@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 customModel->getFormFields();
-timeout=1
+timeout=0
 cid=1
 
 - 测试moduleName值为product，method为空 @0

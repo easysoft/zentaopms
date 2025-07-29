@@ -10,7 +10,11 @@ timeout=0
 cid=1
 
 - 判断图表的sql字段是否被修改 @1
-- 判断图表的sql字段是否被修改 @1
+- 判断图表的fields字段是否被修改 @1
+- 判断图表的settings字段是否被修改 @1
+- 判断图表的sql字段是否被修改 @0
+- 判断图表的fields字段是否被修改 @1
+- 判断图表的settings字段是否被修改 @1
 
 */
 
@@ -49,11 +53,15 @@ $chartList = array($chart1, $chart2);
 $chart1->sql .= ";;;;;";
 $chart1_ = clone($chart1);
 $screen->genComponentDataTest($chartList[0], $componentList[0], $typeList[0], array());
-r($chart1->sql === $chart1_->sql) && p('') && e(1);  //判断图表的sql字段是否被修改
+r($chart1->sql === $chart1_->sql)           && p('') && e(1);  //判断图表的sql字段是否被修改
+r($chart1->fields === $chart1_->fields)     && p('') && e(1);  //判断图表的fields字段是否被修改
+r($chart1->settings === $chart1_->settings) && p('') && e(1);  //判断图表的settings字段是否被修改
 
 $chart2_ = clone($chart2);
 $chart2->sql = '';
 $chart2->filters = '[{"field":"type","type":"int"}]';
 $screen->genComponentDataTest($chartList[1], $componentList[1], $typeList[1], array());
 
-r($chart2_->sql !== $chart2->sql) && p('') && e(1);  //判断图表的sql字段是否被修改
+r($chart2->sql === $chart2_->sql)           && p('') && e(0);  //判断图表的sql字段是否被修改
+r($chart2->fields === $chart2_->fields)     && p('') && e(1);  //判断图表的fields字段是否被修改
+r($chart2->settings === $chart2_->settings) && p('') && e(1);  //判断图表的settings字段是否被修改

@@ -271,6 +271,7 @@ $lang->doc->createBook       = 'Create Book';
 $lang->doc->browse           = 'Document List';
 $lang->doc->view             = 'Document Detail';
 $lang->doc->diff             = 'Diff';
+$lang->doc->confirm          = 'Confirm';
 $lang->doc->cancelDiff       = 'Cancel diff';
 $lang->doc->diffAction       = 'Diff Document';
 $lang->doc->sort             = 'Rank Document';

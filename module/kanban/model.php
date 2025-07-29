@@ -104,7 +104,7 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createRegion(object $kanban, object $fromRegion = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
+    public function createRegion(object $kanban, ?object $fromRegion = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -355,7 +355,7 @@ class kanbanModel extends model
      * @access public
      * @return int|false
      */
-    public function createColumn(int $regionID, object $column = null, string $from = 'kanban', string $mode = 'new'): int|false
+    public function createColumn(int $regionID, ?object $column = null, string $from = 'kanban', string $mode = 'new'): int|false
     {
         if($mode == 'new')
         {
@@ -1865,7 +1865,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getSpaceList(string $browseType, object $pager = null): array
+    public function getSpaceList(string $browseType, ?object $pager = null): array
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
@@ -2155,28 +2155,28 @@ class kanbanModel extends model
      * @access public
      * @return int|bool
      */
-    public function createLane(int $kanbanID, int $regionID, object $lane = null, string $mode = 'new'): int|bool
+    public function createLane(int $kanbanID, int $regionID, ?object $lane = null, string $mode = 'new'): int|bool
     {
-        $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
-        if($laneType == 'common')
-        {
-            $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
-            if($sameNameLane)
-            {
-                dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
-                return false;
-            }
-        }
-
-        /* 共享看板列不能为空。 */
-        if($mode == 'sameAsOther' && $lane->otherLane == 0)
-        {
-            dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
-            return false;
-        }
-
         if($mode == 'new')
         {
+            $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            if($laneType == 'common')
+            {
+                $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+                if($sameNameLane)
+                {
+                    dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
+                    return false;
+                }
+            }
+
+            /* 共享看板列不能为空。 */
+            if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
+            {
+                dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
+                return false;
+            }
+
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
                 ->where('region')->eq($regionID)
                 ->fetch('maxOrder');
@@ -2200,19 +2200,23 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->require->createlane, 'notempty')
             ->autoCheck()
             ->exec();
+
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
-
-        if($mode == 'sameAsOther' || ($lane->type == 'common' && $mode == 'independent'))
+        if($mode == 'new')
         {
-            $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
-            foreach($columnIDList as $columnID)
-            {
-                $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
+            if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
-                if(dao::isError()) return false;
+            if($lane->mode == 'sameAsOther' || ($lane->type == 'common' && $lane->mode == 'independent'))
+            {
+                $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
+                foreach($columnIDList as $columnID)
+                {
+                    $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
+
+                    if(dao::isError()) return false;
+                }
             }
         }
 
@@ -3665,7 +3669,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCards2Import(int $kanbanID = 0, int $excludedID = 0, object $pager = null): array
+    public function getCards2Import(int $kanbanID = 0, int $excludedID = 0, ?object $pager = null): array
     {
         $kanbanIdList = $this->getCanViewObjects();
 

@@ -24,9 +24,11 @@ cid=1
 
 - 测试获取指派给 dev4 的用例执行 @8,4
 
+- 测试获取指派给 test5 的用例执行 @0
+
 */
 
-$accountList = array('admin', 'user2', 'test3', 'dev4');
+$accountList = array('admin', 'user2', 'test3', 'dev4', 'test5');
 
 $testcase = new testcaseTest();
 
@@ -34,3 +36,4 @@ r($testcase->getByAssignedToTest($accountList[0])) && p() && e('5,1'); // 测试
 r($testcase->getByAssignedToTest($accountList[1])) && p() && e('6,2'); // 测试获取指派给 user2 的用例执行
 r($testcase->getByAssignedToTest($accountList[2])) && p() && e('7,3'); // 测试获取指派给 test3 的用例执行
 r($testcase->getByAssignedToTest($accountList[3])) && p() && e('8,4'); // 测试获取指派给 dev4 的用例执行
+r($testcase->getByAssignedToTest($accountList[4])) && p() && e(0);     // 测试获取指派给 test5 的用例执行

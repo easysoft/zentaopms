@@ -16,6 +16,11 @@ class kanbanPage extends page
             'putoffSubmitInLite'  => "//form[contains(@id,'zin_execution_putoff')]//button",
             /* 挂起看板弹窗中的提交按钮 */
             'suspendSubmitInLite' => "//form[contains(@id,'zin_execution_suspend')]//button",
+            /* 关闭看板弹窗中的元素 */
+            'realEndField'      => "//div[@data-name='realEnd']/label/span",
+            'closeSubmitInLite' => "//form[contains(@id,'zin_execution_close')]//button",
+            /* 激活看板弹窗中的提交按钮 */
+            'activateSubmitInLite' => "//form[contains(@id,'zin_execution_activate')]//button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

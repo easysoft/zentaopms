@@ -34,7 +34,7 @@ function query(callback) {
     $('.query').addClass('disabled');
     $('#querying').removeClass('hidden');
     var sql = $('#sql').val();
-    sql = btoa(sql);
+    sql = latin1ToBase64(sql);
     $.post(createLink('dataview', 'ajaxQuery'), {sql: sql, driver: DataStorage.driver, filters: filters, recPerPage: DataStorage.recPerPage, pageID: DataStorage.pageID}, function(resp)
     {
         resp = JSON.parse(resp);

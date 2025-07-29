@@ -5,6 +5,29 @@
 title=需求看板
 timeout=0
 cid=1
+
+- 执行tester模块的check方法，参数是'projected', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @projected列数据正确
+- 执行tester模块的check方法，参数是'developing', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @developing列数据正确
+- 执行tester模块的check方法，参数是'developed', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @developed列数据正确
+- 执行tester模块的check方法，参数是'testing', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @testing列数据正确
+- 执行tester模块的check方法，参数是'tested', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @tested列数据正确
+- 执行tester模块的check方法，参数是'accepted', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @accepted列数据正确
+- 执行tester模块的check方法，参数是'released', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @released列数据正确
+
  */
 
 chdir(__DIR__);
@@ -34,10 +57,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(2);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1, 2');
-$projectproduct->product->range('1');
-$projectproduct->gen(2);
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2');
+$projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
+$projectProduct->gen(2);
 
 $story = zenData('story');
 $story->id->range('1-100');

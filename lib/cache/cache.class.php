@@ -51,6 +51,15 @@ class cache
     private $dao;
 
     /**
+     * 全局数据库操作句柄。
+     * Global database operation handler.
+     *
+     * @access private
+     * @var object
+     */
+    private $dbh;
+
+    /**
      * 全局配置对象。
      * Global configuration object.
      *

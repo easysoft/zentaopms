@@ -358,7 +358,6 @@ window.canDrop = function(dragInfo, dropInfo)
 
     /* 卡片的排序目前仅支持本单元格内排序 */
     if(dropInfo.type == 'item' && (fromCol != toCol || fromLane != toLane)) return false;
-    if(item.lane != toLane.id) return false;
 
     const kanbanRules = window.kanbanDropRules[item.cardType];
     const colRules    = kanbanRules[fromCol.type];

@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '21.7.3';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '21.7.4';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -239,6 +239,10 @@ if(file_exists($myConfig)) include $myConfig;
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
+
+/* 禅道userview配置文件。zentaopms userview settings. */
+$userViewConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'userview.php';
+if(file_exists($userViewConfig)) include $userViewConfig;
 
 /* 数据表格操作配置文件。dtable actions settings. */
 $actionsMapConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'actionsmap.php';

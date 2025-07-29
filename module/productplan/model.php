@@ -102,7 +102,7 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', object|null $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0): array
+    public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', ?object $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPlans();
 
@@ -143,7 +143,7 @@ class productplanModel extends model
             }
             else
             {
-                $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate');
+                $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate', true);
                 $plan->stories = count($storyPairs);
             }
 
@@ -623,7 +623,7 @@ class productplanModel extends model
      * @access public
      * @return object
      */
-    public function buildPlanByStatus(string $status, string $closedReason = '', object $plan = null): object
+    public function buildPlanByStatus(string $status, string $closedReason = '', ?object $plan = null): object
     {
         $now = helper::now();
 

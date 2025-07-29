@@ -24,7 +24,7 @@ featureBar
 $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
 $footToolbar  = array('items' => array
 (
-    $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', 'productID=0&branch=all&type=case&tab=my')) : null
+    $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&from={$app->rawMethod}")) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($type == 'openedbyme' || $app->rawMethod == 'contribute')

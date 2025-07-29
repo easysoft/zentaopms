@@ -15,6 +15,7 @@ class browseTabLiteTester extends tester
         $form = $this->loadPage('project', 'browse');
         $this->switchVision('lite');
         $form = $this->initForm('project', 'browse', '', 'appIframe-project');
+        $form->wait(2);
         $status = [
             'all'       => '全部',
             'undone'    => '未完成',

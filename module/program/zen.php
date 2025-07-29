@@ -115,7 +115,7 @@ class programZen extends program
      * @access protected
      * @return array
      */
-    protected function getProgramsByType(string $status, string $orderBy, int $param = 0, object|null $pager = null): array
+    protected function getProgramsByType(string $status, string $orderBy, int $param = 0, ?object $pager = null): array
     {
         $status = strtolower($status);
         $this->view->summary = '';

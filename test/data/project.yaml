@@ -61,13 +61,11 @@ fields:
   - field: begin
     range: "(-3M)-(+M):1D"
     type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
+    format: "YY-MM-DD hh:mm:ss"
   - field: end
     range: "(+5w)-(+2M):1D"
     type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
+    format: "YY-MM-DD hh:mm:ss"
   - field: PO
     range:
   - field: PM
@@ -87,8 +85,7 @@ fields:
   - field: openedDate
     range: "(-3M)-(+M):1D"
     type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
+    format: "YY-MM-DD hh:mm:ss"
   - field: multiple
     note: "有无迭代"
     range: 1

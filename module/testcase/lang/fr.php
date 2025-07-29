@@ -333,6 +333,7 @@ $lang->testcase->jsLng->set2Group    = 'Set as Group';
 
 $lang->testcase->exportTemplet = 'Export Template';
 
+$lang->testcase->browseScene      = "Scene List";
 $lang->testcase->createScene      = "Add Scene";
 $lang->testcase->changeScene      = "Drag to change the scene which it belongs";
 $lang->testcase->batchChangeScene = "Batch change scene";

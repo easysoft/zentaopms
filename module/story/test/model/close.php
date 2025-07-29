@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+$stories = zenData('story');
+$stories->status->range('draft,active,changing,active{2}');
+$stories->closedReason->range('{5}');
+$stories->gen(5);
+
+zenData('storystage')->gen(5);
+zenData('project')->gen(5);
+zenData('product')->gen(5);
 
 /**
 
@@ -23,17 +35,6 @@ cid=0
  - 属性duplicateStory @『重复需求』不能为空。
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
-su('admin');
-
-$stories = zenData('story');
-$stories->status->range('draft,active,changing,active{2}');
-$stories->closedReason->range('{5}');
-$stories->gen(5);
-
-zenData('storystage')->gen(5);
-zenData('project')->gen(5);
 
 $postData1 = new stdclass();
 $postData1->status = 'closed';

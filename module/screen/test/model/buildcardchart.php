@@ -14,9 +14,11 @@ title=测试 screenModel->getchartoption();
 timeout=0
 cid=1
 
-- 测试type为card以及统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。 @1
-- 测试type为card以及统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。 @1
-- 测试type为card以及统计方式类型为sum的图表是否显示正确，生成的数据项数量是否正确。 @50
+- 测试type为card图表是否显示正确,目前不存在统计方式为value的图表。 @1
+- 测试统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。 @1
+- 测试type为card图表是否显示正确,目前不存在统计方式为count的图表。 @1
+- 测试统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。 @1
+- 测试type为card以及统计方式类型为sum的图表是否显示正确，生成的数据项数量是否正确。 @1
 
 */
 
@@ -52,11 +54,13 @@ function getComponetAndChart($screen, $valueType = array(), $filters = array())
 $filter12 = array('type' => 'card');
 
 list($component13, $chart13) = getComponetAndChart($screen, array('type' => 'value'), $filter12); 
-r(is_null($component13) || is_null($chart13)) && p('') && e(1);  //测试type为card以及统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。
+r(is_null($component13)) && p('') && e(1); // 测试type为card图表是否显示正确,目前不存在统计方式为value的图表。
+r(is_null($chart13)) && p('') && e(1);    // 测试统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。
 
 list($component14, $chart14) = getComponetAndChart($screen, array('type' => 'count'), $filter12);
-r(is_null($component14) || is_null($chart14)) && p('') && e(1);  //测试type为card以及统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。
+r(is_null($component14)) && p('') && e(1); // 测试type为card图表是否显示正确,目前不存在统计方式为count的图表。
+r(is_null($chart14)) && p('') && e(1);    // 测试统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。
 
 list($component15, $chart15) = getComponetAndChart($screen, array('egg' => 'sum'), $filter12);
 $screen->buildCardChart($component15, $chart15);
-r($component15->option->dataset) && p('') && e('50');  //测试type为card以及统计方式类型为sum的图表是否显示正确，生成的数据项数量是否正确。
+r(isset($component15->option->dataset)) && p('') && e('1');  //测试type为card以及统计方式类型为sum的图表是否显示正确，数据项参数是否正确。

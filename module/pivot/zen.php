@@ -192,7 +192,7 @@ class pivotZen extends pivot
      * @access public
      * @return void
      */
-    public function show(int $groupID, int $pivotID, string $mark = '', string|null $version = null): void
+    public function show(int $groupID, int $pivotID, string $mark = '', ?string $version = null): void
     {
         $this->pivot->checkAccess($pivotID, 'preview');
 

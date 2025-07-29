@@ -373,7 +373,7 @@ class docModel extends model
      * @access public
      * @return bool|int
      */
-    public function createApiLib(object $formData = null): bool|int
+    public function createApiLib(?object $formData = null): bool|int
     {
         $this->app->loadLang('api');
 
@@ -411,7 +411,7 @@ class docModel extends model
      * @access public
      * @return array|false
      */
-    public function updateApiLib(int $id, object $formData = null): array|bool
+    public function updateApiLib(int $id, ?object $formData = null): array|bool
     {
         $oldLib = $this->getLibByID($id);
 
@@ -495,7 +495,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsByBrowseType(string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null)
+    public function getDocsByBrowseType(string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null)
     {
         if($browseType == 'all') return $this->getDocs(0, 0, $browseType, $sort, $pager);
 
@@ -558,7 +558,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getMyDocListBySearch(int $queryID, array $hasPrivDocIdList, array $allLibIDList, string $sort, object $pager = null): array
+    public function getMyDocListBySearch(int $queryID, array $hasPrivDocIdList, array $allLibIDList, string $sort, ?object $pager = null): array
     {
         if($queryID)
         {
@@ -664,7 +664,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null, string $searchName = ''): array
+    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', ?object $pager = null, string $searchName = ''): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('templateType')->ne('')
@@ -725,7 +725,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocs(int $libID, int $moduleID, string $browseType, string $orderBy, object $pager = null): array
+    public function getDocs(int $libID, int $moduleID, string $browseType, string $orderBy, ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocs();
 
@@ -915,7 +915,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getMineList(string $type, string $browseType, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getMineList(string $type, string $browseType, int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -978,7 +978,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null, string $appendDocs = '', string $filterDocs = ''): array
+    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = ''): array
     {
         if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
@@ -2421,7 +2421,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibFiles(string $type, int $objectID, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getLibFiles(string $type, int $objectID, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(!in_array($type, array('execution', 'project', 'product'))) return array();
 
@@ -3064,7 +3064,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', object $pager = null): array
+    public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $query     = $this->buildQuery($type, $queryID);
         $libs      = $this->getLibsByObject($type, $objectID, $libID);
@@ -3311,7 +3311,7 @@ class docModel extends model
      * @access public
      * @return object
      */
-    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|null|bool $release = null): object
+    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, mixed $release = null): object
     {
         $releaseModule = array();
         if($release && $release->lib == $lib->id)
@@ -3597,7 +3597,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic(object $pager = null): array
+    public function getDynamic(?object $pager = null): array
     {
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');

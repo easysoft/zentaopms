@@ -1060,7 +1060,7 @@ class dom
             $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
             $pickerInput->click();
             $pickerInput->sendKeys(trim($value));
-            sleep(1);
+            sleep(3);
 
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
             $pickerInput->clear();

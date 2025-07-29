@@ -12,6 +12,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
         form.append('caseIdList[]', caseInfo.case);
         if(caseInfo.auto == 'auto') autoRun = true;
     });
+    if($(this).data('account')) form.append('assignedTo', $(this).data('account'));
 
     if($(this).hasClass('batch-run') && autoRun)
     {

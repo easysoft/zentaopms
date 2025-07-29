@@ -2021,4 +2021,88 @@ class storyZen extends story
         }
         return $storyIdList;
     }
+
+    /**
+     * 处理过滤条件显示内容。
+     * Process filter title.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return string
+     */
+    protected function processFilterTitle(string $browseType, int $param): string
+    {
+        $filter       = '';
+        $fieldsType   = 'execution';
+        $searchConfig = $this->session->executionStorysearchParams;
+        $searchFields = $this->session->executionStoryForm;
+        $featureBar   = $this->lang->execution->featureBar['story'];
+        if($this->app->tab == 'project' && $this->session->multiple)
+        {
+            $this->app->loadLang('projectstory');
+            $this->app->loadConfig('product');
+            $fieldsType   = 'product';
+            $searchConfig = $this->session->projectstorysearchParams;
+            $searchFields = $this->session->projectstoryForm;
+            $featureBar   = array_merge($this->lang->projectstory->featureBar['story'], $this->lang->projectstory->moreSelects['story']['more']);
+        }
+
+        $fieldParams = array();
+        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        if($browseType != 'bysearch' && $browseType != 'bymodule' && $browseType != 'byproduct')
+        {
+            $statusName = zget($featureBar, $browseType, '');
+            $filter     = sprintf($this->lang->story->report->tpl->feature, $statusName);
+            if(!$param) return $filter;
+
+            return $filter . zget($this->lang->search->andor, 'and') . sprintf($this->lang->story->report->tpl->search, $this->config->$fieldsType->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
+        }
+
+        if($browseType == 'byproduct' && $param)
+        {
+            $productName = $this->loadModel('product')->getById($param)->name;
+            return sprintf($this->lang->story->report->tpl->feature, $productName);
+        }
+
+        if($browseType == 'bymodule' && $param)
+        {
+            if($filter) $filter .= ', ';
+            return $filter . sprintf($this->lang->story->report->tpl->search, $this->config->$fieldsType->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
+        }
+
+        $leftConditions  = array();
+        $rightConditions = array();
+        $fieldNames      = json_decode($searchConfig['searchFields']);
+        if(!$searchFields) return '';
+
+        $this->app->loadLang('search');
+        $groupAndOr = 'and';
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        foreach($searchFields as $index => $field)
+        {
+            if($index == 6) $groupAndOr = $field['groupAndOr'];
+            if(!isset($field['field'])) continue;
+
+            if(isset($field['value']) && $field['value'] === '') continue;
+            if(!empty($fieldParams[$field['field']]['values']))
+            {
+                if($fieldParams[$field['field']]['values'] == 'users') $fieldParams[$field['field']]['values'] = $users;
+                $field['value'] = zget($fieldParams[$field['field']]['values'], $field['value']);
+            }
+
+            $fieldName = zget($fieldNames, $field['field']);
+            $operator  = zget($this->lang->search->operators, $field['operator']);
+
+            if($index == 0 || $index == 3) $field['andOr'] = '';
+            if($index < 3)     $leftConditions[]  = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
+            elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
+        }
+
+        if(empty($leftConditions) && empty($rightConditions)) return '';
+        if(empty($leftConditions))  return implode('', $rightConditions);
+        if(empty($rightConditions)) return implode('', $leftConditions);
+
+        return sprintf($this->lang->story->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
+    }
 }

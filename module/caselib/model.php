@@ -152,7 +152,7 @@ class caselibModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $type = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
@@ -174,7 +174,7 @@ class caselibModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getPairs(string $type = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('id,name')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
@@ -227,7 +227,7 @@ class caselibModel extends model
      * @access public
      * @return array
      */
-    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', object $pager = null, string $from = 'qa'): array
+    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', ?object $pager = null, string $from = 'qa'): array
     {
         $browseType = $browseType == 'bymodule' && $this->session->libBrowseType && $this->session->libBrowseType != 'bysearch' ? $this->session->libBrowseType : $browseType;
 

@@ -6,9 +6,13 @@
 title=测试 storyModel->saveEstimateInfo();
 cid=0
 
-- 执行$storyInfo
+- 测试 story的id，圆整值，平均值
+ - 属性story @2
  - 属性round @2
  - 属性average @1.5
+- 测试 dev1和dev2的预计
+ - 第dev1条的estimate属性 @1
+ - 第dev2条的estimate属性 @2
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -28,4 +32,5 @@ $tester->loadModel('story');
 $tester->story->saveEstimateInfo(2);
 $storyInfo = $tester->story->getEstimateInfo(2);
 
-r($storyInfo) && p('round,average') && e('2,1.5');
+r($storyInfo)           && p('story,round,average')         && e('2,2,1.5'); // 测试 story的id，圆整值，平均值
+r($storyInfo->estimate) && p('dev1:estimate;dev2:estimate') && e('1,2');     // 测试 dev1和dev2的预计

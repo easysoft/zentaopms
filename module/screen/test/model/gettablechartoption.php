@@ -14,8 +14,11 @@ title=测试 screenModel->getTableChartOption();
 timeout=0
 cid=1
 
-- 测试type为table的图表是否显示正确，生成的header指标项数量是否正确。 @1
-- 测试type为table的图表是否显示正确，生成的dataset数据项数量是否正确。 @1
+- 测试组件类型。 @TableMergeCell
+- 测试type为table的图表是否显示正确。 @1
+- 测试type为table的图表是否显示正确。 @1
+- 测试生成的header指标项数量是否正确。 @10
+- 测试生成的dataset数据项数量是否正确。 @10
 
 */
 
@@ -43,5 +46,10 @@ $filter9  = array('type' => 'table');
 list($component9, $chart9) = getComponetAndChart($screen, $filter9);
 $screen->getChartOptionTest($chart9, $component9);
 $option = $component9->option;
-r(isset($option->header[0])  && count($option->header[0]) == 10) && p('') && e(1);   //测试type为table的图表是否显示正确，生成的header指标项数量是否正确。
-r(isset($option->dataset[0]) && count($option->dataset[0]) == 10) && p('') && e(1);  //测试type为table的图表是否显示正确，生成的dataset数据项数量是否正确。
+
+r($component9->key) && p('') && e('TableMergeCell'); // 测试组件类型。
+
+r(isset($option->header[0]))  && p('') && e(1);  // 测试type为table的图表是否显示正确。
+r(isset($option->dataset[0])) && p('') && e(1);  // 测试type为table的图表是否显示正确。
+r(count($option->header[0]))  && p('') && e(10); // 测试生成的header指标项数量是否正确。
+r(count($option->dataset[0])) && p('') && e(10); // 测试生成的dataset数据项数量是否正确。

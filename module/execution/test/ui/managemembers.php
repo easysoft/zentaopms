@@ -2,10 +2,28 @@
 <?php
 
 /**
+
 title=维护团队成员
 timeout=0
 cid=1
- */
+
+- 添加团队成员
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @添加团队成员成功
+- 删除团队成员
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @删除团队成员成功
+- 移除团队成员
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @移除团队成员成功
+- 复制部门成员
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @复制部门成员成功
+- 复制团队成员
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @复制团队成员成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/managemembers.ui.class.php';
