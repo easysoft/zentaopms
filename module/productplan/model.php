@@ -143,7 +143,7 @@ class productplanModel extends model
             }
             else
             {
-                $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate');
+                $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate', true);
                 $plan->stories = count($storyPairs);
             }
 
