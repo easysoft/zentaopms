@@ -11264,67 +11264,61 @@ class upgradeModel extends model
             $deliverable->createdBy     = 'system';
             $deliverable->createdDate   = helper::now();
             $deliverable->template      = '[]';
+
+            $deliverableStage = new stdClass();
+            $deliverableStage->stage    = 'project';
+            $deliverableStage->required = '0';
             foreach(array_filter($this->lang->design->typeList) as $key => $value)
             {
                 if(empty($key) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
-
-                /* 重名的交付物名称后面加数字。 */
-                if(!empty($nameFilter[$value]))
-                {
-                    $deliverable->name = $value . $nameFilter[$value];
-                    $nameFilter[$value] ++;
-                }
-                else
-                {
-                    $deliverable->name = $value;
-                    $nameFilter[$value] = 1;
-                }
-                $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
-                $deliverableID = $this->dao->lastInsertID();
-
-                $deliverableStage = new stdClass();
-                $deliverableStage->deliverable = $deliverableID;
-                $deliverableStage->stage       = 'project';
-                $deliverableStage->required    = '0';
-                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
-
-                /* 将历史设计的设计类型替换为交付物ID。 */
-                if(!empty($projectWorkflowGroup[$module->workflowGroup]))
-                {
-                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
-                }
+                $this->addDeliverable($module, $key, $value, $deliverable, $projectWorkflowGroup, $nameFilter);
             }
 
             foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
             {
                 if(empty($key) || $module->projectModel != 'waterfallplus') continue;
-
-                /* 重名的交付物名称后面加数字。 */
-                if(!empty($nameFilter[$value]))
-                {
-                    $deliverable->name = $value . $nameFilter[$value];
-                    $nameFilter[$value] ++;
-                }
-                else
-                {
-                    $deliverable->name = $value;
-                    $nameFilter[$value] = 1;
-                }
-                $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
-                $deliverableID = $this->dao->lastInsertID();
-
-                $deliverableStage = new stdClass();
-                $deliverableStage->deliverable = $deliverableID;
-                $deliverableStage->stage       = 'project';
-                $deliverableStage->required    = '0';
-                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
-
-                /* 将历史设计的设计类型替换为交付物ID。 */
-                if(!empty($projectWorkflowGroup[$module->workflowGroup]))
-                {
-                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
-                }
+                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
             }
+        }
+    }
+
+    /**
+     * 创建交付物。
+     * Add deliverable.
+     *
+     * @param  object $module
+     * @param  string $designType
+     * @param  string $name
+     * @param  object $deliverable
+     * @param  object $deliverableStage
+     * @param  array  $projectWorkflowGroup
+     * @param  array  $nameFilter
+     * @access public
+     * @return void
+     */
+    public function addDeliverable(object $module, string $designType, string $name, object $deliverable, object $deliverableStage, array $projectWorkflowGroup, array &$nameFilter)
+    {
+        /* 重名的交付物名称后面加数字。 */
+        if(!empty($nameFilter[$name]))
+        {
+            $deliverable->name = $name . $nameFilter[$name];
+            $nameFilter[$name] ++;
+        }
+        else
+        {
+            $deliverable->name = $name;
+            $nameFilter[$name] = 1;
+        }
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $deliverableStage->deliverable = $deliverableID;
+        $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+
+        /* 将历史设计的设计类型替换为交付物ID。 */
+        if(!empty($projectWorkflowGroup[$module->workflowGroup]))
+        {
+            $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($designType)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
         }
     }
 }
