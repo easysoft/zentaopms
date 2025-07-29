@@ -11253,21 +11253,20 @@ class upgradeModel extends model
         $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
 
         $this->app->loadLang('design');
+        $deliverable = new stdClass();
+        $deliverable->status      = 'disabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->template    = '[]';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
         foreach($moduleList as $module)
         {
             $nameFilter = array();
-
-            $deliverable = new stdClass();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
-            $deliverable->status        = 'disabled';
-            $deliverable->createdBy     = 'system';
-            $deliverable->createdDate   = helper::now();
-            $deliverable->template      = '[]';
-
-            $deliverableStage = new stdClass();
-            $deliverableStage->stage    = 'project';
-            $deliverableStage->required = '0';
             foreach(array_filter($this->lang->design->typeList) as $key => $value)
             {
                 if(empty($key) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
