@@ -11196,4 +11196,40 @@ class upgradeModel extends model
 
         return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
     }
+
+    /**
+     * 为指定模型的项目流程内置默认设计类。
+     * Add default deliverable module.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultDeliverableModule()
+    {
+        $this->app->loadLang('deliverable');
+        $modelList = array('waterfall', 'waterfallplus', 'ipd');
+        $groupList = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in($modelList)->fetchAll();
+        foreach($groupList as $group)
+        {
+            $module = new stdclass();
+            $module->root      = $group->id;
+            $module->branch    = '0';
+            $module->name      = $this->lang->deliverable->designModule;
+            $module->parent    = '0';
+            $module->path      = '';
+            $module->grade     = '1';
+            $module->order     = '0';
+            $module->type      = 'deliverable';
+            $module->from      = '0';
+            $module->owner     = '';
+            $module->collector = null;
+            $module->short     = '';
+            $module->extra     = 'design';
+            $module->deleted   = '0';
+            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+            $moduleID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+        }
+    }
 }
