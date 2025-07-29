@@ -824,10 +824,15 @@ class testtaskModel extends model
         $caseIdList = array_unique(array_filter(array_map(function($run){return $run->case;}, $runs)));
         if($type == 'bybuild' && $caseIdList) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
 
-        if($this->app->tab != 'qa')
+        if($this->app->tab == 'execution')
         {
-            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->fetch('order');
+            $execution          = $this->loadModel('execution')->fetchByID((int)$this->session->execution);
+            $executionLastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->id)->fetch('order');
+            $projectLastOrder   = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->project)->fetch('order');
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$this->session->project)->fetch('order');
         }
 
         $case = new stdclass();
@@ -844,11 +849,22 @@ class testtaskModel extends model
 
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
             /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
-            if($this->app->tab != 'qa')
+            if($this->app->tab == 'project')
             {
-                $case->project = $projectID;
+                $case->project = (int)$this->session->project;
                 $case->case    = $run->case;
                 $case->order   = ++$lastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+            }
+            elseif($this->app->tab == 'execution')
+            {
+                $case->project = (int)$execution->id;
+                $case->case    = $run->case;
+                $case->order   = ++$executionLastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+
+                $case->project = (int)$execution->project;
+                $case->order   = ++$projectLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
 
