@@ -886,7 +886,8 @@ class bug extends control
             {
                 $this->bug->update($bug);
 
-                $oldBug = $oldBugs[$bugID];
+                $oldBug      = $oldBugs[$bugID];
+                $bug->status = $oldBug->status;
 
                 /* 批量编辑 bug 后的一些操作。*/
                 /* Operate after batch edit bugs. */
