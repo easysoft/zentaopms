@@ -11318,14 +11318,15 @@ class upgradeModel extends model
 
         $deliverableStage = new stdClass();
 
+        $deliverableList = array();
         $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->fetchAll();
-        $deliverableList = $this->dao->select('id,name')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->fetchAll('id');
+        $deliverables    = $this->dao->select('id,name')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->fetchAll('id');
         $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         foreach($workflowGroups as $workflowGroup)
         {
-            $nameFilter        = array();
-            $deliverableFilter = array();
-            $sprintFilter      = array();
+            $nameFilter        = array(); // 过滤重名交付物。
+            $deliverableFilter = array(); // 过滤重复交付物。
+            $sprintFilter      = array(); // 过滤重复交付物检查规则。
             $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
             if($groupDeliverable) $otherModule = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
 
@@ -11337,9 +11338,9 @@ class upgradeModel extends model
                     foreach($deliverableConfigs as $config)
                     {
                         $oldDeliverableID = $config['deliverable'];
-                        if(empty($deliverableList[$oldDeliverableID])) continue;
+                        if(empty($deliverables[$oldDeliverableID])) continue;
 
-                        $oldDeliverable = $deliverableList[$oldDeliverableID];
+                        $oldDeliverable = $deliverables[$oldDeliverableID];
                         if(empty($deliverableFilter[$oldDeliverable->id]))
                         {
                             $deliverableFile            = $fileList[$oldDeliverableID]; // 原交付物只会上传一个附件。
@@ -11363,6 +11364,7 @@ class upgradeModel extends model
                             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
                             $deliverableID = $this->dao->lastInsertID();
                             $deliverableFilter[$oldDeliverable->id] = $deliverableID;
+                            $deliverableList[$oldDeliverable->id]   = $deliverableID;
                         }
                         else
                         {
@@ -11399,6 +11401,8 @@ class upgradeModel extends model
 
         /* 将历史的交付物数据删掉。 */
         $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverableList))->andWhere('workflowGroup')->eq('0')->exec();
+
+        $this->upgradeProjectDeliverable($deliverableList);
     }
 
     /**
@@ -11434,5 +11438,44 @@ class upgradeModel extends model
         $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
 
         return $moduleID;
+    }
+
+    /**
+     * 升级项目和迭代的交付物配置。
+     * Upgrade project deliverable.
+     *
+     * @param  array  $deliverableList
+     * @access public
+     * @return void
+     */
+    public function upgradeProjectDeliverable(array $deliverableList)
+    {
+        $projectList = $this->dao->select('id,deliverable')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
+        foreach($projectList as $project)
+        {
+            $projectDeliverable    = array();
+            $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
+            if(empty($oldProjectDeliverable)) continue;
+
+            /* 解析项目的交付物配置。 */
+            foreach($oldProjectDeliverable as $stageCode => $methodDeliverable)
+            {
+                foreach($methodDeliverable as $deliverableConfigs)
+                {
+                    foreach($deliverableConfigs as $config)
+                    {
+                        if(empty($config['doc']) && empty($config['file'])) continue;
+
+                        $oldDeliverableID = $config['deliverable'];
+                        $deliverableID    = !empty($deliverableList[$oldDeliverableID]) ? $deliverableList[$oldDeliverableID] : $oldDeliverableID;
+                        $projectDeliverable[$deliverableID]['id']   = $deliverableID;
+                        $projectDeliverable[$deliverableID]['doc']  = !empty($config['doc'])  ? $config['doc']  : '';
+                        $projectDeliverable[$deliverableID]['file'] = !empty($config['file']) ? $config['file'] : '';
+                    }
+                }
+            }
+            $projectDeliverable = json_encode(array_values($projectDeliverable));
+            $this->dao->update(TABLE_PROJECT)->set('deliverable')->eq($projectDeliverable)->where('id')->eq($project->id)->exec();
+        }
     }
 }
