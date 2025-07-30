@@ -105,7 +105,8 @@ class transferModel extends model
         $rows = $this->getRows($module, $fieldList);
         if($module == 'story')
         {
-            $parentList = array_map(function($row) {
+            $parentList = array_map(function($row)
+            {
                 return $row->parent;
             }, $rows);
             $parentList  = array_filter($parentList);
