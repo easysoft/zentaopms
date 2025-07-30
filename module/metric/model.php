@@ -1538,7 +1538,9 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
                     ->andWhere('createdDate')->le($date)
-                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
+                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->orWhere('closedDate')->ge($date)
+                    ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -1548,7 +1550,9 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
                     ->andWhere('openedDate')->le($date)
-                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
+                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->orWhere('closedDate')->ge($date)
+                    ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -1558,7 +1562,9 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere('openedDate')->le($date)
-                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
+                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->orWhere('closedDate')->ge($date)
+                    ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
