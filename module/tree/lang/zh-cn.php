@@ -67,6 +67,8 @@ $lang->tree->groupName              = '分组名称';
 $lang->tree->parentGroup            = '上级分组';
 $lang->tree->childGroup             = '子分组';
 $lang->tree->confirmDeleteHost      = '该分组及子分组都会被删除，您确定删除吗？';
+$lang->tree->designModule           = '设计类';
+$lang->tree->otherModule            = '其他';
 
 $lang->tree->module       = '模块';
 $lang->tree->name         = '模块名称';

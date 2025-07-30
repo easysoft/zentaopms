@@ -11206,31 +11206,10 @@ class upgradeModel extends model
      */
     public function addDefaultDeliverableModule()
     {
-        $this->app->loadLang('deliverable');
+        $this->app->loadLang('tree');
         $modelList = array('waterfall', 'waterfallplus', 'ipd');
         $groupList = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in($modelList)->fetchAll();
-        foreach($groupList as $group)
-        {
-            $module = new stdclass();
-            $module->root      = $group->id;
-            $module->branch    = '0';
-            $module->name      = $this->lang->deliverable->designModule;
-            $module->parent    = '0';
-            $module->path      = '';
-            $module->grade     = '1';
-            $module->order     = '0';
-            $module->type      = 'deliverable';
-            $module->from      = '0';
-            $module->owner     = '';
-            $module->collector = null;
-            $module->short     = '';
-            $module->extra     = 'design';
-            $module->deleted   = '0';
-            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-
-            $moduleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
-        }
+        foreach($groupList as $group) $this->createDeliverableModule($group->id, $this->lang->tree->designModule, 'design');
     }
 
     /**
@@ -11242,6 +11221,7 @@ class upgradeModel extends model
      */
     public function upgradeDesignToDeliverable()
     {
+        $this->app->loadLang('design');
         $modelList  = array('waterfall', 'waterfallplus', 'ipd');
         $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
             ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
@@ -11252,7 +11232,6 @@ class upgradeModel extends model
 
         $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
 
-        $this->app->loadLang('design');
         $deliverable = new stdClass();
         $deliverable->status      = 'disabled';
         $deliverable->createdBy   = 'system';
@@ -11319,5 +11298,141 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($designType)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
         }
+    }
+
+    /**
+     * 将通用交付物升级为项目流程下的交付物。
+     * Upgrade deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDeliverable()
+    {
+        $this->app->loadLang('tree');
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'disabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+
+        $deliverableStage = new stdClass();
+
+        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        $deliverableList = $this->dao->select('id,name')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->fetchAll('id');
+        $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        foreach($workflowGroups as $workflowGroup)
+        {
+            $nameFilter        = array();
+            $deliverableFilter = array();
+            $sprintFilter      = array();
+            $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
+            if($groupDeliverable) $otherModule = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
+
+            /* 解析项目流程的交付物配置。 */
+            foreach($groupDeliverable as $stageCode => $methodDeliverable)
+            {
+                foreach($methodDeliverable as $deliverableConfigs)
+                {
+                    foreach($deliverableConfigs as $config)
+                    {
+                        $oldDeliverableID = $config['deliverable'];
+                        if(empty($deliverableList[$oldDeliverableID])) continue;
+
+                        $oldDeliverable = $deliverableList[$oldDeliverableID];
+                        if(empty($deliverableFilter[$oldDeliverable->id]))
+                        {
+                            $deliverableFile            = $fileList[$oldDeliverableID]; // 原交付物只会上传一个附件。
+                            $deliverable->workflowGroup = $workflowGroup->id;
+                            $deliverable->desc          = $oldDeliverable->desc;
+                            $deliverable->module        = $otherModule;
+                            $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
+
+                            /* 重名的交付物名称后面加数字。 */
+                            if(!empty($nameFilter[$oldDeliverable->name]))
+                            {
+                                $deliverable->name = $oldDeliverable->name . $nameFilter[$oldDeliverable->name];
+                                $nameFilter[$oldDeliverable->name] ++;
+                            }
+                            else
+                            {
+                                $deliverable->name = $oldDeliverable->name;
+                                $nameFilter[$oldDeliverable->name] = 1;
+                            }
+
+                            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+                            $deliverableID = $this->dao->lastInsertID();
+                            $deliverableFilter[$oldDeliverable->id] = $deliverableID;
+                        }
+                        else
+                        {
+                            $deliverableID = $deliverableFilter[$oldDeliverable->id];
+                        }
+
+                        $workflowGroupModel            = "{$workflowGroup->projectType}_{$workflowGroup->projectModel}";
+                        $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
+                        $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
+                        $deliverableStage->deliverable = $deliverableID;
+                        /* 将原来不同类型的迭代合并成一个迭代。 */
+                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        {
+                            $deliverableStage->stage = 'sprint';
+                            /* 其中有一个类型是必填的合并后的结果就是必填。 */
+                            if(isset($sprintFilter[$deliverableID]) && empty($sprintFilter[$deliverableID]) && !empty($deliverableStage->required))
+                            {
+                                $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq('1')->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('sprint')->exec();
+                            }
+                            if(!isset($sprintFilter[$deliverableID]))
+                            {
+                                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                            }
+                        }
+                        else
+                        {
+                            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                        }
+                        $sprintFilter[$deliverableID] = $deliverableStage->required;
+                    }
+                }
+            }
+        }
+
+        /* 将历史的交付物数据删掉。 */
+        $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverableList))->andWhere('workflowGroup')->eq('0')->exec();
+    }
+
+    /**
+     * 内置交付物其他分类。
+     * Create other module.
+     *
+     * @param  int    $workflowGroupID
+     * @param  string $name
+     * @param  string $extra
+     * @access public
+     * @return int
+     */
+    public function createDeliverableModule(int $workflowGroupID, string $name, string $extra = ''): int
+    {
+        $module = new stdclass();
+        $module->root      = $workflowGroupID;
+        $module->branch    = '0';
+        $module->name      = $name;
+        $module->parent    = '0';
+        $module->path      = '';
+        $module->grade     = '1';
+        $module->order     = '0';
+        $module->type      = 'deliverable';
+        $module->from      = '0';
+        $module->owner     = '';
+        $module->collector = null;
+        $module->short     = '';
+        $module->extra     = $extra;
+        $module->deleted   = '0';
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
     }
 }
