@@ -2120,6 +2120,8 @@ class execution extends control
     public function storyKanban(int $executionID)
     {
         $this->app->loadLang('kanban');
+        $this->session->set('executionStoryBrowseType', 'unclosed');
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
         $stories     = $this->loadModel('story')->getExecutionStories($executionID);
