@@ -111,7 +111,6 @@ $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$l
 $lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'exclude' => 'required,set', 'alias' => 'execution,limittaskdate');
 $lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "{$lang->qa->common}|custom|required|module=bug", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "{$lang->kanban->common}|custom|kanban|");
-$lang->admin->menuList->feature['subMenu']['doc']         = array('link' => "{$lang->doc->common}|custom|required|module=doc", 'exclude' => 'required');
 $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$lang->user->common}|custom|required|module=user", 'links' => array('custom|set|module=user&field=roleList'), 'exclude' => 'set,required');
 
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList", 'exclude' => 'custom-set');
@@ -156,7 +155,6 @@ $lang->admin->menuList->feature['menuOrder']['10'] = 'product';
 $lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
 $lang->admin->menuList->feature['menuOrder']['20'] = 'qa';
 $lang->admin->menuList->feature['menuOrder']['25'] = 'kanban';
-$lang->admin->menuList->feature['menuOrder']['30'] = 'doc';
 $lang->admin->menuList->feature['menuOrder']['39'] = 'user';
 
 $lang->admin->menuList->feature['dividerMenu'] = ',user,';
