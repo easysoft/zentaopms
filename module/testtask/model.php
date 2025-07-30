@@ -1003,10 +1003,10 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select('t2.*, t1.*, t2.version as caseVersion, t3.title AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t2.version AS caseVersion, t3.title AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case && t1.version = t4.version')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
@@ -1031,10 +1031,10 @@ class testtaskModel extends model
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus,t2.version as caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title AS storyTitle,t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case && t1.version = t4.version')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.id')->in(array_keys($cases))
@@ -1084,7 +1084,7 @@ class testtaskModel extends model
         return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case && t1.version = t4.version')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t1.assignedTo')->eq($user)
             ->andWhere('t2.deleted')->eq('0')
