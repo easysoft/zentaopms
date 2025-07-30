@@ -90,7 +90,7 @@ class task extends control
 
             if(dao::isError())
             {
-                if($this->dao->inTransaction()) $this->dao->rollBack();
+                $this->dao->rollBack();
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
