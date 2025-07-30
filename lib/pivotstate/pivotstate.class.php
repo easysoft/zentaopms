@@ -58,12 +58,28 @@ class pivotState
     public $name;
 
     /**
+     * Pivot state names.
+     *
+     * @var array
+     * @access public
+     */
+    public $names;
+
+    /**
      * Pivot state description.
      *
      * @var string
      * @access public
      */
     public $desc;
+
+    /**
+     * Pivot state descriptions.
+     *
+     * @var array
+     * @access public
+     */
+    public $descs;
 
     /**
      * Pivot state SQL.
@@ -145,6 +161,14 @@ class pivotState
      * @access public
      */
     public $filters;
+
+    /**
+     * Pivot state default drill.
+     *
+     * @var array
+     * @access public
+     */
+    public $defaultDrill;
 
     /**
      * Pivot state drills.
