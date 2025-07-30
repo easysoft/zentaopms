@@ -16,7 +16,7 @@ fields:
   type: timestamp
   format: YYYY-MM-DD
 - field: closedDate
-  range: "20110201 000000-20210201 000000:10D"
+  range: "20250101 000000-20260101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
 ...

@@ -37,7 +37,6 @@ zenData('product')->loadYaml('product', true)->gen(10);
 zenData('project')->loadYaml('project', true)->gen(40);
 
 $date = '2025-01-01';
-
 r(count($metric->getPairsByScopeAndDate('user', $date)))    && p('') && e('15'); // 测试user对象数
 r(count($metric->getPairsByScopeAndDate('product', $date))) && p('') && e('5');  // 测试product对象数
 r(count($metric->getPairsByScopeAndDate('project', $date))) && p('') && e('20'); // 测试project对象数
