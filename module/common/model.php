@@ -150,9 +150,10 @@ class commonModel extends model
         $today = helper::today();
         if($project->status == 'wait')
         {
+            $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('realBegan')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
             $this->dao->update(TABLE_PROJECT)
                  ->set('status')->eq('doing')
-                 ->beginIf(helper::isZeroDate($project->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->set('realBegan')->eq($realBegan)
                  ->where('id')->eq($projectID)
                  ->exec();
 
