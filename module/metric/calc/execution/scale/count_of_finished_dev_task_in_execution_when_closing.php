@@ -33,7 +33,7 @@ class count_of_finished_dev_task_in_execution_when_closing extends baseCalc
         $finishedDate = $this->isDate($row->finishedDate) ? $row->finishedDate : $row->closedDate;
         if(!helper::isZeroDate($row->executionClosedDate))
         {
-            if($row->type == 'devel' && ($row->status == 'done' || $row->status == 'closed' && $row->closedReason == 'done') && $finishedDate <= $row->executionClosedDate)
+            if($row->type == 'devel' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && $finishedDate <= $row->executionClosedDate)
             {
                 if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
                 $this->result[$row->execution] ++;
