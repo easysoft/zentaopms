@@ -33,7 +33,14 @@ class count_of_assigned_task extends baseCalc
 
         if($row->status == 'closed') return false;
 
-        if($mode == 'multi') $assignedTo = $row->account;
+        if($mode == 'multi')
+        {
+            foreach(explode(',', $row->teamMembers) as $user)
+            {
+                if(!isset($this->result[$user])) $this->result[$user] = array();
+                $this->result[$user][$row->id] = $row->id;
+            }
+        }
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
         $this->result[$assignedTo][$row->id] = $row->id;
     }
