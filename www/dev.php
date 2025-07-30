@@ -9,6 +9,9 @@
 <style>
 .dark {--zt-page-bg: var(--color-gray-50)}
 .dtable {--dtable-header-bg: var(--color-special-50); --dtable-border-color: rgba(var(--color-fore-rgb), .1)}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover {background-color: var(--color-canvas); z-index: 10; height: auto!important; outline: 1px solid var(--color-gray-300); box-shadow: var(--shadow-lg); min-height: 48px!important}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover .dtable-cell-html {overflow: visible!important;}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover .dtable-cell-html .whitespace-nowrap {white-space: normal!important;}
 </style>
 </head>
 <body>
@@ -239,29 +242,27 @@ function initTable(data)
                     html: true,
                     size: 'lg',
                     mono: false,
-                    error: [
-                        '<table class="table w-full canvas ring shadow rounded-lg table-fixed">',
-                          '<thead class="sticky" style="top: -2px">',
-                            '<tr>',
-                              '<th style="width: 48px">ID</th>',
-                              '<th style="width: 64px">Duration (ms)</th>',
-                              '<th style="width: auto">Query</th>',
-                            '</tr>',
-                          '</thead>',
-                          '<tbody>',
-                          sqlDetails.map(detail => [
-                              '<tr>',
-                                `<td>${detail.Query_ID}</td>`,
-                                `<td class="text-${getTimeClass(detail.Duration, 200, 100)}">${detail.Duration * (oldVersion ? 1000 : 1)}</td>`,
-                                '<td class="text-sm">',
-                                    `<div class="whitespace-normal font-mono select-all">${detail.Query}</div>`,
-                                    detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : '',
-                                '</td>',
-                              '</tr>',
-                            ].join('\n')).join('\n'),
-                          '</tbody>',
-                        '</table>'
-                    ].join('\n'),
+                    error: '<div id="sqlDetailsTable"></div>',
+                    onShown() {
+                        zui.create('dtable', '#sqlDetailsTable', {
+                            cols: [
+                                {name: 'Query_ID', title: 'ID', width: 48, sort: 'number'},
+                                {name: 'Duration', title: 'Duration (ms)', align: 'center', width: 112, format: (val) => val * (oldVersion ? 1000 : 1), sort: 'number'},
+                                {name: 'Query', title: 'Query', flex: 1, onRenderCell: (result, info) => {
+                                    const detail = info.row.data;
+                                    result[0] = {html: `<div class="whitespace-nowrap font-mono select-all">${detail.Query}</div>${detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : ''}`, className: 'text-sm h-full py-1'};
+                                    return result;
+                                }},
+                            ],
+                            rowHeight: 48,
+                            headerHeight: 32,
+                            data: sqlDetails,
+                            sort: true,
+                            rowHover: true,
+                            sortBy: {name: 'Duration', order: 'desc'},
+                            plugins: ['sort'],
+                        });
+                    },
                 });
                 return;
             }
