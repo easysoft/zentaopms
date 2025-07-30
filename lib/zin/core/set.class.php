@@ -18,6 +18,8 @@ require_once __DIR__ . DS . 'context.func.php';
 
 class set extends setting implements iDirective
 {
+    public bool $notRenderInGlobal;
+
     /**
      * Create an instance, the initialed data can be passed.
      *
