@@ -119,7 +119,7 @@ class ssoZen extends sso
 
         if($this->loadModel('user')->isLogon() and $this->session->user->account == $user->account) return $this->locate($locate);
 
-        $user->last     = date(DT_DATETIME1, $last);
+        $user->last     = date(DT_DATETIME1, (int)$last);
         $user->lastTime = $user->last;
         $user = $this->user->checkNeedModifyPassword($user, 0);
         $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
