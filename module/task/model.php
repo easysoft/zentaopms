@@ -2101,11 +2101,16 @@ class taskModel extends model
      */
     public function getAllChildId(int $taskID, bool $includeSelf = true): array
     {
+        if(!$taskID) return [];
+
+        $task = $this->fetchByID($taskID);
+        if(!$task) return [];
+
         return $this->dao->select('id')->from(TABLE_TASK)
-            ->where('path')->like("%,$taskID,%")
+            ->where('path')->like($task->path . '%') // 去除左侧的模糊查询以利用索引提高性能。Remove the left fuzzy query to use index to improve performance.
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($taskID)->fi()
-            ->fetchPairs('id');
+            ->fetchPairs();
     }
 
     /**
