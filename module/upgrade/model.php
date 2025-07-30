@@ -11344,8 +11344,11 @@ class upgradeModel extends model
         $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         foreach($workflowGroups as $workflowGroup)
         {
+            $nameFilter        = array();
+            $deliverableFilter = array();
+            $sprintFilter      = array();
             $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
-            if($groupDeliverable) $otherModule = $this->createOtherModule($workflowGroup->id);
+            if($groupDeliverable) $otherModule = '0';
 
             /* 解析项目流程的交付物配置。 */
             foreach($groupDeliverable as $stageCode => $methodDeliverable)
@@ -11365,7 +11368,18 @@ class upgradeModel extends model
                             $deliverable->desc          = $oldDeliverable->desc;
                             $deliverable->module        = $otherModule;
                             $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
-                            $deliverable->name          = $oldDeliverable->name;
+
+                            /* 重名的交付物名称后面加数字。 */
+                            if(!empty($nameFilter[$oldDeliverable->name]))
+                            {
+                                $deliverable->name = $oldDeliverable->name . $nameFilter[$oldDeliverable->name];
+                                $nameFilter[$oldDeliverable->name] ++;
+                            }
+                            else
+                            {
+                                $deliverable->name = $oldDeliverable->name;
+                                $nameFilter[$oldDeliverable->name] = 1;
+                            }
 
                             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
                             $deliverableID = $this->dao->lastInsertID();
@@ -11375,9 +11389,36 @@ class upgradeModel extends model
                         {
                             $deliverableID = $deliverableFilter[$oldDeliverable->id];
                         }
+
+                        $workflowGroupModel            = "{$workflowGroup->projectType}_{$workflowGroup->projectModel}";
+                        $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
+                        $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
+                        $deliverableStage->deliverable = $deliverableID;
+                        /* 将原来不同类型的迭代合并成一个迭代。 */
+                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        {
+                            $deliverableStage->stage = 'sprint';
+                            /* 其中有一个类型是必填的合并后的结果就是必填。 */
+                            if(isset($sprintFilter[$deliverableID]) && empty($sprintFilter[$deliverableID]) && !empty($deliverableStage->required))
+                            {
+                                $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq('1')->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('sprint')->exec();
+                            }
+                            if(!isset($sprintFilter[$deliverableID]))
+                            {
+                                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                            }
+                        }
+                        else
+                        {
+                            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                        }
+                        $sprintFilter[$deliverableID] = $deliverableStage->required;
                     }
                 }
             }
         }
+
+        /* 将历史的交付物数据删掉。 */
+        $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverableList))->exec();
     }
 }
