@@ -1020,7 +1020,7 @@ class taskModel extends model
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
 
         if(dao::isError()) return false;
-        if($this->dao->inTransaction()) $this->dao->commit();
+        $this->dao->commit();
 
         if($createAction)
         {
