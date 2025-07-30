@@ -858,13 +858,16 @@ class testtaskModel extends model
             }
             elseif($this->app->tab == 'execution')
             {
+                $executionLastOrder++;
+                $projectLastOrder++;
+
                 $case->project = (int)$execution->id;
                 $case->case    = $run->case;
-                $case->order   = ++$executionLastOrder;
+                $case->order   = $executionLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
 
                 $case->project = (int)$execution->project;
-                $case->order   = ++$projectLastOrder;
+                $case->order   = $projectLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
 
