@@ -1,0 +1,18 @@
+title: zt_task
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: parent
+    range: "0{6},6,0,2,0{3},3,15,1"
+  - field: isParent
+    range: 1{3},0{2},1,0{8},1
+  - field: path
+    fields:
+    - field: path1
+      range: "``{6},`,6`,``,`,2`,``{3},`,3`,`,1,15`,`,1`"
+    - field: path2
+      prefix: ','
+      range: 1-15
+      postfix: ','
+  - field: deleted
+    range: 0{10},1,0{4}
