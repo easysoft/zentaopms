@@ -239,29 +239,26 @@ function initTable(data)
                     html: true,
                     size: 'lg',
                     mono: false,
-                    error: [
-                        '<table class="table w-full canvas ring shadow rounded-lg table-fixed">',
-                          '<thead class="sticky" style="top: -2px">',
-                            '<tr>',
-                              '<th style="width: 48px">ID</th>',
-                              '<th style="width: 64px">Duration (ms)</th>',
-                              '<th style="width: auto">Query</th>',
-                            '</tr>',
-                          '</thead>',
-                          '<tbody>',
-                          sqlDetails.map(detail => [
-                              '<tr>',
-                                `<td>${detail.Query_ID}</td>`,
-                                `<td class="text-${getTimeClass(detail.Duration, 200, 100)}">${detail.Duration * (oldVersion ? 1000 : 1)}</td>`,
-                                '<td class="text-sm">',
-                                    `<div class="whitespace-normal font-mono select-all">${detail.Query}</div>`,
-                                    detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : '',
-                                '</td>',
-                              '</tr>',
-                            ].join('\n')).join('\n'),
-                          '</tbody>',
-                        '</table>'
-                    ].join('\n'),
+                    error: '<div id="sqlDetailsTable"></div>',
+                    onShown() {
+                        zui.create('dtable', '#sqlDetailsTable', {
+                            cols: [
+                                {name: 'Query_ID', title: 'ID', width: 48, sort: 'number'},
+                                {name: 'Duration', title: 'Duration (ms)', align: 'center', width: 112, format: (val) => val * (oldVersion ? 1000 : 1), sort: 'number'},
+                                {name: 'Query', title: 'Query', flex: 1, onRenderCell: (result, info) => {
+                                    const detail = info.row.data;
+                                    result[0] = {html: `<div class="whitespace-normal font-mono select-all">${detail.Query}</div>${detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : ''}`, className: 'text-sm'};
+                                    return result;
+                                }},
+                            ],
+                            rowHeight: 48,
+                            headerHeight: 32,
+                            data: sqlDetails,
+                            sort: true,
+                            sortBy: {name: 'Duration', order: 'desc'},
+                            plugins: ['sort'],
+                        });
+                    },
                 });
                 return;
             }
