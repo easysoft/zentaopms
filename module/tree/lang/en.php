@@ -67,6 +67,8 @@ $lang->tree->groupName              = 'Group Name';
 $lang->tree->parentGroup            = 'Parent grpup';
 $lang->tree->childGroup             = 'Child';
 $lang->tree->confirmDeleteHost      = 'Do you want to delete this host and its child hosts?';
+$lang->tree->designModule           = 'Design';
+$lang->tree->otherModule            = 'Other';
 
 $lang->tree->module       = 'Module';
 $lang->tree->name         = 'Module Name';
