@@ -16,3 +16,5 @@ fields:
     format: ""
   - field: left
     range: 1-5
+  - field: mode
+    range: "[],linear,multi"

@@ -135,6 +135,19 @@ class metricTest
     }
 
     /**
+     * Test getPairsByScopeAndDate method.
+     *
+     * @param  string $scope
+     * @param  string $date
+     * @access public
+     * @return array|false
+     */
+    public function getPairsByScopeAndDate($scope, $date)
+    {
+        return $this->objectModel->getPairsByScopeAndDate($scope, $date);
+    }
+
+    /**
      * Test getControlOptions method.
      *
      * @param  string $scope
