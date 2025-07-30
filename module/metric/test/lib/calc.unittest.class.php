@@ -18,9 +18,10 @@ class metricTest
      */
     public function initMetric()
     {
-        global $tester,$app;
+        global $tester,$app,$config;
         $appPath = $app->getAppRoot();
-        $sqlFile = $appPath . 'test/data/metric.sql';
+        $sqlName = $config->db->driver == 'dm' ? 'metric_dm.sql' : 'metric.sql';
+        $sqlFile = $appPath . "test/data/$sqlName";
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
