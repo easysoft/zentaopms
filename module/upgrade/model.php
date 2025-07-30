@@ -11330,5 +11330,54 @@ class upgradeModel extends model
      */
     public function upgradeDeliverable()
     {
+        $this->app->loadLang('tree');
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'disabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+
+        $deliverableStage = new stdClass();
+
+        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        $deliverableList = $this->dao->select('id,name')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->fetchAll('id');
+        $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        foreach($workflowGroups as $workflowGroup)
+        {
+            $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
+            if($groupDeliverable) $otherModule = $this->createOtherModule($workflowGroup->id);
+
+            /* 解析项目流程的交付物配置。 */
+            foreach($groupDeliverable as $stageCode => $methodDeliverable)
+            {
+                foreach($methodDeliverable as $methodCode => $deliverableConfigs)
+                {
+                    foreach($deliverableConfigs as $config)
+                    {
+                        $oldDeliverableID = $config['deliverable'];
+                        if(empty($deliverableList[$oldDeliverableID])) continue;
+
+                        $oldDeliverable = $deliverableList[$oldDeliverableID];
+                        if(empty($deliverableFilter[$oldDeliverable->id]))
+                        {
+                            $deliverableFile            = $fileList[$oldDeliverableID]; // 原交付物只会上传一个附件。
+                            $deliverable->workflowGroup = $workflowGroup->id;
+                            $deliverable->desc          = $oldDeliverable->desc;
+                            $deliverable->module        = $otherModule;
+                            $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
+                            $deliverable->name          = $oldDeliverable->name;
+
+                            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+                            $deliverableID = $this->dao->lastInsertID();
+                            $deliverableFilter[$oldDeliverable->id] = $deliverableID;
+                        }
+                        else
+                        {
+                            $deliverableID = $deliverableFilter[$oldDeliverable->id];
+                        }
+                    }
+                }
+            }
+        }
     }
 }
