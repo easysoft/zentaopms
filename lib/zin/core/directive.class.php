@@ -32,6 +32,8 @@ class directive implements iDirective
 
     public mixed $parent = null;
 
+    public bool $notRenderInGlobal;
+
     /**
      * Construct a directive object
      * @param  string $type
