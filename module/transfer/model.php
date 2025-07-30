@@ -105,8 +105,19 @@ class transferModel extends model
         $rows = $this->getRows($module, $fieldList);
         if($module == 'story')
         {
-            $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
-            if($product and $product->shadow) foreach($rows as $id => $row) $rows[$id]->product = '';
+            $parentList = array_map(function($row) {
+                return $row->parent;
+            }, $rows);
+            $parentList  = array_filter($parentList);
+            $parentList  = array_unique($parentList);
+            $parentPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parentList)->fetchPairs();
+            $product    = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
+
+            foreach($rows as $id => $row)
+            {
+                $rows[$id]->parent = $row->parent ? '#' . $row->parent . ' ' . $parentPairs[$row->parent] : '';
+                if(!empty($product->shadow)) $rows[$id]->product = '';
+            }
         }
 
         /* 设置Excel下拉数据。 */
