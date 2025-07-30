@@ -11348,7 +11348,7 @@ class upgradeModel extends model
             $deliverableFilter = array();
             $sprintFilter      = array();
             $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
-            if($groupDeliverable) $otherModule = '0';
+            if($groupDeliverable) $otherModule = $this->createOtherModule($workflowGroup->id);
 
             /* 解析项目流程的交付物配置。 */
             foreach($groupDeliverable as $stageCode => $methodDeliverable)
@@ -11420,5 +11420,38 @@ class upgradeModel extends model
 
         /* 将历史的交付物数据删掉。 */
         $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverableList))->exec();
+    }
+
+    /**
+     * 内置交付物其他分类。
+     * Create other module.
+     *
+     * @param  int    $workflowGroupID
+     * @access public
+     * @return int
+     */
+    public function createOtherModule(int $workflowGroupID): int
+    {
+        $module = new stdclass();
+        $module->root      = $workflowGroupID;
+        $module->branch    = '0';
+        $module->name      = $this->lang->tree->otherModule;
+        $module->parent    = '0';
+        $module->path      = '';
+        $module->grade     = '1';
+        $module->order     = '0';
+        $module->type      = 'deliverable';
+        $module->from      = '0';
+        $module->owner     = '';
+        $module->collector = null;
+        $module->short     = '';
+        $module->extra     = 'design';
+        $module->deleted   = '0';
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
     }
 }
