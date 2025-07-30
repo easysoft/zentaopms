@@ -982,7 +982,7 @@ class task extends control
      */
     public function delete(int $executionID, int $taskID, string $from = '')
     {
-        $task = $this->task->getByID($taskID);
+        $task = $this->task->fetchByID($taskID);
 
         /* 如果是父任务，先删除所有子任务 */
         if($task->isParent)
