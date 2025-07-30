@@ -9,6 +9,9 @@
 <style>
 .dark {--zt-page-bg: var(--color-gray-50)}
 .dtable {--dtable-header-bg: var(--color-special-50); --dtable-border-color: rgba(var(--color-fore-rgb), .1)}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover {background-color: var(--color-canvas); z-index: 10; height: auto!important; outline: 1px solid var(--color-gray-300); box-shadow: var(--shadow-lg); min-height: 48px!important}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover .dtable-cell-html {overflow: visible!important;}
+#sqlDetailsTable .dtable-cell[data-col="Query"]:hover .dtable-cell-html .whitespace-nowrap {white-space: normal!important;}
 </style>
 </head>
 <body>
@@ -247,7 +250,7 @@ function initTable(data)
                                 {name: 'Duration', title: 'Duration (ms)', align: 'center', width: 112, format: (val) => val * (oldVersion ? 1000 : 1), sort: 'number'},
                                 {name: 'Query', title: 'Query', flex: 1, onRenderCell: (result, info) => {
                                     const detail = info.row.data;
-                                    result[0] = {html: `<div class="whitespace-normal font-mono select-all">${detail.Query}</div>${detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : ''}`, className: 'text-sm'};
+                                    result[0] = {html: `<div class="whitespace-nowrap font-mono select-all">${detail.Query}</div>${detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : ''}`, className: 'text-sm h-full py-1'};
                                     return result;
                                 }},
                             ],
@@ -255,6 +258,7 @@ function initTable(data)
                             headerHeight: 32,
                             data: sqlDetails,
                             sort: true,
+                            rowHover: true,
                             sortBy: {name: 'Duration', order: 'desc'},
                             plugins: ['sort'],
                         });
