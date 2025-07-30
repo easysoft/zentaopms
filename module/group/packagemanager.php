@@ -3660,8 +3660,9 @@ $config->group->package->manageReportTemplate->subset = 'reporttemplate';
 $config->group->package->manageReportTemplate->privs  = array();
 $config->group->package->manageReportTemplate->privs['reporttemplate-addcategory']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-editcategory'));
 $config->group->package->manageReportTemplate->privs['reporttemplate-editcategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-addcategory'));
-$config->group->package->manageReportTemplate->privs['reporttemplate-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array());
-$config->group->package->manageReportTemplate->privs['reporttemplate-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reporttemplate-browse', 'reporttemplate-view'), 'recommend' => array('reporttemplate-create'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array('reporttemplate-pause'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reporttemplate-browse', 'reporttemplate-view'), 'recommend' => array('reporttemplate-create', 'reporttemplate-pause'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-pause']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-create', 'reporttemplate-edit'));
 
 $config->group->package->deleteReportTemplate = new stdclass();
 $config->group->package->deleteReportTemplate->order  = 20;
