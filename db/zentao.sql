@@ -2006,6 +2006,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `parent` ON `zt_story` (`parent`);
 CREATE INDEX `product` ON `zt_story` (`product`);
 CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
@@ -2139,6 +2140,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
 CREATE INDEX `execution` ON `zt_task` (`execution`);
 CREATE INDEX `story` ON `zt_task` (`story`);
 CREATE INDEX `parent` ON `zt_task` (`parent`);
+CREATE INDEX `path` ON `zt_task` (`path`(100));
 CREATE INDEX `assignedTo` ON `zt_task` (`assignedTo`);
 CREATE INDEX `order` ON `zt_task` (`order`);
 
