@@ -11214,7 +11214,7 @@ class upgradeModel extends model
             $module = new stdclass();
             $module->root      = $group->id;
             $module->branch    = '0';
-            $module->name      = $this->lang->deliverable->designModule;
+            $module->name      = $this->lang->tree->designModule;
             $module->parent    = '0';
             $module->path      = '';
             $module->grade     = '1';
@@ -11319,5 +11319,16 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($designType)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
         }
+    }
+
+    /**
+     * 将通用交付物升级为项目流程下的交付物。
+     * Upgrade deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDeliverable()
+    {
     }
 }
