@@ -238,7 +238,7 @@ class task extends control
             $this->locate($url);
         }
 
-        if($this->app->tab == 'my')
+        if($this->app->tab == 'my' && $this->config->vision == 'rnd')
         {
             $this->loadModel('my');
             if($from == 'work' || $from == 'contribute')
