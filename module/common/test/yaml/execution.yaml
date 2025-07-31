@@ -40,6 +40,11 @@ fields:
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
+  - field: realBegan
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: grade
     range: 1
   - field: parent
