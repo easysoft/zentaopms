@@ -4932,14 +4932,13 @@ class executionModel extends model
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
 
-            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->project->countDeliverable($execution, 'execution');
-
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
             if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
+        if(in_array($this->config->edition, array('max', 'ipd'))) $rows = $this->project->countDeliverable($rows, 'execution');
         return $rows;
     }
 

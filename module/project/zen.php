@@ -1394,12 +1394,10 @@ class projectZen extends project
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
 
-            /* 交付物提交进度。 */
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $project->deliverable = $this->project->countDeliverable($project);
-            }
         }
+
+        /* 交付物提交进度。 */
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
 
         return array_values($projectList);
     }
