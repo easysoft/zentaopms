@@ -374,10 +374,7 @@ class admin extends control
             {
                 $this->dbh->exec($sql);
             }
-            catch(PDOException $e)
-            {
-                $this->app->triggerError($e->getMessage(), __FILE__, __LINE__);
-            }
+            catch(PDOException $e){}
             if(isset($this->config->admin->metricLib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
             return $this->send(['result' => 'success']);
         }
