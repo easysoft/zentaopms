@@ -228,23 +228,23 @@ class metricZen extends metric
 
         /* 保证逻辑集中，这里直接使用sql查询获取数据，保证查询性能。*/
         /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
-        $productList = $this->dao->select('id')->from(TABLE_PRODUCT)
+        $productList = $this->dao->select('id,closedDate')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('shadow')->eq(0)
-            ->fetchPairs('id');
+            ->fetchPairs('id', 'closedDate');
 
-        $projectList = $this->dao->select('id')->from(TABLE_PROJECT)
+        $projectList = $this->dao->select('id,closedDate')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('status')->notIN('closed,done')
             ->andWhere('type')->eq('project')
-            ->fetchPairs('id');
+            ->fetchPairs('id', 'closedDate');
 
-        $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+        $executionList = $this->dao->select('id,closedDate')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('status')->notIN('closed,done')
             ->andWhere('type')->in('sprint,stage,kanban')
-            ->fetchPairs('id');
+            ->fetchPairs('id', 'closedDate');
 
         $this->validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
     }
@@ -356,6 +356,7 @@ class metricZen extends metric
         $this->getValidObjects();
         $validObjects = $this->validObjects;
         $records = array();
+        $yesterday = strtotime('-1 day');
         foreach($calcList as $code => $calc)
         {
             $metric = $this->metric->getByCode($code);
@@ -378,7 +379,9 @@ class metricZen extends metric
 
                     /* 如果度量项是产品、项目、执行且不统计关闭时的对象的度量数据，则过滤掉已关闭的数据。*/
                     /* If the metric is product, project, execution, filter out the closed data. */
-                    if(!$endWithClosing && isset($validObjects[$scope]) && !isset($validObjects[$scope][$record->$scope])) continue;
+                    $closedDate = isset($validObjects[$scope]) && isset($validObjects[$scope][$record->$scope]) ? $validObjects[$scope][$record->$scope] : null;
+                    $isClosedEarlierThanYesterday = $closedDate !== null ? strtotime($closedDate) < $yesterday : false;
+                    if(!$endWithClosing && $closedDate !== null && $isClosedEarlierThanYesterday) continue;
 
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
