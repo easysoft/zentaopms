@@ -780,6 +780,7 @@ class doc extends control
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
+                ->remove('fromVersion')
                 ->get();
 
             $result = $this->doc->update($docID, $docData);
