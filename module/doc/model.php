@@ -3651,14 +3651,15 @@ class docModel extends model
      * Get editors of a document.
      *
      * @param  int    $docID
+     * @param  string $objectType
      * @access public
      * @return array
      */
-    public function getEditors(int $docID = 0): array
+    public function getEditors(int $docID = 0, string $objectType = 'doc'): array
     {
         if(!$docID) return array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
+            ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($docID)
             ->andWhere('action')->in('edited')
             ->orderBy('date_desc')
