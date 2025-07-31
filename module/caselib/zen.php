@@ -558,7 +558,7 @@ class caselibZen extends caselib
     {
         $users          = $this->loadModel('user')->getPairs('noletter');
         $relatedModules = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
-        $relatedSteps   = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedSteps   = $this->loadModel('testcase')->getRelatedSteps(array_keys($cases));
         $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
 
         $cases = $this->testcase->appendData($cases);
