@@ -1703,14 +1703,7 @@ class actionModel extends model
             }
             else
             {
-                if($history->field == 'deliverable' && ($objectType == 'project' || $objectType == 'execution'))
-                {
-                    $content .= $this->processDeliverableJson($objectType, $objectID, $history);
-                }
-                else
-                {
-                    $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
-                }
+                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
             }
         }
         return $content;
