@@ -1887,8 +1887,7 @@ class pivotModel extends model
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
-        $dbh     = $this->app->loadDriver($driver);
-        $records = $dbh->query($sql)->fetchAll();
+        $records = $this->bi->queryWithDriver($driver, $sql);
         $settingFields = $this->filterFieldsWithSettings($fields, $groups, $settings['columns']);
         $records = $this->mapRecordValueWithFieldOptions($records, $settingFields, $driver);
 
