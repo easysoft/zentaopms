@@ -398,6 +398,8 @@ class programplanModel extends model
                 $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
 
+                if(in_array($this->config->edition, array('max', 'ipd'))) $plan = $this->execution->changeExecutionDeliverable($stageID, $plan);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
 
