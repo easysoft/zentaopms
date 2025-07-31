@@ -24,6 +24,7 @@ div
         set::userMap($users),
         set::footPager(usePager()),
         set::loadPartial(),
-        set::loadOptions(array('zui-command' => 'updateLazyContent', 'data-lazy-target' => '#table-api-struct'))
+        set::loadOptions(array('zui-command' => 'updateLazyContent', 'data-lazy-target' => '#table-api-struct')),
+        set::sortLink(createLink('api', 'struct', "libID={$libID}&releaseID={$releaseID}&orderBy={name}_{sortType}"))
     ),
 );
