@@ -2832,17 +2832,15 @@ class execution extends control
      */
     public function storySort(int $executionID)
     {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
+        $storyIdList = json_decode($this->post->storyIdList, true);
+        $storyIdList = array_flip($storyIdList);
+        $orderBy     = $this->post->orderBy;
 
-        $idList  = explode(',', trim($this->post->storyList, ','));
-        $orderBy = $this->post->orderBy;
-
-        $order = $this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
-        if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
-        foreach($idList as $storyID)
+        krsort($storyIdList);
+        $order = $this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        foreach($storyIdList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
-            if(dao::isError()) return $this->sendError(dao::getError());
             $order++;
         }
 
