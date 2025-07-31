@@ -11458,7 +11458,7 @@ class upgradeModel extends model
             if(empty($oldProjectDeliverable)) continue;
 
             /* 解析项目的交付物配置。 */
-            foreach($oldProjectDeliverable as $stageCode => $methodDeliverable)
+            foreach($oldProjectDeliverable as $methodDeliverable)
             {
                 foreach($methodDeliverable as $deliverableConfigs)
                 {
