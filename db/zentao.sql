@@ -2079,7 +2079,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `isParent` tinyint(1) NOT NULL DEFAULT '0',
   `isTpl` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `path` text NULL,
+  `path` varchar(255) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2139,7 +2139,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
 CREATE INDEX `execution` ON `zt_task` (`execution`);
 CREATE INDEX `story` ON `zt_task` (`story`);
 CREATE INDEX `parent` ON `zt_task` (`parent`);
-CREATE INDEX `path` ON `zt_task` (`path`(100));
+CREATE INDEX `path` ON `zt_task` (`path`);
 CREATE INDEX `assignedTo` ON `zt_task` (`assignedTo`);
 CREATE INDEX `order` ON `zt_task` (`order`);
 
