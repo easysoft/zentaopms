@@ -527,7 +527,7 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
+            ->beginIF(strpos(',story,requirement,epic,', ",{$storyType},") !== false)->andWhere('t2.type')->in($storyType)->fi()
             ->fetchGroup('project', 'id');
     }
 
