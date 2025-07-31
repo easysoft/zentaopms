@@ -471,8 +471,8 @@ class adminModel extends model
         {
             if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
-            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], (!empty($menuGroup['icon']) ? "<i class='icon icon-{$menuGroup['icon']} svg-icon bg-{$menuGroup['bg']}' style='height:24px;width:24px;text-align:center;border-radius:0.375rem;color:#fff;align-content:center;margin-left:6px;opacity:1;transform: scale(1);'></i>" : "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>") . $menuGroup['name']) . "</li>";
+            if(!empty($menuGroup['disabled'])) $class .= ' disabled not-clear-menu';
+            $output .= "<li class='$class'>" . html::a(!empty($menuGroup['disabled']) ? '###' : (!empty($menuGroup['link']) ? $menuGroup['link'] : ''), (!empty($menuGroup['icon']) ? "<i class='icon icon-{$menuGroup['icon']} svg-icon bg-{$menuGroup['bg']}' style='height:24px;width:24px;text-align:center;border-radius:0.375rem;color:#fff;align-content:center;margin-left:6px;opacity:1;transform: scale(1);'></i>" : "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>") . $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
 
