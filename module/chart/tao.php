@@ -52,8 +52,7 @@ class chartTao extends chartModel
         }
         $sql .= " GROUP BY $groupBySql";
 
-        $dbh = $this->app->loadDriver($driver);
-        return $dbh->query($sql)->fetchAll();
+        return $this->loadModel('bi')->queryWithDriver($driver, $sql);
     }
 
     /**
