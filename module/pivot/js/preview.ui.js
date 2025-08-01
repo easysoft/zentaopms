@@ -116,8 +116,8 @@ function loadCustomPivot(showMode = 'group')
     const form = zui.createFormData();
     if(showMode == 'origin') form.append('summary', 'notuse');
     filterValues.forEach((val, index) => {
-        if (Array.isArray(val)) {
-            val.forEach(v => form.append(`filterValues[${index}][]`, v));
+        if (typeof val === 'object') {
+            for(var i in val) form.append(`filterValues[${index}][${i}]`, val[i]);
         } else {
             form.append(`filterValues[${index}]`, val)
         }
