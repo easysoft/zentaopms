@@ -396,6 +396,9 @@ if($config->systemMode == 'light')
 $lang->project->authList['extend'] = "继承 (取系统权限与{$lang->projectCommon}权限的合集)";
 $lang->project->authList['reset']  = "重新定义 (只取{$lang->projectCommon}权限)";
 
+$lang->project->sortAuthList['extend'] = '继承';
+$lang->project->sortAuthList['reset']  = '重新定义';
+
 $lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
