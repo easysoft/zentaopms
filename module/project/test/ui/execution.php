@@ -46,7 +46,7 @@ $project->grade->range('1');
 $project->name->range('敏捷项目1, 迭代1, 迭代2, 迭代3, 迭代4, 迭代5, 迭代6, 迭代7, 迭代8, 迭代9, 迭代10, 迭代11, 迭代12, 迭代13, 迭代14, 迭代15');
 $project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
-$project->end->range('(-1M)-(+2M):5D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(-11D)-(+2M):2D')->type('timestamp')->format('YY/MM/DD');
 $project->status->range('wait{8}, doing{4}, suspended{3}, closed{1}');
 $project->acl->range('open');
 $project->vision->range('rnd');
