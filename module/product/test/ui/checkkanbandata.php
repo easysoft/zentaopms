@@ -60,7 +60,7 @@ $productplan->product->range(1);
 $productplan->title->range('计划1,计划2,计划3,计划4,计划5,计划6,计划7');
 $productplan->parent->range(0);
 $productplan->begin->range('(-10M)-(-7M):7D')->type('timestamp')->format('YYYY-MM-DD');
-$productplan->end->range('(-1M)-(+6M):10D')->type('timestamp')->format('YYYY-MM-DD');
+$productplan->end->range('(-11D)-(+2M):4D')->type('timestamp')->format('YYYY-MM-DD');
 $productplan->status->range('wait{3},doing{2},done{1},closed{1}');
 $productplan->gen(7);
 
