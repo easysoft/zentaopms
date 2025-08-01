@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 title=运营界面创建目标测试
 timeout=0
-cid=70
 
 */
 chdir(__DIR__);
