@@ -95,6 +95,7 @@ class miscModel extends model
     {
         if(!$this->app->user->admin) return '';
         if($this->config->edition == 'open') return '';
+        if($this->config->vision != 'rnd') return '';
 
         $remind = '';
         if(empty($this->config->global->metriclibShowed))

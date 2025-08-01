@@ -42,116 +42,126 @@ dashboard
     set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
 
-$remind = $this->loadModel('misc')->getPluginRemind();
-$remind ? modal
-(
-    setID('expiredModal'),
-    set::title($lang->misc->expiredTipsTitle),
-    html($remind)
-) : null;
-
-$metriclibRemind = $this->misc->getMetriclibRemind();
-$metriclibRemind ? modal
-(
-    setID('metriclibModal'),
-    html($metriclibRemind)
-) : null;
-
-$upgradeRemind = $this->misc->getUpgradeRemind();
+$upgradeRemind = $this->loadModel('misc')->getUpgradeRemind();
 if($upgradeRemind)
 {
-    $guideInfo = $this->config->upgradeGuide[$config->edition];
-
     $clientLang = common::checkNotCN() ? 'en' : 'cn';
+    $guideInfo  = $this->config->upgradeGuide[$config->edition];
     $version    = $guideInfo['version'];
     $imagePath  = $guideInfo['imagePath'];
     $moreLink   = 'https://api.zentao.net/goto.php?item=' . $guideInfo['linkItem'];
+
+    modal
+    (
+        setID('upgradeModal'),
+        div
+        (
+            setClass('page-block pageOne'),
+            img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
+            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
+            div
+            (
+                setClass('my-6 text-center'),
+                btn
+                (
+                    setClass('primary'),
+                    on::click("togglePage('pageTwo')"),
+                    $lang->block->nextPage
+                )
+            )
+        ),
+        div
+        (
+            setClass('page-block pageTwo hidden'),
+            img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
+            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
+            div
+            (
+                setClass('my-6 text-center'),
+                btn
+                (
+                    setClass('mr-4'),
+                    on::click("togglePage('pageOne')"),
+                    $lang->block->prevPage
+                ),
+                btn
+                (
+                    setClass('primary'),
+                    on::click("togglePage('pageThree')"),
+                    $lang->block->nextPage
+                )
+            )
+        ),
+        div
+        (
+            setClass('page-block pageThree hidden'),
+            img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
+            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
+            div
+            (
+                setClass('my-6 text-center'),
+                btn
+                (
+                    setClass('mr-4'),
+                    on::click("togglePage('pageTwo')"),
+                    $lang->block->prevPage
+                ),
+                btn
+                (
+                    setClass('primary'),
+                    on::click("togglePage('pageFour')"),
+                    $lang->block->nextPage
+                )
+            )
+        ),
+        div
+        (
+            setClass('page-block pageFour hidden'),
+            img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
+            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
+            div
+            (
+                setClass('my-6 text-center'),
+                btn
+                (
+                    setClass('mr-4'),
+                    on::click("togglePage('pageThree')"),
+                    $lang->block->prevPage
+                ),
+                btn
+                (
+                    setClass('primary'),
+                    setData('dismiss', 'modal'),
+                    $lang->block->experience
+                )
+            )
+        )
+    );
 }
-$upgradeRemind ? modal
-(
-    setID('upgradeModal'),
-    div
-    (
-        setClass('page-block pageOne'),
-        img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-        div
+else
+{
+    $pluginRemind = $this->misc->getPluginRemind();
+    if($pluginRemind)
+    {
+        modal
         (
-            setClass('my-6 text-center'),
-            btn
+            setID('expiredModal'),
+            set::title($lang->misc->expiredTipsTitle),
+            html($pluginRemind)
+        );
+    }
+    else
+    {
+        $metriclibRemind = $this->misc->getMetriclibRemind();
+        if($metriclibRemind)
+        {
+            modal
             (
-                setClass('primary'),
-                on::click("togglePage('pageTwo')"),
-                $lang->block->nextPage
-            )
-        )
-    ),
-    div
-    (
-        setClass('page-block pageTwo hidden'),
-        img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-        div
-        (
-            setClass('my-6 text-center'),
-            btn
-            (
-                setClass('mr-4'),
-                on::click("togglePage('pageOne')"),
-                $lang->block->prevPage
-            ),
-            btn
-            (
-                setClass('primary'),
-                on::click("togglePage('pageThree')"),
-                $lang->block->nextPage
-            )
-        )
-    ),
-    div
-    (
-        setClass('page-block pageThree hidden'),
-        img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-        div
-        (
-            setClass('my-6 text-center'),
-            btn
-            (
-                setClass('mr-4'),
-                on::click("togglePage('pageTwo')"),
-                $lang->block->prevPage
-            ),
-            btn
-            (
-                setClass('primary'),
-                on::click("togglePage('pageFour')"),
-                $lang->block->nextPage
-            )
-        )
-    ),
-    div
-    (
-        setClass('page-block pageFour hidden'),
-        img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-        div
-        (
-            setClass('my-6 text-center'),
-            btn
-            (
-                setClass('mr-4'),
-                on::click("togglePage('pageThree')"),
-                $lang->block->prevPage
-            ),
-            btn
-            (
-                setClass('primary'),
-                setData('dismiss', 'modal'),
-                $lang->block->experience
-            )
-        )
-    )
-) : null;
+                setID('metriclibModal'),
+                html($metriclibRemind)
+            );
+        };
+    }
+}
 
 render();
