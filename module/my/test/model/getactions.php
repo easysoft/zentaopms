@@ -8,18 +8,20 @@ title=测试 myModel->getActions();
 timeout=0
 cid=1
 
-- 正常查询action @96
-- 正常查询action属性1 @64
-- 正常查询action属性2 @32
-- 正常查询action属性3 @95
-- 正常查询action属性4 @63
+- 查询最近两年的动态中序号为0的actionID @93
+- 查询最近两年的动态中序号为1的actionID属性1 @62
+- 查询最近两年的动态中序号为2的actionID属性2 @31
+- 查询最近两年的动态中序号为3的actionID属性3 @92
+- 查询最近两年的动态中序号为4的actionID属性4 @61
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zendata('action')->gen('100');
+$actions = zendata('action');
+$actions->date->range('(-30D):1D')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$actions->gen('100');
 zendata('doc')->gen('0');
 zendata('api')->gen('0');
 zendata('doclib')->gen('0');
@@ -37,8 +39,8 @@ $app->loadLang('action');
 $my = new myTest();
 
 $actions = $my->getActionsTest();
-r($actions) && p('0') && e('93'); // 正常查询action
-r($actions) && p('1') && e('62'); // 正常查询action
-r($actions) && p('2') && e('31'); // 正常查询action
-r($actions) && p('3') && e('92'); // 正常查询action
-r($actions) && p('4') && e('61'); // 正常查询action
+r($actions) && p('0') && e('93'); // 查询最近两年的动态中序号为0的actionID
+r($actions) && p('1') && e('62'); // 查询最近两年的动态中序号为1的actionID
+r($actions) && p('2') && e('31'); // 查询最近两年的动态中序号为2的actionID
+r($actions) && p('3') && e('92'); // 查询最近两年的动态中序号为3的actionID
+r($actions) && p('4') && e('61'); // 查询最近两年的动态中序号为4的actionID
