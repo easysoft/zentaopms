@@ -846,9 +846,10 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `product`   ON `zt_doc`(`product`);
-CREATE INDEX `execution` ON `zt_doc`(`execution`);
-CREATE INDEX `lib`       ON `zt_doc`(`lib`);
+CREATE INDEX `product`      ON `zt_doc`(`product`);
+CREATE INDEX `execution`    ON `zt_doc`(`execution`);
+CREATE INDEX `lib`          ON `zt_doc`(`lib`);
+CREATE INDEX `templateType` ON `zt_doc`(`templateType`);
 
 -- DROP TABLE IF EXISTS `zt_docaction`;
 CREATE TABLE IF NOT EXISTS `zt_docaction` (
