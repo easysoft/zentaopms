@@ -2,7 +2,6 @@ $(function()
 {
     if($('#expiredModal').length) zui.Modal.open({id: 'expiredModal'});
     if($('#metriclibModal').length) zui.Modal.open({id: 'metriclibModal'});
-    if($('#annualModal').length)  zui.Modal.open({id: 'annualModal'});
     if($('#upgradeModal').length)  zui.Modal.open({id: 'upgradeModal'});
 });
 
