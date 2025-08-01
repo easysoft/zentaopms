@@ -41,8 +41,11 @@ class count_of_assigned_task extends baseCalc
                 $this->result[$user][$row->id] = $row->id;
             }
         }
-        if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
-        $this->result[$assignedTo][$row->id] = $row->id;
+        else
+        {
+            if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
+            $this->result[$assignedTo][$row->id] = $row->id;
+        }
     }
 
     public function getResult($options = array())
