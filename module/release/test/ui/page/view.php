@@ -31,8 +31,8 @@ class viewPage extends page
             /*发布关联Bug的元素*/
             'resolvedBugTab'    => "//*[@id='mainContent']/div[2]/div/div/div/div/ul/li[2]/a/span",
             'linkBugBtn'        => "//*[@id='mainContent']/div[2]/div/div/div/div[2]/div[2]/div/button/span",
-            'selectAllBug'      => "//*[@id='unlinkBugList']/div[3]/div/div/label",
-            'linkBugBtnBottom'  => "//*[@id='unlinkBugList']/div/nav/button/span",
+            'selectAllBug'      => "//*[@id='linkBugList']/div[3]/div/div/label",
+            'linkBugBtnBottom'  => "//*[@id='linkBugList']/div/nav/button/span",
             'resolvedBugNum'    => "//*[@id='resolvedBugDTable']/div[3]/div[2]/strong",
             'unlinkFirBugBtn'   => "//*[@id='resolvedBugDTable']/div[2]/div[3]/div/div/div/nav/a/i",
             'allResolvedBugBtn' => "//*[@id='resolvedBugDTable']/div[3]/div/div/label",
