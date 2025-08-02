@@ -481,14 +481,14 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'target' => '#linkBugList div.dtable-body div[data-col="id"][data-row="1"]',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step11->name
 );
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'target' => '#linkBugList div.dtable-footer button.linkObjectBtn',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step12->name,
     'desc'   => $lang->tutorial->productManage->releaseManage->step12->desc
@@ -512,14 +512,14 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'target' => '#linkLeftBugList div.dtable-body div[data-col="id"][data-row="1"]',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step15->name
 );
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'target' => '#linkLeftBugList div.dtable-footer button.linkObjectBtn',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step16->name,
     'desc'   => $lang->tutorial->productManage->releaseManage->step16->desc
@@ -535,12 +535,14 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'form',
+    'target' => '#publishForm',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step18->name
 );
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'saveForm',
+    'target' => '#publishForm button[type="submit"]',
     'page'   => 'release-view',
     'title'  => $lang->tutorial->productManage->releaseManage->step19->name,
     'desc'   => $lang->tutorial->productManage->releaseManage->step19->desc

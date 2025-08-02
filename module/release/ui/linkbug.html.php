@@ -36,7 +36,7 @@ searchForm
 $checkedRows = array_values(array_filter(array_map(function($bug) use($type) {return ($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : 0;}, $allBugs)));
 dtable
 (
-    set::id('unlinkBugList'),
+    set::id($type == 'leftBug' ? 'linkLeftBugList': 'linkBugList'),
     set::userMap($users),
     set::checkable(true),
     set::cols($cols),
