@@ -166,7 +166,7 @@ class doc extends control
         }
 
         $doc = $this->doc->getByID($blockData->doc);
-        $this->view->isTemplate = !empty($doc->templateType) && $blockData->extra != 'fromReview';
+        $this->view->isTemplate = !empty($doc->templateType) && !in_array($blockData->extra, array('fromReview', 'fromProjectReport'));
 
         if($this->view->isTemplate)
         {
