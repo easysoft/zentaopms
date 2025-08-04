@@ -368,6 +368,7 @@ $lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
 $lang->doc->zentaoList['bug']        = $lang->bug->common;
+$lang->doc->zentaoList['projectBug'] = $lang->projectCommon . $lang->bug->common;
 $lang->doc->zentaoList['productBug'] = '产品Bug';
 $lang->doc->zentaoList['planBug']    = '计划Bug';
 
@@ -381,6 +382,11 @@ $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = '反馈';
 $lang->doc->zentaoList['ticket']             = '工单';
 $lang->doc->zentaoList['gantt']              = '甘特图';
+
+$lang->doc->zentaoList['HLDS'] = '概要设计';
+$lang->doc->zentaoList['DDS']  = '详细设计';
+$lang->doc->zentaoList['DBDS'] = '数据库设计';
+$lang->doc->zentaoList['ADS']  = '接口设计';
 
 $lang->doc->zentaoAction = array();
 $lang->doc->zentaoAction['set']       = '设置';
