@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $noticeTip = $noSupport ? sprintf($lang->doc->noSupportList, $lang->doc->zentaoList[$type] . $lang->doc->list) : '';
+$listText  = $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list;
 
 if($type == 'gantt' && !empty($ganttData))
 {
@@ -88,7 +89,7 @@ div
         div
         (
             setClass('config-tip text-center px-3 py-2'),
-            $isTemplate && !$fromReport ? sprintf($lang->docTemplate->configTip, $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list) : $emptyTip
+            $isTemplate ? sprintf($lang->docTemplate->configTip, $listText) : $emptyTip
         )
     ):null,
     !$isTemplate && $type != 'gantt' && !$noSupport ? dtable
