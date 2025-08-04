@@ -11317,6 +11317,8 @@ class upgradeModel extends model
         $deliverable->createdDate = helper::now();
 
         $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
 
         $deliverableList   = array();
         $nameFilter        = array(); // 过滤重名交付物。
@@ -11357,8 +11359,6 @@ class upgradeModel extends model
                     $deliverableID = $this->dao->lastInsertID();
                     $deliverableList[$workflowGroup->id][$oldDeliverable->id] = $deliverableID;
 
-                    $deliverableStage->stage       = 'project';
-                    $deliverableStage->required    = '0';
                     $deliverableStage->deliverable = $deliverableID;
                     $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
                 }
