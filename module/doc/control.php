@@ -169,6 +169,14 @@ class doc extends control
         $this->view->isTemplate = !empty($doc->templateType) && !in_array($blockData->extra, array('fromReview', 'fromReport'));
         $this->view->fromReport = $blockData->extra == 'fromReport';
 
+        $noSupport = false;
+        if($this->view->fromReport)
+        {
+            $project   = $this->loadModel('project')->fetchByID($this->session->project);
+            $noSupport = in_array($type, array('HLDS', 'DDS', 'DBDS', 'ADS')) && in_array($project->model, array('scrum', 'scrumplus', 'kanban'));
+        }
+        $this->view->noSupport = $noSupport;
+
         if($this->view->isTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
