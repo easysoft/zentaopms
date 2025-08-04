@@ -35,8 +35,8 @@ if($type == 'productCase')
 }
 
 $actions = array();
-$setText = (!$isTemplate && $fromTemplate) ? $lang->doc->zentaoAction['setParams'] : $lang->doc->zentaoAction['set'];
-if($type != 'gantt' || !$isTemplate) $actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
+$setText = (!$isTemplate && $fromTemplate && !$fromReport) ? $lang->doc->zentaoAction['setParams'] : $lang->doc->zentaoAction['set'];
+if($type != 'gantt' || !$isTemplate) $actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate || $fromReport ? 'sm' : 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
 if($isTemplate || $fromTemplate)
@@ -47,7 +47,7 @@ if($isTemplate || $fromTemplate)
     if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
-$emptyTip = $lang->doc->previewTip;
+$emptyTip = $fromReport ? $lang->docTemplate->emptyTip : $lang->doc->previewTip;
 if(!$isTemplate && $fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
 
 $pagerSetting = usePager();
@@ -66,7 +66,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            ($isTemplate || $fromTemplate ? $blockTitle . $lang->docTemplate->zentaoList[$type] : $lang->doc->zentaoList[$type]) . ($type == 'gantt' ? '' : $lang->doc->list)
+            (($isTemplate || $fromTemplate || $fromReport) ? $blockTitle . $lang->docTemplate->zentaoList[$type] : $lang->doc->zentaoList[$type]) . ($type == 'gantt' ? '' : $lang->doc->list)
         ),
         div
         (
@@ -86,7 +86,7 @@ div
         div
         (
             setClass('config-tip text-center px-3 py-2'),
-            $isTemplate ? sprintf($lang->docTemplate->configTip, $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list) : $emptyTip
+            $isTemplate && !$fromReport ? sprintf($lang->docTemplate->configTip, $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list) : $emptyTip
         )
     ):null,
     !$isTemplate && $type != 'gantt' ? dtable
