@@ -3706,7 +3706,7 @@ class upgradeModel extends model
 
             $projectList = $result;
         }
-        else if(!empty($data->projects))
+        elseif(!empty($data->projects))
         {
             $projectList = (int)$data->projects;
             $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectList)->exec();
@@ -11388,7 +11388,7 @@ class upgradeModel extends model
                         {
                             $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq($deliverableStage->required)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
                         }
-                        else if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        elseif(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
                         {
                             /* 将原来不同类型的迭代合并成一个迭代。 */
                             $deliverableStage->stage = 'sprint';
