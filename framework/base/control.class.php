@@ -1101,7 +1101,7 @@ class baseControl
         global $lang;
         $moduleName = $this->app->rawModule;
         $notSameTab = isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} != $this->app->tab;
-        $hasLocate  = isset($data['locate']) && $data['locate'][0] == '/';
+        $hasLocate  = !empty($data['locate']) && $data['locate'][0] == '/';
         if($notSameTab && $hasLocate && !helper::inOnlyBodyMode())
         {
             $data['locate'] .= "#app={$this->app->tab}";
