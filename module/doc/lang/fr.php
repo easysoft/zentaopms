@@ -538,6 +538,7 @@ $lang->doc->previewNotAvailable         = 'Preview function is not available. Pl
 $lang->doc->hocuspocusConnect           = 'The collaborative editing service is connected.';
 $lang->doc->hocuspocusDisconnect        = 'The collaborative editing service is disconnected. Edits will be synchronized after reconnection.';
 $lang->doc->docTemplateConvertComment   = 'The template has been converted to the new editor format. Switch to version %s to view the template before conversion.';
+$lang->doc->noSupportList               = "This {$lang->projectCommon} does not support %s.";
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";

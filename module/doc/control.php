@@ -166,7 +166,16 @@ class doc extends control
         }
 
         $doc = $this->doc->getByID($blockData->doc);
-        $this->view->isTemplate = !empty($doc->templateType) && !in_array($blockData->extra, array('fromReview', 'fromProjectReport'));
+        $this->view->isTemplate = !empty($doc->templateType) && !in_array($blockData->extra, array('fromReview', 'fromReport'));
+        $this->view->fromReport = $blockData->extra == 'fromReport';
+
+        $noSupport = false;
+        if($this->view->fromReport)
+        {
+            $project   = $this->loadModel('project')->fetchByID($this->session->project);
+            $noSupport = in_array($type, array('HLDS', 'DDS', 'DBDS', 'ADS')) && in_array($project->model, array('scrum', 'scrumplus', 'kanban'));
+        }
+        $this->view->noSupport = $noSupport;
 
         if($this->view->isTemplate)
         {
@@ -181,7 +190,7 @@ class doc extends control
             return $this->display();
         }
 
-        $fromTemplate = $blockData->extra == 'fromTemplate' || $blockData->extra == 'fromReview';
+        $fromTemplate = in_array($blockData->extra, array('fromTemplate', 'fromReview', 'fromReport'));
         if($fromTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
