@@ -11318,91 +11318,108 @@ class upgradeModel extends model
 
         $deliverableStage = new stdClass();
 
-        $deliverableList = array();
-        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->fetchAll();
-        $deliverables    = $this->dao->select('id,name')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->fetchAll('id');
-        $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        $deliverableList   = array();
+        $nameFilter        = array(); // 过滤重名交付物。
+        $otherModule       = array(); // 交付物其他分类。
+        $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
+        $deliverables      = $this->dao->select('id,name,model,`desc`')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
+        $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
+        foreach($deliverables as $oldDeliverable)
+        {
+            foreach(explode(',', $oldDeliverable->model) as $model)
+            {
+                foreach($workflowGroups as $workflowGroup)
+                {
+                    if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
+                    if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
+                    if(empty($otherModule[$workflowGroup->id])) $otherModule[$workflowGroup->id] = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
+
+                    $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
+                    $deliverable->workflowGroup = $workflowGroup->id;
+                    $deliverable->desc          = $oldDeliverable->desc;
+                    $deliverable->module        = $otherModule[$workflowGroup->id];
+                    $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
+
+                    /* 重名的交付物名称后面加数字。 */
+                    if(!empty($nameFilter[$workflowGroup->id][$oldDeliverable->name]))
+                    {
+                        $deliverable->name = $oldDeliverable->name . $nameFilter[$oldDeliverable->name];
+                        $nameFilter[$workflowGroup->id][$oldDeliverable->name] ++;
+                    }
+                    else
+                    {
+                        $deliverable->name = $oldDeliverable->name;
+                        $nameFilter[$workflowGroup->id][$oldDeliverable->name] = 1;
+                    }
+
+                    $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+                    $deliverableID = $this->dao->lastInsertID();
+                    $deliverableList[$workflowGroup->id][$oldDeliverable->id] = $deliverableID;
+
+                    $deliverableStage->stage       = 'project';
+                    $deliverableStage->required    = '0';
+                    $deliverableStage->deliverable = $deliverableID;
+                    $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+        }
+
+        $sprintFilter = array(); // 过滤重复交付物检查规则。
+        /* 按照项目流程下的交付物配置设置各个交付物的检查规则。 */
         foreach($workflowGroups as $workflowGroup)
         {
-            $nameFilter        = array(); // 过滤重名交付物。
-            $deliverableFilter = array(); // 过滤重复交付物。
-            $sprintFilter      = array(); // 过滤重复交付物检查规则。
-            $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
-            if($groupDeliverable) $otherModule = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
-
             /* 解析项目流程的交付物配置。 */
+            $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
             foreach($groupDeliverable as $stageCode => $methodDeliverable)
             {
                 foreach($methodDeliverable as $deliverableConfigs)
                 {
                     foreach($deliverableConfigs as $config)
                     {
-                        $oldDeliverableID = $config['deliverable'];
-                        if(empty($deliverables[$oldDeliverableID])) continue;
+                        if(empty($deliverableList[$workflowGroup->id][$config['deliverable']])) continue;
 
-                        $oldDeliverable = $deliverables[$oldDeliverableID];
-                        if(empty($deliverableFilter[$oldDeliverable->id]))
-                        {
-                            $deliverableFile            = $fileList[$oldDeliverableID]; // 原交付物只会上传一个附件。
-                            $deliverable->workflowGroup = $workflowGroup->id;
-                            $deliverable->desc          = $oldDeliverable->desc;
-                            $deliverable->module        = $otherModule;
-                            $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
-
-                            /* 重名的交付物名称后面加数字。 */
-                            if(!empty($nameFilter[$oldDeliverable->name]))
-                            {
-                                $deliverable->name = $oldDeliverable->name . $nameFilter[$oldDeliverable->name];
-                                $nameFilter[$oldDeliverable->name] ++;
-                            }
-                            else
-                            {
-                                $deliverable->name = $oldDeliverable->name;
-                                $nameFilter[$oldDeliverable->name] = 1;
-                            }
-
-                            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
-                            $deliverableID = $this->dao->lastInsertID();
-                            $deliverableFilter[$oldDeliverable->id] = $deliverableID;
-                            $deliverableList[$oldDeliverable->id]   = $deliverableID;
-                        }
-                        else
-                        {
-                            $deliverableID = $deliverableFilter[$oldDeliverable->id];
-                        }
-
+                        $deliverableID                 = $deliverableList[$workflowGroup->id][$config['deliverable']];
                         $workflowGroupModel            = "{$workflowGroup->projectType}_{$workflowGroup->projectModel}";
                         $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
                         $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
                         $deliverableStage->deliverable = $deliverableID;
-                        /* 将原来不同类型的迭代合并成一个迭代。 */
-                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        if($deliverableStage->stage == 'project')
                         {
+                            $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq($deliverableStage->required)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
+                        }
+                        else if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        {
+                            /* 将原来不同类型的迭代合并成一个迭代。 */
                             $deliverableStage->stage = 'sprint';
                             /* 其中有一个类型是必填的合并后的结果就是必填。 */
-                            if(isset($sprintFilter[$deliverableID]) && empty($sprintFilter[$deliverableID]) && !empty($deliverableStage->required))
+                            if(isset($sprintFilter[$deliverableID]['sprint']) && empty($sprintFilter[$deliverableID]['sprint']) && !empty($deliverableStage->required))
                             {
                                 $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq('1')->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('sprint')->exec();
                             }
-                            if(!isset($sprintFilter[$deliverableID]))
+                            if(!isset($sprintFilter[$deliverableID]['sprint']))
                             {
                                 $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
                             }
                         }
-                        else
+                        elseif(!isset($sprintFilter[$deliverableID][$deliverableStage->stage]))
                         {
                             $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
                         }
-                        $sprintFilter[$deliverableID] = $deliverableStage->required;
+                        $sprintFilter[$deliverableID][$deliverableStage->stage] = $deliverableStage->required;
                     }
                 }
             }
         }
 
-        /* 将历史的交付物数据删掉。 */
-        $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverableList))->andWhere('workflowGroup')->eq('0')->exec();
+        /* 将已升级的历史交付物数据删掉。 */
+        $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverables))->andWhere('workflowGroup')->eq('0')->exec();
 
-        $this->upgradeProjectDeliverable($deliverableList);
+        /* 升级完后把没用的字段删掉。 */
+        $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " DROP `method`, DROP `model`, DROP `type`, DROP `files`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+
+        if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
     }
 
     /**
@@ -11450,7 +11467,7 @@ class upgradeModel extends model
      */
     public function upgradeProjectDeliverable(array $deliverableList)
     {
-        $projectList = $this->dao->select('id,deliverable')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
+        $projectList = $this->dao->select('id,deliverable,workflowGroup')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
         foreach($projectList as $project)
         {
             $projectDeliverable    = array();
@@ -11467,7 +11484,7 @@ class upgradeModel extends model
                         if(empty($config['doc']) && empty($config['file'])) continue;
 
                         $oldDeliverableID = $config['deliverable'];
-                        $deliverableID    = !empty($deliverableList[$oldDeliverableID]) ? $deliverableList[$oldDeliverableID] : $oldDeliverableID;
+                        $deliverableID    = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
                         $projectDeliverable[$deliverableID]['id']   = $deliverableID;
                         $projectDeliverable[$deliverableID]['doc']  = !empty($config['doc'])  ? $config['doc']  : '';
                         $projectDeliverable[$deliverableID]['file'] = !empty($config['file']) ? $config['file'] : '';
