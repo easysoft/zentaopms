@@ -11235,8 +11235,8 @@ class upgradeModel extends model
             ->andWhere('lang')->in(array($clientLang, 'all'))
             ->fetchPairs();
 
-        $this->lang->design->typeList     = array_merge($this->lang->design->typeList,     $typeList);
-        $this->lang->design->plusTypeList = array_merge($this->lang->design->plusTypeList, $plusTypeList);
+        if($typeList)     $this->lang->design->typeList     = $typeList;
+        if($plusTypeList) $this->lang->design->plusTypeList = $plusTypeList;
 
         $modelList  = array('waterfall', 'waterfallplus', 'ipd');
         $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
