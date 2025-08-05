@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $noticeTip = $noSupport ? sprintf($lang->doc->noSupportList, $lang->doc->zentaoList[$type] . $lang->doc->list) : '';
-$listText  = $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list;
 
 if($type == 'gantt' && !empty($ganttData))
 {
@@ -50,11 +49,36 @@ if($isTemplate || $fromTemplate)
     if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
-$emptyTip = $fromReport ? $lang->docTemplate->emptyTip : $lang->doc->previewTip;
+$emptyTip = $lang->doc->previewTip;
 if(!$isTemplate && $fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
+if($fromReport) $emptyTip = $lang->docTemplate->emptyDataTip;
+
+$listText  = $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list;
+$emptyText = $isTemplate ? sprintf($lang->docTemplate->configTip, $listText) : $emptyTip;
 
 $pagerSetting = usePager();
 unset($pagerSetting['linkCreator']);
+
+$dataTable = null;
+if(!$isTemplate && $type != 'gantt' && !$noSupport)
+{
+    $dataTable = dtable
+        (
+            set::cols(array_values($cols)),
+            set::data(array_values($data)),
+            set::userMap($users),
+            set::emptyTip($emptyTip),
+            set::checkable(false),
+            set::colResize(true),
+            set::customCols(false),
+            set::onRenderCell(jsRaw('window.renderCell')),
+            set::localPager(),
+            set::footPager($pagerSetting),
+            set::footer(array('flex', 'pager')),
+            $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
+            $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
+        );
+}
 
 div
 (
@@ -89,25 +113,10 @@ div
         div
         (
             setClass('config-tip text-center px-3 py-2'),
-            $isTemplate ? sprintf($lang->docTemplate->configTip, $listText) : $emptyTip
+            $emptyText
         )
     ):null,
-    !$isTemplate && $type != 'gantt' && !$noSupport ? dtable
-    (
-        set::cols(array_values($cols)),
-        set::data(array_values($data)),
-        set::userMap($users),
-        set::emptyTip($emptyTip),
-        set::checkable(false),
-        set::colResize(true),
-        set::customCols(false),
-        set::onRenderCell(jsRaw('window.renderCell')),
-        set::localPager(),
-        set::footPager($pagerSetting),
-        set::footer(array('flex', 'pager')),
-        $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
-        $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
-    ) : null,
+    $dataTable,
     $noSupport ? div
     (
         setClass('canvas border rounded py-3 px-3'),
