@@ -11328,9 +11328,7 @@ class upgradeModel extends model
         $this->app->loadLang('tree');
 
         $deliverable = new stdClass();
-        $deliverable->status      = 'disabled';
-        $deliverable->createdBy   = 'system';
-        $deliverable->createdDate = helper::now();
+        $deliverable->status = 'disabled';
 
         $deliverableStage = new stdClass();
         $deliverableStage->stage    = 'project';
@@ -11358,6 +11356,8 @@ class upgradeModel extends model
                     $deliverable->desc          = $oldDeliverable->desc;
                     $deliverable->module        = $otherModule[$workflowGroup->id];
                     $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
+                    $deliverable->createdBy     = $oldDeliverable->createdBy;
+                    $deliverable->createdDate   = !empty($oldDeliverable->createdDate) ? $oldDeliverable->createdDate : null;
 
                     /* 重名的交付物名称后面加数字。 */
                     if(!empty($nameFilter[$workflowGroup->id][$oldDeliverable->name]))
