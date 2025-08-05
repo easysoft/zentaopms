@@ -50,8 +50,9 @@ if($isTemplate || $fromTemplate)
     if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
-$emptyTip = $fromReport ? $lang->docTemplate->emptyTip : $lang->doc->previewTip;
+$emptyTip = $lang->doc->previewTip;
 if(!$isTemplate && $fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
+if($fromReport) $emptyTip = $lang->docTemplate->emptyDataTip;
 
 $pagerSetting = usePager();
 unset($pagerSetting['linkCreator']);
