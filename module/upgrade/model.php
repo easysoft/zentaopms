@@ -11231,7 +11231,7 @@ class upgradeModel extends model
 
         $plusTypeList = $this->dao->select('`key`, value')->from(TABLE_LANG)
             ->where('module')->eq('design')
-            ->andWhere('section')->eq('typeList')
+            ->andWhere('section')->eq('plusTypeList')
             ->andWhere('lang')->in(array($clientLang, 'all'))
             ->fetchPairs();
 
@@ -11375,8 +11375,11 @@ class upgradeModel extends model
                     $deliverableID = $this->dao->lastInsertID();
                     $deliverableList[$workflowGroup->id][$oldDeliverable->id] = $deliverableID;
 
-                    $deliverableStage->deliverable = $deliverableID;
-                    $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                    if(empty($workflowGroup->deliverable))
+                    {
+                        $deliverableStage->deliverable = $deliverableID;
+                        $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                    }
                 }
             }
         }
@@ -11400,11 +11403,8 @@ class upgradeModel extends model
                         $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
                         $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
                         $deliverableStage->deliverable = $deliverableID;
-                        if($deliverableStage->stage == 'project')
-                        {
-                            $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq($deliverableStage->required)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
-                        }
-                        elseif(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+
+                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
                         {
                             /* 将原来不同类型的迭代合并成一个迭代。 */
                             $deliverableStage->stage = 'sprint';
