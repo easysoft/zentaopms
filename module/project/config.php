@@ -331,6 +331,7 @@ $config->project->actionList['close']['icon']        = 'off';
 $config->project->actionList['close']['hint']        = $lang->project->close;
 $config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}');
 $config->project->actionList['close']['data-toggle'] = 'modal';
+$config->project->actionList['close']['data-size']   = '60rem';
 
 $config->project->actionList['activate']['icon']        = 'magic';
 $config->project->actionList['activate']['hint']        = $lang->project->activate;

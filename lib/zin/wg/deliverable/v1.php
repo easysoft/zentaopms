@@ -13,7 +13,7 @@ class deliverable extends wg
      */
     protected static array $defineProps = array
     (
-        'items: array',      // 交付物条目。
+        'items: array',       // 交付物条目。
         'formName: string',   // 表单名称。
         'maxFileSize: string' // 最大文件大小。
     );
@@ -30,9 +30,10 @@ class deliverable extends wg
     {
         global $lang, $app;
         $app->loadLang('doc');
-        $app->loadLang('file');
-        jsVar('downloadTemplate', $lang->doc->downloadTemplate);
+        $app->loadLang('deliverable');
+        jsVar('createByTemplate', $lang->deliverable->createByTemplate);
         jsVar('deleteItem',       $lang->delete);
+        jsVar('otherLang',        $lang->other);
         jsVar('canDownload',      hasPriv('file', 'download'));
 
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
@@ -55,8 +56,8 @@ class deliverable extends wg
         $formName      = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
         $isTemplate    = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
         $onlyShow      = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
-        $extraCategory = $this->prop('extraCategory');
-        $extraCategory = $extraCategory ? $extraCategory : array_column($this->prop('items'), 'category');
+        $extraCategory = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
+        $categories    = $this->prop('categories');
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('isTemplate', $isTemplate);
@@ -84,7 +85,9 @@ class deliverable extends wg
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
             set::maxFileSize($this->prop('maxFileSize')),
             set::isTemplate($isTemplate),
-            set::extraCategory($extraCategory)
+            set::templateMenu(jsRaw('window.getTemplateMenu')),
+            set::extraCategory($extraCategory),
+            set::categories($categories)
         );
     }
 }
