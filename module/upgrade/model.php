@@ -11346,7 +11346,7 @@ class upgradeModel extends model
                     /* 重名的交付物名称后面加数字。 */
                     if(!empty($nameFilter[$workflowGroup->id][$oldDeliverable->name]))
                     {
-                        $deliverable->name = $oldDeliverable->name . $nameFilter[$oldDeliverable->name];
+                        $deliverable->name = $oldDeliverable->name . $nameFilter[$workflowGroup->id][$oldDeliverable->name];
                         $nameFilter[$workflowGroup->id][$oldDeliverable->name] ++;
                     }
                     else
