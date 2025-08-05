@@ -11375,11 +11375,8 @@ class upgradeModel extends model
                     $deliverableID = $this->dao->lastInsertID();
                     $deliverableList[$workflowGroup->id][$oldDeliverable->id] = $deliverableID;
 
-                    if(empty($workflowGroup->deliverable))
-                    {
-                        $deliverableStage->deliverable = $deliverableID;
-                        $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
-                    }
+                    $deliverableStage->deliverable = $deliverableID;
+                    $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
                 }
             }
         }
@@ -11403,6 +11400,9 @@ class upgradeModel extends model
                         $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
                         $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
                         $deliverableStage->deliverable = $deliverableID;
+
+                        /* 如果这个交付物在项目流程下有交付物配置，则删除默认的交付物检查规则。 */
+                        if(!isset($sprintFilter[$deliverableID])) $this->dao->delete()->from(TABLE_DELIVERABLE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
 
                         if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
                         {
