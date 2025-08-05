@@ -261,7 +261,7 @@ class dropmenu extends wg
         return array
         (
             $this->buildDropmenu($menuID, $id, $url, $text, $data, $objectID),
-            $this->buildSubDropMenu($module, $method, $tab, $objectID, $extra),
+            $this->buildSubDropMenu($module, $method, $tab, (int)$objectID, $extra),
             isset($testtaskMenu) ? $testtaskMenu : null
         );
     }
