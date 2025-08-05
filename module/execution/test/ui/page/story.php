@@ -13,7 +13,7 @@ class storyPage extends page
             'num'          => "//*[@id='table-execution-story']/div[3]/div[2]/strong[1]",
             /* 列表 */
             'firstCheckbox'  => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[1]/div/div",
-            'firstName'      => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[2]/div/a",
+            'firstName'      => "//*[@id='table-execution-story']/div[2]/div[1]//div[@data-col='title']//a",
             'firstPhase'     => "//*[@id='table-execution-story']/div[2]/div[2]/div/div[6]/div/span",
             'firstAssignTo'  => "//*[@id='table-execution-story']/div[2]/div[2]/div/div[7]/div/a/span",
             'firstUnlinkBtn' => "//*[@id='table-execution-story']/div[2]/div[3]/div/div/div/nav/a[last()]",
