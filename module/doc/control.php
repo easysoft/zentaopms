@@ -2542,7 +2542,18 @@ class doc extends control
             $this->view->groups = $this->loadModel('group')->getPairs();
         }
 
+        $docTitle = '';
+        if(!empty($doc))
+        {
+            $docTitle = $doc->title;
+        }
+        elseif($this->post->title)
+        {
+            $docTitle = $this->post->title;
+        }
+
         $this->view->docID      = $docID;
+        $this->view->docTitle   = $docTitle;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
