@@ -11,7 +11,7 @@ class createWaterfallTester extends tester
      */
    public function checkLocating(array $waterfall)
     {
-        $form = $this->initForm('project', 'create', array('model' => 'waterfall'));
+        $form = $this->initForm('project', 'create', array('model' => 'waterfall'), 'appIframe-project');
         if(isset($waterfall['name'])) $form->dom->name->setValue($waterfall['name']);
         if(isset($waterfall['end']))  $form->dom->end->datePicker($waterfall['end']);
         if(isset($waterfall['PM']))   $form->dom->PM->picker($waterfall['PM']);
@@ -30,7 +30,7 @@ class createWaterfallTester extends tester
      */
     public function createDefault(array $waterfall)
     {
-        $form         = $this->initForm('project', 'create', array('model' => 'waterfall'));
+        $form         = $this->initForm('project', 'create', array('model' => 'waterfall'), 'appIframe-project');
         $categoryLang = (array)$this->lang->project->projectTypeList;
         if(isset($waterfall['parent']))   $form->dom->parent->picker($waterfall['parent']);
         if(isset($waterfall['name']))     $form->dom->name->setValue($waterfall['name']);
@@ -57,7 +57,6 @@ class createWaterfallTester extends tester
 
        /* 跳转到项目设置页面，点击设置菜单。 */
         $programplanPage = $this->loadPage('programplan', 'create');
-        $programplanPage->wait(4);
         $programplanPage->dom->settings->click();
         $viewPage = $this->loadPage('project', 'view');
         $viewPage->wait(4);

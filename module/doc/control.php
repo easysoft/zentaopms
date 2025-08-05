@@ -769,6 +769,7 @@ class doc extends control
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
+                ->remove('fromVersion')
                 ->get();
 
             $result = $this->doc->update($docID, $docData);
@@ -2126,7 +2127,7 @@ class doc extends control
             if(strpos(",{$this->app->company->admins}", ",{$account},") !== false) continue;
 
             $userView = zget($userViews, $account, '');
-            if(empty($userView)) $userView = $this->user->computeUserView($account);
+            if(empty($userView)) $userView = $this->user->computeUserView($account, true);
 
             if($objectType == 'product'   && isset($userView->products) && strpos(",{$userView->products},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
             if($objectType == 'project'   && isset($userView->projects) && strpos(",{$userView->projects},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
@@ -2244,7 +2245,7 @@ class doc extends control
         $this->view->objectType     = $type;
         $this->view->noSpace        = $noSpace;
         $this->view->objectID       = $spaceID;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users          = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title          = isset($this->lang->doc->spaceList[$type]) ? $this->lang->doc->spaceList[$type] : $this->lang->doc->common;
         $this->display();
     }
@@ -2284,7 +2285,7 @@ class doc extends control
         $this->view->orderBy    = $orderBy;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users      = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title      = $this->lang->doc->quick;
         $this->display();
     }

@@ -658,11 +658,11 @@ class testcase extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  string $type
-     * @param  string $tab
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchEdit(int $productID = 0, string $branch = '0', string $type = 'case', string $tab = '')
+    public function batchEdit(int $productID = 0, string $branch = '0', string $type = 'case', string $from = '')
     {
         if($type == 'case') $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
         if(!$this->post->caseIdList && !$this->post->id) $this->locate($this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$productID}"));
@@ -704,6 +704,15 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $this->view->projectID = $this->session->project;
+        }
+        elseif($this->app->tab == 'my')
+        {
+            $this->loadModel('my');
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'testcase';
+                $this->lang->my->menu->{$from}['subMenu']->testcase['subModule'] = 'testcase';
+            }
         }
 
         $this->testcaseZen->assignForBatchEdit($productID, $branch, $type, $cases);
@@ -1102,7 +1111,7 @@ class testcase extends control
         if($case->story)
         {
             $story = $this->loadModel('story')->fetchBaseInfo($case->story);
-            if($story->version)
+            if($story->version != $case->storyVersion)
             {
                 $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($story->version)->where('id')->eq($caseID)->exec();
                 $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $story->version);

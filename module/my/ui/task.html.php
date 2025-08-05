@@ -57,7 +57,7 @@ $canBatchEdit  = common::hasPriv('task', 'batchEdit');
 $canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';
 $footToolbar = array('items' => array
 (
-    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : array(),
+    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit', "executionID=0&from={$app->rawMethod}"))  : array(),
     $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : array()
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 

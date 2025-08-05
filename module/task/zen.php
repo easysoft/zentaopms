@@ -208,9 +208,6 @@ class taskZen extends task
         }
         else
         {
-            $this->loadModel('my');
-            $this->lang->my->menu->work['subModule'] = 'task';
-
             $this->view->title   = $this->lang->task->batchEdit;
             $this->view->users   = $this->loadModel('user')->getPairs('noletter');
             $this->view->modules = array();
@@ -2130,5 +2127,100 @@ class taskZen extends task
             $parents[$parentID] = $parent;
         }
         return $parents;
+    }
+
+    /**
+     * 处理过滤条件显示内容。
+     * Process filter title.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return string
+     */
+    public function processFilterTitle(string $browseType, int $param): string
+    {
+        if($browseType != 'bysearch' && $browseType != 'bymodule' && $browseType != 'byproduct')
+        {
+            $statusName = zget($this->lang->execution->featureBar['task'], $browseType, '');
+            if(empty($statusName)) $statusName = zget($this->lang->execution->statusSelects, $browseType);
+            return sprintf($this->lang->task->report->tpl->feature, $statusName);
+        }
+
+        if($browseType == 'byproduct' && $param)
+        {
+            $productName = $this->loadModel('product')->getById($param)->name;
+            return sprintf($this->lang->task->report->tpl->feature, $productName);
+        }
+
+        $fieldParams  = array();
+        $searchConfig = $this->session->tasksearchParams;
+        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
+
+        $leftConditions  = array();
+        $rightConditions = array();
+        $searchFields    = $this->session->taskForm;
+        $fieldNames      = json_decode($searchConfig['searchFields']);
+        if(!$searchFields) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
+
+        $this->app->loadLang('search');
+        $groupAndOr = 'and';
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        foreach($searchFields as $index => $field)
+        {
+            if($index == 6) $groupAndOr = $field['groupAndOr'];
+            if(!isset($field['field'])) continue;
+
+            if(isset($field['value']) && $field['value'] === '') continue;
+            if(!empty($fieldParams[$field['field']]['values']))
+            {
+                if($fieldParams[$field['field']]['values'] == 'users') $fieldParams[$field['field']]['values'] = $users;
+                $field['value'] = zget($fieldParams[$field['field']]['values'], $field['value']);
+            }
+
+            $fieldName = zget($fieldNames, $field['field']);
+            $operator  = zget($this->lang->search->operators, $field['operator']);
+
+            if($index == 0 || $index == 3) $field['andOr'] = '';
+            if($index < 3)     $leftConditions[]  = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->task->report->tpl->search, $fieldName, $operator, $field['value']);
+            elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->task->report->tpl->search, $fieldName, $operator, $field['value']);
+        }
+
+        if(empty($leftConditions) && empty($rightConditions)) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
+
+        if(empty($leftConditions))  return implode('', $rightConditions);
+        if(empty($rightConditions)) return implode('', $leftConditions);
+
+        return sprintf($this->lang->task->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
+    }
+
+    /**
+     * 获取报表任务列表。
+     * Get report task list.
+     *
+     * @param  object $execution
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getReportTaskList(object $execution, string $browseType = '', int $param = 0): array
+    {
+        if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
+
+        $this->loadModel('execution')->setMenu($execution->id);
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
+
+        $mode       = $this->app->tab == 'execution' ? 'multiple' : '';
+        $executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
+
+        /* Set queryID, moduleID and productID. */
+        $queryID = $moduleID = $productID = 0;
+        if($browseType == 'bysearch')  $queryID   = (int)$param;
+        if($browseType == 'bymodule')  $moduleID  = (int)$param;
+        if($browseType == 'byproduct') $productID = (int)$param;
+
+        return $this->execution->getTasks((int)$productID, $execution->id, $executions, $browseType, $queryID, (int)$moduleID, 'id_desc');
     }
 }

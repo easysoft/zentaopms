@@ -6,7 +6,10 @@ su('admin');
 
 /**
 
-title=测试记录任务的工时
+title=测试taskModel->recordWorkHour();
+timeout=0
+cid=1
+
 - 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
  - 属性field @consumed
  - 属性old @3

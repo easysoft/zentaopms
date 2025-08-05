@@ -1020,7 +1020,7 @@ class taskModel extends model
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
 
         if(dao::isError()) return false;
-        if($this->dao->inTransaction()) $this->dao->commit();
+        $this->dao->commit();
 
         if($createAction)
         {
@@ -2101,11 +2101,16 @@ class taskModel extends model
      */
     public function getAllChildId(int $taskID, bool $includeSelf = true): array
     {
+        if(!$taskID) return [];
+
+        $task = $this->fetchByID($taskID);
+        if(!$task) return [];
+
         return $this->dao->select('id')->from(TABLE_TASK)
-            ->where('path')->like("%,$taskID,%")
+            ->where('path')->like($task->path . '%') // 去除左侧的模糊查询以利用索引提高性能。Remove the left fuzzy query to use index to improve performance.
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($taskID)->fi()
-            ->fetchPairs('id');
+            ->fetchPairs();
     }
 
     /**
@@ -2424,6 +2429,11 @@ class taskModel extends model
         /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || !empty($task->mode) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
 
+        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
+        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
+        $executionInfo = zget($task, 'executionInfo', array());
+        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
+
         if(!empty($task->team))
         {
             global $app;
@@ -2447,12 +2457,6 @@ class taskModel extends model
                 if($action == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
-
-        $executionInfo = zget($task, 'executionInfo', array());
-
-        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
-        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
-        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
 
         /* 根据状态判断是否可以点击。 Check clickable by status. */
         if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';
@@ -3792,6 +3796,8 @@ class taskModel extends model
     public function confirmStoryChange(int $taskID): bool
     {
         $task = $this->getByID($taskID);
+        if($task->storyVersion == $task->latestStoryVersion) return true;
+
         $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
         $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->latestStoryVersion)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->exec();
         if(dao::isError()) return false;

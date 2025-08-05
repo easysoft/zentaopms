@@ -44,34 +44,34 @@ class weeklyTest
     {
         switch($begin)
         {
-        case '1':
-           $begin = '2023-04-24';
-           break;
-        case '2':
-           $begin = date('Y-m-d', strtotime('2023-04-24' . "- 10 days"));
-           break;
-        case '3':
-           $begin = date('Y-m-d', strtotime('2023-04-24' . "+ 10 days"));
-           break;
-        case '':
-           $begin = '';
-           break;
+            case '1':
+               $begin = '2023-04-24';
+               break;
+            case '2':
+               $begin = date('Y-m-d', strtotime('2023-04-24' . "- 10 days"));
+               break;
+            case '3':
+               $begin = date('Y-m-d', strtotime('2023-04-24' . "+ 10 days"));
+               break;
+            case '':
+               $begin = '';
+               break;
         }
 
-        switch($begin)
+        switch($end)
         {
-        case '1':
-           $end = '2023-04-24';
-           break;
-        case '2':
-           $end = date('Y-m-d', strtotime('2023-04-24' . "- 10 days"));
-           break;
-        case '3':
-           $end = date('Y-m-d', strtotime('2023-04-24' . "+ 10 days"));
-           break;
-        case '':
-           $end = '';
-           break;
+            case '1':
+               $end = '2023-04-24';
+               break;
+            case '2':
+               $end = date('Y-m-d', strtotime('2023-04-24' . "- 10 days"));
+               break;
+            case '3':
+               $end = date('Y-m-d', strtotime('2023-04-24' . "+ 10 days"));
+               break;
+            case '':
+               $end = '';
+               break;
         }
 
         $objects = $this->objectModel->getWeekPairs($begin, $end);

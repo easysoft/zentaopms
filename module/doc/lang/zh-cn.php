@@ -267,6 +267,7 @@ $lang->doc->createBook       = '创建手册';
 $lang->doc->browse           = '文档列表';
 $lang->doc->view             = '文档详情';
 $lang->doc->diff             = '对比';
+$lang->doc->confirm          = '确定';
 $lang->doc->cancelDiff       = '取消对比';
 $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';

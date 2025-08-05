@@ -3276,6 +3276,14 @@ class executionModel extends model
 
         /* Add the execution team members to the project. */
         if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
+
+        /* Add the execution team members to parent executions. */
+        foreach(explode(',', $execution->path) as $parentID)
+        {
+            if(empty($parentID) || $parentID == $execution->project) continue;
+            $this->executionTao->addExecutionMembers((int)$parentID, array_keys($executionMember));
+        }
+
         if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
     }
 
@@ -4924,7 +4932,7 @@ class executionModel extends model
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
 
-            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->project->countDeliverable($execution, 'execution');
+            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->loadModel('project')->countDeliverable($execution, 'execution');
 
             $rows[$execution->id] = $execution;
 

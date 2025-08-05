@@ -250,6 +250,8 @@ class holidayModel extends model
          $endTime   = strtotime($end);
          $days      = ($endTime - $beginTime) / 86400;
 
+         if(!$beginTime) return array();
+
          $dateList  = array();
          for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+{$i} days", $beginTime));
 

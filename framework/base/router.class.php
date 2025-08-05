@@ -1815,50 +1815,43 @@ class baseRouter
      */
     public function setParams()
     {
-        try
-        {
-            $defaultParams = $this->getDefaultParams();
+        $defaultParams = $this->getDefaultParams();
 
-            /**
-             * 根据PATH_INFO或者GET方式设置请求的参数。
-             * Set params according PATH_INFO or GET.
-             */
-            if($this->config->requestType != 'GET')
+        /**
+         * 根据PATH_INFO或者GET方式设置请求的参数。
+         * Set params according PATH_INFO or GET.
+         */
+        if($this->config->requestType != 'GET')
+        {
+            $this->setParamsByPathInfo($defaultParams);
+        }
+        else
+        {
+            $this->setParamsByGET($defaultParams);
+        }
+
+        if ('cli' === PHP_SAPI)
+        {
+            if ($this->params)
             {
-                $this->setParamsByPathInfo($defaultParams);
+                $this->params = array_merge($defaultParams, $this->params);
             }
             else
             {
-                $this->setParamsByGET($defaultParams);
+                $this->params = $defaultParams;
             }
-
-            if ('cli' === PHP_SAPI)
-            {
-                if ($this->params)
-                {
-                    $this->params = array_merge($defaultParams, $this->params);
-                }
-                else
-                {
-                    $this->params = $defaultParams;
-                }
-            }
-            else
-            {
-                if($this->config->framework->filterParam == 2)
-                {
-                    $_GET    = validater::filterParam($_GET, 'get');
-                    $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
-                }
-            }
-            $this->rawParams = $this->params;
-            return true;
         }
-        catch(EndResponseException $endResponseException)
+        else
         {
-            echo $endResponseException->getContent();
-            return false;
+            if($this->config->framework->filterParam == 2)
+            {
+                $_GET    = validater::filterParam($_GET, 'get');
+                $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
+            }
         }
+        $this->rawParams = $this->params;
+
+        return true;
     }
 
     /**
@@ -2770,12 +2763,13 @@ class baseRouter
         /* 初始化$config对象。Init the $config object. */
         global $config, $filter;
         if(!is_object($config)) $config = new config();
-        $this->config = $config;
 
         /* 加载主配置文件。 Load the main config file. */
         $mainConfigFile = $this->configRoot . 'config.php';
         if(!file_exists($mainConfigFile)) $this->triggerError("The main config file $mainConfigFile not found", __FILE__, __LINE__, true);
         include $mainConfigFile;
+
+        $this->config = $config;
     }
 
     /**
@@ -3151,9 +3145,9 @@ class baseRouter
 
             return $dbh;
         }
-        catch (EndResponseException $exception)
+        catch(PDOException $exception)
         {
-            $message = $exception->getContent();
+            $message = $exception->getMessage();
             if(empty($message))
             {
                 /* Try to repair table. */
@@ -3262,7 +3256,7 @@ class baseRouter
         $log = str_replace($this->basePath, '', $log);
 
         /* 触发错误(Trigger the error) */
-        trigger_error($log, $exit ? E_USER_ERROR : E_USER_WARNING);
+        $exit ? helper::end($log) : trigger_error($log, E_USER_WARNING);
     }
 
     /**
@@ -3361,12 +3355,12 @@ class baseRouter
         }
 
         /*
-         * 如果是严重错误，停止程序。
-         * If error level is serious, die.
+         * 如果是严重错误，由shutdown触发，会停止程序。
+         * If error level is serious, die by shutdown function.
          * */
         if(in_array($level, array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR)))
         {
-            if(empty($this->config->debug)) helper::end();
+            if(empty($this->config->debug)) return true;
 
             if(PHP_SAPI == 'cli')
             {
@@ -3377,9 +3371,10 @@ class baseRouter
                 $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
                 $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
                 echo $htmlError;
-                helper::end();
             }
         }
+
+        return true;
     }
 
     /**

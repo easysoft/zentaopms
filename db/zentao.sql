@@ -326,8 +326,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `injection` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `identify` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `injection` varchar(30) NOT NULL DEFAULT '',
+  `identify` varchar(30) NOT NULL DEFAULT '',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2005,6 +2005,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `parent` ON `zt_story` (`parent`);
 CREATE INDEX `product` ON `zt_story` (`product`);
 CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
@@ -2078,7 +2079,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `isParent` tinyint(1) NOT NULL DEFAULT '0',
   `isTpl` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `path` text NULL,
+  `path` varchar(255) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2138,6 +2139,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
 CREATE INDEX `execution` ON `zt_task` (`execution`);
 CREATE INDEX `story` ON `zt_task` (`story`);
 CREATE INDEX `parent` ON `zt_task` (`parent`);
+CREATE INDEX `path` ON `zt_task` (`path`);
 CREATE INDEX `assignedTo` ON `zt_task` (`assignedTo`);
 CREATE INDEX `order` ON `zt_task` (`order`);
 

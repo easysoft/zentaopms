@@ -43,6 +43,7 @@ window.showLink = function(type, params, onlyUpdateTable)
         return;
     }
     loadTarget({url: url, target: type === 'story' ? 'stories' : 'bugs'});
+    $('.detail-header .open-url').attr('href', $.createLink('productplan', 'view', 'planID=' + planID + '&type=' + type)).removeAttr('data-back');
 };
 
 window.onSearchLinks = function(type, result)

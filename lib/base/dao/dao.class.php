@@ -496,7 +496,7 @@ class baseDAO
      */
     public function begin()
     {
-        $this->dbh->beginTransaction();
+        if(!$this->dbh->inTransaction()) $this->dbh->beginTransaction();
     }
 
     /**
@@ -520,7 +520,7 @@ class baseDAO
      */
     public function rollBack()
     {
-        $this->dbh->rollBack();
+        if($this->dbh->inTransaction()) $this->dbh->rollBack();
     }
 
     /**
@@ -532,7 +532,7 @@ class baseDAO
      */
     public function commit()
     {
-        $this->dbh->commit();
+        if($this->dbh->inTransaction()) $this->dbh->commit();
     }
 
     /**
@@ -1171,8 +1171,7 @@ class baseDAO
             return 0;
         }
 
-        $inTransaction = $this->inTransaction();
-        if(!$inTransaction) $this->begin();
+        $this->begin();
 
         foreach($indexes as $fields)
         {
@@ -1191,11 +1190,8 @@ class baseDAO
 
         $result = $this->insert($table)->data($processedData)->exec();
 
-        if(!$inTransaction)
-        {
-            if(!$result) $this->rollback();
-            $this->commit();
-        }
+        if(!$result) $this->rollback();
+        $this->commit();
 
         return $result;
     }
@@ -1262,6 +1258,11 @@ class baseDAO
                 {
                     $this->cache->reset();
                 }
+            }
+
+            if(in_array($table, $this->config->userview->relatedTables))
+            {
+                $this->dbh->exec('UPDATE ' . TABLE_CONFIG . " SET `value` = '" . time() . "' WHERE `owner` = 'system' AND `module` = 'common' AND `section` = 'userview' AND `key` = 'relatedTablesUpdateTime'");
             }
 
             if($this->config->enableDuckdb)

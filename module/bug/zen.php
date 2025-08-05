@@ -673,6 +673,7 @@ class bugZen extends bug
             ->setDefault('product', $oldBug->product)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('resolvedDate', $oldBug->resolvedDate)
             ->add('lastEditedDate', $now)
             ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
@@ -750,7 +751,6 @@ class bugZen extends bug
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
-        if($this->config->edition == 'max') $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
         if($this->config->edition != 'open') $bugRelatedObjectList = $this->custom->getRelatedObjectList(array_keys($bugs), 'bug', 'byRelation', true);
         foreach($bugs as $bug)
         {
@@ -758,11 +758,6 @@ class bugZen extends bug
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
 
-            if(isset($identifyList))
-            {
-                $bug->injection = zget($identifyList, $bug->injection, '');
-                $bug->identify  = zget($identifyList, $bug->identify, '');
-            }
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
@@ -1073,8 +1068,6 @@ class bugZen extends bug
         $productMembers = $this->getProductMembersForCreate($bug);
         if(!in_array($bug->assignedTo, array_keys($productMembers))) $bug->assignedTo = $originAssignedTo;
 
-        if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
-
         $resultFiles = array();
         if(!empty($resultID) && !empty($stepIdList))
         {
@@ -1161,7 +1154,11 @@ class bugZen extends bug
         /* Get branch options. */
         $branchTagOption = array();
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
-        if($this->config->edition == 'max') $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $this->view->injectionList = $this->lang->bug->injectionList;
+            $this->view->identifyList  = $this->lang->bug->identifyList;
+        }
 
         $this->assignVarsForEdit($bug, $product);
 

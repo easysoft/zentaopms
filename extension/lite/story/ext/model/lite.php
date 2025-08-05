@@ -4,7 +4,7 @@ public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0,
     if($this->config->vision == 'lite')
     {
         $execution = $this->loadModel('execution')->getById($executionID);
-        if($execution->project) $executionID = $execution->project;
+        if(!empty($execution->project)) $executionID = $execution->project;
     }
     return parent::getExecutionStoryPairs($executionID, $productID, $branch, $moduleIdList, $type, $status, $storyType);
 }

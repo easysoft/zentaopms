@@ -134,6 +134,7 @@ foreach($results as $i => $result)
                 on::click('setFileModalHeight'),
                 set::href("#stepResult{$modalID}"),
                 set('data-toggle', 'modal'),
+                set('data-position', 'center'),
                 icon('paper-clip'),
                 $fileCount
             ) : ''

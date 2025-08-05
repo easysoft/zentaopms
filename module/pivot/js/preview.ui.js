@@ -115,7 +115,13 @@ function loadCustomPivot(showMode = 'group')
     const filterValues = getFilterValues();
     const form = zui.createFormData();
     if(showMode == 'origin') form.append('summary', 'notuse');
-    filterValues.forEach(val => form.append('filterValues[]', val));
+    filterValues.forEach((val, index) => {
+        if (typeof val === 'object') {
+            for(var i in val) form.append(`filterValues[${index}][${i}]`, val[i]);
+        } else {
+            form.append(`filterValues[${index}]`, val)
+        }
+    });
 
     const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);

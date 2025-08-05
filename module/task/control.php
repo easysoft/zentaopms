@@ -90,7 +90,7 @@ class task extends control
 
             if(dao::isError())
             {
-                if($this->dao->inTransaction()) $this->dao->rollBack();
+                $this->dao->rollBack();
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
@@ -206,10 +206,11 @@ class task extends control
      * Batch edit tasks.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchEdit(int $executionID = 0)
+    public function batchEdit(int $executionID = 0, string $from = '')
     {
         $this->taskZen->setMenu($executionID);
 
@@ -235,6 +236,16 @@ class task extends control
         {
             $url = !empty($this->session->taskList) ? $this->session->taskList : $this->createLink('execution', 'all');
             $this->locate($url);
+        }
+
+        if($this->app->tab == 'my' && $this->config->vision == 'rnd')
+        {
+            $this->loadModel('my');
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'task';
+                $this->lang->my->menu->{$from}['subMenu']->task['subModule'] = 'task';
+            }
         }
 
         $this->taskZen->assignBatchEditVars($executionID);
@@ -971,7 +982,7 @@ class task extends control
      */
     public function delete(int $executionID, int $taskID, string $from = '')
     {
-        $task = $this->task->getByID($taskID);
+        $task = $this->task->fetchByID($taskID);
 
         /* 如果是父任务，先删除所有子任务 */
         if($task->isParent)

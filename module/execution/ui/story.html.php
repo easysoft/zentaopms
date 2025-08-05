@@ -12,6 +12,9 @@ declare(strict_types=1);
 namespace zin;
 
 data('activeMenuID', $storyType);
+jsVar('orderBy', $orderBy);
+jsVar('storyPageID', $pager->pageID);
+jsVar('storyRecPerPage', $pager->recPerPage);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB',  $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
@@ -251,7 +254,8 @@ if(!$isFromDoc)
     }
 }
 
-$product && !$isFromDoc ? toolbar
+$reportText = $config->edition != 'open' ? 'hint' : 'text';
+if($product && !$isFromDoc) toolbar
 (
     common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
     (
@@ -273,10 +277,10 @@ $product && !$isFromDoc ? toolbar
     ) : null,
     hasPriv('story', 'report') ? item(set(array
     (
-        'text'  => $lang->story->report->common,
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
+        $reportText => $lang->story->report->common,
+        'icon'      => 'bar-chart',
+        'class'     => 'ghost',
+        'url'       => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
     hasPriv('story', 'export') && ($linkedProductCount < 2 || $type == 'byproduct' || $type == 'bymodule') ? item(set(array
     (
@@ -308,7 +312,7 @@ $product && !$isFromDoc ? toolbar
     ) : null,
     $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
-) : null;
+);
 
 $isFromDoc ? null : sidebar
 (
@@ -434,8 +438,7 @@ if($canBatchAction && !$isFromDoc)
 
     if($canBatchToTask || $canBatchEdit)
     {
-        $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
-        $items     = array(array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")));
+        $items = array(array('text' => $lang->edit, 'className' => "btn secondary size-sm batch-btn", 'disabled' => !$canBatchEdit, 'btnType' => 'primary', 'data-url' => $canBatchEdit ? createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}") : null));
         if($canBatchToTask) $items[] = array('caret' => 'up', 'className' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
@@ -583,6 +586,10 @@ dtable
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
+    set::plugins(array('sortable')),
+    set::sortHandler('.move-plan'),
+    set::sortable($orderBy == 'order_desc'),
+    set::onSortEnd($orderBy == 'order_desc' ? jsRaw('window.onSortEnd') : null),
     set::noNestedCheck(),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),

@@ -42,6 +42,8 @@ class upgradeZen extends upgrade
         /* When the edition is ipd. */
         if($this->config->edition == 'ipd') $this->setIpdItems($openVersion);
 
+        $this->setting->setItem('system.common.userview.relatedTablesUpdateTime', time());
+
         if($selectMode)
         {
             if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}&mode=ALM"));

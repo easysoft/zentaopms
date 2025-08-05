@@ -15,7 +15,9 @@ class batchCreateStory extends tester
     public function batchCreateStory($project, $storyUrl, $story)
     {
         $this->switchVision('lite', 5);
+        $this->page->waitElement('//*[@id="app-project"]', 5);
         $this->openURL('projectstory', 'story', $project, 'appIframe-project');
+        $this->page->waitElement('//*[@id="app-project"]', 5);
         $form = $this->initForm('story', 'batchCreate', $storyUrl, 'appIframe-project');
         $form->wait(2);
         //设置表单内容

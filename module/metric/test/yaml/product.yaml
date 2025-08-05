@@ -9,5 +9,13 @@ fields:
   range: 0{1},1{1}
 - field: vision
   range: rnd
+- field: createdDate
+  range: "20110101 000000-20210101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: closedDate
+  range: "20250101 000000-20260101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 ...
 

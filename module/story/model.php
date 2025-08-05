@@ -108,17 +108,18 @@ class storyModel extends model
      * @param  int    $productID
      * @param  int    $planID
      * @param  string $field
+     * @param  bool   $hasParent true|false
      * @access public
      * @return array
      */
-    public function getPairs(int $productID = 0, int $planID = 0, string $field = 'title'): array
+    public function getPairs(int $productID = 0, int $planID = 0, string $field = 'title', bool $hasParent = false): array
     {
         return $this->dao->select("id, {$field}")->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($planID)
             ->andWhere("CONCAT(',', `plan`, ',')")->like("%,{$planID},%")
-            ->andWhere("isParent")->eq('0')
+            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
             ->fi()
             ->fetchPairs();
     }
@@ -516,15 +517,17 @@ class storyModel extends model
      * Fetch stories by project id list.
      *
      * @param  array $projectIdList
+     * @param  string $storyType    story|requirement|epic
      * @access public
      * @return array
      */
-    public function fetchStoriesByProjectIdList(array $projectIdList = array()): array
+    public function fetchStoriesByProjectIdList(array $projectIdList = array(), string $storyType = ''): array
     {
         return $this->dao->select("t2.*,t1.project")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(strpos(',story,requirement,epic,', ",{$storyType},") !== false)->andWhere('t2.type')->in($storyType)->fi()
             ->fetchGroup('project', 'id');
     }
 
@@ -1568,7 +1571,7 @@ class storyModel extends model
         if($changes)
         {
             $preStatus = $oldStory->status;
-            $isChanged = !empty($story->changedBy) ? true : false;
+            $isChanged = !empty($oldStory->changedBy) ? true : false;
             if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
             $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");

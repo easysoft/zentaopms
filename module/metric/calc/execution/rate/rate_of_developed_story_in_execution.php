@@ -39,7 +39,7 @@ class rate_of_developed_story_in_execution extends baseCalc
             $this->result[$execution]['all']       = 0;
         }
 
-        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'released')) && $closedReason == 'done') $this->result[$execution]['developed'] += 1;
+        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'rejected', 'delivering', 'delivered', 'released')) && $closedReason == 'done') $this->result[$execution]['developed'] += 1;
         $this->result[$execution]['all'] += 1;
     }
 

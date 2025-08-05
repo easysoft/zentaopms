@@ -9,6 +9,10 @@ cid=0
 - 不传入数据。 @1
 - 传入不存在的项目ID。 @1
 - 检查有关联需求项目的需求数。 @50
+- 检查有关联需求项目的需求
+ - 第50条的id属性 @50
+ - 第50条的product属性 @1
+ - 第50条的title属性 @软件需求50
 - 检查没有关联需求项目，是否在数据中存在。 @1
 
 */
@@ -32,5 +36,6 @@ r(empty($storyModel->fetchStoriesByProjectIdList(array()))) && p() && e('1');   
 r(empty($storyModel->fetchStoriesByProjectIdList(array(100)))) && p() && e('1'); //传入不存在的项目ID。
 
 $storyGroup = $storyModel->fetchStoriesByProjectIdList(array(11, 12));
-r(count($storyGroup[11])) && p() && e('50'); //检查有关联需求项目的需求数。
-r(empty($storyGroup[12])) && p() && e('1');  //检查没有关联需求项目，是否在数据中存在。
+r(count($storyGroup[11])) && p()                      && e('50');              // 检查有关联需求项目的需求数。
+r($storyGroup[11])        && p('50:id,product,title') && e('50,1,软件需求50'); // 检查有关联需求项目的需求
+r(empty($storyGroup[12])) && p()                      && e('1');               // 检查没有关联需求项目，是否在数据中存在。

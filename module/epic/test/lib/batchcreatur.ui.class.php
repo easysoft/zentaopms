@@ -55,7 +55,7 @@ class createChildStoryTester extends tester
         $form->dom->name->setValue($childName);
         $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->requirementSave->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if($this->response('method') != 'view')
         {

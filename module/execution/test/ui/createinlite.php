@@ -78,6 +78,13 @@ $projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
 $projectProduct->gen(2);
 
+zenData('branch')->gen(0);
+zenData('design')->gen(0);
+zenData('story')->gen(0);
+zenData('action')->gen(0);
+zenData('actionrecent')->gen(0);
+zenData('history')->gen(0);
+
 $tester = new createExecutionTester();
 $tester->login();
 

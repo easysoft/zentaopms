@@ -46,7 +46,7 @@ $project->grade->range('1');
 $project->name->range('运营项目1, 看板1, 看板2, 看板3, 看板4, 看板5, 看板6, 看板7, 看板8, 看板9, 看板10, 看板11, 看板12, 看板13, 看板14, 看板15');
 $project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
-$project->end->range('(-1M)-(+2M):5D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(-11D)-(+2M):2D')->type('timestamp')->format('YY/MM/DD');
 $project->status->range('wait{8}, doing{4}, suspended{3}, closed{1}');
 $project->acl->range('open');
 $project->vision->range('lite');

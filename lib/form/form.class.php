@@ -24,6 +24,15 @@ class form extends fixer
     public $dataList;
 
     /**
+     * 原始POST数据。
+     * The raw post data.
+     *
+     * @var object
+     * @access public
+     */
+    public $rawdata;
+
+    /**
      * 类型。single|batch
      * Type. single|batch
      *
@@ -66,15 +75,16 @@ class form extends fixer
      *
      * @param array|null $configObject
      * @param int        $objectID
+     * @param int        $flowGroupID
      * @return form
      */
-    public static function data(?array $configObject = null, int $objectID = 0): form
+    public static function data(?array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
     {
         global $app, $config;
 
         $form = new form;
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
-        $configObject = $form->appendExtendFormConfig($configObject, '', '', $objectID);
+        $configObject = $form->appendExtendFormConfig($configObject, '', '', $objectID, $flowGroupID);
         return $form->config($configObject);
     }
 
@@ -104,10 +114,11 @@ class form extends fixer
      * @param  string $moduleName
      * @param  string $methodName
      * @param  int    $objectID
+     * @param  int    $flowGroupID
      * @access public
      * @return array
      */
-    public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = '', int $objectID = 0): array
+    public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = '', int $objectID = 0, int $flowGroupID = 0): array
     {
         global $app, $config;
         if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
@@ -133,7 +144,14 @@ class form extends fixer
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 
-        $groupID = $app->control->loadModel('workflowgroup')->getGroupIDByDataID($flow->module, $objectID);
+        $app->control->loadModel('workflowgroup');
+        if($flowGroupID)
+        {
+            $group = $app->control->workflowgroup->fetchByID($flowGroupID);
+            $groupID = (empty($group) || $group->main) ? 0 : $flowGroupID;
+        }
+
+        $groupID = isset($groupID) ? $groupID : $app->control->workflowgroup->getGroupIDByDataID($flow->module, $objectID);
         $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
