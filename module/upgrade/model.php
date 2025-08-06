@@ -11338,7 +11338,7 @@ class upgradeModel extends model
         $nameFilter        = array(); // 过滤重名交付物。
         $otherModule       = array(); // 交付物其他分类。
         $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
-        $deliverables      = $this->dao->select('id,name,model,`desc`')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
+        $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
         foreach($deliverables as $oldDeliverable)
