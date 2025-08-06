@@ -155,8 +155,6 @@ class doc extends control
         if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
 
         $blockData = $this->doc->getZentaoList($blockID);
-        if(isset($_SESSION['blockContents'][$blockID])) $blockData->content = json_decode($_SESSION['blockContents'][$blockID]);
-
         if(!$blockData)
         {
             if(helper::isAjaxRequest('fetch'))
