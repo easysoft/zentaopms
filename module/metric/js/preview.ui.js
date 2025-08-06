@@ -410,7 +410,7 @@ window.handleQueryClick = function(id, viewType = 'single')
 
     var formData = window.getFormData($form);
     var scopeValue = formData.get('scope') === null     ? '' : formData.get('scope');
-    var dateLabel  = formData.get('dateLabel') === null ? '' : formData.get('dateLabel');
+    var dateLabel  = formData.get('calcDate') === null ? '' : formData.get('calcDate');
     var dateBegin  = formData.get('dateBegin') === null ? '' : formData.get('dateBegin').replace(/-/g, '_');
     var dateEnd    = formData.get('dateEnd') === null   ? '' : formData.get('dateEnd').replace(/-/g, '_');
 
