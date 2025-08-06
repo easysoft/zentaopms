@@ -34,8 +34,11 @@ class createStoryInLiteTester extends tester
             'storyType' => 'story'
         );
 
-        $this->switchVision('lite', 5);
-        $this->page->wait(2)->refresh();
+        $this->switchVision('lite', 8);
+        if($this->page->getCookie('vision') != 'lite')
+        {
+            $this->switchVision('lite', 8);
+        }
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project');  //由于创建目标后会跳转到记录了session的页面，所以先进入一次对应目标的列表页面
         $form = $this->initForm('story', 'create', $createStoryParam, 'appIframe-project'); //再进入创建目标页面
         $form->dom->titleInLite->setValue($storyName);

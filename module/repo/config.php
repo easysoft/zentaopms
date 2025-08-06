@@ -2,6 +2,8 @@
 global $lang, $app;
 $app->loadLang('repo');
 
+$config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import');
+
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
 $config->program->suffix['cpp']  = "cpp";

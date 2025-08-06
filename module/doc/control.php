@@ -769,6 +769,7 @@ class doc extends control
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
+                ->remove('fromVersion')
                 ->get();
 
             $result = $this->doc->update($docID, $docData);
@@ -2284,7 +2285,7 @@ class doc extends control
         $this->view->orderBy    = $orderBy;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users      = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title      = $this->lang->doc->quick;
         $this->display();
     }

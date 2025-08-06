@@ -31,8 +31,8 @@ function clickRefresh()
 
 function changeStory(event)
 {
-    const storyID = $(event.target).val();
-    if(storyID != '0')
+    const storyID = parseInt($(event.target).val());
+    if(storyID)
     {
         const storyLink = $.createLink('story', 'view', 'storyID=' + storyID);
         $('#preview').removeClass('hidden');

@@ -858,13 +858,16 @@ class testtaskModel extends model
             }
             elseif($this->app->tab == 'execution')
             {
+                $executionLastOrder++;
+                $projectLastOrder++;
+
                 $case->project = (int)$execution->id;
                 $case->case    = $run->case;
-                $case->order   = ++$executionLastOrder;
+                $case->order   = $executionLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
 
                 $case->project = (int)$execution->project;
-                $case->order   = ++$projectLastOrder;
+                $case->order   = $projectLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
 
@@ -1000,9 +1003,10 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select('t2.*, t1.*, t2.version as caseVersion, t3.title AS storyTitle, t2.status AS caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t2.version AS caseVersion, t3.title AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
@@ -1027,9 +1031,10 @@ class testtaskModel extends model
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus,t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title AS storyTitle,t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.id')->in(array_keys($cases))
@@ -1076,9 +1081,10 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t1.assignedTo')->eq($user)
             ->andWhere('t2.deleted')->eq('0')
@@ -1187,9 +1193,10 @@ class testtaskModel extends model
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
             $orderBy   = $this->addPrefixToOrderBy($sort);
-            return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion')->from(TABLE_TESTRUN)->alias('t1')
+            return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+                ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($task->id)
                 ->andWhere('t2.deleted')->eq('0')

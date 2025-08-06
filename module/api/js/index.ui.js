@@ -1,4 +1,19 @@
 /**
+ * 获取列表类型。
+ * Get the list type.
+ *
+ * @param {object} docApp
+ * @returns {string}
+ */
+function getListType(docApp)
+{
+    docApp = docApp || getDocApp();
+    if(docApp.mode !== 'list' || docApp.module) return '';
+    const listType = docApp.signals.listType.value;
+    return listType;
+}
+
+/**
  * 定义页面上的自定义渲染器。
  * Define the custom renderers on the page.
  */
@@ -49,7 +64,7 @@ const customRenders =
      */
     list: function()
     {
-        const listType = this.signals.listType.value;
+        const listType = getListType(this);
         const libID = this.libID;
         const releaseID = this.signals.libReleaseMap.value[libID] || 0;
         if(listType === 'structs') return {fetcher: $.createLink('api', 'struct', `libID=${this.libID}&releaseID=${releaseID}`), loadingText: getDocAppLang('loading'), className: 'api-struct-list'};
@@ -62,7 +77,7 @@ const customRenders =
      */
     filters: function()
     {
-        const listType = this.signals.listType.value;
+        const listType = getListType(this);
         if(this.mode !== 'list' || !listType) return;
         return null;
     },
@@ -73,7 +88,7 @@ const customRenders =
      */
     toolbar: function()
     {
-        const listType = this.signals.listType.value;
+        const listType = getListType(this);
         if(this.mode === 'list' && listType)
         {
             const items = [];
@@ -123,7 +138,7 @@ const customRenders =
                 items[viewIndex] = ['lib', [libView, versionPicker]];
             }
         }
-        const listType = this.signals.listType.value;
+        const listType = getListType(this);
         if(this.mode !== 'list' || !listType) return items;
         if(listType === 'structs')  items.push([listType, zui.renderCustomContent({className: 'mx-2', content: getDocAppLang('struct')})]);
         if(listType === 'releases') items.push([listType, zui.renderCustomContent({className: 'mx-2', content: getDocAppLang('releases')})]);
@@ -144,7 +159,7 @@ const customRenders =
 
         const isListMode = this.mode === 'list';
         const lang       = getDocAppLang();
-        const listType   = this.signals.listType.value;
+        const listType   = getListType(this);
         const items      = [];
         if(canViewStructs) items.push({text: lang.struct, selected: listType === 'structs' && isListMode, icon: 'treemap muted', command: 'showStructs'}, {type: 'divider', className: 'my-1'});
         if(canViewReleases) items.push({text: lang.releases, selected: listType === 'releases' && isListMode, icon: 'version muted', command: 'showReleases'}, {type: 'divider', className: 'my-1'});

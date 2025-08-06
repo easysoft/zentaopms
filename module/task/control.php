@@ -90,7 +90,7 @@ class task extends control
 
             if(dao::isError())
             {
-                if($this->dao->inTransaction()) $this->dao->rollBack();
+                $this->dao->rollBack();
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
@@ -238,7 +238,7 @@ class task extends control
             $this->locate($url);
         }
 
-        if($this->app->tab == 'my')
+        if($this->app->tab == 'my' && $this->config->vision == 'rnd')
         {
             $this->loadModel('my');
             if($from == 'work' || $from == 'contribute')
@@ -982,7 +982,7 @@ class task extends control
      */
     public function delete(int $executionID, int $taskID, string $from = '')
     {
-        $task = $this->task->getByID($taskID);
+        $task = $this->task->fetchByID($taskID);
 
         /* 如果是父任务，先删除所有子任务 */
         if($task->isParent)

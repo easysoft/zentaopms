@@ -1,9 +1,8 @@
 $(function()
 {
-    if($('#expiredModal').length) zui.Modal.open({id: 'expiredModal'});
-    if($('#metriclibModal').length) zui.Modal.open({id: 'metriclibModal'});
-    if($('#annualModal').length)  zui.Modal.open({id: 'annualModal'});
-    if($('#upgradeModal').length)  zui.Modal.open({id: 'upgradeModal'});
+    if($('#upgradeModal').length) zui.Modal.open({id: 'upgradeModal'});
+    else if($('#expiredModal').length) zui.Modal.open({id: 'expiredModal'});
+    else if($('#metriclibModal').length) zui.Modal.open({id: 'metriclibModal'});
 });
 
 function deleteBlock(dashboard, data, block)

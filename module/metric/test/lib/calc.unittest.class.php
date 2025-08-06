@@ -18,9 +18,10 @@ class metricTest
      */
     public function initMetric()
     {
-        global $tester,$app;
+        global $tester,$app,$config;
         $appPath = $app->getAppRoot();
-        $sqlFile = $appPath . 'test/data/metric.sql';
+        $sqlName = $config->db->driver == 'dm' ? 'metric_dm.sql' : 'metric.sql';
+        $sqlFile = $appPath . "test/data/$sqlName";
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
@@ -132,6 +133,19 @@ class metricTest
     public function getPairsByScope($scope)
     {
         return $this->objectModel->getPairsByScope($scope);
+    }
+
+    /**
+     * Test getPairsByScopeAndDate method.
+     *
+     * @param  string $scope
+     * @param  string $date
+     * @access public
+     * @return array|false
+     */
+    public function getPairsByScopeAndDate($scope, $date)
+    {
+        return $this->objectModel->getPairsByScopeAndDate($scope, $date);
     }
 
     /**

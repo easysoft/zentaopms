@@ -12,6 +12,9 @@ declare(strict_types=1);
 namespace zin;
 
 data('activeMenuID', $storyType);
+jsVar('orderBy', $orderBy);
+jsVar('storyPageID', $pager->pageID);
+jsVar('storyRecPerPage', $pager->recPerPage);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB',  $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
@@ -583,6 +586,10 @@ dtable
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
+    set::plugins(array('sortable')),
+    set::sortHandler('.move-plan'),
+    set::sortable($orderBy == 'order_desc'),
+    set::onSortEnd($orderBy == 'order_desc' ? jsRaw('window.onSortEnd') : null),
     set::noNestedCheck(),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),

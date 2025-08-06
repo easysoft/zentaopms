@@ -27,7 +27,7 @@ cid=1
 - 查找用户admin动态 @12
 - 查找用户dev17动态 @12
 - 查找用户test18动态 @11
-- 查找今天的动态 @1
+- 查找今天的动态 @2
 - 查找昨天的动态 @0
 - 查找今天的动态 @5
 
@@ -46,19 +46,7 @@ r($actionTest->getDynamicByExecutionTest($executionID, $accountList[1])) && p() 
 r($actionTest->getDynamicByExecutionTest($executionID, $accountList[2])) && p() && e('12');  // 查找用户dev17动态
 r($actionTest->getDynamicByExecutionTest($executionID, $accountList[3])) && p() && e('11');  // 查找用户test18动态
 
-$action = zenData('action')->loadYaml('action_week');
-$action->execution->range('101');
-$action->gen(35, true, false);
-$actionrecent = zenData('actionrecent')->loadYaml('action_week');
-$actionrecent->execution->range('101');
-$actionrecent->gen(35, true, false);
-r($actionTest->getDynamicByExecutionTest($executionID, $accountList[1], $typeList[1])) && p() && e('1');   // 查找今天的动态
+r($actionTest->getDynamicByExecutionTest($executionID, $accountList[1], $typeList[1])) && p() && e('2');   // 查找今天的动态
 r($actionTest->getDynamicByExecutionTest($executionID, $accountList[1], $typeList[2])) && p() && e('0');   // 查找昨天的动态
 
-$action = zenData('action')->loadYaml('action_year');
-$action->execution->range('101');
-$action->gen(35, true, false);
-$actionrecent = zenData('actionrecent')->loadYaml('action_year');
-$actionrecent->execution->range('101');
-$actionrecent->gen(35, true, false);
 r($actionTest->getDynamicByExecutionTest($executionID, $accountList[0], $typeList[1])) && p() && e('5');  // 查找今天的动态

@@ -3486,7 +3486,7 @@ CREATE TABLE `zt_task` (
   `parent` mediumint(8) NOT NULL DEFAULT 0,
   `isParent` tinyint(1) NOT NULL DEFAULT 0,
   `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
-  `path` text DEFAULT NULL,
+  `path` varchar(255) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `design` mediumint(8) unsigned NOT NULL DEFAULT 0,

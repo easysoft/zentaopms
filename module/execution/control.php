@@ -2120,6 +2120,8 @@ class execution extends control
     public function storyKanban(int $executionID)
     {
         $this->app->loadLang('kanban');
+        $this->session->set('executionStoryBrowseType', 'unclosed');
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
         $stories     = $this->loadModel('story')->getExecutionStories($executionID);
@@ -2830,17 +2832,15 @@ class execution extends control
      */
     public function storySort(int $executionID)
     {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST') return $this->sendError($this->lang->error->unsupportedReq);
+        $storyIdList = json_decode($this->post->storyIdList, true);
+        $storyIdList = array_flip($storyIdList);
+        $orderBy     = $this->post->orderBy;
 
-        $idList  = explode(',', trim($this->post->storyList, ','));
-        $orderBy = $this->post->orderBy;
-
-        $order = $this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
-        if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
-        foreach($idList as $storyID)
+        krsort($storyIdList);
+        $order = $this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        foreach($storyIdList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
-            if(dao::isError()) return $this->sendError(dao::getError());
             $order++;
         }
 
@@ -3144,7 +3144,7 @@ class execution extends control
             $fileName = $project->name . ' - ' . $executionConcept;
         }
 
-        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
+        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
         $this->view->fileName = !empty($fileName) ? $fileName : $executionConcept;
         $this->display();
     }
