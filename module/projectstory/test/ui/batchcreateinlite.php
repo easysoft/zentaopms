@@ -43,7 +43,6 @@ $projectproduct->product->range('1');
 $projectproduct->branch->range('0');
 $projectproduct->plan->range('0');
 $projectproduct->gen(1);
-<<<<<<< HEAD
 
 $team = ZenData('team');
 $team->id->range('1');
@@ -86,5 +85,3 @@ $story->name = '目标A';
 r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status') && e('评审人必填提示信息正确,SUCCESS');//评审人必填校验
 
 $tester->closeBrowser();
-=======
->>>>>>> 7cd6414c90 (*[task#146965,doing,0.2h,3h]batchcreate story in lite)
