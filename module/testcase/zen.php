@@ -1039,6 +1039,8 @@ class testcaseZen extends testcase
         $scenePairs        = array();
         foreach($cases as $case)
         {
+            $case->story = $case->story ? $case->story : '';
+
             /* 设置用例模块。 */
             /* Set case module. */
             $objectID   = $case->lib > 0 ? $case->lib : $case->product;
