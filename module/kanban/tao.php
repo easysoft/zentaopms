@@ -1070,11 +1070,11 @@ class kanbanTao extends kanbanModel
     {
         $menus = array();
 
-        $canStartExecution = false;
+        $canStartExecution = true;
         if($this->config->edition == 'ipd')
         {
             $executionStatus = $this->loadModel('execution')->checkStageStatus($executionID, 'start');
-            $canStartExecution = !$executionStatus['disabled'];
+            $canStartExecution = empty($executionStatus['disabled']);
         }
 
         $this->loadModel('task');

@@ -18,29 +18,29 @@ title=测试 actionModel->getDynamicBySearch();
 timeout=0
 cid=1
 
-- 获取排序为date倒序的所有动态
- - 第0条的id属性 @62
- - 第0条的objectType属性 @branch
- - 第1条的id属性 @31
- - 第1条的objectType属性 @bug
-- 获取排序为date正序的所有动态
- - 第0条的id属性 @63
+- 获取排序为id倒序的所有动态
+ - 第0条的id属性 @90
+ - 第0条的objectType属性 @entry
+ - 第1条的id属性 @89
+ - 第1条的objectType属性 @testreport
+- 获取排序为id正序的所有动态
+ - 第0条的id属性 @1
+ - 第0条的objectType属性 @product
+ - 第1条的id属性 @2
+ - 第1条的objectType属性 @story
+- 获取排序为id倒序的今年之后的动态
+ - 第0条的id属性 @90
+ - 第0条的objectType属性 @entry
+ - 第1条的id属性 @89
+ - 第1条的objectType属性 @testreport
+- 获取排序为id倒序的今天之前的动态
+ - 第0条的id属性 @90
+ - 第0条的objectType属性 @entry
+ - 第1条的id属性 @89
+ - 第1条的objectType属性 @testreport
+- 获取排序为id倒序的今年之后的动态
+ - 第0条的id属性 @86
  - 第0条的objectType属性 @module
- - 第1条的id属性 @32
- - 第1条的objectType属性 @testcase
-- 获取排序为date倒序的今年之后的动态
- - 第0条的id属性 @62
- - 第0条的objectType属性 @branch
- - 第1条的id属性 @31
- - 第1条的objectType属性 @bug
-- 获取排序为date正序的所有动态
- - 第0条的id属性 @61
- - 第0条的objectType属性 @todo
- - 第1条的id属性 @30
- - 第1条的objectType属性 @build
-- 获取排序为date倒序的今年之后的动态
- - 第0条的id属性 @31
- - 第0条的objectType属性 @bug
 
 */
 
@@ -52,15 +52,15 @@ $app->loadLang('action');
 su('admin');
 
 $queryID       = array(0, 1);
-$orderByList   = array('date_desc,id_desc', 'date_asc,id_desc');
+$orderByList   = array('id_desc', 'id_asc');
 $limit         = 50;
 $dateList      = array('', 'today');
 $directionList = array('next', 'pre');
 
 $action = new actionTest();
 
-r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('62,branch;31,bug');      // 获取排序为date倒序的所有动态
-r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[1], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('63,module;32,testcase'); // 获取排序为date正序的所有动态
-r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[0], $directionList[1]))) && p('0:id,objectType;1:id,objectType') && e('62,branch;31,bug');      // 获取排序为date倒序的今年之后的动态
-r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[1], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('61,todo;30,build');      // 获取排序为date倒序的今天之前的动态
-r(array_values($action->getDynamicBySearchTest($queryID[1], $orderByList[0], $limit, $dateList[0], $directionList[1]))) && p('0:id,objectType')                 && e('31,bug');                // 获取排序为date倒序的今年之后的动态
+r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('90,entry;89,testreport'); // 获取排序为id倒序的所有动态
+r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[1], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('1,product;2,story');      // 获取排序为id正序的所有动态
+r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[0], $directionList[1]))) && p('0:id,objectType;1:id,objectType') && e('90,entry;89,testreport'); // 获取排序为id倒序的今年之后的动态
+r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[1], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('90,entry;89,testreport'); // 获取排序为id倒序的今天之前的动态
+r(array_values($action->getDynamicBySearchTest($queryID[1], $orderByList[0], $limit, $dateList[0], $directionList[1]))) && p('0:id,objectType')                 && e('86,module');              // 获取排序为id倒序的今年之后的动态

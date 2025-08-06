@@ -9,8 +9,21 @@ su('admin');
 /**
 
 title=测试 todoModel->getList();
+timeout=0
 cid=1
-pid=0
+
+- 获取当前用户今天的待办数量 @1
+- 获取当前用户昨天的待办数量 @1
+- 获取当前用户本周的待办数量 @7
+- 获取当前用户上周的待办数量 @7
+- 获取当前用户本月的待办数量 @1
+- 获取当前用户上月的待办数量 @1
+- 获取当前用户本季度的待办数量 @1
+- 获取当前用户本年的待办数量 @1
+- 获取当前用户待定的待办数量 @0
+- 获取当前用户今天之前的待办数量 @1
+- 获取当前用户周期性待办数量 @0
+
 */
 
 $typeList = array('today', 'yesterday', 'thisweek', 'lastweek', 'thismonth', 'lastmonth', 'thisseason', 'thisyear', 'future', 'before', 'cycle');
@@ -24,13 +37,8 @@ zenData('todo')->loadYaml('getlist')->gen($thisYearDay + $lastYearDay);
 global $tester;
 $tester->loadModel('todo');
 
-$month = date('m');
-$year  = date('Y');
-$thisMonthDay = cal_days_in_month(CAL_GREGORIAN, (int)$month, (int)$year);
-
-$month = date('m', strtotime("-1 months"));
-$year  = date('Y', strtotime("-1 months"));
-$lastMonthDay = cal_days_in_month(CAL_GREGORIAN, (int)$month, (int)$year);
+$thisMonthDay = date('t');
+$lastMonthDay = date('t', strtotime(date('Y-m-01') . ' -1 day'));
 
 $startMonth = ceil(date('n') / 3) * 3 - 2;
 $start      = date("Y-$startMonth-1");

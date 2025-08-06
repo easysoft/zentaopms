@@ -2,6 +2,11 @@ ALTER TABLE `zt_bug`
 CHANGE `injection` `injection` varchar(30) NOT NULL DEFAULT '',
 CHANGE `identify` `identify` varchar(30) NOT NULL DEFAULT '';
 
+ALTER TABLE `zt_task` MODIFY `path` varchar(255) NOT NULL DEFAULT '';
+
+CREATE INDEX `parent` ON `zt_story` (`parent`);
+CREATE INDEX `path` ON `zt_task` (`path`);
+
 UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproduct' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '1';
 UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproject' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '0';
 

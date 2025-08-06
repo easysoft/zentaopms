@@ -161,6 +161,10 @@ window.renderStoryCell = function(result, info)
     {
         if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
     }
+    if(info.col.name == 'order')
+    {
+        result[0] = {html: "<i class='icon-move'></i>", className: 'text-gray cursor-move move-plan'};
+    }
     return result;
 };
 
@@ -180,4 +184,20 @@ window.toggleCheckRows = function(idList)
     firstRendered = true;
     const dtable = zui.DTable.query($('#table-execution-story'));
     dtable.$.toggleCheckRows(idList.split(','), true);
+}
+
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+
+    const url  = $.createLink('execution', 'storySort', `execution=${executionID}`);
+    const form = new FormData();
+
+    form.append('storyIdList', JSON.stringify(this.state.rowOrders));
+    form.append('orderBy',     orderBy);
+    form.append('pageID',      storyPageID);
+    form.append('recPerPage',  storyRecPerPage);
+
+    $.ajaxSubmit({url, data:form});
+    return true;
 }

@@ -11,8 +11,9 @@ class treePage extends page
             'thirdLevelB'  => "//*[@id='mainContent']/div/div[1]/div/menu/li[2]/menu/li[1]/menu/li[@z-type='item']",
             'fourthLevelB' => "//*[@id='mainContent']/div/div[1]/div/menu/li[2]/menu/li[1]/menu/li[1]/menu/li[@z-type='item']",
             'onlyStoryBtn' => "//*[@id='featureBar']/menu/div/label",
-            'detail'       => "//*[@id='mainContent']/div/div[1]/div/menu/li[2]/menu/li/menu/li[1]/div/div/div/div/span[3]",
-            'title'        => "//*[@id='detailBlock']/div[1]/div[1]/span[2]"
+            'detail'       => "//*[@id='mainContent']/div/div[1]/div/menu/li[1]/menu/li/menu/li[1]//span[3]",
+            'title'        => "//*[@id='detailBlock']/div[1]/div[1]/span[2]",
+            'titleInLite'  => "//*[@id='detailBlock']/div[1]/div[1]/span[3]"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

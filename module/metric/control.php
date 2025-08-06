@@ -360,7 +360,7 @@ class metric extends control
 
         $dateBegin = str_replace('_', '-', $dateBegin);
         $dateEnd   = str_replace('_', '-', $dateEnd);
-        $options = array_filter(array('scope' => $scope, 'dateLabel' => $dateLabel, 'dateBegin' => $dateBegin, 'dateEnd' => $dateEnd));
+        $options = array_filter(array('scope' => $scope, 'calcDate' => $dateLabel, 'dateBegin' => $dateBegin, 'dateEnd' => $dateEnd));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

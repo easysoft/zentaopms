@@ -496,7 +496,7 @@ class baseDAO
      */
     public function begin()
     {
-        $this->dbh->beginTransaction();
+        if(!$this->dbh->inTransaction()) $this->dbh->beginTransaction();
     }
 
     /**
@@ -520,7 +520,7 @@ class baseDAO
      */
     public function rollBack()
     {
-        $this->dbh->rollBack();
+        if($this->dbh->inTransaction()) $this->dbh->rollBack();
     }
 
     /**
@@ -532,7 +532,7 @@ class baseDAO
      */
     public function commit()
     {
-        $this->dbh->commit();
+        if($this->dbh->inTransaction()) $this->dbh->commit();
     }
 
     /**
@@ -899,7 +899,7 @@ class baseDAO
                 {
                     $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
-                    $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                    $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                     $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
                 }
                 else
@@ -912,7 +912,7 @@ class baseDAO
                     if(strpos($sql, "`$table`") !== false)
                     {
                         $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
-                        $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                        $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                         $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
                     }
 
@@ -921,7 +921,7 @@ class baseDAO
                         if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
                         {
                             $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
-                            $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                            $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                             $subSQL  = preg_replace("/wHeRE/i", $replace, $subSQL, 1);
                         }
                         $sql = str_ireplace("$$index", $subSQL, $sql);
@@ -1171,8 +1171,7 @@ class baseDAO
             return 0;
         }
 
-        $inTransaction = $this->inTransaction();
-        if(!$inTransaction) $this->begin();
+        $this->begin();
 
         foreach($indexes as $fields)
         {
@@ -1191,11 +1190,8 @@ class baseDAO
 
         $result = $this->insert($table)->data($processedData)->exec();
 
-        if(!$inTransaction)
-        {
-            if(!$result) $this->rollback();
-            $this->commit();
-        }
+        if(!$result) $this->rollback();
+        $this->commit();
 
         return $result;
     }

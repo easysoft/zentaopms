@@ -13,6 +13,7 @@ modalHeader();
 
 formPanel
 (
+    set::id('publishForm'),
     set::actions(array('submit')),
     formRow
     (

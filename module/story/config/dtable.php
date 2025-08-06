@@ -19,8 +19,9 @@ if($app->tab == 'execution')
     $config->story->dtable->fieldList['order']['name']     = 'order';
     $config->story->dtable->fieldList['order']['title']    = $lang->story->order;
     $config->story->dtable->fieldList['order']['fixed']    = 'left';
-    $config->story->dtable->fieldList['order']['sortType'] = false;
+    $config->story->dtable->fieldList['order']['sortType'] = true;
     $config->story->dtable->fieldList['order']['width']    = '45';
+    $config->story->dtable->fieldList['order']['show']     = true;
 }
 
 $config->story->dtable->fieldList['title']['name']         = 'title';

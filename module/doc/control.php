@@ -155,8 +155,6 @@ class doc extends control
         if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
 
         $blockData = $this->doc->getZentaoList($blockID);
-        if(isset($_SESSION['blockContents'][$blockID])) $blockData->content = json_decode($_SESSION['blockContents'][$blockID]);
-
         if(!$blockData)
         {
             if(helper::isAjaxRequest('fetch'))
@@ -780,6 +778,7 @@ class doc extends control
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
+                ->remove('fromVersion')
                 ->get();
 
             $result = $this->doc->update($docID, $docData);
@@ -2255,7 +2254,7 @@ class doc extends control
         $this->view->objectType     = $type;
         $this->view->noSpace        = $noSpace;
         $this->view->objectID       = $spaceID;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users          = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title          = isset($this->lang->doc->spaceList[$type]) ? $this->lang->doc->spaceList[$type] : $this->lang->doc->common;
         $this->display();
     }
@@ -2295,7 +2294,7 @@ class doc extends control
         $this->view->orderBy    = $orderBy;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users      = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title      = $this->lang->doc->quick;
         $this->display();
     }
@@ -2340,6 +2339,7 @@ class doc extends control
             $data   = array('spaceID' => (int)$spaceID);
             $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
             $libIds = array_keys($libs);
+            foreach($libs as $lib) $lib->order = (int)$lib->order;
 
             if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
             if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);

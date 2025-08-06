@@ -1515,8 +1515,9 @@ function compress(string|array $idList): string
     $idList = array_values($idList);
     asort($idList);
 
+    $count   = count($idList);
     $encoded = [$idList[0]];
-    for($i = 1; $i < count($idList); $i++) $encoded[] = $idList[$i] - $idList[$i-1];
+    for($i = 1; $i < $count; $i++) $encoded[] = $idList[$i] - $idList[$i-1];
 
     return gzcompress(implode(',', $encoded));
 }

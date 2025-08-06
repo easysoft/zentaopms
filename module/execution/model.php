@@ -4932,7 +4932,7 @@ class executionModel extends model
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
 
-            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->project->countDeliverable($execution, 'execution');
+            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->loadModel('project')->countDeliverable($execution, 'execution');
 
             $rows[$execution->id] = $execution;
 

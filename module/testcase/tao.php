@@ -71,7 +71,6 @@ class testcaseTao extends testcaseModel
             ->beginIF(!empty($productID))->andWhere('t2.product')->in($productID)->fi()
             ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t2.scene')->eq(0)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t2.auto')->eq($auto)->fi()
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
