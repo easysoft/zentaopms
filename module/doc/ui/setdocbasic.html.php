@@ -38,7 +38,7 @@ formPanel
        set::label($modalType == 'chapter' ? $lang->doc->chapterName : $lang->doc->title),
        set::name('title'),
        set::required(true),
-       set::value(isset($doc) ? $doc->title : '')
+       set::value($docTitle)
     ),
     $this->app->tab == 'doc' && $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
