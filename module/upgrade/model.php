@@ -11402,7 +11402,7 @@ class upgradeModel extends model
                         $deliverableStage->deliverable = $deliverableID;
 
                         /* 如果这个交付物在项目流程下有交付物配置，则删除默认的交付物检查规则。 */
-                        if(!isset($sprintFilter[$deliverableID])) $this->dao->delete()->from(TABLE_DELIVERABLE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
+                        if(!isset($sprintFilter[$deliverableID])) $this->dao->delete()->from(TABLE_DELIVERABLESTAGE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
 
                         if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
                         {
