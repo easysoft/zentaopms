@@ -92,7 +92,7 @@ class deliverable extends wg
         (
             set::formName($formName),
             set::items($this->prop('items')),
-            set::docPicker(array('placeholder' => $selectDocTips, 'items' => $docLink)),
+            set::docPicker(array('placeholder' => $selectDocTips, 'items' => $docLink, 'cache' => false)),
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
