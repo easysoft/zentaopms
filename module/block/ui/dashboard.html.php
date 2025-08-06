@@ -159,7 +159,7 @@ else
             (
                 setID('metriclibModal'),
                 html($metriclibRemind)
-            );
+            )
         }
     }
 }
