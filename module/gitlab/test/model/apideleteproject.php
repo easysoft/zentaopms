@@ -3,15 +3,15 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
-
 title=测试 gitlabModel::apiDeleteProject();
 timeout=0
 cid=1
 
 - 使用空的projectID删除项目 @0
 - 使用错误gitlabID删除项目 @0
+- 使用空的GitlabID和空的projectID删除项目 @0
+- 使用错误projectID删除项目 @0
 - 通过gitlabID,项目id正确删除项目属性message @202 Accepted
-
 */
 
 zenData('pipeline')->gen(5);
