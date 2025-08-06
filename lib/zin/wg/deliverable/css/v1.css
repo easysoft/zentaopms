@@ -1,1 +1,2 @@
 .deliverable-category-name>.text:after { right: -0.5rem !important; }
+.deliverable-item .form-tip { padding-left: 0.5rem }
