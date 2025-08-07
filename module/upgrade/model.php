@@ -11501,9 +11501,9 @@ class upgradeModel extends model
 
                         $oldDeliverableID = $config['deliverable'];
                         $deliverableID    = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
-                        $projectDeliverable[$deliverableID]['id']   = $deliverableID;
-                        $projectDeliverable[$deliverableID]['doc']  = !empty($config['doc'])  ? $config['doc']  : '';
-                        $projectDeliverable[$deliverableID]['file'] = !empty($config['file']) ? $config['file'] : '';
+                        $projectDeliverable[$deliverableID]['id']     = $deliverableID;
+                        $projectDeliverable[$deliverableID]['doc']    = !empty($config['doc'])  ? $config['doc']  : '';
+                        $projectDeliverable[$deliverableID]['fileID'] = !empty($config['file']) ? $config['file'] : '';
                     }
                 }
             }
