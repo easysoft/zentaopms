@@ -35,6 +35,8 @@ class search extends control
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
 
+        $this->searchZen->processSearchParams($searchParams);
+
         $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
         $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
 
@@ -82,6 +84,8 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
+
+        $this->searchZen->processSearchParams($searchParams);
 
         $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
         $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
