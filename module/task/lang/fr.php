@@ -191,6 +191,9 @@ $lang->task->suffixHour        = 'h';
 $lang->task->update            = 'Update';
 $lang->task->isParent          = 'Is Parent';
 $lang->task->path              = 'Path';
+$lang->task->isTpl             = 'Is Template';
+$lang->task->fromIssue         = 'From Issue';
+$lang->task->order             = 'Order';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
