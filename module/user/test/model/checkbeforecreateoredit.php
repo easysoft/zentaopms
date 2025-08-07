@@ -30,7 +30,7 @@ $user3 = (object)array('account' => 'user1', 'verifyPassword' => md5(md5('Asd@12
 $userTest = new userTest();
 
 $result1 = $userTest->checkBeforeCreateOrEditTest($user1);
-r($result1) && p('result') && e(0);                            // 使用系统预留用户名返回 false。
+r($result1) && p('result') && e(0); // 使用系统预留用户名返回 false。
 r($result1) && p('errors:account') && e('用户名已被系统预留'); // 使用系统预留用户名提示信息。
 
 r($userTest->checkBeforeCreateOrEditTest($user2, true)) && p('result') && e(1); // 使用正常用户名返回 true。
