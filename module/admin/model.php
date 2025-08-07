@@ -391,7 +391,7 @@ class adminModel extends model
                 {
                     if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
                 }
-                elseif($moduleName == 'workflowgroup' && $firstParam)
+                elseif($moduleName == 'workflowgroup' && $firstParam && !in_array($methodName, array('project', 'product')))
                 {
                     $workflowgroup = $this->loadModel('workflowgroup')->fetchByID($firstParam);
                     return $workflowgroup->type == 'project' ? 'projectflow' : 'productflow';
