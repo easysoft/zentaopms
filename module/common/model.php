@@ -1143,6 +1143,7 @@ class commonModel extends model
         if(empty($maintenance)) return true;
 
         $maintenance = json_decode($maintenance);
+        if($this->app->moduleName == 'user' && $this->app->methodName == 'login') return true;
         if(!empty($this->app->user->admin)) return true;
 
         if(isset($maintenance->action) && in_array($maintenance->action, array('upgrade', 'downgrade', 'restore'))) helper::setStatus(503);

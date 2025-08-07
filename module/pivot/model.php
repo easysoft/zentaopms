@@ -2304,6 +2304,7 @@ class pivotModel extends model
                 {
                     if($this->config->edition != 'open')
                     {
+                        $this->app->loadConfig('dataview');
                         static $workflowFields = array();
                         if(!isset($workflowFields[$object])) $workflowFields[$object] = $this->loadModel('workflowfield')->getList($object);
 
