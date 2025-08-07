@@ -283,6 +283,40 @@ class model extends baseModel
     }
 
     /**
+     * 缓存基础搜索参数。
+     * Cache basic search params.
+     *
+     * @param  string $module
+     * @param  string $className  构造搜索参数的类名。The class name which builds the search params.
+     * @param  string $methodName 构造搜索参数的方法名。The method name which builds the search params.
+     * @param  array  $methodArgs 调用构造搜索参数的方法时传入的参数列表（实参）。 The arguments passed to the method which builds the search params (actual parameters).
+     * @access public
+     * @return void
+     */
+    public function cacheSearchParams(string $module, string $className, string $methodName, array $methodArgs)
+    {
+        $funcModel = str_replace(['ext', 'Model'], '', $className);
+
+        $key      = 0;
+        $funcArgs = [];
+        $method   = new ReflectionMethod($className, $methodName);
+        $params   = $method->getParameters(); // 构造搜索参数的方法的参数列表（形参）。The parameters of the method which builds the search params (formal parameters).
+        foreach($params as $param)
+        {
+            if(isset($methodArgs[$key]))
+            {
+                $funcArgs[$param->getName()] = $methodArgs[$key];
+            }
+            elseif($param->isDefaultValueAvailable())
+            {
+                $funcArgs[$param->getName()] = $param->getDefaultValue();
+            }
+            $key++;
+        }
+        $this->loadModel('search')->setSearchParams(['module' => $module, 'funcModel' => $funcModel, 'funcName' => $methodName, 'funcArgs' => $funcArgs]);
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
