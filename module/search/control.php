@@ -34,21 +34,9 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
 
-        if($funcName)
-        {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $fields = empty($fields) ? $this->config->$module->search['fields'] : $fields;
-            $params = empty($params) ? $this->config->$module->search['params'] : $params;
-        }
-        else
-        {
-            $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-            $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        }
+        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
@@ -94,21 +82,9 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
 
-        if($funcName)
-        {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $fields = empty($fields) ? $this->config->$module->search['fields'] : $fields;
-            $params = empty($params) ? $this->config->$module->search['params'] : $params;
-        }
-        else
-        {
-            $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-            $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        }
+        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);
