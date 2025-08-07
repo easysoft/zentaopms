@@ -274,12 +274,6 @@ elseif(in_array($module, array('epic', 'story', 'requirement', 'demand', 'testca
         );
 
         $actionWidth = 'w-2/3';
-        $formActions = array(array(
-            'text'    => $lang->save,
-            'type'    => 'primary',
-            'btnType' => 'button',
-            'onclick' => 'savaTestcaseReview()'
-        ));
     }
 }
 elseif($module == 'bug' && $field == 'longlife')

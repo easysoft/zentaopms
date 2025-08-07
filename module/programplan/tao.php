@@ -216,7 +216,7 @@ class programplanTao extends programplanModel
     {
         $this->app->loadLang('stage');
 
-        $datas = $stageIndex = $planIdList = $reviewDeadline = array();
+        $datas       = $stageIndex = $planIdList = $reviewDeadline = array();
         $today       = helper::today();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         foreach($plans as $plan)

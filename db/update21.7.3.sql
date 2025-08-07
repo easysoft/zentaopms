@@ -16,6 +16,11 @@ ALTER TABLE `zt_bug`
 CHANGE `injection` `injection` varchar(30) NOT NULL DEFAULT '',
 CHANGE `identify` `identify` varchar(30) NOT NULL DEFAULT '';
 
+ALTER TABLE `zt_task` MODIFY `path` varchar(255) NOT NULL DEFAULT '';
+
+CREATE INDEX `parent` ON `zt_story` (`parent`);
+CREATE INDEX `path` ON `zt_task` (`path`);
+
 UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproduct' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '1';
 UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproject' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '0';
 
@@ -70,20 +75,5 @@ WHERE `bug`.`identify` != 0 AND `object`.`category` NOT IN ('HLDS', 'DDS', 'DBDS
 UPDATE `zt_bug` SET `injection` = '' WHERE `injection` = '0';
 UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
 
-ALTER TABLE `zt_doc` ADD `isDeliverable` tinyint(1) NOT NULL DEFAULT 0 AFTER `acl`;
-ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_deliverable` ADD `activity` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
-ALTER TABLE `zt_deliverable` ADD `trimmable` char(30) NOT NULL DEFAULT '0' AFTER `activity`;
-ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmable`;
-ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
-ALTER TABLE `zt_deliverable` ADD `status` varchar(30) NOT NULL DEFAULT 'enabled' AFTER `name`;
-
-CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `deliverable` int(8) unsigned NOT NULL DEFAULT 0,
-  `stage` varchar(30) NOT NULL,
-  `required` varchar(30) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
-ALTER TABLE `zt_module` ADD `extra` varchar(30) NOT NULL DEFAULT '';
+INSERT INTO `zt_workflowaction` (`group`, `module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `role`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
+(0,	'project',	'execution',	'browse',	'执行列表',	'single',	'different',	'none',	'normal',	'browse',	'normal',	'direct',	0,	1,	'buildin',	0,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'',	NULL,	NULL,	'enable',	'rnd',	'admin',	'2025-01-08 09:41:02',	'',	NULL);

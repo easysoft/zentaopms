@@ -17,6 +17,12 @@ window.handleRenderRow = function($row, index, row)
         $module.$.setValue(row.module);
     });
 
+    $row.find('.form-batch-control[data-name="story"] .picker-box').on('inited', function(e, info)
+    {
+        let $story = info[0];
+        $story.render({limitValueInList: false});
+    });
+
     /* Set the scenes for the row. */
     $row.find('.form-batch-control[data-name="scene"] .picker-box').on('inited', function(e, info)
     {

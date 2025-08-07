@@ -1678,8 +1678,9 @@ class docModel extends model
             $docContent->doc         = $docID;
             $docContent->addedBy     = $docContent->editedBy;
             $docContent->addedDate   = $docContent->editedDate;
-            $docContent->files       = implode(',', $files);
+            $docContent->files       = (!empty($docData->files) && is_string($docData->files)) ? (',' . $docData->files) : implode(',', $files);
             $docContent->fromVersion = isset($docData->fromVersion) ? $docData->fromVersion : max(0, ($version - 1));
+
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $docContent->id          = $this->dao->lastInsertID();
         }
@@ -1752,6 +1753,7 @@ class docModel extends model
             $doc->path = $path;
         }
 
+        unset($doc->files);
         $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
