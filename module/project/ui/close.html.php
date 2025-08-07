@@ -15,6 +15,7 @@ modalHeader();
 formPanel
 (
     set::formID("zin_project_close_{$project->id}_form"),
+    /* 确认弹窗只展示一次，表单可能会被必填项拦截。*/
     !empty($confirmTip) ? set::ajax(array('beforeSubmit' => jsRaw("() => {
         if(window.confirmShown) return true;
         window.confirmShown = true;
