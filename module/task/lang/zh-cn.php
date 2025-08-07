@@ -191,6 +191,9 @@ $lang->task->suffixHour        = 'h';
 $lang->task->update            = '更新';
 $lang->task->isParent          = '是父任务';
 $lang->task->path              = '路径';
+$lang->task->isTpl             = '是模板';
+$lang->task->fromIssue         = '来源问题';
+$lang->task->order             = '排序';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
