@@ -28,26 +28,13 @@ class searchModel extends model
 
         if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module, $searchConfig);
 
-        $searchParams['module']    = $searchConfig['module'];
-        $searchParams['actionURL'] = $searchConfig['actionURL'];
-        $searchParams['style']     = zget($searchConfig, 'style', 'full');
-        $searchParams['onMenuBar'] = zget($searchConfig, 'onMenuBar', 'no');
-        $searchParams['queryID']   = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
-
-        $funcArgs = func_get_args();
-        $funcName = $funcArgs[1] ?? '';
-        unset($funcArgs[0], $funcArgs[1]);
-
-        if($funcName)
-        {
-            $searchParams['funcName'] = $funcName;
-            $searchParams['funcArgs'] = $funcArgs;
-        }
-        else
-        {
-            $searchParams['searchFields'] = json_encode($searchConfig['fields']);
-            $searchParams['fieldParams']  = json_encode($searchConfig['params']);
-        }
+        $searchParams['module']       = $searchConfig['module'];
+        $searchParams['searchFields'] = json_encode($searchConfig['fields']);
+        $searchParams['fieldParams']  = json_encode($searchConfig['params']);
+        $searchParams['actionURL']    = $searchConfig['actionURL'];
+        $searchParams['style']        = zget($searchConfig, 'style', 'full');
+        $searchParams['onMenuBar']    = zget($searchConfig, 'onMenuBar', 'no');
+        $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
         $this->session->set($module . 'searchParams', $searchParams);
     }
@@ -110,23 +97,11 @@ class searchModel extends model
         /* Init vars. */
         $module       = $this->post->module;
         $searchParams = $module . 'searchParams';
+        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
+        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
-        if($funcName)
-        {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $searchFields = json_decode(json_encode($this->config->$module->search['fields']));
-            $fieldParams  = json_decode(json_encode($this->config->$module->search['params']));
-        }
-        else
-        {
-            $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
-            $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
-        }
 
         $queryForm = $this->searchTao->initSession($module, $searchFields, $fieldParams);
 
