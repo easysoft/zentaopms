@@ -3,6 +3,25 @@ declare(strict_types=1);
 class searchZen extends search
 {
     /**
+     * 构造搜索表单时调用被搜索模块的方法处理搜索参数。
+     * Call the method of the searched module to process search parameters when constructing the search form.
+     *
+     * @param  string $searchParams
+     * @access public
+     * @return bool
+     */
+    public function processSearchParams(string $searchParams): bool
+    {
+        $funcModel = $_SESSION[$searchParams]['funcModel'] ?? '';
+        $funcName  = $_SESSION[$searchParams]['funcName']  ?? '';
+        $funcArgs  = $_SESSION[$searchParams]['funcArgs']  ?? [];
+        if(!$funcModel || !$funcName) return false;
+
+        $funcArgs['processParams'] = true; // 添加处理搜索参数的标记。Add a flag to process search parameters.
+        $this->loadModel($funcModel)->$funcName(...$funcArgs);
+        return true;
+    }
+    /**
      * 设置列表 session，方便返回。
      * Set list in session, for come back search index page.
      *
