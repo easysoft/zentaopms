@@ -388,15 +388,6 @@ class customZen extends custom
         }
         $this->loadModel('setting')->setItems("system.testcase", $data);
 
-        $reviewCase = isset($data['reviewCase']) ? $data['reviewCase'] : 0;
-        if($data['needReview'] == 0 && $reviewCase)
-        {
-            $waitProductCases = $this->loadModel('testcase')->getByStatus(0, 0, 'all', 'wait');
-            $waitLibCases     = $this->loadModel('caselib')->getLibCases(0, 'wait');
-            $waitCaseIdList   = array_merge(array_keys($waitProductCases), array_keys($waitLibCases));
-            $this->testcase->batchReview($waitCaseIdList, 'pass');
-        }
-
         return !dao::isError();
     }
 }
