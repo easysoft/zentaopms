@@ -213,7 +213,7 @@ class messageModel extends model
         $methodNmae = 'view';
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         if($objectType == 'kanbancard') $moduleName = 'kanban';
-        if($objectType == 'feedback')   $methodNmae = 'adminView';
+        if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
         $space      = common::checkNotCN() ? ' ' : '';
         $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
