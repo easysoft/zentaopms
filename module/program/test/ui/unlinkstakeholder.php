@@ -48,3 +48,16 @@ $project->path->range('`,1,`');
 $project->grade->range('1');
 $project->name->range('项目集A');
 $project->hasProduct->range('1');
+$project->status->range('wait');
+$project->begin->range('(-72w)-(-71w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+72w)-(+73w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->acl->range('open');
+$project->gen(1);
+
+$tester = new unlinkStakeholderTester();
+$tester->login();
+
+r($tester->unlinkStakeholder()) && p('message,status') && e('单个移除干系人成功, SUCCESS'); //单个移除干系人成功
+r($tester->batchUnlinkStakeholders()) && p('message,status') && e('批量移除干系人成功, SUCCESS'); //批量移除干系人成功
+
+$tester->closeBrowser();
