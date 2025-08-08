@@ -16,6 +16,7 @@ cid=1
 - 统计ID为2的日志数量 @1
 - 统计ID不存在时的数量 @0
 - 取出ID为1的其中一个匹配操作内容第4条的action属性 @0
+- 查看ID为2的其中一个匹配url属性第3条的url属性 @http://qcmmi.com
 
 */
 
@@ -30,8 +31,8 @@ $result1 = $webhook->getLogListTest($ID[0]);
 $result2 = $webhook->getLogListTest($ID[1]);
 $result3 = $webhook->getLogListTest($ID[2]);
 
-//a($result1);die;
 r(count($result1)) && p()           && e('0'); //统计ID为1的日志数量
 r(count($result2)) && p()           && e('1'); //统计ID为2的日志数量
 r(count($result3)) && p()           && e('0'); //统计ID不存在时的数量
 r($result1)        && p('4:action') && e('0'); //取出ID为1的其中一个匹配操作内容
+r($result2)        && p('3:url')    && e('http://qcmmi.com'); //查看ID为2的其中一个匹配url属性
