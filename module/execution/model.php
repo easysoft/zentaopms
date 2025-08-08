@@ -5390,24 +5390,26 @@ class executionModel extends model
      */
     public function canCloseByDeliverable(object $execution): bool
     {
-        $project = $this->loadModel('project')->fetchByID((int)$execution->project);
-        if($execution->type == 'stage')
-        {
-            $objectType = $execution->attribute;
-        }
-        else
-        {
-            $objectType = $execution->type;
-        }
+        $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
+        $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
+        $deliverables = $this->dao->select('t1.template,t1.name,t2.required,t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
+            ->andWhere('t1.status')->eq('enabled')
+            ->andWhere('t2.stage')->eq($stageType)
+            ->fetchAll('id');
 
-        $deliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
-        list($deliverables, $_) = $this->loadModel('project')->getDeliverablesAndCategories((int)$project->workflowGroup, $objectType, $deliverables, $execution->id);
+        if(empty($deliverables)) return true;
 
-        if(!is_array($deliverables) || empty($deliverables)) return true;
+        $executionDeliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
 
-        foreach($deliverables as $item)
+        foreach($deliverables as $id => $deliverable)
         {
-            if(!empty($item['required']) && empty($item['fileID']) && empty($item['doc'])) return false;
+            if(empty($deliverable->required)) continue;
+
+            if(!isset($executionDeliverables[$id])) return false;
+            if(empty($executionDeliverables[$id]['fileID']) && empty($executionDeliverables[$id]['doc'])) return false;
         }
 
         return true;
