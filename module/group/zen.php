@@ -330,7 +330,7 @@ class groupZen extends group
         $privList = $this->config->group->setComposeDevOpsPriv;
         $subsets  = array_keys($privList);
         $allPrivs = $this->config->group->package;
-        $servers  = $this->loadModel('pipeline')->getList();
+        $servers  = $this->loadModel('pipeline')->getList('');
         $servers  = array_column($servers, 'type');
 
         foreach($allPrivs as $packageCode => $package)
