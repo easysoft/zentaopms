@@ -205,6 +205,7 @@ class group extends control
             if($type == 'byModule') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
+        if($this->config->inCompose) $this->groupZen->setDevOpsPrivInCompose();
         if($type == 'byGroup' || $type == 'byPackage') $this->groupZen->managePrivByGroup($groupID, $nav, $version);
         if($type == 'byModule') $this->groupZen->managePrivByModule();
 
