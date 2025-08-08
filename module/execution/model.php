@@ -4172,14 +4172,14 @@ class executionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  bool   $processParams 是否处理搜索参数。默认不处理可以提高性能，构造搜索表单时再处理。
+     * @param  bool   $cacheSearchParams 是否缓存搜索参数。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, bool $processParams = false)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, bool $cacheSearchParams = true)
     {
         $module = $this->config->execution->search['module'];
-        if(!$processParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
+        if($cacheSearchParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
 
         $showAll = empty($executionID) && empty($executions) ? true : false;
         if($showAll)

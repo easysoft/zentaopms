@@ -17,7 +17,7 @@ class searchZen extends search
         $funcArgs  = $_SESSION[$searchParams]['funcArgs']  ?? [];
         if(!$funcModel || !$funcName) return false;
 
-        $funcArgs['processParams'] = true; // 添加处理搜索参数的标记。Add a flag to process search parameters.
+        $funcArgs['cacheSearchParams'] = false; // 不缓存搜索参数以加载真实值。Do not cache search parameters to load real values.
         $this->loadModel($funcModel)->$funcName(...$funcArgs);
         return true;
     }

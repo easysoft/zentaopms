@@ -449,14 +449,14 @@ class myModel extends model
      * @param  int    $queryID
      * @param  string $actionURL
      * @param  string $rawMethod
-     * @param  bool   $processParams 是否处理搜索参数。默认不处理可以提高性能，构造搜索表单时再处理。
+     * @param  bool   $cacheSearchParams 是否缓存搜索参数。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $queryID, string $actionURL, string $rawMethod, bool $processParams = false)
+    public function buildTaskSearchForm(int $queryID, string $actionURL, string $rawMethod, bool $cacheSearchParams = true)
     {
         $module = $rawMethod . 'Task';
-        if(!$processParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
+        if($cacheSearchParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
 
         $this->loadModel('execution');
 
