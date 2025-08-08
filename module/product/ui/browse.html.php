@@ -514,7 +514,7 @@ toolbar
         ))
     ))),
     (!$canReport || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => $reportUrl))),
-    !$canExport ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => $exportUrl, 'data-toggle' => 'modal'))),
+    item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost' . ($canExport ? '' : ' hidden'), 'url' => $exportUrl, 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
 );
