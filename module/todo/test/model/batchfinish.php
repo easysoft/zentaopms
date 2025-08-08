@@ -2,12 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
-su('admin');
-
-function initData()
-{
-    zenData('todo')->loadYaml('batchfinish')->gen(10);
-}
 
 /**
 
@@ -15,14 +9,31 @@ title=测试批量完成待办 todoModel->batchFinish();
 timeout=0
 cid=1
 
+- 获取ID为1的待办状态属性status @wait
+- 获取ID为2的待办状态属性status @doing
+- 获取ID为3的待办状态属性status @done
+- 获取ID为4的待办状态属性status @closed
+- 获取批量完成后ID为1的待办状态属性status @done
+- 获取批量完成后ID为2的待办状态属性status @done
+- 获取批量完成后ID为3的待办状态属性status @done
+- 获取批量完成后ID为4的待办状态属性status @done
+
 */
 
-initData();
-$todoIDList = range(1,3);
+su('admin');
+
+zenData('todo')->gen(10);
 
 $todo = new todoTest();
-$todo->batchFinishTest($todoIDList);
 
-r($todo->getByIdTest($todoIDList[0])) && p('status') && e('done'); // 批量完成todo验证状态wait->done
-r($todo->getByIdTest($todoIDList[1])) && p('status') && e('done'); // 批量完成todo验证状态donging->done
-r($todo->getByIdTest($todoIDList[2])) && p('status') && e('done'); // 批量完成todo验证状态done
+r($todo->getByIdTest(1)) && p('status') && e('wait');   // 获取ID为1的待办状态
+r($todo->getByIdTest(2)) && p('status') && e('doing');  // 获取ID为2的待办状态
+r($todo->getByIdTest(3)) && p('status') && e('done');   // 获取ID为3的待办状态
+r($todo->getByIdTest(4)) && p('status') && e('closed'); // 获取ID为4的待办状态
+
+$todo->batchFinishTest(array(1, 2, 3, 4));
+
+r($todo->getByIdTest(1)) && p('status') && e('done'); // 获取批量完成后ID为1的待办状态
+r($todo->getByIdTest(2)) && p('status') && e('done'); // 获取批量完成后ID为2的待办状态
+r($todo->getByIdTest(3)) && p('status') && e('done'); // 获取批量完成后ID为3的待办状态
+r($todo->getByIdTest(4)) && p('status') && e('done'); // 获取批量完成后ID为4的待办状态
