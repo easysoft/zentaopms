@@ -5390,24 +5390,26 @@ class executionModel extends model
      */
     public function canCloseByDeliverable(object $execution): bool
     {
-        if(empty($execution->deliverable)) return true;
+        $project = $this->loadModel('project')->fetchByID((int)$execution->project);
+        if($execution->type == 'stage')
+        {
+            $objectType = $execution->attribute;
+        }
+        else
+        {
+            $objectType = $execution->type;
+        }
 
-        $deliverables = json_decode($execution->deliverable, true);
+        $deliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
+        list($deliverables, $_) = $this->loadModel('project')->getDeliverablesAndCategories((int)$project->workflowGroup, $objectType, $deliverables, $execution->id);
 
         if(!is_array($deliverables) || empty($deliverables)) return true;
 
-        foreach($deliverables as $methods)
+        foreach($deliverables as $item)
         {
-            foreach($methods as $itemList)
-            {
-                foreach($itemList as $item)
-                {
-                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
-                }
-            }
+            if(!empty($item['required']) && empty($item['fileID']) && empty($item['doc'])) return false;
         }
 
         return true;
     }
-
 }
