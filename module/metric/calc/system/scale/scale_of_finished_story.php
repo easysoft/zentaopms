@@ -31,7 +31,7 @@ class scale_of_finished_story extends baseCalc
         if($row->isParent == '1') return false;
         if(empty($row->estimate)) return null;
 
-        if($row->closedReason == 'done') $this->result += $row->estimate;
+        if($row->status == 'closed' && $row->closedReason == 'done') $this->result += $row->estimate;
     }
 
     public function getResult($options = array())
