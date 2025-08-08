@@ -17,6 +17,7 @@ cid=1
 - 测试传入空的情况 @0
 - 测试webhook传入空的情况 @0
 - 测试action传入空的情况 @0
+- 追加toList @0
 
 */
 
@@ -34,3 +35,4 @@ r($webhookTest->getOpenIdListTest($webhook[0], $action[0])) && p() && e('0'); //
 r($webhookTest->getOpenIdListTest($webhook[1], $action[1])) && p() && e('0'); //测试传入空的情况
 r($webhookTest->getOpenIdListTest($webhook[0], $action[1])) && p() && e('0'); //测试webhook传入空的情况
 r($webhookTest->getOpenIdListTest($webhook[1], $action[0])) && p() && e('0'); //测试action传入空的情况
+r($webhookTest->getOpenIdListTest($webhook[0], $action[0], 'user1')) && p() && e('0'); //追加toList
