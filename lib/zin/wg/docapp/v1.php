@@ -171,6 +171,7 @@ class docApp extends wg
         jsVar('needReadable', $lang->doc->needReadable);
         jsVar('vision', $config->vision);
         jsVar('isInModal', isInModal());
+        jsVar('userGroups', $app->user->groups);
 
         /**
          * 定义文档应用接口链接。
