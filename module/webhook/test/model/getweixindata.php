@@ -14,6 +14,7 @@ cid=1
 - 测试不传title第text条的content属性 @文本选择
 - 测试不传text第text条的content属性 @~~
 - 测试不传mobile第markdown条的content属性 @文本选择
+- 测试两个都不传第markdown条的content属性 @~~
 
 */
 
@@ -31,8 +32,10 @@ $result1 = $webhook->getWeixinDataTest($text[0], $mobile[0]);
 $result2 = $webhook->getWeixinDataTest($text[0], $mobile[0]);
 $result3 = $webhook->getWeixinDataTest($text[1], $mobile[0]);
 $result4 = $webhook->getWeixinDataTest($text[0], $mobile[1]);
+$result5 = $webhook->getWeixinDataTest($text[1], $mobile[1]);
 
 r($result1) && p('text:content')     && e('文本选择'); //测试正常传入的情况
 r($result2) && p('text:content')     && e('文本选择'); //测试不传title
 r($result3) && p('text:content')     && e('~~');       //测试不传text
 r($result4) && p('markdown:content') && e('文本选择'); //测试不传mobile
+r($result5) && p('markdown:content') && e('~~');      //测试两个都不传
