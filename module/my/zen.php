@@ -178,8 +178,11 @@ class myZen extends my
         $count['task'] = $pager->recTotal;
 
         /* Get the number of stories assigned to me. */
+        $pager->recTotal = 0;
         $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false, 'all');
         $assignedToStoryCount = $pager->recTotal;
+
+        $pager->recTotal = 0;
         $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false, 'all');
         $reviewByStoryCount = $pager->recTotal;
         $count['story']     = $assignedToStoryCount + $reviewByStoryCount;
@@ -188,8 +191,11 @@ class myZen extends my
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */
+            $pager->recTotal = 0;
             $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement', false, 'all');
             $assignedRequirementCount = $pager->recTotal;
+
+            $pager->recTotal = 0;
             $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement', false, 'all');
             $reviewByRequirementCount = $pager->recTotal;
             $count['requirement']     = $assignedRequirementCount + $reviewByRequirementCount;
@@ -197,25 +203,32 @@ class myZen extends my
 
         if($this->config->enableER)
         {
+            $pager->recTotal = 0;
             $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'epic', false, 'all');
             $assignedEpicCount = $pager->recTotal;
+
+            $pager->recTotal = 0;
             $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'epic', false, 'all');
             $reviewByEpicCount = $pager->recTotal;
             $count['epic']     = $assignedEpicCount + $reviewByEpicCount;
         }
 
         /* Get the number of bugs assigned to me. */
+        $pager->recTotal = 0;
         $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);
         $count['bug'] = $pager->recTotal;
 
         /* Get the number of testcases assigned to me. */
+        $pager->recTotal = 0;
         $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip', 'id_desc', $pager);
         $count['case'] = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
+        $pager->recTotal = 0;
         $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
+        $pager->recTotal = 0;
         $count = $this->showWorkCountNotInOpen($count, $pager);
 
         $this->view->todoCount       = $count;
@@ -242,6 +255,7 @@ class myZen extends my
             $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $count['feedback'] = $pager->recTotal;
 
+            $pager->recTotal = 0;
             $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
@@ -252,23 +266,28 @@ class myZen extends my
             if($this->config->vision != 'or')
             {
                 /* Get the number of issues assigned to me. */
+                $pager->recTotal = 0;
                 $this->loadModel('issue')->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
                 $count['issue'] = $pager->recTotal;
 
                 /* Get the number of risks assigned to me. */
+                $pager->recTotal = 0;
                 $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
                 $count['risk'] = $pager->recTotal;
 
                 /* Get the number of nc assigned to me. */
+                $pager->recTotal = 0;
                 $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
                 $ncCount = $pager->recTotal;
 
                 /* Get the number of nc assigned to me. */
+                $pager->recTotal = 0;
                 $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
                 $auditplanCount = $pager->recTotal;
                 $count['qa']    = $ncCount + $auditplanCount;
 
                 /* Get the number of meetings assigned to me. */
+                $pager->recTotal = 0;
                 $this->loadModel('meeting')->getListByUser('futureMeeting', 'id_desc', 0, $pager);
                 $count['meeting'] = $pager->recTotal;
             }
@@ -276,10 +295,12 @@ class myZen extends my
             if($isIPD && $this->config->vision == 'or')
             {
                 /* Get the number of demands assigned to me. */
+                $pager->recTotal = 0;
                 $this->loadModel('demand')->getUserDemands($this->app->user->account, 'assignedTo', 'id_desc', $pager);
                 $assignedToDemandCount = $pager->recTotal;
 
                 /* Get the number of demands review by me. */
+                $pager->recTotal = 0;
                 $this->loadModel('demand')->getUserDemands($this->app->user->account, 'reviewBy', 'id_desc', $pager);
                 $reviewByDemandCount = $pager->recTotal;
 
