@@ -5390,24 +5390,28 @@ class executionModel extends model
      */
     public function canCloseByDeliverable(object $execution): bool
     {
-        if(empty($execution->deliverable)) return true;
+        $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
+        $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
+        $deliverables = $this->dao->select('t1.template,t1.name,t2.required,t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
+            ->andWhere('t1.status')->eq('enabled')
+            ->andWhere('t2.stage')->eq($stageType)
+            ->fetchAll('id');
 
-        $deliverables = json_decode($execution->deliverable, true);
+        if(empty($deliverables)) return true;
 
-        if(!is_array($deliverables) || empty($deliverables)) return true;
+        $executionDeliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
 
-        foreach($deliverables as $methods)
+        foreach($deliverables as $id => $deliverable)
         {
-            foreach($methods as $itemList)
-            {
-                foreach($itemList as $item)
-                {
-                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
-                }
-            }
+            if(empty($deliverable->required)) continue;
+
+            if(!isset($executionDeliverables[$id])) return false;
+            if(empty($executionDeliverables[$id]['fileID']) && empty($executionDeliverables[$id]['doc'])) return false;
         }
 
         return true;
     }
-
 }
