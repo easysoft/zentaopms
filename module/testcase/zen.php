@@ -436,6 +436,7 @@ class testcaseZen extends testcase
             $case->id      = 'case_' . $case->id;   // 给用例 ID 加前缀以防止和场景 ID 重复。Add prefix to case ID to prevent it from conflicting with scene ID.
             $case->parent  = 0;
             $case->isScene = false;
+            $case->title   = htmlspecialchars_decode($case->title);
         }
 
         $caseScenes = array_unique(array_filter(array_column($cases, 'scene'))); // 获取用例的场景 ID。Get unique scene IDs from cases.
