@@ -83,7 +83,18 @@ class job extends control
         $this->jobZen->buildSearchForm($this->config->job->search, $queryID, $actionURL);
         $jobQuery = $type == 'bySearch' ? $this->jobZen->getJobSearchQuery((int)$queryID) : '';
 
-        $jobList = $this->jobZen->getJobList($repoID, $jobQuery, $orderBy, $pager);
+        $jobList  = $this->jobZen->getJobList($repoID, $jobQuery, $orderBy, $pager);
+
+        $hasJobServer = false;
+        $pipelines    = $this->loadModel('pipeline')->getList();
+        foreach($pipelines as $pipeline)
+        {
+            if(in_array($pipeline->type, array('jenkins', 'gitlab')))
+            {
+                $hasJobServer = true;
+                break;
+            }
+        }
 
         $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
@@ -92,6 +103,8 @@ class job extends control
         $this->view->type    = $type;
         $this->view->queryID = $queryID;
         $this->view->pager   = $pager;
+
+        $this->view->hasJobServer = $hasJobServer;
 
         $this->display();
     }
