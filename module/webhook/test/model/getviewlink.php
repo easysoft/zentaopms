@@ -13,6 +13,8 @@ cid=1
 - 打印出了get链接，我是通过./执行文件，所以打印的是./文件名和传入的参数，通过页面调用返回的则是url @getviewlink.php?m=product&f=view&id=1
 - 同样返回调用方法的url @getviewlink.php?m=story&f=view&id=2
 - 当不传入参数时 @getviewlink.php?m=&f=view&id=0
+- ID不传 @getviewlink.php?m=story&f=view&id=0
+- type不传 @getviewlink.php?m=&f=view&id=1
 
 */
 
@@ -31,7 +33,11 @@ $ID[2]   = 0;
 $result1 = $webhook->getViewLinkTest($type[0], $ID[0]);
 $result2 = $webhook->getViewLinkTest($type[1], $ID[1]);
 $result3 = $webhook->getViewLinkTest($type[2], $ID[2]);
+$result4 = $webhook->getViewLinkTest($type[1], $ID[2]);
+$result5 = $webhook->getViewLinkTest($type[2], $ID[0]);
 
 r($result1) && p() && e('getviewlink.php?m=product&f=view&id=1'); //打印出了get链接，我是通过./执行文件，所以打印的是./文件名和传入的参数，通过页面调用返回的则是url
 r($result2) && p() && e('getviewlink.php?m=story&f=view&id=2');   //同样返回调用方法的url
 r($result3) && p() && e('getviewlink.php?m=&f=view&id=0');        //当不传入参数时
+r($result4) && p() && e('getviewlink.php?m=story&f=view&id=0'); //ID不传
+r($result5) && p() && e('getviewlink.php?m=&f=view&id=1'); //type不传
