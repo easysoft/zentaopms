@@ -115,30 +115,6 @@ class todoTest
     }
 
     /**
-     * 测试删除待办.
-     * Test delete a todo.
-     *
-     * @param  int     $todoID
-     * @param  string  $confirm yes|no
-     * @access public
-     * @return object|false
-     */
-    public function deleteTest(int $todoID, string $confirm = 'no'): object|false
-    {
-        if($confirm == 'no')
-        {
-            return $this->objectModel->getById($todoID);
-        }
-        else
-        {
-            $this->objectModel->delete(TABLE_TODO, $todoID);
-            if(dao::isError()) return false;
-
-            return $this->objectModel->getById($todoID);
-        }
-    }
-
-    /**
      * 测试完成待办.
      * Test finish a todo.
      *
