@@ -6,6 +6,11 @@ $config->group->create->requiredFields = 'name';
 $config->group->edit->requiredFields   = 'name';
 $config->group->maxToolBarCount        = 13;
 
+$config->group->setComposeDevOpsPriv = array();
+$config->group->setComposeDevOpsPriv['repo']     = array('priv' => 'repo-create,repo-import', 'exclude' => 'gitea,gogs,gitlab');
+$config->group->setComposeDevOpsPriv['pipeline'] = array('priv' => 'job-create', 'exclude' => 'jenkins,gitlab');
+$config->group->setComposeDevOpsPriv['app']      = array('priv' => 'instance-manage');
+
 $config->group->acl = new stdclass();
 $config->group->acl->objectTypes['programs'] = 'program';
 $config->group->acl->objectTypes['projects'] = 'project';
