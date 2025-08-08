@@ -287,14 +287,15 @@ class model extends baseModel
      * Cache basic search params.
      *
      * @param  string $module
-     * @param  string $className  构造搜索参数的类名。The class name which builds the search params.
-     * @param  string $methodName 构造搜索参数的方法名。The method name which builds the search params.
-     * @param  array  $methodArgs 调用构造搜索参数的方法时传入的参数列表（实参）。 The arguments passed to the method which builds the search params (actual parameters).
+     * @param  string $classMethod 构造搜索参数的类名和方法名，以::分隔。The class name and method name which builds the search params, separated by ::.
+     * @param  array  $methodArgs  调用构造搜索参数的方法时传入的参数列表（实参）。 The arguments passed to the method which builds the search params (actual parameters).
      * @access public
      * @return void
      */
-    public function cacheSearchParams(string $module, string $className, string $methodName, array $methodArgs)
+    public function cacheSearchParams(string $module, string $classMethod, array $methodArgs)
     {
+        list($className, $methodName) = explode('::', $classMethod);
+
         $funcModel = str_replace(['ext', 'Model'], '', $className);
 
         $key      = 0;

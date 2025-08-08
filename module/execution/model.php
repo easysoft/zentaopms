@@ -4179,7 +4179,7 @@ class executionModel extends model
     public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, bool $processParams = false)
     {
         $module = $this->config->execution->search['module'];
-        if(!$processParams) return $this->cacheSearchParams($module, __CLASS__, __FUNCTION__, func_get_args());
+        if(!$processParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
 
         $showAll = empty($executionID) && empty($executions) ? true : false;
         if($showAll)

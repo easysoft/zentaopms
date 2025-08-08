@@ -456,7 +456,7 @@ class myModel extends model
     public function buildTaskSearchForm(int $queryID, string $actionURL, string $rawMethod, bool $processParams = false)
     {
         $module = $rawMethod . 'Task';
-        if(!$processParams) return $this->cacheSearchParams($module, __CLASS__, __FUNCTION__, func_get_args());
+        if(!$processParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
 
         $this->loadModel('execution');
 
