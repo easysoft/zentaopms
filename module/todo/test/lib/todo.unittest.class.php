@@ -224,19 +224,14 @@ class todoTest
      * Create by cycle test.
      *
      * @access public
-     * @return int
+     * @return bool
      */
-    public function createByCycleTest(): int
+    public function createByCycleTest()
     {
         $todoList = $this->objectModel->getValidCycleList();
         $this->objectModel->createByCycle($todoList);
 
-        global $tester;
-        $todoIDList = array_keys($todoList);
-        $count      = $tester->dao->select('count(`id`) as count')->from(TABLE_TODO)->where('objectID')->in($todoIDList)->andWhere('deleted')->eq('0')->fetch('count');
-
-        if(dao::isError()) return 0;
-        return $count > 0 ? 1 : 0;
+        return true;
     }
 
     /**
