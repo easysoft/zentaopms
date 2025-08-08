@@ -11227,12 +11227,14 @@ class upgradeModel extends model
             ->where('module')->eq('design')
             ->andWhere('section')->eq('typeList')
             ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
             ->fetchPairs();
 
         $plusTypeList = $this->dao->select('`key`, value')->from(TABLE_LANG)
             ->where('module')->eq('design')
             ->andWhere('section')->eq('plusTypeList')
             ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
             ->fetchPairs();
 
         if($typeList)     $this->lang->design->typeList     = $typeList;
