@@ -397,7 +397,7 @@ class todoTest
 
         if(dao::isError()) return 0;
 
-        return $pri ? 1 : 0;
+        return $pri;
     }
 
     /**
