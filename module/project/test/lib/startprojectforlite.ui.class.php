@@ -27,7 +27,7 @@ class startProjectForLiteTester extends tester
         $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $browsePage = $this->loadPage('project', 'browse');
         $form->dom->search(array("项目名称,=,{$title}"));
-        $form->wait(1);
+        $form->wait(3);
         //搜索的项目状态为进行中，说明启动成功
         $featureBar['index'] = (array)$featureBar['index'];
         if($form->dom->browseStatus->getText() != $featureBar['index']['doing']) return $this->fail('启动运营项目失败');
