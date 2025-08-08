@@ -16,6 +16,7 @@ cid=1
 - 查看插入的数据属性url @www.test2.com
 - 查看插入的数据属性url @www.test.com
 - 查看插入的数据属性url @www.test2.com
+- 查看插入的数据属性url @~~
 
 */
 
@@ -31,7 +32,13 @@ $webhook2->id          = 2;
 $webhook2->url         = 'www.test2.com';
 $webhook2->contentType = 'text';
 
+$webhook3 = new stdclass();
+$webhook3->id          = 3;
+$webhook3->url         = '';
+$webhook3->contentType = 'text';
+
 r($webhookTest->saveLogTest($webhook1, 1, 'data',  'result')) && p('url') && e('www.test.com');   // 查看插入的数据
 r($webhookTest->saveLogTest($webhook2, 1, 'data',  'result')) && p('url') && e('www.test2.com');  // 查看插入的数据
 r($webhookTest->saveLogTest($webhook1, 2, 'data1', 'result1')) && p('url') && e('www.test.com');  // 查看插入的数据
 r($webhookTest->saveLogTest($webhook2, 2, 'data2', 'result2')) && p('url') && e('www.test2.com'); // 查看插入的数据
+r($webhookTest->saveLogTest($webhook3, 2, 'data2', 'result2')) && p('url') && e('~~'); // 查看插入的数据
