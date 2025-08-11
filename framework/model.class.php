@@ -314,7 +314,8 @@ class model extends baseModel
             }
             $key++;
         }
-        $this->loadModel('search')->setSearchParams(['module' => $module, 'funcModel' => $funcModel, 'funcName' => $methodName, 'funcArgs' => $funcArgs]);
+
+        $this->session->set($module . 'searchParams', ['funcModel' => $funcModel, 'funcName' => $methodName, 'funcArgs' => $funcArgs]);
     }
 
     /**

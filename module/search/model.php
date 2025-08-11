@@ -26,9 +26,6 @@ class searchModel extends model
     {
         $module = $searchConfig['module'];
 
-        $this->session->set($module . 'searchParams', null); // 清除旧的搜索参数。Clear old search params.
-        if(!empty($searchConfig['funcModel']) && !empty($searchConfig['funcName'])) return $this->session->set($module . 'searchParams', $searchConfig);
-
         if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module, $searchConfig);
 
         $searchParams['module']       = $searchConfig['module'];
