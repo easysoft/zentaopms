@@ -335,11 +335,11 @@ class testtaskZen extends testtask
 
         if($this->config->edition != 'open')
         {
-            $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_column($runList, 'id'), 'testcase', 'byRelation', true);
-            foreach($runList as $case)
+            $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_column($runList, 'case'), 'testcase', 'byRelation', true);
+            foreach($runList as $run)
             {
-                $case->caseID        = $case->id;
-                $case->relatedObject = zget($caseRelatedObjectList, $case->id, 0);
+                $run->caseID        = $run->case;
+                $run->relatedObject = zget($caseRelatedObjectList, $run->case, 0);
             }
         }
 
