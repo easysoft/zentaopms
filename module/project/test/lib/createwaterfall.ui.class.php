@@ -59,7 +59,7 @@ class createWaterfallTester extends tester
         $programplanPage = $this->loadPage('programplan', 'create');
         $programplanPage->dom->settings->click();
         $viewPage = $this->loadPage('project', 'view');
-        $viewPage->wait(4);
+        $viewPage->wait(5);
         $categoryLang = (array)$this->lang->project->projectTypeList;
         if($viewPage->dom->projectName->getText() != $waterfall['name'])               return $this->failed('名称错误');
         if($viewPage->dom->category->getText() != $categoryLang[$waterfall['type']])   return $this->failed('类型错误');
