@@ -15,3 +15,5 @@ CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
 ALTER TABLE `zt_module` ADD `extra` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_process` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
