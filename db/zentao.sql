@@ -14005,6 +14005,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `model` char(30) NOT NULL DEFAULT 'waterfall',
   `name` varchar(255) NOT NULL DEFAULT '',
+  `module` int(8) unsigned NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   `abbr` char(30) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,

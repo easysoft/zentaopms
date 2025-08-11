@@ -11523,38 +11523,22 @@ class upgradeModel extends model
      */
     public function upgradeProcessAndActivity()
     {
-        $groupList = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)
-            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
-            ->andWhere('main')->eq('1')
-            ->fetchAll('id');
+        $this->app->loadLang('process');
+        $groupList = $this->upgradeTao->getWorkflowGroupForProcess();
 
+        $classifyModule = array();
         foreach($groupList as $groupID => $group)
         {
             if($group->projectType == 'product')
             {
-                $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
+                $classifyModule = $this->upgradeTao->handleProductWorkflowGroup($group, $groupID, $classifyModule);
             }
             else
             {
-                /* 复制一份到新的模型中。*/
-                $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
-                $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
-                foreach($processList as $process)
-                {
-                    $activityList = zget($activityGroup, $process->id, array());
-                    unset($process->id);
-                    $process->workflowGroup = $groupID;
-                    $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
-                    $processID = $this->dao->lastInsertID();
-
-                    foreach($activityList as $activity)
-                    {
-                        unset($activity->id);
-                        $activity->process = $processID;
-                        $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
-                    }
-                }
+                $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID);
             }
         }
+
+        $this->upgradeTao->updateProcessModules($classifyModule);
     }
 }
