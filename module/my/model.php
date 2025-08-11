@@ -460,30 +460,33 @@ class myModel extends model
 
         $this->loadModel('execution');
 
-        $this->config->execution->search['module']    = $module;
-        $this->config->execution->search['actionURL'] = $actionURL;
-        $this->config->execution->search['queryID']   = $queryID;
+        $searchConfig = $this->config->execution->search;
+        $searchConfig['module']    = $module;
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
 
         if($rawMethod == 'work')
         {
-            unset($this->config->execution->search['fields']['closedReason']);
-            unset($this->config->execution->search['fields']['closedBy']);
-            unset($this->config->execution->search['fields']['canceledBy']);
-            unset($this->config->execution->search['fields']['closedDate']);
-            unset($this->config->execution->search['fields']['canceledDate']);
-            unset($this->config->execution->search['params']['status']['values']['cancel']);
-            unset($this->config->execution->search['params']['status']['values']['closed']);
+            unset($searchConfig['fields']['closedReason']);
+            unset($searchConfig['fields']['closedBy']);
+            unset($searchConfig['fields']['canceledBy']);
+            unset($searchConfig['fields']['closedDate']);
+            unset($searchConfig['fields']['canceledDate']);
+            unset($searchConfig['params']['status']['values']['cancel']);
+            unset($searchConfig['params']['status']['values']['closed']);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
-        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+        $searchConfig['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
         $executions = $this->execution->getPairs(0, 'all', 'multiple');
-        $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
+        $searchConfig['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
 
-        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
+        $searchConfig['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
 
-        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+
+        return $searchConfig;
     }
 
     /**
