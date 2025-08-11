@@ -1372,12 +1372,12 @@ class docTest
      * 获取文档动态。
      * Get document dynamic.
      *
-     * @param  int          $recPerPage
-     * @param  int          $pageID
+     * @param  int       $recPerPage
+     * @param  int       $pageID
      * @access public
-     * @return array|string
+     * @return array|int
      */
-    public function getDynamicTest(int $recPerPage, int $pageID): array|string
+    public function getDynamicTest(int $recPerPage, int $pageID): array|int
     {
         $this->objectModel->app->loadClass('pager', true);
         $pager = new pager(0, $recPerPage, $pageID);
@@ -1385,10 +1385,9 @@ class docTest
         $actions = $this->objectModel->getDynamic($pager);
         $idList  = array();
         foreach($actions as $action) $idList []= $action->id;
-        sort($idList);
 
         if(dao::isError()) return dao::getError();
-        return implode(';', $idList);
+        return count($idList);
     }
 
     /**
