@@ -989,10 +989,11 @@ class upgradeTao extends upgradeModel
      * 处理非产品类型的流程。
      * Handle non product workflow group.
      *
-     * @param object $group   流程对象
-     * @param int    $groupID 流程ID
+     * @param object $group          流程对象
+     * @param int    $groupID        流程ID
+     * @param array  $classifyModule 分类模块数组
      */
-    protected function handleNonProductWorkflowGroup(object $group, int $groupID)
+    protected function handleNonProductWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
         $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
         $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
@@ -1001,6 +1002,10 @@ class upgradeTao extends upgradeModel
         {
             $this->copyProcessWithActivities($process, $groupID, $activityGroup);
         }
+
+        $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
+
+        return $classifyModule;
     }
 
     /**

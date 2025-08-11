@@ -11537,7 +11537,7 @@ class upgradeModel extends model
             else
             {
                 /* 复制过程、活动。 */
-                $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID);
+                $classifyModule = $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID, $classifyModule);
             }
         }
 
