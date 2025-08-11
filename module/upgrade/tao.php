@@ -1047,9 +1047,9 @@ class upgradeTao extends upgradeModel
      */
     protected function updateProcessModules(array $classifyModule)
     {
-        foreach($classifyModule as $groupID => $classifyModule)
+        foreach($classifyModule as $groupID => $modules)
         {
-            foreach($classifyModule as $key => $moduleID)
+            foreach($modules as $key => $moduleID)
             {
                 $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('type')->eq($key)->exec();
             }
