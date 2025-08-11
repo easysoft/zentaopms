@@ -134,7 +134,17 @@ class adminModel extends model
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
-                    if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID) $subMenu['link'] = sprintf($subMenu['link'], $groupID);
+                    if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID)
+                    {
+                        $subMenu['link'] = sprintf($subMenu['link'], $groupID);
+                        if(isset($subMenu['subMenu']))
+                        {
+                            foreach($subMenu['subMenu'] as $subSubMenuKey => $subSubMenu)
+                            {
+                                $subMenu['subMenu'][$subSubMenuKey]['link'] = sprintf($subSubMenu['link'], $groupID);
+                            }
+                        }
+                    }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
