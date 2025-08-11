@@ -11531,14 +11531,20 @@ class upgradeModel extends model
         {
             if($group->projectType == 'product')
             {
+                /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
                 $classifyModule = $this->upgradeTao->handleProductWorkflowGroup($group, $groupID, $classifyModule);
             }
             else
             {
+                /* 复制过程、活动。 */
                 $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID);
             }
         }
 
+        /* 迁移过程分类到模块表。 */
         $this->upgradeTao->updateProcessModules($classifyModule);
+
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
     }
 }

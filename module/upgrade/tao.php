@@ -904,11 +904,11 @@ class upgradeTao extends upgradeModel
 
     /**
      * 获取工作流组列表
-     * Get workflow group list.
+     * Get workflow group list for process.
      *
      * @return array
      */
-    protected function getWorkflowGroups()
+    protected function getWorkflowGroupForProcess()
     {
         return $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)
             ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
@@ -1051,7 +1051,7 @@ class upgradeTao extends upgradeModel
         {
             foreach($classifyModule as $key => $moduleID)
             {
-                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('model')->eq($key)->exec();
+                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('type')->eq($key)->exec();
             }
         }
     }
