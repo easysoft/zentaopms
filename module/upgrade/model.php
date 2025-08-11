@@ -11544,6 +11544,10 @@ class upgradeModel extends model
         /* 迁移过程分类到模块表。 */
         $this->upgradeTao->updateProcessModules($classifyModule);
 
+        /* 删除旧分类。 */
+        $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
+
+        /* 删除旧字段。 */
         $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
         $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
     }
