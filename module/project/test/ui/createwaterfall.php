@@ -46,9 +46,9 @@ $waterfall = array(
 r($tester->createDefault($waterfall['0'])) && p('message,status') && e('创建瀑布项目表单页提示信息正确, SUCCESS'); // 校验项目名称不能为空
 r($tester->createDefault($waterfall['1'])) && p('message,status') && e('创建瀑布项目表单页提示信息正确, SUCCESS'); // 校验计划完成时间不能为空
 r($tester->createDefault($waterfall['2'])) && p('message,status') && e('创建瀑布项目表单页提示信息正确, SUCCESS'); // 校验项目名称不能重复
-r($tester->createDefault($waterfall['3'])) && p('status')         && e('SUCCESS');                                 // 创建长期瀑布项目
-r($tester->createDefault($waterfall['4'])) && p('status')         && e('SUCCESS');                                 // 创建指定计划完成的瀑布项目
-r($tester->createDefault($waterfall['5'])) && p('status')         && e('SUCCESS');                                 // 创建指定计划完成的项目型瀑布项目
+r($tester->createDefault($waterfall['3'])) && p('message,status') && e('创建瀑布项目成功, SUCCESS');               // 创建长期瀑布项目
+r($tester->createDefault($waterfall['4'])) && p('message,status') && e('创建瀑布项目成功, SUCCESS');               // 创建指定计划完成的瀑布项目
+r($tester->createDefault($waterfall['5'])) && p('message,status') && e('创建瀑布项目成功, SUCCESS');               // 创建指定计划完成的项目型瀑布项目
 r($tester->checkLocating($waterfall['6'])) && p('module,method')  && e('programplan, create');                     // 创建瀑布项目后的跳转
 
 $tester->closeBrowser();
