@@ -11513,4 +11513,42 @@ class upgradeModel extends model
             $this->dao->update(TABLE_PROJECT)->set('deliverable')->eq($projectDeliverable)->where('id')->eq($project->id)->exec();
         }
     }
+
+    /**
+     * 升级流程和活动, 将流程和活动中的数据迁移到流程中。
+     * Upgrade process and activity.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeProcessAndActivity()
+    {
+        $this->app->loadLang('process');
+        $groupList = $this->upgradeTao->getWorkflowGroupForProcess();
+
+        $classifyModule = array();
+        foreach($groupList as $groupID => $group)
+        {
+            if($group->projectType == 'product')
+            {
+                /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
+                $classifyModule = $this->upgradeTao->handleProductWorkflowGroup($group, $groupID, $classifyModule);
+            }
+            else
+            {
+                /* 复制过程、活动。 */
+                $classifyModule = $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID, $classifyModule);
+            }
+        }
+
+        /* 迁移过程分类到模块表。 */
+        $this->upgradeTao->updateProcessModules($classifyModule);
+
+        /* 删除旧分类。 */
+        $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
+
+        /* 删除旧字段。 */
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
+    }
 }

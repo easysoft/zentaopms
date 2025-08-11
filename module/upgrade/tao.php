@@ -901,4 +901,163 @@ class upgradeTao extends upgradeModel
 
         return $duplicateList;
     }
+
+    /**
+     * 获取工作流组列表
+     * Get workflow group list for process.
+     *
+     * @return array
+     */
+    protected function getWorkflowGroupForProcess()
+    {
+        return $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)
+            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
+            ->andWhere('main')->eq('1')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 处理产品类型的工作流组
+     * Handle product workflow group.
+     *
+     * @param object $group           流程对象
+     * @param int    $groupID         流程ID
+     * @param array  $classifyModule  分类模块数组
+     * @return array
+     */
+    protected function handleProductWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    {
+        $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
+
+        $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
+
+        return $classifyModule;
+    }
+
+    /**
+     * 将过程分类从语言表迁移到模块表
+     * Migrate process classify from language table to module table.
+     *
+     * @param object $group  流程对象
+     * @param int   $groupID 流程ID
+     * @return array
+     */
+    protected function migrateClassifyToModule(object $group, int $groupID)
+    {
+        $classifyKey  = $group->projectModel . 'Classify';
+        $classifyList = isset($this->lang->process->{$classifyKey}) ? $this->lang->process->{$classifyKey} : $this->lang->process->classify;
+
+        $classifyModule = array();
+        $order = 10;
+        foreach($classifyList as $key => $value)
+        {
+            $moduleID = $this->createProcessModule($groupID, $value, $order);
+            $classifyModule[$key] = $moduleID;
+            $order += 10;
+        }
+
+        return $classifyModule;
+    }
+
+    /**
+     * 创建过程模块。
+     * Create process module.
+     *
+     * @param int    $groupID 流程ID
+     * @param string $name    模块名称
+     * @param int   $order    排序
+     * @return int
+     */
+    protected function createProcessModule(int $groupID, string $name, int $order)
+    {
+        $module = new stdclass();
+        $module->root   = $groupID;
+        $module->branch = '0';
+        $module->name   = $name;
+        $module->grade  = '1';
+        $module->order  = $order;
+        $module->type   = 'process';
+
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
+    }
+
+    /**
+     * 处理非产品类型的流程。
+     * Handle non product workflow group.
+     *
+     * @param object $group          流程对象
+     * @param int    $groupID        流程ID
+     * @param array  $classifyModule 分类模块数组
+     */
+    protected function handleNonProductWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    {
+        $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
+
+        foreach($processList as $process)
+        {
+            $this->copyProcessWithActivities($process, $groupID, $activityGroup);
+        }
+
+        $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
+
+        return $classifyModule;
+    }
+
+    /**
+     * 复制过程及其活动。
+     * Copy process and activities.
+     *
+     * @param object $process 过程对象
+     * @param int    $groupID 流程ID
+     * @param array  $activityGroup 活动分组
+     */
+    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup)
+    {
+        $activityList = zget($activityGroup, $process->id, array());
+        unset($process->id);
+        $process->workflowGroup = $groupID;
+        $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
+        $processID = $this->dao->lastInsertID();
+
+        foreach($activityList as $activity)
+        {
+            $this->copyActivity($activity, $processID);
+        }
+    }
+
+    /**
+     * 复制活动。
+     * Copy activity.
+     *
+     * @param object $activity  活动对象
+     * @param int    $processID 过程ID
+     */
+    protected function copyActivity(object $activity, int $processID)
+    {
+        unset($activity->id);
+        $activity->process = $processID;
+        $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
+    }
+
+    /**
+     * 更新过程的模块分类。
+     * Update process modules.
+     *
+     * @param array $classifyModule
+     */
+    protected function updateProcessModules(array $classifyModule)
+    {
+        foreach($classifyModule as $groupID => $modules)
+        {
+            foreach($modules as $key => $moduleID)
+            {
+                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('type')->eq($key)->exec();
+            }
+        }
+    }
 }
