@@ -13864,6 +13864,7 @@ CREATE UNIQUE INDEX `project` ON `zt_intervention`(`project`,`activity`);
 CREATE TABLE IF NOT EXISTS `zt_activity` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `process` mediumint(9) NOT NULL DEFAULT '0',
+  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `optional` varchar(255) NOT NULL DEFAULT '',
   `tailorNorm` varchar(255) NOT NULL DEFAULT '',

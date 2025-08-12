@@ -18,3 +18,4 @@ ALTER TABLE `zt_module` ADD `extra` varchar(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_process` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_process` ADD `module` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_activity` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `process`;
