@@ -27,3 +27,5 @@ fields:
     range: "0{15},1,0,1{13}"
   - field: addedBy
     range: "admin"
+  - field: order
+    range: 1-100
