@@ -929,6 +929,10 @@ class upgradeTao extends upgradeModel
     {
         $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
 
+        /* 更新活动的流程。 */
+        $processList = $this->dao->select('id')->from(TABLE_PROCESS)->where('group')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs();
+        $this->dao->update(TABLE_ACTIVITY)->set('workflowGroup')->eq($groupID)->where('process')->in(array_keys($processList))->exec();
+
         $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
 
         return $classifyModule;
@@ -1026,7 +1030,7 @@ class upgradeTao extends upgradeModel
 
         foreach($activityList as $activity)
         {
-            $this->copyActivity($activity, $processID);
+            $this->copyActivity($activity, $processID, $groupID);
         }
     }
 
@@ -1036,11 +1040,13 @@ class upgradeTao extends upgradeModel
      *
      * @param object $activity  活动对象
      * @param int    $processID 过程ID
+     * @param int    $groupID   流程ID
      */
-    protected function copyActivity(object $activity, int $processID)
+    protected function copyActivity(object $activity, int $processID, int $groupID)
     {
         unset($activity->id);
-        $activity->process = $processID;
+        $activity->process       = $processID;
+        $activity->workflowGroup = $groupID;
         $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
     }
 
