@@ -48,3 +48,24 @@ $product->type->range('normal');
 $product->gen(3);
 
 $projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2, 3');
+$projectProduct->product->range('1, 2, 3');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
+$projectProduct->gen(3);
+
+$tester = new projectExportForLiteTester();
+$tester->login();
+
+//设置项目导出数据
+$project = array(
+    array('filename' => ''),
+    array('filename' => '项目导出文件1', 'encoding' => 'UTF-8', 'data' => '选中记录'),
+    array('filename' => '项目导出文件2', 'format' => 'xml', 'data' => '全部记录'),
+);
+
+r($tester->projectExport($project['0'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 按照默认设置导出项目
+r($tester->projectExport($project['1'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 项目导出csv-UTF-8-选中记录
+r($tester->projectExport($project['2'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 项目导出xml-全部记录
+
+$tester->closeBrowser();
