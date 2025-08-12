@@ -320,6 +320,10 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
+        $canPreviewExtensions = 'txt|jpg|jpeg|gif|png|bmp|mp4';
+        if($canPreviewOffice) $canPreviewExtensions .= '|doc|docx|xls|xlsx|ppt|pptx|pdf';
+        jsVar('canPreviewExtensions', $canPreviewExtensions);
+
         // 不可用场景：文档模板、API 文档、开源版
         $diffEnabled = ($config->edition != 'open')
             && !($rawModule == 'doc' && $rawMethod == 'view')
