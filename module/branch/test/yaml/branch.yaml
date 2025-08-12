@@ -11,3 +11,5 @@ fields:
     range: 6-10{3},11-15{2},1-5{3}
   - field: status
     range: 'active{2},closed{1}'
+  - field: order
+    range: 1-100
