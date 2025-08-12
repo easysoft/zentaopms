@@ -317,4 +317,39 @@ class groupZen extends group
 
         return $navGroup;
     }
+
+    /**
+     * 设置DevOps 在Compose 版本中的权限。
+     * Set DevOps priv in compose.
+     *
+     * @access public
+     * @return void
+     */
+    public function setDevOpsPrivInCompose()
+    {
+        $privList = $this->config->group->setComposeDevOpsPriv;
+        $subsets  = array_keys($privList);
+        $allPrivs = $this->config->group->package;
+        $servers  = $this->loadModel('pipeline')->getList('');
+        $servers  = array_column($servers, 'type');
+
+        foreach($allPrivs as $packageCode => $package)
+        {
+            $subset = $package->subset;
+            if(!in_array($subset, $subsets)) continue;
+
+            if(!empty($privList[$subset]['exclude']))
+            {
+                $excludeServer = explode(',', $privList[$subset]['exclude']);
+                if(array_intersect($servers, $excludeServer)) continue;
+            }
+
+            $hidePrivs = explode(',', $privList[$subset]['priv']);
+            foreach($hidePrivs as $priv)
+            {
+                if(empty($package->privs[$priv])) continue;
+                unset($this->config->group->package->{$packageCode}->privs[$priv]);
+            }
+        }
+    }
 }

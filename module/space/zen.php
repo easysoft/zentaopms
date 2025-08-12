@@ -21,17 +21,21 @@ class spaceZen extends space
      */
     protected function getSpaceInstances(string $browseType = 'all'): array
     {
-        $instances = $this->space->getSpaceInstances(0, $browseType);
-        foreach($instances as $instance)
+        $instances = array();
+        if(!$this->config->inCompose)
         {
-            $instance->externalID = 0;
-            $instance->orgID      = $instance->id;
-            $instance->type       = 'store';
-
-            if(in_array($instance->appName, $this->config->space->zentaoApps))
+            $instances = $this->space->getSpaceInstances(0, $browseType);
+            foreach($instances as $instance)
             {
-                $externalApp = $this->space->getExternalAppByApp($instance);
-                if($externalApp) $instance->externalID = $externalApp->id;
+                $instance->externalID = 0;
+                $instance->orgID      = $instance->id;
+                $instance->type       = 'store';
+
+                if(in_array($instance->appName, $this->config->space->zentaoApps))
+                {
+                    $externalApp = $this->space->getExternalAppByApp($instance);
+                    if($externalApp) $instance->externalID = $externalApp->id;
+                }
             }
         }
 
