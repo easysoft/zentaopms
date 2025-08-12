@@ -3123,10 +3123,8 @@ $config->group->package->process->privs['process-edit']                = array('
 $config->group->package->process->privs['process-view']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('process-activityList'));
 $config->group->package->process->privs['process-updateOrder']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array(), 'recommend' => array('process-create', 'process-edit'));
 $config->group->package->process->privs['process-activityList']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array('process-create', 'process-edit', 'process-view'));
-$config->group->package->process->privs['process-scrumBrowse']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->process->privs['process-browse']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->process->privs['process-agilePlusBrowse']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
-$config->group->package->process->privs['process-waterfallPlusBrowse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
+$config->group->package->process->privs['process-manageModule']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->activity = new stdclass();
 $config->group->package->activity->order  = 35;
