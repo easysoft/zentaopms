@@ -92,7 +92,7 @@ class adminTest
     public function sendInstallEventTest($data): string
     {
         $objects = $this->objectModel->sendInstallEvent($data);
-        if(empty($objects)) return 'Fail';
+        if(!$objects) return 'Fail';
         return 'Success';
     }
 }
