@@ -36,13 +36,6 @@ $projectproduct->branch->range('0');
 $projectproduct->plan->range('0');
 $projectproduct->gen(1);
 
-$team = ZenData('team');
-$team->id->range('1');
-$team->root->range('1');
-$team->type->range('project');
-$team->account->range('admin');
-$team->gen(1);
-
 $story = ZenData('story');
 $story->id->range('1');
 $story->vision->range('lite');
