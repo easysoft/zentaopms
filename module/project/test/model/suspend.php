@@ -21,6 +21,15 @@ title=测试 projectModel::suspend();
 timeout=0
 cid=1
 
+- 暂停 projectID=2 后，检查$changes[0]
+ - 属性field @status
+ - 属性new @suspended
+- 暂停 projectID=2 后，检查$changes[1]
+ - 属性field @suspendedDate
+ - 属性new @2023-05-03
+- 暂停 projectID=4第0条的new属性 @suspended
+- 执行已经暂停的项目 @0
+
 */
 
 global $tester;
@@ -35,5 +44,8 @@ $project->lastEditedBy   = 'admin';
 $project->lastEditedDate = '2023-04-27';
 $project->suspendedDate  = '2023-05-03';
 
-r($tester->project->suspend(2, $project)) && p('0:new') && e('suspended');
-r($tester->project->suspend(4, $project)) && p('0:new') && e('suspended');
+$changes = $tester->project->suspend(2, $project);
+r($changes[0])                            && p('field,new') && e('status,suspended');          // 暂停 projectID=2 后，检查$changes[0]
+r($changes[1])                            && p('field,new') && e('suspendedDate,2023-05-03');  // 暂停 projectID=2 后，检查$changes[1]
+r($tester->project->suspend(4, $project)) && p('0:new')     && e('suspended');                 // 暂停 projectID=4
+r($tester->project->suspend(4, $project)) && p()            && e('0');                         // 执行已经暂停的项目
