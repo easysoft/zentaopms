@@ -15,6 +15,7 @@ $uid            = uniqid();
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
 $forceReview    = $this->story->checkForceReview($story->type);
 $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
+$storyEstimate  = $story->estimate ? helper::formatHours($story->estimate) : 0;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
 $multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1) || ($story->type != 'story');
@@ -319,7 +320,7 @@ detailBody
             item
             (
                 set::name($lang->story->estimate),
-                $story->isParent == '0' ? input(set::name('estimate'), set::value($story->estimate ? helper::formatHours($story->estimate) : 0)) : $story->estimate
+                $story->isParent == '0' ? input(set::name('estimate'), set::value($storyEstimate)) : $storyEstimate
             ),
             item
             (
