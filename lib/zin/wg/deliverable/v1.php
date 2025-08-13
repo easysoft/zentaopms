@@ -85,7 +85,7 @@ class deliverable extends wg
             $this->setProp('maxFileSize', $maxFileSize);
         }
 
-        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->doc->selectDoc;
+        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->deliverable->selectDocInProject;
         $docLink       = $isTemplate ? helper::createLink('doc', 'ajaxGetTemplateDocs', 'keyword={search}') : helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}');
 
         return zui::deliverableList
