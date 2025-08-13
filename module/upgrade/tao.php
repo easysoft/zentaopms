@@ -910,22 +910,22 @@ class upgradeTao extends upgradeModel
      */
     protected function getWorkflowGroupForProcess()
     {
-        return $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)
+        return $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)
             ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
-            ->andWhere('main')->eq('1')
+            ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
     }
 
     /**
-     * 处理产品类型的工作流组
-     * Handle product workflow group.
+     * 处理使用内置数据的流程。
+     * Handle buildin workflow group.
      *
      * @param object $group           流程对象
      * @param int    $groupID         流程ID
      * @param array  $classifyModule  分类模块数组
      * @return array
      */
-    protected function handleProductWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    protected function handleBuildinWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
         $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
 
@@ -992,14 +992,14 @@ class upgradeTao extends upgradeModel
     }
 
     /**
-     * 处理非产品类型的流程。
-     * Handle non product workflow group.
+     * 处理需要复制过程和活动的流程。
+     * Handle need copy workflow group.
      *
      * @param object $group          流程对象
      * @param int    $groupID        流程ID
      * @param array  $classifyModule 分类模块数组
      */
-    protected function handleNonProductWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    protected function handleNeedCopyWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
         $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
         $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
@@ -1027,6 +1027,7 @@ class upgradeTao extends upgradeModel
         $activityList = zget($activityGroup, $process->id, array());
         unset($process->id);
         $process->workflowGroup = $groupID;
+        $process->model         = '';
         $process->editedBy      = '';
         $process->editedDate    = null;
         $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
