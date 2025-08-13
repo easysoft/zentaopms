@@ -157,7 +157,7 @@ class testcase extends tester
         $this->webdriver->wait(1);
         $form->dom->btn($this->lang->save)->click();
         $this->webdriver->wait(1);
-        $form->dom->confirm->click();
+        if(is_object($form->dom->confirm)) $form->dom->confirm->click();
         $this->webdriver->wait(1);
 
         if($assertion) return $this->success('测试用例评审通过');
