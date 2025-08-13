@@ -6,6 +6,7 @@ title=测试 docModel->getOrderedProjects();
 cid=1
 
 - 获取系统中已排序的项目第1条的11属性 @项目11
+- 获取系统中包括ID=11已排序的项目第2条的16属性 @项目16
 - 获取系统中包括ID=11已排序的项目第1条的11属性 @项目11
 - 获取系统中已排序的项目数量 @3
 - 获取系统中包括ID=11已排序的项目数量 @3
@@ -21,9 +22,13 @@ su('admin');
 
 $appends = array(0, 11);
 
-$docTester = new docTest();
-r($docTester->getOrderedProjectsTest($appends[0])) && p('1:11') && e('项目11'); // 获取系统中已排序的项目
-r($docTester->getOrderedProjectsTest($appends[1])) && p('1:11') && e('项目11'); // 获取系统中包括ID=11已排序的项目
+$docTester      = new docTest();
+$allProjects    = $docTester->getOrderedProjectsTest($appends[0]);
+$appendProjects = $docTester->getOrderedProjectsTest($appends[1]);
 
-r(count($docTester->getOrderedProjectsTest($appends[0]))) && p() && e('3'); // 获取系统中已排序的项目数量
-r(count($docTester->getOrderedProjectsTest($appends[1]))) && p() && e('3'); // 获取系统中包括ID=11已排序的项目数量
+r($allProjects)    && p('1:11') && e('项目11'); // 获取系统中已排序的项目
+r($appendProjects) && p('2:16') && e('项目16'); // 获取系统中包括ID=11已排序的项目
+r($appendProjects) && p('1:11') && e('项目11'); // 获取系统中包括ID=11已排序的项目
+
+r(count($allProjects))    && p() && e('3'); // 获取系统中已排序的项目数量
+r(count($appendProjects)) && p() && e('3'); // 获取系统中包括ID=11已排序的项目数量
