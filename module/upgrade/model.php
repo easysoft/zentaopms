@@ -11529,15 +11529,15 @@ class upgradeModel extends model
         $classifyModule = array();
         foreach($groupList as $groupID => $group)
         {
-            if($group->projectType == 'product')
+            if($group->projectType == 'product' && $group->main == '1')
             {
                 /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
-                $classifyModule = $this->upgradeTao->handleProductWorkflowGroup($group, $groupID, $classifyModule);
+                $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
             }
             else
             {
                 /* 复制过程、活动。 */
-                $classifyModule = $this->upgradeTao->handleNonProductWorkflowGroup($group, $groupID, $classifyModule);
+                $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
             }
         }
 
