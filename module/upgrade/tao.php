@@ -1025,6 +1025,8 @@ class upgradeTao extends upgradeModel
         $activityList = zget($activityGroup, $process->id, array());
         unset($process->id);
         $process->workflowGroup = $groupID;
+        $process->editedBy      = '';
+        $process->editedDate    = null;
         $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
         $processID = $this->dao->lastInsertID();
 
@@ -1047,6 +1049,8 @@ class upgradeTao extends upgradeModel
         unset($activity->id);
         $activity->process       = $processID;
         $activity->workflowGroup = $groupID;
+        $activity->editedBy      = '';
+        $activity->editedDate    = null;
         $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
     }
 
