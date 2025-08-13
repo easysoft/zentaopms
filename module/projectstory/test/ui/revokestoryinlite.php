@@ -2,9 +2,15 @@
 <?php
 
 /**
+
 title=运营界面撤销评审目标
 timeout=0
 cid=0
+
+- 撤销评审
+ - 测试结果 @目标撤销评审成功
+ - 最终测试状态 @SUCCESS
+
 */
 chdir(__DIR__);
 include '../lib/changestatusinlite.ui.class.php';
@@ -35,6 +41,13 @@ $projectproduct->product->range('1');
 $projectproduct->branch->range('0');
 $projectproduct->plan->range('0');
 $projectproduct->gen(1);
+
+$team = ZenData('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->gen(1);
 
 $story = ZenData('story');
 $story->id->range('1');
