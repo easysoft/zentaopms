@@ -92,3 +92,33 @@ window.loadToIndex = function()
         location.href = $.createLink('index', 'index');
     }, 2000);
 }
+
+window.getFingerprint = function()
+{
+    $.getLib(config.webRoot + 'js/fingerprint/fingerprint.js', {root: false}, async function(fingerprint)
+    {
+        const agent = typeof(FingerprintJS) !== 'undefined' ? await FingerprintJS.load() : '';
+        fingerprint = agent ? await agent.get() : '';
+        fingerprint = fingerprint ? fingerprint.visitorId : '';
+        $('.form-fingerprint').val(fingerprint);
+    });
+}
+
+window.skip = function()
+{
+    ajaxInstallEvent('click-skip-join-community');
+    setTimeout(function() {
+        location.href = $.createLink('index', 'index');
+    }, 1000);
+}
+
+window.ajaxInstallEvent = function(location = '')
+{
+    $.getLib(config.webRoot + 'js/fingerprint/fingerprint.js', {root: false}, async function()
+    {
+        const agent     = typeof(FingerprintJS) !== 'undefined' ? await FingerprintJS.load() : '';
+        let fingerprint = agent ? await agent.get() : '';
+        fingerprint     = fingerprint ? fingerprint.visitorId : '';
+        $.ajax({url: $.createLink('admin', 'installEvent'), type: "post", data: {fingerprint, location}, timeout: 2000});
+    });
+}
