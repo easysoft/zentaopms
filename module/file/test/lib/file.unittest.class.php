@@ -460,4 +460,20 @@ class fileTest
         $file = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
         return $this->objectModel->printFile($file, $method, $showDelete, $showEdit, null);
     }
+
+    /**
+     * Build file actions.
+     *
+     * @param  int         $fileID
+     * @param  bool        $showEdit
+     * @param  bool        $showDelete
+     * @access public
+     * @return string
+     */
+    public function buildFileActionsTest(int $fileID, bool $showEdit, bool $showDelete): string
+    {
+        $file = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
+        $downloadLink = helper::createLink('file', 'download', "fileID=$fileID");
+        return $this->objectModel->buildFileActions('', $downloadLink, 0, $showEdit, $showDelete, $file, null);
+    }
 }
