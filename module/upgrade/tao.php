@@ -948,8 +948,10 @@ class upgradeTao extends upgradeModel
      */
     protected function migrateClassifyToModule(object $group, int $groupID)
     {
+        $this->app->loadLang('process');
         $classifyKey  = $group->projectModel . 'Classify';
-        $classifyList = isset($this->lang->process->{$classifyKey}) ? $this->lang->process->{$classifyKey} : $this->lang->process->classify;
+        $classifyList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('process')->andWhere('section')->eq($classifyKey)->fetchPairs();
+        if(empty($classifyList)) $classifyList = $this->lang->process->classifyList;
 
         $classifyModule = array();
         $order = 10;
