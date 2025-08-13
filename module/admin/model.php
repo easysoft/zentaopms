@@ -467,10 +467,18 @@ class adminModel extends model
         $this->lang->switcherMenu = $output;
     }
 
-    public function sentInstallEvent($data)
+    /**
+     *  发送安装过程埋点。
+     *  Sending installation process buried points.
+     *
+     * @param object $data
+     * @access public
+     * @return bool
+     */
+    public function sendInstallEvent($data)
     {
-        $apiRoot    = $this->config->admin->register->apiRoot;
-        $apiURL     = $apiRoot . "/zentaoevent-install.json";
+        $apiRoot = $this->config->admin->register->apiRoot;
+        $apiURL  = $apiRoot . "/zentaoevent-install.json";
 
         $sn = $this->config->global->sn;
         if(empty($sn)) $sn = $this->loadModel('setting')->setSN();
@@ -486,7 +494,9 @@ class adminModel extends model
         $httpData['installType'] = '';
         $httpData['ip']          = helper::getRemoteIP();
 
-        $this->loadModel('common');
-        common::http($apiURL, $httpData);
+        $response = common::http($apiURL, $httpData);
+        $response = json_decode($response);
+        if($response && $response->code == 200) return true;
+        return false;
     }
 }

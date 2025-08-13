@@ -720,9 +720,16 @@ class admin extends control
         $this->display();
     }
 
+    /**
+     * 安装过程的事件埋点。
+     * Event burial points during installation process.
+     *
+     * @access public
+     * @return void
+     */
     public function installEvent()
     {
         $data = form::data($this->config->admin->form->installEvent)->get();
-        $this->admin->sentInstallEvent($data);
+        $this->admin->sendInstallEvent($data);
     }
 }
