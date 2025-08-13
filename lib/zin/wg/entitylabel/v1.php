@@ -94,7 +94,7 @@ class entityLabel extends wg
         $entityName = $this->buildEntityName();
         return div
         (
-            setClass('entity-label space-x-1.5 overflow-hidden nowrap'),
+            setClass('entity-label space-x-1.5 overflow-hidden nowrap flex items-center'),
             set($this->getRestProps()),
             $prefix,
             $reverse ? array($entityName, ' ', $entityID) : array($entityID, ' ', $entityName),
