@@ -320,19 +320,36 @@ class settingModel extends model
      * Set the sn of current zentaopms.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function setSN()
     {
-        $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
-        if($this->snNeededUpdate($sn))
+        $file   = dirname(dirname(dirname(__FILE__))) . '/tmp/sn';
+        $fileSn = file_get_contents($file);
+        if($fileSn)
         {
-            $sn = $this->computeSN();
-            $this->setItem('system.common.global.sn', $sn);
+            $sn = $fileSn;
         }
-
+        else
+        {
+            if(isset($this->config->global->sn))
+            {
+                $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
+                if($this->snNeededUpdate($sn))
+                {
+                    $sn = $this->computeSN();
+                    $this->setItem('system.common.global.sn', $sn);
+                }
+            }
+            else
+            {
+                $sn = $this->computeSN();
+            }
+        }
         if(!isset($this->config->global)) $this->config->global = new stdclass();
         $this->config->global->sn = $sn;
+        file_put_contents($file, $sn);
+        return $sn;
     }
 
     /**
