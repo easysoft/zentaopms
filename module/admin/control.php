@@ -719,4 +719,10 @@ class admin extends control
         $this->view->company = $company->name;
         $this->display();
     }
+
+    public function installEvent()
+    {
+        $data = form::data($this->config->admin->form->installEvent)->get();
+        $this->admin->sentInstallEvent($data);
+    }
 }

@@ -466,4 +466,27 @@ class adminModel extends model
 
         $this->lang->switcherMenu = $output;
     }
+
+    public function sentInstallEvent($data)
+    {
+        $apiRoot    = $this->config->admin->register->apiRoot;
+        $apiURL     = $apiRoot . "/zentaoevent-install.json";
+
+        $sn = $this->config->global->sn;
+        if(empty($sn)) $sn = $this->loadModel('setting')->setSN();
+
+        $httpData['sn']          = $sn;
+        $httpData['location']    = $data->location;
+        $httpData['fingerprint'] = $data->fingerprint;
+        $httpData['edition']     = $this->config->edition;
+        $httpData['version']     = $this->config->version;
+        $httpData['phpVersion']  = phpversion();
+        $httpData['os']          = PHP_OS . ' ' . php_uname('m');
+        $httpData['is_docker']   = file_exists('/.dockerenv');
+        $httpData['installType'] = '';
+        $httpData['ip']          = helper::getRemoteIP();
+
+        $this->loadModel('common');
+        common::http($apiURL, $httpData);
+    }
 }
