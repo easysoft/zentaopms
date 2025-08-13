@@ -494,6 +494,7 @@ class adminModel extends model
         $httpData['installType'] = '';
         $httpData['ip']          = helper::getRemoteIP();
 
+        $this->loadModel('common');
         $response = common::http($apiURL, $httpData);
         $response = json_decode($response);
         if($response && $response->code == 200) return true;
