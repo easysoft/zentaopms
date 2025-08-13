@@ -8,6 +8,7 @@ cid=1
 - 测试空数据 @0
 - 测试移除当前用户的正在编辑信息属性editing @~~
 - 测试当前用户不在正在编辑列表中 @0
+- 测试当前用户创建的文档属性editing @~~
 - 测试不存在的文档信息 @0
 
 */
@@ -18,14 +19,16 @@ include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 $timestamp = time();
 $docTable = zenData('doc')->loadYaml('doc');
 $docTable->editingDate->range("`{\"admin\": $timestamp}`, `{\"user1\": $timestamp}`");
-$docTable->gen(2);
+$docTable->addedBy->range('user1{2},admin');
+$docTable->gen(3);
 
 zenData('user')->gen(5);
 
-$docIds = array(0, 1, 2, 3);
+$docIds = array(0, 1, 2, 3, 100);
 
 $docTester = new docTest();
 r($docTester->removeEditingTest($docIds[0])) && p()          && e('0');  // 测试空数据
 r($docTester->removeEditingTest($docIds[1])) && p('editing') && e('~~'); // 测试移除当前用户的正在编辑信息
 r($docTester->removeEditingTest($docIds[2])) && p()          && e('0');  // 测试当前用户不在正在编辑列表中
-r($docTester->removeEditingTest($docIds[3])) && p()          && e('0');  // 测试不存在的文档信息
+r($docTester->removeEditingTest($docIds[3])) && p('editing') && e('~~'); // 测试当前用户创建的文档
+r($docTester->removeEditingTest($docIds[4])) && p()          && e('0');  // 测试不存在的文档信息
