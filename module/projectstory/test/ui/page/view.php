@@ -15,7 +15,6 @@ class viewPage extends page
             'activateStoryBtn' => '//*[@id="zin_story_activate_1_form"]/div[3]/div/button',
             'revokeBtn'        => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[2]',
             'confirmBtn'       => '//button[@z-key="confirm"]',
-            'submitReviewBtn'  => '//*[@id="zin_story_submitreview_1_form"]/div[2]/div/button',
             'storyStatus'      => '//*[@id="zin_projectstory_view_tabPane"]/div/div[2]/div[2]/span',
             'storyReviwer'     => '//*[@zui-key="side"]/div/div[2]/div[2]/div/div[3]/div[2]//span',
             'storyEstimate'    => '//*[@id="zin_projectstory_view_tabPane"]/div/div[4]/div[2]'
