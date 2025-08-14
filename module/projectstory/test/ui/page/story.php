@@ -49,7 +49,10 @@ class storyPage extends page
             'draftTabNum'     => '//*[@data-id="draft"]/span[2]',
             'reviewingTabNum' => '//*[@data-id="reviewing"]/span[2]',
             'changingTabNum'  => '//*[@data-id="changing"]/span[2]',
-            'firstStory'      => '//*[@id="stories"]/div[2]/div[1]/div/div[2]/div/a'
+            'firstStory'      => '//*[@id="stories"]/div[2]/div[1]/div/div[2]/div/a',
+            'firstCheckbox'   => '//*[@id="stories"]/div[2]/div[1]/div/div[1]/div/div',
+            'batchEdit'       => '//*[@id="stories"]/div[3]/nav[1]/nav/button[1]'
+
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
