@@ -19,7 +19,7 @@ cid=1
 - 重设权限后，查看user1的权限第index条的index属性 @1
 - 重设权限后，查看user1的权限第my条的index属性 @1
 - 重设权限后，查看user1的权限第story条的edit属性 @1
-- 重设权限后，查看user1的权限第story条的edit属性 @1
+- 重设权限后，查看user1的权限第bug条的delete属性 @1
 
 */
 
@@ -36,4 +36,4 @@ r(count($app->user->rights['rights'])) && p() && e(4); // 查看重设权限之�
 r($app->user->rights['rights']) && p('index:index') && e(1); // 重设权限后，查看user1的权限
 r($app->user->rights['rights']) && p('my:index')    && e(1); // 重设权限后，查看user1的权限
 r($app->user->rights['rights']) && p('story:edit')  && e(1); // 重设权限后，查看user1的权限
-r($app->user->rights['rights']) && p('story:edit')  && e(1); // 重设权限后，查看user1的权限
+r($app->user->rights['rights']) && p('bug:delete')  && e(1); // 重设权限后，查看user1的权限
