@@ -20,7 +20,7 @@ ALTER TABLE `zt_process` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFA
 ALTER TABLE `zt_process` ADD `module` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
 ALTER TABLE `zt_activity` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `process`;
 
-UPDATE zt_process  SET editedDate = NULL WHERE editedDate LIKE '1970-01-01%';
-UPDATE zt_process  SET assignedDate = NULL WHERE assignedDate LIKE '1970-01-01%';
-UPDATE zt_activity SET editedDate = NULL WHERE editedDate LIKE '1970-01-01%';
-UPDATE zt_activity SET assignedDate = NULL WHERE assignedDate LIKE '1970-01-01%';
+UPDATE `zt_process`  SET `editedDate` = NULL WHERE `editedDate` LIKE '1970-01-01%';
+UPDATE `zt_process`  SET `assignedDate` = NULL WHERE `assignedDate` LIKE '1970-01-01%';
+UPDATE `zt_activity` SET `editedDate` = NULL WHERE `editedDate` LIKE '1970-01-01%';
+UPDATE `zt_activity` SET `assignedDate` = NULL WHERE `assignedDate` LIKE '1970-01-01%';
