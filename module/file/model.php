@@ -1284,7 +1284,7 @@ class fileModel extends model
             $extension = end($title);
             if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
             array_pop($title);
-            $fileTitle = join('.', $title);
+            $fileTitle = implode('.', $title);
         }
 
         $html .= "<li class='file hidden'><div>";
