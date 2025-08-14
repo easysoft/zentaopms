@@ -11494,12 +11494,12 @@ class upgradeModel extends model
     {
         /* 创建其他过程分类。 */
         $module = new stdclass();
-        $module->root      = $workflowGroupID;
-        $module->name      = $this->upgrade->projectManage;
-        $module->parent    = '0';
-        $module->grade     = '1';
-        $module->type      = 'process';
-        $module->deleted   = '0';
+        $module->root    = $workflowGroupID;
+        $module->name    = $this->upgrade->projectManage;
+        $module->parent  = '0';
+        $module->grade   = '1';
+        $module->type    = 'process';
+        $module->deleted = '0';
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
         $moduleID = $this->dao->lastInsertID();
