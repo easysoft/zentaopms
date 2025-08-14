@@ -9,11 +9,11 @@ title=测试 todoTao::updateDate();
 timeout=0
 cid=1
 
-- 判断是否更新为当前的时间 @1
-
-- 判断是否更新为当前的时间 @1
-
-- 判断是否更新为当前的时间 @1
+- 判断是否更新成功 @1
+- 判断是否更新成功 @1
+- 判断是否更新成功 @1
+- 判断是否更新成功 @1
+- 判断是否更新成功 @1
 
 */
 
@@ -33,9 +33,10 @@ $todoDate2   = date('Y-m-d H:i');
 $todoIDList1 = array(1);
 $todoIDList2 = array(2, 3);
 $todoIDList3 = array('id' => 4);
-$todoIDList4 = array('id' => 5, 'account' => 'admin');
+$todoIDList4 = array('id' => 5, 'account' => 6);
 
-r($tester->todo->updateDate($todoIDList1, $todoDate1)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList2, $todoDate1)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList3, $todoDate2)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList4, $todoDate2)) && p() && e('1'); // 判断是否更新为当前的时间
+r($tester->todo->updateDate($todoIDList1, $todoDate1))   && p() && e('1'); // 判断是否更新成功
+r($tester->todo->updateDate($todoIDList2, $todoDate1))   && p() && e('1'); // 判断是否更新成功
+r($tester->todo->updateDate($todoIDList3, $todoDate2))   && p() && e('1'); // 判断是否更新成功
+r($tester->todo->updateDate($todoIDList4, $todoDate2))   && p() && e('1'); // 判断是否更新成功
+r($tester->todo->updateDate($todoIDList1, '2025-01-01')) && p() && e('1'); // 判断是否更新成功
