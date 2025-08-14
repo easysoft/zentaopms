@@ -505,6 +505,7 @@ $lang->doc->errorEmptyProject           = "No {$lang->executionCommon}. It canno
 $lang->doc->errorEmptySpaceLib          = "There is no document library in this space. It cannot be created. Please create a document library first";
 $lang->doc->errorMainSysLib             = "This library cannot be deleted.";
 $lang->doc->accessDenied                = "Access is denied!";
+$lang->doc->cannotView                  = "You do not have permission to view this document. Please contact the creator %s.";
 $lang->doc->versionNotFount             = 'It does not exist in this build.';
 $lang->doc->noDoc                       = 'No documents. ';
 $lang->doc->noArticle                   = 'No articles.';

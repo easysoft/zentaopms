@@ -505,6 +505,7 @@ $lang->doc->errorEmptyProject           = "没有{$lang->executionCommon}，无�
 $lang->doc->errorEmptySpaceLib          = "该空间下没有文档库，无法创建文档，请先创建文档库";
 $lang->doc->errorMainSysLib             = "该系统文档库不能删除！";
 $lang->doc->accessDenied                = "您没有权限访问！";
+$lang->doc->cannotView                  = "无查看权限，请联系创建者“%s”！";
 $lang->doc->versionNotFount             = '该版本文档不存在';
 $lang->doc->noDoc                       = '暂时没有文档。';
 $lang->doc->noArticle                   = '暂时没有文章。';
