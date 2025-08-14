@@ -14,7 +14,8 @@ class viewPage extends page
             'activateBtn'      => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[last()-3]',
             'activateStoryBtn' => '//*[@id="zin_story_activate_1_form"]/div[3]/div/button',
             'storyStatus'      => '//*[@id="zin_projectstory_view_tabPane"]/div/div[2]/div[2]/span',
-            'storyReviwer'     => '//*[@zui-key="side"]/div/div[2]/div[2]/div/div[3]/div[2]//span'
+            'storyReviwer'     => '//*[@zui-key="side"]/div/div[2]/div[2]/div/div[3]/div[2]//span',
+            'storyEstimate'    => '//*[@id="zin_projectstory_view_tabPane"]/div/div[4]/div[2]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
