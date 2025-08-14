@@ -48,3 +48,52 @@ $team->root->range('1');
 $team->type->range('project');
 $team->account->range('admin');
 $team->gen(1);
+
+$story = ZenData('story');
+$story->id->range('1');
+$story->vision->range('lite');
+$story->parent->range('0');
+$story->isparent->range('0');
+$story->root->range('1');
+$story->path->range(',1,');
+$story->product->range('1');
+$story->title->range('目标01');
+$story->type->range('story');
+$story->status->range('draft');
+$story->stage->range('projected');
+$story->version->range('1');
+$story->openedBy->range('admin');
+$story->assignedTo->range('');
+$story->gen(1);
+
+$storyspec = ZenData('storyspec');
+$storyspec->story->range('1');
+$storyspec->version->range('1');
+$storyspec->title->range('目标01');
+$storyspec->gen(1);
+
+$storyreview = ZenData('storyreview');
+$storyreview->story->range('1');
+$storyreview->version->range('1');
+$storyreview->reviewer->range('admin');
+$storyreview->result->range('');
+$storyreview->gen(1);
+
+$projectstory = ZenData('projectstory');
+$projectstory->project->range('1');
+$projectstory->product->range('1');
+$projectstory->branch->range('0');
+$projectstory->story->range('1');
+$projectstory->version->range('1');
+$projectstory->order->range('1');
+$projectstory->gen(1);
+
+$storyUrl = array(
+    'storyID'   => '1',
+    'projectID' => '1'
+);
+$tester = new assign();
+$tester->login();
+
+r($tester->assignStory($storyUrl, 'admin')) && p('message,status') && e('目标指派成功,SUCCESS');//指派目标
+$tester->closeBrowser();
