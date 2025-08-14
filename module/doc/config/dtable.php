@@ -17,7 +17,7 @@ $config->doc->dtable->fieldList['module']['title']    = $lang->doc->position;
 $config->doc->dtable->fieldList['module']['type']     = 'desc';
 $config->doc->dtable->fieldList['module']['sortType'] = true;
 
-$config->doc->dtable->fieldList['addedBy']['title'] = $lang->doc->addedByAB;
+$config->doc->dtable->fieldList['addedBy']['title'] = $lang->doc->addedBy;
 $config->doc->dtable->fieldList['addedBy']['type']  = 'user';
 
 $config->doc->dtable->fieldList['addedDate']['title'] = $lang->doc->addedDate;
