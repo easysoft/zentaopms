@@ -11492,7 +11492,36 @@ class upgradeModel extends model
      */
     public function createOtherActivity(int $workflowGroupID): int
     {
+        /* 创建其他过程分类。 */
+        $module = new stdclass();
+        $module->root      = $workflowGroupID;
+        $module->name      = $this->upgrade->projectManage;
+        $module->parent    = '0';
+        $module->grade     = '1';
+        $module->type      = 'process';
+        $module->deleted   = '0';
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        $process = new stdclass();
+        $process->workflowGroup = $workflowGroupID;
+        $process->name          = $this->lang->other;
+        $process->module        = $moduleID;
+        $process->createdBy     = 'system';
+        $process->createdDate   = helper::now();
+        $process->editedDate    = null;
+        $process->assignedDate  = null;
+        $process->deleted       = '0';
+        $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
+
+        $processID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_PROCESS)->set('`order`')->eq($processID * 5)->where('id')->eq($processID)->exec();
+
         $activity = new stdclass();
+        $activity->workflowGroup = $workflowGroupID;
+        $activity->process       = $processID;
         $activity->name          = $this->lang->other;
         $activity->optional      = 'no';
         $activity->createdBy     = 'system';
