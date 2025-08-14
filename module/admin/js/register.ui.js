@@ -106,7 +106,7 @@ window.getFingerprint = function()
 
 window.skip = function()
 {
-    ajaxInstallEvent('click-skip-join-community');
+    ajaxInstallEvent('click-skip');
     setTimeout(function() {
         location.href = $.createLink('index', 'index');
     }, 1000);

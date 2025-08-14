@@ -333,7 +333,6 @@ class settingModel extends model
                 $sn = $this->computeSN();
                 setCookie('sn', $sn);
             }
-
         }
         else
         {
