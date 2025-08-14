@@ -5,9 +5,17 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
 /**
+
 title=测试Tao层的根据类型设置待办名称 todoTao::closeTodo()
 timeout=0
 cid=1
+
+- 验证关联故事的待办名称属性name @simplestory
+- 验证关联任务的待办名称属性name @simpletask
+- 验证关联缺陷的待办名称属性name @simplebug
+- 验证关联测试单的待办名称属性name @simpletesttask
+- 如果找不到对象则用待办的名称属性name @测试单5的待办
+
 */
 
 global $tester;
@@ -18,7 +26,7 @@ $bugModel      = $tester->loadModel('bug');
 $testtaskModel = $tester->loadModel('testtask');
 
 /* Create a todo. */
-zenData('todo')->loadYaml('settodonamebytype')->gen(4);
+zenData('todo')->loadYaml('settodonamebytype')->gen(5);
 
 /* Create a simple story. */
 $story = new stdclass();
@@ -51,7 +59,14 @@ $testtask->name = 'simpletesttask';
 $tester->dao->exec('TRUNCATE TABLE ' . TABLE_TESTTASK);
 $tester->dao->insert(TABLE_TESTTASK)->data($testtask)->exec();
 
+$feedback = new stdclass();
+$feedback->id    = 1;
+$feedback->title = 'simplefeedback';
+$tester->dao->exec('TRUNCATE TABLE ' . TABLE_FEEDBACK);
+$tester->dao->insert(TABLE_FEEDBACK)->data($feedback)->exec();
+
 r($todoModel->setTodoNameByType($todoModel->getByID(1))) && p('name') && e('simplestory');    // 验证关联故事的待办名称
 r($todoModel->setTodoNameByType($todoModel->getByID(2))) && p('name') && e('simpletask');     // 验证关联任务的待办名称
 r($todoModel->setTodoNameByType($todoModel->getByID(3))) && p('name') && e('simplebug');      // 验证关联缺陷的待办名称
 r($todoModel->setTodoNameByType($todoModel->getByID(4))) && p('name') && e('simpletesttask'); // 验证关联测试单的待办名称
+r($todoModel->setTodoNameByType($todoModel->getByID(5))) && p('name') && e('测试单5的待办');   // 如果找不到对象则用待办的名称

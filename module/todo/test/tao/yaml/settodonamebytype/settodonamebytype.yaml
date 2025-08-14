@@ -6,11 +6,11 @@ version: 1.0.0
 
 fields:
   - field: id
-    range: 1-4
+    range: 1-5
   - field: date
     range: '`2023-04-23`'
   - field: type
-    range: story,task,bug,testtask
+    range: story,task,bug,testtask,feedback
   - field: objectID
     range: 1
   - field: status
