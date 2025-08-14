@@ -505,6 +505,7 @@ $lang->doc->errorEmptyProject           = "Kein {$lang->executionCommon}. Kann n
 $lang->doc->errorEmptySpaceLib          = "There is no document library in this space. It cannot be created. Please create a document library first";
 $lang->doc->errorMainSysLib             = "Diese Bibliothek kann nicht gelöscht werden.";
 $lang->doc->accessDenied                = "Zugriff verweigert!";
+$lang->doc->cannotView                  = "You do not have permission to view this document. Please contact the creator %s.";
 $lang->doc->versionNotFount             = 'Existiert nicht in diesem Build.';
 $lang->doc->noDoc                       = 'Keine Dokumente. ';
 $lang->doc->noArticle                   = 'No articles.';

@@ -1355,7 +1355,9 @@ class doc extends control
         $_SESSION["doc_{$doc->id}_nopriv"] = '';
         if(!$isApi && !$this->doc->checkPrivDoc($doc))
         {
-            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? $this->lang->doc->accessDenied : $_SESSION["doc_{$doc->id}_nopriv"];
+            $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+            $user  = zget($users, $doc->addedBy);
+            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? sprintf($this->lang->doc->cannotView, $user) : $_SESSION["doc_{$doc->id}_nopriv"];
             unset($_SESSION["doc_{$doc->id}_nopriv"]);
             return $this->sendError($errorMessage, inlink('index'));
         }
