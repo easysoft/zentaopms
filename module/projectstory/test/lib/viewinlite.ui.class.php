@@ -26,8 +26,8 @@ class viewInLiteTester extends tester
         $form->dom->firstStory->click();
 
         $viewPage = $this->loadPage('story', 'view');
-        if($this->response('method') != 'view' && $viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求详情页不正确');
+        if($this->response('method') != 'view' && $viewPage->dom->storyName->getText() != $storyName) return $this->failed('目标详情页不正确');
 
-        return $this->success('需求详情页正确');
+        return $this->success('目标详情页内容正确');
     }
 }
