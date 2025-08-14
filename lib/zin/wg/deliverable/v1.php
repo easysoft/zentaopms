@@ -71,6 +71,7 @@ class deliverable extends wg
         $onlyShow      = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
         $extraCategory = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
         $categories    = $this->prop('categories');
+        $projectID     = $this->prop('projectID');
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('isTemplate', $isTemplate);
@@ -85,8 +86,8 @@ class deliverable extends wg
             $this->setProp('maxFileSize', $maxFileSize);
         }
 
-        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->doc->selectDoc;
-        $docLink       = $isTemplate ? helper::createLink('doc', 'ajaxGetTemplateDocs', 'keyword={search}') : helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}');
+        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->deliverable->selectDocInProject;
+        $docLink       = $isTemplate ? helper::createLink('doc', 'ajaxGetTemplateDocs', "keyword={search}") : helper::createLink('doc', 'ajaxGetDeliverableDocs', "keyword={search}&projectID={$projectID}");
 
         return zui::deliverableList
         (
