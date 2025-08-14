@@ -120,4 +120,28 @@ class changeStatus extends tester
             ? $this->success('目标撤销评审成功')
             : $this->failed('目标撤销评审失败');
     }
+
+    /**
+     * 运营界面提交评审目标
+     * Submit review story in lite
+     *
+     * @param  array $storyUrl
+     * @return mixed
+     */
+    public function submitReview($storyUrl)
+    {
+        $this->switchVision('lite', 5);
+        $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $form->wait(2);
+        $form->dom->revokeBtn->click();
+        $form->wait(2);
+        $form->dom->reviewer->picker('admin');
+        $form->dom->submitReviewBtn->click();
+        $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $viewPage->wait(2);
+        $status = $viewPage->dom->storyStatus->getText();
+        return($status == $this->lang->story->statusList->reviewing)
+            ? $this->success('目标提交评审成功')
+            : $this->failed('目标提交评审失败');
+    }
 }
