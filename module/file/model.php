@@ -1276,20 +1276,21 @@ class fileModel extends model
         $html .= '</span>';
         $html .= '</li>';
 
-        if(strrpos($file->title, '.') !== false)
+        $fileTitle = $file->title;
+        if(strrpos($fileTitle, '.') !== false)
         {
             /* Fix the file name exe.exe */
-            $title     = explode('.', $file->title);
+            $title     = explode('.', $fileTitle);
             $extension = end($title);
             if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
             array_pop($title);
-            $file->title = join('.', $title);
+            $fileTitle = join('.', $title);
         }
 
         $html .= "<li class='file hidden'><div>";
         $html .= "<div class='renameFile w-300px' id='renameBox{$file->id}'><i class='icon icon-file-text'></i>";
         $html .= "<div class='input-group'>";
-        $html .= "<input type='text' id='fileName{$file->id}' value='{$file->title}' class='form-control'/>";
+        $html .= "<input type='text' id='fileName{$file->id}' value='{$fileTitle}' class='form-control'/>";
         $html .= "<input type='hidden' id='extension{$file->id}' value='{$file->extension}'/>";
         $html .= "<strong class='input-group-addon'>.{$file->extension}</strong></div>";
         $html .= "<div class='input-group-btn'>";
