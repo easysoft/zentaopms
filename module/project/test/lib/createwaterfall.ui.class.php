@@ -48,7 +48,7 @@ class createWaterfallTester extends tester
             if($form->dom->endTip)
             {
                 //检查结束日期不能为空
-                $endTipText = $form->dom->endTipgetText();
+                $endTipText = $form->dom->endTip->getText();
                 $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
                 return ($endTipText == $endTip) ? $this->success('创建瀑布项目表单页提示信息正确') : $this->failed('创建瀑布项目表单页提示信息不正确');
             }
