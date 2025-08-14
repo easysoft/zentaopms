@@ -11351,12 +11351,14 @@ class upgradeModel extends model
                 {
                     if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
                     if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
-                    if(empty($otherModule[$workflowGroup->id])) $otherModule[$workflowGroup->id] = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
+                    if(empty($otherModule[$workflowGroup->id]))   $otherModule[$workflowGroup->id]   = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule);
+                    if(empty($otherActivity[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($workflowGroup->id);
 
                     $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
                     $deliverable->workflowGroup = $workflowGroup->id;
                     $deliverable->desc          = $oldDeliverable->desc;
                     $deliverable->module        = $otherModule[$workflowGroup->id];
+                    $deliverable->activity      = $otherActivity[$workflowGroup->id];
                     $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
                     $deliverable->createdBy     = $oldDeliverable->createdBy;
                     $deliverable->createdDate   = !empty($oldDeliverable->createdDate) ? $oldDeliverable->createdDate : null;
@@ -11403,9 +11405,14 @@ class upgradeModel extends model
                         $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
                         $deliverableStage->deliverable = $deliverableID;
 
-                        /* 如果这个交付物在项目流程下有交付物配置，则删除默认的交付物检查规则。 */
-                        if(!isset($sprintFilter[$deliverableID])) $this->dao->delete()->from(TABLE_DELIVERABLESTAGE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
+                        /* 如果这个交付物在项目流程下有交付物配置，则启用交付物并删除默认的交付物检查规则。 */
+                        if(!isset($sprintFilter[$deliverableID]))
+                        {
+                            $this->dao->update(TABLE_DELIVERABLE)->set('status')->eq('enabled')->where('id')->eq($deliverableID)->exec();
+                            $this->dao->delete()->from(TABLE_DELIVERABLESTAGE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
+                        }
 
+                        /* 按照交付物配置生成交付物检查规则。 */
                         if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
                         {
                             /* 将原来不同类型的迭代合并成一个迭代。 */
@@ -11473,6 +11480,32 @@ class upgradeModel extends model
         $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
 
         return $moduleID;
+    }
+
+    /**
+     * 内置默认的过程活动。
+     * Create other process and activity.
+     *
+     * @param  int    $workflowGroupID
+     * @access public
+     * @return int
+     */
+    public function createOtherActivity(int $workflowGroupID): int
+    {
+        $activity = new stdclass();
+        $activity->name          = $this->lang->other;
+        $activity->optional      = 'no';
+        $activity->createdBy     = 'system';
+        $activity->createdDate   = helper::now();
+        $activity->editedDate    = null;
+        $activity->assignedDate  = null;
+        $activity->deleted       = '0';
+        $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
+
+        $activityID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_ACTIVITY)->set('`order`')->eq($activityID * 5)->where('id')->eq($activityID)->exec();
+
+        return $activityID;
     }
 
     /**
