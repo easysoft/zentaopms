@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=需求详情页测试
+title=目标详情页测试
 timeout=0
 cid=90
 
@@ -99,6 +99,6 @@ $tester = new viewInLiteTester();
 $tester->login();
 
 
-r($tester->viewInLite()) && p('message') && e('需求详情页正确');
+r($tester->viewInLite()) && p('message') && e('目标详情页正确');
 
 $tester->closeBrowser();
