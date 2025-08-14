@@ -324,31 +324,32 @@ class settingModel extends model
      */
     public function setSN()
     {
-        $file   = dirname(dirname(dirname(__FILE__))) . '/tmp/sn';
-        $fileSn = file_get_contents($file);
-        if($fileSn)
+        $sn = $_COOKIE['sn'];
+        if(!isset($this->config->installed) || !$this->config->installed)
         {
-            $sn = $fileSn;
+            if(!$sn) $sn = '';
+            if($this->snNeededUpdate($sn))
+            {
+                $sn = $this->computeSN();
+                setCookie('sn', $sn);
+            }
+
         }
         else
         {
-            if(isset($this->config->global->sn))
+            if(!$sn)
             {
                 $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
                 if($this->snNeededUpdate($sn))
                 {
                     $sn = $this->computeSN();
-                    $this->setItem('system.common.global.sn', $sn);
                 }
             }
-            else
-            {
-                $sn = $this->computeSN();
-            }
+            $this->setItem('system.common.global.sn', $sn);
+            if(!isset($this->config->global)) $this->config->global = new stdclass();
+            $this->config->global->sn = $sn;
+            setCookie('sn', $sn);
         }
-        if(!isset($this->config->global)) $this->config->global = new stdclass();
-        $this->config->global->sn = $sn;
-        file_put_contents($file, $sn);
         return $sn;
     }
 

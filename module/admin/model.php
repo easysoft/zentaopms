@@ -466,38 +466,4 @@ class adminModel extends model
 
         $this->lang->switcherMenu = $output;
     }
-
-    /**
-     *  发送安装过程埋点。
-     *  Sending installation process buried points.
-     *
-     * @param object $data
-     * @access public
-     * @return bool
-     */
-    public function sendInstallEvent($data)
-    {
-        $apiRoot = $this->config->admin->register->apiRoot;
-        $apiURL  = $apiRoot . "/zentaoevent-install.json";
-
-        $sn = $this->config->global->sn;
-        if(empty($sn)) $sn = $this->loadModel('setting')->setSN();
-
-        $httpData['sn']          = $sn;
-        $httpData['location']    = $data->location;
-        $httpData['fingerprint'] = $data->fingerprint;
-        $httpData['edition']     = $this->config->edition;
-        $httpData['version']     = $this->config->version;
-        $httpData['phpVersion']  = phpversion();
-        $httpData['os']          = PHP_OS . ' ' . php_uname('m');
-        $httpData['isDocker']    = file_exists('/.dockerenv');
-        $httpData['installType'] = '';
-        $httpData['ip']          = helper::getRemoteIP();
-
-        $this->loadModel('common');
-        $response = common::http($apiURL, $httpData);
-        $response = json_decode($response);
-        if($response && $response->code == 200) return true;
-        return false;
-    }
 }

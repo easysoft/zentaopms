@@ -210,6 +210,7 @@ $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.ajaxsendevent';
+$config->openMethods[] = 'misc.installevent';
 $config->openMethods[] = 'sso.bind';
 $config->openMethods[] = 'sso.feishuauthen';
 $config->openMethods[] = 'sso.feishulogin';
@@ -227,7 +228,6 @@ $config->openMethods[] = 'admin.register';
 $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.sendcode';
 $config->openMethods[] = 'admin.planmodal';
-$config->openMethods[] = 'admin.installevent';
 
 /* 登录用户可以使用的方法。The methods that can be used by the logged users. */
 $config->logonMethods = array();

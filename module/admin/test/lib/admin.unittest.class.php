@@ -80,19 +80,4 @@ class adminTest
         }
         return $link;
     }
-
-    /**
-     * 测试发送安装过程埋点。
-     * Test send install event.
-     *
-     * @param object $data
-     * @access public
-     * @return string
-     */
-    public function sendInstallEventTest($data): string
-    {
-        $objects = $this->objectModel->sendInstallEvent($data);
-        if(!$objects) return 'Fail';
-        return 'Success';
-    }
 }

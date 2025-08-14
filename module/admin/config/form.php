@@ -34,6 +34,3 @@ $config->admin->form->giftPackage['nickname']       = array('type' => 'string', 
 $config->admin->form->giftPackage['position']       = array('type' => 'string', 'required' => true);
 $config->admin->form->giftPackage['company']        = array('type' => 'string', 'required' => true);
 $config->admin->form->giftPackage['solvedProblems'] = array('type' => 'array', 'required' => true);
-
-$config->admin->form->installEvent['location']    = array('type' => 'string', 'required' => true);
-$config->admin->form->installEvent['fingerprint'] = array('type' => 'string', 'required' => true);

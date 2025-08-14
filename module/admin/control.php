@@ -582,7 +582,7 @@ class admin extends control
                     $eventData = new stdClass();
                     $eventData->fingerprint = $data->fingerprint;
                     $eventData->location    = 'join-community';
-                    $this->admin->sendInstallEvent($eventData);
+                    $this->loadModel('misc')->sendInstallEvent($eventData);
 
                     $callBack = $this->loadModel('user')->isLogon() ? 'loadToRegister()' : 'loadToIndex()';
 
@@ -723,18 +723,5 @@ class admin extends control
 
         $this->view->company = $company->name;
         $this->display();
-    }
-
-    /**
-     * 安装过程的事件埋点。
-     * Event burial points during installation process.
-     *
-     * @access public
-     * @return void
-     */
-    public function installEvent()
-    {
-        $data = form::data($this->config->admin->form->installEvent)->get();
-        $this->admin->sendInstallEvent($data);
     }
 }
