@@ -490,7 +490,7 @@ class adminModel extends model
         $httpData['version']     = $this->config->version;
         $httpData['phpVersion']  = phpversion();
         $httpData['os']          = PHP_OS . ' ' . php_uname('m');
-        $httpData['is_docker']   = file_exists('/.dockerenv');
+        $httpData['isDocker']    = file_exists('/.dockerenv');
         $httpData['installType'] = '';
         $httpData['ip']          = helper::getRemoteIP();
 
