@@ -101,6 +101,7 @@ $lang->upgrade->unknownDate     = 'Unknown Date Project';
 $lang->upgrade->selectProject   = 'The target project';
 $lang->upgrade->programName     = 'Program Name';
 $lang->upgrade->projectName     = 'Project Name';
+$lang->upgrade->projectManage   = 'Project Manage';
 $lang->upgrade->compatibleEXT   = 'Extension mechanism compatible';
 $lang->upgrade->fileName        = 'File Name';
 $lang->upgrade->next            = 'Next';
