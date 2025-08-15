@@ -16,6 +16,11 @@ timeout=0
 cid=1
 
 - 验证task获得的键值对的个数 @4
+- 验证获得的projectIDList
+ - 属性1 @11
+ - 属性2 @12
+ - 属性3 @13
+ - 属性4 @14
 
 */
 
@@ -35,4 +40,5 @@ foreach($list as $todo)
 
 $projectList = $tester->todo->getTodoProjects($todoList);
 
-r(count($projectList['task'])) && p() && e('4'); // 验证task获得的键值对的个数
+r(count($projectList['task'])) && p()          && e('4'); // 验证task获得的键值对的个数
+r(($projectList['task']))      && p('1,2,3,4') && e('11,12,13,14'); // 验证获得的projectIDList
