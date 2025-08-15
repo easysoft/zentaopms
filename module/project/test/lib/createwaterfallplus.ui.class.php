@@ -41,7 +41,7 @@ class createWaterfallplusTester extends tester
         $form = $this->loadPage('programplan', 'create');
         if($this->response('module') != 'programplan')
         {
-            if($this->checkFormTips('project')) return $this->success('创建融合瀑布项目表单页提示信息正确');
+            return $this->checkFormTips('project') ? $this->success('创建融合瀑布项目表单页提示信息正确') : $this->failed('创建融合瀑布项目表单页提示信息不正确');
             if($form->dom->endTip)
             {
                 //检查结束日期不能为空
@@ -49,7 +49,6 @@ class createWaterfallplusTester extends tester
                 $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
                 return ($endTipText == $endTip) ? $this->success('创建融合瀑布项目表单页提示信息正确') : $this->failed('创建融合瀑布项目表单页提示信息不正确');
             }
-            return $this->failed('创建融合瀑布项目表单页提示信息不正确');
         }
 
        /* 跳转到项目设置页面，点击设置菜单。 */
