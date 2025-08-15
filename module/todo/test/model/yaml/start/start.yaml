@@ -3,9 +3,9 @@ author: shenshulong
 version: '1.0'
 fields:
   - field: id
-    range: '1-3'
+    range: '1-5'
   - field: account
-    range: '1-3'
+    range: '1-5'
     prefix: 'admin'
   - field: begin
     range: '1710'
