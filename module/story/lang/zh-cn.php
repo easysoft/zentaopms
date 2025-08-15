@@ -555,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = "该需求已是激活状态，无需评审";
 $lang->story->reviewTip['notReviewer'] = "您不是该需求的评审人员，无法进行评审操作";
 $lang->story->reviewTip['reviewed']    = '您已评审';
+$lang->story->reviewTip['noPriv']      = '您没有提交评审权限';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "该需求未发起评审流程，无需撤销操作";

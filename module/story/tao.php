@@ -2013,7 +2013,7 @@ class storyTao extends storyModel
         if(strpos('draft,changing', $story->status) !== false)
         {
             $canSubmitReview = common::hasPriv($story->type, 'submitReview');
-            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null);
+            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null, 'disabled' => !$canSubmitReview, 'hint' => $this->lang->story->reviewTip['noPriv']);
         }
         else
         {
