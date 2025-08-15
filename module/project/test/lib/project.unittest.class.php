@@ -38,13 +38,14 @@ class Project
     }
 
     /**
-     * Test getByID function.
+     * 根据ID获取项目数据。
+     * Get project by ID.
      *
      * @param  int    $projectID
      * @access public
      * @return string|bool|object
      */
-    public function testGetByID($projectID)
+    public function getByIDTest($projectID)
     {
         return $this->triggerMethod('getByID', array('projectID' => $projectID));
     }
