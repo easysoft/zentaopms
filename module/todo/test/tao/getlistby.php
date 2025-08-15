@@ -9,14 +9,21 @@ zenData('todo')->loadYaml('getlistby')->gen(5);
 /**
 
 title=测试 todoModel->getListBy();
+timeout=0
 cid=1
-pid=0
+
+- 获取待办列表数量 @5
+- 获取待办列表第1条的name和status
+ - 属性name @待办5
+ - 属性status @doing
+- 获取待办列表第5条的name和status
+ - 属性name @待办1
+ - 属性status @wait
 
 */
 
 global $tester;
 $tester->loadModel('todo')->todoTao;
-
 
 $type    = 'before'; // assignedtoother, cycle
 $account = 'admin';
@@ -30,3 +37,4 @@ $result = $tester->todo->getListBy($type, $account, $status, $begin, $end, $limi
 
 r(count($result)) && p() && e('5'); //获取待办列表数量
 r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第1条的name和status
+r($result[4]) && p('name,status') && e('待办1,wait');  //获取待办列表第5条的name和status
