@@ -14,7 +14,7 @@ jsVar('libType', $objectType);
 formPanel
 (
     set::title($lang->doc->uploadDoc),
-    set::submitBtnText($lang->save),
+    set::submitBtnText($lang->doc->release),
     $objectType == 'project' ? formRow
     (
         formGroup
