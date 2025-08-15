@@ -101,6 +101,7 @@ $lang->upgrade->unknownDate     = '无明确时间的项目';
 $lang->upgrade->selectProject   = '目标项目';
 $lang->upgrade->programName     = '项目集名称';
 $lang->upgrade->projectName     = '项目名称';
+$lang->upgrade->projectManage   = '项目管理';
 $lang->upgrade->compatibleEXT   = '扩展机制兼容';
 $lang->upgrade->fileName        = '文件名称';
 $lang->upgrade->next            = '下一步';
