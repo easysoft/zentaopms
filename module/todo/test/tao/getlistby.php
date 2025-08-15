@@ -30,3 +30,4 @@ $result = $tester->todo->getListBy($type, $account, $status, $begin, $end, $limi
 
 r(count($result)) && p() && e('5'); //获取待办列表数量
 r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第1条的name和status
+r($result[4]) && p('name,status') && e('待办1,wait');  //获取待办列表第5条的name和status
