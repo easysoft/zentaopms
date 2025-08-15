@@ -34,7 +34,6 @@ class storyPage extends page
             'selectAllBtn'   => "//*[@id='stories']/div[3]/div/div/label",
             /* 指派 */
             'firstAssignTo'  => "//*[@id='stories']/div[2]/div[2]/div/div[7]/div/a/span",
-            'assignedTo'     => "//*[@data-name='assignedTo']/div/div",
             'assignBtn'      => "//*[@class='panel-body']/form/div[3]/div/button",
             'batchAssignBtn' => "//*[@id='stories']/div[3]/nav/button[4]/span[1]",
             'assignToAdmin'  => "//*[@class='item-content']/div",

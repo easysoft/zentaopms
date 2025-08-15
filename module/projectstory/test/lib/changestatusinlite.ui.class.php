@@ -135,7 +135,6 @@ class changeStatus extends tester
         $form->wait(2);
         $form->dom->revokeBtn->click();
         $form->wait(2);
-        $form->dom->reviewer->picker('admin');
         $form->dom->submitReviewBtn->click();
         $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $viewPage->wait(2);
