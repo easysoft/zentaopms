@@ -34,11 +34,9 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-
-        $this->searchZen->processSearchParams($module);
-
-        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
+        $searchConfig = $this->search->processSearchParams($module);
+        $fields       = $searchConfig['fields'] ?? $fields;
+        $params       = $searchConfig['params'] ?? $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
@@ -84,11 +82,9 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-
-        $this->searchZen->processSearchParams($module);
-
-        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
+        $searchConfig = $this->search->processSearchParams($module);
+        $fields       = $searchConfig['fields'] ?? $fields;
+        $params       = $searchConfig['fields'] ?? $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);

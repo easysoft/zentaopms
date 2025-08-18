@@ -120,8 +120,9 @@ class searchModel extends model
         /* Init vars. */
         $module       = $this->post->module;
         $searchParams = $module . 'searchParams';
-        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
-        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
+        $searchConfig = $this->processSearchParams($module);
+        $searchFields = $searchConfig['fields'];
+        $fieldParams  = $searchConfig['params'];
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -193,7 +194,8 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->post->module;
         $searchParams = $module . 'searchParams';
-        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
+        $searchConfig = $this->processSearchParams($module);
+        $fieldParams  = $searchConfig['params'];
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
