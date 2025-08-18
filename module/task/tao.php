@@ -545,7 +545,7 @@ class taskTao extends taskModel
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $orderBy = str_replace('project_', 't1.project_', $orderBy);
 
-        return $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        return $this->dao->select("t1.*, t4.id AS project, t2.id AS executionID, t2.name AS executionName, t4.name AS projectName, t2.multiple AS executionMultiple, t2.type AS executionType, t3.id AS storyID, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
