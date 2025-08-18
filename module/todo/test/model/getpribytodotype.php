@@ -20,17 +20,20 @@ title=测试 todoModel->getPriByTodoType();
 timeout=0
 cid=1
 
+- 获取 bug 的优先级 @1
+- 获取 bug 的优先级 @2
+- 获取 task 的优先级 @3
+- 获取 story 的优先级 @4
+- 获取 testtask 的优先级 @1
+
 */
 
 initData();
 
-$validTypeList     = array('bug','task','story','testtask');
-$validObjectIdList = array_combine(range(1, 10), range(1, 10));
-$type              = $validTypeList[array_rand($validTypeList, 1)];
-$objectID          = $validObjectIdList[array_rand($validObjectIdList, 1)];
-$inValidType       = 'invalidType';
-$inValidObjectID   = 0;
-
-$todoTest = new todoTest();
-r($todoTest->getPriByTodoTypeTest($type, $objectID))               && p() && e('1'); // 获取有效数据的待办关联数据的优先级，结果为1
-r($todoTest->getPriByTodoTypeTest($inValidType, $inValidObjectID)) && p() && e('1'); // 获取无效数据的待办关联数据的优先级，结果为1
+global $tester;
+$tester->loadModel('todo');
+r($tester->todo->getPriByTodoType('bug', 1))       && p() && e('1'); // 获取 bug 的优先级
+r($tester->todo->getPriByTodoType('bug', 2))       && p() && e('2'); // 获取 bug 的优先级
+r($tester->todo->getPriByTodoType('task', 3))      && p() && e('3'); // 获取 task 的优先级
+r($tester->todo->getPriByTodoType('story', 4))     && p() && e('4'); // 获取 story 的优先级
+r($tester->todo->getPriByTodoType('testtask', 5))  && p() && e('1'); // 获取 testtask 的优先级
