@@ -13,6 +13,25 @@
 <?php
 class searchModel extends model
 {
+    /**
+     * 构造搜索表单时调用被搜索模块的方法处理搜索参数。
+     * Call the method of the searched module to process search parameters when constructing the search form.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function processSearchParams(string $module): array
+    {
+        $cacheKey  = $module . 'SearchFunc';
+        $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
+        $funcName  = $this->session->$cacheKey['funcName']  ?? '';
+        $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
+        if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
+
+        $funcArgs['cacheSearchParams'] = false; // 不缓存搜索参数以加载真实值。Do not cache search parameters to load real values.
+        return $this->loadModel($funcModel)->$funcName(...$funcArgs);
+    }
 
     /**
      * 设置搜索参数的session。
