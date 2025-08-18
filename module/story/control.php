@@ -523,7 +523,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($locateModule, $locateMethod))));
         }
 
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->product->accessDenied, 'locate' => $this->createLink('my', 'index'))));
 
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!empty($story->fromBug)) $this->session->set('bugList', $uri, 'qa');
