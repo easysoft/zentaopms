@@ -69,6 +69,24 @@ cid=1
  - 属性3 @迭代1
  - 属性4 @迭代2
  - 属性5 @迭代3
+- module 为 programplanTask，缓存查询参数，查询参数中 queryID 为空。 @0
+- module 为 programplanTask，缓存查询参数，查询参数中 actionURL 为空。 @0
+- module 为 programplanTask，缓存查询参数，查询参数中有 project 字段。 @1
+- module 为 programplanTask，缓存查询参数，打印 module 的值。属性module @task
+- module 为 programplanTask，缓存查询参数，打印所属执行列表。
+ - 属性6 @0
+ - 属性7 @0
+ - 属性8 @0
+- module 为 programplanTask，不缓存查询参数，查询参数中 queryID 有值。 @1
+- module 为 programplanTask，不缓存查询参数，查询参数中 actionURL 有值。 @1
+- module 为 programplanTask，不缓存查询参数，查询参数中没有 project 字段。 @0
+- module 为 programplanTask，不缓存查询参数，打印 module 的值。属性module @programplanTask
+- module 为 programplanTask，不缓存查询参数，打印 queryID 的值。属性queryID @1
+- module 为 programplanTask，不缓存查询参数，打印 actionURL 的值。属性actionURL @/programplan-browse-2-0-gantt-id_asc-0-bysearch-myQueryID.html
+- module 为 programplanTask，不缓存查询参数，打印所属执行列表。
+ - 属性6 @/阶段1
+ - 属性7 @/阶段2
+ - 属性8 @/阶段3
 
 */
 
@@ -100,3 +118,26 @@ r($searchConfig)                                  && p('module')    && e('projec
 r($searchConfig)                                  && p('queryID')   && e('1');                                                                 // module 为 projectTask，不缓存查询参数，打印 queryID 的值。
 r($searchConfig)                                  && p('actionURL') && e('/project-execution-bySearch-1-order_desc-0-0-100-1-myQueryID.html'); // module 为 projectTask，不缓存查询参数，打印 actionURL 的值。
 r($searchConfig['params']['execution']['values']) && p('3,4,5')     && e('迭代1,迭代2,迭代3');                                                 // module 为 projectTask，不缓存查询参数，打印所属执行列表。
+
+/**
+ * 测试为瀑布项目阶段甘特图页面构造搜索参数功能。
+ */
+$executionID  = 2;
+$executions   = [3 => '迭代1', 4 => '迭代2', 5 => '迭代3'];
+$actionURL    = '/programplan-browse-2-0-gantt-id_asc-0-bysearch-myQueryID.html';
+$module       = 'programplanTask';
+$searchConfig = $execution->buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, true);
+r(isset($searchConfig['queryID']))                && p()         && e(0);       // module 为 programplanTask，缓存查询参数，查询参数中 queryID 为空。
+r(isset($searchConfig['actionURL']))              && p()         && e(0);       // module 为 programplanTask，缓存查询参数，查询参数中 actionURL 为空。
+r(isset($searchConfig['fields']['project']))      && p()         && e(1);       // module 为 programplanTask，缓存查询参数，查询参数中有 project 字段。
+r($searchConfig)                                  && p('module') && e('task');  // module 为 programplanTask，缓存查询参数，打印 module 的值。
+r($searchConfig['params']['execution']['values']) && p('6,7,8')  && e('0,0,0'); // module 为 programplanTask，缓存查询参数，打印所属执行列表。
+
+$searchConfig = $execution->buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, false);
+r(isset($searchConfig['queryID']))                && p()            && e(1);                                                                // module 为 programplanTask，不缓存查询参数，查询参数中 queryID 有值。
+r(isset($searchConfig['actionURL']))              && p()            && e(1);                                                                // module 为 programplanTask，不缓存查询参数，查询参数中 actionURL 有值。
+r(isset($searchConfig['fields']['project']))      && p()            && e(0);                                                                // module 为 programplanTask，不缓存查询参数，查询参数中没有 project 字段。
+r($searchConfig)                                  && p('module')    && e('programplanTask');                                                // module 为 programplanTask，不缓存查询参数，打印 module 的值。
+r($searchConfig)                                  && p('queryID')   && e('1');                                                              // module 为 programplanTask，不缓存查询参数，打印 queryID 的值。
+r($searchConfig)                                  && p('actionURL') && e('/programplan-browse-2-0-gantt-id_asc-0-bysearch-myQueryID.html'); // module 为 programplanTask，不缓存查询参数，打印 actionURL 的值。
+r($searchConfig['params']['execution']['values']) && p('6,7,8')     && e('/阶段1,/阶段2,/阶段3');                                           // module 为 programplanTask，不缓存查询参数，打印所属执行列表。
