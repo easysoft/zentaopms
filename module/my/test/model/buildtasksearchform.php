@@ -25,6 +25,38 @@ title=测试 myModel->buildTaskSearchForm();
 timeout=0
 cid=1
 
+- 缓存查询参数，rawMethod 为 contribute，查询参数中 module 为空。 @0
+- 缓存查询参数，rawMethod 为 contribute，查询参数中 queryID 为空。 @0
+- 缓存查询参数，rawMethod 为 contribute，查询参数中 actionURL 为空。 @0
+- 缓存查询参数，rawMethod 为 contribute，查询参数中 fields 为空。 @0
+- 缓存查询参数，rawMethod 为 contribute，查询参数中 params 为空。 @0
+- 不缓存查询参数，rawMethod 为 contribute，查询参数中 module 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询参数中 queryID 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询参数中 actionURL 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询字段中 closedReason 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询字段中 closedBy 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询字段中 closedDate 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询字段中 canceledBy 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，查询字段中 canceledDate 不为空。 @1
+- 不缓存查询参数，rawMethod 为 contribute，打印 module 的值。属性module @contributeTask
+- 不缓存查询参数，rawMethod 为 contribute，打印 queryID 的值。属性queryID @1
+- 不缓存查询参数，rawMethod 为 contribute，打印 actionURL 的值。属性actionURL @/my-contribute-task.html
+- 不缓存查询参数，rawMethod 为 contribute，打印所属项目列表。
+ - 属性1 @项目1
+ - 属性2 @项目2
+ - 属性all @所有项目
+- 不缓存查询参数，rawMethod 为 contribute，打印所属执行列表。
+ - 属性3 @/迭代1
+ - 属性4 @/迭代2
+ - 属性5 @/迭代3
+ - 属性all @所有执行
+- 不缓存查询参数，rawMethod 为 contribute，打印所属模块列表。
+ -  @/
+ - 属性1 @~~
+ - 属性2 @/模块2
+ - 属性3 @~~
+ - 属性4 @~~
+ - 属性5 @/模块5
 */
 
 $queryID   = 1;
