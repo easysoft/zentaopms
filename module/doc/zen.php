@@ -652,9 +652,9 @@ class docZen extends doc
      * @param  array     $changes
      * @param  array     $files
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array())
+    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array()): array
     {
         if($this->post->comment != '' || !empty($changes) || !empty($files))
         {
@@ -695,10 +695,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
     }
 
     /**

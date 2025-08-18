@@ -848,7 +848,7 @@ class doc extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return !empty($docID) ? $this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files']) : $this->docZen->responseAfterUploadDocs($docResult);
+            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'])) : $this->docZen->responseAfterUploadDocs($docResult);
         }
 
         if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
@@ -1008,7 +1008,7 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->docZen->responseAfterEdit($doc, $changes, $files);
+            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
         }
 
         /* Get doc and set menu. */
