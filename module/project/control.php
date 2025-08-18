@@ -870,15 +870,10 @@ class project extends control
         if($this->cookie->showTask)
         {
             /* Build the search form. */
-            $this->config->execution->search['module'] = 'projectTask';
-
-            $actionURL = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
-            unset($this->config->execution->search['fields']['project']);
-            unset($this->config->execution->search['fields']['module']);
+            $actionURL  = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
             $executions = $this->execution->fetchExecutionList($projectID, 'all', $productID);
             $executions = $this->execution->getPairsByList(array_keys($executions));
-
-            $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL);
+            $this->execution->buildTaskSearchForm($projectID, $productID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
         $this->view->title          = $this->lang->execution->allExecutions;

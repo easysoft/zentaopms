@@ -448,38 +448,47 @@ class myModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $module
+     * @param  bool   $cacheSearchFunc 是否缓存构造搜索参数的方法。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $queryID, string $actionURL): void
+    public function buildTaskSearchForm(int $queryID, string $actionURL, string $module, bool $cacheSearchFunc = true)
     {
-        $rawMethod = $this->app->rawMethod;
         $this->loadModel('execution');
-
-        $this->config->execution->search['module']    = $rawMethod . 'Task';
-        $this->config->execution->search['actionURL'] = $actionURL;
-        $this->config->execution->search['queryID']   = $queryID;
-
-        if($rawMethod == 'work')
+        $searchConfig = $this->config->execution->search;
+        if($cacheSearchFunc)
         {
-            unset($this->config->execution->search['fields']['closedReason']);
-            unset($this->config->execution->search['fields']['closedBy']);
-            unset($this->config->execution->search['fields']['canceledBy']);
-            unset($this->config->execution->search['fields']['closedDate']);
-            unset($this->config->execution->search['fields']['canceledDate']);
-            unset($this->config->execution->search['params']['status']['values']['cancel']);
-            unset($this->config->execution->search['params']['status']['values']['closed']);
+            $this->cacheSearchFunc($module, __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+
+        $searchConfig['module']    = $module;
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        if($module == 'workTask')
+        {
+            unset($searchConfig['fields']['closedReason']);
+            unset($searchConfig['fields']['closedBy']);
+            unset($searchConfig['fields']['canceledBy']);
+            unset($searchConfig['fields']['closedDate']);
+            unset($searchConfig['fields']['canceledDate']);
+            unset($searchConfig['params']['status']['values']['cancel']);
+            unset($searchConfig['params']['status']['values']['closed']);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
-        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+        $searchConfig['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
         $executions = $this->execution->getPairs(0, 'all', 'multiple');
-        $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
+        $searchConfig['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
 
-        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
+        $searchConfig['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
 
-        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+
+        return $searchConfig;
     }
 
     /**

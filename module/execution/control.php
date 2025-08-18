@@ -197,9 +197,7 @@ class execution extends control
         /* Build the search form. */
         $modules   = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID&orderBy=$orderBy&recTotal=0&recPerPage=100&pageID=1&from=$from&blockID=$blockID");
-        $this->config->execution->search['onMenuBar'] = 'yes';
-        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
+        $this->execution->buildTaskSearchForm($executionID, $productID, $this->executions, $queryID, $actionURL);
 
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->tasks       = $tasks;

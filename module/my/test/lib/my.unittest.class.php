@@ -269,16 +269,14 @@ class myTest
      *
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $module
+     * @param  bool   $cacheSearchFunc
      * @access public
      * @return array
      */
-    public function buildTaskSearchFormTest(int $queryID, string $actionURL): array
+    public function buildTaskSearchFormTest(int $queryID, string $actionURL, string $module, bool $cacheSearchFunc): array
     {
-        $this->objectModel->buildTaskSearchForm($queryID, $actionURL);
-
-        if(dao::isError()) return dao::getError();
-        global $tester;
-        return $tester->config->execution->search;
+        return $this->objectModel->buildTaskSearchForm($queryID, $actionURL, $module, $cacheSearchFunc);
     }
 
     /**

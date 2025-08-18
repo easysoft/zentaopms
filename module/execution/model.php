@@ -4169,15 +4169,28 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc 是否缓存构造搜索参数的方法。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL)
+    public function buildTaskSearchForm(int $executionID, int $productID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true)
     {
-        $showAll = empty($executionID) && empty($executions) ? true : false;
+        $searchConfig = $this->config->execution->search;
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc($module, __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+
+        $searchConfig['module']    = $module;
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $showAll = empty($executionID) && empty($executions);
         if($showAll)
         {
             $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
@@ -4185,27 +4198,49 @@ class executionModel extends model
         }
         $execution = $this->getByID($executionID);
 
-        $this->config->execution->search['actionURL'] = $actionURL;
-        $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+        $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+
+        if($module == 'task')
+        {
+            $searchConfig['onMenuBar'] = 'yes';
+            if(!$execution->multiple) unset($searchConfig['fields']['execution']);
+        }
+        elseif($module == 'programplanTask')
+        {
+            unset($searchConfig['fields']['project']);
+            $executions = $this->loadModel('programplan')->getPairs($executionID, $productID, 'all');
+        }
+        elseif($module == 'projectTask')
+        {
+            unset($searchConfig['fields']['project']);
+            unset($searchConfig['fields']['module']);
+        }
 
         if(isset($execution->type) && $execution->type == 'project')
         {
-            unset($this->config->execution->search['fields']['project']);
-            $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
+            unset($searchConfig['fields']['project']);
+            if(isset($searchConfig['fields']['execution'])) $searchConfig['params']['execution']['values'] = array('' => '') + $executions;
         }
         else
         {
-            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
+            if(isset($searchConfig['fields']['execution'])) $searchConfig['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
         }
 
-        $projects = $this->loadModel('project')->getPairsByProgram();
-        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+        if(isset($searchConfig['fields']['project']))
+        {
+            $projects = $this->loadModel('project')->getPairsByProgram();
+            $searchConfig['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+        }
 
-        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
+        if(isset($searchConfig['fields']['module']))
+        {
+            $showAllModule = $this->config->execution->task->allModule ?? '';
+            $searchConfig['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
+        }
 
-        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+
+        return $searchConfig;
     }
 
     /**
