@@ -174,7 +174,7 @@ formBatchPanel
                 'type' => 'inputGroup',
                 'class' => 'form-control',
                 'items' => array(
-                    array('type' => 'input', 'class' => 'form-control', 'name' => 'password', 'placeholder' => zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
+                    array('type' => 'input', 'class' => 'form-control', 'name' => 'password', 'placeholder' => zget($lang->user->placeholder->passwordStrength, !empty($config->safe->mode) ? $config->safe->mode : 0, '')),
                     array('type' => 'span', 'class' => 'input-group-addon passwordStrength hidden')
                 )
             )
