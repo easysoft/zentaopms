@@ -652,9 +652,9 @@ class docZen extends doc
      * @param  array     $changes
      * @param  array     $files
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array())
+    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array()): array
     {
         if($this->post->comment != '' || !empty($changes) || !empty($files))
         {
@@ -668,8 +668,11 @@ class docZen extends doc
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
@@ -692,10 +695,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
     }
 
     /**

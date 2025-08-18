@@ -89,8 +89,9 @@ $config->doc->form->edit['mailto']        = array('type' => 'array',    'require
 $config->doc->form->edit['editedBy']      = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->doc->form->edit['isDeliverable'] = array('type' => 'string',   'required' => false, 'default' => '0');
-$config->doc->form->edit['fromVersion']   = array('type' => 'string',  'required' => false, 'default' => '');
-$config->doc->form->edit['files']         = array('type' => 'string',  'required' => false, 'default' => '');
+$config->doc->form->edit['fromVersion']   = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->edit['files']         = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->edit['deleteFiles']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 
 $config->doc->form->edittemplate = $config->doc->form->edit;
 $config->doc->form->edittemplate['templateDesc'] = array('type' => 'string', 'required' => false, 'default' => '');

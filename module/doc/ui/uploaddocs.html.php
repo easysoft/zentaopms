@@ -10,10 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('docID',   $docID);
 jsVar('libType', $objectType);
 formPanel
 (
-    set::title($lang->doc->uploadDoc),
+    set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadDoc),
     set::submitBtnText($lang->doc->release),
     $objectType == 'project' ? formRow
     (
@@ -34,6 +35,7 @@ formPanel
             set::label($lang->doc->execution),
             set::name('execution'),
             set::items(isset($executions) ? $executions : null),
+            set::value(!empty($doc->execution) ? $doc->execution : 0),
             set::placeholder($lang->doc->placeholder->execution),
             on::change('loadObjectModules')
         ) : null
@@ -88,8 +90,18 @@ formPanel
     (
         setClass('uploadFileBox'),
         set::label($lang->doc->uploadFile),
-        fileSelector(),
+        fileSelector(set::defaultFiles(array_values($doc->files))),
         set::required(true)
+    ),
+    formGroup
+    (
+        setClass('titleBox'),
+        set::hidden(!empty($doc) ? false : true),
+        set::label($lang->doc->title),
+        set::name('title'),
+        set::value(!empty($doc->title) ? $doc->title : ''),
+        set::required(true),
+        on::input('titleChanged')
     ),
     formGroup
     (
@@ -105,15 +117,6 @@ formPanel
             on::change('toggleDocTitle')
         )
     ),
-    formGroup
-    (
-        setClass('titleBox'),
-        set::hidden(true),
-        set::label($lang->doc->title),
-        set::name('title'),
-        set::required(true),
-        on::input('titleChanged')
-    ),
     formRow
     (
         setID('aclBox'),
@@ -124,7 +127,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doc->aclList),
-                set::value($objectType == 'mine' ? 'private' : 'open'),
+                set::value(!empty($doc->acl) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
                 on::change("toggleAcl('doc')")
             )
         )
