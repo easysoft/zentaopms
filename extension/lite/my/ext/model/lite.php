@@ -27,7 +27,10 @@ public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExis
         ->beginIF($checkExists)->limit(1)->fi()
         ->fetchAll();
 
-    if($checkExists) return !empty($stories);
+    if($checkExists)
+    {
+        return !empty($stories);
+    }
 
     $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
     foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;

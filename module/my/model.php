@@ -1052,7 +1052,10 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($checkExists) return !empty($demands);
+        if($checkExists)
+        {
+            return !empty($demands);
+        }
 
          $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
          foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
@@ -1084,7 +1087,10 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
 
-        if($checkExists) return !empty($stories);
+        if($checkExists)
+        {
+            return !empty($stories);
+        }
 
         $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
         foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
