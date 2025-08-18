@@ -22,6 +22,7 @@ class programplanZen extends programplan
     private function checkLegallyDate(object $plan, object $project, object|null $parent, int $rowID): void
     {
         if(isset($plan->enabled) && $plan->enabled == 'off') return;
+        if(!empty($project->isTpl)) return; // 模板不校验日期
 
         $beginIsZeroDate = helper::isZeroDate($plan->begin);
         $endIsZeroDate   = helper::isZeroDate($plan->end);
