@@ -789,6 +789,7 @@ class doc extends control
      * 上传文档。
      * Upload docs.
      *
+     * @param  int        $docID
      * @param  string     $objectType product|project|execution|custom
      * @param  int        $objectID
      * @param  int|string $libID
@@ -797,7 +798,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function uploadDocs(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
     {
         if(!empty($_POST))
         {
@@ -828,12 +829,16 @@ class doc extends control
 
             $this->config->doc->create->requiredFields = trim(str_replace(array(',content,', ',keywords,'), ",", ",{$this->config->doc->create->requiredFields},"), ',');
 
-            $docData = form::data($this->config->doc->form->create)
-                ->setDefault('addedBy', $this->app->user->account)
-                ->get();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $docData = form::data(!empty($docID) ? $this->config->doc->form->edit : $this->config->doc->form->create)->remove('fromVersion')->get();
+            if(empty($docID))  $docData->addedBy  = $this->app->user->account;
+            if(!empty($docID)) $docData->editedBy = $this->app->user->account;
 
-            if($this->post->uploadFormat == 'combinedDocs')
+            if(!empty($docID))
+            {
+                $docResult   = $this->doc->update($docID, $docData);
+                $docData->id = $docID;
+            }
+            elseif($this->post->uploadFormat == 'combinedDocs')
             {
                 $docResult = $this->doc->create($docData);
             }
@@ -843,7 +848,7 @@ class doc extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterUploadDocs($docResult);
+            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'])) : $this->docZen->responseAfterUploadDocs($docResult);
         }
 
         if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
@@ -852,7 +857,12 @@ class doc extends control
             $objectID = $this->doc->getObjectIDByLib($lib);
         }
 
+        $doc = !empty($docID) ? $this->doc->getByID($docID) : null;
+        if(empty($moduleID) && $doc) $moduleID = (int)$doc->module;
+
         $this->docZen->assignVarsForUploadDocs($objectType, $objectID, $libID, $moduleID, $docType);
+        $this->view->docID = $docID;
+        $this->view->doc   = $doc;
         $this->display();
     }
 
@@ -998,7 +1008,7 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->docZen->responseAfterEdit($doc, $changes, $files);
+            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
         }
 
         /* Get doc and set menu. */
