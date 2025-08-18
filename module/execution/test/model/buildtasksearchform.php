@@ -44,20 +44,48 @@ title=测试executionModel->buildTaskSearchForm();
 timeout=0
 cid=1
 
-- 正确的执行，正确的queryID @1
-- 错误的执行，正确的queryID @1
-- 正确的执行，错误的queryID @0
-- 错误的执行，错误的queryID @0
-- 正确的执行，正确的queryID @2
+- 传递项目 ID，缓存查询参数，打印 queryID 的值。 @0
+- 传递项目 ID，缓存查询参数，打印 actionURL 的值。 @0
+- 传递项目 ID，缓存查询参数，打印所属执行列表。 @0
+- 传递项目 ID，不缓存查询参数，打印 queryID 的值。属性queryID @1
+- 传递项目 ID，不缓存查询参数，打印 actionURL 的值。属性actionURL @/execution-task-3-bySearch-myQueryID.html
+- 传递项目 ID，不缓存查询参数，打印所属执行列表。
+ -  @~~
+ - 属性3 @迭代1
+ - 属性4 @迭代2
+ - 属性5 @迭代3
+- 传递执行 ID，不缓存查询参数，打印 queryID 的值。属性queryID @1
+- 传递执行 ID，不缓存查询参数，打印 actionURL 的值。属性actionURL @/execution-task-3-bySearch-myQueryID.html
+- 传递执行 ID，不缓存查询参数，打印所属执行列表。
+ -  @~~
+ - 属性3 @迭代1
+ - 属性4 @~~
+ - 属性5 @~~
+ - 属性all @所有执行
 
 */
 
-$executionIDList = array('3', '0');
-$queryIDList     = array('0', '1', '2');
+$projectID   = 1;
+$productID   = 0;
+$executionID = 3;
+$executions  = [3 => '迭代1', 4 => '迭代2', 5 => '迭代3'];
+$queryID     = 1;
+$module      = 'task';
+$actionURL   = '/execution-task-3-bySearch-myQueryID.html';
 
 $execution = new executionTest();
-r($execution->buildTaskSearchFormTest($executionIDList[0], $queryIDList[1])) && p() && e('1'); // 正确的执行，正确的queryID
-r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[1])) && p() && e('1'); // 错误的执行，正确的queryID
-r($execution->buildTaskSearchFormTest($executionIDList[0], $queryIDList[0])) && p() && e('0'); // 正确的执行，错误的queryID
-r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[0])) && p() && e('0'); // 错误的执行，错误的queryID
-r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[2])) && p() && e('2'); // 正确的执行，正确的queryID
+
+$searchConfig = $execution->buildTaskSearchFormTest($projectID, $productID, $executions, $queryID, $actionURL, $module, true);
+r(isset($searchConfig['queryID']))                       && p() && e(0); // 传递项目 ID，缓存查询参数，打印 queryID 的值。
+r(isset($searchConfig['actionURL']))                     && p() && e(0); // 传递项目 ID，缓存查询参数，打印 actionURL 的值。
+r(isset($searchConfig['params']['execution']['values'])) && p() && e(0); // 传递项目 ID，缓存查询参数，打印所属执行列表。
+
+$searchConfig = $execution->buildTaskSearchFormTest($projectID, $productID, $executions, $queryID, $actionURL, $module, false);
+r($searchConfig)                                  && p('queryID')   && e('1');                                         // 传递项目 ID，不缓存查询参数，打印 queryID 的值。
+r($searchConfig)                                  && p('actionURL') && e('/execution-task-3-bySearch-myQueryID.html'); // 传递项目 ID，不缓存查询参数，打印 actionURL 的值。
+r($searchConfig['params']['execution']['values']) && p(',3,4,5')    && e('~~,迭代1,迭代2,迭代3');                      // 传递项目 ID，不缓存查询参数，打印所属执行列表。
+
+$searchConfig = $execution->buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, false);
+r($searchConfig)                                  && p('queryID')    && e('1');                                         // 传递执行 ID，不缓存查询参数，打印 queryID 的值。
+r($searchConfig)                                  && p('actionURL')  && e('/execution-task-3-bySearch-myQueryID.html'); // 传递执行 ID，不缓存查询参数，打印 actionURL 的值。
+r($searchConfig['params']['execution']['values']) && p(',3,4,5,all') && e('~~,迭代1,~~,~~,所有执行');                   // 传递执行 ID，不缓存查询参数，打印所属执行列表。
