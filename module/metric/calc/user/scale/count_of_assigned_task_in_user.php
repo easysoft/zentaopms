@@ -22,25 +22,9 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasksWithTeam';
 
-    public $fieldList = array('t1.id', "case when t1.mode != '' and t4.status != 'done' then t4.account when t1.mode != '' and t4.status = 'done' then '' else t1.assignedTo end as assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
+    public $fieldList = array('t1.id', "CASE WHEN t1.mode != '' AND t4.status != 'done' THEN t4.account ELSE t1.assignedTo END AS assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status AS projectStatus', 't2.status AS executionStatus', 't4.status AS teamStatus');
 
     public $result = array();
-
-    public $supportSingleQuery = true;
-
-    public function singleQuery()
-    {
-        $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
-        return $this->dao->select($select)->from($this->getSingleSql())
-            ->where('`status`')->notin('closed,cancel')
-            ->andWhere('`projectStatus`', true)->ne('suspended')
-            ->orWhere('`executionStatus`')->ne('suspended')->markRight(1)
-            ->andWhere("(`mode` = 'multi' and `teamStatus` != 'done')", true)
-            ->orWhere('`mode`')->ne('multi')
-            ->markRight(1)
-            ->groupBy('`assignedTo`')
-            ->fetchAll();
-    }
 
     public function calculate($row)
     {
@@ -54,11 +38,7 @@ class count_of_assigned_task_in_user extends baseCalc
 
         if($status == 'closed' || $status == 'cancel') return false;
 
-        if($mode == 'multi')
-        {
-            if($teamStatus == 'done') return false;
-            $assignedTo = $row->account;
-        }
+        if($mode == 'multi' && $teamStatus != 'done') $assignedTo = $row->account;
 
         /* 如果执行和项目都是挂起的，不计算。*/
         if($projectStatus == 'suspended' && $executionStatus == 'suspended') return false;
