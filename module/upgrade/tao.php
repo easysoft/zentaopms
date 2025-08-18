@@ -953,6 +953,8 @@ class upgradeTao extends upgradeModel
         $classifyList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('process')->andWhere('section')->eq($classifyKey)->fetchPairs();
         if(empty($classifyList)) $classifyList = $this->lang->process->classifyList;
 
+        $classifyList = array_reverse($classifyList); // 升级后倒序排列。
+
         $classifyModule = array();
         $order = 10;
         foreach($classifyList as $key => $value)
