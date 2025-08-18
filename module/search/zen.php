@@ -6,15 +6,15 @@ class searchZen extends search
      * 构造搜索表单时调用被搜索模块的方法处理搜索参数。
      * Call the method of the searched module to process search parameters when constructing the search form.
      *
-     * @param  string $searchParams
+     * @param  string $module
      * @access public
      * @return bool
      */
-    public function processSearchParams(string $searchParams): bool
+    public function processSearchParams(string $module): bool
     {
-        $funcModel = $_SESSION[$searchParams]['funcModel'] ?? '';
-        $funcName  = $_SESSION[$searchParams]['funcName']  ?? '';
-        $funcArgs  = $_SESSION[$searchParams]['funcArgs']  ?? [];
+        $funcModel = $_SESSION[$module . 'SearchFunc']['funcModel'] ?? '';
+        $funcName  = $_SESSION[$module . 'SearchFunc']['funcName']  ?? '';
+        $funcArgs  = $_SESSION[$module . 'SearchFunc']['funcArgs']  ?? [];
         if(!$funcModel || !$funcName) return false;
 
         $funcArgs['cacheSearchParams'] = false; // 不缓存搜索参数以加载真实值。Do not cache search parameters to load real values.
