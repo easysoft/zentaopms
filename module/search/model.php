@@ -47,13 +47,17 @@ class searchModel extends model
 
         if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module, $searchConfig);
 
-        $searchParams['module']       = $searchConfig['module'];
-        $searchParams['searchFields'] = json_encode($searchConfig['fields']);
-        $searchParams['fieldParams']  = json_encode($searchConfig['params']);
-        $searchParams['actionURL']    = $searchConfig['actionURL'];
-        $searchParams['style']        = zget($searchConfig, 'style', 'full');
-        $searchParams['onMenuBar']    = zget($searchConfig, 'onMenuBar', 'no');
-        $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
+        $searchParams['module']    = $searchConfig['module'];
+        $searchParams['actionURL'] = $searchConfig['actionURL'];
+        $searchParams['style']     = zget($searchConfig, 'style', 'full');
+        $searchParams['onMenuBar'] = zget($searchConfig, 'onMenuBar', 'no');
+        $searchParams['queryID']   = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
+
+        if(empty($_SESSION[$module . 'SearchFunc']))
+        {
+            $searchParams['searchFields'] = $searchConfig['fields'];
+            $searchParams['fieldParams']  = $searchConfig['params'];
+        }
 
         $this->session->set($module . 'searchParams', $searchParams);
     }
