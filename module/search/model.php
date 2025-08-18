@@ -18,11 +18,11 @@ class searchModel extends model
      * Call the method of the searched module to process search parameters when constructing the search form.
      *
      * @param  string $module
-     * @param  bool   @cacheSearchParams // 是否缓存搜索参数。默认不缓存以加载真实值。Whether to cache search parameters. Default is not to cache to load real values.
+     * @param  bool   $cacheSearchFunc // 是否缓存构造搜索参数的方法。默认不缓存以加载真实值。Wheater to cache the method of constructing search parameters. Default is not to cache to load real values.
      * @access public
      * @return array
      */
-    public function processSearchParams(string $module, bool $cacheSearchParams = false): array
+    public function processSearchParams(string $module, bool $cacheSearchFunc = false): array
     {
         $cacheKey  = $module . 'SearchFunc';
         $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
@@ -30,7 +30,7 @@ class searchModel extends model
         $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
         if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
 
-        $funcArgs['cacheSearchParams'] = $cacheSearchParams;
+        $funcArgs['cacheSearchFunc'] = $cacheSearchFunc;
         return $this->loadModel($funcModel)->$funcName(...$funcArgs);
     }
 
