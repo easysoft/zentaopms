@@ -105,6 +105,7 @@ jsVar('scoreNotice', $scoreNotice);
 jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
+jsVar('appNotFound', $lang->appNotFound);
 jsVar('oldPages',    $config->index->oldPages);
 jsVar('appsItems',   $appsItems);
 jsVar('allAppsItems', $allAppsItems);
