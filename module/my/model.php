@@ -448,24 +448,26 @@ class myModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $rawMethod
+     * @param  string $module
      * @param  bool   $cacheSearchParams 是否缓存搜索参数。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $queryID, string $actionURL, string $rawMethod, bool $cacheSearchParams = true)
+    public function buildTaskSearchForm(int $queryID, string $actionURL, string $module, bool $cacheSearchParams = true)
     {
-        $module = $rawMethod . 'Task';
-        if($cacheSearchParams) return $this->cacheSearchParams($module, __METHOD__, func_get_args());
-
         $this->loadModel('execution');
-
         $searchConfig = $this->config->execution->search;
+        if($cacheSearchParams)
+        {
+            $this->cacheSearchParams($module, __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+
         $searchConfig['module']    = $module;
         $searchConfig['actionURL'] = $actionURL;
         $searchConfig['queryID']   = $queryID;
 
-        if($rawMethod == 'work')
+        if($module == 'workTask')
         {
             unset($searchConfig['fields']['closedReason']);
             unset($searchConfig['fields']['closedBy']);
