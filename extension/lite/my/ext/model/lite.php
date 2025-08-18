@@ -1,8 +1,17 @@
 <?php
+/**
+ * 获取待审批的需求。
+ * Get reviewing stories.
+ *
+ * @param  string     $orderBy
+ * @param  bool       $checkExists
+ * @access public
+ * @return array|bool
+ */
 public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
 {
     $this->app->loadLang($type);
-    $stmt = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
+    $dataList = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
         ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
         ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id = t3.story')
         ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
@@ -15,12 +24,14 @@ public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExis
         ->andWhere('t1.status')->eq('reviewing')
         ->andWhere('t4.deleted')->eq('0')
         ->orderBy($orderBy)
-        ->query();
+        ->beginIF($checkExists)->limit(1)->fi()
+        ->fetchAll();
+
+    if($checkExists) return !empty($dataList);
 
     $stories = array();
-    while($data = $stmt->fetch())
+    foreach($dataList as $data)
     {
-        if($checkExists) return true;
         $story = new stdclass();
         $story->id        = $data->id;
         $story->title     = $data->title;

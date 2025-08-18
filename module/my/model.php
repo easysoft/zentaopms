@@ -1041,7 +1041,7 @@ class myModel extends model
         if($this->config->edition != 'ipd') return array();
 
         $this->app->loadLang('demand');
-        $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
+        $dataList = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
             ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
@@ -1049,26 +1049,28 @@ class myModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
-            ->query();
+            ->beginIF($checkExists)->limit(1)->fi()
+            ->fetchAll();
+
+        if($checkExists) return !empty($dataList);
 
         $demands = array();
-        while($data = $stmt->fetch())
-       {
-            if($checkExists) return true;
-            $demand = new stdclass();
-            $demand->id      = $data->id;
-            $demand->title   = $data->title;
-            $demand->type    = 'demand';
-            $demand->time    = $data->createdDate;
-            $demand->status  = $data->status;
-            $demand->product = $data->product;
-            $demand->project = 0;
-            $demands[$demand->id] = $demand;
-        }
+        foreach($dataList as $data)
+        {
+             $demand = new stdclass();
+             $demand->id      = $data->id;
+             $demand->title   = $data->title;
+             $demand->type    = 'demand';
+             $demand->time    = $data->createdDate;
+             $demand->status  = $data->status;
+             $demand->product = $data->product;
+             $demand->project = 0;
+             $demands[$demand->id] = $demand;
+         }
 
-        $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
-        foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
-        return array_values($demands);
+         $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+         foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
+         return array_values($demands);
     }
 
     /**
@@ -1083,7 +1085,7 @@ class myModel extends model
     public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
         $this->app->loadLang($type);
-        $stmt = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
+        $dataList = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
@@ -1093,12 +1095,14 @@ class myModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
-            ->query();
+            ->beginIF($checkExists)->limit(1)->fi()
+            ->fetchAll();
+
+        if($checkExists) return !empty($dataList);
 
         $stories = array();
-        while($data = $stmt->fetch())
+        foreach($dataList as $data)
         {
-            if($checkExists) return true;
             $story = new stdclass();
             $story->id        = $data->id;
             $story->title     = $data->title;
@@ -1128,17 +1132,19 @@ class myModel extends model
      */
     public function getReviewingCases(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        $stmt = $this->dao->select('*')->from(TABLE_CASE)
+        $dataList = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('wait')
             ->beginIF(!$this->app->user->admin)->andWhere('(product')->in($this->app->user->view->products)->orWhere('lib')->gt(0)->markRight(1)->fi()
             ->orderBy($orderBy)
-            ->query();
+            ->beginIF($checkExists)->limit(1)->fi()
+            ->fetchAll();
+
+        if($checkExists) return !empty($dataList);
 
         $cases = array();
-        while($data = $stmt->fetch())
+        foreach($dataList as $data)
         {
-            if($checkExists) return true;
             $case = new stdclass();
             $case->id      = $data->id;
             $case->title   = $data->title;
@@ -1188,6 +1194,8 @@ class myModel extends model
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
+        if($checkExists) return !empty($projectReviews);
+
         $this->app->loadLang('project');
         $this->session->set('reviewList', $this->app->getURI(true));
 
@@ -1195,7 +1203,6 @@ class myModel extends model
         foreach($projectReviews as $review)
         {
             if(!isset($pendingList[$review->id])) continue;
-            if($checkExists) return true;
 
             $data = new stdclass();
             $data->id      = $review->id;
@@ -1222,7 +1229,7 @@ class myModel extends model
      */
     public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
-        $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
+        $dataList = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
@@ -1230,9 +1237,13 @@ class myModel extends model
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
             ->orderBy("t2.{$orderBy}")
-            ->query();
+            ->beginIF($checkExists)->limit(1)->fi()
+            ->fetchAll();
+
+        if($checkExists) return !empty($dataList);
+
         $objectIdList = array();
-        while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
+        foreach($dataList as $data) $objectIdList[$data->objectType][$data->objectID] = $data->objectID;
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
@@ -1279,12 +1290,12 @@ class myModel extends model
         if($this->config->edition == 'open') return array();
 
         $this->session->set('feedbackProduct', 'all');
-        $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
+        $feedbacks = $this->loadModel('feedback')->getList('review', $orderBy);
+        if($checkExists) return !empty($feedbacks);
+
         $reviewList = array();
         foreach($feedbacks as $feedback)
         {
-            if($checkExists) return true;
-
             $data = new stdclass();
             $data->id      = $feedback->id;
             $data->title   = $feedback->title;
