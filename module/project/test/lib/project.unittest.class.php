@@ -282,7 +282,8 @@ class Project
     {
         $this->project->addProjectAdmin($projectID);
 
-        return $this->project->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
+        global $app;
+        return $this->project->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($app->user->account)->fetch();
     }
 
     /**
