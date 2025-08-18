@@ -572,6 +572,14 @@ class programplanTao extends programplanModel
         $this->setTreePath($stageID);
         $this->computeProgress($stageID, 'create');
 
+        /* Add the execution team members to parent executions. */
+        $stagePath = $this->dao->findByID($stageID)->from(TABLE_PROJECT)->fetch('path');
+        foreach(explode(',', $stagePath) as $stageParentID)
+        {
+            if(empty($stageParentID) || $stageParentID == $projectID) continue;
+            $this->execution->addExecutionMembers((int)$stageParentID, array($plan->PM));
+        }
+
         return $stageID;
     }
 
