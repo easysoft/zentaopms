@@ -4208,7 +4208,7 @@ class executionModel extends model
         elseif($module == 'programplanTask')
         {
             unset($searchConfig['fields']['project']);
-            $executions = $this->loadModel('programplan')->getPairs($projectID, $productID, 'all');
+            $executions = $this->loadModel('programplan')->getPairs($executionID, $productID, 'all');
         }
         elseif($module == 'projectTask')
         {
