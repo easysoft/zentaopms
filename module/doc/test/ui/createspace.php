@@ -6,6 +6,19 @@ title=创建空间
 timeout=0
 cid=1
 
+- 执行tester模块的createSpace方法，参数是'myspace', ''▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @空间名称为空时提示正确
+- 执行tester模块的createSpace方法，参数是'myspace', '空间1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @空间创建成功
+- 执行tester模块的createSpace方法，参数是'teamspace', ''▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @空间名称为空时提示正确
+- 执行tester模块的createSpace方法，参数是'teamspace', '空间2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @空间创建成功
+
 */
 
 chdir(__DIR__);
