@@ -87,6 +87,31 @@ cid=1
  - 属性6 @/阶段1
  - 属性7 @/阶段2
  - 属性8 @/阶段3
+- module 为 task，缓存查询参数，查询参数中 queryID 为空。 @0
+- module 为 task，缓存查询参数，查询参数中 actionURL 为空。 @0
+- module 为 task，缓存查询参数，查询参数中 onMenuBar 为空。 @0
+- module 为 task，缓存查询参数，打印所属项目列表。
+ - 属性1 @0
+ - 属性2 @0
+ - 属性all @0
+- module 为 task，缓存查询参数，打印所属执行列表。
+ -  @0
+ - 属性3 @0
+ - 属性all @0
+- module 为 task，不缓存查询参数，查询参数中 queryID 有值。 @1
+- module 为 task，不缓存查询参数，查询参数中 actionURL 有值。 @1
+- module 为 task，不缓存查询参数，查询参数中 onMenuBar 有值。 @1
+- module 为 task，不缓存查询参数，打印 module 的值。属性module @task
+- module 为 task，不缓存查询参数，打印 queryID 的值。属性queryID @1
+- module 为 task，不缓存查询参数，打印 actionURL 的值。属性actionURL @/execution-task-3-bySearch-myQueryID.html
+- module 为 task，不缓存查询参数，打印所属项目列表。
+ - 属性1 @项目1
+ - 属性2 @项目2
+ - 属性all @所有项目
+- module 为 task，不缓存查询参数，打印所属执行列表。
+ -  @~~
+ - 属性3 @迭代1
+ - 属性all @所有执行
 
 */
 
@@ -141,3 +166,27 @@ r($searchConfig)                                  && p('module')    && e('progra
 r($searchConfig)                                  && p('queryID')   && e('1');                                                              // module 为 programplanTask，不缓存查询参数，打印 queryID 的值。
 r($searchConfig)                                  && p('actionURL') && e('/programplan-browse-2-0-gantt-id_asc-0-bysearch-myQueryID.html'); // module 为 programplanTask，不缓存查询参数，打印 actionURL 的值。
 r($searchConfig['params']['execution']['values']) && p('6,7,8')     && e('/阶段1,/阶段2,/阶段3');                                           // module 为 programplanTask，不缓存查询参数，打印所属执行列表。
+
+/**
+ * 测试为执行任务列表页面构造搜索参数功能。
+ */
+$executionID  = 3;
+$executions   = [3 => '迭代1', 4 => '迭代2', 5 => '迭代3'];
+$actionURL    = '/execution-task-3-bySearch-myQueryID.html';
+$module       = 'task';
+$searchConfig = $execution->buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, true);
+r(isset($searchConfig['queryID']))                && p()          && e(0);       // module 为 task，缓存查询参数，查询参数中 queryID 为空。
+r(isset($searchConfig['actionURL']))              && p()          && e(0);       // module 为 task，缓存查询参数，查询参数中 actionURL 为空。
+r(isset($searchConfig['onMenuBar']))              && p()          && e(0);       // module 为 task，缓存查询参数，查询参数中 onMenuBar 为空。
+r($searchConfig['params']['project']['values'])   && p('1,2,all') && e('0,0,0'); // module 为 task，缓存查询参数，打印所属项目列表。
+r($searchConfig['params']['execution']['values']) && p(',3,all')  && e('0,0,0'); // module 为 task，缓存查询参数，打印所属执行列表。
+
+$searchConfig = $execution->buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, false);
+r(isset($searchConfig['queryID']))                && p()            && e(1);                                           // module 为 task，不缓存查询参数，查询参数中 queryID 有值。
+r(isset($searchConfig['actionURL']))              && p()            && e(1);                                           // module 为 task，不缓存查询参数，查询参数中 actionURL 有值。
+r(isset($searchConfig['onMenuBar']))              && p()            && e(1);                                           // module 为 task，不缓存查询参数，查询参数中 onMenuBar 有值。
+r($searchConfig)                                  && p('module')    && e('task');                                      // module 为 task，不缓存查询参数，打印 module 的值。
+r($searchConfig)                                  && p('queryID')   && e('1');                                         // module 为 task，不缓存查询参数，打印 queryID 的值。
+r($searchConfig)                                  && p('actionURL') && e('/execution-task-3-bySearch-myQueryID.html'); // module 为 task，不缓存查询参数，打印 actionURL 的值。
+r($searchConfig['params']['project']['values'])   && p('1,2,all')   && e('项目1,项目2,所有项目');                      // module 为 task，不缓存查询参数，打印所属项目列表。
+r($searchConfig['params']['execution']['values']) && p(',3,all')    && e('~~,迭代1,所有执行');                         // module 为 task，不缓存查询参数，打印所属执行列表。
