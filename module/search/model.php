@@ -18,10 +18,11 @@ class searchModel extends model
      * Call the method of the searched module to process search parameters when constructing the search form.
      *
      * @param  string $module
+     * @param  bool   @cacheSearchParams // 是否缓存搜索参数。默认不缓存以加载真实值。Whether to cache search parameters. Default is not to cache to load real values.
      * @access public
      * @return array
      */
-    public function processSearchParams(string $module): array
+    public function processSearchParams(string $module, bool $cacheSearchParams = false): array
     {
         $cacheKey  = $module . 'SearchFunc';
         $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
@@ -29,7 +30,7 @@ class searchModel extends model
         $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
         if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
 
-        $funcArgs['cacheSearchParams'] = false; // 不缓存搜索参数以加载真实值。Do not cache search parameters to load real values.
+        $funcArgs['cacheSearchParams'] = $cacheSearchParams;
         return $this->loadModel($funcModel)->$funcName(...$funcArgs);
     }
 
@@ -119,7 +120,7 @@ class searchModel extends model
     {
         /* Init vars. */
         $module       = $this->post->module;
-        $searchConfig = $this->processSearchParams($module);
+        $searchConfig = $this->processSearchParams($module, true);
         $searchFields = $searchConfig['fields'];
         $fieldParams  = $searchConfig['params'];
         $groupItems   = $this->config->search->groupItems;
@@ -192,7 +193,7 @@ class searchModel extends model
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->post->module;
-        $searchConfig = $this->processSearchParams($module);
+        $searchConfig = $this->processSearchParams($module, true);
         $fieldParams  = $searchConfig['params'];
         $scoreNum     = 0;
 
