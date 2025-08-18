@@ -270,13 +270,13 @@ class myTest
      * @param  int    $queryID
      * @param  string $actionURL
      * @param  string $module
-     * @param  bool   $cacheSearchParams
+     * @param  bool   $cacheSearchFunc
      * @access public
-     * @return null|array
+     * @return array
      */
-    public function buildTaskSearchFormTest(int $queryID, string $actionURL, string $module, bool $cacheSearchParams): null|array
+    public function buildTaskSearchFormTest(int $queryID, string $actionURL, string $module, bool $cacheSearchFunc): array
     {
-        return $this->objectModel->buildTaskSearchForm($queryID, $actionURL, $module, $cacheSearchParams);
+        return $this->objectModel->buildTaskSearchForm($queryID, $actionURL, $module, $cacheSearchFunc);
     }
 
     /**
