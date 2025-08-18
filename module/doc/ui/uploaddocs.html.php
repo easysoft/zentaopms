@@ -90,7 +90,7 @@ formPanel
     (
         setClass('uploadFileBox'),
         set::label($lang->doc->uploadFile),
-        fileSelector(set::defaultFiles(array_values($doc->files))),
+        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null)),
         set::required(true)
     ),
     formGroup
