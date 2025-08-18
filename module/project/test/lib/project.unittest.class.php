@@ -63,13 +63,14 @@ class Project
     }
 
     /**
-     * Test getByShadowProduct function.
+     * 通过影子产品ID获取一条项目记录。
+     * Get a project by its shadow product.
      *
-     * @param  int    $productID
+     * @param  int|string $productID
      * @access public
      * @return string|bool|object
      */
-    public function testGetByShadowProduct($productID)
+    public function getByShadowProductTest(int|string $productID): string|bool|object
     {
         return $this->triggerMethod('getByShadowProduct', array('productID' => $productID));
     }
