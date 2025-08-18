@@ -383,24 +383,6 @@ class todoTest
     }
 
     /**
-     * 根据待办类型，对象ID获取优先级。
-     * Get pri by todo type and object id.
-     *
-     * @param  string $todoType
-     * @param  int    $objectID
-     * @access public
-     * @return int
-     */
-    public function getPriByTodoTypeTest(string $todoType, int $objectID): int
-    {
-        $pri = $this->objectModel->getPriByTodoType($todoType, $objectID);
-
-        if(dao::isError()) return 0;
-
-        return $pri ? 1 : 0;
-    }
-
-    /**
      * 获取周期待办列表。
      * Get created cycle list by todo list.
      *
