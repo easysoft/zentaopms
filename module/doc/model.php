@@ -773,8 +773,9 @@ class docModel extends model
      */
     public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
-        $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+        $docs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
@@ -785,14 +786,15 @@ class docModel extends model
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
 
-        $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('lib')->in($libs)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
-            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
-            ->andWhere('module')->in(array('0', ''))
-            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
+        $rootDocs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
+            ->where('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->andWhere('t1.module')->in(array('0', ''))
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
@@ -809,6 +811,7 @@ class docModel extends model
             $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
             $doc->title       = htmlspecialchars_decode($doc->title);
             if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
+            $doc->hasContent = !empty($doc->content) ? true : false;
             unset($doc->content);
             unset($doc->draft);
         }
@@ -1716,6 +1719,9 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
+        $deleteFiles = !empty($doc->deleteFiles) ? $doc->deleteFiles : '';
+        unset($doc->deleteFiles);
+
         $oldDoc           = $this->getByID($docID);
         $changes          = common::createChanges($oldDoc, $doc);
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
@@ -1754,7 +1760,7 @@ class docModel extends model
         }
 
         unset($doc->files);
-        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion,deleteFiles')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -1762,6 +1768,8 @@ class docModel extends model
 
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+
+        if(!empty($deleteFiles)) $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
 
         /* 如果修改了父模板，子模板也同步更新相关信息。*/
         /* If the parent template is modified, the child template will also update the relevant information synchronously. */

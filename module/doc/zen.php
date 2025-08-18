@@ -668,8 +668,11 @@ class docZen extends doc
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
