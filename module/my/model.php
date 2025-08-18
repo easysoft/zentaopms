@@ -1085,7 +1085,7 @@ class myModel extends model
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
             ->beginIF($checkExists)->limit(1)->fi()
-            ->fetchAll();
+            ->fetchAll('id');
 
         if($checkExists)
         {
@@ -1114,7 +1114,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('(product')->in($this->app->user->view->products)->orWhere('lib')->gt(0)->markRight(1)->fi()
             ->orderBy($orderBy)
             ->beginIF($checkExists)->limit(1)->fi()
-            ->fetchAll();
+            ->fetchAll('id');
 
         if($checkExists) return !empty($cases);
         return array_values($cases);

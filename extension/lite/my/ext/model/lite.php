@@ -25,7 +25,7 @@ public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExis
         ->andWhere('t4.deleted')->eq('0')
         ->orderBy($orderBy)
         ->beginIF($checkExists)->limit(1)->fi()
-        ->fetchAll();
+        ->fetchAll('id');
 
     if($checkExists)
     {
