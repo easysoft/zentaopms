@@ -2020,7 +2020,7 @@ class taskZen extends task
         if(!$execution || (!empty($execution) && $execution->multiple))
         {
             /* If the admin denied modification of closed executions, only query not closed executions. */
-            $queryMode = $execution && common::canModify('execution', $execution) ? '' : 'noclosed';
+            $queryMode = ($this->app->methodName == 'view' || ($execution && common::canModify('execution', $execution))) ? '' : 'noclosed';
 
             /* Get executions the current user can access. */
             $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
