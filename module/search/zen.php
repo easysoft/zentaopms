@@ -8,18 +8,18 @@ class searchZen extends search
      *
      * @param  string $module
      * @access public
-     * @return bool
+     * @return array
      */
-    public function processSearchParams(string $module): bool
+    public function processSearchParams(string $module): array
     {
-        $funcModel = $_SESSION[$module . 'SearchFunc']['funcModel'] ?? '';
-        $funcName  = $_SESSION[$module . 'SearchFunc']['funcName']  ?? '';
-        $funcArgs  = $_SESSION[$module . 'SearchFunc']['funcArgs']  ?? [];
-        if(!$funcModel || !$funcName) return false;
+        $cacheKey  = $module . 'SearchFunc';
+        $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
+        $funcName  = $this->session->$cacheKey['funcName']  ?? '';
+        $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
+        if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
 
         $funcArgs['cacheSearchParams'] = false; // 不缓存搜索参数以加载真实值。Do not cache search parameters to load real values.
-        $this->loadModel($funcModel)->$funcName(...$funcArgs);
-        return true;
+        return $this->loadModel($funcModel)->$funcName(...$funcArgs);
     }
     /**
      * 设置列表 session，方便返回。
