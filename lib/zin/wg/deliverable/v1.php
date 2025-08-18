@@ -32,6 +32,8 @@ class deliverable extends wg
         $app->loadLang('doc');
         $app->loadLang('deliverable');
         jsVar('createByTemplate', $lang->deliverable->createByTemplate);
+        jsVar('createDoc',        $lang->doc->create);
+        jsVar('uploadFile',       $lang->doc->uploadFile);
         jsVar('deleteItem',       $lang->delete);
         jsVar('otherLang',        $lang->other);
         jsVar('canDownload',      hasPriv('file', 'download'));
@@ -72,8 +74,12 @@ class deliverable extends wg
         $extraCategory = $this->prop('extraCategory') ? $this->prop('extraCategory') : array_column($this->prop('items'), 'category');
         $categories    = $this->prop('categories');
         $projectID     = $this->prop('projectID');
+        $createDocUrl  = $this->prop('createDocUrl');
+        $uploadDocUrl  = $this->prop('uploadDocUrl');
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
+        jsVar('createDocUrl', $createDocUrl);
+        jsVar('uploadDocUrl', $uploadDocUrl);
         jsVar('isTemplate', $isTemplate);
         jsVar('onlyShow', $onlyShow);
 
@@ -99,7 +105,6 @@ class deliverable extends wg
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
             set::maxFileSize($this->prop('maxFileSize')),
             set::isTemplate($isTemplate),
-            set::templateMenu(jsRaw('window.getTemplateMenu')),
             set::extraCategory($extraCategory),
             set::categories($categories)
         );
