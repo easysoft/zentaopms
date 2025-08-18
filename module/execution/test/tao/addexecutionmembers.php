@@ -16,6 +16,12 @@ title=productModel->addExecutionMembers();
 cid=1
 pid=1
 
+- 空的执行ID，空的团队 @0
+- 空的执行ID，有团队 @0
+- 不存在的执行ID，有团队 @0
+- 存在的执行ID，空团队 @0
+- 存在的执行ID，有团队 @3
+
 */
 
 $execution = new executionTest('admin');
