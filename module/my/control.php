@@ -434,7 +434,7 @@ class my extends control
         $tasks   = $this->myZen->buildTaskData($tasks);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
-        $this->my->buildTaskSearchForm($queryID, $actionURL, $this->app->rawMethod);
+        $this->my->buildTaskSearchForm($queryID, $actionURL, $this->app->rawMethod . 'Task');
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
