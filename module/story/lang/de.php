@@ -555,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = 'The Story is already active,no review requirements.';
 $lang->story->reviewTip['notReviewer'] = 'You are not the reviewer of this Story and cannot perform review operations.';
 $lang->story->reviewTip['reviewed']    = 'Reviewed';
+$lang->story->reviewTip['noPriv']      = 'You do not have the authority to submit for review.';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = 'The Story has not initiated a review process and no undo action is required.';

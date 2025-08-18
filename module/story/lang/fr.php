@@ -555,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = "Cette Story est déjà active, il n'y a pas de demande de révision.";
 $lang->story->reviewTip['notReviewer'] = "Vous n'êtes pas l'évaluateur de cette Story et ne pouvez pas effectuer d'opérations d'évaluation.";
 $lang->story->reviewTip['reviewed']    = "Révisé";
+$lang->story->reviewTip['noPriv']      = 'You do not have the authority to submit for review.';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
