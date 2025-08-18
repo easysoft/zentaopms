@@ -1729,7 +1729,7 @@ class docModel extends model
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
         $version          = $isDraft ? 0 : ($oldDoc->version + 1);
-        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
+        $changed          = $deleteFiles || $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
@@ -1738,7 +1738,7 @@ class docModel extends model
             if($change['field'] == 'content') $onlyRawChanged = false;
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
-        if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
+        if($changed) $this->saveDocContent($docID, $doc, $version, array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), explode(',', $deleteFiles)));
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
@@ -1768,8 +1768,6 @@ class docModel extends model
 
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-
-        if(!empty($deleteFiles)) $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
 
         /* 如果修改了父模板，子模板也同步更新相关信息。*/
         /* If the parent template is modified, the child template will also update the relevant information synchronously. */
