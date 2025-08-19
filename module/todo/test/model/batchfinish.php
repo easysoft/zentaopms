@@ -18,7 +18,7 @@ cid=1
 */
 
 initData();
-$todoIDList = range(1,3);
+$todoIDList = range(1,5);
 
 $todo = new todoTest();
 $todo->batchFinishTest($todoIDList);
@@ -26,3 +26,5 @@ $todo->batchFinishTest($todoIDList);
 r($todo->getByIdTest($todoIDList[0])) && p('status') && e('done'); // 批量完成todo验证状态wait->done
 r($todo->getByIdTest($todoIDList[1])) && p('status') && e('done'); // 批量完成todo验证状态donging->done
 r($todo->getByIdTest($todoIDList[2])) && p('status') && e('done'); // 批量完成todo验证状态done
+r($todo->getByIdTest($todoIDList[3])) && p('status') && e('done'); // 批量完成todo验证状态done
+r($todo->getByIdTest($todoIDList[4])) && p('status') && e('done'); // 批量完成todo验证状态done
