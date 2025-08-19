@@ -87,12 +87,6 @@ $team->type->range('project{2}, execution{2}');
 $team->account->range('admin, user1');
 $team->gen('4');
 
-
-zenData('taskteam')->gen(0);
-zenData('action')->gen(0);
-#zenData('history')->gen(0);
-zenData('actionrecent')->gen(0);
-
 $tester = new startTaskTester();
 $tester->login();
 
