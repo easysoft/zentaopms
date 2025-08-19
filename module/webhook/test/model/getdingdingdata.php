@@ -12,7 +12,9 @@ cid=1
 
 - 打印出msgtype第markdown条的title属性 @ceshi
 - 测试不传text的情况第markdown条的title属性 @ceshi
-- 测试不传mobile的情况第markdown条的title属性 @ceshi
+- 测试不传mobile的情况
+ - 第markdown条的title属性 @ceshi
+ - 第markdown条的text属性 @文本信息
 - 测试不传mobile的情况第markdown条的title属性 @~~
 
 */
@@ -33,5 +35,5 @@ $mobile[1] = '';
 
 r($webhook->getDingdingDataTest($title[0], $text[0], $mobile[0])) && p('markdown:title') && e('ceshi'); //打印出msgtype
 r($webhook->getDingdingDataTest($title[0], $text[1], $mobile[0])) && p('markdown:title') && e('ceshi'); //测试不传text的情况
-r($webhook->getDingdingDataTest($title[0], $text[0], $mobile[1])) && p('markdown:title') && e('ceshi'); //测试不传mobile的情况
-r($webhook->getDingdingDataTest($title[1], $text[0], $mobile[0])) && p('markdown:title') && e('~~');    //测试不传mobile的情况
+r($webhook->getDingdingDataTest($title[0], $text[0], $mobile[1])) && p('markdown:title,text') && e('ceshi,文本信息'); //测试不传mobile的情况
+r($webhook->getDingdingDataTest($title[1], $text[0], $mobile[0])) && p('markdown:title') && e('~~'); //测试不传mobile的情况
