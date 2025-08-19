@@ -43,6 +43,7 @@ $func = $zen->getMethod('setMenu');
 r($func->invokeArgs($zen->newInstance(), [$executionIDList[0]])) && p() && e('3'); //启用迭代的项目，跳转到可访问的第一个执行下
 r($func->invokeArgs($zen->newInstance(), [$executionIDList[1]])) && p() && e('2'); //不启用迭代的项目，直接返回当前项目的导航
 r($func->invokeArgs($zen->newInstance(), [$executionIDList[2]])) && p() && e('3'); //进行中的迭代，直接返回当前迭代的导航
+$config->CRExecution = 0;
 r($func->invokeArgs($zen->newInstance(), [$executionIDList[3]])) && p() && e('5'); //不可以修改关闭的迭代，关闭的迭代，跳转到可访问的第一个执行下
 $config->CRExecution = 1;
 r($func->invokeArgs($zen->newInstance(), [$executionIDList[3]])) && p() && e('4'); //可以修改关闭的迭代，关闭的迭代，直接返回当前迭代的导航
