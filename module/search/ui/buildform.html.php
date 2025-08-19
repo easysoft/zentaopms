@@ -120,7 +120,6 @@ $setting->deleteQueryConfirm  = $deleteQueryConfirm;
 $setting->saveQueryPanelTitle = $lang->search->savedQuery;
 $setting->saveQueryBtnText    = $lang->search->saveCondition;
 $setting->onMenuBar           = $onMenuBar;
-$setting->formName            = $formName;
 $setting->datePeriods         = $datePeriods;
 
 /**
