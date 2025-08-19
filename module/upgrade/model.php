@@ -11444,6 +11444,8 @@ class upgradeModel extends model
         /* 升级完后把没用的字段删掉。 */
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " DROP `method`, DROP `model`, DROP `type`, DROP `files`;");
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
 
         if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
     }
@@ -11609,9 +11611,5 @@ class upgradeModel extends model
 
         /* 删除旧分类。 */
         $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
-
-        /* 删除旧字段。 */
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
     }
 }
