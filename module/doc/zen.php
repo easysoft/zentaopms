@@ -578,19 +578,24 @@ class docZen extends doc
      * 展示上传文件的相关变量。
      * Show the related variables of uploading files.
      *
+     * @param  int       $docID
      * @param  string    $objectType product|project|execution|custom
      * @param  int       $objectID
      * @param  int       $libID
      * @param  int       $moduleID
      * @param  string    $docType    html|word|ppt|excel|attachment
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function assignVarsForUploadDocs(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): void
+    protected function assignVarsForUploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): object
     {
+        $doc = !empty($docID) ? $this->doc->getByID($docID) : null;
+        if(empty($moduleID) && $doc) $moduleID = (int)$doc->module;
+
         $this->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+        $lib            = $libID ? $this->doc->getLibByID($libID) : '';
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
         $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
         $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
@@ -599,6 +604,9 @@ class docZen extends doc
         $this->view->linkType   = $objectType;
         $this->view->spaces     = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
         $this->view->optionMenu = $chapterAndDocs;
+        $this->view->docID      = $docID;
+        $this->view->doc        = $doc;
+        return $this->view;
     }
 
     /**

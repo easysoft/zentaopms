@@ -35,9 +35,13 @@ window.loadExecutions = function(e)
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
     $.getJSON(link, function(data)
     {
-        const $picker = $('.moduleBox input[name="module"]').zui('picker');
-        $picker.render({items: data});
-        $picker.$.setValue('');
+        const $libPicker = $("[name='lib']").zui('picker');
+        $libPicker.render({items: data.libs});
+        $libPicker.$.setValue('');
+
+        const $modulePicker = $("[name='parent']").zui('picker');
+        $modulePicker.render({items: data.modules});
+        $modulePicker.$.setValue('');
     });
 }
 

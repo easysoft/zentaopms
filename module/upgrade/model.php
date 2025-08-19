@@ -11339,6 +11339,7 @@ class upgradeModel extends model
         $deliverableList   = array();
         $nameFilter        = array(); // 过滤重名交付物。
         $otherModule       = array(); // 交付物其他分类。
+        $otherActivity     = array();
         $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
@@ -11443,6 +11444,8 @@ class upgradeModel extends model
         /* 升级完后把没用的字段删掉。 */
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " DROP `method`, DROP `model`, DROP `type`, DROP `files`;");
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
 
         if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
     }
@@ -11495,7 +11498,7 @@ class upgradeModel extends model
         /* 创建其他过程分类。 */
         $module = new stdclass();
         $module->root    = $workflowGroupID;
-        $module->name    = $this->upgrade->projectManage;
+        $module->name    = $this->lang->upgrade->projectManage;
         $module->parent  = '0';
         $module->grade   = '1';
         $module->type    = 'process';
@@ -11608,9 +11611,5 @@ class upgradeModel extends model
 
         /* 删除旧分类。 */
         $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
-
-        /* 删除旧字段。 */
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
     }
 }
