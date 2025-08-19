@@ -14,11 +14,11 @@ cid=1
  - 第0条的totalTasks属性 @1
  - 第0条的totalHours属性 @4
  - 第0条的workload属性 @57.14
- - 第2条的id属性 @10
- - 第2条的isExecutionNameHtml属性 @1
- - 第2条的totalTasks属性 @1
- - 第2条的totalHours属性 @5
- - 第2条的workload属性 @71.43
+ - 第1条的id属性 @10
+ - 第1条的isExecutionNameHtml属性 @1
+ - 第1条的totalTasks属性 @1
+ - 第1条的totalHours属性 @5
+ - 第1条的workload属性 @71.43
 - 测试部门id为0，执行状态已分配，工时为7.5的透视表数据是否正常生成,此返回值包含四条数据,与上面用例的区别在于负载率的不同。
  - 第0条的id属性 @4
  - 第0条的isExecutionNameHtml属性 @0
@@ -36,11 +36,11 @@ cid=1
  - 第0条的totalTasks属性 @1
  - 第0条的totalHours属性 @4
  - 第0条的workload属性 @50
- - 第2条的id属性 @10
- - 第2条的isExecutionNameHtml属性 @1
- - 第2条的totalTasks属性 @1
- - 第2条的totalHours属性 @5
- - 第2条的workload属性 @62.5
+ - 第1条的id属性 @10
+ - 第1条的isExecutionNameHtml属性 @1
+ - 第1条的totalTasks属性 @1
+ - 第1条的totalHours属性 @5
+ - 第1条的workload属性 @62.5
 
 */
 
@@ -76,7 +76,7 @@ foreach($result as $row)
     $row->isExecutionNameHtml = 0;
     if(strip_tags($name) != $row->executionName) $row->isExecutionNameHtml = 1; 
 }
-r($result) && p('0:id,isExecutionNameHtml,totalTasks,totalHours,workload;2:id,isExecutionNameHtml,totalTasks,totalHours,workload') && e("4,0,1,4,57.14;10,1,1,5,71.43");    //测试部门id为0，执行状态已分配，工时为7的透视表数据是否正常生成,此返回值包含四条数据。
+r($result) && p('0:id,isExecutionNameHtml,totalTasks,totalHours,workload;1:id,isExecutionNameHtml,totalTasks,totalHours,workload') && e("4,0,1,4,57.14;10,1,1,5,71.43");    //测试部门id为0，执行状态已分配，工时为7的透视表数据是否正常生成,此返回值包含四条数据。
 
 $result = $pivot->getWorkload($deptList[0], $assignList[1], $usersList[0], $allHourList[1]);
 foreach($result as $row)
@@ -96,4 +96,4 @@ foreach($result as $row)
     $row->isExecutionNameHtml = 0;
     if(strip_tags($name) != $row->executionName) $row->isExecutionNameHtml = 1; 
 }
-r($result) && p('0:id,isExecutionNameHtml,totalTasks,totalHours,workload;2:id,isExecutionNameHtml,totalTasks,totalHours,workload') && e("4,0,1,4,50;10,1,1,5,62.5");    //测试部门id为0，执行状态已分配，工时为8的透视表数据是否正常生成,此返回值包含四条数据,于上边用例的区别在于负载率的不同。
+r($result) && p('0:id,isExecutionNameHtml,totalTasks,totalHours,workload;1:id,isExecutionNameHtml,totalTasks,totalHours,workload') && e("4,0,1,4,50;10,1,1,5,62.5");    //测试部门id为0，执行状态已分配，工时为8的透视表数据是否正常生成,此返回值包含四条数据,于上边用例的区别在于负载率的不同。
