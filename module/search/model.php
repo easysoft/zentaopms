@@ -56,8 +56,8 @@ class searchModel extends model
 
         if(empty($_SESSION[$module . 'SearchFunc']))
         {
-            $searchParams['searchFields'] = $searchConfig['fields'];
-            $searchParams['fieldParams']  = $searchConfig['params'];
+            $searchParams['fields'] = $searchConfig['fields'];
+            $searchParams['params'] = $searchConfig['params'];
         }
 
         $this->session->set($module . 'searchParams', $searchParams);
