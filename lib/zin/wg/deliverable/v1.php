@@ -37,6 +37,7 @@ class deliverable extends wg
         jsVar('deleteItem',       $lang->delete);
         jsVar('otherLang',        $lang->other);
         jsVar('canDownload',      hasPriv('file', 'download'));
+        jsVar('canCreateDoc',     hasPriv('doc', 'create'));
 
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
