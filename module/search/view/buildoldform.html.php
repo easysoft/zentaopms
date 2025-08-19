@@ -15,6 +15,7 @@ $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
+$groupItems = $config->search->groupItems;
 ?>
 <style>
 #save-query .text {font-weight: 400; font-size: 14px;}
@@ -109,7 +110,7 @@ foreach($fieldParams as $fieldName => $param)
                 $currentField = $formSession["field$fieldNO"];
                 if(!isset($fieldParams[$currentField]))
                 {
-                    $currentField = key($searchFields);
+                    $currentField = key($fields);
                     $formSession["field$fieldNO"]    = $currentField;
                     $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
                     $formSession["value$fieldNO"]    =  '';
@@ -124,7 +125,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $fields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -174,7 +175,7 @@ foreach($fieldParams as $fieldName => $param)
                 $currentField = $formSession["field$fieldNO"];
                 if(!isset($fieldParams[$currentField]))
                 {
-                    $currentField = key($searchFields);
+                    $currentField = key($fields);
                     $formSession["field$fieldNO"]    = $currentField;
                     $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
                     $formSession["value$fieldNO"]    =  '';
@@ -188,7 +189,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $fields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -274,7 +275,7 @@ var dtOptions =
     format: 'yyyy-mm-dd'
 };
 var <?php echo $module . 'params'?> = <?php echo empty($fieldParams) ? '{}' : json_encode($fieldParams);?>;
-var groupItems    = <?php echo $config->search->groupItems;?>;
+var groupItems    = <?php echo $groupItems;?>;
 var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
 var module        = '<?php echo $module;?>';
 var actionURL     = '<?php echo $actionURL;?>';

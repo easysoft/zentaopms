@@ -21,10 +21,11 @@ class search extends control
      * Build search form.
      *
      * @param  string $module
+     * @param  string $mode   new 20版本后的新页面 | old 20版本前的旧页面
      * @access public
      * @return void
      */
-    public function buildForm(string $module)
+    public function buildForm(string $module, string $mode = 'new')
     {
         $searchForm   = $module . 'Form';
         $searchParams = $module . 'searchParams';
@@ -32,7 +33,11 @@ class search extends control
         $fields       = $searchConfig['fields'];
         $params       = $searchConfig['params'];
 
-        if(!$this->session->$searchForm) $this->search->initSession($module, $fields, $params);
+        if(!$this->session->$searchForm)
+        {
+            $initFunc = $mode == 'new' ? 'initSession' : 'initOldSession';
+            $this->search->$initFunc($module, $fields, $params);
+        }
 
         if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
@@ -52,7 +57,7 @@ class search extends control
 
         if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
 
-        $this->display();
+        $this->display('search', $mode == 'new' ? 'buildForm' : 'buildOldForm');
     }
 
     /**
@@ -65,35 +70,7 @@ class search extends control
      */
     public function buildOldForm(string $module)
     {
-        $searchForm   = $module . 'Form';
-        $searchParams = $module . 'searchParams';
-        $searchConfig = $this->search->processSearchParams($module);
-        $fields       = $searchConfig['fields'];
-        $params       = $searchConfig['params'];
-
-        if(!$this->session->$searchForm) $this->search->initOldSession($module, $fields, $params);
-
-        if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
-        {
-            $space = common::checkNotCN() ? ' ' : '';
-            $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
-        }
-
-        $this->view->module       = $module;
-        $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->searchFields = $fields;
-        $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
-        $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->actionURL    = $this->session->$searchParams['actionURL'];
-        $this->view->queryID      = $this->session->$searchParams['queryID']   ?? 0;
-        $this->view->style        = $this->session->$searchParams['style']     ?? 'full';
-        $this->view->onMenuBar    = $this->session->$searchParams['onMenuBar'] ?? 'no';
-        $this->view->formSession  = $this->session->$searchForm;
-
-        if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
-
-        $this->display();
+        $this->buildForm($module, 'old');
     }
 
     /**
