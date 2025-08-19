@@ -77,14 +77,16 @@ class search extends control
      * 构建搜索查询。
      * Build search query.
      *
+     * @param  string $mode new 20版本后的新页面 | old 20版本前的旧页面
      * @access public
      * @return void
      */
-    public function buildQuery()
+    public function buildQuery(string $mode = 'new')
     {
         /* 将查询 sql 和 表单名字设置 session。*/
         /* Set query sql and form name in session. */
-        $this->search->buildQuery();
+        $buildFunc = $mode == 'new' ? 'buildQuery' : 'buildOldQuery';
+        $this->search->$buildFunc();
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
@@ -108,7 +110,9 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
+        if($mode == 'new') return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
+
+        echo js::locate($actionURL, 'parent');
     }
 
     /**
@@ -119,25 +123,7 @@ class search extends control
      */
     public function buildOldQuery()
     {
-        $this->search->buildOldQuery();
-
-        $actionURL = $this->post->actionURL;
-        $parsedURL = parse_url($actionURL);
-        if(isset($parsedURL['host'])) return;
-        if($this->config->requestType != 'GET')
-        {
-            $path = $parsedURL['path'];
-            $path = str_replace($this->config->webRoot, '', $path);
-            if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
-            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) return;
-        }
-        else
-        {
-            $query = $parsedURL['query'];
-            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
-        }
-
-        echo js::locate($actionURL, 'parent');
+        $this->buildQuery('old');
     }
 
     /**
