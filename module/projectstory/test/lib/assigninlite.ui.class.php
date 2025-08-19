@@ -45,8 +45,11 @@ class assign extends tester
         $form->dom->selectAllBtn->click();
         $form->dom->batchAssignlite->click();
         $form->wait(2);
+        $form->dom->batchAssignInput->setValue('admin');
+        $form->wait(2);
         $form->dom->assignToAdmin->click();
         $form->wait(2);
+        $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $form->dom->targetLife->click();
         $form->wait(2);
         $assignTo = strstr($form->dom->assignTo->getText(), ' ', true);
