@@ -21,25 +21,18 @@ class search extends control
      * Build search form.
      *
      * @param  string $module
-     * @param  string $fields
-     * @param  array  $params
-     * @param  string $actionURL
-     * @param  int    $queryID
-     * @param  string $formName
      * @access public
      * @return void
      */
-    public function buildForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
+    public function buildForm(string $module)
     {
-        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
-        $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
+        $searchParams = $module . 'searchParams';
         $searchConfig = $this->search->processSearchParams($module);
-        $fields       = $searchConfig['fields'] ?? $fields;
-        $params       = $searchConfig['params'] ?? $params;
+        $fields       = $searchConfig['fields'];
+        $params       = $searchConfig['params'];
 
-        $_SESSION['searchParams']['module'] = $module;
-        if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
+        if(!$this->session->$searchForm) $this->search->initSession($module, $fields, $params);
 
         if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
@@ -48,19 +41,17 @@ class search extends control
         }
 
         $this->view->module       = $module;
-        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $this->view->fields       = $fields;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
-        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
-        $this->view->formSession  = $_SESSION[$searchForm];
-        $this->view->formName     = $formName;
+        $this->view->actionURL    = $this->session->$searchParams['actionURL'];
+        $this->view->queryID      = $this->session->$searchParams['queryID']   ?? 0;
+        $this->view->style        = $this->session->$searchParams['style']     ?? 'full';
+        $this->view->onMenuBar    = $this->session->$searchParams['onMenuBar'] ?? 'no';
+        $this->view->formSession  = $this->session->$searchForm;
 
         if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
 
-        $this->app->loadModuleConfig('action');
         $this->display();
     }
 
@@ -69,25 +60,18 @@ class search extends control
      * Build old search form.
      *
      * @param  string $module
-     * @param  string $fields
-     * @param  array  $params
-     * @param  string $actionURL
-     * @param  int    $queryID
-     * @param  string $formName
      * @access public
      * @return void
      */
-    public function buildOldForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
+    public function buildOldForm(string $module)
     {
-        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
-        $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
+        $searchParams = $module . 'searchParams';
         $searchConfig = $this->search->processSearchParams($module);
-        $fields       = $searchConfig['fields'] ?? $fields;
-        $params       = $searchConfig['params'] ?? $params;
+        $fields       = $searchConfig['fields'];
+        $params       = $searchConfig['params'];
 
-        $_SESSION['searchParams']['module'] = $module;
-        if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);
+        if(!$this->session->$searchForm) $this->search->initOldSession($module, $fields, $params);
 
         if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
@@ -97,20 +81,18 @@ class search extends control
 
         $this->view->module       = $module;
         $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $this->view->searchFields = $fields;
         $this->view->fields       = $fields;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
-        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
-        $this->view->formSession  = $_SESSION[$searchForm];
-        $this->view->formName     = $formName;
+        $this->view->actionURL    = $this->session->$searchParams['actionURL'];
+        $this->view->queryID      = $this->session->$searchParams['queryID']   ?? 0;
+        $this->view->style        = $this->session->$searchParams['style']     ?? 'full';
+        $this->view->onMenuBar    = $this->session->$searchParams['onMenuBar'] ?? 'no';
+        $this->view->formSession  = $this->session->$searchForm;
 
         if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
 
-        $this->app->loadModuleConfig('action');
         $this->display();
     }
 
