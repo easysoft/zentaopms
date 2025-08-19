@@ -18,7 +18,7 @@ class cancelTaskTester extends tester
         $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         if(in_array($status, array('done', 'cancel', 'closed')))
         {
-            if(is_object($form->dom->cancelBtn)) return $this->false('错误的显示了取消按钮');
+            if(is_object($form->dom->cancelBtn)) return $this->failed('错误的显示了取消按钮');
             return $this->success('没有显示取消按钮');
         }
         $form->dom->cancelBtn->click();
