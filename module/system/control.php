@@ -362,7 +362,7 @@ class system extends control
 
         $this->loadModel('cne');
         if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
-        $this->loadModel('instance');
+        $this->app->loadConfig('instance');
         $instance = $this->config->instance->zentaopaas;
         $result   = $this->cne->getBackupStatus($instance, $backupName);
         if($result && $result->code == 200)
