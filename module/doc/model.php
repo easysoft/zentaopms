@@ -1739,7 +1739,7 @@ class docModel extends model
         }
 
         $docFiles = array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), explode(',', $deleteFiles));
-        if(empty($docFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if(empty($docFiles) && !empty($deleteFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
         if($changed) $this->saveDocContent($docID, $doc, $version, $docFiles);
