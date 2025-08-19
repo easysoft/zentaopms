@@ -8,8 +8,11 @@ function addFileUploadMutationObserver()
         let title  = $('.uploadFileBox .file-selector-list .file-selector-item:nth-child(1) .item-title').text();
         let dotIdx = title.lastIndexOf('.');
         if(dotIdx != '-1') title = title.substring(0, dotIdx);
-        if(!docID) $('.titleBox [name=title]').val(title);
-        $('.uploadFormatBox').toggleClass('hidden', $('.uploadFileBox .file-selector-list .file-selector-item').length <= 1);
+        if(!docID)
+        {
+            $('.titleBox [name=title]').val(title);
+            $('.uploadFormatBox').toggleClass('hidden', $('.uploadFileBox .file-selector-list .file-selector-item').length <= 1);
+        }
     });
 
     observer.observe(fileUpload, {childList: true, subtree: true});
