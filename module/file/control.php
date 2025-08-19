@@ -162,7 +162,7 @@ class file extends control
         if($mode != 'open')
         {
             $fileName = $file->title;
-            if(!preg_match("/\.{$file->extension}$/", $fileName)) $fileName .= '.' . $file->extension;
+            if(!preg_match("/\.{$file->extension}$/", strtolower($fileName))) $fileName .= '.' . $file->extension;
             return $this->sendDownHeader($fileName, $file->extension, $file->realPath, 'file');
         }
 
