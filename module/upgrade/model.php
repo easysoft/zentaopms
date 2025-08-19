@@ -11330,7 +11330,8 @@ class upgradeModel extends model
         $this->app->loadLang('tree');
 
         $deliverable = new stdClass();
-        $deliverable->status = 'disabled';
+        $deliverable->status    = 'disabled';
+        $deliverable->trimmable = '1';
 
         $deliverableStage = new stdClass();
         $deliverableStage->stage    = 'project';
