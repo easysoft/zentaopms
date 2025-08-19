@@ -336,11 +336,13 @@ class searchTao extends searchModel
      * 如果搜索框的选项是users，products, executions, 获取相对应的列表。
      * Get user, product and execution value of the param.
      *
-     * @param  array $fields
+     * @param  string    $module
+     * @param  array     $fields
+     * @param  array     $params
      * @access protected
      * @return array
      */
-    protected function getParamValues(array $fields, array $params): array
+    protected function getParamValues(string $module, array $fields, array $params): array
     {
         $hasProduct   = false;
         $hasExecution = false;
@@ -355,7 +357,6 @@ class searchTao extends searchModel
 
         /* 将用户的值追加到获取到的用户列表。*/
         $appendUsers     = array();
-        $module          = $_SESSION['searchParams']['module'];
         $formSessionName = $module . 'Form';
         if(isset($_SESSION[$formSessionName]))
         {
