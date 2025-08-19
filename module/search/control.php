@@ -84,7 +84,7 @@ class search extends control
         $searchForm   = $module . 'Form';
         $searchConfig = $this->search->processSearchParams($module);
         $fields       = $searchConfig['fields'] ?? $fields;
-        $params       = $searchConfig['fields'] ?? $params;
+        $params       = $searchConfig['params'] ?? $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);
