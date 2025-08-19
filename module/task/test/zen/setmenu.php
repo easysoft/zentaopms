@@ -34,7 +34,7 @@ cid=1
 $executionIDList = array('1', '2', '3', '4', '5');
 
 global $tester, $app, $config;
-$app->rawModule   = 'project';
+$app->rawModule   = 'execution';
 $app->rawMethod   = 'task';
 
 $zen  = initReference('task');
