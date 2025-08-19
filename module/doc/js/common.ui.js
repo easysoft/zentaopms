@@ -224,7 +224,7 @@ window.loadLibModules = function(e, docID)
     const libType  = $(e.target.closest('div.form-group')).attr('data-lib-type');
     const objectID = $("input[name='" + libType + "']").val();
 
-    if(!docType)
+    if(typeof docType == 'undefined')
     {
         docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
         if(typeof docType == 'undefined') docType = 'doc';
