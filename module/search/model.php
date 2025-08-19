@@ -67,16 +67,17 @@ class searchModel extends model
      * 设置默认的搜索参数。
      * Set default params for selection.
      *
+     * @param  string $module
      * @param  array  $fields
      * @param  array  $params
      * @access public
      * @return array
      */
-    public function setDefaultParams(array $fields, array $params): array
+    public function setDefaultParams(string $module, array $fields, array $params): array
     {
         $fields = array_keys($fields);
 
-        list($users, $products, $executions) = $this->getParamValues($fields, $params);
+        list($users, $products, $executions) = $this->getParamValues($module, $fields, $params);
 
         foreach($fields as $fieldName)
         {
