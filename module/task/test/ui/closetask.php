@@ -3,33 +3,33 @@
 
 /**
 
-title=取消任务
+title=关闭任务
 timeout=0
 cid=1
 
-- 执行tester模块的cancel方法，参数是'1', 'wait'
+- 执行tester模块的close方法，参数是'1', 'wait'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @取消任务成功
-- 执行tester模块的cancel方法，参数是'2', 'doing'
+ - 测试结果 @没有显示关闭按钮
+- 执行tester模块的close方法，参数是'2', 'doing'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @取消任务成功
-- 执行tester模块的cancel方法，参数是'3', 'done'
+ - 测试结果 @没有显示关闭按钮
+- 执行tester模块的close方法，参数是'3', 'done'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @没有显示取消按钮
-- 执行tester模块的cancel方法，参数是'4', 'pause'
+ - 测试结果 @关闭任务成功
+- 执行tester模块的close方法，参数是'4', 'pause'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @取消任务成功
-- 执行tester模块的cancel方法，参数是'5', 'cancel'
+ - 测试结果 @没有显示关闭按钮
+- 执行tester模块的close方法，参数是'5', 'cancel'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @没有显示取消按钮
-- 执行tester模块的cancel方法，参数是'6', 'closed'
+ - 测试结果 @关闭任务成功
+- 执行tester模块的close方法，参数是'6', 'closed'▫
  - 最终测试状态 @SUCCESS
- - 测试结果 @没有显示取消按钮
+ - 测试结果 @没有显示关闭按钮
 
 */
 
 chdir(__DIR__);
-include '../lib/canceltask.ui.class.php';
+include '../lib/closetask.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');
@@ -75,13 +75,13 @@ $taskSpec->version->range('0');
 $taskSpec->name->range('1-100');
 $taskSpec->gen(6);
 
-$tester = new cancelTaskTester();
+$tester = new closeTaskTester();
 $tester->login();
 
-r($tester->cancel('1', 'wait'))   &&p('status,message') &&e('SUCCESS,取消任务成功');
-r($tester->cancel('2', 'doing'))  &&p('status,message') &&e('SUCCESS,取消任务成功');
-r($tester->cancel('3', 'done'))   &&p('status,message') &&e('SUCCESS,没有显示取消按钮');
-r($tester->cancel('4', 'pause'))  &&p('status,message') &&e('SUCCESS,取消任务成功');
-r($tester->cancel('5', 'cancel')) &&p('status,message') &&e('SUCCESS,没有显示取消按钮');
-r($tester->cancel('6', 'closed')) &&p('status,message') &&e('SUCCESS,没有显示取消按钮');
+r($tester->close('1', 'wait'))   &&p('status,message') &&e('SUCCESS,没有显示关闭按钮');
+r($tester->close('2', 'doing'))  &&p('status,message') &&e('SUCCESS,没有显示关闭按钮');
+r($tester->close('3', 'done'))   &&p('status,message') &&e('SUCCESS,关闭任务成功');
+r($tester->close('4', 'pause'))  &&p('status,message') &&e('SUCCESS,没有显示关闭按钮');
+r($tester->close('5', 'cancel')) &&p('status,message') &&e('SUCCESS,关闭任务成功');
+r($tester->close('6', 'closed')) &&p('status,message') &&e('SUCCESS,没有显示关闭按钮');
 $tester->closeBrowser();
