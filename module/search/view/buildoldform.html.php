@@ -90,6 +90,71 @@ foreach($fieldParams as $fieldName => $param)
 }
 ?>
 </div>
+<?php
+$printGroup = function(&$formSession, &$fieldNO, $group) use ($lang, $config, $module, $fields, $fieldParams, $groupItems)
+{
+    for($i = 1; $i <= $groupItems; $i ++)
+    {
+        $spanClass = $i == 1 ? '' : 'hidden';
+        echo "<tr id='searchbox$fieldNO' class='$spanClass'>";
+
+        /* Get params of current field. */
+        $currentField = $formSession["field$fieldNO"];
+        if(!isset($fieldParams[$currentField]))
+        {
+            $currentField = key($fields);
+            $formSession["field$fieldNO"]    = $currentField;
+            $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
+            $formSession["value$fieldNO"]    =  '';
+        }
+        $param = $fieldParams[$currentField];
+
+        /* Print and or. */
+        echo "<td class='text-right w-80px'>";
+        if($i == 1) echo "<span id='search{$group}'><strong>{$lang->search->$group}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
+        if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
+        echo '</td>';
+
+        /* Print field. */
+        echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $fields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+
+        /* Print operator. */
+        echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
+
+        /* Print value. */
+        echo "<td id='valueBox$fieldNO'>";
+        if(isset($config->moreLinks["field{$currentField}"]))
+        {
+            $selected = $formSession["value$fieldNO"];
+            if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
+        }
+        if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
+
+        if($param['control'] == 'input')
+        {
+            $fieldName  = $formSession["field$fieldNO"];
+            $fieldValue = $formSession["value$fieldNO"];
+            $extraClass = isset($param['class']) ? $param['class'] : '';
+
+            $placeholder = '';
+            if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
+            {
+                $placeholder = "placeholder='{$fieldValue}'";
+            }
+            elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
+            {
+                $placeholder = "placeholder='{$lang->search->queryTips}'";;
+            }
+
+            echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder data-max_drop_width='0'");
+        }
+        echo '</td>';
+
+        $fieldNO ++;
+        echo '</tr>';
+    }
+};
+?>
 <table class='table table-condensed table-form' id='<?php echo "{$module}-search";?>'>
   <tbody>
     <tr>
@@ -99,64 +164,8 @@ foreach($fieldParams as $fieldName => $param)
             <?php
             $formSessionName = $module . 'Form';
             $formSession     = $_SESSION[$formSessionName];
-
-            $fieldNO = 1;
-            for($i = 1; $i <= $groupItems; $i ++)
-            {
-                $spanClass = $i == 1 ? '' : 'hidden';
-                echo "<tr id='searchbox$fieldNO' class='$spanClass'>";
-
-                /* Get params of current field. */
-                $currentField = $formSession["field$fieldNO"];
-                if(!isset($fieldParams[$currentField]))
-                {
-                    $currentField = key($fields);
-                    $formSession["field$fieldNO"]    = $currentField;
-                    $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
-                    $formSession["value$fieldNO"]    =  '';
-                }
-
-                $param = $fieldParams[$currentField];
-
-                /* Print and or. */
-                echo "<td class='text-right w-80px'>";
-                if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-                if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
-                echo '</td>';
-
-                /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $fields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
-
-                /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
-
-                /* Print value. */
-                echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
-                if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
-                if($param['control'] == 'input')
-                {
-                    $fieldName  = $formSession["field$fieldNO"];
-                    $fieldValue = $formSession["value$fieldNO"];
-                    $extraClass = isset($param['class']) ? $param['class'] : '';
-
-                    $placeholder = '';
-                    if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
-                    {
-                        $placeholder = "placeholder='{$fieldValue}'";
-                    }
-                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
-                    {
-                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
-                    }
-
-                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
-                }
-                echo '</td>';
-
-                $fieldNO ++;
-                echo '</tr>';
-            }
+            $fieldNO         = 1;
+            $printGroup($formSession, $fieldNO, 'group1');
             ?>
           </tbody>
         </table>
@@ -165,68 +174,7 @@ foreach($fieldParams as $fieldName => $param)
       <td class='w-400px'>
         <table class='table table-form'>
           <tbody>
-            <?php
-            for($i = 1; $i <= $groupItems; $i ++)
-            {
-                $spanClass = $i == 1 ? '' : 'hidden';
-                echo "<tr id='searchbox$fieldNO' class='$spanClass'>";
-
-                /* Get params of current field. */
-                $currentField = $formSession["field$fieldNO"];
-                if(!isset($fieldParams[$currentField]))
-                {
-                    $currentField = key($fields);
-                    $formSession["field$fieldNO"]    = $currentField;
-                    $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
-                    $formSession["value$fieldNO"]    =  '';
-                }
-                $param = $fieldParams[$currentField];
-
-                /* Print and or. */
-                echo "<td class='text-right w-80px'>";
-                if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-                if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
-                echo '</td>';
-
-                /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $fields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
-
-                /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
-
-                /* Print value. */
-                echo "<td id='valueBox$fieldNO'>";
-                if(isset($config->moreLinks["field{$currentField}"]))
-                {
-                    $selected = $formSession["value$fieldNO"];
-                    if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                }
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' data-max_drop_width='0'");
-
-                if($param['control'] == 'input')
-                {
-                    $fieldName  = $formSession["field$fieldNO"];
-                    $fieldValue = $formSession["value$fieldNO"];
-                    $extraClass = isset($param['class']) ? $param['class'] : '';
-
-                    $placeholder = '';
-                    if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
-                    {
-                        $placeholder = "placeholder='{$fieldValue}'";
-                    }
-                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
-                    {
-                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
-                    }
-
-                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder data-max_drop_width='0'");
-                }
-                echo '</td>';
-
-                $fieldNO ++;
-                echo '</tr>';
-            }
-            ?>
+            <?php $printGroup($formSession, $fieldNO, 'group2');?>
           </tbody>
         </table>
       </td>
