@@ -585,15 +585,16 @@ class docZen extends doc
      * @param  int       $moduleID
      * @param  string    $docType    html|word|ppt|excel|attachment
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function assignVarsForUploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): void
+    protected function assignVarsForUploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): object
     {
         $doc = !empty($docID) ? $this->doc->getByID($docID) : null;
         if(empty($moduleID) && $doc) $moduleID = (int)$doc->module;
 
         $this->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
+        $lib            = $libID ? $this->doc->getLibByID($libID) : '';
         $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
         $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
@@ -605,6 +606,7 @@ class docZen extends doc
         $this->view->optionMenu = $chapterAndDocs;
         $this->view->docID      = $docID;
         $this->view->doc        = $doc;
+        return $this->view;
     }
 
     /**
