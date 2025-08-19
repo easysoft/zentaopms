@@ -1210,8 +1210,6 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
 
-        if($checkExists) return !empty($dataList);
-
         $objectIdList = array();
         foreach($dataList as $data) $objectIdList[$data->objectType][$data->objectID] = $data->objectID;
 
