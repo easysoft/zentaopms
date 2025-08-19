@@ -14,13 +14,13 @@ class cancelTaskTester extends tester
     public function cancel($id, $status)
     {
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
+        $form->dom->xpath['cancelBtn']  = "//a[@title='{$this->lang->task->cancel}']";
+        $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         if(in_array($status, array('done', 'cancel', 'closed')))
         {
             if(is_object($form->dom->cancelBtn)) return $this->false('错误的显示了取消按钮');
             return $this->success('没有显示取消按钮');
         }
-        $form->dom->xpath['cancelBtn']  = "//a[@title='{$this->lang->task->cancel}']";
-        $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         $form->dom->cancelBtn->click();
         $form->wait(1);
         $form->dom->submitBtn->click();
