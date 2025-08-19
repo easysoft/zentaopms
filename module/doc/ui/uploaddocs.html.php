@@ -14,7 +14,7 @@ jsVar('docID',   $docID);
 jsVar('libType', $objectType);
 formPanel
 (
-    set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadDoc),
+    set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadFile),
     set::submitBtnText($lang->doc->release),
     $objectType == 'project' ? formRow
     (
