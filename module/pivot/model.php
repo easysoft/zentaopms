@@ -586,7 +586,7 @@ class pivotModel extends model
 
             if(isset($taskGroups[$user][$project][$execution][$id]))
             {
-                $taskGroups[$user][$project][$execution][$id]->left += $task->left;
+                $taskGroups[$user][$project][$execution][$id]->left = round($taskGroups[$user][$project][$execution][$id]->left + $task->left, 2);
             }
             else
             {
@@ -678,7 +678,7 @@ class pivotModel extends model
                 {
                     if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
 
-                    $totalHours += $task->left;
+                    $totalHours = round($totalHours + $task->left, 2);
                 }
             }
         }
