@@ -857,12 +857,7 @@ class doc extends control
             $objectID = $this->doc->getObjectIDByLib($lib);
         }
 
-        $doc = !empty($docID) ? $this->doc->getByID($docID) : null;
-        if(empty($moduleID) && $doc) $moduleID = (int)$doc->module;
-
-        $this->docZen->assignVarsForUploadDocs($objectType, $objectID, $libID, $moduleID, $docType);
-        $this->view->docID = $docID;
-        $this->view->doc   = $doc;
+        $this->docZen->assignVarsForUploadDocs($docID, $objectType, $objectID, $libID, $moduleID, $docType);
         $this->display();
     }
 
