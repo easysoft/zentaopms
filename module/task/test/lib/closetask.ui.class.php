@@ -4,7 +4,7 @@ class closeTaskTester extends tester
 {
     /**
      * 关闭任务。
-     * Cancel task.
+     * Close task.
      *
      * @param  string $id
      * @param  string $status
