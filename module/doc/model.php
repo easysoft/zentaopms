@@ -1737,8 +1737,12 @@ class docModel extends model
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
             if($change['field'] == 'content') $onlyRawChanged = false;
         }
+
+        $docFiles = array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), explode(',', $deleteFiles));
+        if(empty($docFiles) && !empty($deleteFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
-        if($changed) $this->saveDocContent($docID, $doc, $version, array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), explode(',', $deleteFiles)));
+        if($changed) $this->saveDocContent($docID, $doc, $version, $docFiles);
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
