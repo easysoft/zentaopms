@@ -594,7 +594,6 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
-        if(!$this->post->projectIdList) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->projectList));
         $projectIdList = $this->post->projectIdList;
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
