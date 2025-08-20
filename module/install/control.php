@@ -388,6 +388,10 @@ class install extends control
 
             $this->install->enableCache();
 
+            /* 保存sn到数据库。*/
+            /* Save SN to database. */
+            $this->loadModel('setting')->setSN();
+
             return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
