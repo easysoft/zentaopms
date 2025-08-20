@@ -22,7 +22,7 @@ class restartTaskTester extends tester
         $form->dom->xpath['taskStatus']     = "//*[@title='{$this->lang->task->status}']/..//span";
         $form->dom->xpath['taskConsumed']   = "//*[@title='{$this->lang->task->consumed}']/../div[2]";
         $form->dom->xpath['taskLeft']       = "//*[@title='{$this->lang->task->left}']/../div[2]";
-        $form->dom->xpath['restartBtn']       = "//a[@title='{$this->lang->task->restart}']";
+        $form->dom->xpath['restartBtn']     = "//a[@title='{$this->lang->task->restart}']";
         $taskConsumed = $form->dom->taskConsumed->getText();
 
         /* 只有已暂停的任务才显示继续任务按钮 */
