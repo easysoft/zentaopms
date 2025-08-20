@@ -443,7 +443,7 @@ class programplanZen extends programplan
         {
             /* Build the search form. */
             $actionURL = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$type&orderBy=$orderBy&baselineID=$baselineID&browseType=bysearch&queryID=myQueryID");
-            $this->loadModel('execution')->buildTaskSearchForm($projectID, $productID, $executions, $queryID, $actionURL, 'programplanTask');
+            $this->loadModel('execution')->buildTaskSearchForm($projectID, $productID, [], $queryID, $actionURL, 'programplanTask');
         }
 
         $this->view->title       = $this->lang->programplan->browse;
