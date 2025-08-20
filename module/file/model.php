@@ -1028,7 +1028,7 @@ class fileModel extends model
 
         /* Append the extension name auto. */
         $extension = $fileType ? ('.' . $fileType) : '';
-        if($extension && strpos($fileName, $extension) === false) $fileName .= $extension;
+        if($extension && strpos(strtolower($fileName), $extension) === false) $fileName .= $extension;
 
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
