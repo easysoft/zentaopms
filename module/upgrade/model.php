@@ -11496,18 +11496,7 @@ class upgradeModel extends model
      */
     public function createOtherActivity(int $workflowGroupID): int
     {
-        /* 创建其他过程分类。 */
-        $module = new stdclass();
-        $module->root    = $workflowGroupID;
-        $module->name    = $this->lang->upgrade->projectManage;
-        $module->parent  = '0';
-        $module->grade   = '1';
-        $module->type    = 'process';
-        $module->deleted = '0';
-        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-
-        $moduleID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($workflowGroupID)->andWhere('type')->eq('process')->andWhere('extra')->eq('project')->fetch('id');
 
         $process = new stdclass();
         $process->workflowGroup = $workflowGroupID;

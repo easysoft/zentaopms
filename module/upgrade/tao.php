@@ -960,7 +960,7 @@ class upgradeTao extends upgradeModel
         foreach($classifyList as $key => $value)
         {
             $order    = isset($orderList[$key]) ? $orderList[$key] : $customOrder;
-            $moduleID = $this->createProcessModule($groupID, $value, $order);
+            $moduleID = $this->createProcessModule($groupID, $key, $value, $order);
             $classifyModule[$key] = $moduleID;
             if(!isset($orderList[$key])) $customOrder += 10;
         }
@@ -972,12 +972,13 @@ class upgradeTao extends upgradeModel
      * 创建过程模块。
      * Create process module.
      *
-     * @param int    $groupID 流程ID
-     * @param string $name    模块名称
-     * @param int   $order    排序
+     * @param  int    $groupID 流程ID
+     * @param  string $key     模块标识
+     * @param  string $name    模块名称
+     * @param  int    $order   排序
      * @return int
      */
-    protected function createProcessModule(int $groupID, string $name, int $order)
+    protected function createProcessModule(int $groupID, string $key, string $name, int $order)
     {
         $module = new stdclass();
         $module->root   = $groupID;
@@ -986,6 +987,7 @@ class upgradeTao extends upgradeModel
         $module->grade  = '1';
         $module->order  = $order;
         $module->type   = 'process';
+        $module->extra  = $key;
 
         $this->dao->insert(TABLE_MODULE)->data($module)->exec();
         $moduleID = $this->dao->lastInsertID();
