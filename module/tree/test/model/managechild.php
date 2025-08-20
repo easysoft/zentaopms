@@ -7,11 +7,18 @@ title=测试 treeModel->manageChild();
 timeout=0
 cid=1
 
-- 测试管理module 1821 的子模块 @,修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2
-
-- 测试管理module 2621 的子模块 @,新建产品子模块3,新建产品子模块4
-
-- 测试管理module 1981 的子模块 @,修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6
+- 查看结果数量 @4
+- 查看结果数量 @2
+- 查看结果数量 @4
+- 查看结果
+ - 第0条的id属性 @6
+ - 第0条的name属性 @修改名称的产品子模块1
+- 查看结果
+ - 第0条的id属性 @33
+ - 第0条的name属性 @新建产品子模块3
+- 查看结果
+ - 第0条的id属性 @9
+ - 第0条的name属性 @修改名称的产品子模块81
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -40,6 +47,14 @@ $tree3    = array('maxOrder' => 20, 'parentModuleID' => $parentModuleID[2], 'mod
 
 $tree = new treeTest();
 
-r($tree->manageChildTest($root[0], 'story', $tree1)) && p() && e(',修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2');   // 测试管理module 1821 的子模块
-r($tree->manageChildTest($root[0], 'story', $tree2)) && p() && e(',新建产品子模块3,新建产品子模块4');                                     // 测试管理module 2621 的子模块
-r($tree->manageChildTest($root[0], 'bug',  $tree3)) && p() && e(',修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6'); // 测试管理module 1981 的子模块
+$result1 = $tree->manageChildTest($root[0], 'story', $tree1);
+$result2 = $tree->manageChildTest($root[0], 'story', $tree2);
+$result3 = $tree->manageChildTest($root[0], 'bug',  $tree3);
+
+r(count($result1)) && p() && e(4); // 查看结果数量
+r(count($result2)) && p() && e(2); // 查看结果数量
+r(count($result3)) && p() && e(4); // 查看结果数量
+
+r($result1) && p('0:id,name') && e('6,修改名称的产品子模块1'); // 查看结果
+r($result2) && p('0:id,name') && e('33,新建产品子模块3'); // 查看结果
+r($result3) && p('0:id,name') && e('9,修改名称的产品子模块81'); // 查看结果

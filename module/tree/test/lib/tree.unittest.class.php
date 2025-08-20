@@ -643,9 +643,7 @@ class treeTest
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_MODULE)->where('parent')->eq($param['parentModuleID'])->andWhere('deleted')->eq(0)->fetchAll();
 
-        $names = '';
-        foreach($objects as $object) $names .= ',' . $object->name;
-        return $names;
+        return $objects;
     }
 
     /**
