@@ -1719,7 +1719,7 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
-        $deletedFiles = !empty($doc->deleteFiles) ? explode(',', $doc->deleteFiles) : '';
+        $deletedFiles = !empty($doc->deleteFiles) ? explode(',', $doc->deleteFiles) : array();
         unset($doc->deleteFiles);
 
         $oldDoc           = $this->getByID($docID);
