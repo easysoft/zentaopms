@@ -4,10 +4,14 @@
 /**
 
 title=测试 userModel->unbind();
+timeout=0
 cid=0
 
 - 获取user7对应的然之用户，重置为空 @success
 - 获取不存在的用户的对应的然之用户，返回空 @success
+- 获取admin对应的然之用户，重置为空 @success
+- 获取user1对应的然之用户，重置为空 @success
+- 获取user2对应的然之用户，重置为空 @success
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,5 +33,8 @@ $user = new userTest();
 $userLocked   = $user->unbindTest('user7');
 $notExistUser = $user->unbindTest('test999');
 
-r($userLocked)   && p('') && e('success'); //获取user7对应的然之用户，重置为空
-r($notExistUser) && p('') && e('success');    //获取不存在的用户的对应的然之用户，返回空
+r($userLocked)                && p('') && e('success'); //获取user7对应的然之用户，重置为空
+r($notExistUser)              && p('') && e('success'); //获取不存在的用户的对应的然之用户，返回空
+r($user->unbindTest('admin')) && p('') && e('success'); //获取admin对应的然之用户，重置为空
+r($user->unbindTest('user1')) && p('') && e('success'); //获取user1对应的然之用户，重置为空
+r($user->unbindTest('user2')) && p('') && e('success'); //获取user2对应的然之用户，重置为空

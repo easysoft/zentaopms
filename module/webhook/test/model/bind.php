@@ -4,13 +4,21 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
 su('admin');
 
+zendata('webhook')->gen(0);
+
 /**
 
 title=测试 webhookModel->bind();
 timeout=0
 cid=1
 
-- 查看是否绑定成功 @1
+- 查看绑定后的webhook信息
+ - 属性id @1
+ - 属性type @feishuuser
+ - 属性name @测试绑定的webhook
+ - 属性products @93
+ - 属性executions @690
+ - 属性desc @测试描述
 
 */
 
@@ -53,6 +61,9 @@ $bind['userid']['user12']            = '';
 $bind['userid']['user13']            = '';
 $bind['userid']['user14']            = '';
 
-$result1 = $webhook->bindTest($post, $bind);
+$webhook->bindTest($post, $bind);
 
-r($result1) && p() && e('1'); // 查看是否绑定成功
+global $tester;
+$result1 = $tester->loadModel('webhook')->getByID(1);
+
+r($result1) && p('id,type,name,products,executions,desc') && e('1,feishuuser,测试绑定的webhook,93,690,测试描述'); // 查看绑定后的webhook信息

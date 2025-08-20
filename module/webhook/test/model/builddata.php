@@ -14,6 +14,7 @@ timeout=0
 cid=1
 
 - 正常传入的情况 @12
+- 不传objectType第markdown条的title属性 @admin创建了发布
 - 不传objectType @0
 - 不传actionType @0
 - 不传actionID @0
@@ -45,6 +46,9 @@ $result3 = $webhook->buildDataTest($objectType[0], $objectID[0], $actionType[1],
 $result4 = $webhook->buildDataTest($objectType[0], $objectID[0], $actionType[0], $actionID[1]);
 
 r(strpos($result1, 'markdown')) && p() && e('12'); //正常传入的情况
-r($result2)                     && p() && e('0');  //不传objectType
-r($result3)                     && p() && e('0');  //不传actionType
-r($result4)                     && p() && e('0');  //不传actionID
+
+$result1 = json_decode($result1, true);
+r($result1) && p('markdown:title') && e('admin创建了发布'); //不传objectType
+r($result2) && p()                 && e('0');  //不传objectType
+r($result3) && p()                 && e('0');  //不传actionType
+r($result4) && p()                 && e('0');  //不传actionID

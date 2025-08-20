@@ -4,11 +4,13 @@
 /**
 
 title=测试 userModel->isLogon();
+timeout=0
 cid=0
 
 - session 中用户为 admin 时获取用户的登录状态。 @1
 - session 中用户为 user1 时获取用户的登录状态。 @1
 - session 中用户为 guest 时获取用户的登录状态。 @0
+- session 中用户为 test999 时获取用户的登录状态。 @0
 - session 中用户为空时获取用户的登录状态。 @0
 
 */
@@ -27,6 +29,9 @@ r($userTest->isLogonTest()) && p() && e(1); // session 中用户为 user1 时获
 
 $_SESSION['user'] = (object)array('account' => 'guest');
 r($userTest->isLogonTest()) && p() && e(0); // session 中用户为 guest 时获取用户的登录状态。
+
+$_SESSION['user'] = $userTest->getbyIdTest('test999');
+r($userTest->isLogonTest()) && p() && e(0); // session 中用户为 test999 时获取用户的登录状态。
 
 $_SESSION['user'] = false;
 r($userTest->isLogonTest()) && p() && e(0); // session 中用户为空时获取用户的登录状态。
