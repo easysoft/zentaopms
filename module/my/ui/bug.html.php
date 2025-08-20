@@ -71,12 +71,13 @@ $config->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(i
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
+$pinyinItems     = common::convert2Pinyin($memberPairs);
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
     if(!$key) continue;
     $key = base64_encode((string)$key); // 编码用户名中的特殊字符
-    $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
+    $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
 $footToolbar = $canBatchAction ? array('items' => array
