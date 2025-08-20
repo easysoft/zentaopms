@@ -324,14 +324,14 @@ class settingModel extends model
      */
     public function setSN()
     {
-        $sn = $_COOKIE['sn'];
+        $sn = $this->cookie->sn;
         if(!isset($this->config->installed) || !$this->config->installed)
         {
             if(!$sn) $sn = '';
             if($this->snNeededUpdate($sn))
             {
                 $sn = $this->computeSN();
-                setCookie('sn', $sn);
+                helper::setcookie('sn', $sn, 0);
             }
         }
         else
@@ -347,7 +347,7 @@ class settingModel extends model
             $this->setItem('system.common.global.sn', $sn);
             if(!isset($this->config->global)) $this->config->global = new stdclass();
             $this->config->global->sn = $sn;
-            setCookie('sn', $sn);
+            helper::setcookie('sn', $sn, 0);
         }
         return $sn;
     }

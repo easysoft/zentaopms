@@ -357,10 +357,17 @@ class miscModel extends model
      */
     public function sendInstallEvent($data)
     {
+        if(!$data->location || !$data->fingerprint) return false;
         $apiRoot = $this->config->misc->zentaonet;
         $apiURL  = $apiRoot . "/zentaoevent-install.json";
-        $sn      = $this->loadModel('setting')->setSN();
-
+        if(empty($this->config->global->sn))
+        {
+            $sn = $this->loadModel('setting')->setSN();
+        }
+        else
+        {
+            $sn = $this->config->global->sn;
+        }
         $httpData['sn']          = $sn;
         $httpData['location']    = $data->location;
         $httpData['fingerprint'] = $data->fingerprint;
