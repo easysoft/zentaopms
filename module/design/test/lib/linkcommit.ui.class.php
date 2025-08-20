@@ -23,7 +23,9 @@ class linkCommitTester extends tester
         $form->wait(1);
         $form->dom->selectAllBtn->click();
         $form->dom->saveBtn->click();
+        $form->wait(3);
         $form->dom->viewCommitBtn->click();
+        $form->wait(3);
         $string    = $form->dom->commitNum->getText();
         $commitNum = preg_replace('/\D/', '', $string); //从字符串中提取数字部分
         if($commitNum == $expectNum) return $this->success('关联提交成功');
