@@ -677,8 +677,8 @@ class docZen extends doc
             if(!empty($deletedFiles)) $deletedFiles = $this->dao->select('id,title')->from(TABLE_FILE)->where('id')->in($deletedFiles)->fetchPairs();
 
             $fileAction = '';
-            if(!empty($files))        $fileAction .= $this->lang->addFiles . join(',', $files) . "\n";
-            if(!empty($deletedFiles)) $fileAction .= $this->lang->delFiles . join(',', $deletedFiles) . "\n";
+            if(!empty($files))        $fileAction .= $this->lang->addFiles . implode(',', $files) . "\n";
+            if(!empty($deletedFiles)) $fileAction .= $this->lang->delFiles . implode(',', $deletedFiles) . "\n";
             if(!empty($changes))
             {
                 $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
