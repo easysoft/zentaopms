@@ -953,15 +953,16 @@ class upgradeTao extends upgradeModel
         $classifyList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('process')->andWhere('section')->eq($classifyKey)->fetchPairs();
         if(empty($classifyList)) $classifyList = $this->lang->process->classifyList;
 
-        $classifyList = array_reverse($classifyList); // 升级后倒序排列。
+        $orderList = array('project' => 10, 'engineering' => 20, 'support' => 30);
 
         $classifyModule = array();
-        $order = 10;
+        $customOrder    = 40;
         foreach($classifyList as $key => $value)
         {
+            $order    = isset($orderList[$key]) ? $orderList[$key] : $customOrder;
             $moduleID = $this->createProcessModule($groupID, $value, $order);
             $classifyModule[$key] = $moduleID;
-            $order += 10;
+            if(!isset($orderList[$key])) $customOrder += 10;
         }
 
         return $classifyModule;
