@@ -123,6 +123,7 @@ $lang->saveSuccess     = 'Gespeichert';
 $lang->importSuccess   = 'Gespeichert';
 $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
+$lang->delFiles        = 'Deleted Files ';
 $lang->deleteSuccess   = 'Gelöscht';
 $lang->deleted         = 'Gelöscht';
 $lang->files           = 'Datei ';

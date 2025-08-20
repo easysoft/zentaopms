@@ -123,6 +123,7 @@ $lang->saveSuccess     = '保存成功';
 $lang->importSuccess   = '导入成功';
 $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
+$lang->delFiles        = '删除了附件 ';
 $lang->deleteSuccess   = '删除成功';
 $lang->deleted         = '已删除';
 $lang->files           = '附件 ';

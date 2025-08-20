@@ -1719,7 +1719,7 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
-        $deleteFiles = !empty($doc->deleteFiles) ? $doc->deleteFiles : '';
+        $deletedFiles = !empty($doc->deleteFiles) ? explode(',', $doc->deleteFiles) : '';
         unset($doc->deleteFiles);
 
         $oldDoc           = $this->getByID($docID);
@@ -1729,7 +1729,7 @@ class docModel extends model
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
         $version          = $isDraft ? 0 : ($oldDoc->version + 1);
-        $changed          = $deleteFiles || $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
+        $changed          = $deletedFiles || $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
@@ -1738,10 +1738,11 @@ class docModel extends model
             if($change['field'] == 'content') $onlyRawChanged = false;
         }
 
-        $docFiles = array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), explode(',', $deleteFiles));
-        if(empty($docFiles) && !empty($deleteFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        $docFiles = array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), $deletedFiles);
+        if(empty($docFiles) && !empty($deletedFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
+        if(!empty($deletedFiles) || !empty($files)) $changes[] = array('field' => 'files', 'old' => implode(',', array_keys($oldDoc->files)), 'new' => implode(',', $docFiles));
         if($changed) $this->saveDocContent($docID, $doc, $version, $docFiles);
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
@@ -1790,7 +1791,7 @@ class docModel extends model
             $objectType = !empty($doc->templateType) ? 'doctemplate' : 'doc';
             $this->loadModel('action')->create($objectType, $docID, 'convertToNewDoc');
         }
-        return array('changes' => $changes, 'files' => array_keys($files));
+        return array('changes' => $changes, 'files' => $files, 'deletedFiles' => $deletedFiles);
     }
 
     /**

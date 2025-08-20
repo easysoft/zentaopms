@@ -659,12 +659,13 @@ class docZen extends doc
      * @param  object    $doc
      * @param  array     $changes
      * @param  array     $files
+     * @param  array     $deletedFiles
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array()): array
+    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array(), array $deletedFiles = array()): array
     {
-        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        if($this->post->comment != '' || !empty($changes) || !empty($files) || !empty($deletedFiles))
         {
             $action = 'Commented';
             if(!empty($changes))
@@ -673,9 +674,11 @@ class docZen extends doc
                 if($doc->status == 'draft' && $newType == 'normal')              $action = 'releasedDoc';
                 if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
+            if(!empty($deletedFiles)) $deletedFiles = $this->dao->select('id,title')->from(TABLE_FILE)->where('id')->in($deletedFiles)->fetchPairs();
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+            if(!empty($files))        $fileAction .= $this->lang->addFiles . join(',', $files) . "\n";
+            if(!empty($deletedFiles)) $fileAction .= $this->lang->delFiles . join(',', $deletedFiles) . "\n";
             if(!empty($changes))
             {
                 $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
