@@ -600,6 +600,7 @@ class project extends control
         /* Get program list. */
         $programs           = $this->loadModel('program')->getParentPairs('', '');
         $unauthorizedIDList = array();
+        $appendPMUsers      = array();
         foreach($projects as $project)
         {
             if(!isset($programs[$project->parent]) and !in_array($project->parent, $unauthorizedIDList)) $unauthorizedIDList[] = $project->parent;
