@@ -42,7 +42,7 @@ $result4 = $webhook->getBindAccountTest(1, 'webhook', 10);
 $result5 = $webhook->getBindAccountTest(1, 'gitea', 3);
 
 r($result1) && p() && e('user3'); //按条件查出openID=1的关联用户
-r($result2) && p() && e('0');     //按条件查出openID=空时，关联的用户
+r($result2) && p() && e('0'); //按条件查出openID=空时，关联的用户
 r($result3) && p() && e('user10'); //按条件查出openID=8的关联用户
 r($result4) && p() && e('user12'); //按条件查出openID=10的关联用户
 r($result5) && p() && e('user5'); //按条件查出openID=3的关联用户
