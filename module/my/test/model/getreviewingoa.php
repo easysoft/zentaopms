@@ -4,13 +4,9 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zenData('user')->gen('2');
-
-su('admin');
-
 /**
 
-title=测试 myModel->getReviewingOAs();
+title=测试 myModel->getReviewingOA();
 timeout=0
 cid=1
 
@@ -18,12 +14,17 @@ cid=1
 - 测试获取排序 id_desc 的审批是否存在。 @empty
 - 测试获取排序 id_asc 的审批id。 @empty
 - 测试获取排序 id_asc 的审批是否存在。 @empty
-- 测试不传入排序 @empty
+- 测试不传入排序 @~~
 
 */
 
-$my = new myTest();
+zenData('user')->gen('2');
+su('admin');
 
+global $config;
+$config->edition = 'ipd';
+
+$my = new myTest();
 $orderBy    = array('id_desc', 'id_asc');
 $checkExist = array(false, true);
 
@@ -31,4 +32,4 @@ r($my->getReviewingOATest($orderBy[0], $checkExist[0])) && p() && e('empty'); //
 r($my->getReviewingOATest($orderBy[0], $checkExist[1])) && p() && e('empty'); // 测试获取排序 id_desc 的审批是否存在。
 r($my->getReviewingOATest($orderBy[1], $checkExist[0])) && p() && e('empty'); // 测试获取排序 id_asc 的审批id。
 r($my->getReviewingOATest($orderBy[1], $checkExist[1])) && p() && e('empty'); // 测试获取排序 id_asc 的审批是否存在。
-r($my->getReviewingOATest('', false)) && p() && e('empty'); // 测试不传入排序
+r($my->getReviewingOATest('', false)) && p() && e('~~'); // 测试不传入排序
