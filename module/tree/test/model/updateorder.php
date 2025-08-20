@@ -15,6 +15,8 @@ cid=1
 
 - 测试更新task不同分支模块顺序 @,1,31,11
 
+- 测试更新模块顺序 @,13,14,15
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
