@@ -238,7 +238,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-task div[data-row="1"] a.dtable-assign-btn',
+    'target' => '#tasks div[data-row="1"] a.dtable-assign-btn',
     'page'   => 'execution-task',
     'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step6->name,
@@ -261,7 +261,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-task div[data-row="1"] a.task-start-btn',
+    'target' => '#tasks div[data-row="1"] a.task-start-btn',
     'page'   => 'execution-task',
     'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step9->name,
@@ -284,7 +284,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-task div[data-row="1"] a.task-record-btn',
+    'target' => '#tasks div[data-row="1"] a.task-record-btn',
     'page'   => 'execution-task',
     'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step12->name,
@@ -307,7 +307,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-task div[data-row="1"] a.task-finish-btn',
+    'target' => '#tasks div[data-row="1"] a.task-finish-btn',
     'page'   => 'execution-task',
     'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step15->name,
