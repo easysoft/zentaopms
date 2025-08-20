@@ -1894,7 +1894,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `objectType` char(20) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
   `title` text NULL,
-  `content` text NULL,
+  `content` longtext NULL,
   `addedDate` datetime NULL,
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`),
