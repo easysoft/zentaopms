@@ -76,6 +76,18 @@ class designModel extends model
             }
 
             $designID = $this->dao->lastInsertID();
+            if($this->config->edition != 'open' && !empty($design->story))
+            {
+                $relation = new stdClass();
+                $relation->AID      = $design->story;
+                $relation->AType    = $stories[$design->story]->type;
+                $relation->relation = 'generated';
+                $relation->BID      = $designID;
+                $relation->BType    = 'design';
+                $relation->product  = 0;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+
             $this->action->create('design', $designID, 'created');
         }
 

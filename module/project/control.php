@@ -594,12 +594,20 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
+        if(!$this->post->projectIdList)
+        {
+            /* Use a fallback link to locate in case session has no related data. */
+            $locateLink = !empty($this->session->projectList) ? $this->session->projectList : $this->createLink('project', 'browse');
+            return $this->locate($locateLink);
+        }
+
         $projectIdList = $this->post->projectIdList;
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         /* Get program list. */
         $programs           = $this->loadModel('program')->getParentPairs('', '');
         $unauthorizedIDList = array();
+        $appendPMUsers      = array();
         foreach($projects as $project)
         {
             if(!isset($programs[$project->parent]) and !in_array($project->parent, $unauthorizedIDList)) $unauthorizedIDList[] = $project->parent;
