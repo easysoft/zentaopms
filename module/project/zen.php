@@ -1669,7 +1669,7 @@ class projectZen extends project
             $project->parent   = $project->parentName;
             $project->end      = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $project->invested = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
-            $project->progress = floor((float)$project->progress);
+            $project->progress = floor((float)$project->progress) . '%';
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
