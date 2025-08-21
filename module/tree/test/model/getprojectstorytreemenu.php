@@ -9,6 +9,8 @@ cid=1
 
 - 测试获取项目1的Story模块 @7|2
 - 测试获取项目2的Story模块 @7|2|12
+- 测试获取项目3的Story模块 @2|12
+- 测试获取项目4的Story模块 @7|2
 - 测试不存在项目的Story模块 @0
 
 */
@@ -38,4 +40,6 @@ $tree = new treeTest();
 
 r($tree->getProjectStoryTreeMenuTest(1))  && p() && e('7|2');    // 测试获取项目1的Story模块
 r($tree->getProjectStoryTreeMenuTest(2))  && p() && e('7|2|12'); // 测试获取项目2的Story模块
-r($tree->getProjectStoryTreeMenuTest(30)) && p() && e('0');      // 测试不存在项目的Story模块
+r($tree->getProjectStoryTreeMenuTest(3))  && p() && e('2|12'); // 测试获取项目3的Story模块
+r($tree->getProjectStoryTreeMenuTest(4))  && p() && e('7|2'); // 测试获取项目4的Story模块
+r($tree->getProjectStoryTreeMenuTest(30)) && p() && e('0'); // 测试不存在项目的Story模块
