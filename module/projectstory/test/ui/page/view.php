@@ -17,6 +17,8 @@ class viewPage extends page
             'confirmBtn'       => '//button[@z-key="confirm"]',
             'submitReviewBtn'  => '//*[@id="zin_story_submitreview_1_form"]/div[2]/div/button',
             'assignBtn'        => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[4]',
+            'assignSpan'       => '//input[@name="assignedTo"]/../span',
+            'assignToAdmin'    => '//li[@z-key="admin"]',
             'assignSubmitBtn'  => '//*[@id="zin_story_assignto_1_form"]/div[3]/div/button',
             'storyStatus'      => '//*[@id="zin_projectstory_view_tabPane"]/div/div[2]/div[2]/span',
             'targetLife'       => '//*[@id="mainContent"]/div/div[2]/div[2]/div[1]/div[1]/ul/li[2]',
