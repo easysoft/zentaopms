@@ -8,7 +8,7 @@ class closeTaskTester extends tester
      *
      * @param  string $id
      * @param  string $status
-     * @accuss public
+     * @access public
      * @return object
      */
     public function close($id, $status)
