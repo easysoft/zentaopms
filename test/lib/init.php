@@ -48,16 +48,12 @@ if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true')
  */
 function ensureObject($data)
 {
-    if (is_object($data)) {
-        return $data;
-    }
+    if(is_object($data)) return $data;
 
-    if (is_string($data)) {
+    if(is_string($data))
+    {
         $decoded = json_decode($data);
-
-        if (json_last_error() === JSON_ERROR_NONE) {
-            return $decoded;
-        }
+        if(json_last_error() === JSON_ERROR_NONE) return $decoded;
     }
 
     return $data;
