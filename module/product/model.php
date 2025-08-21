@@ -1779,7 +1779,7 @@ class productModel extends model
         if(empty($productIdList)) return array();
 
         /* Get storie list by product ID list. */
-        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList);
+        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList, 'story', false);
 
         /* Get case count of each story. */
         $storyIdList      = array();
