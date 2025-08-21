@@ -1,6 +1,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
-class batchEditProjectTester extends tester
+class batchEditProjectLiteTester extends tester
 {
     /**
      * 批量编辑项目时检查页面输入。
@@ -12,9 +12,13 @@ class batchEditProjectTester extends tester
      */
     public function checkInput($project = array())
     {
+        $form = $this->loadPage('project', 'browse');
+        $this->switchVision('lite');
         $form = $this->initForm('project', 'browse', array(), 'appIframe-project');
         $form->dom->selectAllBtn->click();
         $form->dom->batchEditBtn->click();
+
+        $form       = $this->loadPage('project', 'batchEdit');
         $firstID    = $form->dom->id_static_0->getText(); //获取第一行的ID
         $firstBegin = "begin[{$firstID}]";
         $firstEnd   = "end[{$firstID}]";
@@ -41,7 +45,7 @@ class batchEditProjectTester extends tester
     {
         /* 检查批量编辑页面提示信息 */
         $batchEditPage = $this->loadPage('project', 'batchEdit');
-        $existName     = '敏捷项目2';
+        $existName     = '运营项目2';
         if($this->response('method') != 'view')
         {
             $firstNameTipDom  = "name[{$firstID}]Tip"; //第一行的名称提示信息

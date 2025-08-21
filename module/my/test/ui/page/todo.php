@@ -22,7 +22,16 @@ class todoPage extends page
             'fstTitle'        => '//*[@id="name_0"]',
             'secTitle'        => '//*[@id="name_1"]',
             'trdTitle'        => '//*[@id="name_2"]',
-            'saveBtn'         => '//*[@id="batchCreateTodoForm"]/div[2]/form/div[2]/button[1]'
+            'saveBtn'         => '//*[@id="batchCreateTodoForm"]/div[2]/form/div[2]/button[1]',
+            /* 待办列表 */
+            'assignBtn'       => '//*[@id="table-my-todo"]/div[2]/div[3]/div/div/div/nav/a[2]/i',
+            'date'            => '//*[@id="table-my-todo"]/div[2]/div[2]/div/div[2]/div',
+            'more'            => '//*[@id="featureBar"]/menu/li[7]/a/span[1]',
+            'assignedToOther' => '//*[@id="more"]/menu/menu/li[2]/a/div/div',
+            'assignedTo'      => '//*[@id="table-my-todo"]/div[2]/div[2]/div/div[7]/div',
+            /* 指派给页面 */
+            'assignDate' => "//*[@name='date']",
+            'submitBtn'  => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[4]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
