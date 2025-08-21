@@ -48,3 +48,14 @@ class createSceneTester extends tester
         {
             $browsePage = $this->loadPage('testcase', 'browse');
             $form->wait(2);
+            $browsePage->dom->onlyScene->click();
+
+            $browseScenePage = $this->loadPage('testcase', 'browseScene');
+            $browseScenePage->wait(1);
+            $sceneName = $browseScenePage->dom->getElement("//*[@id='scenes']/div[2]/div[1]/div/div[last()]/div")->element->getText();
+
+            if($sceneName != $scene['scene']) return $this->failed('场景名称错误');
+            return $this->success('场景创建成功');
+        }
+    }
+}
