@@ -2156,15 +2156,14 @@ class taskZen extends task
             return sprintf($this->lang->task->report->tpl->feature, $productName);
         }
 
-        $fieldParams  = array();
-        $searchConfig = $this->session->tasksearchParams;
-        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        $searchConfig = $this->loadModel('search')->processSearchParams('task');
+        $fieldParams  = $searchConfig['params'];
         if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
 
         $leftConditions  = array();
         $rightConditions = array();
         $searchFields    = $this->session->taskForm;
-        $fieldNames      = json_decode($searchConfig['searchFields']);
+        $fieldNames      = $searchConfig['fields'];
         if(!$searchFields) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
 
         $this->app->loadLang('search');
