@@ -509,7 +509,7 @@ function initPageEntity(object $object): array
  * @access public
  * @return array
  */
-function initTableData(array $items, array &$fieldList, ?object $model = null, string $moduleName = ''): array
+function initTableData(array $items, array &$fieldList, ?object $model = null): array
 {
     if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
     if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))
@@ -812,11 +812,19 @@ function getVisions(): array
 /**
  * Save debug log to the php log file which prefix with 'debug.<today>'.
  *
- * @param  mixed $message
+ * @param  mixed ...$messages
  * @return void
  */
-function debug($message = ''): void
+function debug(mixed ...$messages): void
 {
+    if(count($messages) > 1)
+    {
+        foreach($messages as $message) debug($message);
+        return;
+    }
+
+    $message = current($messages);
+
     static $times = [];
     $time     = microtime(true);
     $duration = $times ? $time - end($times) : 0;

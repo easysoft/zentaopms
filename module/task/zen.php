@@ -1317,6 +1317,9 @@ class taskZen extends task
         $task->canceledDate   = helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate,   0, 10);
         $task->closedDate     = helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate,     0, 10);
         $task->lastEditedDate = helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 0, 10);
+        $task->rawEstimate    = $task->estimate;
+        $task->rawConsumed    = $task->consumed;
+        $task->rawLeft        = $task->left;
         $task->estimate       = $task->estimate . $this->lang->execution->workHourUnit;
         $task->consumed       = $task->consumed . $this->lang->execution->workHourUnit;
         $task->left           = $task->left     . $this->lang->execution->workHourUnit;
@@ -2017,7 +2020,7 @@ class taskZen extends task
         if(!$execution || (!empty($execution) && $execution->multiple))
         {
             /* If the admin denied modification of closed executions, only query not closed executions. */
-            $queryMode = $execution && common::canModify('execution', $execution) ? '' : 'noclosed';
+            $queryMode = ($this->app->methodName == 'view' || ($execution && common::canModify('execution', $execution))) ? '' : 'noclosed';
 
             /* Get executions the current user can access. */
             $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);

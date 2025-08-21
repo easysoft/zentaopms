@@ -38,13 +38,14 @@ class Project
     }
 
     /**
-     * Test getByID function.
+     * 根据ID获取项目数据。
+     * Get project by ID.
      *
      * @param  int    $projectID
      * @access public
      * @return string|bool|object
      */
-    public function testGetByID($projectID)
+    public function getByIDTest($projectID)
     {
         return $this->triggerMethod('getByID', array('projectID' => $projectID));
     }
@@ -62,13 +63,14 @@ class Project
     }
 
     /**
-     * Test getByShadowProduct function.
+     * 通过影子产品ID获取一条项目记录。
+     * Get a project by its shadow product.
      *
-     * @param  int    $productID
+     * @param  int|string $productID
      * @access public
      * @return string|bool|object
      */
-    public function testGetByShadowProduct($productID)
+    public function getByShadowProductTest(int|string $productID): string|bool|object
     {
         return $this->triggerMethod('getByShadowProduct', array('productID' => $productID));
     }
@@ -281,7 +283,8 @@ class Project
     {
         $this->project->addProjectAdmin($projectID);
 
-        return $this->project->dao->select('*')->from(TABLE_PROJECTADMIN)->fetch();
+        global $app;
+        return $this->project->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($app->user->account)->fetch();
     }
 
     /**

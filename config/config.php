@@ -176,6 +176,9 @@ $config->timeout       = 30000;
 $config->maxCount      = 500;
 $config->moreLinks     = array();
 
+/* Docker Compose设置。 */
+$config->inCompose = strtolower((string)getenv('PROVIDER')) == 'docker';
+
 /* 渠成平台设置。CNE Api settings. */
 $config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
 $config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';

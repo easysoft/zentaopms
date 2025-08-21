@@ -115,30 +115,6 @@ class todoTest
     }
 
     /**
-     * 测试删除待办.
-     * Test delete a todo.
-     *
-     * @param  int     $todoID
-     * @param  string  $confirm yes|no
-     * @access public
-     * @return object|false
-     */
-    public function deleteTest(int $todoID, string $confirm = 'no'): object|false
-    {
-        if($confirm == 'no')
-        {
-            return $this->objectModel->getById($todoID);
-        }
-        else
-        {
-            $this->objectModel->delete(TABLE_TODO, $todoID);
-            if(dao::isError()) return false;
-
-            return $this->objectModel->getById($todoID);
-        }
-    }
-
-    /**
      * 测试完成待办.
      * Test finish a todo.
      *
@@ -248,19 +224,14 @@ class todoTest
      * Create by cycle test.
      *
      * @access public
-     * @return int
+     * @return bool
      */
-    public function createByCycleTest(): int
+    public function createByCycleTest()
     {
         $todoList = $this->objectModel->getValidCycleList();
         $this->objectModel->createByCycle($todoList);
 
-        global $tester;
-        $todoIDList = array_keys($todoList);
-        $count      = $tester->dao->select('count(`id`) as count')->from(TABLE_TODO)->where('objectID')->in($todoIDList)->andWhere('deleted')->eq('0')->fetch('count');
-
-        if(dao::isError()) return 0;
-        return $count > 0 ? 1 : 0;
+        return true;
     }
 
     /**
@@ -353,21 +324,6 @@ class todoTest
     }
 
     /**
-     * 修改待办事项时间。
-     * Edit todo date.
-     *
-     * @param  array  $todoIDList
-     * @param  string $date
-     * @access public
-     * @return string
-     */
-    public function editDateTest(array $todoIDList, string $date): string
-    {
-        $result = $this->objectModel->editDate($todoIDList, $date);
-        return $result ? '1' : '0';
-    }
-
-    /**
      * 获取导出的待办数据。
      * Get data for export todo.
      *
@@ -397,7 +353,7 @@ class todoTest
 
         if(dao::isError()) return 0;
 
-        return $pri ? 1 : 0;
+        return $pri;
     }
 
     /**

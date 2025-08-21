@@ -21,37 +21,23 @@ class search extends control
      * Build search form.
      *
      * @param  string $module
-     * @param  string $fields
-     * @param  array  $params
-     * @param  string $actionURL
-     * @param  int    $queryID
-     * @param  string $formName
+     * @param  string $mode   new 20版本后的新页面 | old 20版本前的旧页面
      * @access public
      * @return void
      */
-    public function buildForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
+    public function buildForm(string $module, string $mode = 'new')
     {
-        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
-        $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
+        $searchParams = $module . 'searchParams';
+        $searchConfig = $this->search->processSearchParams($module);
+        $fields       = $searchConfig['fields'];
+        $params       = $searchConfig['params'];
 
-        if($funcName)
+        if(!$this->session->$searchForm)
         {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $fields = empty($fields) ? $this->config->$module->search['fields'] : $fields;
-            $params = empty($params) ? $this->config->$module->search['params'] : $params;
+            $initFunc = $mode == 'new' ? 'initSession' : 'initOldSession';
+            $this->search->$initFunc($module, $fields, $params);
         }
-        else
-        {
-            $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-            $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        }
-
-        $_SESSION['searchParams']['module'] = $module;
-        if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
 
         if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
@@ -59,21 +45,19 @@ class search extends control
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
         }
 
-        $this->view->module       = $module;
-        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
-        $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
-        $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
-        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
-        $this->view->formSession  = $_SESSION[$module . 'Form'];
-        $this->view->formName     = $formName;
+        $this->view->module      = $module;
+        $this->view->fields      = $fields;
+        $this->view->fieldParams = $this->search->setDefaultParams($module, $fields, $params);
+        $this->view->queries     = $this->search->getQueryList($module);
+        $this->view->actionURL   = $this->session->$searchParams['actionURL'];
+        $this->view->queryID     = $this->session->$searchParams['queryID']   ?? 0;
+        $this->view->style       = $this->session->$searchParams['style']     ?? 'full';
+        $this->view->onMenuBar   = $this->session->$searchParams['onMenuBar'] ?? 'no';
+        $this->view->formSession = $this->session->$searchForm;
 
         if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
 
-        $this->app->loadModuleConfig('action');
-        $this->display();
+        $this->display('search', $mode == 'new' ? 'buildForm' : 'buildOldForm');
     }
 
     /**
@@ -81,75 +65,28 @@ class search extends control
      * Build old search form.
      *
      * @param  string $module
-     * @param  string $fields
-     * @param  array  $params
-     * @param  string $actionURL
-     * @param  int    $queryID
-     * @param  string $formName
      * @access public
      * @return void
      */
-    public function buildOldForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
+    public function buildOldForm(string $module)
     {
-        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
-        $searchParams = $module . 'searchParams';
-        $searchForm   = $module . 'Form';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
-
-        if($funcName)
-        {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $fields = empty($fields) ? $this->config->$module->search['fields'] : $fields;
-            $params = empty($params) ? $this->config->$module->search['params'] : $params;
-        }
-        else
-        {
-            $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-            $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        }
-
-        $_SESSION['searchParams']['module'] = $module;
-        if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);
-
-        if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
-        {
-            $space = common::checkNotCN() ? ' ' : '';
-            $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
-        }
-
-        $this->view->module       = $module;
-        $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
-        $this->view->searchFields = $fields;
-        $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
-        $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
-        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
-        $this->view->formSession  = $_SESSION[$searchForm];
-        $this->view->formName     = $formName;
-
-        if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
-
-        $this->app->loadModuleConfig('action');
-        $this->display();
+        $this->buildForm($module, 'old');
     }
 
     /**
      * 构建搜索查询。
      * Build search query.
      *
+     * @param  string $mode new 20版本后的新页面 | old 20版本前的旧页面
      * @access public
      * @return void
      */
-    public function buildQuery()
+    public function buildQuery(string $mode = 'new')
     {
         /* 将查询 sql 和 表单名字设置 session。*/
         /* Set query sql and form name in session. */
-        $this->search->buildQuery();
+        $buildFunc = $mode == 'new' ? 'buildQuery' : 'buildOldQuery';
+        $this->search->$buildFunc();
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
@@ -173,7 +110,9 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
+        if($mode == 'new') return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
+
+        echo js::locate($actionURL, 'parent');
     }
 
     /**
@@ -184,25 +123,7 @@ class search extends control
      */
     public function buildOldQuery()
     {
-        $this->search->buildOldQuery();
-
-        $actionURL = $this->post->actionURL;
-        $parsedURL = parse_url($actionURL);
-        if(isset($parsedURL['host'])) return;
-        if($this->config->requestType != 'GET')
-        {
-            $path = $parsedURL['path'];
-            $path = str_replace($this->config->webRoot, '', $path);
-            if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
-            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) return;
-        }
-        else
-        {
-            $query = $parsedURL['query'];
-            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
-        }
-
-        echo js::locate($actionURL, 'parent');
+        $this->buildQuery('old');
     }
 
     /**

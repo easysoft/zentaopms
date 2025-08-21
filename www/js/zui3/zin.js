@@ -246,12 +246,18 @@
         return (zinbar && zinbar.$) ? zinbar.$.state.pagePerf : null;
     }
 
+    function triggerEvent(event, args, options)
+    {
+        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
+        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
+    }
+
     function triggerPerfEvent(stage)
     {
         if(!zinbar || !zinbar.$) return;
         if(zinbar.lastPerfEventType === stage) clearTimeout(zinbar.lastPerfEventTimer);
         zinbar.lastPerfEventTimer = setTimeout(() => {
-            $.apps.triggerEvent('updatePerfData.app', {stage: stage, perf: getPerfData()}, {silent: true});
+            triggerEvent('updatePerfData.app', {stage: stage, perf: getPerfData()}, {silent: true});
         }, 100);
         zinbar.lastPerfEventType = stage;
     }
@@ -271,12 +277,6 @@
         }
         updateZinbar(perf);
         triggerPerfEvent(stage);
-    }
-
-    function triggerEvent(event, args, options)
-    {
-        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
-        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
     }
 
     function showZinDebugInfo(data, options)

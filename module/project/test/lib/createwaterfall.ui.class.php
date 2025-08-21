@@ -44,22 +44,22 @@ class createWaterfallTester extends tester
 
         if($this->response('module') != 'programplan')
         {
-            if($this->checkFormTips('project')) return $this->success('创建瀑布项目表单页提示信息正确');
+            return $this->checkFormTips('project') ? $this->success('创建瀑布项目表单页提示信息正确') : $this->failed('创建瀑布项目表单页提示信息不正确');
             if($form->dom->endTip)
             {
                 //检查结束日期不能为空
-                $endTipText = $form->dom->endTipgetText();
+                $endTipText = $form->dom->endTip->getText();
                 $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
                 return ($endTipText == $endTip) ? $this->success('创建瀑布项目表单页提示信息正确') : $this->failed('创建瀑布项目表单页提示信息不正确');
             }
-            return $this->failed('创建瀑布项目表单页提示信息不正确');
         }
 
        /* 跳转到项目设置页面，点击设置菜单。 */
         $programplanPage = $this->loadPage('programplan', 'create');
+        $programplanPage->wait(2);
         $programplanPage->dom->settings->click();
         $viewPage = $this->loadPage('project', 'view');
-        $viewPage->wait(4);
+        $viewPage->wait(6);
         $categoryLang = (array)$this->lang->project->projectTypeList;
         if($viewPage->dom->projectName->getText() != $waterfall['name'])               return $this->failed('名称错误');
         if($viewPage->dom->category->getText() != $categoryLang[$waterfall['type']])   return $this->failed('类型错误');

@@ -148,6 +148,7 @@ $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätig
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 $lang->hasReviewed     = 'The content has already been reviewed and does not need further review !';
+$lang->appNotFound     = 'Sie haben keine Berechtigung, um auf diese Anwendung zuzugreifen. Bitte überprüfen Sie die Berechtigungseinstellungen.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

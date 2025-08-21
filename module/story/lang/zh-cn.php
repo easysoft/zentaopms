@@ -227,6 +227,18 @@ $lang->story->linkCommit       = '相关代码版本';
 $lang->story->URS              = '用户需求';
 $lang->story->estimateUnit     = "（单位：{$lang->story->hour}）";
 $lang->story->verifiedDate     = '验收时间';
+$lang->story->root             = '顶级需求ID';
+$lang->story->vision           = '所属界面';
+$lang->story->fromStory        = '来源需求';
+$lang->story->fromVersion      = '来源版本';
+$lang->story->approvedDate     = '评审日期';
+$lang->story->releasedDate     = '发布日期';
+$lang->story->parentVersion    = '父需求版本';
+$lang->story->demandVersion    = '需求池需求版本';
+$lang->story->storyChanged     = '需求已变更';
+$lang->story->demand           = '需求池需求';
+$lang->story->unlinkReason     = '移除原因';
+$lang->story->retractedReason  = '撤销原因';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";
@@ -543,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = "该需求已是激活状态，无需评审";
 $lang->story->reviewTip['notReviewer'] = "您不是该需求的评审人员，无法进行评审操作";
 $lang->story->reviewTip['reviewed']    = '您已评审';
+$lang->story->reviewTip['noPriv']      = '您没有提交评审权限';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "该需求未发起评审流程，无需撤销操作";

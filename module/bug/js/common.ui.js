@@ -342,10 +342,10 @@ function loadAssignedToByModule(moduleID, productID)
         }
         if(!isExist && account)
         {
-            assignedToItems = {text: realName, value: account, keys: realName};
-            $assignedToPicker.render({items: data, value: account});
+            assignedToItems.push({text: realName, value: account, keys: realName, key: account});
+            $assignedToPicker.render({items: Array.from(assignedToItems)});
         }
-        $assignedToPicker.$.setValue(account);
+        if(!bug.assignedTo) $assignedToPicker.$.setValue(account);
     });
 }
 

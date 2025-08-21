@@ -33,5 +33,6 @@ r($cneModel->backupDetailTest($instance, 0)) && p() && e('0'); // 错误的空�
 $instance->spaceData->k8space = 'quickon-system';
 $instance->k8name = 'zentaopaas';
 
-r($cneModel->backupDetailTest($instance, 1)->db)     && p('0:db_type,status') && e('mysql,completed'); // 备份的数据库
-r($cneModel->backupDetailTest($instance, 2)->volume) && p('0:volume,status') && e('data,completed');   // 备份的数据
+$backupDetail = $cneModel->backupDetailTest($instance, 1);
+r($backupDetail->db)     && p('0:db_type,status') && e('mysql,completed'); // 备份的数据库
+r($backupDetail->volume) && p('0:volume,status')  && e('data,completed');   // 备份的数据

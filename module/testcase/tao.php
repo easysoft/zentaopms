@@ -266,9 +266,9 @@ class testcaseTao extends testcaseModel
             $data = new stdclass();
             $data->name    = str_replace('.0', '', $name);
             $data->id      = $step->id;
-            $data->step    = $step->desc;
-            $data->desc    = $step->desc;
-            $data->expect  = $step->expect;
+            $data->step    = htmlspecialchars_decode($step->desc);
+            $data->desc    = htmlspecialchars_decode($step->desc);
+            $data->expect  = htmlspecialchars_decode($step->expect);
             $data->type    = $step->type;
             $data->parent  = $step->parent;
             $data->grade   = $grade;

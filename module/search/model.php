@@ -13,6 +13,26 @@
 <?php
 class searchModel extends model
 {
+    /**
+     * 构造搜索表单时调用被搜索模块的方法处理搜索参数。
+     * Call the method of the searched module to process search parameters when constructing the search form.
+     *
+     * @param  string $module
+     * @param  bool   $cacheSearchFunc // 是否缓存构造搜索参数的方法。默认不缓存以加载真实值。Wheater to cache the method of constructing search parameters. Default is not to cache to load real values.
+     * @access public
+     * @return array
+     */
+    public function processSearchParams(string $module, bool $cacheSearchFunc = false): array
+    {
+        $cacheKey  = $module . 'SearchFunc';
+        $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
+        $funcName  = $this->session->$cacheKey['funcName']  ?? '';
+        $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
+        if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
+
+        $funcArgs['cacheSearchFunc'] = $cacheSearchFunc;
+        return $this->loadModel($funcModel)->$funcName(...$funcArgs);
+    }
 
     /**
      * 设置搜索参数的session。
@@ -22,31 +42,22 @@ class searchModel extends model
      * @access public
      * @return void
      */
-    public function setSearchParams(array $searchConfig): void
+    public function setSearchParams(array $searchConfig)
     {
         $module = $searchConfig['module'];
 
         if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module, $searchConfig);
 
-        $searchParams['module']    = $searchConfig['module'];
+        $searchParams['module']    = $module;
         $searchParams['actionURL'] = $searchConfig['actionURL'];
         $searchParams['style']     = zget($searchConfig, 'style', 'full');
         $searchParams['onMenuBar'] = zget($searchConfig, 'onMenuBar', 'no');
         $searchParams['queryID']   = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
-        $funcArgs = func_get_args();
-        $funcName = $funcArgs[1] ?? '';
-        unset($funcArgs[0], $funcArgs[1]);
-
-        if($funcName)
+        if(empty($_SESSION[$module . 'SearchFunc']))
         {
-            $searchParams['funcName'] = $funcName;
-            $searchParams['funcArgs'] = $funcArgs;
-        }
-        else
-        {
-            $searchParams['searchFields'] = json_encode($searchConfig['fields']);
-            $searchParams['fieldParams']  = json_encode($searchConfig['params']);
+            $searchParams['fields'] = $searchConfig['fields'];
+            $searchParams['params'] = $searchConfig['params'];
         }
 
         $this->session->set($module . 'searchParams', $searchParams);
@@ -56,16 +67,17 @@ class searchModel extends model
      * 设置默认的搜索参数。
      * Set default params for selection.
      *
+     * @param  string $module
      * @param  array  $fields
      * @param  array  $params
      * @access public
      * @return array
      */
-    public function setDefaultParams(array $fields, array $params): array
+    public function setDefaultParams(string $module, array $fields, array $params): array
     {
         $fields = array_keys($fields);
 
-        list($users, $products, $executions) = $this->getParamValues($fields, $params);
+        list($users, $products, $executions) = $this->getParamValues($module, $fields, $params);
 
         foreach($fields as $fieldName)
         {
@@ -109,24 +121,12 @@ class searchModel extends model
     {
         /* Init vars. */
         $module       = $this->post->module;
-        $searchParams = $module . 'searchParams';
+        $searchConfig = $this->processSearchParams($module, true);
+        $searchFields = $searchConfig['fields'];
+        $fieldParams  = $searchConfig['params'];
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
-        $funcName     = $_SESSION[$searchParams]['funcName'] ?? '';
-        $funcArgs     = $_SESSION[$searchParams]['funcArgs'] ?? [];
-        if($funcName)
-        {
-            $funcArgs[] = true; // 处理选项列表。
-            $this->loadModel($module)->$funcName(...$funcArgs);
-            $searchFields = json_decode(json_encode($this->config->$module->search['fields']));
-            $fieldParams  = json_decode(json_encode($this->config->$module->search['params']));
-        }
-        else
-        {
-            $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
-            $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
-        }
 
         $queryForm = $this->searchTao->initSession($module, $searchFields, $fieldParams);
 
@@ -147,12 +147,12 @@ class searchModel extends model
 
             $field        = $this->post->$fieldName;
             $value        = $this->post->$valueName;
-            $fieldControl = isset($fieldParams->$field) && isset($fieldParams->{$field}->control) ? $fieldParams->{$field}->control : '';
+            $fieldControl = $fieldParams[$field]['control'] ?? '';
             if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
-            if(isset($fieldParams->$field) && $fieldControl == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
+            if($fieldControl == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
             if($field == 'id' && $value === '0') $this->post->set($valueName, 'ZERO');
 
             /* set queryForm. */
@@ -194,8 +194,8 @@ class searchModel extends model
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->post->module;
-        $searchParams = $module . 'searchParams';
-        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
+        $searchConfig = $this->processSearchParams($module, true);
+        $fieldParams  = $searchConfig['params'];
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -215,13 +215,15 @@ class searchModel extends model
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
+
+            $fieldControl = $fieldParams[$field]['control'] ?? '';
+            if($fieldControl == 'input' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
             if($field == 'id' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
 
             /* Skip empty values. */
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select. Fix bug #3279.
+            if($fieldControl == 'select' and $this->post->$valueName === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select. Fix bug #3279.
 
             $scoreNum += 1;
 
@@ -245,7 +247,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = $fieldParams->$field->control == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = $fieldControl == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
                 }
             }
             elseif($operator == "notinclude")
@@ -257,7 +259,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = $fieldParams->$field->control == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = $fieldControl == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
                 }
             }
             elseif($operator == 'belong')

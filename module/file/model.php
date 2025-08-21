@@ -1028,7 +1028,7 @@ class fileModel extends model
 
         /* Append the extension name auto. */
         $extension = $fileType ? ('.' . $fileType) : '';
-        if($extension && strpos($fileName, $extension) === false) $fileName .= $extension;
+        if($extension && strpos(strtolower($fileName), $extension) === false) $fileName .= $extension;
 
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
@@ -1276,20 +1276,21 @@ class fileModel extends model
         $html .= '</span>';
         $html .= '</li>';
 
-        if(strrpos($file->title, '.') !== false)
+        $fileTitle = $file->title;
+        if(strrpos($fileTitle, '.') !== false)
         {
             /* Fix the file name exe.exe */
-            $title     = explode('.', $file->title);
+            $title     = explode('.', $fileTitle);
             $extension = end($title);
             if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
             array_pop($title);
-            $file->title = join('.', $title);
+            $fileTitle = implode('.', $title);
         }
 
         $html .= "<li class='file hidden'><div>";
         $html .= "<div class='renameFile w-300px' id='renameBox{$file->id}'><i class='icon icon-file-text'></i>";
         $html .= "<div class='input-group'>";
-        $html .= "<input type='text' id='fileName{$file->id}' value='{$file->title}' class='form-control'/>";
+        $html .= "<input type='text' id='fileName{$file->id}' value='{$fileTitle}' class='form-control'/>";
         $html .= "<input type='hidden' id='extension{$file->id}' value='{$file->extension}'/>";
         $html .= "<strong class='input-group-addon'>.{$file->extension}</strong></div>";
         $html .= "<div class='input-group-btn'>";
@@ -1354,31 +1355,31 @@ class fileModel extends model
      */
     public function saveDefaultFiles(array $fileList, string $objectType, int|array $objectIdList, string|int $extra = '')
     {
-        if(is_int($objectIdList)) $objectIdList = array($objectIdList);
-        if(!empty($fileList))
-        {
-            if(!empty($_POST['deleteFiles']))
-            {
-                foreach($this->post->deleteFiles as $deletedFileID) unset($fileList[$deletedFileID]);
-            }
-            if(!empty($_POST['renameFiles']))
-            {
-                foreach($this->post->renameFiles as $renamedFileID => $newName) $fileList[$renamedFileID]['title'] = $newName;
-            }
+        if(empty($fileList)) return;
 
-            foreach($objectIdList as $objectID)
+        if(is_int($objectIdList)) $objectIdList = array($objectIdList);
+
+        if(!empty($_POST['deleteFiles']))
+        {
+            foreach($this->post->deleteFiles as $deletedFileID) unset($fileList[$deletedFileID]);
+        }
+        if(!empty($_POST['renameFiles']))
+        {
+            foreach($this->post->renameFiles as $renamedFileID => $newName) $fileList[$renamedFileID]['title'] = $newName;
+        }
+
+        foreach($objectIdList as $objectID)
+        {
+            $fileIdList = '';
+            foreach($fileList as $file)
             {
-                $fileIdList = '';
-                foreach($fileList as $file)
-                {
-                    unset($file['id']);
-                    $file['objectType'] = $objectType;
-                    $file['objectID']   = $objectID;
-                    $file['extra']      = $extra;
-                    $fileIdList .= ',' . $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
-                }
-                if($objectType == 'story') $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($objectID)->exec();
+                unset($file['id']);
+                $file['objectType'] = $objectType;
+                $file['objectID']   = $objectID;
+                $file['extra']      = $extra;
+                $fileIdList .= ',' . $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
             }
+            if($objectType == 'story') $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($objectID)->exec();
         }
 
         foreach($objectIdList as $objectID)

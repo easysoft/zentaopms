@@ -134,6 +134,7 @@ class repo extends control
         $this->view->projects      = $projects;
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
+        $this->view->repoServers   = $this->pipeline->getPairs('gitlab,gitea,gogs');
 
         $this->display();
     }

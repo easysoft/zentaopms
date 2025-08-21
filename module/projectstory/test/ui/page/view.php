@@ -13,8 +13,16 @@ class viewPage extends page
             'closestoryBtn'    => '//*[@id="zin_story_close_1_form"]/div[4]/div/button',
             'activateBtn'      => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[last()-3]',
             'activateStoryBtn' => '//*[@id="zin_story_activate_1_form"]/div[3]/div/button',
+            'revokeBtn'        => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[2]',
+            'confirmBtn'       => '//button[@z-key="confirm"]',
+            'submitReviewBtn'  => '//*[@id="zin_story_submitreview_1_form"]/div[2]/div/button',
+            'assignBtn'        => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[4]',
+            'assignSubmitBtn'  => '//*[@id="zin_story_assignto_1_form"]/div[3]/div/button',
             'storyStatus'      => '//*[@id="zin_projectstory_view_tabPane"]/div/div[2]/div[2]/span',
-            'storyReviwer'     => '//*[@zui-key="side"]/div/div[2]/div[2]/div/div[3]/div[2]//span'
+            'targetLife'       => '//*[@id="mainContent"]/div/div[2]/div[2]/div[1]/div[1]/ul/li[2]',
+            'assignTo'         => '//*[@id="zin_projectstory_view_tabPane_1"]/div/div[2]/div[2]',
+            'storyReviwer'     => '//*[@zui-key="side"]/div/div[2]/div[2]/div/div[3]/div[2]//span',
+            'storyEstimate'    => '//*[@id="zin_projectstory_view_tabPane"]/div/div[4]/div[2]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

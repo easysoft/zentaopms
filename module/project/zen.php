@@ -1662,14 +1662,15 @@ class projectZen extends project
 
             $projectBudget = $project->budget === '' ? '0' : $project->budget;
 
-            $project->PM       = zget($users, $project->PM);
-            $project->status   = $this->processStatus('project', $project);
-            $project->model    = zget($this->lang->project->modelList, $project->model);
-            $project->budget   = !empty($projectBudget) ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
-            $project->parent   = $project->parentName;
-            $project->end      = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-            $project->invested = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
-            $project->progress = floor((float)$project->progress);
+            $project->PM        = zget($users, $project->PM);
+            $project->status    = $this->processStatus('project', $project);
+            $project->model     = zget($this->lang->project->modelList, $project->model);
+            $project->budget    = !empty($projectBudget) ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+            $project->parent    = $project->parentName;
+            $project->end       = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $project->invested  = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
+            $project->invested .= " {$this->lang->project->manDay}";
+            $project->progress  = floor((float)$project->progress) . '%';
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);

@@ -36,20 +36,31 @@ function initData()
 
 /**
 
-title=测试 projectModel::fetchProjectList();
+title=测试 projectModel::fetchTaskEstimateByIdList();
 timeout=0
 cid=1
 
+- 查询没有项目ID的情况 @0
+- 查询错误ID的情况 @0
+- 检查项目13的预计工时属性estimate @2
+- 检查项目14的预计工时属性estimate @3
+- 检查项目15的预计工时属性estimate @4
+- 检查不存在ID的情况 @0
 
 */
 
 initData();
 $noneIDList  = array();
 $wrongIDList = array('1',  '2');
-$realIDList  = array('13', '14');
+$realIDList  = array('13', '14', '15', '1');
 
 global $tester;
 $projectTester = $tester->loadModel('project');
-r($projectTester->fetchTaskEstimateByIdList($noneIDList))  && p()              && e('0'); // 查询没有项目ID的情况
-r($projectTester->fetchTaskEstimateByIdList($wrongIDList)) && p()              && e('0'); // 查询错误ID的情况
-r($projectTester->fetchTaskEstimateByIdList($realIDList))  && p('14:estimate') && e('3'); // 查询正常ID的情况
+r($projectTester->fetchTaskEstimateByIdList($noneIDList))  && p() && e('0'); // 查询没有项目ID的情况
+r($projectTester->fetchTaskEstimateByIdList($wrongIDList)) && p() && e('0'); // 查询错误ID的情况
+
+$estimates = $projectTester->fetchTaskEstimateByIdList($realIDList);
+r($estimates[13])       && p('estimate') && e('2'); // 检查项目13的预计工时
+r($estimates[14])       && p('estimate') && e('3'); // 检查项目14的预计工时
+r($estimates[15])       && p('estimate') && e('4'); // 检查项目15的预计工时
+r(isset($estimates[1])) && p()           && e('0'); // 检查不存在ID的情况
