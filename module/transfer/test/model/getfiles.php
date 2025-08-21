@@ -15,6 +15,7 @@ cid=1
 - 测试ID为3的bug附件是否存在 @No File
 - 测试ID为1的task附件是否存在 @File isset
 - 测试ID为3的task附件是否存在 @No File
+- 测试ID为1的story附件是否存在 @No File
 
 */
 
@@ -33,7 +34,8 @@ $file8->id = 8;
 $rows = array(1 => $file1, 2 => $file2, 3 => $file3, 7 => $file7, 8 => $file8);
 
 $transfer = new transferTest();
-r($transfer->getFilesTest('bug', $rows, 2))  && p('') && e("File isset"); // 测试ID为2的bug附件是否存在
-r($transfer->getFilesTest('bug', $rows, 3))  && p('') && e("No File");    // 测试ID为3的bug附件是否存在
-r($transfer->getFilesTest('task', $rows, 1)) && p('') && e("File isset"); // 测试ID为1的task附件是否存在
-r($transfer->getFilesTest('task', $rows, 3)) && p('') && e("No File");    // 测试ID为3的task附件是否存在
+r($transfer->getFilesTest('bug', $rows, 2))   && p('') && e("File isset"); // 测试ID为2的bug附件是否存在
+r($transfer->getFilesTest('bug', $rows, 3))   && p('') && e("No File");    // 测试ID为3的bug附件是否存在
+r($transfer->getFilesTest('task', $rows, 1))  && p('') && e("File isset"); // 测试ID为1的task附件是否存在
+r($transfer->getFilesTest('task', $rows, 3))  && p('') && e("No File");    // 测试ID为3的task附件是否存在
+r($transfer->getFilesTest('story', $rows, 1)) && p('') && e("No File");    // 测试ID为1的story附件是否存在
