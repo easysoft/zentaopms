@@ -7,8 +7,14 @@ su('admin');
 /**
 
 title=测试 testcaseModel->batchChangeBranch();
+timeout=0
 cid=1
-pid=1
+
+- 用例和场景都为空返回 false。 @0
+- 用例不为空，场景为空返回 true。 @1
+- 用例为空，场景不为空返回 true。 @1
+- 用例和场景都不为空返回 true。 @1
+- 用例和场景都不为空返回 true。 @1
 
 */
 
@@ -18,3 +24,4 @@ r($testcase->batchChangeBranchTest(array(),  array(),  0)) && p() && e('0'); // 
 r($testcase->batchChangeBranchTest(array(1), array(),  0)) && p() && e('1'); // 用例不为空，场景为空返回 true。
 r($testcase->batchChangeBranchTest(array(),  array(1), 0)) && p() && e('1'); // 用例为空，场景不为空返回 true。
 r($testcase->batchChangeBranchTest(array(1), array(1), 0)) && p() && e('1'); // 用例和场景都不为空返回 true。
+r($testcase->batchChangeBranchTest(array(2), array(2), 0)) && p() && e('1'); // 用例和场景都不为空返回 true。
