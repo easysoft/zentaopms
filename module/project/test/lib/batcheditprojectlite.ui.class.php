@@ -17,7 +17,8 @@ class batchEditProjectLiteTester extends tester
         $form = $this->initForm('project', 'browse', array(), 'appIframe-project');
         $form->dom->selectAllBtn->click();
         $form->dom->batchEditBtn->click();
-        $form = $this->loadPage('project', 'batchEdit');
+
+        $form       = $this->loadPage('project', 'batchEdit');
         $firstID    = $form->dom->id_static_0->getText(); //获取第一行的ID
         $firstBegin = "begin[{$firstID}]";
         $firstEnd   = "end[{$firstID}]";
