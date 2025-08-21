@@ -20,3 +20,7 @@ su('admin');
 $tutorial = new tutorialTest();
 
 r($tutorial->getExecutionStoryPairsTest()) && p('3') && e('Test active story'); //测试是否能拿到数据
+r($tutorial->getExecutionStoryPairsTest()) && p('1') && e('~~'); //测试是否能拿到数据
+r($tutorial->getExecutionStoryPairsTest()) && p('2') && e('~~'); //测试是否能拿到数据
+r($tutorial->getExecutionStoryPairsTest()) && p('4') && e('~~'); //测试是否能拿到数据
+r($tutorial->getExecutionStoryPairsTest()) && p('5') && e('~~'); //测试是否能拿到数据
