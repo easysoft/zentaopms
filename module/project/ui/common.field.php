@@ -80,6 +80,7 @@ $fields->field('begin')
 $fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->disabled($isLongTime)->value(!empty(data('project.days')) ? data('project.days') : '');
 
 $fields->field('productsBox')
+    ->id('productsBox')
     ->width('full')
     ->required(data('copyProject.parent') || data('parentProgram.id') || data('project.parent'))
     ->control(array
