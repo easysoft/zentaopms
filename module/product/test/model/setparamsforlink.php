@@ -4,10 +4,15 @@
 /**
 
 title=测试productModel->setParamsForLink();
+timeout=0
 cid=0
 
 - 不传入任何数据。 @0
 - 只传入module参数。 @0
+- 传入module=product，检查链接。 @/product-browse-1.html
+- 传入module=product，检查链接。 @/product-browse-0.html
+- 传入module=programplan，检查链接。 @/programplan-browse-2-0.html
+- 传入module=programplan，检查链接。 @/programplan-browse-0-2.html
 - 传入module=product，检查链接。 @/product-browse-1.html
 - 传入module=programplan，检查链接。 @/programplan-browse-2-1.html
 
@@ -22,6 +27,9 @@ $planLink    = '/programplan-browse-%s-%s.html';
 
 r($productModel->setParamsForLink('',        '', 0, 0)) && p() && e('0'); //不传入任何数据。
 r($productModel->setParamsForLink('product', '', 0, 0)) && p() && e('0'); //只传入module参数。
-
+r($productModel->setParamsForLink('product',     $productLink, 0, 1)) && p() && e('/product-browse-1.html');       //传入module=product，检查链接。
+r($productModel->setParamsForLink('product',     $productLink, 1, 0)) && p() && e('/product-browse-0.html');       //传入module=product，检查链接。
+r($productModel->setParamsForLink('programplan', $planLink,    2, 0)) && p() && e('/programplan-browse-2-0.html'); //传入module=programplan，检查链接。
+r($productModel->setParamsForLink('programplan', $planLink,    0, 2)) && p() && e('/programplan-browse-0-2.html'); //传入module=programplan，检查链接。
 r($productModel->setParamsForLink('product',     $productLink, 2, 1)) && p() && e('/product-browse-1.html');       //传入module=product，检查链接。
 r($productModel->setParamsForLink('programplan', $planLink,    2, 1)) && p() && e('/programplan-browse-2-1.html'); //传入module=programplan，检查链接。
