@@ -13,6 +13,8 @@ cid=1
 - 测试获取task模块id字段语言项 @input
 - 测试获取bug模块product字段应该是下拉列表 @select
 - 测试当获取不到对应的control时默认为input @input
+- 测试获取story模块product字段应该是下拉列表 @select
+- 测试获取feedback模块id字段应该是input @input
 
 */
 global $tester;
@@ -21,3 +23,5 @@ $transfer = $tester->loadModel('transfer');
 r($transfer->initControl('task', 'id'))       && p('') && e('input');  // 测试获取task模块id字段语言项
 r($transfer->initControl('bug',  'product'))  && p('') && e('select'); // 测试获取bug模块product字段应该是下拉列表
 r($transfer->initControl('task', 'notIsset')) && p('') && e('input');  // 测试当获取不到对应的control时默认为input
+r($transfer->initControl('story', 'product')) && p('') && e('select'); // 测试获取story模块product字段应该是下拉列表
+r($transfer->initControl('feedback', 'id'))   && p('') && e('input');  // 测试获取feedback模块id字段应该是input
