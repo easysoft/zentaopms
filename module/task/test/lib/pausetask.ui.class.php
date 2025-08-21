@@ -8,7 +8,7 @@ class pauseTaskTester extends tester
      *
      * @param  string $id
      * @param  string $status
-     * @accuss public
+     * @access public
      * @return object
      */
     public function pause($id, $status)
