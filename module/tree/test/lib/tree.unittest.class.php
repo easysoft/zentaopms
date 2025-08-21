@@ -295,10 +295,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $modules = array();
-        foreach($objects as $object) $modules[] = $object->id;
-
-        return implode('|', $modules);
+        return $objects;
     }
 
     /**
