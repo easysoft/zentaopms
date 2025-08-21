@@ -43,6 +43,31 @@ cid=0
  - 属性order @15
  - 属性storyCompleteRate @50
  - 属性bugFixedRate @33.3
+- id5的产品信息
+ - 属性id @5
+ - 属性name @正常产品5
+ - 属性code @code5
+ - 属性type @product
+ - 属性status @normal
+ - 属性PO @po5
+ - 属性QD @test5
+ - 属性RD @dev5
+ - 属性order @25
+ - 属性storyCompleteRate @50
+ - 属性bugFixedRate @33.3
+- id8的产品信息
+ - 属性id @8
+ - 属性name @正常产品8
+ - 属性code @code8
+ - 属性type @product
+ - 属性status @normal
+ - 属性PO @po8
+ - 属性QD @test8
+ - 属性RD @dev8
+ - 属性order @40
+ - 属性storyCompleteRate @50
+ - 属性bugFixedRate @33.3
+- 不存在的产品 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
