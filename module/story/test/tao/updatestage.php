@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->setStageToClosed();
+timeout=0
 cid=0
 
 - 不传入任何数据。 @0
