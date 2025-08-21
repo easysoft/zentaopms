@@ -451,9 +451,9 @@ class myModel extends model
      * @param  string $module
      * @param  bool   $cacheSearchFunc 是否缓存构造搜索参数的方法。默认缓存可以提高性能，构造搜索表单时再加载真实值。
      * @access public
-     * @return void
+     * @return array
      */
-    public function buildTaskSearchForm(int $queryID, string $actionURL, string $module, bool $cacheSearchFunc = true)
+    public function buildTaskSearchForm(int $queryID, string $actionURL, string $module, bool $cacheSearchFunc = true): array
     {
         $this->loadModel('execution');
         $searchConfig = $this->config->execution->search;
