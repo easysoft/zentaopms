@@ -20,11 +20,15 @@ cid=1
 
 - 正常查询 @共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。
 - taskID为空查询 @共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。
+- taskID为空查询 @共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。
+- taskID为空查询 @共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。
+- taskID为空查询 @共有<strong>2</strong>个用例，共执行<strong>2</strong>个用例，产生了<strong>2</strong>个结果，失败的用例有<strong>1</strong>个。
 
 */
-$taskID   = array(1, 0);
-$reportID = 1;
 
 $testreport = new testreportTest();
-r($testreport->getResultSummaryTest($taskID[0], $reportID)) && p() && e('共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。'); //正常查询
-r($testreport->getResultSummaryTest($taskID[1], $reportID)) && p() && e('共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。'); //taskID为空查询
+r($testreport->getResultSummaryTest(1, 1)) && p() && e('共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。'); //正常查询
+r($testreport->getResultSummaryTest(0, 1)) && p() && e('共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。'); //taskID为空查询
+r($testreport->getResultSummaryTest(2, 2)) && p() && e('共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。'); //taskID为空查询
+r($testreport->getResultSummaryTest(0, 2)) && p() && e('共有<strong>0</strong>个用例，共执行<strong>0</strong>个用例，产生了<strong>0</strong>个结果，失败的用例有<strong>0</strong>个。'); //taskID为空查询
+r($testreport->getResultSummaryTest(3, 3)) && p() && e('共有<strong>2</strong>个用例，共执行<strong>2</strong>个用例，产生了<strong>2</strong>个结果，失败的用例有<strong>1</strong>个。'); //taskID为空查询
