@@ -48,3 +48,32 @@ $tester->login();
 $scene = array(
     '0' => array(
         'product' => '产品01',
+        'module1' => '模块1',
+        'module2' => '模块2',
+        'module'  => '模块1',
+        'scene'   => '',
+    ),
+    '1' => array(
+        'product' => '产品01',
+        'module'  => '模块1',
+        'scene'   => '场景1',
+    ),
+    '2' => array(
+        'product' => '产品01',
+        'module'  => '模块1',
+        'scene'   => '场景1',
+    ),
+    '3' => array(
+        'product'     => '产品01',
+        'module'      => '模块1',
+        'parentscene' => '场景1',
+        'scene'       => '场景2',
+    )
+);
+
+r($tester->createScene($scene['0'])) && p('message,status') && e('建场景必填提示信息正确,SUCCESS');          // 建场景时维护模块，场景必填信息检查
+r($tester->createScene($scene['1'])) && p('message,status') && e('场景创建成功,SUCCESS');                    // 创建场景
+r($tester->createScene($scene['2'])) && p('message,status') && e('建场景名称重复时提示信息正确,SUCCESS');    // 创建场景时名称重复检查
+r($tester->createScene($scene['3'])) && p('message,status') && e('场景创建成功,SUCCESS');                    // 创建场景
+
+$tester->closeBrowser();
