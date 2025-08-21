@@ -46,7 +46,8 @@ if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true')
  * @param mixed $data   variable to check
  * @return object|mixed object converted from variable or itself (if can't convert）
  */
-function ensureObject($data) {
+function ensureObject($data)
+{
     if (is_object($data)) {
         return $data;
     }
