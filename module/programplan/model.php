@@ -890,17 +890,17 @@ class programplanModel extends model
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
             {
-                $this->session->set('projectTaskQuery', $query->sql);
-                $this->session->set('projectTaskForm', $query->form);
+                $this->session->set('programplanTaskQuery', $query->sql);
+                $this->session->set('programplanTaskForm', $query->form);
             }
-            elseif(!$this->session->projectTaskQuery)
+            elseif(!$this->session->programplanTaskQuery)
             {
-                $this->session->set('projectTaskQuery', ' 1 = 1');
+                $this->session->set('programplanTaskQuery', ' 1 = 1');
             }
 
-            if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
+            if(strpos($this->session->programplanTaskQuery, "deleted =") === false) $this->session->set('programplanTaskQuery', $this->session->programplanTaskQuery . " AND deleted = '0'");
 
-            $projectTaskQuery = $this->session->projectTaskQuery;
+            $projectTaskQuery = $this->session->programplanTaskQuery;
             $projectTaskQuery .= " AND `project` = '$projectID'";
             $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
 
