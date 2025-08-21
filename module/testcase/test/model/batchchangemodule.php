@@ -18,3 +18,4 @@ r($testcase->batchChangeModuleTest(array(),  array(),  0)) && p() && e('0'); // 
 r($testcase->batchChangeModuleTest(array(1), array(),  0)) && p() && e('1'); // 用例不为空，场景为空返回 true。
 r($testcase->batchChangeModuleTest(array(),  array(1), 0)) && p() && e('1'); // 用例为空，场景不为空返回 true。
 r($testcase->batchChangeModuleTest(array(1), array(1), 0)) && p() && e('1'); // 用例和场景都不为空返回 true。
+r($testcase->batchChangeModuleTest(array(2), array(2), 0)) && p() && e('1'); // 用例和场景都不为空返回 true。
