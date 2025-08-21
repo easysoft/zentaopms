@@ -648,12 +648,13 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function getStoriesByProductIdList(array $productIdList, string $storyType = ''): array
+    protected function getStoriesByProductIdList(array $productIdList, string $storyType = '', bool $hasParent = true): array
     {
         return $this->dao->select('id, product, parent')
             ->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
             ->andWhere('product')->in($productIdList)
             ->fetchAll();
     }
