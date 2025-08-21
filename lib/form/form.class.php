@@ -488,6 +488,7 @@ class form extends fixer
         {
             $this->data = $data;
             $this->dataList[$rowIndex] = parent::get($fields);
+            $this->stripedFields = array();
         }
         return $this->dataList;
     }
