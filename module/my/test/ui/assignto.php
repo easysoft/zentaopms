@@ -26,7 +26,7 @@ $user->gen(5);
 $todo = zendata('todo');
 $todo->id->range('1');
 $todo->account->range('admin');
-$todo->date->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$todo->date->range('(-1M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $todo->type->range('custom');
 $todo->name->range('待办1');
 $todo->status->range('wait');
