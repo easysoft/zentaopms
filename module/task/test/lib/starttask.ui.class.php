@@ -66,6 +66,7 @@ class startTaskTester extends tester
         }
         else
         {
+            $form->wait(3);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('开始任务后状态错误');
         }
         if($form->dom->taskAssignedTo->getText() != $assignedTo)     return $this->failed('开始任务后指派给错误');

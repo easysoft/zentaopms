@@ -56,7 +56,7 @@ class finishTaskTester extends tester
         if(is_object($form->dom->confirmBtn)) $form->dom->confirmBtn->click();
         $form->wait(3);
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->done) return $this->failed('完成任务后状态错误');
-        if(intval($form->dom->taskConsumed->getText()) != $consumed + $taskConsumed) return $this->failed('完成任务后总计消耗错误');
+        if(floatval($form->dom->taskConsumed->getText()) != floatval($consumed) + floatval($taskConsumed)) return $this->failed('完成任务后总计消耗错误');
         /* 当完成任务弹窗指派给为空，完成任务后，任务指派给为完成者admin */
         if(empty($assignedTo)) $assignedTo = 'admin';
         if($form->dom->taskAssignedTo->getText() != $assignedTo) return $this->failed('完成任务后指派给错误');
