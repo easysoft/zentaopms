@@ -4205,11 +4205,6 @@ class executionModel extends model
             $searchConfig['onMenuBar'] = 'yes';
             if(!$execution->multiple) unset($searchConfig['fields']['execution']);
         }
-        elseif($module == 'programplanTask')
-        {
-            unset($searchConfig['fields']['project']);
-            $executions = $this->loadModel('programplan')->getPairs($executionID, $productID, 'all');
-        }
         elseif($module == 'projectTask')
         {
             unset($searchConfig['fields']['project']);
