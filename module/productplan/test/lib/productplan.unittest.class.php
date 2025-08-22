@@ -159,7 +159,7 @@ class productPlan
     {
         $productplans = $this->productplan->updateStatus($planID, $status, $action);
         if(dao::isError()) return dao::getError();
-        return $productplans;
+        return $this->productplan->fetchByID($planID);
     }
 
     /**
