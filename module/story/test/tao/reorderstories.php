@@ -11,6 +11,7 @@ cid=0
 - 无效重排，查看重排后索引为3的需求ID属性3 @3
 - 有效重排，查看重排后的数量 @22
 - 有效重排，查看重排后索引为19的需求ID属性19 @19
+- 有效重排，查看重排后索引为20的需求ID属性20 @20
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -69,3 +70,4 @@ r(count($tester->story->reorderStories($onlyChildList))) && p('')   && e('16'); 
 r($tester->story->reorderStories($onlyChildList))        && p('3')  && e('3');  // 无效重排，查看重排后索引为3的需求ID
 r(count($tester->story->reorderStories($normalList)))    && p('')   && e('22'); // 有效重排，查看重排后的数量
 r($tester->story->reorderStories($normalList))           && p('19') && e('19'); // 有效重排，查看重排后索引为19的需求ID
+r($tester->story->reorderStories($normalList))           && p('20') && e('20'); // 有效重排，查看重排后索引为20的需求ID
