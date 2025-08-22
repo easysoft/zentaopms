@@ -30,6 +30,7 @@ $story21Members = $tester->story->getTeamMembers(21, 'changed');
 $story0Members  = $tester->story->getTeamMembers(0, '');
 
 r(count($story20Members)) && p()         && e('1');      // 查找需求20的相关团队成员数量
+r($story20Members)        && p('user6')  && e('user6');  // 查找需求20的相关团队成员数量
 r(count($story21Members)) && p()         && e('1');      // 查找需求21的变更时影响的团队成员数量
 r($story21Members)        && p('user97') && e('user97'); // 查找需求21的变更时影响的团队成员数量
 r(count($story0Members))  && p()         && e('0');      // 查找需求0的相关团队成员数量
