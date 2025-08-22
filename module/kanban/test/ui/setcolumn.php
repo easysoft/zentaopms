@@ -92,7 +92,7 @@ $tester = new viewTester();
 $tester->login();
 
 $kanbanurl['kanbanID'] = 1;
-r($tester->setColumn($kanbanurl, ''))        && p('message,status') && e('看板列名称必填提示信息正确,SUCCESS');//看板列名称必填校验
+r($tester->setColumn($kanbanurl, ''))         && p('message,status') && e('看板列名称必填提示信息正确,SUCCESS');//看板列名称必填校验
 r($tester->setColumn($kanbanurl, '列名编辑')) && p('message,status') && e('看板列设置成功,SUCCESS');//重命名看板列
 
 $tester->closeBrowser();
