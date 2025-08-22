@@ -42,3 +42,11 @@ class editSceneTester extends tester
             $browsePage->dom->onlyScene->click();
 
             $browseScenePage = $this->loadPage('testcase', 'browseScene');
+            $browseScenePage->wait(1);
+            $sceneName = $browseScenePage->dom->getElement("//*[@id='scenes']/div[2]/div[1]/div/div[2]/div")->element->getText();
+
+            if($sceneName != $scene['scene']) return $this->failed('场景名称错误');
+            return $this->success('场景编辑成功');
+        }
+    }
+}
