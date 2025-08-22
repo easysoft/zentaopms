@@ -38,4 +38,25 @@ class taskZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 构造激活的任务数据。
+     * Build the task data to activate.
+     *
+     * @param  int         $taskID
+     * @param  string      $left
+     * @access public
+     * @return object|array
+     */
+    public function buildTaskForActivateTest(int $taskID, string $left): object|array
+    {
+        $_POST['left'] = $left;
+
+        $method = $this->taskZenTest->getMethod('buildTaskForActivate');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->taskZenTest->newInstance(), [$taskID]);
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->fetchByID($taskID);
+    }
 }
