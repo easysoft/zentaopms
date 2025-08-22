@@ -4169,7 +4169,6 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
-     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
@@ -4177,7 +4176,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, int $productID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true)
     {
         $searchConfig = $this->config->execution->search;
         if($cacheSearchFunc)
