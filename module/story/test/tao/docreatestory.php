@@ -4,12 +4,14 @@
 /**
 
 title=测试 storyModel->doCreateStory();
+timeout=0
 cid=0
 
 - 检查保存后的数据。
  - 属性product @1
  - 属性title @test story
  - 属性status @active
+ - 属性pri @3
 - 检查报错信息。 @『通知邮箱』应当为合法的EMAIL。
 
 */
@@ -47,7 +49,7 @@ $data->openedDate  = date('Y-m-d H:i:s');
 
 $storyTest = new storyTest();
 $story = $storyTest->doCreateStoryTest($data);
-r($story) && p('product,title,status') && e('1,test story,active'); //检查保存后的数据。
+r($story) && p('product,title,status,pri') && e('1,test story,active,3'); //检查保存后的数据。
 
 $data->notifyEmail = 'test';
 $error = $storyTest->doCreateStoryTest($data);
