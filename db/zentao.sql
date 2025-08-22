@@ -472,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `subStatus` varchar(30) NOT NULL default '',
   `color` char(7) NOT NULL DEFAULT '',
   `frequency` enum('1','2','3') NOT NULL default '1',
-  `order` tinyint(30) unsigned NOT NULL default '0',
+  `order` mediumint(8) unsigned NOT NULL default '0',
   `openedBy` char(30) NOT NULL default '',
   `openedDate` datetime NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
