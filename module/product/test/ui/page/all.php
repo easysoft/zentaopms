@@ -5,9 +5,11 @@ class allPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'selectAllBtn' => "//*[@id='products']/div[1]/div[1]/div/div/div[1]/div/label",
-            'batchEditBtn' => "//*[@id='products']/div[3]/nav[1]/a",
-            'saveBtn'      => "//*[@id='zin_product_batchedit_formBatch']/div[2]/button[1]",
+            'selectAllBtn'  => "//*[@id='products']/div[1]/div[1]/div/div/div[1]/div/label",
+            'batchEditBtn'  => "//*[@id='products']/div[3]/nav[1]/a",
+            'saveBtn'       => "//*[@id='zin_product_batchedit_formBatch']/div[2]/button[1]",
+            'exportBtn'     => "//*[@id='actionBar']/button[1]",
+            'exportConfirm' => "//*[@id='zin_product_export_form']/div[last()-1]/div/div/button",
             /*tab标签*/
             'allTab'    => "//*[@id='featureBar']/menu/li[1]/a/span[1]",
             'openTab'   => "//*[@id='featureBar']/menu/li[2]/a/span[1]",
