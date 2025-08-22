@@ -4,9 +4,16 @@
 /**
 
 title=测试productModel->buildProductSearchForm();
+timeout=0
 cid=0
 
 - 正确的queryID @1
+- 构建后的搜索数据属性module @product
+- 构建后的搜索数据
+ - 第fields条的name属性 @产品名称
+ - 第fields条的reviewer属性 @评审人
+ - 第fields条的program属性 @所属项目集
+- 构建后的搜索数据属性actionURL @searchUrl
 - 错误的queryID @0
 
 */
@@ -26,6 +33,10 @@ $query->gen(1);
 
 $queryIDList = array('0', '1');
 
+global $config;
 $product = new productTest('admin');
 r($product->buildProductSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
+r($config->product->all->search) && p('module')                       && e('product');                    // 构建后的搜索数据
+r($config->product->all->search) && p('fields:name,reviewer,program') && e('产品名称,评审人,所属项目集'); // 构建后的搜索数据
+r($config->product->all->search) && p('actionURL')                    && e('searchUrl');                  // 构建后的搜索数据
 r($product->buildProductSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
