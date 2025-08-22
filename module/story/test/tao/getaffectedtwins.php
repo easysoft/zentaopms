@@ -4,10 +4,15 @@
 /**
 
 title=测试 storyModel->getAffectedTwins();
+timeout=0
 cid=0
 
 - 检查需求2孪生需求 @1
-- 检查需求28孪生需求 @1
+- 检查需求28孪生需求
+ - 属性id @30
+ - 属性title @软件需求30
+ - 属性pri @2
+ - 属性status @激活
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -35,5 +40,5 @@ $story = new storyTest();
 $affectedStory2  = $story->getAffectedTwinsTest(2);
 $affectedStory28 = $story->getAffectedTwinsTest(28);
 
-r((int)empty($affectedStory2->twins))      && p() && e('1');  //检查需求2孪生需求
-r((int)isset($affectedStory28->twins[30])) && p() && e('1');  //检查需求28孪生需求
+r(empty($affectedStory2->twins)) && p() && e('1');  //检查需求2孪生需求
+r($affectedStory28->twins[30])   && p('id,title,pri,status') && e('30,软件需求30,2,激活');  //检查需求28孪生需求
