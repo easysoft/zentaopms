@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::fixLinkedProduct();
+timeout=0
+cid=1
+
+- 测试空数据 @0
+- 测试含有影子产品的项目修改。 @4
+- 测试含有影子产品的项目修改。 @4
+- 测试OldParent参数等于0的项目修改。 @2
+- 测试OldParent参数等于0的项目修改。 @2
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 su('admin');
@@ -14,21 +29,9 @@ $projectproduct->product->range('2');
 $projectproduct->project->range('11');
 $projectproduct->gen(1);
 
-/**
-
-title=测试 programModel::fixLinkedProduct();
-timeout=0
-cid=1
-
-*/
-
-$programIdList = array(0, 1, 3);
-$parentIdList  = array(0, 0, 4);
-$oldParent     = array(0, 11, 0);
-$oldPathList   = array(',0,', ',11,1', ',14,2');
-
 $programTester = new programTest();
-
-r($programTester->fixLinkedProductTest($programIdList[0], $parentIdList[0], $oldParent[0], $oldPathList[0])) && p() && e('0'); // 测试空数据
-r($programTester->fixLinkedProductTest($programIdList[2], $parentIdList[2], $oldParent[2], $oldPathList[2])) && p() && e('4'); // 测试含有影子产品的项目修改。
-r($programTester->fixLinkedProductTest($programIdList[1], $parentIdList[1], $oldParent[1], $oldPathList[1])) && p() && e('2'); // 测试OldParent参数等于0的项目修改。
+r($programTester->fixLinkedProductTest(0, 0, 0, ',0,'))     && p() && e('0'); // 测试空数据
+r($programTester->fixLinkedProductTest(3, 1, 0, ',14,2'))   && p() && e('4'); // 测试含有影子产品的项目修改。
+r($programTester->fixLinkedProductTest(3, 4, 0, ',14,2'))   && p() && e('4'); // 测试含有影子产品的项目修改。
+r($programTester->fixLinkedProductTest(1, 0, 11, ',11,1'))  && p() && e('2'); // 测试OldParent参数等于0的项目修改。
+r($programTester->fixLinkedProductTest(1, 0, 12, ',12,1'))  && p() && e('2'); // 测试OldParent参数等于0的项目修改。
