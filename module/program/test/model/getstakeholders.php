@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::getStakeholders();
+timeout=0
+cid=1
+
+- 获取干系人数量 @2
+- 获取干系人数量 @1
+- id倒序排，获取第一个干系人真实姓名第0条的realname属性 @用户2
+- id倒序排，获取第二个干系人真实姓名第1条的realname属性 @admin
+- id正序排，获取第一个干系人真实姓名第0条的realname属性 @用户1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
@@ -23,13 +38,6 @@ $stakeholder->user->range('admin,user1,user2');
 $stakeholder->gen(3);
 
 su('admin');
-/**
-
-title=测试 programModel::getStakeholders();
-timeout=0
-cid=1
-
-*/
 
 global $tester;
 $tester->loadModel('program');
@@ -39,4 +47,5 @@ $stakeholders2 = $tester->program->getStakeholders(2, 'id_asc');
 r(count($stakeholders1)) && p()             && e('2');     // 获取干系人数量
 r(count($stakeholders2)) && p()             && e('1');     // 获取干系人数量
 r($stakeholders1)        && p('0:realname') && e('用户2'); // id倒序排，获取第一个干系人真实姓名
+r($stakeholders1)        && p('1:realname') && e('admin'); // id倒序排，获取第二个干系人真实姓名
 r($stakeholders2)        && p('0:realname') && e('用户1'); // id正序排，获取第一个干系人真实姓名
