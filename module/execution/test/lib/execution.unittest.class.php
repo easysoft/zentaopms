@@ -2481,7 +2481,6 @@ class executionTest
      * Test build task search form.
      *
      * @param  int    $executionID
-     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
@@ -2490,9 +2489,9 @@ class executionTest
      * @access public
      * @return array
      */
-    public function buildTaskSearchFormTest($executionID, $productID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc): array
+    public function buildTaskSearchFormTest($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc): array
     {
-        return $this->executionModel->buildTaskSearchForm($executionID, $productID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc);
+        return $this->executionModel->buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc);
     }
 
     /**

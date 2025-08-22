@@ -880,7 +880,7 @@ class project extends control
             $actionURL  = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
             $executions = $this->execution->fetchExecutionList($projectID, 'all', $productID);
             $executions = $this->execution->getPairsByList(array_keys($executions));
-            $this->execution->buildTaskSearchForm($projectID, $productID, $executions, $queryID, $actionURL, 'projectTask');
+            $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
         $this->view->title          = $this->lang->execution->allExecutions;

@@ -4,6 +4,7 @@
 /**
 
 title=测试 programplanModel->getGanttTasks();
+timeout=0
 cid=0
 
 - 测试查询项目 11 执行 101 browseType 空 queryID 0 的甘特图任务 @1
@@ -12,6 +13,27 @@ cid=0
 - 测试查询项目 11 执行 101 browseType bysearch queryID 1 的甘特图任务 @0
 - 测试查询项目 12 执行 102 browseType 空 queryID 0 的甘特图任务 @2
 - 测试查询项目 12 执行 102 browseType 空 queryID 1 的甘特图任务 @2
+- 测试查询项目 12 执行 102 browseType bysearch queryID 0 的甘特图任务 @0
+- 测试查询项目 12 执行 102 browseType bysearch queryID 1 的甘特图任务 @0
+- 测试查询不存在的项目 101 执行 101 browseType 空 queryID 0 的甘特图任务 @0
+- 测试查询项目 11 执行 101 browseType 空 queryID 0 的甘特图任务
+ - 第1条的storyVersion属性 @1
+ - 第1条的storyStatus属性 @active
+ - 第1条的needConfirm属性 @~~
+- 测试查询项目 11 执行 101 browseType 空 queryID 1 的甘特图任务
+ - 第1条的storyVersion属性 @1
+ - 第1条的storyStatus属性 @active
+ - 第1条的needConfirm属性 @~~
+- 测试查询项目 11 执行 101 browseType bysearch queryID 0 的甘特图任务 @0
+- 测试查询项目 11 执行 101 browseType bysearch queryID 1 的甘特图任务 @0
+- 测试查询项目 12 执行 102 browseType 空 queryID 0 的甘特图任务
+ - 第2条的storyVersion属性 @1
+ - 第2条的storyStatus属性 @active
+ - 第2条的needConfirm属性 @~~
+- 测试查询项目 12 执行 102 browseType 空 queryID 1 的甘特图任务
+ - 第2条的storyVersion属性 @1
+ - 第2条的storyStatus属性 @active
+ - 第2条的needConfirm属性 @~~
 - 测试查询项目 12 执行 102 browseType bysearch queryID 0 的甘特图任务 @0
 - 测试查询项目 12 执行 102 browseType bysearch queryID 1 的甘特图任务 @0
 - 测试查询不存在的项目 101 执行 101 browseType 空 queryID 0 的甘特图任务 @0
