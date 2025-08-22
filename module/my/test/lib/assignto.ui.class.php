@@ -13,12 +13,10 @@ class assignToTester extends tester
     public function assignTo(array $todo)
     {
         $form = $this->initForm('my', 'todo', array('type' => 'all', 'userID' => '', 'status' => 'all'), 'appIframe-my');
-        $form->wait(2);
         $form->dom->assignBtn->click();
-        $form = $this->loadPage('todo', 'assignTo');
+        $form->wait(1);
         if(isset($todo['assignTo']))   $form->dom->assignedTo->picker($todo['assignTo']);
-        if(isset($todo['assignDate'])) $form->dom->date->datePicker($todo['assignDate']);
-
+        if(isset($todo['assignDate'])) $form->dom->assignDate->datePicker($todo['assignDate']);
         $form->wait(2);
         $form->dom->submitBtn->click();
         $form->wait(1);
@@ -28,8 +26,8 @@ class assignToTester extends tester
         $todoPage->dom->more->click();
         $todoPage->dom->assignedToOther->click();
         $todoPage->wait(2);
-        if($todoPage->dom->assignedTo->getText() != $todo['assignTo']) return $this->failed('指派人不正确');
-        if($todoPage->dom->date->getText()       != $todo['assignDate']) return $this->failed('日期不正确');
+        if($todoPage->dom->assignedToA->getText() != $todo['assignTo']) return $this->failed('指派人不正确');
+        if($todoPage->dom->date->getText()        != $todo['assignDate']) return $this->failed('日期不正确');
         return $this->success('指派他人待办成功');
     }
 }
