@@ -1309,40 +1309,6 @@ class productModel extends model
     }
 
     /**
-     * 为产品列表页和详情页构建操作按钮。
-     * Build operate menu.
-     *
-     * @param  object $product
-     * @access public
-     * @return array
-     */
-    public function buildOperateMenu(object $product): array
-    {
-        /* Declare menu list. */
-        $menuList = array
-        (
-            'main'   => array(),
-            'suffix' => array()
-        );
-
-        $params = "product=$product->id";
-
-        if($product->status != 'closed' && common::hasPriv('product', 'close')) $menuList['main'][] = $this->config->product->actionList['close'];
-        if($product->status == 'closed' && common::hasPriv('product', 'activate')) $menuList['main'][] = $this->config->product->actionList['activate'];
-
-        if(common::hasPriv('product', 'edit'))
-        {
-            unset($this->config->product->actionList['edit']['text']);
-            $this->config->product->actionList['edit']['url'] = helper::createLink('product', 'edit', $params);
-            $menuList['suffix'][] = $this->config->product->actionList['edit'];
-        }
-
-        if(common::hasPriv('product', 'delete')) $menuList['suffix'][] = $this->config->product->actionList['delete'];
-
-        return $menuList;
-    }
-
-    /**
      * Setting parameters for link.
      *
      * @param  string $module
