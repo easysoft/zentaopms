@@ -4,12 +4,22 @@
 /**
 
 title=productModel->buildRoadmapForUI();
+timeout=0
 cid=0
 
 - 空数据 @0
 - 分支没有数据 @0
 - 执行$data[$year][0] @1
 - 执行$data[$year][1] @5
+- 执行$data[$year][0]
+ - 第0条的version属性 @plan2
+ - 第0条的date属性 @2023-09-04~2023-09-08
+- 执行$data[$year][1]
+ - 第0条的version属性 @release1
+ - 第0条的date属性 @2023-08-14
+- 执行$data[$year][1]
+ - 第1条的version属性 @release2
+ - 第1条的date属性 @2023-08-15
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -70,3 +80,6 @@ r($product->buildRoadmapForUI($roadmaps, 1)) && p() && e('0'); //分支没有数
 $data = $product->buildRoadmapForUI($roadmaps, 0);
 r(count($data[$year][0])) && p() && e('1');
 r(count($data[$year][1])) && p() && e('5');
+r($data[$year][0]) && p('0:version,date') && e('plan2,2023-09-04~2023-09-08');
+r($data[$year][1]) && p('0:version,date') && e('release1,2023-08-14');
+r($data[$year][1]) && p('1:version,date') && e('release2,2023-08-15');
