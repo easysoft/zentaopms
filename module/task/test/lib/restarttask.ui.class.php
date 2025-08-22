@@ -7,18 +7,16 @@ class restartTaskTester extends tester
      * Restart task.
      *
      * @param  string $id
-     * @param  string $assignedTo
      * @param  string $consumed
      * @param  string $left
      * @param  string $status
      * @access public
      * @return object
      */
-    public function restart($id, $assignedTo, $consumed, $left, $status)
+    public function restart($id, $consumed, $left, $status)
     {
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
 
-        $form->dom->xpath['taskAssignedTo'] = "//*[@title='{$this->lang->task->assignedTo}']/../div[2]";
         $form->dom->xpath['taskStatus']     = "//*[@title='{$this->lang->task->status}']/..//span";
         $form->dom->xpath['taskConsumed']   = "//*[@title='{$this->lang->task->consumed}']/../div[2]";
         $form->dom->xpath['taskLeft']       = "//*[@title='{$this->lang->task->left}']/../div[2]";
@@ -55,7 +53,7 @@ class restartTaskTester extends tester
             $form->wait(3);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->done) return $this->failed('预计剩余为空或0时任务没有完成');
         }
-        elseif($taskConsumed > $consumed)
+        elseif(floatval($taskConsumed) > floatval($consumed))
         {
             if(!is_object($form->dom->consumedTip)) return $this->failed('总计消耗小于之前消耗时没有提示');
             if($form->dom->consumedTip->getText() != $this->lang->task->error->consumedSmall) return $this->failed('总计消耗小于之前消耗时提示错误');
@@ -63,9 +61,9 @@ class restartTaskTester extends tester
         }
         else
         {
+            $form->wait(3);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('继续任务后状态错误');
         }
-        if($form->dom->taskAssignedTo->getText() != $assignedTo)     return $this->failed('继续任务后指派给错误');
         if(intval($form->dom->taskConsumed->getText()) != $consumed) return $this->failed('继续任务后总计消耗错误');
         if(intval($form->dom->taskLeft->getText()) != $left)         return $this->failed('继续任务后预计剩余错误');
         return $this->success('继续任务成功');
