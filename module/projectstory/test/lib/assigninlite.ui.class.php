@@ -17,9 +17,7 @@ class assign extends tester
         $form->wait(2);
         $form->dom->assignBtn->click();
         $form->wait(2);
-        $form->dom->assignSpan->click();
-        $form->wait(1);
-        $form->dom->assignToAdmin->click();
+        $form->dom->assignedTo->picker($user);
         $form->dom->assignSubmitBtn->click();
         $form->wait(2);
         $form->dom->targetLife->click();
