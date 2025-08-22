@@ -1757,6 +1757,7 @@ class testcase extends control
 
         if($_POST)
         {
+            $this->lang->testcase->title = $this->lang->testcase->sceneTitle;
             $scene = form::data($this->config->testcase->form->editScene)->get();
 
             $this->testcase->updateScene($scene, $oldScene);
