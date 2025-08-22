@@ -378,9 +378,11 @@ fields:
 ### 🔴 步骤7：提交和推送代码（强制要求）
 **测试验证通过后，必须按以下步骤提交代码：**
 
-1. **添加文件到git**：
+1. **添加测试文件到git（仅添加测试相关文件）**：
    ```bash
-   git add .
+   git add module/{module}/test/lib/{module}.unittest.class.php
+   git add module/{module}/test/model/{methodName}.php
+   # 注意：不要添加规范文档文件到测试分支！规范文档应保留在开发分支上
    ```
 
 2. **提交代码**：
@@ -606,6 +608,7 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 - [ ] **避免使用php直接运行测试**：必须使用ztf运行器验证
 - [ ] **避免不提交代码**：测试通过后必须提交并推送代码
 - [ ] **避免忘记切换回开发分支**：完成后必须切换回原分支
+- [ ] **避免将规范文档提交到测试分支**：规范文档应该保留在开发分支供后续参照使用
 
 ---
 
