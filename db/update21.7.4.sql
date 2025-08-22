@@ -1,0 +1,1 @@
+ALTER TABLE `zt_case` CHANGE `order` `order` mediumint(8) unsigned NOT NULL DEFAULT '0';
