@@ -899,7 +899,7 @@ class taskModel extends model
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
             }
 
-            if($task->mode == 'multi' && strpos(',wait,doing,pause,', ",{$task->status},") !== false)  $currentTask->assignedTo = '';
+            if(isset($task->mode) && $task->mode == 'multi' && strpos(',wait,doing,pause,', ",{$task->status},") !== false)  $currentTask->assignedTo = '';
 
             if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
 
