@@ -205,15 +205,16 @@ class actionModel extends model
      */
     public function getList(string $objectType, array|int $objectID): array
     {
+        $this->loadModel('file');
+        $this->loadModel('workflow');
+
         $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         $histories = $this->getHistory(array_keys($actions));
+        $files     = $this->file->groupByObjectID('comment', array_keys($actions));
         $flowList  = array();
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
-
-        $this->loadModel('file');
-        $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
@@ -271,7 +272,7 @@ class actionModel extends model
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
-            $action->files   = $this->file->getByObject('comment', $actionID);
+            $action->files   = !empty($files[$actionID]) ? $files[$actionID] : array();
             $actions[$actionID] = $action;
         }
         return $actions;
