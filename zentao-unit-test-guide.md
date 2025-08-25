@@ -2,15 +2,45 @@
 
 ## 概述
 
-本文档用于指导大模型为ZenTao项目生成高质量的单元测试脚本。ZenTao采用自研测试框架，支持数据驱动测试、分层测试架构和多种断言方式。
+本文档专门用于指导AI大模型为ZenTao项目生成高质量的单元测试脚本。ZenTao采用自研测试框架，支持数据驱动测试、分层测试架构和多种断言方式。
+
+### 🎯 大模型使用须知
+- **严格按照模板格式**：所有代码必须遵循本文档提供的模板
+- **完整执行流程**：按顺序执行所有步骤，不可跳过任何环节
+- **精确理解术语**：区分测试用例（.php文件）和测试步骤（r()...e()语句）
+- **强制性要求**：每个测试用例必须包含至少5个测试步骤
+
+### 📝 统一占位符说明
+**AI大模型必须严格按照以下占位符规范，保持命名一致性：**
+- `{moduleName}` - 模块名（小写，如：user、task、project）
+- `{methodName}` - 方法名（驼峰命名，如：getById、createUser）
+- `{tableName}` - 数据表名（小写，如：user、task、project）
+- `{fieldName}` - 字段名（小写，如：id、name、status）
+- `{paramName}` - 参数名（驼峰命名，如：userId、taskId）
+
+**🚨 注意：不要使用其他变体形式，如 {ModuleName}、{methodname}、{table} 等**
+
+### 🔧 代码格式要求
+**AI大模型必须严格遵守代码格式规范，违反将导致提交失败：**
+- **🚨 严禁行尾空格**：所有代码行末尾不得包含任何空格字符
+- **文件末尾换行**：每个文件必须以一个换行符结尾，不能有多余空行
+- **缩进统一**：使用4个空格进行缩进，不使用制表符
+- **字符编码**：使用UTF-8编码，不包含非ASCII特殊字符
 
 ---
-**🚨🚨🚨 重要警告 🚨🚨🚨**
+**🚨🚨🚨 AI大模型必读警告 🚨🚨🚨**
 
-**在开始编写任何代码之前，必须先创建测试分支！**
-**任何直接在开发分支上编写单元测试的行为都是严重违规！**
-**每个测试用例必须包含至少5个测试步骤（r()...e()语句）！**
-**必须严格按照分支→开发→测试→提交→推送的流程执行！**
+**第一步：必须先切换到 feature/unittest/ai 分支！**
+**第二步：每个测试用例必须包含至少5个测试步骤（r()...e()语句）！**
+**第三步：必须使用 test/runtime/ztf 运行测试验证！**
+**第四步：必须按照指定格式提交代码！**
+
+**⛔ 绝对禁止的行为：**
+- 在开发分支上直接编写测试代码
+- 测试步骤少于5个
+- 使用php命令直接运行测试
+- 不遵循提交信息格式
+- 代码包含行尾空格（会导致提交失败）
 
 ---
 
@@ -18,34 +48,40 @@
 
 **任何单元测试脚本的开发都必须严格按照以下分支流程进行：**
 
-### 第一步：创建测试分支（必须）
-1. **检查当前分支**：确认当前处于开发分支（通常是release分支或master分支）
-2. **创建测试分支**：基于当前开发分支创建新的测试分支
-3. **分支命名规范**：`unittest/{ModuleName}/{module|tao|zen}/{methodName}/{大模型名称}`
-   - 示例：`unittest/execution/model/buildCaseSearchForm/claude`
-4. **切换到测试分支**：立即切换到新创建的测试分支进行开发
+### 第一步：切换到测试分支（必须）
+1. **测试分支名**：`feature/unittest/ai`
+2. **检查当前分支**：确认当前处于测试分支
+3. **切换到测试分支**：如果当前没有处于测试分支，立即切换到测试分支进行开发
 
 ### 分支操作命令示例：
 ```bash
 # 检查当前分支
 git branch
 
-# 创建并切换到测试分支
-git checkout -b unittest/execution/model/buildCaseSearchForm/claude
+# 切换到测试分支
+git switch feature/unittest/ai
 
 # 确认已切换到测试分支
 git branch
 ```
 
-**🚨 警告：如果不创建测试分支，将违反ZenTao开发规范，必须立即停止操作并创建正确的分支！**
+**🚨 警告：如果不切换到测试分支，将违反ZenTao开发规范，必须立即停止操作并切换到正确的分支！**
 
 ## 🔍 核心概念说明
 
-### 测试用例 vs 测试步骤
-在ZenTao测试框架中，需要明确区分以下两个概念：
+### 🔑 关键概念：测试用例 vs 测试步骤
+**大模型必须精确理解以下概念，避免混淆：**
 
-- **测试用例（Test Case）**：每个`.php`测试脚本文件对应一个测试用例，用于测试单个方法
-- **测试步骤（Test Step）**：在测试用例中，每个`r()...e()`语句对应一个测试步骤，用于验证特定场景
+#### 测试用例（Test Case）
+- **定义**：每个`.php`测试脚本文件 = 一个测试用例
+- **作用**：专门测试一个具体方法（如：getUserById.php测试getUserById方法）
+- **文件命名**：使用小写方法名 + .php后缀（如：getUserById方法 → getuserbyid.php）
+
+#### 测试步骤（Test Step）
+- **定义**：测试用例内的每个`r()...e()`语句 = 一个测试步骤
+- **作用**：验证方法在不同输入下的表现
+- **强制要求**：每个测试用例必须包含≥5个测试步骤
+- **覆盖场景**：正常情况、边界值、异常输入、权限验证、业务规则
 
 **示例说明：**
 ```php
@@ -63,21 +99,21 @@ r($userTest->getByIdTest('abc')) && p() && e(false);           // 测试步骤5�
 
 ```
 module/{moduleName}/test/
-├── lib/                            # 测试类库
-│   └── {moduleName}.unittest.class.php    # 单元测试类
-├── model/                          # Model层单元测试
-│   ├── {methodName}.php           # 测试执行脚本
-│   └── yaml/                      # 测试数据目录
-│   │   ├── {table}_{method}.yaml # YAML测试数据
-├── tao/                            # TAO层业务逻辑测试
-│   ├── {methodName}.php           # 测试执行脚本
-│   └── yaml/                      # 测试数据目录
-│   │   ├── {table}_{method}.yaml # YAML测试数据
-├── zen/                            # ZEN层新架构测试
-│   ├── {methodName}.php           # 测试执行脚本
-│   └── yaml/                      # 测试数据目录
-│   │   ├── {table}_{method}.yaml # YAML测试数据
-└── ui/                             # UI自动化测试（独立文档）
+├── lib/                                # 测试类库
+│   └── {moduleName}.unittest.class.php # 单元测试类
+├── model/                              # Model层单元测试
+│   ├── {methodName}.php                # 测试执行脚本
+│   └── yaml/                           # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
+├── tao/                                # TAO层业务逻辑测试
+│   ├── {methodName}.php                # 测试执行脚本
+│   └── yaml/                           # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
+├── zen/                                # ZEN层新架构测试
+│   ├── {methodName}.php                # 测试执行脚本
+│   └── yaml/                           # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
+└── ui/                                 # UI自动化测试（独立文档）
 ```
 
 ## 核心文件类型详解
@@ -103,30 +139,46 @@ cid=0
 */
 ```
 
-**标准代码结构：**
+**🛠️ AI大模型标准代码模板（必须严格遵循）：**
 ```php
-// 1. 导入依赖
+#!/usr/bin/env php
+<?php
+
+/**
+
+title=测试 {moduleName}Model::{methodName}();
+cid=0
+
+- 测试步骤1：正常输入情况 >> 期望正常结果
+- 测试步骤2：边界值输入 >> 期望边界处理结果
+- 测试步骤3：无效输入情况 >> 期望错误处理结果
+- 测试步骤4：权限验证情况 >> 期望权限控制结果
+- 测试步骤5：业务规则验证 >> 期望业务逻辑结果
+
+*/
+
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';
 
-// 2. zendata数据准备
+// 2. zendata数据准备（根据需要配置）
 $table = zenData('{tableName}');
-$table->{field}->range({range});               // 设置字段数据范围
-$table->{field2}->range('{range2}');           // 设置其他字段范围
-$table->gen({count});                          // 生成指定数量的数据
+$table->{field}->range('{dataRange}');               // 具体数据范围
+$table->{field2}->range('{dataRange2}');             // 其他字段数据
+$table->gen({count});                                // 生成数据数量
 
-// 3. 用户登录
-su('{username}');
+// 3. 用户登录（选择合适角色）
+su('admin');  // 或 su('user'); 根据测试需要
 
-// 4. 创建测试实例
+// 4. 创建测试实例（变量名与模块名一致）
 ${moduleName}Test = new {moduleName}Test();
 
-// 5. 执行测试步骤并断言 (🔴 强制要求：至少5个测试步骤)
-r(${moduleName}Test->{methodName}Test({params})) && p('{property}') && e('{expected}'); // 测试步骤1描述
-r(${moduleName}Test->{methodName}Test({params})) && p('{property}') && e('{expected}'); // 测试步骤2描述
-r(${moduleName}Test->{methodName}Test({params})) && p('{property}') && e('{expected}'); // 测试步骤3描述
-r(${moduleName}Test->{methodName}Test({params})) && p('{property}') && e('{expected}'); // 测试步骤4描述
-r(${moduleName}Test->{methodName}Test({params})) && p('{property}') && e('{expected}'); // 测试步骤5描述
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
+r(${moduleName}Test->{methodName}Test({param1})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤1：正常情况
+r(${moduleName}Test->{methodName}Test({param2})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤2：边界值
+r(${moduleName}Test->{methodName}Test({param3})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤3：异常输入
+r(${moduleName}Test->{methodName}Test({param4})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤4：权限验证
+r(${moduleName}Test->{methodName}Test({param5})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤5：业务规则
 ```
 
 **关键API说明：**
@@ -161,14 +213,17 @@ class {moduleName}Test
      * @access public
      * @return mixed
      */
-    public function {methodName}Test({parameters}): {returnType}
+    /**
+     * Test {methodName} method.
+     *
+     * @param  mixed $param 参数描述
+     * @access public
+     * @return mixed
+     */
+    public function {methodName}Test($param = null)
     {
-        $result = $this->objectModel->{methodName}({parameters});
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
+        $result = $this->objectModel->{methodName}($param);
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
@@ -344,29 +399,34 @@ fields:
 
 ## 单元测试开发完整流程（必须按顺序执行）
 
-### 🔴 步骤1：创建测试分支（强制要求，不可跳过）
-**在开始任何代码编写之前，必须先执行分支操作：**
+### 🔴 步骤1：切换到测试分支（AI大模型必须首先执行）
 
-1. **检查当前分支状态**：
-   ```bash
-   git branch
-   git status
-   ```
+**⚠️ AI大模型执行指令：在生成任何代码之前，必须先执行以下分支命令**
 
-2. **创建并切换到测试分支**：
-   ```bash
-   git checkout -b unittest/{ModuleName}/{module|tao|zen}/{methodName}/{大模型名称}
-   ```
+#### 1.1 检查当前分支
+```bash
+# 执行此命令查看当前分支
+git branch
+git status
+```
 
-3. **验证分支创建成功**：
-   ```bash
-   git branch  # 确认带*的是新创建的测试分支
-   ```
+#### 1.2 切换到指定测试分支
+```bash
+# 必须切换到这个分支，分支名固定不变
+git switch feature/unittest/ai
+```
 
-**⚠️ 关键要求：**
-- 分支名必须包含模块名、层次、方法名和大模型标识
-- 例如：`unittest/execution/model/buildCaseSearchForm/claude`
-- 如果忘记创建分支，必须立即停止当前操作并创建分支
+#### 1.3 验证切换成功
+```bash
+# 确认当前分支标记为 * feature/unittest/ai
+git branch
+```
+
+**🚨 AI执行检查点：**
+- [ ] 已执行 `git branch` 命令
+- [ ] 已执行 `git switch feature/unittest/ai` 命令
+- [ ] 已确认当前在 feature/unittest/ai 分支
+- [ ] 如果分支不存在，需要先创建：`git checkout -b feature/unittest/ai`
 
 ### 步骤2：分析待测方法
 1. 确定方法所属模块和层次（Model/TAO/ZEN）
@@ -392,31 +452,58 @@ fields:
 
 ### 步骤5：编写测试脚本
 1. 创建测试执行脚本，包含完整的测试用例描述
-2. **🔴 强制要求：每个测试用例必须包含至少5个测试步骤（r()...e()语句）**
-3. 实现单元测试类中的测试方法
-4. 配置数据准备和环境设置
-5. 为每个测试步骤编写准确的断言验证
+2. 测试脚本使用小写的方法名称作为文件名，后缀统一为.php
+3. **🔴 强制要求：每个测试用例必须包含至少5个测试步骤（r()...e()语句）**
+4. 实现单元测试类中的测试方法
+5. 配置数据准备和环境设置
+6. 为每个测试步骤编写准确的断言验证
 
-### 步骤6：验证测试脚本
-1. **必须使用** `test/runtime/ztf` 运行测试脚本（不能用php直接运行）
-2. 运行命令：`cd test/runtime && ./ztf run ../../module/{module}/test/model/{method}.php`
-3. 验证结果：通过数为1，失败数和忽略数为0表示测试通过
-4. 如果测试失败，根据输出结果修改测试脚本
-5. 重复验证直到所有测试通过
+### 步骤6：验证测试脚本（AI大模型必须执行验证）
+
+**🔴 强制要求：必须使用 ztf 运行器，禁止使用 php 命令直接运行**
+
+#### 6.1 执行测试命令
+```bash
+# 切换到测试运行目录
+cd test/runtime
+
+# 运行测试脚本（替换实际的模块名和方法名）
+./ztf run ../../module/{moduleName}/test/model/{methodName}.php
+```
+
+#### 6.2 验证测试结果
+**✅ 测试通过标准：**
+- 通过数（PASS）：1
+- 失败数（FAIL）：0
+- 忽略数（SKIP）：0
+
+**❌ 如果测试失败：**
+1. 查看错误输出信息
+2. 检查测试数据是否正确
+3. 验证断言是否匹配实际结果
+4. 修改测试脚本后重新运行
+
+#### 6.3 AI执行检查点
+- [ ] 已切换到 test/runtime 目录
+- [ ] 已使用 ztf 命令运行测试
+- [ ] 测试结果显示 PASS=1, FAIL=0, SKIP=0
+- [ ] 如有失败，已根据错误信息修正代码
 
 ### 🔴 步骤7：提交和推送代码（强制要求）
 **测试验证通过后，必须按以下步骤提交代码：**
 
 1. **添加测试文件到git（仅添加测试相关文件）**：
+
    ```bash
-   git add module/{module}/test/lib/{module}.unittest.class.php
-   git add module/{module}/test/model/{methodName}.php
+   git add module/{moduleName}/test/lib/{moduleName}.unittest.class.php
+   git add module/{moduleName}/test/model/{methodName}.php
+   git add module/{moduleName}/test/model/yaml/{tableName}_{methodName}.yaml
    # 注意：不要添加规范文档文件到测试分支！规范文档应保留在开发分支上
    ```
 
 2. **提交代码**：
    ```bash
-   git commit -m "+ [misc] Add unit tests for {ModuleName}::{methodName}() method
+   git commit -m "+ [misc] Add unit tests for {moduleName}::{methodName}() method
 
    🤖 Generated with [Claude Code](https://claude.ai/code)
 
@@ -424,20 +511,26 @@ fields:
    ```
 
 3. **推送到远程仓库**：
+
    ```bash
    git push
    ```
 
-4. **切换回开发分支**：
-   ```bash
-   git checkout {原开发分支名}  # 如 release/21.7.5 或 master
-   ```
+**⚠️ AI大模型提交信息模板（必须严格遵循）：**
 
-**⚠️ 提交信息规范：**
-- 必须以符号开头：`+`（新增）、`-`（删除）、`*`（修改）
-- 格式：`{symbol} [misc] {描述}`
-- 必须包含Claude Code标识
-- 必须包含Co-Authored-By信息
+```bash
+git commit -m "+ [misc] Add unit tests for {moduleName}::{methodName}() method
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+**📋 提交信息格式说明：**
+- **符号**：`+` (新增测试) / `*` (修改测试) / `-` (删除测试)
+- **分类**：`[misc]` (测试相关固定使用misc)
+- **描述**：`Add unit tests for {moduleName}::{methodName}() method`
+- **标识**：必须包含Claude Code和Co-Authored-By标记
 
 ## 常见测试模式
 
@@ -566,9 +659,9 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 
 ### 1. 命名规范
 - 测试文件：使用被测方法名
-- 测试类：{ModuleName}Test
+- 测试类：{moduleName}Test
 - 测试方法：{methodName}Test
-- YAML文件：{table}_{method}.yaml
+- YAML文件：{tableName}_{methodName}.yaml
 
 ### 2. 测试数据管理
 - 每个测试脚本独立准备数据
@@ -621,14 +714,29 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 
 在完成单元测试脚本开发后，请确认以下所有步骤都已正确执行：
 
-### 🔴 强制检查项（必须100%完成）
-- [ ] **已创建测试分支**：分支名格式为 `unittest/{模块名}/{层次}/{方法名}/{大模型名}`
-- [ ] **当前在测试分支上工作**：通过 `git branch` 确认当前分支正确
-- [ ] **测试步骤数量符合要求**：每个测试用例包含至少5个测试步骤（r()...e()语句）
-- [ ] **测试脚本验证通过**：使用 `test/runtime/ztf` 运行测试，通过数为1，失败数为0
-- [ ] **已提交代码到本地**：使用正确格式的提交信息
-- [ ] **已推送到远程仓库**：执行 `git push` 推送测试分支
-- [ ] **已切换回开发分支**：完成后切换回原始开发分支
+### 🔴 AI大模型强制检查清单（每项必须100%完成）
+
+**📋 分支操作检查**
+- [ ] 已执行 `git switch feature/unittest/ai` 切换分支
+- [ ] 已确认当前在 `feature/unittest/ai` 分支（git branch 显示*号）
+
+**📋 代码生成检查**
+- [ ] 测试文件名使用小写方法名：`{methodName}.php`
+- [ ] 单元测试类名格式：`{moduleName}Test`
+- [ ] 测试方法名格式：`{methodName}Test`
+- [ ] 每个测试用例包含≥5个 `r()...e()` 测试步骤
+- [ ] 文件头包含完整的测试步骤描述
+- [ ] **🚨 所有代码行尾无空格**：检查每行末尾是否清洁
+
+**📋 测试验证检查**
+- [ ] 已使用 `cd test/runtime && ./ztf run` 命令运行测试
+- [ ] 测试结果：PASS=1, FAIL=0, SKIP=0
+- [ ] 所有断言都与实际输出匹配
+
+**📋 代码提交检查**
+- [ ] 已添加测试相关文件：`git add module/{moduleName}/test/...`
+- [ ] 提交信息符合格式：`+ [misc] Add unit tests for...`
+- [ ] 已推送到远程：`git push`
 
 ### 📝 代码质量检查项
 - [ ] **测试步骤完整**：测试用例包含正常流程、边界值、异常情况等测试步骤
@@ -640,8 +748,8 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 - [ ] **避免直接在开发分支开发**：必须在测试分支上进行开发
 - [ ] **避免使用php直接运行测试**：必须使用ztf运行器验证
 - [ ] **避免不提交代码**：测试通过后必须提交并推送代码
-- [ ] **避免忘记切换回开发分支**：完成后必须切换回原分支
 - [ ] **避免将规范文档提交到测试分支**：规范文档应该保留在开发分支供后续参照使用
+- [ ] **🚨 避免行尾空格**：所有生成的代码必须移除行尾空格，否则提交会被拒绝
 
 ---
 
