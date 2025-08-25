@@ -515,7 +515,7 @@ class transferModel extends model
 
                 /* 处理为空字段的情况。*/
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if(is_string($rows[$id]->$field) && ($rows[$id]->$field == '0' || substr($rows[$id]->$field, 0, 4) == '0000')) $rows[$id]->$field = '';
+                if(is_string($rows[$id]->$field) && ($rows[$id]->$field == '0' || substr($rows[$id]->$field, 0, 10) == '0000:00:00')) $rows[$id]->$field = '';
             }
         }
 
