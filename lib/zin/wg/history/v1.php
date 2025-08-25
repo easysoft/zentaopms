@@ -62,6 +62,7 @@ class history extends wg
             $objectType = data('objectType');
             if(empty($objectType)) $objectType = $app->rawModule;
             if($objectType == 'requirement' || $objectType == 'epic') $objectType = 'story';
+            if($objectType == 'researchtask') $objectType = 'task';
             $this->setProp('objectType', $objectType);
         }
         if(empty($objectID))
