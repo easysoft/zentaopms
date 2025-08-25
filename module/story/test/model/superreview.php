@@ -7,12 +7,12 @@ title=测试 storyModel->superReview();
 timeout=0
 cid=0
 
-- 执行$reviewers
+- 查看评审人详情
  - 第0条的story属性 @1
  - 第0条的version属性 @1
  - 第0条的reviewer属性 @user1
  - 第0条的result属性 @pass
- - 第0条的reviewDate属性 @2025-08-22 00:00:00
+- 检查评审日期 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -37,4 +37,5 @@ $oldStory->twins   = '';
 
 $storyModel->superReview(1, $oldStory, $story, 'pass');
 $reviewers = $storyModel->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->eq(1)->fetchAll();
-r($reviewers) && p('0:story,version,reviewer,result,reviewDate') && e('1,1,user1,pass,2025-08-22 00:00:00'); // 查看评审人详情
+r($reviewers) && p('0:story,version,reviewer,result') && e('1,1,user1,pass'); // 查看评审人详情
+r($reviewers[0]->reviewDate == date('Y-m-d 00:00:00')) && p() && e('1');      // 检查评审日期
