@@ -21,6 +21,7 @@ extension/custom/*
 test/data/sql/
 .bak
 .idea
+.tree
 .vscode
 .gitignore
 .DS_Store
