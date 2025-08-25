@@ -885,6 +885,7 @@ class taskModel extends model
             $currentTask = !empty($task) ? clone $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
+            if(isset($task->mode)) $oldTask->mode = $task->mode;
 
             /* If the assignedTo is not empty, the current task assignedTo is assignedTo. */
             if(!empty($_POST['assignedTo']) && is_string($_POST['assignedTo']))
@@ -896,9 +897,13 @@ class taskModel extends model
             else
             {
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
-                if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
-                $oldTask->team = $oldTeam;
             }
+
+            if($task->mode == 'multi' && strpos(',wait,doing,pause,', ",{$task->status},") !== false)  $currentTask->assignedTo = '';
+
+            if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
+
+            $oldTask->team = $oldTeam;
 
             /* Compute estimate and left. */
             $currentTask->estimate = 0;
