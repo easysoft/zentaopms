@@ -547,6 +547,7 @@ class storyModel extends model
     {
         if(commonModel::isTutorialMode()) return false;
 
+        if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
 
@@ -716,6 +717,7 @@ class storyModel extends model
         $link2Plans  = array();
         foreach($stories as $i => $story)
         {
+            if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
             $storyID = $this->storyTao->doCreateStory($story);
             if(!$storyID) return array();
 
@@ -854,6 +856,7 @@ class storyModel extends model
         }
 
         if($oldStory->stage != 'verified' && $story->stage == 'verified') $story->verifiedDate = helper::now();
+        if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
 
         $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult')
@@ -1184,6 +1187,7 @@ class storyModel extends model
             $oldStory = $oldStories[$storyID];
 
             if($oldStory->stage != 'verified' && $story->stage == 'verified') $story->verifiedDate = helper::now();
+            if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
 
             $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
@@ -1240,6 +1244,7 @@ class storyModel extends model
         $now      = helper::now();
         $account  = $this->app->user->account;
         if(!str_contains(",{$oldStory->reviewedBy},", ",{$account}")) $story->reviewedBy = $oldStory->reviewedBy . ',' . $account;
+        if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
 
         $this->dao->update(TABLE_STORYREVIEW)
             ->set('result')->eq($story->result)
