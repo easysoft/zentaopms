@@ -287,10 +287,6 @@ r($action->getListTest($objectType[9], $testtaskID[1])) && p() && e('link'); // 
 // 操作 testtaskclosed
 r($action->getListTest($objectType[9], $testtaskID[2])) && p() && e('link'); // 测试获取对象类型 testtask 对象ID 3 的动态信息
 
-// 开源版 导入资产库相关
-// 操作 importfromstorylib
-r($action->getListTest($objectType[1], $taskID[11])) && p() && e('link'); // 测试获取对象类型 task 对象ID 12 的动态信息
-
 // 操作 opened 对象类型 execution
 r($action->getListTest($objectType[13], $executionID[0])) && p() && e('link'); // 测试获取对象类型 execution 对象ID 1 的动态信息
 
