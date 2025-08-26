@@ -404,7 +404,7 @@ class bugModel extends model
      */
     public function assign(object $bug, object $oldBug): bool
     {
-        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->andWhere('status')->ne('closed')->exec();
         if(dao::isError()) return false;
 
         /* 记录指派动作。*/
