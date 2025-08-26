@@ -3,6 +3,11 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
+zenData('feedback')->gen(0);
+zenData('ticket')->gen(0);
+zenData('issue')->gen(0);
+zenData('risk')->gen(0);
+zenData('opportunity')->gen(0);
 zenData('action')->loadYaml('action')->gen(99);
 zenData('actionrecent')->gen(0);
 zenData('project')->gen(20, true, false);
