@@ -511,7 +511,7 @@ detailBody
                         input
                         (
                             set::name('estimate'),
-                            set::value($task->estimate),
+                            set::value(helper::formatHours($task->estimate)),
                             !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
@@ -538,7 +538,7 @@ detailBody
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')
                     ) : null,
-                    formHidden('consumed', $task->consumed)
+                    formHidden('consumed', helper::formatHours($task->consumed))
                 )
             ),
             item
@@ -551,7 +551,7 @@ detailBody
                         input
                         (
                             set::name('left'),
-                            set::value($task->left),
+                            set::value(helper::formatHours($task->left)),
                             !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
