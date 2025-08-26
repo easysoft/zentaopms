@@ -859,7 +859,7 @@ class storyModel extends model
         if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
 
         $moduleName = $this->app->rawModule;
-        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult')
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult,oldDocs,docVersions')
             ->autoCheck()
             ->batchCheck($this->config->{$moduleName}->edit->requiredFields, 'notempty')
             ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
