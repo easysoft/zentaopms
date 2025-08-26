@@ -293,7 +293,7 @@ class storyTest
     public function updateTest($storyID, $params): array|object
     {
         $data          = $this->objectModel->getByID($storyID);
-        $defaultParams = array('title', 'product', 'branch', 'stage', 'spec', 'verify', 'linkStories', 'notifyEmail', 'grade', 'parent', 'plan');
+        $defaultParams = array('title', 'product', 'branch', 'stage', 'spec', 'verify', 'notifyEmail', 'grade', 'parent', 'plan');
 
         $story = new stdclass();
         foreach($defaultParams as $defaultKey) $story->$defaultKey = $data->$defaultKey;

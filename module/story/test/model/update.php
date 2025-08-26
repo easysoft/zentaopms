@@ -29,8 +29,8 @@ zenData('product')->gen(1);
 global $app;
 $app->rawModule = 'story';
 
-$params1 = array('title' => '编辑后的名称1', 'pri' => 1, 'sourceNote' => '来源备注1', 'estimate' => 1, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => '');
-$params2 = array('title' => '编辑后的名称2', 'pri' => 2, 'sourceNote' => '来源备注2', 'estimate' => 2, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => '');
+$params1 = array('title' => '编辑后的名称1', 'pri' => 1, 'sourceNote' => '来源备注1', 'estimate' => 1, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '');
+$params2 = array('title' => '编辑后的名称2', 'pri' => 2, 'sourceNote' => '来源备注2', 'estimate' => 2, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '');
 
 $story   = new storyTest();
 $result1 = $story->updateTest(1, $params1);
