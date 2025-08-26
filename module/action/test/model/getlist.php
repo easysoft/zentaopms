@@ -3,11 +3,6 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zenData('feedback')->gen(0);
-zenData('ticket')->gen(0);
-zenData('issue')->gen(0);
-zenData('risk')->gen(0);
-zenData('opportunity')->gen(0);
 zenData('action')->loadYaml('action')->gen(99);
 zenData('actionrecent')->gen(0);
 zenData('project')->gen(20, true, false);
@@ -64,8 +59,6 @@ cid=1
 - 测试获取对象类型 bug 对象ID 1 的动态信息 @link
 - 测试获取对象类型 bug 对象ID 2 的动态信息 @link
 - 测试获取对象类型 bug 对象ID 3 的动态信息 @link
-- 测试获取对象类型 feedback 对象ID 1 的动态信息 @nochanged
-- 测试获取对象类型 ticket 对象ID 1 的动态信息 @nochanged
 - 测试获取对象类型 task 对象ID 1 的动态信息 @link
 - 测试获取对象类型 module 对象ID 1 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 28 的动态信息 @link
@@ -98,12 +91,6 @@ cid=1
 - 测试获取对象类型 task 对象ID 9 的动态信息 @link
 - 测试获取对象类型 task 对象ID 10 的动态信息 @link
 - 测试获取对象类型 task 对象ID 11 的动态信息 @link
-- 测试获取对象类型 feedback 对象ID 2 的动态信息 @nochanged
-- 测试获取对象类型 feedback 对象ID 3 的动态信息 @nochanged
-- 测试获取对象类型 feedback 对象ID 4 的动态信息 @nochanged
-- 测试获取对象类型 feedback 对象ID 5 的动态信息 @nochanged
-- 测试获取对象类型 feedback 对象ID 6 的动态信息 @nochanged
-- 测试获取对象类型 feedback 对象ID 7 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 36 的动态信息 @link
 - 测试获取对象类型 story 对象ID 37 的动态信息 @link
 - 测试获取对象类型 story 对象ID 38 的动态信息 @link
@@ -113,9 +100,6 @@ cid=1
 - 测试获取对象类型 testtask 对象ID 2 的动态信息 @link
 - 测试获取对象类型 testtask 对象ID 3 的动态信息 @link
 - 测试获取对象类型 task 对象ID 12 的动态信息 @link
-- 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @link
-- 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @link
-- 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 1 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 2 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 3 的动态信息 @link
@@ -140,7 +124,6 @@ $objectType  = array('story', 'task', 'bug', 'feedback', 'ticket', 'module', 're
 $storyID     = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43);
 $taskID      = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
 $bugID       = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
-$feedbackID  = array(1, 2, 3, 4, 5, 6, 7);
 $hasOneID    = array(1);
 $hasTwoID    = array(1, 2);
 $todoID      = array(1, 2, 3, 4, 5);
@@ -183,12 +166,6 @@ r($action->getListTest($objectType[0], $storyID[26])) && p() && e('nochanged'); 
 r($action->getListTest($objectType[2], $bugID[0])) && p() && e('link'); // 测试获取对象类型 bug 对象ID 1 的动态信息
 r($action->getListTest($objectType[2], $bugID[1])) && p() && e('link'); // 测试获取对象类型 bug 对象ID 2 的动态信息
 r($action->getListTest($objectType[2], $bugID[2])) && p() && e('link'); // 测试获取对象类型 bug 对象ID 3 的动态信息
-
-// 操作是 tostory 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[0])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 1 的动态信息
-
-// 操作是 tostory 对象类型 ticket
-r($action->getListTest($objectType[4], $hasOneID[0])) && p() && e('link'); // 测试获取对象类型 ticket 对象ID 1 的动态信息
 
 // 操作是 moved 对象类型是 task
 r($action->getListTest($objectType[1], $taskID[0])) && p() && e('link'); // 测试获取对象类型 task 对象ID 1 的动态信息
@@ -286,24 +263,6 @@ r($action->getListTest($objectType[1], $taskID[9])) && p() && e('link'); // 测�
 // 操作 deletechildrentask 对象类型 task
 r($action->getListTest($objectType[1], $taskID[10])) && p() && e('link'); // 测试获取对象类型 task 对象ID 11 的动态信息
 
-// 操作 totask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[1])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 2 的动态信息
-
-// 操作 linkchildtask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[2])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 3 的动态信息
-
-// 操作 unlinkchildrentask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[3])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 4 的动态信息
-
-// 操作 linkparenttask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[4])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 5 的动态信息
-
-// 操作 unlinkparenttask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[5])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 6 的动态信息
-
-// 操作 deletechildrentask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[6])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 7 的动态信息
-
 // 操作 linkchildstory
 r($action->getListTest($objectType[0], $storyID[35])) && p() && e('link'); // 测试获取对象类型 story 对象ID 36 的动态信息
 
@@ -331,15 +290,6 @@ r($action->getListTest($objectType[9], $testtaskID[2])) && p() && e('link'); // 
 // 开源版 导入资产库相关
 // 操作 importfromstorylib
 r($action->getListTest($objectType[1], $taskID[11])) && p() && e('link'); // 测试获取对象类型 task 对象ID 12 的动态信息
-
-// 操作 importfromrisklib
-r($action->getListTest($objectType[10], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息
-
-// 操作 importfromissuelib
-r($action->getListTest($objectType[11], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息
-
-// 操作 importfromopportunitylib
-r($action->getListTest($objectType[12], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
 
 // 操作 opened 对象类型 execution
 r($action->getListTest($objectType[13], $executionID[0])) && p() && e('link'); // 测试获取对象类型 execution 对象ID 1 的动态信息
