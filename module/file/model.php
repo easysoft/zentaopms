@@ -57,6 +57,31 @@ class fileModel extends model
     }
 
     /**
+     * 按照objectID分组获取附件列表。
+     * Get files of an object group by objectID.
+     *
+     * @param  string       $objectType
+     * @param  string|array $objectID
+     * @access public
+     * @return array
+     */
+    public function groupByObjectID(string $objectType, string|array $objectID): array
+    {
+        $fileGroup = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id')
+            ->fetchGroup('objectID', 'id');
+
+        foreach($fileGroup as $objectID => $files)
+        {
+            foreach($files as $file) $this->setFileWebAndRealPaths($file);
+        }
+        return $fileGroup;
+    }
+
+    /**
      * Delete files by object.
      *
      * @param  string    $objectType
