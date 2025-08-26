@@ -282,16 +282,24 @@ class storyTest
     }
 
     /**
-     * Test update story.
+     * 编辑需求。
+     * Edit a story
      *
-     * @param  int    $storyID
-     * @param  array  $params
+     * @param  int          $storyID
+     * @param  array        $params
      * @access public
-     * @return void
+     * @return array|object
      */
-    public function updateTest($storyID, $params)
+    public function updateTest($storyID, $params): array|object
     {
-        $this->objectModel->update($storyID, $params);
+        $data          = $this->objectModel->getByID($storyID);
+        $defaultParams = array('title', 'product', 'branch', 'stage', 'spec', 'verify', 'linkStories', 'notifyEmail', 'grade', 'parent', 'plan');
+
+        $story = new stdclass();
+        foreach($defaultParams as $defaultKey) $story->$defaultKey = $data->$defaultKey;
+        foreach($params as $key => $value) $story->$key = $value;
+
+        $this->objectModel->update($storyID, $story);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->fetchByID($storyID);
