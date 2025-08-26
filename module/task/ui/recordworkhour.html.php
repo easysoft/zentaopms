@@ -59,8 +59,8 @@ if($efforts)
     }
     else
     {
-        $effortRows = array();
-        $i = 1;
+        $i          = 1;
+        $effortRows = '';
         foreach($efforts as $effort)
         {
             $effort->consumed = helper::formatHours($effort->consumed);
@@ -69,36 +69,17 @@ if($efforts)
             $canOperateEffort = $this->task->canOperateEffort($task, $effort);
             $operateTips      = $canOperateEffort ? '' : $lang->task->effortOperateTips;
             $hidden           = ($taskEffortFold and $i > 3) ? 'hidden' : '';
-            $effortRows[] = h::tr
-            (
-                setClass($hidden),
-                h::td($effort->id),
-                h::td($effort->date),
-                h::td(zget($users, $effort->account)),
-                h::td(html($effort->work), setClass('break-all')),
-                h::td("{$effort->consumed} {$lang->task->suffixHour}"),
-                h::td("{$effort->left} {$lang->task->suffixHour}"),
-                h::td
-                (
-                    common::hasPriv($app->rawModule, 'editEffort') ? a
-                    (
-                        setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
-                        $canOperateEffort ? on::click()->call('loadModal', createLink($app->rawModule, 'editEffort', "id={$effort->id}")) : null,
-                        !$canOperateEffort ? set::disabled(true) : null,
-                        set::title($operateTips ? sprintf($operateTips, $lang->task->update) : ''),
-                        icon('edit'),
-                    ) : null,
-                    common::hasPriv($app->rawModule, 'deleteWorkhour') ? a
-                    (
-                        setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
-                        set('data-confirm', $lang->task->confirmDeleteEffort),
-                        set::href(createLink($app->rawModule, 'deleteWorkhour', "id={$effort->id}")),
-                        !$canOperateEffort ? set::disabled(true) : null,
-                        set::title($operateTips ? sprintf($operateTips, $lang->delete) : ''),
-                        icon('trash')
-                    ) : null
-                )
-            );
+            $effortRows .= "<tr class='{$hidden}'>";
+            $effortRows .= "<td>{$effort->id}</td>";
+            $effortRows .= "<td>{$effort->date}</td>";
+            $effortRows .= "<td>" . zget($users, $effort->account) . "</td>";
+            $effortRows .= "<td>{$effort->work}</td>";
+            $effortRows .= "<td>{$effort->consumed} {$lang->task->suffixHour}</td>";
+            $effortRows .= "<td>{$effort->left} {$lang->task->suffixHour}</td>";
+            $effortRows .= "<td>";
+            if(common::hasPriv($app->rawModule, 'editEffort'))     $effortRows .= "<a class='btn ghost toolbar-item square size-sm text-primary edit-effort' data-on='click' " . ($canOperateEffort ? "data-call='loadModal($.createLink(\"$app->rawModule\", \"editEffort\", \"id={$effort->id}\"))' " : '') . (!$canOperateEffort ? 'disabled ' : '') . ($operateTips ? "title='" . sprintf($operateTips, $lang->task->update) . "' " : '') . "><i class='icon icon-edit'></i></a>";
+            if(common::hasPriv($app->rawModule, 'deleteWorkhour')) $effortRows .= "<a class='btn ghost toolbar-item square size-sm ajax-submit text-primary' data-confirm='{$lang->task->confirmDeleteEffort}' href='" . createLink($app->rawModule, 'deleteWorkhour', "id={$effort->id}") ."' ". (!$canOperateEffort ? 'disabled ' : '') . ($operateTips ? "title='" . sprintf($operateTips, $lang->delete) . "' " : '') . "'><i class='icon icon-trash'/></a></td>";
+            $effortRows .= "</tr>";
             $i ++;
         }
         div
@@ -143,7 +124,7 @@ if($efforts)
                     $lang->actions
                 )
             ),
-            $effortRows
+            html($effortRows)
         );
         if(count($efforts) > 3)
         {
