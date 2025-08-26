@@ -23,7 +23,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zenData('story')->gen(10);
+$storyTable = zenData('story');
+$storyTable->type->range('epic');
+$storyTable->gen(10);
 zenData('storyspec')->gen(30);
 zenData('product')->gen(30);
 
