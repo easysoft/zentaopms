@@ -2642,6 +2642,8 @@ class executionModel extends model
             $bug = $task->bug;
             unset($task->bug);
 
+            if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+            if(isset($task->left)) $task->left = round((float)$task->left, 2);
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
             $this->dao->insert(TABLE_TASK)->data($task)->exec();
             if(dao::isError()) return false;
