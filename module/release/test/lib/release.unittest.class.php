@@ -329,4 +329,22 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
         return $this->objectModel->isClickable($release, $action);
     }
+
+    /*
+     * 当发布的状态变为正常时，设置需求的阶段。
+     * Set the stage of the stories when the release status is normal.
+     *
+     * @param  string $stage
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function setStoriesStageTest(string $stage, int $storyID)
+    {
+        $this->objectModel->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
+        $this->objectModel->setStoriesStage(1);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
 }
