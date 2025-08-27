@@ -664,9 +664,7 @@ class bug extends control
             {
                 /* 设置模块数据源。 */
                 /* Set module data source. */
-                $this->config->bug->dtable->fieldList['module']['dataSource']['module'] = 'tree';
-                $this->config->bug->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = 'bug';
+                $this->config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
 
                 /* 如果导出执行的bug，设置数据源。 */
                 /* In execution, set data source. */
@@ -678,6 +676,7 @@ class bug extends control
                     $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
                 }
             }
+            $this->config->bug->dtable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getPairs', 'params' => array());
 
             $this->loadModel('transfer')->export('bug');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
