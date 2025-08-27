@@ -210,6 +210,7 @@ $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.ajaxsendevent';
+$config->openMethods[] = 'misc.installevent';
 $config->openMethods[] = 'sso.bind';
 $config->openMethods[] = 'sso.feishuauthen';
 $config->openMethods[] = 'sso.feishulogin';

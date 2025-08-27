@@ -346,4 +346,43 @@ class miscModel extends model
         $this->loadModel('setting')->updateItem('system.misc.statistics', json_encode(array('date' => date('Y-m-d'), 'data' => $data)));
         return $data;
     }
+
+    /**
+     *  发送安装过程埋点。
+     *  Sending installation process buried points.
+     *
+     * @param object $data
+     * @access public
+     * @return bool
+     */
+    public function sendInstallEvent($data)
+    {
+        if(!$data->location || !$data->fingerprint) return false;
+        $apiRoot = $this->config->misc->zentaonet;
+        $apiURL  = $apiRoot . "/zentaoevent-install.json";
+        if(empty($this->config->global->sn))
+        {
+            $sn = $this->loadModel('setting')->setSN();
+        }
+        else
+        {
+            $sn = $this->config->global->sn;
+        }
+        $httpData['sn']          = $sn;
+        $httpData['location']    = $data->location;
+        $httpData['fingerprint'] = $data->fingerprint;
+        $httpData['edition']     = $this->config->edition;
+        $httpData['version']     = $this->config->version;
+        $httpData['phpVersion']  = phpversion();
+        $httpData['os']          = PHP_OS . ' ' . php_uname('m');
+        $httpData['isDocker']    = file_exists('/.dockerenv');
+        $httpData['installType'] = '';
+        $httpData['ip']          = helper::getRemoteIP();
+
+        $this->loadModel('common');
+        $response = common::http($apiURL, $httpData);
+        $response = json_decode($response);
+        if($response && $response->result == 'success') return true;
+        return false;
+    }
 }

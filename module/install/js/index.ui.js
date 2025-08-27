@@ -4,3 +4,5 @@ window.switchLang = function(lang)
 };
 
 $.ajax({url: $.createLink('misc', 'ajaxSendEvent', "step=start"), timeout: 2000});
+
+ajaxInstallEvent('start');

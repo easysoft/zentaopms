@@ -23,7 +23,7 @@ if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
         (
             setClass('btn capitalize skip-btn font-normal'),
             $lang->admin->community->skip,
-            set::href(createLink('index')),
+            on::click()->call('skip')
         )
     );
 }
@@ -240,6 +240,12 @@ else
                                 $lang->admin->community->uxPlanStatusTitle
                             )
                         )
+                    ),
+                    formHidden(
+                        'fingerprint',
+                        '',
+                        setClass('form-fingerprint'),
+                        on::init()->call('getFingerprint')
                     )
                 ),
                 $skip,
