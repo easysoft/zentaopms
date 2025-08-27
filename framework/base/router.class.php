@@ -343,15 +343,6 @@ class baseRouter
     public $mao;
 
     /**
-     * 性能分析的方式。
-     * The profiling method.
-     *
-     * @var string
-     * @access public
-     */
-    public $profiling;
-
-    /**
      * 从数据库的句柄。
      * The slave database handler.
      *
@@ -522,7 +513,6 @@ class baseRouter
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
 
-        $this->setupProfiling();
         $this->setupXhprof();
 
         $this->setEdition();
@@ -854,27 +844,6 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL);
-    }
-
-    /**
-     * 配置数据库性能采样。
-     * Setup database profiling.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function setupProfiling(): void
-    {
-        if(empty($this->config->debug) || $this->config->debug < 3 || empty($this->config->installed)) return;
-
-        $performanceSchema = $this->dbh->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
-        $performanceSwitch = $performanceSchema->Value ?? 'OFF';
-        $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'show_profiles';
-
-        if($this->profiling != 'show_profiles') return;
-
-        $this->dbh->exec('SET profiling = 1');
-        $this->dbh->exec('SET profiling_history_size = 200');
     }
 
     /**
