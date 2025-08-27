@@ -3399,8 +3399,10 @@ class baseRouter
         fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
         foreach(dbh::$queries as $key => $query)
         {
+            if(!empty(dbh::$flags))     fwrite($fh, '  #Flag: '         . (dbh::$flags[$key]     ?? '') . "\n");
+            if(!empty(dbh::$durations)) fwrite($fh, '  #Query_time: '   . (dbh::$durations[$key] ?? '') . "\n");
+            if(!empty(dbh::$traces))    fwrite($fh, '  #Trigger_code: ' . (dbh::$traces[$key]    ?? '') . "\n");
             fwrite($fh, "  $query\n");
-            if(!empty(dbh::$traces)) fwrite($fh, '  └' . (dbh::$traces[$key] ?? '') . "\n");
         }
         fwrite($fh, "\n");
         fclose($fh);
