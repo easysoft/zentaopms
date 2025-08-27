@@ -834,8 +834,7 @@ function debug(mixed ...$messages): void
     $count    = $counts ? end($counts) + 1 : 1;
     $counts[] = $count;
 
-    global $app;
-    $logFile  = $app->getLogRoot() . 'debug.' . date('Ymd') . '.log.php';
+    $logFile  = dirname(__FILE__, 2) . '/tmp/log/debug.' . date('Ymd') . '.log.php';
     $uid      = $_SERVER['HTTP_X_ZIN_UID'] ?? '';
     $count    = sprintf('%04d', $count);
     $time     = date('H:i:s');
