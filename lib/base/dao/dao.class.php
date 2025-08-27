@@ -1928,54 +1928,34 @@ class baseDAO
     public function getProfiles()
     {
         $profiles = [];
-        if($this->app->profiling == 'performance_schema')
-        {
-            try
-            {
-                $sql      = "SELECT t1.EVENT_ID AS Query_ID, TRUNCATE(t1.TIMER_WAIT/1000000000000,6) AS Duration, t1.SQL_TEXT AS Query FROM performance_schema.events_statements_history_long AS t1 LEFT JOIN performance_schema.threads AS t2 ON t1.THREAD_ID=t2.THREAD_ID wHeRe t2.PROCESSLIST_ID=CONNECTION_ID() oRdEr bY EVENT_ID";
-                $profiles = $this->dbh->query($sql)->fetchAll();
-            }
-            catch(PDOException $e)
-            {
-                $this->sqlError($e);
-            }
-        }
-        elseif($this->app->profiling == 'show_profiles')
-        {
-            $profiles = $this->query('SHOW PROFILES')->fetchAll();
-        }
-        if(empty($profiles)) return [];
-
-        $traces = dbh::$traces;
-        if($this->app->profiling == 'show_profiles')
-        {
-            $count = count($profiles);
-            if(count($traces) > $count) $traces = array_slice($traces, -$count);
-        }
-
         $basePath = $this->app->getBasePath();
-        foreach($profiles as $key => $profile)
+        $sqlTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'REPLACE'];
+        foreach(dbh::$queries as $key => $query)
         {
-            $profile->Duration = round((float)$profile->Duration, 4);
+            $profile = new stdClass();
+            $profile->Query_ID = $key + 1;
+            $profile->Query    = $query;
             $profile->Explain  = [];
             $profile->Error    = '';
-            $profile->Code     = str_replace($basePath, '', $traces[$key] ?? '');
+            $profile->Duration = dbh::$durations[$key] ?? 0;
+            $profile->Code     = str_replace($basePath, '', dbh::$traces[$key] ?? '');
+            $profiles[] = $profile;
 
-            $sql = trim($profile->Query);
-            if(stripos($sql, 'select') !== 0
-                && strpos($sql, 'insert') !== 0
-                && strpos($sql, 'update') !== 0
-                && strpos($sql, 'delete') !== 0
-                && strpos($sql, 'replace') !== 0
-            )
+            $allowExplain = false;
+            foreach($sqlTypes as $type)
             {
-                continue;
+                if(stripos($query, $type) === 0)
+                {
+                    $allowExplain = true;
+                    break;
+                }
             }
+            if(!$allowExplain) continue;
 
             try
             {
                 $slow = false;
-                $rows = $this->explain($sql, false);
+                $rows = $this->explain($query, false);
                 foreach($rows as $row)
                 {
                     if($row->type === 'ALL'
