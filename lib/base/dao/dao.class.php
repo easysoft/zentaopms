@@ -1929,6 +1929,7 @@ class baseDAO
     {
         $profiles = [];
         $basePath = $this->app->getBasePath();
+        $sqlTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'REPLACE'];
         foreach(dbh::$queries as $key => $query)
         {
             $profile = new stdClass();
@@ -1940,15 +1941,16 @@ class baseDAO
             $profile->Code     = str_replace($basePath, '', dbh::$traces[$key] ?? '');
             $profiles[] = $profile;
 
-            if(stripos($query, 'select') !== 0
-                && strpos($query, 'insert') !== 0
-                && strpos($query, 'update') !== 0
-                && strpos($query, 'delete') !== 0
-                && strpos($query, 'replace') !== 0
-            )
+            $allowExplain = false;
+            foreach($sqlTypes as $type)
             {
-                continue;
+                if(stripos($query, $type) === 0)
+                {
+                    $allowExplain = true;
+                    break;
+                }
             }
+            if(!$allowExplain) continue;
 
             try
             {
