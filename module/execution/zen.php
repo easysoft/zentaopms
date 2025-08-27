@@ -749,7 +749,7 @@ class executionZen extends execution
                 return false;
             }
 
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate) and !empty($task->estimate))
+            if(!preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$task->estimate) and !empty($task->estimate))
             {
                 dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . $this->lang->task->error->estimateNumber;
                 return false;

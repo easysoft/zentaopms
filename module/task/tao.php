@@ -449,6 +449,10 @@ class taskTao extends taskModel
             $task->lastEditedDate = helper::now();
         }
 
+        if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+        if(isset($task->left))     $task->left     = round((float)$task->left, 2);
+
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles,renameFiles,files,docVersions,oldDocs,docs')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')

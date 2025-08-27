@@ -639,6 +639,11 @@ class taskModel extends model
                 if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = null;
             }
 
+            /* Format hours. */
+            if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+            if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+            if(isset($task->left))     $task->left     = round((float)$task->left, 2);
+
             /* Update a task.*/
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -923,6 +928,8 @@ class taskModel extends model
             if(!empty($task)) return $this->taskTao->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, !empty($efforts), $members);
 
             /* If task is empty, update the current task. */
+            $currentTask->consumed = round((float)$currentTask->consumed, 2);
+            $currentTask->left     = round((float)$currentTask->left, 2);
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
         return !dao::isError();
@@ -992,6 +999,9 @@ class taskModel extends model
         /* Insert task data. */
         if(!empty($execution->isTpl)) $task->isTpl = $execution->isTpl;
         if(empty($task->assignedTo)) unset($task->assignedDate);
+        if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
+
         $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->autoCheck()
@@ -2923,6 +2933,9 @@ class taskModel extends model
 
         foreach($workhour as $record)
         {
+            if(isset($record->consumed)) $record->consumed = round((float)$record->consumed, 2);
+            if(isset($record->left))     $record->left     = round((float)$record->left, 2);
+
             $this->addTaskEffort($record);
             $effortID = $this->dao->lastInsertID();
 
@@ -3208,6 +3221,9 @@ class taskModel extends model
         $oldEffort = $this->getEffortByID($effort->id);
 
         if(!$this->taskTao->checkEffort($effort)) return false;
+
+        if(isset($effort->consumed)) $effort->consumed = round((float)$effort->consumed, 2);
+        if(isset($effort->left)) $effort->left = round((float)$effort->left, 2);
 
         $this->dao->update(TABLE_EFFORT)->data($effort)
             ->autoCheck()
