@@ -1,4 +1,6 @@
 <?php
+use Facebook\WebDriver\WebDriverBy;
+
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class viewTester extends tester
 {
@@ -61,5 +63,35 @@ class viewTester extends tester
         return ($form->dom->firLaneName->getText() == $laneName)
             ? $this->success('泳道名称修改成功')
             : $this->failed('泳道名称修改失败');
+    }
+
+    /*
+     * 修改泳道背景色
+     * Edit Lane Color
+     *
+     * @param  $kanbanurl
+     * @return mixed
+     */
+    public function editLaneColor($kanbanurl)
+    {
+        $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
+        $form->dom->laneMoreBtn->click();
+        $form->wait(2);
+        $form->dom->editLaneColorBtn->click();
+        $form->wait(2);
+        $form->dom->firColor->click();
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+        if ($form->dom->zin_kanban_editlanecolor_form)
+        {
+            return $this->failed('修改泳道背景色失败');
+        }
+        $firLane = $this->page->webdriver->driver->findElement(WebDriverBy::xpath('//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]'));
+        $style   = $firLane->getAttribute('style');
+        preg_match('/--kanban-lane-color:\s*([^;]+)/', $style, $matches);
+        $colorValue = isset($matches[1]) ? trim($matches[1]) : null;
+        return ($colorValue == '#3C4353')
+            ? $this->success('修改泳道背景色成功')
+            : $this->failed('修改泳道背景色失败');
     }
 }
