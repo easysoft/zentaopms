@@ -1068,14 +1068,14 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task)
+    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task, string $lastDate)
     {
         $this->dao->update(TABLE_TASKTEAM)
-                  ->set('left')->eq($record->left)
-                  ->set("consumed = consumed + {$record->consumed}")
-                  ->set('status')->eq($currentTeam->status)
-                  ->where('id')->eq($currentTeam->id)
-                  ->exec();
+            ->set("consumed = consumed + {$record->consumed}")
+            ->set('status')->eq($currentTeam->status)
+            ->beginIF($record->date >= $lastDate)->set('left')->eq($record->left)->fi()
+            ->where('id')->eq($currentTeam->id)
+            ->exec();
 
         if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }
