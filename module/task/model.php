@@ -2948,7 +2948,7 @@ class taskModel extends model
             if(!empty($currentTeam))
             {
                 $currentTeam->status = $record->left == 0 ? 'done' : 'doing';
-                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task);
+                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task, (string)$lastDate);
                 $newTask = $this->computeMultipleHours($task, $newTask);
             }
 
