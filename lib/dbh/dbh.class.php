@@ -703,60 +703,59 @@ class dbh
     /**
      * Format attribute of field.
      *
-     * @param string $sql
+     * @param  string $sql
      * @access public
      * @return string
      */
     public function formatAttr($sql)
     {
-        switch($this->dbConfig->driver)
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'dm':
-                $pos = stripos($sql, ' ENGINE');
-                if($pos > 0) $sql = substr($sql, 0, $pos);
+            $pos = stripos($sql, ' ENGINE');
+            if($pos > 0) $sql = substr($sql, 0, $pos);
 
-                $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
 
-                $replace = array(
-                    " AUTO_INCREMENT"           => ' IDENTITY(1, 1)',
-                    " int "                     => ' integer ',
-                    " mediumint "               => ' integer ',
-                    " smallint "                => ' integer ',
-                    " tinyint "                 => ' integer ',
-                    " varchar "                 => ' varchar(255) ',
-                    " char "                    => ' varchar(255) ',
-                    " mediumtext "              => ' text ',
-                    " mediumtext,"              => ' text,',
-                    " longtext "                => ' text ',
-                    "COLLATE 'utf8_general_ci'" => ' ',
-                    " unsigned "                => ' ',
-                    " zerofill "                => ' ',
-                    "0000-00-00"                => '1970-01-01',
-                );
+            $replace = array(
+                " AUTO_INCREMENT"           => ' IDENTITY(1, 1)',
+                " int "                     => ' integer ',
+                " mediumint "               => ' integer ',
+                " smallint "                => ' integer ',
+                " tinyint "                 => ' integer ',
+                " varchar "                 => ' varchar(255) ',
+                " char "                    => ' varchar(255) ',
+                " mediumtext "              => ' text ',
+                " mediumtext,"              => ' text,',
+                " longtext "                => ' text ',
+                "COLLATE 'utf8_general_ci'" => ' ',
+                " unsigned "                => ' ',
+                " zerofill "                => ' ',
+                "0000-00-00"                => '1970-01-01',
+            );
 
-                $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
-                $sql = str_ireplace(array_keys($replace), array_values($replace), $sql);
-                $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
-                $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
-                $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
+            $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
+            $sql = str_ireplace(array_keys($replace), array_values($replace), $sql);
+            $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
+            $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
+            $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
 
-                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
-                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
-                if(!empty($datetimeMatch))
+            /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
+            preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
+            if(!empty($datetimeMatch))
+            {
+                foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+            }
+
+            if(strpos($sql, "ALTER TABLE") === 0)
+            {
+                $sql = $this->convertAlterTableSql($sql);
+                if(stripos($sql, "ADD") !== false)
                 {
-                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+                    // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
+                    $pattern = "/\s+AFTER\s+.+$/i";
+                    $sql     = preg_replace($pattern, "", $sql);
                 }
-
-                if(strpos($sql, "ALTER TABLE") === 0)
-                {
-                    $sql = $this->convertAlterTableSql($sql);
-                    if(stripos($sql, "ADD") !== false)
-                    {
-                        // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
-                        $pattern = "/\s+AFTER\s+.+$/i";
-                        $sql     = preg_replace($pattern, "", $sql);
-                    }
-                }
+            }
         }
 
         return $sql;
