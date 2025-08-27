@@ -44,12 +44,12 @@ class dbh
     private $statement;
 
     /**
-     * Database config.
+     * Database dbConfig.
      *
      * @var object
      * @access private
      */
-    private $config;
+    private $dbConfig;
 
     /**
      * The SQL string of last query.
@@ -80,22 +80,22 @@ class dbh
     /**
      * Constructor
      *
-     * @param object $config
-     * @param bool   $setSchema
-     * @param string $flag
+     * @param  object $dbConfig
+     * @param  bool   $setSchema
+     * @param  string $flag
      * @access public
      * @return void
      */
-    public function __construct($config, $setSchema = true, $flag = 'MASTER')
+    public function __construct($dbConfig, $setSchema = true, $flag = 'MASTER')
     {
-        $driver = $config->driver;
-        if($config->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
+        $driver = $dbConfig->driver;
+        if($dbConfig->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
 
-        $dsn = "{$driver}:host={$config->host};port={$config->port}";
-        if($setSchema) $dsn .= ";dbname={$config->name}";
+        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        if($setSchema) $dsn .= ";dbname={$dbConfig->name}";
 
-        $password = helper::decryptPassword($config->password);
-        $pdo = new PDO($dsn, $config->user, $password);
+        $password = helper::decryptPassword($dbConfig->password);
+        $pdo = new PDO($dsn, $dbConfig->user, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -103,12 +103,12 @@ class dbh
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $queries[] = "SET NAMES {$config->encoding}";
-            if(isset($config->strictMode) && empty($config->strictMode)) $queries[] = "SET @@sql_mode= ''";
+            $queries[] = "SET NAMES {$dbConfig->encoding}";
+            if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
-            $queries[] = "SET SCHEMA {$config->name}";
+            $queries[] = "SET SCHEMA {$dbConfig->name}";
         }
         if(!empty($queries))
         {
@@ -120,9 +120,9 @@ class dbh
             }
         }
 
-        $this->pdo    = $pdo;
-        $this->config = $config;
-        $this->flag   = $flag;
+        $this->pdo      = $pdo;
+        $this->dbConfig = $dbConfig;
+        $this->flag     = $flag;
     }
 
     /**
@@ -153,7 +153,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
-        if(!empty($this->config->enableSqlite)) $this->pushSqliteQueue($sql);
+        if(!empty($this->dbConfig->enableSqlite)) $this->pushSqliteQueue($sql);
 
         try
         {
@@ -334,14 +334,14 @@ class dbh
      */
     public function dbExists()
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
-                $sql = "SHOW DATABASES like '{$this->config->name}'";
+                $sql = "SHOW DATABASES like '{$this->dbConfig->name}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->config->name}'";
+                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->dbConfig->name}'";
                 break;
             default:
                 $sql = '';
@@ -359,15 +359,15 @@ class dbh
     public function tableExits($tableName)
     {
         $tableName = str_replace(array("'", '`'), "", $tableName);
-        $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
-        switch($this->config->driver)
+        $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
+                $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name='{$tableName}'";
+                $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
                 break;
             default:
                 $sql = '';
@@ -385,13 +385,13 @@ class dbh
      */
     public function createDB($version)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
-                $sql = "CREATE DATABASE `{$this->config->name}`";
+                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 return $this->rawQuery($sql);
             case 'mysql':
-                $sql = "CREATE DATABASE `{$this->config->name}`";
+                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
                 {
                     $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
@@ -403,19 +403,19 @@ class dbh
                 return $this->rawQuery($sql);
             case 'dm':
                 /*
-                $tableSpace = strtoupper($this->config->name);
+                $tableSpace = strtoupper($this->dbConfig->name);
                 $res = $this->rawQuery("SELECT * FROM dba_data_files WHERE TABLESPACE_NAME = '$tableSpace'")->fetchAll();
 
                 if(empty($res))
                 {
-                    $createTableSpace = "CREATE TABLESPACE $tableSpace DATAFILE '{$this->config->name}.DBF' size 150 AUTOEXTEND ON";
-                    $createUser       = "CREATE USER {$this->config->name} IDENTIFIED by {$this->config->password} DEFAULT TABLESPACE {$this->config->name} DEFAULT INDEX TABLESPACE {$this->config->name}";
+                    $createTableSpace = "CREATE TABLESPACE $tableSpace DATAFILE '{$this->dbConfig->name}.DBF' size 150 AUTOEXTEND ON";
+                    $createUser       = "CREATE USER {$this->dbConfig->name} IDENTIFIED by {$this->dbConfig->password} DEFAULT TABLESPACE {$this->dbConfig->name} DEFAULT INDEX TABLESPACE {$this->dbConfig->name}";
 
                     $this->rawQuery($createTableSpace);
                     $this->rawQuery($createUser);
                 }
                 */
-                $createSchema = "CREATE SCHEMA {$this->config->name} AUTHORIZATION {$this->config->user}";
+                $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
                 return $this->rawQuery($createSchema);
             default:
                 return false;
@@ -431,14 +431,14 @@ class dbh
      */
     public function useDB($dbName)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
-                return $this->exec("USE {$this->config->name}");
+                return $this->exec("USE {$this->dbConfig->name}");
 
             case 'dm':
-                return $this->exec("SET SCHEMA {$this->config->name}");
+                return $this->exec("SET SCHEMA {$this->dbConfig->name}");
 
             default:
                 return false;
@@ -456,7 +456,7 @@ class dbh
     {
         $this->sql = $sql;
 
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 return $this->formatDmSQL($sql);
@@ -537,7 +537,7 @@ class dbh
                 {
                     preg_match('/ON\s+([^.`\s]+\.)?`([^\s`]+)`/', $sql, $matches);
 
-                    $tableName = isset($matches[2]) ? str_replace($this->config->prefix, '', $matches[2]) : '';
+                    $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
             case 'ALTER':
@@ -569,9 +569,9 @@ class dbh
         /* DMDB must set IDENTITY_INSERT 'on' to insert id field. */
         if($action == 'INSERT' and stripos($fields, '"id"') !== FALSE)
         {
-            $tableBegin = strpos($sql, '"' . $this->config->prefix);
+            $tableBegin = strpos($sql, '"' . $this->dbConfig->prefix);
             $tableEnd   = strpos($sql, '"', $tableBegin + 1);
-            $tableName  = '' . $this->config->name . '."' . substr($sql, $tableBegin + 1, $tableEnd - $tableBegin - 1) . '"';
+            $tableName  = '' . $this->dbConfig->name . '."' . substr($sql, $tableBegin + 1, $tableEnd - $tableBegin - 1) . '"';
             return "SET IDENTITY_INSERT $tableName ON;" . $sql;
         }
 
@@ -613,7 +613,7 @@ class dbh
      */
     public function formatField($sql)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 $sql = str_replace('`', '"', $sql);
@@ -633,7 +633,7 @@ class dbh
      */
     public function formatFunction($sql)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 /* DATE convert to TO_CHAR. */
@@ -683,7 +683,7 @@ class dbh
      */
     public function formatAttr($sql)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 $pos = stripos($sql, ' ENGINE');
@@ -920,9 +920,9 @@ class dbh
 
         if(!in_array($action, $allowedActions)) return null;
 
-        foreach($this->config->sqliteBlacklist as $table)
+        foreach($this->dbConfig->sqliteBlacklist as $table)
         {
-            $tableName = $this->config->prefix . $table;
+            $tableName = $this->dbConfig->prefix . $table;
             if(stripos($sql, $tableName) !== false) return null;
         }
 
@@ -962,12 +962,12 @@ class dbh
      */
     public function checkUserPriv(): string
     {
-        global $config;
-        if(!in_array($this->config->driver, $config->mysqlDriverList)) return '';
+        global $dbConfig;
+        if(!in_array($this->dbConfig->driver, $dbConfig->mysqlDriverList)) return '';
 
-        $dbName = $this->config->name;
-        $user   = $this->config->user;
-        $host   = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
+        $dbName = $this->dbConfig->name;
+        $user   = $this->dbConfig->user;
+        $host   = ($this->dbConfig->host == 'localhost' || $this->dbConfig->host == '127.0.0.1') ? 'localhost' : '%';
 
         $privPairs = array();
         try
@@ -1013,7 +1013,7 @@ class dbh
      */
     public function getVersion(): string
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
