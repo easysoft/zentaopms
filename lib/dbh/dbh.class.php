@@ -391,20 +391,14 @@ class dbh
     public function tableExits($tableName)
     {
         $tableName = str_replace(array("'", '`'), "", $tableName);
-        $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
-        switch($this->dbConfig->driver)
+
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'oceanbase':
-            case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
-                break;
-            case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
-                break;
-            default:
-                $sql = '';
+            $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
+            return $this->rawQuery($sql)->fetch();
         }
 
+        $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
         return $this->rawQuery($sql)->fetch();
     }
 
