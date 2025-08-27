@@ -159,7 +159,7 @@ class dbh
                 {
                     dbh::$flags[]     = $flag;
                     dbh::$queries[]   = $query;
-                    dbh::$durations[] = number_format($duration * 1000, 2) . ' ms';
+                    dbh::$durations[] = round($duration, 6);
                     if(!empty($config->debug)) dbh::$traces[] = 'vim +' . (__LINE__ - 12) . ' ' . __FILE__;
                 }
             }
@@ -256,7 +256,7 @@ class dbh
         {
             dbh::$flags[]     = $this->flag;
             dbh::$queries[]   = dao::processKeywords($sql);
-            dbh::$durations[] = number_format($duration * 1000, 2) . ' ms';
+            dbh::$durations[] = round($duration, 6);
 
             if(!empty($this->config->debug))
             {
