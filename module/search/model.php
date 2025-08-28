@@ -31,7 +31,7 @@ class searchModel extends model
         if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
 
         $funcArgs['cacheSearchFunc'] = $cacheSearchFunc;
-        return $this->loadModel($funcModel)->$funcName(...$funcArgs);
+        return $this->loadModel($funcModel)->$funcName(...array_values($funcArgs)); // PHP 8.0以下只能展开索引数组。PHP 8.0 below can only unpack indexed arrays.
     }
 
     /**
