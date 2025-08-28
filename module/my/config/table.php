@@ -1071,12 +1071,12 @@ $config->my->execution->dtable->fieldList['code']['fixed']  = 'left';
 $config->my->execution->dtable->fieldList['code']['group']  = '1';
 $config->my->execution->dtable->fieldList['code']['show']   = false;
 
-$config->my->execution->dtable->fieldList['project']['name']   = 'project';
-$config->my->execution->dtable->fieldList['project']['title']  = $lang->execution->project;
-$config->my->execution->dtable->fieldList['project']['type']   = 'text';
-$config->my->execution->dtable->fieldList['project']['link']   = array('module' => 'project', 'method' => 'view', 'params' => 'id={project}');
-$config->my->execution->dtable->fieldList['project']['group']  = '2';
-$config->my->execution->dtable->fieldList['project']['show']   = false;
+$config->my->execution->dtable->fieldList['projectName']['name']   = 'projectName';
+$config->my->execution->dtable->fieldList['projectName']['title']  = $lang->execution->project;
+$config->my->execution->dtable->fieldList['projectName']['type']   = 'text';
+$config->my->execution->dtable->fieldList['projectName']['link']   = array('module' => 'project', 'method' => 'view', 'params' => 'id={project}');
+$config->my->execution->dtable->fieldList['projectName']['group']  = '2';
+$config->my->execution->dtable->fieldList['projectName']['show']   = false;
 
 $config->my->execution->dtable->fieldList['status']['name']      = 'status';
 $config->my->execution->dtable->fieldList['status']['title']     = $lang->execution->status;
