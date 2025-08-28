@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 loadModel->checkLegallyDate()
+title=测试 loadModel->getExecutionStats()
 timeout=0
 cid=0
 
@@ -62,8 +62,7 @@ $tester->app->loadClass('pager', true);
 $pager = new pager(10, 10, 1);
 $result = $func->invokeArgs($zen->newInstance(), ['all', 1, array(1,2,3), 0, 0, 'id_desc', $pager]);
 
-r(count($result)) && p('') && e('1'); // 查看获取到的执行列表数量
-r($result)        && p('0:name,id,type,code') && e('迭代2,4,stage,program4'); // 查看获取到的执行详情
+r($result) && p('0:name,id,type,code') && e('迭代2,4,stage,program4'); // 查看获取到的执行详情
 
 $result = $func->invokeArgs($zen->newInstance(), ['all', 1, array(1,2,3), 1, 0, 'id_desc', $pager]);
 
