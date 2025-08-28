@@ -55,6 +55,7 @@ class taskModel extends model
             if(!empty($task->assignedTo) && $task->assignedTo == 'closed') $task->assignedTo = '';
         }
 
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
@@ -1300,10 +1301,12 @@ class taskModel extends model
         if($currentTeam)
         {
             $consumed = $currentTeam->consumed + (float)$this->post->currentConsumed;
+            $consumed = round((float)$consumed, 2);
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
             $task = $this->computeMultipleHours($oldTask, $task);
         }
 
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
 
         if(dao::isError()) return false;
@@ -3112,8 +3115,8 @@ class taskModel extends model
         {
             /* Update task team. */
             $team = new stdclass();
-            $team->consumed = $task->consumed;
-            $team->left     = $task->left;
+            $team->consumed = round((float)$task->consumed, 2);
+            $team->left     = round((float)$task->left, 2);
             $team->status   = empty($team->left) ? 'done' : 'doing';
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
 
@@ -3138,6 +3141,8 @@ class taskModel extends model
             }
         }
 
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
 
         if(dao::isError()) return false;
