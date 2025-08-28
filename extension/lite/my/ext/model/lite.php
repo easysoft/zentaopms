@@ -11,7 +11,7 @@
 public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
 {
     $this->app->loadLang($type);
-    $stories = $this->dao->select("t1.id, t1.title, 'story' AS type, t1.openedDate AS time, t1.status, t1.product, 0 AS project, t1.parent")->from(TABLE_STORY)->alias('t1')
+    $stories = $this->dao->select("t1.id, t1.title, 'story' AS type, t1.type AS storyType, t1.openedDate AS time, t1.status, t1.product, 0 AS project, t1.parent")->from(TABLE_STORY)->alias('t1')
         ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
         ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id = t3.story')
         ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
