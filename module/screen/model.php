@@ -638,7 +638,7 @@ class screenModel extends model
         $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
         $component->chartConfig->package      = 'Decorates';
 
-        if(in_array($filterType, $this->config->metric->scopeList))
+        if(in_array($filterType, $this->config->screen->scopeList))
         {
             $objectPairs = $this->metric->getPairsByScope($filterType, true);
             $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
@@ -650,7 +650,7 @@ class screenModel extends model
             }, array_keys($objectPairs), array_values($objectPairs));
         }
 
-        $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
+        $firstAction = $this->dao->select('YEAR(date) AS year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
         $yearRange = range((int)date('Y'), $firstAction->year);
         $component->chartConfig->yearList = array_map(function($year)
         {
