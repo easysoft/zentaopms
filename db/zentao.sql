@@ -1243,6 +1243,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `group` ON `zt_kanbanlane`(`group`);
 
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
@@ -1259,6 +1260,8 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `parent` ON `zt_kanbancolumn`(`parent`);
+CREATE INDEX `group` ON `zt_kanbancolumn`(`group`);
 
 -- DROP TABLE IF EXISTS `zt_lang`;
 CREATE TABLE IF NOT EXISTS `zt_lang` (

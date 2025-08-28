@@ -1816,7 +1816,9 @@ CREATE TABLE `zt_kanbancolumn` (
   `order` mediumint NOT NULL DEFAULT '0',
   `archived` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `parent` (`parent`),
+  KEY `group` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_kanbangroup` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -1838,7 +1840,8 @@ CREATE TABLE `zt_kanbanlane` (
   `order` smallint NOT NULL DEFAULT '0',
   `lastEditedTime` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `group` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_kanbanregion` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
