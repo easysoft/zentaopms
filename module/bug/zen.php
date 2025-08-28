@@ -1161,8 +1161,12 @@ class bugZen extends bug
 
         $this->assignVarsForEdit($bug, $product);
 
+        $duplicateBugs = $this->bug->getProductBugPairs($bug->product, $bug->branch);
+        unset($duplicateBugs[$bug->id]);
+
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
+        $this->view->duplicateBugs         = $duplicateBugs;
         $this->view->product               = $product;
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectID             = $bug->project;
