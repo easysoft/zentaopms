@@ -45,6 +45,7 @@ zenData('project')->loadYaml('project')->gen(5);
 zenData('product')->gen(5);
 zenData('user')->gen(5);
 zenData('dept')->gen(5);
+zenData('action')->gen(5);
 
 $screenTest = new screenTest();
 
