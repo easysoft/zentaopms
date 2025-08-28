@@ -349,6 +349,21 @@ class screenTest
     }
 
     /**
+     * 测试genFilterCommponent。
+     * Test genFilterComponent.
+     *
+     * @param  string $filterType
+     * @access public
+     * @return array
+     */
+    public function genFilterComponentTest(string $filterType): array
+    {
+        $component = $this->objectModel->genFilterComponent($filterType);
+
+        return !empty($component->chartConfig->objectList) ? $component->chartConfig->objectList : array();
+    }
+
+    /**
      * 测试getBurnData。
      * Test getBurnData.
      *
