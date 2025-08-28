@@ -95,7 +95,7 @@ $bug6->comment        = '';
 $bug = new bugTest();
 r($bug->assignTest($bug1))  && p('assignedTo;mailto', ';') && e('user2;user1,user3;'); // 指派bug状态为激活的bug 更改指派人
 r($bug->assignTest($bug2))  && p('assignedTo;mailto', ';') && e('user2;user2;');       // 指派bug状态为解决的bug 更改指派人
-r($bug->assignTest($bug3))  && p('assignedTo;mailto', ';') && e('user2;user3');        // 指派bug状态为关闭的bug 更改指派人
+r($bug->assignTest($bug3))  && p('assignedTo;mailto', ';') && e('user1;admin');        // 指派bug状态为关闭的bug 更改指派人
 r($bug->assignTest($bug4))  && p('assignedTo;mailto', ';') && e('user1;user1;');       // 指派bug状态为激活的bug 不更改指派人
 r($bug->assignTest($bug5))  && p('assignedTo;mailto', ';') && e('user1;user2;');       // 指派bug状态为解决的bug 不更改指派人
-r($bug->assignTest($bug6))  && p('assignedTo;mailto', ';') && e('user1;user3');        // 指派bug状态为关闭的bug 不更改指派人
+r($bug->assignTest($bug6))  && p('assignedTo;mailto', ';') && e('user1;admin');        // 指派bug状态为关闭的bug 不更改指派人
