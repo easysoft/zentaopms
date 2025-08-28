@@ -3127,6 +3127,8 @@ class taskModel extends model
             $now = helper::now();
             if($team->status == 'done')
             {
+                if(isset($oldTask->team[$currentTeam->id])) $oldTask->team[$currentTeam->id]->status = $team->status; // 通过开始直接完成的情况，status会变成done
+
                 $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'current');
                 $task->assignedDate = $now;
             }
