@@ -270,7 +270,7 @@ class cronModel extends model
             ->where('owner')->eq('system')
             ->andWhere('module')->eq('cron')
             ->andWhere('section')->eq('scheduler')
-            ->andWhere('`key`')->eq($execId)
+            ->andWhere('`key`')->eq('execId')
             ->exec();
         $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
 
