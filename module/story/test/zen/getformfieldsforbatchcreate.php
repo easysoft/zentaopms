@@ -45,3 +45,14 @@ su('admin');
 $products = range(1, 3);
 $branch   = 'all';
 $storyTypes = array('story', 'requirement', 'epic');
+
+$storyTester = new storyZenTest();
+r($storyTester->getFormFieldsForBatchCreateTest($products[0], $branch, $storyTypes[0])) && p('assignedTo:control,label') && e('select,指派给');    // 测试获取普通产品批量创建软件需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[0], $branch, $storyTypes[1])) && p('assignedTo:control,label') && e('select,指派给');    // 测试获取普通产品批量创建用户需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[0], $branch, $storyTypes[2])) && p('assignedTo:control,label') && e('select,指派给');    // 测试获取普通产品批量创建业务需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[1], $branch, $storyTypes[0])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多分支产品批量创建软件需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[1], $branch, $storyTypes[1])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多分支产品批量创建用户需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[1], $branch, $storyTypes[2])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多分支产品批量创建业务需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[2], $branch, $storyTypes[0])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多平台产品批量创建软件需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[2], $branch, $storyTypes[1])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多平台产品批量创建用户需求字段
+r($storyTester->getFormFieldsForBatchCreateTest($products[2], $branch, $storyTypes[2])) && p('branch:control,label')     && e('select,平台/分支'); // 测试获取多平台产品批量创建业务需求字段
