@@ -987,8 +987,8 @@ class dbh
      */
     public function checkUserPriv(): string
     {
-        global $dbConfig;
-        if(!in_array($this->dbConfig->driver, $dbConfig->mysqlDriverList)) return '';
+        global $config;
+        if(!in_array($this->dbConfig->driver, $config->mysqlDriverList)) return '';
 
         $dbName = $this->dbConfig->name;
         $user   = $this->dbConfig->user;
