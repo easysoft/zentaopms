@@ -110,14 +110,9 @@ window.demoSubmit = function($el)
     let account          = $($el).attr('data-account');
     let password         = $($el).attr('data-password');
     let link             = $.createLink('user', 'login');
-    let timeout          = true;
     let passwordStrength = computePasswordStrength(password);
 
     clearTimeout(timeoutID);
-    timeoutID = setTimeout(function()
-    {
-        if(timeout) zui.Modal.alert(loginTimeoutTip);
-    }, 4000);
     $.post(link,
     {
         "account"          : account,
