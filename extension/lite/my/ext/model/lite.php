@@ -32,7 +32,9 @@ public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExis
         return !empty($stories);
     }
 
-    $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
-    foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
+    $actions  = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
+    $projects = $this->dao->select('story,project')->from(TABLE_PROJECTSTORY)->where('story')->in(array_keys($stories))->fetchPairs();
+    foreach($projects as $storyID => $projectID) $stories[$storyID]->project = $projectID;
+    foreach($actions as $storyID => $date)       $stories[$storyID]->time = $date;
     return array_values($stories);
 }
