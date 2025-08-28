@@ -569,10 +569,14 @@ class fileModel extends model
         $content = (string)$content;
         if(empty($content)) return $content;
 
-        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
+        static $fileLink, $imageLink;
+        if(empty($fileLink))  $fileLink  = helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+');
+        if(empty($imageLink)) $imageLink = helper::createLink('file', 'read', "fileID=$1", "$3");
+
+        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), $fileLink);
 
         $content = preg_replace('/ src="(' . $readLinkReg . ')" /', ' onload="setImageSize(this,' . $maxSize . ')" src="$1" ', $content);
-        $content = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' onload="setImageSize(this,' . $maxSize . ')" src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $content);
+        $content = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' onload="setImageSize(this,' . $maxSize . ')" src="' . $imageLink . '" ', $content);
 
         return str_replace(' src="data/upload', ' onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
     }
