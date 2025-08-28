@@ -676,6 +676,7 @@ CREATE TABLE `zt_bug` (
   KEY `assignedTo` (`assignedTo`),
   KEY `deleted` (`deleted`),
   KEY `project` (`project`),
+  KEY `feedback` (`feedback`),
   KEY `product_status_deleted` (`product`,`status`,`deleted`),
   KEY `idx_repo` (`repo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -1802,6 +1803,7 @@ CREATE TABLE `zt_kanbancell` (
   `type` char(30) NOT NULL DEFAULT '',
   `cards` mediumtext,
   PRIMARY KEY (`id`),
+  KEY `lane` (`lane`),
   UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_kanbancolumn` (
@@ -1841,6 +1843,7 @@ CREATE TABLE `zt_kanbanlane` (
   `lastEditedTime` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  KEY `execution` (`execution`),
   KEY `group` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_kanbanregion` (
@@ -3413,6 +3416,7 @@ CREATE TABLE `zt_story` (
   KEY `parent` (`parent`),
   KEY `product` (`product`),
   KEY `root` (`root`),
+  KEY `feedback` (`feedback`),
   KEY `status` (`status`),
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -3551,6 +3555,7 @@ CREATE TABLE `zt_task` (
   KEY `parent` (`parent`),
   KEY `path` (`path`),
   KEY `assignedTo` (`assignedTo`),
+  KEY `feedback` (`feedback`),
   KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_taskestimate` (
@@ -3747,6 +3752,7 @@ CREATE TABLE `zt_ticket` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
+  KEY `feedback` (`feedback`),
   KEY `product` (`product`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_ticketrelation` (
@@ -3794,6 +3800,7 @@ CREATE TABLE `zt_todo` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
+  KEY `feedback` (`feedback`),
   KEY `assignedTo` (`assignedTo`),
   KEY `finishedBy` (`finishedBy`),
   KEY `date` (`date`)
