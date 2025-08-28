@@ -748,7 +748,7 @@ class storyZen extends story
 
         if($this->story->checkForceReview($storyType)) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
-        if($this->view->hiddenPlan) unset($fields['plan']);
+        if(!empty($this->view->hiddenPlan)) unset($fields['plan']);
 
         $hiddenGrade = empty($this->config->showStoryGrade);
         if($hiddenGrade && $storyType == 'epic') $fields['parent']['hidden'] = true;
