@@ -6,5 +6,12 @@ fields:
     range: 11-100
   - field: type
     range: 'project'
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: '项目'
+    - field: name2
+      range: 11-100
   - field: vision
     range: 'rnd'
