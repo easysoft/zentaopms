@@ -326,8 +326,11 @@ class caselibModel extends model
             $caseData->lib = $libID;
             if(!empty($data->id[$key]) && !$this->post->insert)
             {
-                $oldCase = $oldCases[$data->id[$key]];
-                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $data->id[$key], array());
+                $caseID = $data->id[$key];
+                if(!isset($oldCases[$caseID])) continue;
+
+                $oldCase = $oldCases[$caseID];
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $caseID, array());
                 $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
             }
             else
