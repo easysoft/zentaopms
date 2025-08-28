@@ -244,7 +244,8 @@ class dbh
         {
             $result   = false;
             $begin    = microtime(true);
-            $result   = $this->pdo->query($sql);
+            $method   = $mode == 'exec' ? 'exec' : 'query';
+            $result   = $this->pdo->$method($sql);
             $duration = microtime(true) - $begin;
         }
         catch(PDOException $e)

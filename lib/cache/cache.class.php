@@ -454,7 +454,7 @@ class cache
      */
     private function delete()
     {
-        if(empty($this->objects)) return;
+        if(empty($this->objects)) return $this->log('No objects to delete.', __FILE__, __LINE__);
 
         $code         = $this->getTableCode();
         $setCacheKey  = $this->getSetCacheKey($code);
