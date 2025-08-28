@@ -734,17 +734,7 @@ class storyZen extends story
 
         /* 设置下拉菜单内容。 */
         $fields['branch']['options'] = $branches;
-        switch ($product->type)
-        {
-            case 'normal':
-                unset($fields['branch']);
-                break;
-            case 'platform':
-                $fieldPlatform = array('platform' => $fields['branch']);
-                unset($fields['branch']);
-                $fields = array_merge($fieldPlatform, $fields);
-                break;
-        }
+        if($product->type == 'normal') unset($fields['branch']);
 
         $fields['grade']['default']      = key($grades);
         $fields['module']['options']     = $modules;
@@ -758,7 +748,7 @@ class storyZen extends story
 
         if($this->story->checkForceReview($storyType)) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
-        if($this->view->hiddenPlan) unset($fields['plan']);
+        if(!empty($this->view->hiddenPlan)) unset($fields['plan']);
 
         $hiddenGrade = empty($this->config->showStoryGrade);
         if($hiddenGrade && $storyType == 'epic') $fields['parent']['hidden'] = true;
