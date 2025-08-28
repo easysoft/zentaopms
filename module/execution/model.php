@@ -1204,14 +1204,16 @@ class executionModel extends model
      *
      * @param  array  $executionIdList
      * @param  string $mode           all
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getByIdList(array $executionIdList = array(), string $mode = ''): array
+    public function getByIdList(array $executionIdList = array(), string $mode = '', string $orderBy = 'id_asc'): array
     {
         return $this->dao->select('*,whitelist')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
             ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 

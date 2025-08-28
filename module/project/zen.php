@@ -1900,7 +1900,7 @@ class projectZen extends project
                 if(!isset($executionTasks[$task->execution])) $executionTasks[$task->execution] = array();
                 $executionTasks[$task->execution][$task->id] = $task;
             }
-            $executions = $this->loadModel('execution')->getByIdList($executionIdList);
+            $executions = $this->loadModel('execution')->getByIdList($executionIdList, '', $sort);
             $executions = $this->execution->batchProcessExecution($executions, $projectID, $productID, true, '', $executionTasks);
             $executionStats = array_values($executions);
         }
