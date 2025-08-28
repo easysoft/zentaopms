@@ -741,7 +741,7 @@ class programplanTao extends programplanModel
     {
         $this->app->loadLang('task');
         $groupName = $group;
-        $groupName = $group ? zget($users, $group) : $this->lang->task->noAssigned;
+        $groupName = $group != '/' ? zget($users, $group) : $this->lang->task->noAssigned;
 
         $dataGroup                = new stdclass();
         $dataGroup->id            = $groupID;
