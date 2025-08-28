@@ -442,9 +442,11 @@ class searchTao extends searchModel
         foreach($this->config->search->fields as $objectType => $fields)
         {
             $module = $objectType;
+            $method = 'view';
             if($module == 'case') $module = 'testcase';
+            if($module == 'feedback') $method = 'adminView';
 
-            if(common::hasPriv($module, 'view')) $allowedObjects[] = $objectType;
+            if(common::hasPriv($module, $method)) $allowedObjects[] = $objectType;
             if($module == 'deploystep' && common::haspriv('deploy',  'viewstep')) $allowedobjects[] = $objectType;
         }
 
