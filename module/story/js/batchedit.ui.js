@@ -204,40 +204,47 @@ window.loadBranches = function(product, obj)
 
     let storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
     let $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
-    let currentModuleID = $module.val();
+    let currentModuleID = $module.find('input[name^=module]').val();
     let moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&extra=nodeleted&currentModuleID=' + currentModuleID);
-    $.getJSON(moduleLink, function(items)
+    if($module.find('input[name^=module]').length > 0)
     {
-        let $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
-        let options = $picker.options;
-
-        let oldItems = options.items.map(item => item.value.toString());
-        let newItems = items.map(item => item.value.toString());
-
-        if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+        $.getJSON(moduleLink, function(items)
         {
-            options.items = items;
-            $picker.render(options);
-            $picker.$.setValue(0);
-        }
-    });
+            let $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
+            let options = $picker.options;
 
+            let oldItems = options.items.map(item => item.value.toString());
+            let newItems = items.map(item => item.value.toString());
+
+            if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+            {
+                options.items = items;
+                $picker.render(options);
+                $picker.$.setValue(currentModuleID);
+            }
+        });
+    }
+
+    let $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
     let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&params=&skipparent=true');
-    $.getJSON(planLink, function(items)
+    if($plan.find('input[name^=plan]').length > 0)
     {
-        let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
-        let options = $picker.options;
-
-        let oldItems = options.items.map(item => item.value.toString());
-        let newItems = items.map(item => item.value.toString());
-
-        if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+        $.getJSON(planLink, function(items)
         {
-            options.items = items;
-            $picker.render(options);
-            $picker.$.setValue('');
-        }
-    });
+            let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
+            let options = $picker.options;
+
+            let oldItems = options.items.map(item => item.value.toString());
+            let newItems = items.map(item => item.value.toString());
+
+            if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+            {
+                options.items = items;
+                $picker.render(options);
+                $picker.$.setValue('');
+            }
+        });
+    }
 }
 
 window.setDuplicateAndChild = function(resolution, storyID)
