@@ -16,7 +16,9 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
-$fields->autoLoad('branch',    'module,execution,project,story,task,assignedTo')
+
+$fields->autoLoad('product',   array('items' => 'product,module,execution,project,story,task,assignedTo,' . (!empty($lang->bug->flowExtraFields) ? implode(',', $lang->bug->flowExtraFields) : ''), 'updateOrders' => true))
+       ->autoLoad('branch',    'module,execution,project,story,task,assignedTo')
        ->autoLoad('module',    'assignedTo,story')
        ->autoLoad('project',   'project,execution,story,task,assignedTo,injection,identify,openedBuild')
        ->autoLoad('execution', 'execution,story,task,assignedTo,openedBuild')
@@ -40,8 +42,7 @@ jsVar('projectExecutionPairs', $projectExecutionPairs);
 
 formGridPanel
 (
-    on::change('[name="product"]', 'reloadByProduct'),
-    on::change('[name="branch"], [name="project"], [name="execution"]', 'loadBuilds'),
+    on::change('[name="product"], [name="branch"], [name="project"], [name="execution"]', 'loadBuilds'),
     set::title($lang->bug->create),
     set::fields($fields),
     set::loadUrl($loadUrl)

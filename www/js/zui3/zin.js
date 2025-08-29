@@ -1303,9 +1303,17 @@
                         }
                         else
                         {
-                            const $item = $data.filter(`[data-name="${name}"]`);
-                            $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
-                            $item.zuiInit();
+                            const $items         = $data.filter(`[data-name="${name}"]`);
+                            const $oldMatchItems = $oldItems.filter(`[data-name="${name}"]`);
+                            if($oldMatchItems.length)
+                            {
+                                $oldMatchItems.replaceWith($items);
+                            }
+                            else
+                            {
+                                $oldItems.last().after($items);
+                            }
+                            $items.zuiInit();
                         }
                     });
 

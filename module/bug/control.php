@@ -248,7 +248,8 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->bug->form->create);
+            if(!empty($params['productID'])) $product = $this->bug->fetchByID((int)$params['productID'], 'product');
+            $formData = form::data($this->config->bug->form->create, 0, !empty($product->workflowGroup) ? $product->workflowGroup : 0);
             $bug      = $this->bugZen->prepareCreateExtras($formData);
 
             $bugID = $this->bug->create($bug, $from);
@@ -268,8 +269,9 @@ class bug extends control
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
-        $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($product->QD) ? $product->QD : ''));
+        $fields = array('id' => 0, 'productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($product->QD) ? $product->QD : ''));
         $fields = array_merge($fields, $params);
+        $fields['product'] = $fields['productID'];
 
         $bug = $this->bugZen->initBug($fields);
 
