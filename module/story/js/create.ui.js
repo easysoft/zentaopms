@@ -32,6 +32,16 @@ window.toggleFeedback = function(obj)
 }
 waitDom('[name=source]', function(){toggleFeedback($('[name=source]'));});
 
+window.loadProduct = function(e)
+{
+    const $this     = $(e.target);
+    const productID = $this.val();
+    const $modal    = $this.closest('.modal');
+    const inModal   = $modal.length > 0;
+    if(inModal)  loadModal($.createLink(storyType, 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
+    if(!inModal) loadPage($.createLink(storyType, 'create', 'productID=' + productID + '&' + createParams));
+};
+
 window.setLane = function(e)
 {
     const regionID = $(e.target).val();
