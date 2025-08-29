@@ -22,6 +22,8 @@ $createFields = useFields('story.create');
 $createFields->field('needNotReview')->value($forceReview ? 0 : 1);
 if(!$forceReview) $createFields->field('reviewer')->hidden(true);
 
+$createFields->autoLoad('product', 'module,plan,parent');
+
 if((isset($fields['branch']) && $type == 'story') || $type != 'story')
 {
     $createFields->field('source')->width('1/2');
@@ -89,9 +91,6 @@ else
     $createFields->fullModeOrders($fullModeOrders);
 }
 
-$params = $app->getParams();
-array_shift($params);
-jsVar('createParams', http_build_query($params));
 jsVar('storyType', $type);
 jsVar('langSource', $lang->story->source);
 jsVar('langSourceNote', $lang->story->sourceNote);
@@ -114,12 +113,12 @@ formGridPanel
         array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
         !isInModal() ? array('text' => $lang->goback, 'back' => true) : null
     )),
+    set::loadUrl($loadUrl),
     set::fields($createFields),
     set::pinnedItems($pinnedItems),
     set::data($initStory),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=parent]', 'loadGrade'),
-    on::change('[name=product]', 'loadProduct'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
     on::change('[name=region]', 'setLane'),
     $type != 'story' ? on::change('[name=branch]', "loadBranchModule('{$productID}')") : null,

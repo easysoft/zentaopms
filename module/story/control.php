@@ -117,6 +117,7 @@ class story extends control
         $this->view->blockID   = $this->storyZen->getAssignMeBlockID();
         $this->view->type      = $storyType;
         $this->view->initStory = $initStory;
+        $this->view->loadUrl   = $this->createLink($storyType, 'create', "productID={product}&branch={$branch}&moduleID={module}&storyID={$storyID}&objectID={$objectID}&bugID={$bugID}&planID={plan}&todoID={$todoID}&extra=&storyType={$storyType}");
 
         $this->display();
     }
