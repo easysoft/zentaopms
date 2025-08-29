@@ -10934,7 +10934,12 @@ class upgradeModel extends model
         while($action = $stmt->fetch())
         {
             $productIdList = array_unique(array_filter(explode(',', $action->product)));
-            foreach($productIdList as $productID) $values[] = "({$action->id}, {$productID})";
+            foreach($productIdList as $productID)
+            {
+                if(!is_int($productID)) continue;
+                $values[] = "({$action->id}, {$productID})";
+            }
+
             if(count($values) >= 5000)
             {
                 $this->dao->exec($sql . implode(',', $values));
