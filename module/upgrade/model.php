@@ -10936,7 +10936,7 @@ class upgradeModel extends model
             $productIdList = array_unique(array_filter(explode(',', $action->product)));
             foreach($productIdList as $productID)
             {
-                if(!is_int($productID)) continue;
+                if(!is_numeric($productID)) continue;
                 $values[] = "({$action->id}, {$productID})";
             }
 
