@@ -31,7 +31,7 @@ featureBar
 
 /* zin: Define the toolbar on main menu. */
 $canCreateTestcase = hasPriv('testcase', 'create') && common::canModify('execution', $execution);
-if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}"), 'data-app' => 'execution');
+if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}"), 'data-app' => 'execution', 'id' => 'createTestCaseBtn');
 $viewItems = array(array('text' => $lang->testcase->listView, 'url' => createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}"), 'active' => true));
 if(hasPriv('testcase', 'groupcase'))
 {

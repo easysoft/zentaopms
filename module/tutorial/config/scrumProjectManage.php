@@ -410,7 +410,7 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#actionBar a',
+    'target' => '#actionBar a#createTestCaseBtn',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step3->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step3->desc
@@ -563,7 +563,7 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => '#taskTable div.dtable-body div[data-col="id"]',
+    'target' => '#taskTable div.dtable-body div[data-col="taskID"]',
     'page'   => 'execution-testtask',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step23->name
 );

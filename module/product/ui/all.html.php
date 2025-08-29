@@ -109,6 +109,7 @@ toolbar
     ) : null,
     $canManageLine ? btn
     (
+        set::id('manageLineBtn'),
         set::className('ghost text-primary pl-0'),
         set::icon('edit'),
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
