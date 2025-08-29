@@ -520,7 +520,7 @@ detailBody
                 picker
                 (
                     on::click('setDuplicateBug'),
-                    set::items(array()),
+                    set::items($duplicateBugs),
                     set::name('duplicateBug'),
                     set::value($bug->duplicateBug)
                 )
