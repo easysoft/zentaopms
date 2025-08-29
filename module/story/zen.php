@@ -2039,7 +2039,7 @@ class storyZen extends story
         }
 
         $fieldParams = array();
-        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        if($searchConfig && !empty($searchConfig['params'])) $fieldParams = $searchConfig['params'];
         if($browseType != 'bysearch' && $browseType != 'bymodule' && $browseType != 'byproduct')
         {
             $statusName = zget($featureBar, $browseType, '');
