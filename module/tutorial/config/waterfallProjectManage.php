@@ -388,7 +388,7 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#actionBar a',
+    'target' => '#actionBar a#createTestCaseBtn',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step3->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step3->desc
@@ -541,7 +541,7 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => '#taskTable div.dtable-body div[data-col="id"]',
+    'target' => '#taskTable div.dtable-body div[data-col="taskID"]',
     'page'   => 'execution-testtask',
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step23->name
 );
