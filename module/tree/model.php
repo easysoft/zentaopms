@@ -1887,10 +1887,11 @@ class treeModel extends model
             $grade      = 1;
             $parentPath = ',';
         }
-        $i = 1;
 
-        $oldModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+        $this->setModuleLang();
 
+        $i            = 1;
+        $oldModules   = $this->getOptionMenu($rootID, 'story', 0, 'all');
         $createIdList = array();
         $editIdList   = array();
         foreach($childs as $moduleID => $moduleName)
@@ -1919,11 +1920,14 @@ class treeModel extends model
                 $module->grade  = $grade;
                 $module->type   = $type;
                 $module->order  = $order;
-                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $this->dao->insert(TABLE_MODULE)->data($module)->autoCheck()->exec();
+                if(dao::isError()) return false;
+
                 $moduleID       = $this->dao->lastInsertID();
                 $createIdList[] = $moduleID;
                 $childPath      = $parentPath . "$moduleID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
+                if(dao::isError()) return false;
             }
             else
             {
@@ -1940,8 +1944,8 @@ class treeModel extends model
                 $data->order  = $order;
                 $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
 
-                $this->setModuleLang();
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
+                if(dao::isError()) return false;
 
                 $newModule = $this->getByID($moduleID);
                 if(common::createChanges($oldModule, $newModule))
@@ -2043,10 +2047,11 @@ class treeModel extends model
             return false;
         }
 
-        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();
+        $this->setModuleLang();
 
-        $parent = $this->getById((int)$this->post->parent);
-        $childs = $this->getAllChildId($moduleID);
+        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();
+        $parent  = $this->getById((int)$this->post->parent);
+        $childs  = $this->getAllChildId($moduleID);
         $module->grade = $parent ? $parent->grade + 1 : 1;
         $module->path  = $parent ? $parent->path . $moduleID . ',' : ',' . $moduleID . ',';
         $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
