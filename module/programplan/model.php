@@ -235,6 +235,7 @@ class programplanModel extends model
         $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         foreach($tasksGroup as $group => $tasks)
         {
+            if(!$group) $group = '/'; // 未指派
             $groupID ++;
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users);
