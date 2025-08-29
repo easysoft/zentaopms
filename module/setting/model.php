@@ -55,6 +55,14 @@ class settingModel extends model
 
         $item->value = strval($value);
         if($item->module == 'feedback') $item->vision = '';
+
+        /* 升级的时候，检查 vision 字段是否存在，不存在的话，unset。 */
+        if(!empty($this->app->upgrading))
+        {
+            $firstConfig = $this->dao->select('*')->from(TABLE_CONFIG)->limit(1)->fetch();
+            if(!isset($firstConfig->vision)) unset($item->vision);
+        }
+
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
 
         return !dao::isError();
@@ -184,7 +192,7 @@ class settingModel extends model
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
-        if(empty($this->app->upgrading)) $item->vision = $vision;
+        $item->vision  = $vision;
 
         return $item;
     }
