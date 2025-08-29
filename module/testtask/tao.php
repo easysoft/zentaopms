@@ -28,6 +28,7 @@ class testtaskTao extends testtaskModel
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project = t5.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($unit == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($unit != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
