@@ -184,7 +184,7 @@ class settingModel extends model
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
-        $item->vision  = $vision;
+        if(empty($this->app->upgrading)) $item->vision = $vision;
 
         return $item;
     }
