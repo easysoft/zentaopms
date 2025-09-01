@@ -25,6 +25,12 @@ title=测试 blockModel->getByID();
 timeout=0
 cid=1
 
+- 测试新加入的区块宽度为2的时候，top是否为6。 @6
+- 测试新加入的区块宽度为1的时候，top是否为15。 @15
+- 测试新加入的区块宽度为3的时候，top是否为3。 @3
+- width为0的时候，仍然是3 @3
+- width为100的时候，仍然是3 @3
+
 */
 
 global $tester;
@@ -44,3 +50,21 @@ $block->dashboard = 'my';
 $block->width     = '1';
 $block->vision    = 'rnd';
 r($tester->block->computeBlockTop($block)) && p('') && e('15'); // 测试新加入的区块宽度为1的时候，top是否为15。
+
+$block = new stdclass();
+$block->dashboard = 'my';
+$block->width     = '3';
+$block->vision    = 'rnd';
+r($tester->block->computeBlockTop($block)) && p('') && e('3'); // 测试新加入的区块宽度为3的时候，top是否为3。
+
+$block = new stdclass();
+$block->dashboard = 'my';
+$block->width     = '0';
+$block->vision    = 'rnd';
+r($tester->block->computeBlockTop($block)) && p('') && e('3'); // width为0的时候，仍然是3
+
+$block = new stdclass();
+$block->dashboard = 'my';
+$block->width     = '100';
+$block->vision    = 'rnd';
+r($tester->block->computeBlockTop($block)) && p('') && e('3'); // width为100的时候，仍然是3

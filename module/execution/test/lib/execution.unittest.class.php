@@ -2481,15 +2481,17 @@ class executionTest
      * Test build task search form.
      *
      * @param  int    $executionID
+     * @param  array  $executions
      * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $module
+     * @param  bool   $cacheSearchFunc
      * @access public
-     * @return int
+     * @return array
      */
-    public function buildTaskSearchFormTest($executionID, $queryID)
+    public function buildTaskSearchFormTest($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc): array
     {
-        $this->executionModel->buildTaskSearchForm($executionID, array($executionID => 'yes'), $queryID, 'searchTask');
-
-        return $_SESSION['tasksearchParams']['queryID'];
+        return $this->executionModel->buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc);
     }
 
     /**

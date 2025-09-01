@@ -11,7 +11,7 @@ fields:
   - field: type
     range: custom
   - field: status
-    range: wait
+    range: wait,doing,done,closed
   - field: finishedDate
     range: '`2023-04-23`'
   - field: closedDate

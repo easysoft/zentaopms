@@ -4,6 +4,7 @@
 /**
 
 title=测试 loadModel->buildGroupDataForGantt()
+timeout=0
 cid=0
 
 - 检查构建分组Gantt数据。
@@ -17,12 +18,12 @@ cid=0
 - 检查空组构建情况。
  - 属性id @3
  - 属性type @group
- - 属性text @''
+ - 属性text @未指派
 - 检查自定义组ID。
  - 属性id @99
  - 属性type @group
  - 属性text @产品
-- 检查无用户列表时。
+- 检查无用户列表。
  - 属性id @5
  - 属性type @group
  - 属性text @设计
@@ -50,7 +51,7 @@ $group   = '测试';
 r((array)$tester->programplan->buildGroupDataForGantt($groupID, $group, $users)) && p('id,type,text') && e("2,group,测试"); //检查另一个分组。
 
 $groupID = 3;
-$group   = '';
+$group   = '/';
 r((array)$tester->programplan->buildGroupDataForGantt($groupID, $group, $users)) && p('id,type,text') && e("3,group,未指派"); //检查空组构建情况。
 
 $groupID = 99;

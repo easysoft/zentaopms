@@ -401,6 +401,7 @@ CREATE INDEX `deleted`                ON `zt_bug`(`deleted`);
 CREATE INDEX `project`                ON `zt_bug`(`project`);
 CREATE INDEX `product_status_deleted` ON `zt_bug`(`product`,`status`,`deleted`);
 CREATE INDEX `idx_repo`               ON `zt_bug`(`repo`);
+CREATE INDEX `feedback`               ON `zt_bug`(`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
@@ -472,7 +473,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `subStatus` varchar(30) NOT NULL default '',
   `color` char(7) NOT NULL DEFAULT '',
   `frequency` enum('1','2','3') NOT NULL default '1',
-  `order` tinyint(30) unsigned NOT NULL default '0',
+  `order` mediumint(8) unsigned NOT NULL default '0',
   `openedBy` char(30) NOT NULL default '',
   `openedDate` datetime NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
@@ -1230,6 +1231,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `card_group` ON `zt_kanbancell`(`kanban`,`type`,`lane`,`column`);
+CREATE INDEX `lane` ON `zt_kanbancell`(`lane`);
 
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE IF NOT EXISTS `zt_kanbangroup` (
@@ -1256,6 +1258,8 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `execution` ON `zt_kanbanlane`(`execution`);
+CREATE INDEX `group` ON `zt_kanbanlane`(`group`);
 
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
@@ -1272,6 +1276,8 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `parent` ON `zt_kanbancolumn`(`parent`);
+CREATE INDEX `group` ON `zt_kanbancolumn`(`group`);
 
 -- DROP TABLE IF EXISTS `zt_lang`;
 CREATE TABLE IF NOT EXISTS `zt_lang` (
@@ -2024,6 +2030,7 @@ CREATE INDEX `product` ON `zt_story` (`product`);
 CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
 CREATE INDEX `assignedTo` ON `zt_story` (`assignedTo`);
+CREATE INDEX `feedback` ON `zt_story` (`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_storygrade`;
 CREATE TABLE IF NOT EXISTS `zt_storygrade` (
@@ -2156,6 +2163,7 @@ CREATE INDEX `parent` ON `zt_task` (`parent`);
 CREATE INDEX `path` ON `zt_task` (`path`);
 CREATE INDEX `assignedTo` ON `zt_task` (`assignedTo`);
 CREATE INDEX `order` ON `zt_task` (`order`);
+CREATE INDEX `feedback` ON `zt_task` (`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
@@ -2361,6 +2369,7 @@ CREATE INDEX `account`    ON `zt_todo` (`account`);
 CREATE INDEX `assignedTo` ON `zt_todo` (`assignedTo`);
 CREATE INDEX `finishedBy` ON `zt_todo` (`finishedBy`);
 CREATE INDEX `date`       ON `zt_todo` (`date`);
+CREATE INDEX `feedback`   ON `zt_todo` (`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
@@ -2842,6 +2851,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `product` ON `zt_ticket` (`product`);
+CREATE INDEX `feedback` ON `zt_ticket` (`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_ticketsource`;
 CREATE TABLE IF NOT EXISTS `zt_ticketsource` (

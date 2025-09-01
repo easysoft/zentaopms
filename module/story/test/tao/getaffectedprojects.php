@@ -4,10 +4,16 @@
 /**
 
 title=测试 storyModel->getAffectedProjects();
+timeout=0
 cid=0
 
-- 获取需求2团队成员的数量 @22|30|37
-- 获取需求2影响任务的数量 @26|21
+- 获取需求2团队成员的数量
+ -  @22
+ - 属性1 @30
+ - 属性2 @37
+- 获取需求2影响任务的数量
+ -  @26
+ - 属性1 @21
 - 获取需求2影响任务的指派给属性assignedTo @管理员
 
 */
@@ -63,6 +69,6 @@ zenData('productplan')->gen(1);
 $story = new storyTest();
 $affectedStory = $story->getAffectedProjectsTest(2);
 
-r(implode('|', array_keys($affectedStory->teams))) && p() && e('22|30|37');  //获取需求2团队成员的数量
-r(implode('|', array_keys($affectedStory->tasks))) && p() && e('26|21');     //获取需求2影响任务的数量
-r($affectedStory->tasks[21][0])  && p('assignedTo') && e('管理员');          //获取需求2影响任务的指派给
+r(array_keys($affectedStory->teams)) && p('0,1,2') && e('22,30,37'); //获取需求2团队成员的数量
+r(array_keys($affectedStory->tasks)) && p('0,1') && e('26,21'); //获取需求2影响任务的数量
+r($affectedStory->tasks[21][0])  && p('assignedTo') && e('管理员'); //获取需求2影响任务的指派给

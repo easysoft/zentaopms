@@ -101,6 +101,7 @@ $fields->field('percent')
     ->label($lang->stage->percent . sprintf($lang->execution->unitTemplate, '%'));
 
 $fields->field('productsBox')
+    ->id('productsBox')
     ->width('full')
     ->control(array
     (

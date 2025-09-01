@@ -149,6 +149,7 @@ $lang->noticeOkFile    = 'For security reasons, your Admin account has to be con
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 $lang->hasReviewed     = 'The content has already been reviewed and does not need further review !';
+$lang->appNotFound     = 'You do not have permission to access this application. Please check the permission settings.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

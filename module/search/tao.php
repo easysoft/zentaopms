@@ -76,15 +76,14 @@ class searchTao extends searchModel
      * 初始化搜索表单，并且保存到 session。
      * Init the search session for the first time search.
      *
-     * @param  string       $module
-     * @param  object|array $fields
-     * @param  object|array $fieldParams
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
      * @access public
      * @return array
      */
-    public function initSession(string $module, object|array $fields, object|array $fieldParams): array
+    public function initSession(string $module, array $fields, array $fieldParams): array
     {
-        if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
 
         $queryForm = array();
@@ -143,7 +142,7 @@ class searchTao extends searchModel
      * 处理查询表单的相关数据。
      * Process query form datas.
      *
-     * @param  object $fieldParams
+     * @param  array  $fieldParams
      * @param  string $field
      * @param  string $andOrName
      * @param  string $operatorName
@@ -151,7 +150,7 @@ class searchTao extends searchModel
      * @access public
      * @return array
      */
-    public function processQueryFormDatas(object $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
+    public function processQueryFormDatas(array $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
     {
         /* 设置分组之间的逻辑关系。*/
         /* Set and or. */
@@ -167,7 +166,7 @@ class searchTao extends searchModel
         /* Skip empty values. */
         $value = $this->post->$valueName;
         if($value == 'ZERO') $this->post->set($valueName, 0);   // ZERO is special, stands to 0.
-        if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $value === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select.
+        if(isset($fieldParams[$field]) && $fieldParams[$field]['control'] == 'select' && $value === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select.
         $value = addcslashes(trim((string)$this->post->{$valueName}), '%');
 
         return array($andOr, $operator, $value);
@@ -337,11 +336,13 @@ class searchTao extends searchModel
      * 如果搜索框的选项是users，products, executions, 获取相对应的列表。
      * Get user, product and execution value of the param.
      *
-     * @param  array $fields
+     * @param  string    $module
+     * @param  array     $fields
+     * @param  array     $params
      * @access protected
      * @return array
      */
-    protected function getParamValues(array $fields, array $params): array
+    protected function getParamValues(string $module, array $fields, array $params): array
     {
         $hasProduct   = false;
         $hasExecution = false;
@@ -356,7 +357,6 @@ class searchTao extends searchModel
 
         /* 将用户的值追加到获取到的用户列表。*/
         $appendUsers     = array();
-        $module          = $_SESSION['searchParams']['module'];
         $formSessionName = $module . 'Form';
         if(isset($_SESSION[$formSessionName]))
         {
@@ -442,9 +442,11 @@ class searchTao extends searchModel
         foreach($this->config->search->fields as $objectType => $fields)
         {
             $module = $objectType;
+            $method = 'view';
             if($module == 'case') $module = 'testcase';
+            if($module == 'feedback') $method = 'adminView';
 
-            if(common::hasPriv($module, 'view')) $allowedObjects[] = $objectType;
+            if(common::hasPriv($module, $method)) $allowedObjects[] = $objectType;
             if($module == 'deploystep' && common::haspriv('deploy',  'viewstep')) $allowedobjects[] = $objectType;
         }
 

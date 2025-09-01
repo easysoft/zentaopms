@@ -97,3 +97,5 @@ $config->screen->fieldConfig->execution->fields['status'] = $this->lang->executi
 $config->screen->fieldConfig->execution->options = array();
 $config->screen->fieldConfig->execution->options['type']   = array('type' => 'lang', 'options' => $this->lang->execution->typeList);
 $config->screen->fieldConfig->execution->options['status'] = array('type' => 'lang', 'options' => $this->lang->execution->statusList);
+
+$config->screen->scopeList = array('program', 'project', 'product', 'execution', 'user', 'system', 'dept');

@@ -36,6 +36,6 @@ $tester->story->linkStories(1, $storyIdList);
 
 $afterRelations = $tester->story->getRelation(1, 'requirement');
 
-r(count($beforeRelations))       && p() && e('0');       // 查看关联前的关联关系数量
-r(count($afterRelations))        && p() && e('4');       // 查看关联后的关联关系数量
-r(implode('|', $afterRelations)) && p() && e('1|3|5|7'); // 查看关联后的需求详情
+r(count($beforeRelations)) && p()          && e('0');       // 查看关联前的关联关系数量
+r(count($afterRelations))  && p()          && e('4');       // 查看关联后的关联关系数量
+r($afterRelations)         && p('1,3,5,7') && e('1,3,5,7'); // 查看关联后的需求详情

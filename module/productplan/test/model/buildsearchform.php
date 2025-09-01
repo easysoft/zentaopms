@@ -10,8 +10,14 @@ su('admin');
 /**
 
 title=测试planModel->buildSearchForm();
+timeout=0
 cid=1
-pid=1
+
+- 正确的queryid @1
+- 错误的queryid @0
+- 正确的queryid @1
+- 正确的queryid @1
+- 错误的queryid @0
 
 */
 
@@ -19,8 +25,8 @@ $queryIDList   = array(0, 1);
 $productIDList = array(1, 6);
 
 $plan = new productPlan();
-r($plan->buildsearchformtest($queryIDList[1], $productIDList[0])) && p() && e('1'); // 正确的queryid
-r($plan->buildsearchformtest($queryIDList[0], $productIDList[0])) && p() && e('0'); // 错误的queryid
-
-r($plan->buildsearchformtest($queryIDList[1], $productIDList[1])) && p() && e('1'); // 正确的queryid
-r($plan->buildsearchformtest($queryIDList[0], $productIDList[1])) && p() && e('0'); // 错误的queryid
+r($plan->buildsearchformtest(1, 1)) && p() && e('1'); // 正确的queryid
+r($plan->buildsearchformtest(0, 1)) && p() && e('0'); // 错误的queryid
+r($plan->buildsearchformtest(1, 1)) && p() && e('1'); // 正确的queryid
+r($plan->buildsearchformtest(1, 6)) && p() && e('1'); // 正确的queryid
+r($plan->buildsearchformtest(0, 6)) && p() && e('0'); // 错误的queryid

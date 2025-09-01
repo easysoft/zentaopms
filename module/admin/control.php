@@ -580,6 +580,11 @@ class admin extends control
                     $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
                     $this->config->admin->agreeUX = $agreeUX;
 
+                    $eventData = new stdClass();
+                    $eventData->fingerprint = $data->fingerprint;
+                    $eventData->location    = 'join-community';
+                    $this->loadModel('misc')->sendInstallEvent($eventData);
+
                     $callBack = $this->loadModel('user')->isLogon() ? 'loadToRegister()' : 'loadToIndex()';
 
                     return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->joinSuccess, 'callback' => $callBack));

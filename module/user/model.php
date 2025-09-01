@@ -305,7 +305,7 @@ class userModel extends model
             $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
 
             $moreLink = helper::createLink('user', 'ajaxGetMore');
-            $this->config->user->moreLink = $moreLink . (strpos($moreLink, '?') === false ? '?' : '&') . "params=" . base64_encode($moreLinkParams);
+            $this->config->user->moreLink = $moreLink . (strpos($moreLink, '?') === false ? '?' : '&') . "params=" . base64_encode($moreLinkParams) . '&search={search}';
         }
 
         return true;

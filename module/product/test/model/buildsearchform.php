@@ -8,6 +8,11 @@ timeout=0
 cid=0
 
 - 正确的执行，正确的queryID @1
+- 构建后的搜索数据属性module @product
+- 构建后的搜索数据
+ - 第fields条的name属性 @产品名称
+ - 第fields条的reviewer属性 @评审人
+ - 第fields条的program属性 @所属项目集
 - 错误的执行，正确的queryID @0
 - 正确的执行，错误的queryID @0
 - 错误的执行，错误的queryID @0
@@ -43,7 +48,9 @@ $productIdList = array(1, 0);
 $queryIdList   = array(0, 1);
 
 $product = new productTest();
-r($product->buildSearchFormTest($productIdList[0], $queryIdList[1])) && p() && e('1'); // 正确的执行，正确的queryID
-r($product->buildSearchFormTest($productIdList[1], $queryIdList[1])) && p() && e('0'); // 错误的执行，正确的queryID
-r($product->buildSearchFormTest($productIdList[0], $queryIdList[0])) && p() && e('0'); // 正确的执行，错误的queryID
-r($product->buildSearchFormTest($productIdList[1], $queryIdList[0])) && p() && e('0'); // 错误的执行，错误的queryID
+r($product->buildSearchFormTest($productIdList[0], $queryIdList[1])) && p()                               && e('1');                          // 正确的执行，正确的queryID
+r($config->product->all->search)                                     && p('module')                       && e('product');                    // 构建后的搜索数据
+r($config->product->all->search)                                     && p('fields:name,reviewer,program') && e('产品名称,评审人,所属项目集'); // 构建后的搜索数据
+r($product->buildSearchFormTest($productIdList[1], $queryIdList[1])) && p()                               && e('0');                          // 错误的执行，正确的queryID
+r($product->buildSearchFormTest($productIdList[0], $queryIdList[0])) && p()                               && e('0');                          // 正确的执行，错误的queryID
+r($product->buildSearchFormTest($productIdList[1], $queryIdList[0])) && p()                               && e('0');                          // 错误的执行，错误的queryID

@@ -638,7 +638,7 @@ class control extends baseControl
                 if($object && empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
                 if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
 
-                $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                $field->required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
                 $field->value    = !empty($object->{$field->field}) ? zget($object, $field->field, '') : '';

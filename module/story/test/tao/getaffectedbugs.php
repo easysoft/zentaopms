@@ -4,10 +4,19 @@
 /**
 
 title=测试 storyModel->getAffectedBugs();
+timeout=0
 cid=0
 
 - 获取需求2关联bug数 @3
+- 获取需求2关联的第1条bug
+ - 第0条的id属性 @31
+ - 第0条的status属性 @激活
+ - 第0条的pri属性 @3
 - 获取需求28关联bug数，包含孪生需求 @4
+- 获取需求2关联的第1条bug
+ - 第0条的id属性 @30
+ - 第0条的status属性 @激活
+ - 第0条的pri属性 @2
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -37,5 +46,7 @@ $story = new storyTest();
 $affectedStory2  = $story->getAffectedBugsTest(2);
 $affectedStory28 = $story->getAffectedBugsTest(28);
 
-r(count($affectedStory2->bugs))  && p() && e('3');  //获取需求2关联bug数
-r(count($affectedStory28->bugs)) && p() && e('4');  //获取需求28关联bug数，包含孪生需求
+r(count($affectedStory2->bugs))  && p() && e('3'); //获取需求2关联bug数
+r($affectedStory2->bugs)  && p('0:id,status,pri') && e('31,激活,3'); //获取需求2关联的第1条bug
+r(count($affectedStory28->bugs)) && p() && e('4'); //获取需求28关联bug数，包含孪生需求
+r($affectedStory28->bugs)  && p('0:id,status,pri') && e('30,激活,2'); //获取需求2关联的第1条bug

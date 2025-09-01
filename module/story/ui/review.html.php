@@ -35,6 +35,7 @@ foreach($fields as $field => $attr)
         $control['maxItemsCount'] = 100;
     }
 
+    $value = $field == 'estimate' ? helper::formatHours($attr['default']) : $attr['default'];
     $formItems[$field] = formRow
     (
         in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate')) ? setID($field . 'Box') : null,
@@ -51,7 +52,7 @@ foreach($fields as $field => $attr)
             set::name($fieldName),
             set::label($attr['title']),
             set::control($control),
-            set::value($attr['default']),
+            set::value($value),
             set::required($attr['required']),
             set::readonly(!empty($attr['readonly']))
         )

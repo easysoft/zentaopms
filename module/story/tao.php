@@ -648,12 +648,13 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function getStoriesByProductIdList(array $productIdList, string $storyType = ''): array
+    protected function getStoriesByProductIdList(array $productIdList, string $storyType = '', bool $hasParent = true): array
     {
         return $this->dao->select('id, product, parent')
             ->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
             ->andWhere('product')->in($productIdList)
             ->fetchAll();
     }
@@ -2013,7 +2014,7 @@ class storyTao extends storyModel
         if(strpos('draft,changing', $story->status) !== false)
         {
             $canSubmitReview = common::hasPriv($story->type, 'submitReview');
-            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null);
+            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null, 'disabled' => !$canSubmitReview, 'hint' => $this->lang->story->reviewTip['noPriv']);
         }
         else
         {

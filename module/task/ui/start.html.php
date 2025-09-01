@@ -107,7 +107,7 @@ else
                     input
                     (
                         set::name('consumed'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed)
+                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->consumed) : helper::formatHours((float)$task->consumed))
                     ),
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
@@ -122,7 +122,7 @@ else
                     input
                     (
                         set::name('left'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left)
+                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->left) : helper::formatHours((float)$task->left))
                     ),
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)

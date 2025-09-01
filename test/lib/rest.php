@@ -78,6 +78,33 @@ class rest
     }
 
     /**
+     * Patch method.
+     *
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $headers
+     * @access public
+     * @return object
+     */
+	public function patch($url, $data = array(), $headers = array())
+    {
+        $headers['Accept']       = 'application/json';
+        $headers['Content-Type'] = 'application/json';
+        $data = json_encode($data);
+
+        $resp = requests::patch($this->base . $url, $headers, $data, array());
+        try
+        {
+            $resp->body = json_decode($resp->body);
+        }
+        catch(Exception $e)
+        {
+        }
+
+        return $resp;
+    }
+
+    /**
      * Put method.
      *
      * @param  string $url

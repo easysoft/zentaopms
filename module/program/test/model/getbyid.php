@@ -1,5 +1,35 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::getById();
+timeout=0
+cid=1
+
+- 通过id字段获取id=1的项目集。
+ - 属性id @1
+ - 属性name @项目集1
+ - 属性budget @900000
+ - 属性type @program
+ - 属性status @wait
+- 通过id字段获取id=2的项目集。
+ - 属性id @2
+ - 属性name @项目集2
+ - 属性budget @899900
+ - 属性type @program
+ - 属性status @wait
+- 通过id字段获取id=3的项目集。
+ - 属性id @3
+ - 属性name @项目集3
+ - 属性budget @899800
+ - 属性type @program
+ - 属性status @doing
+- 通过id字段获取id=1000的项目集，返回空 @0
+- 通过id字段获取id=0的项目集，返回空 @0
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 su('admin');
@@ -13,24 +43,10 @@ $program->name->setFields(array(
 ));
 $program->gen(5);
 
-/**
-
-title=测试 programModel::getById();
-cid=1
-pid=1
-
-通过id字段获取id=1的项目集并验证它的name。 >> 项目集1
-通过id字段获取id=1000的项目集，返回空 >> 0
-通过id字段获取id=0的项目集，返回空 >> 0
-
-*/
-
 $programTester = new programTest();
 
-$program1 = $programTester->getByIDTest(1);
-$program2 = $programTester->getByIDTest(1000);
-$program3 = $programTester->getByIDTest(0);
-
-r($program1) && p('name') && e('项目集1'); // 通过id字段获取id=1的项目集并验证它的name。
-r($program2) && p()       && e('0');       // 通过id字段获取id=1000的项目集，返回空
-r($program3) && p()       && e('0');       // 通过id字段获取id=0的项目集，返回空
+r($programTester->getByIDTest(1))    && p('id,name,budget,type,status') && e('1,项目集1,900000,program,wait');  // 通过id字段获取id=1的项目集。
+r($programTester->getByIDTest(2))    && p('id,name,budget,type,status') && e('2,项目集2,899900,program,wait');  // 通过id字段获取id=2的项目集。
+r($programTester->getByIDTest(3))    && p('id,name,budget,type,status') && e('3,项目集3,899800,program,doing'); // 通过id字段获取id=3的项目集。
+r($programTester->getByIDTest(1000)) && p()                             && e('0');                              // 通过id字段获取id=1000的项目集，返回空
+r($programTester->getByIDTest(0))    && p()                             && e('0');                              // 通过id字段获取id=0的项目集，返回空

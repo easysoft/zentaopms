@@ -97,4 +97,50 @@ class changeStatus extends tester
 
         return $this->success('评审目标成功');
     }
+
+    /**
+     * 运营界面撤销评审目标
+     * Revoke story in lite
+     *
+     * @param  array $storyUrl
+     * @return mixed
+     */
+    public function revokeStory($storyUrl)
+    {
+        $this->switchVision('lite', 5);
+        $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $form->wait(2);
+        $form->dom->revokeBtn->click();
+        $form->wait(2);
+        $form->dom->confirmBtn->click();
+        $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $viewPage->wait(2);
+        $status = $viewPage->dom->storyStatus->getText();
+        return($status == $this->lang->story->statusList->draft)
+            ? $this->success('目标撤销评审成功')
+            : $this->failed('目标撤销评审失败');
+    }
+
+    /**
+     * 运营界面提交评审目标
+     * Submit review story in lite
+     *
+     * @param  array $storyUrl
+     * @return mixed
+     */
+    public function submitReview($storyUrl)
+    {
+        $this->switchVision('lite', 5);
+        $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $form->wait(2);
+        $form->dom->revokeBtn->click();
+        $form->wait(2);
+        $form->dom->submitReviewBtn->click();
+        $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
+        $viewPage->wait(2);
+        $status = $viewPage->dom->storyStatus->getText();
+        return($status == $this->lang->story->statusList->reviewing)
+            ? $this->success('目标提交评审成功')
+            : $this->failed('目标提交评审失败');
+    }
 }

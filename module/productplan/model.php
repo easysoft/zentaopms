@@ -192,14 +192,14 @@ class productplanModel extends model
      * 获取计划id:name的键值对。
      * Get the key-value pair for plan id:name
      *
-     * @param  array|int        $productIdList
+     * @param  array|int|string $productIdList
      * @param  int|string|array $branch
      * @param  string           $param         unexpired|noclosed
      * @param  bool             $skipParent
      * @access public
      * @return array
      */
-    public function getPairs(array|int $productIdList = 0, int|string|array $branch = '', string $param = '', bool $skipParent = false): array
+    public function getPairs(array|int|string $productIdList = 0, int|string|array $branch = '', string $param = '', bool $skipParent = false): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPlanPairs();
 

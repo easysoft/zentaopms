@@ -8,7 +8,12 @@ timeout=0
 cid=0
 
 - 传入空参数。 @1
-- 检查返回数据的 lanes，cols，items。 @1
+- 查看泳道数量 @1
+- 查看列数量 @16
+- 查看卡片数量 @1
+- 查看列详情
+ - 第0条的name属性 @epic
+ - 第0条的title属性 @业务需求
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,4 +34,8 @@ r(empty($tracks)) && p() && e('1');  //传入空参数。
 
 $stories = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in(array('2,3,4,5'))->fetchAll('id');
 $tracks = $tester->story->getTracksByStories($stories, 'epic', 'allstory', 'id_desc');
-r(isset($tracks['lanes']) && isset($tracks['cols']) && isset($tracks['items'])) && p() && e('1'); //检查返回数据的 lanes，cols，items。
+r(count($tracks['lanes'])) && p() && e('1'); // 查看泳道数量
+r(count($tracks['cols'])) && p() && e('16'); // 查看列数量
+r(count($tracks['items'])) && p() && e('1'); // 查看卡片数量
+
+r($tracks['cols']) && p('0:name,title') && e('epic,业务需求'); // 查看列详情

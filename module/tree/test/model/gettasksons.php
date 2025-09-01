@@ -12,6 +12,7 @@ cid=1
 - 测试获取root 1 product 1 module 6 的子module @0
 - 测试获取root 1 product 1 module 10 的子module @0
 - 测试获取root 2 product 1 module 1 的子module @0
+- 测试获取root 2 product 2 module 6 的子module @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -35,3 +36,4 @@ r($tree->getTaskSonsTest($rootID[0], $productID[0], $moduleID[0])) && p() && e('
 r($tree->getTaskSonsTest($rootID[0], $productID[0], $moduleID[1])) && p() && e('0');  // 测试获取root 1 product 1 module 6 的子module
 r($tree->getTaskSonsTest($rootID[0], $productID[0], $moduleID[2])) && p() && e('0');  // 测试获取root 1 product 1 module 10 的子module
 r($tree->getTaskSonsTest($rootID[1], $productID[0], $moduleID[0])) && p() && e('0');  // 测试获取root 2 product 1 module 1 的子module
+r($tree->getTaskSonsTest($rootID[1], $productID[1], $moduleID[1])) && p() && e('0');  // 测试获取root 2 product 2 module 6 的子module

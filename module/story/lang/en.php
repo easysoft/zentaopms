@@ -227,6 +227,18 @@ $lang->story->linkCommit       = 'Related Commits';
 $lang->story->URS              = 'User requirements';
 $lang->story->estimateUnit     = "(Unit: {$lang->story->hour})";
 $lang->story->verifiedDate     = 'Verified Date';
+$lang->story->root             = 'Root';
+$lang->story->vision           = 'Vision';
+$lang->story->fromStory        = 'From Story';
+$lang->story->fromVersion      = 'From Version';
+$lang->story->approvedDate     = 'Approved Date';
+$lang->story->releasedDate     = 'Released Date';
+$lang->story->parentVersion    = 'Parent Version';
+$lang->story->demandVersion    = 'Demand Version';
+$lang->story->storyChanged     = 'Story Changed';
+$lang->story->demand           = 'Demand';
+$lang->story->unlinkReason     = 'Unlink Reason';
+$lang->story->retractedReason  = 'Retracted Reason';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
@@ -543,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = 'The Story is already active,no review requirements.';
 $lang->story->reviewTip['notReviewer'] = 'You are not the reviewer of this Story and cannot perform review operations.';
 $lang->story->reviewTip['reviewed']    = 'Reviewed';
+$lang->story->reviewTip['noPriv']      = 'You do not have the authority to submit for review.';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = 'The Story has not initiated a review process and no undo action is required.';

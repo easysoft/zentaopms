@@ -29,7 +29,7 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$canCreate  = hasPriv('job', 'create');
+$canCreate  = hasPriv('job', 'create') && (!$this->config->inCompose || $hasJobServer);
 $createItem = array('text' => $lang->job->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
 $cols = $this->loadModel('datatable')->getSetting('job');

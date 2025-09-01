@@ -970,8 +970,16 @@ class doc extends control
             $currentAccount  = $this->app->user->account;
             $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
             $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            $isInEditGroups  = false;
+            if(!empty($doc->groups))
+            {
+                foreach($this->app->user->groups as $groupID)
+                {
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
+                }
+            }
 
-            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 

@@ -20,10 +20,13 @@ cid=1
 - 测试获取关联的需求
  - 属性1 @用户需求1
  - 属性2 @软件需求2
+ - 属性3 @用户需求3
+ - 属性4 @软件需求4
+ - 属性5 @用户需求5
 
 */
 
-$storyIDList = array('1', '2', '3');
+$storyIDList = array('1', '2', '3', '4', '5');
 
 $testcase = new testcaseTest();
-r($testcase->getRelatedStoriesTest($storyIDList)) && p('1;2') && e('用户需求1;软件需求2'); // 测试获取关联的需求
+r($testcase->getRelatedStoriesTest($storyIDList)) && p('1;2;3;4;5') && e('用户需求1;软件需求2;用户需求3;软件需求4;用户需求5'); // 测试获取关联的需求

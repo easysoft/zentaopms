@@ -210,12 +210,14 @@ class messageModel extends model
         $isonlybody = isInModal();
         if($isonlybody) unset($_GET['onlybody']);
 
+        $methodNmae = 'view';
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         if($objectType == 'kanbancard') $moduleName = 'kanban';
+        if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
         $space      = common::checkNotCN() ? ' ' : '';
         $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, 'view', "id={$dataID}");
+        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';

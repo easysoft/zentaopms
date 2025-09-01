@@ -2,8 +2,6 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
-su('admin');
 
 /**
 
@@ -11,20 +9,34 @@ title=测试 todoModel->editDateTest();
 timeout=0
 cid=1
 
-- 修改id为1的待办的日期，查看是否有报错 @1
-- 修改id为2,3的待办的日期，查看是否有报错 @1
-- 修改id为4的待办的日期，查看是否有报错 @1
-- 修改id为5的待办的日期，查看是否有报错 @1
-- 修改id为0的待办的日期，查看是否有报错 @1
+- 获取待办id为1的修改后的日期属性date @2023-06-07
+- 获取待办id为2的修改后的日期属性date @2023-04-27
+- 获取待办id为2的修改后的日期属性date @2023-04-27
+- 获取待办id为1的修改后的日期属性date @2023-02-27
+- 获取待办id为2的修改后的日期属性date @2023-02-27
+- 获取待办id为3的修改后的日期属性date @2023-02-27
 
 */
-
-$todo = new todoTest();
-
+su('admin');
 zenData('todo')->loadYaml('editdate')->gen(5);
 
-r($todo->editDateTest(array(1),    '2023-06-07')) && p() && e('1');  // 修改id为1的待办的日期，查看是否有报错
-r($todo->editDateTest(array(2, 3), '2023-04-27')) && p() && e('1');  // 修改id为2,3的待办的日期，查看是否有报错
-r($todo->editDateTest(array(4),    '2023-04-27')) && p() && e('1');  // 修改id为4的待办的日期，查看是否有报错
-r($todo->editDateTest(array(5),    '2023-04-27')) && p() && e('1');  // 修改id为5的待办的日期，查看是否有报错
-r($todo->editDateTest(array(0),    '2023-04-27')) && p() && e('1');  // 修改id为0的待办的日期，查看是否有报错
+global $tester;
+$tester->loadModel('todo');
+$tester->todo->editDate(array(1), '2023-06-07');
+$todo = $tester->todo->fetchByID(1);
+
+r($todo) && p('date') && e('2023-06-07');  // 获取待办id为1的修改后的日期
+
+$tester->todo->editDate(array(1, 2), '2023-04-27');
+$todo = $tester->todo->fetchByID(1);
+r($todo) && p('date') && e('2023-04-27');  // 获取待办id为2的修改后的日期
+$todo = $tester->todo->fetchByID(2);
+r($todo) && p('date') && e('2023-04-27');  // 获取待办id为2的修改后的日期
+
+$tester->todo->editDate(array(1, 2, 3), '2023-02-27');
+$todo = $tester->todo->fetchByID(1);
+r($todo) && p('date') && e('2023-02-27');  // 获取待办id为1的修改后的日期
+$todo = $tester->todo->fetchByID(2);
+r($todo) && p('date') && e('2023-02-27');  // 获取待办id为2的修改后的日期
+$todo = $tester->todo->fetchByID(3);
+r($todo) && p('date') && e('2023-02-27');  // 获取待办id为3的修改后的日期

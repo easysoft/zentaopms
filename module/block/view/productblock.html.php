@@ -27,7 +27,7 @@
         <th title='<?php echo $lang->product->plans?>' class='c-num w-120px'><?php echo $lang->product->plans;?></th>
         <th title='<?php echo $lang->product->releases?>' class='c-num w-100px'><?php echo $lang->product->releases;?></th>
         <th title='<?php echo $lang->product->activeStoriesTitle?>' class='c-num w-120px'><?php echo $lang->product->activeStories;?></th>
-        <th title='<?php echo $lang->product->unResolvedBugsTitle?>' class='c-num w-100px'><?php echo $lang->product->unResolvedBugs;?></th>
+        <th title='<?php echo $lang->product->unresolvedBugsTitle?>' class='c-num w-100px'><?php echo $lang->product->unresolvedBugs;?></th>
       </tr>
     </thead>
     <tbody>

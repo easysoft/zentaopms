@@ -168,8 +168,8 @@ class stageModel extends model
         $stageType = '';
         if($this->config->systemMode == 'PLM' && $this->app->rawMethod == 'create' && $this->app->rawModule == 'programplan' && $type == 'ipd')
         {
-            $project   = $this->loadModel('project')->getByID($this->session->project);
-            $stageType = $this->config->project->categoryStages[$project->category];
+            $project   = $this->loadModel('project')->fetchByID($this->session->project);
+            $stageType = zget($this->config->project->categoryStages, $project->category, '');
         }
 
         return $this->dao->select('*')->from(TABLE_STAGE)

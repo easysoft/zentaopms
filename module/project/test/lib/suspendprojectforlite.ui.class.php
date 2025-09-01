@@ -28,7 +28,7 @@ class suspendProjectForLiteTester extends tester
         $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $browsePage = $this->loadPage('project', 'browse');
         $form->dom->search(array("项目名称,=,{$title}"));
-        $form->wait(1);
+        $form->wait(3);
         //搜索的项目状态为挂起，说明挂起成功
         $featureBar['index'] = (array)$featureBar['index'];
         if($form->dom->browseStatus->getText() != $featureBar['index']['suspended']) return $this->fail('挂起运营项目失败');

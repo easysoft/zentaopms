@@ -21,7 +21,7 @@ fields:
   - field: desc
     range: '描述'
   - field: status
-    range: 'wait,doing,done'
+    range: 'wait,doing,done,closed'
   - field: assignedTo
     range: '1-3'
     prefix: 'admin'
