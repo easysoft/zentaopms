@@ -365,7 +365,7 @@ class header extends wg
                     {
                         $params = "model=kanban";
                     }
-                    else if(!defined('TUTORIAL'))
+                    else if(!commonModel::isTutorialMode())
                     {
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
