@@ -9,6 +9,10 @@ cid=0
 
 - 删除用户需求1的关联关系之前，获取关联关系数量 @1
 - 删除用户需求1的关联关系之后，获取关联关系数量 @0
+- 需求和需求关联不存在 @0
+- 需求和需求关联不存在 @0
+- 删除需求12的关联关系之前，获取关联关系数量 @1
+- 删除需求12的关联关系之后，获取关联关系数量 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -32,3 +36,17 @@ $afterRelation = $tester->story->getRelation(1, 'requirement');
 
 r(count($beforeRelation)) && p() && e('1'); //删除用户需求1的关联关系之前，获取关联关系数量
 r(count($afterRelation))  && p() && e('0'); //删除用户需求1的关联关系之后，获取关联关系数量
+
+$beforeRelation = $tester->story->getRelation(1, 'requirement');
+$tester->story->unlinkStory(1, 11);
+$afterRelation = $tester->story->getRelation(1, 'requirement');
+
+r(count($beforeRelation)) && p() && e('0'); // 需求和需求关联不存在
+r(count($afterRelation))  && p() && e('0'); // 需求和需求关联不存在
+
+$beforeRelation = $tester->story->getRelation(12, 'story');
+$tester->story->unlinkStory(12, 2);
+$afterRelation = $tester->story->getRelation(12, 'story');
+
+r(count($beforeRelation)) && p() && e('1'); // 删除需求12的关联关系之前，获取关联关系数量
+r(count($afterRelation))  && p() && e('0'); // 删除需求12的关联关系之后，获取关联关系数量

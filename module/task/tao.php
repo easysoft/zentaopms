@@ -449,6 +449,10 @@ class taskTao extends taskModel
             $task->lastEditedDate = helper::now();
         }
 
+        if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+        if(isset($task->left))     $task->left     = round((float)$task->left, 2);
+
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles,renameFiles,files,docVersions,oldDocs,docs')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
@@ -545,7 +549,7 @@ class taskTao extends taskModel
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $orderBy = str_replace('project_', 't1.project_', $orderBy);
 
-        return $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        return $this->dao->select("t1.*, t4.id AS project, t2.id AS executionID, t2.name AS executionName, t4.name AS projectName, t2.multiple AS executionMultiple, t2.type AS executionType, t3.id AS storyID, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
@@ -566,7 +570,7 @@ class taskTao extends taskModel
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF(!in_array($type, array('all', 'finishedBy', 'assignedTo', 'myInvolved')))->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}' and t1.mode != 'multi') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
             ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
@@ -1064,14 +1068,14 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task)
+    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task, string $lastDate)
     {
         $this->dao->update(TABLE_TASKTEAM)
-                  ->set('left')->eq($record->left)
-                  ->set("consumed = consumed + {$record->consumed}")
-                  ->set('status')->eq($currentTeam->status)
-                  ->where('id')->eq($currentTeam->id)
-                  ->exec();
+            ->set("consumed = consumed + {$record->consumed}")
+            ->set('status')->eq($currentTeam->status)
+            ->beginIF($record->date >= $lastDate)->set('left')->eq($record->left)->fi()
+            ->where('id')->eq($currentTeam->id)
+            ->exec();
 
         if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }

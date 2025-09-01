@@ -102,7 +102,9 @@ class transfer extends control
             $file = $this->loadModel('file')->getUpload('file');
             if(!empty($file['error'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->uploadError[$file['error']]));
 
-            $file      = $file[0];
+            $file = $file[0];
+            if(!in_array(strtolower($file['extension']), array('xls', 'xlsx'))) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
+
             $shortName = $this->file->getSaveName($file['pathname']);
             if(empty($shortName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->emptyFileName));
 

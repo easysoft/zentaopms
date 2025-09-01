@@ -142,6 +142,7 @@ if($hasPercent && $project && $project->model != 'ipd')
 }
 
 $fields->field('productsBox')
+    ->id('productsBox')
     ->width('full')
     ->className($hidden)
     ->control(array(

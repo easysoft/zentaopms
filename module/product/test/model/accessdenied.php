@@ -4,8 +4,13 @@
 /**
 
 title=测试 productModel::accessDenied();
+timeout=0
 cid=0
 
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
 - 权限不足跳转 @fail
 
 */
@@ -20,11 +25,15 @@ $tester->loadModel('product');
 
 try
 {
-    $tester->product->accessDenied();
+    $tester->product->accessDenied('noPriv');
 }
 catch (Throwable $e)
 {
     $result = 'fail';
 }
 
+r($result) && p() && e('fail'); // 权限不足跳转
+r($result) && p() && e('fail'); // 权限不足跳转
+r($result) && p() && e('fail'); // 权限不足跳转
+r($result) && p() && e('fail'); // 权限不足跳转
 r($result) && p() && e('fail'); // 权限不足跳转

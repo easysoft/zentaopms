@@ -70,8 +70,11 @@ window.renderRowData = function($row, index, row)
     let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]');
     if(row.status == 'closed')
     {
-        /* If the status of the bug is closed, assigner of the bug is closed. */
-        $assignedTo.replaceWith('<input class="form-control form-batch-input" name="assignedTo[' + row.id + ']" id="assignedTo_0" data-name="assignedTo" disabled="disabled" value="' + row.assignedTo.slice(0, 1).toUpperCase() + row.assignedTo.slice(1) + '">');
+        $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $plan = info[0];
+            $plan.render({disabled: true});
+        });
     }
     else if(tab == 'project' || tab == 'execution')
     {

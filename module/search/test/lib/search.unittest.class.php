@@ -555,9 +555,8 @@ class searchTest
     public function getParamValuesTest(array $fields, array $params): array
     {
         $_SESSION['project'] = 0;
-        $_SESSION['searchParams']['module'] = 'bug';
 
-        return $this->objectModel->getParamValues($fields, $params);
+        return $this->objectModel->getParamValues('bug', $fields, $params);
     }
 
     /**
@@ -711,9 +710,8 @@ class searchTest
     public function setDefaultParamsTest(array $fields, array $params): string
     {
         $_SESSION['project'] = 0;
-        $_SESSION['searchParams']['module'] = 'bug';
 
-        $result = $this->objectModel->setDefaultParams($fields, $params);
+        $result = $this->objectModel->setDefaultParams('bug', $fields, $params);
         $field  = key($result);
         $value  = zget($result[$field], 'values', array());
 

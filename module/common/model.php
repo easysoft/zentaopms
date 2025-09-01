@@ -1456,28 +1456,36 @@ eof;
                 }
             }
 
-            $recomputedRights = array_merge($rights, $programRightGroup);
+            foreach($programRightGroup as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    $rights[$module][$method] = $label;
+                }
+            }
 
             /* Set base priv for project. */
             $projectRights = zget($this->app->user->rights['rights'], 'project', array());
-            if(isset($projectRights['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
-            if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
-            if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
+            if(isset($projectRights['browse']) and !isset($rights['project']['browse'])) $rights['project']['browse'] = 1;
+            if(isset($projectRights['kanban']) and !isset($rights['project']['kanban'])) $rights['project']['kanban'] = 1;
+            if(isset($projectRights['index'])  and !isset($rights['project']['index']))  $rights['project']['index']  = 1;
 
-            if(isset($projectPrivs->execution->linkStory))      $recomputedRights['execution']['linkstory']      = 1;
-            if(isset($projectPrivs->execution->batchLinkStory)) $recomputedRights['execution']['batchlinkstory'] = 1;
-            if(isset($projectPrivs->execution->unLinkStory))    $recomputedRights['execution']['unlinkstory']    = 1;
+            if(isset($projectPrivs->execution->linkStory))      $rights['execution']['linkstory']      = 1;
+            if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
+            if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
             if(isset($projectPrivs->story))
             {
                 foreach($projectPrivs->story as $method => $label)
                 {
                     $method = strtolower($method);
-                    $recomputedRights['story'][$method] = 1;
+                    $rights['story'][$method] = 1;
                 }
             }
 
-            $this->app->user->rights['rights'] = $recomputedRights;
+            $this->app->user->rights['rights'] = $rights;
         }
     }
 

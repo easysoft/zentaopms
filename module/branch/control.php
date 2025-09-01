@@ -324,7 +324,7 @@ class branch extends control
             $targetBranch = $this->branch->mergeBranch($productID, $branchIdList, $postData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
+            $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', array_keys($mergedBranches)));
             if(dao::isError()) return $this->sendError(dao::getError());
         }
         return $this->sendSuccess(array('load' => true, 'closeModel' => true));

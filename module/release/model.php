@@ -1294,6 +1294,9 @@ class releaseModel extends model
         $storyIdList = array_unique(array_filter(explode(',', $release->stories)));
         if(empty($storyIdList)) return;
 
+        /* Reset story stagedBy field for auto compute stage. */
+        $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->in($storyIdList)->exec();
+
         $this->loadModel('story');
         foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID);
     }

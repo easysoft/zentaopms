@@ -4,12 +4,15 @@
 /**
 
 title=测试 storyModel->recallReview();
+timeout=0
 cid=0
 
-- 执行$storyList[28]属性status @draft
-- 执行$storyList[30]属性status @draft
-- 执行$storyReviewList[28][3] @0
-- 执行$storyReviewList[30][3] @0
+- 需求28状态属性status @draft
+- 需求29状态属性status @draft
+- 需求30状态属性status @draft
+- 撤回后，需求28版本3的评审记录不存在 @0
+- 撤回后，需求29版本3的评审记录不存在 @0
+- 撤回后，需求30版本3的评审记录不存在 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -42,10 +45,14 @@ global $tester;
 $tester->loadModel('story');
 
 $tester->story->recallReview(28);
-$storyList       = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('28,30')->fetchAll('id');
-$storyReviewList = $tester->story->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->in('28,30')->fetchGroup('story', 'version');
+$tester->story->recallReview(29);
+$tester->story->recallReview(30);
+$storyList       = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('28,29,30')->fetchAll('id');
+$storyReviewList = $tester->story->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->in('28,29,30')->fetchGroup('story', 'version');
 
-r($storyList[28]) && p('status') && e('draft');
-r($storyList[30]) && p('status') && e('draft');
-r((int)isset($storyReviewList[28][3])) && p() && e('0');
-r((int)isset($storyReviewList[30][3])) && p() && e('0');
+r($storyList[28]) && p('status') && e('draft'); // 需求28状态
+r($storyList[29]) && p('status') && e('draft'); // 需求29状态
+r($storyList[30]) && p('status') && e('draft'); // 需求30状态
+r((int)isset($storyReviewList[28][3])) && p() && e('0'); // 撤回后，需求28版本3的评审记录不存在
+r((int)isset($storyReviewList[29][3])) && p() && e('0'); // 撤回后，需求29版本3的评审记录不存在
+r((int)isset($storyReviewList[30][3])) && p() && e('0'); // 撤回后，需求30版本3的评审记录不存在

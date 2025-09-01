@@ -248,7 +248,8 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->bug->form->create);
+            if(!empty($params['productID'])) $product = $this->bug->fetchByID((int)$params['productID'], 'product');
+            $formData = form::data($this->config->bug->form->create, 0, !empty($product->workflowGroup) ? $product->workflowGroup : 0);
             $bug      = $this->bugZen->prepareCreateExtras($formData);
 
             $bugID = $this->bug->create($bug, $from);
@@ -268,8 +269,9 @@ class bug extends control
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
-        $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($product->QD) ? $product->QD : ''));
+        $fields = array('id' => 0, 'productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($product->QD) ? $product->QD : ''));
         $fields = array_merge($fields, $params);
+        $fields['product'] = $fields['productID'];
 
         $bug = $this->bugZen->initBug($fields);
 
@@ -664,9 +666,7 @@ class bug extends control
             {
                 /* 设置模块数据源。 */
                 /* Set module data source. */
-                $this->config->bug->dtable->fieldList['module']['dataSource']['module'] = 'tree';
-                $this->config->bug->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = 'bug';
+                $this->config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
 
                 /* 如果导出执行的bug，设置数据源。 */
                 /* In execution, set data source. */
@@ -678,6 +678,7 @@ class bug extends control
                     $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
                 }
             }
+            $this->config->bug->dtable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getPairs', 'params' => array());
 
             $this->loadModel('transfer')->export('bug');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);

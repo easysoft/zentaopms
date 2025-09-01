@@ -594,13 +594,20 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
-        if(!$this->post->projectIdList) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->projectList));
+        if(!$this->post->projectIdList)
+        {
+            /* Use a fallback link to locate in case session has no related data. */
+            $locateLink = !empty($this->session->projectList) ? $this->session->projectList : $this->createLink('project', 'browse');
+            return $this->locate($locateLink);
+        }
+
         $projectIdList = $this->post->projectIdList;
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         /* Get program list. */
         $programs           = $this->loadModel('program')->getParentPairs('', '');
         $unauthorizedIDList = array();
+        $appendPMUsers      = array();
         foreach($projects as $project)
         {
             if(!isset($programs[$project->parent]) and !in_array($project->parent, $unauthorizedIDList)) $unauthorizedIDList[] = $project->parent;
@@ -870,15 +877,10 @@ class project extends control
         if($this->cookie->showTask)
         {
             /* Build the search form. */
-            $this->config->execution->search['module'] = 'projectTask';
-
-            $actionURL = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
-            unset($this->config->execution->search['fields']['project']);
-            unset($this->config->execution->search['fields']['module']);
+            $actionURL  = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
             $executions = $this->execution->fetchExecutionList($projectID, 'all', $productID);
             $executions = $this->execution->getPairsByList(array_keys($executions));
-
-            $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL);
+            $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
         $this->view->title          = $this->lang->execution->allExecutions;

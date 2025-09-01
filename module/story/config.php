@@ -132,6 +132,7 @@ $config->story->actionList['testcase']['hint']      = $lang->testcase->common;
 $config->story->actionList['testcase']['key']       = 'testcase';
 $config->story->actionList['testcase']['caret']     = 'up';
 $config->story->actionList['testcase']['placement'] = 'top-end';
+$config->story->actionList['testcase']['data-load'] = false;
 $config->story->actionList['testcase']['items']     = array('createTestcase', 'batchCreateTestcase');
 
 $app->loadLang('task');

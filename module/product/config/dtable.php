@@ -94,6 +94,7 @@ $config->product->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseC
 $config->product->dtable->fieldList['testCaseCoverage']['title']    = $lang->product->testCaseCoverage;
 $config->product->dtable->fieldList['testCaseCoverage']['minWidth'] = 86;
 $config->product->dtable->fieldList['testCaseCoverage']['type']     = 'progress';
+$config->product->dtable->fieldList['testCaseCoverage']['hint']     = $lang->product->testCaseCoverageInfo;
 $config->product->dtable->fieldList['testCaseCoverage']['sortType'] = false;
 $config->product->dtable->fieldList['testCaseCoverage']['border']   = 'right';
 
@@ -386,6 +387,7 @@ $config->product->all->dtable->fieldList['testCaseCoverage']['type']     = 'prog
 $config->product->all->dtable->fieldList['testCaseCoverage']['minWidth'] = 80;
 $config->product->all->dtable->fieldList['testCaseCoverage']['show']     = true;
 $config->product->all->dtable->fieldList['testCaseCoverage']['sortType'] = false;
+$config->product->all->dtable->fieldList['testCaseCoverage']['hint']     = $lang->product->testCaseCoverageInfo;
 $config->product->all->dtable->fieldList['testCaseCoverage']['group']    = 'g7';
 
 $config->product->all->dtable->fieldList['unresolvedBugs']['name']     = 'unresolvedBugs';

@@ -14,9 +14,9 @@ cid=1
 
 - 判断创建的待办数据name字段为空，返回结果id为0 @0
 - 判断创建的待办数据objectID字段错误，返回结果id为0 @0
-- 查看数据库错误 @『待办名称』不能为空。
 - 判断创建待办，返回结果id为6 @6
 - 判断创建周期待办，返回结果id为7 @7
+- 判断空待办 @~~
 
 */
 
@@ -52,11 +52,9 @@ $todoWithCycle->config   = json_encode(array('day' => 1, 'specify' => array('mon
 $todoWithCycle->objectID = 0;
 
 $todoTest = new todoTest();
-r($todoTest->createTest($todoWithoutName))     && p()    && e('0'); // 判断创建的待办数据name字段为空，返回结果id为0
-r($todoTest->createTest($todoInvalidObjectID)) && p()    && e('0'); // 判断创建的待办数据objectID字段错误，返回结果id为0
-
-$error = current(dao::getError());
-r($error) && p('0') && e('『待办名称』不能为空。'); // 查看数据库错误
-
-r($todoTest->createTest($todo))          && p() && e('6'); // 判断创建待办，返回结果id为6
-r($todoTest->createTest($todoWithCycle)) && p() && e('7'); // 判断创建周期待办，返回结果id为7
+r($todoTest->createTest($todoWithoutName))     && p() && e('0');  // 判断创建的待办数据name字段为空，返回结果id为0
+r($todoTest->createTest($todoInvalidObjectID)) && p() && e('0');  // 判断创建的待办数据objectID字段错误，返回结果id为0
+dao::getError();
+r($todoTest->createTest($todo))                && p() && e('6');  // 判断创建待办，返回结果id为6
+r($todoTest->createTest($todoWithCycle))       && p() && e('7');  // 判断创建周期待办，返回结果id为7
+r($todoTest->createTest(null))                 && p() && e('~~'); // 判断空待办

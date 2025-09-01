@@ -39,12 +39,15 @@ su('admin');
 
 title=测试 docModel->getModuleTree();
 cid=1
-pid=1
 
-检查产品库高亮 >> 1
-检查产品库子模块树的数量 >> 2
-检查接口库高亮 >> 1
-检查接口库子模块树的数量 >> 2
+- 检查产品库高亮第0条的active属性 @1
+- 检查产品库是否有同时高亮问题第1条的active属性 @0
+- 检查产品库是否有同时高亮问题第2条的active属性 @0
+- 检查产品库子模块树的数量 @2
+- 检查接口库高亮第0条的active属性 @1
+- 检查接口库是否有同时高亮问题第1条的active属性 @0
+- 检查接口库是否有同时高亮问题第2条的active属性 @0
+- 检查接口库子模块树的数量 @2
 
 */
 
@@ -58,6 +61,10 @@ $docChildrenModule = $tester->loadModel('doc')->getModuleTree($rootIDList[0], $m
 $apiChildrenModule = $tester->loadModel('doc')->getModuleTree($rootIDList[1], $moduleIDList[2], $typeList[1]);
 
 r($docChildrenModule)                     && p('0:active') && e('1');      // 检查产品库高亮
+r($docChildrenModule)                     && p('1:active') && e('0');      // 检查产品库是否有同时高亮问题
+r($docChildrenModule)                     && p('2:active') && e('0');      // 检查产品库是否有同时高亮问题
 r(count($docChildrenModule[0]->children)) && p()           && e('2');      // 检查产品库子模块树的数量
 r($apiChildrenModule)                     && p('0:active') && e('1');      // 检查接口库高亮
+r($apiChildrenModule)                     && p('1:active') && e('0');      // 检查接口库是否有同时高亮问题
+r($apiChildrenModule)                     && p('2:active') && e('0');      // 检查接口库是否有同时高亮问题
 r(count($apiChildrenModule[0]->children)) && p()           && e('2');      // 检查接口库子模块树的数量

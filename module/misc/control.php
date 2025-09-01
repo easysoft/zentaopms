@@ -348,4 +348,19 @@ class misc extends control
         $api = $this->config->misc->sendEventAPI . '?action=' . $step . '&version=' . $this->config->version;
         commonModel::http($api, null, array(), array(), 'data', 'GET', $timeout = 2);
     }
+
+    /**
+     * 安装过程的事件埋点。
+     * Event burial points during installation process.
+     *
+     * @access public
+     * @return void
+     */
+    public function installEvent()
+    {
+        $data = new stdClass();
+        $data->location    = $this->post->location;
+        $data->fingerprint = $this->post->fingerprint;
+        $this->misc->sendInstallEvent($data);
+    }
 }

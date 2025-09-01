@@ -10,7 +10,11 @@ title=测试 transfer->mergeConfig();
 timeout=0
 cid=1
 
-- 测试获取合并配置后的时间字段属性9 @estStarted
+- 测试获取合并配置后的字段
+ - 属性6 @deadline
+ - 属性7 @openedDate
+ - 属性8 @realStarted
+ - 属性9 @estStarted
 - 测试传入模块为空时的时间字段 @assignedDate
 
 */
@@ -27,5 +31,5 @@ $taskDateFields = $transfer->moduleConfig->dateFields;
 $transfer->mergeConfig('');
 $dateFields = $transfer->moduleConfig->dateFields;
 
-r($taskDateFields) && p('9') && e('estStarted');   // 测试获取合并配置后的时间字段
-r($dateFields)     && p('0') && e('assignedDate'); // 测试传入模块为空时的时间字段
+r($taskDateFields)  && p('6,7,8,9') && e('deadline,openedDate,realStarted,estStarted'); // 测试获取合并配置后的字段
+r($dateFields)      && p('0')       && e('assignedDate'); // 测试传入模块为空时的时间字段

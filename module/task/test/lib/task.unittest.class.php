@@ -685,11 +685,11 @@ class taskTest
      * @access public
      * @return array
      */
-    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID): array
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, object $task = null, string $lastDate): array
     {
         $task        = $this->objectModel->getByID($taskID);
         $currentTeam = $this->objectModel->getTeamByAccount($task->team);
-        $this->objectModel->updateTeamByEffort($effortID, $record, $currentTeam, $task);
+        $this->objectModel->updateTeamByEffort($effortID, $record, $currentTeam, $task, $lastDate);
         if(dao::isError())
         {
             return dao::getError();

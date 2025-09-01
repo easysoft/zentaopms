@@ -4,10 +4,18 @@
 /**
 
 title=productTao->getProjectProductList();
+timeout=0
 cid=0
 
 - 测试传入空的产品ID列表 @0
 - 测试传入产品ID列表 @0
+- 测试传入产品ID列表 @0
+- 测试传入产品ID列表
+ - 第61条的product属性 @3
+ - 第61条的project属性 @61
+- 测试传入产品ID列表
+ - 第100条的product属性 @4
+ - 第100条的project属性 @100
 - 测试传入不存在的产品ID列表 @0
 
 */
@@ -24,6 +32,9 @@ $productIdList[1] = range(1, 10);
 $productIdList[2] = range(11, 20);
 
 $productTester = new productTest();
-r($productTester->getProjectProductListTest($productIdList[0]))    && p() && e('0'); // 测试传入空的产品ID列表
-r($productTester->getProjectProductListTest($productIdList[1])[3]) && p() && e('0'); // 测试传入产品ID列表
-r($productTester->getProjectProductListTest($productIdList[2]))    && p() && e('0'); // 测试传入不存在的产品ID列表
+r($productTester->getProjectProductListTest($productIdList[0]))    && p() && e('0');                          // 测试传入空的产品ID列表
+r($productTester->getProjectProductListTest($productIdList[1])[1]) && p() && e('0');                          // 测试传入产品ID列表
+r($productTester->getProjectProductListTest($productIdList[1])[2]) && p() && e('0');                          // 测试传入产品ID列表
+r($productTester->getProjectProductListTest($productIdList[1])[3]) && p('61:product,project')  && e('3,61');  // 测试传入产品ID列表
+r($productTester->getProjectProductListTest($productIdList[1])[4]) && p('100:product,project') && e('4,100'); // 测试传入产品ID列表
+r($productTester->getProjectProductListTest($productIdList[2]))    && p() && e('0');                          // 测试传入不存在的产品ID列表

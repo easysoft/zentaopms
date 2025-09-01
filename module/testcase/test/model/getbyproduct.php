@@ -20,8 +20,16 @@ title=测试 testcaseModel->getBySuite();
 timeout=0
 cid=1
 
-- 产品1用例有6个 @6
+- 产品1的用例有6个 @6
 - 产品2的用例有4个 @4
+- 产品1的用例详情
+ - 第1条的id属性 @1
+ - 第1条的project属性 @0
+ - 第1条的title属性 @这个是测试用例1
+- 产品2的用例详情
+ - 第7条的id属性 @7
+ - 第7条的project属性 @0
+ - 第7条的title属性 @这个是测试用例7
 
 */
 
@@ -34,3 +42,5 @@ $tester->loadModel('testcase');
 
 r(count($tester->testcase->getByProduct($productIDList[0]))) && p() && e(6); // 产品1的用例有6个
 r(count($tester->testcase->getByProduct($productIDList[1]))) && p() && e(4); // 产品2的用例有4个
+r($tester->testcase->getByProduct($productIDList[0]))        && p('1:id,project,title') && e('1,0,这个是测试用例1'); // 产品1的用例详情
+r($tester->testcase->getByProduct($productIDList[1]))        && p('7:id,project,title') && e('7,0,这个是测试用例7'); // 产品2的用例详情

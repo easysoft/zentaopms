@@ -75,4 +75,23 @@ class projectZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 格式化导出的项目数据。
+     * Format the export project data.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function formatExportProjectsTest($status, $orderBy)
+    {
+        $method = $this->projectZenTest->getMethod('formatExportProjects');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$status, $orderBy]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

@@ -8,6 +8,8 @@ timeout=0
 cid=1
 
 - 测试获取产品1的Bug模块 @正常产品1|模块4
+- 测试获取产品2的Bug模块 @正常产品2
+- 测试获取产品3的Bug模块 @正常产品3
 - 测试获取产品10的Bug模块 @正常产品10
 - 测试不存在产品的Bug模块 @0
 
@@ -34,5 +36,7 @@ $bug->gen(10);
 $tree = new treeTest();
 
 r($tree->getBugTreeMenuTest(1))  && p() && e('正常产品1|模块4'); // 测试获取产品1的Bug模块
-r($tree->getBugTreeMenuTest(10)) && p() && e('正常产品10');      // 测试获取产品10的Bug模块
-r($tree->getBugTreeMenuTest(20)) && p() && e('0');               // 测试不存在产品的Bug模块
+r($tree->getBugTreeMenuTest(2))  && p() && e('正常产品2'); // 测试获取产品2的Bug模块
+r($tree->getBugTreeMenuTest(3))  && p() && e('正常产品3'); // 测试获取产品3的Bug模块
+r($tree->getBugTreeMenuTest(10)) && p() && e('正常产品10'); // 测试获取产品10的Bug模块
+r($tree->getBugTreeMenuTest(20)) && p() && e('0'); // 测试不存在产品的Bug模块

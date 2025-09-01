@@ -25,14 +25,23 @@ $project->gen(4);
 
 /**
 
-title=测试 projectModel::fetchProjectInfo;
+title=测试 projectModel::fetchProjectInfo();
 timeout=0
 cid=1
 
+- 获取ID等于2的项目
+ - 属性id @2
+ - 属性project @2
+ - 属性name @项目2
+ - 属性status @wait
+ - 属性code @project2
+ - 属性type @project
+- 获取不存在的项目属性code @0
+- 获取字符串ID的项目属性code @($projectID) must be of type int
 
 */
 
 $projectTester = new Project();
-r($projectTester->testFetchProjectInfo(2))      && p('code,type') && e('project2,project');                 //获取ID等于2的项目
+r($projectTester->testFetchProjectInfo(2))      && p('id,project,name,status,code,type') && e('2,2,项目2,wait,project2,project');                 //获取ID等于2的项目
 r($projectTester->testFetchProjectInfo(1))      && p('code')      && e('0');                                //获取不存在的项目
 r($projectTester->testFetchProjectInfo('aaa'))  && p('code')      && e('($projectID) must be of type int'); //获取字符串ID的项目
