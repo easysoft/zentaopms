@@ -9,7 +9,7 @@
  * @version     $Id
  * @link        https://www.zentao.net
  */
-$lang->weekly->common   = $lang->projectCommon . ' Weekly';
+$lang->weekly->common   = 'Report';
 $lang->weekly->index    = 'Weekly Overview';
 $lang->weekly->progress = 'Progress';
 $lang->weekly->workload = 'Workload';
