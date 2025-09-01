@@ -9,7 +9,7 @@
  * @version     $Id
  * @link        https://www.zentao.net
  */
-$lang->weekly->common   = $lang->projectCommon . '周报';
+$lang->weekly->common   = '报告';
 $lang->weekly->index    = '周报总览';
 $lang->weekly->progress = '完成百分比';
 $lang->weekly->workload = '工作量';
