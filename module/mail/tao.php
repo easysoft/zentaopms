@@ -199,15 +199,12 @@ class mailTao extends mailModel
         $objectModel = $objectType == 'kanbancard' ? $this->loadModel('kanban') : $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        $getObjectMethod = $objectType == 'kanbancard' ? 'getCardByID' : 'getByID';
+        $getObjectMethod = $objectType == 'kanbancard' ? 'getCardByID' : 'fetchByID';
         if(method_exists($objectModel, $getObjectMethod))
         {
             $object = call_user_func(array($objectModel, $getObjectMethod), $objectID);
         }
-        else
-        {
-            $object = $this->fetchByID($objectID, $objectType);
-        }
+
         if(!$object) return false;
 
         if($objectType == 'doc' && $object->contentType == 'markdown')
