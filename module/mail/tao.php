@@ -207,7 +207,7 @@ class mailTao extends mailModel
         }
         else
         {
-            $object = $objectModel->fetchByID($objectID);
+            $object = $this->fetchByID($objectID, $objectType);
         }
 
         if(!$object) return false;
