@@ -226,9 +226,14 @@ class doc extends control
 
         if($type == 'productRelease')
         {
-            $children      = implode(',', array_column($this->view->data, 'releases'));
+            $releaseList = array();
+            foreach($this->view->data as $release)
+            {
+                if($release->id == $release->rowID) $releaseList[$release->id] = $release;
+            }
+            $children      = implode(',', array_column($releaseList, 'releases'));
             $childReleases = $this->loadModel('release')->getListByCondition(explode(',', $children), 0, true);
-            $this->view->data = $this->release->processReleaseListData($this->view->data, $childReleases, false);
+            $this->view->data = $this->release->processReleaseListData($releaseList, $childReleases, false);
         }
 
         $this->display();
