@@ -71,6 +71,8 @@ window.deleteItem = function(obj)
     if(trLen <= appLength) $('#systemForm tbody tr .actions-list .add-item').removeClass('hidden');
 
     setTimeout(window.initAppPicker, 100);
+
+    itemIndex --;
 };
 
 $(function()
