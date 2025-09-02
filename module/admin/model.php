@@ -134,8 +134,12 @@ class adminModel extends model
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
+                    /* 针对项目流程和产品流程菜单做特殊处理。 */
                     if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID)
                     {
+                        $workflowGroup = $this->fetchByID($groupID, 'workflowgroup');
+                        if($subMenuKey == 'review' && $workflowGroup->projectModel == 'kanban') continue;
+
                         $subMenu['link'] = sprintf($subMenu['link'], $groupID);
                         if(isset($subMenu['subMenu']))
                         {
