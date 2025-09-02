@@ -11567,8 +11567,7 @@ class upgradeModel extends model
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
                         $newProjectDeliverable->category    = $config['category'];
-                        $newProjectDeliverable->docID       = $config['doc'];
-                        $newProjectDeliverable->fileID      = $config['file'];
+                        $newProjectDeliverable->doc         = $config['doc'];
                         $newProjectDeliverable->required    = $config['required'];
                         $newProjectDeliverable->createdBy   = 'system';
                         $newProjectDeliverable->createdDate = helper::today();
@@ -11579,29 +11578,16 @@ class upgradeModel extends model
             }
         }
 
-        /* 之前交付物没存文件、文档名称、版本，升级的时候补上。 */
-        $emptyNameDeliverables = $this->dao->select('id,docID,fileID')->from(TABLE_PROJECTDELIVERABLE)->where('name')->eq('')->fetchAll();
-        $fileIdList = array_column($emptyNameDeliverables, 'fileID');
-        $docIdList  = array_column($emptyNameDeliverables, 'docID');
-        $fileIdList = array_filter($fileIdList);
-        $docIdList  = array_filter($docIdList);
+        /* 之前交付物没存文档名称、版本，升级的时候补上。 */
+        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id')
+            ->where('t1.name')->eq('')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('id');
 
-        $fileList = $this->dao->select('id,title')->from(TABLE_FILE)->where('id')->in($fileIdList)->fetchPairs();
-        $docList  = $this->dao->select('id,title,version')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
-
-        foreach($emptyNameDeliverables as $deliverable)
+        foreach($emptyNameDocs as $deliverableID => $doc)
         {
-            if(isset($fileList[$deliverable->fileID]))
-            {
-                $name = $fileList[$deliverable->fileID];
-                $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($name)->where('id')->eq($deliverable->id)->exec();
-            }
-            elseif(isset($docList[$deliverable->docID]))
-            {
-                $name    = $docList[$deliverable->docID]->title;
-                $version = $docList[$deliverable->docID]->version;
-                $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($name)->set('docVersion')->eq($version)->where('id')->eq($deliverable->id)->exec();
-            }
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($doc->title)->set('docVersion')->eq($doc->version)->where('id')->eq($deliverableID)->exec();
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_PROJECT . " DROP `deliverable`;");
