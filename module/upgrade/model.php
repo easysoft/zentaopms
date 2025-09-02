@@ -11548,7 +11548,6 @@ class upgradeModel extends model
         $projectList = $this->dao->select('id,deliverable,workflowGroup')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
         foreach($projectList as $project)
         {
-            $projectDeliverable    = array();
             $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
             if(empty($oldProjectDeliverable)) continue;
 
