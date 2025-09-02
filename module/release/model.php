@@ -1443,6 +1443,15 @@ class releaseModel extends model
             {
                 $releaseInfo = clone $release;
 
+                if($addActionsAndBuildLink)
+                {
+                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                    $canClickable = false;
+                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
+                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
+                    $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
+                }
+
                 $releaseInfo->build       = $build;
                 $releaseInfo->projectName = $build->projectName;
 
