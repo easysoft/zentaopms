@@ -110,6 +110,11 @@ $productBranches = zget($product, 'branches', array());
 formPanel
 (
     set::title($lang->build->create),
+    set::titleClass('text-lg gap-0'),
+    to::titleSuffix
+    (
+        btn(setClass('ghost'), icon('help'), set::hint($lang->help), set::url('https://www.zentao.net/book/zentaopms/build-copy-1529.html'), set::target('_blank'))
+    ),
     set::formID('createBuildForm'),
     on::change('[name=newSystem]', 'setSystemBox'),
     on::change('[name=system]', 'loadBuilds'),
