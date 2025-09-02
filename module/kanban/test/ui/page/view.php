@@ -9,6 +9,7 @@ class viewPage extends page
             'laneMoreBtn'      => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]/div[1]/nav/button',
             'editLaneNameBtn'  => '//*[@z-key-path="editLaneName"]',
             'editLaneColorBtn' => '//*[@z-key-path="editLaneColor"]',
+            'firLane'          => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]',
             'firLaneName'      => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]/div[1]/div',
             'firColor'         => '//*[@id="zin_kanban_editlanecolor_form"]/div[1]/div/div/div[1]',
             /*看板列*/

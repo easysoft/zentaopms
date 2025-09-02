@@ -1,6 +1,4 @@
 <?php
-use Facebook\WebDriver\WebDriverBy;
-
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class viewTester extends tester
 {
@@ -86,12 +84,11 @@ class viewTester extends tester
         {
             return $this->failed('修改泳道背景色失败');
         }
-        $firLane = $this->page->webdriver->driver->findElement(WebDriverBy::xpath('//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]'));
-        $style   = $firLane->getAttribute('style');
+        $style = $form->dom->firLane->attr('style');
         preg_match('/--kanban-lane-color:\s*([^;]+)/', $style, $matches);
         $colorValue = isset($matches[1]) ? trim($matches[1]) : null;
         return ($colorValue == '#3C4353')
-            ? $this->success('修改泳道背景色成功')
-            : $this->failed('修改泳道背景色失败');
+            ? $this->success('泳道背景色修改成功')
+            : $this->failed('泳道背景色修改失败');
     }
 }
