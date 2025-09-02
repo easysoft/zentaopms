@@ -1435,34 +1435,5 @@ class releaseModel extends model
      */
     public function processReleaseBuilds(object $release, bool $addActionsAndBuildLink): array
     {
-        $releases = array();
-
-        if(!empty($release->builds))
-        {
-            foreach($release->builds as $build)
-            {
-                $releaseInfo = clone $release;
-
-                if($addActionsAndBuildLink)
-                {
-                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
-                    $canClickable = false;
-                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
-                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
-                    $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
-                }
-
-                $releaseInfo->build       = $build;
-                $releaseInfo->projectName = $build->projectName;
-
-                $releases[] = $releaseInfo;
-            }
-        }
-        else
-        {
-            $releases[] = $release;
-        }
-
-        return $releases;
     }
 }
