@@ -26,3 +26,20 @@ UPDATE `zt_activity` SET `editedDate` = NULL WHERE `editedDate` LIKE '1970-01-01
 UPDATE `zt_activity` SET `assignedDate` = NULL WHERE `assignedDate` LIKE '1970-01-01%';
 
 ALTER TABLE `zt_searchindex` CHANGE `content` `content` longtext NULL;
+
+CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` int(8) unsigned NOT NULL,
+  `deliverable` varchar(30) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `doc` int(8) unsigned NOT NULL,
+  `docVersion` smallint(6) unsigned NOT NULL,
+  `fileID` int(8) unsigned NOT NULL,
+  `required` tinyint(1) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` date NULL,
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `project` ON `zt_projectdeliverable` (`project`);

@@ -1674,6 +1674,24 @@ CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `group_account` ON `zt_projectadmin`(`group`, `account`);
 
+-- DROP TABLE IF EXISTS `zt_projectdeliverable`;
+CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` int(8) unsigned NOT NULL,
+  `deliverable` varchar(30) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `doc` int(8) unsigned NOT NULL,
+  `docVersion` smallint(6) unsigned NOT NULL,
+  `fileID` int(8) unsigned NOT NULL,
+  `required` tinyint(1) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` date NULL,
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `project` ON `zt_projectdeliverable` (`project`);
+
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
