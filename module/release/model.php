@@ -1435,5 +1435,25 @@ class releaseModel extends model
      */
     public function processReleaseBuilds(object $release, bool $addActionsAndBuildLink): array
     {
+        $releases = array();
+
+        if(!empty($release->builds))
+        {
+            foreach($release->builds as $build)
+            {
+                $releaseInfo = clone $release;
+
+                $releaseInfo->build       = $build;
+                $releaseInfo->projectName = $build->projectName;
+
+                $releases[] = $releaseInfo;
+            }
+        }
+        else
+        {
+            $releases[] = $release;
+        }
+
+        return $releases;
     }
 }
