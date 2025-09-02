@@ -15,6 +15,11 @@ formPanel
 (
     set::id('systemCreateForm'),
     set::title($lang->system->create),
+    set::titleClass('text-lg gap-0'),
+    to::titleSuffix
+    (
+        btn(setClass('ghost'), icon('help'), set::hint($lang->help), set::url('https://www.zentao.net/book/zentaopms/888.html'), set::target('_blank'))
+    ),
     set::submitBtnText($lang->save),
     set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
     formGroup
