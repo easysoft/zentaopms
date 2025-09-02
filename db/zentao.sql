@@ -1650,7 +1650,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
-  `deliverable` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1681,10 +1680,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `deliverable` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `doc` int(8) unsigned NOT NULL,
-  `docVersion` smallint(6) unsigned NOT NULL,
-  `fileID` int(8) unsigned NOT NULL,
-  `required` tinyint(1) NOT NULL,
+  `doc` int(8) unsigned NOT NULL DEFAULT '0',
+  `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `required` tinyint(1) NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` date NULL,

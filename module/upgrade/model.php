@@ -11548,7 +11548,6 @@ class upgradeModel extends model
         $projectList = $this->dao->select('id,deliverable,workflowGroup')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
         foreach($projectList as $project)
         {
-            $projectDeliverable    = array();
             $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
             if(empty($oldProjectDeliverable)) continue;
 
@@ -11563,15 +11562,35 @@ class upgradeModel extends model
 
                         $oldDeliverableID = $config['deliverable'];
                         $deliverableID    = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
-                        $projectDeliverable[$deliverableID]['id']     = $deliverableID;
-                        $projectDeliverable[$deliverableID]['doc']    = !empty($config['doc'])  ? $config['doc']  : '';
-                        $projectDeliverable[$deliverableID]['fileID'] = !empty($config['file']) ? $config['file'] : '';
+
+                        $newProjectDeliverable = new stdclass();
+                        $newProjectDeliverable->deliverable = $deliverableID;
+                        $newProjectDeliverable->project     = $project->id;
+                        $newProjectDeliverable->category    = $config['category'];
+                        $newProjectDeliverable->doc         = $config['doc'];
+                        $newProjectDeliverable->required    = $config['required'];
+                        $newProjectDeliverable->createdBy   = 'system';
+                        $newProjectDeliverable->createdDate = helper::today();
+
+                        $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($newProjectDeliverable)->exec();
                     }
                 }
             }
-            $projectDeliverable = json_encode(array_values($projectDeliverable));
-            $this->dao->update(TABLE_PROJECT)->set('deliverable')->eq($projectDeliverable)->where('id')->eq($project->id)->exec();
         }
+
+        /* 之前交付物没存文档名称、版本，升级的时候补上。 */
+        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id')
+            ->where('t1.name')->eq('')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('id');
+
+        foreach($emptyNameDocs as $deliverableID => $doc)
+        {
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($doc->title)->set('docVersion')->eq($doc->version)->where('id')->eq($deliverableID)->exec();
+        }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_PROJECT . " DROP `deliverable`;");
     }
 
     /**
