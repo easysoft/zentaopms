@@ -2575,18 +2575,20 @@ eof;
         $rawModule = $moduleName;
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $moduleName = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
-            $methodName = $actionData['url']['method'];
-            $params     = $actionData['url']['params'];
-            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
+            $moduleName     = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
+            $methodName     = $actionData['url']['method'];
+            $params         = $actionData['url']['params'];
+            $storySubdivide = in_array($moduleName, array('epic', 'requirement', 'story')) && $action == 'subdivide';
+            if(!$storySubdivide && !common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $moduleName = ($actionData['data-url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['data-url']['module'];
-            $methodName = $actionData['data-url']['method'];
-            $params     = $actionData['data-url']['params'];
-            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
+            $moduleName     = ($actionData['data-url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['data-url']['module'];
+            $methodName     = $actionData['data-url']['method'];
+            $params         = $actionData['data-url']['params'];
+            $storySubdivide = in_array($moduleName, array('epic', 'requirement', 'story')) && $action == 'subdivide';
+            if(!$storySubdivide && !common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['data-url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
         }
         elseif(empty($actionData['url']))
