@@ -121,7 +121,8 @@ class releaseModel extends model
             foreach(explode(',', $release->build) as $buildID)
             {
                 if(!$buildID || !isset($builds[$buildID])) continue;
-                $releaseBuilds[] = $builds[$buildID];
+                $builds[$buildID]->projectName = zget($projectPairs, $builds[$buildID]->project, '');
+                $releaseBuilds[$buildID] = $builds[$buildID];
             }
             $release->builds = $releaseBuilds;
 
@@ -1386,7 +1387,7 @@ class releaseModel extends model
      *
      * @param  array  $releaseList
      * @param  array  $childReleases
-     * @param  int    $addActionsAndBuildLink
+     * @param  bool   $addActionsAndBuildLink
      * @access public
      * @return array
      */
@@ -1403,30 +1404,7 @@ class releaseModel extends model
             $release->rowspan = $buildCount;
             if($addActionsAndBuildLink) $release->actions = $this->buildActionList($release);
 
-            if(!empty($release->builds))
-            {
-                foreach($release->builds as $build)
-                {
-                    $releaseInfo = clone $release;
-
-                    if($addActionsAndBuildLink)
-                    {
-                        $moduleName   = $build->execution ? 'build' : 'projectbuild';
-                        $canClickable = false;
-                        if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
-                        if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
-                        $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
-                    }
-
-                    $releaseInfo->build = $build;
-
-                    $releases[] = $releaseInfo;
-                }
-            }
-            else
-            {
-                $releases[] = $release;
-            }
+            $releases = array_merge($releases, $this->processReleaseBuilds($release, $addActionsAndBuildLink));
 
             if(empty($release->releases)) continue;
 
@@ -1436,12 +1414,53 @@ class releaseModel extends model
                 {
                     $child = clone $childReleases[$childID];
                     $child = current($this->processReleaseListData(array($child)));
-
                     $child->rowID  = "{$release->id}-{$childID}";
                     $child->parent = $release->id;
-                    $releases[$child->rowID] = $child;
+                    $releases = array_merge($releases, $this->processReleaseBuilds($child, $addActionsAndBuildLink));
                 }
             }
+        }
+
+        return $releases;
+    }
+
+    /**
+     * 处理发布构建信息。
+     * Process release builds.
+     *
+     * @param  object $release
+     * @param  bool   $addActionsAndBuildLink
+     * @access public
+     * @return array
+     */
+    public function processReleaseBuilds(object $release, bool $addActionsAndBuildLink): array
+    {
+        $releases = array();
+
+        if(!empty($release->builds))
+        {
+            foreach($release->builds as $build)
+            {
+                $releaseInfo = clone $release;
+
+                if($addActionsAndBuildLink)
+                {
+                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                    $canClickable = false;
+                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
+                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
+                    $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
+                }
+
+                $releaseInfo->build       = $build;
+                $releaseInfo->projectName = $build->projectName;
+
+                $releases[] = $releaseInfo;
+            }
+        }
+        else
+        {
+            $releases[] = $release;
         }
 
         return $releases;
