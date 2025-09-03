@@ -133,7 +133,6 @@ class date
      */
     public static function getNextWeek()
     {
-        $baseTime = time();
         $weekDay  = date('N');
         $baseTime = time() + 86400 * 7;
         if($weekDay == 1) $baseTime = time() + 86400;
