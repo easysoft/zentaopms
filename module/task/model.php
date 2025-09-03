@@ -102,8 +102,8 @@ class taskModel extends model
         $effort->project    = (int)$relation['project'];
         $effort->account    = $data->account;
         $effort->date       = $data->date;
-        $effort->consumed   = $data->consumed;
-        $effort->left       = $data->left;
+        $effort->consumed   = round((float)$data->consumed, 2);
+        $effort->left       = round((float)$data->left, 2);
         $effort->work       = isset($data->work) ? $data->work : '';
         $effort->vision     = $this->config->vision;
         $effort->order      = isset($data->order) ? $data->order : 0;
