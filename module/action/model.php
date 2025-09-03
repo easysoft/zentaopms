@@ -1880,7 +1880,7 @@ class actionModel extends model
              ->exec();
 
          $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
-         $this->file->processFileDiffsForObject($action->objectType, $action, $newComment);
+         $this->file->processFileDiffsForObject('comment', $action, $newComment);
          if(!empty($newComment->files))
          {
              $action->files = $newComment->files;
