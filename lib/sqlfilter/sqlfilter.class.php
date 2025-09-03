@@ -23,9 +23,7 @@ class sqlfilter
     public function filterForSQL($input)
     {
         // 步骤1：基础验证
-        if (!is_string($input) || empty(trim($input))) {
-            return '';
-        }
+        if(!is_string($input) || empty(trim($input))) return '';
 
         // 步骤2：移除控制字符（但保留正常的空白字符）
         $filtered = $this->removeControlCharacters($input);
@@ -55,9 +53,7 @@ class sqlfilter
      */
     public function filterUnicodeForSQL($input)
     {
-        if (!is_string($input) || empty(trim($input))) {
-            return '';
-        }
+        if(!is_string($input) || empty(trim($input))) return '';
 
         // 步骤1：使用Unicode属性类保留语言字符和基本标点
         // \p{L} = 所有语言的字母
@@ -92,9 +88,7 @@ class sqlfilter
      */
     public function filterStrictSQL($input)
     {
-        if (!is_string($input) || empty(trim($input))) {
-            return '';
-        }
+        if(!is_string($input) || empty(trim($input))) return '';
 
         // 步骤1：只保留字母、数字、最基本的标点
         $filtered = preg_replace('/[^\p{L}\p{N}\s\.\,\!\?\-\_]/u', '', $input);
@@ -182,9 +176,7 @@ class sqlfilter
         ];
 
         // 逐个应用模式，将匹配内容替换为空格
-        foreach ($dangerousPatterns as $pattern) {
-            $input = preg_replace($pattern, ' ', $input);
-        }
+        foreach($dangerousPatterns as $pattern) $input = preg_replace($pattern, ' ', $input);
 
         return $input;
     }
@@ -220,9 +212,7 @@ class sqlfilter
             '/\s+(or|and)\s+[\'"]?\d+[\'"]?\s*=\s*[\'"]?\d+[\'"]?/i' => " ", // 1=1类型注入
         ];
 
-        foreach ($replacements as $pattern => $replacement) {
-            $input = preg_replace($pattern, $replacement, $input);
-        }
+        foreach($replacements as $pattern => $replacement) $input = preg_replace($pattern, $replacement, $input);
 
         return $input;
     }
@@ -246,10 +236,9 @@ class sqlfilter
             '/\bor\s+\d+\s*=\s*\d+/i', // 1=1类型条件
         ];
 
-        foreach ($dangerousPatterns as $pattern) {
-            if (preg_match($pattern, $input)) {
-                return false; // 发现危险特征
-            }
+        foreach($dangerousPatterns as $pattern)
+        {
+            if(preg_match($pattern, $input)) return false; // 发现危险特征
         }
 
         return true; // 通过安全检查
@@ -264,7 +253,8 @@ class sqlfilter
      */
     public function getRecommendedFilter($input, $securityLevel = 'medium')
     {
-        switch ($securityLevel) {
+        switch($securityLevel)
+        {
             case 'high':
                 // 高安全级别：最严格的过滤
                 return $this->filterStrictSQL($input);
@@ -290,9 +280,7 @@ class sqlfilter
     public function filterMultiple($inputs, $securityLevel = 'medium')
     {
         $filtered = [];
-        foreach ($inputs as $key => $input) {
-            $filtered[$key] = $this->getRecommendedFilter($input, $securityLevel);
-        }
+        foreach($inputs as $key => $input) $filtered[$key] = $this->getRecommendedFilter($input, $securityLevel);
         return $filtered;
     }
 
@@ -333,10 +321,9 @@ class sqlfilter
             'encoding_bypass' => '/\\\\x[0-9a-f]{2}|%[0-9a-f]{2}/i'
         ];
 
-        foreach ($threatPatterns as $threat => $pattern) {
-            if (preg_match_all($pattern, $input, $matches)) {
-                $threats[$threat] = $matches[0];
-            }
+        foreach($threatPatterns as $threat => $pattern)
+        {
+            if(preg_match_all($pattern, $input, $matches)) $threats[$threat] = $matches[0];
         }
 
         return $threats;
@@ -351,7 +338,6 @@ class sqlfilter
      */
     private function getRemovedChars($original, $filtered)
     {
-        $removed = '';
         $originalChars = mb_str_split($original, 1, 'UTF-8');
         $filteredChars = mb_str_split($filtered, 1, 'UTF-8');
 
