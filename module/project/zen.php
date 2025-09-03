@@ -479,7 +479,7 @@ class projectZen extends project
         $this->view->disableParent        = $disableParent;
         $this->view->groups               = $this->loadModel('group')->getPairs();
 
-        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($project))
+        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($projectID))
         {
             $this->view->disableModel = true;
         }
