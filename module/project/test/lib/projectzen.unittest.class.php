@@ -111,4 +111,17 @@ class projectZenTest
 
         return callZenMethod('project', 'buildEditForm', [$projectID, $project], 'view');
     }
+
+    /**
+     * 处理项目列表展示数据。
+     * Process project list display data.
+     *
+     * @access public
+     * @return array
+     */
+    public function processProjectListDataTest(): array
+    {
+        $projectList = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        return callZenMethod('project', 'processProjectListData', [$projectList]);
+    }
 }
