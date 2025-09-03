@@ -93,7 +93,7 @@ class userZen extends user
         $params     = "userID={$user->id}";
 
         $featureBarMenus = array();
-        if(common::hasPriv($moduleName, 'todo')) $featureBarMenus['todo'] = array('active' => false, 'url' => $this->createLink($moduleName, 'todo', "$params&type=all"), 'text' => $this->lang->user->schedule);
+        if(common::hasPriv($moduleName, 'todo')) $featureBarMenus['todo'] = array('active' => false, 'url' => $this->createLink($moduleName, 'view', $params), 'text' => $this->lang->user->schedule);
         if(common::hasPriv($moduleName, 'task')) $featureBarMenus['task'] = array('active' => false, 'url' => $this->createLink($moduleName, 'task', $params), 'text' => $this->lang->user->task);
 
         if($this->config->URAndSR && $this->config->vision == 'rnd') $featureBarMenus['requirement'] = array('active' => false, 'url' => $this->createLink($moduleName, 'story', "$params&storyType=requirement"), 'text' => $this->lang->URCommon);
