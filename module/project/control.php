@@ -560,6 +560,7 @@ class project extends control
         if(!empty($output['category']))      $project->category      = $output['category'];
 
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
+        $this->display();
     }
 
     /**
