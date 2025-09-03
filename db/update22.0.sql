@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
-  `versiot` varchar(255) NULL,
+  `version` varchar(255) NULL,
   `isBaseline` tinyint(1) DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` date NULL,
