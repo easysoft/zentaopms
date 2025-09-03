@@ -2195,6 +2195,7 @@ $config->group->package->manageReview->subset = 'projectreview';
 $config->group->package->manageReview->privs  = array();
 $config->group->package->manageReview->privs['review-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('review-view'));
 $config->group->package->manageReview->privs['review-admin']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageReview->privs['review-createFlow']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('review-admin'), 'recommend' => array());
 $config->group->package->manageReview->privs['review-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-report', 'review-submit', 'review-toAudit'));
 $config->group->package->manageReview->privs['review-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-delete', 'review-recall', 'review-report', 'review-submit', 'review-toAudit'));
 $config->group->package->manageReview->privs['review-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('review-browse'), 'recommend' => array());
