@@ -3669,6 +3669,7 @@ $config->group->package->manageReportTemplate->privs['reporttemplate-editcategor
 $config->group->package->manageReportTemplate->privs['reporttemplate-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array('reporttemplate-pause'));
 $config->group->package->manageReportTemplate->privs['reporttemplate-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reporttemplate-browse', 'reporttemplate-view'), 'recommend' => array('reporttemplate-create', 'reporttemplate-pause'));
 $config->group->package->manageReportTemplate->privs['reporttemplate-pause']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-create', 'reporttemplate-edit'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-cron']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array('reporttemplate-create', 'reporttemplate-edit'));
 
 $config->group->package->deleteReportTemplate = new stdclass();
 $config->group->package->deleteReportTemplate->order  = 20;
