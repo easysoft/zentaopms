@@ -1684,11 +1684,14 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
+  `version` varchar(255) NULL,
+  `isBaseline` tinyint(1) DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `project` ON `zt_projectdeliverable` (`project`);
+CREATE UNIQUE INDEX `project_deliverable_doc` ON `zt_projectdeliverable` (`project`, `deliverable`, `doc`);
 
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (

@@ -11545,7 +11545,11 @@ class upgradeModel extends model
      */
     public function upgradeProjectDeliverable(array $deliverableList)
     {
-        $projectList = $this->dao->select('id,deliverable,workflowGroup')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll();
+        $projectList           = $this->dao->select('id,deliverable,workflowGroup,type')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll('id');
+        $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
+        $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
+        $fileList              = $this->dao->select('*')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('extra')->like('deliverable%')->fetchAll('id');
+
         foreach($projectList as $project)
         {
             $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
@@ -11567,10 +11571,19 @@ class upgradeModel extends model
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
                         $newProjectDeliverable->category    = $config['category'];
-                        $newProjectDeliverable->doc         = $config['doc'];
                         $newProjectDeliverable->required    = $config['required'];
                         $newProjectDeliverable->createdBy   = 'system';
                         $newProjectDeliverable->createdDate = helper::today();
+
+                        /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
+                        if(!empty($config['file']) && !empty($fileList[$config['file']]))
+                        {
+                            $newProjectDeliverable->doc = $this->moveFileToDoc($project, $projectMainLibPairs, $executionMainLibPairs, $fileList[$config['file']]);
+                        }
+                        else
+                        {
+                            $newProjectDeliverable->doc = $config['doc'];
+                        }
 
                         $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($newProjectDeliverable)->exec();
                     }
@@ -11591,6 +11604,56 @@ class upgradeModel extends model
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_PROJECT . " DROP `deliverable`;");
+    }
+
+    /**
+     * 将附件类型的交付物变成附件类型的文档并关联到交付物。
+     * Move file to doc.
+     *
+     * @param  object $project
+     * @param  array  $projectMainLibPairs
+     * @param  array  $executionMainLibPairs
+     * @param  array  $files
+     * @access public
+     * @return int
+     */
+    public function moveFileToDoc(object $project, array $projectMainLibPairs, array $executionMainLibPairs, object $file): int
+    {
+        $projectType = $project->type == 'project' ? 'project' : 'execution';
+
+        $title    = $file->title;
+        $position = strrpos($title, '.');
+        if($position > 0) $title = substr($title, 0, $position);
+
+        $doc = new stdclass();
+        $doc->title       = $title;
+        $doc->lib         = $projectType == 'project' ? $projectMainLibPairs[$project->id] : $executionMainLibPairs[$project->id];
+        $doc->project     = $projectType == 'project' ? $project->id : 0;
+        $doc->execution   = $projectType == 'execution' ? $project->id : 0;
+        $doc->addedBy     = 'admin';
+        $doc->addedDate   = helper::today();
+        $doc->acl         = 'open';
+        $doc->vision      = 'rnd';
+        $doc->version     = 1;
+        $doc->type        = 'attachment';
+
+        $this->dao->insert(TABLE_DOC)->data($doc)->exec();
+        $docID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_FILE)->set('objectID')->eq($docID)->set('objectType')->eq('doc')->where('id')->eq($file->id)->exec(); // 将附件的对象变成文档。
+
+        $docContent          = new stdclass();
+        $docContent->doc     = $docID;
+        $docContent->title   = $title;
+        $docContent->content = '';
+        $docContent->type    = 'attachment';
+        $docContent->digest  = '';
+        $docContent->version = 1;
+        $docContent->files   = ",$file->id";
+
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+
+        return $docID;
     }
 
     /**
