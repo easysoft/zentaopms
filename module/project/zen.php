@@ -375,7 +375,7 @@ class projectZen extends project
         $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $projectBranches     = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = empty($branchGroups) ? '' : array_keys($branchGroups);
+        $linkedProductIdList = empty($projectBranches) ? '' : array_keys($projectBranches);
         $parentProject       = $this->program->getByID($project->parent);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList, false);
         $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
@@ -483,8 +483,6 @@ class projectZen extends project
         {
             $this->view->disableModel = true;
         }
-
-        $this->display();
     }
 
     /**
