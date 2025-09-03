@@ -1644,7 +1644,7 @@ class testtaskModel extends model
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
             }
-            elseif($file->objectType == 'stepResult' && $file->extra !== '')
+            elseif($file->objectType == 'stepResult')
             {
                 $stepFiles[$file->objectID][(int)$file->extra][$file->id] = $file;
             }
