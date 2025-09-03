@@ -483,8 +483,6 @@ class projectZen extends project
         {
             $this->view->disableModel = true;
         }
-
-        $this->display();
     }
 
     /**
