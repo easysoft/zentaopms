@@ -1380,7 +1380,7 @@ class projectZen extends project
                 if($story->isParent) continue;
                 $project->storyPoints += $story->estimate;
             }
-            $project->storyPoints .= ' ' . $this->config->hourUnit;
+            $project->storyPoints = helper::formatHours($project->storyPoints) . ' ' . $this->config->hourUnit;
 
             $executions = zget($executionGroup, $project->id, array());
             $project->executionCount = count($executions);
