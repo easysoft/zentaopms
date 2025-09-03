@@ -136,3 +136,4 @@ $lang->release->markerList[0] = 'No';
 
 $lang->release->failTips        = 'Deployment/Launch Failed';
 $lang->release->versionErrorTip = 'Version number can only contain letters, numbers, hyphens (-), dots (.), and underscores (_).';
+$lang->release->integratedLabel = 'Integrated';
