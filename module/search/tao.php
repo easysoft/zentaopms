@@ -411,7 +411,7 @@ class searchTao extends searchModel
             if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond .= "(-\" $word \") ";
         }
 
-        $likeCondition = trim($keywords) ? "OR title like '%{$keywords}%' OR content like '%{$keywords}%'" : '';
+        $likeCondition = trim($keywords) ? 'OR title LIKE ' . $this->dbh->quote("%{$keywords}%") . ' OR content LIKE ' . $this->dbh->quote("%{$keywords}%") : '';
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
