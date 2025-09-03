@@ -44,7 +44,7 @@ class fileList extends wg
 
         foreach($files as $file)
         {
-            if($file->extra != $extra) continue;
+            if($extra && $file->extra != $extra) continue;
             $fileItemView = html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object));
 
             $fileListView->add($fileItemView);
