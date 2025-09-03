@@ -1867,29 +1867,29 @@ class actionModel extends model
 
          /* 只保留允许的标签。 */
          /* Keep only allowed tags. */
-        $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
+         $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
 
          /* 处理评论内的图片。*/
          /* Handle images in comment. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
+         $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
 
-        $this->dao->update(TABLE_ACTION)
-            ->set('date')->eq(helper::now())
-            ->set('comment')->eq($newComment->lastComment)
-            ->where('id')->eq($actionID)
-            ->exec();
+         $this->dao->update(TABLE_ACTION)
+             ->set('date')->eq(helper::now())
+             ->set('comment')->eq($newComment->lastComment)
+             ->where('id')->eq($actionID)
+             ->exec();
 
-        $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
-        $this->file->processFileDiffsForObject('comment', $action, $newComment);
-        if(!empty($newComment->files))
-        {
-            $action->files = $newComment->files;
-            $this->dao->update(TABLE_ACTION)->set('files')->eq($newComment->files)->where('id')->eq($actionID)->exec();
-        }
-        $changes = common::createChanges($action, $newComment);
-        if($changes) $this->logHistory($actionID, $changes);
+         $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
+         $this->file->processFileDiffsForObject('comment', $action, $newComment);
+         if(!empty($newComment->files))
+         {
+             $action->files = $newComment->files;
+             $this->dao->update(TABLE_ACTION)->set('files')->eq($newComment->files)->where('id')->eq($actionID)->exec();
+         }
+         $changes = common::createChanges($action, $newComment);
+         if($changes) $this->logHistory($actionID, $changes);
 
-        return true;
+         return true;
     }
 
     /**

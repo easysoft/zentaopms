@@ -4,6 +4,7 @@
 /**
 
 title=测试 fileModel->processFileDiffsForObject();
+timeout=0
 cid=0
 
 - 传入空对象。属性count @added:;delete:;rename:;
@@ -11,6 +12,8 @@ cid=0
 - 有删除文件字段。 @added:;delete:文件标题1,文件标题2;rename:;
 
 - 有重命名文件字段。 @added:;delete:文件标题3;rename:文件标题3,11,文件标题4,22;
+
+- 有重命名文件字段。 @added:;delete:文件标题1;rename:文件标题1,11;
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -45,5 +48,10 @@ $oldObject->files       = $oldFiles;
 $newObject->deleteFiles = array(3);
 $newObject->renameFiles = array(3 => '11', 4 => '22');
 r($file->processFileDiffsForObjectTest('story', $oldObject, $newObject)) && p() && e('added:;delete:文件标题3;rename:文件标题3,11,文件标题4,22;'); //有重命名文件字段。
+
+$oldObject->files       = $oldFiles;
+$newObject->deleteFiles = array(1);
+$newObject->renameFiles = array(1 => '11');
+r($file->processFileDiffsForObjectTest('story', $oldObject, $newObject)) && p() && e('added:;delete:文件标题1;rename:文件标题1,11;'); //有重命名文件字段。
 
 $config->debug = $debug;
