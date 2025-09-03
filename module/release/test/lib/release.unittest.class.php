@@ -347,4 +347,36 @@ class releaseTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
     }
+
+    /**
+     * 处理发布列表数据测试。
+     * Process release list data test.
+     *
+     * @param  int $productID
+     * @param  string $type
+     * @param  array $childReleases
+     * @param  bool $addActionsAndBuildLink
+     * @access public
+     * @return void
+     */
+    public function processReleaseListDataTest(int $productID, string $type = 'all', array $childReleases = array(), bool $addActionsAndBuildLink = true)
+    {
+        $releases = $this->objectModel->getList($productID, 0, $type);
+        return $this->objectModel->processReleaseListData($releases, $childReleases, $addActionsAndBuildLink);
+    }
+
+    /**
+     * 处理发布版本数据测试。
+     * Process release build data test.
+     *
+     * @param  int $releaseID
+     * @param  bool $addActionsAndBuildLink
+     * @access public
+     * @return array
+     */
+    public function processReleaseBuildsTest(int $releaseID, bool $addActionsAndBuildLink = true): array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        return $this->objectModel->processReleaseBuilds($release, $addActionsAndBuildLink);
+    }
 }

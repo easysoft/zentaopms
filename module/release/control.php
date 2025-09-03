@@ -108,7 +108,7 @@ class release extends control
         $this->view->showBranch    = $showBranch;
         $this->view->branchPairs   = $this->loadModel('branch')->getPairs($productID);
         $this->view->appList       = $this->loadModel('system')->getPairs();
-        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
+        $this->view->childReleases = $childReleases;
         $this->view->from          = $from;
         $this->view->blockID       = $blockID;
         $this->view->idList        = '';
