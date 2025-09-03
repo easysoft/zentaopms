@@ -364,3 +364,19 @@ function initReference($moduleName, $type = 'zen')
     if(!$class || !class_exists($class)) return false;
     return new ReflectionClass($class);
 }
+
+function callZenMethod($moduleName, $name, $args, $property = '')
+{
+    global $app;
+    $zenTest = $app->loadTarget($moduleName, '', 'zen');
+    $reflection = new ReflectionClass($zenTest);
+
+    $method = $reflection->getMethod($name);
+    $method->setAccessible(true);
+    $result = $method->invokeArgs($zenTest, $args);
+    if(empty($property)) return $result; // 如果不获取属性值，则返回被调用方法的返回值。
+
+    $zenProperty = $reflection->getProperty($property);
+    $zenProperty->setAccessible(true);
+    return $zenProperty->getValue($zenTest); // 返回zen的属性值。
+}
