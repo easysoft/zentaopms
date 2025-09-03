@@ -2570,7 +2570,7 @@ eof;
      * @access protected
      * @return array|bool
      */
-    protected function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
+    public function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
     {
         $rawModule = $moduleName;
         if(!empty($actionData['url']) && is_array($actionData['url']))
