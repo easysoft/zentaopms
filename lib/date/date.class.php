@@ -212,8 +212,12 @@ class date
      */
     public static function getNextMonth()
     {
-        $begin = date('Y-m-01 00:00:00', strtotime('+1 month'));
-        $end   = date('Y-m-d 23:59:59', strtotime("$begin +1 month -1 day"));
+        $thisYear  = date('Y');
+        $thisMonth = date('m');
+        $year      = $thisMonth == 12 ? $thisYear + 1 : $thisYear;
+        $month     = $thisMonth == 12 ? 1 : $thisMonth + 1;
+        $begin     = "{$year}-{$month}-01 00:00:00";
+        $end       = date('Y-m-d 23:59:59', strtotime("$begin +1 month -1 day"));
         return array('begin' => $begin, 'end' => $end);
     }
 
