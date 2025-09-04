@@ -61,6 +61,15 @@ else
 
 featureBar(set::items($navItems));
 
+toolbar
+(
+    item(set(array(
+        'type' => 'primary',
+        'text' => $lang->aiapp->manageGeneralAgent,
+        'url'  => createLink('ai', 'miniPrograms'),
+    ))),
+);
+
 $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $showTag)
 {
     global $config, $lang;
