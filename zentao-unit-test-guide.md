@@ -489,7 +489,7 @@ cd test/runtime
 - [ ] 测试结果显示 PASS=1, FAIL=0, SKIP=0
 - [ ] 如有失败，已根据错误信息修正代码
 
-### 🔴 步骤7：提交和推送代码（强制要求）
+### 🔴 步骤7：提交代码（强制要求）
 **测试验证通过后，必须按以下步骤提交代码：**
 
 1. **添加测试文件到git（仅添加测试相关文件）**：
@@ -508,12 +508,6 @@ cd test/runtime
    🤖 Generated with [Claude Code](https://claude.ai/code)
 
    Co-Authored-By: Claude <noreply@anthropic.com>"
-   ```
-
-3. **推送到远程仓库**：
-
-   ```bash
-   git push
    ```
 
 **⚠️ AI大模型提交信息模板（必须严格遵循）：**
@@ -736,7 +730,6 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 **📋 代码提交检查**
 - [ ] 已添加测试相关文件：`git add module/{moduleName}/test/...`
 - [ ] 提交信息符合格式：`+ [misc] Add unit tests for...`
-- [ ] 已推送到远程：`git push`
 
 ### 📝 代码质量检查项
 - [ ] **测试步骤完整**：测试用例包含正常流程、边界值、异常情况等测试步骤
@@ -747,7 +740,7 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 ### ⚠️ 常见错误避免
 - [ ] **避免直接在开发分支开发**：必须在测试分支上进行开发
 - [ ] **避免使用php直接运行测试**：必须使用ztf运行器验证
-- [ ] **避免不提交代码**：测试通过后必须提交并推送代码
+- [ ] **避免不提交代码**：测试通过后必须提交代码
 - [ ] **避免将规范文档提交到测试分支**：规范文档应该保留在开发分支供后续参照使用
 - [ ] **🚨 避免行尾空格**：所有生成的代码必须移除行尾空格，否则提交会被拒绝
 
