@@ -674,7 +674,7 @@ class testcaseModel extends model
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldCase, $case);
-        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
+        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $this->post->comment, ucfirst($case->result));
         $this->action->logHistory($actionID, $changes);
         return true;
     }
@@ -752,15 +752,16 @@ class testcaseModel extends model
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
+    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0, string $orderBy = 'id_asc'): array
     {
         if($browseType != 'bySearch') return array();
 
         $case      = $this->getByID($caseID);
-        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', 'id');
+        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', $orderBy);
         foreach($bugs2Link as $key => $bug2Link)
         {
             if($bug2Link->case != 0) unset($bugs2Link[$key]);
