@@ -1255,6 +1255,28 @@ class treeModel extends model
         $data->parent = (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('deliverable', 'browse', "groupID={$module->root}&browseType={$extra}&param={$module->id}");
+
+        return $data;
+    }
+
+    /**
+     * 生成项目交付物链接。
+     * Create link of a project deliverable.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  string $extra
+     * @access public
+     * @return object
+     */
+    public function createProjectDeliverableLink(string $type, object $module, string $parent, string $extra = ''): object
+    {
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('project', 'deliverable', "projectID={$extra}&browseType=bymodule&param={$module->id}");
         $data->extra  = $module->extra;
 
         return $data;
