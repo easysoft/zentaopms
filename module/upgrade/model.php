@@ -11725,7 +11725,7 @@ class upgradeModel extends model
             ->andWhere('t2.projectModel')->in($modelList)
             ->fetchAll();
 
-        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->fetchGroup('type', 'object');
+        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->fetchGroup('type');
 
         $deliverable = new stdClass();
         $deliverable->status      = 'disabled';
@@ -11753,13 +11753,14 @@ class upgradeModel extends model
                 if(empty($value)) continue;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
-                $reviewFlow->root     = module->workflowGroup;
+                $reviewFlow->root     = $module->workflowGroup;
                 $reviewFlow->objectID = $deliverableID;
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
                 $flowID = $this->dao->lastInsertID();
 
-                foreach($reviewclList[$module->projectModel][$key] as $reviewcl)
+                foreach($reviewclList[$module->projectModel] as $reviewcl)
                 {
+                    if($key !== $reviewcl->object) continue;
                     unset($reviewcl->id);
                     unset($reviewcl->editedDate);
                     unset($reviewcl->assignedDate);
@@ -11769,5 +11770,8 @@ class upgradeModel extends model
                 }
             }
         }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " CHANGE `object` `object` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+        $this->dao->exec('ALTER TABLE ' . TABLE_REVIEWCL . ' DROP `type`');
     }
 }
