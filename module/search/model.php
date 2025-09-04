@@ -627,6 +627,9 @@ class searchModel extends model
      */
     public function getList(string $keywords, array|string $type, ?object $pager = null): array
     {
+        $filter   = $this->app->loadClass('sqlfilter');
+        $keywords = $filter->getRecommendedFilter($keywords, 'medium');
+
         list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords);
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
@@ -639,9 +642,9 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
-        $stmt = $this->dao->select("*, {$scoreColumn} as score")->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+        $table = "SELECT *, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) AS score FROM " . TABLE_SEARCHINDEX;
+        $stmt  = $this->dao->select('*')->from("({$table})")->alias('t1')
+            ->where("(score >= 1 {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
