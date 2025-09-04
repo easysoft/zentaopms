@@ -36,6 +36,7 @@ class putoffExecutionTester extends tester
      */
     public function putoff($execution, $executionId)
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $this->inputFields($execution, $executionId);
         $form = $this->loadPage();

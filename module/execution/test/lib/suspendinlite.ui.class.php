@@ -12,6 +12,7 @@ class suspendExecutionTester extends tester
      */
     public function suspend($executionId)
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $form = $this->initForm('execution', 'kanban', array('execution' => $executionId ), 'appIframe-project');
         $form->wait(1);
