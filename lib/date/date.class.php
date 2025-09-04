@@ -217,7 +217,7 @@ class date
         $year      = $thisMonth == 12 ? $thisYear + 1 : $thisYear;
         $month     = $thisMonth == 12 ? 1 : $thisMonth + 1;
         $begin     = "{$year}-{$month}-01 00:00:00";
-        $end       = date('Y-m-d 23:59:59', strtotime("$begin +1 month -1 day"));
+        $end       = date("{$year}-{$month}-t 23:59:59", strtotime($begin));
         return array('begin' => $begin, 'end' => $end);
     }
 
