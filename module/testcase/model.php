@@ -1488,18 +1488,21 @@ class testcaseModel extends model
         if(empty($projects)) return false;
 
         $this->loadModel('action');
-        $projects   = array_unique($projects);
+        $projects   = array_filter(array_unique($projects));
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id', false);
         foreach($projects as $projectID)
         {
+            if(!isset($objectInfo[$projectID])) continue;
+
             $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+            $lastOrder++;
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $case->product;
             $data->case    = $caseID;
             $data->version = 1;
-            $data->order   = ++ $lastOrder;
+            $data->order   = $lastOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
             $object     = $objectInfo[$projectID];
