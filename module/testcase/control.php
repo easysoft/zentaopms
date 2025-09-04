@@ -956,13 +956,14 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs(int $caseID, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkBugs(int $caseID, string $browseType = '', int $param = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('bug');
 
@@ -975,7 +976,7 @@ class testcase extends control
 
         /* 获取关联的bug。*/
         /* Get bugs to link. */
-        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
+        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID, $orderBy);
 
         /* bug 分页。*/
         /* Pager. */
@@ -985,11 +986,14 @@ class testcase extends control
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title     = $this->lang->testcase->linkBugs;
-        $this->view->case      = $case;
-        $this->view->bugs2Link = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->testcase->linkBugs;
+        $this->view->case       = $case;
+        $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
 
         $this->display();
     }
