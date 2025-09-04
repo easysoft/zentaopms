@@ -38,4 +38,4 @@ $lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';
 $lang->aiapp->miniProgramChat    = 'Execute AI Mini Program';
 $lang->aiapp->view               = 'View AI Mini Program Details';
 
-$lang->aiapp->manageGeneralAgent = 'Managing General Agent';
+$lang->aiapp->manageGeneralAgent = 'Manage General Agent';
