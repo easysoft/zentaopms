@@ -69,11 +69,11 @@ process_method() {
     # 构建Claude命令
     local claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
 
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 执行Claude命令: claude -p \"$claude_prompt\" --dangerously-skip-permissions" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 执行Claude命令: claude -p \"$claude_prompt\" --dangerously-skip-permissions < /dev/null 2>&1" | tee -a "$LOG_FILE"
 
     # 执行Claude命令并捕获输出
     local claude_output
-    if claude_output=$(claude -p "$claude_prompt" --dangerously-skip-permissions 2>&1); then
+    if claude_output=$(claude -p "$claude_prompt" --dangerously-skip-permissions < /dev/null 2>&1); then
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Claude命令执行成功" | tee -a "$LOG_FILE"
 
         # 将Claude输出保存到测试文件
