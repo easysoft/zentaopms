@@ -133,8 +133,6 @@ main() {
             echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 第 $CURRENT_LINE 行处理失败" | tee -a "$LOG_FILE"
         fi
 
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] 第 $CURRENT_LINE 行处理完成" | tee -a "$LOG_FILE"
-
         ((TOTAL_PROCESSED++))
 
         # 进度提示
