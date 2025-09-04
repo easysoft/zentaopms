@@ -827,3 +827,20 @@ if(!helper::hasFeature('kanban'))
     unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[50]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
 }
+
+/* AI menu. */
+$lang->aiapp->menu = new stdclass();
+$lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
+$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|");
+$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|");
+$lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
+$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|");
+
+$lang->aiapp->dividerMenu = ',zentaoAgent,models,';
+
+/* AI menu order. */
+$lang->aiapp->menuOrder[5]  = 'conversation';
+$lang->aiapp->menuOrder[10] = 'zentaoAgent';
+$lang->aiapp->menuOrder[15] = 'generalAgent';
+$lang->aiapp->menuOrder[20] = 'models';
+$lang->aiapp->menuOrder[25] = 'config';
