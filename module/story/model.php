@@ -2764,7 +2764,7 @@ class storyModel extends model
             $products = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
         }
 
-        $this->loadModel('search')->setQuery('story', $queryID);
+        $this->loadModel('search')->setQuery($type, $queryID);
 
         $allProduct     = "`product` = 'all'";
         $queryVar       = in_array($type, array('requirement', 'epic')) ? "{$type}Query" : 'storyQuery';
