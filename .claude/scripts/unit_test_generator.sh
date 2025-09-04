@@ -6,7 +6,6 @@
 
 # 设置变量
 
-#CURRENT_DIR="$(dirname "$(readlink -f "$0")")"
 BASE_PATH=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")/../..")
 GUIDE_FILE="$BASE_PATH/.claude/rules/zentao-unit-test-guide.md"
 CSV_FILE="$BASE_PATH/.claude/data/open_model_no_case.csv"
