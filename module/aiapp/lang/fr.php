@@ -37,3 +37,5 @@ $lang->aiapp->miniProgramSquare  = 'Browse AI Mini Program List';
 $lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';
 $lang->aiapp->miniProgramChat    = 'Execute AI Mini Program';
 $lang->aiapp->view               = 'View AI Mini Program Details';
+
+$lang->aiapp->manageGeneralAgent = 'Managing General Agent';
