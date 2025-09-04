@@ -296,6 +296,9 @@ class ai extends control
      */
     public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
+        $this->lang->aiapp->menu->generalAgent['alias']     = 'miniprograms';
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
@@ -312,7 +315,8 @@ class ai extends control
                 : $this->lang->ai->miniPrograms->statuses['draft'];
         }
 
-        $this->view->title        = $this->lang->ai->miniPrograms->common;
+        $this->app->loadLang('aiapp');
+        $this->view->title        = $this->lang->aiapp->manageGeneralAgent;
         $this->view->miniPrograms = $programs;
         $this->view->category     = $category;
         $this->view->categoryList = $categoryList;
