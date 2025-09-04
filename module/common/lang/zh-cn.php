@@ -653,6 +653,7 @@ $lang->datepicker->dpText->TEXT_THIS_WEEK   = '本周';
 $lang->datepicker->dpText->TEXT_TODAY       = '今天';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = '明年';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = '下月';
+$lang->datepicker->dpText->TEXT_NEXT_WEEK   = '下周';
 $lang->datepicker->dpText->TEXT_CLOSE       = '关闭';
 $lang->datepicker->dpText->TEXT_DATE        = '选择时间段';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = '选择日期';

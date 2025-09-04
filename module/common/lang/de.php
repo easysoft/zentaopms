@@ -652,6 +652,7 @@ $lang->datepicker->dpText->TEXT_THIS_WEEK   = 'Diese Woche';
 $lang->datepicker->dpText->TEXT_TODAY       = 'Heute';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Nächstes Jahr';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Nächsten Monat';
+$lang->datepicker->dpText->TEXT_NEXT_WEEK   = 'Next Week';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Schließen';
 $lang->datepicker->dpText->TEXT_DATE        = 'Zeit wählen';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Datum wählen';
