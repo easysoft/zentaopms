@@ -24,6 +24,7 @@ class executionForLiteTester extends tester
             'closed'    => '已关闭',
         ];
         $tabDom = $tab.'Tab';
+        $form->wait(2);
         $form->dom->$tabDom->click();
         $form->wait(5);
 
