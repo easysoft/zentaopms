@@ -455,7 +455,7 @@ class ai extends control
         $this->view->status     = $status;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->title      = $this->lang->aiapp->zentaoAgent;
         $this->view->users      = $users;
 
         if($this->config->edition == 'open')

@@ -150,7 +150,7 @@ class aiapp extends control
         $this->view->categoryList = array_merge($squareCategoryArray, $usedCategoryArray);
         $this->view->pager        = $pager;
         $this->view->miniPrograms = $miniPrograms ?: array();
-        $this->view->title        = $this->lang->aiapp->title;
+        $this->view->title        = $this->lang->aiapp->generalAgent;
         $this->display();
     }
 
