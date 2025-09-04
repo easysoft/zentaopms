@@ -91,17 +91,17 @@ class release extends control
         $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
-        $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
-        $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
-        $children     = implode(',', array_column($releases, 'releases'));
+        $releaseQuery    = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
+        $currentReleases = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
+        $children        = implode(',', array_column($currentReleases, 'releases'));
 
         $childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
-        $releases      = $this->release->processReleaseListData($releases, $childReleases);
+        $releases      = $this->release->processReleaseListData($currentReleases, $childReleases);
         foreach($releases as $release) $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases      = $releases;
-        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->pageSummary   = $this->release->getPageSummary($currentReleases, $type);
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->param         = $param;
