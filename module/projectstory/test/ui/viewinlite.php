@@ -99,6 +99,6 @@ $tester = new viewInLiteTester();
 $tester->login();
 
 
-r($tester->viewInLite()) && p('message') && e('目标详情页正确');
+r($tester->viewInLite()) && p('message') && e('目标详情页内容正确');
 
 $tester->closeBrowser();
