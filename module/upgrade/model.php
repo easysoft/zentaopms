@@ -11724,5 +11724,50 @@ class upgradeModel extends model
             ->andWhere('t1.extra')->eq('other')
             ->andWhere('t2.projectModel')->in($modelList)
             ->fetchAll();
+
+        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->fetchGroup('type', 'object');
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'disabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->template    = '[]';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
+
+        $reviewFlow = new stdclass();
+        $reviewFlow->flow = 1;
+        $reviewFlow->objectType  = 'deliverable';
+        $reviewFlow->relatedBy   = 'system';
+        $reviewFlow->relatedDate = helper::now();
+        $reviewFlow->extra       = 'review';
+        foreach($moduleList as $module)
+        {
+            $nameFilter = array();
+            $deliverable->workflowGroup = $module->workflowGroup;
+            $deliverable->module        = $module->id;
+            foreach(array_filter($this->lang->baseline->objectList) as $key => $value)
+            {
+                if(empty($value)) continue;
+                $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
+
+                $reviewFlow->root     = module->workflowGroup;
+                $reviewFlow->objectID = $deliverableID;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
+                $flowID = $this->dao->lastInsertID();
+
+                foreach($reviewclList[$module->projectModel][$key] as $reviewcl)
+                {
+                    unset($reviewcl->id);
+                    unset($reviewcl->editedDate);
+                    unset($reviewcl->assignedDate);
+                    $reviewcl->workflowGroup = $module->workflowGroup;
+                    $reviewcl->object        = $flowID;
+                    $this->dao->insert(TABLE_REVIEWCL)->data($reviewcl)->exec();
+                }
+            }
+        }
     }
 }
