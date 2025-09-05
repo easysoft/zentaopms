@@ -981,7 +981,7 @@ class testcase extends control
         /* bug 分页。*/
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal  = count($bugs2Link);
+        if(empty($recTotal)) $recTotal = count($bugs2Link);
         $pager     = new pager($recTotal, $recPerPage, $pageID);
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
