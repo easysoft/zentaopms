@@ -604,6 +604,7 @@ $lang->group->package->publishMiniProgram    = 'AI小程序上下架';
 $lang->group->package->deleteMiniProgram     = '删除AI小程序';
 $lang->group->package->impAndExpMiniProgram  = '导入导出AI小程序';
 $lang->group->package->aiAssistant           = 'AI助手';
+$lang->group->package->aiConversation        = '智能会话';
 $lang->group->package->applyZentaoAgent      = '应用禅道智能体';
 $lang->group->package->manageZentaoAgent     = '管理禅道智能体';
 $lang->group->package->applyGeneralAgent     = '应用通用智能体';
