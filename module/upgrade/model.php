@@ -11553,8 +11553,8 @@ class upgradeModel extends model
     public function upgradeProjectDeliverable(array $deliverableList)
     {
         $projectList           = $this->dao->select('id,deliverable,workflowGroup,type')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll('id');
-        $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
-        $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
+        $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
+        $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('execution')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
         $fileList              = $this->dao->select('*')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('extra')->like('deliverable%')->fetchAll('id');
 
         foreach($projectList as $project)
@@ -11577,8 +11577,6 @@ class upgradeModel extends model
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
-                        $newProjectDeliverable->createdBy   = 'system';
-                        $newProjectDeliverable->createdDate = helper::today();
 
                         /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
                         if(!empty($config['file']) && !empty($fileList[$config['file']]))
