@@ -1,1 +1,2 @@
 .doc-tree-actions {display: none;}
+#mainContent.loading > * {opacity: 0;}

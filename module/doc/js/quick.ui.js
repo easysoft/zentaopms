@@ -3,7 +3,7 @@ window.setDocAppOptions = function(_, options)
 {
     options = window._setDocAppOptions(_, options);
     const onSwitchView = options.onSwitchView;
-    return $.extend(options,
+    options = $.extend(options,
     {
         docFetcher: {url: options.docFetcher, dataFilter: (data) => $.extend(data, {lib: options.libID})},
         viewModeUrl: function(options)
@@ -23,6 +23,8 @@ window.setDocAppOptions = function(_, options)
             return item;
         }
     });
+    if(typeof window._currentLibID === 'number') options.libID = window._currentLibID;
+    return options;
 };
 
 /**
@@ -34,7 +36,9 @@ window.setDocAppOptions = function(_, options)
 function trySwitchView(docApp, libID)
 {
     if(window._trySwitchViewTimer) clearTimeout(window._trySwitchViewTimer);
+    if(libID === window._currentLibID) return;
 
+    window._currentLibID = libID;
     window._trySwitchViewTimer = setTimeout(() => {
         window._trySwitchViewTimer = 0;
         if(libID === docApp.props.libID) return;
@@ -43,8 +47,9 @@ function trySwitchView(docApp, libID)
         const quickType = lib ? lib.data.quickType : 'view';
         const url       = $.createLink('doc', 'quick', `type=${quickType}`);
         docApp.signals.loading.value = true;
-        loadPartial(url, '#mainContent', {complete: () =>
-        {
+        $('#mainContent').addClass('loading');
+        loadPartial(url, '#mainContent', {complete: () => {
+            $('#mainContent').removeClass('loading');
             docApp.signals.loading.value = false;
         }});
     }, 10);
