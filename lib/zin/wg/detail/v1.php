@@ -374,16 +374,17 @@ CSS;
 
     protected function buildMain()
     {
+        $mainSections = $this->buildMainSections();
         return div
         (
             setClass('detail-main flex-auto col gap-2 min-w-0'),
-            div
+            $mainSections ? div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),
                 setKey('main'),
-                $this->buildMainSections(),
+                $mainSections,
                 $this->block('main')
-            ),
+            ) : null,
             $this->block('sections'),
             $this->children(),
             $this->buildHistory(),
