@@ -66,26 +66,20 @@ $userModel = $tester->loadModel('user');
 $ref = new ReflectionMethod($userModel, 'getSprintView');
 $ref->setAccessible(true);
 
-$result1  = $ref->invoke($userModel, 'user1', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result2  = $ref->invoke($userModel, 'user2', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result3  = $ref->invoke($userModel, 'user3', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result4  = $ref->invoke($userModel, 'user4', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result5  = $ref->invoke($userModel, 'user5', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result6  = $ref->invoke($userModel, 'user6', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result7  = $ref->invoke($userModel, 'user7', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result8  = $ref->invoke($userModel, 'user8', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result9  = $ref->invoke($userModel, 'user9', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result10 = $ref->invoke($userModel, 'user10', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
-$result11 = $ref->invoke($userModel, 'admin', $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
+$result = array();
+foreach(array('user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'admin') as $account)
+{
+    $result[$account] = $ref->invokeArgs($userModel, array($account, $allSprints, array(), $teams, $stakeholders, $whiteList, $executionStakeholderGroup));
+}
 
-r($result1)  && p() && e(1); // 查看user1可访问的执行
-r($result2)  && p() && e(1); // 查看user2可访问的执行
-r($result3)  && p() && e(2); // 查看user3可访问的执行
-r($result4)  && p() && e(2); // 查看user4可访问的执行
-r($result5)  && p() && e(1); // 查看user5可访问的执行
-r($result6)  && p() && e(2); // 查看user6可访问的执行
-r($result7)  && p() && e(1); // 查看user7可访问的执行
-r($result8)  && p() && e(2); // 查看user8可访问的执行
-r($result9)  && p() && e(1); // 查看user9可访问的执行
-r($result10) && p() && e(2); // 查看user10可访问的执行
-r($result11) && p() && e('1,2,3'); // 查看admin可访问的执行
+r($result['user1'])  && p() && e(1); // 查看user1可访问的执行
+r($result['user2'])  && p() && e(1); // 查看user2可访问的执行
+r($result['user3'])  && p() && e(2); // 查看user3可访问的执行
+r($result['user4'])  && p() && e(2); // 查看user4可访问的执行
+r($result['user5'])  && p() && e(1); // 查看user5可访问的执行
+r($result['user6'])  && p() && e(2); // 查看user6可访问的执行
+r($result['user7'])  && p() && e(1); // 查看user7可访问的执行
+r($result['user8'])  && p() && e(2); // 查看user8可访问的执行
+r($result['user9'])  && p() && e(1); // 查看user9可访问的执行
+r($result['user10']) && p() && e(2); // 查看user10可访问的执行
+r($result['admin'])  && p() && e('1,2,3'); // 查看admin可访问的执行

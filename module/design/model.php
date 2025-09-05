@@ -433,7 +433,7 @@ class designModel extends model
             ->where($this->session->designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
-            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('product')->in(is_numeric($productID) ? "0,$productID" : array_merge($productID, array(0)))->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
