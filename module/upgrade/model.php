@@ -11581,7 +11581,10 @@ class upgradeModel extends model
                         /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
                         if(!empty($config['file']) && !empty($fileList[$config['file']]))
                         {
-                            $newProjectDeliverable->doc = $this->moveFileToDoc($project, $projectMainLibPairs, $executionMainLibPairs, $fileList[$config['file']]);
+                            $file = $fileList[$config['file']];
+                            $newProjectDeliverable->doc         = $this->moveFileToDoc($project, $projectMainLibPairs, $executionMainLibPairs, $file);
+                            $newProjectDeliverable->createdBy   = $file->addedBy;
+                            $newProjectDeliverable->createdDate = substr($file->addedDate, 0, 10);
                         }
                         else
                         {
