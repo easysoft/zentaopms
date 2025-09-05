@@ -410,14 +410,12 @@ fields:
 
 #### 5.1 执行测试命令
 ```bash
-# 切换到测试运行目录
-cd test/runtime
 
 # 使用 php 命令运行测试脚本，检查是否有错误
-php ../../module/{moduleName}/test/model/{methodName}.php
+php module/{moduleName}/test/model/{methodName}.php
 
 # 使用 ztf 运行测试脚本
-./ztf run ../../module/{moduleName}/test/model/{methodName}.php
+test/runtime/ztf module/{moduleName}/test/model/{methodName}.php
 ```
 
 #### 5.2 验证测试结果
@@ -433,9 +431,8 @@ php ../../module/{moduleName}/test/model/{methodName}.php
 4. 修改测试脚本后重新运行
 
 #### 5.3 AI执行检查点
-- [ ] 已切换到 test/runtime 目录
 - [ ] 已使用 php 命令运行测试脚本，确认无错误
-- [ ] 已使用 ztf 命令运行测试
+- [ ] 已使用 test/runtime/ztf 命令运行测试
 - [ ] 测试结果显示 PASS=1, FAIL=0, SKIP=0
 - [ ] 如有失败，已根据错误信息修正代码
 
@@ -669,7 +666,7 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 
 **📋 测试验证检查**
 - [ ] 已使用 `php` 命令验证测试脚本无语法错误
-- [ ] 已使用 `cd test/runtime && ./ztf run` 命令运行测试
+- [ ] 已使用 `test/runtime/ztf` 命令运行测试
 - [ ] 测试结果：PASS=1, FAIL=0, SKIP=0
 - [ ] 所有断言都与实际输出匹配
 
