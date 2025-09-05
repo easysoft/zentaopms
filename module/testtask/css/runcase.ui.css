@@ -11,3 +11,7 @@
 #caseStepForm .step-item-id {color: var(--color-gray-500);}
 
 .modal[id^='fileModal'] .modal-dialog {max-height: 100%;}
+
+.files-list>li>a {display: inline; word-wrap: break-word; color: #313c52; line-height: 24px}
+.files-list .icon.icon-file-text {padding-left: 7px}
+.files-list .right-icon .btn {padding: 0 6px; height: 20px}

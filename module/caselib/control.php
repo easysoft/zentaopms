@@ -430,11 +430,13 @@ class caselib extends control
     {
         $this->loadModel('testcase');
 
-        if($_FILES)
+        if($_POST)
         {
             $file = $this->loadModel('file')->getUpload('file');
-            $file = $file[0];
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
+            if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
+            $file = $file[0];
             if(!$file || (isset($file['extension']) && $file['extension'] != 'csv')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);

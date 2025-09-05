@@ -981,7 +981,7 @@ class testcase extends control
         /* bug 分页。*/
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal  = count($bugs2Link);
+        if(empty($recTotal)) $recTotal = count($bugs2Link);
         $pager     = new pager($recTotal, $recPerPage, $pageID);
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
@@ -1236,14 +1236,16 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
-        if($_FILES)
+        if($_POST)
         {
             /* 获取上传的文件。 */
             /* Get file. */
             $file = $this->loadModel('file')->getUpload('file');
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
             if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
             $file = $file[0];
+            if(!$file || (isset($file['extension']) && $file['extension'] != 'csv')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
             /* 移动上传的文件。 */
             /* Move file. */
@@ -1957,9 +1959,14 @@ class testcase extends control
      */
     public function importXmind(int $productID, string $branch)
     {
-        if($_FILES)
+        if($_POST)
         {
-            if($_FILES['file']['size'][0] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+            $file = $this->loadModel('file')->getUpload('file');
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
+            if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+
+            $file = $file[0];
+            if(!$file || (isset($file['extension']) && $file['extension'] != 'xmind')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
