@@ -33,9 +33,9 @@ $lang->aiapp->newChatTip       = '请在左侧输入字段内容，开启新对�
 $lang->aiapp->disabledTip      = '当前小程序已被禁用。';
 $lang->aiapp->continueasking   = '继续追问';
 
-$lang->aiapp->miniProgramSquare  = '查看AI小程序列表';
-$lang->aiapp->collectMiniProgram = '收藏AI小程序';
-$lang->aiapp->miniProgramChat    = '执行AI小程序';
-$lang->aiapp->view               = '查看AI小程序详情';
+$lang->aiapp->miniProgramSquare  = '查看通用智能体广场';
+$lang->aiapp->collectMiniProgram = '收藏通用智能体';
+$lang->aiapp->miniProgramChat    = '执行通用智能体';
+$lang->aiapp->view               = '查看通用智能体详情';
 
 $lang->aiapp->manageGeneralAgent = '管理通用智能体';

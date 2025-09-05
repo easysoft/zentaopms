@@ -33,9 +33,9 @@ $lang->aiapp->newChatTip       = 'Please enter the fields on the left to start a
 $lang->aiapp->disabledTip      = 'The current mini program is disabled.';
 $lang->aiapp->continueasking   = 'Continue asking';
 
-$lang->aiapp->miniProgramSquare  = 'Browse AI Mini Program List';
-$lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';
-$lang->aiapp->miniProgramChat    = 'Execute AI Mini Program';
-$lang->aiapp->view               = 'View AI Mini Program Details';
+$lang->aiapp->miniProgramSquare  = 'Browse General Agent List';
+$lang->aiapp->collectMiniProgram = 'Collect General Agent';
+$lang->aiapp->miniProgramChat    = 'Execute General Agent';
+$lang->aiapp->view               = 'View General Agent Details';
 
 $lang->aiapp->manageGeneralAgent = 'Manage General Agent';
