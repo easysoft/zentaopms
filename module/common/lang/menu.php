@@ -834,7 +834,7 @@ $lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}
 $lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'promptview');
 $lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view');
 $lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
-$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|");
+$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
 
 $lang->aiapp->dividerMenu = ',zentaoAgent,models,';
 
