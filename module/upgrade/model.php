@@ -11577,8 +11577,6 @@ class upgradeModel extends model
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
-                        $newProjectDeliverable->category    = $config['category'];
-                        $newProjectDeliverable->required    = $config['required'];
                         $newProjectDeliverable->createdBy   = 'system';
                         $newProjectDeliverable->createdDate = helper::today();
 
