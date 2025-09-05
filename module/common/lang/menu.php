@@ -832,7 +832,7 @@ if(!helper::hasFeature('kanban'))
 $lang->aiapp->menu = new stdclass();
 $lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
 $lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'promptview');
-$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view');
+$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory');
 $lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
 $lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
 

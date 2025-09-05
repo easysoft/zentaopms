@@ -297,7 +297,6 @@ class ai extends control
     public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
-        $this->lang->aiapp->menu->generalAgent['alias']     = 'miniprograms';
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -334,6 +333,8 @@ class ai extends control
      */
     public function editMiniProgramCategory()
     {
+        $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
+
         if(!empty($_POST))
         {
             if($this->ai->checkDuplicatedCategory()) return $this->sendError($this->lang->ai->maintenanceGroupDuplicated);
