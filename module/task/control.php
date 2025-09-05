@@ -1019,6 +1019,7 @@ class task extends control
         if($from == 'view') return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
 
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+        $link = isInModal() ? true : $link;
         return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
     }
 

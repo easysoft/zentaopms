@@ -681,6 +681,7 @@ class story extends control
             if($this->app->tab == 'execution' and $from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            $locateLink = isInModal() ? true : $locateLink;
             return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
         }
     }
