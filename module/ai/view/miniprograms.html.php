@@ -27,9 +27,11 @@ $isNotOpen = $config->edition != 'open';
         <?= $lang->ai->store; ?>
       </a>
     <?php endif; ?>
+    <?php if(common::hasPriv('aiapp', 'square')): ?>
     <a class="btn btn-secondary" href="<?= $this->createLink('aiapp', 'square'); ?>">
       <?= $lang->ai->exitManage; ?>
     </a>
+    <?php endif; ?>
     <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
       <a class="btn btn-primary" data-toggle="modal" data-target="#import-miniprogram">
         <i class="icon icon-import"></i>
