@@ -88,6 +88,7 @@ class createExecutionTester extends tester
      */
     public function create($execution, $module = 'execution')
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $this->inputFields($execution);
 

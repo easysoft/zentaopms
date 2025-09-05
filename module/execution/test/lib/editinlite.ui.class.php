@@ -88,6 +88,7 @@ class editExecutionTester extends tester
      */
     public function edit($execution)
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $this->inputFields($execution);
         if($this->checkFormTips('execution')) return $this->success('编辑看板表单页提示信息正确');

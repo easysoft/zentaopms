@@ -14,6 +14,7 @@ class treeTester extends tester
      */
     public function checkTreeData($level, $num, $click = false)
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $form = $this->initForm('execution', 'tree', array('kanbanID' => '2'), 'appIframe-project');
         $form->wait(1);

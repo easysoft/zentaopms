@@ -13,6 +13,7 @@ class grouptaskTester extends tester
      */
     public function checkGroupData($groupData, $nums)
     {
+        $this->page->wait(1);
         $this->switchVision('lite', 5);
         $form  = $this->initForm('execution', 'grouptask', array('execution' => '2', 'groupBy' => $groupData ), 'appIframe-project');
         preg_match_all('/\d+(?:\.\d+)?/', $form->dom->task->getText(), $matches);
