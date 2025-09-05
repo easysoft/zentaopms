@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $menuItems = array();
-if(!empty($lang->custom->{$module}->fields))
+if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
 {
     foreach($lang->custom->{$module}->fields as $key => $value)
     {

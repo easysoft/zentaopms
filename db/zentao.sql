@@ -14031,10 +14031,8 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
 CREATE TABLE IF NOT EXISTS `zt_process` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `model` char(30) NOT NULL DEFAULT 'waterfall',
   `name` varchar(255) NOT NULL DEFAULT '',
   `module` int(8) unsigned NOT NULL DEFAULT '0',
-  `type` char(30) NOT NULL DEFAULT '',
   `abbr` char(30) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -14359,10 +14357,10 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
 -- DROP TABLE IF EXISTS `zt_reviewcl`;
 CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `object` char(30) NOT NULL DEFAULT '',
+  `object` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `category` char(30) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `order` mediumint(8) DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
