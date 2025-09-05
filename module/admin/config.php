@@ -14,7 +14,6 @@ $config->admin->menuGroup['message']       = array('mail', 'webhook', 'sms', 'me
 $config->admin->menuGroup['dev']           = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension']     = array('extension');
 $config->admin->menuGroup['convert']       = array('convert');
-$config->admin->menuGroup['ai']            = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|modelcreate', 'ai|modelview', 'ai|modeledit', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit', 'ai|miniprograms', 'ai|createminiprogram', 'ai|editminiprogram', 'ai|configuredminiprogram', 'ai|editminiprogramcategory', 'ai|miniprogramview', 'ai|assistants', 'ai|assistantcreate', 'ai|assistantview', 'ai|assistantedit');
 $config->admin->menuGroup['adminregister'] = array('admin|register');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
@@ -72,7 +71,7 @@ $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExte
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
 $config->admin->dynamicAPIURL  = $config->admin->apiSite . 'dynamic-activities-%s.json';
 $config->admin->videoAPIURL    = $config->admin->apiSite . 'zentao.json';
-$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev', 'ai');
+$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
 $config->admin->helpURL['company']   = 'https://www.zentao.net/book/zentaopms/38.html';
@@ -83,7 +82,6 @@ $config->admin->helpURL['message']   = 'https://www.zentao.net/book/zentaopms/em
 $config->admin->helpURL['extension'] = 'https://www.zentao.net/book/zentaopms/536.html';
 $config->admin->helpURL['dev']       = 'https://www.zentao.net/book/zentaopms/537.html';
 $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/656.html';
-$config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
 $config->admin->navsGroup['feature']['product']   = ',product,epic,requirement,story,productplan,release,';
