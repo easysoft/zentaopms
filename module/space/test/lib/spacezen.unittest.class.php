@@ -28,10 +28,6 @@ class spaceZenTest
 
         $instances = $method->invokeArgs($this->spaceZenTest->newInstance(), array("all"));
         if(dao::isError()) return dao::getError();
-        if (count($instances) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return count($instances) > 0;
     }
 }
