@@ -46,7 +46,7 @@ class spaceZen extends space
         foreach($pipelines as $key => $pipeline)
         {
             $maxID ++;
-            if($pipeline->createdBy == 'system') unset($pipelines[$key]);
+            if($pipeline->createdBy == 'system' && !$this->config->inCompose) unset($pipelines[$key]);
 
             $pipeline->createdAt  = $pipeline->createdDate;
             $pipeline->appName    = zget($this->lang->space->appType, $pipeline->type);
