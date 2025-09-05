@@ -21,7 +21,7 @@ class spaceZenTest
      * @access public
      * @return array
      */
-    public function getSpaceInstancesZenTest(string $browseType = 'all'): int
+    public function getSpaceInstancesZenTest(string $browseType = 'all'): bool
     {
         $method = $this->spaceZenTest->getMethod('getSpaceInstances');
         $method->setAccessible(true);
@@ -29,9 +29,9 @@ class spaceZenTest
         $instances = $method->invokeArgs($this->spaceZenTest->newInstance(), array("all"));
         if(dao::isError()) return dao::getError();
         if (count($instances) > 0) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 }
