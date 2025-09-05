@@ -55,8 +55,6 @@ class gantt extends wg
     protected function build()
     {
         global $app;
-        $cssFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.css';
-        $jsFile  = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';
 
         list($id, $zooming, $colsWidth, $showChart) = $this->prop(array('id', 'zooming', 'colsWidth', 'showChart'));
         if(empty($id))           $id        = 'ganttView';
@@ -73,8 +71,6 @@ class gantt extends wg
 
         return div
         (
-            h::import($cssFile),
-            h::import($jsFile),
             jsVar('ganttID',         $id),
             jsVar('projectID',       $project ? $project->id : 0),
             jsVar('module',          $app->rawModule),
