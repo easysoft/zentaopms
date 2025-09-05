@@ -320,10 +320,16 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
-        // 不可用场景：文档模板、API 文档、开源版
+        /* 对比不可用场景：文档模板、API 文档、开源版 */
         $diffEnabled = ($config->edition != 'open')
             && !($rawModule == 'doc' && $rawMethod == 'view')
             && $rawModule != 'api';
+
+        /* 禅道数据菜单不可用界面：运营（lite）、需求与时长（or） */
+        if ($config->vision == 'lite' || $config->vision == 'or')
+        {
+            $hasZentaoSlashMenu = false;
+        }
 
         $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
 
@@ -382,7 +388,7 @@ class docApp extends wg
             set::moreMenuAction(jsRaw('window.moreMenuAction')),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $zentaoListMenu, $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $zentaoListMenu, $lang->doc->zentaoData, $config->doc->zentaoListMenuPosition) : null
         );
     }
 }
