@@ -1830,10 +1830,11 @@ class userModel extends model
      * @param  array   $teams
      * @param  array   $stakeholders
      * @param  array   $whiteList
+     * @param  array   $executionStakeholderGroup
      * @access private
      * @return string
      */
-    private function getSprintView(string $account, array $allSprints, array $manageObjects, array $teams, array $stakeholders, array $whiteList): string
+    private function getSprintView(string $account, array $allSprints, array $manageObjects, array $teams, array $stakeholders, array $whiteList, array $executionStakeholderGroup): string
     {
         $sprintView = '';
         if(!empty($manageObjects['executions']['isAdmin']))
@@ -1850,6 +1851,7 @@ class userModel extends model
                 $sprintTeams        = !empty($teams['execution'][$sprintID])        ? $teams['execution'][$sprintID]        : array();
                 $sprintStakeholders = !empty($stakeholders['execution'][$sprintID]) ? $stakeholders['execution'][$sprintID] : array();
                 $sprintWhiteList    = !empty($whiteList['sprint'][$sprintID])       ? $whiteList['sprint'][$sprintID]       : array();
+                if($sprint->acl == 'private') $sprintStakeholders += zget($executionStakeholderGroup, $sprintID, array());
                 if($this->checkProjectPriv($sprint, $account, $sprintStakeholders, $sprintTeams, $sprintWhiteList)) $sprints[$sprintID] = $sprintID;
 
                 /* 如果有某个迭代管理权限，也可以访问该迭代。 */
@@ -1949,8 +1951,9 @@ class userModel extends model
         {
             /* Compute parent stakeholders. */
             $this->loadModel('stakeholder');
-            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
-            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
+            $programStakeholderGroup   = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+            $projectStakeholderGroup   = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
+            $executionStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allSprints));
 
             /* 按照类型分组获取当前用户所拥有的的项目管理权限。 */
             $manageObjects = $this->getManageListGroupByType($account);
@@ -1959,7 +1962,7 @@ class userModel extends model
             $userView->programs = $this->getProgramView($account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
             $userView->products = $this->getProductView($account, $allProducts, $manageObjects, $whiteList);
             $userView->projects = $this->getProjectView($account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
-            $userView->sprints  = $this->getSprintView($account, $allSprints, $manageObjects, $teams, $stakeholders, $whiteList);
+            $userView->sprints  = $this->getSprintView($account, $allSprints, $manageObjects, $teams, $stakeholders, $whiteList, $executionStakeholderGroup);
         }
 
         /* 更新访问权限表。 */
