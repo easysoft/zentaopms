@@ -6,6 +6,7 @@ class biTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('bi');
+        $this->objectTao   = $tester->loadTao('bi');
     }
 
     /**
@@ -561,6 +562,21 @@ class biTest
     public function getSqlByMonthTest($year = 'Y', $month = 'm')
     {
         $result = $this->objectModel->getSqlByMonth($year, $month);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getActionSyncSql method.
+     *
+     * @param  string $range
+     * @access public
+     * @return mixed
+     */
+    public function getActionSyncSqlTest($range = 'current')
+    {
+        $result = $this->objectModel->getActionSyncSql($range);
         if(dao::isError()) return dao::getError();
 
         return $result;
