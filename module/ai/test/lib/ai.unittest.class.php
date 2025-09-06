@@ -308,4 +308,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test standardizeParams method.
+     *
+     * @param  mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function standardizeParamsTest($data = null)
+    {
+        /* Using reflection to call private static method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('standardizeParams');
+        $method->setAccessible(true);
+        $result = $method->invoke(null, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
