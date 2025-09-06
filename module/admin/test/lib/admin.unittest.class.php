@@ -80,4 +80,20 @@ class adminTest
         }
         return $link;
     }
+
+    /**
+     * 测试获取签名。
+     * Test get signature.
+     *
+     * @param  array $params
+     * @access public
+     * @return string
+     */
+    public function getSignatureTest(array $params): string
+    {
+        $result = $this->objectModel->getSignature($params);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
