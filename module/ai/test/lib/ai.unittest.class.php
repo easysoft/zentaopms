@@ -172,4 +172,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createModel method.
+     *
+     * @param  mixed $model
+     * @access public
+     * @return mixed
+     */
+    public function createModelTest($model = null)
+    {
+        $result = $this->objectModel->createModel($model);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
