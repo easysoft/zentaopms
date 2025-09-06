@@ -90,4 +90,18 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getLanguageModelNamesWithDefault method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getLanguageModelNamesWithDefaultTest()
+    {
+        $result = $this->objectModel->getLanguageModelNamesWithDefault();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
