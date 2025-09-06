@@ -1300,4 +1300,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test setInjectData method.
+     *
+     * @param  mixed $form
+     * @param  mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function setInjectDataTest($form = null, $data = null)
+    {
+        $this->objectModel->setInjectData($form, $data);
+        if(dao::isError()) return dao::getError();
+
+        return '0';
+    }
 }
