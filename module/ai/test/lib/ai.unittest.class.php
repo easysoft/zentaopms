@@ -270,4 +270,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getProxyType method.
+     *
+     * @param  string $proxyType
+     * @access public
+     * @return mixed
+     */
+    public function getProxyTypeTest($proxyType = null)
+    {
+        /* Using reflection to call private static method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProxyType');
+        $method->setAccessible(true);
+        $result = $method->invoke(null, $proxyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
