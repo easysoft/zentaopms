@@ -695,4 +695,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getMiniPrograms method.
+     *
+     * @param  string $category
+     * @param  string $status
+     * @param  string $order
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getMiniProgramsTest($category = '', $status = '', $order = 'createdDate_desc', $pager = null)
+    {
+        $result = $this->objectModel->getMiniPrograms($category, $status, $order, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
