@@ -85,4 +85,19 @@ class backupTest
 
         return $return;
     }
+
+    /**
+     * Test restoreFile method.
+     *
+     * @param  string $backupFile
+     * @access public
+     * @return mixed
+     */
+    public function restoreFileTest($backupFile = null)
+    {
+        $result = $this->objectModel->restoreFile($backupFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
