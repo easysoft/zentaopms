@@ -1095,4 +1095,23 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectTypeTeamParams method.
+     *
+     * @param  object $action
+     * @access public
+     * @return array
+     */
+    public function getObjectTypeTeamParamsTest($action)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getObjectTypeTeamParams');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
