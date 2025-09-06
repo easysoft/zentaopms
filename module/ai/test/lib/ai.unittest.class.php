@@ -203,4 +203,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test toggleModel method.
+     *
+     * @param  int  $modelID
+     * @param  bool $enabled
+     * @access public
+     * @return mixed
+     */
+    public function toggleModelTest($modelID = null, $enabled = null)
+    {
+        $result = $this->objectModel->toggleModel($modelID, $enabled);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
