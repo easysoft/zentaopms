@@ -915,4 +915,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getPrompts method.
+     *
+     * @param  string $module
+     * @param  string $status
+     * @param  string $order
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getPromptsTest($module = '', $status = '', $order = 'id_desc', $pager = null)
+    {
+        $result = $this->objectModel->getPrompts($module, $status, $order, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
