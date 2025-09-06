@@ -490,4 +490,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getDuckDBPath method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDuckDBPathTest()
+    {
+        $result = $this->objectModel->getDuckDBPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
