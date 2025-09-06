@@ -1,0 +1,72 @@
+---
+title: AI模型unserializeModel方法测试数据
+desc: 用于测试AI模型反序列化功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 模型类型
+  range: openai-gpt35,openai-gpt4,baidu-ernie
+  prefix: ""
+  postfix: ""
+- field: vendor
+  note: 模型厂商
+  range: openai,claude,gemini,zhipu
+  prefix: ""
+  postfix: ""
+- field: credentials
+  note: 认证凭据JSON
+  range: '{"apiKey":"sk-test123","endpoint":"https://api.openai.com"},{"apiKey":"sk-claude456","model":"claude-3","endpoint":"https://api.anthropic.com"},{"apiKey":"","endpoint":""},{"token":"zhipu789","baseUrl":"https://open.bigmodel.cn"}'
+  prefix: ""
+  postfix: ""
+- field: proxy
+  note: 代理配置JSON
+  range: '{"host":"proxy.com","port":"8080","auth":"user:pass"},{"host":"127.0.0.1","port":"1080"},null,""'
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 模型名称
+  range: 'GPT-4,Claude-3,{5},"",Gemini-Pro'
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 模型描述
+  range: '高性能AI模型,智能对话模型,测试模型,""'
+  prefix: ""
+  postfix: ""
+- field: enabled
+  note: 启用状态
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除状态
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user,test
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00,2023-06-01 10:30:00,2023-12-01 15:45:30'
+  prefix: ""
+  postfix: ""
+- field: editedBy
+  note: 编辑者
+  range: admin,user,{3}
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-02 00:00:00,2023-06-02 10:30:00,{3}'
+  prefix: ""
+  postfix: ""

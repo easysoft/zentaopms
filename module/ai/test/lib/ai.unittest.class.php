@@ -157,4 +157,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test unserializeModel method.
+     *
+     * @param  mixed $model
+     * @access public
+     * @return mixed
+     */
+    public function unserializeModelTest($model = null)
+    {
+        $result = $this->objectModel->unserializeModel($model);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
