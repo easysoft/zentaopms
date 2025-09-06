@@ -1116,4 +1116,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test autoPrependNewline method.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public function autoPrependNewlineTest($text = '')
+    {
+        $reflectionClass = new ReflectionClass('aiModel');
+        $method = $reflectionClass->getMethod('autoPrependNewline');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke(null, $text);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
