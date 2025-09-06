@@ -534,4 +534,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getDuckDBTmpDir method.
+     *
+     * @param  bool $static
+     * @access public
+     * @return mixed
+     */
+    public function getDuckDBTmpDirTest($static = false)
+    {
+        $result = $this->objectModel->getDuckDBTmpDir($static);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
