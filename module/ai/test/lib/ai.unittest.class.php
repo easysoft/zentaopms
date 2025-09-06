@@ -783,4 +783,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test collectMiniProgram method.
+     *
+     * @param  mixed $userID
+     * @param  mixed $appID
+     * @param  string $delete
+     * @access public
+     * @return mixed
+     */
+    public function collectMiniProgramTest($userID = null, $appID = null, $delete = 'false')
+    {
+        $result = $this->objectModel->collectMiniProgram($userID, $appID, $delete);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
