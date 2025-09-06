@@ -177,4 +177,19 @@ class biTest
         
         return $result;
     }
+
+    /**
+     * Test getFields method.
+     *
+     * @param  object $statement
+     * @access public
+     * @return mixed
+     */
+    public function getFieldsTest($statement)
+    {
+        $result = $this->objectModel->getFields($statement);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
