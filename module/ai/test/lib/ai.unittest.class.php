@@ -1173,6 +1173,21 @@ class aiTest
     }
 
     /**
+     * Test isExecutable method.
+     *
+     * @param  mixed $prompt
+     * @access public
+     * @return mixed
+     */
+    public function isExecutableTest($prompt = null)
+    {
+        $result = $this->objectModel->isExecutable($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test executePrompt method.
      *
      * @param  mixed $prompt
