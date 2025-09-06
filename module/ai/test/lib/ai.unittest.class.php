@@ -1505,4 +1505,27 @@ class aiTest
 
         return $result ? '1' : '0';
     }
+
+    /**
+     * Test AIResponseException::__construct method.
+     *
+     * @param  string $type
+     * @param  mixed $response
+     * @access public
+     * @return mixed
+     */
+    public function __constructTest($type = '', $response = '')
+    {
+        try {
+            $exception = new AIResponseException($type, $response);
+            
+            // 验证基本属性设置正确
+            if($exception->type === $type && $exception->response === $response) {
+                return '1';
+            }
+            return '0';
+        } catch (Exception $e) {
+            return '0';
+        }
+    }
 }
