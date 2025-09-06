@@ -222,4 +222,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsWithAlias method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function getFieldsWithAliasTest($sql)
+    {
+        $result = $this->objectModel->getFieldsWithAlias($sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
