@@ -923,4 +923,19 @@ class actionTest
     {
         return $this->objectModel->checkActionClickable($action, $deptUser, $moduleName, $methodName);
     }
+
+    /**
+     * Test getAccountFirstAction method.
+     *
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function getAccountFirstActionTest(string $account): object|false
+    {
+        $result = $this->objectModel->getAccountFirstAction($account);
+        if(dao::isError()) return dao::getError();
+
+        return $result ?: false;
+    }
 }

@@ -426,7 +426,7 @@ class actionModel extends model
      * @access public
      * @return object
      */
-    public function getAccountFirstAction(string $account): object
+    public function getAccountFirstAction(string $account): object|false
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->where('actor')->eq($account)->orderBy('id')->limit(1)->fetch();
     }
