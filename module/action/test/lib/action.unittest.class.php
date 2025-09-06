@@ -1114,4 +1114,24 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test checkActionCanUndelete method.
+     *
+     * @param  object $action
+     * @param  object $object
+     * @access public
+     * @return string|bool
+     */
+    public function checkActionCanUndeleteTest($action, $object)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkActionCanUndelete');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $action, $object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

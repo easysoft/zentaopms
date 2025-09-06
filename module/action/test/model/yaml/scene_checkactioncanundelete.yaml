@@ -1,0 +1,17 @@
+---
+title: Scene数据定义
+desc: 用于测试checkActionCanUndelete方法的scene数据
+
+fields:
+- field: id
+  note: scene ID
+  range: 1-10
+- field: title
+  note: 场景标题
+  range: 'scene1, scene2, scene3, scene4, scene5'
+- field: deleted
+  note: 是否删除
+  range: '0{5}, 1{5}'
+- field: product
+  note: 所属产品
+  range: 1-5

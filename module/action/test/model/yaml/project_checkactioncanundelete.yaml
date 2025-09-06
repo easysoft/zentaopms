@@ -1,0 +1,20 @@
+---
+title: Project数据定义
+desc: 用于测试checkActionCanUndelete方法的project数据
+
+fields:
+- field: id
+  note: project ID
+  range: 1-10
+- field: name
+  note: 项目名称
+  range: 'project1, project2, project3, project4, project5'
+- field: deleted
+  note: 是否删除
+  range: '0{5}, 1{5}'
+- field: status
+  note: 状态
+  range: 'wait, doing, done, suspended, closed'
+- field: type
+  note: 类型
+  range: 'project, program'

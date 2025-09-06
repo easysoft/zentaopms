@@ -1,0 +1,17 @@
+---
+title: Pipeline数据定义
+desc: 用于测试checkActionCanUndelete方法的pipeline数据
+
+fields:
+- field: id
+  note: pipeline ID
+  range: 1-10
+- field: name
+  note: 流水线名称
+  range: 'pipeline1, pipeline2, pipeline3, pipeline4, pipeline5'
+- field: deleted
+  note: 是否删除
+  range: '0{5}, 1{5}'
+- field: type
+  note: 类型
+  range: 'gitlab, gitea, gogs'
