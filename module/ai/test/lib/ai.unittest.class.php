@@ -767,4 +767,20 @@ class aiTest
         // 否则应该为每个用户都创建了一条通知
         return $userCount;
     }
+
+    /**
+     * Test publishMiniProgram method.
+     *
+     * @param  mixed $appID
+     * @param  mixed $published
+     * @access public
+     * @return mixed
+     */
+    public function publishMiniProgramTest($appID = null, $published = '1')
+    {
+        $result = $this->objectModel->publishMiniProgram($appID, $published);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
