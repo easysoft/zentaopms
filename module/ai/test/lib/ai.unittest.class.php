@@ -800,4 +800,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test canPublishMiniProgram method.
+     *
+     * @param  object $program
+     * @access public
+     * @return mixed
+     */
+    public function canPublishMiniProgramTest($program = null)
+    {
+        $result = $this->objectModel->canPublishMiniProgram($program);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,52 @@
+---
+title: ai_miniprogram data for canPublishMiniProgram test
+desc: Test data for ai_miniprogram table to test canPublishMiniProgram method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: name
+  note: App name
+  range: Career Navigation,Work Report,[]{1},Market Analysis,Fitness Plan,[]{1},Creative Master,Video Script,Email Helper,[]{1}
+- field: category
+  note: Category
+  range: personal{3},work{3},[]{1},life{2},creative{1}
+- field: desc
+  note: Description
+  range: This is a test AI miniprogram description{5},[]{2},Valid description content{2},[]{1}
+- field: model
+  note: Model ID
+  range: 1-5,[]{2},null{1},0{1}
+- field: icon
+  note: Icon
+  range: writinghand-7,technologist-6,chart-6,cactus-5,palette-3
+- field: createdBy
+  note: Creator
+  range: admin{5},user1{3},user2{1},system{1}
+- field: createdDate
+  note: Create time
+  range: "2024-01-01 00:00:00","2024-06-15 10:30:00","2024-09-01 15:45:00"
+- field: editedBy
+  note: Editor
+  range: admin{5},user1{3},user2{1},system{1}
+- field: editedDate
+  note: Edit time
+  range: "2024-01-01 00:00:00","2024-06-15 10:30:00","2024-09-01 15:45:00"
+- field: published
+  note: Published status
+  range: '0','1'
+- field: publishedDate
+  note: Publish time
+  range: "2024-01-01 00:00:00"{5},[]{5}
+- field: deleted
+  note: Delete status
+  range: '0'{8},'1'{2}
+- field: prompt
+  note: Prompt text
+  range: Please help me generate test content{4},[]{3},Valid prompt content{2},[]{1}
+- field: builtIn
+  note: Built-in status
+  range: '0','1'
