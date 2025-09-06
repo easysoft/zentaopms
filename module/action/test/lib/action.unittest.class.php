@@ -1030,4 +1030,21 @@ class actionTest
 
         return $result === false ? false : $output;
     }
+
+    /**
+     * Test processActionForAPI method.
+     *
+     * @param  array|object $actions
+     * @param  array|object $users
+     * @param  array|object $objectLang
+     * @access public
+     * @return array
+     */
+    public function processActionForAPITest($actions, $users = array(), $objectLang = array()): array
+    {
+        $result = $this->objectModel->processActionForAPI($actions, $users, $objectLang);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
