@@ -627,4 +627,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test generateParquetFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function generateParquetFileTest()
+    {
+        $result = $this->objectModel->generateParquetFile();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
