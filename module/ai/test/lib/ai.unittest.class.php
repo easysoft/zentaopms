@@ -104,4 +104,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getLanguageModel method.
+     *
+     * @param  mixed $modelID
+     * @param  bool  $enabledOnly
+     * @access public
+     * @return mixed
+     */
+    public function getLanguageModelTest($modelID = null, $enabledOnly = false)
+    {
+        $result = $this->objectModel->getLanguageModel($modelID, $enabledOnly);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
