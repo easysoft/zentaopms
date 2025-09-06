@@ -1316,4 +1316,18 @@ class aiTest
 
         return '0';
     }
+
+    /**
+     * Test getRoleTemplates method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getRoleTemplatesTest()
+    {
+        $result = $this->objectModel->getRoleTemplates();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
