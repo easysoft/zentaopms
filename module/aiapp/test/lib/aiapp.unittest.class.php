@@ -37,4 +37,21 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test countLatestMiniPrograms method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function countLatestMiniProgramsTest()
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('countLatestMiniPrograms');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
