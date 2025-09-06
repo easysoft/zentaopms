@@ -595,4 +595,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareCopySQL method.
+     *
+     * @param  string $duckdbTmpPath
+     * @access public
+     * @return mixed
+     */
+    public function prepareCopySQLTest($duckdbTmpPath)
+    {
+        $result = $this->objectModel->prepareCopySQL($duckdbTmpPath);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
