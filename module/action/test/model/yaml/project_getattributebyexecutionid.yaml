@@ -1,0 +1,7 @@
+fields:
+- field: id
+  range: 1-10
+- field: attribute
+  range: request{2},design{2},devel{3},test{2},''{1}
+- field: deleted
+  range: 0{9},1{1}

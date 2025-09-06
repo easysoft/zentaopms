@@ -1080,4 +1080,19 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getAttributeByExecutionID method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function getAttributeByExecutionIDTest(int $executionID)
+    {
+        $result = $this->objectModel->getAttributeByExecutionID($executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
