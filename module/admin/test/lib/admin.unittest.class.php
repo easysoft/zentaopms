@@ -96,4 +96,50 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * 测试设置后台二级导航。
+     * Test set menu.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  array  $params
+     * @access public
+     * @return mixed
+     */
+    public function setMenuTest(string $moduleName = 'admin', string $methodName = 'index', array $params = array())
+    {
+        global $app, $lang;
+
+        // 保存原始值
+        $originalModule = isset($app->rawModule) ? $app->rawModule : '';
+        $originalMethod = isset($app->rawMethod) ? $app->rawMethod : '';
+        $originalParams = isset($app->rawParams) ? $app->rawParams : array();
+
+        // 设置测试值
+        $app->rawModule = $moduleName;
+        $app->rawMethod = $methodName;
+        $app->rawParams = $params;
+
+        // 执行setMenu方法
+        $this->objectModel->setMenu();
+
+        // 检查是否有错误
+        if(dao::isError()) return dao::getError();
+
+        // 恢复原始值
+        $app->rawModule = $originalModule;
+        $app->rawMethod = $originalMethod;
+        $app->rawParams = $originalParams;
+
+        // 返回设置结果的标识
+        $result = array();
+        if(isset($lang->admin->menu)) $result['hasMenu'] = true;
+        if(isset($lang->admin->menuOrder)) $result['hasMenuOrder'] = true;
+        if(isset($lang->admin->dividerMenu)) $result['hasDividerMenu'] = true;
+        if(isset($lang->admin->tabMenu)) $result['hasTabMenu'] = true;
+        if(isset($lang->switcherMenu)) $result['hasSwitcherMenu'] = true;
+
+        return $result;
+    }
 }
