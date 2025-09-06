@@ -107,4 +107,20 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test getCollectedMiniProgramIDs method.
+     *
+     * @param string $userID
+     * @param object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getCollectedMiniProgramIDsTest($userID, $pager = null)
+    {
+        $result = $this->objectModel->getCollectedMiniProgramIDs($userID, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,23 @@
+---
+title: AI小程序收藏数据
+desc: 用于测试getCollectedMiniProgramIDs方法
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 收藏ID
+  range: 1-100
+  format: ""
+- field: appID
+  note: 小程序ID
+  range: 1001,1002,1003,1004,1005,1006,1007,1008,1009,1010
+  format: ""
+- field: userID
+  note: 用户ID
+  range: 1{5},2{3},3{2}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00,2024-02-01 10:30:00,2024-03-01 15:45:00,2024-04-01 09:20:00,2024-05-01 14:10:00
+  format: ""
