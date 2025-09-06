@@ -867,4 +867,20 @@ class aiTest
 
         return count($fields);
     }
+
+    /**
+     * Test checkDuplicatedAppName method.
+     *
+     * @param  string $name
+     * @param  string $appID
+     * @access public
+     * @return mixed
+     */
+    public function checkDuplicatedAppNameTest($name = '', $appID = '-1')
+    {
+        $result = $this->objectModel->checkDuplicatedAppName($name, $appID);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
 }
