@@ -327,4 +327,24 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test assembleRequestData method.
+     *
+     * @param  string $type
+     * @param  mixed  $data
+     * @access public
+     * @return mixed
+     */
+    public function assembleRequestDataTest($type = null, $data = null)
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('assembleRequestData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $type, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
