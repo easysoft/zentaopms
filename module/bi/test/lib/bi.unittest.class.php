@@ -207,4 +207,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsWithTable method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function getFieldsWithTableTest($sql)
+    {
+        $result = $this->objectModel->getFieldsWithTable($sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
