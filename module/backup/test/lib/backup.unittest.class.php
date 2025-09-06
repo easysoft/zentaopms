@@ -122,4 +122,19 @@ class backupTest
 
         return $diskFreeSpace . ',' . $mockBackupSize;
     }
+
+    /**
+     * Test getDirSize method.
+     *
+     * @param  string $dir
+     * @access public
+     * @return mixed
+     */
+    public function getDirSizeTest($dir = null)
+    {
+        $result = $this->objectModel->getDirSize($dir);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
