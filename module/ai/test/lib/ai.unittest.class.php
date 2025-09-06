@@ -47,6 +47,20 @@ class aiTest
      * @access public
      * @return mixed
      */
+    /**
+     * Test updateCustomCategories method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function updateCustomCategoriesTest()
+    {
+        $result = $this->objectModel->updateCustomCategories();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function useLanguageModelTest($modelID = null)
     {
         /* Using reflection to call private method */
