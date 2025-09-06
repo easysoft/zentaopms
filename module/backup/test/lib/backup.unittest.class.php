@@ -37,4 +37,19 @@ class backupTest
 
         return $result;
     }
+
+    /**
+     * Test backCode method.
+     *
+     * @param  string $backupFile
+     * @access public
+     * @return mixed
+     */
+    public function backCodeTest($backupFile = null)
+    {
+        $result = $this->objectModel->backCode($backupFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
