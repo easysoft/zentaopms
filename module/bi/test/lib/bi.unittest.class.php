@@ -428,4 +428,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test preparePivotObject method.
+     *
+     * @param  mixed $pivot
+     * @access public
+     * @return mixed
+     */
+    public function preparePivotObjectTest($pivot)
+    {
+        $result = $this->objectModel->preparePivotObject($pivot);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
