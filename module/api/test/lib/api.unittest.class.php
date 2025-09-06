@@ -460,4 +460,41 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  object $lib
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  array  $libs
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest($lib, $queryID, $actionURL, $libs = array(), $type = '')
+    {
+        global $tester;
+
+        // 备份原始配置
+        $originalConfig = isset($tester->config->api->search) ? $tester->config->api->search : null;
+
+        // 执行方法
+        $this->objectModel->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回设置后的搜索配置
+        $result = array(
+            'module' => isset($tester->config->api->search['module']) ? $tester->config->api->search['module'] : '',
+            'queryID' => isset($tester->config->api->search['queryID']) ? $tester->config->api->search['queryID'] : '',
+            'actionURL' => isset($tester->config->api->search['actionURL']) ? $tester->config->api->search['actionURL'] : '',
+            'libValues' => isset($tester->config->api->search['params']['lib']['values']) ? $tester->config->api->search['params']['lib']['values'] : array()
+        );
+
+        // 恢复原始配置
+        if($originalConfig !== null) $tester->config->api->search = $originalConfig;
+
+        return $result;
+    }
 }
