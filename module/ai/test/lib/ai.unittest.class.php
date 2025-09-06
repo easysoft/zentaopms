@@ -608,4 +608,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getMiniProgramByID method.
+     *
+     * @param  string $id
+     * @access public
+     * @return mixed
+     */
+    public function getMiniProgramByIDTest($id)
+    {
+        $result = $this->objectModel->getMiniProgramByID($id);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
