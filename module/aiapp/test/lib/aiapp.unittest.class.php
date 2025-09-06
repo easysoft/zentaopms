@@ -139,4 +139,18 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test getUsedCategoryArray method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getUsedCategoryArrayTest()
+    {
+        $result = $this->objectModel->getUsedCategoryArray();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

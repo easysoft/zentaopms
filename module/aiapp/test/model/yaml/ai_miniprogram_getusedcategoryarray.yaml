@@ -1,0 +1,52 @@
+---
+title: 测试 getUsedCategoryArray 方法的小程序数据
+desc: 为 getUsedCategoryArray 方法测试生成 AI 小程序数据
+
+fields:
+- field: id
+  range: 1-20
+  
+- field: name
+  range: 职业导航{3},工作助手{4},健身计划{4},创意大师{4},文章助手{3},视频脚本{2}
+  
+- field: category  
+  range: work{8},personal{5},life{4},creative{3}
+  
+- field: desc
+  range: 这是一个AI小程序
+  
+- field: model
+  range: 1-5:R
+  
+- field: icon
+  range: chart-6,writinghand-7,computer-6,notebook-3,palette-3
+  
+- field: createdBy
+  range: admin{10},user1{6},user2{4}
+  
+- field: createdDate
+  range: 2024-01-01 10:00:00-2024-12-31 18:00:00:1D
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: editedBy
+  range: admin{10},user1{6},user2{4}
+  
+- field: editedDate
+  range: 2024-01-01 10:00:00-2024-12-31 18:00:00:1D
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: published
+  range: '0'{3},'1'{17}
+  
+- field: publishedDate
+  range: 2024-01-01 10:00:00-2024-12-31 18:00:00:1D,[null]{3}
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: deleted
+  range: '0'{18},'1'{2}
+  
+- field: prompt
+  range: 请帮助用户完成任务
+  
+- field: builtIn
+  range: '0'{15},'1'{5}

@@ -1,0 +1,25 @@
+---
+title: 测试 getUsedCategoryArray 方法的配置数据
+desc: 为 getUsedCategoryArray 方法测试生成配置表数据
+
+fields:
+- field: id
+  range: 21-30
+  
+- field: vision
+  range: rnd
+  
+- field: owner
+  range: system
+  
+- field: module
+  range: ai
+  
+- field: section
+  range: miniProgram
+  
+- field: key
+  range: customCategory1,customCategory2,customCategory3,customCategory4,customCategory5,technical,management,training,testing,tools
+  
+- field: value
+  range: 自定义分类1,自定义分类2,自定义分类3,自定义分类4,自定义分类5,技术类,管理类,培训类,测试类,工具类
