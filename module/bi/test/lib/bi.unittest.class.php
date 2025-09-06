@@ -301,4 +301,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getDataviewOptions method.
+     *
+     * @param  string $object
+     * @param  string $field
+     * @access public
+     * @return mixed
+     */
+    public function getDataviewOptionsTest($object, $field)
+    {
+        $result = $this->objectModel->getDataviewOptions($object, $field);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
