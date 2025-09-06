@@ -253,4 +253,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test explainSQL method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function explainSQLTest($sql, $driver = 'mysql')
+    {
+        $result = $this->objectModel->explainSQL($sql, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
