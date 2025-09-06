@@ -1,0 +1,31 @@
+---
+title: AI消息表测试数据 - getHistoryMessages方法
+desc: 用于测试getHistoryMessages方法的AI消息数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-30
+
+- field: appID
+  note: 应用ID
+  range: 1{10}, 2{5}, 3{8}, 999{2}, 1000{5}
+
+- field: user
+  note: 用户ID
+  range: 1{15}, 2{10}, 3{5}
+
+- field: type
+  note: 消息类型
+  range: req{10}, res{15}, ntf{5}
+
+- field: content
+  note: 消息内容
+  range: "测试消息内容{5}", "用户请求消息{8}", "系统响应消息{10}", "通知消息{7}"
+
+- field: createdDate
+  note: 创建时间
+  range: (-7D)-(-1D):1D
+  format: "YYYY-MM-DD hh:mm:ss"
