@@ -979,4 +979,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test deletePrompt method.
+     *
+     * @param  mixed $id
+     * @access public
+     * @return mixed
+     */
+    public function deletePromptTest($id = null)
+    {
+        $result = $this->objectModel->deletePrompt($id);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
