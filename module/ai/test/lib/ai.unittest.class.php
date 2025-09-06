@@ -592,4 +592,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getMiniProgramsByID method.
+     *
+     * @param  array $ids
+     * @param  bool  $sort
+     * @access public
+     * @return mixed
+     */
+    public function getMiniProgramsByIDTest($ids = array(), $sort = false)
+    {
+        $result = $this->objectModel->getMiniProgramsByID($ids, $sort);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
