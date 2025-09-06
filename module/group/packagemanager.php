@@ -1070,8 +1070,7 @@ $config->group->package->projectDeliverable->subset = 'projectDeliverable';
 $config->group->package->projectDeliverable->privs  = array();
 $config->group->package->projectDeliverable->privs['project-deliverable']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 $config->group->package->projectDeliverable->privs['project-createDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
-$config->group->package->projectDeliverable->privs['project-editDeliverable']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
-$config->group->package->projectDeliverable->privs['project-deleteDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
+$config->group->package->projectDeliverable->privs['project-deleteDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->projectTemplate = new stdclass();
 $config->group->package->projectTemplate->order  = 5;
