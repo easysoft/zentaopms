@@ -933,4 +933,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getPromptById method.
+     *
+     * @param  mixed $id
+     * @access public
+     * @return mixed
+     */
+    public function getPromptByIdTest($id = null)
+    {
+        $result = $this->objectModel->getPromptById($id);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
