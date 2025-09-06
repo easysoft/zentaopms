@@ -520,4 +520,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getDuckdbBinConfig method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDuckdbBinConfigTest()
+    {
+        $result = $this->objectModel->getDuckdbBinConfig();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
