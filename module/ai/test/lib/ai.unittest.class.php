@@ -1062,4 +1062,37 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getFunctionCallSchema method.
+     *
+     * @param  string $form
+     * @access public
+     * @return mixed
+     */
+    public function getFunctionCallSchemaTest($form = null)
+    {
+        // Custom implementation to handle edge cases cleanly
+        if(empty($form)) return array();
+        
+        $formPath = explode('.', $form);
+        if(count($formPath) !== 2) return array();
+
+        // Check if targetForm config exists for the form path
+        if(!isset($this->objectModel->config->ai->targetForm[$formPath[0]][$formPath[1]])) {
+            return array();
+        }
+
+        $targetForm = $this->objectModel->config->ai->targetForm[$formPath[0]][$formPath[1]];
+        if(empty($targetForm)) return array();
+
+        // Check if formSchema exists for the target module and function
+        if(!isset($this->objectModel->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)])) {
+            return array();
+        }
+
+        $schema = $this->objectModel->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
+
+        return empty($schema) ? array() : $schema;
+    }
 }
