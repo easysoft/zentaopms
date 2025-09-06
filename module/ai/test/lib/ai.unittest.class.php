@@ -1330,4 +1330,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createRoleTemplate method.
+     *
+     * @param  string $role
+     * @param  string $characterization
+     * @access public
+     * @return mixed
+     */
+    public function createRoleTemplateTest($role = '', $characterization = '')
+    {
+        $result = $this->objectModel->createRoleTemplate($role, $characterization);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
