@@ -969,4 +969,24 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test printAction method.
+     *
+     * @param  object      $action
+     * @param  string|array $desc
+     * @access public
+     * @return string
+     */
+    public function printActionTest(object $action, string|array $desc = ''): string
+    {
+        ob_start();
+        $this->objectModel->printAction($action, $desc);
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return $output;
+    }
 }
