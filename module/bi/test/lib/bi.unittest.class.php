@@ -641,4 +641,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getLogFile method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLogFileTest()
+    {
+        $result = $this->objectModel->getLogFile();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
