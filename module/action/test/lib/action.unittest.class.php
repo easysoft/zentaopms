@@ -1047,4 +1047,37 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test buildTrashSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildTrashSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+
+        // 备份原始配置
+        $originalConfig = isset($tester->config->trash->search) ? $tester->config->trash->search : null;
+
+        $this->objectModel->buildTrashSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+
+        // 获取设置后的配置值
+        $result = array(
+            'actionURL' => $tester->config->trash->search['actionURL'] ?? '',
+            'queryID'   => $tester->config->trash->search['queryID'] ?? 0
+        );
+
+        // 恢复原始配置
+        if($originalConfig !== null) {
+            $tester->config->trash->search = $originalConfig;
+        }
+
+        return $result;
+    }
 }
