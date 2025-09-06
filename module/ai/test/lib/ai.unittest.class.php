@@ -138,4 +138,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test serializeModel method.
+     *
+     * @param  mixed $model
+     * @access public
+     * @return mixed
+     */
+    public function serializeModelTest($model = null)
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('serializeModel');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $model);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
