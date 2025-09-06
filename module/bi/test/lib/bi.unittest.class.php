@@ -146,6 +146,18 @@ class biTest
     }
 
     /**
+     * Test prepareBuiltinChartSQL method.
+     *
+     * @param  string $operate
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinChartSQLTest($operate)
+    {
+        return $this->objectModel->prepareBuiltinChartSQL($operate);
+    }
+
+    /**
      * Test getViewableObject method.
      *
      * @param  string $objectType
