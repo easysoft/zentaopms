@@ -845,4 +845,26 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test saveMiniProgramFields method.
+     *
+     * @param  mixed $appID
+     * @param  mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function saveMiniProgramFieldsTest($appID = null, $data = null)
+    {
+        $this->objectModel->saveMiniProgramFields($appID, $data);
+        if(dao::isError()) return dao::getError();
+
+        // 验证字段数据是否正确保存
+        $fields = $this->objectModel->dao->select('*')
+            ->from('`zt_ai_miniprogramfield`')
+            ->where('appID')->eq($appID)
+            ->fetchAll();
+
+        return count($fields);
+    }
 }

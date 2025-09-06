@@ -1,0 +1,44 @@
+---
+title: AI小程序字段测试数据
+desc: 用于测试saveMiniProgramFields方法的AI小程序字段数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: appID
+  note: 所属小程序ID
+  range: 1{5}, 2{5}, 3{5}, 4{3}, 5{2}
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 字段名称
+  range: 教育背景{3}, 职位信息{3}, 工作经验{3}, 掌握技能{3}, 职业目标{3}, 兴趣领域{3}, 补充信息{2}
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 字段类型
+  range: text{8}, textarea{6}, radio{4}, checkbox{2}
+  prefix: ""
+  postfix: ""
+- field: placeholder
+  note: 占位符文本
+  range: 请输入{5}, 请选择{3}, 请描述{4}, 学历/专业{2}, 简要概述{3}, []{3}
+  prefix: ""
+  postfix: ""
+- field: options
+  note: 选项内容
+  range: '[]{10}, 选项1,选项2{3}, 1年,3-5年,10年{2}, 是,否{2}, 初级,中级,高级{3}'
+  prefix: ""
+  postfix: ""
+- field: required
+  note: 是否必填
+  range: '0'{10}, '1'{10}
+  prefix: ""
+  postfix: ""
