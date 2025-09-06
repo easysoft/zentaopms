@@ -1,0 +1,98 @@
+---
+title: AI提示词数据定义 - getPromptsForUser
+desc: 用于测试getPromptsForUser方法的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 提示词ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 提示词名称
+  range: 需求润色{3},任务润色{1},Bug润色{1},文档润色{1},需求转任务{1},一键拆用例{3},Bug转需求{1},拆分一个子计划{1},TestPrompt{8}
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 提示词描述
+  range: [测试描述内容]{20}
+  prefix: ""
+  postfix: ""
+
+- field: model
+  note: 模型ID
+  range: 0,1,2,3
+  prefix: ""
+  postfix: ""
+
+- field: module
+  note: 所属模块
+  range: story{3},task{1},bug{1},doc{1},productplan{1},testmodule{13}
+  prefix: ""
+  postfix: ""
+
+- field: source
+  note: 数据源
+  range: ',story.title,story.spec,story.verify,',',task.name,task.desc,task.pri,',',bug.title,bug.steps,bug.severity,',',doc.content,doc.title,',',productplan.title,productplan.desc,'
+  prefix: ""
+  postfix: ""
+
+- field: targetForm
+  note: 目标表单
+  range: story.change,story.testcasecreate,task.edit,story.totask,bug.edit,doc.edit,story.create,productplan.create
+  prefix: ""
+  postfix: ""
+
+- field: purpose
+  note: 目的
+  range: [测试目的内容]{20}
+  prefix: ""
+  postfix: ""
+
+- field: elaboration
+  note: 详细说明
+  range: [测试详细说明内容]{20}
+  prefix: ""
+  postfix: ""
+
+- field: role
+  note: 角色描述
+  range: [测试角色描述]{20}
+  prefix: ""
+  postfix: ""
+
+- field: characterization
+  note: 角色特征
+  range: [测试角色特征]{20}
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin,system,user1,user2
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: 2023-08-10 10:00:00,2023-08-11 11:00:00,2023-08-12 12:00:00,2024-01-01 10:00:00,2024-06-01 15:30:00
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 状态
+  range: active{18},draft{2}
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0{18},1{2}
+  prefix: ""
+  postfix: ""

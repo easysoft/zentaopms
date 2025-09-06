@@ -1269,4 +1269,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getPromptsForUser method.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getPromptsForUserTest($module = '')
+    {
+        $result = $this->objectModel->getPromptsForUser($module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
