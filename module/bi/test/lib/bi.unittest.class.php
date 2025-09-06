@@ -443,4 +443,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareBuilitinPivotDrillSQL method.
+     *
+     * @param  int   $pivotID
+     * @param  array $drills
+     * @param  int   $version
+     * @access public
+     * @return array
+     */
+    public function prepareBuilitinPivotDrillSQLTest($pivotID, $drills, $version)
+    {
+        $result = $this->objectModel->prepareBuilitinPivotDrillSQL($pivotID, $drills, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
