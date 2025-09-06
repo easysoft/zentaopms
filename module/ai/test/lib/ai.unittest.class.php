@@ -1378,4 +1378,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getAssistants method.
+     *
+     * @param  pager  $pager
+     * @param  string $orderBy
+     * @access public
+     * @return mixed
+     */
+    public function getAssistantsTest($pager = null, $orderBy = 'id_desc')
+    {
+        $result = $this->objectModel->getAssistants($pager, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
