@@ -1135,4 +1135,24 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test tryPunctuate method.
+     *
+     * @param  string $sentence
+     * @param  bool   $newline
+     * @access public
+     * @return string
+     */
+    public function tryPunctuateTest($sentence = '', $newline = false)
+    {
+        $reflectionClass = new ReflectionClass('aiModel');
+        $method = $reflectionClass->getMethod('tryPunctuate');
+        $method->setAccessible(true);
+
+        $result = $method->invoke(null, $sentence, $newline);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
