@@ -123,4 +123,20 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test getSquareCategoryArray method.
+     *
+     * @param array $collectedIDs
+     * @param int   $latestSum
+     * @access public
+     * @return mixed
+     */
+    public function getSquareCategoryArrayTest($collectedIDs = null, $latestSum = null)
+    {
+        $result = $this->objectModel->getSquareCategoryArray($collectedIDs, $latestSum);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,35 @@
+---
+title: ai_miniprogramstar表数据定义 - getSquareCategoryArray方法测试
+desc: 为getSquareCategoryArray方法提供用户收藏测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 收藏记录ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: appID
+  note: 小程序ID
+  range: 1,2,3,5,8
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: userID
+  note: 用户ID
+  range: admin{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 收藏时间
+  range: (-1w)-(d):1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
