@@ -994,4 +994,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test togglePromptStatus method.
+     *
+     * @param  int|object  $prompt  prompt (or id) to toggle.
+     * @param  string      $status  optional, will set status to $status if provided.
+     * @access public
+     * @return mixed
+     */
+    public function togglePromptStatusTest($prompt = null, $status = '')
+    {
+        $result = $this->objectModel->togglePromptStatus($prompt, $status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
