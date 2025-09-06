@@ -504,4 +504,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test checkDuckDBFile method.
+     *
+     * @param  string $path
+     * @param  array  $bin
+     * @access public
+     * @return mixed
+     */
+    public function checkDuckDBFileTest($path, $bin)
+    {
+        $result = $this->objectModel->checkDuckDBFile($path, $bin);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
