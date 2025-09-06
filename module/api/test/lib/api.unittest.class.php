@@ -395,4 +395,29 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test createDemoApi method.
+     *
+     * @param  int    $libID
+     * @param  string $version
+     * @param  array  $moduleMap
+     * @param  string $currentAccount
+     * @access public
+     * @return mixed
+     */
+    public function createDemoApiTest($libID, $version, $moduleMap, $currentAccount)
+    {
+        global $tester;
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('createDemoApi');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $libID, $version, $moduleMap, $currentAccount);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
