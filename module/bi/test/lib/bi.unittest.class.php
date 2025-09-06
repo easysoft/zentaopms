@@ -144,4 +144,19 @@ class biTest
     {
         return $this->objectModel->prepareBuiltinPivotSQL($operate);
     }
+
+    /**
+     * Test getViewableObject method.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getViewableObjectTest($objectType)
+    {
+        $result = $this->objectModel->getViewableObject($objectType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
