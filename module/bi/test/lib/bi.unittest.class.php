@@ -333,4 +333,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getOptionsFromSql method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access public
+     * @return mixed
+     */
+    public function getOptionsFromSqlTest($sql, $driver, $keyField, $valueField)
+    {
+        $result = $this->objectModel->getOptionsFromSql($sql, $driver, $keyField, $valueField);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
