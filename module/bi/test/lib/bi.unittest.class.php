@@ -237,4 +237,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getTableByAlias method.
+     *
+     * @param  mixed $statement
+     * @param  string $alias
+     * @access public
+     * @return mixed
+     */
+    public function getTableByAliasTest($statement, $alias)
+    {
+        $result = $this->objectModel->getTableByAlias($statement, $alias);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
