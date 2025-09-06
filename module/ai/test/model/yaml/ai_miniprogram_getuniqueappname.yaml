@@ -1,0 +1,36 @@
+title: AI小程序getUniqueAppName方法测试数据
+desc: 用于测试获取唯一应用名称方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 测试应用,重复名称,重复名称,重复名称,特殊字符@#$
+- field: category
+  range: work,personal,creative,life,personal
+- field: desc
+  range: 这是一个测试应用,用于测试重复名称,包含特殊字符的应用,空字符串测试应用,独特的测试应用
+- field: model
+  range: 1-5
+- field: icon
+  range: test-icon-1,test-icon-2,test-icon-3,test-icon-1,test-icon-2
+- field: createdBy
+  range: admin,user1,user2,admin,user1
+- field: createdDate
+  range: 2024-01-01 00:00:00,2024-01-02 00:00:00,2024-01-03 00:00:00,2024-01-04 00:00:00,2024-01-05 00:00:00
+- field: editedBy
+  range: admin,user1,user2,admin,user1
+- field: editedDate
+  range: 2024-01-01 00:00:00,2024-01-02 00:00:00,2024-01-03 00:00:00,2024-01-04 00:00:00,2024-01-05 00:00:00
+- field: published
+  range: '0'
+- field: publishedDate
+  range: '[]'
+- field: deleted
+  range: '0'
+- field: prompt
+  range: 这是测试提示词1,这是测试提示词2,这是测试提示词3,这是测试提示词4,这是测试提示词5
+- field: builtIn
+  range: '0'

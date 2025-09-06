@@ -883,4 +883,19 @@ class aiTest
 
         return $result ? '1' : '0';
     }
+
+    /**
+     * Test getUniqueAppName method.
+     *
+     * @param  string $name
+     * @access public
+     * @return mixed
+     */
+    public function getUniqueAppNameTest($name = '')
+    {
+        $result = $this->objectModel->getUniqueAppName($name);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
