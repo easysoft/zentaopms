@@ -1456,4 +1456,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test toggleAssistant method.
+     *
+     * @param  int  $assistantId
+     * @param  bool $enabled
+     * @access public
+     * @return mixed
+     */
+    public function toggleAssistantTest($assistantId = null, $enabled = true)
+    {
+        $result = $this->objectModel->toggleAssistant($assistantId, $enabled);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

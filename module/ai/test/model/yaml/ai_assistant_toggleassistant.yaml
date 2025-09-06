@@ -1,0 +1,84 @@
+---
+title: AI助手数据定义 - toggleAssistant测试
+desc: 为toggleAssistant方法生成测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 助手ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 助手名称
+  range: 测试助手{1-5}, 代码助手{6-10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: modelId
+  note: 模型ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 助手描述
+  range: 这是一个测试助手, 这是一个代码助手, 这是一个通用助手
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: systemMessage
+  note: 系统消息
+  range: 你是一个测试助手, 你是一个代码助手, 你是一个通用助手
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: greetings
+  note: 欢迎语
+  range: 你好！我是测试助手, 你好！我是代码助手, 你好！我是通用助手
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: icon
+  note: 图标
+  range: coding-1, ai-1, robot-1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: enabled
+  note: 是否启用
+  range: ['0','1']
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: publishedDate
+  note: 发布时间
+  range: ['','2024-01-01 00:00:00-2024-12-31 23:59:59:1D']
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
