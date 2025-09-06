@@ -1472,4 +1472,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test checkAssistantDuplicate method.
+     *
+     * @param  string $assistantName
+     * @param  int    $modelId
+     * @access public
+     * @return mixed
+     */
+    public function checkAssistantDuplicateTest($assistantName = null, $modelId = null)
+    {
+        $result = $this->objectModel->checkAssistantDuplicate($assistantName, $modelId);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
