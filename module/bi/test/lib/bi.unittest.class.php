@@ -192,4 +192,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test parseTableList method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function parseTableListTest($sql)
+    {
+        $result = $this->objectModel->parseTableList($sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
