@@ -665,4 +665,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test checkDuplicatedCategory method.
+     *
+     * @param  array $postData
+     * @access public
+     * @return mixed
+     */
+    public function checkDuplicatedCategoryTest($postData = array())
+    {
+        $_POST = $postData;
+        $result = $this->objectModel->checkDuplicatedCategory();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
