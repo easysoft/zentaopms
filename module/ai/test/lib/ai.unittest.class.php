@@ -623,4 +623,18 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getCustomCategories method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getCustomCategoriesTest()
+    {
+        $result = $this->objectModel->getCustomCategories();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
