@@ -938,4 +938,20 @@ class actionTest
 
         return $result ?: false;
     }
+
+    /**
+     * Test renderAction method.
+     *
+     * @param  object      $action
+     * @param  string|array $desc
+     * @access public
+     * @return mixed
+     */
+    public function renderActionTest(object $action, string|array $desc = '')
+    {
+        $result = $this->objectModel->renderAction($action, $desc);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
