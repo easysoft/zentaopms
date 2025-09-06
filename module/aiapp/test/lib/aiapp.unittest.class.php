@@ -71,4 +71,24 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test deleteHistoryMessagesByID method.
+     *
+     * @param string $appID
+     * @param string $userID
+     * @param array  $messageIDs
+     * @access public
+     * @return mixed
+     */
+    public function deleteHistoryMessagesByIDTest($appID, $userID, $messageIDs)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('deleteHistoryMessagesByID');
+        $method->setAccessible(true);
+        $method->invoke($this->objectModel, $appID, $userID, $messageIDs);
+        if(dao::isError()) return dao::getError();
+
+        return true;
+    }
 }

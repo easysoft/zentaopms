@@ -1,0 +1,23 @@
+---
+title: AI消息删除测试数据
+desc: 用于测试deleteHistoryMessagesByID方法的测试数据
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-20
+- field: appID
+  note: 应用ID
+  range: 1{5},2{5},3{10}
+- field: user
+  note: 用户ID
+  range: 1{10},2{5},3{5}
+- field: type
+  note: 消息类型
+  range: req{7},res{7},ntf{6}
+- field: content
+  note: 消息内容
+  range: test message 1,test message 2,test message 3,test message 4,test message 5
+- field: createdDate
+  note: 创建时间
+  range: NOW(){20}
