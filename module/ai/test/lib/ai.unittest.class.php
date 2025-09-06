@@ -1204,6 +1204,26 @@ class aiTest
     }
 
     /**
+     * Test getTargetFormLocation method.
+     *
+     * @param  mixed $prompt
+     * @param  mixed $object
+     * @param  array $linkArgs
+     * @access public
+     * @return mixed
+     */
+    public function getTargetFormLocationTest($prompt = null, $object = null, $linkArgs = array())
+    {
+        if(is_numeric($prompt) && $prompt > 0) $prompt = $this->objectModel->getPromptById($prompt);
+        if(empty($prompt)) return array(false, true);
+        
+        $result = $this->objectModel->getTargetFormLocation($prompt, $object, $linkArgs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getTestingLocation method.
      *
      * @param  mixed $prompt
