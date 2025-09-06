@@ -1,0 +1,29 @@
+---
+fields:
+- field: id
+  range: 1-5
+- field: type
+  range: openai-gpt35,openai-gpt4,baidu-ernie,anthropic-claude,zhipu-glm
+- field: vendor
+  range: openai,openai,baidu,anthropic,zhipu
+- field: credentials
+  range: '{"key": "sk-test123"},{"key": "sk-test456"},{"key": "ak-test789"},{"key": "ak-test000"},{"key": "test-key"}'
+- field: proxy
+  range: '[]'
+- field: name
+  range: OpenAI GPT-3.5,OpenAI GPT-4,Baidu ERNIE,Anthropic Claude,ZhiPu GLM
+- field: desc
+  range: GPT-3.5 Turbo,GPT-4 Model,ERNIE Bot,Claude 3 Haiku,ChatGLM Model
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: 2023-01-01 10:00:00{5}
+- field: editedBy
+  range: '[]'
+- field: editedDate
+  range: '[]'
+- field: enabled
+  range: 1{5}
+- field: deleted
+  range: 0{5}
+...

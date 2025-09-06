@@ -494,4 +494,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test converseTwiceForJSON method.
+     *
+     * @param  mixed $model
+     * @param  array $messages
+     * @param  object $schema
+     * @param  array $options
+     * @access public
+     * @return mixed
+     */
+    public function converseTwiceForJSONTest($model = null, $messages = array(), $schema = null, $options = array())
+    {
+        $result = $this->objectModel->converseTwiceForJSON($model, $messages, $schema, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
