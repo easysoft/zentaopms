@@ -1155,4 +1155,36 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test assemblePrompt method.
+     *
+     * @param  object $prompt
+     * @param  string $dataPrompt
+     * @access public
+     * @return string
+     */
+    public function assemblePromptTest($prompt = null, $dataPrompt = '')
+    {
+        $result = aiModel::assemblePrompt($prompt, $dataPrompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test executePrompt method.
+     *
+     * @param  mixed $prompt
+     * @param  mixed $object
+     * @access public
+     * @return mixed
+     */
+    public function executePromptTest($prompt = null, $object = null)
+    {
+        $result = $this->objectModel->executePrompt($prompt, $object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
