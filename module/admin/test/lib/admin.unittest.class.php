@@ -98,6 +98,48 @@ class adminTest
     }
 
     /**
+     * 测试检查导航权限并设置导航链接。
+     * Test check priv menu.
+     *
+     * @access public
+     * @return array
+     */
+    public function checkPrivMenuTest(): array
+    {
+        global $lang;
+
+        // 保存原始数据
+        $originalMenuList = isset($lang->admin->menuList) ? $lang->admin->menuList : null;
+
+        // 执行checkPrivMenu方法
+        $this->objectModel->checkPrivMenu();
+
+        // 检查是否有错误
+        if(dao::isError()) return dao::getError();
+
+        // 获取处理结果
+        $result = array();
+        if(isset($lang->admin->menuList))
+        {
+            $result['hasMenuList'] = true;
+            $result['menuCount'] = count(get_object_vars($lang->admin->menuList));
+
+            // 检查菜单项是否有link和disabled属性设置
+            $hasLinkedMenu = false;
+            $hasDisabledMenu = false;
+            foreach($lang->admin->menuList as $menuKey => $menu)
+            {
+                if(!empty($menu['link'])) $hasLinkedMenu = true;
+                if($menu['disabled']) $hasDisabledMenu = true;
+            }
+            $result['hasLinkedMenu'] = $hasLinkedMenu;
+            $result['hasDisabledMenu'] = $hasDisabledMenu;
+        }
+
+        return $result;
+    }
+
+    /**
      * 测试设置后台二级导航。
      * Test set menu.
      *
