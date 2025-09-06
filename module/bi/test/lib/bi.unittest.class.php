@@ -159,4 +159,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test parseToStatement method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function parseToStatementTest($sql)
+    {
+        $result = $this->objectModel->parseToStatement($sql);
+        if(dao::isError()) return dao::getError();
+
+        if($result === false) return false;
+        if(is_object($result)) return 'object';
+        
+        return $result;
+    }
 }
