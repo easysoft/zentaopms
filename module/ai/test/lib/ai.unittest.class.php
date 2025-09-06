@@ -713,4 +713,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getMiniProgramFields method.
+     *
+     * @param  string $appID
+     * @access public
+     * @return mixed
+     */
+    public function getMiniProgramFieldsTest($appID = null)
+    {
+        $result = $this->objectModel->getMiniProgramFields($appID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
