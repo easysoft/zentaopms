@@ -549,4 +549,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getSqlByMonth method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return mixed
+     */
+    public function getSqlByMonthTest($year = 'Y', $month = 'm')
+    {
+        $result = $this->objectModel->getSqlByMonth($year, $month);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
