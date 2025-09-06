@@ -1,3 +1,2 @@
 # .gitattributes
-.claude/**       -diff
-module/*/test/** -diff
+.claude/** -diff
