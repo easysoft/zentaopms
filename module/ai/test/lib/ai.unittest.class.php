@@ -948,4 +948,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createPrompt method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function createPromptTest($prompt = null)
+    {
+        $result = $this->objectModel->createPrompt($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
