@@ -372,4 +372,27 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test createDemoModule method.
+     *
+     * @param  int    $libID
+     * @param  string $version
+     * @access public
+     * @return mixed
+     */
+    public function createDemoModuleTest($libID, $version)
+    {
+        global $tester;
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('createDemoModule');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $libID, $version);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
