@@ -24,4 +24,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test setModelConfig method.
+     *
+     * @param  mixed $config
+     * @access public
+     * @return mixed
+     */
+    public function setModelConfigTest($config = null)
+    {
+        $result = $this->objectModel->setModelConfig($config);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
