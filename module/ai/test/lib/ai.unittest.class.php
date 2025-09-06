@@ -1254,4 +1254,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getLastActiveStep method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getLastActiveStepTest($prompt = null)
+    {
+        $result = $this->objectModel->getLastActiveStep($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
