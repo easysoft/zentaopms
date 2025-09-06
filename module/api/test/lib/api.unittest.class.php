@@ -297,4 +297,32 @@ class apiTest
 
         return $objects;
     }
+
+    /**
+     * Test createDemoLib method.
+     *
+     * @param  string $name
+     * @param  string $baseUrl
+     * @param  string $currentAccount
+     * @access public
+     * @return object|false
+     */
+    public function createDemoLibTest($name, $baseUrl, $currentAccount)
+    {
+        global $tester;
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('createDemoLib');
+        $method->setAccessible(true);
+
+        $libID = $method->invoke($this->objectModel, $name, $baseUrl, $currentAccount);
+
+        if(dao::isError()) return dao::getError();
+
+        $lib = $tester->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
+
+        $tester->dao->delete()->from(TABLE_DOCLIB)->where('id')->eq($libID)->exec();
+
+        return $lib;
+    }
 }
