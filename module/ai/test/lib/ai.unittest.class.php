@@ -815,4 +815,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createMiniProgram method.
+     *
+     * @param  mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function createMiniProgramTest($data = null)
+    {
+        $result = $this->objectModel->createMiniProgram($data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
