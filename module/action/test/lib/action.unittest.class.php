@@ -989,4 +989,26 @@ class actionTest
 
         return $output;
     }
+
+    /**
+     * Test printChanges method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  array  $histories
+     * @param  bool   $canChangeTag
+     * @access public
+     * @return string
+     */
+    public function printChangesTest(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): string
+    {
+        ob_start();
+        $this->objectModel->printChanges($objectType, $objectID, $histories, $canChangeTag);
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return $output;
+    }
 }
