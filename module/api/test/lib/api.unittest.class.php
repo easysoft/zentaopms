@@ -325,4 +325,28 @@ class apiTest
 
         return $lib;
     }
+
+    /**
+     * Test createDemoStruct method.
+     *
+     * @param  int    $libID
+     * @param  string $version
+     * @param  string $currentAccount
+     * @access public
+     * @return mixed
+     */
+    public function createDemoStructTest($libID, $version, $currentAccount)
+    {
+        global $tester;
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('createDemoStruct');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $libID, $version, $currentAccount);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

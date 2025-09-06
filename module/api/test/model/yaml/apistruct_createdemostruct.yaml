@@ -1,0 +1,58 @@
+---
+title: API结构演示数据定义
+desc: 为createDemoStruct方法测试准备的API结构数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lib
+  note: 所属库ID
+  range: 1-10
+  format: ""
+- field: name
+  note: 结构名称
+  range: 'User,Product,Order,Category,Tag,Comment,File,Message,Log,Setting'
+  format: ""
+- field: type
+  note: 数据类型
+  range: 'object,array,string,integer,boolean'
+  format: ""
+- field: desc
+  note: 描述信息
+  range: '用户信息结构,产品数据结构,订单数据结构,分类数据结构,标签数据结构'
+  format: ""
+- field: version
+  note: 版本号
+  range: 1-5
+  format: ""
+- field: attribute
+  note: 属性定义（JSON格式）
+  range: '{"fields":[]},{"properties":{}},{"items":{}}'
+  format: ""
+- field: addedBy
+  note: 创建者
+  range: 'admin,user,test'
+  format: ""
+- field: addedDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  note: 编辑者
+  range: 'admin,user,test'
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除标记
+  range: '0'
+  format: ""
