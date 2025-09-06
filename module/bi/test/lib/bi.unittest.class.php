@@ -581,4 +581,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test initParquet method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function initParquetTest()
+    {
+        $result = $this->objectModel->initParquet();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
