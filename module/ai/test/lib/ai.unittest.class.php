@@ -404,4 +404,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test parseFunctionCallResponse method.
+     *
+     * @param  mixed $response
+     * @access public
+     * @return mixed
+     */
+    public function parseFunctionCallResponseTest($response = null)
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('parseFunctionCallResponse');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $response);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
