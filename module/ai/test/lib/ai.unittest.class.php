@@ -963,4 +963,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test updatePrompt method.
+     *
+     * @param  object $prompt
+     * @param  object $originalPrompt
+     * @access public
+     * @return mixed
+     */
+    public function updatePromptTest($prompt = null, $originalPrompt = null)
+    {
+        $result = $this->objectModel->updatePrompt($prompt, $originalPrompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
