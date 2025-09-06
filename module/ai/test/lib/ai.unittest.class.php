@@ -187,4 +187,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test updateModel method.
+     *
+     * @param  int   $modelID
+     * @param  mixed $model
+     * @access public
+     * @return mixed
+     */
+    public function updateModelTest($modelID = null, $model = null)
+    {
+        $result = $this->objectModel->updateModel($modelID, $model);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
