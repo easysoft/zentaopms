@@ -610,4 +610,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareSyncCommand method.
+     *
+     * @param  string $binPath
+     * @param  string $extensionPath
+     * @param  string $copySQL
+     * @access public
+     * @return mixed
+     */
+    public function prepareSyncCommandTest($binPath, $extensionPath, $copySQL)
+    {
+        $result = $this->objectModel->prepareSyncCommand($binPath, $extensionPath, $copySQL);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
