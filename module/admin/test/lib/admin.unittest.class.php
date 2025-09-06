@@ -201,4 +201,20 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test setTabMenu method.
+     *
+     * @param  string $subMenuKey
+     * @param  array  $menu
+     * @access public
+     * @return mixed
+     */
+    public function setTabMenuTest(string $subMenuKey, array $menu)
+    {
+        $result = $this->objectModel->setTabMenu($subMenuKey, $menu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
