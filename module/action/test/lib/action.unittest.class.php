@@ -954,4 +954,19 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test formatActionComment method.
+     *
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function formatActionCommentTest(string $comment): string
+    {
+        $result = $this->objectModel->formatActionComment($comment);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
