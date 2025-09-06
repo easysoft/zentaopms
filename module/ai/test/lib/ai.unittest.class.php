@@ -542,4 +542,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test saveMiniProgramMessage method.
+     *
+     * @param  string $appID
+     * @param  string $type
+     * @param  string $content
+     * @access public
+     * @return mixed
+     */
+    public function saveMiniProgramMessageTest($appID, $type, $content)
+    {
+        $result = $this->objectModel->saveMiniProgramMessage($appID, $type, $content);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
