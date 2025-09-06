@@ -269,4 +269,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getColumnsType method.
+     *
+     * @param  string $sql
+     * @param  string $driverName
+     * @param  array  $columns
+     * @access public
+     * @return mixed
+     */
+    public function getColumnsTypeTest($sql, $driverName = 'mysql', $columns = array())
+    {
+        $result = $this->objectModel->getColumnsType($sql, $driverName, $columns);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
