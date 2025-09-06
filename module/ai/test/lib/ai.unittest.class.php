@@ -249,4 +249,25 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test makeRequest method.
+     *
+     * @param  string $type
+     * @param  mixed  $data
+     * @param  int    $timeout
+     * @access public
+     * @return mixed
+     */
+    public function makeRequestTest($type = null, $data = null, $timeout = 10)
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('makeRequest');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $type, $data, $timeout);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
