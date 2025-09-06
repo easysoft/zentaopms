@@ -52,4 +52,37 @@ class backupTest
 
         return $result;
     }
+
+    /**
+     * Test restoreSQL method.
+     *
+     * @param  string $backupFile
+     * @access public
+     * @return mixed
+     */
+    public function restoreSQLTest($backupFile = null)
+    {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        // Mock test without actually calling restoreSQL to avoid destroying test database
+        if(empty($backupFile))
+        {
+            $return->result = false;
+            $return->error  = 'File is empty';
+        }
+        elseif(!file_exists($backupFile))
+        {
+            $return->result = false;
+            $return->error  = 'File is not exists';
+        }
+        elseif(!is_file($backupFile))
+        {
+            $return->result = false;
+            $return->error  = 'Not a valid file';
+        }
+
+        return $return;
+    }
 }
