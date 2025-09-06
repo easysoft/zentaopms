@@ -1043,4 +1043,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test isAssoc method.
+     *
+     * @param  array $array
+     * @access public
+     * @return mixed
+     */
+    public function isAssocTest($array = null)
+    {
+        /* Using reflection to call private static method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('isAssoc');
+        $method->setAccessible(true);
+        $result = $method->invoke(null, $array);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
