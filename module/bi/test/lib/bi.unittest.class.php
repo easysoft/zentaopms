@@ -351,4 +351,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test genWaterpolo method.
+     *
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $sql
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function genWaterpoloTest($fields, $settings, $sql, $filters)
+    {
+        $result = $this->objectModel->genWaterpolo($fields, $settings, $sql, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
