@@ -58,4 +58,18 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test hasModelsAvailable method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function hasModelsAvailableTest()
+    {
+        $result = $this->objectModel->hasModelsAvailable();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
