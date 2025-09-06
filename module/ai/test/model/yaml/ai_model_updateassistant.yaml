@@ -1,0 +1,34 @@
+---
+title: AI模型数据定义
+desc: 用于测试updateAssistant方法的AI模型测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-2
+- field: type
+  note: 模型类型
+  range: 'chat'
+- field: vendor
+  note: 供应商
+  range: 'openai'
+- field: credentials
+  note: 认证信息
+  range: '{"api_key":"test-key"}'
+- field: name
+  note: 模型名称
+  range: 'test-model-1,test-model-2'
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 09:00:00'
+- field: enabled
+  note: 启用状态
+  range: '1'
+- field: deleted
+  note: 删除状态
+  range: '0'

@@ -1441,4 +1441,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test updateAssistant method.
+     *
+     * @param  object $assistant
+     * @access public
+     * @return mixed
+     */
+    public function updateAssistantTest($assistant = null)
+    {
+        $result = $this->objectModel->updateAssistant($assistant);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
