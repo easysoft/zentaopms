@@ -349,4 +349,27 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test createDemoStructSpec method.
+     *
+     * @param  string $version
+     * @param  string $currentAccount
+     * @access public
+     * @return mixed
+     */
+    public function createDemoStructSpecTest($version, $currentAccount)
+    {
+        global $tester;
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('createDemoStructSpec');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $version, $currentAccount);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
