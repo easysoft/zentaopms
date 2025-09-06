@@ -13,6 +13,8 @@
 ### 📝 统一占位符说明
 **AI大模型必须严格按照以下占位符规范，保持命名一致性：**
 - `{moduleName}` - 模块名（小写，如：user、task、project）
+- `{layerName}` - 业务分层（小写，如：model、tao、zen、control、ui）
+- `{className}` - 类名（驼峰命名，如：userModel、taskTao、projectZen）
 - `{methodName}` - 方法名（驼峰命名，如：getById、createUser）
 - `{tableName}` - 数据表名（小写，如：user、task、project）
 - `{fieldName}` - 字段名（小写，如：id、name、status）
@@ -102,7 +104,7 @@ module/{moduleName}/test/
 
 /**
 
-title=测试 {moduleName}Model::{methodName}();
+title=测试 {className}::{methodName}();
 cid=0
 
 - 测试步骤1描述 @期望结果1
@@ -121,7 +123,7 @@ cid=0
 
 /**
 
-title=测试 {moduleName}Model::{methodName}();
+title=测试 {className}::{methodName}();
 cid=0
 
 - 测试步骤1：正常输入情况 >> 期望正常结果
@@ -375,7 +377,7 @@ fields:
 ## 单元测试开发完整流程（必须按顺序执行）
 
 ### 步骤1：分析待测方法
-1. 确定方法所属模块和层次（Model/TAO/ZEN）
+1. 确定方法所属模块和业务分层（model/tao/zen/control/ui）
 2. 分析方法参数类型和返回值
 3. 理解业务逻辑和数据依赖关系
 4. 识别可能的异常情况
@@ -412,10 +414,10 @@ fields:
 ```bash
 
 # 使用 php 命令运行测试脚本，检查是否有错误
-php module/{moduleName}/test/model/{methodName}.php
+php module/{moduleName}/test/{layerName}/{methodName}.php
 
 # 使用 ztf 运行测试脚本
-test/runtime/ztf module/{moduleName}/test/model/{methodName}.php
+test/runtime/ztf module/{moduleName}/test/{layerName}/{methodName}.php
 ```
 
 #### 5.2 验证测试结果
@@ -443,13 +445,13 @@ test/runtime/ztf module/{moduleName}/test/model/{methodName}.php
 
    ```bash
    git add module/{moduleName}/test/lib/{moduleName}.unittest.class.php
-   git add module/{moduleName}/test/model/{methodName}.php
-   git add module/{moduleName}/test/model/yaml/{tableName}_{methodName}.yaml
+   git add module/{moduleName}/test/{layerName}/{methodName}.php
+   git add module/{moduleName}/test/{layerName}/yaml/{tableName}_{methodName}.yaml
    ```
 
 2. **提交代码**：
    ```bash
-   git commit -m "+ [misc] Add unit tests for {moduleName}::{methodName}() method
+   git commit -m "+ [misc] Add unit tests for {className}::{methodName}() method
 
    🤖 Generated with [Claude Code](https://claude.ai/code)
 
@@ -459,7 +461,7 @@ test/runtime/ztf module/{moduleName}/test/model/{methodName}.php
 **⚠️ AI大模型提交信息模板（必须严格遵循）：**
 
 ```bash
-git commit -m "+ [misc] Add unit tests for {moduleName}::{methodName}() method
+git commit -m "+ [misc] Add unit tests for {className}::{methodName}() method
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
@@ -469,7 +471,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 **📋 提交信息格式说明：**
 - **符号**：`+` (新增测试) / `*` (修改测试) / `-` (删除测试)
 - **分类**：`[misc]` (测试相关固定使用misc)
-- **描述**：`Add unit tests for {moduleName}::{methodName}() method`
+- **描述**：`Add unit tests for {className}::{methodName}() method`
 - **标识**：必须包含Claude Code和Co-Authored-By标记
 
 ## 常见测试模式
@@ -628,7 +630,7 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 - 理解被测方法的业务逻辑
 - 分析被测方法涉及的数据库表
 - 理解数据库表的结构
-- 表结构定义参考db/zentao.sql
+- 表结构定义参考 `db/zentao.sql`
 
 ## 注意事项
 
