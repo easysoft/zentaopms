@@ -423,4 +423,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test complete method.
+     *
+     * @param  mixed $model
+     * @param  string $prompt
+     * @param  int $maxTokens
+     * @param  array $options
+     * @access public
+     * @return mixed
+     */
+    public function completeTest($model = null, $prompt = '', $maxTokens = 512, $options = array())
+    {
+        $result = $this->objectModel->complete($model, $prompt, $maxTokens, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
