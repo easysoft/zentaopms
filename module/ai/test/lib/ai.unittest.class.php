@@ -39,4 +39,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test useLanguageModel method.
+     *
+     * @param  mixed $modelID
+     * @access public
+     * @return mixed
+     */
+    public function useLanguageModelTest($modelID = null)
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('useLanguageModel');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $modelID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
