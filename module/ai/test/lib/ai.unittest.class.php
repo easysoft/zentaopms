@@ -441,4 +441,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test edit method.
+     *
+     * @param  mixed $model
+     * @param  string $input
+     * @param  string $instruction
+     * @param  array $options
+     * @access public
+     * @return mixed
+     */
+    public function editTest($model = null, $input = '', $instruction = '', $options = array())
+    {
+        $result = $this->objectModel->edit($model, $input, $instruction, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
