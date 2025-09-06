@@ -217,4 +217,18 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test genDateUsed method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function genDateUsedTest()
+    {
+        $result = $this->objectModel->genDateUsed();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
