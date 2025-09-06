@@ -369,4 +369,23 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getMultiData method.
+     *
+     * @param  array  $settings
+     * @param  string $defaultSql
+     * @param  array  $filters
+     * @param  string $driver
+     * @param  bool   $sort
+     * @access public
+     * @return mixed
+     */
+    public function getMultiDataTest($settings, $defaultSql, $filters, $driver, $sort = false)
+    {
+        $result = $this->objectModel->getMultiData($settings, $defaultSql, $filters, $driver, $sort);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
