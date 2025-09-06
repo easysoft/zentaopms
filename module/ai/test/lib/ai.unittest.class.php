@@ -1027,4 +1027,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test generateDemoDataPrompt method.
+     *
+     * @param  string $module
+     * @param  string $source
+     * @access public
+     * @return mixed
+     */
+    public function generateDemoDataPromptTest($module = null, $source = null)
+    {
+        $result = $this->objectModel->generateDemoDataPrompt($module, $source);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
