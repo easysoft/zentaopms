@@ -289,4 +289,23 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test camelCaseToSnakeCase method.
+     *
+     * @param  string $str
+     * @access public
+     * @return mixed
+     */
+    public function camelCaseToSnakeCaseTest($str = null)
+    {
+        /* Using reflection to call private static method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('camelCaseToSnakeCase');
+        $method->setAccessible(true);
+        $result = $method->invoke(null, $str);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
