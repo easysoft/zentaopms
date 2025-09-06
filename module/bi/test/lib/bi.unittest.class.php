@@ -317,4 +317,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectOptions method.
+     *
+     * @param  string $object
+     * @param  string $field
+     * @access public
+     * @return mixed
+     */
+    public function getObjectOptionsTest($object, $field)
+    {
+        $result = $this->objectModel->getObjectOptions($object, $field);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
