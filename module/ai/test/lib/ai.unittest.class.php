@@ -898,4 +898,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test verifyRequiredFields method.
+     *
+     * @param  array $requiredFields
+     * @param  array $postData
+     * @access public
+     * @return mixed
+     */
+    public function verifyRequiredFieldsTest($requiredFields = array(), $postData = array())
+    {
+        $_POST = $postData;
+        $result = $this->objectModel->verifyRequiredFields($requiredFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
