@@ -459,4 +459,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test converse method.
+     *
+     * @param  mixed $model
+     * @param  array $messages
+     * @param  array $options
+     * @access public
+     * @return mixed
+     */
+    public function converseTest($model = null, $messages = array(), $options = array())
+    {
+        $result = $this->objectModel->converse($model, $messages, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
