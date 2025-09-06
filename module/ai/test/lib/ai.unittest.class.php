@@ -1237,4 +1237,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test tryGetRelatedObjects method.
+     *
+     * @param  mixed $prompt      prompt object or prompt id
+     * @param  mixed $object      object or object id
+     * @param  array $objectNames object names to get
+     * @access public
+     * @return mixed
+     */
+    public function tryGetRelatedObjectsTest($prompt = null, $object = null, $objectNames = array())
+    {
+        $result = $this->objectModel->tryGetRelatedObjects($prompt, $object, $objectNames);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

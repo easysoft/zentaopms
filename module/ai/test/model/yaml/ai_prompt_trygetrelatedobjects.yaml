@@ -1,0 +1,53 @@
+---
+title: AI Prompt测试数据 - tryGetRelatedObjects方法
+desc: 为tryGetRelatedObjects方法提供测试数据，包含不同模块和状态的prompt
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Prompt ID
+  range: 1-20
+- field: name
+  note: Prompt名称
+  range: 需求润色,一键拆用例,项目分析,产品评审,任务拆解,缺陷修复,文档生成,代码评审,测试计划,执行分析,用例设计,项目管理,产品规划,需求分析,bug分析,story优化,task创建,project总结,execution监控,doc编写
+- field: desc
+  note: 描述
+  range: 帮助优化需求描述,自动生成测试用例,分析项目数据,评审产品需求,拆分任务,修复代码缺陷,生成技术文档,评审代码质量,制定测试计划,监控执行情况,设计测试用例,管理项目进度,规划产品路线,分析需求内容,分析bug原因,优化story描述,创建新任务,总结项目情况,监控执行状态,编写文档内容
+- field: model
+  note: AI模型ID
+  range: 1,2,3{5},4{5},5{5}
+- field: module
+  note: 模块名称
+  range: story{3},task{3},project{3},product{3},execution{3},bug{2},case{2},doc{1}
+- field: source
+  note: 源数据字段配置
+  range: ',story.title,story.spec,story.verify,',',task.name,task.desc,task.pri,',',project.name,project.desc,',',product.name,product.desc,',',execution.name,execution.desc,',',bug.title,bug.steps,',',case.title,case.precondition,',',doc.title,doc.content,'
+- field: targetForm
+  note: 目标表单
+  range: 'story.change,task.create,project.create,product.create,execution.create,bug.resolve,case.create,doc.create'
+- field: purpose
+  note: 用途描述
+  range: '帮忙优化其中各字段的表述,生成对应的任务,分析项目数据,评估产品需求,监控执行情况,修复问题,生成测试用例,生成技术文档'
+- field: elaboration
+  note: 详细说明
+  range: 需求描述格式建议使用：作为一名用户,测试用例设计要完整,项目数据要准确分析,产品需求评估要全面,执行情况要实时监控,问题修复要及时,测试用例要覆盖全面,技术文档要详细准确
+- field: role
+  note: 角色描述
+  range: 请你扮演一名资深的产品经理,作为一名资深的测试工程师,你是一名经验丰富的项目经理,假如你是一名资深的QA工程师,你是一名文章写得很好的文案编辑,请你扮演一名技术专家,作为开发工程师,你是产品分析师
+- field: characterization
+  note: 特征描述
+  range: 负责产品战略设计开发,熟悉测试流程和方法,具备项目管理经验,了解质量管理体系,擅长文档写作,精通技术架构,熟悉开发流程,擅长产品分析
+- field: status
+  note: 状态
+  range: 'active{15},draft{3},deleted{2}'
+- field: createdBy
+  note: 创建者
+  range: admin{10},user1{5},user2{3},user3{2}
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00 - 2024-01-01 00:00:00'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: deleted
+  note: 删除标记
+  range: '0{18},1{2}'
