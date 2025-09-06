@@ -445,4 +445,19 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test getGroupedObjects method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGroupedObjectsTest()
+    {
+        $result = $this->objectModel->getGroupedObjects();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
