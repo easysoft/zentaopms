@@ -21,4 +21,20 @@ class aiappTest
 
         return $result;
     }
+
+    /**
+     * Test getLatestMiniPrograms method.
+     *
+     * @param object $pager
+     * @param string $order
+     * @access public
+     * @return mixed
+     */
+    public function getLatestMiniProgramsTest($pager = null, $order = 'publishedDate_desc')
+    {
+        $result = $this->objectModel->getLatestMiniPrograms($pager, $order);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
