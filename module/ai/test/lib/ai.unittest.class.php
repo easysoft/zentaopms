@@ -1394,4 +1394,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getAssistantsByModel method.
+     *
+     * @param  int $modelId
+     * @param  bool $enabled
+     * @access public
+     * @return mixed
+     */
+    public function getAssistantsByModelTest($modelId = null, $enabled = true)
+    {
+        $result = $this->objectModel->getAssistantsByModel($modelId, $enabled);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
