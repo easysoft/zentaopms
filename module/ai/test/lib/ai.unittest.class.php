@@ -1425,4 +1425,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createAssistant method.
+     *
+     * @param  object $assistant
+     * @param  bool   $publish
+     * @access public
+     * @return mixed
+     */
+    public function createAssistantTest($assistant = null, $publish = false)
+    {
+        $result = $this->objectModel->createAssistant($assistant, $publish);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
