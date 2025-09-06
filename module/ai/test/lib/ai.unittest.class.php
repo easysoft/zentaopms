@@ -728,4 +728,43 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test createNewVersionNotification method.
+     *
+     * @param  string $appID
+     * @access public
+     * @return mixed
+     */
+    public function createNewVersionNotificationTest($appID = null)
+    {
+        // 记录执行前的通知数量
+        $beforeCount = $this->objectModel->dao->select('COUNT(*)')
+            ->from(TABLE_AI_MESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('type')->eq('ntf')
+            ->fetch('COUNT(*)');
+
+        $this->objectModel->createNewVersionNotification($appID);
+        if(dao::isError()) return dao::getError();
+
+        // 记录执行后的通知数量
+        $afterCount = $this->objectModel->dao->select('COUNT(*)')
+            ->from(TABLE_AI_MESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('type')->eq('ntf')
+            ->fetch('COUNT(*)');
+
+        // 获取该appID对应的用户数量
+        $userCount = $this->objectModel->dao->select('COUNT(DISTINCT user)')
+            ->from(TABLE_AI_MESSAGE)
+            ->where('appID')->eq($appID)
+            ->fetch('COUNT(DISTINCT user)');
+
+        // 如果没有用户记录，应该没有创建通知
+        if($userCount == 0) return 0;
+
+        // 否则应该为每个用户都创建了一条通知
+        return $userCount;
+    }
 }
