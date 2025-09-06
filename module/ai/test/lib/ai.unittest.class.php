@@ -830,4 +830,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test extractZtAppZip method.
+     *
+     * @param  string $file
+     * @access public
+     * @return mixed
+     */
+    public function extractZtAppZipTest($file = null)
+    {
+        $result = $this->objectModel->extractZtAppZip($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
