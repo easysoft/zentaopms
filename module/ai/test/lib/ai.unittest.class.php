@@ -1410,4 +1410,19 @@ class aiTest
 
         return count($result);
     }
+
+    /**
+     * Test getAssistantById method.
+     *
+     * @param  int $assistantId
+     * @access public
+     * @return mixed
+     */
+    public function getAssistantByIdTest($assistantId = null)
+    {
+        $result = $this->objectModel->getAssistantById($assistantId);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
