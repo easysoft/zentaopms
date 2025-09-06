@@ -497,4 +497,24 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test getApiSpecByData method.
+     *
+     * @param  object $data
+     * @access public
+     * @return array
+     */
+    public function getApiSpecByDataTest($data)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getApiSpecByData');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $data);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
