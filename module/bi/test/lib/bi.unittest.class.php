@@ -475,4 +475,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareBuiltinScreenSQL method.
+     *
+     * @param  string $operate
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinScreenSQLTest($operate = 'insert')
+    {
+        $result = $this->objectModel->prepareBuiltinScreenSQL($operate);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
