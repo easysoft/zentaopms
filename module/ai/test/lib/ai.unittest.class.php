@@ -576,4 +576,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getHistoryMessages method.
+     *
+     * @param  mixed $appID
+     * @param  int   $limit
+     * @access public
+     * @return mixed
+     */
+    public function getHistoryMessagesTest($appID = null, $limit = 20)
+    {
+        $result = $this->objectModel->getHistoryMessages($appID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
