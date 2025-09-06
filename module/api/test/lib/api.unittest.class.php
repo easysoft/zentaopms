@@ -537,4 +537,20 @@ class apiTest
 
         return $result;
     }
+
+    /**
+     * Test getTypeList method.
+     *
+     * @param  int $libID
+     * @access public
+     * @return array
+     */
+    public function getTypeListTest($libID)
+    {
+        $result = $this->objectModel->getTypeList($libID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
