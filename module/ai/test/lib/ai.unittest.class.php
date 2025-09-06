@@ -1010,4 +1010,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test serializeDataToPrompt method.
+     *
+     * @param  string $module
+     * @param  mixed  $sources
+     * @param  mixed  $data
+     * @access public
+     * @return mixed
+     */
+    public function serializeDataToPromptTest($module = null, $sources = null, $data = null)
+    {
+        $result = $this->objectModel->serializeDataToPrompt($module, $sources, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
