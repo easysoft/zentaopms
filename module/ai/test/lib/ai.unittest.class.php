@@ -234,4 +234,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test testModelConnection method.
+     *
+     * @param  int $modelID
+     * @access public
+     * @return mixed
+     */
+    public function testModelConnectionTest($modelID = null)
+    {
+        $result = $this->objectModel->testModelConnection($modelID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

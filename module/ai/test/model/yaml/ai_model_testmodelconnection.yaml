@@ -1,0 +1,50 @@
+---
+title: AI模型测试连接数据
+desc: 用于测试testModelConnection方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 模型类型
+  range: openai-gpt4, openai-davinci, ernie, claude
+- field: vendor
+  note: 厂商
+  range: openai, azure, baidu, anthropic, openaiCompatible
+- field: credentials
+  note: API凭证
+  range: '{"key":"test-api-key-123","endpoint":"https://api.openai.com/v1","model":"gpt-4"}{5}, {"key":"invalid-key"}{5}'
+- field: proxy
+  note: 代理配置
+  range: '[]{8}, {"host":"proxy.example.com","port":8080}{2}'
+- field: name
+  note: 模型名称
+  range: GPT-4测试模型, Davinci测试模型, 文心一言测试, Claude测试, 无效模型{2}
+- field: desc
+  note: 模型描述
+  range: 用于测试的AI模型
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00'
+- field: editedBy
+  note: 编辑者
+  range: admin, user{3}, '[]{6}'
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00', '[]{6}'
+- field: enabled
+  note: 是否启用
+  range: '1{8}, 0{2}'
+- field: deleted
+  note: 是否删除
+  range: '0{9}, 1{1}'
