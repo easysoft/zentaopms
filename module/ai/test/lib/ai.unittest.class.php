@@ -528,4 +528,18 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test countLatestMiniPrograms method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function countLatestMiniProgramsTest()
+    {
+        $result = $this->objectModel->countLatestMiniPrograms();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
