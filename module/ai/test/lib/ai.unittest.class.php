@@ -72,4 +72,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getLanguageModels method.
+     *
+     * @param  string $type
+     * @param  bool   $enabledOnly
+     * @param  object $pager
+     * @param  string $orderBy
+     * @access public
+     * @return mixed
+     */
+    public function getLanguageModelsTest($type = '', $enabledOnly = false, $pager = null, $orderBy = 'id_desc')
+    {
+        $result = $this->objectModel->getLanguageModels($type, $enabledOnly, $pager, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
