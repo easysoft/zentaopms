@@ -460,4 +460,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareBuiltinMetricSQL method.
+     *
+     * @param  string $operate
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinMetricSQLTest($operate = 'insert')
+    {
+        $result = $this->objectModel->prepareBuiltinMetricSQL($operate);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
