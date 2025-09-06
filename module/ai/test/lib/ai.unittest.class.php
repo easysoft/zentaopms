@@ -1346,4 +1346,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test deleteRoleTemplate method.
+     *
+     * @param  int $id
+     * @access public
+     * @return mixed
+     */
+    public function deleteRoleTemplateTest($id = null)
+    {
+        $result = $this->objectModel->deleteRoleTemplate($id);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
