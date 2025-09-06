@@ -120,4 +120,22 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getDefaultLanguageModel method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDefaultLanguageModelTest()
+    {
+        /* Using reflection to call private method */
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getDefaultLanguageModel');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
