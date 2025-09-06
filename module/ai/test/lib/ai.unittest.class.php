@@ -1284,4 +1284,20 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test filterPromptsForExecution method.
+     *
+     * @param  array $prompts
+     * @param  bool  $keepUnauthorized
+     * @access public
+     * @return mixed
+     */
+    public function filterPromptsForExecutionTest($prompts = array(), $keepUnauthorized = false)
+    {
+        $result = $this->objectModel->filterPromptsForExecution($prompts, $keepUnauthorized);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

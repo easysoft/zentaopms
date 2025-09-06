@@ -1,0 +1,62 @@
+---
+title: AI Prompt数据定义 - filterPromptsForExecution测试
+desc: 为filterPromptsForExecution方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 提示词名称
+  range: test_prompt1,test_prompt2,invalid_prompt{2},valid_prompt{3},executable_prompt{3}
+- field: desc
+  note: 描述
+  range: 测试提示词描述{10}
+- field: model
+  note: 关联模型ID
+  range: 1-5:R
+- field: module
+  note: 所属模块
+  range: story{3},task{3},bug{2},testcase{2}
+- field: source
+  note: 数据源
+  range: story.story{3},task.task{3},bug.bug{2},testcase.case{2}
+- field: targetForm
+  note: 目标表单
+  range: story.create{3},task.edit{2},bug.edit{2},testcase.edit{2},invalid.form{1}
+- field: purpose
+  note: 用途说明
+  range: 创建需求{3},编辑任务{2},修复缺陷{2},编写测试用例{2},无效用途{1}
+- field: elaboration
+  note: 详细说明
+  range: 详细说明内容{10}
+- field: role
+  note: 角色设定
+  range: 产品经理{3},开发工程师{3},测试工程师{2},QA工程师{2}
+- field: characterization
+  note: 角色特征
+  range: 专业且严谨{10}
+- field: status
+  note: 状态
+  range: active{8},draft{2}
+- field: createdBy
+  note: 创建者
+  range: admin{5},user{3},tester{2}
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{5},2024-01-02 00:00:00{3},2024-01-03 00:00:00{2}
+- field: editedBy
+  note: 编辑者
+  range: admin{4},user{3},tester{2},[]{1}
+- field: editedDate
+  note: 编辑时间
+  range: 2024-01-01 12:00:00{4},2024-01-02 12:00:00{3},2024-01-03 12:00:00{2},[]{1}
+- field: deleted
+  note: 删除标记
+  range: 0{9},1{1}
