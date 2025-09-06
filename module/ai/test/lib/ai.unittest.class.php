@@ -1488,4 +1488,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test deleteAssistant method.
+     *
+     * @param  int $assistantId
+     * @access public
+     * @return mixed
+     */
+    public function deleteAssistantTest($assistantId = null)
+    {
+        if(empty($assistantId) || $assistantId < 0) return '0';
+        
+        $result = $this->objectModel->deleteAssistant($assistantId);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
 }

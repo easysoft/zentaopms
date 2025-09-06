@@ -1,0 +1,62 @@
+---
+title: AI助手数据定义
+desc: 用于测试deleteAssistant方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 助手ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 助手名称
+  range: "AI助手{10}, 代码助手{10}, 测试助手{10}, 设计助手{10}, 已删除助手{20}"
+  prefix: ""
+  postfix: ""
+- field: modelId
+  note: 模型ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 助手描述
+  range: "这是一个AI助手{20}, 用于协助开发工作{15}, 辅助测试任务{15}"
+  prefix: ""
+  postfix: ""
+- field: systemMessage
+  note: 系统消息
+  range: "你是一个专业的AI助手{25}, 请协助用户完成任务{25}"
+  prefix: ""
+  postfix: ""
+- field: greetings
+  note: 问候语
+  range: "你好，我是AI助手{25}, 很高兴为您服务{25}"
+  prefix: ""
+  postfix: ""
+- field: icon
+  note: 图标
+  range: "coding-1{30}, robot-1{20}"
+  prefix: ""
+  postfix: ""
+- field: enabled
+  note: 启用状态
+  range: "1{40}, 0{10}"
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: "(-30D)-(-1D):1D"
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: publishedDate
+  note: 发布时间
+  range: "(-20D)-(-1D):1D, []{10}"
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: "0{45}, 1{5}"
+  prefix: ""
+  postfix: ""
