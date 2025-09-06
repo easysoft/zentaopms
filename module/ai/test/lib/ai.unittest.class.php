@@ -1361,4 +1361,21 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test updateRoleTemplate method.
+     *
+     * @param  int    $id
+     * @param  string $role
+     * @param  string $characterization
+     * @access public
+     * @return mixed
+     */
+    public function updateRoleTemplateTest($id = null, $role = '', $characterization = '')
+    {
+        $result = $this->objectModel->updateRoleTemplate($id, $role, $characterization);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
