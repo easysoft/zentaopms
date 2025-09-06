@@ -219,4 +219,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test deleteModel method.
+     *
+     * @param  int $modelID
+     * @access public
+     * @return mixed
+     */
+    public function deleteModelTest($modelID = null)
+    {
+        $result = $this->objectModel->deleteModel($modelID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
