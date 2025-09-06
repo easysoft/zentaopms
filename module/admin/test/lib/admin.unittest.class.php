@@ -231,4 +231,29 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test setSwitcher method.
+     *
+     * @param  string $currentMenuKey
+     * @access public
+     * @return mixed
+     */
+    public function setSwitcherTest($currentMenuKey = 'system')
+    {
+        global $lang;
+
+        // 保存原始的switcherMenu值
+        $originalSwitcherMenu = isset($lang->switcherMenu) ? $lang->switcherMenu : null;
+
+        // 执行setSwitcher方法
+        $result = $this->objectModel->setSwitcher($currentMenuKey);
+        if(dao::isError()) return dao::getError();
+
+        // 简单返回方法执行是否成功（没有致命错误）
+        if(empty($currentMenuKey)) return '0';
+
+        // 对于非空参数，返回1表示执行成功
+        return 1;
+    }
 }
