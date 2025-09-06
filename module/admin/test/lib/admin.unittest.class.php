@@ -184,4 +184,21 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * 测试设置二级导航。
+     * Test set sub menu.
+     *
+     * @param  string $menuKey
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function setSubMenuTest(string $menuKey, array $menu): array
+    {
+        $result = $this->objectModel->setSubMenu($menuKey, $menu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
