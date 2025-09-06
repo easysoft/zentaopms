@@ -1202,4 +1202,19 @@ class aiTest
 
         return $result;
     }
+
+    /**
+     * Test getTestingLocation method.
+     *
+     * @param  mixed $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestingLocationTest($prompt = null)
+    {
+        $result = $this->objectModel->getTestingLocation($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
