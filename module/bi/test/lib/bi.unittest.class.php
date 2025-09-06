@@ -286,4 +286,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getScopeOptions method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getScopeOptionsTest($type)
+    {
+        $result = $this->objectModel->getScopeOptions($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
