@@ -1,0 +1,54 @@
+---
+title: action表数据，用于测试printActionForGitLab方法
+desc: 生成不同类型的action数据用于测试GitLab格式化输出
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: task,bug,story,project
+- field: objectID
+  note: 对象ID
+  range: 1-100
+- field: product
+  note: 产品ID
+  range: 1-5
+- field: project
+  note: 项目ID
+  range: 1-10
+- field: execution
+  note: 执行ID
+  range: 1-15
+- field: actor
+  note: 操作者
+  range: admin,user1,user2,test
+- field: action
+  note: 动作类型
+  range: opened{2},assigned{2},closed{2},edited{1},commented{1},activated{1},resolved{1}
+- field: date
+  note: 操作时间
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:60D
+  format: YYYY-MM-DD hh:mm:ss
+- field: comment
+  note: 注释内容
+  range: '[]{4},test comment{3},fix bug{2},feature update{1}'
+  prefix: ""
+  postfix: ""
+- field: extra
+  note: 额外信息
+  range: '[]{4},user1{2},user2{2},extra info{2}'
+  prefix: ""
+  postfix: ""
+- field: read
+  note: 是否已读
+  range: 0{8},1{2}
+- field: vision
+  note: 视觉模式
+  range: rnd{5},[]{5}
+- field: efforted
+  note: 是否工时记录
+  range: 0{9},1{1}

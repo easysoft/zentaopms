@@ -1011,4 +1011,23 @@ class actionTest
 
         return $output;
     }
+
+    /**
+     * Test printActionForGitLab method.
+     *
+     * @param  object $action
+     * @access public
+     * @return string|false
+     */
+    public function printActionForGitLabTest(object $action): string|false
+    {
+        ob_start();
+        $result = $this->objectModel->printActionForGitLab($action);
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result === false ? false : $output;
+    }
 }
