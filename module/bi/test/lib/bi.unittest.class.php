@@ -402,4 +402,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getTableFieldsMenu method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getTableFieldsMenuTest()
+    {
+        $result = $this->objectModel->getTableFieldsMenu();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
