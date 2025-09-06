@@ -1095,4 +1095,25 @@ class aiTest
 
         return empty($schema) ? array() : $schema;
     }
+
+    /**
+     * Test getObjectForPromptById method.
+     *
+     * @param  mixed $promptID
+     * @param  mixed $objectId
+     * @access public
+     * @return mixed
+     */
+    public function getObjectForPromptByIdTest($promptID = null, $objectId = null)
+    {
+        if(empty($promptID)) return false;
+        
+        $prompt = $this->objectModel->getPromptById($promptID);
+        if(empty($prompt)) return false;
+        
+        $result = $this->objectModel->getObjectForPromptById($prompt, $objectId);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,91 @@
+---
+title: AI Prompt测试数据 - getObjectForPromptById方法
+desc: 为getObjectForPromptById方法提供测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: Prompt ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: Prompt名称
+  range: story_prompt{1}, task_prompt{1}, bug_prompt{1}, product_prompt{1}, project_prompt{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: Prompt描述
+  range: 需求润色提示词{2}, 任务优化提示词{2}, 缺陷分析提示词{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 模型ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: story{2}, task{2}, bug{2}, product{1}, project{1}, execution{1}, case{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: source
+  note: 数据源配置
+  range: story.title,story.spec{1}, task.name,task.desc{1}, bug.title,bug.steps{1}, product.name,product.desc{1}, project.name,project.desc{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: targetForm
+  note: 目标表单
+  range: story.edit{2}, task.edit{2}, bug.edit{2}, product.edit{1}, project.edit{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: purpose
+  note: 用途说明
+  range: 优化需求描述{2}, 优化任务信息{2}, 优化缺陷信息{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: active{8}, draft{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00-2024-12-31 23:59:59:1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: 0{9}, 1{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
