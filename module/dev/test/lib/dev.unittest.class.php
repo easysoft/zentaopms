@@ -198,4 +198,20 @@ class devTest
 
         return $result;
     }
+
+    /**
+     * Test getAPIData method.
+     *
+     * @param  int    $apiID
+     * @param  string $version
+     * @access public
+     * @return mixed
+     */
+    public function getAPIDataTest($apiID = 0, $version = '16.0')
+    {
+        $result = $this->objectModel->getAPIData($apiID, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
