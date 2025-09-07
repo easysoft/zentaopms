@@ -47,4 +47,24 @@ class dataviewTest
         
         return $result;
     }
+
+    /**
+     * Test verifySqlWithModify method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function verifySqlWithModifyTest($sql)
+    {
+        try {
+            $result = $this->objectModel->verifySqlWithModify($sql);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('result' => 'fail', 'message' => $e->getMessage());
+        } catch(Error $e) {
+            return array('result' => 'fail', 'message' => $e->getMessage());
+        }
+    }
 }
