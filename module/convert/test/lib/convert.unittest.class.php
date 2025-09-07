@@ -486,4 +486,19 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getZentaoStatus method.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoStatusTest($module = '')
+    {
+        $result = $this->objectModel->getZentaoStatus($module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
