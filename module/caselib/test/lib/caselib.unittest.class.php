@@ -262,4 +262,20 @@ class caselibTest
 
         return implode(';', array_keys($objects));
     }
+
+    /**
+     * Test setLibMenu method.
+     *
+     * @param  array $libraries
+     * @param  int   $libID
+     * @access public
+     * @return bool
+     */
+    public function setLibMenuTest(array $libraries = array(), int $libID = 0): bool
+    {
+        $result = $this->objectModel->setLibMenu($libraries, $libID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
