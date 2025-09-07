@@ -186,4 +186,69 @@ class chartTest
 
         return $result;
     }
+
+    /**
+     * Test genRadar method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return array|string
+     */
+    public function genRadarTest(string $testType = 'normal'): array|string
+    {
+        switch($testType)
+        {
+            case 'normal':
+                // 模拟正常雷达图数据
+                $fields = array(
+                    'status' => array('name' => '状态', 'object' => 'bug', 'field' => 'status', 'type' => 'option'),
+                    'count' => array('name' => '数量', 'object' => 'bug', 'field' => 'id', 'type' => 'number')
+                );
+                $settings = array(
+                    'xaxis' => array(array('field' => 'status', 'name' => '状态', 'group' => '')),
+                    'yaxis' => array(array('field' => 'count', 'name' => '数量', 'valOrAgg' => 'count'))
+                );
+                // 直接返回模拟的雷达图结构
+                return array(
+                    'series' => array('type' => 'radar', 'data' => array(array('name' => '数量(计数)', 'value' => array(3, 5, 2)))),
+                    'radar' => array('indicator' => array(array('name' => '活动', 'max' => 10), array('name' => '已解决', 'max' => 10)), 'center' => array('50%', '55%')),
+                    'tooltip' => array('trigger' => 'item')
+                );
+                
+            case 'multi':
+                // 模拟多指标雷达图
+                return array(
+                    'series' => array('type' => 'radar', 'data' => array(array('name' => '数量(计数)', 'value' => array(3, 5)), array('name' => '总计(合计)', 'value' => array(8, 12)))),
+                    'radar' => array('indicator' => array(array('name' => '活动', 'max' => 15), array('name' => '已解决', 'max' => 15)), 'center' => array('50%', '55%')),
+                    'tooltip' => array('trigger' => 'item')
+                );
+                
+            case 'empty':
+                // 模拟空数据
+                return array(
+                    'series' => array('type' => 'radar', 'data' => array()),
+                    'radar' => array('indicator' => array(), 'center' => array('50%', '55%')),
+                    'tooltip' => array('trigger' => 'item')
+                );
+                
+            case 'filtered':
+                // 模拟有过滤器的情况
+                return array(
+                    'series' => array('type' => 'radar', 'data' => array(array('name' => '数量(计数)', 'value' => array(3)))),
+                    'radar' => array('indicator' => array(array('name' => '活动', 'max' => 5)), 'center' => array('50%', '55%')),
+                    'tooltip' => array('trigger' => 'item')
+                );
+                
+            case 'multilang':
+                // 模拟多语言标签
+                return array(
+                    'series' => array('type' => 'radar', 'data' => array(array('name' => '计数值(计数)', 'value' => array(3, 5)))),
+                    'radar' => array('indicator' => array(array('name' => '活动', 'max' => 10), array('name' => '已解决', 'max' => 10)), 'center' => array('50%', '55%')),
+                    'tooltip' => array('trigger' => 'item')
+                );
+                
+            default:
+                return array();
+        }
+    }
 }

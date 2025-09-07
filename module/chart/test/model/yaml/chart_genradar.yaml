@@ -1,0 +1,33 @@
+title: chart_genradar
+desc: 雷达图生成测试数据
+author: Claude Code
+version: "1.0"
+
+fields:
+  - field: id
+    range: 1-20
+  - field: name
+    prefix: 图表
+    range: 1-20
+  - field: type
+    range: radar
+  - field: group
+    range: 1-5
+  - field: stage
+    range: published
+  - field: builtin
+    range: 0
+  - field: deleted
+    range: 0
+  - field: settings
+    range: '[{"type":"radar","xaxis":[{"field":"status","name":"状态","group":""}],"yaxis":[{"field":"count","name":"数量","valOrAgg":"count"}]}]'
+  - field: fields
+    range: '{"status":{"name":"状态","object":"bug","field":"status","type":"option"},"count":{"name":"数量","object":"bug","field":"id","type":"number"}}'
+  - field: sql
+    range: 'SELECT status, COUNT(*) as count FROM zt_bug WHERE deleted = "0" GROUP BY status'
+  - field: filters
+    range: '[]'
+  - field: langs
+    range: '{}'
+  - field: driver
+    range: mysql
