@@ -1940,4 +1940,20 @@ class docTest
         }
         return $checkResult;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $doc
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(object $doc, string $action): bool
+    {
+        $result = $this->objectModel->isClickable($doc, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
