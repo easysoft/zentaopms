@@ -909,6 +909,59 @@ class convertTest
     }
 
     /**
+     * Test processJiraUser method.
+     *
+     * @param  string $jiraAccount
+     * @param  string $jiraEmail
+     * @param  array  $userConfig
+     * @access public
+     * @return mixed
+     */
+    public function processJiraUserTest($jiraAccount = '', $jiraEmail = '', $userConfig = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraUser = $app->session->jiraUser ?? null;
+            
+            // 设置测试用户配置
+            if(!empty($userConfig)) {
+                $app->session->set('jiraUser', $userConfig);
+            } else {
+                $app->session->set('jiraUser', array('mode' => 'account'));
+            }
+            
+            $result = $this->objectModel->processJiraUser($jiraAccount, $jiraEmail);
+            if(dao::isError()) return dao::getError();
+            
+            // 恢复原始session数据
+            if($originalJiraUser !== null) {
+                $app->session->set('jiraUser', $originalJiraUser);
+            } else {
+                $app->session->destroy('jiraUser');
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraUser) && $originalJiraUser !== null) {
+                $app->session->set('jiraUser', $originalJiraUser);
+            } else {
+                $app->session->destroy('jiraUser');
+            }
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraUser) && $originalJiraUser !== null) {
+                $app->session->set('jiraUser', $originalJiraUser);
+            } else {
+                $app->session->destroy('jiraUser');
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
      * Create mock convert model for testing.
      *
      * @access private
