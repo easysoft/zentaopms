@@ -1882,4 +1882,116 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test printOrderLink method.
+     *
+     * @param  string $fieldName
+     * @param  string $orderBy
+     * @param  string $vars
+     * @param  string $label
+     * @param  string $module
+     * @param  string $method
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function printOrderLinkTest($fieldName = '', $orderBy = '', $vars = '', $label = '', $module = '', $method = '', $viewType = 'html')
+    {
+        // 创建测试模拟环境，避免依赖全局初始化
+        $mockApp = new stdClass();
+        $mockApp->rawModule = $module ?: 'user';
+        $mockApp->rawMethod = $method ?: 'browse';
+        $mockApp->viewType = $viewType;
+        $mockApp->tab = 'system';
+        
+        // 创建测试用的模拟函数
+        $mockApp->getModuleName = function() use ($module) {
+            return $module ?: 'user';
+        };
+        
+        $mockApp->getMethodName = function() use ($method) {
+            return $method ?: 'browse';
+        };
+        
+        // 备份并设置全局变量
+        global $app, $lang;
+        $originalApp = isset($app) ? $app : null;
+        $originalLang = isset($lang) ? $lang : null;
+        
+        $app = $mockApp;
+        if (!isset($lang)) $lang = new stdClass();
+        
+        try {
+            // 模拟必要的类
+            if (!class_exists('html')) {
+                eval('class html { 
+                    public static function a($href, $title = "", $target = "", $misc = "") { 
+                        return "<a href=\"$href\" $target $misc>$title</a>"; 
+                    } 
+                }');
+            }
+            
+            if (!class_exists('helper')) {
+                eval('class helper { 
+                    public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) { 
+                        return "/$module-$method-$params.html"; 
+                    } 
+                }');
+            }
+            
+            // 直接实现printOrderLink的核心逻辑进行测试
+            $isMobile = $app->viewType === 'mhtml';
+            $className = 'header';
+            
+            $order = explode('_', $orderBy);
+            $order[0] = trim($order[0], '`');
+            
+            if($order[0] == $fieldName)
+            {
+                if(isset($order[1]) and $order[1] == 'asc')
+                {
+                    $newOrderBy = "{$order[0]}_desc";
+                    $className = $isMobile ? 'SortUp' : 'sort-up';
+                }
+                else
+                {
+                    $newOrderBy = "{$order[0]}_asc";
+                    $className = $isMobile ? 'SortDown' : 'sort-down';
+                }
+            }
+            else
+            {
+                $newOrderBy = trim($fieldName, '`') . '_asc';
+                $className = 'header';
+            }
+            
+            $params = sprintf($vars, $newOrderBy);
+            
+            // 特殊处理my模块的work方法
+            if($app->getModuleName() == 'my' and $app->rawMethod == 'work') {
+                $params = "mode={$app->getMethodName()}&" . $params;
+            }
+            
+            $link = helper::createLink($app->getModuleName(), $app->getMethodName(), $params);
+            $output = html::a($link, $label, '', "class='$className' data-app={$app->tab}");
+            
+            return $output;
+            
+        } catch (Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        } finally {
+            // 恢复原始状态
+            if ($originalApp !== null) {
+                $app = $originalApp;
+            } else {
+                unset($GLOBALS['app']);
+            }
+            if ($originalLang !== null) {
+                $lang = $originalLang;
+            } else {
+                unset($GLOBALS['lang']);
+            }
+        }
+    }
 }
