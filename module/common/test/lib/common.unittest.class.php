@@ -1434,4 +1434,105 @@ class commonTest
                 return '0';
         }
     }
+
+    /**
+     * Test printAboutBar method.
+     *
+     * @param  int $testType
+     * @access public
+     * @return mixed
+     */
+    public function printAboutBarTest($testType = 1)
+    {
+        switch($testType) {
+            case 1: // 验证方法存在
+                return method_exists('commonModel', 'printAboutBar') ? '1' : '0';
+                
+            case 2: // 验证方法为静态方法
+                $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
+                return $reflection->isStatic() ? '1' : '0';
+                
+            case 3: // 验证方法为公共方法
+                $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
+                return $reflection->isPublic() ? '1' : '0';
+                
+            case 4: // 验证参数数量为0
+                $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
+                return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
+                
+            case 5: // 模拟输出测试 - 验证方法可以被调用
+                global $app, $config, $lang;
+                
+                // 备份原始状态
+                $originalConfig = isset($config) ? $config : null;
+                $originalLang = isset($lang) ? $lang : null;
+                $originalApp = isset($app) ? $app : null;
+                $originalCookie = isset($_COOKIE['theme']) ? $_COOKIE['theme'] : null;
+
+                try {
+                    // 设置基本的测试环境
+                    if (!isset($config)) $config = new stdClass();
+                    if (!isset($lang)) $lang = new stdClass();
+                    
+                    // 设置必要的配置和语言项
+                    $config->isINT = false;
+                    $config->manualUrl = array('home' => 'http://test.com', 'int' => 'http://test.com');
+                    $config->xxserver = new stdClass();
+                    $config->xxserver->installed = false;
+                    $_COOKIE['theme'] = 'default';
+                    
+                    $lang->help = 'Help';
+                    $lang->manual = 'Manual';
+                    $lang->changeLog = 'Change Log';
+                    $lang->aboutZenTao = 'About ZenTao';
+                    $lang->designedByAIUX = 'Designed by AIUX';
+                    
+                    // 模拟helper类
+                    if (!class_exists('html')) {
+                        eval('class html { 
+                            public static function a($href, $title = "", $target = "", $misc = "") { 
+                                return "<a href=\"$href\" $target $misc>$title</a>"; 
+                            } 
+                        }');
+                    }
+                    
+                    if (!class_exists('helper')) {
+                        eval('class helper { 
+                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) { 
+                                return "/$module-$method-$params.html"; 
+                            } 
+                        }');
+                    }
+                    
+                    // 捕获输出
+                    ob_start();
+                    commonModel::printAboutBar();
+                    $output = ob_get_clean();
+                    
+                    // 检查输出是否包含预期内容
+                    if(strpos($output, 'Help') !== false) {
+                        return '1';
+                    }
+                    
+                    return '0';
+                    
+                } catch (Exception $e) {
+                    if (ob_get_level()) ob_end_clean();
+                    return '0';
+                } finally {
+                    // 恢复原始状态
+                    if ($originalConfig !== null) $config = $originalConfig;
+                    if ($originalLang !== null) $lang = $originalLang;
+                    if ($originalApp !== null) $app = $originalApp;
+                    if ($originalCookie !== null) {
+                        $_COOKIE['theme'] = $originalCookie;
+                    } else {
+                        unset($_COOKIE['theme']);
+                    }
+                }
+                
+            default:
+                return '0';
+        }
+    }
 }
