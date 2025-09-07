@@ -1559,4 +1559,21 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test getLinkedCommits method.
+     *
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return array
+     */
+    public function getLinkedCommitsTest(int $repoID, array $revisions): array
+    {
+        $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

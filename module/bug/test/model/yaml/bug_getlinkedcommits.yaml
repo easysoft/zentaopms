@@ -1,0 +1,184 @@
+---
+title: Bug表测试数据
+desc: 用于测试getLinkedCommits方法的bug表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-5
+- field: project
+  note: 项目ID
+  range: 1{3}, 2{2}
+- field: product
+  note: 产品ID
+  range: 1{3}, 2{2}
+- field: injection
+  note: 注入阶段
+  range: ''
+- field: identify
+  note: 识别阶段
+  range: ''
+- field: branch
+  note: 分支ID
+  range: 0
+- field: module
+  note: 模块ID
+  range: 1{2}, 2{2}, 3{1}
+- field: execution
+  note: 执行ID
+  range: 0
+- field: plan
+  note: 计划ID
+  range: 0
+- field: story
+  note: 需求ID
+  range: 0
+- field: storyVersion
+  note: 需求版本
+  range: 1
+- field: task
+  note: 任务ID
+  range: 0
+- field: toTask
+  note: 转任务ID
+  range: 0
+- field: toStory
+  note: 转需求ID
+  range: 0
+- field: title
+  note: Bug标题
+  range: 登录失败问题, 页面显示错误, 数据保存异常, 权限验证Bug, 接口调用失败
+- field: keywords
+  note: 关键词
+  range: ''
+- field: severity
+  note: 严重程度
+  range: 1{1}, 2{2}, 3{2}
+- field: pri
+  note: 优先级
+  range: 1{1}, 2{2}, 3{2}
+- field: type
+  note: Bug类型
+  range: codeerror{3}, interface{2}
+- field: os
+  note: 操作系统
+  range: all
+- field: browser
+  note: 浏览器
+  range: all
+- field: hardware
+  note: 硬件
+  range: ''
+- field: found
+  note: 发现版本
+  range: trunk
+- field: steps
+  note: 重现步骤
+  range: 步骤1, 步骤2, 步骤3
+- field: status
+  note: 状态
+  range: active{3}, resolved{2}
+- field: subStatus
+  note: 子状态
+  range: ''
+- field: color
+  note: 颜色
+  range: ''
+- field: confirmed
+  note: 确认状态
+  range: 1
+- field: activatedCount
+  note: 激活次数
+  range: 0
+- field: activatedDate
+  note: 激活日期
+  range: '0000-00-00'
+- field: feedbackBy
+  note: 反馈人
+  range: ''
+- field: notifyEmail
+  note: 通知邮箱
+  range: ''
+- field: mailto
+  note: 抄送
+  range: ''
+- field: openedBy
+  note: 由谁创建
+  range: admin{3}, user1{2}
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00{2}, 2024-01-02 11:00:00{2}, 2024-01-03 12:00:00{1}
+- field: openedBuild
+  note: 影响版本
+  range: trunk
+- field: assignedTo
+  note: 指派给
+  range: admin{2}, user1{2}, user2{1}
+- field: assignedDate
+  note: 指派时间
+  range: 2024-01-01 10:00:00
+- field: deadline
+  note: 截止时间
+  range: '0000-00-00'
+- field: resolvedBy
+  note: 由谁解决
+  range: '{2}, admin{2}, user1{1}'
+- field: resolution
+  note: 解决方案
+  range: '{3}, fixed{2}'
+- field: resolvedBuild
+  note: 解决版本
+  range: ''
+- field: resolvedDate
+  note: 解决时间
+  range: '0000-00-00 00:00:00'
+- field: closedBy
+  note: 由谁关闭
+  range: ''
+- field: closedDate
+  note: 关闭时间
+  range: '0000-00-00 00:00:00'
+- field: duplicateBug
+  note: 重复Bug
+  range: 0
+- field: linkBug
+  note: 相关Bug
+  range: ''
+- field: feedback
+  note: 反馈ID
+  range: 0
+- field: result
+  note: 测试结果
+  range: 0
+- field: repo
+  note: 代码库
+  range: 0
+- field: mr
+  note: 合并请求
+  range: 0
+- field: entry
+  note: 应用入口
+  range: ''
+- field: lines
+  note: 代码行数
+  range: ''
+- field: v1
+  note: 自定义字段1
+  range: ''
+- field: v2
+  note: 自定义字段2
+  range: ''
+- field: deleted
+  note: 已删除
+  range: '0'
+- field: lastEditedBy
+  note: 最后编辑
+  range: ''
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '0000-00-00 00:00:00'
+- field: case
+  note: 用例ID
+  range: 0
