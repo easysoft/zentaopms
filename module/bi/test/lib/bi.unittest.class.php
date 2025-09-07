@@ -1119,4 +1119,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test unzipFile method.
+     *
+     * @param  string $path
+     * @param  string $file
+     * @param  string $extractFile
+     * @access public
+     * @return bool
+     */
+    public function unzipFileTest(string $path, string $file, string $extractFile): bool
+    {
+        $result = $this->objectModel->unzipFile($path, $file, $extractFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
