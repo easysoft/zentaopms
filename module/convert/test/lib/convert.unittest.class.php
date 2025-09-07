@@ -155,4 +155,44 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test splitFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function splitFileTest()
+    {
+        try {
+            // 检查源文件是否存在
+            global $app;
+            $jiraPath = $app->getTmpRoot() . 'jirafile/';
+            $sourceFile = $jiraPath . 'entities.xml';
+            
+            if(!file_exists($sourceFile))
+            {
+                return 'no_source_file';
+            }
+            
+            $this->objectModel->splitFile();
+            if(dao::isError()) return dao::getError();
+
+            // 检查是否成功分割文件
+            $checkFiles = array('action.xml', 'project.xml', 'issue.xml');
+            $existFiles = 0;
+            foreach($checkFiles as $file)
+            {
+                if(file_exists($jiraPath . $file)) $existFiles++;
+            }
+            
+            return $existFiles > 0 ? 'success' : 'no_files';
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (TypeError $e) {
+            return 'type_error: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
