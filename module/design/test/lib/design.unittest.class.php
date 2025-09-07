@@ -332,6 +332,23 @@ class designTest
     }
 
     /**
+     * 获取设计关联的提交数据。
+     * Get the commit data for the associated designs.
+     *
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return int
+     */
+    public function getLinkedCommitsTest(int $repoID, array $revisions): int
+    {
+        $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+        
+        return count($result);
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Judge if the action can be clicked.
      *
