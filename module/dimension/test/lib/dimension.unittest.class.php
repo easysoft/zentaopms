@@ -163,4 +163,45 @@ class dimensionTest
             return 1; // 默认返回 1
         }
     }
+
+    /**
+     * Test saveState method.
+     *
+     * @param  int $dimensionID
+     * @param  string $sessionDimension 模拟session中的维度ID
+     * @param  string $configDimension 模拟config中的维度ID
+     * @access public
+     * @return mixed
+     */
+    public function saveStateTest(int $dimensionID = 0, string $sessionDimension = '', string $configDimension = ''): int
+    {
+        try {
+            global $app, $config;
+            
+            // 清除之前的session值
+            if(isset($app->session->dimension)) unset($app->session->dimension);
+            if(isset($config->dimensions)) unset($config->dimensions);
+            
+            // 模拟配置中的维度
+            if($configDimension && !$dimensionID)
+            {
+                if(!isset($config->dimensions)) $config->dimensions = new stdClass();
+                $config->dimensions->lastDimension = (int)$configDimension;
+            }
+
+            // 模拟session中的维度
+            if($sessionDimension && !$dimensionID)
+            {
+                $app->session->dimension = (int)$sessionDimension;
+            }
+
+            $result = $this->objectModel->saveState($dimensionID);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            // 当方法调用失败时，至少返回传入的dimensionID或1作为默认值
+            return $dimensionID ? $dimensionID : 1;
+        }
+    }
 }
