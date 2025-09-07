@@ -460,4 +460,28 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test uploadCert method.
+     *
+     * @param  object $cert
+     * @param  string $channel
+     * @access public
+     * @return mixed
+     */
+    public function uploadCertTest(object $cert = null, string $channel = ''): mixed
+    {
+        if($cert === null)
+        {
+            $cert = new stdclass();
+            $cert->name = 'test-cert';
+            $cert->certificate_pem = '-----BEGIN CERTIFICATE-----\ntest-cert-pem\n-----END CERTIFICATE-----';
+            $cert->private_key_pem = '-----BEGIN PRIVATE KEY-----\ntest-key-pem\n-----END PRIVATE KEY-----';
+        }
+
+        $result = $this->objectModel->uploadCert($cert, $channel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
