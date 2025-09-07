@@ -1305,4 +1305,23 @@ class commonTest
 
         return $error;
     }
+
+    /**
+     * Test buildActionItem method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $params
+     * @param  object|null $object
+     * @param  array $attrs
+     * @access public
+     * @return array
+     */
+    public function buildActionItemTest(string $module, string $method, string $params, ?object $object = null, array $attrs = array())
+    {
+        $result = commonModel::buildActionItem($module, $method, $params, $object, $attrs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
