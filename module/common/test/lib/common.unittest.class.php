@@ -991,6 +991,21 @@ class commonTest
     }
     
     /**
+     * Test processMarkdown method.
+     *
+     * @param  string $markdown
+     * @access public
+     * @return mixed
+     */
+    public function processMarkdownTest($markdown = '')
+    {
+        $result = commonModel::processMarkdown($markdown);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Create mock common class for tutorial mode testing.
      *
      * @access private
