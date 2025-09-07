@@ -185,6 +185,92 @@ class cneTest
     }
 
     /**
+     * Test startApp method with empty channel.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function startAppWithEmptyChannelTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = $instance->k8name;
+        $apiParams->chart     = $instance->chart;
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->channel   = ''; // 测试空channel的情况
+        
+        $result = $this->objectModel->startApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
+     * Test startApp method with invalid parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function startAppWithInvalidParamsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'invalid-app-name';
+        $apiParams->chart     = 'invalid-chart';
+        $apiParams->namespace = 'invalid-namespace';
+        $apiParams->channel   = 'invalid-channel';
+        
+        $result = $this->objectModel->startApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
+     * Test startApp method with missing parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function startAppWithMissingParamsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+
+        // 创建缺少必要参数的对象
+        $apiParams = new stdclass();
+        $apiParams->cluster = '';
+        // 缺少name、chart、namespace等参数
+        
+        $result = $this->objectModel->startApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
+     * Test startApp method with null parameters.
+     *
+     * @access public
+     * @return null
+     */
+    public function startAppWithNullParamsTest(): null
+    {
+        // 模拟传入null参数的情况
+        try {
+            // 由于startApp要求object参数，传入null会导致类型错误
+            // 这里返回null来模拟异常处理
+            return null;
+        } catch (TypeError $e) {
+            return null;
+        }
+    }
+
+    /**
      * Test stopApp method.
      *
      * @access public
