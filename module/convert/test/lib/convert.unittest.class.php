@@ -1064,4 +1064,68 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test convertStage method.
+     *
+     * @param  string $jiraStatus
+     * @param  string $issueType
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function convertStageTest($jiraStatus = '', $issueType = '', $relations = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraRelation = $app->session->jiraRelation ?? null;
+
+            // 如果没有提供relations参数，设置测试session数据
+            if(empty($relations)) {
+                $testRelations = array(
+                    'zentaoStage1' => array(
+                        'open' => 'wait',
+                        'in-progress' => 'developing',
+                        'done' => 'developed',
+                        'closed' => 'closed'
+                    ),
+                    'zentaoStage2' => array(
+                        'to-do' => 'wait',
+                        'in-progress' => 'developing',
+                        'done' => 'developed'
+                    )
+                );
+                $app->session->set('jiraRelation', json_encode($testRelations));
+            }
+
+            $result = $this->objectModel->convertStage($jiraStatus, $issueType, $relations);
+            if(dao::isError()) return dao::getError();
+
+            // 恢复原始session数据
+            if($originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
