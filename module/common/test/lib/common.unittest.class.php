@@ -210,4 +210,20 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test getMainNavList method.
+     *
+     * @param  string $moduleName
+     * @param  bool   $useDefault
+     * @access public
+     * @return mixed
+     */
+    public function getMainNavListTest($moduleName, $useDefault = false)
+    {
+        $result = commonModel::getMainNavList($moduleName, $useDefault);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
