@@ -37,4 +37,19 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test tableExists method.
+     *
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function tableExistsTest($table = null)
+    {
+        $result = $this->objectModel->tableExists($table);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
