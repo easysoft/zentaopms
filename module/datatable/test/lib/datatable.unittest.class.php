@@ -71,4 +71,19 @@ class datatableTest
         $result = $this->objectModel->setFixedFieldWidth($setting);
         return $result;
     }
+
+    /**
+     * Test get old field list.
+     *
+     * @param string $module
+     * @access public
+     * @return array
+     */
+    public function getOldFieldListTest($module)
+    {
+        $result = $this->objectModel->getOldFieldList($module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
