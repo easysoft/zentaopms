@@ -86,4 +86,19 @@ class datatableTest
 
         return $result;
     }
+
+    /**
+     * Test getOldSetting method.
+     *
+     * @param string $module
+     * @access public
+     * @return mixed
+     */
+    public function getOldSettingTest($module)
+    {
+        $result = $this->objectModel->getOldSetting($module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
