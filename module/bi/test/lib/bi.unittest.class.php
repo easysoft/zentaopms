@@ -1027,4 +1027,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareDrillConditions method.
+     *
+     * @param  array  $drillFields
+     * @param  array  $conditions
+     * @param  string $originField
+     * @access public
+     * @return array
+     */
+    public function prepareDrillConditionsTest(array $drillFields, array $conditions, string $originField): array
+    {
+        $result = $this->objectModel->prepareDrillConditions($drillFields, $conditions, $originField);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
