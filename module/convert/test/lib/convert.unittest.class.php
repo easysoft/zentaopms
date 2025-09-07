@@ -22,4 +22,19 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test dbExists method.
+     *
+     * @param  string $dbName
+     * @access public
+     * @return mixed
+     */
+    public function dbExistsTest($dbName = null)
+    {
+        $result = $this->objectModel->dbExists($dbName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
