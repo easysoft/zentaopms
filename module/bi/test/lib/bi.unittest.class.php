@@ -813,4 +813,32 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getSQL method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return mixed
+     */
+    public function getSQLTest($sql, $driver = 'mysql', $recPerPage = 10, $pageID = 1)
+    {
+        try
+        {
+            $result = $this->objectModel->getSQL($sql, $driver, $recPerPage, $pageID);
+            if(dao::isError()) return dao::getError();
+
+            // 确保结果是一个数组，包含两个元素
+            if(!is_array($result) || count($result) != 2) return array('error', 'invalid result format');
+            
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('exception', $e->getMessage());
+        }
+    }
 }
