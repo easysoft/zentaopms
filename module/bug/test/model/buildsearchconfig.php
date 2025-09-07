@@ -20,8 +20,6 @@ cid=1
 
 */
 
-
-
 $bug=new bugTest();
 $searchConfig = $bug->objectModel->buildSearchConfig(1, 'story');
 

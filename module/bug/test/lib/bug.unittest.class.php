@@ -1492,4 +1492,20 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchConfig method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfigTest(int $productID): array
+    {
+        $result = $this->objectModel->buildSearchConfig($productID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
