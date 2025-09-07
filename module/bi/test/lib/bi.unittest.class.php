@@ -975,4 +975,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test convertDataForDtable method.
+     *
+     * @param  object $data
+     * @param  array  $configs
+     * @param  string $version
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function convertDataForDtableTest($data, $configs, $version, $status)
+    {
+        $result = $this->objectModel->convertDataForDtable($data, $configs, $version, $status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
