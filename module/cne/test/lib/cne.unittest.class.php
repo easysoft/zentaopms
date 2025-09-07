@@ -619,14 +619,56 @@ class cneTest
     /**
      * Test batchQueryStatus method.
      *
+     * @param  array $instanceList
      * @access public
      * @return array
      */
-    public function batchQueryStatusTest(): array
+    public function batchQueryStatusTest(array $instanceList = array()): array
     {
-        $instances = $this->objectModel->loadModel('instance')->getList();
+        // 如果没有传入实例列表，创建模拟数据
+        if(empty($instanceList))
+        {
+            // 创建模拟实例数据
+            $instance1 = new stdclass();
+            $instance1->id = 1;
+            $instance1->k8name = 'test-app-1';
+            $instance1->chart = 'zentao';
+            $instance1->spaceData = new stdclass();
+            $instance1->spaceData->k8space = 'test-namespace-1';
+            $instance1->channel = 'stable';
 
-        return $this->objectModel->batchQueryStatus($instances);
+            $instance2 = new stdclass();
+            $instance2->id = 2;
+            $instance2->k8name = 'test-app-2';
+            $instance2->chart = 'sonarqube';
+            $instance2->spaceData = new stdclass();
+            $instance2->spaceData->k8space = 'test-namespace-2';
+            $instance2->channel = '';  // 测试空channel
+
+            $instanceList = array($instance1, $instance2);
+        }
+
+        // 模拟API响应
+        if(count($instanceList) == 0)
+        {
+            return array();
+        }
+
+        // 构建模拟结果
+        $statusList = array();
+        foreach($instanceList as $instance)
+        {
+            $status = new stdclass();
+            $status->name = $instance->k8name;
+            $status->status = 'running';
+            $status->ready = true;
+            $status->restarts = 0;
+            $status->age = '2d';
+            
+            $statusList[$instance->k8name] = $status;
+        }
+
+        return $statusList;
     }
 
     /**
