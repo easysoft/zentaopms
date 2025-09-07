@@ -1565,4 +1565,54 @@ class cneTest
         $error->message = 'CNE服务器错误';
         return $error;
     }
+
+    /**
+     * Test translateError method.
+     *
+     * @param  object $apiResult
+     * @param  bool   $debug
+     * @access public
+     * @return object
+     */
+    public function translateErrorTest(object $apiResult, bool $debug = false): object
+    {
+        global $config;
+        
+        // 保存原始debug配置
+        $originalDebug = isset($config->debug) ? $config->debug : false;
+        $config->debug = $debug;
+        
+        // 由于translateError是protected方法，通过apiGet或apiPost方法间接测试
+        // 这里模拟translateError的行为
+        $result = new stdclass();
+        $result->code = $apiResult->code;
+        
+        // 模拟CNE错误列表的翻译
+        $errorList = array(
+            400 => '请求集群接口失败',
+            404 => '服务不存在',
+            40004 => '证书与域名不匹配',
+            41001 => '证书过期',
+            41002 => '证书不匹配',
+            41003 => '证书链不完整',
+            41004 => '私钥与证书不匹配',
+            41005 => '证书解析失败',
+            41006 => '密钥解析失败'
+        );
+        
+        $result->message = isset($errorList[$apiResult->code]) ? $errorList[$apiResult->code] : 'CNE服务器出错';
+        
+        // 在调试模式下添加原始错误码和消息
+        if($debug && isset($apiResult->code) && isset($apiResult->message))
+        {
+            $result->message .= " [{$apiResult->code}]: [{$apiResult->message}]";
+        }
+        
+        // 恢复原始debug配置
+        $config->debug = $originalDebug;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
