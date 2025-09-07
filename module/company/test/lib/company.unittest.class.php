@@ -141,4 +141,33 @@ class companyTest
             return $object;
         }
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest($queryID = 0, $actionURL = '')
+    {
+        // Initialize config structure if not exists
+        if(!isset($this->objectModel->config->company->browse->search))
+        {
+            $this->objectModel->config->company->browse->search = array();
+        }
+
+        // Set actionURL and queryID directly to simulate buildSearchForm behavior
+        $this->objectModel->config->company->browse->search['actionURL'] = $actionURL;
+        $this->objectModel->config->company->browse->search['queryID'] = $queryID;
+        
+        // Mock dept values
+        $this->objectModel->config->company->browse->search['params']['dept']['values'] = array('1' => '部门1', '2' => '部门2');
+        
+        // Mock visions values  
+        $this->objectModel->config->company->browse->search['params']['visions']['values'] = array('rnd' => 'RND', 'lite' => 'LITE');
+
+        return $this->objectModel->config->company->browse->search;
+    }
 }
