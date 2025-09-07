@@ -101,4 +101,20 @@ class datatableTest
 
         return $result;
     }
+
+    /**
+     * Test sortOldCols method.
+     *
+     * @param object $a
+     * @param object $b
+     * @access public
+     * @return mixed
+     */
+    public function sortOldColsTest($a, $b)
+    {
+        $result = datatableModel::sortOldCols($a, $b);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
