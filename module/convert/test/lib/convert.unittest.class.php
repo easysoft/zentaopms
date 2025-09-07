@@ -1243,4 +1243,18 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getJiraSprintIssue method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraSprintIssueTest(): array
+    {
+        $result = $this->objectModel->getJiraSprintIssue();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
