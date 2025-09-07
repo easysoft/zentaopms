@@ -552,4 +552,54 @@ class convertTest
             return 'exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getObjectDefaultValue method.
+     *
+     * @param  string $step
+     * @param  array  $sessionData
+     * @access public
+     * @return mixed
+     */
+    public function getObjectDefaultValueTest($step = '', $sessionData = array())
+    {
+        // 备份原始session数据
+        global $app;
+        $originalJiraRelation = $app->session->jiraRelation ?? null;
+        
+        // 设置测试session数据
+        if(!empty($sessionData['jiraRelation'])) {
+            $app->session->set('jiraRelation', $sessionData['jiraRelation']);
+        }
+        
+        try {
+            $result = $this->objectModel->getObjectDefaultValue($step);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                // 恢复原始session数据
+                if($originalJiraRelation !== null) {
+                    $app->session->set('jiraRelation', $originalJiraRelation);
+                } else {
+                    $app->session->destroy('jiraRelation');
+                }
+                return $errors;
+            }
+            
+            // 恢复原始session数据
+            if($originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if($originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+            return 'exception: ' . $e->getMessage();
+        }
+    }
 }
