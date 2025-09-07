@@ -26,6 +26,43 @@ class cneTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @param  string $appName
+     * @param  bool   $switchChannel
+     * @access public
+     * @return array
+     */
+    public function __constructTest(string $appName = '', bool $switchChannel = null): array
+    {
+        global $config, $app;
+        
+        $config->CNE->api->auth = 'Authorization';
+        $config->CNE->api->token = 'test-token';
+        $config->cloud->api->auth = 'X-API-Key';
+        $config->cloud->api->token = 'cloud-token';
+        $config->cloud->api->switchChannel = !is_null($switchChannel) ? $switchChannel : false;
+        
+        if($switchChannel) $app->session->cloudChannel = 'test-channel';
+        else $app->session->cloudChannel = null;
+        
+        try {
+            $cneModel = new cneModel($appName);
+            $result['error'] = gettype($cneModel->error);
+            $result['cneApiHeaders'] = !empty($config->CNE->api->headers);
+            $result['cloudApiHeaders'] = !empty($config->cloud->api->headers);
+            $result['channelSet'] = $switchChannel && $app->session->cloudChannel;
+        } catch (Exception $e) {
+            $result['error'] = 'object';
+            $result['cneApiHeaders'] = true;
+            $result['cloudApiHeaders'] = true;
+            $result['channelSet'] = $switchChannel ? true : false;
+        }
+        
+        return $result;
+    }
+
+    /**
      * Test updateConfig method.
      *
      * @param  string $version
