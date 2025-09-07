@@ -10,6 +10,20 @@ class commonTest
     }
 
     /**
+     * Test checkSafeFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function checkSafeFileTest()
+    {
+        $result = $this->objectModel->checkSafeFile();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 检查详情页操作按钮的权限。
      * Check the privilege of the operate action.
      *
