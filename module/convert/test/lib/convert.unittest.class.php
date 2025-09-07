@@ -344,4 +344,117 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getZentaoObjectList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoObjectListTest()
+    {
+        $result = $this->objectModel->getZentaoObjectList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getZentaoObjectList method without ER feature.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoObjectListTestWithoutER()
+    {
+        global $config;
+        $originalER = $config->enableER ?? true;
+        $config->enableER = false;
+
+        $result = $this->objectModel->getZentaoObjectList();
+        
+        $config->enableER = $originalER;
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getZentaoObjectList method without UR and SR feature.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoObjectListTestWithoutUR()
+    {
+        global $config;
+        $originalUR = $config->URAndSR ?? true;
+        $config->URAndSR = false;
+
+        $result = $this->objectModel->getZentaoObjectList();
+        
+        $config->URAndSR = $originalUR;
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getZentaoObjectList method without ER and UR/SR feature.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoObjectListTestWithoutERAndUR()
+    {
+        global $config;
+        $originalER = $config->enableER ?? true;
+        $originalUR = $config->URAndSR ?? true;
+        $config->enableER = false;
+        $config->URAndSR = false;
+
+        $result = $this->objectModel->getZentaoObjectList();
+        
+        $config->enableER = $originalER;
+        $config->URAndSR = $originalUR;
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getZentaoObjectList method count.
+     *
+     * @param  string $type
+     * @access public
+     * @return int
+     */
+    public function getZentaoObjectListCountTest($type = 'default')
+    {
+        global $config;
+        $originalER = $config->enableER ?? true;
+        $originalUR = $config->URAndSR ?? true;
+
+        switch($type)
+        {
+            case 'noER':
+                $config->enableER = false;
+                break;
+            case 'noUR':
+                $config->URAndSR = false;
+                break;
+            case 'noERAndUR':
+                $config->enableER = false;
+                $config->URAndSR = false;
+                break;
+        }
+
+        $result = $this->objectModel->getZentaoObjectList();
+        $count = count($result);
+
+        $config->enableER = $originalER;
+        $config->URAndSR = $originalUR;
+
+        return $count;
+    }
 }
