@@ -230,4 +230,28 @@ class cronTest
 
         return $execId;
     }
+
+    /**
+     * Restart cron test.
+     *
+     * @param  mixed $execId
+     * @access public
+     * @return array
+     */
+    public function restartCronTest($execId)
+    {
+        $this->objectModel->restartCron($execId);
+
+        if(dao::isError()) return dao::getError();
+
+        // Get updated execId in config
+        $configAfter = $this->objectModel->dao->select('value')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('cron')
+            ->andWhere('section')->eq('scheduler')
+            ->andWhere('`key`')->eq('execId')
+            ->fetch('value');
+
+        return array('configAfter' => $configAfter);
+    }
 }
