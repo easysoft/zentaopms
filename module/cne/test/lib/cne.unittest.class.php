@@ -1536,6 +1536,23 @@ class cneTest
     }
 
     /**
+     * Test cneServerError method.
+     *
+     * @access public
+     * @return object
+     */
+    public function cneServerErrorTest(): object
+    {
+        // 由于cneServerError是protected方法，我们通过模拟网络错误来间接测试它
+        // apiPost在网络错误时会调用cneServerError方法
+        $result = $this->apiPostTest('/api/cne/app/network-error', array());
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
      * Return CNE server error object for testing.
      *
      * @access private
