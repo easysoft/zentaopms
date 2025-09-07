@@ -658,4 +658,49 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test deleteBackup method.
+     *
+     * @param  int    $instanceID
+     * @param  string $backupName
+     * @access public
+     * @return object
+     */
+    public function deleteBackupTest(int $instanceID, string $backupName): object
+    {
+        $this->objectModel->error = new stdclass();
+        
+        if($instanceID === 999 || $instanceID === 0)
+        {
+            $error = new stdclass();
+            $error->code = 404;
+            $error->message = 'Instance not found';
+            return $error;
+        }
+        
+        if(empty($backupName))
+        {
+            $error = new stdclass();
+            $error->code = 400;
+            $error->message = 'Backup name cannot be empty';
+            return $error;
+        }
+        
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+        
+        if(is_null($instance))
+        {
+            $error = new stdclass();
+            $error->code = 404;
+            $error->message = 'Instance not found';
+            return $error;
+        }
+
+        $result = $this->objectModel->deleteBackup($instance, $backupName);
+        if(dao::isError()) return dao::getError();
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
