@@ -1,0 +1,47 @@
+---
+title: 区块布局更新测试数据
+desc: 用于测试updateLayout方法的区块数据
+
+fields:
+- field: id
+  range: 1-10
+  note: 区块ID
+- field: account
+  range: admin{5}, user1{3}, user2{2}
+  note: 用户账号
+- field: dashboard
+  range: my{4}, project{3}, product{3}
+  note: 仪表盘类型
+- field: module
+  range: my{4}, project{3}, product{3}
+  note: 模块名称
+- field: title
+  range: 测试区块1{3}, 测试区块2{3}, 测试区块3{4}
+  note: 区块标题
+- field: block
+  range: welcome{2}, guide{3}, list{5}
+  note: 区块类型
+- field: code
+  range: welcome{2}, guide{3}, list{5}
+  note: 区块代码
+- field: width
+  range: 1{3}, 2{4}, 3{3}
+  note: 区块宽度
+- field: height
+  range: 3{5}, 4{3}, 5{2}
+  note: 区块高度
+- field: left
+  range: 0{4}, 1{3}, 2{3}
+  note: 左侧位置
+- field: top
+  range: 0{3}, 3{3}, 6{2}, 9{2}
+  note: 顶部位置
+- field: params
+  range: '{"count":10}'{3}, '{"type":"list"}'{3}, '{}'{4}
+  note: 区块参数
+- field: hidden
+  range: 0{8}, 1{2}
+  note: 是否隐藏
+- field: vision
+  range: rnd{8}, lite{2}
+  note: 视图类型

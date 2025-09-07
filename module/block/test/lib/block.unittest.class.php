@@ -812,4 +812,19 @@ class blockTest
 
         return $isInitiated;
     }
+
+    /**
+     * Test updateLayout method.
+     *
+     * @param  array $layout
+     * @access public
+     * @return bool
+     */
+    public function updateLayoutTest($layout)
+    {
+        $result = $this->objectModel->updateLayout($layout);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
