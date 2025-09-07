@@ -1761,4 +1761,59 @@ class commonTest
             $lang = $oldLang;
         }
     }
+
+    /**
+     * Test printIcon method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return mixed
+     */
+    public function printIconTest($testCase = 1)
+    {
+        // 验证方法存在性和基本属性
+        switch($testCase) {
+            case 1: // 验证方法存在
+                return method_exists('commonModel', 'printIcon') ? '1' : '0';
+                
+            case 2: // 验证方法为静态方法
+                $reflection = new ReflectionMethod('commonModel', 'printIcon');
+                return $reflection->isStatic() ? '1' : '0';
+                
+            case 3: // 验证方法为公共方法
+                $reflection = new ReflectionMethod('commonModel', 'printIcon');
+                return $reflection->isPublic() ? '1' : '0';
+                
+            case 4: // 验证参数数量
+                $reflection = new ReflectionMethod('commonModel', 'printIcon');
+                return (string)$reflection->getNumberOfParameters();
+                
+            case 5: // 验证方法功能 - printIcon调用buildIconButton
+                try {
+                    // 使用反射来验证printIcon方法的源码中是否包含buildIconButton调用
+                    $reflection = new ReflectionMethod('commonModel', 'printIcon');
+                    $filename = $reflection->getFileName();
+                    $startLine = $reflection->getStartLine();
+                    $endLine = $reflection->getEndLine();
+                    
+                    if (!$filename) return '0';
+                    
+                    $lines = file($filename);
+                    $methodBody = '';
+                    for ($i = $startLine - 1; $i < $endLine; $i++) {
+                        if (isset($lines[$i])) {
+                            $methodBody .= $lines[$i];
+                        }
+                    }
+                    
+                    // 验证方法体是否包含buildIconButton调用
+                    return strpos($methodBody, 'buildIconButton') !== false ? '1' : '0';
+                } catch (Exception $e) {
+                    return '0';
+                }
+                
+            default:
+                return '0';
+        }
+    }
 }
