@@ -653,4 +653,26 @@ class convertTest
             return 'exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getJiraCustomField method.
+     *
+     * @param  string|int $step
+     * @param  array      $relations
+     * @access public
+     * @return mixed
+     */
+    public function getJiraCustomFieldTest($step = 1, $relations = array())
+    {
+        try {
+            $result = $this->objectModel->getJiraCustomField($step, $relations);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
