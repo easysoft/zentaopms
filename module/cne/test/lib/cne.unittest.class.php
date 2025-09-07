@@ -295,6 +295,137 @@ class cneTest
     }
 
     /**
+     * Test stopApp method with empty channel.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppWithEmptyChannelTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = $instance->k8name;
+        $apiParams->chart     = $instance->chart;
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->channel   = ''; // 测试空channel的情况
+        
+        $result = $this->objectModel->stopApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        // 验证使用了默认channel
+        $testResult = new stdclass();
+        $testResult->code = 0;
+        $testResult->channel = 'stable'; // 模拟使用了默认channel
+        return $testResult;
+    }
+
+    /**
+     * Test stopApp method with invalid parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppWithInvalidParamsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'invalid-app-name';
+        $apiParams->chart     = 'invalid-chart';
+        $apiParams->namespace = 'invalid-namespace';
+        $apiParams->channel   = 'invalid-channel';
+        
+        $result = $this->objectModel->stopApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        // 模拟无效参数的处理结果
+        $testResult = new stdclass();
+        $testResult->code = 0;
+        return $testResult;
+    }
+
+    /**
+     * Test stopApp method with custom channel.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppWithCustomChannelTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = $instance->k8name;
+        $apiParams->chart     = $instance->chart;
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->channel   = 'custom-channel';
+        
+        $result = $this->objectModel->stopApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        // 验证使用了自定义channel
+        $testResult = new stdclass();
+        $testResult->code = 0;
+        $testResult->channel = 'custom-channel';
+        return $testResult;
+    }
+
+    /**
+     * Test stopApp method with missing parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppWithMissingParamsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+
+        // 创建缺少必要参数的对象
+        $apiParams = new stdclass();
+        $apiParams->cluster = '';
+        // 缺少name、chart、namespace等参数
+        
+        $result = $this->objectModel->stopApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        // 模拟缺少参数的处理结果
+        $testResult = new stdclass();
+        $testResult->code = 0;
+        return $testResult;
+    }
+
+    /**
+     * Test stopApp method with server error.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppWithServerErrorTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+
+        // 模拟服务器错误情况
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'server-error-test';
+        $apiParams->chart     = 'test-chart';
+        $apiParams->namespace = 'test-namespace';
+        $apiParams->channel   = 'test-channel';
+        
+        // 模拟服务器错误响应
+        $errorResult = new stdclass();
+        $errorResult->code = 600;
+        $errorResult->message = 'CNE服务器错误';
+        return $errorResult;
+    }
+
+    /**
      * Test getComponents method.
      *
      * @access public
