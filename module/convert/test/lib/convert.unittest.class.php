@@ -138,4 +138,21 @@ class convertTest
         // 默认返回空数组
         return array();
     }
+
+    /**
+     * Test getJiraDataFromFile method.
+     *
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function getJiraDataFromFileTest($module = '', $lastID = 0, $limit = 0)
+    {
+        $result = $this->objectModel->getJiraDataFromFile($module, $lastID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
