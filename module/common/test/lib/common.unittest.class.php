@@ -1818,6 +1818,57 @@ class commonTest
     }
 
     /**
+     * Test printModuleMenu method.
+     *
+     * @param  string $activeMenu
+     * @access public
+     * @return mixed
+     */
+    public function printModuleMenuTest($activeMenu = 'user')
+    {
+        global $app, $lang;
+        
+        // Mock basic global variables if not set
+        if (!isset($app)) 
+        {
+            $app = new stdClass();
+            $app->rawModule = 'user';
+            $app->rawMethod = 'browse';
+            $app->tab = 'system';
+            $app->viewType = 'html';
+            $app->isFlow = false;
+        }
+        
+        if (!isset($lang)) 
+        {
+            $lang = new stdClass();
+        }
+        
+        // Set up basic tab menu structure
+        if (!isset($lang->{$app->tab}))
+        {
+            $lang->{$app->tab} = new stdClass();
+        }
+        if (!isset($lang->{$app->tab}->menu))
+        {
+            $lang->{$app->tab}->menu = new stdClass();
+        }
+
+        ob_start();
+        try {
+            commonModel::printModuleMenu($activeMenu);
+            $result = ob_get_clean();
+        } catch (Exception $e) {
+            ob_end_clean();
+            return 'Exception: ' . $e->getMessage();
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test printMainMenu method.
      *
      * @param  bool $printHtml
