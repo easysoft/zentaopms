@@ -476,4 +476,24 @@ class buildTest
 
         return $objectModels;
     }
+
+    /**
+     * Test getRelatedReleases method.
+     *
+     * @param  array|int  $productIdList
+     * @param  string     $buildIdList
+     * @param  array|bool $shadows
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  string     $params
+     * @access public
+     * @return array
+     */
+    public function getRelatedReleasesTest($productIdList, string $buildIdList = '', $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
+    {
+        $result = $this->objectModel->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID, $params);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
