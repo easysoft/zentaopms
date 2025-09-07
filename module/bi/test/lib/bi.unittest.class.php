@@ -993,4 +993,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getDrillFields method.
+     *
+     * @param  int   $rowIndex
+     * @param  string $columnKey
+     * @param  array $drills
+     * @access public
+     * @return array
+     */
+    public function getDrillFieldsTest(int $rowIndex, string $columnKey, array $drills): array
+    {
+        $result = $this->objectModel->getDrillFields($rowIndex, $columnKey, $drills);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
