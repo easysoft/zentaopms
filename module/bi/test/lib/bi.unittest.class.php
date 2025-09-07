@@ -956,4 +956,23 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test rebuildFieldSettings method.
+     *
+     * @param  array        $fieldPairs
+     * @param  object       $columns
+     * @param  array        $relatedObject
+     * @param  object|array $fieldSettings
+     * @param  array        $objectFields
+     * @access public
+     * @return mixed
+     */
+    public function rebuildFieldSettingsTest($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields)
+    {
+        $result = $this->objectModel->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
