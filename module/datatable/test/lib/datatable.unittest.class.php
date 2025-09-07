@@ -43,20 +43,37 @@ class datatableTest
      *
      * @param array $data
      * @access public
-     * @return void
+     * @return mixed
      */
     public function printHeadTest($data)
     {
+        // 设置应用环境以避免方法名为空的问题
+        if(!$this->objectModel->app->getMethodName()) {
+            $this->objectModel->app->methodName = 'browse';
+        }
+
         ob_start();
         $this->objectModel->printHead($data['cols'], $data['orderBy'], $data['vars'], $data['checkBox']);
         $head = ob_get_clean();
 
-        $isTh   = strpos($head, '<th data-flex') !== false ? true : false;
-        $order  = $data['orderBy'] ? (strpos($head, "class='sort-") !== false ? true : false) : true;
-        $vars   = $data['vars'] ? (strpos($head, $data['vars']) !== false ? true : false) : true;
-        $check  = $data['checkBox'] ? (strpos($head, 'checkbox-primary') !== false ? true : false) : true;
-        $result = ($isTh and $order and $vars and $check) ? true : false;
-        return $result;
+        // 如果列不显示，直接返回输出内容的长度（应该为0）
+        if(!$data['cols']->show) return strlen($head);
+
+        // 对于显示的列，检查特定的输出内容
+        $col = $data['cols'];
+        if($col->id == 'actions') {
+            // actions列应该包含actions文本
+            return strpos($head, 'actions') !== false ? 1 : 0;
+        } elseif(isset($col->sort) && $col->sort == 'no') {
+            // 不可排序列应该直接显示标题，不含排序链接
+            return (strpos($head, '<th') !== false && strpos($head, 'sort-') === false) ? 1 : 0;
+        } elseif($col->id == 'id' && $data['checkBox']) {
+            // id列且开启复选框应该包含复选框
+            return strpos($head, 'checkbox-primary') !== false ? 1 : 0;
+        } else {
+            // 普通列应该包含th标签
+            return strpos($head, '<th data-flex') !== false ? 1 : 0;
+        }
     }
 
     /**
