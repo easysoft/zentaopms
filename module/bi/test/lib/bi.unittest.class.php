@@ -889,4 +889,20 @@ class biTest
             return 'exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getTableList method.
+     *
+     * @param  bool $hasDataview
+     * @param  bool $withPrefix
+     * @access public
+     * @return mixed
+     */
+    public function getTableListTest($hasDataview = true, $withPrefix = true)
+    {
+        $result = $this->objectModel->getTableList($hasDataview, $withPrefix);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
