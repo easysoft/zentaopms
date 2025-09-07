@@ -263,4 +263,27 @@ class convertTest
             return array();
         }
     }
+
+    /**
+     * Test importJiraData method.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @param  bool   $createTable
+     * @access public
+     * @return mixed
+     */
+    public function importJiraDataTest($type = '', $lastID = 0, $createTable = false)
+    {
+        try {
+            $result = $this->objectModel->importJiraData($type, $lastID, $createTable);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
