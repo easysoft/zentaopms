@@ -52,4 +52,20 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test tableExistsOfJira method.
+     *
+     * @param  string $dbName
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function tableExistsOfJiraTest($dbName = null, $table = null)
+    {
+        $result = $this->objectModel->tableExistsOfJira($dbName, $table);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
