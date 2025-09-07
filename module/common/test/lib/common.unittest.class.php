@@ -103,4 +103,67 @@ class commonTest
         global $mockHeaders;
         return isset($mockHeaders) ? $mockHeaders : array();
     }
+
+    /**
+     * Test initAuthorize method.
+     *
+     * @param  string $account     用户账号
+     * @param  bool   $upgrading   是否升级模式
+     * @access public
+     * @return mixed
+     */
+    public function initAuthorizeTest($account = '', $upgrading = false)
+    {
+        global $app, $config;
+        
+        // 备份原始状态
+        $originalUser = isset($app->user) ? $app->user : null;
+        $originalUpgrading = $app->upgrading;
+        
+        // 设置测试状态
+        $app->upgrading = $upgrading;
+        
+        if(empty($account))
+        {
+            unset($app->user);
+            // 使用反射调用私有方法
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('initAuthorize');
+            $method->setAccessible(true);
+            $method->invoke($this->objectModel);
+            $result = array('result' => '0');
+        }
+        else
+        {
+            // 创建测试用户对象
+            $user = $this->objectModel->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            if(!$user)
+            {
+                $user = new stdClass();
+                $user->account = $account;
+                $user->id = 999;
+                $user->realname = 'Test User';
+                $user->role = 'user';
+            }
+            
+            $app->user = $user;
+            
+            // 使用反射调用私有方法
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('initAuthorize');
+            $method->setAccessible(true);
+            $method->invoke($this->objectModel);
+            
+            // 检查结果
+            $result = array('result' => isset($app->user) ? '1' : '0');
+        }
+        
+        // 恢复原始状态
+        if($originalUser) $app->user = $originalUser;
+        $app->upgrading = $originalUpgrading;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }

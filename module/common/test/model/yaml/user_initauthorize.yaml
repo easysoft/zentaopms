@@ -1,0 +1,43 @@
+---
+title: 用户数据定义 - initAuthorize 方法测试
+desc: 为 initAuthorize 方法提供测试用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  
+- field: account
+  note: 用户账号
+  range: admin{1},user1{1},user2{1},guest{1},testuser{6}
+  
+- field: password
+  note: 用户密码
+  range: 123456{10}
+  
+- field: realname
+  note: 真实姓名
+  range: 管理员{1},用户1{1},用户2{1},访客{1},测试用户{6}
+  
+- field: role
+  note: 用户角色
+  range: admin{1},dev{3},qa{2},pm{2},po{2}
+  
+- field: email
+  note: 邮箱地址
+  fields:
+  - field: username
+    range: admin,user1,user2,guest,test{6}
+  - field: domain
+    range: '[@test.com]'
+    
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  
+- field: last
+  note: 最后登录时间
+  range: 1640995200-1672531200:86400
+  format: timestamp
