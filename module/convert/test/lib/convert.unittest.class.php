@@ -501,4 +501,20 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getJiraStepList method.
+     *
+     * @param  array $jiraData
+     * @param  array $issueTypeList
+     * @access public
+     * @return mixed
+     */
+    public function getJiraStepListTest($jiraData = array(), $issueTypeList = array())
+    {
+        $result = $this->objectModel->getJiraStepList($jiraData, $issueTypeList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
