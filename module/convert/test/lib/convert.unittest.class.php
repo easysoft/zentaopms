@@ -457,4 +457,18 @@ class convertTest
 
         return $count;
     }
+
+    /**
+     * Test getZentaoRelationList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoRelationListTest()
+    {
+        $result = $this->objectModel->getZentaoRelationList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
