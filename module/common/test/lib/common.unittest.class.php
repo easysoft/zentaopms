@@ -2428,4 +2428,18 @@ class commonTest
             return false;
         }
     }
+
+    /**
+     * Test getDotStyle method.
+     *
+     * @param  bool $showCount
+     * @param  int  $unreadCount
+     * @access public
+     * @return array
+     */
+    public function getDotStyleTest(bool $showCount, int $unreadCount): array
+    {
+        $result = commonModel::getDotStyle($showCount, $unreadCount);
+        return $result;
+    }
 }
