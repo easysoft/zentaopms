@@ -796,4 +796,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getParams4Rebuild method.
+     *
+     * @param  string $sql
+     * @param  object $statement
+     * @param  array  $columnFields
+     * @access public
+     * @return mixed
+     */
+    public function getParams4RebuildTest($sql, $statement, $columnFields)
+    {
+        $result = $this->objectModel->getParams4Rebuild($sql, $statement, $columnFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
