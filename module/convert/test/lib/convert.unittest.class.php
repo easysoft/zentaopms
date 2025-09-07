@@ -286,4 +286,47 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test deleteJiraFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function deleteJiraFileTest()
+    {
+        try {
+            // 获取jirafile目录路径
+            global $app;
+            $jiraPath = $app->getTmpRoot() . 'jirafile/';
+            
+            // 创建测试目录和测试文件
+            if(!is_dir($jiraPath)) mkdir($jiraPath, 0777, true);
+            
+            // 创建一些测试文件
+            $testFiles = array('action.xml', 'project.xml', 'issue.xml', 'user.xml');
+            foreach($testFiles as $file) {
+                file_put_contents($jiraPath . $file, '<?xml version="1.0"?><test>content</test>');
+            }
+            
+            // 执行删除方法
+            $this->objectModel->deleteJiraFile();
+            if(dao::isError()) return dao::getError();
+
+            // 检查文件是否被删除
+            $deletedCount = 0;
+            $predefinedFiles = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration', 'fixversion', 'affectsversion');
+            foreach($predefinedFiles as $fileName) {
+                if(!file_exists($jiraPath . $fileName . '.xml')) {
+                    $deletedCount++;
+                }
+            }
+            
+            return array('deletedCount' => $deletedCount, 'totalFiles' => count($predefinedFiles));
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
