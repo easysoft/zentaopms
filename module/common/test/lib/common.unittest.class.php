@@ -2045,4 +2045,127 @@ class commonTest
         
         return $output;
     }
+
+    /**
+     * Test printUserBar method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return string
+     */
+    public function printUserBarTest($testCase = 1)
+    {
+        switch($testCase) {
+            case 1: // 验证方法存在
+                return method_exists('commonModel', 'printUserBar') ? '1' : '0';
+                
+            case 2: // 验证方法为静态方法
+                $reflection = new ReflectionMethod('commonModel', 'printUserBar');
+                return $reflection->isStatic() ? '1' : '0';
+                
+            case 3: // 验证方法为公共方法
+                $reflection = new ReflectionMethod('commonModel', 'printUserBar');
+                return $reflection->isPublic() ? '1' : '0';
+                
+            case 4: // 验证参数数量为0
+                $reflection = new ReflectionMethod('commonModel', 'printUserBar');
+                return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
+                
+            case 5: // 验证方法可以被调用
+                global $app, $lang, $config;
+                
+                // 备份原始状态
+                $originalApp = isset($app) ? clone $app : null;
+                $originalLang = isset($lang) ? $lang : null;
+                $originalConfig = isset($config) ? $config : null;
+                
+                try {
+                    // 初始化必要的全局变量
+                    if(!isset($app)) $app = new stdClass();
+                    if(!isset($lang)) $lang = new stdClass();
+                    if(!isset($config)) $config = new stdClass();
+                    
+                    // 设置测试用户
+                    $app->user = new stdClass();
+                    $app->user->account = 'admin';
+                    $app->user->realname = 'Administrator';
+                    $app->user->role = 'admin';
+                    
+                    // 设置语言配置
+                    $lang->user = new stdClass();
+                    $lang->user->roleList = array('admin' => 'Administrator', 'user' => 'User');
+                    $lang->themes = array('default' => 'Default', 'blue' => 'Blue');
+                    $lang->profile = 'Profile';
+                    $lang->theme = 'Theme';
+                    $lang->lang = 'Language';
+                    $lang->logout = 'Logout';
+                    
+                    // 设置应用配置
+                    $app->config = new stdClass();
+                    $app->config->vision = 'rnd';
+                    $app->config->langs = array('zh-cn' => '简体中文', 'en' => 'English');
+                    $app->lang = $lang;
+                    $app->cookie = new stdClass();
+                    $app->cookie->theme = 'default';
+                    $app->cookie->lang = 'zh-cn';
+                    
+                    // 模拟必要的类
+                    if (!class_exists('html')) {
+                        eval('class html { 
+                            public static function a($href, $title = "", $target = "", $misc = "") { 
+                                return "<a href=\"$href\" $target $misc>$title</a>"; 
+                            } 
+                            public static function avatar($user, $size = "", $class = "", $id = "") { 
+                                return "<img class=\"$class\" id=\"$id\" />"; 
+                            } 
+                        }');
+                    }
+                    
+                    if (!class_exists('helper')) {
+                        eval('class helper { 
+                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) { 
+                                return "/$module-$method-$params.html"; 
+                            } 
+                        }');
+                    }
+                    
+                    if (!class_exists('common')) {
+                        eval('class common { 
+                            public static function hasPriv($module, $method) { 
+                                return true; 
+                            } 
+                        }');
+                    }
+                    
+                    // 捕获输出
+                    ob_start();
+                    commonModel::printUserBar();
+                    $output = ob_get_clean();
+                    
+                    // 验证输出包含预期的HTML结构（至少包含基本的下拉菜单结构）
+                    $hasDropdownMenu = strpos($output, 'dropdown-menu') !== false;
+                    $hasBasicStructure = strpos($output, 'ul') !== false || strpos($output, 'dropdown') !== false;
+                    
+                    return ($hasDropdownMenu || $hasBasicStructure) ? '1' : '0';
+                    
+                } catch (Exception $e) {
+                    if (ob_get_level()) ob_end_clean();
+                    return '0';
+                } finally {
+                    // 恢复原始状态
+                    if ($originalApp !== null) {
+                        $app = $originalApp;
+                    }
+                    if ($originalLang !== null) {
+                        $lang = $originalLang;
+                    }
+                    if ($originalConfig !== null) {
+                        $config = $originalConfig;
+                    }
+                }
+                
+            default:
+                return '0';
+        }
+    }
 }
