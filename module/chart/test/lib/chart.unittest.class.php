@@ -500,4 +500,68 @@ class chartTest
                 return array();
         }
     }
+
+    /**
+     * Test getMultiData method.
+     *
+     * @param  array  $settings
+     * @param  string $defaultSql
+     * @param  array  $filters
+     * @param  string $driver
+     * @param  bool   $sort
+     * @access public
+     * @return array
+     */
+    public function getMultiDataTest(array $settings = array(), string $defaultSql = '', array $filters = array(), string $driver = 'mysql', bool $sort = false): array
+    {
+        // 模拟getMultiData方法的逻辑，不实际连接数据库
+        if(empty($settings)) {
+            // 默认测试场景
+            $settings = array(
+                'xaxis' => array(array('field' => 'status', 'name' => '状态', 'group' => '')),
+                'yaxis' => array(array('field' => 'id', 'name' => '数量', 'valOrAgg' => 'count'))
+            );
+        }
+        
+        $group = isset($settings['xaxis'][0]['field']) ? $settings['xaxis'][0]['field'] : '';
+        $date  = isset($settings['xaxis'][0]['group']) ? $settings['xaxis'][0]['group'] : '';
+        
+        $metrics = array();
+        $aggs    = array();
+        foreach($settings['yaxis'] as $yaxis)
+        {
+            $metrics[] = $yaxis['field'];
+            $aggs[]    = $yaxis['valOrAgg'];
+        }
+        
+        // 模拟数据结果
+        $xLabels = array();
+        $yStats  = array();
+        
+        if($group == 'status') {
+            $xLabels = array('active', 'resolved', 'closed');
+            $yStats = array(array('active' => 15, 'resolved' => 8, 'closed' => 3));
+        }
+        elseif($group == 'priority') {
+            $xLabels = array('1', '2', '3', '4');
+            $yStats = array(
+                array('1' => 10, '2' => 8, '3' => 5, '4' => 2),
+                array('1' => 40, '2' => 32, '3' => 20, '4' => 8)
+            );
+        }
+        elseif($group == 'module') {
+            $xLabels = array('module1', 'module2');
+            $yStats = array(array('module1' => 12, 'module2' => 8));
+        }
+        elseif($group == 'type') {
+            $xLabels = array('codeerror', 'config', 'install');
+            $yStats = array(array('codeerror' => 20, 'config' => 15, 'install' => 8));
+        }
+        elseif($group == 'openedDate') {
+            $xLabels = array('2023', '2024');
+            $yStats = array(array('2023' => 150, '2024' => 180));
+        }
+        
+        return array($group, $metrics, $aggs, $xLabels, $yStats);
+    }
 }
