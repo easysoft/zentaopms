@@ -471,4 +471,19 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getZentaoFields method.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoFieldsTest($module = '')
+    {
+        $result = $this->objectModel->getZentaoFields($module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
