@@ -1153,4 +1153,23 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test jsonEncode method.
+     *
+     * @param  object|array $object
+     * @access public
+     * @return mixed
+     */
+    public function jsonEncodeTest($object)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('jsonEncode');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
