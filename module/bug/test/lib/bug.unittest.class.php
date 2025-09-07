@@ -1525,4 +1525,20 @@ class bugTest
 
         return count($result);
     }
+
+    /**
+     * Test getDatatableModules method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getDatatableModulesTest(int $productID): array
+    {
+        $result = $this->objectModel->getDatatableModules($productID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
