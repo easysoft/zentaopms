@@ -751,4 +751,19 @@ class customTest
 
         return isset($lang->$module->featureBar[$method]) ? $lang->$module->featureBar[$method] : null;
     }
+
+    /**
+     * 检查系统中是否有业务需求数据。
+     * Test hasProductERData method.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasProductERDataTest(): int
+    {
+        $result = $this->objectModel->hasProductERData();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
