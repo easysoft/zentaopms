@@ -363,4 +363,37 @@ class deptTest
 
         return $objects;
     }
+
+    /**
+     * Test fixDeptPath method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function fixDeptPathTest()
+    {
+        $result = $this->objectModel->fixDeptPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test fixDeptPath method and return dept count.
+     *
+     * @access public
+     * @return mixed
+     */  
+    public function fixDeptPathCountTest()
+    {
+        global $tester;
+
+        $result = $this->objectModel->fixDeptPath();
+        if(dao::isError()) return dao::getError();
+
+        // 返回部门数量以验证方法执行成功
+        $count = $tester->dao->select('count(*) as count')->from(TABLE_DEPT)->fetch('count');
+        
+        return $count;
+    }
 }

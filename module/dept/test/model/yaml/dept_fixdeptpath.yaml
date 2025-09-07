@@ -1,0 +1,36 @@
+---
+title: 部门层次结构测试数据
+desc: 用于测试fixDeptPath方法的部门数据，包含多级层次结构和错误的path/grade数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 部门ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 部门名称
+  range: ["总公司", "技术部", "市场部", "财务部", "开发组", "测试组", "销售组", "会计组", "出纳组", "产品组"]
+- field: parent
+  note: 上级部门ID
+  range: [0, 1, 1, 0, 2, 2, 3, 4, 4, 2]
+- field: path
+  note: 部门路径(故意设置错误的值来测试修复功能)
+  range: ["", "", "", "", "", "", "", "", "", ""]
+- field: grade
+  note: 部门层级(故意设置错误的值来测试修复功能)
+  range: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+- field: order
+  note: 排序
+  range: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+- field: position
+  note: 职位
+  range: ["", "", "", "", "", "", "", "", "", ""]
+- field: function
+  note: 职能
+  range: ["", "", "", "", "", "", "", "", "", ""]
+- field: manager
+  note: 负责人
+  range: ["admin", "", "", "", "", "", "", "", "", ""]
