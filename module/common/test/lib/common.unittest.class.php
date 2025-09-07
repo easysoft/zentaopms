@@ -1535,4 +1535,90 @@ class commonTest
                 return '0';
         }
     }
+
+    /**
+     * Test printClientLink method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return string
+     */
+    public function printClientLinkTest($scenario = 'both_enabled')
+    {
+        return $this->staticPrintClientLinkTest($scenario);
+    }
+
+    /**
+     * Static test for printClientLink method - for standalone testing.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return string
+     */
+    public static function staticPrintClientLinkTest($scenario = 'both_enabled')
+    {
+        global $config, $lang;
+
+        // 创建临时配置
+        $tempConfig = new stdClass();
+        $tempConfig->webRoot = '/zentao/';
+        $tempConfig->xxserver = new stdClass();
+        $tempConfig->xuanxuan = new stdClass();
+
+        $tempLang = new stdClass();
+        $tempLang->clientName = 'Desktop';
+        $tempLang->downloadClient = 'Download ZenTao Desktop';
+        $tempLang->downloadMobile = 'Download Mobile Terminal';
+        $tempLang->clientHelp = 'Client Help';
+        $tempLang->clientHelpLink = 'https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html';
+
+        // 根据场景设置配置
+        switch ($scenario) {
+            case 'both_enabled':
+                $tempConfig->xxserver->installed = true;
+                $tempConfig->xuanxuan->turnon = true;
+                break;
+            case 'xxserver_only':
+                $tempConfig->xxserver->installed = true;
+                $tempConfig->xuanxuan->turnon = false;
+                break;
+            case 'xuanxuan_only':
+                // xxserver->installed 属性不设置
+                $tempConfig->xuanxuan->turnon = true;
+                break;
+            case 'both_disabled':
+                // xxserver->installed 属性不设置
+                $tempConfig->xuanxuan->turnon = false;
+                break;
+            case 'xxserver_not_set':
+                $tempConfig->xuanxuan->turnon = true;
+                break;
+        }
+
+        // 备份并设置全局变量
+        $oldConfig = $config ?? null;
+        $oldLang = $lang ?? null;
+        
+        $config = $tempConfig;
+        $lang = $tempLang;
+
+        try {
+            // 捕获输出
+            ob_start();
+            commonModel::printClientLink();
+            $output = ob_get_clean();
+
+            // 分析结果 - 只有xxserver已安装且xuanxuan开启时才有输出
+            $hasOutput = !empty($output) && strpos($output, 'zentao-client') !== false;
+            return $hasOutput ? '1' : '0';
+
+        } catch (Exception $e) {
+            if (ob_get_level()) ob_end_clean();
+            return '0';
+        } finally {
+            // 恢复原始配置
+            $config = $oldConfig;
+            $lang = $oldLang;
+        }
+    }
 }
