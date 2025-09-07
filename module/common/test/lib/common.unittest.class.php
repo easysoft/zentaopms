@@ -1816,4 +1816,19 @@ class commonTest
                 return '0';
         }
     }
+
+    /**
+     * Test printMainMenu method.
+     *
+     * @param  bool $printHtml
+     * @access public
+     * @return mixed
+     */
+    public function printMainMenuTest($printHtml = true)
+    {
+        $result = commonModel::printMainMenu($printHtml);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
