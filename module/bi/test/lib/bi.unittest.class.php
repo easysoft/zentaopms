@@ -50,6 +50,21 @@ class biTest
     }
 
     /**
+     * Test buildQueryResultTableColumns method.
+     *
+     * @param  array $fieldSettings
+     * @access public
+     * @return array
+     */
+    public function buildQueryResultTableColumnsTest($fieldSettings)
+    {
+        $result = $this->objectModel->buildQueryResultTableColumns($fieldSettings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * get condition test.
      *
      * @param  mixed  $tableA
