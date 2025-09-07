@@ -1366,4 +1366,20 @@ class commonTest
             return array();
         }
     }
+
+    /**
+     * Test printDuration method.
+     *
+     * @param  int    $seconds
+     * @param  string $format
+     * @access public
+     * @return string
+     */
+    public function printDurationTest(int $seconds, string $format = 'y-m-d-h-i-s'): string
+    {
+        $result = commonModel::printDuration($seconds, $format);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
