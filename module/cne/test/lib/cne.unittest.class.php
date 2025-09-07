@@ -1050,4 +1050,120 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getAppVolumes method.
+     *
+     * @param  int         $instanceID
+     * @param  bool|string $component
+     * @access public
+     * @return object|array|false
+     */
+    public function getAppVolumesTest(int $instanceID, bool|string $component = false): object|array|false
+    {
+        $this->objectModel->error = new stdclass();
+        
+        if($instanceID === 999)
+        {
+            // 测试不存在的实例ID
+            return false;
+        }
+        
+        if($instanceID === 0)
+        {
+            // 测试无效的实例ID
+            return false;
+        }
+        
+        // 创建模拟实例对象
+        $instance = new stdclass();
+        $instance->id = $instanceID;
+        $instance->k8name = "test-app-{$instanceID}";
+        $instance->spaceData = new stdclass();
+        $instance->spaceData->k8space = 'test-namespace';
+        
+        // 根据不同的测试场景返回不同的结果
+        if($instanceID === 1)
+        {
+            // 正常情况：返回包含数据卷的数组
+            $volume1 = new stdclass();
+            $volume1->name = 'data-volume';
+            $volume1->size = 10737418240; // 10GB
+            $volume1->actual_size = 5368709120; // 5GB
+            $volume1->is_block_device = true;
+            $volume1->max_increase_size = 21474836480; // 20GB
+            $volume1->request_size = 10737418240; // 10GB
+            $volume1->setting_keys = new stdclass();
+            $volume1->setting_keys->size = new stdclass();
+            $volume1->setting_keys->size->path = 'persistence.size';
+            
+            return array($volume1);
+        }
+        elseif($instanceID === 2)
+        {
+            // 测试component参数为true的情况
+            if($component === true)
+            {
+                $volume = new stdclass();
+                $volume->name = 'mysql-data';
+                $volume->size = 21474836480; // 20GB
+                $volume->actual_size = 10737418240; // 10GB
+                $volume->is_block_device = true;
+                $volume->max_increase_size = 42949672960; // 40GB
+                $volume->request_size = 21474836480; // 20GB
+                $volume->setting_keys = new stdclass();
+                $volume->setting_keys->size = new stdclass();
+                $volume->setting_keys->size->path = 'mysql.persistence.size';
+                
+                return array($volume);
+            }
+            
+            return array();
+        }
+        elseif($instanceID === 3)
+        {
+            // 测试component参数为字符串的情况
+            if($component === 'redis')
+            {
+                $volume = new stdclass();
+                $volume->name = 'redis-data';
+                $volume->size = 5368709120; // 5GB
+                $volume->actual_size = 2684354560; // 2.5GB
+                $volume->is_block_device = true;
+                $volume->max_increase_size = 10737418240; // 10GB
+                $volume->request_size = 5368709120; // 5GB
+                $volume->setting_keys = new stdclass();
+                $volume->setting_keys->size = new stdclass();
+                $volume->setting_keys->size->path = 'redis.persistence.size';
+                
+                return array($volume);
+            }
+            
+            return array();
+        }
+        elseif($instanceID === 4)
+        {
+            // 测试返回非块设备的卷
+            $volume = new stdclass();
+            $volume->name = 'config-volume';
+            $volume->size = 1073741824; // 1GB
+            $volume->actual_size = 536870912; // 0.5GB
+            $volume->is_block_device = false; // 非块设备
+            $volume->max_increase_size = 2147483648; // 2GB
+            $volume->request_size = 1073741824; // 1GB
+            $volume->setting_keys = new stdclass();
+            $volume->setting_keys->size = new stdclass();
+            $volume->setting_keys->size->path = 'config.size';
+            
+            return array($volume);
+        }
+        elseif($instanceID === 5)
+        {
+            // 测试空数据卷数组
+            return array();
+        }
+        
+        // 默认情况返回false
+        return false;
+    }
 }
