@@ -339,6 +339,21 @@ class deptTest
         return count($objects);
     }
 
+    /**
+     * Test getList method.
+     *
+     * @param  mixed $param 参数描述
+     * @access public
+     * @return mixed
+     */
+    public function getListTest($param = null)
+    {
+        $result = $this->objectModel->getList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function getDataStructureTest($count)
     {
         $objects = $this->objectModel->getDataStructure();

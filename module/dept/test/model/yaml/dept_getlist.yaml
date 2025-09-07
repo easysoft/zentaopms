@@ -1,0 +1,46 @@
+---
+title: 部门getList方法测试数据
+desc: 用于测试deptModel::getList()方法的部门数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 部门ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 部门名称
+  range: 技术部,产品部,运营部,人事部,财务部,市场部,客服部,行政部,研发部,测试部,设计部,销售部,法务部,采购部,质量部
+  format: ""
+- field: parent
+  note: 父部门ID
+  range: 0{5},1{5},2{3},3{2}
+  format: ""
+- field: path
+  note: 部门路径
+  range: ',1,,2,,3,,4,,5,,1,1,,1,2,,1,3,,1,4,,1,5,,2,1,,2,2,,2,3,,3,1,,3,2,'
+  format: ""
+- field: grade
+  note: 部门层级
+  range: 1{5},2{8},3{2}
+  format: ""
+- field: order
+  note: 显示顺序
+  range: 10-150:10
+  format: ""
+- field: position
+  note: 岗位
+  range: 部长{5},主管{6},专员{4}
+  format: ""
+- field: function
+  note: 部门职能
+  range: 技术开发,产品规划,运营管理,人力资源管理,财务管理,市场推广,客户服务,行政管理,研发创新,软件测试,UI设计,销售管理,法律事务,采购管理,质量管理
+  format: ""
+- field: manager
+  note: 部门负责人
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12,user13,user14
+  format: ""
