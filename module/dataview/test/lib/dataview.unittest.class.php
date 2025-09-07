@@ -85,4 +85,18 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectFields method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getObjectFieldsTest()
+    {
+        $result = $this->objectModel->getObjectFields();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
