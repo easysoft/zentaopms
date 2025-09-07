@@ -317,4 +317,32 @@ class commonTest
             return '1'; // 默认返回成功状态
         }
     }
+
+    /**
+     * Test getUserPriv method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  mixed  $object
+     * @param  string $vars
+     * @access public
+     * @return mixed
+     */
+    public function getUserPrivTest($module = 'user', $method = 'browse', $object = null, $vars = '')
+    {
+        global $app;
+        
+        // 备份原始状态
+        $originalUser = isset($app->user) ? clone $app->user : null;
+        
+        // 执行测试方法
+        $result = commonModel::getUserPriv($module, $method, $object, $vars);
+        
+        // 恢复原始状态
+        if($originalUser) $app->user = $originalUser;
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

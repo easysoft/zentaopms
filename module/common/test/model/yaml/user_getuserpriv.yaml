@@ -1,0 +1,38 @@
+---
+title: getUserPriv用户测试数据
+desc: 为getUserPriv方法提供用户权限测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,test,user1,user2,user3,user4,user5,user6,user7,user8
+  format: ""
+- field: password
+  note: 用户密码
+  range: 123456{10}
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,测试用户,用户一,用户二,用户三,用户四,用户五,用户六,用户七,用户八
+  format: ""
+- field: role
+  note: 用户角色
+  range: qa{3},dev{3},po{2},pm{1},td{1}
+  format: ""
+- field: admin
+  note: 管理员权限
+  range: super,no{9}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  format: ""
