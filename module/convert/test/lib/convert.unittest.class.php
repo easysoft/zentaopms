@@ -517,4 +517,39 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test checkImportJira method.
+     *
+     * @param  string $step
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function checkImportJiraTest($step = '', $postData = array())
+    {
+        // 备份原始POST数据
+        $originalPost = $_POST;
+        
+        // 设置测试POST数据
+        $_POST = $postData;
+        
+        try {
+            $result = $this->objectModel->checkImportJira($step);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                // 恢复原始POST数据
+                $_POST = $originalPost;
+                return $errors;
+            }
+            
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 'exception: ' . $e->getMessage();
+        }
+    }
 }
