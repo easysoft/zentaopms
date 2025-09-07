@@ -1089,4 +1089,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test checkDuckdbInstall method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function checkDuckdbInstallTest()
+    {
+        $result = $this->objectModel->checkDuckdbInstall();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
