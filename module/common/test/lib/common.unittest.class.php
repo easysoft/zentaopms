@@ -394,4 +394,18 @@ class commonTest
         
         return '0';
     }
+
+    /**
+     * Test isTutorialMode method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function isTutorialModeTest()
+    {
+        $result = commonModel::isTutorialMode();
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
 }
