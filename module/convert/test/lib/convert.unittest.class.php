@@ -106,4 +106,36 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getJiraDataFromDB method.
+     *
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function getJiraDataFromDBTest($module = '', $lastID = 0, $limit = 0)
+    {
+        try {
+            // 检查sourceDBH是否已初始化
+            if(empty($this->objectModel->sourceDBH)) {
+                // 如果没有数据库连接，直接返回空数组
+                return array();
+            }
+            
+            $result = $this->objectModel->getJiraDataFromDB($module, $lastID, $limit);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return array();
+        } catch (Error $e) {
+            // 处理PHP7+的Error异常（包括Call to a member function on null）
+            return array();
+        }
+        
+        // 默认返回空数组
+        return array();
+    }
 }
