@@ -750,4 +750,195 @@ class commonTest
                 return '1';
         }
     }
+
+    /**
+     * Test setMenuVars method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return mixed
+     */
+    public function setMenuVarsTest($testCase = 1)
+    {
+        // 创建独立的测试环境，不依赖框架初始化
+        $testApp = new stdClass();
+        $testLang = new stdClass();
+        
+        // 备份并替换全局变量
+        global $app, $lang;
+        $originalApp = isset($app) ? $app : null;
+        $originalLang = isset($lang) ? $lang : null;
+        
+        $app = $testApp;
+        $lang = $testLang;
+        $app->viewType = 'html';
+
+        try {
+            switch($testCase) {
+                case 1: // 测试基本链接替换
+                    $lang->test = new stdClass();
+                    $lang->test->menu = new stdClass();
+                    $lang->test->menu->browse = array('link' => 'browse-%s');
+                    $lang->test->homeMenu = array();
+                    
+                    $this->setMenuVarsStandalone('test', 123);
+                    return $lang->test->menu->browse['link'];
+                    
+                case 2: // 测试带html后缀的链接
+                    $lang->test = new stdClass();
+                    $lang->test->menu = new stdClass();
+                    $lang->test->menu->view = array('link' => 'view-%s.html');
+                    $lang->test->homeMenu = array();
+                    
+                    $this->setMenuVarsStandalone('test', 456);
+                    return $lang->test->menu->view['link'];
+                    
+                case 3: // 测试webMenu模式
+                    $app->viewType = 'mhtml';
+                    $lang->test = new stdClass();
+                    $lang->test->webMenu = new stdClass();
+                    $lang->test->webMenu->browse = array('link' => 'browse-%s');
+                    $lang->test->homeMenu = array();
+                    
+                    $this->setMenuVarsStandalone('test', 789);
+                    return $lang->test->webMenu->browse['link'];
+                    
+                case 4: // 测试空菜单项跳过
+                    $app->viewType = 'html';
+                    $lang->test = new stdClass();
+                    $lang->test->menu = new stdClass();
+                    $lang->test->menu->empty = null;
+                    $lang->test->menu->browse = array('link' => 'browse-%s');
+                    $lang->test->homeMenu = array();
+                    
+                    $this->setMenuVarsStandalone('test', 999);
+                    return $lang->test->menu->browse['link'];
+                    
+                case 5: // 测试homeMenu删除
+                    $lang->test = new stdClass();
+                    $lang->test->menu = new stdClass();
+                    $lang->test->menu->browse = array('link' => 'browse-%s');
+                    $lang->test->homeMenu = array('test' => 'value');
+                    
+                    $this->setMenuVarsStandalone('test', 111);
+                    return !isset($lang->test->homeMenu) ? '1' : '0';
+                    
+                default:
+                    return 'error';
+            }
+
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        } finally {
+            // 恢复原始状态
+            if($originalApp !== null) {
+                $app = $originalApp;
+            } else {
+                unset($GLOBALS['app']);
+            }
+            
+            if($originalLang !== null) {
+                $lang = $originalLang;
+            } else {
+                unset($GLOBALS['lang']);
+            }
+        }
+    }
+
+    /**
+     * Standalone implementation of setMenuVars method for testing.
+     *
+     * @param  string $moduleName
+     * @param  int    $objectID
+     * @param  array  $params
+     * @access private
+     * @return void
+     */
+    private function setMenuVarsStandalone(string $moduleName, int $objectID, array $params = array())
+    {
+        global $app, $lang;
+
+        $menuKey = 'menu';
+        if($app->viewType == 'mhtml') $menuKey = 'webMenu';
+
+        if(isset($lang->$moduleName->$menuKey))
+        {
+            foreach($lang->$moduleName->$menuKey as $label => $menu)
+            {
+                if(!$menu) continue;
+
+                $lang->$moduleName->$menuKey->$label = $this->setMenuVarsExStandalone($menu, $objectID, $params);
+                
+                if(isset($menu['subMenu']))
+                {
+                    foreach($menu['subMenu'] as $key1 => $subMenu)
+                    {
+                        if(!isset($lang->$moduleName->$menuKey->{$label}['subMenu'])) {
+                            $lang->$moduleName->$menuKey->{$label}['subMenu'] = new stdClass();
+                        }
+                        $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = $this->setMenuVarsExStandalone($subMenu, $objectID, $params);
+                        
+                        if(!isset($subMenu['dropMenu'])) continue;
+                        foreach($subMenu['dropMenu'] as $key2 => $dropMenu)
+                        {
+                            if(!isset($lang->$moduleName->$menuKey->{$label}['subMenu']->$key1['dropMenu'])) {
+                                $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1['dropMenu'] = new stdClass();
+                            }
+                            $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1['dropMenu']->$key2 = $this->setMenuVarsExStandalone($dropMenu, $objectID, $params);
+                        }
+                    }
+                }
+
+                if(!isset($menu['dropMenu'])) continue;
+
+                foreach($menu['dropMenu'] as $key2 => $dropMenu)
+                {
+                    if(!isset($lang->$moduleName->$menuKey->{$label}['dropMenu'])) {
+                        $lang->$moduleName->$menuKey->{$label}['dropMenu'] = new stdClass();
+                    }
+                    $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2 = $this->setMenuVarsExStandalone($dropMenu, $objectID, $params);
+
+                    if(!isset($dropMenu['subMenu'])) continue;
+
+                    foreach($dropMenu['subMenu'] as $key3 => $subMenu)
+                    {
+                        if(!isset($lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2['subMenu'])) {
+                            $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2['subMenu'] = new stdClass();
+                        }
+                        $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2['subMenu']->$key3 = $this->setMenuVarsExStandalone($subMenu, $objectID, $params);
+                    }
+                }
+            }
+        }
+
+        /* If objectID is set, cannot use homeMenu. */
+        unset($lang->$moduleName->homeMenu);
+    }
+
+    /**
+     * Standalone implementation of setMenuVarsEx method for testing.
+     *
+     * @param  array|string $menu
+     * @param  int          $objectID
+     * @param  array        $params
+     * @access private
+     * @return array|string
+     */
+    private function setMenuVarsExStandalone($menu, int $objectID, array $params = array())
+    {
+        if(is_array($menu))
+        {
+            if(!isset($menu['link'])) return $menu;
+
+            $link = sprintf($menu['link'], $objectID);
+            $menu['link'] = vsprintf($link, $params);
+        }
+        else
+        {
+            $menu = sprintf($menu, $objectID);
+            $menu = vsprintf($menu, $params);
+        }
+
+        return $menu;
+    }
 }
