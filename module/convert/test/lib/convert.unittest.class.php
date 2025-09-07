@@ -716,4 +716,58 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test checkJiraApi method.
+     *
+     * @param  array $jiraApiData
+     * @access public
+     * @return mixed
+     */
+    public function checkJiraApiTest($jiraApiData = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraApi = $app->session->jiraApi ?? null;
+            
+            // 设置测试session数据
+            if(!empty($jiraApiData)) {
+                $app->session->set('jiraApi', json_encode($jiraApiData));
+            } else {
+                // 清空jiraApi session数据
+                $app->session->set('jiraApi', '');
+            }
+            
+            $result = $this->objectModel->checkJiraApi();
+            
+            // checkJiraApi方法本身处理错误，不需要在这里检查dao错误
+            // 直接返回结果
+            
+            // 恢复原始session数据
+            if($originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraApi) && $originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraApi) && $originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
