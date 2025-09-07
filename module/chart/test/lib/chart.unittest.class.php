@@ -153,4 +153,20 @@ class chartTest
         
         return $result;
     }
+
+    /**
+     * Test addFormatter4Echart method.
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addFormatter4EchartTest(array $options, string $type): array
+    {
+        $result = $this->objectModel->addFormatter4Echart($options, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
