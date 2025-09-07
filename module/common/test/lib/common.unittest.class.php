@@ -360,4 +360,38 @@ class commonTest
 
         return $result ? '1' : '0';
     }
+
+    /**
+     * Test getSysURL method.
+     *
+     * @param  int $testType
+     * @access public
+     * @return mixed
+     */
+    public function getSysURLTest($testType = 1)
+    {
+        // 由于测试框架已经定义了RUN_MODE='test'，getSysURL总是返回空字符串
+        // 这里我们验证方法的存在性和基本功能
+        
+        switch($testType)
+        {
+            case 1: // 基本功能测试 - 测试模式下返回空字符串
+                $result = commonModel::getSysURL();
+                return $result;
+            case 2: // 方法存在性验证
+                return method_exists('commonModel', 'getSysURL') ? '1' : '0';
+            case 3: // 静态方法验证
+                $reflection = new ReflectionMethod('commonModel', 'getSysURL');
+                return $reflection->isStatic() ? '1' : '0';
+            case 4: // 返回类型验证
+                $reflection = new ReflectionMethod('commonModel', 'getSysURL');
+                $returnType = $reflection->getReturnType();
+                return ($returnType && $returnType->getName() === 'string') ? '1' : '0';
+            case 5: // 参数数量验证
+                $reflection = new ReflectionMethod('commonModel', 'getSysURL');
+                return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
+        }
+        
+        return '0';
+    }
 }
