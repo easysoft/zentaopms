@@ -780,4 +780,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getSqlTypeAndFields method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function getSqlTypeAndFieldsTest($sql, $driver = 'mysql')
+    {
+        $result = $this->objectModel->getSqlTypeAndFields($sql, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
