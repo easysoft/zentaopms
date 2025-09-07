@@ -669,4 +669,20 @@ class chartTest
                 return array();
         }
     }
+
+    /**
+     * Test isChartHaveData method.
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function isChartHaveDataTest(array $options = array(), string $type = ''): bool
+    {
+        $result = $this->objectModel->isChartHaveData($options, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
