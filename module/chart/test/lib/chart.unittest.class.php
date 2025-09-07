@@ -8,6 +8,45 @@ class chartTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return object
+     */
+    public function __constructTest(string $testType = 'normal'): object
+    {
+        $result = new stdClass();
+        $chartModel = $this->objectModel;
+        
+        switch($testType) {
+            case 'biModel':
+                $result->result = property_exists($chartModel, 'bi') && !empty($chartModel->bi);
+                break;
+            case 'parentConstructor':
+                $result->result = property_exists($chartModel, 'app') && !empty($chartModel->app);
+                break;
+            case 'dao':
+                $result->result = property_exists($chartModel, 'dao') && !empty($chartModel->dao);
+                break;
+            case 'modelInstance':
+                $result->result = $chartModel instanceof chartModel;
+                break;
+            case 'modelExists':
+                $result->result = !empty($chartModel);
+                break;
+            case 'className':
+                $result->result = get_class($chartModel);
+                break;
+            default:
+                $result->result = 'normal';
+                break;
+        }
+        
+        return $result;
+    }
+
+    /**
      * 测试处理图表数据。
      * Test process the data of the chart.
      *
