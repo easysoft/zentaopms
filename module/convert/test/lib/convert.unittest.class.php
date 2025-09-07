@@ -1049,4 +1049,19 @@ class convertTest
             return array();
         }
     }
+
+    /**
+     * Test object2Array method.
+     *
+     * @param  object|array $parsedXML
+     * @access public
+     * @return array
+     */
+    public function object2ArrayTest($parsedXML = null)
+    {
+        $result = $this->objectModel->object2Array($parsedXML);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
