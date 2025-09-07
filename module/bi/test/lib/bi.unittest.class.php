@@ -920,4 +920,25 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareFieldObjects method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function prepareFieldObjectsTest()
+    {
+        try
+        {
+            $result = $this->objectModel->prepareFieldObjects();
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
+    }
 }
