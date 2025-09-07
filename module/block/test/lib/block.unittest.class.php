@@ -827,4 +827,19 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test getModelType4Projects method.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return string|null
+     */
+    public function getModelType4ProjectsTest($projectIdList)
+    {
+        $result = $this->objectModel->getModelType4Projects($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,118 @@
+---
+title: 项目模型类型测试数据
+desc: 为测试getModelType4Projects方法提供不同模型类型的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 父项目ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: isTpl
+  note: 是否模板
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: charter
+  note: 项目章程
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: model
+  note: 项目模型类型
+  range: scrum{2}, kanban{1}, waterfall{2}, waterfallplus{1}, agileplus{1}, []
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 项目类型
+  range: project{5}, sprint{2}, stage{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: category
+  note: 项目分类
+  range: ''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 项目名称
+  range: 敏捷项目1, 敏捷项目2, 看板项目1, 瀑布项目1, 瀑布项目2, 瀑布增强项目1, 敏捷增强项目1, 普通项目1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: code
+  note: 项目代号
+  range: AGILE001, AGILE002, KANBAN001, WATER001, WATER002, WATERPLUS001, AGILEPLUS001, NORMAL001
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 项目状态
+  range: wait{2}, doing{4}, suspended{1}, closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: acl
+  note: 访问控制
+  range: open{6}, private{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: openedBy
+  note: 创建人
+  range: admin{6}, user1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: openedDate
+  note: 创建日期
+  range: '2024-01-01 00:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 删除标记
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
