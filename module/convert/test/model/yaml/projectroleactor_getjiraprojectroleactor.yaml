@@ -1,0 +1,21 @@
+---
+title: 项目角色参与者测试数据
+desc: 用于getJiraProjectRoleActor方法的测试数据
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-10
+  format: ""
+
+- field: pid
+  note: 项目ID
+  range: 1001{3}, 1002{2}, 0{1}, 1003{4}
+
+- field: roletype
+  note: 角色类型
+  range: atlassian-user-role-actor{5}, atlassian-group-role-actor{5}
+
+- field: roletypeparameter
+  note: 角色类型参数
+  range: admin{2}, user001{1}, user002{1}, user003{1}, developers{2}, testers{2}, managers{1}

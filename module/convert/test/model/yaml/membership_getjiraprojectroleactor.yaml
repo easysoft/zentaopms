@@ -1,0 +1,17 @@
+---
+title: 成员关系测试数据
+desc: 用于getJiraProjectRoleActor方法的测试数据
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-15
+  format: ""
+
+- field: parent_name
+  note: 父级名称(组名)
+  range: developers{8}, testers{4}, managers{2}, other_group{1}
+
+- field: child_id
+  note: 子级ID(用户ID)
+  range: 100{2}, 101{3}, 102{3}, 103{2}, 104{2}, 105{2}, 106{1}

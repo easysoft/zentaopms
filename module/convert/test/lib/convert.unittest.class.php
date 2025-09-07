@@ -1331,4 +1331,77 @@ class convertTest
             $app->session->destroy('jiraApi');
         }
     }
+
+    /**
+     * Test getJiraProjectRoleActor method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return array
+     */
+    public function getJiraProjectRoleActorTest($scenario = 'normal'): array
+    {
+        $projectRoleActor = array();
+        $memberShip = array();
+
+        switch($scenario) {
+            case 'empty':
+                break;
+            case 'no_pid':
+                $projectRoleActor[] = (object)array('pid' => '', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'admin');
+                break;
+            case 'user_role':
+                $projectRoleActor[] = (object)array('pid' => '1001', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'user001');
+                break;
+            case 'group_role':
+                $projectRoleActor[] = (object)array('pid' => '1001', 'roletype' => 'atlassian-group-role-actor', 'roletypeparameter' => 'developers');
+                $memberShip[] = (object)array('parent_name' => 'developers', 'child_id' => '100');
+                break;
+            default:
+                $projectRoleActor[] = (object)array('pid' => '1001', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'admin');
+                $projectRoleActor[] = (object)array('pid' => '1001', 'roletype' => 'atlassian-group-role-actor', 'roletypeparameter' => 'developers');
+                $projectRoleActor[] = (object)array('pid' => '1002', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'user001');
+                $projectRoleActor[] = (object)array('pid' => '', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'user002');
+                
+                $memberShip[] = (object)array('parent_name' => 'developers', 'child_id' => '100');
+                $memberShip[] = (object)array('parent_name' => 'developers', 'child_id' => '101');
+                $memberShip[] = (object)array('parent_name' => 'testers', 'child_id' => '102');
+        }
+
+        $projectMember = array();
+        foreach($projectRoleActor as $role)
+        {
+            if(empty($role->pid)) continue;
+            if($role->roletype == 'atlassian-user-role-actor')
+            {
+                $projectMember[$role->pid][$role->roletypeparameter] = $role->roletypeparameter;
+            }
+            if($role->roletype == 'atlassian-group-role-actor')
+            {
+                foreach($memberShip as $member)
+                {
+                    if($member->parent_name == $role->roletypeparameter) $projectMember[$role->pid]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
+                }
+            }
+        }
+        return $projectMember;
+    }
+
+    /**
+     * Restore jira method session helper method.
+     *
+     * @param  mixed $originalJiraMethod
+     * @access private
+     * @return void
+     */
+    private function restoreJiraMethodSession($originalJiraMethod)
+    {
+        global $app;
+        
+        if($originalJiraMethod !== null) {
+            $app->session->set('jiraMethod', $originalJiraMethod);
+        } else {
+            $app->session->destroy('jiraMethod');
+        }
+    }
 }
