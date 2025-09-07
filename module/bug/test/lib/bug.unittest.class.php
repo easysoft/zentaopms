@@ -1508,4 +1508,21 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test getRelatedObjects method.
+     *
+     * @param  string $object
+     * @param  string $pairs
+     * @access public
+     * @return int
+     */
+    public function getRelatedObjectsTest(string $object, string $pairs = ''): int
+    {
+        $result = $this->objectModel->getRelatedObjects($object, $pairs);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
