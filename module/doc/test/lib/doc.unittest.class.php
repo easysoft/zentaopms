@@ -2004,4 +2004,20 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test filterPrivDocs method.
+     *
+     * @param  array  $docs
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function filterPrivDocsTest(array $docs, string $spaceType): array
+    {
+        $result = $this->objectModel->filterPrivDocs($docs, $spaceType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
