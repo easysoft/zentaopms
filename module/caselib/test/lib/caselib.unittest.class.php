@@ -295,4 +295,19 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchConfig method.
+     *
+     * @param  int $libID
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfigTest(int $libID): array
+    {
+        $result = $this->objectModel->buildSearchConfig($libID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
