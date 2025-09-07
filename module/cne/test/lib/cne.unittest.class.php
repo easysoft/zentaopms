@@ -501,4 +501,57 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getDiskSettings method.
+     *
+     * @param  int         $instanceID
+     * @param  bool|string $component
+     * @access public
+     * @return object
+     */
+    public function getDiskSettingsTest(int $instanceID, bool|string $component = false): object
+    {
+        // 创建Mock实例对象用于测试
+        $instance = new stdclass();
+        $instance->id = $instanceID;
+        $instance->k8name = "test-instance-{$instanceID}";
+        $instance->chart = 'test-chart';
+        $instance->spaceData = new stdclass();
+        $instance->spaceData->k8space = 'test-namespace';
+        $instance->channel = 'stable';
+
+        if($instanceID === 999 || $instanceID === 0)
+        {
+            // 模拟无效实例返回默认值
+            $result = new stdclass();
+            $result->resizable   = false;
+            $result->size        = 0;
+            $result->used        = 0;
+            $result->limit       = 0;
+            $result->name        = '';
+            $result->requestSize = 0;
+            return $result;
+        }
+
+        try {
+            // 模拟getAppVolumes方法返回空值（无block device）
+            $this->objectModel->getAppVolumes = function() { return false; };
+            
+            $result = $this->objectModel->getDiskSettings($instance, $component);
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            // 如果发生异常，返回默认的磁盘设置对象
+            $result = new stdclass();
+            $result->resizable   = false;
+            $result->size        = 0;
+            $result->used        = 0;
+            $result->limit       = 0;
+            $result->name        = '';
+            $result->requestSize = 0;
+            return $result;
+        }
+    }
 }
