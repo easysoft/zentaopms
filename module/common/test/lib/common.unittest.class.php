@@ -551,4 +551,46 @@ class commonTest
             $_SERVER = $originalServer;
         }
     }
+
+    /**
+     * Test checkNotCN method.
+     *
+     * @param  string $lang
+     * @access public
+     * @return mixed
+     */
+    public function checkNotCNTest($lang = '')
+    {
+        global $app;
+
+        // 备份原始的app对象
+        $originalApp = $app;
+
+        try {
+            // 创建一个模拟的app对象
+            $mockApp = new class($lang) {
+                private $lang;
+                
+                public function __construct($lang = 'zh-cn')
+                {
+                    $this->lang = $lang ?: 'zh-cn';
+                }
+                
+                public function getClientLang()
+                {
+                    return $this->lang;
+                }
+            };
+
+            // 替换全局的app对象
+            $app = $mockApp;
+
+            // 调用被测试的方法
+            $result = commonModel::checkNotCN();
+            return $result ? '1' : '0';
+        } finally {
+            // 恢复原始的app对象
+            $app = $originalApp;
+        }
+    }
 }
