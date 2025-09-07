@@ -1103,4 +1103,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test updateDownloadingTagFile method.
+     *
+     * @param  string $type
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function updateDownloadingTagFileTest($type = 'file', $action = 'create')
+    {
+        $result = $this->objectModel->updateDownloadingTagFile($type, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
