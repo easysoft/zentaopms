@@ -1,0 +1,70 @@
+---
+title: printMessageBar测试数据
+desc: 用于测试printMessageBar方法的消息通知数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+  
+- field: objectType
+  note: 对象类型
+  range: message{15},task{3},bug{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: objectID
+  note: 对象ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: action
+  note: 操作动作
+  range: created,updated,commented,mentioned
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: toList
+  note: 接收用户列表
+  range: ',admin,{8},,user1,{5},,user2,{3},,test,{4}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 读取状态
+  range: 'unread{12},read{8}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin{10},user1{5},user2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '(-30D)-(0D):1D'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"

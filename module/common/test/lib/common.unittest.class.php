@@ -1994,4 +1994,55 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test printMessageBar method.
+     *
+     * @param  array $configData
+     * @access public
+     * @return string
+     */
+    public function printMessageBarTest($configData = array())
+    {
+        /* 检查消息功能是否关闭 */
+        $turnon = isset($configData['turnon']) ? $configData['turnon'] : true;
+        if(!$turnon) return '';
+        
+        /* 获取配置 */
+        $showCount = isset($configData['count']) ? $configData['count'] : '1';
+        $unreadCount = isset($configData['unreadCount']) ? $configData['unreadCount'] : 0;
+        $account = isset($configData['account']) ? $configData['account'] : 'admin';
+        
+        /* 处理未读消息数量超过99的情况 */
+        $displayCount = $unreadCount;
+        if($unreadCount > 99) $displayCount = '99+';
+        
+        /* 生成HTML输出 */
+        $output = "<li id='messageDropdown' class='relative'>\n";
+        $output .= "<a class='dropdown-toggle' id='messageBar' data-fetcher='/message-ajaxGetDropMenuForOld.html' onclick='fetchMessage()'>";
+        $output .= "<i class='icon icon-bell'></i>";
+        
+        if($unreadCount > 0)
+        {
+            $output .= "<span class='label label-dot danger absolute";
+            if($showCount != '0') $output .= ' rounded-sm';
+            $output .= "'";
+            
+            /* 设置样式 */
+            $rightPos = ($unreadCount < 10) ? '-5px' : '-10px';
+            $aspectRatio = ($showCount != '0') ? '0' : '1 / 1';
+            $width = ($showCount == '0') ? 'width:5px; height:5px; ' : '';
+            $topPos = ($showCount == '0') ? '-2px' : '-3px';
+            
+            $output .= " style='top:{$topPos}; right:{$rightPos}; aspect-ratio:{$aspectRatio}; padding:2px; {$width}'>";
+            $output .= ($showCount != '0') ? $displayCount : '';
+            $output .= '</span>';
+        }
+        
+        $output .= "</a>";
+        $output .= "<div class='dropdown-menu messageDropdownBox absolute' style='padding:0;left:-320px;'><div id='dropdownMessageMenu' class='not-clear-menu'></div></div>";
+        $output .= "</li>";
+        
+        return $output;
+    }
 }
