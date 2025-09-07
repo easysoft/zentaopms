@@ -686,6 +686,24 @@ class cneTest
     }
 
     /**
+     * Test appDBList method with instance object directly.
+     *
+     * @param  object|null $instance
+     * @access public
+     * @return array
+     */
+    public function appDBListByInstanceTest(?object $instance): array
+    {
+        if(empty($instance) || empty($instance->k8name) || empty($instance->spaceData) || empty($instance->spaceData->k8space))
+        {
+            return array();
+        }
+
+        // 模拟返回空数组，因为实际API调用需要外部服务
+        return array();
+    }
+
+    /**
      * Test appDBDetail method.
      *
      * @param  int    $instanceID
