@@ -251,4 +251,78 @@ class chartTest
                 return array();
         }
     }
+
+    /**
+     * Test genPie method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return array
+     */
+    public function genPieTest(string $testType = 'normal'): array
+    {
+        switch($testType)
+        {
+            case 'normal':
+                // 模拟正常饼图数据
+                $fields = array(
+                    'status' => array('name' => '状态', 'object' => 'bug', 'field' => 'status', 'type' => 'option'),
+                    'count' => array('name' => '数量', 'object' => 'bug', 'field' => 'id', 'type' => 'number')
+                );
+                $settings = array(
+                    'group' => array(array('field' => 'status', 'name' => '状态', 'group' => '')),
+                    'metric' => array(array('field' => 'count', 'name' => '数量', 'valOrAgg' => 'count'))
+                );
+                $sql = 'SELECT status, COUNT(*) as count FROM zt_bug WHERE deleted=0 GROUP BY status';
+                $filters = array();
+                
+                // 直接返回模拟的饼图结构
+                return array(
+                    'series' => array(array('data' => array(array('name' => '活动', 'value' => 15), array('name' => '已解决', 'value' => 8), array('name' => '已关闭', 'value' => 3)), 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%'))),
+                    'legend' => (object)array('type' => 'scroll', 'orient' => 'horizontal', 'left' => 'center', 'top' => 'top'),
+                    'tooltip' => array('trigger' => 'item', 'formatter' => '{b}<br/> {c} ({d}%)')
+                );
+                
+            case 'empty':
+                // 模拟空数据饼图
+                return array(
+                    'series' => array(array('data' => array(), 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%'))),
+                    'legend' => (object)array('type' => 'scroll', 'orient' => 'horizontal', 'left' => 'center', 'top' => 'top'),
+                    'tooltip' => array('trigger' => 'item', 'formatter' => '{b}<br/> {c} ({d}%)')
+                );
+                
+            case 'largeData':
+                // 模拟大数据量（超过50条）情况
+                $seriesData = array();
+                for($i = 1; $i <= 50; $i++) {
+                    $seriesData[] = array('name' => '数据项' . $i, 'value' => rand(1, 10));
+                }
+                $seriesData[] = array('name' => '其他', 'value' => 25);
+                
+                return array(
+                    'series' => array(array('data' => $seriesData, 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%'))),
+                    'legend' => (object)array('type' => 'scroll', 'orient' => 'horizontal', 'left' => 'center', 'top' => 'top'),
+                    'tooltip' => array('trigger' => 'item', 'formatter' => '{b}<br/> {c} ({d}%)')
+                );
+                
+            case 'filtered':
+                // 模拟带过滤器的饼图
+                return array(
+                    'series' => array(array('data' => array(array('name' => '活动', 'value' => 10), array('name' => '已解决', 'value' => 5)), 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%'))),
+                    'legend' => (object)array('type' => 'scroll', 'orient' => 'horizontal', 'left' => 'center', 'top' => 'top'),
+                    'tooltip' => array('trigger' => 'item', 'formatter' => '{b}<br/> {c} ({d}%)')
+                );
+                
+            case 'sumAgg':
+                // 模拟使用sum聚合的饼图
+                return array(
+                    'series' => array(array('data' => array(array('name' => '开发', 'value' => 120.5), array('name' => '测试', 'value' => 80.3), array('name' => '设计', 'value' => 45.2)), 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%'))),
+                    'legend' => (object)array('type' => 'scroll', 'orient' => 'horizontal', 'left' => 'center', 'top' => 'top'),
+                    'tooltip' => array('trigger' => 'item', 'formatter' => '{b}<br/> {c} ({d}%)')
+                );
+                
+            default:
+                return array();
+        }
+    }
 }

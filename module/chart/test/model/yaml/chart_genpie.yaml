@@ -1,0 +1,62 @@
+title: zt_chart genPie测试数据
+author: Claude
+version: "1.0"
+desc: 为genPie方法提供测试数据，包含各种饼图场景
+
+fields:
+  - field: id
+    range: 1-50
+  - field: name
+    range: '用户状态分布,Bug状态分布,任务类型分布,项目进度分布,需求优先级分布'
+  - field: code
+    range: 'user_status,bug_status,task_type,project_progress,story_priority'
+  - field: driver
+    range: mysql{40},duckdb{10}
+  - field: mode
+    range: builder{45},text{5}
+  - field: dimension
+    range: 1-10
+  - field: type
+    range: pie{50}
+  - field: group
+    range: '1,2,3,4,5'
+  - field: dataset
+    range: '0{30},1{10},2{10}'
+  - field: desc
+    range: '饼图描述1,饼图描述2,饼图描述3,饼图描述4,饼图描述5'
+  - field: acl
+    range: open{30},private{20}
+  - field: whitelist
+    range: 'admin,user{5},pm{3},[]{42}'
+  - field: settings
+    range: '[{"type":"pie","group":[{"field":"status","name":"状态","group":""}],"metric":[{"field":"count","name":"数量","valOrAgg":"count"}]}]{20},[{"type":"pie","group":[{"field":"type","name":"类型","group":""}],"metric":[{"field":"sum","name":"总计","valOrAgg":"sum"}]}]{15},[{"type":"pie","group":[{"field":"priority","name":"优先级","group":""}],"metric":[{"field":"id","name":"ID","valOrAgg":"count"}]}]{15}'
+  - field: filters
+    range: '[]{30},[{"field":"status","type":"select","name":"状态","default":["active","resolved"]}]{10},[{"field":"type","type":"input","name":"类型","default":"bug"}]{10}'
+  - field: step
+    range: 1-5
+  - field: fields
+    range: '{"status":{"name":"状态","object":"bug","field":"status","type":"option"},"count":{"name":"数量","object":"bug","field":"id","type":"number"}}{20},{"type":{"name":"类型","object":"task","field":"type","type":"option"},"sum":{"name":"总计","object":"task","field":"estimate","type":"number"}}{15},{"priority":{"name":"优先级","object":"story","field":"pri","type":"option"},"id":{"name":"ID","object":"story","field":"id","type":"number"}}{15}'
+  - field: langs
+    range: '[]{40},{"status":{"zh-cn":"状态","en":"Status"}}{5},{"type":{"zh-cn":"类型","en":"Type"}}{5}'
+  - field: sql
+    range: 'SELECT status, COUNT(*) as count FROM zt_bug WHERE deleted=0 GROUP BY status{15},SELECT type, SUM(estimate) as sum FROM zt_task WHERE deleted=0 GROUP BY type{15},SELECT pri as priority, COUNT(*) as id FROM zt_story WHERE deleted=0 GROUP BY pri{10},SELECT assignedTo, COUNT(*) as count FROM zt_bug WHERE status="active" GROUP BY assignedTo{10}'
+  - field: version
+    range: '1.0{30},1.1{10},2.0{10}'
+  - field: stage
+    range: published{40},draft{10}
+  - field: builtin
+    range: 0{40},1{10}
+  - field: objects
+    range: '[]{30},{"bug":true}{10},{"task":true}{10}'
+  - field: createdBy
+    range: admin{20},user1{10},user2{10},pm{10}
+  - field: createdDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: editedBy
+    range: admin{25},user1{12},user2{8},pm{5}
+  - field: editedDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: deleted
+    range: 0{45},1{5}
