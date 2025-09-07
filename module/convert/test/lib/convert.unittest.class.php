@@ -675,4 +675,25 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getJiraFieldGroupByProject method.
+     *
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function getJiraFieldGroupByProjectTest($relations = array())
+    {
+        try {
+            $result = $this->objectModel->getJiraFieldGroupByProject($relations);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
