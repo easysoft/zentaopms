@@ -1228,4 +1228,19 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getJiraSprint method.
+     *
+     * @param  array $projectList
+     * @access public
+     * @return array
+     */
+    public function getJiraSprintTest(array $projectList): array
+    {
+        $result = $this->objectModel->getJiraSprint($projectList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
