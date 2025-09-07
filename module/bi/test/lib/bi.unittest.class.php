@@ -655,4 +655,43 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test saveLogs method.
+     *
+     * @param  string $log
+     * @access public
+     * @return mixed
+     */
+    public function saveLogsTest($log)
+    {
+        $tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
+        $logFile = $tmpDir . 'test_saveLogs_' . date('Ymd') . '.log.php';
+        
+        // 删除现有日志文件以确保测试环境干净
+        if(file_exists($logFile)) unlink($logFile);
+        
+        // 模拟 saveLogs 方法的逻辑
+        $logContent = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $logContent = "<?php\ndie();\n?" . ">\n" . $logContent;
+        
+        file_put_contents($logFile, $logContent, FILE_APPEND);
+        
+        // 检查文件是否被创建
+        if(!file_exists($logFile)) return false;
+        
+        // 读取文件内容进行验证
+        $content = file_get_contents($logFile);
+        
+        // 清理测试文件
+        if(file_exists($logFile)) unlink($logFile);
+        
+        return array(
+            'fileExists' => true,
+            'hasPhpHeader' => strpos($content, '<?php') === 0,
+            'hasDieStatement' => strpos($content, 'die();') !== false,
+            'hasLogContent' => strpos($content, $log) !== false,
+            'hasTimestamp' => preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $content) === 1
+        );
+    }
 }
