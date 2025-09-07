@@ -1956,4 +1956,20 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectIDByLib method.
+     *
+     * @param  object|null $lib
+     * @param  string      $libType
+     * @access public
+     * @return int
+     */
+    public function getObjectIDByLibTest(object|null $lib, string $libType = ''): int
+    {
+        $result = $this->objectModel->getObjectIDByLib($lib, $libType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
