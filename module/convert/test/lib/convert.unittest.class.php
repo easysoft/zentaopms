@@ -195,4 +195,72 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test createTmpTable4Jira method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function createTmpTable4JiraTest()
+    {
+        try {
+            // 先删除可能存在的表
+            $this->dropTableIfExists('jiratmprelation');
+            
+            $this->objectModel->createTmpTable4Jira();
+            if(dao::isError()) return dao::getError();
+
+            // 检查表是否创建成功
+            $result = $this->objectModel->tableExists('jiratmprelation');
+            if($result) {
+                // 验证表结构
+                $columns = $this->getTableColumns('jiratmprelation');
+                return $columns;
+            }
+            
+            return false;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Drop table if exists helper method.
+     *
+     * @param  string $table
+     * @access private
+     * @return void
+     */
+    private function dropTableIfExists($table)
+    {
+        try {
+            global $app;
+            $app->dbh->exec("DROP TABLE IF EXISTS `$table`");
+        } catch (Exception $e) {
+            // 忽略删除表的异常
+        }
+    }
+
+    /**
+     * Get table columns helper method.
+     *
+     * @param  string $table
+     * @access private
+     * @return array
+     */
+    private function getTableColumns($table)
+    {
+        try {
+            global $app;
+            $result = $app->dbh->query("SHOW COLUMNS FROM `$table`")->fetchAll();
+            $columns = array();
+            foreach($result as $column) {
+                $columns[$column->Field] = $column->Type;
+            }
+            return $columns;
+        } catch (Exception $e) {
+            return array();
+        }
+    }
 }
