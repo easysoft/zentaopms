@@ -770,4 +770,59 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test callJiraAPI method.
+     *
+     * @param  string $url
+     * @param  int    $start
+     * @access public
+     * @return mixed
+     */
+    public function callJiraAPITest($url = '', $start = 0)
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraApi = $app->session->jiraApi ?? null;
+            
+            // 检查是否有session数据，如果没有则设置默认测试数据
+            if(empty($app->session->jiraApi)) {
+                $testJiraApi = array(
+                    'domain' => 'https://test.atlassian.net',
+                    'admin' => 'testuser',
+                    'token' => 'testtoken123'
+                );
+                $app->session->set('jiraApi', json_encode($testJiraApi));
+            }
+            
+            $result = $this->objectModel->callJiraAPI($url, $start);
+            if(dao::isError()) return dao::getError();
+            
+            // 恢复原始session数据
+            if($originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraApi) && $originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始session数据  
+            if(isset($originalJiraApi) && $originalJiraApi !== null) {
+                $app->session->set('jiraApi', $originalJiraApi);
+            } else {
+                $app->session->destroy('jiraApi');
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
