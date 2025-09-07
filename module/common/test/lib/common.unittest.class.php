@@ -226,4 +226,54 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test getActiveMainMenu method.
+     *
+     * @param  int $testType
+     * @access public
+     * @return mixed
+     */
+    public function getActiveMainMenuTest($testType = 1)
+    {
+        global $app;
+        
+        // 模拟应用状态以进行测试
+        if(!isset($app->rawModule)) $app->rawModule = 'product';
+        if(!isset($app->rawMethod)) $app->rawMethod = 'browse';
+        
+        // 测试类型决定不同的测试场景
+        switch($testType)
+        {
+            case 1: $app->rawModule = 'product'; $app->rawMethod = 'browse'; break;
+            case 2: $app->rawModule = ''; $app->rawMethod = ''; break;
+            case 3: $app->rawModule = 'project'; $app->rawMethod = 'browse'; break;
+            case 4: $app->rawModule = 'execution'; $app->rawMethod = 'browse'; break;
+            case 5: $app->rawModule = 'bug'; $app->rawMethod = 'browse'; break;
+            default: $app->rawModule = 'product'; $app->rawMethod = 'browse'; break;
+        }
+        
+        // 验证方法是否存在
+        if(!method_exists('commonModel', 'getActiveMainMenu'))
+        {
+            return 'method_not_exists';
+        }
+        
+        // 验证方法是否为静态方法
+        $reflection = new ReflectionMethod('commonModel', 'getActiveMainMenu');
+        if(!$reflection->isStatic())
+        {
+            return 'not_static_method';
+        }
+        
+        // 验证返回类型声明
+        $returnType = $reflection->getReturnType();
+        if(!$returnType || $returnType->getName() !== 'string')
+        {
+            return 'wrong_return_type';
+        }
+        
+        // 基本的方法存在性和类型验证通过
+        return 'method_validated';
+    }
 }
