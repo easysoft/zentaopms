@@ -442,4 +442,22 @@ class cneTest
         if(!empty($result->message)) return $result->message;
         return $result->backup_details;
     }
+
+    /**
+     * Test validateCert method.
+     *
+     * @param  string $certName
+     * @param  string $pem
+     * @param  string $key
+     * @param  string $domain
+     * @access public
+     * @return object
+     */
+    public function validateCertTest(string $certName, string $pem, string $key, string $domain): object
+    {
+        $result = $this->objectModel->validateCert($certName, $pem, $key, $domain);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
