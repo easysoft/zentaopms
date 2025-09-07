@@ -194,4 +194,20 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test strEndsWith method.
+     *
+     * @param  string $haystack
+     * @param  string $needle
+     * @access public
+     * @return bool
+     */
+    public function strEndsWithTest($haystack, $needle)
+    {
+        $result = commonModel::strEndsWith($haystack, $needle);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
