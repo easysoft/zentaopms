@@ -1059,4 +1059,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test getCorrectGroup method.
+     *
+     * @param  string $id
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getCorrectGroupTest($id, $type)
+    {
+        $result = $this->objectModel->getCorrectGroup($id, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
