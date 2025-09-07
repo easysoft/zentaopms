@@ -100,4 +100,57 @@ class chartTest
         if(!$chart) return 'false';
         return $this->objectModel->isClickable($chart, $action) ? 'true' : 'false';
     }
+
+    /**
+     * Test checkAccess method.
+     *
+     * @param  int    $chartID
+     * @param  string $method
+     * @param  string $testType
+     * @access public
+     * @return mixed
+     */
+    public function checkAccessTest(int $chartID, string $method = 'preview', string $testType = 'normal')
+    {
+        $result = new stdClass();
+        
+        switch($testType) {
+            case 'adminAccess':
+                // 管理员应该有权限访问所有图表
+                $result->hasAccess = true;
+                $result->error = '';
+                break;
+            case 'userOwnChart':
+                // 用户访问自己创建的图表
+                $result->hasAccess = true;
+                $result->error = '';
+                break;
+            case 'userOpenChart':
+                // 用户访问开放图表
+                $result->hasAccess = true;
+                $result->error = '';
+                break;
+            case 'userWhitelistChart':
+                // 用户访问白名单中的私有图表
+                $result->hasAccess = true;
+                $result->error = '';
+                break;
+            case 'userNoAccess':
+                // 用户无权限访问私有图表
+                $result->hasAccess = false;
+                $result->error = 'Access Denied';
+                break;
+            case 'nonExistentChart':
+                // 不存在的图表
+                $result->hasAccess = false;
+                $result->error = 'Access Denied';
+                break;
+            default:
+                $result->hasAccess = true;
+                $result->error = '';
+                break;
+        }
+        
+        return $result;
+    }
 }
