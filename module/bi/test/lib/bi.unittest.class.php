@@ -865,4 +865,28 @@ class biTest
             return array('result' => 'fail', 'message' => $e->getMessage());
         }
     }
+
+    /**
+     * Test query method.
+     *
+     * @param  object $stateObj
+     * @param  string $driver
+     * @param  bool   $useFilter
+     * @access public
+     * @return mixed
+     */
+    public function queryTest($stateObj, $driver = 'mysql', $useFilter = true)
+    {
+        try
+        {
+            $result = $this->objectModel->query($stateObj, $driver, $useFilter);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
 }
