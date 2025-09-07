@@ -602,4 +602,23 @@ class convertTest
             return 'exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getJiraTypeList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getJiraTypeListTest()
+    {
+        try {
+            $result = $this->objectModel->getJiraTypeList();
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (TypeError $e) {
+            return array();
+        }
+    }
 }
