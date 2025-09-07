@@ -1382,4 +1382,20 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test checkPrivByObject method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObjectTest(string $objectType, int $objectID): bool
+    {
+        $result = $this->objectModel->checkPrivByObject($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
