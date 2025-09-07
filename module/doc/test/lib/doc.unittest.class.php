@@ -1972,4 +1972,19 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getSpaceType method.
+     *
+     * @param  int|string $spaceID
+     * @access public
+     * @return string
+     */
+    public function getSpaceTypeTest(int|string $spaceID): string
+    {
+        $result = $this->objectModel->getSpaceType($spaceID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
