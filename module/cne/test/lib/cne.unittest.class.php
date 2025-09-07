@@ -484,4 +484,21 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getVolumesMetrics method.
+     *
+     * @param  int $instanceID
+     * @access public
+     * @return object
+     */
+    public function getVolumesMetricsTest(int $instanceID): object
+    {
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+        
+        $result = $this->objectModel->getVolumesMetrics($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
