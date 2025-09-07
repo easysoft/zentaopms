@@ -329,4 +329,19 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test checkDBName method.
+     *
+     * @param  string $dbName
+     * @access public
+     * @return mixed
+     */
+    public function checkDBNameTest($dbName = null)
+    {
+        $result = $this->objectModel->checkDBName($dbName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
