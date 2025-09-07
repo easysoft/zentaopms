@@ -1010,4 +1010,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test processDrills method.
+     *
+     * @param  string $field
+     * @param  array  $drillFields
+     * @param  array  $columns
+     * @access public
+     * @return array
+     */
+    public function processDrillsTest(string $field, array $drillFields, array $columns): array
+    {
+        $result = $this->objectModel->processDrills($field, $drillFields, $columns);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
