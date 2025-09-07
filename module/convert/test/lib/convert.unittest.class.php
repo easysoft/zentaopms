@@ -1257,4 +1257,78 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test getJiraArchivedProject method.
+     *
+     * @param  array $dataList
+     * @access public
+     * @return array
+     */
+    public function getJiraArchivedProjectTest($dataList = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraMethod = $app->session->jiraMethod ?? null;
+            $originalJiraApi = $app->session->jiraApi ?? null;
+            
+            // 设置测试session数据
+            $app->session->set('jiraMethod', 'db');
+            
+            // 模拟sourceDBH连接
+            if(empty($this->objectModel->sourceDBH)) {
+                $this->objectModel->sourceDBH = $app->dbh;
+            }
+            
+            $result = $this->objectModel->getJiraArchivedProject($dataList);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                // 恢复原始session数据
+                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
+                return $errors;
+            }
+            
+            // 恢复原始session数据
+            $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraMethod) && isset($originalJiraApi)) {
+                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
+            }
+            return array();
+        } catch (Error $e) {
+            // 恢复原始session数据
+            if(isset($originalJiraMethod) && isset($originalJiraApi)) {
+                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
+            }
+            return array();
+        }
+    }
+
+    /**
+     * Restore session data helper method.
+     *
+     * @param  mixed $originalJiraMethod
+     * @param  mixed $originalJiraApi
+     * @access private
+     * @return void
+     */
+    private function restoreSessionData($originalJiraMethod, $originalJiraApi)
+    {
+        global $app;
+        
+        if($originalJiraMethod !== null) {
+            $app->session->set('jiraMethod', $originalJiraMethod);
+        } else {
+            $app->session->destroy('jiraMethod');
+        }
+        
+        if($originalJiraApi !== null) {
+            $app->session->set('jiraApi', $originalJiraApi);
+        } else {
+            $app->session->destroy('jiraApi');
+        }
+    }
 }
