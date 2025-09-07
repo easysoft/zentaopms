@@ -745,4 +745,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareSqlPager method.
+     *
+     * @param  object $statement
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $driver
+     * @access public
+     * @return string
+     */
+    public function prepareSqlPagerTest($statement, $recPerPage, $pageID, $driver = 'mysql')
+    {
+        $result = $this->objectModel->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
