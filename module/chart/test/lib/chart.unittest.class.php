@@ -169,4 +169,21 @@ class chartTest
 
         return $result;
     }
+
+    /**
+     * Test addRotate4Echart method.
+     *
+     * @param  array  $options
+     * @param  array  $settings
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addRotate4EchartTest(array $options, array $settings, string $type): array
+    {
+        $result = $this->objectModel->addRotate4Echart($options, $settings, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
