@@ -2020,4 +2020,18 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getTeamSpaces method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTeamSpacesTest(): array
+    {
+        $result = $this->objectModel->getTeamSpaces();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
