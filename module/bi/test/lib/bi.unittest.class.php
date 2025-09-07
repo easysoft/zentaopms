@@ -1136,4 +1136,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test downloadFile method.
+     *
+     * @param  string $url
+     * @param  string $savePath
+     * @param  string $finalFile
+     * @access public
+     * @return bool
+     */
+    public function downloadFileTest(string $url, string $savePath, string $finalFile): bool
+    {
+        $result = $this->objectModel->downloadFile($url, $savePath, $finalFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
