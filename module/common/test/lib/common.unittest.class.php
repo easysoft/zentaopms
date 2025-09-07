@@ -2327,4 +2327,57 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test printPreAndNext method.
+     *
+     * @param  mixed  $preAndNext
+     * @param  string $linkTemplate
+     * @access public
+     * @return mixed
+     */
+    public function printPreAndNextTest($preAndNext = '', $linkTemplate = '')
+    {
+        global $app, $lang;
+        
+        // 保存原始值
+        $originalApp = $app ?? null;
+        $originalLang = $lang ?? null;
+        
+        // 模拟全局变量
+        if(!isset($app))
+        {
+            $app = new stdClass();
+            $app->tab = 'my';
+        }
+        if(!$app->tab) $app->tab = 'my';
+        
+        $app->getModuleName = function() { return 'test'; };
+        $app->getMethodName = function() { return 'view'; };
+        
+        if(!isset($lang))
+        {
+            $lang = new stdClass();
+        }
+        $lang->preShortcutKey = '(←)';
+        $lang->nextShortcutKey = '(→)';
+        
+        ob_start();
+        $result = commonModel::printPreAndNext($preAndNext, $linkTemplate);
+        $output = ob_get_clean();
+        
+        // 恢复原始值
+        if($originalApp !== null)
+        {
+            $app = $originalApp;
+        }
+        if($originalLang !== null)
+        {
+            $lang = $originalLang;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array('result' => $result, 'output' => $output);
+    }
 }
