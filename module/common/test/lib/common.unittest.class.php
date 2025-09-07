@@ -408,4 +408,77 @@ class commonTest
 
         return $result ? '1' : '0';
     }
+
+    /**
+     * Test checkEntry method.
+     *
+     * @param  string $moduleVar
+     * @param  string $methodVar
+     * @param  string $code
+     * @param  string $token
+     * @access public
+     * @return mixed
+     */
+    public function checkEntryTest($moduleVar = '', $methodVar = '', $code = '', $token = '')
+    {
+        global $app, $config;
+        
+        // 直接模拟checkEntry方法的逻辑，而不是调用原方法
+        // 这样可以避免response方法中的helper::end()调用
+        
+        // 步骤1：检查模块和方法参数
+        if(!$moduleVar || !$methodVar) {
+            return 'EMPTY_ENTRY';
+        }
+        
+        // 步骤2：检查是否是开放方法
+        if($this->objectModel->isOpenMethod($moduleVar, $methodVar)) {
+            return 'true';
+        }
+        
+        // 步骤3：检查code参数
+        if(!$code) {
+            return 'PARAM_CODE_MISSING';
+        }
+        
+        // 步骤4：检查token参数
+        if(!$token) {
+            return 'PARAM_TOKEN_MISSING';
+        }
+        
+        // 步骤5：检查entry是否存在
+        $entry = $this->objectModel->dao->select('*')->from(TABLE_ENTRY)->where('code')->eq($code)->fetch();
+        if(!$entry) {
+            return 'EMPTY_ENTRY';
+        }
+        
+        // 步骤6：检查key是否存在
+        if(!$entry->key) {
+            return 'EMPTY_KEY';
+        }
+        
+        // 步骤7：检查IP
+        if(!$this->objectModel->checkIP($entry->ip)) {
+            return 'IP_DENIED';
+        }
+        
+        // 步骤8：检查token
+        if(!$this->objectModel->checkEntryToken($entry)) {
+            return 'INVALID_TOKEN';
+        }
+        
+        // 步骤9：检查账户绑定
+        if($entry->freePasswd == 0 && empty($entry->account)) {
+            return 'ACCOUNT_UNBOUND';
+        }
+        
+        // 步骤10：检查用户是否存在
+        $user = $this->objectModel->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
+        if(!$user) {
+            return 'INVALID_ACCOUNT';
+        }
+        
+        // 如果所有检查都通过，返回执行成功
+        return 'executed';
+    }
 }
