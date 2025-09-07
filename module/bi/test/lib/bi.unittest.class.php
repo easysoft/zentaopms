@@ -841,4 +841,28 @@ class biTest
             return array('exception', $e->getMessage());
         }
     }
+
+    /**
+     * Test querySQL method.
+     *
+     * @param  string $sql
+     * @param  string $limitSql
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function querySQLTest($sql, $limitSql, $driver = 'mysql')
+    {
+        try
+        {
+            $result = $this->objectModel->querySQL($sql, $limitSql, $driver);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('result' => 'fail', 'message' => $e->getMessage());
+        }
+    }
 }
