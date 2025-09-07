@@ -1,0 +1,77 @@
+---
+title: Bug表数据定义
+desc: genCluBar方法测试用Bug数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Bug标题
+  range: 'Bug测试标题1,Bug测试标题2,Bug测试标题3,Bug测试标题4,Bug测试标题5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Bug状态
+  range: 'active{40},resolved{30},closed{20},wait{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: 'admin{25},user1{25},user2{25},user3{25}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 所属模块
+  range: '1{20},2{30},3{25},4{25}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Bug类型
+  range: 'codeerror{40},config{30},install{20},security{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: '1{25},2{25},3{25},4{25}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{95},1{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品
+  range: '1{50},2{30},3{20}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 由谁创建
+  range: 'admin{40},user1{30},user2{20},user3{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

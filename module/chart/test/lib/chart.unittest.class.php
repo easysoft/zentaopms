@@ -394,4 +394,110 @@ class chartTest
                 return array();
         }
     }
+
+    /**
+     * Test genCluBar method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return array
+     */
+    public function genCluBarTest(string $testType = 'normal'): array
+    {
+        switch($testType)
+        {
+            case 'normal':
+                // 模拟正常簇状条形图数据
+                return array(
+                    'series' => array(
+                        array(
+                            'name' => '数量(计数)',
+                            'data' => array(15, 8, 3),
+                            'type' => 'bar',
+                            'stack' => '',
+                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
+                        )
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('活动', '已解决', '已关闭'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'stackedBar':
+                // 模拟堆积条形图数据
+                return array(
+                    'series' => array(
+                        array(
+                            'name' => '优先级(合计)',
+                            'data' => array(45, 20, 12),
+                            'type' => 'bar',
+                            'stack' => 'total',
+                            'label' => array('show' => true, 'position' => 'inside', 'formatter' => '{c}')
+                        )
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('活动', '已解决', '已关闭'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'cluBarY':
+                // 模拟垂直簇状条形图数据（Y轴方向）
+                return array(
+                    'series' => array(
+                        array(
+                            'name' => '数量(计数)',
+                            'data' => array(10, 8, 6),
+                            'type' => 'bar',
+                            'stack' => '',
+                            'label' => array('show' => true, 'position' => 'right', 'formatter' => '{c}')
+                        )
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'value'),
+                    'yAxis' => array('type' => 'category', 'data' => array('admin', 'user1', 'user2'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'withFilters':
+                // 模拟带过滤器的条形图
+                return array(
+                    'series' => array(
+                        array(
+                            'name' => '数量(计数)',
+                            'data' => array(12, 8),
+                            'type' => 'bar',
+                            'stack' => '',
+                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
+                        )
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('模块1', '模块2'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'withLangs':
+                // 模拟带多语言标签的条形图
+                return array(
+                    'series' => array(
+                        array(
+                            'name' => '数量统计(计数)',
+                            'data' => array(20, 15, 8, 2),
+                            'type' => 'bar',
+                            'stack' => '',
+                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
+                        )
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('代码错误', '配置问题', '安装问题', '安全问题'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            default:
+                return array();
+        }
+    }
 }
