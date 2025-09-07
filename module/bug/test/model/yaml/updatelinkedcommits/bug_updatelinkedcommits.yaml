@@ -1,0 +1,47 @@
+---
+title: Bug数据定义用于测试updateLinkedCommits方法
+desc: 提供测试用的bug数据，包含正常bug和边界情况
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{5},2{3},3{2}
+- field: project
+  note: 项目ID
+  range: 11{4},12{3},13{3}
+- field: title
+  note: Bug标题
+  range: 测试Bug{10}
+- field: type
+  note: Bug类型
+  range: codeerror{5},interface{3},config{2}
+- field: status
+  note: Bug状态
+  range: active{7},resolved{2},closed{1}
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: severity
+  note: 严重程度
+  range: 1-4
+- field: openedBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+- field: openedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00{10}
+- field: assignedTo
+  note: 指派给
+  range: admin{4},user1{3},user2{3}
+- field: deleted
+  note: 是否删除
+  range: 0{10}

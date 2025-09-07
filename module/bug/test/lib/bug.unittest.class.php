@@ -1541,4 +1541,22 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test updateLinkedCommits method.
+     *
+     * @param  int   $bugID
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return bool
+     */
+    public function updateLinkedCommitsTest(int $bugID, int $repoID, array $revisions): bool
+    {
+        $result = $this->objectModel->updateLinkedCommits($bugID, $repoID, $revisions);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
