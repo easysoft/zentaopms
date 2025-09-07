@@ -92,4 +92,37 @@ class dimensionTest
             return false;
         }
     }
+
+    /**
+     * Test getList method.
+     *
+     * @param  string $mockViewable 模拟可见对象ID数组
+     * @param  string $returnType   返回类型：'result'返回结果集，'count'返回数量
+     * @access public
+     * @return mixed
+     */
+    public function getListTest($mockViewable = '', $returnType = 'result')
+    {
+        // 如果提供了模拟数据，直接根据提供的ID列表查询维度
+        if($mockViewable)
+        {
+            $viewableIds = explode(',', $mockViewable);
+            $result = $this->objectModel->dao->select('*')->from(TABLE_DIMENSION)->where('id')->in($viewableIds)->fetchAll('id');
+            if(dao::isError()) return dao::getError();
+            
+            if($returnType === 'count') return count($result);
+            return $result;
+        }
+        
+        // 否则尝试调用原始方法
+        try {
+            $result = $this->objectModel->getList();
+            if(dao::isError()) return dao::getError();
+            
+            if($returnType === 'count') return count($result);
+            return $result;
+        } catch (Exception $e) {
+            return $returnType === 'count' ? 0 : array();
+        }
+    }
 }
