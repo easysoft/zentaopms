@@ -1128,4 +1128,104 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test convertStatus method.
+     *
+     * @param  string $objectType
+     * @param  string $jiraStatus
+     * @param  string $issueType
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function convertStatusTest($objectType = '', $jiraStatus = '', $issueType = '', $relations = array())
+    {
+        try {
+            // 备份原始session数据和配置
+            global $app, $config;
+            $originalJiraRelation = $app->session->jiraRelation ?? null;
+            $originalTestcaseNeedReview = $config->testcase->needReview ?? null;
+            $originalFeedbackNeedReview = $config->feedback->needReview ?? null;
+            $originalFeedbackTicket = $config->feedback->ticket ?? null;
+
+            // 如果没有提供relations参数，设置测试session数据
+            if(empty($relations)) {
+                $testRelations = array(
+                    'zentaoStatus1' => array(
+                        'open' => 'active',
+                        'in-progress' => 'doing',
+                        'done' => 'closed',
+                        'resolved' => 'resolved'
+                    ),
+                    'zentaoStatus2' => array(
+                        'to-do' => 'wait',
+                        'in-progress' => 'doing',
+                        'done' => 'done'
+                    )
+                );
+                $app->session->set('jiraRelation', json_encode($testRelations));
+            }
+
+            $result = $this->objectModel->convertStatus($objectType, $jiraStatus, $issueType, $relations);
+            if(dao::isError()) return dao::getError();
+
+            // 恢复原始session数据和配置
+            if($originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+
+            if($originalTestcaseNeedReview !== null) {
+                $config->testcase->needReview = $originalTestcaseNeedReview;
+            }
+            if($originalFeedbackNeedReview !== null) {
+                $config->feedback->needReview = $originalFeedbackNeedReview;
+            }
+            if($originalFeedbackTicket !== null) {
+                $config->feedback->ticket = $originalFeedbackTicket;
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始session数据和配置
+            if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+
+            if(isset($originalTestcaseNeedReview) && $originalTestcaseNeedReview !== null) {
+                $config->testcase->needReview = $originalTestcaseNeedReview;
+            }
+            if(isset($originalFeedbackNeedReview) && $originalFeedbackNeedReview !== null) {
+                $config->feedback->needReview = $originalFeedbackNeedReview;
+            }
+            if(isset($originalFeedbackTicket) && $originalFeedbackTicket !== null) {
+                $config->feedback->ticket = $originalFeedbackTicket;
+            }
+
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始session数据和配置
+            if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
+                $app->session->set('jiraRelation', $originalJiraRelation);
+            } else {
+                $app->session->destroy('jiraRelation');
+            }
+
+            if(isset($originalTestcaseNeedReview) && $originalTestcaseNeedReview !== null) {
+                $config->testcase->needReview = $originalTestcaseNeedReview;
+            }
+            if(isset($originalFeedbackNeedReview) && $originalFeedbackNeedReview !== null) {
+                $config->feedback->needReview = $originalFeedbackNeedReview;
+            }
+            if(isset($originalFeedbackTicket) && $originalFeedbackTicket !== null) {
+                $config->feedback->ticket = $originalFeedbackTicket;
+            }
+
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
