@@ -941,4 +941,19 @@ class biTest
             return array();
         }
     }
+
+    /**
+     * Test prepareFieldSettingFormData method.
+     *
+     * @param  mixed $settings
+     * @access public
+     * @return mixed
+     */
+    public function prepareFieldSettingFormDataTest($settings)
+    {
+        $result = $this->objectModel->prepareFieldSettingFormData($settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
