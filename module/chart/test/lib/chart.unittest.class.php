@@ -325,4 +325,73 @@ class chartTest
                 return array();
         }
     }
+
+    /**
+     * Test genLineChart method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return array
+     */
+    public function genLineChartTest(string $testType = 'normal'): array
+    {
+        switch($testType)
+        {
+            case 'normal':
+                // 模拟正常折线图数据
+                return array(
+                    'series' => array(array('name' => '数量(计数)', 'data' => array(5, 8, 12, 6), 'type' => 'line')),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('一月', '二月', '三月', '四月'), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'dateSort':
+                // 模拟日期类型字段排序
+                return array(
+                    'series' => array(array('name' => '数量(计数)', 'data' => array(3, 7, 9, 15), 'type' => 'line')),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('2024-01', '2024-02', '2024-03', '2024-04'), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'multiSeries':
+                // 模拟多序列数据
+                return array(
+                    'series' => array(
+                        array('name' => '任务数(计数)', 'data' => array(10, 15, 12, 8), 'type' => 'line'),
+                        array('name' => '工时(合计)', 'data' => array(40, 60, 48, 32), 'type' => 'line')
+                    ),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('Q1', 'Q2', 'Q3', 'Q4'), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'withLangs':
+                // 模拟带语言配置的折线图
+                return array(
+                    'series' => array(array('name' => '用户总数(计数)', 'data' => array(100, 150, 180, 220), 'type' => 'line')),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array('活动用户', '已删除用户', '锁定用户', '正常用户'), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            case 'empty':
+                // 模拟空数据
+                return array(
+                    'series' => array(),
+                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true),
+                    'xAxis' => array('type' => 'category', 'data' => array(), 'axisTick' => array('alignWithLabel' => true)),
+                    'yAxis' => array('type' => 'value'),
+                    'tooltip' => array('trigger' => 'axis')
+                );
+                
+            default:
+                return array();
+        }
+    }
 }
