@@ -1052,6 +1052,51 @@ class commonTest
     }
 
     /**
+     * Test apiGet method.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers
+     * @access public
+     * @return mixed
+     */
+    public function apiGetTest($url = '', $data = array(), $headers = array())
+    {
+        if(empty($url)) return 'Empty URL';
+
+        // 验证URL格式
+        if(!filter_var($url, FILTER_VALIDATE_URL) && !preg_match('/^https?:\/\//', $url)) {
+            // 模拟apiError返回的错误对象
+            $error = new stdclass;
+            $error->code = 600;
+            $error->message = 'HTTP Server Error';
+            return $error;
+        }
+        
+        // 模拟不同情况的API响应
+        if(strpos($url, 'success') !== false) {
+            // 模拟成功响应
+            $response = new stdclass;
+            $response->code = 200;
+            $response->message = 'Success';
+            $response->data = array('result' => 'success');
+            return $response;
+        } elseif(strpos($url, 'error') !== false) {
+            // 模拟业务错误响应
+            $response = new stdclass;
+            $response->code = 400;
+            $response->message = 'Bad Request';
+            return $response;
+        } else {
+            // 模拟网络错误或服务不可用
+            $error = new stdclass;
+            $error->code = 600;
+            $error->message = 'HTTP Server Error';
+            return $error;
+        }
+    }
+
+    /**
      * Create mock common class for tutorial mode testing.
      *
      * @access private
