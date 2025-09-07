@@ -1006,6 +1006,52 @@ class commonTest
     }
 
     /**
+     * Test sortFeatureMenu method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return mixed
+     */
+    public function sortFeatureMenuTest($testCase = 1)
+    {
+        switch($testCase) {
+            case 1: // 验证方法存在性
+                return method_exists('commonModel', 'sortFeatureMenu') ? '1' : '0';
+                
+            case 2: // 验证方法为静态方法
+                $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
+                return $reflection->isStatic() ? '1' : '0';
+                
+            case 3: // 验证返回类型为bool
+                $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
+                $returnType = $reflection->getReturnType();
+                return ($returnType && $returnType->getName() === 'bool') ? '1' : '0';
+                
+            case 4: // 验证参数数量
+                $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
+                return (string)$reflection->getNumberOfParameters();
+                
+            case 5: // 验证方法为公共可访问
+                $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
+                return $reflection->isPublic() ? '1' : '0';
+                
+            case 6: // 验证参数类型
+                $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
+                $parameters = $reflection->getParameters();
+                if(count($parameters) >= 1) {
+                    $firstParam = $parameters[0];
+                    $paramType = $firstParam->getType();
+                    return ($paramType && $paramType->getName() === 'string') ? '1' : '0';
+                } else {
+                    return '0';
+                }
+                
+            default:
+                return '0';
+        }
+    }
+
+    /**
      * Create mock common class for tutorial mode testing.
      *
      * @access private
