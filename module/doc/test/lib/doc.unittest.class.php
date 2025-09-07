@@ -1987,4 +1987,21 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getExecutionLibPairsByProject method.
+     *
+     * @param  int    $projectID
+     * @param  string $extra
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function getExecutionLibPairsByProjectTest(int $projectID, string $extra = '', array $executions = array()): array
+    {
+        $result = $this->objectModel->getExecutionLibPairsByProject($projectID, $extra, $executions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
