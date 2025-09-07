@@ -1,0 +1,50 @@
+---
+title: workflowfield表测试数据
+desc: 用于formConfig方法单元测试的工作流字段数据
+author: claude
+version: 1
+
+fields:
+- field: id
+  range: 1-5
+  note: 字段ID
+
+- field: module
+  range: user{2},task{2},product{1}
+  note: 模块名
+
+- field: action
+  range: create{2},edit{2},view{1}
+  note: 动作名
+
+- field: field
+  range: custom_field1,custom_field2,custom_field3,extend_field1,extend_field2
+  note: 字段名
+
+- field: type
+  range: varchar{2},int{1},date{1},text{1}
+  note: 字段类型
+
+- field: control
+  range: input{2},select{1},multi-select{1},checkbox{1}
+  note: 控件类型
+
+- field: default
+  range: '[]{3},default_value{1},option1{1}'
+  note: 默认值
+
+- field: rules
+  range: 1,2{2},[]{1},1,3{1}
+  note: 验证规则ID列表
+
+- field: buildin
+  range: 0{4},1{1}
+  note: 是否内置字段
+
+- field: readonly
+  range: 0{4},1{1}
+  note: 是否只读
+
+- field: position
+  range: before,after{2},[]{2}
+  note: 位置
