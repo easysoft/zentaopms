@@ -134,4 +134,26 @@ class datatableTest
 
         return $result;
     }
+
+    /**
+     * Test appendWorkflowFields method.
+     *
+     * @param string $module
+     * @param string $method
+     * @access public
+     * @return mixed
+     */
+    public function appendWorkflowFieldsTest($module, $method = '')
+    {
+        // 在开源版中，工作流模块不存在，直接返回空数组
+        if($this->objectModel->config->edition == 'open')
+        {
+            return array();
+        }
+
+        $result = $this->objectModel->appendWorkflowFields($module, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
