@@ -710,4 +710,23 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test sql2Statement method.
+     *
+     * @param  string $sql
+     * @param  string $mode
+     * @access public
+     * @return mixed
+     */
+    public function sql2StatementTest($sql, $mode = 'text')
+    {
+        $result = $this->objectModel->sql2Statement($sql, $mode);
+        if(dao::isError()) return dao::getError();
+
+        if(is_string($result)) return $result;
+        if(is_object($result)) return 'object';
+
+        return $result;
+    }
 }
