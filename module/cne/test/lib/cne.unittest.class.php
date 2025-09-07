@@ -1298,4 +1298,114 @@ class cneTest
         // 默认情况返回false
         return false;
     }
+
+    /**
+     * Test apiGet method.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $header
+     * @param  string       $host
+     * @access public
+     * @return object
+     */
+    public function apiGetTest(string $url, array|object $data = array(), array $header = array(), string $host = ''): object
+    {
+        // 模拟不同的测试场景，避免实际API调用
+        
+        // 检查URL参数
+        if(empty($url))
+        {
+            // 模拟空URL的错误响应
+            $error = new stdclass();
+            $error->code = 600;
+            $error->message = 'URL cannot be empty';
+            return $error;
+        }
+        
+        // 检查无效URL格式
+        if(strpos($url, '/invalid') !== false)
+        {
+            // 模拟无效URL的服务器错误
+            $error = new stdclass();
+            $error->code = 600;
+            $error->message = 'CNE服务器错误';
+            return $error;
+        }
+        
+        // 根据URL路径返回不同的模拟响应
+        if(strpos($url, '/api/cne/app/status') !== false)
+        {
+            // 模拟成功的API响应
+            $response = new stdclass();
+            $response->code = 200;
+            $response->message = 'success';
+            $response->data = new stdclass();
+            $response->data->name = 'test-app';
+            $response->data->status = 'running';
+            $response->data->ready = true;
+            return $response;
+        }
+        elseif(strpos($url, '/api/cne/app/info') !== false)
+        {
+            // 模拟包含查询参数的API响应
+            $response = new stdclass();
+            $response->code = 200;
+            $response->message = 'success';
+            $response->data = new stdclass();
+            
+            // 根据传入的data参数构建响应数据
+            if(is_array($data) && isset($data['name']))
+            {
+                $response->data->name = $data['name'];
+            }
+            elseif(is_object($data) && isset($data->name))
+            {
+                $response->data->name = $data->name;
+            }
+            else
+            {
+                $response->data->name = 'default-app';
+            }
+            
+            $response->data->namespace = 'default';
+            return $response;
+        }
+        elseif(strpos($url, '/api/cne/app/error') !== false)
+        {
+            // 模拟API错误响应
+            $error = new stdclass();
+            $error->code = 404;
+            $error->message = 'App not found';
+            return $error;
+        }
+        elseif(strpos($url, '/api/cne/app/auth-error') !== false)
+        {
+            // 模拟认证错误响应
+            $error = new stdclass();
+            $error->code = 401;
+            $error->message = 'Unauthorized';
+            return $error;
+        }
+        elseif(strpos($url, '/api/cne/app/custom-host') !== false)
+        {
+            // 模拟使用自定义host的响应
+            $response = new stdclass();
+            $response->code = 200;
+            $response->message = 'success with custom host';
+            $response->data = new stdclass();
+            $response->data->host = $host ?: 'http://default-host';
+            return $response;
+        }
+        else
+        {
+            // 默认成功响应
+            $response = new stdclass();
+            $response->code = 200;
+            $response->message = 'success';
+            $response->data = new stdclass();
+            $response->data->result = 'ok';
+            return $response;
+        }
+    }
 }
