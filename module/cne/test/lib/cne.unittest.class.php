@@ -622,4 +622,40 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getBackupList method.
+     *
+     * @param  int $instanceID
+     * @access public
+     * @return object
+     */
+    public function getBackupListTest(int $instanceID): object
+    {
+        $this->objectModel->error = new stdclass();
+        
+        if($instanceID === 999 || $instanceID === 0)
+        {
+            $error = new stdclass();
+            $error->code = 404;
+            $error->message = 'Instance not found';
+            return $error;
+        }
+        
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+        
+        if(is_null($instance))
+        {
+            $error = new stdclass();
+            $error->code = 404;
+            $error->message = 'Instance not found';
+            return $error;
+        }
+
+        $result = $this->objectModel->getBackupList($instance);
+        if(dao::isError()) return dao::getError();
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
