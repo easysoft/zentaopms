@@ -1398,4 +1398,40 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test buildIconButton method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return mixed
+     */
+    public function buildIconButtonTest($testCase = 1)
+    {
+        // 验证方法存在性和基本属性
+        switch($testCase) {
+            case 1: // 验证方法存在
+                return method_exists('commonModel', 'buildIconButton') ? '1' : '0';
+                
+            case 2: // 验证方法为静态方法
+                $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
+                return $reflection->isStatic() ? '1' : '0';
+                
+            case 3: // 验证方法为公共方法
+                $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
+                return $reflection->isPublic() ? '1' : '0';
+                
+            case 4: // 验证参数数量
+                $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
+                return (string)$reflection->getNumberOfParameters();
+                
+            case 5: // 验证方法签名中第一个参数名称
+                $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
+                $parameters = $reflection->getParameters();
+                return count($parameters) > 0 ? $parameters[0]->getName() : 'no_params';
+                
+            default:
+                return '0';
+        }
+    }
 }
