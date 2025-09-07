@@ -1044,4 +1044,19 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test json2Array method.
+     *
+     * @param  string|object|array|null $json
+     * @access public
+     * @return array
+     */
+    public function json2ArrayTest($json): array
+    {
+        $result = $this->objectModel->json2Array($json);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
