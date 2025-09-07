@@ -2168,4 +2168,66 @@ class commonTest
                 return '0';
         }
     }
+
+    /**
+     * Test printBack method.
+     *
+     * @param  string $backLink
+     * @param  string $class
+     * @param  string $misc
+     * @access public
+     * @return mixed
+     */
+    public function printBackTest($backLink = '', $class = '', $misc = '')
+    {
+        global $lang;
+        
+        // 备份原始状态
+        $originalLang = isset($lang) ? $lang : null;
+        
+        try {
+            // 初始化必要的语言配置
+            if(!isset($lang)) $lang = new stdClass();
+            $lang->goback = 'Go Back';
+            $lang->backShortcutKey = '(Alt+← ←)';
+            
+            // 模拟必要的类
+            if (!class_exists('html')) {
+                eval('class html { 
+                    public static function a($href, $title = "", $target = "", $misc = "") { 
+                        return "<a href=\"$href\" $target $misc>$title</a>"; 
+                    } 
+                }');
+            }
+            
+            // 模拟isonlybody函数
+            if (!function_exists('isonlybody')) {
+                eval('function isonlybody() { return false; }');
+            }
+            
+            // 捕获输出
+            ob_start();
+            $result = commonModel::printBack($backLink, $class, $misc);
+            $output = ob_get_clean();
+            
+            // 如果方法返回false（表示isonlybody为true），返回结果
+            if($result === false) {
+                return false;
+            }
+            
+            // 返回输出内容
+            return $output;
+            
+        } catch (Exception $e) {
+            if (ob_get_level()) ob_end_clean();
+            return 'Exception: ' . $e->getMessage();
+        } finally {
+            // 恢复原始状态
+            if ($originalLang !== null) {
+                $lang = $originalLang;
+            } else {
+                unset($GLOBALS['lang']);
+            }
+        }
+    }
 }
