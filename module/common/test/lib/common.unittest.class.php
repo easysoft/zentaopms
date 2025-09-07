@@ -941,4 +941,68 @@ class commonTest
 
         return $menu;
     }
+
+    /**
+     * Test checkMenuVarsReplaced method.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return mixed
+     */
+    public function checkMenuVarsReplacedTest($testCase = 1)
+    {
+        // 验证方法存在性和基本属性
+        if(!method_exists('commonModel', 'checkMenuVarsReplaced'))
+        {
+            return 'method_not_exists';
+        }
+        
+        $reflection = new ReflectionMethod('commonModel', 'checkMenuVarsReplaced');
+        
+        switch($testCase) {
+            case 1: // 验证方法是公开的且静态的
+                $isPublic = $reflection->isPublic();
+                $isStatic = $reflection->isStatic();
+                return ($isPublic && $isStatic) ? 'public_static_method' : 'method_attributes_wrong';
+                
+            case 2: // 验证方法返回类型
+                $returnType = $reflection->getReturnType();
+                return !$returnType ? 'no_return_type' : 'has_return_type';
+                
+            case 3: // 验证方法无参数
+                $paramCount = $reflection->getNumberOfParameters();
+                return $paramCount === 0 ? 'no_parameters' : 'has_parameters';
+                
+            case 4: // 验证方法具有文档注释
+                $docComment = $reflection->getDocComment();
+                return $docComment !== false ? 'has_doc_comment' : 'no_doc_comment';
+                
+            case 5: // 测试方法签名完整性
+                $signature = $reflection->__toString();
+                $hasCorrectSignature = (
+                    strpos($signature, 'static public method') !== false &&
+                    strpos($signature, 'checkMenuVarsReplaced') !== false
+                );
+                return $hasCorrectSignature ? 'correct_signature' : 'incorrect_signature';
+                
+            default:
+                return 'invalid_test_case';
+        }
+    }
+    
+    /**
+     * Create mock common class for tutorial mode testing.
+     *
+     * @access private
+     * @return object
+     */
+    private function createMockCommonForTutorial()
+    {
+        return new class {
+            public static function isTutorialMode()
+            {
+                return true;
+            }
+        };
+    }
 }
