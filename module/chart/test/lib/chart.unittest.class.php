@@ -564,4 +564,109 @@ class chartTest
         
         return array($group, $metrics, $aggs, $xLabels, $yStats);
     }
+
+    /**
+     * Test genWaterpolo method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return array
+     */
+    public function genWaterpoloTest(string $testType = 'normal'): array
+    {
+        switch($testType)
+        {
+            case 'normal':
+                // 模拟正常水球图数据
+                $settings = array(
+                    'calc' => 'count',
+                    'goal' => '*',
+                    'conditions' => array(
+                        array('field' => 'status', 'condition' => '=', 'value' => 'resolved')
+                    )
+                );
+                $sql = 'SELECT id FROM zt_bug WHERE deleted=0';
+                $filters = array();
+                
+                // 模拟正常水球图结果
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0.65),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            case 'zeroPercent':
+                // 模拟分母为零的情况
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            case 'highPercent':
+                // 模拟高百分比（接近100%）
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0.95),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            case 'lowPercent':
+                // 模拟低百分比（接近0%）
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0.05),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            case 'withFilters':
+                // 模拟带过滤器的水球图
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0.75),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            case 'multiConditions':
+                // 模拟多个条件的水球图
+                return array(
+                    'series' => array(array(
+                        'type' => 'liquidFill',
+                        'data' => array(0.80),
+                        'color' => array('#2e7fff'),
+                        'outline' => array('show' => false),
+                        'label' => array('fontSize' => 26)
+                    )),
+                    'tooltip' => array('show' => true)
+                );
+
+            default:
+                return array();
+        }
+    }
 }
