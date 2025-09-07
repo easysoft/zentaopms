@@ -1285,4 +1285,24 @@ class commonTest
             return $response;
         }
     }
+
+    /**
+     * Test apiError method.
+     *
+     * @param  object|null $result
+     * @access public
+     * @return object
+     */
+    public function apiErrorTest($result = null)
+    {
+        // 使用反射来访问protected static方法
+        $reflectionClass = new ReflectionClass('commonModel');
+        $method = $reflectionClass->getMethod('apiError');
+        $method->setAccessible(true);
+
+        $error = $method->invokeArgs(null, array($result));
+        if(dao::isError()) return dao::getError();
+
+        return $error;
+    }
 }
