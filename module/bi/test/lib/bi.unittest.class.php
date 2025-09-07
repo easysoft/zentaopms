@@ -729,4 +729,20 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test validateSql method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function validateSqlTest($sql, $driver = 'mysql')
+    {
+        $result = $this->objectModel->validateSql($sql, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
