@@ -451,4 +451,29 @@ class branchTest
         $branch = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
         return $this->objectModel->isClickable($branch, $status);
     }
+
+    /**
+     * Test manage branch.
+     *
+     * @param  int    $productID
+     * @param  array  $branchData
+     * @param  array  $newBranches
+     * @access public
+     * @return array|bool
+     */
+    public function manageTest(int $productID, array $branchData = array(), array $newBranches = array()): array|bool
+    {
+        global $tester;
+        
+        // 模拟POST数据
+        $_POST = array();
+        if(!empty($branchData)) $_POST['branch'] = $branchData;
+        if(!empty($newBranches)) $_POST['newbranch'] = $newBranches;
+
+        $result = $this->objectModel->manage($productID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
