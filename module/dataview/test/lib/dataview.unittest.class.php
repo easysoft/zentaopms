@@ -67,4 +67,22 @@ class dataviewTest
             return array('result' => 'fail', 'message' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processMergeFields method.
+     *
+     * @param  string $moduleName
+     * @param  string $field
+     * @param  string $fieldName
+     * @param  array  $workflowFields
+     * @access public
+     * @return mixed
+     */
+    public function processMergeFieldsTest($moduleName, $field, $fieldName, $workflowFields = array())
+    {
+        $result = $this->objectModel->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
