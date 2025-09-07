@@ -139,15 +139,26 @@ class cneTest
     /**
      * Test instancesMetrics method.
      *
+     * @param  array $instances
+     * @param  bool  $volumesMetrics
      * @access public
      * @return array
      */
-    public function instancesMetricsTest(): array
+    public function instancesMetricsTest(array $instances = array(), bool $volumesMetrics = true): array
     {
         $this->objectModel->error = new stdclass();
-        $instances = $this->objectModel->loadModel('instance')->getList();
+        
+        // 如果没有传入实例数组，尝试从数据库获取
+        if(empty($instances))
+        {
+            $instances = $this->objectModel->loadModel('instance')->getList();
+            if(empty($instances)) $instances = array();
+        }
 
-        return $this->objectModel->instancesMetrics($instances);
+        $result = $this->objectModel->instancesMetrics($instances, $volumesMetrics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
