@@ -68,4 +68,24 @@ class convertTest
 
         return $result;
     }
+
+    /**
+     * Test saveState method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function saveStateTest()
+    {
+        try {
+            $this->objectModel->saveState();
+            if(dao::isError()) return dao::getError();
+
+            global $app;
+            $state = $app->session->state;
+            return is_array($state) ? 'array' : gettype($state);
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
 }
