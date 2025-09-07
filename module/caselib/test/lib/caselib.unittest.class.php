@@ -278,4 +278,21 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getPairs method.
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  mixed  $pager
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(string $type = 'all', string $orderBy = 'id_desc', $pager = null): array
+    {
+        $result = $this->objectModel->getPairs($type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
