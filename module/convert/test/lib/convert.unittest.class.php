@@ -1404,4 +1404,48 @@ class convertTest
             $app->session->destroy('jiraMethod');
         }
     }
+
+    /**
+     * Test getIssueTypeList method.
+     *
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function getIssueTypeListTest($relations = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraMethod = $app->session->jiraMethod ?? null;
+
+            // 设置测试session数据
+            $app->session->set('jiraMethod', 'db');
+            
+            // 模拟sourceDBH连接
+            if(empty($this->objectModel->sourceDBH)) {
+                $this->objectModel->sourceDBH = $app->dbh;
+            }
+
+            $result = $this->objectModel->getIssueTypeList($relations);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                $this->restoreJiraMethodSession($originalJiraMethod);
+                return $errors;
+            }
+
+            $this->restoreJiraMethodSession($originalJiraMethod);
+            return $result;
+        } catch (Exception $e) {
+            if(isset($originalJiraMethod)) {
+                $this->restoreJiraMethodSession($originalJiraMethod);
+            }
+            return array();
+        } catch (Error $e) {
+            if(isset($originalJiraMethod)) {
+                $this->restoreJiraMethodSession($originalJiraMethod);
+            }
+            return array();
+        }
+    }
 }

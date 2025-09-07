@@ -1,0 +1,25 @@
+---
+title: JIRA临时关系表测试数据
+desc: 为getIssueTypeList方法生成的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: AType
+  note: A类型
+  range: configurationcontext{5},optionconfiguration{5}
+- field: AID
+  note: A类型ID
+  range: 1001-1010
+- field: BType
+  note: B类型
+  range: project{5},issuetype{5}
+- field: BID
+  note: B类型ID
+  range: 10001-10010
+- field: extra
+  note: 额外信息
+  range: story{3},task{3},bug{4}
