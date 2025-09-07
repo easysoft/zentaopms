@@ -496,4 +496,20 @@ class buildTest
 
         return $result;
     }
+
+    /**
+     * Test addReleaseLabelForBuilds method.
+     *
+     * @param  int   $productID
+     * @param  array $builds
+     * @access public
+     * @return array
+     */
+    public function addReleaseLabelForBuildsTest(int $productID, array $builds): array
+    {
+        $result = $this->objectModel->addReleaseLabelForBuilds($productID, $builds);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
