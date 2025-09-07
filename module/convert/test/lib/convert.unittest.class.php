@@ -88,4 +88,22 @@ class convertTest
             return 'exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getJiraData method.
+     *
+     * @param  string $method
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function getJiraDataTest($method = null, $module = null, $lastID = 0, $limit = 0)
+    {
+        $result = $this->objectModel->getJiraData($method, $module, $lastID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
