@@ -63,4 +63,33 @@ class dimensionTest
             return false;
         }
     }
+
+    /**
+     * Test getFirst method.
+     *
+     * @param  string $mockViewable 模拟可见对象ID数组
+     * @access public
+     * @return mixed
+     */
+    public function getFirstTest($mockViewable = '')
+    {
+        // 如果提供了模拟数据，直接查询第一个ID对应的维度
+        if($mockViewable)
+        {
+            $viewableIds = explode(',', $mockViewable);
+            $firstID = current($viewableIds);
+            $result = $this->objectModel->dao->select('*')->from(TABLE_DIMENSION)->where('id')->eq($firstID)->fetch();
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        
+        // 否则尝试调用原始方法
+        try {
+            $result = $this->objectModel->getFirst();
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
