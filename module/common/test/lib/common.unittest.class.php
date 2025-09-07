@@ -345,4 +345,19 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test checkIP method.
+     *
+     * @param  string $ipWhiteList
+     * @access public
+     * @return mixed
+     */
+    public function checkIPTest($ipWhiteList = '')
+    {
+        $result = $this->objectModel->checkIP($ipWhiteList);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
 }
