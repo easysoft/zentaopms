@@ -1075,4 +1075,18 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test downloadDuckdb method.
+     *
+     * @access public
+     * @return string
+     */
+    public function downloadDuckdbTest()
+    {
+        $result = $this->objectModel->downloadDuckdb();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
