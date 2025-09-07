@@ -763,4 +763,21 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test prepareColumns method.
+     *
+     * @param  string $sql
+     * @param  object $statement
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function prepareColumnsTest($sql, $statement, $driver = 'mysql')
+    {
+        $result = $this->objectModel->prepareColumns($sql, $statement, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
