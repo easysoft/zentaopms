@@ -545,4 +545,22 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test query method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $title
+     * @param  string $extra
+     * @access public
+     * @return object|false
+     */
+    public function queryTest(string $objectType, int $objectID = 0, string $title = '', string $extra = ''): object|false
+    {
+        $result = $this->objectModel->query($objectType, $objectID, $title, $extra);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
