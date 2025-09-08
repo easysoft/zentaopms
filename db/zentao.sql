@@ -15482,7 +15482,7 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tai
 (494, 329, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', NULL, 630, '0');
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('1','0','*','*','*','moduleName=weekly&methodName=computeWeekly','更新项目周报','zentao',0,'normal');
+('1','0','*','*','*','moduleName=reporttemplate&methodName=createCycleReport','定时生成报告','zentao',1,'normal');
 
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (
