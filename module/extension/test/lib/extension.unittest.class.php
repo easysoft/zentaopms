@@ -40,4 +40,23 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test removeExtensionFiles method.
+     *
+     * @param  string $files
+     * @access public
+     * @return array
+     */
+    public function removeExtensionFilesTest($files = '')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('removeExtensionFiles');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, array($files));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
