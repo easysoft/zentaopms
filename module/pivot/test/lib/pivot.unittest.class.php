@@ -954,4 +954,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getGroupsKey method.
+     *
+     * @param  array  $groups
+     * @param  object $record
+     * @access public
+     * @return string
+     */
+    public function getGroupsKeyTest(array $groups, object $record): string
+    {
+        $result = $this->objectModel->getGroupsKey($groups, $record);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
