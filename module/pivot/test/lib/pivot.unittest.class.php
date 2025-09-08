@@ -916,4 +916,25 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test initVarFilter method.
+     *
+     * @param  array  $filters
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function initVarFilterTest(array $filters = array(), string $sql = ''): string
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initVarFilter');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $filters, $sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
