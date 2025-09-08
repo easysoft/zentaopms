@@ -2048,4 +2048,68 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test initDocTemplateSpaces method.
+     *
+     * @param  string $checkType
+     * @access public
+     * @return mixed
+     */
+    public function initDocTemplateSpacesTest(string $checkType = ''): mixed
+    {
+        // 模拟doctemplate配置和语言
+        global $config, $lang;
+        
+        $config->doctemplate = new stdclass();
+        $config->doctemplate->defaultSpaces = array(
+            'plan' => array('requirement', 'design'),
+            'dev' => array('api'),
+            'test' => array()
+        );
+
+        // 模拟doctemplate语言配置
+        $lang->doctemplate = new stdclass();
+        $lang->doctemplate->plan = '计划模板';
+        $lang->doctemplate->requirement = '需求模板';
+        $lang->doctemplate->design = '设计模板';
+        $lang->doctemplate->dev = '开发模板';
+        $lang->doctemplate->api = 'API模板';
+        $lang->doctemplate->test = '测试模板';
+
+        // 执行初始化方法
+        $result = $this->objectModel->initDocTemplateSpaces();
+        if(dao::isError()) return dao::getError();
+
+        // 根据检查类型返回不同结果
+        switch($checkType)
+        {
+            case 'count':
+                $doclibs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('doctemplate')->fetchAll();
+                return count($doclibs);
+            case 'checkParentSpace':
+                $parentSpaces = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)
+                    ->where('type')->eq('doctemplate')
+                    ->andWhere('parent')->eq(0)
+                    ->fetchAll();
+                return count($parentSpaces) > 0 ? 'true' : 'false';
+            case 'checkChildSpace':
+                $childSpaces = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)
+                    ->where('type')->eq('doctemplate')
+                    ->andWhere('parent')->gt(0)
+                    ->fetchAll();
+                return count($childSpaces) > 0 ? 'true' : 'false';
+            case 'checkAttributes':
+                $doclibs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)
+                    ->where('type')->eq('doctemplate')
+                    ->fetchAll();
+                foreach($doclibs as $lib)
+                {
+                    if($lib->vision !== 'rnd' || $lib->addedBy !== 'system') return 'false';
+                }
+                return 'true';
+            default:
+                return 'true';
+        }
+    }
 }
