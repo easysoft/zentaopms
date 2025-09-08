@@ -817,4 +817,41 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test updateMetricFields method.
+     *
+     * @param  string $metricID
+     * @param  object $metric
+     * @access public
+     * @return mixed
+     */
+    public function updateMetricFieldsTest($metricID = '', $metric = null)
+    {
+        if(empty($metricID) || $metric === null) return 'invalid_params';
+        
+        try {
+            $this->objectModel->updateMetricFields($metricID, $metric);
+            if(dao::isError()) return dao::getError();
+            return '';
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Test getMetricById method.
+     *
+     * @param  string $metricID
+     * @access public
+     * @return mixed
+     */
+    public function getMetricByIdTest($metricID = '')
+    {
+        global $tester;
+        $result = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
