@@ -103,4 +103,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getDataStatement method.
+     *
+     * @param  object $calculator
+     * @param  string $returnType
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function getDataStatementTest($calculator = null, $returnType = 'statement', $vision = 'rnd')
+    {
+        $result = $this->objectModel->getDataStatement($calculator, $returnType, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
