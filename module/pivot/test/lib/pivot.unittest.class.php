@@ -581,4 +581,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test pureCrystalData method.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function pureCrystalDataTest(array $records): array
+    {
+        $result = $this->objectModel->pureCrystalData($records);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
