@@ -60,4 +60,23 @@ class markTest
 
         return $result;
     }
+
+    /**
+     * Test hasMark method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $version
+     * @param  string $mark
+     * @param  bool   $onlyMajor
+     * @access public
+     * @return bool
+     */
+    public function hasMarkTest(string $objectType, int $objectID, string $version = 'all', string $mark = 'view', bool $onlyMajor = false): bool
+    {
+        $result = $this->objectModel->hasMark($objectType, $objectID, $version, $mark, $onlyMajor);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
