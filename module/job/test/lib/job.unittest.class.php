@@ -358,4 +358,21 @@ class jobTest
         $job = $this->objectModel->getById($jobID);
         return $this->objectModel->getServerAndPipeline($job, $repo);
     }
+
+    /**
+     * Test initJob method.
+     *
+     * @param  int    $id
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function initJobTest($id, $job)
+    {
+        $result = $this->objectModel->initJob($id, $job);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
