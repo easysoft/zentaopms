@@ -999,4 +999,20 @@ class metricTest
             $config->edition = $originalEdition;
         }
     }
+
+    /**
+     * Test getMetricRecordType method.
+     *
+     * @param  string $code
+     * @param  string $scope
+     * @access public
+     * @return mixed
+     */
+    public function getMetricRecordTypeTest($code = '', $scope = 'system')
+    {
+        $result = $this->objectModel->getMetricRecordType($code, $scope);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
