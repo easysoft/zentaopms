@@ -523,6 +523,22 @@ class metricTest
     }
 
     /**
+     * Test insertMetricLib method.
+     *
+     * @param  array  $recordWithCode
+     * @param  string $calcType
+     * @access public
+     * @return mixed
+     */
+    public function insertMetricLibTest($recordWithCode = array(), $calcType = 'cron')
+    {
+        $result = $this->objectModel->insertMetricLib($recordWithCode, $calcType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test clearOutDatedRecords method.
      *
      * @param  string $code
