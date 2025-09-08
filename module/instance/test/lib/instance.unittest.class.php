@@ -435,4 +435,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test saveBackupSettings method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function saveBackupSettingsTest(object $instance)
+    {
+        $result = $this->objectModel->saveBackupSettings($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
