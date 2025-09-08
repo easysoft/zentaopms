@@ -638,4 +638,19 @@ class metricTest
         // 验证方法是否正确执行，通过返回成功标志
         return true;
     }
+
+    /**
+     * Test getWaterfullProjectPairs method.
+     *
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function getWaterfullProjectPairsTest($vision = 'rnd')
+    {
+        $result = $this->objectModel->getWaterfullProjectPairs($vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
