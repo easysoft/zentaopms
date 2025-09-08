@@ -1714,4 +1714,29 @@ class kanbanTest
 
         return $this->objectModel->buildExecutionGroup($lane, $columns, $objectGroup, '', $storyCardMenu, $bugCardMenu, $taskCardMenu);
     }
+
+    /**
+     * Test get RD kanban by group.
+     *
+     * @param  object $execution
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $regionID
+     * @param  string $groupBy
+     * @param  string $searchValue
+     * @access public
+     * @return array
+     */
+    public function getRDKanbanByGroupTest($execution, $browseType, $orderBy, $regionID, $groupBy, $searchValue = '')
+    {
+        // 使用反射来调用私有方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getRDKanbanByGroup');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $execution, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

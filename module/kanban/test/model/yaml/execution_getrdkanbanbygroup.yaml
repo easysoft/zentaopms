@@ -1,0 +1,67 @@
+title: execution data for getRDKanbanByGroup test
+desc: execution test data
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    prefix: "执行项目"
+    range: 1-10
+  - field: project
+    range: 1-5
+  - field: type
+    range: stage,sprint,kanban
+  - field: model
+    range: scrum,waterfall,kanban
+  - field: status
+    range: wait,doing,done
+  - field: budget
+    range: 100000-500000
+  - field: percent
+    range: 0,10,20,50,80,100
+  - field: auth
+    range: extend
+  - field: desc
+    prefix: "执行项目描述"
+    range: 1-10
+  - field: begin
+    range: "(-1M)-(+1M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 1-5
+  - field: attribute
+    range: "[]{3},request,design,review,mix"
+  - field: acl
+    range: open,private
+  - field: whitelist
+    range: "[]{5},admin,user1,user2"
+  - field: order
+    range: 1-10
+  - field: openedBy
+    range: admin,user1,user2
+  - field: openedDate
+    range: "(-1M)-(now):1D"
+    type: timestamp
+    format: "YY/MM/DD hh:mm:ss"
+  - field: closedBy
+    range: "[]{7},admin,user1,user2"
+  - field: closedDate
+    range: "[]{7},(now)-(+1M):1D"
+    type: timestamp
+    format: "YY/MM/DD hh:mm:ss"
+  - field: canceledBy
+    range: "[]{9},admin"
+  - field: canceledDate
+    range: "[]{9},(now)-(+1M):1D"
+    type: timestamp
+    format: "YY/MM/DD hh:mm:ss"
+  - field: deleted
+    range: "0"
