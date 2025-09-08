@@ -1048,4 +1048,39 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectOptions method.
+     *
+     * @param  array  $data
+     * @param  string $type
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getObjectOptionsTest($data = array(), $type = 'line', $chartType = 'line')
+    {
+        $result = $this->objectModel->getObjectOptions($data, $type, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTimeOptions method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $type
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getTimeOptionsTest($header = array(), $data = array(), $type = 'line', $chartType = 'line')
+    {
+        $result = $this->objectModel->getTimeOptions($header, $data, $type, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
