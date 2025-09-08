@@ -1185,4 +1185,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test checkHasInferenceOfDate method.
+     *
+     * @param  string $code
+     * @param  string $dateType
+     * @param  string $date
+     * @access public
+     * @return mixed
+     */
+    public function checkHasInferenceOfDateTest($code, $dateType, $date)
+    {
+        $result = $this->objectModel->checkHasInferenceOfDate($code, $dateType, $date);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? 1 : 0;
+    }
 }
