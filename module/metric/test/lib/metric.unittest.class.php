@@ -606,4 +606,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test uniteFieldList method.
+     *
+     * @param  array $calcList
+     * @access public
+     * @return mixed
+     */
+    public function uniteFieldListTest($calcList = array())
+    {
+        $result = $this->objectModel->uniteFieldList($calcList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
