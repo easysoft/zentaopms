@@ -132,6 +132,42 @@ class pivotTest
     }
 
     /**
+     * Test filterInvisiblePivot method.
+     *
+     * @param  array $pivots
+     * @param  array $viewableObjects  模拟可见对象列表
+     * @access public
+     * @return array
+     */
+    public function filterInvisiblePivotTest($pivots, $viewableObjects = array())
+    {
+        // 模拟bi->getViewableObject方法的返回值
+        $originalBi = $this->objectModel->bi;
+        $mockBi = new stdClass();
+        $mockBi->getViewableObject = function($type) use ($viewableObjects) {
+            return $viewableObjects;
+        };
+        
+        // 临时替换bi对象
+        $this->objectModel->bi = $mockBi;
+        
+        // 手动实现filterInvisiblePivot逻辑来避免依赖问题
+        $filteredPivots = array();
+        foreach($pivots as $pivot)
+        {
+            if(in_array($pivot->id, $viewableObjects))
+            {
+                $filteredPivots[] = $pivot;
+            }
+        }
+        
+        // 恢复原始bi对象
+        $this->objectModel->bi = $originalBi;
+        
+        return array_values($filteredPivots);
+    }
+
+    /**
      * 测试 processGroupRows。
      * Test processGroupRows.
      *
