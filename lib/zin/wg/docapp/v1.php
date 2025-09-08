@@ -326,10 +326,7 @@ class docApp extends wg
             && $rawModule != 'api';
 
         /* 禅道数据菜单不可用界面：运营（lite）、需求与市场（or） */
-        if ($config->vision == 'lite' || $config->vision == 'or')
-        {
-            $hasZentaoSlashMenu = false;
-        }
+        if ($config->vision == 'lite' || $config->vision == 'or') $hasZentaoSlashMenu = false;
 
         $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
 
