@@ -465,4 +465,21 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test restore method.
+     *
+     * @param  object $instance
+     * @param  object $user
+     * @param  string $backupName
+     * @access public
+     * @return mixed
+     */
+    public function restoreTest(object $instance, object $user, string $backupName)
+    {
+        $result = $this->objectModel->restore($instance, $user, $backupName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

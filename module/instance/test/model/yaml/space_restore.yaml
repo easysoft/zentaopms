@@ -1,0 +1,24 @@
+---
+title: space restore test data
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: '1'
+  - field: name
+    range: '`default`'
+  - field: k8space
+    range: '`quickon-user`'
+  - field: owner
+    range: '`admin`'
+  - field: desc
+    range: '`默认工作空间用于备份还原测试`'
+  - field: vip
+    range: "0"
+  - field: createdAt
+    range: '`2023-01-01 10:00:00`'
+  - field: createdBy
+    range: '`admin`'
+  - field: deleted
+    range: "0"
+...
