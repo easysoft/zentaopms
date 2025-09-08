@@ -2208,4 +2208,19 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test setLastViewed method.
+     *
+     * @param  array $value
+     * @access public
+     * @return mixed
+     */
+    public function setLastViewedTest(array $value): mixed
+    {
+        $this->objectModel->setLastViewed($value);
+        if(dao::isError()) return dao::getError();
+
+        return true;
+    }
 }
