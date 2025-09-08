@@ -1,0 +1,166 @@
+---
+title: completePivot方法测试数据
+desc: 为completePivot方法测试提供pivot表测试数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 透视表ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: dimension
+  note: 维度ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: group
+  note: 分组
+  range: "['system','custom','report']"
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 透视表代码
+  range: "pivot001,pivot002,pivot003,pivot004,pivot005"
+  prefix: ""
+  postfix: ""
+
+- field: driver
+  note: 驱动类型
+  range: mysql
+  prefix: ""
+  postfix: ""
+
+- field: mode
+  note: 模式
+  range: builder
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 透视表名称（多语言JSON格式）
+  range: '["{\\"zh-cn\\":\\"测试透视表1\\",\\"en\\":\\"Test Pivot 1\\"}","{\\"zh-cn\\":\\"测试透视表2\\",\\"en\\":\\"Test Pivot 2\\"}","{\\"zh-cn\\":\\"测试透视表3\\",\\"en\\":\\"Test Pivot 3\\"}"]'
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 透视表描述（多语言JSON格式）
+  range: '["{\\"zh-cn\\":\\"测试描述1\\",\\"en\\":\\"Test Description 1\\"}","{\\"zh-cn\\":\\"测试描述2\\",\\"en\\":\\"Test Description 2\\"}","{\\"zh-cn\\":\\"测试描述3\\",\\"en\\":\\"Test Description 3\\"}"]'
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: open{7},private{3}
+  prefix: ""
+  postfix: ""
+
+- field: whitelist
+  note: 白名单
+  range: "admin,user1,user2"
+  prefix: ""
+  postfix: ""
+
+- field: sql
+  note: SQL查询语句
+  range: "SELECT * FROM zt_user,SELECT * FROM zt_task,SELECT * FROM zt_project"
+  prefix: ""
+  postfix: ""
+
+- field: fields
+  note: 字段配置
+  range: "null,{},{\\"id\\":{\\"type\\":\\"number\\",\\"name\\":\\"ID\\"}}"
+  prefix: ""
+  postfix: ""
+
+- field: langs
+  note: 语言配置
+  range: "null,{},{\\"zh-cn\\":\\"中文\\",\\"en\\":\\"English\\"}"
+  prefix: ""
+  postfix: ""
+
+- field: vars
+  note: 变量配置
+  range: "null,{},{\\"dateVar\\":\\"today\\"}"
+  prefix: ""
+  postfix: ""
+
+- field: objects
+  note: 对象配置
+  range: "null,{},{\\"user\\":\\"用户\\",\\"task\\":\\"任务\\"}"
+  prefix: ""
+  postfix: ""
+
+- field: settings
+  note: 设置配置（JSON格式）
+  range: '["{\\"columns\\":[{\\"field\\":\\"id\\",\\"label\\":\\"ID\\"}]}","{\\"columns\\":[{\\"field\\":\\"name\\",\\"label\\":\\"名称\\"}],\\"filters\\":{\\"status\\":\\"active\\"}}","{\\"chart\\":{\\"type\\":\\"bar\\",\\"title\\":\\"统计图\\"}}"]'
+  prefix: ""
+  postfix: ""
+
+- field: filters
+  note: 过滤器配置
+  range: "null,{},{\\"date\\":{\\"type\\":\\"date\\",\\"value\\":\\"today\\"}}"
+  prefix: ""
+  postfix: ""
+
+- field: step
+  note: 步骤
+  range: 0-5
+  prefix: ""
+  postfix: ""
+
+- field: stage
+  note: 阶段
+  range: "draft{3},published{7}"
+  prefix: ""
+  postfix: ""
+
+- field: builtin
+  note: 内置标识
+  range: "0{8},1{2}"
+  prefix: ""
+  postfix: ""
+
+- field: version
+  note: 版本号
+  range: "1.0,1.1,2.0"
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: "admin,user1,user2,tester"
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: "(Y-1M)-(Y):1D"
+  format: "YYYY-MM-DD hh:mm:ss"
+  prefix: ""
+  postfix: ""
+
+- field: editedBy
+  note: 编辑者
+  range: "admin,user1,user2,editor"
+  prefix: ""
+  postfix: ""
+
+- field: editedDate
+  note: 编辑时间
+  range: "(Y-1M)-(Y):1D"
+  format: "YYYY-MM-DD hh:mm:ss"
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除标识
+  range: "0{9},1{1}"
+  prefix: ""
+  postfix: ""

@@ -265,4 +265,26 @@ class pivotTest
         
         return $pivot;
     }
+
+    /**
+     * Test completePivot method.
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function completePivotTest($pivot)
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 使用反射调用私有方法completePivot
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('completePivot');
+        $method->setAccessible(true);
+        
+        // 调用completePivot方法，该方法会直接修改传入的对象
+        $method->invoke($this->objectModel, $pivot);
+        
+        return $pivot;
+    }
 }
