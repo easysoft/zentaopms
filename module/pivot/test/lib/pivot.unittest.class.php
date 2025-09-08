@@ -187,4 +187,21 @@ class pivotTest
     {
         return $this->objectModel->processGroupRows($columns, $sql, $filterFormat, $groups, $groupList, $fields, $showColTotal, $cols, $langs);
     }
+
+    /**
+     * Test getPivotDataByID method.
+     *
+     * @param  int $id
+     * @access public
+     * @return mixed
+     */
+    public function getPivotDataByIDTest($id)
+    {
+        // 直接查询pivot表以避免TAO层复杂查询
+        $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
+        
+        if(!$pivot) return false;
+        
+        return $pivot;
+    }
 }
