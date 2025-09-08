@@ -521,4 +521,29 @@ class metricTest
 
         return false;
     }
+
+    /**
+     * Test clearOutDatedRecords method.
+     *
+     * @param  string $code
+     * @param  string $cycle
+     * @access public
+     * @return mixed
+     */
+    public function clearOutDatedRecordsTest($code = '', $cycle = '')
+    {
+        global $tester;
+        
+        if(empty($code) || empty($cycle)) return 0;
+        
+        // 记录删除前的数据量
+        $beforeCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
+        
+        $this->objectModel->clearOutDatedRecords($code, $cycle);
+        
+        // 记录删除后的数据量
+        $afterCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
+        
+        return $beforeCount - $afterCount;
+    }
 }

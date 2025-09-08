@@ -1,0 +1,51 @@
+---
+title: metriclib表清理过期记录测试数据
+desc: 用于测试clearOutDatedRecords方法的测试数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  range: 1-20
+- field: metricID
+  range: 1-5
+- field: metricCode
+  range: test_metric_001{4}, test_metric_002{4}, test_metric_003{4}, test_metric_004{4}, test_metric_005{4}
+- field: system
+  range: 0{20}
+- field: program
+  range: 0{20}
+- field: project
+  range: 0{20}
+- field: product
+  range: 0{20}
+- field: execution
+  range: 0{20}
+- field: code
+  range: "{20}"
+- field: pipeline
+  range: "{20}"
+- field: repo
+  range: "{20}"
+- field: user
+  range: admin{20}
+- field: dept
+  range: "{20}"
+- field: year
+  range: 2025{16}, 2024{4}
+- field: month
+  range: 9{16}, 8{4}
+- field: week
+  range: 37{16}, 36{4}
+- field: day
+  range: 8{16}, 7{4}
+- field: value
+  range: 1-20
+- field: calcType
+  range: cron{20}
+- field: calculatedBy
+  range: admin{20}
+- field: date
+  range: '2025-09-08{16}, 2024-08-15{4}'
+- field: deleted
+  range: 0{20}
