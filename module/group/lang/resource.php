@@ -1989,10 +1989,12 @@ $lang->resource->ai->assistantPublish        = 'assistantPublish';
 $lang->resource->ai->assistantWithdraw       = 'assistantWithdraw';
 
 $lang->resource->aiapp = new stdclass();
-$lang->resource->aiapp->square                  = 'miniProgramSquare';
-$lang->resource->aiapp->view                    = 'view';
-$lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
-$lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
+$lang->resource->aiapp->square             = 'miniProgramSquare';
+$lang->resource->aiapp->view               = 'view';
+$lang->resource->aiapp->miniProgramChat    = 'miniProgramChat';
+$lang->resource->aiapp->collectMiniProgram = 'collectMiniProgram';
+$lang->resource->aiapp->models             = 'models';
+$lang->resource->aiapp->converse           = 'converse';
 
 /* Others. */
 $lang->resource->api = new stdclass();
