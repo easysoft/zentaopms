@@ -1,0 +1,33 @@
+---
+title: 空间数据测试配置
+desc: 用于测试实例关联的空间数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 空间ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 空间名称
+  range: test-space-{1-10}
+- field: k8space
+  note: K8S空间名称
+  range: test-k8space-{1-10}
+- field: deleted
+  note: 删除标记
+  range: 0{9},1{1}
+- field: owner
+  note: 空间所有者
+  range: admin{5},user1{3},user2{2}
+- field: createdBy
+  note: 创建者
+  range: admin{6},user1{2},user2{2}
+- field: createdAt
+  note: 创建时间
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss

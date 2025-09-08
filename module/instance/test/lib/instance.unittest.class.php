@@ -286,4 +286,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test batchFresh method.
+     *
+     * @param  array $instances
+     * @access public
+     * @return mixed
+     */
+    public function batchFreshTest(array $instances)
+    {
+        $result = $this->objectModel->batchFresh($instances);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
