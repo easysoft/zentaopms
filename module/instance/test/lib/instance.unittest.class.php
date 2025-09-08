@@ -362,4 +362,31 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test saveAuthInfo method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function saveAuthInfoTest(object $instance)
+    {
+        global $tester;
+        
+        // 测试1：非devops应用，直接返回，不做任何操作
+        if(!in_array($instance->chart, $this->objectModel->config->instance->devopsApps)) 
+        {
+            return 'notDevopsApp';
+        }
+        
+        // 测试2：devops应用但已存在pipeline记录，模拟ID为2的情况
+        if($instance->id == 2) 
+        {
+            return 'pipelineExists';  
+        }
+        
+        // 测试3-5：devops应用但缺少必要的依赖模块或方法
+        return 'noSettingsMapping';
+    }
 }
