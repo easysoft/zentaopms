@@ -986,4 +986,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test setConditionValueWithFilters method.
+     *
+     * @param  array $condition
+     * @param  array $filters
+     * @access public
+     * @return string
+     */
+    public function setConditionValueWithFiltersTest(array $condition, array $filters): string
+    {
+        $result = $this->objectModel->setConditionValueWithFilters($condition, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
