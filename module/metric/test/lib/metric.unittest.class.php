@@ -1121,4 +1121,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getDateByDateType method.
+     *
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function getDateByDateTypeTest($dateType)
+    {
+        $result = $this->objectModel->getDateByDateType($dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
