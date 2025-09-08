@@ -865,4 +865,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processQueryFilterDefaults method.
+     *
+     * @param  array|false $filters
+     * @access public
+     * @return array|false
+     */
+    public function processQueryFilterDefaultsTest(array|false $filters): array|false
+    {
+        $result = $this->objectModel->processQueryFilterDefaults($filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
