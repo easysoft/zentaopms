@@ -213,3 +213,26 @@ $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = 'You 
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Activation Approval Workflow';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'You can design the approval process for activating project approval.';
+
+$lang->upgrade->deliverableModule['plan']   = 'Plan';
+$lang->upgrade->deliverableModule['story']  = 'Story';
+$lang->upgrade->deliverableModule['design'] = 'Design';
+$lang->upgrade->deliverableModule['test']   = 'Test';
+$lang->upgrade->deliverableModule['other']  = 'Other';
+
+$lang->upgrade->reviewObjectList['PP']   = 'Project Plan';
+$lang->upgrade->reviewObjectList['QAP']  = 'Quality Assurance Plan';
+$lang->upgrade->reviewObjectList['CMP']  = 'Configuration Management Plan';
+$lang->upgrade->reviewObjectList['ITP']  = 'Integration Test Plan';
+$lang->upgrade->reviewObjectList['ERS']  = 'Epic Statement';
+$lang->upgrade->reviewObjectList['URS']  = 'User Requirement Statement';
+$lang->upgrade->reviewObjectList['SRS']  = 'Software Requirements Specification';
+$lang->upgrade->reviewObjectList['HLDS'] = 'High Level Design Statement';
+$lang->upgrade->reviewObjectList['DDS']  = 'Detailed Design Statement';
+$lang->upgrade->reviewObjectList['DBDS'] = 'Database Design Statement';
+$lang->upgrade->reviewObjectList['ADS']  = 'Interface Design Statement';
+$lang->upgrade->reviewObjectList['Code'] = 'Code';
+$lang->upgrade->reviewObjectList['ITTC'] = 'Integrate Test Cases';
+$lang->upgrade->reviewObjectList['STP']  = 'System Test Plan';
+$lang->upgrade->reviewObjectList['STTC'] = 'System Test Cases';
+$lang->upgrade->reviewObjectList['UM']   = 'User Manual';

@@ -1035,6 +1035,7 @@ class upgradeTao extends upgradeModel
         $process->model         = '';
         $process->editedBy      = '';
         $process->editedDate    = null;
+        $process->assignedDate  = null;
         $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
         $processID = $this->dao->lastInsertID();
 
@@ -1059,6 +1060,7 @@ class upgradeTao extends upgradeModel
         $activity->workflowGroup = $groupID;
         $activity->editedBy      = '';
         $activity->editedDate    = null;
+        $activity->assignedDate  = null;
         $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
     }
 

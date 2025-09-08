@@ -213,3 +213,26 @@ $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = '可�
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = '激活立项审批流';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = '可以为激活立项审批设计审批流程。';
+
+$lang->upgrade->deliverableModule['plan']   = '计划类';
+$lang->upgrade->deliverableModule['story']  = '需求类';
+$lang->upgrade->deliverableModule['design'] = '设计类';
+$lang->upgrade->deliverableModule['test']   = '测试类';
+$lang->upgrade->deliverableModule['other']  = '其他类';
+
+$lang->upgrade->reviewObjectList['PP']   = '项目计划';
+$lang->upgrade->reviewObjectList['QAP']  = '质量保证计划';
+$lang->upgrade->reviewObjectList['CMP']  = '配置管理计划';
+$lang->upgrade->reviewObjectList['ITP']  = '集成测试计划';
+$lang->upgrade->reviewObjectList['ERS']  = '业务需求说明书';
+$lang->upgrade->reviewObjectList['URS']  = '用户需求说明书';
+$lang->upgrade->reviewObjectList['SRS']  = '软件需求规格说明书';
+$lang->upgrade->reviewObjectList['HLDS'] = '概要设计说明书';
+$lang->upgrade->reviewObjectList['DDS']  = '详细设计说明书';
+$lang->upgrade->reviewObjectList['DBDS'] = '数据库设计文档';
+$lang->upgrade->reviewObjectList['ADS']  = '接口设计文档';
+$lang->upgrade->reviewObjectList['Code'] = '程序代码';
+$lang->upgrade->reviewObjectList['ITTC'] = '集成测试用例';
+$lang->upgrade->reviewObjectList['STP']  = '系统测试计划';
+$lang->upgrade->reviewObjectList['STTC'] = '系统测试用例';
+$lang->upgrade->reviewObjectList['UM']   = '用户手册';
