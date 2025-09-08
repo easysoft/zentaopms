@@ -316,4 +316,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test enoughMemory method.
+     *
+     * @param  object $cloudApp
+     * @access public
+     * @return bool
+     */
+    public function enoughMemoryTest(object $cloudApp): bool
+    {
+        $result = $this->objectModel->enoughMemory($cloudApp);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
