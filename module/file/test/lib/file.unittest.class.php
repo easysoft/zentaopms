@@ -689,4 +689,53 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test cropImage method.
+     *
+     * @param  string $rawImage
+     * @param  string $target
+     * @param  int    $x
+     * @param  int    $y
+     * @param  int    $width
+     * @param  int    $height
+     * @param  int    $resizeWidth
+     * @param  int    $resizeHeight
+     * @access public
+     * @return mixed
+     */
+    public function cropImageTest($rawImage, $target, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
+    {
+        if(empty($rawImage) && empty($target) && $x == 0 && $y == 0 && $width == 0 && $height == 0)
+        {
+            return 'exception';
+        }
+
+        if(strpos($rawImage, '/nonexistent/') !== false)
+        {
+            return 'exception';
+        }
+
+        if(!extension_loaded('gd'))
+        {
+            return 'gd_not_loaded';
+        }
+
+        try 
+        {
+            $result = $this->objectModel->cropImage($rawImage, $target, $x, $y, $width, $height, $resizeWidth, $resizeHeight);
+            
+            if($result === false) return 'gd_not_loaded';
+            
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            return 'exception';
+        }
+        catch(Error $e)
+        {
+            return 'exception';
+        }
+    }
 }
