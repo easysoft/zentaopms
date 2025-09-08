@@ -17,6 +17,26 @@ class mailTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function __constructTest()
+    {
+        $result = new stdClass();
+        $result->isMailModel = $this->objectModel instanceof mailModel;
+        $result->hasMTA = isset($this->objectModel->mta);
+        $result->hasErrors = isset($this->objectModel->errors);
+        $result->hasConfig = isset($this->objectModel->config);
+        $result->mtaType = $this->objectModel->mta ? get_class($this->objectModel->mta) : '';
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * AutoDetect.
      *
      * @param  int    $email
