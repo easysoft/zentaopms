@@ -25,4 +25,21 @@ class markTest
 
         return $result;
     }
+
+    /**
+     * Test getMarks method.
+     *
+     * @param  array  $objects
+     * @param  string $objectType
+     * @param  string $mark
+     * @access public
+     * @return array
+     */
+    public function getMarksTest(array $objects, string $objectType, string $mark): array
+    {
+        $result = $this->objectModel->getMarks($objects, $objectType, $mark);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
