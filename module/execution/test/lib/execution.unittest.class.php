@@ -3115,4 +3115,19 @@ class executionTest
         $this->executionModel->delete(TABLE_EXECUTION, $executionID);
         return $this->executionModel->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('deleted');
     }
+
+    /**
+     * Test getByBuild method.
+     *
+     * @param  int $buildID
+     * @access public
+     * @return mixed
+     */
+    public function getByBuildTest($buildID = 0)
+    {
+        $result = $this->executionModel->getByBuild((int)$buildID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
