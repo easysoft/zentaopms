@@ -611,4 +611,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test flattenCrystalData method.
+     *
+     * @param  array $crystalData
+     * @param  bool  $withGroupSummary
+     * @access public
+     * @return array
+     */
+    public function flattenCrystalDataTest(array $crystalData, bool $withGroupSummary = false): array
+    {
+        $result = $this->objectModel->flattenCrystalData($crystalData, $withGroupSummary);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
