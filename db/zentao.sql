@@ -605,7 +605,7 @@ CREATE TABLE `zt_deliverable` (
   `createdDate` date NULL,
   `lastEditedBy` varchar(30) NULL,
   `lastEditedDate` date NULL,
-  `extra` varchar(255) NULL,
+  `category` varchar(255) NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

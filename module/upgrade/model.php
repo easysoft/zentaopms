@@ -11750,7 +11750,7 @@ class upgradeModel extends model
             foreach(array_filter($this->lang->baseline->objectList) as $key => $value)
             {
                 if(empty($value)) continue;
-                $deliverable->extra = $key; // 标记交付物的类型。
+                $deliverable->category = $key; // 标记交付物的类型。
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 $reviewFlow->root     = $module->workflowGroup;
