@@ -516,4 +516,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getGroupTreeWithKey method.
+     *
+     * @param  array $data
+     * @access public
+     * @return array|string
+     */
+    public function getGroupTreeWithKeyTest(array $data): array|string
+    {
+        $result = $this->objectModel->getGroupTreeWithKey($data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
