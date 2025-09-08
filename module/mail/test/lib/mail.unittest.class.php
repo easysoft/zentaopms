@@ -386,4 +386,23 @@ class mailTest
         
         return $result;
     }
+
+    /**
+     * Test setErrorLang method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setErrorLangTest()
+    {
+        $this->objectModel->setErrorLang();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->mta = $this->objectModel->mta;
+        $result->currentLang = $this->objectModel->app->getClientLang();
+        
+        return $result;
+    }
 }
