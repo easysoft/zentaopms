@@ -248,4 +248,21 @@ class pivotTest
 
         return $pivot;
     }
+
+    /**
+     * Test processNameDesc method.
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function processNameDescTest($pivot)
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 调用processNameDesc方法，该方法会直接修改传入的对象
+        $this->objectModel->processNameDesc($pivot);
+        
+        return $pivot;
+    }
 }
