@@ -412,4 +412,22 @@ class pivotTest
             return '1';
         }
     }
+
+    /**
+     * Test appendWhereFilterToSql method.
+     *
+     * @param  string      $sql
+     * @param  array|false $filters
+     * @param  string      $driver
+     * @access public
+     * @return string
+     */
+    public function appendWhereFilterToSqlTest($sql, $filters, $driver)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->appendWhereFilterToSql($sql, $filters, $driver);
+        
+        return $result;
+    }
 }
