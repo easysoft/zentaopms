@@ -1042,4 +1042,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processDTableCols method.
+     *
+     * @param  array $cols
+     * @access public
+     * @return mixed
+     */
+    public function processDTableColsTest(array $cols)
+    {
+        $result = $this->objectModel->processDTableCols($cols);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
