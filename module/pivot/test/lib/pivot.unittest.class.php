@@ -675,4 +675,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processPercentage method.
+     *
+     * @param  array $crystalData
+     * @param  array $allSummary
+     * @access public
+     * @return array
+     */
+    public function processPercentageTest(array $crystalData, array $allSummary): array
+    {
+        $result = $this->objectModel->processPercentage($crystalData, $allSummary);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
