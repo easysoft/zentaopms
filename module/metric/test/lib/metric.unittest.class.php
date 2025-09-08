@@ -621,4 +621,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest($queryID = 0, $actionURL = '')
+    {
+        $this->objectModel->buildSearchForm($queryID, $actionURL);
+        if(dao::isError()) return dao::getError();
+
+        // 验证方法是否正确执行，通过返回成功标志
+        return true;
+    }
 }
