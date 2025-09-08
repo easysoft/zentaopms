@@ -669,4 +669,20 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test processScopeList method.
+     *
+     * @param  string $stage
+     * @access public
+     * @return mixed
+     */
+    public function processScopeListTest($stage = 'all')
+    {
+        $this->objectModel->processScopeList($stage);
+        if(dao::isError()) return dao::getError();
+
+        // 方法执行成功，返回true
+        return true;
+    }
 }
