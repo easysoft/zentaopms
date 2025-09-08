@@ -199,4 +199,29 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test doCneInstall method.
+     *
+     * @param  object|null $instance
+     * @param  object      $space
+     * @param  object      $settingsMap
+     * @param  array       $snippets
+     * @param  array       $settings
+     * @access public
+     * @return mixed
+     */
+    public function doCneInstallTest($instance, object $space, object $settingsMap, array $snippets = array(), array $settings = array())
+    {
+        if($instance === null) return false;
+        
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('doCneInstall');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $instance, $space, $settingsMap, $snippets, $settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
