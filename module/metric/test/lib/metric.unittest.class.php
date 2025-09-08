@@ -707,4 +707,60 @@ class metricTest
 
         return $processedMeasure;
     }
+
+    /**
+     * Test processObjectList method.
+     *
+     * @param  mixed $urAndSR
+     * @access public
+     * @return mixed
+     */
+    public function processObjectListTest($urAndSR = null)
+    {
+        // 备份原始配置
+        $originalUrAndSR = isset($this->objectModel->config->custom->URAndSR) 
+                          ? $this->objectModel->config->custom->URAndSR : null;
+        $originalObjectList = isset($this->objectModel->lang->metric->objectList['requirement']) 
+                             ? $this->objectModel->lang->metric->objectList['requirement'] : null;
+
+        // 设置测试配置
+        if($urAndSR !== null)
+        {
+            if(!isset($this->objectModel->config->custom)) $this->objectModel->config->custom = new stdClass();
+            $this->objectModel->config->custom->URAndSR = $urAndSR;
+        }
+        else if(isset($this->objectModel->config->custom->URAndSR))
+        {
+            unset($this->objectModel->config->custom->URAndSR);
+        }
+
+        // 确保requirement条目存在
+        if(!isset($this->objectModel->lang->metric->objectList['requirement']))
+        {
+            $this->objectModel->lang->metric->objectList['requirement'] = 'Requirement';
+        }
+
+        $this->objectModel->processObjectList();
+        if(dao::isError()) return dao::getError();
+
+        // 检查requirement条目是否存在
+        $hasRequirement = isset($this->objectModel->lang->metric->objectList['requirement']);
+
+        // 恢复原始配置
+        if($originalUrAndSR !== null)
+        {
+            $this->objectModel->config->custom->URAndSR = $originalUrAndSR;
+        }
+        else if(isset($this->objectModel->config->custom->URAndSR))
+        {
+            unset($this->objectModel->config->custom->URAndSR);
+        }
+
+        if($originalObjectList !== null)
+        {
+            $this->objectModel->lang->metric->objectList['requirement'] = $originalObjectList;
+        }
+
+        return $hasRequirement;
+    }
 }
