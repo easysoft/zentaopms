@@ -1025,4 +1025,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsOptions method.
+     *
+     * @param  array  $fieldSettings
+     * @param  array  $records
+     * @param  string $driver
+     * @access public
+     * @return array
+     */
+    public function getFieldsOptionsTest($fieldSettings = array(), $records = array(), $driver = 'mysql')
+    {
+        $result = $this->objectModel->getFieldsOptions($fieldSettings, $records, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
