@@ -1,0 +1,49 @@
+---
+title: User backupList test data
+desc: Test data for users in backupList testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: User ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: User account
+  range: admin{1},backup_user1{1},backup_user2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: Password hash
+  range: 123456{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: Real name
+  range: 管理员{1},备份用户1{1},备份用户2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: User role
+  range: admin{1},dev{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: Deleted flag
+  range: 0{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

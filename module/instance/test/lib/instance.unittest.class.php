@@ -420,4 +420,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test backupList method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function backupListTest(object $instance)
+    {
+        $result = $this->objectModel->backupList($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
