@@ -1231,4 +1231,26 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test filterCalcByEdition method.
+     *
+     * @param  array $calcInstances
+     * @access public
+     * @return mixed
+     */
+    public function filterCalcByEditionTest($calcInstances = null)
+    {
+        if($calcInstances === null)
+        {
+            // 默认测试数据
+            $calcInstances = array();
+        }
+        
+        $result = $this->objectModel->filterCalcByEdition($calcInstances);
+        if(dao::isError()) return dao::getError();
+
+        // 返回过滤后的实例数量，便于测试验证
+        return count($result);
+    }
 }
