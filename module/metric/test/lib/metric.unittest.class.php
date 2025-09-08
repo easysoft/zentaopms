@@ -258,4 +258,45 @@ class metricTest
 
         return true;
     }
+
+    /**
+     * Test getLatestResultByCode method.
+     *
+     * @param  string $code
+     * @param  array  $options
+     * @param  object $pager
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function getLatestResultByCodeTest($code = null, $options = array(), $pager = null, $vision = 'rnd')
+    {
+        // Suppress errors and capture output to handle various error conditions
+        ob_start();
+        $error = error_get_last();
+        
+        try {
+            $result = $this->objectModel->getLatestResultByCode($code, $options, $pager, $vision);
+            if(dao::isError()) return dao::getError();
+
+            ob_end_clean();
+            return $result;
+        } catch(TypeError $e) {
+            ob_end_clean();
+            return 'TypeError: Metric not found or invalid';
+        } catch(Exception $e) {
+            ob_end_clean();
+            return 'Exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            ob_end_clean();
+            return 'Error: ' . $e->getMessage();
+        }
+        
+        $output = ob_get_clean();
+        if(!empty($output)) {
+            return 'Error captured: ' . strip_tags($output);
+        }
+        
+        return false;
+    }
 }
