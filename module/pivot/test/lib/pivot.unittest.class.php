@@ -786,4 +786,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test addDrillFields method.
+     *
+     * @param  array $cell
+     * @param  array $drillFields
+     * @access public
+     * @return array
+     */
+    public function addDrillFieldsTest(array $cell, array $drillFields): array
+    {
+        $result = $this->objectModel->addDrillFields($cell, $drillFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
