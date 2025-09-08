@@ -1754,4 +1754,20 @@ class kanbanTest
 
         return $result ? 1 : 0;
     }
+
+    /**
+     * Test getKanbanCallback method.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return mixed
+     */
+    public function getKanbanCallbackTest($kanbanID, $regionID)
+    {
+        $result = $this->objectModel->getKanbanCallback($kanbanID, $regionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,34 @@
+---
+title: 看板区域回调数据定义
+desc: 用于测试getKanbanCallback方法的区域数据
+
+fields:
+- field: id
+  note: 区域ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  
+- field: space
+  note: 空间ID
+  range: 1-5
+  
+- field: kanban
+  note: 看板ID
+  range: 1-10
+  
+- field: name
+  note: 区域名称
+  range: '区域{1-10}'
+  
+- field: order
+  note: 排序
+  range: 1-10
+  
+- field: createdBy
+  note: 创建者
+  range: 'admin,user1,user2'
+  
+- field: deleted
+  note: 是否删除
+  range: '0'
