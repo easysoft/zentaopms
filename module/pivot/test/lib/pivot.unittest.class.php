@@ -895,4 +895,25 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test genOriginSheet method.
+     *
+     * @param  array       $fields
+     * @param  array       $settings
+     * @param  string      $sql
+     * @param  array|false $filters
+     * @param  array       $langs
+     * @param  string      $driver
+     * @access public
+     * @return array|string
+     */
+    public function genOriginSheetTest($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
+    {
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->genOriginSheet($fields, $settings, $sql, $filters, $langs, $driver);
+        
+        return $result;
+    }
 }
