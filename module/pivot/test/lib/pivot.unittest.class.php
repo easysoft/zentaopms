@@ -499,4 +499,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test columnStatistics method.
+     *
+     * @param  array  $records
+     * @param  string $statistic
+     * @param  string $field
+     * @access public
+     * @return mixed
+     */
+    public function columnStatisticsTest(array $records, string $statistic, string $field): mixed
+    {
+        $result = $this->objectModel->columnStatistics($records, $statistic, $field);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
