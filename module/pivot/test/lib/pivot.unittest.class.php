@@ -691,4 +691,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test groupRecords method.
+     *
+     * @param  array $records
+     * @param  array $groups
+     * @access public
+     * @return array
+     */
+    public function groupRecordsTest(array $records, array $groups): array
+    {
+        $result = $this->objectModel->groupRecords($records, $groups);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
