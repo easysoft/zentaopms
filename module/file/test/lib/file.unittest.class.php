@@ -510,4 +510,20 @@ class fileTest
         
         return $result;
     }
+
+    /**
+     * Test deleteByObject method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function deleteByObjectTest(string $objectType, int $objectID): bool
+    {
+        $result = $this->objectModel->deleteByObject($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
