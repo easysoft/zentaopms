@@ -1105,4 +1105,20 @@ class metricTest
         
         return array('before' => $beforeCount, 'after' => $afterCount, 'updated' => $beforeCount - $afterCount);
     }
+
+    /**
+     * Test parseDateStr method.
+     *
+     * @param  string $date
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function parseDateStrTest($date, $dateType = 'all')
+    {
+        $result = $this->objectModel->parseDateStr($date, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
