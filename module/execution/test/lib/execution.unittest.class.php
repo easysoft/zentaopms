@@ -3130,4 +3130,22 @@ class executionTest
 
         return $result;
     }
+
+    /**
+     * Test buildCaseSearchForm method.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function buildCaseSearchFormTest(array $products, int $queryID, string $actionURL, int $executionID): string
+    {
+        $this->executionModel->loadModel('testcase');
+        $this->executionModel->buildCaseSearchForm($products, $queryID, $actionURL, $executionID);
+        
+        return 'executionCase';
+    }
 }
