@@ -685,4 +685,26 @@ class metricTest
         // 方法执行成功，返回true
         return true;
     }
+
+    /**
+     * Test processUnitList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processUnitListTest()
+    {
+        // 备份原始unitList配置
+        $originalUnitList = isset($this->objectModel->lang->metric->unitList['measure']) 
+                           ? $this->objectModel->lang->metric->unitList['measure'] : null;
+
+        $this->objectModel->processUnitList();
+        if(dao::isError()) return dao::getError();
+
+        // 获取处理后的measure单位
+        $processedMeasure = isset($this->objectModel->lang->metric->unitList['measure']) 
+                           ? $this->objectModel->lang->metric->unitList['measure'] : null;
+
+        return $processedMeasure;
+    }
 }
