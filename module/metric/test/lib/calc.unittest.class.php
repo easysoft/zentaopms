@@ -1061,5 +1061,23 @@ class metricTest
         $metric->collector = ",{$user},";
         $this->objectModel->updateMetricFields($metricID, $metric);
     }
+
+    /**
+     * Test getObjectTable method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return mixed
+     */
+    public function getObjectTableTest($header = null, $data = null, $dateType = 'day', $withCalcTime = true)
+    {
+        $result = $this->objectModel->getObjectTable($header, $data, $dateType, $withCalcTime);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
 
