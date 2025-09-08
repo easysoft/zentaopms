@@ -562,4 +562,33 @@ class metricTest
         
         return $beforeCount - $afterCount;
     }
+
+    /**
+     * Test getDataset method.
+     *
+     * @param  mixed $dao
+     * @access public
+     * @return mixed
+     */
+    public function getDatasetTest($dao = null)
+    {
+        if($dao === null) {
+            global $tester;
+            $dao = $tester->dao;
+        }
+        
+        $result = $this->objectModel->getDataset($dao);
+        if(dao::isError()) return dao::getError();
+
+        if(is_object($result)) {
+            $info = new stdClass();
+            $info->className = get_class($result);
+            $info->dao = is_object($result->dao) ? gettype($result->dao) : 'null';
+            $info->config = is_object($result->config) ? gettype($result->config) : 'null';
+            $info->vision = isset($result->vision) ? gettype($result->vision) : 'null';
+            return $info;
+        }
+        
+        return $result;
+    }
 }
