@@ -23,4 +23,23 @@ class hostTest
 
         return $result;
     }
+
+    /**
+     * Test processTreemap method.
+     *
+     * @param  array $datas
+     * @access public
+     * @return array
+     */
+    public function processTreemapTest($datas = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processTreemap');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
