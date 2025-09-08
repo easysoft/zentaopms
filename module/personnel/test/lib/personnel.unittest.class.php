@@ -488,4 +488,84 @@ class personnelTest
         $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         return $this->objectModel->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
     }
+
+    /**
+     * 测试更新对象的父级白名单。
+     * Test update parent whitelist of the object.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  array  $accounts
+     * @param  string $source
+     * @param  string $updateType
+     * @param  array  $deletedAccounts
+     * @param  string $objectTable
+     * @access public
+     * @return string|array
+     */
+    public function updateParentWhitelistTest(string $objectType, int $objectID, array $accounts, string $source = 'sync', string $updateType = 'replace', array $deletedAccounts = array(), string $objectTable = ''): string|array
+    {
+        if(empty($objectTable))
+        {
+            $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        }
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('updateParentWhitelist');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $objectType, $objectID, $accounts, $source, $updateType, $deletedAccounts, $objectTable);
+
+        if(dao::isError()) return dao::getError();
+
+        if($result === false) return 'false';
+
+        global $tester;
+        $return = '';
+
+        if($objectType == 'product')
+        {
+            $product = $tester->dao->select('program')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch();
+            if($product && $product->program)
+            {
+                $parentWhitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($product->program)->fetch('whitelist');
+                $return .= "parent_whitelist:{$parentWhitelist};";
+                
+                $acls = $tester->dao->select('account,source')->from(TABLE_ACL)
+                    ->where('objectID')->eq($product->program)
+                    ->andWhere('objectType')->eq('program')
+                    ->fetchPairs();
+                if($acls)
+                {
+                    $return .= 'parent_acls:';
+                    foreach($acls as $account => $source) $return .= "{$account}:{$source},";
+                    $return = trim($return, ',');
+                    $return .= ';';
+                }
+            }
+        }
+        elseif($objectType == 'sprint')
+        {
+            $sprint = $tester->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+            if($sprint && $sprint->project)
+            {
+                $parentWhitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($sprint->project)->fetch('whitelist');
+                $return .= "parent_whitelist:{$parentWhitelist};";
+                
+                $acls = $tester->dao->select('account,source')->from(TABLE_ACL)
+                    ->where('objectID')->eq($sprint->project)
+                    ->andWhere('objectType')->eq('project')
+                    ->fetchPairs();
+                if($acls)
+                {
+                    $return .= 'parent_acls:';
+                    foreach($acls as $account => $source) $return .= "{$account}:{$source},";
+                    $return = trim($return, ',');
+                    $return .= ';';
+                }
+            }
+        }
+
+        return $return ? $return : 'no_parent_update';
+    }
 }
