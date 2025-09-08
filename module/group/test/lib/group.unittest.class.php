@@ -620,4 +620,25 @@ class groupTest
 
         return count($result);
     }
+
+    /**
+     * Test processDepends method.
+     *
+     * @param  array $depends
+     * @param  array $privs
+     * @param  array $excludes
+     * @param  array $processedPrivs
+     * @access public
+     * @return array
+     */
+    public function processDependsTest($depends, $privs, $excludes, $processedPrivs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('processDepends');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $depends, $privs, $excludes, $processedPrivs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
