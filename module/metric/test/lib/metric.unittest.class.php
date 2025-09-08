@@ -1153,4 +1153,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test isCalcByCron method.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function isCalcByCronTest($code, $date, $dateType)
+    {
+        $result = $this->objectModel->isCalcByCron($code, $date, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
