@@ -11270,7 +11270,7 @@ class upgradeModel extends model
             $nameFilter = array();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
-            foreach(array_filter($this->lang->design->typeList) as $key => $value)
+            foreach(array_filter($this->lang->design->typeList) as $value)
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
@@ -11283,7 +11283,7 @@ class upgradeModel extends model
                 }
             }
 
-            foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
+            foreach(array_filter($this->lang->design->plusTypeList) as $value)
             {
                 if(empty($value) || $module->projectModel != 'waterfallplus') continue;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
@@ -11352,7 +11352,6 @@ class upgradeModel extends model
 
         $deliverableList   = array();
         $nameFilter        = array(); // 过滤重名交付物。
-        $otherModule       = array(); // 交付物其他分类。
         $otherActivity     = array();
         $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
