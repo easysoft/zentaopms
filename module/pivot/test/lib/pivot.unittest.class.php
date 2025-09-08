@@ -880,4 +880,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test isFiltersAllEmpty method.
+     *
+     * @param  array $filters
+     * @access public
+     * @return bool
+     */
+    public function isFiltersAllEmptyTest(array $filters): bool
+    {
+        $result = $this->objectModel->isFiltersAllEmpty($filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
