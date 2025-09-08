@@ -178,4 +178,25 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test createInstance method.
+     *
+     * @param  object $app
+     * @param  object $space
+     * @param  string $thirdDomain
+     * @param  string $name
+     * @param  string $k8name
+     * @param  string $channel
+     * @param  array  $snippets
+     * @access public
+     * @return mixed
+     */
+    public function createInstanceTest(object $app, object $space, string $thirdDomain, string $name = '', string $k8name = '', string $channel = 'stable', array $snippets = array())
+    {
+        $result = $this->objectModel->createInstance($app, $space, $thirdDomain, $name, $k8name, $channel, $snippets);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
