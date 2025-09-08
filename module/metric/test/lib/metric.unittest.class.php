@@ -1136,4 +1136,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getStartAndEndOfWeek method.
+     *
+     * @param  int    $year
+     * @param  int    $week
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getStartAndEndOfWeekTest($year, $week, $type = 'datetime')
+    {
+        $result = $this->objectModel->getStartAndEndOfWeek($year, $week, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
