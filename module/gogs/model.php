@@ -328,11 +328,15 @@ class gogsModel extends model
      */
     public function apiGetMergeRequests(int $giteaID,  string $project): array
     {
-        $apiRoot  = $this->getApiRoot($giteaID, false);
-        $apiPath  = "/repos/{$project}/pulls";
-        $url      = sprintf($apiRoot, $apiPath);
+        $apiRoot = $this->getApiRoot($giteaID);
+        if(!$apiRoot) return array();
+
+        $apiPath = "/repos/{$project}/pulls";
+        $url     = sprintf($apiRoot, $apiPath);
 
         $mrList = json_decode(common::http($url));
+        if(!is_array($mrList)) return array();
+
         foreach($mrList as $mr)
         {
             $mr->web_url = $mr->html_url;

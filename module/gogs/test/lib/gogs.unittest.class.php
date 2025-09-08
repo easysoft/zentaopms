@@ -29,4 +29,20 @@ class gogsTest
             ->andWhere('providerType')->eq('gogs')
             ->fetchAll();
     }
+
+    /**
+     * Test apiGetMergeRequests method.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @access public
+     * @return mixed
+     */
+    public function apiGetMergeRequestsTest(int $gogsID = 0, string $project = ''): mixed
+    {
+        $result = $this->gogs->apiGetMergeRequests($gogsID, $project);
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? count($result) : 0;
+    }
 }
