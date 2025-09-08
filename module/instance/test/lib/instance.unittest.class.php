@@ -161,4 +161,21 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test installSysSLB method.
+     *
+     * @param  object $app
+     * @param  string $k8name
+     * @param  string $channel
+     * @access public
+     * @return mixed
+     */
+    public function installSysSLBTest(object $app, string $k8name = 'cne-lb', string $channel = 'stable')
+    {
+        $result = $this->objectModel->installSysSLB($app, $k8name, $channel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
