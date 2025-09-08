@@ -135,4 +135,23 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getResultByCodeWithArray method.
+     *
+     * @param  string $code
+     * @param  array  $options
+     * @param  string $type
+     * @param  object $pager
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function getResultByCodeWithArrayTest($code = null, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
+    {
+        $result = $this->objectModel->getResultByCodeWithArray($code, $options, $type, $pager, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

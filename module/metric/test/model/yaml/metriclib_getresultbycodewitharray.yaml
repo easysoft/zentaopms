@@ -1,0 +1,72 @@
+---
+title: metriclib表测试数据-getResultByCodeWithArray方法
+desc: 用于测试getResultByCodeWithArray方法的度量库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+- field: metricID
+  note: 度量项ID
+  range: '1-10:R'
+- field: metricCode
+  note: 度量项代码
+  range: 'test_metric_1{8},test_metric_2{8},bug_count{6},story_count{8}'
+- field: system
+  note: 系统
+  range: '0'
+- field: program
+  note: 项目集
+  range: '0'
+- field: project
+  note: 项目
+  range: '0'
+- field: product
+  note: 产品
+  range: '0'
+- field: execution
+  note: 执行
+  range: '0'
+- field: code
+  note: 代码
+  range: ''
+- field: pipeline
+  note: 流水线
+  range: ''
+- field: repo
+  note: 代码库
+  range: ''
+- field: user
+  note: 用户
+  range: ''
+- field: dept
+  note: 部门
+  range: ''
+- field: year
+  note: 年份
+  range: '2024'
+- field: month
+  note: 月份
+  range: '01-12:R'
+- field: week
+  note: 周
+  range: '01-52:R'
+- field: day
+  note: 日
+  range: '01-31:R'
+- field: value
+  note: 度量值
+  range: '10-100:10'
+- field: calcType
+  note: 计算类型
+  range: 'cron'
+- field: calculatedBy
+  note: 计算者
+  range: 'admin'
+- field: calculatedDate
+  note: 计算时间
+  range: '2024-01-01 00:00:00,2024-02-01 00:00:00,2024-03-01 00:00:00'
