@@ -638,4 +638,24 @@ class myTest
         foreach($reviewList as $review) $return .= "{$review->type},{$review->id};";
         return trim($return, ',');
     }
+
+    /**
+     * Test getProductRelatedData method.
+     *
+     * @param  array $productKeys
+     * @access public
+     * @return mixed
+     */
+    public function getProductRelatedDataTest(array $productKeys)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProductRelatedData');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, [$productKeys]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回数组长度，因为getProductRelatedData返回包含4个元素的数组
+        return count($result);
+    }
 }
