@@ -28,7 +28,7 @@ class searchModel extends model
         $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
         $funcName  = $this->session->$cacheKey['funcName']  ?? '';
         $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
-        if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
+        if(!$funcModel || !$funcName || !$funcArgs) return $_SESSION[$module . 'searchParams'] ?? [];
 
         $funcArgs['cacheSearchFunc'] = $cacheSearchFunc;
         return $this->loadModel($funcModel)->$funcName(...array_values($funcArgs)); // PHP 8.0以下只能展开索引数组。PHP 8.0 below can only unpack indexed arrays.
@@ -122,8 +122,8 @@ class searchModel extends model
         /* Init vars. */
         $module       = $this->post->module;
         $searchConfig = $this->processSearchParams($module, true);
-        $searchFields = $searchConfig['fields'];
-        $fieldParams  = $searchConfig['params'];
+        $searchFields = $searchConfig['fields'] ?? [] ;
+        $fieldParams  = $searchConfig['params'] ?? [];
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -195,7 +195,7 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->post->module;
         $searchConfig = $this->processSearchParams($module, true);
-        $fieldParams  = $searchConfig['params'];
+        $fieldParams  = $searchConfig['params'] ?? [];
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
