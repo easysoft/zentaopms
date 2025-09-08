@@ -366,4 +366,19 @@ class metricTest
         
         return $result;
     }
+
+    /**
+     * Test getRecordFields method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function getRecordFieldsTest($code = '')
+    {
+        $result = $this->objectModel->getRecordFields($code);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
