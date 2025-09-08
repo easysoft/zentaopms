@@ -40,6 +40,21 @@ class docTest
     }
 
     /**
+     * Test getLastViewed method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getLastViewedTest(string $type)
+    {
+        $result = $this->objectModel->getLastViewed($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 创建一个API文档库。
      * Creat a api doc library.
      *
