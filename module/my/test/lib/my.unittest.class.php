@@ -658,4 +658,25 @@ class myTest
         // 返回数组长度，因为getProductRelatedData返回包含4个元素的数组
         return count($result);
     }
+
+    /**
+     * Test getTaskAssignedByMe method.
+     *
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  array  $objectIdList
+     * @access public
+     * @return mixed
+     */
+    public function getTaskAssignedByMeTest(?object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getTaskAssignedByMe');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, [$pager, $orderBy, $objectIdList]);
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? '0' : count($result);
+    }
 }
