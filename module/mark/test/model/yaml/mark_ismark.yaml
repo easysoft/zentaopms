@@ -1,0 +1,34 @@
+---
+title: isMark方法测试数据
+desc: 用于测试markModel::isMark()方法的测试数据配置
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 标记ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: story{7},task{7},bug{6}
+- field: objectID
+  note: 对象ID
+  range: 1-10
+- field: version
+  note: 版本号
+  range: 1.0{8},1.1{6},2.0{6}
+- field: account
+  note: 用户账号
+  range: admin{10},user1{5},user2{5}
+- field: mark
+  note: 标记类型
+  range: view{12},edit{4},delete{4}
+- field: extra
+  note: 扩展字段
+  range: []{20}
+- field: date
+  note: 创建时间
+  range: (-1M)-(w):1D
+  format: YYYY-MM-DD hh:mm:ss

@@ -42,4 +42,22 @@ class markTest
 
         return $result;
     }
+
+    /**
+     * Test isMark method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $version
+     * @param  string $mark
+     * @access public
+     * @return mixed
+     */
+    public function isMarkTest(string $objectType, int $objectID, string $version, string $mark = 'view')
+    {
+        $result = $this->objectModel->isMark($objectType, $objectID, $version, $mark);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
