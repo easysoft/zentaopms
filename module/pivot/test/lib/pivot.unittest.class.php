@@ -643,4 +643,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getRowTotal method.
+     *
+     * @param  array $row
+     * @access public
+     * @return array
+     */
+    public function getRowTotalTest(array $row): array
+    {
+        $result = $this->objectModel->getRowTotal($row);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
