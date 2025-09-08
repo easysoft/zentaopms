@@ -166,7 +166,7 @@ function p($keys = '', $delimiter = ',')
         $values = getValues($_result, $part, $delimiter);
         if(!is_array($values)) continue;
 
-        foreach($values as $value) echo $value . "\n";
+        foreach($values as $value) echo ($value ? $value : 0) . "\n";
     }
 
     return true;
