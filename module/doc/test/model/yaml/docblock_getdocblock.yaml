@@ -1,0 +1,22 @@
+---
+title: 文档块测试数据
+desc: 用于getDocBlock方法测试的docblock表数据
+
+fields:
+- field: id
+  range: 1-10
+  
+- field: doc
+  range: 1001-1005
+  
+- field: type
+  range: text,image,table,code,list
+  
+- field: settings
+  range: '{"align":"left"},{"align":"center"},{"align":"right"},{},{}'
+  
+- field: content
+  range: '{"text":"测试内容1"},{"text":"测试内容2"},{"text":"测试内容3"},{"text":"测试内容4"},{"text":"测试内容5"}'
+  
+- field: extra
+  range: extra1,extra2,extra3,[]{2}

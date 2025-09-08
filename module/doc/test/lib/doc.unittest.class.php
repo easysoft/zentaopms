@@ -2223,4 +2223,19 @@ class docTest
 
         return true;
     }
+
+    /**
+     * Test getDocBlock method.
+     *
+     * @param  int $blockID
+     * @access public
+     * @return mixed
+     */
+    public function getDocBlockTest(int $blockID)
+    {
+        $result = $this->objectModel->getDocBlock($blockID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
