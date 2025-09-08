@@ -509,4 +509,21 @@ class gitlabTest
         if(dao::isError()) return dao::getError();
         return $result ? $this->gitlab->loadModel($issue->objectType)->getByID($issue->objectID) : false;
     }
+
+    /**
+     * Test apiCreateTag method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $tag
+     * @access public
+     * @return mixed
+     */
+    public function apiCreateTagTest(int $gitlabID, int $projectID, object $tag): mixed
+    {
+        $result = $this->gitlab->apiCreateTag($gitlabID, $projectID, $tag);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
