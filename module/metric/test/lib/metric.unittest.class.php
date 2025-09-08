@@ -89,4 +89,18 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getDAO method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDAOTest()
+    {
+        $result = $this->objectModel->getDAO();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
