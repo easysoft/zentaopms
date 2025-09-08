@@ -484,4 +484,19 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test getShowColPosition method.
+     *
+     * @param  array|object $settings
+     * @access public
+     * @return string
+     */
+    public function getShowColPositionTest($settings)
+    {
+        $result = $this->objectModel->getShowColPosition($settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
