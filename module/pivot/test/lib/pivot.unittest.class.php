@@ -753,4 +753,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getSliceRecords method.
+     *
+     * @param  array  $records
+     * @param  string $field
+     * @access public
+     * @return array
+     */
+    public function getSliceRecordsTest(array $records, string $field): array
+    {
+        $result = $this->objectModel->getSliceRecords($records, $field);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
