@@ -658,4 +658,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test setPercentage method.
+     *
+     * @param  array $row
+     * @param  array $rowTotal
+     * @param  array $columnTotal
+     * @access public
+     * @return array
+     */
+    public function setPercentageTest(array $row, array $rowTotal, array $columnTotal): array
+    {
+        $result = $this->objectModel->setPercentage($row, $rowTotal, $columnTotal);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
