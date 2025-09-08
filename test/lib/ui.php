@@ -241,18 +241,22 @@ class tester extends result
      * Switch a zentao vision.
      *
      * @param  string    $vision
-     * @param  int       $refreshTime
+     * @param  int       $waitTime
      * @access public
      * @return object
      */
-    public function switchVision($vision, $refreshTime = 2)
+    public function switchVision($vision, $waitTime = 2)
     {
-        $currentVision = $this->page->getCookie('vision');
-        if($currentVision) $this->page->deleteCookie('vision');
+        if(empty($this->lang->visionList->{$vision})) return false;
+        $visionName = $this->lang->visionList->{$vision};
 
-        $this->page->addCookie(array('name' => 'vision', 'value' => $vision));
-        $this->page->wait($refreshTime)->refresh();
+        $this->page->wait(2);
+        $this->page->dom->switchToIframe();
+        $this->page->dom->visionSwitcher->click();
+        $this->page->wait(2);
+        $this->page->dom->btn($visionName)->click();
 
+        $this->page->wait($waitTime);
         return $this;
     }
 
