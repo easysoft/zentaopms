@@ -2346,4 +2346,21 @@ class docTest
 
         return 0;
     }
+
+    /**
+     * Test buildDocItems method.
+     *
+     * @param  int|string $docID
+     * @param  string     $docTitle
+     * @param  array      $children
+     * @access public
+     * @return array
+     */
+    public function buildDocItemsTest(int|string $docID, string $docTitle, array $children): array
+    {
+        $result = $this->objectModel->buildDocItems($docID, $docTitle, $children);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
