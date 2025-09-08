@@ -254,4 +254,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test stop method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function stopTest(object $instance)
+    {
+        $result = $this->objectModel->stop($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
