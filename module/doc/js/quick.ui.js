@@ -16,7 +16,7 @@ window.setDocAppOptions = function(_, options)
         onSwitchView: function(mode, location, info)
         {
             onSwitchView.call(this, mode, location, info);
-            trySwitchView(this, location.libID);
+            trySwitchView(this, location.libID, mode);
         },
         formatDataItem: function(type, item)
         {
@@ -33,11 +33,12 @@ window.setDocAppOptions = function(_, options)
  * Try to switch view.
  * @param {Object} docApp - 文档应用实例。
  * @param {number} libID - 库ID。
+ * @param {string} mode - 模式。
  */
-function trySwitchView(docApp, libID)
+function trySwitchView(docApp, libID, mode)
 {
     if(window._trySwitchViewTimer) clearTimeout(window._trySwitchViewTimer);
-    if(libID === window._currentLibID) return;
+    if(libID === window._currentLibID || mode !== 'list') return;
 
     window._currentLibID = libID;
     window._trySwitchViewTimer = setTimeout(() => {
