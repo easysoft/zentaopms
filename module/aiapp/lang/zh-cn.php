@@ -39,3 +39,10 @@ $lang->aiapp->miniProgramChat    = '执行通用智能体';
 $lang->aiapp->view               = '查看通用智能体详情';
 
 $lang->aiapp->manageGeneralAgent = '管理通用智能体';
+$lang->aiapp->models             = '浏览模型列表';
+$lang->aiapp->id                 = 'ID';
+$lang->aiapp->model              = '模型名称';
+$lang->aiapp->converse           = '开始会话';
+
+$lang->aiapp->tips = new stdClass();
+$lang->aiapp->tips->noData = '暂无数据';

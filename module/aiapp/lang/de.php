@@ -39,3 +39,10 @@ $lang->aiapp->miniProgramChat    = 'Execute General Agent';
 $lang->aiapp->view               = 'View General Agent Details';
 
 $lang->aiapp->manageGeneralAgent = 'Manage General Agent';
+$lang->aiapp->models             = 'Browse Model List';
+$lang->aiapp->id                 = 'ID';
+$lang->aiapp->model              = 'Model Name';
+$lang->aiapp->converse           = 'Converse';
+
+$lang->aiapp->tips = new stdClass();
+$lang->aiapp->tips->noData = 'No data';
