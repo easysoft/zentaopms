@@ -1,0 +1,42 @@
+---
+title: 测试checkAppNameUnique方法的pipeline表数据
+desc: 为checkAppNameUnique方法提供pipeline表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 管道ID
+  range: 1-3
+
+- field: type
+  note: 管道类型
+  range: jenkins,gitlab,nexus
+
+- field: name
+  note: 管道名称
+  range: pipeline-app-1,pipeline-app-2,shared-name
+
+- field: url
+  note: 管道URL
+  range: http://jenkins.test,http://gitlab.test,http://nexus.test
+
+- field: account
+  note: 账户
+  range: admin{3}
+
+- field: instanceID
+  note: 实例ID
+  range: 0{3}
+
+- field: createdBy
+  note: 创建者
+  range: admin
+
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00
+
+- field: deleted
+  note: 删除状态
+  range: 0{2},1

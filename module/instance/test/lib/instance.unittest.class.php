@@ -347,4 +347,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test checkAppNameUnique method.
+     *
+     * @param  string $name
+     * @access public
+     * @return bool
+     */
+    public function checkAppNameUniqueTest(string $name): bool
+    {
+        $result = $this->objectModel->checkAppNameUnique($name);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

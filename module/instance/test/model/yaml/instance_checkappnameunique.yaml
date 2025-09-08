@@ -1,0 +1,42 @@
+---
+title: 测试checkAppNameUnique方法的instance表数据
+desc: 为checkAppNameUnique方法提供测试数据，包括正常实例和已删除实例
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-5
+  
+- field: space
+  note: 空间ID
+  range: 1
+
+- field: name
+  note: 应用名称
+  range: test-app-1,test-app-2,unique-app,existing-app,demo-app
+
+- field: appID
+  note: 应用ID
+  range: 1-5
+
+- field: appName
+  note: 应用名称
+  range: TestApp1,TestApp2,UniqueApp,ExistingApp,DemoApp
+
+- field: status
+  note: 状态
+  range: running{3},stopped{2}
+
+- field: deleted
+  note: 删除状态
+  range: 0{4},1
+
+- field: createdBy
+  note: 创建者
+  range: admin
+
+- field: createdAt
+  note: 创建时间
+  range: 2023-01-01 10:00:00
