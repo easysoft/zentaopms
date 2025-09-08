@@ -358,6 +358,14 @@ class actionModel extends model
             if(isset($fieldList[$history->old])) $history->oldValue = $fieldList[$history->old];
             if(isset($fieldList[$history->new])) $history->newValue = $fieldList[$history->new];
         }
+
+        /* 如果是升级, 检查oldValue和newValue字段是否存在。以防止从老版本升级的时候，而这两个字段不存在，导致升级失败。 */
+        if(!empty($this->app->upgrading) && (isset($history->oldValue) || isset($history->newValue)))
+        {
+            $existHistory = $this->dao->select('*')->from(TABLE_HISTORY)->limit(1)->fetch();
+            if(!isset($existHistory->oldValue)) unset($history->oldValue, $history->newValue);
+        }
+
         return $history;
     }
 
