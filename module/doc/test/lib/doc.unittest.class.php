@@ -2268,4 +2268,19 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getDocsByParent method.
+     *
+     * @param  int $parentID
+     * @access public
+     * @return array
+     */
+    public function getDocsByParentTest(int $parentID): array
+    {
+        $result = $this->objectModel->getDocsByParent($parentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
