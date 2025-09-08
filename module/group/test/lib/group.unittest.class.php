@@ -587,4 +587,37 @@ class groupTest
 
         return $result;
     }
+
+    /**
+     * Test getProductsForAdminGroup method.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function getProductsForAdminGroupTest($programs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProductsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $programs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsForAdminGroup method return count.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return int
+     */
+    public function getProductsForAdminGroupCountTest($programs = array())
+    {
+        $result = $this->getProductsForAdminGroupTest($programs);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }

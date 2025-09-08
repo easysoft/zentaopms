@@ -1,0 +1,40 @@
+---
+title: 项目集测试数据
+desc: 用于getProductsForAdminGroup方法测试的项目集数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 项目集名称
+  range: 项目集1,项目集2,项目集3,项目集4,项目集5
+- field: code
+  note: 项目集代码
+  range: program1,program2,program3,program4,program5
+- field: parent
+  note: 父项目集ID
+  range: 0{3},1{1},2{1}
+- field: type
+  note: 项目集类型
+  range: program{3},project{2}
+- field: status
+  note: 项目集状态
+  range: doing{3},wait{1},closed{1}
+- field: deleted
+  note: 是否删除
+  range: 0{4},1{1}
+- field: vision
+  note: 界面类型
+  range: rnd{3},lite{1},or{1}
+- field: createdBy
+  note: 创建者
+  range: admin{2},user1{1},user2{1},system{1}
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:1D
+  format: YYYY-MM-DD hh:mm:ss
