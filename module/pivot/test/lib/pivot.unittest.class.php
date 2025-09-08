@@ -802,4 +802,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processCrystalData method.
+     *
+     * @param  array $groups
+     * @param  array $records
+     * @param  array $settings
+     * @access public
+     * @return array
+     */
+    public function processCrystalDataTest(array $groups, array $records, array $settings): array
+    {
+        $result = $this->objectModel->processCrystalData($groups, $records, $settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
