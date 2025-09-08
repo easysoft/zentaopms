@@ -763,4 +763,24 @@ class metricTest
 
         return $hasRequirement;
     }
+
+    /**
+     * Test createSqlFunction method.
+     *
+     * @param  string $sql
+     * @param  object $measurement
+     * @access public
+     * @return mixed
+     */
+    public function createSqlFunctionTest($sql = '', $measurement = null)
+    {
+        // 清除错误缓冲区以捕获可能的警告信息
+        ob_start();
+        $result = $this->objectModel->createSqlFunction($sql, $measurement);
+        ob_end_clean();
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
