@@ -26,4 +26,18 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test updateInstancesDomain method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function updateInstancesDomainTest()
+    {
+        $result = $this->objectModel->updateInstancesDomain();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
