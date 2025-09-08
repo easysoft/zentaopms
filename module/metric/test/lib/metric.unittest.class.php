@@ -170,4 +170,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getUniqueKeyByRecord method.
+     *
+     * @param  array $record
+     * @access public
+     * @return mixed
+     */
+    public function getUniqueKeyByRecordTest($record = null)
+    {
+        $result = $this->objectModel->getUniqueKeyByRecord($record);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
