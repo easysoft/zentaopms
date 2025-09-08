@@ -937,4 +937,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getColLabel method.
+     *
+     * @param  string $key
+     * @param  array  $fields
+     * @param  array  $langs
+     * @access public
+     * @return string
+     */
+    public function getColLabelTest(string $key, array $fields, array $langs = array()): string
+    {
+        $result = $this->objectModel->getColLabel($key, $fields, $langs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
