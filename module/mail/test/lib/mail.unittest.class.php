@@ -366,4 +366,24 @@ class mailTest
 
         return $this->objectModel->getObjectTitle($object, $objectType);
     }
+
+    /**
+     * Test setImages method.
+     *
+     * @param  array $images
+     * @access public
+     * @return mixed
+     */
+    public function setImagesTest($images = array())
+    {
+        $this->objectModel->setImages($images);
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->imageCount = count($images);
+        $result->uniqueImageCount = count(array_filter(array_unique($images)));
+        
+        return $result;
+    }
 }
