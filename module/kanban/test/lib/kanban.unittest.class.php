@@ -1739,4 +1739,19 @@ class kanbanTest
 
         return $result;
     }
+
+    /**
+     * Test checkDisplayCards method.
+     *
+     * @param  int $count
+     * @access public
+     * @return mixed
+     */
+    public function checkDisplayCardsTest($count)
+    {
+        $result = $this->objectModel->checkDisplayCards($count);
+        if(dao::isError()) return 0;
+
+        return $result ? 1 : 0;
+    }
 }
