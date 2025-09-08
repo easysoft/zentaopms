@@ -738,4 +738,46 @@ class fileTest
             return 'exception';
         }
     }
+
+    /**
+     * Test imagecreatefrombmp method.
+     *
+     * @param  string $filename
+     * @access public
+     * @return mixed
+     */
+    public function imagecreatefrombmpTest(string $filename)
+    {
+        if(!extension_loaded('gd'))
+        {
+            return 'gd_not_loaded';
+        }
+
+        try 
+        {
+            // 捕获并清理错误输出缓冲区
+            ob_start();
+            $result = $this->objectModel->imagecreatefrombmp($filename);
+            $output = ob_get_clean();
+            
+            // 如果有HTML错误输出，返回exception
+            if(!empty($output) && (strpos($output, 'alert alert-danger') !== false || strpos($output, 'Failed to open stream') !== false))
+            {
+                return 'exception';
+            }
+            
+            if($result === false) return false;
+            if(is_resource($result) || (is_object($result) && $result instanceof GdImage)) return 'resource';
+            
+            return 'unknown';
+        }
+        catch(Exception $e)
+        {
+            return 'exception';
+        }
+        catch(Error $e)
+        {
+            return 'exception';
+        }
+    }
 }
