@@ -1015,4 +1015,20 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getEchartLegend method.
+     *
+     * @param  array  $series
+     * @param  string $range
+     * @access public
+     * @return mixed
+     */
+    public function getEchartLegendTest($series = array(), $range = 'time')
+    {
+        $result = $this->objectModel->getEchartLegend($series, $range);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
