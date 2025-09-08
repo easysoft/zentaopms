@@ -673,4 +673,20 @@ class fileTest
 
         return $fileTitle;
     }
+
+    /**
+     * Test saveChunkedFile method.
+     *
+     * @param  array  $file
+     * @param  string $uid
+     * @access public
+     * @return array
+     */
+    public function saveChunkedFileTest(array $file, string $uid): array
+    {
+        $result = $this->objectModel->saveChunkedFile($file, $uid);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
