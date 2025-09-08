@@ -330,4 +330,40 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test saveLogs method.
+     *
+     * @param  string $log
+     * @access public
+     * @return mixed
+     */
+    public function saveLogsTest($log = '')
+    {
+        $logFile = $this->objectModel->getLogFile();
+        $originalExists = file_exists($logFile);
+        $originalContent = $originalExists ? file_get_contents($logFile) : '';
+        
+        $this->objectModel->saveLogs($log);
+        if(dao::isError()) return dao::getError();
+        
+        $result = array();
+        $result['fileExists'] = file_exists($logFile);
+        
+        if($result['fileExists']) {
+            $content = file_get_contents($logFile);
+            $result['hasPhpHeader'] = !$originalExists && strpos($content, "<?php\ndie();\n?>") === 0;
+            $result['hasTimestamp'] = preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $content);
+            $result['hasLogContent'] = strpos($content, trim($log)) !== false;
+            
+            // Clean up: restore original content or remove file
+            if($originalExists) {
+                file_put_contents($logFile, $originalContent);
+            } else {
+                unlink($logFile);
+            }
+        }
+        
+        return $result;
+    }
 }
