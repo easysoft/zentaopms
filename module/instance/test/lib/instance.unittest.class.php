@@ -73,4 +73,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test url method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return string
+     */
+    public function urlTest(object $instance): string
+    {
+        $result = $this->objectModel->url($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
