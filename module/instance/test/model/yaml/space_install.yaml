@@ -1,0 +1,29 @@
+---
+title: space表测试数据定义
+desc: 用于install方法测试的空间表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 空间ID
+  range: 1-10
+- field: name
+  note: 空间名称
+  range: 默认空间,开发空间,测试空间,生产空间,共享空间
+- field: k8space
+  note: K8s空间名
+  range: default,dev,test,prod,shared
+- field: owner
+  note: 空间拥有者
+  range: admin{2},user1{2},user2{1}
+- field: createdBy
+  note: 创建者
+  range: admin{3},user1{2}
+- field: createdAt
+  note: 创建时间
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 删除标记
+  range: 0{5}

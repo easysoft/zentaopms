@@ -142,4 +142,23 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test install method.
+     *
+     * @param  object $app
+     * @param  object $dbInfo
+     * @param  object $customData
+     * @param  int    $spaceID
+     * @param  array  $settings
+     * @access public
+     * @return mixed
+     */
+    public function installTest(object $app, object $dbInfo, object $customData, ?int $spaceID = null, array $settings = array())
+    {
+        $result = $this->objectModel->install($app, $dbInfo, $customData, $spaceID, $settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
