@@ -167,4 +167,17 @@ class aiapp extends control
         $this->ai->collectMiniProgram($this->app->user->id, $appID, $delete);
         return $this->send(array('status' => ($delete === 'true' ? '0' : '1')));
     }
+
+    /**
+     * 模型列表。
+     * Models page.
+     *
+     * @access public
+     * @return void
+     */
+    public function models()
+    {
+        $this->view->title = $this->lang->aiapp->models;
+        $this->display();
+    }
 }
