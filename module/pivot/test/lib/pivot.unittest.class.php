@@ -430,4 +430,22 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test filterFieldsWithSettings method.
+     *
+     * @param  array $fields
+     * @param  array $groups
+     * @param  array $columns
+     * @access public
+     * @return array
+     */
+    public function filterFieldsWithSettingsTest($fields, $groups, $columns)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->filterFieldsWithSettings($fields, $groups, $columns);
+        
+        return $result;
+    }
 }
