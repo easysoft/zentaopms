@@ -1079,5 +1079,22 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectOptions method.
+     *
+     * @param  array  $data
+     * @param  string $type
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getObjectOptions($data = array(), $type = 'line', $chartType = 'line')
+    {
+        $result = $this->objectModel->getObjectOptions($data, $type, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
 
