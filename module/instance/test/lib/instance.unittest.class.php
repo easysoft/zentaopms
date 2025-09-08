@@ -120,4 +120,26 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test getValidDBSettings method.
+     *
+     * @param  object $dbSettings
+     * @param  string $defaultUser
+     * @param  string $defaultDBName
+     * @param  int    $times
+     * @access public
+     * @return mixed
+     */
+    public function getValidDBSettingsTest(object $dbSettings, string $defaultUser, string $defaultDBName, int $times = 1)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getValidDBSettings');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $dbSettings, $defaultUser, $defaultDBName, $times);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
