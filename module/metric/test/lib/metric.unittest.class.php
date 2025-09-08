@@ -854,4 +854,149 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test processOldMetrics method.
+     *
+     * @param  mixed $metrics
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsTest($metrics = null)
+    {
+        if($metrics === null)
+        {
+            // 默认测试数据
+            $metrics = array();
+            $metric1 = new stdClass();
+            $metric1->id = 1;
+            $metric1->type = 'sql';
+            $metric1->fromID = 1;
+            $metric1->unit = '';
+            $metrics[] = $metric1;
+            
+            $metric2 = new stdClass();
+            $metric2->id = 2;
+            $metric2->type = 'php';
+            $metric2->fromID = 2;
+            $metric2->unit = '';
+            $metrics[] = $metric2;
+        }
+        
+        $result = $this->objectModel->processOldMetrics($metrics);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test processOldMetrics method with open edition.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsOpenTest()
+    {
+        global $config;
+        $originalEdition = $config->edition;
+        $config->edition = 'open';
+        
+        try {
+            $metrics = array();
+            $metric1 = new stdClass();
+            $metric1->id = 1;
+            $metric1->type = 'sql';
+            $metric1->fromID = 1;
+            $metric1->unit = '';
+            $metrics[] = $metric1;
+            
+            $result = $this->objectModel->processOldMetrics($metrics);
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        finally
+        {
+            $config->edition = $originalEdition;
+        }
+    }
+
+    /**
+     * Test processOldMetrics method with max edition.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsMaxTest()
+    {
+        global $config;
+        $originalEdition = $config->edition;
+        $config->edition = 'max';
+        
+        try {
+            $metrics = array();
+            $metric1 = new stdClass();
+            $metric1->id = 1;
+            $metric1->type = 'sql';
+            $metric1->fromID = 1;
+            $metric1->unit = '';
+            $metrics[] = $metric1;
+            
+            $result = $this->objectModel->processOldMetrics($metrics);
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        finally
+        {
+            $config->edition = $originalEdition;
+        }
+    }
+
+    /**
+     * Test processOldMetrics method with empty metrics.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsEmptyTest()
+    {
+        $metrics = array();
+        $result = $this->objectModel->processOldMetrics($metrics);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test processOldMetrics method with new metric type.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsNewTest()
+    {
+        global $config;
+        $originalEdition = $config->edition;
+        $config->edition = 'max';
+        
+        try {
+            $metrics = array();
+            $metric = new stdClass();
+            $metric->id = 1;
+            $metric->type = 'php';
+            $metric->fromID = 1;
+            $metric->unit = '';
+            $metrics[] = $metric;
+            
+            $result = $this->objectModel->processOldMetrics($metrics);
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        finally
+        {
+            $config->edition = $originalEdition;
+        }
+    }
 }
