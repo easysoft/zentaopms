@@ -1,0 +1,22 @@
+---
+title: installationSettingsMap用户测试数据
+desc: 用于测试instanceModel::installationSettingsMap()方法中用户相关逻辑的数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-5
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4
+- field: deleted
+  note: 是否删除
+  range: 0{5}
+- field: role
+  note: 用户角色
+  range: admin{1},dev{2},qa{2}

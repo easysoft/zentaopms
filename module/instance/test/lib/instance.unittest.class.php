@@ -103,4 +103,21 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test installationSettingsMap method.
+     *
+     * @param  object $customData
+     * @param  object $dbInfo
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function installationSettingsMapTest(object $customData, object $dbInfo, object $instance)
+    {
+        $result = $this->objectModel->installationSettingsMap($customData, $dbInfo, $instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
