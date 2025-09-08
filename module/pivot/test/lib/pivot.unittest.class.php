@@ -1002,4 +1002,27 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsFromPivot method.
+     *
+     * @param  object $pivot
+     * @param  string $key
+     * @param  mixed  $default
+     * @param  bool   $jsonDecode
+     * @param  bool   $needArray
+     * @access public
+     * @return mixed
+     */
+    public function getFieldsFromPivotTest(object $pivot, string $key, mixed $default = null, bool $jsonDecode = false, bool $needArray = false): mixed
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getFieldsFromPivot');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($pivot, $key, $default, $jsonDecode, $needArray));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
