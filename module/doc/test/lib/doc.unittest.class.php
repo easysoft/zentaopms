@@ -2050,6 +2050,22 @@ class docTest
     }
 
     /**
+     * Test initDocDefaultSpaces method.
+     *
+     * @param  string $code
+     * @param  int    $parent
+     * @access public
+     * @return object
+     */
+    public function initDocDefaultSpacesTest(string $code, int $parent = 0): object
+    {
+        $result = $this->objectModel->initDocDefaultSpaces($code, $parent);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test initDocTemplateSpaces method.
      *
      * @param  string $checkType
