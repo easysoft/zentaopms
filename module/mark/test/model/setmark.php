@@ -13,6 +13,7 @@ cid=0
 - 步骤4：设置不同类型的标记 @0
 - 步骤5：设置包含额外信息的标记 @0
 - 步骤6：设置空对象ID数组 @0
+- 步骤7：设置重复对象标记 @0
 
 */
 
@@ -44,3 +45,4 @@ r($markTest->setMarkTest([1], 'story', '2.0', 'view', '')) && p() && e('0'); // 
 r($markTest->setMarkTest([4], 'bug', '1.0', 'favorite', '')) && p() && e('0'); // 步骤4：设置不同类型的标记
 r($markTest->setMarkTest([5], 'story', '1.0', 'view', 'important')) && p() && e('0'); // 步骤5：设置包含额外信息的标记
 r($markTest->setMarkTest([], 'story', '1.0', 'view', '')) && p() && e('0'); // 步骤6：设置空对象ID数组
+r($markTest->setMarkTest([1], 'story', '1.0', 'view', '')) && p() && e('0'); // 步骤7：设置重复对象标记
