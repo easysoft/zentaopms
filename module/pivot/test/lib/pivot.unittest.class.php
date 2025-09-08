@@ -531,4 +531,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test formatCellData method.
+     *
+     * @param  string $key
+     * @param  array  $data
+     * @access public
+     * @return array
+     */
+    public function formatCellDataTest(string $key, array $data): array
+    {
+        $result = $this->objectModel->formatCellData($key, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
