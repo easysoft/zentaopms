@@ -55,4 +55,25 @@ class giteaTest
         $this->gitea->parseApiError($message);
         return dao::getError();
     }
+
+    /**
+     * Test apiGetMergeRequests method.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return mixed
+     */
+    public function apiGetMergeRequestsTest(int $giteaID, string $project)
+    {
+        try {
+            $result = $this->gitea->apiGetMergeRequests($giteaID, $project);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (TypeError $e) {
+            return 'TypeError: ' . $e->getMessage();
+        } catch (Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
 }
