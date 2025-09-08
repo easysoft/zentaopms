@@ -203,4 +203,23 @@ class metricTest
         if(is_object($result) && isset($result->fieldList)) return get_class($result);
         return $result;
     }
+
+    /**
+     * Test calculateReuseMetric method.
+     *
+     * @param  object $calculator
+     * @param  array  $options
+     * @param  string $type
+     * @param  object $pager
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function calculateReuseMetricTest($calculator = null, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
+    {
+        $result = $this->objectModel->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
