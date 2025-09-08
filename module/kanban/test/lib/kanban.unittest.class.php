@@ -1770,4 +1770,20 @@ class kanbanTest
 
         return $result;
     }
+
+    /**
+     * Test getCellByCard method.
+     *
+     * @param  int $cardID
+     * @param  int $kanbanID
+     * @access public
+     * @return mixed
+     */
+    public function getCellByCardTest($cardID, $kanbanID)
+    {
+        $result = $this->objectModel->getCellByCard($cardID, $kanbanID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
