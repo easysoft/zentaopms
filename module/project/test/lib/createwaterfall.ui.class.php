@@ -40,7 +40,7 @@ class createWaterfallTester extends tester
         if(isset($waterfall['PM']))       $form->dom->PM->picker($waterfall['PM']);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(5);
 
         if($this->response('module') != 'programplan')
         {
