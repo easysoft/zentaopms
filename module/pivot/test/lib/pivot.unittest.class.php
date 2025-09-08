@@ -970,4 +970,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processFilters method.
+     *
+     * @param  array  $filters
+     * @param  string $filterStatus
+     * @access public
+     * @return array
+     */
+    public function processFiltersTest(array $filters, string $filterStatus): array
+    {
+        $result = $this->objectModel->processFilters($filters, $filterStatus);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
