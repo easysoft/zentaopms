@@ -834,4 +834,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getRowSpanConfig method.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function getRowSpanConfigTest(array $records): array
+    {
+        $result = $this->objectModel->getRowSpanConfig($records);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
