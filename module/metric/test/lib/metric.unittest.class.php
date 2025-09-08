@@ -120,4 +120,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test calculateMetricByCode method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function calculateMetricByCodeTest($code = null)
+    {
+        $result = $this->objectModel->calculateMetricByCode($code);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
