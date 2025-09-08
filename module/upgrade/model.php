@@ -11815,6 +11815,12 @@ class upgradeModel extends model
 
         $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
 
+        $doc = new stdclass();
+        $doc->version   = 1;
+        $doc->type      = 'text';
+        $doc->acl       = 'open';
+        $doc->addedBy   = 'system';
+        $doc->addedDate = helper::now();
         foreach($reviews as $review)
         {
             if(!isset($projectDeliverables[$review->project][$review->category])) continue;
@@ -11822,17 +11828,11 @@ class upgradeModel extends model
             /* 不是系统模板生成、也没选文档的，自动生成文档。 */
             if(!$review->template && !$review->doc)
             {
-                $doc = new stdclass();
                 $doc->title     = $review->title;
                 $doc->lib       = $projectMainLibPairs[$review->project];
                 $doc->project   = $review->project;
-                $doc->version   = 1;
-                $doc->type      = 'text';
                 $doc->addedBy   = $review->createdBy;
                 $doc->addedDate = $review->createdDate;
-                $doc->acl       = 'open';
-                $doc->addedBy   = 'system';
-                $doc->addedDate = helper::now();
 
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc = $this->dao->lastInsertID();
