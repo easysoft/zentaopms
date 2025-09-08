@@ -405,4 +405,22 @@ class mailTest
         
         return $result;
     }
+
+    /**
+     * Test clear method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function clearTest()
+    {
+        $this->objectModel->clear();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->mta = $this->objectModel->mta;
+        
+        return $result;
+    }
 }
