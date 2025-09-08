@@ -56,4 +56,21 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test updateVolSize method.
+     *
+     * @param  object     $instance
+     * @param  int|string $size
+     * @param  string     $name
+     * @access public
+     * @return mixed
+     */
+    public function updateVolSizeTest(object $instance, int|string $size, string $name)
+    {
+        $result = $this->objectModel->updateVolSize($instance, $size, $name);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
