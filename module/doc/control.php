@@ -2403,6 +2403,7 @@ class doc extends control
 
         if(!empty($doc->rawContent))
         {
+            $doc->html    = $doc->content;
             $doc->content = $doc->rawContent;
             unset($doc->rawContent);
         }
