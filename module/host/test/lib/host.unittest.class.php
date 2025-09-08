@@ -42,4 +42,24 @@ class hostTest
 
         return $result;
     }
+
+    /**
+     * Test getTreeModules method.
+     *
+     * @param  int   $rootID
+     * @param  array $hosts
+     * @access public
+     * @return array
+     */
+    public function getTreeModulesTest($rootID = 0, $hosts = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getTreeModules');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $rootID, $hosts);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

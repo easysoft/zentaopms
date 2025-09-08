@@ -1,0 +1,67 @@
+---
+fields:
+- field: id
+  range: 1-10
+- field: root
+  note: 根目录
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  range: 模块1,模块2,子模块1,子模块2,子模块3,模块3,子模块4,子模块5,子模块6,模块4
+- field: parent
+  range: 0,0,1,1,2,0,6,6,3,0
+- field: path
+  note: ID路径
+  fields:
+  - field: path1
+    range: 1-1000
+    prefix: ','
+    postfix: ','
+  - field: path2
+    range: []
+    postfix: ""
+- field: grade
+  note: 等级
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  range: 1-10
+- field: type
+  range: host{10}
+- field: owner
+  note: 所有者
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: collector
+  note: 收藏者
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: short
+  note: 模块简称
+  range: 1-10000
+  prefix: 模块简称
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  range: 0{10}
+...
