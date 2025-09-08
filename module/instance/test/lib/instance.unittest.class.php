@@ -389,4 +389,19 @@ class instanceTest
         // 测试3-5：devops应用但缺少必要的依赖模块或方法
         return 'noSettingsMapping';
     }
+
+    /**
+     * Test generatePipelineName method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return string
+     */
+    public function generatePipelineNameTest(object $instance): string
+    {
+        $result = $this->objectModel->generatePipelineName($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

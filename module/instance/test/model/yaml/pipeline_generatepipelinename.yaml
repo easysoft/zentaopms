@@ -1,0 +1,62 @@
+---
+title: pipeline数据定义
+desc: 用于generatePipelineName方法测试的pipeline表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: pipeline ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: pipeline类型
+  range: gitlab,jenkins,sonarqube,nexus
+  loop: 0
+- field: name
+  note: pipeline名称
+  range: testapp,testapp-1.0.0,testapp-1,testapp-2,existing-app
+  loop: 0
+- field: url
+  note: pipeline URL
+  range: http://test1.com,http://test2.com,http://test3.com,http://test4.com,http://test5.com
+  loop: 0
+- field: account
+  note: 账户名
+  range: admin,user{4}
+  loop: 0
+- field: password
+  note: 密码
+  range: password123{5}
+  loop: 0
+- field: token
+  note: 访问令牌
+  range: token123{5}
+  loop: 0
+- field: private
+  note: 私有标识
+  range: private123{5}
+  loop: 0
+- field: createdBy
+  note: 创建者
+  range: system,admin{4}
+  loop: 0
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00{10}
+  loop: 0
+- field: editedBy
+  note: 编辑者
+  range: system,admin{4}
+  loop: 0
+- field: editedDate
+  note: 编辑时间
+  range: 2024-01-01 11:00:00{10}
+  loop: 0
+- field: deleted
+  note: 是否删除
+  range: 0{9},1
+  loop: 0
