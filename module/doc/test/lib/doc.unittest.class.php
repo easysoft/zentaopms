@@ -2159,4 +2159,22 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getParamFromTargetSpace method.
+     *
+     * @param  string $targetSpace
+     * @param  string $paramType
+     * @access public
+     * @return mixed
+     */
+    public function getParamFromTargetSpaceTest(string $targetSpace, string $paramType = 'type'): mixed
+    {
+        $params = explode('.', $targetSpace);
+
+        if($paramType == 'type') return $params[0];
+        if($paramType == 'id')   return isset($params[1]) ? $params[1] : null;
+        
+        return null;
+    }
 }
