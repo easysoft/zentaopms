@@ -2128,4 +2128,20 @@ class docTest
                 return 'true';
         }
     }
+
+    /**
+     * Test getSubSpacesByType method.
+     *
+     * @param  string $type
+     * @param  bool   $withType
+     * @access public
+     * @return array
+     */
+    public function getSubSpacesByTypeTest(string $type = 'all', bool $withType = false): array
+    {
+        $result = $this->objectModel->getSubSpacesByType($type, $withType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
