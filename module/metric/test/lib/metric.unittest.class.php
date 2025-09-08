@@ -1083,4 +1083,26 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test updateMetricDate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function updateMetricDateTest()
+    {
+        global $tester;
+        
+        // 记录更新前有多少条 createdDate 为 null 的记录
+        $beforeCount = $tester->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
+        
+        $this->objectModel->updateMetricDate();
+        if(dao::isError()) return dao::getError();
+        
+        // 记录更新后有多少条 createdDate 为 null 的记录
+        $afterCount = $tester->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
+        
+        return array('before' => $beforeCount, 'after' => $afterCount, 'updated' => $beforeCount - $afterCount);
+    }
 }
