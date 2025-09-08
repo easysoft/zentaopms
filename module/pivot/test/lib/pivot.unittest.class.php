@@ -563,4 +563,22 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test addRowSummary method.
+     *
+     * @param  array $groupTree
+     * @param  array $data
+     * @param  array $groups
+     * @param  int   $currentGroup
+     * @access public
+     * @return array
+     */
+    public function addRowSummaryTest(array $groupTree, array $data, array $groups, int $currentGroup = 0): array
+    {
+        $result = $this->objectModel->addRowSummary($groupTree, $data, $groups, $currentGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
