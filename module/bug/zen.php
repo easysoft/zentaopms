@@ -1102,7 +1102,7 @@ class bugZen extends bug
         $this->view->resultFiles           = $resultFiles;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
-        $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
+        $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct((int)$bug->product, array(0, $this->view->branchID));
         $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
         $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->productID, $bug->branch, 'noclosed', true);
     }

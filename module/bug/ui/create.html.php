@@ -16,7 +16,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
-$fields->autoLoad('product',   array('items' => 'product,module,assignedTo,story,execution,task,openedBuild,project,injection,identify,plan,' . (!empty($lang->bug->flowExtraFields) ? implode(',', $lang->bug->flowExtraFields) : ''), 'updateOrders' => true))
+$fields->autoLoad('product',   array('items' => 'product,module,assignedTo,story,execution,task,openedBuild,project,injection,identify,plan,case,' . (!empty($lang->bug->flowExtraFields) ? implode(',', $lang->bug->flowExtraFields) : ''), 'updateOrders' => true))
        ->autoLoad('branch',    'module,execution,project,story,task,assignedTo')
        ->autoLoad('module',    'assignedTo,story')
        ->autoLoad('project',   'project,execution,story,task,assignedTo,injection,identify,openedBuild')
