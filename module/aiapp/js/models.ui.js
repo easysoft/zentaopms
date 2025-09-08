@@ -28,3 +28,17 @@ window.initModelList = async function()
     $('#modelsList').zui('dtable').render({cols, data: models});
     $('#modelsList').removeClass('loading');
 }
+
+/**
+ * 为模型列表设置表格页脚。
+ * Set models summary for table footer.
+ *
+ * @access public
+ * @return object
+ */
+window.setModelsStatistics = function()
+{
+    const pageSummary = $('.models-view').data('pageSummary');
+    const rows        = this.layout.allRows;
+    return {html: pageSummary.replace('%s', rows.length)};
+}
