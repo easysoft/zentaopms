@@ -299,4 +299,21 @@ class metricTest
         
         return false;
     }
+
+    /**
+     * Test getResultByCodes method.
+     *
+     * @param  array  $codes
+     * @param  array  $options
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function getResultByCodesTest($codes = array(), $options = array(), $vision = 'rnd')
+    {
+        $result = $this->objectModel->getResultByCodes($codes, $options, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
