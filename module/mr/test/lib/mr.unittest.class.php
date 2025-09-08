@@ -432,4 +432,29 @@ class mrTest
         $MR = $this->objectModel->fetchByID($MRID);
         return $this->objectModel->apiAcceptMR($MR);
     }
+
+    /**
+     * Test __construct method.
+     *
+     * @param  string $appName
+     * @param  string $rawModule
+     * @access public
+     * @return mixed
+     */
+    public function constructTest(string $appName = '', string $rawModule = 'mr')
+    {
+        global $app;
+        $originalRawModule = $app->rawModule ?? '';
+        
+        try {
+            $app->rawModule = $rawModule;
+            $mrModel = new mrModel($appName);
+            $result = $mrModel->moduleName;
+            $app->rawModule = $originalRawModule;
+            return $result;
+        } catch (Exception $e) {
+            $app->rawModule = $originalRawModule;
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
