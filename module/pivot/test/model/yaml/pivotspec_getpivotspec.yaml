@@ -1,0 +1,42 @@
+---
+title: pivotspec表测试数据定义
+desc: getPivotSpec方法测试用pivotspec数据
+author: Claude
+version: 1.0
+
+fields:
+- field: pivot
+  range: 1-3
+
+- field: version
+  range: '1'{3}
+
+- field: driver
+  range: mysql{3}
+
+- field: mode
+  range: builder{3}
+
+- field: name
+  range: '用户需求统计,项目进度统计,Bug统计分析'
+
+- field: desc
+  range: '统计用户需求完成情况的详细版本,统计项目执行进度的详细版本,分析Bug分布和趋势的详细版本'
+
+- field: sql
+  range: 'SELECT * FROM zt_story WHERE deleted = "0" AND status = "active",SELECT * FROM zt_project WHERE deleted = "0" AND status != "closed",SELECT * FROM zt_bug WHERE deleted = "0" AND status = "active"'
+
+- field: fields
+  range: '{"story": {"name": "需求标题", "type": "string", "width": "200"}},{"project": {"name": "项目名称", "type": "string", "width": "150"}},{"bug": {"name": "Bug标题", "type": "string", "width": "180"}}'
+
+- field: langs
+  range: '{"story": "需求详情"},{"project": "项目详情"},{"bug": "Bug详情"}'
+
+- field: vars
+  range: '{"dateRange": "2023-01-01,2023-12-31"},{"status": "active"},{"severity": "high"}'
+
+- field: filters
+  range: '[{"field": "status", "value": "active", "operator": "="}],[{"field": "closedDate", "value": "", "operator": "!="}],[{"field": "severity", "value": "high", "operator": "="}]'
+
+- field: settings
+  range: '{"showTotal": true},{"showAverage": false},{"groupBy": "status"}'
