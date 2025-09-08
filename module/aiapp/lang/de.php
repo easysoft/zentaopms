@@ -43,6 +43,7 @@ $lang->aiapp->models             = 'Browse Model List';
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
 $lang->aiapp->converse           = 'Converse';
+$lang->aiapp->pageSummary        = 'Total %s items.';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
