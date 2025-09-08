@@ -11211,10 +11211,11 @@ class upgradeModel extends model
      */
     public function addDefaultDeliverableModule()
     {
-        $this->app->loadLang('tree');
-        $modelList = array('waterfall', 'waterfallplus', 'ipd');
-        $groupList = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in($modelList)->fetchAll();
-        foreach($groupList as $group) $this->createDeliverableModule($group->id, $this->lang->tree->designModule, 'design');
+        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        foreach($groupList as $group)
+        {
+            foreach($this->lang->upgrade->deliverableModule as $code => $name) $this->createDeliverableModule($group->id, $name, $code);
+        }
     }
 
     /**
@@ -11269,7 +11270,7 @@ class upgradeModel extends model
             $nameFilter = array();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
-            foreach(array_filter($this->lang->design->typeList) as $key => $value)
+            foreach(array_filter($this->lang->design->typeList) as $value)
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
@@ -11282,7 +11283,7 @@ class upgradeModel extends model
                 }
             }
 
-            foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
+            foreach(array_filter($this->lang->design->plusTypeList) as $value)
             {
                 if(empty($value) || $module->projectModel != 'waterfallplus') continue;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
@@ -11351,11 +11352,12 @@ class upgradeModel extends model
 
         $deliverableList   = array();
         $nameFilter        = array(); // 过滤重名交付物。
-        $otherModule       = array(); // 交付物其他分类。
         $otherActivity     = array();
         $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        $otherModules      = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
+        $projectModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
         /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
         foreach($deliverables as $oldDeliverable)
         {
@@ -11365,13 +11367,12 @@ class upgradeModel extends model
                 {
                     if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
                     if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
-                    if(empty($otherModule[$workflowGroup->id]))   $otherModule[$workflowGroup->id]   = $this->createDeliverableModule($workflowGroup->id, $this->lang->tree->otherModule, 'other');
-                    if(empty($otherActivity[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($workflowGroup->id);
+                    if(empty($otherActivity[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($projectModules[$workflowGroup->id], $workflowGroup->id);
 
                     $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
                     $deliverable->workflowGroup = $workflowGroup->id;
                     $deliverable->desc          = $oldDeliverable->desc;
-                    $deliverable->module        = $otherModule[$workflowGroup->id];
+                    $deliverable->module        = $otherModules[$workflowGroup->id];
                     $deliverable->activity      = $otherActivity[$workflowGroup->id];
                     $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
                     $deliverable->createdBy     = $oldDeliverable->createdBy;
@@ -11502,14 +11503,13 @@ class upgradeModel extends model
      * 内置默认的过程活动。
      * Create other process and activity.
      *
+     * @param  int    $moduleID
      * @param  int    $workflowGroupID
      * @access public
      * @return int
      */
-    public function createOtherActivity(int $workflowGroupID): int
+    public function createOtherActivity(int $moduleID, int $workflowGroupID): int
     {
-        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($workflowGroupID)->andWhere('type')->eq('process')->andWhere('extra')->eq('project')->fetch('id');
-
         $process = new stdclass();
         $process->workflowGroup = $workflowGroupID;
         $process->name          = $this->lang->other;
@@ -11714,7 +11714,8 @@ class upgradeModel extends model
             ->orderBy('id_asc')
             ->fetchPairs();
 
-        if($objectList) $this->lang->baseline->objectList = $objectList;
+        if(empty($objectList) && !empty($this->lang->baseline->objectList)) $objectList = $this->lang->baseline->objectList;
+        if(empty($objectList)) $objectList = $this->lang->upgrade->reviewObjectList;
 
         $modelList  = array('waterfall', 'waterfallplus', 'ipd');
         $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
@@ -11724,7 +11725,7 @@ class upgradeModel extends model
             ->andWhere('t2.projectModel')->in($modelList)
             ->fetchAll();
 
-        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->fetchGroup('type');
+        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->where('type')->ne('')->fetchGroup('type');
 
         $deliverable = new stdClass();
         $deliverable->status      = 'enabled';
@@ -11742,12 +11743,14 @@ class upgradeModel extends model
         $reviewFlow->relatedBy   = 'system';
         $reviewFlow->relatedDate = helper::now();
         $reviewFlow->extra       = 'review';
+
+        $upgradeReviewcls = array();
         foreach($moduleList as $module)
         {
             $nameFilter = array();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
-            foreach(array_filter($this->lang->baseline->objectList) as $key => $value)
+            foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
                 $deliverable->category = $key; // 标记交付物的类型。
@@ -11758,18 +11761,25 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
                 $flowID = $this->dao->lastInsertID();
 
+                if(empty($reviewclList[$module->projectModel])) continue;
                 foreach($reviewclList[$module->projectModel] as $reviewcl)
                 {
-                    if($key !== $reviewcl->object) continue;
-                    unset($reviewcl->id);
-                    unset($reviewcl->editedDate);
-                    unset($reviewcl->assignedDate);
-                    $reviewcl->workflowGroup = $module->workflowGroup;
-                    $reviewcl->object        = $flowID;
-                    $this->dao->insert(TABLE_REVIEWCL)->data($reviewcl)->exec();
+                    if($key != $reviewcl->object) continue;
+                    $upgradeReviewcls[$reviewcl->id] = $reviewcl->id;
+
+                    $reviewclData = clone $reviewcl;
+                    unset($reviewclData->id);
+                    unset($reviewclData->editedDate);
+                    unset($reviewclData->assignedDate);
+                    $reviewclData->workflowGroup = $module->workflowGroup;
+                    $reviewclData->object        = $flowID;
+                    $this->dao->insert(TABLE_REVIEWCL)->data($reviewclData)->exec();
                 }
             }
         }
+
+        /* 将已升级的历史检查清单数据删掉。 */
+        $this->dao->delete()->from(TABLE_REVIEWCL)->where('id')->in($upgradeReviewcls)->exec();
 
         $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " CHANGE `object` `object` mediumint(8) unsigned NOT NULL DEFAULT '0';");
         $this->dao->exec('ALTER TABLE ' . TABLE_REVIEWCL . ' DROP `type`');
