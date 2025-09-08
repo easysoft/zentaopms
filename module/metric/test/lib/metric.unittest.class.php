@@ -653,4 +653,20 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getPairsByIdList method.
+     *
+     * @param  string $scope
+     * @param  array  $idList
+     * @access public
+     * @return mixed
+     */
+    public function getPairsByIdListTest($scope = '', $idList = array())
+    {
+        $result = $this->objectModel->getPairsByIdList($scope, $idList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
