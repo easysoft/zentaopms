@@ -3,9 +3,10 @@ window.setDocAppOptions = function(_, options)
 {
     options = window._setDocAppOptions(_, options);
     const onSwitchView = options.onSwitchView;
+    const initLibID = options.libID;
     options = $.extend(options,
     {
-        docFetcher: {url: options.docFetcher, dataFilter: (data) => $.extend(data, {lib: options.libID})},
+        docFetcher: {url: options.docFetcher, dataFilter: (data) => $.extend(data, {lib: initLibID || options.libID})},
         viewModeUrl: function(options)
         {
             const lib       = this.getLib(options.libID);
