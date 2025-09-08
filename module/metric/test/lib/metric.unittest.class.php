@@ -1217,4 +1217,18 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getInstallDate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getInstallDateTest()
+    {
+        $result = $this->objectModel->getInstallDate();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
