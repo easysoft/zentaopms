@@ -78,6 +78,8 @@ class designModel extends model
             $designID = $this->dao->lastInsertID();
             if($this->config->edition != 'open' && !empty($design->story))
             {
+                if(!isset($stories[$design->story])) continue;
+
                 $relation = new stdClass();
                 $relation->AID      = $design->story;
                 $relation->AType    = $stories[$design->story]->type;
