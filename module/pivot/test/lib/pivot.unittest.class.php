@@ -547,4 +547,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getColumnSummary method.
+     *
+     * @param  array  $data
+     * @param  string $totalKey
+     * @access public
+     * @return array
+     */
+    public function getColumnSummaryTest(array $data, string $totalKey): array
+    {
+        $result = $this->objectModel->getColumnSummary($data, $totalKey);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
