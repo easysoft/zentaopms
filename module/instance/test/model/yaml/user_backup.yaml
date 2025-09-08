@@ -1,0 +1,56 @@
+---
+title: User backup test data
+desc: Test data for user accounts used in backup testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: User ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: User account
+  range: admin{1},user1{1},user2{1},user3{1},user4{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: Password hash
+  range: 123456{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: Real name
+  range: Administrator{1},User1{1},User2{1},User3{1},User4{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: email
+  note: Email
+  range: admin@test.com{1},user1@test.com{1},user2@test.com{1},user3@test.com{1},user4@test.com{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: User role
+  range: admin{1},qa{1},dev{2},pm{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: Deleted flag
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

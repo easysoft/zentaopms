@@ -404,4 +404,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test backup method.
+     *
+     * @param  object $instance
+     * @param  object $user
+     * @access public
+     * @return mixed
+     */
+    public function backupTest(object $instance, object $user)
+    {
+        $result = $this->objectModel->backup($instance, $user);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
