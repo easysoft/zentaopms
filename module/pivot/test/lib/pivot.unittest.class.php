@@ -110,6 +110,28 @@ class pivotTest
     }
 
     /**
+     * Test checkAccess method.
+     *
+     * @param  int    $pivotID
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function checkAccessTest($pivotID, $method = 'preview')
+    {
+        // 先获取可访问的pivot列表
+        $viewableObjects = $this->objectModel->bi->getViewableObject('pivot');
+        
+        // 检查pivotID是否在可访问列表中
+        if(!in_array($pivotID, $viewableObjects))
+        {
+            return 'access_denied';
+        }
+        
+        return 'access_granted';
+    }
+
+    /**
      * 测试 processGroupRows。
      * Test processGroupRows.
      *
