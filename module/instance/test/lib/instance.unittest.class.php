@@ -450,4 +450,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test getBackupSettings method.
+     *
+     * @param  int $instanceID
+     * @access public
+     * @return mixed
+     */
+    public function getBackupSettingsTest(int $instanceID)
+    {
+        $result = $this->objectModel->getBackupSettings($instanceID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
