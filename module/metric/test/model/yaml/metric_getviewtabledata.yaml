@@ -1,0 +1,46 @@
+---
+title: getViewTableData方法测试用metric数据
+desc: 为测试getViewTableData方法提供的metric表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: purpose
+  note: 目的
+  range: productivity,quality,efficiency
+  format: ""
+- field: scope
+  note: 范围
+  range: system{2},product{2},execution{1}
+  format: ""
+- field: object
+  note: 对象
+  range: system{2},product{2},task{1}
+  format: ""
+- field: name
+  note: 名称
+  range: 测试指标1,测试指标2,测试指标3,测试指标4,测试指标5
+  format: ""
+- field: code
+  note: 代码
+  range: test_system,test_product,test_metric_1,test_metric_2,test_metric_3
+  format: ""
+- field: dateType
+  note: 日期类型
+  range: day{3},week{1},month{1}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{3},user{2}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{5}
+  format: ""
