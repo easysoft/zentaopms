@@ -11609,7 +11609,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($doc->title)->set('docVersion')->eq($doc->version)->where('id')->eq($deliverableID)->exec();
         }
 
-        $this->dao->exec("ALTER TABLE " . TABLE_PROJECT . " DROP `deliverable`;");
+        $this->dao->query("ALTER TABLE " . TABLE_PROJECT . " DROP COLUMN `deliverable`;");
     }
 
     /**
@@ -11782,6 +11782,75 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_REVIEWCL)->where('id')->in($upgradeReviewcls)->exec();
 
         $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " CHANGE `object` `object` mediumint(8) unsigned NOT NULL DEFAULT '0';");
-        $this->dao->exec('ALTER TABLE ' . TABLE_REVIEWCL . ' DROP `type`');
+        $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " DROP `type`;");
+    }
+
+    /**
+     * 升级项目评审对象到项目交付物。
+     * Upgrade review to deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeReviewToDeliverable()
+    {
+        if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有评审功能。
+
+        $this->loadModel('review');
+        $reviews = $this->dao->select('t1.*, t2.category, t2.version')->from(TABLE_REVIEW)->alias('t1')
+            ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($this->config->edition == 'ipd')->andWhere('t2.category')->notin(array_keys($this->lang->review->reviewPoint->titleList))->fi() // IPD 模式下，只升级非评审点的评审。
+            ->fetchAll('id');
+
+        $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
+            ->where('t2.category IS NOT NULL')
+            ->fetchGroup('id', 'category');
+
+        $docIdList = array_column($reviews, 'doc');
+        $docIdList = array_unique($docIdList);
+        $docIdList = array_filter($docIdList);
+        $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
+
+        $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
+
+        foreach($reviews as $review)
+        {
+            if(!isset($projectDeliverables[$review->project][$review->category])) continue;
+
+            /* 不是系统模板生成、也没选文档的，自动生成文档。 */
+            if(!$review->template && !$review->doc)
+            {
+                $doc = new stdclass();
+                $doc->title     = $review->title;
+                $doc->lib       = $projectMainLibPairs[$review->project];
+                $doc->project   = $review->project;
+                $doc->version   = 1;
+                $doc->type      = 'text';
+                $doc->addedBy   = $review->createdBy;
+                $doc->addedDate = $review->createdDate;
+                $doc->acl       = 'open';
+                $doc->addedBy   = 'system';
+                $doc->addedDate = helper::now();
+
+                $this->dao->insert(TABLE_DOC)->data($doc)->exec();
+                $review->doc = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
+            }
+
+            $deliverable = new stdclass();
+            $deliverable->name        = isset($docList[$review->doc]) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
+            $deliverable->project     = $review->project;
+            $deliverable->review      = $review->id;
+            $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
+            $deliverable->doc         = $review->doc;
+            $deliverable->docVersion  = $review->docVersion;
+            $deliverable->createdBy   = $review->createdBy;
+            $deliverable->createdDate = $review->createdDate;
+            $deliverable->status      = $review->status;
+            $deliverable->version     = $review->version;
+            $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+        }
     }
 }
