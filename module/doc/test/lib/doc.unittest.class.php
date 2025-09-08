@@ -2144,4 +2144,19 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getLibTargetSpace method.
+     *
+     * @param  object $lib
+     * @access public
+     * @return string
+     */
+    public function getLibTargetSpaceTest($lib)
+    {
+        $result = $this->objectModel->getLibTargetSpace($lib);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
