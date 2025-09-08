@@ -59,4 +59,23 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test removeExtensionDirs method.
+     *
+     * @param  string $dirs
+     * @access public
+     * @return array
+     */
+    public function removeExtensionDirsTest($dirs = '')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('removeExtensionDirs');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, array($dirs));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
