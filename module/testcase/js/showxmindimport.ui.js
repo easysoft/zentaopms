@@ -61,7 +61,7 @@ $(document).ready(function()
         if(hasExist)
         {
             var confirmActions = [{btnType: 'primary', class: 'btn-wide', key: 'confirm', text: importAndCoverLang}, {class: 'btn-wide', key: 'cancel', text: importAndInsertLang}];
-            zui.Modal.confirm({message: noticeImport, actions: confirmActions}).then((confirmed) => {submitXmindImport(data, confirmed ? 0 : 1);})
+            zui.Modal.confirm({message: noticeImport, actions: confirmActions, onResult: (confirmed) => {submitXmindImport(data, confirmed ? 0 : 1);}});
             return;
         }
 
