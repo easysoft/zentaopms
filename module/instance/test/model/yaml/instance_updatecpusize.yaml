@@ -1,0 +1,122 @@
+---
+title: 应用实例CPU大小更新测试数据
+desc: 为updateCpuSize方法提供测试数据，包含不同状态和配置的实例
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-10
+  
+- field: space
+  note: 空间ID
+  range: 1-3
+
+- field: solution
+  note: 方案ID
+  range: 0-2
+
+- field: name
+  note: 实例名称
+  range: test-app{1-10},zentao-instance,gitlab-server,jenkins-ci,sonar-scanner
+
+- field: appID
+  note: 应用ID
+  range: 1-5
+
+- field: appName
+  note: 应用名称
+  range: zentao{3},gitlab{2},jenkins{2},sonar{2},nexus{1}
+
+- field: appVersion
+  note: 应用版本
+  range: 18.7,18.8,18.9,latest
+
+- field: chart
+  note: Chart名称
+  range: zentao{3},gitlab{2},jenkins{2},sonar{2},nexus{1}
+
+- field: logo
+  note: 应用Logo
+  range: /static/zentao.png,/static/gitlab.png,/static/jenkins.png
+
+- field: version
+  note: 版本号
+  range: 1.0.0,1.1.0,2.0.0
+
+- field: desc
+  note: 应用描述
+  range: 项目管理工具,代码仓库管理,持续集成工具,代码质量检测,制品仓库
+
+- field: source
+  note: 来源
+  range: system{5},cloud{3},user{2}
+
+- field: channel
+  note: 渠道
+  range: stable{7},beta{2},alpha{1}
+
+- field: k8name
+  note: K8S名称
+  range: zentao-{1-10},app-{1-5}
+
+- field: status
+  note: 状态
+  range: running{5},stopped{3},initializing{2}
+
+- field: pinned
+  note: 置顶状态
+  range: 0{8},1{2}
+
+- field: domain
+  note: 域名
+  range: test{1-5}.example.com,app{6-10}.demo.org
+
+- field: smtpSnippetName
+  note: SMTP配置片段名称
+  range: 'smtp-default',''{8},smtp-test{1}
+
+- field: ldapSnippetName
+  note: LDAP配置片段名称
+  range: 'ldap-default',''{8},ldap-test{1}
+
+- field: ldapSettings
+  note: LDAP设置
+  range: '{}','{\"enabled\":false}','{\"enabled\":true,\"host\":\"ldap.example.com\"}'
+
+- field: dbSettings
+  note: 数据库设置
+  range: '{\"mysql\":{\"host\":\"mysql\",\"port\":3306}}','{\"mysql\":{\"enabled\":false}}','{}'{7}
+
+- field: autoBackup
+  note: 自动备份
+  range: 0{7},1{3}
+
+- field: backupKeepDays
+  note: 备份保留天数
+  range: 1,3,7,15,30
+
+- field: autoRestore
+  note: 自动恢复
+  range: 0{9},1{1}
+
+- field: createdBy
+  note: 创建者
+  range: admin{5},user{3},system{2}
+
+- field: createdAt
+  note: 创建时间
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59':30D
+
+- field: editedBy
+  note: 编辑者
+  range: admin{4},user{4},''{2}
+
+- field: editedAt
+  note: 编辑时间
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59':45D,null{3}
+
+- field: deleted
+  note: 删除标记
+  range: 0{9},1{1}

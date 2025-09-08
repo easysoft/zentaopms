@@ -40,4 +40,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test updateCpuSize method.
+     *
+     * @param  object     $instance
+     * @param  int|string $size
+     * @access public
+     * @return mixed
+     */
+    public function updateCpuSizeTest(object $instance, int|string $size)
+    {
+        $result = $this->objectModel->updateCpuSize($instance, $size);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
