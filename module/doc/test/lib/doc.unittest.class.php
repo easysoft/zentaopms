@@ -2177,4 +2177,20 @@ class docTest
         
         return null;
     }
+
+    /**
+     * Test getModulesOfLibs method.
+     *
+     * @param  array  $libs
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getModulesOfLibsTest(array $libs, string $type = 'doc,api'): mixed
+    {
+        $result = $this->objectModel->getModulesOfLibs($libs, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

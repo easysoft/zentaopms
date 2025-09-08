@@ -1,0 +1,49 @@
+---
+title: 模块数据定义-getModulesOfLibs测试
+desc: 为docModel::getModulesOfLibs()方法提供测试数据
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: root
+  note: 根ID(对应库ID)
+  range: 1{5},2{5},3{5},4{3},5{2}
+- field: branch
+  note: 分支ID
+  range: 0
+- field: name
+  note: 模块名称
+  range: 产品文档{3},接口文档{3},项目文档{4},用户文档{2},技术文档{3},设计文档{2},测试文档{3}
+- field: parent
+  note: 父模块ID
+  range: 0{10},1{3},2{3},3{2},4{2}
+- field: path
+  note: 模块路径
+  range: ,1,{5},2,{5},3,{3},1,2,{3},1,3,{2},2,3,{2}
+- field: grade
+  note: 级别
+  range: 1{10},2{8},3{2}
+- field: order
+  note: 排序
+  range: 1-20
+- field: type
+  note: 模块类型
+  range: doc{10},api{5},story{3},task{2}
+- field: from
+  note: 来源
+  range: 0
+- field: owner
+  note: 负责人
+  range: admin{5},user1{5},user2{5},user3{3},user4{2}
+- field: collector
+  note: 收藏者
+  range: ''
+- field: short
+  note: 简称
+  range: 'PD{2},AD{2},TD{1},""'
+- field: deleted
+  note: 是否删除
+  range: 0{18},'1'{2}
