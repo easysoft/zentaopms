@@ -185,4 +185,22 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getCalculator method.
+     *
+     * @param  string $scope
+     * @param  string $purpose
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function getCalculatorTest($scope = null, $purpose = null, $code = null)
+    {
+        $result = $this->objectModel->getCalculator($scope, $purpose, $code);
+        if(dao::isError()) return dao::getError();
+
+        if(is_object($result) && isset($result->fieldList)) return get_class($result);
+        return $result;
+    }
 }
