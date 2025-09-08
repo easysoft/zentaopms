@@ -641,4 +641,23 @@ class groupTest
 
         return $result;
     }
+
+    /**
+     * Test checkNavSubset method.
+     *
+     * @param  string $nav
+     * @param  string $subset
+     * @access public
+     * @return bool
+     */
+    public function checkNavSubsetTest($nav, $subset)
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('checkNavSubset');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $nav, $subset);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
