@@ -448,4 +448,22 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test mapRecordValueWithFieldOptions method.
+     *
+     * @param  array  $records
+     * @param  array  $fields
+     * @param  string $driver
+     * @access public
+     * @return array
+     */
+    public function mapRecordValueWithFieldOptionsTest($records, $fields, $driver = 'mysql')
+    {
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->mapRecordValueWithFieldOptions($records, $fields, $driver);
+        
+        return $result;
+    }
 }
