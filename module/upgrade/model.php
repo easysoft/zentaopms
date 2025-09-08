@@ -11727,7 +11727,7 @@ class upgradeModel extends model
         $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->fetchGroup('type');
 
         $deliverable = new stdClass();
-        $deliverable->status      = 'disabled';
+        $deliverable->status      = 'enabled';
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
         $deliverable->template    = '[]';
@@ -11750,6 +11750,7 @@ class upgradeModel extends model
             foreach(array_filter($this->lang->baseline->objectList) as $key => $value)
             {
                 if(empty($value)) continue;
+                $deliverable->category = $key; // 标记交付物的类型。
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 $reviewFlow->root     = $module->workflowGroup;
