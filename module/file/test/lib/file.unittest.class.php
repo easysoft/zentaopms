@@ -780,4 +780,28 @@ class fileTest
             return 'exception';
         }
     }
+
+    /**
+     * Test dwordize method.
+     *
+     * @param  string $str
+     * @access public
+     * @return mixed
+     */
+    public function dwordizeTest(string $str)
+    {
+        // 使用反射来访问private方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('dwordize');
+        $method->setAccessible(true);
+        
+        if(dao::isError()) return dao::getError();
+        
+        try {
+            $result = $method->invoke($this->objectModel, $str);
+            return $result;
+        } catch (Exception $e) {
+            return 'exception';
+        }
+    }
 }
