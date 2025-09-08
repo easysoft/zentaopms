@@ -1,0 +1,62 @@
+---
+title: instance数据定义用于uninstall测试
+desc: 为uninstall方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 实例名称
+  range: test_app{10}
+  format: ""
+- field: source
+  note: 实例来源类型
+  range: external{2},store{3},system{5}
+  format: ""
+- field: k8name
+  note: Kubernetes实例名称
+  range: test-k8name{10}
+  format: ""
+- field: status
+  note: 实例状态
+  range: running{5},stopped{3},initializing{2}
+  format: ""
+- field: space
+  note: 空间ID
+  range: 1-3:1
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{10}
+  format: ""
+- field: appName
+  note: 应用名称
+  range: TestApp{10}
+  format: ""
+- field: chart
+  note: Helm Chart名称
+  range: test-chart{10}
+  format: ""
+- field: version
+  note: 应用版本
+  range: 1.0.0{5},2.0.0{5}
+  format: ""
+- field: domain
+  note: 域名
+  range: test{10}.example.com
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  format: ""
+- field: createdAt
+  note: 创建时间
+  range: 2024-01-01 10:00:00
+  format: "YYYY-MM-DD hh:mm:ss"

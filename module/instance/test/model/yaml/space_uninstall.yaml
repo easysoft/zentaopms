@@ -1,0 +1,38 @@
+---
+title: space数据定义用于uninstall测试
+desc: 为uninstall方法提供空间测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 空间ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 空间名称
+  range: space{3}
+  format: ""
+- field: k8space
+  note: Kubernetes命名空间
+  range: ns-space{3}
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{3}
+  format: ""
+- field: owner
+  note: 空间所有者
+  range: admin{3}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{3}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00
+  format: "YYYY-MM-DD hh:mm:ss"

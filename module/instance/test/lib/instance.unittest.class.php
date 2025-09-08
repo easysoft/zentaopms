@@ -224,4 +224,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test uninstall method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function uninstallTest(object $instance)
+    {
+        $result = $this->objectModel->uninstall($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
