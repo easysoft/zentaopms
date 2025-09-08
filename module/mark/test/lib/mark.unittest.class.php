@@ -79,4 +79,23 @@ class markTest
 
         return $result;
     }
+
+    /**
+     * Test setMark method.
+     *
+     * @param  array  $objectIDs
+     * @param  string $objectType
+     * @param  string $version
+     * @param  string $mark
+     * @param  string $extra
+     * @access public
+     * @return bool
+     */
+    public function setMarkTest(array $objectIDs, string $objectType, string $version, string $mark, string $extra = '')
+    {
+        $result = $this->objectModel->setMark($objectIDs, $objectType, $version, $mark, $extra);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
