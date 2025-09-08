@@ -269,4 +269,21 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test upgrade method.
+     *
+     * @param  object $instance
+     * @param  string $toVersion
+     * @param  string $appVersion
+     * @access public
+     * @return mixed
+     */
+    public function upgradeTest(object $instance, string $toVersion, string $appVersion)
+    {
+        $result = $this->objectModel->upgrade($instance, $toVersion, $appVersion);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
