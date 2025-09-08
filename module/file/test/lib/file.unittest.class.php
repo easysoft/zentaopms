@@ -563,4 +563,64 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test saveUpload method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $extra
+     * @param  array  $files
+     * @param  array  $labels
+     * @access public
+     * @return array|false
+     */
+    public function saveUploadTest(string $objectType = '', int $objectID = 0, string $extra = '', array $files = array(), array $labels = array())
+    {
+        $_FILES['files'] = $files;
+        $_POST['labels'] = $labels;
+
+        // 确保保存目录存在
+        if(!is_dir($this->objectModel->savePath))
+        {
+            mkdir($this->objectModel->savePath . date('Ym/', $this->objectModel->now), 0777, true);
+        }
+
+        // 创建临时文件以模拟真实上传
+        $tempDir = sys_get_temp_dir();
+        if(isset($files['tmp_name']) && is_array($files['tmp_name']))
+        {
+            foreach($files['tmp_name'] as $index => $tmpName)
+            {
+                if(!empty($tmpName) && isset($files['size'][$index]) && $files['size'][$index] > 0)
+                {
+                    $tempFile = $tempDir . '/' . basename($tmpName) . '_test_' . time() . '_' . $index;
+                    file_put_contents($tempFile, str_repeat('test', max(1, intval($files['size'][$index] / 4))));
+                    $_FILES['files']['tmp_name'][$index] = $tempFile;
+                }
+            }
+        }
+
+        $result = $this->objectModel->saveUpload($objectType, $objectID, $extra);
+
+        // 清理临时文件
+        if(isset($files['tmp_name']) && is_array($files['tmp_name']))
+        {
+            foreach($_FILES['files']['tmp_name'] as $tmpFile)
+            {
+                if(file_exists($tmpFile) && is_file($tmpFile)) unlink($tmpFile);
+            }
+        }
+
+        unset($_FILES['files']);
+        unset($_POST['labels']);
+
+        if(dao::isError()) return dao::getError();
+
+        // 调试输出
+        if($result === false) return 'false';
+        if(empty($result)) return 'empty';
+        
+        return is_array($result) ? count($result) : $result;
+    }
 }
