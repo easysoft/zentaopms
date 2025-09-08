@@ -78,4 +78,22 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test cleanModelCache method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function cleanModelCacheTest()
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('cleanModelCache');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
