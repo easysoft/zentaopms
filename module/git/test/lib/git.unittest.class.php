@@ -101,4 +101,43 @@ class gitTest
 
         return $this->gitModel->loadModel('repo')->getByID($repoID);
     }
+
+    /**
+     * Test linkCommit method.
+     *
+     * @param  array  $designs
+     * @param  int    $repoID
+     * @param  string $revision
+     * @access public
+     * @return mixed
+     */
+    public function linkCommitTest(array $designs, int $repoID, string $revision): mixed
+    {
+        $log = new stdclass();
+        $log->revision = $revision;
+
+        ob_start();
+        try {
+            $this->gitModel->linkCommit($designs, $repoID, $log);
+        } catch (TypeError $e) {
+            ob_end_clean();
+            return 'has_error';
+        }
+        $output = ob_get_clean();
+
+        if(dao::isError()) return 'has_error';
+
+        if(!empty($output) && strpos($output, 'alert') !== false) return 'has_error';
+
+        if(empty($designs)) return 'empty';
+
+        $relations = $this->gitModel->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq('design')
+            ->andWhere('AID')->in($designs)
+            ->andWhere('BType')->eq('commit')
+            ->andWhere('relation')->eq('completedin')
+            ->fetchAll();
+
+        return count($relations) > 0 ? 'success' : 'no_relation';
+    }
 }
