@@ -88,4 +88,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test k8nameExists method.
+     *
+     * @param  string $k8name
+     * @access public
+     * @return mixed
+     */
+    public function k8nameExistsTest(string $k8name)
+    {
+        $result = $this->objectModel->k8nameExists($k8name);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
