@@ -596,4 +596,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test flattenRow method.
+     *
+     * @param  array $row
+     * @access public
+     * @return array
+     */
+    public function flattenRowTest(array $row): array
+    {
+        $result = $this->objectModel->flattenRow($row);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
