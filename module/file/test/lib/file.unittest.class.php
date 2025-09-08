@@ -476,4 +476,38 @@ class fileTest
         $downloadLink = helper::createLink('file', 'download', "fileID=$fileID");
         return $this->objectModel->buildFileActions('', $downloadLink, 0, $showEdit, $showDelete, $file, null);
     }
+
+    /**
+     * Test __construct method.
+     *
+     * @access public
+     * @return array
+     */
+    public function __constructTest(): array
+    {
+        global $tester;
+        
+        // 创建新的fileModel实例来测试构造函数
+        $fileModel = $tester->loadModel('file');
+        
+        $result = array();
+        
+        // 测试now属性是否为整数类型
+        $result['nowIsInt'] = is_int($fileModel->now) ? 1 : 0;
+        
+        // 测试savePath属性是否包含upload路径
+        $result['savePathContainsUpload'] = (strpos($fileModel->savePath, 'upload') !== false) ? 1 : 0;
+        
+        // 测试webPath属性是否包含upload路径
+        $result['webPathContainsUpload'] = (strpos($fileModel->webPath, 'upload') !== false) ? 1 : 0;
+        
+        // 测试now属性是否接近当前时间（允许5秒误差）
+        $currentTime = time();
+        $result['nowIsRecent'] = (abs($fileModel->now - $currentTime) <= 5) ? 1 : 0;
+        
+        // 测试是否继承了父类属性（检查dao属性）
+        $result['hasParentProperties'] = isset($fileModel->dao) ? 1 : 0;
+        
+        return $result;
+    }
 }
