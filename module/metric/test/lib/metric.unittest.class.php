@@ -222,4 +222,22 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test calculateSingleMetric method.
+     *
+     * @param  object $calculator
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function calculateSingleMetricTest($calculator = null, $vision = 'rnd')
+    {
+        if($calculator === null) return false;
+        
+        $result = $this->objectModel->calculateSingleMetric($calculator, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
