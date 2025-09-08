@@ -240,4 +240,22 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test calculateDefaultMetric method.
+     *
+     * @param  object $calculator
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function calculateDefaultMetricTest($calculator = null, $vision = 'rnd')
+    {
+        if($calculator === null) return false;
+        
+        $this->objectModel->calculateDefaultMetric($calculator, $vision);
+        if(dao::isError()) return dao::getError();
+
+        return true;
+    }
 }
