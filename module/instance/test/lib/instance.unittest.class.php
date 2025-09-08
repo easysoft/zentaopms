@@ -239,4 +239,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test start method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function startTest(object $instance)
+    {
+        $result = $this->objectModel->start($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
