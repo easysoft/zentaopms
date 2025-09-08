@@ -679,4 +679,25 @@ class myTest
 
         return empty($result) ? '0' : count($result);
     }
+
+    /**
+     * Test buildReviewedList method.
+     *
+     * @param  array $objectGroup
+     * @param  array $actions
+     * @param  array $flows
+     * @access public
+     * @return mixed
+     */
+    public function buildReviewedListTest(array $objectGroup, array $actions, array $flows)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('buildReviewedList');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, [$objectGroup, $actions, $flows]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
