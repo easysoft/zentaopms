@@ -849,4 +849,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getDrillsFromRecords method.
+     *
+     * @param  array $records
+     * @param  array $groups
+     * @access public
+     * @return array
+     */
+    public function getDrillsFromRecordsTest(array $records, array $groups): array
+    {
+        $result = $this->objectModel->getDrillsFromRecords($records, $groups);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
