@@ -316,4 +316,18 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getLogFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getLogFileTest()
+    {
+        $result = $this->objectModel->getLogFile();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
