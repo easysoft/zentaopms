@@ -41,4 +41,37 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectTable method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return mixed
+     */
+    public function getObjectTableTest($header = null, $data = null, $dateType = 'day', $withCalcTime = true)
+    {
+        $result = $this->objectModel->getObjectTable($header, $data, $dateType, $withCalcTime);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getMetricsByCodeList method.
+     *
+     * @param  array $codeList
+     * @access public
+     * @return mixed
+     */
+    public function getMetricsByCodeListTest($codeList = null)
+    {
+        $result = $this->objectModel->getMetricsByCodeList($codeList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

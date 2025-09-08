@@ -1,0 +1,71 @@
+---
+title: 度量项测试数据
+desc: 用于getMetricsByCodeList方法的测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: purpose
+  note: 目的
+  range: '["scale", "predict", "quality", "efficiency", "security"]'
+- field: scope
+  note: 范围
+  range: '["system", "project", "product", "execution", "user"]'
+- field: object
+  note: 对象
+  range: '["product", "project", "execution", "story", "task", "bug", "case", "user", "build", "release"]'
+- field: stage
+  note: 阶段
+  range: '["wait", "released"]'
+- field: type
+  note: 类型
+  range: '["php", "sql"]'
+- field: name
+  note: 名称
+  range: '["产品数", "项目数", "执行数", "需求数", "任务数", "缺陷数", "用例数", "用户数", "版本数", "发布数"]'
+- field: alias
+  note: 别名
+  range: '["product_count", "project_count", "execution_count", "story_count", "task_count", "bug_count", "case_count", "user_count", "build_count", "release_count"]'
+- field: code
+  note: 编码
+  range: '["count_of_product", "count_of_project", "count_of_execution", "count_of_story", "count_of_task", "count_of_bug", "count_of_case", "count_of_user", "count_of_build", "count_of_release"]'
+- field: unit
+  note: 单位
+  range: '["个", "件", "人", "条"]'
+- field: dateType
+  note: 日期类型
+  range: '["day", "week", "month", "year", "notime"]'
+- field: collector
+  note: 收集器
+  range: '["", "system", "cron", "manual"]'
+- field: desc
+  note: 描述
+  range: '["产品数量统计", "项目数量统计", "执行数量统计", "需求数量统计", "任务数量统计", "缺陷数量统计", "用例数量统计", "用户数量统计", "版本数量统计", "发布数量统计"]'
+- field: definition
+  note: 定义
+  range: '["统计产品总数", "统计项目总数", "统计执行总数", "统计需求总数", "统计任务总数", "统计缺陷总数", "统计用例总数", "统计用户总数", "统计版本总数", "统计发布总数"]'
+- field: createdBy
+  note: 创建者
+  range: '["admin", "system", "user1", "user2"]'
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00-2023-12-31 23:59:59'
+- field: editedBy
+  note: 编辑者
+  range: '["", "admin", "user1"]'
+- field: editedDate
+  note: 编辑时间
+  range: '["", "2023-01-01 00:00:00-2023-12-31 23:59:59"]'
+- field: builtin
+  note: 内置
+  range: '["0", "1"]'
+- field: fromID
+  note: 来源ID
+  range: 0-100
+- field: order
+  note: 排序
+  range: 0-100
+- field: deleted
+  note: 删除标记
+  range: '["0", "1"]'
