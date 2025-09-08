@@ -526,4 +526,23 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test getByGid method.
+     *
+     * @param  string $gid
+     * @access public
+     * @return object|false
+     */
+    public function getByGidTest(string $gid): object|false
+    {
+        $result = $this->objectModel->getByGid($gid);
+        
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return false;
+
+        if(isset($result->webPath)) $result->webPath = substr($result->webPath, strpos($result->webPath, '/data/upload'));
+
+        return $result;
+    }
 }
