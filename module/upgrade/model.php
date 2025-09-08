@@ -11855,11 +11855,11 @@ class upgradeModel extends model
                 $docContent->files = $files;
                 $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             }
-            elseif($review->doc)
+            elseif($review->doc && $files)
             {
                 /* 原来有文档也有附件，将附件关联到文档。 */
                 $this->dao->update(TABLE_DOCCONTENT)->set('files')->eq($files)->where('doc')->eq($review->doc)->exec();
-                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($fileIdList)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
             }
 
             $deliverable = new stdclass();
