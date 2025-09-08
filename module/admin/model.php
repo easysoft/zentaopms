@@ -429,7 +429,7 @@ class adminModel extends model
     public function genDateUsed(): object
     {
         $firstUseDate = $this->dao->select('min(`date`) as `date`')->from(TABLE_ACTION)
-            ->where('`date`')->gt('1970-01-01')
+            ->where('`date`')->gt('2000-01-01')
             ->andWhere('actor')->eq($this->app->user->account)
             ->fetch('date');
 
