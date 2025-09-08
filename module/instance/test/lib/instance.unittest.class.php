@@ -331,4 +331,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $instance
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(object $instance, string $action): bool
+    {
+        $result = $this->objectModel->isClickable($instance, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
