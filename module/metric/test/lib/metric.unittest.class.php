@@ -74,4 +74,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getRecordCalcInfo method.
+     *
+     * @param  mixed $recordID
+     * @access public
+     * @return mixed
+     */
+    public function getRecordCalcInfoTest($recordID = null)
+    {
+        $result = $this->objectModel->getRecordCalcInfo($recordID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
