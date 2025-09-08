@@ -301,4 +301,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test freshStatus method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return object
+     */
+    public function freshStatusTest(object $instance): object
+    {
+        $result = $this->objectModel->freshStatus($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
