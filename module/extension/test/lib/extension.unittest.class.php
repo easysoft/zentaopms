@@ -21,4 +21,23 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test fetchAPI method.
+     *
+     * @param  string $url
+     * @access public
+     * @return mixed
+     */
+    public function fetchAPITest($url = '')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('fetchAPI');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectModel, array($url));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
