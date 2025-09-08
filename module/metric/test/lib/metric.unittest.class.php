@@ -1170,4 +1170,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getNoDataTip method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function getNoDataTipTest($code)
+    {
+        $result = $this->objectModel->getNoDataTip($code);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
