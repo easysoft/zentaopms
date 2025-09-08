@@ -2253,4 +2253,19 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getZentaoList method.
+     *
+     * @param  int $blockID
+     * @access public
+     * @return object|null
+     */
+    public function getZentaoListTest(int $blockID): object|null
+    {
+        $result = $this->objectModel->getZentaoList($blockID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
