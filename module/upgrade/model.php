@@ -11814,6 +11814,7 @@ class upgradeModel extends model
         $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
 
         $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
+        $fileGroup           = $this->dao->select('id, objectID')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('objectType')->eq('review')->fetchGroup('objectID', 'id');
 
         $doc = new stdclass();
         $doc->version   = 1;
@@ -11821,9 +11822,19 @@ class upgradeModel extends model
         $doc->acl       = 'open';
         $doc->addedBy   = 'system';
         $doc->addedDate = helper::now();
+
+        $docContent = new stdclass();
+        $docContent->type = 'doc';
         foreach($reviews as $review)
         {
             if(!isset($projectDeliverables[$review->project][$review->category])) continue;
+
+            $files = '';
+            if(!empty($fileGroup[$review->id]))
+            {
+                $fileIdList = array_keys($fileGroup[$review->id]);
+                $files      = implode(',', $fileIdList);
+            }
 
             /* 不是系统模板生成、也没选文档的，自动生成文档。 */
             if(!$review->template && !$review->doc)
@@ -11833,10 +11844,22 @@ class upgradeModel extends model
                 $doc->project   = $review->project;
                 $doc->addedBy   = $review->createdBy;
                 $doc->addedDate = $review->createdDate;
+                $doc->type      = $files ? 'attachment' : 'text';
 
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc = $this->dao->lastInsertID();
                 $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
+
+                $docContent->doc   = $review->doc;
+                $docContent->title = $review->title;
+                $docContent->files = $files;
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            }
+            elseif($review->doc)
+            {
+                /* 原来有文档也有附件，将附件关联到文档。 */
+                $this->dao->update(TABLE_DOCCONTENT)->set('files')->eq($files)->where('doc')->eq($review->doc)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($fileIdList)->exec();
             }
 
             $deliverable = new stdclass();
