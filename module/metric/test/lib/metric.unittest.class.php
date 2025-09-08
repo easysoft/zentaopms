@@ -783,4 +783,38 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test execSqlMeasurement method.
+     *
+     * @param  object $measurement
+     * @param  array  $vars
+     * @access public
+     * @return mixed
+     */
+    public function execSqlMeasurementTest($measurement = null, $vars = array())
+    {
+        ob_start();
+        $result = $this->objectModel->execSqlMeasurement($measurement, $vars);
+        $output = ob_get_clean();
+        
+        if(dao::isError()) return dao::getError();
+
+        // 如果有HTML输出，从输出中提取实际结果
+        if(!empty($output) && strpos($output, '<pre') !== false)
+        {
+            // 清理HTML标签，只保留实际内容
+            $cleanOutput = preg_replace('/<[^>]*>/', '', $output);
+            $cleanOutput = trim($cleanOutput);
+            
+            // 尝试提取最后的数字或值
+            if(preg_match('/(\d+)$/', $cleanOutput, $matches))
+            {
+                return $matches[1];
+            }
+            return $cleanOutput;
+        }
+
+        return $result;
+    }
 }
