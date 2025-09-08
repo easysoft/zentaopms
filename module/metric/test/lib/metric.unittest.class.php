@@ -591,4 +591,19 @@ class metricTest
         
         return $result;
     }
+
+    /**
+     * Test classifyCalc method.
+     *
+     * @param  array $calcList
+     * @access public
+     * @return mixed
+     */
+    public function classifyCalcTest($calcList = array())
+    {
+        $result = $this->objectModel->classifyCalc($calcList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
