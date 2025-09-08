@@ -819,4 +819,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processRecordsForDisplay method.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function processRecordsForDisplayTest(array $records): array
+    {
+        $result = $this->objectModel->processRecordsForDisplay($records);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
