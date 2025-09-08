@@ -55,7 +55,8 @@ class startExecutionTester extends tester
     public function startWithGreaterDate($realBegan, $kanbanId)
     {
         $this->page->wait(1);
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($realBegan, $kanbanId);
         $form  = $this->loadPage();
         $field = $form->dom->realBegan->getValue();

@@ -89,7 +89,8 @@ class createExecutionTester extends tester
     public function create($execution, $module = 'execution')
     {
         $this->page->wait(1);
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
