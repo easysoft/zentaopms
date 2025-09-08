@@ -24,4 +24,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getTimeTable method.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return mixed
+     */
+    public function getTimeTableTest($data = null, $dateType = 'day', $withCalcTime = true)
+    {
+        $result = $this->objectModel->getTimeTable($data, $dateType, $withCalcTime);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
