@@ -769,4 +769,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getCellData method.
+     *
+     * @param  string $columnKey
+     * @param  array  $records
+     * @param  array  $setting
+     * @access public
+     * @return array
+     */
+    public function getCellDataTest(string $columnKey, array $records, array $setting): array
+    {
+        $result = $this->objectModel->getCellData($columnKey, $records, $setting);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
