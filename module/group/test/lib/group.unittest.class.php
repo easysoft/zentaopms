@@ -660,4 +660,20 @@ class groupTest
 
         return $result;
     }
+
+    /**
+     * Test getPrivsByParents method.
+     *
+     * @param  string $selectedSubset
+     * @param  string $selectedPackages
+     * @access public
+     * @return array
+     */
+    public function getPrivsByParentsTest($selectedSubset, $selectedPackages = '')
+    {
+        $result = $this->objectModel->getPrivsByParents($selectedSubset, $selectedPackages);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
