@@ -2034,4 +2034,18 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getDocTemplateSpaces method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateSpacesTest(): array
+    {
+        $result = $this->objectModel->getDocTemplateSpaces();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
