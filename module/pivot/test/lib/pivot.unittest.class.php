@@ -707,4 +707,50 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test setUniqueSlices method.
+     *
+     * @param  string $slice
+     * @param  array  $records
+     * @access public
+     * @return array
+     */
+    public function setUniqueSlicesTest(string $slice, array $records = null): array
+    {
+        if($records === null) {
+            // 构造测试数据
+            $records = array();
+            $record1 = new stdClass();
+            $record2 = new stdClass();
+            $record3 = new stdClass();
+            $record4 = new stdClass();
+            
+            if($slice == 'category') {
+                $record1->category = 'bug';
+                $record1->id = 1;
+                $record2->category = 'story';
+                $record2->id = 2;
+                $record3->category = 'bug';
+                $record3->id = 3;
+                $record4->category = 'story';
+                $record4->id = 4;
+                $records = array($record1, $record2, $record3, $record4);
+            } elseif($slice == 'priority') {
+                $record1->priority = '1';
+                $record1->id = 1;
+                $record2->priority = '2';
+                $record2->id = 2;
+                $record3->priority = '1';
+                $record3->id = 3;
+                $records = array($record1, $record2, $record3);
+            }
+        }
+
+        $setting = array('slice' => $slice);
+        $result = $this->objectModel->setUniqueSlices($records, $setting);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
