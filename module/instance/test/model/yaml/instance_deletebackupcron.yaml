@@ -1,0 +1,74 @@
+---
+title: 实例表测试数据 - deleteBackupCron方法
+desc: 用于测试删除定时备份任务的实例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-5
+
+- field: name
+  note: 实例名称
+  range: 'test-instance{5}'
+  format: "%s%d"
+
+- field: space
+  note: 空间ID
+  range: 1{5}
+
+- field: k8name
+  note: K8S名称
+  range: 'zentao{5}'
+  format: "%s%d"
+
+- field: domain
+  note: 域名
+  range: 'test{5}'
+  postfix: '.local.com'
+
+- field: appType
+  note: 应用类型
+  range: 'zentao{3}, jenkins{1}, gitlab{1}'
+
+- field: appVersion
+  note: 应用版本
+  range: '18.0{5}'
+
+- field: status
+  note: 实例状态
+  range: 'running{3}, stopped{1}, creating{1}'
+
+- field: dbName
+  note: 数据库名称
+  range: 'zentao{5}'
+  format: "%s%d"
+
+- field: dbUser
+  note: 数据库用户
+  range: 'root{5}'
+
+- field: dbPassword
+  note: 数据库密码
+  range: '123456{5}'
+
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}'
+
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 10:00:00{5}'
+
+- field: editedBy
+  note: 编辑者
+  range: 'admin{5}'
+
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-02 10:00:00{5}'
+
+- field: deleted
+  note: 删除标记
+  range: 0{5}

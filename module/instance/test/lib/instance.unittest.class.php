@@ -498,4 +498,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test deleteBackupCron method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return bool
+     */
+    public function deleteBackupCronTest(object $instance): bool
+    {
+        $result = $this->objectModel->deleteBackupCron($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
