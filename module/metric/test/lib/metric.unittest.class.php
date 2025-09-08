@@ -154,4 +154,20 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test mergeRecord method.
+     *
+     * @param  array $record
+     * @param  array $result
+     * @access public
+     * @return mixed
+     */
+    public function mergeRecordTest($record = null, $result = array())
+    {
+        $result = $this->objectModel->mergeRecord($record, $result);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
