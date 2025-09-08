@@ -1202,4 +1202,19 @@ class metricTest
 
         return $result ? 1 : 0;
     }
+
+    /**
+     * Test isFirstInference method.
+     *
+     * @param  string|array|null $codes
+     * @access public
+     * @return mixed
+     */
+    public function isFirstInferenceTest($codes = null)
+    {
+        $result = $this->objectModel->isFirstInference($codes);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
