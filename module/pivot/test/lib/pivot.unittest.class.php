@@ -466,4 +466,22 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test generateTableCols method.
+     *
+     * @param  array $fields
+     * @param  array $groups
+     * @param  array $langs
+     * @access public
+     * @return array
+     */
+    public function generateTableColsTest($fields, $groups, $langs)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->generateTableCols($fields, $groups, $langs);
+        
+        return $result;
+    }
 }
