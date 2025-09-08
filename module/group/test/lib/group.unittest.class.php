@@ -570,4 +570,21 @@ class groupTest
 
         return array('depend' => $depend, 'recommend' => $recommend);
     }
+
+    /**
+     * Test getProgramsForAdminGroup method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramsForAdminGroupTest()
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProgramsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
