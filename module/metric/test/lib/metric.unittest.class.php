@@ -1031,4 +1031,21 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getEchartsOptions method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getEchartsOptionsTest($header = array(), $data = array(), $chartType = 'line')
+    {
+        $result = $this->objectModel->getEchartsOptions($header, $data, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
