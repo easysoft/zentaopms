@@ -1055,4 +1055,21 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getListByProduct method.
+     *
+     * @param  int    $productID
+     * @param  string $scm
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function getListByProductTest(int $productID, string $scm = '', int $limit = 0)
+    {
+        $result = $this->objectModel->getListByProduct($productID, $scm, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
