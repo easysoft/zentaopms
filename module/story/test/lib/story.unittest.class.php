@@ -1417,4 +1417,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getGradePairs method.
+     *
+     * @param  string $type
+     * @param  string $status
+     * @param  array  $appendList
+     * @access public
+     * @return array
+     */
+    public function getGradePairsTest(string $type = 'story', string $status = 'enable', array $appendList = array()): array
+    {
+        $result = $this->objectModel->getGradePairs($type, $status, $appendList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
