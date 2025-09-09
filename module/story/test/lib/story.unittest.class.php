@@ -42,6 +42,23 @@ class storyTest
     }
 
     /**
+     * Test get grade options.
+     *
+     * @param  object|bool $story
+     * @param  string      $storyType
+     * @param  array       $appendList
+     * @access public
+     * @return array
+     */
+    public function getGradeOptionsTest($story, $storyType, $appendList = array())
+    {
+        $result = $this->objectModel->getGradeOptions($story, $storyType, $appendList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test get grade list.
      *
      * @param  string $type
