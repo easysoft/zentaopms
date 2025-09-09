@@ -1359,4 +1359,20 @@ class productTest
         if(!$output) return false;
         return strpos($output, $productName) !== false;
     }
+
+    /**
+     * Test buildSearchConfig method.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfigTest(int $productID, string $storyType): array
+    {
+        $result = $this->objectModel->buildSearchConfig($productID, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
