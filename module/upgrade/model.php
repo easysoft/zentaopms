@@ -11719,13 +11719,15 @@ class upgradeModel extends model
         if(empty($objectList) && !empty($this->lang->baseline->objectList)) $objectList = $this->lang->baseline->objectList;
         if(empty($objectList)) $objectList = $this->lang->upgrade->reviewObjectList;
 
-        $modelList  = array('waterfall', 'waterfallplus', 'ipd');
-        $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
-            ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
-            ->where('t1.type')->eq('deliverable')
-            ->andWhere('t1.extra')->eq('other')
-            ->andWhere('t2.projectModel')->in($modelList)
-            ->fetchAll();
+        $modelList = array('waterfall', 'waterfallplus', 'ipd');
+        $workflowGroupPairs = $this->dao->select('id, projectModel')->from(TABLE_WORKFLOWGROUP)
+            ->where('projectModel')->in($modelList)
+            ->fetchPairs();
+
+        $moduleGroup = $this->dao->select('id, root, extra')->from(TABLE_MODULE)
+            ->where('type')->eq('deliverable')
+            ->andWhere('root')->in(array_keys($workflowGroupPairs))
+            ->fetchGroup('root', 'extra');
 
         $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->where('type')->ne('')->fetchGroup('type');
 
@@ -11746,25 +11748,30 @@ class upgradeModel extends model
         $reviewFlow->relatedDate = helper::now();
         $reviewFlow->extra       = 'review';
 
-        $upgradeReviewcls = array();
-        foreach($moduleList as $module)
+        $upgradeReviewcls  = array();
+        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
+        foreach($workflowGroupPairs as $groupID => $projectModel)
         {
             $nameFilter = array();
-            $deliverable->workflowGroup = $module->workflowGroup;
-            $deliverable->module        = $module->id;
+            $deliverable->workflowGroup = $groupID;
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
+                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS'))) continue; // 设计类型的上面处理过了，跳过。
                 $deliverable->category = $key; // 标记交付物的类型。
+
+                /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
+                $moduleKey           = isset($categoryModuleMap[$key]) ? $categoryModuleMap[$key] : 'other';
+                $deliverable->module = isset($moduleGroup[$groupID][$moduleKey]) ? $moduleGroup[$groupID][$moduleKey]->id : 0;
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
-                $reviewFlow->root     = $module->workflowGroup;
+                $reviewFlow->root     = $groupID;
                 $reviewFlow->objectID = $deliverableID;
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
                 $flowID = $this->dao->lastInsertID();
 
-                if(empty($reviewclList[$module->projectModel])) continue;
-                foreach($reviewclList[$module->projectModel] as $reviewcl)
+                if(empty($reviewclList[$projectModel])) continue;
+                foreach($reviewclList[$projectModel] as $reviewcl)
                 {
                     if($key != $reviewcl->object) continue;
                     $upgradeReviewcls[$reviewcl->id] = $reviewcl->id;
@@ -11773,7 +11780,7 @@ class upgradeModel extends model
                     unset($reviewclData->id);
                     unset($reviewclData->editedDate);
                     unset($reviewclData->assignedDate);
-                    $reviewclData->workflowGroup = $module->workflowGroup;
+                    $reviewclData->workflowGroup = $groupID;
                     $reviewclData->object        = $flowID;
                     $this->dao->insert(TABLE_REVIEWCL)->data($reviewclData)->exec();
                 }
@@ -11807,7 +11814,7 @@ class upgradeModel extends model
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
-            ->where('t2.category IS NOT NULL')
+            ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
 
         $docIdList = array_column($reviews, 'doc');
