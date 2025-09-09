@@ -668,4 +668,23 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function setMenuTest(int $programID): array
+    {
+        $this->program->setMenu($programID);
+        if(dao::isError()) return dao::getError();
+
+        $result = array();
+        $result['switcherMenu'] = $this->program->lang->switcherMenu ?? '';
+        $result['programID'] = $programID;
+
+        return $result;
+    }
 }
