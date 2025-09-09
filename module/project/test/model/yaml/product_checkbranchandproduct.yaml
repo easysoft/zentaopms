@@ -1,0 +1,34 @@
+---
+title: checkBranchAndProduct测试产品数据
+desc: 用于测试checkBranchAndProduct方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 测试产品1,测试产品2,测试产品3,测试产品4,测试产品5,测试产品6,测试产品7,测试产品8,测试产品9,测试产品10
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{5},branch{3},platform{2}
+  format: ""
+- field: program
+  note: 所属项目集
+  range: 1{3},2{4},3{3}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{8},1{2}
+  format: ""

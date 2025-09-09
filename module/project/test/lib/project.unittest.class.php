@@ -147,4 +147,21 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test checkBranchAndProduct method.
+     *
+     * @param  int   $parent
+     * @param  array $products
+     * @param  array $branch
+     * @access public
+     * @return mixed
+     */
+    public function checkBranchAndProductTest($parent = 0, $products = array(), $branch = array())
+    {
+        $result = $this->objectModel->checkBranchAndProduct($parent, $products, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
