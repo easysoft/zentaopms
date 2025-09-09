@@ -1035,4 +1035,19 @@ class storyTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->limit(1)->fetch();
     }
+
+    /**
+     * Test getPairsByList method.
+     *
+     * @param  array|string $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByListTest($storyIdList): array
+    {
+        $result = $this->objectModel->getPairsByList($storyIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
