@@ -496,4 +496,19 @@ class reportTest
 
         return $objects;
     }
+
+    /**
+     * Test getContributionCountTips method.
+     *
+     * @param  string $mode
+     * @access public
+     * @return mixed
+     */
+    public function getContributionCountTipsTest($mode)
+    {
+        $result = $this->objectModel->getContributionCountTips($mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
