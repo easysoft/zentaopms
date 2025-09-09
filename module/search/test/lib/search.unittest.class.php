@@ -757,4 +757,42 @@ class searchTest
 
         return str_replace('@', '', $return);
     }
+
+    /**
+     * Test buildOldQuery method.
+     *
+     * @param  array $searchConfig
+     * @param  array $postData
+     * @access public
+     * @return array
+     */
+    public function buildOldQueryTest(array $searchConfig, array $postData): array
+    {
+        global $tester;
+
+        // 设置搜索配置
+        $this->objectModel->setSearchParams($searchConfig);
+
+        // 设置POST数据
+        foreach($postData as $key => $value) {
+            $_POST[$key] = $value;
+        }
+
+        // 调用buildOldQuery方法
+        $this->objectModel->buildOldQuery();
+
+        // 获取结果
+        $module = $postData['module'];
+        $querySessionName = $module . 'Query';
+        $formSessionName = $module . 'Form';
+
+        $result = array(
+            'query' => $_SESSION[$querySessionName] ?? '',
+            'form' => $_SESSION[$formSessionName] ?? array()
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

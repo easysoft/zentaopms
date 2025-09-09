@@ -314,7 +314,7 @@ class searchModel extends model
             {
                 $where .= " $andOr " . '`' . $this->post->$fieldName . "` > '$value 23:59:59'";
             }
-            elseif(in_array($operator, array('include', 'notinclude')) && $control == 'select')
+            elseif(in_array($operator, array('include', 'notinclude')) && $fieldControl == 'select')
             {
                 $where .= " $andOr CONCAT(',', `{$this->post->$fieldName}`, ',') {$condition}";
             }
