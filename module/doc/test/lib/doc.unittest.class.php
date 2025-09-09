@@ -2363,4 +2363,20 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test getDocIdByTitle method.
+     *
+     * @param  int    $originPageID
+     * @param  string $title
+     * @access public
+     * @return mixed
+     */
+    public function getDocIdByTitleTest(int $originPageID, string $title = '')
+    {
+        $result = $this->objectModel->getDocIdByTitle($originPageID, $title);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
