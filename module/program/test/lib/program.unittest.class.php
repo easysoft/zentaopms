@@ -638,4 +638,19 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getChildrenPairsByID method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function getChildrenPairsByIDTest(int $programID): array
+    {
+        $result = $this->program->getChildrenPairsByID($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
