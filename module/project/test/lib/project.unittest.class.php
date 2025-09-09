@@ -111,4 +111,19 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test getExecutionProductGroup method.
+     *
+     * @param  array $executionIDs
+     * @access public
+     * @return mixed
+     */
+    public function getExecutionProductGroupTest($executionIDs = array())
+    {
+        $result = $this->objectModel->getExecutionProductGroup($executionIDs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

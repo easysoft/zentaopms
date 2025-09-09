@@ -1,0 +1,13 @@
+title: projectproduct data for getExecutionProductGroup method testing
+author: Claude Code
+version: 1.0.0
+
+fields:
+  - field: project
+    range: 11,12,13,14,15,101,102
+  - field: product
+    range: 1,2,3,4,5,6,7,8
+  - field: branch
+    range: 0
+  - field: plan
+    range: 0
