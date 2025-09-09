@@ -1561,4 +1561,21 @@ class storyTest
         
         return $result;
     }
+
+    /**
+     * Test updateLinkedCommits method.
+     *
+     * @param  int   $storyID
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return mixed
+     */
+    public function updateLinkedCommitsTest(int $storyID, int $repoID, array $revisions)
+    {
+        $result = $this->objectModel->updateLinkedCommits($storyID, $repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
