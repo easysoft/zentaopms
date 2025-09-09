@@ -22,10 +22,12 @@ $lang->weekly->postponed      = '本周未完成工作';
 $lang->weekly->nextWeek       = '下周工作计划';
 $lang->weekly->workloadByType = '工作量统计';
 
-$lang->weekly->term    = '报告周期';
-$lang->weekly->project = $lang->projectCommon . '名称';
-$lang->weekly->master  = '项目经理 ';
-$lang->weekly->staff   = '本周投入人数';
+$lang->weekly->term          = '报告周期';
+$lang->weekly->project       = $lang->projectCommon . '名称';
+$lang->weekly->master        = '项目经理 ';
+$lang->weekly->staff         = '本周投入人数';
+$lang->weekly->projectCommon = '项目';
+$lang->weekly->template      = '周报模板';
 
 $lang->weekly->weekDesc       = '第 %s 周( %s ~ %s)';
 $lang->weekly->progress       = $lang->projectCommon . '当前进展状况';
@@ -41,6 +43,10 @@ $lang->weekly->cv = '成本偏差率（CV%）';
 $lang->weekly->totalCount = '总计 : %u 个任务';
 
 $lang->weekly->exportWeeklyReport = '导出周报';
+
+$lang->weekly->builtInScopes = array();
+$lang->weekly->builtInScopes['rnd']  = array();
+$lang->weekly->builtInScopes['rnd']['project'] = '项目';
 
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV 计划完成的工作</h2>
@@ -144,3 +150,5 @@ $lang->weekly->blockHelpNotice = <<<EOD
 <h2>CV(%) 成本偏差率</h2>
 计算方式：CV(%) = -1 * (1 - (EV / AC))%
 EOD;
+
+$lang->weekly->builtinContent = '<div class="affine-paragraph-block-container"><p> 周报： 项目由项目经理 负责，投入人数为 。</p></div><div class="affine-paragraph-block-container"><h5>项目进展状况</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_progress_summary&amp;blockID=__TML_ZENTAOCHART__{project_progress_summary}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_progress_summary&amp;blockID=__TML_ZENTAOCHART__{project_progress_summary}</a></div><div class="affine-paragraph-block-container"><h5>已完成任务情况</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_finished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_finished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}</a></div><div class="affine-paragraph-block-container"><h5>未完成任务情况</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_unfinished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_unfinished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}</a></div><div class="affine-paragraph-block-container"><h5>工作计划</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_workplan&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_workplan&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}</a></div><div class="affine-paragraph-block-container"><h5>项目计划工作量统计</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_basicStatistic_workload&amp;blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_basicStatistic_workload&amp;blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}</a></div>';

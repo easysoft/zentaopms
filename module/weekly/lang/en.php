@@ -22,10 +22,12 @@ $lang->weekly->postponed      = 'Work unfinished this week';
 $lang->weekly->nextWeek       = 'Work planned for next week';
 $lang->weekly->workloadByType = 'Workload Summary';
 
-$lang->weekly->term    = 'Reporting Cycle';
-$lang->weekly->project = $lang->projectCommon . ' Name';
-$lang->weekly->master  = 'Project Manager ';
-$lang->weekly->staff   = 'Weekly Effort';
+$lang->weekly->term          = 'Reporting Cycle';
+$lang->weekly->project       = $lang->projectCommon . ' Name';
+$lang->weekly->master        = 'Project Manager ';
+$lang->weekly->staff         = 'Weekly Effort';
+$lang->weekly->projectCommon = 'Project';
+$lang->weekly->template      = 'Weekly Report Template';
 
 $lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
 $lang->weekly->progress       = 'Progress of the ' . $lang->projectCommon;
@@ -41,6 +43,10 @@ $lang->weekly->cv = 'Cost Variance(CV%)';
 $lang->weekly->totalCount = 'Total : %u tasks';
 
 $lang->weekly->exportWeeklyReport = 'Export Weekly Report';
+
+$lang->weekly->builtInScopes = array();
+$lang->weekly->builtInScopes['rnd']  = array();
+$lang->weekly->builtInScopes['rnd']['project'] = 'Project';
 
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV Planned Value</h2>
@@ -143,3 +149,5 @@ Calculation method: SV(%) = -1 * (1 - (EV / PV))%
 <h2>CV(%) Schedule Variance</h2>
 Calculation method: CV(%) = -1 * (1 - (EV / AC))%
 EOD;
+
+$lang->weekly->builtinContent = '<div class="affine-paragraph-block-container"><p> Weekly report:  The project is managed by , the number of people involved is .</p></div><div class="affine-paragraph-block-container"><h5>Project Progress Summary</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_progress_summary&amp;blockID=__TML_ZENTAOCHART__{project_progress_summary}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_progress_summary&amp;blockID=__TML_ZENTAOCHART__{project_progress_summary}</a></div><div class="affine-paragraph-block-container"><h5>Finished Tasks</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_finished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_finished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}</a></div><div class="affine-paragraph-block-container"><h5>Unfinished Tasks</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_unfinished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_unfinished&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}</a></div><div class="affine-paragraph-block-container"><h5>Work Plan</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_workplan&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=task_basicStatistic_workplan&amp;blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}</a></div><div class="affine-paragraph-block-container"><h5>Project Plan Workload Statistic</h5><a href="/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_basicStatistic_workload&amp;blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}" target="_blank" rel="noreferrer noopener">/index.php?m=reporttemplate&amp;f=ajaxZentaoChart&amp;type=project_basicStatistic_workload&amp;blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}</a></div>';
