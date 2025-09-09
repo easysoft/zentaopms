@@ -2359,4 +2359,22 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * 测试根据需求ID列表获取任务列表。
+     * Test get task list by story ID list.
+     *
+     * @param  array $storyIdList
+     * @param  int   $executionID
+     * @param  int   $projectID
+     * @access public
+     * @return int
+     */
+    public function getListByStoriesTest(array $storyIdList = array(), int $executionID = 0, int $projectID = 0): int
+    {
+        $result = $this->objectModel->getListByStories($storyIdList, $executionID, $projectID);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
