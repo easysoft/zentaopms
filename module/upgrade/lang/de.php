@@ -236,3 +236,8 @@ $lang->upgrade->reviewObjectList['ITTC'] = 'Integrate Test Cases';
 $lang->upgrade->reviewObjectList['STP']  = 'System Test Plan';
 $lang->upgrade->reviewObjectList['STTC'] = 'System Test Cases';
 $lang->upgrade->reviewObjectList['UM']   = 'User Manual';
+
+$lang->upgrade->baselineReview = array();
+$lang->upgrade->baselineReview['baseline'] = 'Baseline Review';
+$lang->upgrade->baselineReview['change']   = 'Project Change Review';
+$lang->upgrade->baselineReview['accept']   = 'Project Change Accept Review';

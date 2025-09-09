@@ -236,3 +236,8 @@ $lang->upgrade->reviewObjectList['ITTC'] = '集成测试用例';
 $lang->upgrade->reviewObjectList['STP']  = '系统测试计划';
 $lang->upgrade->reviewObjectList['STTC'] = '系统测试用例';
 $lang->upgrade->reviewObjectList['UM']   = '用户手册';
+
+$lang->upgrade->baselineReview = array();
+$lang->upgrade->baselineReview['baseline'] = '基线评审';
+$lang->upgrade->baselineReview['change']   = '项目变更评审';
+$lang->upgrade->baselineReview['accept']   = '项目变更验收评审';
