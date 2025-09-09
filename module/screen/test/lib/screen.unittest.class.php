@@ -2,7 +2,7 @@
 class screenTest
 {
 
-    private $objectModel;
+    public $objectModel;
     public $componentList = array();
 
     public function __construct()
@@ -852,6 +852,52 @@ class screenTest
         $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
         $testResult['newField'] = isset($result->chartConfig->filters['newField']) ? $result->chartConfig->filters['newField'] : 'missing';
         
+        return $testResult;
+    }
+
+    /**
+     * Test prepareRadarDataset method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return mixed
+     */
+    public function prepareRadarDatasetTest(string $testType = 'normal')
+    {
+        $component = new stdclass();
+        $component->option = new stdclass();
+        $component->option->dataset = new stdclass();
+
+        switch($testType)
+        {
+            case 'normal':
+                $radarIndicator = array('indicator1', 'indicator2', 'indicator3');
+                $seriesData = array('series1', 'series2');
+                break;
+            case 'empty_indicator':
+                $radarIndicator = array();
+                $seriesData = array('series1', 'series2');
+                break;
+            case 'empty_series':
+                $radarIndicator = array('indicator1', 'indicator2');
+                $seriesData = array();
+                break;
+            default:
+                $radarIndicator = array('indicator1', 'indicator2', 'indicator3');
+                $seriesData = array('series1', 'series2');
+        }
+
+        $result = $this->objectModel->prepareRadarDataset($component, $radarIndicator, $seriesData);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['radarIndicator'] = isset($result->option->dataset->radarIndicator) ? $result->option->dataset->radarIndicator : array();
+        $testResult['seriesData'] = isset($result->option->dataset->seriesData) ? $result->option->dataset->seriesData : array();
+        $testResult['radarCount'] = isset($result->option->dataset->radarIndicator) ? count($result->option->dataset->radarIndicator) : 0;
+        $testResult['seriesCount'] = isset($result->option->dataset->seriesData) ? count($result->option->dataset->seriesData) : 0;
+        $testResult['hasStyles'] = isset($result->styles) ? 'yes' : 'no';
+        $testResult['result'] = is_object($result) ? 'object' : 'other';
+
         return $testResult;
     }
 }
