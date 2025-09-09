@@ -1946,4 +1946,20 @@ class testcaseTest
         $result = $this->objectModel->buildSearchConfig($productID, $branch);
         return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
     }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @access public
+     * @return mixed
+     */
+    public function setMenuTest(int $productID, int|string $branch = 0): mixed
+    {
+        $this->objectModel->setMenu($productID, $branch);
+        if(dao::isError()) return dao::getError();
+        
+        return true;
+    }
 }
