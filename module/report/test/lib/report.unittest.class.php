@@ -236,6 +236,22 @@ class reportTest
     }
 
     /**
+     * Test getUserYearContributionCount method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getUserYearContributionCountTest(array $accounts, string $year): mixed
+    {
+        $count = $this->objectModel->getUserYearContributionCount($accounts, $year);
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
+    /**
      * 测试获取用户某年的动态数。
      * Test get user contributions in this year.
      *
