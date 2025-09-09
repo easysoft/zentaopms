@@ -713,4 +713,19 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test preparePaginationBeforeFetchRecords method.
+     *
+     * @param  mixed $pagination
+     * @access public
+     * @return mixed
+     */
+    public function preparePaginationBeforeFetchRecordsTest($pagination)
+    {
+        $result = $this->objectModel->preparePaginationBeforeFetchRecords($pagination);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
