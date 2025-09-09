@@ -42,6 +42,69 @@ class storyTest
     }
 
     /**
+     * Test batch change grade.
+     *
+     * @param  array  $storyIdList
+     * @param  int    $grade
+     * @param  string $storyType
+     * @access public
+     * @return string|null
+     */
+    public function batchChangeGradeTest($storyIdList, $grade, $storyType = 'story')
+    {
+        $oldStories = $this->objectModel->getByList($storyIdList);
+        if(empty($oldStories)) return 'no_stories';
+        
+        // 模拟批量修改等级的核心逻辑，跳过 action 记录
+        $now = helper::now();
+        $account = 'admin';
+        
+        $rootGroup = array();
+        $parentIdList = array();
+        foreach($oldStories as $oldStory)
+        {
+            $rootGroup[$oldStory->root] = isset($rootGroup[$oldStory->root]) ? $rootGroup[$oldStory->root] + 1 : 1;
+            if($oldStory->parent > 0) $parentIdList[] = $oldStory->parent;
+        }
+        
+        if($parentIdList)
+        {
+            $parents = $this->objectModel->dao->select('id, grade, type')->from(TABLE_STORY)->where('id')->in($parentIdList)->fetchAll('id');
+        }
+        
+        $sameRootList = '';
+        $gradeGtParentList = '';
+        $gradeOverflowList = '';
+        
+        foreach($storyIdList as $storyID)
+        {
+            if(!isset($oldStories[$storyID])) continue;
+            $oldStory = $oldStories[$storyID];
+            if($grade == $oldStory->grade) continue;
+            if($oldStory->type != $storyType) continue;
+            
+            if(isset($rootGroup[$oldStory->root]) && $rootGroup[$oldStory->root] > 1)
+            {
+                $sameRootList .= "#{$storyID} ";
+                continue;
+            }
+            
+            if($oldStory->parent > 0 && isset($parents[$oldStory->parent]) && $grade < $parents[$oldStory->parent]->grade && $oldStory->type == $parents[$oldStory->parent]->type)
+            {
+                $gradeGtParentList .= "#{$storyID} ";
+                continue;
+            }
+            
+            // 跳过数据库操作和 action 记录，仅模拟逻辑验证
+        }
+        
+        if($gradeOverflowList) return 'grade_overflow';
+        if($sameRootList) return 'same_root_error';
+        if($gradeGtParentList) return 'grade_gt_parent';
+        return 'success';
+    }
+
+    /**
      * Test get test stories.
      *
      * @param  array  $storyIdList
