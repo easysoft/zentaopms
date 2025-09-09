@@ -12,8 +12,8 @@ class suspendExecutionTester extends tester
      */
     public function suspend($executionId)
     {
-        $this->page->wait(1);
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'kanban', array('execution' => $executionId ), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
