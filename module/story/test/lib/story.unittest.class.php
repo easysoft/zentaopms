@@ -1325,4 +1325,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getDataOfStoriesPerGrade method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerGradeTest(string $storyType = 'story'): array
+    {
+        $result = $this->objectModel->getDataOfStoriesPerGrade($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
