@@ -591,4 +591,54 @@ class weeklyModel extends model
 
         return $data;
     }
+
+    /**
+     * 设置内置项目周报模板。
+     * Set builtin weekly report template.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltinWeeklyTemplate()
+    {
+        /* Set scope and class data. */
+        $scopeID    = $this->addBuiltinScope();
+        return !dao::isError();
+    }
+
+    /**
+     * 添加内置报告模板范围。
+     * Set scope.
+     *
+     * @access public
+     * @return int
+     */
+    public function addBuiltinScope(): int
+    {
+        /* Set scope data. */
+        $scope = new stdClass();
+        $scope->type      = 'reportTemplate';
+        $scope->main      = '1';
+        $scope->vision    = $this->config->vision;
+        $scope->addedBy   = 'system';
+        $scope->addedDate = helper::now();
+        foreach($this->lang->weekly->builtInScopes as $vision => $scopeList)
+        {
+            $scopeMaps = array();
+            $scope->vision = $vision;
+            foreach($scopeList as $scopeKey => $scopeName)
+            {
+                if(empty($scopeName)) continue;
+
+                $scope->name = $scopeName;
+                $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+
+                $scopeID = $this->dao->lastInsertID();
+                $scopeMaps[$scopeKey] = $scopeID;
+            }
+            if(!empty($scopeMaps)) $this->loadModel('setting')->setItem("system.reporttemplate.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
+        }
+
+        return $scopeID;
+    }
 }
