@@ -1115,4 +1115,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test buildOrgChart method.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return mixed
+     */
+    public function buildOrgChartTest($component, $chart)
+    {
+        $result = $this->objectModel->buildOrgChart($component, $chart);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
