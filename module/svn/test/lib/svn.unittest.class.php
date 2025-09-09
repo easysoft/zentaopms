@@ -8,6 +8,22 @@ class svnTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return object
+     */
+    public function __constructTest($moduleName = '', $methodName = ''): object
+    {
+        $svnModel = new svnModel($moduleName, $methodName);
+        if(dao::isError()) return dao::getError();
+
+        return $svnModel;
+    }
+
+    /**
      * Test run method.
      *
      * @access public
