@@ -965,4 +965,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test buildTableChart method.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildTableChartTest($component, $chart)
+    {
+        $result = $this->objectModel->buildTableChart($component, $chart);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
