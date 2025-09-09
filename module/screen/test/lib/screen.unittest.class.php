@@ -1147,4 +1147,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test initMetricComponent method.
+     *
+     * @param  object|null $metric
+     * @param  object|null $component
+     * @access public
+     * @return array
+     */
+    public function initMetricComponentTest($metric = null, $component = null)
+    {
+        $result = $this->objectModel->initMetricComponent($metric, $component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
