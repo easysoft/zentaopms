@@ -248,4 +248,19 @@ class storeTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 测试设置应用最新版本。
+     * Test set app latest version.
+     *
+     * @param  array  $appList
+     * @access public
+     * @return array
+     */
+    public function batchSetLatestVersionsTest(array $appList): array
+    {
+        $result = $this->batchSetLatestVersions($appList);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
