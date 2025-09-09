@@ -553,4 +553,22 @@ class screenTest
             return 'access_denied';
         }
     }
+
+    /**
+     * Test mergeChartAndPivotFilters method.
+     *
+     * @param  string $type
+     * @param  object $chartOrPivot
+     * @param  int    $sourceID
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function mergeChartAndPivotFiltersTest($type, $chartOrPivot, $sourceID, $filters)
+    {
+        $result = $this->objectModel->mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
