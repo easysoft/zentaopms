@@ -1340,4 +1340,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test appendChildren method.
+     *
+     * @param  int    $productID
+     * @param  array  $stories
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function appendChildrenTest(int $productID, array $stories, string $storyType): array
+    {
+        $result = $this->objectModel->appendChildren($productID, $stories, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
