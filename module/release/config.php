@@ -59,7 +59,7 @@ $config->release->actionList['pause']['data-confirm'] = array('message' => $lang
 $config->release->actionList['edit']['icon'] = 'edit';
 $config->release->actionList['edit']['text'] = $lang->release->edit;
 $config->release->actionList['edit']['hint'] = $lang->release->edit;
-$config->release->actionList['edit']['url']  = helper::createLink('release', 'edit', 'releaseID={id}');
+$config->release->actionList['edit']['url']  = $app->tab == 'project' ? helper::createLink('projectrelease', 'edit', 'releaseID={id}') : helper::createLink('release', 'edit', 'releaseID={id}');
 
 $config->release->actionList['notify']['icon']        = 'bullhorn';
 $config->release->actionList['notify']['hint']        = $lang->release->notify;
