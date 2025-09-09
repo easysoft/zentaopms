@@ -603,6 +603,22 @@ class weeklyModel extends model
     {
         /* Set scope and class data. */
         $scopeID    = $this->addBuiltinScope();
+        $categoryID = $this->addBuildinCategory($scopeID);
+
+        /* Set docblock data. */
+        $blockIdList = array();
+        $docBlock    = new stdclass();
+        foreach($this->config->weekly->charts as $chartKey => $chartContent)
+        {
+            $docBlock->type    = $chartKey;
+            $docBlock->content = json_encode($chartContent);
+            $this->dao->insert(TABLE_DOCBLOCK)->data($docBlock)->exec();
+            $blockIdList[$chartKey] = $this->dao->lastInsertId();
+        }
+
+        /* Set doc and doc content data. */
+        $this->setTemplateData($scopeID, $categoryID, $blockIdList);
+
         return !dao::isError();
     }
 
@@ -640,5 +656,29 @@ class weeklyModel extends model
         }
 
         return $scopeID;
+    }
+
+    /**
+     * 添加内置报告模板分类。
+     * Add builtin report template category.
+     *
+     * @param  int $scopeID
+     * @access public
+     * @return int
+     */
+    public function addBuildinCategory(int $scopeID): int
+    {
+        /* Set category data. */
+        $category = new stdClass();
+        $category->root  = $scopeID;
+        $category->name  = $this->lang->weekly->projectCommon;
+        $category->grade = 1;
+        $category->type  = 'reportTemplate';
+        $this->dao->insert(TABLE_MODULE)->data($category)->exec();
+
+        $categoryID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set(`path`)->eq(",{$categoryID},")->where('id')->eq($categoryID)->exec();
+
+        return $categoryID;
     }
 }
