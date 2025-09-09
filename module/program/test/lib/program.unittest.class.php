@@ -687,4 +687,19 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getSwitcher method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest(int $programID): string
+    {
+        $result = $this->program->getSwitcher($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
