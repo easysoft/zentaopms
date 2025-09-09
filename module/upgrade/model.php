@@ -11814,7 +11814,7 @@ class upgradeModel extends model
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
-            ->where('t2.category IS NOT NULL')
+            ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
 
         $docIdList = array_column($reviews, 'doc');
