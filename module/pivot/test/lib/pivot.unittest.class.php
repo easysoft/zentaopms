@@ -1110,4 +1110,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getDrillSQL method.
+     *
+     * @param  string $objectTable
+     * @param  string $whereSQL
+     * @param  array  $conditions
+     * @access public
+     * @return string
+     */
+    public function getDrillSQLTest($objectTable, $whereSQL = '', $conditions = array())
+    {
+        $result = $this->objectModel->getDrillSQL($objectTable, $whereSQL, $conditions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
