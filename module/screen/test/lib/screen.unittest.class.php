@@ -1393,4 +1393,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getUsageReportProducts method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return int
+     */
+    public function getUsageReportProductsTest($year, $month)
+    {
+        $result = $this->objectModel->getUsageReportProducts($year, $month);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
 }
