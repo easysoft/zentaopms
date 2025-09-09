@@ -1,0 +1,27 @@
+title: Project data for getProjectStoryTable test
+desc: Test project data with various scenarios
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    fields:
+    - field: name1
+      range: 'Project '
+    - field: name2
+      range: 1-10
+  - field: type
+    range: 'project'
+  - field: parent
+    range: 0
+  - field: deleted
+    range: '0'
+  - field: status
+    range: 'wait{3},doing{5},suspended{1},closed{1}'
+  - field: openedDate
+    range: '2023-01-01 00:00:00{5},2023-06-01 00:00:00{3},2022-12-15 00:00:00{2}'
+  - field: closedDate
+    range: '0000-00-00 00:00:00{8},2023-07-01 00:00:00{2}'
+  - field: vision
+    range: 'rnd'
