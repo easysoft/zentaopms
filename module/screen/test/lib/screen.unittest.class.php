@@ -1213,4 +1213,19 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getChartType method.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getChartTypeTest($type)
+    {
+        $result = $this->objectModel->getChartType($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
