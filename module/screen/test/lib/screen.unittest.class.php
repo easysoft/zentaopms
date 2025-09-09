@@ -1424,4 +1424,19 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test removeScheme method.
+     *
+     * @param  array $screens
+     * @access public
+     * @return array
+     */
+    public function removeSchemeTest($screens)
+    {
+        $result = $this->objectModel->removeScheme($screens);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
