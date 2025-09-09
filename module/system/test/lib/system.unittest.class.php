@@ -136,4 +136,18 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test isUpgradeable method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function isUpgradeableTest()
+    {
+        $result = $this->objectModel->isUpgradeable();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
