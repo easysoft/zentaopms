@@ -603,4 +603,29 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test genNotFoundOrDraftComponentOption method.
+     *
+     * @param  object|null $component
+     * @param  object|null $chart
+     * @param  string      $type
+     * @access public
+     * @return array
+     */
+    public function genNotFoundOrDraftComponentOptionTest($component, $chart, $type)
+    {
+        $result = $this->objectModel->genNotFoundOrDraftComponentOption($component, $chart, $type);
+        if(dao::isError()) return dao::getError();
+
+        // 转换为数组格式便于测试
+        $testResult = array();
+        $testResult['hasOption'] = isset($result->option) ? 1 : 0;
+        $testResult['hasTitle'] = isset($result->option->title) ? 1 : 0;
+        $testResult['hasNotFoundText'] = isset($result->option->title->notFoundText) ? 1 : 0;
+        $testResult['isDeleted'] = isset($result->option->isDeleted) && $result->option->isDeleted ? 1 : 0;
+        $testResult['notFoundText'] = isset($result->option->title->notFoundText) ? $result->option->title->notFoundText : '';
+        
+        return $testResult;
+    }
 }
