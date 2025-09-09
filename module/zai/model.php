@@ -326,9 +326,9 @@ class zaiModel extends model
      */
     public function getNextTarget($type, $id)
     {
-        if(!isset(self::$syncTables[$type])) return null;
+        if(!isset(static::$syncTables[$type])) return null;
 
-        $table = self::$syncTables[$type];
+        $table = static::$syncTables[$type];
         $target = $this->dao->select('*')->from($table)->where('id')->ge($id)->andWhere('deleted')->eq(0)->orderby('id_asc')->fetch();
         if(!$target) return null;
 
@@ -350,7 +350,7 @@ class zaiModel extends model
         $target = $this->getNextTarget($type, $id);
         if(!$target) return null;
 
-        $markdownData = self::convertTargetToMarkdown($type, $target);
+        $markdownData = static::convertTargetToMarkdown($type, $target);
         $syncData     = array();
 
         $syncData['content']      = $markdownData['content'];
@@ -404,7 +404,7 @@ class zaiModel extends model
      * @access public
      * @return array
      */
-    static function getSyncTypes()
+    public static function getSyncTypes()
     {
         global $app, $config;
         $types = $app->lang->zai->syncingTypeList;
@@ -421,7 +421,7 @@ class zaiModel extends model
      * @param string $currentType
      * @return string 下一个同步类型。The next sync type.
      */
-    static function getNextSyncType($currentType = '')
+    public static function getNextSyncType($currentType = '')
     {
         global $app;
         $types = array_keys(zaiModel::getSyncTypes());
@@ -443,14 +443,14 @@ class zaiModel extends model
      * @param object $target
      * @return array
      */
-    static function convertTargetToMarkdown($type, $target)
+    public static function convertTargetToMarkdown($type, $target)
     {
         global $app;
 
         $funcName = 'convert' . ucfirst($type) . 'ToMarkdown';
-        if(method_exists(self::class, $funcName))
+        if(method_exists(static::class, $funcName))
         {
-            $markdown = self::$funcName($target);
+            $markdown = static::$funcName($target);
         }
         else
         {
@@ -480,7 +480,7 @@ class zaiModel extends model
      * @param object $story
      * @return array
      */
-    static function convertStoryToMarkdown($story)
+    public static function convertStoryToMarkdown($story)
     {
         global $app;
 
@@ -533,7 +533,7 @@ class zaiModel extends model
      * @param object $demand
      * @return array
      */
-    static function convertDemandToMarkdown($demand)
+    public static function convertDemandToMarkdown($demand)
     {
         global $app;
 
@@ -588,7 +588,7 @@ class zaiModel extends model
      * @param object $bug
      * @return array
      */
-    static function convertBugToMarkdown($bug)
+    public static function convertBugToMarkdown($bug)
     {
         global $app;
 
@@ -643,7 +643,7 @@ class zaiModel extends model
      * @param object $doc
      * @return array
      */
-    static function convertDocToMarkdown($doc)
+    public static function convertDocToMarkdown($doc)
     {
         global $app;
 
@@ -689,7 +689,7 @@ class zaiModel extends model
      * @param object $design
      * @return array
      */
-    static function convertDesignToMarkdown($design)
+    public static function convertDesignToMarkdown($design)
     {
         global $app;
 
@@ -729,7 +729,7 @@ class zaiModel extends model
      * @param object $feedback
      * @return array
      */
-    static function convertFeedbackToMarkdown($feedback)
+    public static function convertFeedbackToMarkdown($feedback)
     {
         global $app;
 

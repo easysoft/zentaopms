@@ -186,7 +186,6 @@ class zai extends control
                 $info->syncingType = $nextSyncType;
                 $info->syncingID   = 0;
             }
-            $syncingType = $info->syncingType;
         }
         $this->zai->setVectorizedInfo($info);
         return $this->send(array('result' => 'success', 'data' => $info));
