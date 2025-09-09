@@ -73,4 +73,22 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test deleteBackup method.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return mixed
+     */
+    public function deleteBackupTest($instance, $backupName)
+    {
+        ob_start();
+        $result = $this->objectModel->deleteBackup($instance, $backupName);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
