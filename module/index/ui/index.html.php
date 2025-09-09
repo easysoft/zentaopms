@@ -218,6 +218,16 @@ div
     )
 );
 
+/* Inject zai config to index page. */
+if($zaiConfig && !empty($zaiConfig->host) && !empty($zaiConfig->token))
+{
+    to::head
+    (
+        h::js('window.zai = ' . js::value($zaiConfig) . ';'),
+        h::importJs($app->getWebRoot() . 'js/zui3/ai.js', setID('aiJS'))
+    );
+}
+
 /**
  * Check if the tutorial mode is on, show confirm dialog if it is.
  * 检查是否处于教程模式，如果是则显示确认对话框是否继续。
