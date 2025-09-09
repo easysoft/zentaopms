@@ -1,0 +1,20 @@
+title: zt_task
+author: AI Assistant
+version: "1.0"
+
+fields:
+- field: name
+  range: 1-10
+  prefix: '任务'
+- field: execution
+  range: 1{3},2{3},3{4}
+- field: module
+  range: 0{8},1{2}
+- field: story
+  range: 0{8},1{2}
+- field: assignedTo
+  range: 'admin{4},user1{3},user2{3}'
+- field: status
+  range: 'wait{3},doing{3},done{2},pause{1},cancel{1}'
+- field: deleted
+  range: '0{8},1{2}'

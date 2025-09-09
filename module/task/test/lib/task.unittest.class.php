@@ -2343,4 +2343,20 @@ class taskTest
         if(dao::isError()) return dao::getError();
         return $object;
     }
+
+    /**
+     * 测试根据任务ID列表获取任务键值对。
+     * Test get task pairs by task ID list.
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdListTest(array $taskIdList = array()): array
+    {
+        $result = $this->objectModel->getPairsByIdList($taskIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
