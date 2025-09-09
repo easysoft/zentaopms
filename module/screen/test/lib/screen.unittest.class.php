@@ -1019,4 +1019,22 @@ class screenTest
         }
     }
 
+    /**
+     * Test getMetricChartOption method.
+     *
+     * @param  object $metric
+     * @param  array  $resultHeader
+     * @param  array  $resultData
+     * @param  object $component
+     * @access public
+     * @return mixed
+     */
+    public function getMetricChartOptionTest($metric, $resultHeader, $resultData, $component = null)
+    {
+        $result = $this->objectModel->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
