@@ -2418,4 +2418,21 @@ class taskTest
             return 'Exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test updateLinkedCommits method.
+     *
+     * @param  int   $taskID
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return bool|mixed
+     */
+    public function updateLinkedCommitsTest($taskID, $repoID, $revisions)
+    {
+        $result = $this->objectModel->updateLinkedCommits($taskID, $repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
