@@ -571,4 +571,20 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test updateComponentFilters method.
+     *
+     * @param  object $component
+     * @param  array  $latestFilters
+     * @access public
+     * @return object
+     */
+    public function updateComponentFiltersTest($component, $latestFilters)
+    {
+        $result = $this->objectModel->updateComponentFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
