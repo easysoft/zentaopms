@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-class Project
+class projectTest
 {
     public function __construct()
     {
@@ -240,6 +240,22 @@ class Project
     public function setNoMultipleMenuTest($projectID = 0)
     {
         $result = $this->objectModel->setNoMultipleMenu($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test formatDataForList method.
+     *
+     * @param  object $project
+     * @param  array  $PMList
+     * @access public
+     * @return mixed
+     */
+    public function formatDataForListTest($project = null, $PMList = array())
+    {
+        $result = $this->objectModel->formatDataForList($project, $PMList);
         if(dao::isError()) return dao::getError();
 
         return $result;
