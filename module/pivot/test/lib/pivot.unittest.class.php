@@ -1228,4 +1228,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getMaxVersionByIDList method.
+     *
+     * @param  string|array $pivotIDList
+     * @access public
+     * @return array
+     */
+    public function getMaxVersionByIDListTest(string|array $pivotIDList): array
+    {
+        $result = $this->objectModel->getMaxVersionByIDList($pivotIDList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
