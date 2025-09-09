@@ -2393,4 +2393,29 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * 测试更新任务父级关系。
+     * Test updateParent method.
+     *
+     * @param  object $task
+     * @param  bool   $isParentChanged
+     * @access public
+     * @return mixed
+     */
+    public function updateParentTest(object $task, bool $isParentChanged = false)
+    {
+        try
+        {
+            $this->objectModel->updateParent($task, $isParentChanged);
+            if(dao::isError()) return dao::getError();
+
+            $updatedTask = $this->objectModel->fetchByID($task->id);
+            return $updatedTask;
+        }
+        catch(Exception $e)
+        {
+            return 'Exception: ' . $e->getMessage();
+        }
+    }
 }
