@@ -718,6 +718,18 @@ class weeklyModel extends model
         $this->dao->update(TABLE_DOC)->set('`path`')->eq(",{$templateID},")->set('`order`')->eq($templateID)->where('id')->eq($templateID)->exec();
         $this->dao->update(TABLE_DOCBLOCK)->set('doc')->eq($templateID)->where('id')->in(array_values($blockIdList))->exec();
 
+        $templateContent = new stdclass();
+        $templateContent->doc        = $templateID;
+        $templateContent->title      = $template->title;
+        $templateContent->type       = 'doc';
+        $templateContent->version    = 1;
+        $templateContent->rawContent = $this->getBuildinRawContent($blockIdList);
+        $templateContent->addedBy    = 'system';
+        $templateContent->addedDate  = $now;
+        $this->dao->insert(TABLE_DOCCONTENT)->data($templateContent)->exec();
+
+        $this->loadModel('action')->create('reportTemplate', $templateID, 'Created', '', '', 'system');
+
         return !dao::isError();
     }
 
