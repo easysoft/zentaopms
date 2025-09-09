@@ -260,4 +260,19 @@ class projectTest
 
         return $result;
     }
+
+    /**
+     * Test recordFirstEnd method.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function recordFirstEndTest($projectID = 0)
+    {
+        $result = $this->objectModel->recordFirstEnd($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
