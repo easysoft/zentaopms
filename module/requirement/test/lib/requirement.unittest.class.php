@@ -30,4 +30,20 @@ class requirementTest
 
         return $result;
     }
+
+    /**
+     * Test getToAndCcList method.
+     *
+     * @param  object $story
+     * @param  string $actionType
+     * @access public
+     * @return mixed
+     */
+    public function getToAndCcListTest($story, $actionType)
+    {
+        $result = $this->objectModel->getToAndCcList($story, $actionType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
