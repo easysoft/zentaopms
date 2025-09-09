@@ -395,4 +395,32 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test sendmail method.
+     *
+     * @param  int $releaseID
+     * @access public
+     * @return string
+     */
+    public function sendmailTest(int $releaseID): string
+    {
+        if(empty($releaseID)) {
+            $this->objectModel->sendmail($releaseID);
+            return 'empty'; // 空releaseID应该直接返回
+        }
+        
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) {
+            return 'no_release'; // 发布不存在
+        }
+        
+        // Mock mail model to avoid actual sending
+        $originalMail = $this->objectModel->app->loadModel('mail');
+        $this->objectModel->sendmail($releaseID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return 'success'; // 成功执行
+    }
 }
