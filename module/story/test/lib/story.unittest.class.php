@@ -1434,4 +1434,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getGradeMenu method.
+     *
+     * @param  string      $storyType
+     * @param  object|null $project
+     * @access public
+     * @return array
+     */
+    public function getGradeMenuTest(string $storyType, ?object $project = null): array
+    {
+        $result = $this->objectModel->getGradeMenu($storyType, $project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
