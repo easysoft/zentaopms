@@ -229,4 +229,19 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test setNoMultipleMenu method.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function setNoMultipleMenuTest($projectID = 0)
+    {
+        $result = $this->objectModel->setNoMultipleMenu($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

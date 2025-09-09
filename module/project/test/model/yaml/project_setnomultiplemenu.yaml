@@ -1,0 +1,54 @@
+---
+title: setNoMultipleMenu方法测试数据
+desc: 为setNoMultipleMenu方法提供不同类型的项目测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: '项目{1-10}'
+  format: ""
+- field: code
+  note: 项目代码
+  range: 'PRJ{001-010}'
+  format: ""
+- field: type
+  note: 项目类型
+  range: 'project{3},sprint{3},kanban{3},stage{1}'
+  format: ""
+- field: model
+  note: 项目模型
+  range: 'scrum{3},waterfall{3},kanban{3},stage{1}'
+  format: ""
+- field: multiple
+  note: 是否多重项目
+  range: '0{8},1{2}'
+  format: ""
+- field: hasProduct
+  note: 是否关联产品
+  range: '1{8},0{2}'
+  format: ""
+- field: acl
+  note: 访问控制
+  range: 'open{8},private{2}'
+  format: ""
+- field: status
+  note: 项目状态
+  range: 'wait'
+  format: ""
+- field: begin
+  note: 开始日期
+  range: '2024-01-01'
+  format: ""
+- field: end
+  note: 结束日期
+  range: '2024-12-31'
+  format: ""
