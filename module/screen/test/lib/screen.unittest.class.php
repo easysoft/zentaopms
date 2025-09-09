@@ -666,4 +666,36 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test genMetricComponent method.
+     *
+     * @param  int         $metricID
+     * @param  object|null $component
+     * @param  array       $filterParams
+     * @access public
+     * @return array
+     */
+    public function genMetricComponentTest($metricID, $component = null, $filterParams = array())
+    {
+        global $tester;
+        
+        // 从数据库获取metric对象
+        $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
+        if(empty($metric))
+        {
+            return array('hasComponent' => 0, 'isDeleted' => 0, 'isWaiting' => 0);
+        }
+        
+        $result = $this->objectModel->genMetricComponent($metric, $component, $filterParams);
+        if(dao::isError()) return dao::getError();
+
+        // 转换为数组格式便于测试
+        $testResult = array();
+        $testResult['hasComponent'] = isset($result) && is_object($result) ? 1 : 0;
+        $testResult['isDeleted'] = (isset($result->option->isDeleted) && $result->option->isDeleted) ? 1 : 0;
+        $testResult['isWaiting'] = ($metric->stage == 'wait') ? 1 : 0;
+        
+        return $testResult;
+    }
 }

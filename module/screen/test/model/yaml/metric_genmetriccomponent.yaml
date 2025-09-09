@@ -1,0 +1,71 @@
+---
+title: metric test data for genMetricComponent
+desc: Test data for metric table used in genMetricComponent method testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: purpose
+  range: scale,efficiency,quality{2}
+- field: scope
+  range: system,product,project{2}
+- field: object
+  range: story,task,bug,case
+- field: stage
+  range: released{7},wait{3}
+- field: type
+  range: php{6},sql{4}
+- field: name
+  range: 需求总数,任务完成率,缺陷密度,测试覆盖率,代码质量,项目进度,用户满意度,开发效率,系统稳定性,性能指标
+- field: alias
+  range: story_count,task_completion,bug_density,test_coverage,code_quality,project_progress,user_satisfaction,dev_efficiency,system_stability,performance_metric
+- field: code
+  range: story_count,task_completion,bug_density,test_coverage,code_quality,project_progress,user_satisfaction,dev_efficiency,system_stability,performance_metric
+- field: unit
+  range: 个,百分比,个/千行,百分比,分,百分比,分,个/天,百分比,毫秒
+- field: dateType
+  range: day{3},week{3},month{2},nodate{2}
+- field: collector
+  range: '[]{3}',简单数据收集器,复杂SQL收集器{2}
+- field: desc
+  range: '用于统计需求总数的指标,计算任务完成率,统计缺陷密度,测试覆盖率统计,代码质量评估,项目进度追踪,用户满意度调查,开发效率统计,系统稳定性监控,性能指标统计'
+- field: definition
+  range: '统计系统中的需求总数,计算已完成任务占总任务的百分比,计算每千行代码的缺陷数量,统计测试用例覆盖的代码百分比,基于代码规范评估质量,跟踪项目完成进度,收集用户反馈评分,统计开发人员日均产出,监控系统运行稳定性,统计系统响应时间'
+- field: when
+  range: day{4},week{3},month{3}
+- field: event
+  range: cron{7},[]{3}
+- field: cronCFG
+  range: '0 2 * * *{3},0 3 * * 1{2},[]{5}'
+- field: time
+  range: '[]{5}',2h,4h,6h,1d
+- field: createdBy
+  range: admin{5},user1{2},user2{2},system
+- field: createdDate
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+- field: editedBy
+  range: admin{4},user1{3},user2{2},[]{1}
+- field: editedDate
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59,[]{1}
+- field: implementedBy
+  range: admin{5},dev1{2},dev2{2},system
+- field: implementedDate
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59,[]{1}
+- field: delistedBy
+  range: '[]{8}',admin{2}
+- field: delistedDate
+  range: '[]{8}',2023-06-01 00:00:00,2023-07-01 00:00:00
+- field: builtin
+  range: 0{8},1{2}
+- field: fromID
+  range: 0{7},1-3{3}
+- field: order
+  range: 1-10
+- field: lastCalcRows
+  range: 0{3},100-10000{7}
+- field: lastCalcTime
+  range: '[]{3}',2023-01-01 00:00:00-2023-12-31 23:59:59{7}
+- field: deleted
+  range: 0{8},1{2}
