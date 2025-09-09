@@ -1,0 +1,32 @@
+---
+title: isVersionChange测试数据
+desc: 为pivot表生成isVersionChange方法测试所需的数据
+
+fields:
+- field: id
+  note: pivot ID
+  range: 1-5
+  
+- field: name
+  note: pivot名称
+  range: '测试透视表{1-5}'
+  
+- field: code
+  note: pivot代码
+  range: 'pivot_{1-5}'
+  
+- field: version
+  note: pivot版本
+  range: '1.0{2},2.0{3}'
+  
+- field: builtin
+  note: 是否内置
+  range: '1{3},0{2}'
+  
+- field: stage
+  note: 发布状态
+  range: 'published{4},draft{1}'
+  
+- field: deleted
+  note: 删除标记
+  range: '0'

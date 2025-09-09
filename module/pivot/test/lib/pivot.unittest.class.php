@@ -1243,4 +1243,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test isVersionChange method.
+     *
+     * @param  array|object $pivots
+     * @param  bool         $isObject
+     * @access public
+     * @return array|object
+     */
+    public function isVersionChangeTest(array|object $pivots, bool $isObject = true): array|object
+    {
+        $result = $this->objectModel->isVersionChange($pivots, $isObject);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
