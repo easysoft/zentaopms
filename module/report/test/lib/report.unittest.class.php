@@ -10,6 +10,28 @@ class reportTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function __constructTest()
+    {
+        global $tester;
+        $report = $tester->loadModel('report');
+        if(dao::isError()) return dao::getError();
+
+        // 验证对象是否正确实例化
+        $result = array();
+        $result['isReportModel'] = $report instanceof reportModel ? '1' : '0';
+        $result['hasDao'] = isset($report->dao) ? '1' : '0';
+        $result['hasConfig'] = isset($report->config) ? '1' : '0';
+        $result['hasLang'] = isset($report->lang) ? '1' : '0';
+        
+        return $result;
+    }
+
+    /**
      * 测试计算每项数据的百分比。
      * Test compute percent of every item.
      *
