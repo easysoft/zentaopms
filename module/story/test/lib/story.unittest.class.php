@@ -1482,4 +1482,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getDefaultShowGrades method.
+     *
+     * @param  array $gradeMenu
+     * @access public
+     * @return string
+     */
+    public function getDefaultShowGradesTest(array $gradeMenu): string
+    {
+        $result = $this->objectModel->getDefaultShowGrades($gradeMenu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
