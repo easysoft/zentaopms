@@ -1,0 +1,38 @@
+---
+title: 水球图组件测试数据
+desc: 为getWaterPoloOption方法提供测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 图表ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 图表名称
+  range: 水球图测试{10}
+  format: ""
+- field: type
+  note: 图表类型
+  range: waterpolo{10}
+  format: ""
+- field: sql
+  note: SQL查询语句
+  range: 'SELECT COUNT(*) as value FROM zt_user{5}, SELECT SUM(estimate) as value FROM zt_task{3}, SELECT COUNT(*) as value FROM zt_bug{2}'
+  format: ""
+- field: settings
+  note: 图表设置
+  range: '{5}, [{"type":"liquidFill","radius":"90%"}]{3}, null{2}'
+  format: ""
+- field: fields
+  note: 字段配置
+  range: '[]'
+  format: ""
+- field: driver
+  note: 数据库驱动
+  range: mysql{8}, duckdb{2}
+  format: ""

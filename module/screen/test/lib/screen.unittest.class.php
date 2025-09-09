@@ -981,4 +981,42 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getWaterPoloOption method.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function getWaterPoloOptionTest($component, $chart, $filters = array())
+    {
+        try {
+            // 确保config中有WaterPolo配置
+            global $config;
+            if(!isset($config->screen->chartConfig['WaterPolo'])) {
+                $config->screen->chartConfig['WaterPolo'] = '{"key": "WaterPolo", "package": "Charts"}';
+            }
+            if(!isset($config->screen->chartOption['WaterPolo'])) {
+                $config->screen->chartOption['WaterPolo'] = '{"type":"nomal","series":[{"type":"liquidFill","radius":"90%"}],"backgroundColor":"rgba(0,0,0,0)"}';
+            }
+            
+            $result = $this->objectModel->getWaterPoloOption($component, $chart, $filters);
+            if(dao::isError()) return dao::getError();
+
+            // 转换为可测试的格式
+            $testResult = array();
+            $testResult['hasOption'] = isset($result->option) ? 1 : 0;
+            $testResult['hasDataset'] = (isset($result->option) && isset($result->option->dataset)) ? 1 : 0;
+            $testResult['datasetValue'] = (isset($result->option) && isset($result->option->dataset)) ? $result->option->dataset : 'null';
+            $testResult['hasStyles'] = isset($result->styles) ? 1 : 0;
+            $testResult['componentType'] = is_object($result) ? 'object' : gettype($result);
+            
+            return $testResult;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
 }
