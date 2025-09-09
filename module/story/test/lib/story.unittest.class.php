@@ -1357,4 +1357,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getMergeTrackCells method.
+     *
+     * @param  array $tracks
+     * @param  array $showCols
+     * @access public
+     * @return array
+     */
+    public function getMergeTrackCellsTest(array &$tracks, array $showCols): array
+    {
+        $result = $this->objectModel->getMergeTrackCells($tracks, $showCols);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
