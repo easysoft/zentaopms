@@ -616,8 +616,8 @@ class weeklyModel extends model
             $blockIdList[$chartKey] = $this->dao->lastInsertId();
         }
 
-        /* Set doc and doc content data. */
-        $this->setTemplateData($scopeID, $categoryID, $blockIdList);
+        /* Set template data. */
+        $this->addBuiltinTemplate($scopeID, $categoryID, $blockIdList);
 
         return !dao::isError();
     }
@@ -680,5 +680,43 @@ class weeklyModel extends model
         $this->dao->update(TABLE_MODULE)->set(`path`)->eq(",{$categoryID},")->where('id')->eq($categoryID)->exec();
 
         return $categoryID;
+    }
+
+    /**
+     * 添加内置报告模板。
+     * Add builtin report template.
+     *
+     * @param  int   $libID
+     * @param  int   $moduleID
+     * @param  array $blockIdList
+     * @access public
+     * @return bool
+     */
+    public function addBuiltinTemplate(int $libID, int $moduleID, array $blockIdList): bool
+    {
+        $now         = helper::now();
+        $cycleConfig = array('trunon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => array(), 'readUsers' => array(), 'groups' => array(), 'users' => array());
+        $objects     = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('waterfall')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq(0)->fetchPairs('id');
+
+        $template = new stdclass();
+        $template->libID        = $libID;
+        $template->moduleID     = $moduleID;
+        $template->title        = $this->lang->weekly->project . $this->lang->weekly->template;
+        $template->type         = 'text';
+        $template->status       = 'normal';
+        $template->acl          = 1;
+        $template->builtIn      = 'open';
+        $template->templateType = 'reportTemplate';
+        $template->cycle        = 'week';
+        $template->cycleConfig  = json_encode($cycleConfig);
+        $template->objects      = ',' . implode(',', $objects) . ',';
+        $template->addedBy      = 'system';
+        $template->addedDate    = $now;
+        $this->dao->insert(TABLE_DOC)->data($template)->exec();
+
+        $templateID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_DOC)->set('`path`')->eq(",{$templateID},")->set('`order`')->eq($templateID)->where('id')->eq($templateID)->exec();
+
+        return !dao::isError();
     }
 }
