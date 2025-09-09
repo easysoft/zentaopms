@@ -53,4 +53,19 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test getInvolvedListByCurrentUser method.
+     *
+     * @param  string $fields
+     * @access public
+     * @return mixed
+     */
+    public function getInvolvedListByCurrentUserTest($fields = 't1.*')
+    {
+        $result = $this->objectModel->getInvolvedListByCurrentUser($fields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,30 @@
+---
+title: 项目数据
+desc: 用于测试 getInvolvedListByCurrentUser 方法的项目数据
+author: claude
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: '项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10'
+- field: type
+  range: 'project{10}'
+- field: openedBy
+  range: 'admin{2},user1{2},user2{2},user3{2},testuser{2}'
+- field: PM
+  range: 'admin{2},user1{2},user2{2},user3{2},testuser{2}'
+- field: deleted
+  range: '0{10}'
+- field: status
+  range: 'wait{3},doing{3},done{2},suspended{1},closed{1}'
+- field: vision
+  range: 'rnd{10}'
+- field: acl
+  range: 'open{7},private{3}'
+- field: whitelist
+  range: 'admin{2},user1{2},user2{2},user3{2},testuser{2}'
+- field: begin
+  range: '2024-01-01{3},2024-02-01{3},2024-03-01{4}'
+- field: end
+  range: '2024-12-31{3},2024-11-30{3},2024-10-31{4}'
