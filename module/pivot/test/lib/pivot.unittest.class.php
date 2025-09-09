@@ -1213,4 +1213,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getMaxVersion method.
+     *
+     * @param  int $pivotID
+     * @access public
+     * @return string
+     */
+    public function getMaxVersionTest(int $pivotID): string
+    {
+        $result = $this->objectModel->getMaxVersion($pivotID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
