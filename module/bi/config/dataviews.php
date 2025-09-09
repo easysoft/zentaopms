@@ -247,7 +247,7 @@ $testcasefields['id']              = array('name' => '用例编号', 'field' => 
 $testcasefields['title']           = array('name' => '用例标题', 'field' => 'title', 'object' => 'testcase', 'type' => 'string');
 $testcasefields['pri']             = array('name' => '优先级', 'field' => 'pri', 'object' => 'testcase', 'type' => 'option');
 $testcasefields['type']            = array('name' => '用例类型', 'field' => 'type', 'object' => 'testcase', 'type' => 'option');
-$testcasefields['stage']           = array('name' => '适用阶段', 'field' => 'stage', 'object' => 'testcase', 'type' => 'option');
+$testcasefields['stage']           = array('name' => '适用环节', 'field' => 'stage', 'object' => 'testcase', 'type' => 'option');
 $testcasefields['status']          = array('name' => '用例状态', 'field' => 'status', 'object' => 'testcase', 'type' => 'option');
 $testcasefields['version']         = array('name' => '用例版本', 'field' => 'version', 'object' => 'testcase', 'type' => 'number');
 $testcasefields['product_id']      = array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object');
