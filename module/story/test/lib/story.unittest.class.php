@@ -1403,4 +1403,18 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getGradeGroup method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGradeGroupTest(): array
+    {
+        $result = $this->objectModel->getGradeGroup();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
