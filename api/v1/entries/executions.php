@@ -88,15 +88,16 @@ class executionsEntry extends entry
         $this->batchSetPost($fields);
 
         $projectID = $this->param('project', $projectID);
-        $this->setPost('project',   $projectID);
-        $this->setPost('acl',       $this->request('acl', 'private'));
-        $this->setPost('PO',        $this->request('PO', ''));
-        $this->setPost('PM',        $this->request('PM', ''));
-        $this->setPost('QD',        $this->request('QD', ''));
-        $this->setPost('RD',        $this->request('RD', ''));
-        $this->setPost('whitelist', $this->request('whitelist', array()));
-        $this->setPost('products',  $this->request('products', array()));
-        $this->setPost('plans',     $this->request('plans', array()));
+        $this->setPost('project',     $projectID);
+        $this->setPost('acl',         $this->request('acl', 'private'));
+        $this->setPost('PO',          $this->request('PO', ''));
+        $this->setPost('PM',          $this->request('PM', ''));
+        $this->setPost('QD',          $this->request('QD', ''));
+        $this->setPost('RD',          $this->request('RD', ''));
+        $this->setPost('whitelist',   $this->request('whitelist', array()));
+        $this->setPost('products',    $this->request('products', array()));
+        $this->setPost('plans',       $this->request('plans', array()));
+        $this->setPost('teamMembers', $this->request('teamMembers', array()));
 
         $requireFields = 'name,begin,end';
         if($useCode) $requireFields .= ',code';
