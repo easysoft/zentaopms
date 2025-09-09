@@ -11749,7 +11749,7 @@ class upgradeModel extends model
         $reviewFlow->extra       = 'review';
 
         $upgradeReviewcls  = array();
-        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'HLDS' => 'design', 'DDS' => 'design', 'ADS' => 'design', 'DBDS' => 'design', 'ITTC' => 'test', 'STTC' => 'test');
+        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
         foreach($workflowGroupPairs as $groupID => $projectModel)
         {
             $nameFilter = array();
@@ -11757,6 +11757,7 @@ class upgradeModel extends model
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
+                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS'))) continue; // 设计类型的上面处理过了，跳过。
                 $deliverable->category = $key; // 标记交付物的类型。
 
                 /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
