@@ -1037,4 +1037,22 @@ class repoTest
 
         return $returnCount ? count($result) : $result;
     }
+
+    /**
+     * Test unlinkObjectBranch method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function unlinkObjectBranchTest(int $objectID, string $objectType, int $repoID, string $branch)
+    {
+        $result = $this->objectModel->unlinkObjectBranch($objectID, $objectType, $repoID, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

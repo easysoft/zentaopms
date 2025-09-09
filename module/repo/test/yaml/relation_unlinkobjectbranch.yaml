@@ -1,0 +1,89 @@
+title: table zt_relation for unlinkObjectBranch test
+desc: "测试unlinkObjectBranch方法的关系数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "项目ID"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品ID"  
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "执行ID"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AType
+    note: "对象类型"
+    range: story,task,bug,testcase
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AID
+    note: "对象ID"
+    range: 1-3,10,999
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AVersion
+    note: "对象版本"
+    range: "1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: relation
+    note: "关系类型"
+    range: linkrepobranch
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BType
+    note: "分支名称"
+    range: master,develop,feature/test,hotfix/fix
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BID
+    note: "代码库ID"
+    range: 1-3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BVersion
+    note: "版本"
+    range: "1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: "扩展信息"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
