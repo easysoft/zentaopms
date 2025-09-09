@@ -1373,4 +1373,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getStatusList method.
+     *
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function getStatusListTest(string $status)
+    {
+        $result = $this->objectModel->getStatusList($status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
