@@ -1,0 +1,35 @@
+---
+title: Space data for restore testing
+desc: Test data for space table in system restore tests
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Space ID
+  range: 1-10
+  format: ""
+- field: name
+  note: Space name
+  range: test-space{5}, prod-space{3}, dev-space{2}
+  format: ""
+- field: k8space
+  note: Kubernetes namespace
+  range: test-namespace{5}, prod-namespace{3}, dev-namespace{2}
+  format: ""
+- field: createdBy
+  note: Created by user
+  range: admin{7}, user{3}
+  format: ""
+- field: createdDate
+  note: Created date
+  range: 2024-01-01 00:00:00-2024-09-09 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: status
+  note: Space status
+  range: active{8}, inactive{2}
+  format: ""
+- field: deleted
+  note: Delete flag
+  range: 0{9}, 1{1}
+  format: ""

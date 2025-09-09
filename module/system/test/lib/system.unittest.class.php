@@ -54,4 +54,23 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test restore method.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function restoreTest($instance, $backupName, $account = '')
+    {
+        ob_start();
+        $result = $this->objectModel->restore($instance, $backupName, $account);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
