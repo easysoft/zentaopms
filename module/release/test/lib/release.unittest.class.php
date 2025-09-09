@@ -423,4 +423,23 @@ class releaseTest
         
         return 'success'; // 成功执行
     }
+
+    /**
+     * 获取发送邮件的人员。
+     * Get notify list.
+     *
+     * @param  int $releaseID
+     * @access public
+     * @return false|array
+     */
+    public function getNotifyListTest(int $releaseID): false|array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) return false;
+
+        $result = $this->objectModel->getNotifyList($release);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
