@@ -1,5 +1,4 @@
 <?php
-include dirname(__FILE__, 4) . '/lang/zh-cn.php';
 class viewPage extends page
 {
     public function __construct($webdriver)
