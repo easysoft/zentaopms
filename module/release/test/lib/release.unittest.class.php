@@ -488,4 +488,44 @@ class releaseTest
         
         return 'success';
     }
+
+    /**
+     * Test processRelated method.
+     *
+     * @param  int    $releaseID
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function processRelatedTest(int $releaseID, object $release): array
+    {
+        try {
+            // 记录操作前的关联数据数量
+            $beforeCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetch('count');
+            
+            $this->objectModel->processRelated($releaseID, $release);
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 记录操作后的关联数据数量
+            $afterCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetch('count');
+            
+            // 获取所有关联数据
+            $relatedData = $this->objectModel->dao->select('*')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetchAll();
+            
+            return array(
+                'beforeCount' => $beforeCount,
+                'afterCount' => $afterCount,
+                'relatedData' => $relatedData
+            );
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
