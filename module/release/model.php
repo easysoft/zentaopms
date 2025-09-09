@@ -116,6 +116,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
             ->fetchAll('id');
 
+        $this->loadModel('branch');
         foreach($releases as $release)
         {
             $releaseBuilds = array();
@@ -125,6 +126,12 @@ class releaseModel extends model
                 $releaseBuilds[$buildID] = $builds[$buildID];
             }
             $release->builds = $releaseBuilds;
+
+            $branchName = array();
+            foreach(explode(',', trim($release->branch, ',')) as $releaseBranch) $branchName[] = $releaseBranch === '0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
+            $branchName = implode(',', $branchName);
+
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
 
             $release->projectName = array();
             foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zget($projectPairs, $projectID, '');

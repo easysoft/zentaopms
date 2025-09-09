@@ -98,6 +98,7 @@ class release extends control
         $childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
         $releases      = $this->release->processReleaseListData($currentReleases, $childReleases);
         foreach($releases as $release) $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
+        a($releases);
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases      = $releases;
