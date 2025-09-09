@@ -1,0 +1,17 @@
+---
+title: team表测试数据
+desc: 用于测试leftJoinInvolvedTable方法中team表关联的数据
+
+fields:
+- field: id
+  note: 团队成员ID
+  range: 1-20
+- field: root
+  note: 所属项目ID
+  range: 1-10:2
+- field: type
+  note: 团队类型
+  range: project{20}
+- field: account
+  note: 用户账号
+  range: admin,user1,user2{18}

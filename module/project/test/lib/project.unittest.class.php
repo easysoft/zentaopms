@@ -68,4 +68,25 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test leftJoinInvolvedTable method.
+     *
+     * @param  object $stmt
+     * @access public
+     * @return mixed
+     */
+    public function leftJoinInvolvedTableTest($stmt = null)
+    {
+        global $tester;
+        if($stmt === null)
+        {
+            $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
+        }
+        
+        $result = $this->objectModel->leftJoinInvolvedTable($stmt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,20 @@
+---
+title: leftJoinInvolvedTable测试数据
+desc: 用于测试projectModel::leftJoinInvolvedTable方法的数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+- field: name
+  note: 项目名称
+  range: 项目A,项目B,项目C{8}
+- field: type
+  note: 项目类型
+  range: project{10}
+- field: acl
+  note: 访问控制
+  range: open{5},private{3},custom{2}
+- field: deleted
+  note: 删除状态
+  range: 0{8},1{2}
