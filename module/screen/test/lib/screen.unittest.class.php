@@ -917,4 +917,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test formatMetricDateByType method.
+     *
+     * @param  string $stamp
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function formatMetricDateByTypeTest($stamp, $dateType)
+    {
+        $result = $this->objectModel->formatMetricDateByType($stamp, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
