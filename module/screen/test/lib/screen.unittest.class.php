@@ -1073,4 +1073,30 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getMetricCardOption method.
+     *
+     * @param  int         $metricId
+     * @param  array       $resultData
+     * @param  object|null $component
+     * @access public
+     * @return object
+     */
+    public function getMetricCardOptionTest($metricId, $resultData, $component = null)
+    {
+        global $tester;
+        
+        // 从数据库获取metric对象
+        $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricId)->fetch();
+        if(empty($metric))
+        {
+            return new stdclass();
+        }
+        
+        $result = $this->objectModel->getMetricCardOption($metric, $resultData, $component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
