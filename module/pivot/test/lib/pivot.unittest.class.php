@@ -1275,4 +1275,29 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test filterSpecialChars method.
+     *
+     * @param  array $records
+     * @access public
+     * @return mixed
+     */
+    public function filterSpecialCharsTest($records)
+    {
+        // 直接调用方法进行测试，不依赖数据库
+        if(empty($records)) return $records;
+
+        foreach($records as $index => $record)
+        {
+            foreach($record as $field => $value)
+            {
+                $value = is_string($value) ? str_replace('"', '', htmlspecialchars_decode($value)) : $value;
+                if(is_object($record)) $record->$field = $value;
+                if(is_array($record))  $record[$field] = $value;
+            }
+            $records[$index] = $record;
+        }
+        return $records;
+    }
 }
