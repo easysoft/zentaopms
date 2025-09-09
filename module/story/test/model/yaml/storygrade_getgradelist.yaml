@@ -1,0 +1,19 @@
+---
+title: 需求等级测试数据
+desc: 用于测试 getGradeList 方法的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: type
+  note: 需求类型
+  range: story{5}, requirement{3}, epic{2}
+- field: grade
+  note: 需求等级
+  range: 1-5
+- field: name
+  note: 需求等级名称
+  range: 一级{2}, 二级{2}, 三级{2}, 四级{2}, 五级{2}
+- field: status
+  note: 状态
+  range: enable{8}, disable{2}

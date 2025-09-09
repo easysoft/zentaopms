@@ -42,6 +42,21 @@ class storyTest
     }
 
     /**
+     * Test get grade list.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGradeListTest($type = 'story')
+    {
+        $result = $this->objectModel->getGradeList($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test batch change grade.
      *
      * @param  array  $storyIdList
