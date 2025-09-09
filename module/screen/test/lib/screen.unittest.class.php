@@ -1099,4 +1099,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getMetricHeaders method.
+     *
+     * @param  array  $resultHeader
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function getMetricHeadersTest($resultHeader, $dateType)
+    {
+        $result = $this->objectModel->getMetricHeaders($resultHeader, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
