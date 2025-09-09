@@ -1497,4 +1497,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test checkGrade method.
+     *
+     * @param  object $story
+     * @param  object $oldStory
+     * @param  string $mode
+     * @access public
+     * @return mixed
+     */
+    public function checkGradeTest(object $story, object $oldStory, string $mode = 'single')
+    {
+        $result = $this->objectModel->checkGrade($story, $oldStory, $mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
