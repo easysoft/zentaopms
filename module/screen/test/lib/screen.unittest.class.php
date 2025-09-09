@@ -532,4 +532,25 @@ class screenTest
         $this->objectModel->filter->account = '';
         $this->objectModel->filter->charts  = array();
     }
+
+    /**
+     * Test checkAccess method.
+     *
+     * @param  int $screenID
+     * @access public
+     * @return mixed
+     */
+    public function checkAccessTest(int $screenID): mixed
+    {
+        try {
+            $result = $this->objectModel->checkAccess($screenID);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        } catch (EndResponseException $e) {
+            // 这表示访问被拒绝或发生了重定向
+            return 'access_denied';
+        }
+    }
 }
