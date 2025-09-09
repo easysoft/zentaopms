@@ -1131,4 +1131,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test buildFunnelChart method.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return mixed
+     */
+    public function buildFunnelChartTest($component, $chart)
+    {
+        $result = $this->objectModel->buildFunnelChart($component, $chart);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
