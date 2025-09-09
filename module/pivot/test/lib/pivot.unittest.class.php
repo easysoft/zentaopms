@@ -1057,4 +1057,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processDTableData method.
+     *
+     * @param  array $cols
+     * @param  array $datas
+     * @access public
+     * @return array
+     */
+    public function processDTableDataTest(array $cols, array $datas): array
+    {
+        $result = $this->objectModel->processDTableData($cols, $datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
