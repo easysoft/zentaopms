@@ -587,4 +587,20 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test isFilterChange method.
+     *
+     * @param  mixed $oldFilters
+     * @param  mixed $latestFilters
+     * @access public
+     * @return bool
+     */
+    public function isFilterChangeTest($oldFilters = null, $latestFilters = null)
+    {
+        $result = $this->objectModel->isFilterChange($oldFilters, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
