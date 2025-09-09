@@ -25,6 +25,24 @@ class screenTest
     }
 
     /**
+     * Test filterMetricData method.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $isObjectMetric
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function filterMetricDataTest($data, $dateType, $isObjectMetric, $filters = array())
+    {
+        $result = $this->objectModel->filterMetricData($data, $dateType, $isObjectMetric, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试getByID。
      * Test getByID.
      *
