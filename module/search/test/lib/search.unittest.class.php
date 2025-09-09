@@ -810,4 +810,19 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test getOldQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return mixed
+     */
+    public function getOldQueryTest(int $queryID)
+    {
+        $result = $this->objectModel->getOldQuery($queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
