@@ -1050,4 +1050,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test relieveTwins method.
+     *
+     * @param  int $productID
+     * @param  int $storyID
+     * @access public
+     * @return bool
+     */
+    public function relieveTwinsTest(int $productID, int $storyID): bool
+    {
+        $result = $this->objectModel->relieveTwins($productID, $storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
