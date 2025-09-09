@@ -197,4 +197,20 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test updateUserView method.
+     *
+     * @param  int    $projectID
+     * @param  string $acl
+     * @access public
+     * @return mixed
+     */
+    public function updateUserViewTest($projectID = 0, $acl = '')
+    {
+        $result = $this->objectModel->updateUserView($projectID, $acl);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
