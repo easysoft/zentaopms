@@ -599,4 +599,28 @@ class programTest
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
     }
+
+    /**
+     * 挂起一个项目集。
+     * Suspend a program.
+     *
+     * @param  int    $programID
+     * @param  array  $postData
+     * @access public
+     * @return bool
+     */
+    public function suspendTest(int $programID, array $postData): bool
+    {
+        $postDataObj = new stdclass();
+        $postDataObj->status = 'suspended';
+        $postDataObj->comment = isset($postData['comment']) ? $postData['comment'] : '';
+        $postDataObj->uid = isset($postData['uid']) ? $postData['uid'] : '';
+        foreach($postData as $field => $value) $postDataObj->{$field} = $value;
+
+        $result = $this->program->suspend($programID, $postDataObj);
+
+        if(dao::isError()) return false;
+
+        return $result;
+    }
 }
