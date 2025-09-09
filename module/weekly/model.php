@@ -671,13 +671,13 @@ class weeklyModel extends model
         /* Set category data. */
         $category = new stdClass();
         $category->root  = $scopeID;
-        $category->name  = $this->lang->weekly->projectCommon;
+        $category->name  = $this->lang->projectCommon;
         $category->grade = 1;
         $category->type  = 'reportTemplate';
         $this->dao->insert(TABLE_MODULE)->data($category)->exec();
 
         $categoryID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_MODULE)->set(`path`)->eq(",{$categoryID},")->where('id')->eq($categoryID)->exec();
+        $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$categoryID},")->where('id')->eq($categoryID)->exec();
 
         return $categoryID;
     }
@@ -695,17 +695,17 @@ class weeklyModel extends model
     public function addBuiltinTemplate(int $libID, int $moduleID, array $blockIdList): bool
     {
         $now         = helper::now();
-        $cycleConfig = array('trunon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => array(), 'readUsers' => array(), 'groups' => array(), 'users' => array());
+        $cycleConfig = array('turnon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => array(), 'readUsers' => array(), 'groups' => array(), 'users' => array());
         $objects     = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('waterfall')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq(0)->fetchPairs('id');
 
         $template = new stdclass();
-        $template->libID        = $libID;
-        $template->moduleID     = $moduleID;
-        $template->title        = $this->lang->weekly->project . $this->lang->weekly->template;
+        $template->lib          = $libID;
+        $template->module       = $moduleID;
+        $template->title        = $this->lang->weekly->projectTemplate;
         $template->type         = 'text';
         $template->status       = 'normal';
-        $template->acl          = 1;
-        $template->builtIn      = 'open';
+        $template->acl          = 'open';
+        $template->builtIn      = 1;
         $template->templateType = 'reportTemplate';
         $template->cycle        = 'week';
         $template->cycleConfig  = json_encode($cycleConfig);
@@ -716,7 +716,52 @@ class weeklyModel extends model
 
         $templateID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_DOC)->set('`path`')->eq(",{$templateID},")->set('`order`')->eq($templateID)->where('id')->eq($templateID)->exec();
+        $this->dao->update(TABLE_DOCBLOCK)->set('doc')->eq($templateID)->where('id')->in(array_values($blockIdList))->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 获取内置项目周报模板内容。
+     * Get builtin project weekly report template content.
+     *
+     * @param  array $blockIdList
+     * @access public
+     * @return string
+     */
+    public function getBuildinRawContent(array $blockIdList): string
+    {
+        $blockCodes = array();
+        foreach($blockIdList as $blockKey => $blockID) $blockCodes[] = '{' . $blockKey . '}';
+
+        $rawContent = json_decode($this->lang->weekly->builtinRawContent);
+        foreach($rawContent as $content)
+        {
+            if(isset($content->id)) $content->id = uniqid();
+            if(isset($content->createDate)) $content->createDate = time();
+            if(empty($content->children)) continue;
+
+            foreach($content->children as $childList)
+            {
+                if(isset($childList->id)) $childList->id = uniqid();
+                if(empty($childList->children)) continue;
+                foreach($childList->children as $child)
+                {
+                    if(isset($child->id)) $child->id = uniqid();
+                    if(!empty($child->props->text->delta))
+                    {
+                        foreach($child->props->text->delta as $delta)
+                        {
+                            if(isset($delta->attributes->holder->id)) $delta->attributes->holder->id = uniqid();
+                            if(isset($delta->attributes->holder->name) && isset($blockIdList[$delta->attributes->holder->name])) $delta->attributes->holder->name = "{$delta->attributes->holder->name}_{$blockIdList[$delta->attributes->holder->name]}";
+                            if(isset($delta->attributes->holder->data->blockID)) $delta->attributes->holder->data->blockID = $blockIdList[$delta->attributes->holder->data->type];
+                        }
+                    }
+                    if(!empty($child->props->content)) $child->props->content->fetcher = str_replace($blockCodes, array_values($blockIdList), $child->props->content->fetcher);
+                }
+            }
+        }
+
+        return json_encode($rawContent);
     }
 }
