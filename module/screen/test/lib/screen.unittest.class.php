@@ -1293,4 +1293,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getActiveProductCard method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getActiveProductCardTest($year, $month)
+    {
+        $result = $this->objectModel->getActiveProductCard($year, $month);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
