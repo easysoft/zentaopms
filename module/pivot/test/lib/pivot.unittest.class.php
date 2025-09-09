@@ -1198,4 +1198,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getPivotVersions method.
+     *
+     * @param  int $pivotID
+     * @access public
+     * @return array|bool
+     */
+    public function getPivotVersionsTest(int $pivotID)
+    {
+        $result = $this->objectModel->getPivotVersions($pivotID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
