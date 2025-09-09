@@ -15,7 +15,6 @@ class closeTaskTester extends tester
     {
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
         $form->dom->xpath['closeBtn']   = "//a[@title='{$this->lang->task->close}']";
-        $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         if(!in_array($status, array('done', 'cancel')))
         {
             if(is_object($form->dom->closeBtn)) return $this->failed('错误的显示了关闭按钮');
