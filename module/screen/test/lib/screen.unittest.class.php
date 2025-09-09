@@ -1343,4 +1343,21 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getProductStoryTable method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductStoryTableTest($year, $month, $productList)
+    {
+        $result = $this->objectModel->getProductStoryTable($year, $month, $productList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }

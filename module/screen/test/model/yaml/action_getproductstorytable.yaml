@@ -1,0 +1,17 @@
+title: table zt_action for getProductStoryTable test
+desc: "操作记录表测试数据"
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: objectType
+    range: "story"
+  - field: objectID
+    range: "1{2},2{2},3{2},4{2},5{2}"
+  - field: action
+    range: "linked2release{5},opened{5}"
+  - field: date
+    range: "2023-12-01 00:00:00{3},2023-01-01 00:00:00{7}"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
