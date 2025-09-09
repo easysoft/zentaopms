@@ -1268,4 +1268,25 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getByStatus method.
+     *
+     * @param  mixed  $productID
+     * @param  mixed  $branch
+     * @param  mixed  $modules
+     * @param  string $status
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  mixed  $pager
+     * @access public
+     * @return mixed
+     */
+    public function getByStatusTest($productID, $branch, $modules, $status, $type = 'story', $orderBy = '', $pager = null)
+    {
+        $result = $this->objectModel->getByStatus($productID, $branch, $modules, $status, $type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
