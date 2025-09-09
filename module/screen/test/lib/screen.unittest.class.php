@@ -1163,4 +1163,38 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test initChartAndPivotComponent method.
+     *
+     * @param  object|null $chart
+     * @param  string      $type
+     * @param  object|null $component
+     * @access public
+     * @return array
+     */
+    public function initChartAndPivotComponentTest($chart = null, $type = 'chart', $component = null)
+    {
+        $result = $this->objectModel->initChartAndPivotComponent($chart, $type, $component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initOptionTitle method.
+     *
+     * @param  object $component
+     * @param  string $type
+     * @param  string $chartName
+     * @access public
+     * @return object
+     */
+    public function initOptionTitleTest($component, $type, $chartName)
+    {
+        $result = $this->objectModel->initOptionTitle($component, $type, $chartName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
