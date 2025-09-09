@@ -1066,4 +1066,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test batchChangeParent method.
+     *
+     * @param  string $storyIdList
+     * @param  int    $parentID
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function batchChangeParentTest(string $storyIdList, int $parentID, string $storyType = 'story')
+    {
+        $result = $this->objectModel->batchChangeParent($storyIdList, $parentID, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
