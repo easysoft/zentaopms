@@ -11460,8 +11460,6 @@ class upgradeModel extends model
         /* 升级完后把没用的字段删掉。 */
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " DROP `method`, DROP `model`, DROP `type`, DROP `files`;");
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
-        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
 
         if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
     }
@@ -11699,6 +11697,34 @@ class upgradeModel extends model
     }
 
     /**
+     * 内置基线评审到项目流程中。
+     * buildInBaselineReviewFlow
+     *
+     * @access public
+     * @return void
+     */
+    public function buildInBaselineReview()
+    {
+        $reviewFlow = new stdclass();
+        $reviewFlow->flow        = '1';
+        $reviewFlow->objectID    = '0';
+        $reviewFlow->relatedBy   = 'system';
+        $reviewFlow->relatedDate = helper::now();
+        $reviewFlow->extra       = 'baseline';
+
+        $workflows = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->notin('scrum,projectModel')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            foreach($this->lang->upgrade->baselineReview as $key => $name)
+            {
+                $reviewFlow->root       = $workflow->id;
+                $reviewFlow->objectType = $key;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
+            }
+        }
+    }
+
+    /**
      * 升级项目评审对象到项目流程中。
      * Upgrade baseline objects.
      *
@@ -11730,6 +11756,12 @@ class upgradeModel extends model
             ->fetchGroup('root', 'extra');
 
         $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->where('type')->ne('')->fetchGroup('type');
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
 
         $deliverable = new stdClass();
         $deliverable->status      = 'enabled';
@@ -11742,7 +11774,7 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
 
         $reviewFlow = new stdclass();
-        $reviewFlow->flow = 1;
+        $reviewFlow->flow        = 1;
         $reviewFlow->objectType  = 'deliverable';
         $reviewFlow->relatedBy   = 'system';
         $reviewFlow->relatedDate = helper::now();
@@ -11752,8 +11784,20 @@ class upgradeModel extends model
         $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
         foreach($workflowGroupPairs as $groupID => $projectModel)
         {
+            if(!empty($activityList[$groupID]))
+            {
+                $otherActivity = reset($activityList[$groupID]);
+                $otherActivityID = $otherActivity->id;
+            }
+            else
+            {
+                if(empty($projectModules[$groupID])) continue;
+                $otherActivityID = $this->createOtherActivity($projectModules[$groupID], $groupID);
+            }
+
             $nameFilter = array();
             $deliverable->workflowGroup = $groupID;
+            $deliverable->activity      = $otherActivityID;
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
@@ -11792,6 +11836,8 @@ class upgradeModel extends model
 
         $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " CHANGE `object` `object` mediumint(8) unsigned NOT NULL DEFAULT '0';");
         $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " DROP `type`;");
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
     }
 
     /**
