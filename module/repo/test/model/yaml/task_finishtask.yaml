@@ -1,0 +1,56 @@
+---
+title: 任务数据定义
+desc: 用于finishTask方法测试的任务数据
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-100
+- field: project
+  note: 所属项目ID
+  range: 1-5
+- field: execution
+  note: 所属执行ID
+  range: 1-10
+- field: name
+  note: 任务名称
+  range: 任务1{5},任务2{3},任务3{2}
+- field: status
+  note: 任务状态
+  range: wait{3},doing{5},done{2}
+- field: consumed
+  note: 已消耗工时
+  range: 0-20
+- field: left
+  note: 剩余工时
+  range: 0-10
+- field: openedBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+- field: assignedTo
+  note: 指派给
+  range: admin{3},user1{4},user2{3}
+- field: realStarted
+  note: 实际开始时间
+  range: 2024-01-01 00:00:00,2024-02-01 00:00:00,{2}
+- field: finishedBy
+  note: 完成者
+  range: ,admin{3},user1{2}
+- field: finishedDate
+  note: 完成时间
+  range: 0000-00-00 00:00:00{5},2024-03-01 00:00:00{3},2024-04-01 00:00:00{2}
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{8},user1{2}
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: 2024-01-15 10:00:00-2024-03-15 18:00:00:30D
+- field: assignedDate
+  note: 指派时间
+  range: 2024-01-01 00:00:00-2024-02-28 23:59:59:7D
+- field: team
+  note: 团队成员
+  range: {8},team1{1},team2{1}
+- field: mode
+  note: 任务模式
+  range: linear{5},multi{3},{2}
