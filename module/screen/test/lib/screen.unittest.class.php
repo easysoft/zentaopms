@@ -1228,4 +1228,21 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test buildDataset method.
+     *
+     * @param  int    $chartID
+     * @param  string $driver
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function buildDatasetTest($chartID, $driver, $sql = '')
+    {
+        $result = $this->objectModel->buildDataset($chartID, $driver, $sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
