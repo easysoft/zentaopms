@@ -795,4 +795,19 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test convertQueryForm method.
+     *
+     * @param  array $queryForm
+     * @access public
+     * @return array
+     */
+    public function convertQueryFormTest(array $queryForm): array
+    {
+        $result = $this->objectModel->convertQueryForm($queryForm);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
