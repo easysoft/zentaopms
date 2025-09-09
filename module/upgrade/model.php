@@ -11784,15 +11784,15 @@ class upgradeModel extends model
         $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
         foreach($workflowGroupPairs as $groupID => $projectModel)
         {
-            if(!empty($activityList[$module->workflowGroup]))
+            if(!empty($activityList[$groupID]))
             {
-                $otherActivity = reset($activityList[$module->workflowGroup]);
+                $otherActivity = reset($activityList[$groupID]);
                 $otherActivityID = $otherActivity->id;
             }
             else
             {
-                if(empty($projectModules[$module->workflowGroup])) continue;
-                $otherActivityID = $this->createOtherActivity($projectModules[$module->workflowGroup], $module->workflowGroup);
+                if(empty($projectModules[$groupID])) continue;
+                $otherActivityID = $this->createOtherActivity($projectModules[$groupID], $groupID);
             }
 
             $nameFilter = array();
