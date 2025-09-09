@@ -77,7 +77,6 @@ class gantt extends wg
             jsVar('method',          $app->rawMethod),
             jsVar('jsRoot',          $app->getWebRoot()),
             jsVar('fileName',        $fileName),
-            jsVar('reviewPoints',    $reviewPoints),
             jsVar('ganttType',       $ganttType),
             jsVar('showFields',      $showFields),
             jsVar('showChart',       $showChart),
@@ -97,7 +96,7 @@ class gantt extends wg
             setID('ganttContainer'),
             on::click('.toggle-all-icon')->call('toggleAllTasks'),
             div(setID($id), setClass('gantt is-collapsed')),
-            div(setID('myCover'), div(setID('gantt_here')))
+            div(setID('myCover'), div(setID('gantt_here'), setData('reviewpoints', json_encode($reviewPoints))))
         );
     }
 }
