@@ -1,0 +1,24 @@
+---
+title: 项目产品关系测试数据
+desc: buildSearchConfig方法测试用例的项目产品关联数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-5
+
+- field: product
+  note: 产品ID
+  range: 1-5
+
+- field: branch
+  note: 分支ID
+  range: 0,1,2
+
+- field: plan
+  note: 计划ID
+  range: '',1,2,3
+
+- field: roadmap
+  note: 路线图ID
+  range: '',1,2,3

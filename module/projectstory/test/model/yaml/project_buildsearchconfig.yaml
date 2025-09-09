@@ -1,0 +1,38 @@
+---
+title: 项目搜索配置测试数据
+desc: buildSearchConfig方法测试用例的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 项目名称
+  range: 项目A,项目B,项目C,测试项目{3},IPD项目{2},普通项目{2}
+
+- field: type
+  note: 项目类型
+  range: project,sprint,stage,kanban
+  
+- field: status
+  note: 项目状态
+  range: wait,doing,suspended,closed
+
+- field: storyType
+  note: 故事类型
+  range: epic,story,requirement,epic,story
+
+- field: begin
+  note: 开始日期
+  range: 2023-01-01,2023-06-01,2024-01-01
+
+- field: end
+  note: 结束日期  
+  range: 2024-12-31,2024-06-30,2024-12-31
+
+- field: deleted
+  note: 删除标记
+  range: '0'

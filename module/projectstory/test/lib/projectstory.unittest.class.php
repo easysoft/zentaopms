@@ -23,4 +23,19 @@ class projectstoryTest
 
         return $objects;
     }
+
+    /**
+     * Test buildSearchConfig method.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchConfigTest($projectID)
+    {
+        $result = $this->objectModel->buildSearchConfig($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
