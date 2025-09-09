@@ -2377,4 +2377,20 @@ class taskTest
 
         return count($result);
     }
+
+    /**
+     * 测试给任务下拉列表增加标签。
+     * Test add label to task dropdown list.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function addTaskLabelTest(array $tasks): array
+    {
+        $result = $this->objectModel->addTaskLabel($tasks);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
