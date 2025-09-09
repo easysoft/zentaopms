@@ -150,4 +150,21 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test setSystemRelease method.
+     *
+     * @param  int    $systemID
+     * @param  int    $releaseID
+     * @param  string $releasedDate
+     * @access public
+     * @return mixed
+     */
+    public function setSystemReleaseTest($systemID, $releaseID, $releasedDate = '')
+    {
+        $result = $this->objectModel->setSystemRelease($systemID, $releaseID, $releasedDate);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
 }
