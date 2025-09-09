@@ -213,4 +213,20 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test unlinkStoryByType method.
+     *
+     * @param  int    $projectID
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function unlinkStoryByTypeTest($projectID = 0, $storyType = '')
+    {
+        $result = $this->objectModel->unlinkStoryByType($projectID, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
