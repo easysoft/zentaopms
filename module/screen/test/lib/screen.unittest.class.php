@@ -728,4 +728,130 @@ class screenTest
 
         return $result;
     }
+
+    /**
+     * Test updateMetricFilters method - Test case 1: component without filters
+     *
+     * @access public
+     * @return array
+     */
+    public function updateMetricFiltersTest1()
+    {
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        
+        $latestFilters = array('status' => 'enabled', 'filter1' => 'value1');
+        
+        $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
+        $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
+        $testResult['status'] = isset($result->chartConfig->filters['status']) ? $result->chartConfig->filters['status'] : 'missing';
+        
+        return $testResult;
+    }
+
+    /**
+     * Test updateMetricFilters method - Test case 2: component with existing filters
+     *
+     * @access public
+     * @return array
+     */
+    public function updateMetricFiltersTest2()
+    {
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        $component->chartConfig->filters = array('existing' => 'existingFilter', 'preserved' => true);
+        
+        $latestFilters = array('new' => 'newFilter');
+        
+        $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
+        $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
+        $testResult['existing'] = isset($result->chartConfig->filters['existing']) ? $result->chartConfig->filters['existing'] : 'missing';
+        
+        return $testResult;
+    }
+
+    /**
+     * Test updateMetricFilters method - Test case 3: empty filters array
+     *
+     * @access public
+     * @return array
+     */
+    public function updateMetricFiltersTest3()
+    {
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        
+        $latestFilters = array();
+        
+        $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
+        $testResult['filters'] = isset($result->chartConfig->filters) ? count($result->chartConfig->filters) : -1;
+        
+        return $testResult;
+    }
+
+    /**
+     * Test updateMetricFilters method - Test case 4: complex filters object
+     *
+     * @access public
+     * @return array
+     */
+    public function updateMetricFiltersTest4()
+    {
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        
+        $latestFilters = array(
+            'field1' => 'value1',
+            'field2' => 'value2',
+            'nested' => array('subfield' => 'subvalue')
+        );
+        
+        $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
+        $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
+        $testResult['field1'] = isset($result->chartConfig->filters['field1']) ? $result->chartConfig->filters['field1'] : 'missing';
+        $testResult['field2'] = isset($result->chartConfig->filters['field2']) ? $result->chartConfig->filters['field2'] : 'missing';
+        
+        return $testResult;
+    }
+
+    /**
+     * Test updateMetricFilters method - Test case 5: component with chartConfig but no filters
+     *
+     * @access public
+     * @return array
+     */
+    public function updateMetricFiltersTest5()
+    {
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        // chartConfig exists but no filters property
+        
+        $latestFilters = array('newField' => 'newValue');
+        
+        $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
+        if(dao::isError()) return dao::getError();
+
+        $testResult = array();
+        $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
+        $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
+        $testResult['newField'] = isset($result->chartConfig->filters['newField']) ? $result->chartConfig->filters['newField'] : 'missing';
+        
+        return $testResult;
+    }
 }
