@@ -39,4 +39,19 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test getBackupList method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function getBackupListTest($instance)
+    {
+        $result = $this->objectModel->getBackupList($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
