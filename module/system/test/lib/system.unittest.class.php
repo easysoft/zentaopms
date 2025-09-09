@@ -21,4 +21,22 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test getBackupStatus method.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return mixed
+     */
+    public function getBackupStatusTest($instance, $backupName)
+    {
+        ob_start();
+        $result = $this->objectModel->getBackupStatus($instance, $backupName);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
