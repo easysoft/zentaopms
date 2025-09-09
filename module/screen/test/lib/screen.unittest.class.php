@@ -651,4 +651,19 @@ class screenTest
         
         return $testResult;
     }
+
+    /**
+     * Test unsetComponentDraftMarker method.
+     *
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function unsetComponentDraftMarkerTest($component)
+    {
+        $result = $this->objectModel->unsetComponentDraftMarker($component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
