@@ -1164,4 +1164,22 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getDrillDatas method.
+     *
+     * @param  object $pivotState
+     * @param  object $drill
+     * @param  array  $conditions
+     * @param  array  $filterValues
+     * @access public
+     * @return array
+     */
+    public function getDrillDatasTest($pivotState, $drill, $conditions, $filterValues = array())
+    {
+        $result = $this->objectModel->getDrillDatas($pivotState, $drill, $conditions, $filterValues);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
