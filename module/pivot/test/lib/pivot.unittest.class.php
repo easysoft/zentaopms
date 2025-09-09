@@ -1093,4 +1093,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getReferSQL method.
+     *
+     * @param  string $object
+     * @param  string $whereSQL
+     * @param  array  $fields
+     * @access public
+     * @return string
+     */
+    public function getReferSQLTest($object, $whereSQL = '', $fields = array())
+    {
+        $result = $this->objectModel->getReferSQL($object, $whereSQL, $fields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
