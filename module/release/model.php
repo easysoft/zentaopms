@@ -110,9 +110,10 @@ class releaseModel extends model
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select('id,name,execution,project')
-            ->from(TABLE_BUILD)
-            ->where('deleted')->eq(0)
+        $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+            ->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
             ->fetchAll('id');
 
         foreach($releases as $release)
@@ -121,7 +122,6 @@ class releaseModel extends model
             foreach(explode(',', $release->build) as $buildID)
             {
                 if(!$buildID || !isset($builds[$buildID])) continue;
-                $builds[$buildID]->projectName = zget($projectPairs, $builds[$buildID]->project, '');
                 $releaseBuilds[$buildID] = $builds[$buildID];
             }
             $release->builds = $releaseBuilds;
