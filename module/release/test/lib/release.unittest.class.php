@@ -528,4 +528,21 @@ class releaseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test updateRelated method.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return mixed
+     */
+    public function updateRelatedTest(int $releaseID, string $objectType, int|string|array $objectIdList): mixed
+    {
+        $result = $this->objectModel->updateRelated($releaseID, $objectType, $objectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
