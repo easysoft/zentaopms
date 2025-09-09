@@ -106,4 +106,20 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test unsetMaintenance method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function unsetMaintenanceTest()
+    {
+        $this->objectModel->unsetMaintenance();
+        if(dao::isError()) return dao::getError();
+
+        // 检查维护模式配置是否被删除
+        $maintenance = $this->objectModel->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
+        return empty($maintenance) ? 'deleted' : 'exists';
+    }
 }
