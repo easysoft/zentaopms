@@ -442,4 +442,50 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test sendMail2Feedback method.
+     *
+     * @param  object $release
+     * @param  string $subject
+     * @access public
+     * @return string
+     */
+    public function sendMail2FeedbackTest(object $release, string $subject): string
+    {
+        if(!$release) return 'no_release';
+        
+        if(!$release->stories && !$release->bugs) return 'no_data';
+        
+        // 模拟检查是否存在有效的notifyEmail
+        $stories = $release->stories ? explode(',', trim($release->stories, ',')) : array();
+        $bugs = $release->bugs ? explode(',', trim($release->bugs, ',')) : array();
+        
+        $hasNotifyEmail = false;
+        
+        if($stories) {
+            $storyNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+                ->where('id')->in($stories)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchAll();
+            if($storyNotifyList) $hasNotifyEmail = true;
+        }
+        
+        if($bugs) {
+            $bugNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+                ->where('id')->in($bugs)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchAll();
+            if($bugNotifyList) $hasNotifyEmail = true;
+        }
+        
+        if(!$hasNotifyEmail) return 'no_email';
+        
+        // 实际调用sendMail2Feedback方法
+        $this->objectModel->sendMail2Feedback($release, $subject);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return 'success';
+    }
 }
