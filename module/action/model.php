@@ -127,7 +127,7 @@ class actionModel extends model
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
 
-        $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
+        if(empty($this->app->installing) && empty($this->app->upgrading)) $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
         $this->saveIndex($objectType, $objectID, $actionType);
 
