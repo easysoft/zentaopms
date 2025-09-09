@@ -1277,4 +1277,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getActiveProjectCard method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getActiveProjectCardTest($year, $month)
+    {
+        $result = $this->objectModel->getActiveProjectCard($year, $month);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
