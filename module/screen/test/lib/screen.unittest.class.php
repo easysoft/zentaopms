@@ -1197,4 +1197,20 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test checkIFChartInUse method.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function checkIFChartInUseTest($chartID, $type = 'chart')
+    {
+        $result = $this->objectModel->checkIFChartInUse($chartID, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
