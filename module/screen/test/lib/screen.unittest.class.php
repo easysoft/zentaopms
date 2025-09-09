@@ -1245,4 +1245,36 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getDatasetForUsageReport method.
+     *
+     * @param  int $chartID
+     * @access public
+     * @return mixed
+     */
+    public function getDatasetForUsageReportTest($chartID)
+    {
+        $result = $this->objectModel->getDatasetForUsageReport($chartID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getActiveUserTable method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getActiveUserTableTest($year, $month, $projectList)
+    {
+        $result = $this->objectModel->getActiveUserTable($year, $month, $projectList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }

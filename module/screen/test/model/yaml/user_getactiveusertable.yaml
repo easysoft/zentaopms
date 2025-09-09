@@ -1,0 +1,29 @@
+---
+title: User数据定义
+desc: getActiveUserTable方法的用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin, user1, user2, user3, user4, user5, user6, user7, user8, user9
+- field: password
+  note: 密码
+  range: 123456{10}
+- field: role
+  note: 角色
+  range: admin{1}, user{9}
+- field: realname
+  note: 真实姓名
+  range: 管理员, 用户一, 用户二, 用户三, 用户四, 用户五, 用户六, 用户七, 用户八, 用户九
+- field: deleted
+  note: 删除标记
+  range: '0'{10}
