@@ -89,4 +89,26 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test appendInvolvedCondition method.
+     *
+     * @param  object $stmt
+     * @access public
+     * @return mixed
+     */
+    public function appendInvolvedConditionTest($stmt = null)
+    {
+        global $tester;
+        if($stmt === null)
+        {
+            $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
+            $stmt = $this->objectModel->leftJoinInvolvedTable($stmt);
+        }
+        
+        $result = $this->objectModel->appendInvolvedCondition($stmt);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
