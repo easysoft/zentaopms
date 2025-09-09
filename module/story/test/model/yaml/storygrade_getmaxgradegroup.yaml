@@ -1,0 +1,20 @@
+---
+title: storygrade getmaxgradegroup数据
+desc: 用于测试getMaxGradeGroup方法的storygrade测试数据
+
+fields:
+- field: type
+  note: 需求类型
+  range: story{3},requirement{2},epic{2}
+
+- field: grade
+  note: 等级
+  range: 1,3,5,1,2,1,2
+
+- field: name
+  note: 等级名称
+  range: SR,SR3,SR5,UR,UR2,BR,BR2
+
+- field: status
+  note: 状态
+  range: enable{6},disable{1}

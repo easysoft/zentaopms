@@ -1467,4 +1467,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getMaxGradeGroup method.
+     *
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getMaxGradeGroupTest(string $status = 'enable'): array
+    {
+        $result = $this->objectModel->getMaxGradeGroup($status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
