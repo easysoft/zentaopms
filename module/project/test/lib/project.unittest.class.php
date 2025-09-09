@@ -1,10 +1,11 @@
 <?php
+declare(strict_types = 1);
 class Project
 {
     public function __construct()
     {
         global $tester;
-        $this->project = $tester->loadModel('project');
+        $this->objectModel = $tester->loadModel('project');
     }
 
     /**
@@ -16,7 +17,7 @@ class Project
      */
     public function getAclListByObjectTypeTest($objectType = null)
     {
-        $result = $this->project->getAclListByObjectType($objectType);
+        $result = $this->objectModel->getAclListByObjectType($objectType);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -32,7 +33,22 @@ class Project
      */
     public function getListByAclTest($acl = '', $idList = array())
     {
-        $result = $this->project->getListByAcl($acl, $idList);
+        $result = $this->objectModel->getListByAcl($acl, $idList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTeamListByType method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getTeamListByTypeTest($type = '')
+    {
+        $result = $this->objectModel->getTeamListByType($type);
         if(dao::isError()) return dao::getError();
 
         return $result;
