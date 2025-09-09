@@ -1182,4 +1182,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processKanbanDatas method.
+     *
+     * @param  string $object
+     * @param  array  $datas
+     * @access public
+     * @return array
+     */
+    public function processKanbanDatasTest($object, $datas)
+    {
+        $result = $this->objectModel->processKanbanDatas($object, $datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
