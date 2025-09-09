@@ -1307,4 +1307,22 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getEpicParents method.
+     *
+     * @param  int        $productID
+     * @param  string|int $appendedStories
+     * @param  string     $storyType
+     * @param  int        $storyID
+     * @access public
+     * @return array
+     */
+    public function getEpicParentsTest(int $productID, string|int $appendedStories = '', string $storyType = 'epic', int $storyID = 0): array
+    {
+        $result = $this->objectModel->getEpicParents($productID, $appendedStories, $storyType, $storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
