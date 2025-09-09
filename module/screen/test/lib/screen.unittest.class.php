@@ -1409,4 +1409,19 @@ class screenTest
         return count($result);
     }
 
+    /**
+     * Test getThumbnail method.
+     *
+     * @param  array $screens
+     * @access public
+     * @return mixed
+     */
+    public function getThumbnailTest($screens)
+    {
+        $result = $this->objectModel->getThumbnail($screens);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
