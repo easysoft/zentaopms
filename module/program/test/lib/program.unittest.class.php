@@ -653,4 +653,19 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getProductPairsByID method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function getProductPairsByIDTest(int $programID): array
+    {
+        $result = $this->program->getProductPairsByID($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
