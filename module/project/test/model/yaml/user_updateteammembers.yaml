@@ -1,0 +1,77 @@
+---
+title: user表测试数据 - updateTeamMembers方法测试
+desc: 测试用户数据的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: company
+  note: 公司ID
+  range: 1{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 用户类型
+  range: inside{18},outside{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dept
+  note: 部门ID
+  range: 1{10},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,user5,dev1,dev2,dev3,tester1,tester2,tester3,po1,po2,po3,qa1,qa2,pm1,pm2,manager1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: 'd0970714757783e6cf17b26fb8e2298f'{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色
+  range: admin{1},dev{6},qa{4},pm{3},po{3},manager{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: '管理员',用户1,用户2,用户3,用户4,用户5,开发者1,开发者2,开发者3,测试员1,测试员2,测试员3,产品经理1,产品经理2,产品经理3,质量员1,质量员2,项目经理1,项目经理2,经理1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: email
+  note: 邮箱
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,user5@test.com,dev1@test.com,dev2@test.com,dev3@test.com,tester1@test.com,tester2@test.com,tester3@test.com,po1@test.com,po2@test.com,po3@test.com,qa1@test.com,qa2@test.com,pm1@test.com,pm2@test.com,manager1@test.com
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,28 @@
+---
+title: usergroup表测试数据 - updateTeamMembers方法测试
+desc: 测试用户组数据
+author: Claude
+version: 1.0
+
+fields:
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,dev1,dev2,tester1,tester2,po1,pm1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: group
+  note: 组ID
+  range: 1{3},2{3},3{2},4{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目关联
+  range: ',1,'{5},',2,'{3},',3,'{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

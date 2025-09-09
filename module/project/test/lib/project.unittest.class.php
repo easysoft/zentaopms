@@ -164,4 +164,37 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test checkDates method.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function checkDatesTest($projectID = 0, $project = null)
+    {
+        $result = $this->objectModel->checkDates($projectID, $project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateTeamMembers method.
+     *
+     * @param  object $project
+     * @param  object $oldProject
+     * @param  array  $newMembers
+     * @access public
+     * @return mixed
+     */
+    public function updateTeamMembersTest($project = null, $oldProject = null, $newMembers = array())
+    {
+        $result = $this->objectModel->updateTeamMembers($project, $oldProject, $newMembers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
