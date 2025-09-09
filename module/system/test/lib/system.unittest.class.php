@@ -91,4 +91,19 @@ class systemTest
 
         return $result;
     }
+
+    /**
+     * Test setMaintenance method.
+     *
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function setMaintenanceTest($action)
+    {
+        $result = $this->objectModel->setMaintenance($action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
