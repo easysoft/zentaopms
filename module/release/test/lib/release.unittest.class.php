@@ -545,4 +545,21 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test deleteRelated method.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return mixed
+     */
+    public function deleteRelatedTest(int $releaseID, string $objectType, int|string|array $objectIdList): mixed
+    {
+        $result = $this->objectModel->deleteRelated($releaseID, $objectType, $objectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
