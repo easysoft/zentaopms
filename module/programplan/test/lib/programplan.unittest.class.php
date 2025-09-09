@@ -61,7 +61,7 @@ class programplanTest
      *
      * @param  array $idList
      * @access public
-     * @return array
+     * @return int
      */
     public function getByListTest($idList = array())
     {
@@ -69,7 +69,7 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
