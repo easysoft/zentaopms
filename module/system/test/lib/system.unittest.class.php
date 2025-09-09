@@ -122,4 +122,18 @@ class systemTest
         $maintenance = $this->objectModel->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
         return empty($maintenance) ? 'deleted' : 'exists';
     }
+
+    /**
+     * Test getLatestRelease method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getLatestReleaseTest()
+    {
+        $result = $this->objectModel->getLatestRelease();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
