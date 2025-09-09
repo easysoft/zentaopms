@@ -1163,4 +1163,46 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getByAssignedTo method.
+     *
+     * @param  mixed  $productID
+     * @param  mixed  $branch
+     * @param  mixed  $modules
+     * @param  string $account
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  mixed  $pager
+     * @access public
+     * @return array
+     */
+    public function getByAssignedToTest($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
+    {
+        $result = $this->objectModel->getByAssignedTo($productID, $branch, $modules, $account, $type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getByOpenedBy method.
+     *
+     * @param  mixed  $productID
+     * @param  mixed  $branch
+     * @param  mixed  $modules
+     * @param  string $account
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  mixed  $pager
+     * @access public
+     * @return mixed
+     */
+    public function getByOpenedByTest($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
+    {
+        $result = $this->objectModel->getByOpenedBy($productID, $branch, $modules, $account, $type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
