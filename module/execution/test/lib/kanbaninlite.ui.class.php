@@ -15,7 +15,6 @@ class kanbanTester extends tester
      */
     public function checkKanban($col, $num, $groupId = '', $lane = '1')
     {
-        $this->page->wait(1);
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');

@@ -13,7 +13,6 @@ class grouptaskTester extends tester
      */
     public function checkGroupData($groupData, $nums)
     {
-        $this->page->wait(1);
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form  = $this->initForm('execution', 'grouptask', array('execution' => '2', 'groupBy' => $groupData ), 'appIframe-project');

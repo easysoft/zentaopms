@@ -88,7 +88,6 @@ class createExecutionTester extends tester
      */
     public function create($execution, $module = 'execution')
     {
-        $this->page->wait(1);
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($execution);

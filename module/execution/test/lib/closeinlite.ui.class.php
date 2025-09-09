@@ -58,7 +58,6 @@ class closeExecutionTester extends tester
      */
     public function closeWithGreaterDate($realEnd, $executionId)
     {
-        $this->page->wait(1);
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($realEnd, $executionId);
