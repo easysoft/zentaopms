@@ -1,0 +1,41 @@
+---
+title: 关系表数据定义
+desc: 用于getLinkedCommits方法测试的关系表数据
+
+fields:
+- field: id
+  note: 关系ID
+  range: 1-8
+- field: project
+  note: 项目ID
+  range: 1{3}, 2{3}, 3{2}
+- field: product
+  note: 产品ID
+  range: 1{4}, 2{4}
+- field: execution
+  note: 执行ID
+  range: 1{4}, 2{4}
+- field: AType
+  note: A类型
+  range: story{8}
+- field: AID
+  note: A对象ID（需求ID）
+  range: 1{2}, 2{2}, 3{2}, 4{1}, 5{1}
+- field: AVersion
+  note: A版本
+  range: 1{8}
+- field: relation
+  note: 关系类型
+  range: completedin{8}
+- field: BType
+  note: B类型
+  range: commit{8}
+- field: BID
+  note: B对象ID（提交ID）
+  range: 1-8
+- field: BVersion
+  note: B版本
+  range: 1{8}
+- field: extra
+  note: 额外信息
+  range: []{8}

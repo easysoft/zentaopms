@@ -1578,4 +1578,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getLinkedCommits method.
+     *
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedCommitsTest(int $repoID, array $revisions)
+    {
+        $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
