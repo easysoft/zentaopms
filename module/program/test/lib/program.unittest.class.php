@@ -623,4 +623,19 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test checkPriv method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivTest(int $programID): bool
+    {
+        $result = $this->program->checkPriv($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
