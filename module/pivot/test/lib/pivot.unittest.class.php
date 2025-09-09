@@ -1144,4 +1144,24 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getDrillResult method.
+     *
+     * @param  string $object
+     * @param  string $whereSQL
+     * @param  array  $filters
+     * @param  array  $conditions
+     * @param  bool   $emptyFilters
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function getDrillResultTest($object, $whereSQL, $filters = array(), $conditions = array(), $emptyFilters = true, $limit = 10)
+    {
+        $result = $this->objectModel->getDrillResult($object, $whereSQL, $filters, $conditions, $emptyFilters, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
