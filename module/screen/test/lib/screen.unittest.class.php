@@ -950,4 +950,19 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test buildGroup method.
+     *
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function buildGroupTest($component)
+    {
+        $result = $this->objectModel->buildGroup($component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
