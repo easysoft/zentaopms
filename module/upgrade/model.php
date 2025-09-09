@@ -11270,9 +11270,10 @@ class upgradeModel extends model
             $nameFilter = array();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
-            foreach(array_filter($this->lang->design->typeList) as $value)
+            foreach(array_filter($this->lang->design->typeList) as $key => $value)
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
+                $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 /* 将历史设计的设计类型替换为交付物ID。 */
@@ -11286,6 +11287,7 @@ class upgradeModel extends model
             foreach(array_filter($this->lang->design->plusTypeList) as $value)
             {
                 if(empty($value) || $module->projectModel != 'waterfallplus') continue;
+                $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 /* 将历史设计的设计类型替换为交付物ID。 */
