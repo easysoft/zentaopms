@@ -1,0 +1,43 @@
+---
+title: 项目任务统计测试数据
+desc: 用于测试getProjectTaskTable方法的任务数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目ID
+  range: 1{10}, 2{5}, 3{3}, 4{2}
+- field: execution
+  note: 执行ID
+  range: 1{8}, 2{5}, 3{4}, 4{3}
+- field: name
+  note: 任务名称
+  range: Task{20}
+  format: "Task%03d"
+- field: openedBy
+  note: 创建者
+  range: admin{8}, user1{6}, user2{4}, user3{2}
+- field: openedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+- field: finishedBy
+  note: 完成者
+  range: admin{5}, user1{3}, user2{2}, ""{10}
+- field: finishedDate
+  note: 完成时间
+  range: 2023-02-01 00:00:00-2023-12-31 23:59:59, ""{10}
+- field: deleted
+  note: 删除状态
+  range: 0{18}, 1{2}
+- field: vision
+  note: 视图类型
+  range: rnd{15}, ops{3}, lite{2}
+- field: status
+  note: 状态
+  range: wait{5}, doing{8}, done{5}, cancel{2}

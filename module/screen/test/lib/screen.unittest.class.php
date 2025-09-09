@@ -1326,4 +1326,21 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getProjectTaskTable method.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskTableTest($year, $month, $projectList)
+    {
+        $result = $this->objectModel->getProjectTaskTable($year, $month, $projectList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }

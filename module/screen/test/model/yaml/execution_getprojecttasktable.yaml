@@ -1,0 +1,25 @@
+---
+title: 执行基础测试数据
+desc: 用于测试getProjectTaskTable方法的执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: project
+  note: 所属项目ID
+  range: 1{4}, 2{3}, 3{2}, 4{1}
+- field: name
+  note: 执行名称
+  range: Sprint 1, Sprint 2, Sprint 3, Iteration A, Iteration B, Phase 1, Phase 2, Release 1, Release 2, Kanban 1
+- field: type
+  note: 执行类型
+  range: sprint{4}, stage{3}, kanban{2}, waterfallexec{1}
+- field: status
+  note: 执行状态
+  range: wait{2}, doing{5}, done{2}, closed{1}
+- field: deleted
+  note: 删除状态
+  range: 0{8}, 1{2}
