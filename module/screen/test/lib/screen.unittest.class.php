@@ -1037,4 +1037,22 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test getMetricTableOption method.
+     *
+     * @param  mixed $metric
+     * @param  mixed $resultHeader
+     * @param  mixed $resultData
+     * @param  mixed $component
+     * @access public
+     * @return mixed
+     */
+    public function getMetricTableOptionTest($metric, $resultHeader, $resultData, $component = null)
+    {
+        $result = $this->objectModel->getMetricTableOption($metric, $resultHeader, $resultData, $component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
