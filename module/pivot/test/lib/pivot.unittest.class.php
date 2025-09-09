@@ -1073,4 +1073,24 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test buildPivotTable method.
+     *
+     * @param  mixed $data
+     * @param  array $configs
+     * @access public
+     * @return string
+     */
+    public function buildPivotTableTest($data, $configs = array())
+    {
+        ob_start();
+        $this->objectModel->buildPivotTable($data, $configs);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
