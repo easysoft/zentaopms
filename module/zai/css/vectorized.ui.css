@@ -1,0 +1,30 @@
+.vectorized-panel {--load-indicator-delay: 0s}
+.vectorized-panel::before {background-color: #fff;}
+.vectorized-panel > .panel-body {padding-top: 0;}
+.vectorized-panel.is-syncing-loop .hide-on-syncing-loop,
+.vectorized-panel.is-status-disabled .hide-on-disabled,
+.vectorized-panel.is-status-wait .hide-on-wait,
+.vectorized-panel.is-status-syncing .hide-on-syncing,
+.vectorized-panel.is-status-paused .hide-on-paused,
+.vectorized-panel.is-status-synced .hide-on-synced,
+.vectorized-panel.is-status-unavailable .hide-on-unavailable,
+.vectorized-panel.is-status-failed .hide-on-failed,
+.vectorized-panel.is-synced-failed .hide-on-synced-failed,
+.vectorized-panel.not-syncing-loop .hide-not-syncing-loop,
+.vectorized-panel.not-status-disabled .hide-not-disabled,
+.vectorized-panel.not-status-wait .hide-not-wait,
+.vectorized-panel.not-status-syncing .hide-not-syncing,
+.vectorized-panel.not-status-paused .hide-not-paused,
+.vectorized-panel.not-status-synced .hide-not-synced,
+.vectorized-panel.not-status-unavailable .hide-not-unavailable,
+.vectorized-panel.not-synced-failed .hide-not-failed,
+.show-on-failed-success-paused {display: none;}
+.vectorized-panel.is-status-synced .show-on-failed-success-paused,
+.vectorized-panel.is-status-failed .show-on-failed-success-paused,
+.vectorized-panel.is-status-success .show-on-failed-success-paused {display: flex;}
+.vectorized-sync-progress {transition: width .2s;}
+.vectorized-sync-progress .progress-bar.danger {box-shadow: none;}
+
+.is-status-synced .vectorized-alert {--alert-bg: var(--color-success-50);}
+.is-status-syncing .vectorized-alert {--alert-bg: var(--color-primary-50);}
+.is-synced-failed .vectorized-alert {--alert-bg: var(--color-danger-50);}
