@@ -900,4 +900,21 @@ class screenTest
 
         return $testResult;
     }
+
+    /**
+     * Test processMetricFilter method.
+     *
+     * @param  array  $filterParams
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function processMetricFilterTest(array $filterParams, string $dateType)
+    {
+        $result = $this->objectModel->processMetricFilter($filterParams, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
