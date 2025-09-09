@@ -230,12 +230,12 @@ $lang->testcase->typeList['security']    = '安全相关';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';
-$lang->testcase->stageList['unittest']   = '单元测试阶段';
-$lang->testcase->stageList['feature']    = '功能测试阶段';
-$lang->testcase->stageList['intergrate'] = '集成测试阶段';
-$lang->testcase->stageList['system']     = '系统测试阶段';
-$lang->testcase->stageList['smoke']      = '冒烟测试阶段';
-$lang->testcase->stageList['bvt']        = '版本验证阶段';
+$lang->testcase->stageList['unittest']   = '单元测试环节';
+$lang->testcase->stageList['feature']    = '功能测试环节';
+$lang->testcase->stageList['intergrate'] = '集成测试环节';
+$lang->testcase->stageList['system']     = '系统测试环节';
+$lang->testcase->stageList['smoke']      = '冒烟测试环节';
+$lang->testcase->stageList['bvt']        = '版本验证环节';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';
