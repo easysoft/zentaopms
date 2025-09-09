@@ -1,0 +1,39 @@
+---
+title: relation表数据用于测试getLinkedBranch方法
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-15
+- field: project
+  note: 项目ID
+  range: 0
+- field: product
+  note: 产品ID
+  range: 0
+- field: execution
+  note: 执行ID  
+  range: 0
+- field: AType
+  note: A类型
+  range: story{5}, task{8}, bug{2}
+- field: AID
+  note: A对象ID
+  range: 1-15
+- field: AVersion
+  note: A版本
+  range: 1
+- field: relation
+  note: 关联关系
+  range: linkrepobranch
+- field: BType
+  note: B类型（分支名）
+  range: master{5}, develop{4}, release{3}, main{2}, feature{1}
+- field: BID
+  note: B对象ID（仓库ID）
+  range: 1-5
+- field: BVersion
+  note: B版本
+  range: 1

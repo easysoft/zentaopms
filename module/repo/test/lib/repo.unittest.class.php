@@ -1019,4 +1019,22 @@ class repoTest
         // 返回成功标志，表示所有检查和逻辑都通过
         return true;
     }
+
+    /**
+     * Test getLinkedBranch method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  int    $repoID
+     * @param  bool   $returnCount
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedBranchTest(int $objectID = 0, string $objectType = '', int $repoID = 0, bool $returnCount = false)
+    {
+        $result = $this->objectModel->getLinkedBranch($objectID, $objectType, $repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $returnCount ? count($result) : $result;
+    }
 }
