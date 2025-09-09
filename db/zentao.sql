@@ -204,6 +204,8 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
   `flow` int(8) NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
+  `relatedBy` varchar(30) NOT NULL DEFAULT '',
+  `relatedDate`  datetime NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

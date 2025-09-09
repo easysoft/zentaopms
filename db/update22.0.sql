@@ -49,3 +49,10 @@ ALTER TABLE `zt_approvalflowobject` ADD `relatedBy` varchar(30) NOT NULL DEFAULT
 ALTER TABLE `zt_approvalflowobject` ADD `relatedDate`  datetime NULL AFTER `relatedBy`;
 
 ALTER TABLE `zt_reviewcl` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
+
+UPDATE `zt_lang` SET `value` = '单元测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'unittest'   AND `value` = '单元测试阶段';
+UPDATE `zt_lang` SET `value` = '功能测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'feature'    AND `value` = '功能测试阶段';
+UPDATE `zt_lang` SET `value` = '集成测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'intergrate' AND `value` = '集成测试阶段';
+UPDATE `zt_lang` SET `value` = '系统测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'system'     AND `value` = '系统测试阶段';
+UPDATE `zt_lang` SET `value` = '冒烟测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'smoke'      AND `value` = '冒烟测试阶段';
+UPDATE `zt_lang` SET `value` = '版本验证环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'bvt'        AND `value` = '版本验证阶段';
