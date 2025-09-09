@@ -242,10 +242,10 @@ class storeTest
      * @access public
      * @return object|null
      */
-    public function pickHighestVersionTest(string $currentVersion, int $appID)
+    public function pickHighestVersionTest(array $versionList): object|null
     {
-        $versionList = $this->getUpgradableVersions($currentVersion, $appID);
-        $result      = $this->pickHighestVersion($versionList);
+        $result = $this->pickHighestVersion($versionList);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 }
