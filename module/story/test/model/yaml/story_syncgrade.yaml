@@ -1,0 +1,123 @@
+---
+title: 需求等级同步测试数据
+desc: 用于测试 syncGrade 方法的测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: vision
+  range: rnd{10}
+- field: parent
+  range: 0, 1, 1, 2, 2, 0, 0, 0, 0, 0
+- field: product  
+  range: 1{10}
+- field: branch
+  range: 0{10}
+- field: module
+  range: 1{10}
+- field: plan
+  range: ''{10}
+- field: source
+  range: customer{10}
+- field: sourceNote
+  range: ''{10}
+- field: fromBug
+  range: 0{10}
+- field: feedback
+  range: 0{10}
+- field: title
+  range: 父需求1, 父需求2, 子需求1, 子需求2, 子需求3, 普通需求1, 普通需求2, 普通需求3, 普通需求4, 普通需求5
+- field: keywords
+  range: ''{10}
+- field: type
+  range: story{10}
+- field: category
+  range: feature{10}
+- field: pri
+  range: 3{10}
+- field: estimate
+  range: 0{10}
+- field: status
+  range: active{10}
+- field: subStatus
+  range: ''{10}
+- field: color
+  range: ''{10}
+- field: stage
+  range: wait{10}
+- field: stagedBy
+  range: admin{10}
+- field: mailto
+  range: ''{10}
+- field: lib
+  range: 0{10}
+- field: fromStory
+  range: 0{10}
+- field: fromVersion
+  range: 1{10}
+- field: openedBy
+  range: admin{10}
+- field: openedDate
+  range: '2023-01-01 10:00:00'{10}
+- field: assignedTo
+  range: admin{10}
+- field: assignedDate
+  range: '2023-01-01 10:00:00'{10}
+- field: approvedDate
+  range: '0000-00-00'{10}
+- field: lastEditedBy
+  range: admin{10}
+- field: lastEditedDate
+  range: '2023-01-01 10:00:00'{10}
+- field: changedBy
+  range: ''{10}
+- field: changedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: reviewedBy
+  range: ''{10}
+- field: reviewedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: releasedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: closedBy
+  range: ''{10}
+- field: closedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: closedReason
+  range: ''{10}
+- field: activatedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: toBug
+  range: 0{10}
+- field: childStories
+  range: ''{10}
+- field: linkStories
+  range: ''{10}
+- field: linkRequirements
+  range: ''{10}
+- field: twins
+  range: ''{10}
+- field: duplicateStory
+  range: 0{10}
+- field: version
+  range: 1{10}
+- field: storyChanged
+  range: 0{10}
+- field: feedbackBy
+  range: ''{10}
+- field: notifyEmail
+  range: ''{10}
+- field: URChanged
+  range: 0{10}
+- field: deleted
+  range: 0{10}
+- field: isParent
+  range: 1, 1, 0, 0, 0, 0, 0, 0, 0, 0
+- field: root
+  range: 1, 2, 1, 1, 2, 6, 7, 8, 9, 10
+- field: path
+  range: ',1,', ',2,', ',1,3,', ',1,4,', ',2,5,', ',6,', ',7,', ',8,', ',9,', ',10,'
+- field: grade
+  range: 1, 2, 2, 2, 3, 1, 1, 1, 1, 1
+- field: parentVersion
+  range: 0{10}

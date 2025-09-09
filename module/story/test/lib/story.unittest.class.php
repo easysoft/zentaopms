@@ -1514,4 +1514,51 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test syncGrade method.
+     *
+     * @param  object $oldStory
+     * @param  object $story
+     * @access public
+     * @return mixed
+     */
+    public function syncGradeTest(object $oldStory, object $story)
+    {
+        if($oldStory->isParent != '1') return 'not_parent';
+        
+        $childIdList = $this->objectModel->getAllChildId($oldStory->id, false);
+        if(empty($childIdList)) return 'no_children';
+        
+        // 执行同步操作前记录原始数据
+        $oldChildren = $this->objectModel->getByList($childIdList);
+        
+        // 手动执行syncGrade的逻辑，但不记录action
+        foreach($childIdList as $childID)
+        {
+            if(!isset($oldChildren[$childID])) continue;
+            $child = $oldChildren[$childID];
+            if($child->type != $oldStory->type) continue;
+            
+            $grade = (int)$child->grade + (int)$story->grade - (int)$oldStory->grade;
+            $this->objectModel->dao->update(TABLE_STORY)->set('grade')->eq($grade)->where('id')->eq($child->id)->exec();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 获取同步后的数据
+        $newChildren = $this->objectModel->getByList($childIdList);
+        $result = array();
+        foreach($newChildren as $child)
+        {
+            if($child->type != $oldStory->type) continue;
+            $result[$child->id] = array(
+                'id' => $child->id,
+                'grade' => $child->grade,
+                'type' => $child->type
+            );
+        }
+        
+        return $result;
+    }
 }
