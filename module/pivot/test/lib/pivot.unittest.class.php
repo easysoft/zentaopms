@@ -1259,4 +1259,20 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test switchNewVersion method.
+     *
+     * @param  int    $pivotID
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function switchNewVersionTest(int $pivotID, string $version): bool
+    {
+        $result = $this->objectModel->switchNewVersion($pivotID, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
