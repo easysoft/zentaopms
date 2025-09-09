@@ -134,6 +134,20 @@ class formPanel extends panel
             }
         }
 
+        if($moduleName == 'ticket')
+        {
+            if($methodName == 'createstory')
+            {
+                $moduleName = 'story';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'createbug')
+            {
+                $moduleName = 'bug';
+                $methodName = 'create';
+            }
+        }
+
         return array($moduleName, $methodName);
     }
 
