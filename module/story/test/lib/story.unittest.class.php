@@ -1146,4 +1146,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getAllChildId method.
+     *
+     * @param  int  $storyID
+     * @param  bool $includeSelf
+     * @param  bool $sameType
+     * @access public
+     * @return array
+     */
+    public function getAllChildIdTest(int $storyID, bool $includeSelf = true, bool $sameType = false): array
+    {
+        $result = $this->objectModel->getAllChildId($storyID, $includeSelf, $sameType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,38 @@
+---
+title: story表测试数据，用于getAllChildId方法
+desc: 用于测试getAllChildId方法的层次化story数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+- field: parent
+  note: 父需求ID
+  range: '0,1,1,2,2,0,0,0,0,0'
+- field: isParent
+  note: 是否为父需求
+  range: "'1','1','0','1','0','0','0','0','0','0'"
+- field: root
+  note: 根需求ID  
+  range: '1,1,1,1,1,6,7,8,9,10'
+- field: path
+  note: 路径字段，用于层级查询
+  range: "',1,',',1,2,',',1,3,',',1,2,4,',',1,2,5,',',6,',',7,',',8,',',9,',',10,'"
+- field: product
+  note: 所属产品
+  range: '1,1,1,1,1,1,1,1,1,1'
+- field: type
+  note: 需求类型
+  range: story,story,story,story,story,story,story,story,story,story
+- field: status
+  note: 需求状态
+  range: active,active,active,active,active,active,active,active,active,active
+- field: deleted
+  note: 删除状态
+  range: '0,0,0,0,0,0,0,0,0,0'
+- field: title
+  note: 需求标题
+  prefix: 需求
+- field: grade
+  note: 需求等级
+  range: '1,2,3,3,3,1,1,1,1,1'
