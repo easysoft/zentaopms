@@ -698,4 +698,19 @@ class screenTest
         
         return $testResult;
     }
+
+    /**
+     * Test getMetricPagination method.
+     *
+     * @param  mixed $component
+     * @access public
+     * @return array
+     */
+    public function getMetricPaginationTest($component = null)
+    {
+        $result = $this->objectModel->getMetricPagination($component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
