@@ -379,4 +379,20 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
         return $this->objectModel->processReleaseBuilds($release, $addActionsAndBuildLink);
     }
+
+    /**
+     * Test getPageSummary method.
+     *
+     * @param  array  $releases
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getPageSummaryTest(array $releases, string $type): string
+    {
+        $result = $this->objectModel->getPageSummary($releases, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
