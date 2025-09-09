@@ -1,0 +1,35 @@
+---
+title: story表测试数据，用于getByReviewBy方法
+desc: 用于测试getByReviewBy方法的story审核数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: '1,1,1,2,2,2,3,3,3,1'
+- field: branch
+  note: 分支
+  range: '0,0,1,0,1,2,0,0,0,0'
+- field: module
+  note: 模块
+  range: '1,1,2,1,2,3,1,2,3,1'
+- field: type
+  note: 需求类型
+  range: story,story,story,story,story,story,requirement,requirement,story,story
+- field: status
+  note: 需求状态
+  range: reviewing,reviewing,reviewing,active,reviewing,closed,reviewing,reviewing,reviewing,draft
+- field: deleted
+  note: 删除状态
+  range: '0,0,0,0,0,0,0,0,0,0'
+- field: title
+  note: 需求标题
+  prefix: 需求标题
+- field: vision
+  note: 视图
+  range: rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd
+- field: version
+  note: 版本号
+  range: '1,1,1,1,1,1,1,1,1,1'

@@ -1226,4 +1226,25 @@ class storyTest
 
         return count($result);
     }
+
+    /**
+     * Test getByReviewBy method.
+     *
+     * @param  mixed  $productID
+     * @param  mixed  $branch
+     * @param  mixed  $modules
+     * @param  string $account
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  mixed  $pager
+     * @access public
+     * @return mixed
+     */
+    public function getByReviewByTest($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
+    {
+        $result = $this->objectModel->getByReviewBy($productID, $branch, $modules, $account, $type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }

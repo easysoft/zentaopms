@@ -1,0 +1,20 @@
+---
+title: storyreview表测试数据，用于getByReviewBy方法
+desc: 用于测试getByReviewBy方法的storyreview审核数据
+
+fields:
+- field: story
+  note: 需求ID
+  range: '1,1,2,2,3,5,7,8,9,1'
+- field: version
+  note: 版本号
+  range: '1,1,1,1,1,1,1,1,1,1'
+- field: reviewer
+  note: 审核人
+  range: 'admin,admin,admin,user2,admin,admin,admin,admin,admin,user2'
+- field: result
+  note: 审核结果
+  range: ',,,,pass,reject,pass,,,'
+- field: reviewDate
+  note: 审核时间
+  range: '0000-00-00 00:00:00,0000-00-00 00:00:00,0000-00-00 00:00:00,0000-00-00 00:00:00,2023-01-01 10:00:00,2023-01-02 11:00:00,2023-01-03 12:00:00,0000-00-00 00:00:00,0000-00-00 00:00:00,0000-00-00 00:00:00'
