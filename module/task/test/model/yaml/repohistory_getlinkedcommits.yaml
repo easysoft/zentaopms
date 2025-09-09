@@ -1,0 +1,19 @@
+---
+title: 代码历史测试数据
+desc: 用于 getLinkedCommits 方法的测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: repo
+  range: 1{3},2{3},999{4}
+- field: revision
+  range: abc123{1},def456{1},ghi789{1},jkl012{1},mno345{1},xyz999{5}
+- field: commit
+  range: 1-10
+- field: comment
+  range: '["Fixed bug","Added feature","Refactored code","Updated docs","Initial commit"]{2}'
+- field: committer
+  range: developer1{3},developer2{3},developer3{4}
+- field: time
+  range: 2024-01-01 10:00:00-2024-12-31 18:00:00

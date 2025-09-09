@@ -1,0 +1,29 @@
+---
+title: 关系表测试数据
+desc: 用于 getLinkedCommits 方法的关系表测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 1{5},2{3},3{2}
+- field: product
+  range: 1{4},2{3},3{3}
+- field: execution
+  range: 1{4},2{3},3{3}
+- field: AType
+  range: task{8},story{2}
+- field: AID
+  range: 1{2},2{2},3{2},4{2},5{2}
+- field: AVersion
+  range: 1{10}
+- field: relation
+  range: completedin{8},resolvedby{2}
+- field: BType
+  range: commit{8},bug{2}
+- field: BID
+  range: 1{2},2{2},3{2},4{2},5{2}
+- field: BVersion
+  range: 1{10}
+- field: extra
+  range: '["","test","note"]{3},extra{1}'

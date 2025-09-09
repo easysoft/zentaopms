@@ -1,0 +1,101 @@
+---
+title: 任务表测试数据
+desc: 用于 getLinkedCommits 方法的任务表测试数据
+
+fields:
+- field: id
+  range: 1-5
+- field: project
+  range: 1{3},2{2}
+- field: parent
+  range: 0{5}
+- field: isParent
+  range: 0{5}
+- field: isTpl
+  range: 0{5}
+- field: path
+  range: ',1,',',2,',',3,',',4,',',5,'
+- field: execution
+  range: 1{3},2{2}
+- field: module
+  range: 0{5}
+- field: design
+  range: 0{5}
+- field: story
+  range: 0{3},1{1},2{1}
+- field: storyVersion
+  range: 1{5}
+- field: designVersion
+  range: 1{5}
+- field: fromBug
+  range: 0{5}
+- field: feedback
+  range: 0{5}
+- field: fromIssue
+  range: 0{5}
+- field: name
+  range: Task1,Task2,Task3,Task4,Task5
+- field: type
+  range: devel{3},test{1},design{1}
+- field: mode
+  range: '["",linear,multi]{1},linear{2},multi{2}'
+- field: pri
+  range: 1{1},2{2},3{2}
+- field: estimate
+  range: 2-8
+- field: consumed
+  range: 0-2
+- field: left
+  range: 0-6
+- field: status
+  range: wait{2},doing{1},done{2}
+- field: color
+  range: '["","#3da7f5","#7ec5ff","#75c941"]'
+- field: desc
+  range: Task description 1,Task description 2,Task description 3,Task description 4,Task description 5
+- field: version
+  range: 1{5}
+- field: openedBy
+  range: admin{3},user1{1},user2{1}
+- field: openedDate
+  range: 2024-01-01 09:00:00-2024-12-31 18:00:00
+- field: assignedTo
+  range: admin{2},user1{1},user2{1},''{1}
+- field: assignedDate
+  range: 2024-01-01 09:00:00-2024-12-31 18:00:00
+- field: estStarted
+  range: 2024-01-01-2024-03-01
+- field: realStarted
+  range: 2024-01-05 10:00:00-2024-03-05 18:00:00
+- field: deadline
+  range: 2024-02-01-2024-04-01
+- field: finishedBy
+  range: admin{2},user1{1},''{2}
+- field: finishedDate
+  range: 2024-01-10 16:00:00-2024-03-10 18:00:00
+- field: finishedList
+  range: '["","admin","user1"]'
+- field: canceledBy
+  range: '["","admin"]'
+- field: canceledDate
+  range: '["0000-00-00 00:00:00","2024-02-15 14:00:00"]'
+- field: closedBy
+  range: '["","admin","user1"]'
+- field: closedDate
+  range: '["0000-00-00 00:00:00","2024-02-20 17:00:00"]'
+- field: planDuration
+  range: 0{5}
+- field: realDuration
+  range: 0{5}
+- field: closedReason
+  range: '["","done","cancel"]'
+- field: lastEditedBy
+  range: '["","admin","user1"]'
+- field: lastEditedDate
+  range: '["0000-00-00 00:00:00","2024-01-15 11:00:00","2024-01-16 12:00:00"]'
+- field: order
+  range: 1-5
+- field: vision
+  range: rnd{5}
+- field: deleted
+  range: 0{5}
