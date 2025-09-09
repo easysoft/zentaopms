@@ -1127,4 +1127,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test execDrillSQL method.
+     *
+     * @param  string $object
+     * @param  string $drillSQL
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function execDrillSQLTest($object, $drillSQL, $limit = 10)
+    {
+        $result = $this->objectModel->execDrillSQL($object, $drillSQL, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
