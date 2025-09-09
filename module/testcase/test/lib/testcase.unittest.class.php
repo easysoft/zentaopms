@@ -1962,4 +1962,19 @@ class testcaseTest
         
         return true;
     }
+
+    /**
+     * Test processDatas method.
+     *
+     * @param  mixed $datas
+     * @access public
+     * @return mixed
+     */
+    public function processDatasTest($datas)
+    {
+        $result = $this->objectModel->processDatas($datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
