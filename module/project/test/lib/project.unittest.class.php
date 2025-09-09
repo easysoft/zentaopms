@@ -126,4 +126,25 @@ class Project
 
         return $result;
     }
+
+    /**
+     * Test addTeamMembers method.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  array  $members
+     * @access public
+     * @return mixed
+     */
+    public function addTeamMembersTest($projectID = 0, $project = null, $members = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('addTeamMembers');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $projectID, $project, $members);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
