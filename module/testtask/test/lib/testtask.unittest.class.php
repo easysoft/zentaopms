@@ -779,4 +779,25 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test importSuiteOfUnitResult method.
+     *
+     * @param  object $suite
+     * @access public
+     * @return int
+     */
+    public function importSuiteOfUnitResultTest(object $suite): int
+    {
+        $this->objectModel->loadModel('action');
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('importSuiteOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$suite]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
