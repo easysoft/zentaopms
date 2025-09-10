@@ -466,4 +466,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式版本键值对。
+     * Test get build pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBuildPairsTest(): array
+    {
+        $result = $this->objectModel->getBuildPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
