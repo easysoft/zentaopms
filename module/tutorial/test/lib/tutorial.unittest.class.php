@@ -1208,4 +1208,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getDemandpool method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDemandpoolTest(): object
+    {
+        $result = $this->objectModel->getDemandpool();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
