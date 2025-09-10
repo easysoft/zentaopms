@@ -1250,4 +1250,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getResearchStageStats method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getResearchStageStatsTest(): array
+    {
+        $result = $this->objectModel->getResearchStageStats();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
