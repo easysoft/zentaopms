@@ -11547,9 +11547,9 @@ class upgradeModel extends model
      * Buildin testcase stage deliverable.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function buildinTestcaseStageDeliverable()
+    public function buildinTestcaseStageDeliverable(): bool
     {
         $this->app->loadLang('testcase');
         $clientLang        = $this->app->getClientLang();
@@ -11561,11 +11561,50 @@ class upgradeModel extends model
             ->fetchPairs();
 
         if(empty($testcaseStageList)) $testcaseStageList = $this->lang->testcase->stageList;
+        $this->createTestcaseDeliverable($testcaseStageList);
 
-        $modules = $this->dao->select('root,id')->from(TABLE_MODULE)
+        return true;
+    }
+
+    /**
+     * 创建测试用例阶段类型交付物。
+     * Create testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function createTestcaseDeliverable(array $modules): bool
+    {
+        $testModules = $this->dao->select('root,id')->from(TABLE_MODULE)
             ->where('type')->eq('deliverable')
             ->andWhere('extra')->eq('test')
             ->fetchPairs();
+
+        $testDeliverable = $this->dao->select('category')->from(TABLE_DELIVERABLE)
+            ->where('buitin')->eq('1')
+            ->andWhere('module')->in($testModules)
+            ->fetchPairs();
+
+        /* 已经存在但是被删除的交付物进行还原操作。 */
+        foreach($modules as $key => $name)
+        {
+            if(empty($name)) continue;
+            if(!empty($testDeliverable[$key]))
+            {
+                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+                unset($modules[$key]);
+            }
+        }
+
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
+
+        if(empty($modules)) return true;
 
         $deliverable = new stdClass();
         $deliverable->status      = 'enabled';
@@ -11581,16 +11620,65 @@ class upgradeModel extends model
         $workflows = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
         foreach($workflows as $workflow)
         {
-            $deliverable->module        = zget($modules, $workflow->id, 0);
+            $groupID = $workflow->id;
+            if(!empty($activityList[$groupID]))
+            {
+                $otherActivity = reset($activityList[$groupID]);
+                $otherActivityID = $otherActivity->id;
+            }
+            else
+            {
+                if(empty($projectModules[$groupID])) continue;
+                $otherActivityID = $this->createOtherActivity($projectModules[$groupID], $groupID);
+            }
+
+            $deliverable->module        = zget($testModules, $workflow->id, 0);
             $deliverable->workflowGroup = $workflow->id;
-            foreach($testcaseStageList as $key => $name)
+            $deliverable->activity      = $otherActivityID;
+            foreach($modules as $key => $name)
             {
                 if(empty($name)) continue;
                 $deliverable->category = $key; // 标记交付物的类型。
                 $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
             }
         }
+        return true;
     }
+
+    /**
+     * 删除测试用例阶段交付物。
+     * Delete testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function deleteTestcaseDeliverable(array $modules): bool
+    {
+        foreach($modules as $key => $name)
+        {
+            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+        }
+        return true;
+    }
+
+    /**
+     * 变更测试用例阶段交付物名称。
+     * Change testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function changeTestcaseDeliverable(array $modules): bool
+    {
+        foreach($modules as $key => $name)
+        {
+            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+        }
+        return true;
+    }
+
 
     /**
      * 升级项目和迭代的交付物配置。
