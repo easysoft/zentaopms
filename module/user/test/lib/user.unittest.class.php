@@ -1184,4 +1184,18 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test uploadAvatar method.
+     *
+     * @access public
+     * @return array
+     */
+    public function uploadAvatarTest(): array
+    {
+        $result = $this->objectModel->uploadAvatar();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
