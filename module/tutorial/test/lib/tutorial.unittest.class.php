@@ -856,4 +856,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式看板卡片组。
+     * Test get card group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCardGroupTest(): array
+    {
+        $result = $this->objectModel->getCardGroup();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
