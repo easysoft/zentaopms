@@ -1034,4 +1034,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式分支键值对。
+     * Test get branch pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranchPairsTest(): array
+    {
+        $result = $this->objectModel->getBranchPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
