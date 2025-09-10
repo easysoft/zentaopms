@@ -1326,4 +1326,52 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test mergeAclsToUserView method.
+     *
+     * @param  string $account
+     * @param  object $userView
+     * @param  array  $acls
+     * @param  string $projects
+     * @access public
+     * @return mixed
+     */
+    public function mergeAclsToUserViewTest(string $account, object $userView, array $acls, string $projects)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('mergeAclsToUserView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $userView, $acls, $projects);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getObjectsAuthedUsers method.
+     *
+     * @param  array  $objects
+     * @param  string $objectType
+     * @param  array  $stakeholderGroup
+     * @param  array  $teamsGroup
+     * @param  array  $whiteListGroup
+     * @param  array  $adminsGroup
+     * @param  array  $parentStakeholderGroup
+     * @param  array  $parentPMGroup
+     * @access public
+     * @return array
+     */
+    public function getObjectsAuthedUsersTest(array $objects, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getObjectsAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($objects, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
