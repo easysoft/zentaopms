@@ -637,6 +637,8 @@ class weeklyModel extends model
         $scope = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('reportTemplate')->andWhere('main')->eq(1)->andWhere('vision')->eq($this->config->vision)->fetch();
         if($scope) return false;
 
+        $this->loadModel('setting');
+
         /* Set scope data. */
         $scope = new stdClass();
         $scope->type      = 'reportTemplate';
@@ -654,14 +656,12 @@ class weeklyModel extends model
 
                 $scope->name = $scopeName;
                 $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
-
-                $scopeID = $this->dao->lastInsertID();
-                $scopeMaps[$scopeKey] = $scopeID;
+                $scopeMaps[$scopeKey] = $this->dao->lastInsertID();
             }
-            if(!empty($scopeMaps)) $this->loadModel('setting')->setItem("system.reporttemplate.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
+            if(!empty($scopeMaps)) $this->setting->setItem("system.reporttemplate.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
         }
 
-        return $scopeID;
+        return array_push($scopeMaps);
     }
 
     /**
