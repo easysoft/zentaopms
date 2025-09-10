@@ -11311,7 +11311,7 @@ class upgradeModel extends model
      * @access public
      * @return int
      */
-    public function addDeliverable(string $name, object $deliverable, object $deliverableStage, array &$nameFilter): int
+    public function addDeliverable(string $name, object $deliverable, object $deliverableStage, array &$nameFilter = array()): int
     {
         /* 重名的交付物名称后面加数字。 */
         if(!empty($nameFilter[$name]))
@@ -11543,6 +11543,56 @@ class upgradeModel extends model
     }
 
     /**
+     * 内置测试环节列表交付物。
+     * Buildin testcase stage deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function buildinTestcaseStageDeliverable()
+    {
+        $this->app->loadLang('testcase');
+        $clientLang        = $this->app->getClientLang();
+        $testcaseStageList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('testcase')
+            ->andWhere('section')->eq('stageList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if(empty($typeList)) $testcaseStageList = $this->lang->testcase->stageList;
+
+        $modules = $this->dao->select('root,id')->from(TABLE_MODULE)
+            ->where('type')->eq('deliverable')
+            ->andWhere('extra')->eq('test')
+            ->fetchPairs();
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'enabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->template    = '[]';
+        $deliverable->buildin     = '1';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
+
+        $workflows = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            $deliverable->module        = zget($modules, $workflow->id, 0);
+            $deliverable->workflowGroup = $workflow->id;
+            foreach($testcaseStageList as $key => $name)
+            {
+                if(empty($name)) continue;
+                $deliverable->category = $key; // 标记交付物的类型。
+                $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
+            }
+        }
+    }
+
+    /**
      * 升级项目和迭代的交付物配置。
      * Upgrade project deliverable.
      *
@@ -11698,12 +11748,12 @@ class upgradeModel extends model
 
     /**
      * 内置基线评审到项目流程中。
-     * buildInBaselineReviewFlow
+     * Buildin baseline review flow.
      *
      * @access public
      * @return void
      */
-    public function buildInBaselineReview()
+    public function buildinBaselineReview()
     {
         $reviewFlow = new stdclass();
         $reviewFlow->flow        = '1';

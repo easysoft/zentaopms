@@ -596,6 +596,7 @@ CREATE TABLE `zt_deliverable` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` int(8) unsigned NOT NULL DEFAULT 0,
   `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `buildin` enum('0','1') NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `status` varchar(30) NOT NULL DEFAULT 'enabled',
   `activity` int(8) unsigned NOT NULL DEFAULT 0,

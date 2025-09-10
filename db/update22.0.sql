@@ -6,6 +6,7 @@ ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmab
 ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
 ALTER TABLE `zt_deliverable` ADD `status` varchar(30) NOT NULL DEFAULT 'enabled' AFTER `name`;
 ALTER TABLE `zt_deliverable` ADD `category` varchar(255) NOT NULL DEFAULT '' AFTER `lastEditedDate`;
+ALTER TABLE `zt_deliverable` ADD `buildin` enum('0','1') NOT NULL DEFAULT '0' AFTER `module`;
 
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,

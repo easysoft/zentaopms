@@ -104,6 +104,7 @@ $lang->upgrade->projectName     = 'Project Name';
 $lang->upgrade->projectManage   = 'Project Manage';
 $lang->upgrade->compatibleEXT   = 'Extension mechanism compatible';
 $lang->upgrade->fileName        = 'File Name';
+$lang->upgrade->list            = ' List';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
