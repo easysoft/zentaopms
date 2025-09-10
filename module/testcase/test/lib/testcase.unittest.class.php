@@ -2068,4 +2068,27 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test getXmindImport method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return string|false
+     */
+    public function getXmindImportTest(string $fileName): string|false
+    {
+        if(!file_exists($fileName)) return false;
+        
+        // Check if file can be loaded as XML (suppress XML errors)
+        libxml_use_internal_errors(true);
+        $xmlNode = simplexml_load_file($fileName);
+        libxml_clear_errors();
+        if($xmlNode === false) return false;
+        
+        $result = $this->objectModel->getXmindImport($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
