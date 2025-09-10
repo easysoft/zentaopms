@@ -659,4 +659,19 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test getGroupByCases method.
+     *
+     * @param  int|array $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getGroupByCasesTest($caseIDList)
+    {
+        $result = $this->objectModel->getGroupByCases($caseIDList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
