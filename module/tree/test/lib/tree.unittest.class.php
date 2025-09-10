@@ -927,4 +927,21 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test createManageLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return object
+     */
+    public function createManageLinkTest($type, $module)
+    {
+        $result = $this->objectModel->createManageLink($type, $module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
