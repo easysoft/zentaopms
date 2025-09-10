@@ -1263,4 +1263,29 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectView method.
+     *
+     * @param  string $account
+     * @param  array  $allProjects
+     * @param  array  $manageObjects
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $projectStakeholderGroup
+     * @access public
+     * @return mixed
+     */
+    public function getProjectViewTest(string $account = '', array $allProjects = array(), array $manageObjects = array(), array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $projectStakeholderGroup = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProjectView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
