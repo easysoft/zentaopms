@@ -916,4 +916,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式系统。
+     * Test get system.
+     *
+     * @access public
+     * @return object
+     */
+    public function getSystemTest(): object
+    {
+        $result = $this->objectModel->getSystem();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
