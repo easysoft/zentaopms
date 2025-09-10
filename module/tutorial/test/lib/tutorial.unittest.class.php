@@ -496,4 +496,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式用例。
+     * Test get case.
+     *
+     * @access public
+     * @return object
+     */
+    public function getCaseTest(): object
+    {
+        $result = $this->objectModel->getCase();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
