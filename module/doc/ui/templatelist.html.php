@@ -95,6 +95,7 @@ docApp
     set::spaceID($spaceID),
     set::libID($libID),
     set::docID((int)$docID),
+    set::docVersion($docVersion),
     set::docIcon('file-archive'),
     set::noSpace('hidden'),
     set::noModule(),
