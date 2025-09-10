@@ -796,4 +796,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式看板组。
+     * Test get groups.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGroupsTest(): array
+    {
+        $result = $this->objectModel->getGroups();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
