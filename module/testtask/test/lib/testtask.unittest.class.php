@@ -589,4 +589,23 @@ class testtaskTest
         $newRun = $this->objectModel->dao->select('*')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
         return $newRun ? $newRun : false;
     }
+
+    /**
+     * Test processExecutionName method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function processExecutionNameTest(array $tasks): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processExecutionName');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($tasks));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
