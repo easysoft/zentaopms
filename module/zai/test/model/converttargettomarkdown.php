@@ -7,19 +7,22 @@ title=测试 zaiModel::convertTargetToMarkdown();
 timeout=0
 cid=0
 
-- 测试转换story类型的目标对象
- - 属性content
- - 属性attrs
-- 测试转换bug类型的目标对象
- - 属性content
- - 属性attrs
-- 测试转换未知类型的目标对象
- - 属性content
- - 属性title
- - 属性attrs
-- 测试转换具有name属性的目标对象
- - 属性title
- - 属性attrs
+- 测试转换story类型的目标对象 @1
+- 测试story返回attrs属性 @1
+- 测试转换bug类型的目标对象 @1
+- 测试bug返回attrs属性 @1
+- 测试转换未知类型的目标对象 @1
+- 测试未知类型返回title @1
+- 测试未知类型返回attrs属性 @1
+- 测试转换具有name属性的目标对象 @1
+- 测试name对象返回attrs属性 @1
+- 验证objectType属性 @unknowntype
+- 验证objectID属性 @1
+- 验证objectKey属性 @unknowntype-1
+- 验证story的objectType @story
+- 验证story的objectID @1
+- 验证bug的objectType @bug
+- 验证bug的objectID @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
