@@ -715,4 +715,20 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test formatZtfLog method.
+     *
+     * @param  string $result
+     * @param  array  $stepResults
+     * @access public
+     * @return string
+     */
+    public function formatZtfLogTest(string $result, array $stepResults): string
+    {
+        $result = $this->objectModel->formatZtfLog($result, $stepResults);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
