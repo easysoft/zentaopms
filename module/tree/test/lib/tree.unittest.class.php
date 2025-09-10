@@ -908,4 +908,23 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test createEpicLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
+    public function createEpicLinkTest($type, $module, $parent = '0', $extra = array())
+    {
+        $result = $this->objectModel->createEpicLink($type, $module, $parent, $extra);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
