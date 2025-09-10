@@ -1495,4 +1495,27 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectAuthedUsers method.
+     *
+     * @param  object $project
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return array
+     */
+    public function getProjectAuthedUsersTest(object $project, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProjectAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($project, $stakeholders, $teams, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
