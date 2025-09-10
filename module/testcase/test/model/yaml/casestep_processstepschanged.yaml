@@ -1,0 +1,34 @@
+---
+title: 测试用例步骤数据
+desc: 用于测试processStepsChanged方法的测试用例步骤数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 步骤ID
+  range: 1-10
+  
+- field: parent
+  note: 父步骤ID
+  range: 0
+
+- field: case
+  note: 测试用例ID
+  range: 1-3
+
+- field: version
+  note: 版本号
+  range: 1
+
+- field: type
+  note: 步骤类型
+  range: step{4},group{2},item{4}
+
+- field: desc
+  note: 步骤描述
+  range: '步骤描述1,步骤描述2,步骤描述3,步骤描述4,步骤描述5'
+
+- field: expect
+  note: 期望结果
+  range: '期望结果1,期望结果2,期望结果3,期望结果4,期望结果5'

@@ -1992,4 +1992,80 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test processStepsChanged method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return bool
+     */
+    public function processStepsChangedTest(string $testType): bool
+    {
+        // 创建测试用例对象
+        $case = new stdclass();
+        
+        // 创建旧步骤数据
+        $oldStep = array();
+        $oldStep1 = new stdclass();
+        $oldStep1->desc = '步骤描述1';
+        $oldStep1->expect = '期望结果1';
+        $oldStep1->type = 'step';
+        $oldStep[] = $oldStep1;
+        
+        $oldStep2 = new stdclass();
+        $oldStep2->desc = '步骤描述2';
+        $oldStep2->expect = '期望结果2';
+        $oldStep2->type = 'group';
+        $oldStep[] = $oldStep2;
+
+        // 根据测试类型设置不同的新步骤数据
+        switch($testType)
+        {
+            case 'same_content':
+                // 相同内容
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_count':
+                // 不同数量
+                $case->steps = array('步骤描述1');
+                $case->expects = array('期望结果1');
+                $case->stepType = array('step');
+                break;
+                
+            case 'different_desc':
+                // 不同描述
+                $case->steps = array('步骤描述1修改', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_expect':
+                // 不同期望
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1修改', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_type':
+                // 不同类型
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('item', 'group');
+                break;
+        }
+
+        // 使用反射来调用保护方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processStepsChanged');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $case, $oldStep);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
