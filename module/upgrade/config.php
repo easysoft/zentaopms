@@ -329,7 +329,6 @@ $config->upgrade->ipdVersion['ipd4_0']         = '21_7_1';
 $config->upgrade->ipdVersion['ipd4_1']         = '21_7_2';
 $config->upgrade->ipdVersion['ipd4_2']         = '21_7_3';
 $config->upgrade->ipdVersion['ipd4_3']         = '21_7_4'; // ipd insert position.
-$config->upgrade->ipdVersion['ipd4_4']         = '21_7_5'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
