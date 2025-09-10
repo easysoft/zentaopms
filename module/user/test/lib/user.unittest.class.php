@@ -1217,4 +1217,28 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProgramView method.
+     *
+     * @param  string $account
+     * @param  array  $allPrograms
+     * @param  array  $manageObjects
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $programStakeholderGroup
+     * @access public
+     * @return mixed
+     */
+    public function getProgramViewTest(string $account = '', array $allPrograms = array(), array $manageObjects = array(), array $stakeholders = array(), array $whiteList = array(), array $programStakeholderGroup = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
