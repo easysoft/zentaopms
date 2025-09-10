@@ -1518,4 +1518,26 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * 测试保存旧版用户模板方法。
+     * Test saveOldUserTemplate method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function saveOldUserTemplateTest(string $type): array
+    {
+        $this->objectModel->saveOldUserTemplate($type);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        $result = dao::isError() ? 0 : 1;
+        return array('result' => $result, 'errors' => $errors);
+    }
 }
