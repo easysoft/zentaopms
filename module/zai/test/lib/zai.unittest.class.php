@@ -130,6 +130,49 @@ class zaiTest
     {
         return zaiModel::getSyncTypes();
     }
+
+    /**
+     * Test syncNextTarget method.
+     *
+     * @param  string $memoryID
+     * @param  string $type
+     * @param  int $id
+     * @access public
+     * @return array|null
+     */
+    public function syncNextTargetTest($memoryID, $type, $id)
+    {
+        $result = $this->objectModel->syncNextTarget($memoryID, $type, $id);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test convertTargetToMarkdown static method.
+     *
+     * @param  string $type
+     * @param  object $target
+     * @access public
+     * @return array
+     */
+    public function convertTargetToMarkdownTest($type, $target)
+    {
+        return zaiModel::convertTargetToMarkdown($type, $target);
+    }
+
+    /**
+     * Test convertStoryToMarkdown static method.
+     *
+     * @param  object $story
+     * @access public
+     * @return array
+     */
+    public function convertStoryToMarkdownTest($story)
+    {
+        return zaiModel::convertStoryToMarkdown($story);
+    }
+
     /**
      * Test convertDemandToMarkdown static method.
      *
