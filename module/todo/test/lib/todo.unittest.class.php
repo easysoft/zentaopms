@@ -460,4 +460,23 @@ class todoTest
         $result = $this->objectModel->insert($todo);
         return dao::isError() ? dao::getError() : $result;
     }
+
+    /**
+     * Test dateRange method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function dateRangeTest(string $type): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('dateRange');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
