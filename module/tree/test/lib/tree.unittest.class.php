@@ -980,4 +980,24 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test setModuleLang method.
+     *
+     * @access public
+     * @return object
+     */
+    public function setModuleLangTest()
+    {
+        global $lang;
+        
+        // 清空现有的module语言项
+        unset($lang->module);
+        
+        $this->objectModel->setModuleLang();
+
+        if(dao::isError()) return dao::getError();
+
+        return $lang->module;
+    }
 }
