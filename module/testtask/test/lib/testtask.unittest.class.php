@@ -977,4 +977,29 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test initCase method.
+     *
+     * @param  int    $product
+     * @param  string $title
+     * @param  string $now
+     * @param  string $auto
+     * @param  string $frame
+     * @param  string $type
+     * @param  string $stage
+     * @access public
+     * @return object
+     */
+    public function initCaseTest(int $product, string $title, string $now, string $auto, string $frame, string $type = 'unit', string $stage = 'unittest'): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initCase');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$product, $title, $now, $auto, $frame, $type, $stage]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
