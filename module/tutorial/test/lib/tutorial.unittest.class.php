@@ -826,4 +826,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式看板列。
+     * Test get columns.
+     *
+     * @access public
+     * @return array
+     */
+    public function getColumnsTest(): array
+    {
+        $result = $this->objectModel->getColumns();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
