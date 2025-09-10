@@ -91,4 +91,20 @@ class weekly extends control
             $this->weekly->save($projectID, $date);
         }
     }
+
+    /**
+     *  定时创建报告。
+     *  Generate weekly report.
+     *
+     * @access public
+     * @return void
+     */
+    public function createCycleReport()
+    {
+        if(in_array($this->config->edition, array('open', 'biz'))) return print('Support min edition is max');
+
+        $errors = $this->loadModel('reporttemplate')->createCycleReport();
+        if($errors) return print(json_encode($errors));
+        return print('success');
+    }
 }
