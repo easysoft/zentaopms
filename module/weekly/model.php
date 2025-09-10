@@ -593,8 +593,8 @@ class weeklyModel extends model
     }
 
     /**
-     * 设置内置项目周报模板。
-     * Set builtin weekly report template.
+     * 添加内置项目周报模板。
+     * Add builtin project weekly report template.
      *
      * @access public
      * @return bool
@@ -603,7 +603,7 @@ class weeklyModel extends model
     {
         /* Set scope data. */
         $scopeID = $this->addBuiltinScope();
-        if(!$scopeID) return true;
+        if(!$scopeID) return false;
 
         /* Set category data. */
         $categoryID = $this->addBuiltinCategory($scopeID);

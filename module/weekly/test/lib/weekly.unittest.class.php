@@ -432,4 +432,19 @@ class weeklyTest
         $content = $this->objectModel->getBuildinRawContent(array());
         return json_decode($content, true);
     }
+
+    /**
+     * 添加内置项目周报模板。
+     * Add builtin project weekly report template.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function addBuiltinWeeklyTemplateTest():bool|object
+    {
+        $result = $this->objectModel->addBuiltinWeeklyTemplate();
+        if(!$result) return false;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
+    }
 }
