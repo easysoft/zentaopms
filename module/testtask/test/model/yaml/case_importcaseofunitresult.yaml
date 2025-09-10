@@ -1,0 +1,60 @@
+---
+title: 测试用例数据定义
+desc: importCaseOfUnitResult方法测试用例数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+- field: title
+  note: 用例标题
+  range: 测试用例1,测试用例2,测试用例3{3},单元测试用例1,单元测试用例2,新建测试用例{4}
+- field: product
+  note: 产品ID
+  range: 1{5},2{5}
+- field: module
+  note: 模块ID
+  range: 1-5:2
+- field: type
+  note: 用例类型
+  range: unit{6},feature{4}
+- field: auto
+  note: 自动化类型
+  range: unit{5},no{5}
+- field: status
+  note: 用例状态
+  range: normal{8},blocked{2}
+- field: version
+  note: 版本号
+  range: 1{8},2{2}
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2,admin,user1{5}
+- field: openedDate
+  note: 创建时间
+  range: (2024-01-01 10:00:00)-(2024-01-03 12:00:00):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: precondition
+  note: 前置条件
+  range: 无特殊要求,需要登录系统,准备测试数据{8}
+- field: keywords
+  note: 关键词
+  range: 单元测试,功能测试,接口测试{8}
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: frequency
+  note: 执行频率
+  range: 1{6},2{3},3{1}
+- field: order
+  note: 排序
+  range: 0-9
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{5},user1{3},user2{2}
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: (2024-01-01 10:00:00)-(2024-01-05 18:00:00):12h
+  format: YYYY-MM-DD hh:mm:ss
