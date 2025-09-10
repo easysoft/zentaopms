@@ -1,0 +1,38 @@
+---
+title: 项目测试数据
+desc: 用于测试getProgramStakeholder方法的project表数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-6
+- field: type
+  note: 项目类型
+  range: program{6}
+- field: name
+  note: 项目名称
+  range: 测试项目1,测试项目2,测试项目3,测试项目4,测试项目5,测试项目6
+- field: code
+  note: 项目代码
+  range: PRJ001,PRJ002,PRJ003,PRJ004,PRJ005,PRJ006
+- field: PM
+  note: 项目经理
+  range: admin,pm1,pm2,pm3,pm4,pm5
+- field: PO
+  note: 产品负责人
+  range: po1{6}
+- field: status
+  note: 项目状态
+  range: wait{2},doing{3},closed{1}
+- field: openedBy
+  note: 创建者
+  range: admin{6}
+- field: openedDate
+  note: 创建日期
+  range: 2023-01-01{6}
+- field: deleted
+  note: 删除标记
+  range: 0{6}
+- field: vision
+  note: 视图
+  range: rnd{6}

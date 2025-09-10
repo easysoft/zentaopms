@@ -1,0 +1,41 @@
+---
+title: 项目干系人测试数据
+desc: 用于测试getProgramStakeholder方法的stakeholder表数据
+
+fields:
+- field: id
+  note: 干系人ID
+  range: 1-10
+- field: objectID
+  note: 项目ID
+  range: 1,2,3{2},4{2}
+- field: objectType
+  note: 对象类型
+  range: program{8}
+- field: user
+  note: 用户账号
+  range: admin,user1,user2,user3,user4{2},user5{2}
+- field: type
+  note: 干系人类型
+  range: inside{5},outside{3}
+- field: key
+  note: 关键干系人
+  range: 0{6},1{2}
+- field: from
+  note: 来源
+  range: stakeholder{8}
+- field: createdBy
+  note: 创建者
+  range: admin{8}
+- field: createdDate
+  note: 创建日期
+  range: 2023-01-01{8}
+- field: editedBy
+  note: 编辑者
+  range: admin{8}
+- field: editedDate
+  note: 编辑日期
+  range: 2023-01-01{8}
+- field: deleted
+  note: 删除标记
+  range: 0{8}

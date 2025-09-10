@@ -1307,4 +1307,23 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProgramStakeholder method.
+     *
+     * @param  mixed $programProduct
+     * @access public
+     * @return mixed
+     */
+    public function getProgramStakeholderTest($programProduct = null)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramStakeholder');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $programProduct);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
