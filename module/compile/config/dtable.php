@@ -57,7 +57,7 @@ $config->compile->dtable->fieldList['createdDate']['hint']       = true;
 $config->compile->dtable->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->compile->actionList = array();
-$config->compile->actionList['logs']['icon'] = 'history';
+$config->compile->actionList['logs']['icon'] = 'file-log';
 $config->compile->actionList['logs']['text'] = $lang->compile->logs;
 $config->compile->actionList['logs']['hint'] = $lang->compile->logs;
 $config->compile->actionList['logs']['url']  = array('module' => 'compile', 'method' => 'logs', 'params' => 'compileID={id}');
