@@ -11928,7 +11928,10 @@ class upgradeModel extends model
             $deliverable->createdDate = $review->createdDate;
             $deliverable->status      = $review->status;
             $deliverable->version     = $review->version;
+
             $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+            $deliverableID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
         }
     }
 }
