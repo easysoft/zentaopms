@@ -307,4 +307,48 @@ class zaiTest
         }
         return zaiModel::convertFeedbackToMarkdown($feedback);
     }
+    public function enableVectorizationTest($force = false)
+    {
+        $result = $this->objectModel->enableVectorization($force);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test callAPI method.
+     *
+     * @param  string $path
+     * @param  string $method
+     * @param  array|null $params
+     * @param  array|null $postData
+     * @param  bool $admin
+     * @access public
+     * @return array
+     */
+    public function callAPITest($path, $method = 'POST', $params = null, $postData = null, $admin = false)
+    {
+        $result = $this->objectModel->callAPI($path, $method, $params, $postData, $admin);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test callAdminAPI method.
+     *
+     * @param  string $path
+     * @param  string $method
+     * @param  array|null $params
+     * @param  array|null $postData
+     * @access public
+     * @return array
+     */
+    public function callAdminAPITest($path, $method = 'POST', $params = null, $postData = null)
+    {
+        $result = $this->objectModel->callAdminAPI($path, $method, $params, $postData);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
