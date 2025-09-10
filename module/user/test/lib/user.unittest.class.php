@@ -1288,4 +1288,23 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getManageListGroupByType method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function getManageListGroupByTypeTest(string $account = '')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getManageListGroupByType');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
