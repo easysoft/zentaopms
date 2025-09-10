@@ -588,14 +588,14 @@ class doc extends control
      *
      * @param  int    $libID
      * @param  string $type
-     * @param  int    $docID
+     * @param  mixed  $docID
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
+    public function browseTemplate(int $libID = 0, string $type = 'all', mixed $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
     {
         /* 添加内置的范围、分类、文档模板。*/
         /* Add the built-in scopes and type and doc template. */
@@ -618,11 +618,15 @@ class doc extends control
         $allModules   = array_column($allModules, 'fullName', 'id');
         foreach($templateList as $template) $template->moduleName = zget($allModules, $template->module);
 
+        $docVersion = 0;
+        if(is_string($docID) && strpos($docID, '_') !== false) list($docID, $docVersion) = explode('_', $docID);
+
         $this->view->title        = $this->lang->doc->template;
         $this->view->libID        = $libID;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->templateList = $templateList;
         $this->view->docID        = $docID;
+        $this->view->docVersion   = $docVersion;
         $this->view->orderBy      = $orderBy;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
@@ -1359,6 +1363,8 @@ class doc extends control
         $isApi = is_string($docID) && strpos($docID, 'api.') === 0;
         $docID = $isApi ? (int)str_replace('api.', '', $docID) : (int)$docID;
         $doc   = $isApi ? $this->loadModel('api')->getByID($docID, $version) : $this->doc->getByID($docID, $version, true);
+        $docParam = $version ? ($docID . '_' . $version) : $docID;
+        if($isApi) $docParam = 'api.' . $docParam;
         if(!$doc || !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -1376,7 +1382,7 @@ class doc extends control
 
         if($doc->templateType)
         {
-            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docParam&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
             return;
         }
 
@@ -1396,8 +1402,6 @@ class doc extends control
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->view->title = $doc->title;
-        $docParam = $version ? ($docID . '_' . $version) : $docID;
-        if($isApi) $docParam = 'api.' . $docParam;
         $libID = isset($lib->id) ? $lib->id : 0;
         echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docParam&mode=view");
     }
