@@ -19,7 +19,7 @@ class systemTest
         $result = $this->objectModel->updateMinioDomain();
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return is_null($result) ? '0' : $result;
     }
 
     /**
