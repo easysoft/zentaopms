@@ -13,4 +13,20 @@ class zaiTest
         $result = $this->objectModel->getSetting($includeAdmin);
         return $result;
     }
+
+    /**
+     * Test getToken method.
+     *
+     * @param  object|null $zaiConfig
+     * @param  bool $admin
+     * @access public
+     * @return array
+     */
+    public function getTokenTest($zaiConfig = null, $admin = false)
+    {
+        $result = $this->objectModel->getToken($zaiConfig, $admin);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
