@@ -451,4 +451,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式版本列表。
+     * Test get builds.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBuildsTest(): array
+    {
+        $result = $this->objectModel->getBuilds();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
