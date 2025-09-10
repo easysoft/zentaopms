@@ -757,4 +757,26 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test importDataOfUnitResult method.
+     *
+     * @param  int    $taskID
+     * @param  int    $productID
+     * @param  array  $suites
+     * @param  array  $cases
+     * @param  array  $results
+     * @param  array  $suiteNames
+     * @param  array  $caseTitles
+     * @param  string $auto
+     * @access public
+     * @return bool
+     */
+    public function importDataOfUnitResultTest(int $taskID, int $productID, array $suites, array $cases, array $results, array $suiteNames, array $caseTitles, string $auto = 'unit'): bool
+    {
+        $result = $this->objectModel->importDataOfUnitResult($taskID, $productID, $suites, $cases, $results, $suiteNames, $caseTitles, $auto);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

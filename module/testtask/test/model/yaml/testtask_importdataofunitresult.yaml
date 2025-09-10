@@ -1,0 +1,102 @@
+---
+title: 测试任务数据定义
+desc: 用于 importDataOfUnitResult 方法的测试任务数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: "Unit Test Task{3}, Function Test Task{3}, API Test Task{2}, Performance Test Task{2}"
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-3
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1-5
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0{5}, 1-5{5}
+  format: ""
+- field: build
+  note: 版本ID
+  range: 1-5
+  format: ""
+- field: owner
+  note: 负责人
+  range: admin{5}, user1{3}, user2{2}
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1{3}, 2{4}, 3{3}
+  format: ""
+- field: begin
+  note: 开始时间
+  range: "2023-01-01"-"2023-06-30":30D
+  format: YYYY-MM-DD
+- field: end
+  note: 结束时间
+  range: "2023-07-01"-"2023-12-31":30D
+  format: YYYY-MM-DD
+- field: realBegan
+  note: 实际开始时间
+  range: ""{5}, "2023-01-01"-"2023-06-30":30D{5}
+  format: YYYY-MM-DD
+- field: realFinished
+  note: 实际结束时间
+  range: ""{5}, "2023-07-01"-"2023-12-31":30D{5}
+  format: YYYY-MM-DD
+- field: status
+  note: 任务状态
+  range: wait{3}, doing{4}, done{2}, blocked{1}
+  format: ""
+- field: subStatus
+  note: 子状态
+  range: ""{10}
+  format: ""
+- field: desc
+  note: 任务描述
+  range: "Unit testing task description{3}, Functional testing task description{3}, API testing task{2}, Performance testing{2}"
+  format: ""
+- field: report
+  note: 测试报告
+  range: ""{10}
+  format: ""
+- field: mail
+  note: 邮件通知
+  range: ""{5}, admin@test.com{3}, user1@test.com{2}
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 0{10}
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: ""{10}
+  format: ""
+- field: auto
+  note: 自动化类型
+  range: no{5}, unit{3}, func{2}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{6}, user1{2}, user2{2}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00"-"2023-12-31 23:59:59":30D
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: "0"{9}, "1"{1}
+  format: ""
