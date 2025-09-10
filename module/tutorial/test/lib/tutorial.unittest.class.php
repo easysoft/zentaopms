@@ -1049,4 +1049,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式项目关联分支。
+     * Test get branches by project.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranchesByProjectTest(): array
+    {
+        $result = $this->objectModel->getBranchesByProject();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
