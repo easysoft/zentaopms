@@ -1002,4 +1002,23 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test initResult method.
+     *
+     * @param  string $now
+     * @access public
+     * @return object
+     */
+    public function initResultTest(string $now): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$now]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
