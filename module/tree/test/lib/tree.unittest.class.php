@@ -883,4 +883,29 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test buildTree method.
+     *
+     * @param  object        $module
+     * @param  string        $type
+     * @param  string        $parent
+     * @param  array         $userFunc
+     * @param  array|string  $extra
+     * @param  string        $branch
+     * @access public
+     * @return mixed
+     */
+    public function buildTreeTest($module, $type, $parent = '0', $userFunc = array(), $extra = array(), $branch = 'all')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('buildTree');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $module, $type, $parent, $userFunc, $extra, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
