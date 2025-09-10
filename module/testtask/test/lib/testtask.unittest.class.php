@@ -692,4 +692,27 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test processStepResults method.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $caseID
+     * @param  string $caseResult
+     * @param  array  $postSteps
+     * @param  array  $postReals
+     * @access public
+     * @return array
+     */
+    public function processStepResultsTest(array $caseIdList, int $caseID, string $caseResult, array $postSteps, array $postReals): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processStepResults');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$caseIdList, $caseID, $caseResult, $postSteps, $postReals]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
