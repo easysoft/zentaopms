@@ -1,0 +1,81 @@
+---
+title: 测试结果表数据
+desc: 用于测试 initResultForAutomatedTest 方法的 testresult 表数据
+
+fields:
+- field: id
+  note: 结果ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+- field: run
+  note: 测试运行ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: case
+  note: 测试用例ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+- field: version
+  note: 用例版本
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: job
+  note: 任务ID
+  range: 0-10
+  prefix: ""
+  postfix: ""
+- field: compile
+  note: 编译ID
+  range: 0-5
+  prefix: ""
+  postfix: ""
+- field: caseResult
+  note: 测试结果
+  range: '["","pass","fail","blocked","skipped"]'
+  prefix: ""
+  postfix: ""
+- field: stepResults
+  note: 步骤结果
+  range: '["","[{\"id\":1,\"result\":\"pass\"}]","[{\"id\":2,\"result\":\"fail\"}]"]'
+  prefix: ""
+  postfix: ""
+- field: ZTFResult
+  note: ZTF结果
+  range: '["","success","fail","error"]'
+  prefix: ""
+  postfix: ""
+- field: node
+  note: 节点ID
+  range: 0-10
+  prefix: ""
+  postfix: ""
+- field: lastRunner
+  note: 最后执行人
+  range: 'admin,user{5},tester{3}'
+  prefix: ""
+  postfix: ""
+- field: date
+  note: 执行时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  prefix: ""
+  postfix: ""
+- field: duration
+  note: 执行耗时
+  range: 0-3600
+  prefix: ""
+  postfix: ""
+- field: xml
+  note: XML结果
+  range: '["","<xml>test</xml>","<result>pass</result>"]'
+  prefix: ""
+  postfix: ""
+- field: deploy
+  note: 部署ID
+  range: 0-5
+  prefix: ""
+  postfix: ""

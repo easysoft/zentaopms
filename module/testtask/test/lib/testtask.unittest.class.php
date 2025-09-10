@@ -674,4 +674,22 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test initResultForAutomatedTest method.
+     *
+     * @param  int $runID
+     * @param  int $caseID
+     * @param  int $version
+     * @param  int $nodeID
+     * @access public
+     * @return int|false
+     */
+    public function initResultForAutomatedTestTest(int $runID = 0, int $caseID = 0, int $version = 0, int $nodeID = 0)
+    {
+        $result = $this->objectModel->initResultForAutomatedTest($runID, $caseID, $version, $nodeID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
