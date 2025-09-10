@@ -88,4 +88,46 @@ class zaiTest
 
         return true;
     }
+
+    /**
+     * Test getNextTarget method.
+     *
+     * @param  string $type
+     * @param  int $id
+     * @access public
+     * @return object|null
+     */
+    public function getNextTargetTest($type, $id)
+    {
+        $result = $this->objectModel->getNextTarget($type, $id);
+        if(dao::isError()) return dao::getError();
+
+        if(is_null($result) || $result === false) return false;
+        if(is_object($result) && empty((array)$result)) return false;
+
+        return $result;
+    }
+
+    /**
+     * Test getNextSyncType static method.
+     *
+     * @param  string $currentType
+     * @access public
+     * @return string
+     */
+    public function getNextSyncTypeTest($currentType = '')
+    {
+        return zaiModel::getNextSyncType($currentType);
+    }
+
+    /**
+     * Test getSyncTypes static method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSyncTypesTest()
+    {
+        return zaiModel::getSyncTypes();
+    }
 }
