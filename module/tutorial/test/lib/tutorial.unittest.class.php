@@ -329,4 +329,20 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试根据需求ID获取需求详情。
+     * Test get story by ID.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return object
+     */
+    public function getStoryByIDTest(int $storyID): object
+    {
+        $result = $this->objectModel->getStoryByID($storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
