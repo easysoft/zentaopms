@@ -931,4 +931,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式应用键值对。
+     * Test get system pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSystemPairsTest(): array
+    {
+        $result = $this->objectModel->getSystemPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
