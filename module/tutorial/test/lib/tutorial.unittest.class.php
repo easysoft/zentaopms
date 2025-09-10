@@ -781,4 +781,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式看板默认区域键值对。
+     * Test get region pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRegionPairsTest(): array
+    {
+        $result = $this->objectModel->getRegionPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
