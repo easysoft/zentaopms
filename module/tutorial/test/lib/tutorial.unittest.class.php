@@ -284,4 +284,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式研发需求。
+     * Test get tutorial story.
+     *
+     * @access public
+     * @return object
+     */
+    public function getStoryTest(): object
+    {
+        $result = $this->objectModel->getStory();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
