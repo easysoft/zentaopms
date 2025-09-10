@@ -1198,4 +1198,23 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test initViewObjects method.
+     *
+     * @param  bool $force
+     * @access public
+     * @return mixed
+     */
+    public function initViewObjectsTest(bool $force = false)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initViewObjects');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $force);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
