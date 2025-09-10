@@ -721,4 +721,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式设计。
+     * Test get design.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDesignTest(): object
+    {
+        $result = $this->objectModel->getDesign();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
