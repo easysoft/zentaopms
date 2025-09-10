@@ -606,7 +606,7 @@ class weeklyModel extends model
         if(!$scopeID) return true;
 
         /* Set category data. */
-        $categoryID = $this->addBuildinCategory($scopeID);
+        $categoryID = $this->addBuiltinCategory($scopeID);
 
         /* Set docblock data. */
         $blockIdList = array();
@@ -672,7 +672,7 @@ class weeklyModel extends model
      * @access public
      * @return int
      */
-    public function addBuildinCategory(int $scopeID): int
+    public function addBuiltinCategory(int $scopeID): int
     {
         /* Set category data. */
         $category = new stdClass();

@@ -376,7 +376,7 @@ class weeklyTest
 
     /**
      * 添加内置报告模板范围。
-     * Add builtin report template scope.
+     * Add built-in report template scope.
      *
      * @access public
      * @return bool|object
@@ -387,5 +387,19 @@ class weeklyTest
         if(!$scopeID) return false;
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($scopeID)->fetch();
+    }
+
+    /**
+     * 添加内置分类。
+     * Add built-in category.
+     *
+     * @access public
+     * @return object
+     */
+    public function addBuiltinCategoryTest(): object
+    {
+        $scopeID    = $this->objectModel->addBuiltinScope();
+        $categroyID = $this->objectModel->addBuiltinCategory($scopeID);
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($categroyID)->fetch();
     }
 }
