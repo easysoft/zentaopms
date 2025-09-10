@@ -1064,4 +1064,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式分支列表。
+     * Test get branches.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranchesTest(): array
+    {
+        $result = $this->objectModel->getBranches();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
