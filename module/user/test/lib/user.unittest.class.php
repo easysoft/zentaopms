@@ -1241,4 +1241,26 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProductView method.
+     *
+     * @param  string $account
+     * @param  array  $allProducts
+     * @param  array  $manageObjects
+     * @param  array  $whiteList
+     * @access public
+     * @return mixed
+     */
+    public function getProductViewTest(string $account = '', array $allProducts = array(), array $manageObjects = array(), array $whiteList = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProductView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allProducts, $manageObjects, $whiteList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

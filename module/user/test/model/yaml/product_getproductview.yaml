@@ -1,0 +1,66 @@
+---
+title: 产品数据定义
+desc: 用于getProductView方法测试的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: "产品{1-10}"
+  format: ""
+- field: code
+  note: 产品代码
+  range: "prod{1-10}"
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: "admin,user1,user2,user3,user4"
+  format: ""
+- field: QD
+  note: 测试负责人
+  range: "admin,user1,user2,user3,user4"
+  format: ""
+- field: RD
+  note: 发布负责人
+  range: "admin,user1,user2,user3,user4"
+  format: ""
+- field: acl
+  note: 访问控制
+  range: "open{3},private{4},custom{3}"
+  format: ""
+- field: reviewer
+  note: 审批人
+  range: "admin,user1,user2,,,"
+  format: ""
+- field: PMT
+  note: PMT成员
+  range: "admin,user1,user2,,,"
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: "admin,user1,user2,user3,user4"
+  format: ""
+- field: feedback
+  note: 反馈负责人
+  range: "admin,user1,user2,,,"
+  format: ""
+- field: ticket
+  note: 工单负责人
+  range: "admin,user1,user2,,,"
+  format: ""
+- field: status
+  note: 产品状态
+  range: "normal{8},closed{2}"
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "0{9},1{1}"
+  format: ""
