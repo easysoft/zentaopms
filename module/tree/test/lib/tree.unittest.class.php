@@ -963,4 +963,21 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test createPracticeLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createPracticeLinkTest($type, $module)
+    {
+        $result = $this->objectModel->createPracticeLink($type, $module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
