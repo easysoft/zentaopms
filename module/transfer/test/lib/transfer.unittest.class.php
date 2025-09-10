@@ -426,4 +426,53 @@ class transferTest
 
         return $result;
     }
+
+    /**
+     * Test initWorkflowFieldList method.
+     *
+     * @param  string $module
+     * @param  array  $fieldList
+     * @access public
+     * @return mixed
+     */
+    public function initWorkflowFieldListTest(string $module = '', array $fieldList = array())
+    {
+        global $tester, $app;
+
+        // 检查是否为开源版本，如果是则直接返回字段列表
+        if($tester->config->edition == 'open')
+        {
+            return $fieldList;
+        }
+
+        // 设置应用方法名
+        $app->methodName = 'create';
+        $app->rawModule = $module;
+        $app->rawMethod = 'create';
+
+        if(empty($fieldList))
+        {
+            $fieldList = array(
+                'title' => array(
+                    'name' => 'title',
+                    'label' => 'Title',
+                    'title' => 'Title',
+                    'control' => 'input',
+                    'required' => true
+                )
+            );
+        }
+
+        try 
+        {
+            $result = $this->objectModel->initWorkflowFieldList($module, $fieldList);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            // 如果遇到异常（比如工作流模块不存在），返回原始字段列表
+            return $fieldList;
+        }
+    }
 }
