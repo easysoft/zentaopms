@@ -307,6 +307,14 @@ class zaiTest
         }
         return zaiModel::convertFeedbackToMarkdown($feedback);
     }
+
+    /**
+     * Test enableVectorization method.
+     *
+     * @param  bool $force
+     * @access public
+     * @return array
+     */
     public function enableVectorizationTest($force = false)
     {
         $result = $this->objectModel->enableVectorization($force);
