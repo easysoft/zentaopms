@@ -1019,4 +1019,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式项目集列表。
+     * Test get programs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramsTest(): array
+    {
+        $result = $this->objectModel->getPrograms();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
