@@ -702,7 +702,8 @@ class weeklyModel extends model
     {
         $now         = helper::now();
         $cycleConfig = array('turnon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => array(), 'readUsers' => array(), 'groups' => array(), 'users' => array());
-        $objects     = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('waterfall')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq(0)->fetchPairs('id');
+
+        $objects = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('waterfall')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('objectID')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs('id');
 
         $template = new stdclass();
         $template->lib          = $libID;
