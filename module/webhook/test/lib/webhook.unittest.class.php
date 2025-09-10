@@ -392,4 +392,38 @@ class webhookTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_NOTIFY)->where('id')->in($idList)->fetchAll('id');
     }
+
+    /**
+     * Test getDataByType method.
+     *
+     * @param  string $type
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
+     * @param  string $email
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getDataByTypeTest($type, $title, $text, $mobile, $email, $objectType, $objectID)
+    {
+        // 创建模拟的 webhook 对象
+        $webhook = new stdclass();
+        $webhook->type = $type;
+        $webhook->params = 'text,title,objectType';
+
+        // 创建模拟的 action 对象
+        $action = new stdclass();
+        $action->text = '测试动作文本';
+        $action->title = $title;
+        $action->objectType = $objectType;
+
+        $result = $this->objectModel->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 解析JSON为对象以便测试框架可以使用p()语法检查属性
+        return json_decode($result);
+    }
 }
