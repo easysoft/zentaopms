@@ -299,4 +299,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式业务需求。
+     * Test get tutorial epic.
+     *
+     * @access public
+     * @return object
+     */
+    public function getEpicTest(): object
+    {
+        $result = $this->objectModel->getEpic();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
