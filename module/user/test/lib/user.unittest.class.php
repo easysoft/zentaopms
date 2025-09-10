@@ -1425,4 +1425,28 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test checkProjectPriv method.
+     *
+     * @param  object $project
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProjectPrivTest(object $project, string $account, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProjectPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($project, $account, $stakeholders, $teams, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
