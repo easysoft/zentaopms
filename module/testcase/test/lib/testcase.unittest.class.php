@@ -2123,4 +2123,25 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test processCaseSteps method.
+     *
+     * @param  object $case
+     * @param  object $testcase
+     * @access public
+     * @return object
+     */
+    public function processCaseStepsTest(object $case, object $testcase): object
+    {
+        // 使用反射来调用保护方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processCaseSteps');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $case, $testcase);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
