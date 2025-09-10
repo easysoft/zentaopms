@@ -420,13 +420,39 @@ class testtaskTest
         return $objects;
     }
 
-    public function importUnitResultTest($productID)
+    /**
+     * Test importUnitResult method.
+     *
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function importUnitResultTest(object $task)
     {
-        $objects = $this->objectModel->importUnitResult($productID);
+        if(isset($task->mockNoFile) && $task->mockNoFile)
+        {
+            // 模拟无文件上传的情况
+            $_SESSION['resultFile'] = array();
+        }
+        elseif(isset($task->resultFile))
+        {
+            // 模拟有文件上传的情况
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => basename($task->resultFile),
+                    'title'     => basename($task->resultFile),
+                    'size'      => 1024,
+                    'extension' => 'xml',
+                    'tmpname'   => $task->resultFile
+                )
+            );
+        }
+
+        $result = $this->objectModel->importUnitResult($task);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     public function parseCppXMLResultTest($fileName, $productID, $frame)
