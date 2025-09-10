@@ -1278,4 +1278,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getCharter method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getCharterTest(): object
+    {
+        $result = $this->objectModel->getCharter();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
