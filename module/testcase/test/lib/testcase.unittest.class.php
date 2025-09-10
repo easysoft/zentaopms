@@ -2091,4 +2091,20 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test saveXmindImport method.
+     *
+     * @param  array $scenes
+     * @param  array $testcases
+     * @access public
+     * @return array
+     */
+    public function saveXmindImportTest(array $scenes, array $testcases): array
+    {
+        $result = $this->objectModel->saveXmindImport($scenes, $testcases);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
