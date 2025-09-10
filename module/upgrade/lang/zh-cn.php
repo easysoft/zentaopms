@@ -104,6 +104,7 @@ $lang->upgrade->projectName     = '项目名称';
 $lang->upgrade->projectManage   = '项目管理';
 $lang->upgrade->compatibleEXT   = '扩展机制兼容';
 $lang->upgrade->fileName        = '文件名称';
+$lang->upgrade->list            = '列表';
 $lang->upgrade->next            = '下一步';
 $lang->upgrade->back            = '上一步';
 
