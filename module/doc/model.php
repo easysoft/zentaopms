@@ -4054,7 +4054,7 @@ class docModel extends model
             ->orWhere('t1.vision')->ne($this->config->vision)
             ->markRight(1)
             ->andWhere('t1.key')->notin(array_keys($templateTypes))
-            ->andWhere('t3.module')->eq('docTemplate')
+            ->andWhere('t3.type')->eq('docTemplate')
             ->andWhere('t2.lib')->eq('')
             ->andWhere('t2.module')->eq('')
             ->andWhere('t2.deleted')->eq(0)
