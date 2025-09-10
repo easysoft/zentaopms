@@ -269,4 +269,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式研发需求键值对。
+     * Test get tutorial story pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStoryPairsTest(): array
+    {
+        $result = $this->objectModel->getStoryPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
