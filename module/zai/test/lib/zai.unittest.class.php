@@ -8,8 +8,9 @@ class zaiTest
         $this->objectModel = $tester->loadModel('zai');
     }
 
-    public function getTokenTest(): array
+    public function getSettingTest($includeAdmin = false): ?object
     {
-        return $this->objectModel->getToken();
+        $result = $this->objectModel->getSetting($includeAdmin);
+        return $result;
     }
 }
