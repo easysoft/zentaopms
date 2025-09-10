@@ -1264,4 +1264,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getMarket method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getMarketTest(): object
+    {
+        $result = $this->objectModel->getMarket();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
