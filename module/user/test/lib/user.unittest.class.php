@@ -1402,4 +1402,27 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test checkProgramPriv method.
+     *
+     * @param  object $program
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProgramPrivTest(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProgramPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($program, $account, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

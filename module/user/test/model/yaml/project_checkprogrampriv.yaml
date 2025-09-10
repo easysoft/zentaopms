@@ -1,0 +1,58 @@
+---
+title: 项目集权限检查数据定义
+desc: 用于测试checkProgramPriv方法的项目集测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目集ID
+
+- field: type
+  range: 'program'
+  note: 项目类型
+
+- field: name
+  range: '开放项目集,私有项目集,受限项目集,管理员项目集,PM项目集,创建者项目集,父级项目集,子级项目集,普通项目集,测试项目集'
+  note: 项目集名称
+
+- field: code
+  range: 'OPEN001,PRIV001,REST001,ADMIN001,PM001,CREATE001,PARENT001,CHILD001,NORMAL001,TEST001'
+  note: 项目集代码
+
+- field: acl
+  range: 'open{3},private{4},program{3}'
+  note: 访问控制
+
+- field: PM
+  range: 'admin,user1,user2,admin,testpm,testcreator,user1,user2,[],[]'
+  note: 项目经理
+
+- field: openedBy
+  range: 'admin,user1,user2,user1,user2,testcreator,admin,testcreator,admin,user1'
+  note: 创建者
+
+- field: parent
+  range: '0{8},1{1},1{1}'
+  note: 父项目集
+
+- field: path
+  range: ',1,,2,,3,,4,,5,,6,,7,,8,,1,9,,1,10,'
+  note: 路径
+
+- field: status
+  range: 'wait{2},doing{5},done{2},closed{1}'
+  note: 状态
+
+- field: deleted
+  range: '0'
+  note: 删除状态
+
+- field: begin
+  range: '2024-01-01{5},2024-02-01{3},2024-03-01{2}'
+  note: 开始日期
+
+- field: end
+  range: '2024-12-31{5},2024-06-30{3},2024-09-30{2}'
+  note: 结束日期

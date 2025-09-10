@@ -1,0 +1,50 @@
+---
+title: 用户权限检查数据定义
+desc: 用于测试checkProgramPriv方法的用户测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 用户ID
+
+- field: account
+  range: 'admin,user1,user2,testpm,testcreator,stakeholder1,stakeholder2,whitelist1,whitelist2,guest'
+  note: 用户账号
+
+- field: realname
+  range: '系统管理员,普通用户1,普通用户2,项目经理,项目创建者,干系人1,干系人2,白名单用户1,白名单用户2,访客用户'
+  note: 用户真实姓名
+
+- field: password
+  range: '123456{10}'
+  note: 密码
+
+- field: role
+  range: 'admin{1},user{9}'
+  note: 用户角色
+
+- field: dept
+  range: '1{3},2{3},3{2},4{2}'
+  note: 部门ID
+
+- field: email
+  range: 'admin@test.com,user1@test.com,user2@test.com,pm@test.com,creator@test.com,stake1@test.com,stake2@test.com,white1@test.com,white2@test.com,guest@test.com'
+  note: 邮箱
+
+- field: mobile
+  range: '13800000001,13800000002,13800000003,13800000004,13800000005,13800000006,13800000007,13800000008,13800000009,13800000010'
+  note: 手机号
+
+- field: status
+  range: 'active'
+  note: 用户状态
+
+- field: deleted
+  range: '0'
+  note: 删除状态
+
+- field: last
+  range: '1725984000{10}'
+  note: 最后登录时间
