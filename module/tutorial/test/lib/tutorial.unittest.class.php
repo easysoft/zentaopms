@@ -811,4 +811,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式看板泳道组。
+     * Test get lane group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getLaneGroupTest(): array
+    {
+        $result = $this->objectModel->getLaneGroup();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
