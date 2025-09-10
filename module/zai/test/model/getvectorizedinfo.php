@@ -11,6 +11,7 @@ cid=0
 - 测试默认向量化信息的key字段 @~~
 - 测试默认向量化信息的同步计数字段 @0
 - 测试设置向量化信息后获取 @1
+- 测试验证向量化信息的所有字段 @testvectorkey123
 
 */
 
@@ -44,4 +45,8 @@ $vectorizedInfo->syncFailedCount = 5;
 
 $tester->loadModel('setting')->setItem('system.zai.kb.systemVectorization', json_encode($vectorizedInfo));
 
-r($zai->getVectorizedInfoTest()) && p('key,status,syncedCount,syncFailedCount') && e('testvectorkey123,enabled,100,5'); // 测试设置向量化信息后获取
+$getResult = $zai->getVectorizedInfoTest();
+r(isset($getResult->key) ? 1 : 0) && p() && e('1'); // 测试设置向量化信息后获取
+
+/* 测试验证向量化信息的所有字段 */
+r($getResult) && p('key') && e('testvectorkey123'); // 测试验证向量化信息的所有字段

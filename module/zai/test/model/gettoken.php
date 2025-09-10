@@ -11,6 +11,7 @@ cid=0
 - 测试普通用户正常获取Token @success
 - 测试管理员配置不完整情况 @fail
 - 测试管理员正常获取Token @success
+- 测试验证Token配置TTL设置 @1200
 
 */
 
@@ -56,3 +57,7 @@ r($zai->getTokenTest($adminIncompleteConfig, true)) && p('result') && e('fail');
 
 /* 测试管理员获取Token */
 r($zai->getTokenTest(null, true)) && p('result') && e('success'); // 测试管理员正常获取Token
+
+/* 测试验证Token配置TTL设置 */
+$currentSetting = $zai->getSettingTest();
+r($currentSetting->zaiTokenTTL) && p() && e('1200'); // 测试验证Token配置TTL设置

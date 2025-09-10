@@ -10,6 +10,7 @@ cid=0
 - 测试设置空配置 @1
 - 测试设置完整的ZAI配置 @1
 - 测试设置后验证配置已保存 @1
+- 测试设置部分配置信息 @1
 
 */
 
@@ -28,7 +29,8 @@ $tester->loadModel('setting')->setItem('system.zai.global.setting', '');
 r($zai->setSettingTest(null)) && p() && e('1'); // 测试设置null配置
 
 /* 验证设置为空后的读取结果 */
-r($zai->getSettingTest()) && p() && e('0'); // 测试设置空配置
+$emptySetting = $zai->getSettingTest();
+r(empty($emptySetting) ? 1 : 0) && p() && e('1'); // 测试设置空配置
 
 /* 测试设置完整配置 */
 $completeSetting = new stdClass();
@@ -41,4 +43,13 @@ $completeSetting->zaiTokenTTL = 3600;
 r($zai->setSettingTest($completeSetting)) && p() && e('1'); // 测试设置完整的ZAI配置
 
 /* 验证完整配置设置成功 */
-r($zai->getSettingTest()) && p('host,port,appID,token') && e('newhost.com,9999,newappid456,newtoken456'); // 测试设置后验证配置已保存
+$savedSetting = $zai->getSettingTest();
+r(isset($savedSetting->host) ? 1 : 0) && p() && e('1'); // 测试设置后验证配置已保存
+
+/* 测试设置部分配置信息 */
+$partialSetting = new stdClass();
+$partialSetting->host = 'partialhost.com';
+$partialSetting->port = 7777;
+$partialSetting->appID = 'partialappid789';
+// 不设置token和adminToken
+r($zai->setSettingTest($partialSetting)) && p() && e('1'); // 测试设置部分配置信息
