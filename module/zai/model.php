@@ -132,7 +132,7 @@ class zaiModel extends model
             $this->loadModel('setting')->setItem('system.zai.global.setting', '');
             return;
         }
-        $this->loadModel('setting')->setItem('system.zai.global.setting', json_encode($setting));
+        $this->loadModel('setting')->setItem('system.zai.global.setting', empty($setting) ? '' : json_encode($setting));
     }
 
     /**
