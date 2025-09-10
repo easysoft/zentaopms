@@ -402,4 +402,21 @@ class weeklyTest
         $categroyID = $this->objectModel->addBuiltinCategory($scopeID);
         return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($categroyID)->fetch();
     }
+
+    /**
+     * 添加内置报告模板。
+     * Add builtin report template.
+     *
+     * @access public
+     * @return array|object
+     */
+    public function addBuiltinTemplateTest(): array|object
+    {
+        $scopeID    = $this->objectModel->addBuiltinScope();
+        $categroyID = $this->objectModel->addBuiltinCategory($scopeID);
+        $this->objectModel->addBuiltinTemplate($scopeID, $categroyID, array());
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
+    }
 }

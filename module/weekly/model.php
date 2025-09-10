@@ -773,7 +773,7 @@ class weeklyModel extends model
                         {
                             if(isset($delta->attributes->holder->id)) $delta->attributes->holder->id = uniqid();
                             if(isset($delta->attributes->holder->name) && isset($blockIdList[$delta->attributes->holder->name])) $delta->attributes->holder->name = "{$delta->attributes->holder->name}_{$blockIdList[$delta->attributes->holder->name]}";
-                            if(isset($delta->attributes->holder->data->blockID)) $delta->attributes->holder->data->blockID = $blockIdList[$delta->attributes->holder->data->type];
+                            if(isset($delta->attributes->holder->data->blockID) && isset($blockIdList[$delta->attributes->holder->data->type])) $delta->attributes->holder->data->blockID = $blockIdList[$delta->attributes->holder->data->type];
                         }
                     }
                     if(!empty($child->props->content)) $child->props->content->fetcher = str_replace($blockCodes, array_values($blockIdList), $child->props->content->fetcher);
