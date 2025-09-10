@@ -989,4 +989,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式项目集键值对。
+     * Test get program pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramPairsTest(): array
+    {
+        $result = $this->objectModel->getProgramPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
