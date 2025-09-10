@@ -39,15 +39,15 @@ $lang->ai->modelEnable             = '启用语言模型';
 $lang->ai->modelDisable            = '禁用语言模型';
 $lang->ai->modelDelete             = '删除语言模型';
 $lang->ai->modelTestConnection     = '测试连接';
-$lang->ai->promptCreate            = '创建提词';
-$lang->ai->promptEdit              = '编辑提词';
-$lang->ai->promptDelete            = '删除提词';
+$lang->ai->promptCreate            = '创建禅道智能体';
+$lang->ai->promptEdit              = '编辑禅道智能体';
+$lang->ai->promptDelete            = '删除禅道智能体';
 $lang->ai->promptAssignRole        = '指定角色';
 $lang->ai->promptSelectDataSource  = '选择对象';
 $lang->ai->promptSetPurpose        = '确认操作';
 $lang->ai->promptSetTargetForm     = '结果处理';
 $lang->ai->promptFinalize          = '准备发布';
-$lang->ai->promptAudit             = '调试提词';
+$lang->ai->promptAudit             = '调试禅道智能体';
 $lang->ai->promptPublish           = '发布禅道智能体';
 $lang->ai->promptUnpublish         = '取消发布';
 $lang->ai->promptBrowse            = '浏览禅道智能体列表';
@@ -56,10 +56,10 @@ $lang->ai->promptExecute           = '执行禅道智能体';
 $lang->ai->promptExecutionReset    = '重置执行';
 $lang->ai->roleTemplates           = '管理角色模板';
 $lang->ai->chat                    = '聊天';
-$lang->ai->createMiniProgram       = '创建AI小程序';
-$lang->ai->editMiniProgram         = '编辑AI小程序';
-$lang->ai->configuredMiniProgram   = '配置小程序';
-$lang->ai->testMiniProgram         = '调试AI小程序';
+$lang->ai->createMiniProgram       = '创建通用智能体';
+$lang->ai->editMiniProgram         = '编辑通用智能体';
+$lang->ai->configuredMiniProgram   = '配置通用智能体';
+$lang->ai->testMiniProgram         = '调试通用智能体';
 $lang->ai->miniProgramList         = '浏览通用智能体列表';
 $lang->ai->miniProgramView         = '查看通用智能体详情';
 $lang->ai->publishMiniProgram      = '发布通用智能体';
@@ -82,7 +82,7 @@ $lang->ai->import                 = '导入';
 $lang->ai->saveFail               = '保存失败';
 $lang->ai->installPackage         = '安装包';
 $lang->ai->toPublish              = '安装后发布';
-$lang->ai->toZentaoStoreAIPage    = '点击可跳转至禅道官网应用商店AI小程序页面。';
+$lang->ai->toZentaoStoreAIPage    = '点击可跳转至禅道官网应用商店通用智能体页面。';
 $lang->ai->exitManage             = '退出管理界面';
 
 $lang->ai->chatPlaceholderMessage = 'Hi，我是 AI 助手阿道，您可以问我任何问题。';
@@ -91,7 +91,7 @@ $lang->ai->chatSystemMessage      = '你叫阿道，是禅道的 AI 助手兼吉
 $lang->ai->chatSend               = '发送';
 $lang->ai->chatReset              = '清空';
 $lang->ai->chatNoResponse         = '会话发生了错误，<a id="retry" class="text-blue">点击这里重试</a>。';
-$lang->ai->noMiniProgram          = '您访问的小程序不存在';
+$lang->ai->noMiniProgram          = '您访问的通用智能体不存在';
 
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
@@ -105,10 +105,10 @@ $lang->ai->validate->dirtyForm     = '%s的参数配置已变动，是否保存�
 $lang->ai->validate->nameNotUnique = '该名称已使用，请尝试其他名称。';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common       = '提词';
-$lang->ai->prompts->emptyList    = '暂时没有提词。';
-$lang->ai->prompts->create       = '创建提词';
-$lang->ai->prompts->edit         = '编辑提词';
+$lang->ai->prompts->common       = '禅道智能体';
+$lang->ai->prompts->emptyList    = '暂时没有禅道智能体。';
+$lang->ai->prompts->create       = '创建禅道智能体';
+$lang->ai->prompts->edit         = '编辑禅道智能体';
 $lang->ai->prompts->id           = 'ID';
 $lang->ai->prompts->name         = '名称';
 $lang->ai->prompts->description  = '描述';
@@ -126,13 +126,13 @@ $lang->ai->prompts->draftedBy    = '由谁下架';
 $lang->ai->prompts->lastEditor   = '最后编辑';
 $lang->ai->prompts->modelNeutral = '通用';
 
-$lang->ai->prompts->summary = '本页共 %s 个提词。';
+$lang->ai->prompts->summary = '本页共 %s 个禅道智能体。';
 $lang->ai->prompts->fieldSeparator = '、';
 
 $lang->ai->prompts->action = new stdclass();
-$lang->ai->prompts->action->goDesignConfirm = '当前提词未完成，是否继续设计？';
+$lang->ai->prompts->action->goDesignConfirm = '当前禅道智能体未完成，是否继续设计？';
 $lang->ai->prompts->action->goDesign        = '去设计';
-$lang->ai->prompts->action->draftConfirm    = '下架后，提词将不能继续使用，您确定要下架吗？';
+$lang->ai->prompts->action->draftConfirm    = '下架后，禅道智能体将不能继续使用，您确定要下架吗？';
 $lang->ai->prompts->action->design          = '设计';
 $lang->ai->prompts->action->test            = '调试';
 $lang->ai->prompts->action->edit            = '编辑';
@@ -140,7 +140,7 @@ $lang->ai->prompts->action->publish         = '发布';
 $lang->ai->prompts->action->unpublish       = '下架';
 $lang->ai->prompts->action->delete          = '删除';
 $lang->ai->prompts->action->disable         = '禁用';
-$lang->ai->prompts->action->deleteConfirm   = '删除后，提词将不能继续使用，您确定要删除吗？';
+$lang->ai->prompts->action->deleteConfirm   = '删除后，禅道智能体将不能继续使用，您确定要删除吗？';
 $lang->ai->prompts->action->publishSuccess  = '发布成功';
 
 /* Steps of prompt creation. */
@@ -160,9 +160,9 @@ $lang->ai->prompts->roleTemplate        = '角色模版';
 $lang->ai->prompts->roleTemplateTip     = '引用模板后，修改角色、角色描述不会对模板造成影响。';
 $lang->ai->prompts->addRoleTemplate     = '添加角色模板';
 $lang->ai->prompts->editRoleTemplate    = '编辑角色模板';
-$lang->ai->prompts->editRoleTemplateTip = '本次编辑不会影响已使用该模版的提词';
+$lang->ai->prompts->editRoleTemplateTip = '本次编辑不会影响已使用该模版的禅道智能体';
 $lang->ai->prompts->roleAddedSuccess    = '角色模版保存成功';
-$lang->ai->prompts->roleDelConfirm      = '删除不会影响已用角色模版的提词，是否删除？';
+$lang->ai->prompts->roleDelConfirm      = '删除不会影响已用角色模版的禅道智能体，是否删除？';
 $lang->ai->prompts->roleDelSuccess      = '角色模板已删除';
 $lang->ai->prompts->roleTemplateSave    = '存为角色模板';
 $lang->ai->prompts->roleTemplateSaveList = array();
@@ -185,8 +185,8 @@ $lang->ai->prompts->elaboration    = '补充要求';
 $lang->ai->prompts->elaborationTip = '“我希望<它的回答请注意一些补充要求>”';
 $lang->ai->prompts->inputPreview   = '输入预览';
 $lang->ai->prompts->dataPreview    = '对象数据预览';
-$lang->ai->prompts->rolePreview    = '角色提词预览';
-$lang->ai->prompts->promptPreview  = '操作提词预览';
+$lang->ai->prompts->rolePreview    = '角色禅道智能体预览';
+$lang->ai->prompts->promptPreview  = '操作禅道智能体预览';
 
 /* Target form selecting. */
 $lang->ai->prompts->selectTargetForm    = '选择表单';
@@ -444,11 +444,11 @@ $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = '会话';
 
 $lang->ai->miniPrograms                    = new stdClass();
-$lang->ai->miniPrograms->common            = '小程序';
-$lang->ai->miniPrograms->emptyList         = '暂时没有小程序。';
-$lang->ai->miniPrograms->create            = '创建小程序';
+$lang->ai->miniPrograms->common            = '通用智能体';
+$lang->ai->miniPrograms->emptyList         = '暂时没有通用智能体。';
+$lang->ai->miniPrograms->create            = '创建通用智能体';
 $lang->ai->miniPrograms->configuration     = '基本信息配置';
-$lang->ai->miniPrograms->downloadTip       = '发布后将在AI小程序广场上展示，并会自动同步到客户端上。';
+$lang->ai->miniPrograms->downloadTip       = '发布后将在通用智能体广场上展示，并会自动同步到客户端上。';
 $lang->ai->miniPrograms->download          = '下载禅道客户端';
 $lang->ai->miniPrograms->category          = '所属分类';
 $lang->ai->miniPrograms->icon              = '图标';
@@ -465,21 +465,21 @@ $lang->ai->miniPrograms->lastStep          = '上一步';
 $lang->ai->miniPrograms->backToListPageTip = '选择对象的参数配置已变动，是否保存并返回？';
 $lang->ai->miniPrograms->saveAndBack       = '保存并返回';
 $lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在一级导航AI模块中显示，客户端将会同步更新。');
-$lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑后再进行发布';
-$lang->ai->miniPrograms->maintenanceGroup  = '维护小程序分组';
+$lang->ai->miniPrograms->emptyPrompterTip  = '通用智能体提词为空，请编辑后再进行发布';
+$lang->ai->miniPrograms->maintenanceGroup  = '维护通用智能体分组';
 
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
-$lang->ai->miniPrograms->deleteTip           = '确定删除该小程序？';
-$lang->ai->miniPrograms->disableTip          = '下架小程序用户将无法使用，是否确认下架？';
+$lang->ai->miniPrograms->deleteTip           = '确定删除该通用智能体？';
+$lang->ai->miniPrograms->disableTip          = '下架通用智能体用户将无法使用，是否确认下架？';
 $lang->ai->miniPrograms->publishTip          = '发布后将在一级导航AI模块中显示，客户端将会同步更新。';
-$lang->ai->miniPrograms->unpublishedTip      = '您使用的小程序没有发布';
+$lang->ai->miniPrograms->unpublishedTip      = '您使用的通用智能体没有发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
-$lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
-$lang->ai->miniPrograms->placeholder->desc    = '请输入小程序简介';
+$lang->ai->miniPrograms->placeholder->name    = '请输入通用智能体名称';
+$lang->ai->miniPrograms->placeholder->desc    = '请输入通用智能体简介';
 $lang->ai->miniPrograms->placeholder->default = '请输入填写提示，默认为“请输入”';
 $lang->ai->miniPrograms->placeholder->input   = '请输入';
-$lang->ai->miniPrograms->placeholder->prompt  = '请输入提词设计';
+$lang->ai->miniPrograms->placeholder->prompt  = '请输入禅道智能体设计';
 $lang->ai->miniPrograms->placeholder->asking  = '继续追问';
 
 $lang->ai->miniPrograms->deleteFieldTip = '您确定删除该字段吗？';
@@ -501,9 +501,9 @@ $lang->ai->miniPrograms->field->preview             = '预览区';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';
-$lang->ai->miniPrograms->field->prompterDesign      = '提词设计';
+$lang->ai->miniPrograms->field->prompterDesign      = '禅道智能体设计';
 $lang->ai->miniPrograms->field->prompterDesignTip   = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
-$lang->ai->miniPrograms->field->prompterPreview     = '提词预览';
+$lang->ai->miniPrograms->field->prompterPreview     = '禅道智能体预览';
 $lang->ai->miniPrograms->field->generateResult      = '生成结果';
 $lang->ai->miniPrograms->field->resultPreview       = '结果预览';
 
@@ -527,15 +527,15 @@ $lang->ai->miniPrograms->statuses = array(
 
 $lang->ai->miniPrograms->publishedOptions   = array('未发布', '已发布');
 $lang->ai->miniPrograms->optionName         = '选项名称';
-$lang->ai->miniPrograms->promptTemplate     = '提词模板';
+$lang->ai->miniPrograms->promptTemplate     = '禅道智能体模板';
 $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
-$lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
+$lang->ai->miniPrograms->summary            = '本页共 %s 个通用智能体。';
 $lang->ai->miniPrograms->generate           = '生成';
 $lang->ai->miniPrograms->regenerate         = '重新生成';
 $lang->ai->miniPrograms->noModel            = array('尚未配置语言模型，请联系管理员或跳转至后台配置<a id="to-language-model">语言模型</a>。', '若已完成相关配置，请尝试<a id="reload-current">重新加载</a>页面。');
 $lang->ai->miniPrograms->clearContext       = '上下文内容已清除';
-$lang->ai->miniPrograms->newVersionTip      = '小程序已于 %s 更新，以上为过往记录';
-$lang->ai->miniPrograms->disabledTip        = '当前小程序已被禁用。';
+$lang->ai->miniPrograms->newVersionTip      = '通用智能体已于 %s 更新，以上为过往记录';
+$lang->ai->miniPrograms->disabledTip        = '当前通用智能体已被禁用。';
 $lang->ai->miniPrograms->chatNoResponse     = '会话发生了错误';
 
 $lang->ai->models = new stdclass();
@@ -569,10 +569,10 @@ $lang->ai->models->concealTip     = '完整信息在编辑时可见';
 $lang->ai->models->upgradeBiz     = '更多AI功能，尽在<a target="_blank" href="https://www.zentao.net/page/enterprise.html" class="text-blue">企业版</a>！';
 $lang->ai->models->noModelError   = '暂无可用的语言模型，请联系管理员配置。';
 $lang->ai->models->noModels       = '暂时没有语言模型，添加模型并配置相关参数后可以使用 AI 相关功能。';
-$lang->ai->models->confirmDelete  = '删除模型后，关联的AI提词、小程序及AI会话将会无法使用，是否确认删除？';
+$lang->ai->models->confirmDelete  = '删除模型后，关联的禅道智能体、通用智能体及AI会话将会无法使用，是否确认删除？';
 $lang->ai->models->confirmDisable = '您确认要禁用该语言模型吗？';
 $lang->ai->models->default        = '默认';
-$lang->ai->models->defaultTip     = '默认语言模型（第一个可用的语言模型）将会用于运行未指定语言模型的提词、小程序，也将会用于聊天。';
+$lang->ai->models->defaultTip     = '默认语言模型（第一个可用的语言模型）将会用于运行未指定语言模型的禅道智能体、通用智能体，也将会用于聊天。';
 $lang->ai->models->authFailure    = 'API 认证失败';
 
 $lang->ai->models->testConnectionResult = new stdclass();
@@ -938,22 +938,22 @@ $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = 'AI';
 
 $lang->ai->dataInject = new stdclass();
-$lang->ai->dataInject->success = '已将提词执行结果填写到表单中';
-$lang->ai->dataInject->fail    = '提词执行结果填写失败';
+$lang->ai->dataInject->success = '已将禅道智能体执行结果填写到表单中';
+$lang->ai->dataInject->fail    = '禅道智能体执行结果填写失败';
 
 $lang->ai->execute = new stdclass();
-$lang->ai->execute->loading    = '提词执行中';
-$lang->ai->execute->auditing   = '即将跳转至调试页面并执行提词';
-$lang->ai->execute->success    = '提词执行成功';
-$lang->ai->execute->fail       = '提词执行失败';
-$lang->ai->execute->failFormat = '提词执行失败：%s。';
+$lang->ai->execute->loading    = '禅道智能体执行中';
+$lang->ai->execute->auditing   = '即将跳转至调试页面并执行禅道智能体';
+$lang->ai->execute->success    = '禅道智能体执行成功';
+$lang->ai->execute->fail       = '禅道智能体执行失败';
+$lang->ai->execute->failFormat = '禅道智能体执行失败：%s。';
 $lang->ai->execute->failReasons = array();
-$lang->ai->execute->failReasons['noPrompt']     = '提词不存在';
+$lang->ai->execute->failReasons['noPrompt']     = '禅道智能体不存在';
 $lang->ai->execute->failReasons['noObjectData'] = '对象数据获取失败';
 $lang->ai->execute->failReasons['noResponse']   = '请求返回值为空';
 $lang->ai->execute->failReasons['noTargetForm'] = '目标表单地址获取失败，或表单必要变量获取失败（可能原因为无法找到关联的对象，请检查对象间的关联关系）';
 $lang->ai->execute->executeErrors = array();
-$lang->ai->execute->executeErrors['-1'] = '提词不存在';
+$lang->ai->execute->executeErrors['-1'] = '禅道智能体不存在';
 $lang->ai->execute->executeErrors['-2'] = '对象数据获取失败';
 $lang->ai->execute->executeErrors['-3'] = '序列化对象数据失败';
 $lang->ai->execute->executeErrors['-4'] = '没有可用的语言模型';
@@ -961,7 +961,7 @@ $lang->ai->execute->executeErrors['-5'] = '表单结构获取失败';
 $lang->ai->execute->executeErrors['-6'] = 'API 返回值为空或返回了错误';
 
 $lang->ai->audit = new stdclass();
-$lang->ai->audit->designPrompt = '提词设计';
+$lang->ai->audit->designPrompt = '禅道智能体设计';
 $lang->ai->audit->afterSave    = '保存后';
 $lang->ai->audit->regenerate   = '重新生成';
 $lang->ai->audit->exit         = '退出调试';
@@ -974,7 +974,7 @@ $lang->ai->engineeredPrompts = new stdclass();
 $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role' => 'user', 'content' => '请把我所发的下一条消息内容转换为 function 调用。'), (object)array('role' => 'assistant', 'content' => '好的，我会把下一条消息转换为 function 调用。'));
 
 $lang->ai->aiResponseException = array();
-$lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';
+$lang->ai->aiResponseException['notFunctionCalling'] = '禅道智能体执行返回值结构不正确，请重试（可能可以通过优化禅道智能体来解决）';
 
 $lang->ai->assistant = new stdclass();
 $lang->ai->assistant->view                     = 'AI 助手详情';
