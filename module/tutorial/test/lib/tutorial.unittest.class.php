@@ -706,4 +706,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式风险列表。
+     * Test get risks.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRisksTest(): array
+    {
+        $result = $this->objectModel->getRisks();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
