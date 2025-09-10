@@ -207,7 +207,7 @@ function getDocViewSidebarTabs(doc, info)
     return [
         {key: 'info',    icon: 'info',     title: lang.docInfo},
         info.mode === 'edit' ? null : {key: 'outline', icon: 'list-box', title: lang.docOutline},
-        {key: 'history', icon: 'history',  title: lang.history},
+        {key: 'history', icon: 'file-log',  title: lang.history},
     ].filter(Boolean);
 }
 
