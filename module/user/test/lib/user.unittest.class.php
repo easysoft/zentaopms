@@ -1374,4 +1374,32 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getLatestUserView method.
+     *
+     * @param  string $account
+     * @param  string $view
+     * @param  object $object
+     * @param  string $objectType
+     * @param  array  $stakeholderGroup
+     * @param  array  $teamsGroup
+     * @param  array  $whiteListGroup
+     * @param  array  $adminsGroup
+     * @param  array  $parentStakeholderGroup
+     * @param  array  $parentPMGroup
+     * @access public
+     * @return string
+     */
+    public function getLatestUserViewTest(string $account, string $view, object $object, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): string
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getLatestUserView');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($account, $view, $object, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
