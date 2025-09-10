@@ -59,4 +59,33 @@ class zaiTest
 
         return true;
     }
+
+    /**
+     * Test getVectorizedInfo method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getVectorizedInfoTest()
+    {
+        $result = $this->objectModel->getVectorizedInfo();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setVectorizedInfo method.
+     *
+     * @param  object $info
+     * @access public
+     * @return mixed
+     */
+    public function setVectorizedInfoTest($info)
+    {
+        $this->objectModel->setVectorizedInfo($info);
+        if(dao::isError()) return dao::getError();
+
+        return true;
+    }
 }
