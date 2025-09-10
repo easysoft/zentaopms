@@ -956,4 +956,25 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test initSuite method.
+     *
+     * @param  int    $product
+     * @param  string $name
+     * @param  string $now
+     * @access public
+     * @return object
+     */
+    public function initSuiteTest(int $product, string $name, string $now): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initSuite');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$product, $name, $now]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
