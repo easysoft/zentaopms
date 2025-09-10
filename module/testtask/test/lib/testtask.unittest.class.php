@@ -847,4 +847,41 @@ class testtaskTest
             $tester->config->global->flow = $oldConfig;
         }
     }
+
+    /**
+     * Test importRunOfUnitResult method.
+     *
+     * @param  object $case
+     * @param  int    $caseID
+     * @param  object $testRun
+     * @access public
+     * @return mixed
+     */
+    public function importRunOfUnitResultTest(object $case, int $caseID, object $testRun)
+    {
+        // 确保case对象包含必需的属性
+        if(!isset($case->version)) $case->version = 1;
+        if(!isset($case->lastRunner)) $case->lastRunner = '';
+        if(!isset($case->lastRunDate)) $case->lastRunDate = '';
+        if(!isset($case->lastRunResult)) $case->lastRunResult = '';
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('importRunOfUnitResult');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->objectModel, [$case, $caseID, $testRun]);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                return 'dao_error: ' . (is_array($errors) ? implode(', ', $errors) : $errors);
+            }
+            
+            // 返回插入成功的标志，而不是具体的ID
+            return $result > 0 ? 'success' : 'failed';
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
