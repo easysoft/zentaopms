@@ -1021,4 +1021,27 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test processResult method.
+     *
+     * @param  object $result
+     * @param  object $matchNode
+     * @param  string $failure
+     * @param  string $skipped
+     * @access public
+     * @return object|array
+     */
+    public function processResultTest(object $result, object $matchNode, string $failure, string $skipped): object|array
+    {
+        // Use reflection to access private method
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processResult');
+        $method->setAccessible(true);
+
+        $processedResult = $method->invokeArgs($this->objectModel, [$result, $matchNode, $failure, $skipped]);
+        if(dao::isError()) return dao::getError();
+
+        return $processedResult;
+    }
 }
