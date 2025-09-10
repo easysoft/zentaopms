@@ -1,0 +1,18 @@
+title: project.
+desc: project data.
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 敏捷项目,瀑布项目,看板项目
+    - field: name2
+      range: 1-100
+  - field: model
+    range: scrum,waterfall,kanban
+  - field: type
+    range: project
