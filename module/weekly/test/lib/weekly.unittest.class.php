@@ -419,4 +419,17 @@ class weeklyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
     }
+
+    /**
+     * 获取内置项目周报模板内容。
+     * Get builtin project weekly report template content.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBuildinRawContentTest(): array
+    {
+        $content = $this->objectModel->getBuildinRawContent(array());
+        return json_decode($content, true);
+    }
 }
