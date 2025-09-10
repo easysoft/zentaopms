@@ -751,4 +751,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式评审。
+     * Test get review.
+     *
+     * @access public
+     * @return object
+     */
+    public function getReviewTest(): object
+    {
+        $result = $this->objectModel->getReview();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
