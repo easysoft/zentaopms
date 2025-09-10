@@ -426,4 +426,23 @@ class webhookTest
         // 解析JSON为对象以便测试框架可以使用p()语法检查属性
         return json_decode($result);
     }
+
+    /**
+     * Test fetchHook method.
+     *
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
+     * @access public
+     * @return mixed
+     */
+    public function fetchHookTest($webhook, $sendData, $actionID = 0, $appendUser = '')
+    {
+        $result = $this->objectModel->fetchHook($webhook, $sendData, $actionID, $appendUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
