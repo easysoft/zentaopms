@@ -1306,4 +1306,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getRepoPairs method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRepoPairsTest(): array
+    {
+        $result = $this->objectModel->getRepoPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
