@@ -376,4 +376,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式阶段。
+     * Test get tutorial stage.
+     *
+     * @access public
+     * @return object
+     */
+    public function getStageTest(): object
+    {
+        $result = $this->objectModel->getStage();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
