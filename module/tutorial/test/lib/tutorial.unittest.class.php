@@ -946,4 +946,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式产品应用列表。
+     * Test get product app list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSystemListTest(): array
+    {
+        $result = $this->objectModel->getSystemList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
