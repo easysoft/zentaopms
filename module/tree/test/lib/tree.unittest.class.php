@@ -1000,4 +1000,22 @@ class treeTest
 
         return $lang->module;
     }
+
+    /**
+     * Test getGroupPairs method.
+     *
+     * @param  int    $dimensionID
+     * @param  int    $parentGroup
+     * @param  int    $grade
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGroupPairsTest($dimensionID = 0, $parentGroup = 0, $grade = 2, $type = 'chart')
+    {
+        $result = $this->objectModel->getGroupPairs($dimensionID, $parentGroup, $grade, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
