@@ -2165,6 +2165,7 @@ class tutorialModel extends model
     {
         if($type == 'custom') return array(1 => 'Test Team Space');
         if($type == 'mine')   return array(1 => 'Test My Space');
+        return array();
     }
 
     /**

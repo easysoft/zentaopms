@@ -1109,4 +1109,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getSubSpaces method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array|null
+     */
+    public function getSubSpacesTest(string $type = 'custom'): array|null
+    {
+        $result = $this->objectModel->getSubSpaces($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
