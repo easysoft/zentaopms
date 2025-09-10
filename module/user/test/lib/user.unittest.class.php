@@ -1165,4 +1165,23 @@ class userTest
     {
         return $this->objectModel->isClickable($user, $action);
     }
+
+    /**
+     * Test getUserAcls method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function getUserAclsTest(string $account)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getUserAcls');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

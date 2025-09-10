@@ -1,0 +1,23 @@
+---
+title: 用户权限组数据定义
+desc: 测试getUserAcls方法的用户组数据
+
+fields:
+- field: id
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  range: 0{8},1,2
+- field: vision
+  range: rnd
+- field: name
+  range: admin,dev{2},test{2},guest,pm,qa
+- field: role
+  range: admin,dev{2},test{2},guest,pm,qa
+- field: desc
+  range: 管理员组,开发组{2},测试组{2},访客组,项目经理组,QA组
+- field: acl
+  range: '{"programs":["1","2"],"projects":["1","3"],"products":["1","2"],"sprints":["1","2"],"views":["product","project"],"actions":["create","edit"]}{3},[]{3},""{},'
+- field: developer
+  range: 1{7},0{3}
