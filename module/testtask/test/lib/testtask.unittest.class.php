@@ -913,4 +913,25 @@ class testtaskTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getExistSuitesOfUnitResult method.
+     *
+     * @param  array  $names
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    public function getExistSuitesOfUnitResultTest(array $names, int $productID, string $auto): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getExistSuitesOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$names, $productID, $auto]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
