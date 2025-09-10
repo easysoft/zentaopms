@@ -7,18 +7,13 @@ title=测试 zaiModel::convertBugToMarkdown();
 timeout=0
 cid=0
 
-- 测试转换完整的Bug对象
- - 属性id @1
- - 属性title
- - 属性content
- - 属性attrs
-- 测试转换最小化的Bug对象
- - 属性id @2
- - 属性title
-- 测试验证Markdown内容包含Bug信息
- - 属性content ~Bug #1
-- 测试验证属性设置正确
- - 属性attrs
+- 测试转换完整的Bug对象 @1
+- 测试转换最小化的Bug对象 @2
+- 测试验证Markdown内容包含Bug信息 @1
+- 测试验证属性设置正确 @1
+- 测试验证标题格式正确 @1
+- 测试验证内容包含优先级信息 @1
+- 测试验证内容包含步骤信息 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

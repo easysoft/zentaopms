@@ -7,18 +7,18 @@ title=测试 zaiModel::convertDemandToMarkdown();
 timeout=0
 cid=0
 
-- 测试转换完整的需求对象
- - 属性id @1
- - 属性title
- - 属性content
- - 属性attrs
-- 测试转换没有spec的需求对象
- - 属性id @2
- - 属性title
-- 测试验证Markdown内容包含需求信息
- - 属性content ~需求 #1
-- 测试验证属性设置正确
- - 属性attrs
+- 测试转换完整的需求对象 @1
+- 测试转换第二个需求对象 @2
+- 测试验证返回了attrs属性 @1
+- 测试验证第二个对象返回了attrs属性 @1
+- 测试验证生成了content @1
+- 测试验证第二个对象生成了content @1
+- 测试验证生成了title @1
+- 测试验证第二个对象生成了title @1
+- 测试返回数组结构正确 @1
+- 测试第二个对象返回数组结构正确 @1
+- 测试验证产品属性 @1
+- 测试验证状态属性 @active
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -107,7 +107,7 @@ r(isset($result2['title'])) && p() && e('1'); // 测试验证第二个对象生�
 
 /* 验证返回数组结构正确 */
 r(is_array($result1)) && p() && e('1'); // 测试返回数组结构
-r(is_array($result2)) && p() && e('1'); // 测试第二个对象返回数组结构
+r(is_array($result2)) && p() && e('1'); // 测试第二个对象返回数组结构正确
 
 /* 验证具体的属性值 */
 r($result1['attrs']['product']) && p() && e('1'); // 测试验证产品属性

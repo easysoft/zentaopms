@@ -11,11 +11,12 @@ su('admin');
 /**
 
 title=测试 zaiModel::getNextTarget();
+timeout=0
 cid=0
 
-- 测试不存在的同步类型 >> 期望返回null
-- 测试story类型数据为空时 >> 期望返回null
-- 测试bug类型数据不为空时 >> 期望返回ID1
+- 测试不存在的同步类型 @0
+- 测试story类型数据为空时 @0
+- 测试bug类型数据不为空时 @1
 
 */
 

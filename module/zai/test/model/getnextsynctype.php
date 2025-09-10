@@ -4,13 +4,14 @@
 /**
 
 title=测试 zaiModel::getNextSyncType();
+timeout=0
 cid=0
 
-- 测试无参数时获取第一个同步类型 >> 期望返回story
-- 测试从story获取下一个同步类型 >> 期望返回bug
-- 测试从bug获取下一个同步类型 >> 期望返回doc
-- 测试从doc获取下一个同步类型 >> 期望返回design
-- 测试从最后一个类型获取下一个 >> 期望返回null
+- 测试无参数时获取第一个同步类型 @story
+- 测试从story获取下一个同步类型 @bug
+- 测试从bug获取下一个同步类型 @doc
+- 测试从doc获取下一个同步类型 @design
+- 测试从最后一个类型获取下一个 @0
 
 */
 

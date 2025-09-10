@@ -4,13 +4,14 @@
 /**
 
 title=测试 zaiModel::formatOldSetting();
+timeout=0
 cid=0
 
-- 测试空设置输入 >> 期望返回null
-- 测试包含旧apiBaseUrl的设置格式化 >> 期望正确解析host和port
-- 测试包含旧appToken的设置格式化 >> 期望正确转换为token
-- 测试包含https协议的apiBaseUrl >> 期望正确解析主机信息
-- 测试同时包含旧格式字段的完整设置 >> 期望全部字段正确转换
+- 测试空设置输入 @0
+- 测试包含旧apiBaseUrl的设置格式化 @1
+- 测试包含旧appToken的设置格式化 @1
+- 测试包含https协议的apiBaseUrl @1
+- 测试同时包含旧格式字段的完整设置 @1
 
 */
 
