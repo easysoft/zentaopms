@@ -360,4 +360,20 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取需求层级键值对。
+     * Test get story grade pairs.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGradePairsTest(string $type): array
+    {
+        $result = $this->objectModel->getGradePairs($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
