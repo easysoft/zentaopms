@@ -586,4 +586,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式测试单键值对。
+     * Test get testtask pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTesttaskPairsTest(): array
+    {
+        $result = $this->objectModel->getTesttaskPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
