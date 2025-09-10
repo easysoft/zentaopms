@@ -901,4 +901,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式计划键值对。
+     * Test get plan pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPlanPairsTest(): array
+    {
+        $result = $this->objectModel->getPlanPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
