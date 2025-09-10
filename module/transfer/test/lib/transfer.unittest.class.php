@@ -16,6 +16,7 @@ class transferTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('transfer');
+         $this->objectTao   = $tester->loadTao('transfer');
     }
 
     /**
@@ -496,6 +497,62 @@ class transferTest
         catch(Exception $e)
         {
             return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test format method.
+     *
+     * @param  string $module
+     * @param  string $filter
+     * @access public
+     * @return mixed
+     */
+    public function formatTest(string $module = '', string $filter = '')
+    {
+        // 如果模块为空，返回错误信息
+        if(empty($module)) return 'Module is empty';
+
+        global $tester, $app;
+
+        try 
+        {
+            // 设置临时文件路径和会话数据
+            $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
+            if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
+
+            // 创建简单的CSV测试文件
+            $testCSVPath = $tmpPath . '/test_import.csv';
+            $testContent = "标题,状态,优先级\n测试需求1,激活,高\n测试需求2,已关闭,中\n";
+            file_put_contents($testCSVPath, $testContent);
+
+            // 设置会话数据
+            $_SESSION['fileImportFileName'] = $testCSVPath;
+            $_SESSION['fileImportExtension'] = 'csv';
+
+            // 设置应用方法名
+            $app->methodName = 'import';
+            $app->rawModule = $module;
+
+            // 初始化配置
+            $this->initConfig($module);
+
+            // 通过TAO层调用format方法
+            $result = $this->objectTao->format($module, $filter);
+            if(dao::isError()) return dao::getError();
+
+            return $result ? 'Success' : 'Failed';
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        finally
+        {
+            // 清理临时文件
+            if(isset($testCSVPath) && file_exists($testCSVPath)) unlink($testCSVPath);
+            if(isset($_SESSION['fileImportFileName'])) unset($_SESSION['fileImportFileName']);
+            if(isset($_SESSION['fileImportExtension'])) unset($_SESSION['fileImportExtension']);
         }
     }
 }
