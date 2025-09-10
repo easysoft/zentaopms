@@ -6,6 +6,7 @@ ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmab
 ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
 ALTER TABLE `zt_deliverable` ADD `status` varchar(30) NOT NULL DEFAULT 'enabled' AFTER `name`;
 ALTER TABLE `zt_deliverable` ADD `category` varchar(255) NOT NULL DEFAULT '' AFTER `lastEditedDate`;
+ALTER TABLE `zt_deliverable` ADD `buitin` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `module`;
 
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -58,4 +59,4 @@ UPDATE `zt_lang` SET `value` = '冒烟测试环节' WHERE `module` = 'testcase' 
 UPDATE `zt_lang` SET `value` = '版本验证环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'bvt'        AND `value` = '版本验证阶段';
 
 ALTER TABLE `zt_review` ADD `version` varchar(255) NOT NULL DEFAULT '' AFTER `docVersion`;
-ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) NOT NULL DEFAULT '0' AFTER `title`;
+ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `title`;
