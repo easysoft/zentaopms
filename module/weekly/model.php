@@ -601,8 +601,11 @@ class weeklyModel extends model
      */
     public function addBuiltinWeeklyTemplate()
     {
-        /* Set scope and class data. */
-        $scopeID    = $this->addBuiltinScope();
+        /* Set scope data. */
+        $scopeID = $this->addBuiltinScope();
+        if(!$scopeID) return true;
+
+        /* Set category data. */
         $categoryID = $this->addBuildinCategory($scopeID);
 
         /* Set docblock data. */
@@ -624,13 +627,16 @@ class weeklyModel extends model
 
     /**
      * 添加内置报告模板范围。
-     * Set scope.
+     * Add builtin report template scope.
      *
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function addBuiltinScope(): int
+    public function addBuiltinScope(): int|bool
     {
+        $scope = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('reportTemplate')->andWhere('main')->eq(1)->andWhere('vision')->eq($this->config->vision)->fetch();
+        if($scope) return false;
+
         /* Set scope data. */
         $scope = new stdClass();
         $scope->type      = 'reportTemplate';
