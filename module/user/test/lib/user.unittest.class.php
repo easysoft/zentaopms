@@ -1473,4 +1473,26 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test getProgramAuthedUsers method.
+     *
+     * @param  object $program
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return array
+     */
+    public function getProgramAuthedUsersTest(object $program, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($program, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
