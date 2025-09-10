@@ -181,6 +181,42 @@ class zaiTest
     }
 
     /**
+     * Test convertBugToMarkdown static method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function convertBugToMarkdownTest($bug)
+    {
+        return zaiModel::convertBugToMarkdown($bug);
+    }
+
+    /**
+     * Test convertDocToMarkdown static method.
+     *
+     * @param  object $doc
+     * @access public
+     * @return array
+     */
+    public function convertDocToMarkdownTest($doc)
+    {
+        return zaiModel::convertDocToMarkdown($doc);
+    }
+
+    /**
+     * Test convertDesignToMarkdown static method.
+     *
+     * @param  object $design
+     * @access public
+     * @return array
+     */
+    public function convertDesignToMarkdownTest($design)
+    {
+        return zaiModel::convertDesignToMarkdown($design);
+    }
+
+    /**
      * Test convertFeedbackToMarkdown static method.
      *
      * @param  object $feedback
