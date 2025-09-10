@@ -29,4 +29,34 @@ class zaiTest
 
         return $result;
     }
+
+    /**
+     * Test formatOldSetting method.
+     *
+     * @param  object|null $setting
+     * @access public
+     * @return object|null
+     */
+    public function formatOldSettingTest($setting)
+    {
+        $result = $this->objectModel->formatOldSetting($setting);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setSetting method.
+     *
+     * @param  object|null $setting
+     * @access public
+     * @return mixed
+     */
+    public function setSettingTest($setting)
+    {
+        $this->objectModel->setSetting($setting);
+        if(dao::isError()) return dao::getError();
+
+        return true;
+    }
 }
