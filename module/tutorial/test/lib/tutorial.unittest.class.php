@@ -646,4 +646,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式Bug列表。
+     * Test get bugs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBugsTest(): array
+    {
+        $result = $this->objectModel->getBugs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
