@@ -853,4 +853,30 @@ class treeTest
         }
         return $object;
     }
+
+    /**
+     * Test getOptionMenuByBranch method.
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $startModule
+     * @param  string $branch
+     * @param  string $param
+     * @param  string $grade
+     * @param  string $divide
+     * @access public
+     * @return array
+     */
+    public function getOptionMenuByBranchTest(int $rootID, string $type = 'story', int $startModule = 0, string $branch = 'all', string $param = 'nodeleted', string $grade = 'all', string $divide = '/'): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getOptionMenuByBranch');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $rootID, $type, $startModule, $branch, $param, $grade, $divide);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
