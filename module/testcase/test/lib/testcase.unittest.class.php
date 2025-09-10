@@ -2107,4 +2107,20 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test saveTestcase method.
+     *
+     * @param  object $testcase
+     * @param  array  $sceneIdList
+     * @access public
+     * @return array
+     */
+    public function saveTestcaseTest(object $testcase, array $sceneIdList): array
+    {
+        $result = $this->objectModel->saveTestcase($testcase, $sceneIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

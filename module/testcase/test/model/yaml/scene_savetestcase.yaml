@@ -1,0 +1,62 @@
+---
+title: 场景数据
+desc: 用于测试saveTestcase方法的场景数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 场景ID
+  range: 1-10
+
+- field: product
+  note: 产品ID
+  range: 1-3
+
+- field: branch
+  note: 分支ID
+  range: 0
+
+- field: module
+  note: 模块ID
+  range: 1821-1823
+
+- field: title
+  note: 场景标题
+  range: '场景标题1,场景标题2,场景标题3,场景标题4,场景标题5'
+
+- field: sort
+  note: 排序
+  range: 1-10
+
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2
+
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00,2024-01-02 00:00:00,2024-01-03 00:00:00'
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin
+
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '2025-09-10 00:00:00'
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+
+- field: parent
+  note: 父场景ID
+  range: 0
+
+- field: path
+  note: 路径
+  range: ',1,,2,,3,,4,,5,'
+
+- field: grade
+  note: 层级
+  range: 1
