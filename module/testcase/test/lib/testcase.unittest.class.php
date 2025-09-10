@@ -2144,4 +2144,35 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test xmlToArray method.
+     *
+     * @param  string $xmlString
+     * @param  array  $options
+     * @access public
+     * @return mixed
+     */
+    public function xmlToArrayTest(string $xmlString, array $options = array()): mixed
+    {
+        // 创建SimpleXMLElement对象
+        $xml = simplexml_load_string($xmlString);
+        if($xml === false) return false;
+        
+        // 使用反射来调用私有方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('xmlToArray');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $xml, $options);
+        if(dao::isError()) return dao::getError();
+
+        // 返回数组的序列化字符串，便于测试验证
+        if(is_array($result))
+        {
+            return json_encode($result, JSON_UNESCAPED_UNICODE);
+        }
+        
+        return $result;
+    }
 }
