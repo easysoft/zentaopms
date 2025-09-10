@@ -643,4 +643,20 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test getSceneCases method.
+     *
+     * @param  int   $productID
+     * @param  array $runs
+     * @access public
+     * @return array
+     */
+    public function getSceneCasesTest(int $productID, array $runs): array
+    {
+        $result = $this->objectModel->getSceneCases($productID, $runs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
