@@ -677,7 +677,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type);
+        $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type, 'version' => $doc->version);
         return $markdown;
     }
 
@@ -769,7 +769,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type);
+        $markdown['attrs'] = array('product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
         return $markdown;
     }
 }
