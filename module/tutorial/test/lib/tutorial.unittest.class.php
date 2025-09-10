@@ -253,4 +253,20 @@ class tutorialTest
     {
         return $this->objectModel->getTutorialed();
     }
+
+    /**
+     * 测试获取新手模式迭代燃尽图数据。
+     * Test get execution burn data for tutorial.
+     *
+     * @param  array $dateList
+     * @access public
+     * @return array
+     */
+    public function getExecutionBurnDataTest(array $dateList): array
+    {
+        $result = $this->objectModel->getExecutionBurnData($dateList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
