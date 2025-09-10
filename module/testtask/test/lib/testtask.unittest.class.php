@@ -624,4 +624,23 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test addPrefixToOrderBy method.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return string
+     */
+    public function addPrefixToOrderByTest(string $orderBy): string
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('addPrefixToOrderBy');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($orderBy));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
