@@ -1977,4 +1977,19 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test processStepsOrExpects method.
+     *
+     * @param  string $steps
+     * @access public
+     * @return array
+     */
+    public function processStepsOrExpectsTest(string $steps): array
+    {
+        $result = $this->objectModel->processStepsOrExpects($steps);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
