@@ -4019,6 +4019,13 @@ $config->group->package->browseAiModels->privs  = array();
 $config->group->package->browseAiModels->privs['aiapp-models']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseAiModels->privs['aiapp-converse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('aiapp-models'), 'recommend' => array());
 
+$config->group->package->zai = new stdclass();
+$config->group->package->zai->order  = 2090;
+$config->group->package->zai->subset = 'aiapp';
+$config->group->package->zai->privs  = array();
+$config->group->package->zai->privs['zai-setting']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array());
+$config->group->package->zai->privs['zai-vectorized'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 61, 'depend' => array('zai-setting'), 'recommend' => array());
+
 $config->group->package->component = new stdclass();
 $config->group->package->component->order  = 2300;
 $config->group->package->component->subset = 'configure';

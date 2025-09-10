@@ -1996,6 +1996,10 @@ $lang->resource->aiapp->collectMiniProgram = 'collectMiniProgram';
 $lang->resource->aiapp->models             = 'models';
 $lang->resource->aiapp->converse           = 'converse';
 
+$lang->resource->zai = new stdclass();
+$lang->resource->zai->setting    = 'setting';
+$lang->resource->zai->vectorized = 'vectorized';
+
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->index         = 'index';
