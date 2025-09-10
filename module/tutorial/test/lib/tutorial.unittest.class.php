@@ -1166,4 +1166,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getLibTree method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getLibTreeTest(): array
+    {
+        $result = $this->objectModel->getLibTree();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
