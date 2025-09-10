@@ -886,4 +886,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式计划列表。
+     * Test get plans.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPlansTest(): array
+    {
+        $result = $this->objectModel->getPlans();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
