@@ -129,9 +129,13 @@ class treeTest
      * @access public
      * @return array
      */
-    public function buildTreeArrayTest(array & $treeMenu, array $modules, object $module, string $moduleName = '/'): array
+    public function buildTreeArrayTest(array & $treeMenu, array $modules, object $module, string $moduleName = '/', string $divide = '/'): array
     {
-        $this->objectModel->buildTreeArray($treeMenu, $modules, $module, $moduleName);
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('buildTreeArray');
+        $method->setAccessible(true);
+        
+        $method->invokeArgs($this->objectModel, array(&$treeMenu, $modules, $module, $moduleName, $divide));
 
         if(dao::isError()) return dao::getError();
 
