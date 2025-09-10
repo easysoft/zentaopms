@@ -975,4 +975,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getReleases method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getReleasesTest(): array
+    {
+        $result = $this->objectModel->getReleases();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
