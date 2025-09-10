@@ -2175,4 +2175,26 @@ class testcaseTest
         
         return $result;
     }
+
+    /**
+     * Test getXmlTagsArray method.
+     *
+     * @param  string $xmlString
+     * @param  array  $namespaces
+     * @param  array  $options
+     * @access public
+     * @return mixed
+     */
+    public function getXmlTagsArrayTest(string $xmlString, array $namespaces, array $options): mixed
+    {
+        // 创建SimpleXMLElement对象
+        $xml = simplexml_load_string($xmlString);
+        if($xml === false) return false;
+        
+        $result = $this->objectModel->getXmlTagsArray($xml, $namespaces, $options);
+        if(dao::isError()) return dao::getError();
+
+        // 返回数组数量用于测试验证
+        return count($result);
+    }
 }
