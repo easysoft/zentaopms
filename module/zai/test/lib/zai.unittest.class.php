@@ -179,4 +179,53 @@ class zaiTest
 
         return zaiModel::convertDemandToMarkdown($demand);
     }
+
+    /**
+     * Test convertFeedbackToMarkdown static method.
+     *
+     * @param  object $feedback
+     * @access public
+     * @return array
+     */
+    public function convertFeedbackToMarkdownTest($feedback)
+    {
+        global $tester;
+        try {$tester->loadLang('feedback');} catch (Exception $e) {}
+        if(!isset($tester->lang->feedback))
+        {
+            $tester->lang->feedback = new stdClass();
+            $tester->lang->feedback->common = '反馈';
+            $tester->lang->feedback->labelBasic = '基本信息';
+            $tester->lang->feedback->type = '类型';
+            $tester->lang->feedback->pri = '优先级';
+            $tester->lang->feedback->status = '状态';
+            $tester->lang->feedback->solution = '解决方案';
+            $tester->lang->feedback->product = '产品';
+            $tester->lang->feedback->module = '模块';
+            $tester->lang->feedback->openedBy = '创建者';
+            $tester->lang->feedback->openedDate = '创建日期';
+            $tester->lang->feedback->assignedTo = '指派给';
+            $tester->lang->feedback->assignedDate = '指派日期';
+            $tester->lang->feedback->reviewedBy = '评审者';
+            $tester->lang->feedback->reviewedDate = '评审日期';
+            $tester->lang->feedback->closedBy = '关闭者';
+            $tester->lang->feedback->feedbackBy = '反馈者';
+            $tester->lang->feedback->closedDate = '关闭日期';
+            $tester->lang->feedback->closedReason = '关闭原因';
+            $tester->lang->feedback->processedBy = '处理者';
+            $tester->lang->feedback->processedDate = '处理日期';
+            $tester->lang->feedback->source = '来源';
+            $tester->lang->feedback->result = '结果';
+            $tester->lang->feedback->keywords = '关键词';
+            $tester->lang->feedback->faq = 'FAQ';
+            $tester->lang->feedback->desc = '描述';
+            $tester->lang->feedback->statusList = array('draft' => '草稿', 'active' => '激活', 'closed' => '关闭', 'changing' => '变更', 'reviewing' => '评审');
+            $tester->lang->feedback->priList = array('1' => '低', '2' => '中', '3' => '高', '4' => '紧急');
+            $tester->lang->feedback->typeList = array('bug' => '缺陷', 'feature' => '功能', 'interface' => '接口', 'performance' => '性能', 'security' => '安全', 'other' => '其他');
+            $tester->lang->feedback->solutionList = array('none' => '无', 'implemented' => '已实现', 'notImplemented' => '未实现');
+            $tester->lang->feedback->closedReasonList = array('duplicate' => '重复', 'notReproducible' => '无法重现', 'asExpected' => '符合预期', 'other' => '其他');
+            $tester->lang->feedback->publicList = array('public' => '公开', 'private' => '私有');
+        }
+        return zaiModel::convertFeedbackToMarkdown($feedback);
+    }
 }
