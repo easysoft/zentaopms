@@ -39,7 +39,8 @@ $lang->weekly->ac = '实际花费的成本(AC)';
 $lang->weekly->sv = '进度偏差率(SV%)';
 $lang->weekly->cv = '成本偏差率（CV%）';
 
-$lang->weekly->totalCount = '总计 : %u 个任务';
+$lang->weekly->totalCount  = '总计 : %u 个任务';
+$lang->weekly->builtinDesc = "系统内置的{$lang->projectCommon}周报模板，每周一在{$lang->projectCommon}下自动生成本周周报。";
 
 $lang->weekly->exportWeeklyReport = '导出周报';
 

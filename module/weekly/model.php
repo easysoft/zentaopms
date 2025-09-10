@@ -707,6 +707,7 @@ class weeklyModel extends model
         $template->acl          = 'open';
         $template->builtIn      = 1;
         $template->templateType = 'reportTemplate';
+        $template->templateDesc = $this->lang->weekly->builtinDesc;
         $template->cycle        = 'week';
         $template->cycleConfig  = json_encode($cycleConfig);
         $template->objects      = ',' . implode(',', $objects) . ',';

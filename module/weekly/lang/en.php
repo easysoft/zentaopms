@@ -39,7 +39,8 @@ $lang->weekly->ac = 'Actual Cost(AC)';
 $lang->weekly->sv = 'Schedule Variance(SV%)';
 $lang->weekly->cv = 'Cost Variance(CV%)';
 
-$lang->weekly->totalCount = 'Total : %u tasks';
+$lang->weekly->totalCount  = 'Total : %u tasks';
+$lang->weekly->builtinDesc = "The system's built-in {$lang->projectCommon} weekly report template automatically generates this week's report under the {$lang->projectCommon} every Monday.";
 
 $lang->weekly->exportWeeklyReport = 'Export Weekly Report';
 
