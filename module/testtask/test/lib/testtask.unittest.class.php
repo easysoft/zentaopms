@@ -934,4 +934,26 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test getExistCasesOfUnitResult method.
+     *
+     * @param  array  $titles
+     * @param  int    $suiteID
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    public function getExistCasesOfUnitResultTest(array $titles, int $suiteID, int $productID, string $auto): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getExistCasesOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$titles, $suiteID, $productID, $auto]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
