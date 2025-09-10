@@ -406,4 +406,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式任务。
+     * Test get task.
+     *
+     * @access public
+     * @return object
+     */
+    public function getTaskTest(): object
+    {
+        $result = $this->objectModel->getTask();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
