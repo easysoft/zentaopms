@@ -821,4 +821,82 @@ class transferTest
             }
         }
     }
+
+    /**
+     * Test processRows4Fields method.
+     *
+     * @param  array $rows
+     * @param  array $fields
+     * @access public
+     * @return mixed
+     */
+    public function processRows4FieldsTest(array $rows = array(), array $fields = array())
+    {
+        global $tester;
+
+        // 备份原始session数据
+        $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
+        $originalSessionExtension = isset($_SESSION['fileImportExtension']) ? $_SESSION['fileImportExtension'] : null;
+
+        try 
+        {
+            // 清除之前的错误状态
+            dao::$errors = array();
+
+            // 设置临时文件路径用于可能的清理操作
+            $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
+            if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
+            
+            $testFile = $tmpPath . '/test_processrows.csv';
+            file_put_contents($testFile, 'test content');
+            $_SESSION['fileImportFileName'] = $testFile;
+            $_SESSION['fileImportExtension'] = 'csv';
+
+            // 确保excel语言包存在
+            global $lang;
+            if(!isset($lang->excel))
+            {
+                $lang->excel = new stdClass();
+                $lang->excel->noData = '没有数据';
+            }
+
+            // 使用反射访问protected方法
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('processRows4Fields');
+            $method->setAccessible(true);
+            $result = $method->invoke($this->objectModel, $rows, $fields);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        finally
+        {
+            // 恢复原始数据
+            if($originalSessionFileName !== null)
+            {
+                $_SESSION['fileImportFileName'] = $originalSessionFileName;
+            }
+            elseif(isset($_SESSION['fileImportFileName']))
+            {
+                unset($_SESSION['fileImportFileName']);
+            }
+
+            if($originalSessionExtension !== null)
+            {
+                $_SESSION['fileImportExtension'] = $originalSessionExtension;
+            }
+            elseif(isset($_SESSION['fileImportExtension']))
+            {
+                unset($_SESSION['fileImportExtension']);
+            }
+
+            // 清理测试文件
+            if(isset($testFile) && file_exists($testFile)) unlink($testFile);
+        }
+    }
 }
