@@ -475,4 +475,27 @@ class transferTest
             return $fieldList;
         }
     }
+
+    /**
+     * Test getPageDatas method.
+     *
+     * @param  array $datas
+     * @param  int   $pagerID
+     * @access public
+     * @return mixed
+     */
+    public function getPageDatasTest(array $datas = array(), int $pagerID = 1)
+    {
+        try 
+        {
+            $result = $this->objectModel->getPageDatas($datas, $pagerID);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
