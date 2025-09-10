@@ -1152,4 +1152,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getDocLibs method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocLibsTest(): array
+    {
+        $result = $this->objectModel->getDocLibs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
