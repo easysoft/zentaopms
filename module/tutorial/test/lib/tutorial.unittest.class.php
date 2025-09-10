@@ -314,4 +314,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式用户需求。
+     * Test get tutorial requirement.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRequirementTest(): object
+    {
+        $result = $this->objectModel->getRequirement();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
