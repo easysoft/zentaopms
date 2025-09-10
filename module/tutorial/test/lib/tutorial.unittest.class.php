@@ -1094,4 +1094,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式反馈列表。
+     * Test get feedbacks.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFeedbacksTest(): array
+    {
+        $result = $this->objectModel->getFeedbacks();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
