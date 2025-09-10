@@ -1194,4 +1194,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getDocs method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocsTest(): array
+    {
+        $result = $this->objectModel->getDocs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
