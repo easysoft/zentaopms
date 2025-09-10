@@ -11572,7 +11572,7 @@ class upgradeModel extends model
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
         $deliverable->template    = '[]';
-        $deliverable->buildin     = '1';
+        $deliverable->buitin      = '1';
 
         $deliverableStage = new stdClass();
         $deliverableStage->stage    = 'project';
