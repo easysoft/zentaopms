@@ -899,4 +899,109 @@ class transferTest
             if(isset($testFile) && file_exists($testFile)) unlink($testFile);
         }
     }
+
+    /**
+     * Test createTmpFile method.
+     *
+     * @param  array $objectDatas
+     * @access public
+     * @return mixed
+     */
+    public function createTmpFileTest(array $objectDatas = array())
+    {
+        global $tester;
+
+        // 备份原始session数据
+        $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
+        $originalSessionTmpFile = isset($_SESSION['tmpFile']) ? $_SESSION['tmpFile'] : null;
+
+        try 
+        {
+            // 获取临时文件路径
+            $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
+            if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
+
+            // 根据测试场景设置参数
+            if(empty($objectDatas))
+            {
+                // 默认测试数据
+                $objectDatas = array(
+                    1 => (object)array('title' => '测试标题1', 'status' => 'active'),
+                    2 => (object)array('title' => '测试标题2', 'status' => 'closed')
+                );
+            }
+
+            // 设置session文件名
+            $testFile = $tmpPath . '/create_tmpfile_test.csv';
+            file_put_contents($testFile, 'test,content');
+            $_SESSION['fileImportFileName'] = $testFile;
+
+            // 使用反射访问protected方法
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('createTmpFile');
+            $method->setAccessible(true);
+            $method->invoke($this->objectModel, $objectDatas);
+
+            // 验证临时文件是否创建成功
+            $expectedTmpFile = $tmpPath . DS . md5(basename($testFile));
+            
+            if(file_exists($expectedTmpFile))
+            {
+                // 验证文件内容
+                $fileContent = file_get_contents($expectedTmpFile);
+                $unserializedData = unserialize($fileContent);
+                
+                // 验证文件内容是否能正确反序列化
+                if($unserializedData !== false && is_array($unserializedData))
+                {
+                    // 验证session是否被正确设置
+                    if(isset($_SESSION['tmpFile']) && $_SESSION['tmpFile'] === $expectedTmpFile)
+                    {
+                        return 'Success';
+                    }
+                    else
+                    {
+                        return 'Session not set';
+                    }
+                }
+                else
+                {
+                    return 'Serialize failed';
+                }
+            }
+            else
+            {
+                return 'File not created';
+            }
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        finally
+        {
+            // 恢复原始数据
+            if($originalSessionFileName !== null)
+            {
+                $_SESSION['fileImportFileName'] = $originalSessionFileName;
+            }
+            elseif(isset($_SESSION['fileImportFileName']))
+            {
+                unset($_SESSION['fileImportFileName']);
+            }
+
+            if($originalSessionTmpFile !== null)
+            {
+                $_SESSION['tmpFile'] = $originalSessionTmpFile;
+            }
+            elseif(isset($_SESSION['tmpFile']))
+            {
+                unset($_SESSION['tmpFile']);
+            }
+
+            // 清理测试文件
+            if(isset($testFile) && file_exists($testFile)) unlink($testFile);
+            if(isset($expectedTmpFile) && file_exists($expectedTmpFile)) unlink($expectedTmpFile);
+        }
+    }
 }
