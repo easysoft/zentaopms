@@ -1449,4 +1449,28 @@ class userTest
 
         return $result;
     }
+
+    /**
+     * Test checkProductPriv method.
+     *
+     * @param  object $product
+     * @param  string $account
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProductPrivTest(object $product, string $account, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProductPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($product, $account, $teams, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
