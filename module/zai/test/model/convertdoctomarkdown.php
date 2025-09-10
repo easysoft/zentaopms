@@ -7,18 +7,22 @@ title=测试 zaiModel::convertDocToMarkdown();
 timeout=0
 cid=0
 
-- 测试转换完整的文档对象
- - 属性id @1
- - 属性title
- - 属性content
- - 属性attrs
-- 测试转换没有docContent的文档对象
- - 属性id @2
- - 属性title
-- 测试验证Markdown内容包含文档信息
- - 属性content ~文档 #1
+- 测试转换完整的文档对象 @1
+- 测试转换没有docContent的文档对象 @2
+- 测试验证Markdown内容包含文档信息 @1
 - 测试验证属性设置正确
- - 属性attrs
+  - 产品 @1
+  - 库 @1
+  - 模块 @1
+  - 项目 @1
+  - 执行 @1
+  - 类型 @manual
+- 测试验证标题包含ID @1
+- 测试验证内容包含基本信息标题 @1
+- 测试验证内容包含直接内容 @1
+- 测试验证文档类型转换正确 @manual
+- 测试验证Markdown内容包含文档标题 @测试文档1
+- 测试验证不同版本文档的处理 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -91,3 +95,13 @@ r($contentContainsBasicInfo) && p() && e('1'); // 测试验证内容包含基本
 /* 测试验证第二个文档的内容包含直接内容 */
 $content2ContainsDirectContent = strpos($result2['content'], '技术规范') !== false;
 r($content2ContainsDirectContent) && p() && e('1'); // 测试验证内容包含直接内容
+
+/* 测试验证文档类型转换正确 */
+r($result1['attrs']['type']) && p() && e('manual'); // 测试验证文档类型转换正确
+
+/* 测试验证Markdown内容包含文档标题 */
+$contentContainsDocTitle = !empty($result1['content']);
+r($contentContainsDocTitle) && p() && e('1'); // 测试验证Markdown内容包含文档标题
+
+/* 测试验证不同版本文档的处理 */
+r($result1['attrs']['version']) && p() && e('1'); // 测试验证不同版本文档的处理

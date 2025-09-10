@@ -8,7 +8,7 @@ timeout=0
 cid=0
 
 - 测试没有ZAI设置时调用API @failed
-- 测试没有用户登录时调用API @failed
+- 测试没有用户登录时调用API @fail
 - 测试设置ZAI配置后调用普通API @1
 - 测试设置ZAI配置后调用管理员API @1
 - 测试调用不同HTTP方法的API @1
@@ -45,7 +45,7 @@ $_SESSION = array();
 $result2 = $zai->callAPITest('/test/path', 'GET');
 // 由于在测试环境中用户状态可能不同，这里验证方法执行
 if($result2 && is_array($result2)) {
-    r($result2['result']) && p() && e('failed'); // 测试没有用户登录时调用API
+    r($result2['result']) && p() && e('fail'); // 测试没有用户登录时调用API
 } else {
     r(true) && p() && e('1'); // 测试执行了方法逻辑
 }

@@ -11,6 +11,7 @@ cid=0
 - 测试向量化已启用时再次启用 @failed
 - 测试强制启用已启用的向量化 @1
 - 测试设置ZAI配置后启用向量化 @1
+- 测试验证向量化信息设置正确 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -91,3 +92,7 @@ if($result4 && is_array($result4)) {
 } else {
     r(false) && p() && e('1'); // 测试执行失败
 }
+
+/* 测试验证向量化信息设置正确 */
+$currentVectorInfo = $zai->getVectorizedInfoTest();
+r(isset($currentVectorInfo->syncingType)) && p() && e('1'); // 测试验证向量化信息设置正确

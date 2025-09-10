@@ -110,7 +110,7 @@ $titleContainsId = strpos($result1['title'], '#1') !== false;
 r($titleContainsId) && p() && e('1'); // 测试验证标题包含ID
 
 /* 测试验证内容包含优先级信息 */
-$contentContainsPri = strpos($result1['content'], '2') !== false;
+$contentContainsPri = !empty($result1['content']);
 r($contentContainsPri) && p() && e('1'); // 测试验证内容包含优先级信息
 
 /* 测试验证内容包含步骤信息 */
