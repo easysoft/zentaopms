@@ -884,4 +884,33 @@ class testtaskTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test linkImportedCaseToSuite method.
+     *
+     * @param  object $case
+     * @param  int    $caseID
+     * @param  object $suiteCase
+     * @access public
+     * @return mixed
+     */
+    public function linkImportedCaseToSuiteTest(object $case, int $caseID, object $suiteCase)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('linkImportedCaseToSuite');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->objectModel, [$case, $caseID, $suiteCase]);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                return 'dao_error: ' . (is_array($errors) ? implode(', ', $errors) : $errors);
+            }
+            return $result;
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
