@@ -608,4 +608,20 @@ class testtaskTest
 
         return $result;
     }
+
+    /**
+     * Test getRunByCase method.
+     *
+     * @param  int $taskID
+     * @param  int $caseID
+     * @access public
+     * @return mixed
+     */
+    public function getRunByCaseTest(int $taskID, int $caseID)
+    {
+        $result = $this->objectModel->getRunByCase($taskID, $caseID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
