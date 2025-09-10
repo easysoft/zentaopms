@@ -1,0 +1,15 @@
+title: 项目管理员数据配置
+
+fields:
+- field: group
+  range: 1-5
+- field: account
+  range: admin,manager,user1
+- field: programs
+  range: 1,2,3
+- field: projects
+  range: 1,2,3
+- field: products
+  range: 1,2,3
+- field: executions
+  range: 1,2,3,all

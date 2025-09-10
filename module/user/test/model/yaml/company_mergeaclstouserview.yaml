@@ -1,0 +1,9 @@
+title: 公司数据配置
+
+fields:
+- field: id
+  range: 1
+- field: name
+  range: 测试公司
+- field: admins
+  range: ,admin,
