@@ -616,4 +616,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式测试报告列表。
+     * Test get testreports.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTestReportsTest(): array
+    {
+        $result = $this->objectModel->getTestReports();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
