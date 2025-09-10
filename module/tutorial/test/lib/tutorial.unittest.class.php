@@ -1320,4 +1320,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getRepo method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRepoTest(): object
+    {
+        $result = $this->objectModel->getRepo();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
