@@ -4,12 +4,19 @@
 # 作者: Auto-generated script
 # 日期: $(date +%Y-%m-%d)
 
+if [ "$#" -eq 0 ]; then
+    echo "Usage: $0 <csv_file_name>"
+    echo "This script generates unit test scripts based on the provided CSV file."
+    exit 1
+fi
+
 # 设置变量
 
 BASE_PATH=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")/../..")
 GUIDE_FILE="$BASE_PATH/.claude/rules/zentao-unit-test-guide.md"
-CSV_FILE="$BASE_PATH/.claude/data/open_model_no_case.csv"
+CSV_FILE="$BASE_PATH/.claude/data/$1"
 LOG_FILE="$BASE_PATH/tmp/log/unit_test_generation_$(date +%Y%m%d_%H%M%S).log"
+
 CURRENT_LINE=0
 TOTAL_PROCESSED=0
 TOTAL_SKIPPED=0
