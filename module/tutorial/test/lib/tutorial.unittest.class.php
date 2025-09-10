@@ -661,4 +661,19 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * 测试获取新手模式问题。
+     * Test get issue.
+     *
+     * @access public
+     * @return object
+     */
+    public function getIssueTest(): object
+    {
+        $result = $this->objectModel->getIssue();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
