@@ -1222,4 +1222,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getDemand method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDemandTest(): object
+    {
+        $result = $this->objectModel->getDemand();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
