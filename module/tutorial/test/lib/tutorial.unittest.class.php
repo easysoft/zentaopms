@@ -1334,4 +1334,18 @@ class tutorialTest
 
         return $result;
     }
+
+    /**
+     * Test getCommits method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCommitsTest(): array
+    {
+        $result = $this->objectModel->getCommits();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
