@@ -18,5 +18,3 @@ fields:
     range: "(M)-(w)"
     type: timestamp
     format: "YY/MM/DD"
-  - field: type
-    range: 'project'
