@@ -101,6 +101,7 @@ class release extends control
         {
             $release->desc       = str_replace('&nbsp;', ' ', strip_tags($release->desc));
             $release->branchName = trim($release->branchName, ',');
+            $release->branch     = trim($release->branch, ',');
         }
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
