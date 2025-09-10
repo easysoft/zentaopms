@@ -944,4 +944,23 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test createSceneLink method.
+     *
+     * @param  string       $type
+     * @param  object       $module
+     * @param  string       $parent
+     * @param  array|string $extra
+     * @access public
+     * @return object
+     */
+    public function createSceneLinkTest($type, $module, $parent = '', $extra = array())
+    {
+        $result = $this->objectModel->createSceneLink($type, $module, $parent, $extra);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
