@@ -1249,4 +1249,22 @@ class biTest
         
         return $updatedCount;
     }
+
+    /**
+     * Test fetchActionDate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function fetchActionDateTest()
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchActionDate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
