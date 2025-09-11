@@ -1134,4 +1134,23 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getLinkedExtra method.
+     *
+     * @param  object $action
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function getLinkedExtraTest(object $action, string $type): bool
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+        $result = $actionTao->getLinkedExtra($action, $type);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
