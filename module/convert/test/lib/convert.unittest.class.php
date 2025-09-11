@@ -2346,4 +2346,40 @@ class convertTest
             return get_class($e) === 'Exception' ? 'exception: ' . $e->getMessage() : 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test createTmpRelation method.
+     *
+     * @param  string $AType
+     * @param  string|int $AID
+     * @param  string $BType
+     * @param  string|int $BID
+     * @param  string $extra
+     * @access public
+     * @return mixed
+     */
+    public function createTmpRelationTest($AType = '', $AID = '', $BType = '', $BID = '', $extra = '')
+    {
+        try {
+            global $tester;
+            
+            // 设置dbh属性，确保数据库连接可用
+            if(empty($this->objectTao->dbh)) {
+                $this->objectTao->dbh = $tester->dbh;
+            }
+            
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createTmpRelation');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $AType, $AID, $BType, $BID, $extra);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage() . ' File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage() . ' File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+        }
+    }
 }
