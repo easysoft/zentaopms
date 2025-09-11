@@ -3930,4 +3930,24 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test updateSubTask method.
+     *
+     * @param  array $taskLink
+     * @param  array $issueList
+     * @access public
+     * @return mixed
+     */
+    public function updateSubTaskTest($taskLink = array(), $issueList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateSubTask');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $taskLink, $issueList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
