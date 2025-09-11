@@ -7,6 +7,7 @@ class MockWorkflowField
     {
         return 1;
     }
+
 }
 
 class convertTest
@@ -3907,6 +3908,26 @@ class convertTest
         }
         
         return 0;
+    }
+
+    /**
+     * Test updateSubStory method.
+     *
+     * @param  array $storyLink
+     * @param  array $issueList
+     * @access public
+     * @return mixed
+     */
+    public function updateSubStoryTest($storyLink = array(), $issueList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateSubStory');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $storyLink, $issueList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
 }
