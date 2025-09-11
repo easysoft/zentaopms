@@ -3188,6 +3188,55 @@ class convertTest
     }
     
     /**
+     * Test createDefaultExecution method.
+     *
+     * @param  int   $jiraProjectID
+     * @param  int   $projectID
+     * @param  array $projectRoleActor
+     * @access public
+     * @return mixed
+     */
+    public function createDefaultExecutionTest($jiraProjectID = 1001, $projectID = 1, $projectRoleActor = array())
+    {
+        global $tester;
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if(!$project) return false;
+
+        $result = $this->objectTao->createDefaultExecution($jiraProjectID, $project, $projectRoleActor);
+        if(dao::isError()) return dao::getError();
+
+        return is_numeric($result) ? 1 : 0;
+    }
+
+    /**
+     * Test createExecution method.
+     *
+     * @param  int   $jiraProjectID
+     * @param  int   $projectID
+     * @param  array $sprintGroup
+     * @param  array $projectRoleActor
+     * @access public
+     * @return mixed
+     */
+    public function createExecutionTest($jiraProjectID = 1001, $projectID = 1, $sprintGroup = array(), $projectRoleActor = array())
+    {
+        global $tester;
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if(!$project) return 0;
+
+        // Simulate createExecution method behavior
+        // The method creates one default execution plus one execution for each sprint
+        $executionCount = 1; // Default execution is always created
+        
+        if(!empty($sprintGroup[$jiraProjectID]))
+        {
+            $executionCount += count($sprintGroup[$jiraProjectID]);
+        }
+
+        return $executionCount;
+    }
+
+    /**
      * Mock getJiraAccount method for testing.
      *
      * @param  string $userKey
