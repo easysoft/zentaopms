@@ -1534,4 +1534,23 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getAllProductsIDAndName method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllProductsIDAndNameTest(): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAllProductsIDAndName');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
