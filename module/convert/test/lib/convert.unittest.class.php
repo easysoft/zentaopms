@@ -3592,4 +3592,58 @@ class convertTest
         return new MockWorkflowField();
     }
 
+    /**
+     * Test createDefaultLayout method.
+     *
+     * @param  array  $fields
+     * @param  object $flow
+     * @param  int    $group
+     * @access public
+     * @return mixed
+     */
+    public function createDefaultLayoutTest($fields = array(), $flow = null, $group = 0)
+    {
+        global $tester;
+        
+        if(empty($fields))
+        {
+            $field1 = new stdClass();
+            $field1->field = 'title';
+            $field2 = new stdClass();
+            $field2->field = 'description';
+            $field3 = new stdClass();
+            $field3->field = 'deleted';
+            $field4 = new stdClass();
+            $field4->field = 'id';
+            $fields = array($field1, $field2, $field3, $field4);
+        }
+        
+        if(empty($flow))
+        {
+            $flow = new stdClass();
+            $flow->module = 'test';
+        }
+        
+        // Record initial count
+        $beforeCount = $tester->dao->select('count(*) as count')->from(TABLE_WORKFLOWLAYOUT)->fetch('count');
+        
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('createDefaultLayout');
+        $method->setAccessible(true);
+        
+        try
+        {
+            $result = $method->invokeArgs($this->objectTao, array($fields, $flow, $group));
+            if(dao::isError()) return dao::getError();
+            
+            // Check if records were inserted
+            $afterCount = $tester->dao->select('count(*) as count')->from(TABLE_WORKFLOWLAYOUT)->fetch('count');
+            return $afterCount > $beforeCount ? true : $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
 }
