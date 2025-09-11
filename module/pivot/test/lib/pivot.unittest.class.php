@@ -1515,4 +1515,23 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getProductProjects method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductProjectsTest(): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProductProjects');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
