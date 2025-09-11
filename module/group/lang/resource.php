@@ -1994,7 +1994,6 @@ $lang->resource->aiapp->view               = 'view';
 $lang->resource->aiapp->miniProgramChat    = 'miniProgramChat';
 $lang->resource->aiapp->collectMiniProgram = 'collectMiniProgram';
 $lang->resource->aiapp->models             = 'models';
-$lang->resource->aiapp->converse           = 'converse';
 $lang->resource->aiapp->conversation       = 'browseConversation';
 
 $lang->resource->zai = new stdclass();
