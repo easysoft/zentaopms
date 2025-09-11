@@ -1445,4 +1445,43 @@ class metricTest
         
         return $afterCount - $beforeCount;
     }
+
+    /**
+     * Test keepLatestRecords method.
+     *
+     * @param  string $code
+     * @param  array  $fields
+     * @access public
+     * @return mixed
+     */
+    public function keepLatestRecordsTest($code = '', $fields = array())
+    {
+        global $tester;
+        
+        if(empty($code)) return 'invalid_code';
+        
+        // 记录操作前未删除的记录数
+        $beforeUndeleted = $tester->dao->select('COUNT(*) as count')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('keepLatestRecords');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $code, $fields);
+        if(dao::isError()) return dao::getError();
+
+        // 记录操作后未删除的记录数
+        $afterUndeleted = $tester->dao->select('COUNT(*) as count')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        
+        return $afterUndeleted - $beforeUndeleted;
+    }
 }
