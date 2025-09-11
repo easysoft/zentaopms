@@ -2090,4 +2090,25 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test appendTeamMember method.
+     *
+     * @param  array $cardList
+     * @access public
+     * @return array
+     */
+    public function appendTeamMemberTest($cardList)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('appendTeamMember');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $cardList);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
