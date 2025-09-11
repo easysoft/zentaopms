@@ -1338,4 +1338,28 @@ class actionTest
 
         return $action;
     }
+
+    /**
+     * Test processLinkStoryAndBugActionExtra method.
+     *
+     * @param  string $extra
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return object
+     */
+    public function processLinkStoryAndBugActionExtraTest(string $extra, string $module, string $method): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+
+        $action = new stdClass();
+        $action->extra = $extra;
+
+        $actionTao->processLinkStoryAndBugActionExtra($action, $module, $method);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
 }
