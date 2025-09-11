@@ -170,12 +170,14 @@ class zahostTest
      * @access public
      * @return array|object
      */
-    public function downloadImageTest(int $imageID): array|object
+    public function downloadImageTest(int $imageID): array|object|bool
     {
         $image = $this->objectModel->getImageByID($imageID);
+        if(!$image) return false;
+        
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
-        $this->objectModel->downloadImage($image);
+        $result = $this->objectModel->downloadImage($image);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->getImageByID($imageID);
