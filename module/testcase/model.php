@@ -2981,7 +2981,7 @@ class testcaseModel extends model
 
         $_SESSION['searchParams']['module'] = 'testcase';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
-        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->search->setDefaultParams('testcase', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
     }

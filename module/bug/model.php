@@ -814,7 +814,7 @@ class bugModel extends model
 
         $_SESSION['searchParams']['module'] = 'bug';
         $searchConfig = $this->config->bug->search;
-        $searchConfig['params'] = $this->loadModel('search')->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->loadModel('search')->setDefaultParams('bug', $searchConfig['fields'], $searchConfig['params']);
         return $searchConfig;
     }
 
