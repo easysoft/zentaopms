@@ -2138,4 +2138,28 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test buildGroupColumn method.
+     *
+     * @param  array  $columnList
+     * @param  object $column
+     * @param  array  $laneData
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function buildGroupColumnTest($columnList, $column, $laneData, $browseType)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildGroupColumn');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $columnList, $column, $laneData, $browseType);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
