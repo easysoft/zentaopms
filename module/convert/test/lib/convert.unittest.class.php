@@ -3731,4 +3731,40 @@ class convertTest
         }
     }
 
+    /**
+     * Test processWorkflowHooks method.
+     *
+     * @param  array  $jiraAction
+     * @param  array  $jiraStepList
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function processWorkflowHooksTest($jiraAction = array(), $jiraStepList = array(), $module = '')
+    {
+        // Mock workflowhook object - create a proper mock object with check method
+        $mockWorkflowHook = new class {
+            public function check($hook) {
+                return array('SELECT * FROM ' . $hook->table, null);
+            }
+        };
+        $this->objectTao->workflowhook = $mockWorkflowHook;
+        
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processWorkflowHooks');
+        $method->setAccessible(true);
+        
+        try
+        {
+            $result = $method->invokeArgs($this->objectTao, array($jiraAction, $jiraStepList, $module));
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
 }
