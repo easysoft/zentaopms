@@ -1,0 +1,29 @@
+---
+title: 执行保存测试数据
+desc: 为weekly模块save方法提供执行测试数据
+
+fields:
+- field: id
+  range: 1-20
+- field: project
+  range: 1-10:R
+- field: name
+  range: 执行{1-20}
+- field: code
+  range: execution{1-20}
+- field: begin
+  range: 2023-09-01{10},2023-10-01{10}
+- field: end
+  range: 2023-12-31{10},2024-01-31{10}
+- field: realBegan
+  range: 2023-09-01{10},2023-10-01{10}
+- field: realEnd
+  range: []{10},2023-12-31{10}
+- field: status
+  range: wait{4},doing{10},suspended{2},closed{4}
+- field: type
+  range: stage{15},sprint{5}
+- field: vision
+  range: rnd{20}
+- field: deleted
+  range: 0{20}

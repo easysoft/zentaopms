@@ -1,0 +1,27 @@
+---
+title: 项目保存测试数据
+desc: 为weekly模块save方法提供项目测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: 项目{1-10}
+- field: code
+  range: project{1-10}
+- field: begin
+  range: 2023-09-01{5},2023-10-01{5}
+- field: end  
+  range: 2023-12-31{5},2024-01-31{5}
+- field: realBegan
+  range: 2023-09-01{5},2023-10-01{5}
+- field: realEnd
+  range: []{5},2023-12-31{5}
+- field: status
+  range: wait{2},doing{5},suspended{1},closed{2}
+- field: PM
+  range: admin{5},user1{3},user2{2}
+- field: type
+  range: project{8},sprint{2}
+- field: deleted
+  range: 0{10}
