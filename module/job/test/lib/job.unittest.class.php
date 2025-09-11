@@ -431,4 +431,26 @@ class jobTest
         
         return $job;
     }
+
+    /**
+     * Test getCustomParam method.
+     *
+     * @param  object $job
+     * @access public
+     * @return mixed
+     */
+    public function getCustomParamTest($job)
+    {
+        // Use reflection to access protected method
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getCustomParam');
+        $method->setAccessible(true);
+        
+        // Invoke the method with reference parameter
+        $result = $method->invokeArgs($this->objectTao, array(&$job));
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
