@@ -1384,4 +1384,26 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test fetchMetricRecordByDate method.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function fetchMetricRecordByDateTest($code = 'all', $date = '', $limit = 100)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchMetricRecordByDate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $code, $date, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
