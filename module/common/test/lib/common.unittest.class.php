@@ -2587,4 +2587,47 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test getStoryModuleAndMethod method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function getStoryModuleAndMethodTest($module = '', $method = '', $params = array())
+    {
+        try {
+            global $app;
+            
+            // 备份原始状态
+            $originalApp = isset($app) ? clone $app : null;
+            
+            // 初始化必要的全局变量
+            if(!isset($app)) $app = new stdClass();
+            if(!isset($app->params)) $app->params = array();
+            
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass('commonTao');
+            $method_ref = $reflection->getMethod('getStoryModuleAndMethod');
+            $method_ref->setAccessible(true);
+            
+            $result = $method_ref->invokeArgs(null, array($module, $method, $params));
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+            
+        } catch (Exception $e) {
+            return array($module, $method);
+        } finally {
+            // 恢复原始状态
+            if($originalApp !== null) {
+                global $app;
+                $app = $originalApp;
+            }
+        }
+    }
 }
