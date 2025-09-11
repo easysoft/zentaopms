@@ -1314,4 +1314,28 @@ class actionTest
 
         return $action;
     }
+
+    /**
+     * Test processAppendLinkByExtra method.
+     *
+     * @param  string $extra
+     * @param  string $objectType
+     * @access public
+     * @return object
+     */
+    public function processAppendLinkByExtraTest(string $extra, string $objectType = 'task'): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+
+        $action = new stdClass();
+        $action->extra = $extra;
+        $action->objectType = $objectType;
+
+        $actionTao->processAppendLinkByExtra($action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
 }
