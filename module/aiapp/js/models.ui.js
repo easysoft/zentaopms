@@ -21,8 +21,9 @@ window.initModelList = async function()
         {name: 'index', title: 'ID', type: 'id', sortType: false},
         {name: 'id', title: modelLang},
         {name: 'actions', title: actionLang, width: 90, type: 'actions', actions: ['converse'], actionsMap: {
-            // TODO: The conversation page has not been developed yet.
-            converse: {text: converseLang},
+            converse: {text: converseLang, onClick: (_event, info) => {
+                loadPage($.createLink('aiapp', 'conversation', `chat=NEW&params=${btoa(JSON.stringify({model: info.item.data.row}))}`));
+            }},
         }},
     ];
     $('#modelsList').zui('dtable').render({cols, data: models});
