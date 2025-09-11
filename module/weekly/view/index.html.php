@@ -17,6 +17,9 @@ $(function(){$('#exportreport').modalTrigger();});
 </script>
 <?php endif;?>
 <div id="mainMenu" class="clearfix text-center">
+  <div class="btn-toolbar pull-right">
+  <?php echo html::a($this->createLink('weekly', 'exportweeklyreport', "module=weekly&projectID={$project->id}"), $this->lang->export, '', "class='btn btn-primary' data-width='30%' id='exportreport' data-group='project'");?>
+  </div>
   <div id='mainContent' >
     <div class='main-table'>
     <table class='table table-bordered'>
