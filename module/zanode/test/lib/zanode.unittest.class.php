@@ -249,6 +249,7 @@ class zanodeTest
     public function getVncUrlTest(int $nodeID): bool|object
     {
         $node = $this->getNodeByID($nodeID);
+        if(!$node) return false;
         return $this->getVncUrl($node);
     }
 
