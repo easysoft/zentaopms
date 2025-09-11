@@ -453,4 +453,19 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test getImagesByPath method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByPathTest($matches = array())
+    {
+        $result = $this->objectModel->getImagesByPath($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
