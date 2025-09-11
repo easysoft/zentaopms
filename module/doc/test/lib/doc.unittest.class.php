@@ -5,6 +5,7 @@ class docTest
     {
         global $tester, $app;
         $this->objectModel = $tester->loadModel('doc');
+        $this->objectTao   = $tester->loadTao('doc');
         $this->objectModel->config->global->syncProduct = '';
 
         su($account);
@@ -2365,16 +2366,20 @@ class docTest
     }
 
     /**
-     * Test getDocIdByTitle method.
+     * Test getSpacePairs method.
      *
-     * @param  int    $originPageID
-     * @param  string $title
+     * @param  string $type
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function getDocIdByTitleTest(int $originPageID, string $title = '')
+    public function getSpacePairsTest(string $type): array
     {
-        $result = $this->objectModel->getDocIdByTitle($originPageID, $title);
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getSpacePairs');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $type);
+        
         if(dao::isError()) return dao::getError();
 
         return $result;

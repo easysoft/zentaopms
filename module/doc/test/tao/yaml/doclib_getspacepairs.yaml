@@ -1,0 +1,68 @@
+---
+title: doclib测试数据
+desc: 为getSpacePairs方法生成测试数据
+
+fields:
+- field: id
+  range: 1-10
+  
+- field: type
+  range: product{3},project{2},execution{2},custom{2},mine{1}
+  
+- field: vision
+  range: rnd{10}
+  
+- field: parent
+  range: 0{10}
+  
+- field: product
+  range: 0{8},1{1},2{1}
+  
+- field: project
+  range: 0{8},1{1},2{1}
+  
+- field: execution
+  range: 0{10}
+  
+- field: name
+  range: 产品文档库{3},项目文档库{2},执行文档库{2},自定义文档库{2},我的文档库{1}
+  
+- field: baseUrl
+  range: []{10}
+  
+- field: acl
+  range: open{6},private{3},custom{1}
+  
+- field: groups
+  range: []{8},1{1},2{1}
+  
+- field: users
+  range: []{7},admin{2},user{1}
+  
+- field: main
+  range: 0{8},1{2}
+  
+- field: collector
+  range: []{10}
+  
+- field: desc
+  range: 这是一个测试用的文档库{10}
+  
+- field: order
+  range: 1-10
+  
+- field: addedBy
+  range: admin{6},user{2},test{2}
+  
+- field: addedDate
+  range: (-1Y)-(-1D):30D
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: deleted
+  range: 0{8},1{2}
+  
+- field: archived
+  range: 0{10}
+  
+- field: orderBy
+  range: id_asc{10}
