@@ -4017,8 +4017,7 @@ $config->group->package->browseAiModels = new stdclass();
 $config->group->package->browseAiModels->order  = 2080;
 $config->group->package->browseAiModels->subset = 'aiapp';
 $config->group->package->browseAiModels->privs  = array();
-$config->group->package->browseAiModels->privs['aiapp-models']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseAiModels->privs['aiapp-converse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('aiapp-models'), 'recommend' => array());
+$config->group->package->browseAiModels->privs['aiapp-models'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->zai = new stdclass();
 $config->group->package->zai->order  = 2090;
