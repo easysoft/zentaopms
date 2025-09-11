@@ -2362,12 +2362,12 @@ class convertTest
     {
         try {
             global $tester;
-            
+
             // 设置dbh属性，确保数据库连接可用
             if(empty($this->objectTao->dbh)) {
                 $this->objectTao->dbh = $tester->dbh;
             }
-            
+
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('createTmpRelation');
             $method->setAccessible(true);
@@ -3011,7 +3011,7 @@ class convertTest
         {
             // 跳过已存在的关联
             if(!empty($changeRelation[$data->id])) continue;
-            
+
             // 检查 groupid 是否存在
             if(!isset($changeGroup[$data->groupid])) continue;
 
@@ -3112,7 +3112,7 @@ class convertTest
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('createTeamMember');
             $method->setAccessible(true);
-            
+
             $result = $method->invoke($this->objectTao, $objectID, $createdBy, $type);
             if(dao::isError()) return false;
             return $result;
@@ -3141,10 +3141,10 @@ class convertTest
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('createDocLib');
             $method->setAccessible(true);
-            
+
             $result = $method->invoke($this->objectTao, $productID, $projectID, $executionID, $name, $type);
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             return false;
@@ -3183,10 +3183,10 @@ class convertTest
         $project->openedVersion = '18.0';
         $project->storyType     = 'story,epic,requirement';
         $project->id            = isset($data->id) ? $data->id : 1;
-        
+
         return $project;
     }
-    
+
     /**
      * Test createDefaultExecution method.
      *
@@ -3227,7 +3227,7 @@ class convertTest
         // Simulate createExecution method behavior
         // The method creates one default execution plus one execution for each sprint
         $executionCount = 1; // Default execution is always created
-        
+
         if(!empty($sprintGroup[$jiraProjectID]))
         {
             $executionCount += count($sprintGroup[$jiraProjectID]);
@@ -3240,7 +3240,7 @@ class convertTest
      * Mock getJiraAccount method for testing.
      *
      * @param  string $userKey
-     * @access private  
+     * @access private
      * @return string
      */
     private function mockGetJiraAccount($userKey)
@@ -3248,7 +3248,7 @@ class convertTest
         if(empty($userKey)) return '';
         $mockUsers = array(
             'jira_admin' => 'admin',
-            'jira_user1' => 'user1',  
+            'jira_user1' => 'user1',
             'jira_user2' => 'user2',
             'jira_lead' => 'manager'
         );
@@ -3266,7 +3266,7 @@ class convertTest
     public function createProductTest($project = null, $executions = array())
     {
         if($project === null) return false;
-        
+
         $result = $this->objectTao->createProduct($project, $executions);
         if(dao::isError()) return dao::getError();
 
@@ -3287,8 +3287,30 @@ class convertTest
     public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
     {
         if($module === null || $data === null || $object === null) return false;
-        
+
         $result = $this->objectTao->processBuildinFieldData($module, $data, $object, $relations, $buildinFlow);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test createStory method.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  object $data
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function createStoryTest($productID = 0, $projectID = 0, $executionID = 0, $type = 'story', $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        $result = $this->objectTao->createStory($productID, $projectID, $executionID, $type, $data, $relations);
         if(dao::isError()) return dao::getError();
 
         return $result;
