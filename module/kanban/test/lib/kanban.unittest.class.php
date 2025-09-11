@@ -2434,4 +2434,24 @@ class kanbanTest
             return 0;
         }
     }
+
+    /**
+     * Test getRiskCardMenu method.
+     *
+     * @param  array $risks
+     * @access public
+     * @return mixed
+     */
+    public function getRiskCardMenuTest($risks)
+    {
+        try {
+            $result = $this->objectTao->getRiskCardMenu($risks);
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
