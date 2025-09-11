@@ -3970,4 +3970,24 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test updateRelatesObject method.
+     *
+     * @param  array $relatesLink
+     * @param  array $issueList
+     * @access public
+     * @return mixed
+     */
+    public function updateRelatesObjectTest($relatesLink = array(), $issueList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateRelatesObject');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $relatesLink, $issueList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
