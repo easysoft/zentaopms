@@ -2382,4 +2382,85 @@ class convertTest
             return 'error: ' . $e->getMessage() . ' File: ' . $e->getFile() . ' Line: ' . $e->getLine();
         }
     }
+
+    /**
+     * Test importJiraProject method.
+     *
+     * @param  array $dataList
+     * @access public
+     * @return mixed
+     */
+    public function importJiraProjectTest($dataList = array())
+    {
+        try {
+            // 备份原始session数据
+            global $app;
+            $originalJiraMethod = $app->session->jiraMethod ?? null;
+            $originalJiraUser = $app->session->jiraUser ?? null;
+
+            // 设置测试session数据
+            if(empty($app->session->jiraMethod)) {
+                $app->session->set('jiraMethod', 'file');
+            }
+            if(empty($app->session->jiraUser)) {
+                $app->session->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => 'account'));
+            }
+
+            // 设置dbh属性，确保数据库连接可用
+            if(empty($this->objectTao->dbh)) {
+                $this->objectTao->dbh = $app->dbh;
+            }
+
+            // 使用反射来访问protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('importJiraProject');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $dataList);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                $this->restoreImportJiraProjectSession($originalJiraMethod, $originalJiraUser);
+                return $errors;
+            }
+
+            // 恢复原始session数据
+            $this->restoreSessionData($originalJiraMethod, $originalJiraUser);
+            return $result ? 'true' : 'false';
+        } catch (Exception $e) {
+            if(isset($originalJiraMethod) && isset($originalJiraUser)) {
+                $this->restoreImportJiraProjectSession($originalJiraMethod, $originalJiraUser);
+            }
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            if(isset($originalJiraMethod) && isset($originalJiraUser)) {
+                $this->restoreImportJiraProjectSession($originalJiraMethod, $originalJiraUser);
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Restore session data for importJiraProject test.
+     *
+     * @param  mixed $originalJiraMethod
+     * @param  mixed $originalJiraUser
+     * @access private
+     * @return void
+     */
+    private function restoreImportJiraProjectSession($originalJiraMethod, $originalJiraUser)
+    {
+        global $app;
+
+        if($originalJiraMethod !== null) {
+            $app->session->set('jiraMethod', $originalJiraMethod);
+        } else {
+            $app->session->destroy('jiraMethod');
+        }
+
+        if($originalJiraUser !== null) {
+            $app->session->set('jiraUser', $originalJiraUser);
+        } else {
+            $app->session->destroy('jiraUser');
+        }
+    }
 }
