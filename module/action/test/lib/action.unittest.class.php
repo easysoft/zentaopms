@@ -1153,4 +1153,60 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test processActionExtra method.
+     *
+     * @param  string $table
+     * @param  int    $extraID
+     * @param  string $fields
+     * @param  string $type
+     * @param  string $method
+     * @param  bool   $onlyBody
+     * @param  bool   $addLink
+     * @access public
+     * @return string
+     */
+    public function processActionExtraTest(string $table, int $extraID, string $fields, string $type, string $method = 'view', bool $onlyBody = false, bool $addLink = true): string
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+        
+        // 创建测试用的action对象
+        $action = new stdClass();
+        $action->extra = $extraID;
+        $action->objectType = 'bug';
+        $action->action = 'converttotask';
+        $action->project = 1;
+        
+        // 备份原始extra值
+        $originalExtra = $action->extra;
+        
+        // 模拟onlyBody场景
+        if($onlyBody)
+        {
+            $originalIsonlybody = $tester->config->requestType ?? 'GET';
+            $_GET['onlybody'] = 'yes';
+        }
+        
+        // 调用测试方法
+        $actionTao->processActionExtra($table, $action, $fields, $type, $method, $onlyBody, $addLink);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 恢复onlyBody状态
+        if($onlyBody)
+        {
+            unset($_GET['onlybody']);
+        }
+        
+        // 分析结果 - 优先检查特殊场景
+        if($action->extra == $originalExtra) return 'no_change';
+        if($onlyBody && strpos($action->extra, '<a') === false) return 'onlybody_mode';
+        if(!$addLink && strpos($action->extra, '#') !== false && strpos($action->extra, '<a') === false) return 'no_link';
+        if($action->objectType == 'bug' && $type == 'task' && strpos($action->extra, 'data-app=') !== false) return 'bug_to_task';
+        if(strpos($action->extra, '<a') !== false) return 'contains_link';
+        
+        return 'processed';
+    }
 }
