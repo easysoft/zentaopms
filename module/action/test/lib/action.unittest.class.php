@@ -1270,4 +1270,26 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test processCreateChildrenActionExtra method.
+     *
+     * @param  string $taskIds
+     * @access public
+     * @return object
+     */
+    public function processCreateChildrenActionExtraTest(string $taskIds): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+
+        $action = new stdClass();
+        $action->extra = $taskIds;
+
+        $actionTao->processCreateChildrenActionExtra($action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
 }
