@@ -398,4 +398,37 @@ class jobTest
         
         return $result;
     }
+
+    /**
+     * Test getSvnDir method.
+     *
+     * @param  object $job
+     * @param  object $repo
+     * @param  array  $svnDirPost
+     * @access public
+     * @return mixed
+     */
+    public function getSvnDirTest($job, $repo, $svnDirPost = array())
+    {
+        // Backup original $_POST
+        $originalPost = $_POST;
+        
+        // Set up $_POST['svnDir'] for testing
+        $_POST['svnDir'] = $svnDirPost;
+        
+        // Use reflection to access protected method
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getSvnDir');
+        $method->setAccessible(true);
+        
+        // Invoke the method with reference parameter
+        $method->invokeArgs($this->objectTao, array(&$job, $repo));
+        
+        // Restore original $_POST
+        $_POST = $originalPost;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $job;
+    }
 }
