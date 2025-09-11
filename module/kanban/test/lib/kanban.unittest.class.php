@@ -1811,4 +1811,95 @@ class kanbanTest
 
         return $result;
     }
+
+    /**
+     * Test addChildColumnCell method.
+     *
+     * @param  int $columnID
+     * @param  int $childColumnID
+     * @param  int $i
+     * @access public
+     * @return array
+     */
+    public function addChildColumnCellTest($columnID, $childColumnID, $i = 0)
+    {
+        global $tester;
+        
+        // 记录操作前的单元格数量
+        $beforeCount = $tester->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('addChildColumnCell');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $columnID, $childColumnID, $i);
+        
+        if(dao::isError()) return array('success' => 0, 'error' => dao::getError());
+        
+        // 记录操作后的单元格数量
+        $afterCount = $tester->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
+        
+        // 判断是否成功创建了新的单元格
+        $success = $afterCount > $beforeCount ? 1 : 0;
+        
+        return array('success' => $success);
+    }
+
+    /**
+     * Test updateColumnParent method.
+     *
+     * @param  int $columnID
+     * @access public
+     * @return array
+     */
+    public function updateColumnParentTest($columnID)
+    {
+        global $tester;
+        
+        // 获取待测试的列信息
+        $column = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch();
+        
+        if(!$column) return array('result' => 0, 'error' => 'Column not found');
+        
+        // 如果列没有父列，方法应该正常执行不报错
+        if($column->parent == 0) 
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('updateColumnParent');
+            $method->setAccessible(true);
+            $method->invoke($this->objectTao, $column);
+            return array('result' => 0); // 正常执行，无变化
+        }
+        
+        // 记录调用前的同父列子列数量
+        $siblingCount = $tester->dao->select('COUNT(1) AS count')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($column->parent)
+            ->andWhere('id')->ne($column->id)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->fetch('count');
+        
+        // 调用被测试的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateColumnParent');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $column);
+        
+        if(dao::isError()) return array('result' => 0, 'error' => dao::getError());
+        
+        // 获取父列的当前parent值
+        $parentColumn = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($column->parent)->fetch();
+        $currentParent = $parentColumn ? $parentColumn->parent : -1;
+        
+        // 判断结果：如果没有其他兄弟列，父列的parent应该被重置为0
+        if($siblingCount == 0 && $currentParent == 0) {
+            return array('result' => 1); // 正确重置
+        } elseif($siblingCount > 0 && $currentParent != 0) {
+            return array('result' => 0); // 正确保持不变
+        } else {
+            return array('result' => 0); // 其他情况
+        }
+    }
 }
