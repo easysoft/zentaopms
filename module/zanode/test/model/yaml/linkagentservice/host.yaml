@@ -1,28 +1,32 @@
 title: zt_host
-author: Qiyu Xie
+author: Claude Code
 version: "1.0"
+desc: Host data for linkAgentService test
 fields:
   - field: id
-    range: 1-1000
+    range: 1-10
+    note: 主机ID
   - field: name
-    fields:
-      - field: name1
-        range: zahost,zanode
-      - field: name2
-        range: 1-1000
+    range: host{1-10}
+    note: 主机名称
   - field: type
-    range: zahost,node
+    range: host
+    note: 主机类型
   - field: hostType
-    range: 'physical,[]'
+    range: ''
+    note: 物理机类型为空
   - field: status
-    range: online,running
-  - field: image
-    range: 1
-  - field: parent
-    range: '0,1'
-  - field: tokenSN
-    range: f9f9220b37bd2a92061417118afe165c,[]
-  - field: zap
-    range: '55001,55156'
+    range: online
+    note: 主机状态
   - field: extranet
-    range: "10.0.1.222,[]"
+    range: 192.168.1.{101-110}
+    note: 外网IP地址
+  - field: zap
+    range: 8848
+    note: Agent端口
+  - field: tokenSN
+    range: token{1-10}
+    note: 认证令牌
+  - field: deleted
+    range: 0
+    note: 未删除状态

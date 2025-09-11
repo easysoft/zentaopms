@@ -350,4 +350,32 @@ class zanodeTest
         
         return $result;
     }
+
+    /**
+     * 测试连接Agent服务。
+     * Test link agent service.
+     *
+     * @param  object $data
+     * @access public
+     * @return mixed
+     */
+    public function linkAgentServiceTest(object $data): mixed
+    {
+        // 检查必要参数是否存在
+        if(!isset($data->image) || !isset($data->parent)) return false;
+        if($data->image === null || $data->parent === null) return false;
+        
+        // 检查镜像是否存在
+        $image = $this->getImageByID($data->image);
+        if(!$image) return false;
+        
+        // 检查宿主机是否存在
+        $host = $this->getHostByID($data->parent);
+        if(!$host) return false;
+        
+        $result = $this->linkAgentService($data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
