@@ -11560,7 +11560,7 @@ class upgradeModel extends model
             ->orderBy('id_asc')
             ->fetchPairs();
 
-        if(empty($typeList)) $testcaseStageList = $this->lang->testcase->stageList;
+        if(empty($testcaseStageList)) $testcaseStageList = $this->lang->testcase->stageList;
 
         $modules = $this->dao->select('root,id')->from(TABLE_MODULE)
             ->where('type')->eq('deliverable')
