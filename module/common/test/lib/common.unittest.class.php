@@ -2,11 +2,13 @@
 class commonTest
 {
     public $objectModel;
+    public $objectTao;
 
     public function __construct()
     {
         global $tester;
         $this->objectModel = $tester->loadModel('common');
+        $this->objectTao   = $tester->loadTao('common');
     }
 
     /**
@@ -2531,6 +2533,56 @@ class commonTest
                 $app = $originalApp;
             }
             if($originalLang !== null) {
+                $lang = $originalLang;
+            }
+        }
+    }
+
+    /**
+     * Test isProjectAdmin method.
+     *
+     * @param  string $module
+     * @param  mixed  $object
+     * @access public
+     * @return mixed
+     */
+    public function isProjectAdminTest($module = '', $object = null)
+    {
+        try {
+            global $app, $lang;
+            
+            // 备份原始状态
+            $originalApp = isset($app) ? clone $app : null;
+            $originalLang = isset($lang) ? clone $lang : null;
+            
+            // 初始化必要的全局变量
+            if(!isset($app)) $app = new stdClass();
+            if(!isset($app->user)) $app->user = new stdClass();
+            if(!isset($app->session)) $app->session = new stdClass();
+            if(!isset($lang)) $lang = new stdClass();
+            if(!isset($lang->navGroup)) $lang->navGroup = new stdClass();
+            
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass('commonTao');
+            $method = $reflection->getMethod('isProjectAdmin');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs(null, array($module, $object));
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result ? '1' : '0';
+            
+        } catch (Exception $e) {
+            return '0';
+        } finally {
+            // 恢复原始状态
+            if($originalApp !== null) {
+                global $app;
+                $app = $originalApp;
+            }
+            if($originalLang !== null) {
+                global $lang;
                 $lang = $originalLang;
             }
         }
