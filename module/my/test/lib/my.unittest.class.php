@@ -772,4 +772,27 @@ class myTest
 
         return count($result);
     }
+
+    /**
+     * Test fetchEpicsBySearch method.
+     *
+     * @param  string $myEpicQuery
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  array  $epicIDList
+     * @access public
+     * @return mixed
+     */
+    public function fetchEpicsBySearchTest(string $myEpicQuery, string $type, string $orderBy, ?object $pager = null, array $epicIDList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchEpicsBySearch');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$myEpicQuery, $type, $orderBy, $pager, $epicIDList]);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
