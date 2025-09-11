@@ -1251,4 +1251,23 @@ class actionTest
         
         return $result;
     }
+
+    /**
+     * Test processParamString method.
+     *
+     * @param  object $action
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function processParamStringTest(object $action, string $type): string
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+        $result = $actionTao->processParamString($action, $type);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
