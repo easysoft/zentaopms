@@ -2192,4 +2192,28 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test getObjectPairs method.
+     *
+     * @param  string $groupBy
+     * @param  array  $groupByList
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getObjectPairsTest($groupBy, $groupByList, $browseType, $orderBy)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getObjectPairs');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $groupBy, $groupByList, $browseType, $orderBy);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
