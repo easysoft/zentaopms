@@ -1962,4 +1962,49 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test updateExecutionCell method.
+     *
+     * @param  int    $executionID
+     * @param  int    $colID
+     * @param  int    $laneID
+     * @param  string $cards
+     * @access public
+     * @return array
+     */
+    public function updateExecutionCellTest($executionID, $colID, $laneID, $cards)
+    {
+        global $tester;
+        
+        // 获取操作前的单元格数据
+        $beforeCell = $tester->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('`column`')->eq($colID)
+            ->fetch();
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateExecutionCell');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $executionID, $colID, $laneID, $cards);
+        
+        if(dao::isError()) return array('result' => 'error', 'message' => dao::getError());
+        
+        // 获取操作后的单元格数据
+        $afterCell = $tester->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('`column`')->eq($colID)
+            ->fetch();
+        
+        return array(
+            'result' => 'success',
+            'beforeCards' => $beforeCell ? $beforeCell->cards : '',
+            'afterCards' => $afterCell ? $afterCell->cards : '',
+            'updated' => $afterCell && $afterCell->cards === $cards ? 1 : 0
+        );
+    }
 }
