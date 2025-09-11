@@ -2377,4 +2377,61 @@ class kanbanTest
             return array();
         }
     }
+
+    /**
+     * Test getBugCardMenu method.
+     *
+     * @param  mixed $testType
+     * @access public
+     * @return mixed
+     */
+    public function getBugCardMenuTest($testType)
+    {
+        global $tester;
+        
+        // 准备测试数据
+        $objects = array();
+        
+        if($testType === 'singleBug')
+        {
+            // 获取单个Bug对象
+            $bug = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
+            if($bug) $objects = array($bug);
+        }
+        elseif($testType === 'multipleBugs')
+        {
+            // 获取多个Bug对象
+            $objects = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->in('1,2,3')->fetchAll('id');
+        }
+        elseif($testType === 'bugWithDifferentStatus')
+        {
+            // 获取不同状态的Bug
+            $bug = $tester->dao->select('*')->from(TABLE_BUG)->where('status')->eq('resolved')->limit(1)->fetch();
+            if($bug) $objects = array($bug);
+        }
+        elseif($testType === 'permissionTest')
+        {
+            // 权限测试用例
+            su('user1');
+            $bug = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
+            if($bug) $objects = array($bug);
+        }
+        
+        if(empty($objects)) return 0;
+        
+        try {
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getBugCardMenu');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $objects);
+            
+            if(dao::isError()) return 0;
+            
+            return count($result);
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
