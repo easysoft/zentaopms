@@ -445,4 +445,23 @@ class webhookTest
 
         return $result;
     }
+
+    /**
+     * Test sendToUser method.
+     *
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
+     * @access public
+     * @return string|false
+     */
+    public function sendToUserTest($webhook, $sendData, $actionID, $appendUser = '')
+    {
+        $result = $this->objectModel->sendToUser($webhook, $sendData, $actionID, $appendUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
