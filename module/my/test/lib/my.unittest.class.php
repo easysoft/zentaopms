@@ -749,4 +749,27 @@ class myTest
 
         return count($result);
     }
+
+    /**
+     * Test fetchStoriesBySearch method.
+     *
+     * @param  string $myStoryQuery
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  array  $storiesAssignedByMe
+     * @access public
+     * @return mixed
+     */
+    public function fetchStoriesBySearchTest(string $myStoryQuery, string $type, string $orderBy, ?object $pager = null, array $storiesAssignedByMe = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchStoriesBySearch');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$myStoryQuery, $type, $orderBy, $pager, $storiesAssignedByMe]);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
