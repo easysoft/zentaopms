@@ -3164,4 +3164,23 @@ class executionTest
 
         return $result;
     }
+
+    /**
+     * Test buildStoryTree method.
+     *
+     * @param  array  $stories
+     * @param  array  $taskGroups
+     * @param  int    $executionID
+     * @param  object $node
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function buildStoryTreeTest(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0)
+    {
+        $result = $this->executionModel->buildStoryTree($stories, $taskGroups, $executionID, $node, $parentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
