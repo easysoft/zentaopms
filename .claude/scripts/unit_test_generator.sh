@@ -5,13 +5,23 @@
 # 日期: $(date +%Y-%m-%d)
 
 if [ "$#" -eq 0 ]; then
-    echo "Usage: $0 <csv_file_name>"
+    echo "Usage: $0 <csv_file_name> [-c]"
     echo "This script generates unit test scripts based on the provided CSV file."
     exit 1
 fi
 
-# 设置变量
+# 错误处理策略
+ON_ERROR_STRATEGY="break" # 默认为 break
 
+while getopts ":c" opt; do
+  case ${opt} in
+    c )
+      ON_ERROR_STRATEGY="continue"
+      ;;
+  esac
+done
+
+# 设置变量
 BASE_PATH=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")/../..")
 GUIDE_FILE="$BASE_PATH/.claude/rules/zentao-unit-test-guide.md"
 CSV_FILE="$BASE_PATH/.claude/data/$1"
@@ -44,6 +54,56 @@ check_prerequisites() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 前置条件检查完成" | tee -a "$LOG_FILE"
 }
 
+# 调用 claude 生成测试脚本
+claude_generate_test() {
+    local claude_command="$1"
+    local test_file_path="$2"
+    local retry_count="${3:-0}"  # 添加重试计数参数，默认为0
+
+    # 设置最大重试次数
+    local max_retries=12
+
+    # 检查是否超过最大重试次数
+    if [ "$retry_count" -ge "$max_retries" ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 达到最大重试次数($max_retries)，放弃处理第 $CURRENT_LINE 行" | tee -a "$LOG_FILE"
+        return 1
+    fi
+
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 执行Claude命令: $claude_command" | tee -a "$LOG_FILE"
+
+    # 执行Claude命令并捕获输出
+    local claude_output
+    if claude_output=$($claude_command); then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Claude命令执行成功" | tee -a "$LOG_FILE"
+
+        # 将Claude输出保存到测试文件
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已生成: $test_file_path" | tee -a "$LOG_FILE"
+
+        # 记录详细的Claude输出到日志
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [DEBUG] Claude输出内容:" | tee -a "$LOG_FILE"
+        echo "--- 开始输出 ---" | tee -a "$LOG_FILE"
+        echo "$claude_output" | tee -a "$LOG_FILE"
+        echo "--- 结束输出 ---" | tee -a "$LOG_FILE"
+
+        ((TOTAL_GENERATED++))
+    else
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] Claude命令执行失败" | tee -a "$LOG_FILE"
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 错误信息: $claude_output" | tee -a "$LOG_FILE"
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 等待5分钟后重试..." | tee -a "$LOG_FILE"
+
+        # 等待5分钟
+        sleep 300
+
+        # 递归重试
+        claude_generate_test "$claude_command" "$test_file_path" "$((retry_count + 1))"
+
+        # 返回递归调用的结果
+        return $?
+    fi
+
+    return 0
+}
+
 # 处理单个方法的单元测试生成
 process_method() {
     local module="$1"
@@ -74,31 +134,12 @@ process_method() {
 
     # 构建Claude命令
     local claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
+    local claude_command="claude -p \"$claude_prompt\" --dangerously-skip-permissions"
 
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 执行Claude命令: claude -p \"$claude_prompt\" --dangerously-skip-permissions < /dev/null 2>&1" | tee -a "$LOG_FILE"
+    # 调用Claude生成测试脚本
+    claude_generate_test "$claude_command" "$test_file_path"
 
-    # 执行Claude命令并捕获输出
-    local claude_output
-    if claude_output=$(claude -p "$claude_prompt" --dangerously-skip-permissions < /dev/null 2>&1); then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Claude命令执行成功" | tee -a "$LOG_FILE"
-
-        # 将Claude输出保存到测试文件
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已生成: $test_file_path" | tee -a "$LOG_FILE"
-
-        # 记录详细的Claude输出到日志
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [DEBUG] Claude输出内容:" | tee -a "$LOG_FILE"
-        echo "--- 开始输出 ---" | tee -a "$LOG_FILE"
-        echo "$claude_output" | tee -a "$LOG_FILE"
-        echo "--- 结束输出 ---" | tee -a "$LOG_FILE"
-
-        ((TOTAL_GENERATED++))
-    else
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] Claude命令执行失败" | tee -a "$LOG_FILE"
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 错误信息: $claude_output" | tee -a "$LOG_FILE"
-        return 1
-    fi
-
-    return 0
+    return $?
 }
 
 # 主处理函数
@@ -137,7 +178,13 @@ main() {
             echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] 第 $CURRENT_LINE 行处理完成" | tee -a "$LOG_FILE"
         else
             echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 第 $CURRENT_LINE 行处理失败" | tee -a "$LOG_FILE"
-            break
+
+            # 根据错误处理策略决定是否继续
+            if [ "$ON_ERROR_STRATEGY" == "break" ]; then
+                break
+            else
+                continue
+            fi
         fi
 
         ((TOTAL_PROCESSED++))
