@@ -3122,4 +3122,34 @@ class convertTest
             return false;
         }
     }
+
+    /**
+     * Test createDocLib method.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $name
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function createDocLibTest(int $productID, int $projectID, int $executionID, string $name, string $type)
+    {
+        try {
+            // Use reflection to access protected method
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createDocLib');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $productID, $projectID, $executionID, $name, $type);
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        } catch (Error $e) {
+            return false;
+        }
+    }
 }
