@@ -37,7 +37,7 @@ div
                 (
                     setID('upgradeReportsBtn'),
                     set::type('primary'),
-                    set::url('upgrade', 'ajaxUpgradeWeeklyReports', "fromVersion={$fromVersion}&processed=yes"),
+                    set::url('upgrade', 'upgradeWeeklyReports', "fromVersion={$fromVersion}&processed=yes"),
                     on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingWeeklyReports, $lang->upgrade->next),
                     span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingWeeklyReports),
                     span(setClass('hidden as-finish-text'), $lang->upgrade->next),

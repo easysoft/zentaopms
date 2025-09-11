@@ -11232,4 +11232,29 @@ class upgradeModel extends model
         }
         return array_values($reports);
     }
+
+    /**
+     * 升级周报数据。
+     * Upgrade Weekly Report.
+     *
+     * @param  array $data
+     * @access public
+     * @return bool
+     */
+    public function upgradeWeeklyReport(array $data): bool
+    {
+        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7);
+        $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
+
+        $report = new stdclass();
+        $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+        $report->project      = $data['project'];
+        $report->templateType = 'weekly';
+        $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
+        $report->addedBy      = 'system';
+        $report->addedDate    = $data['weekStart'] . ' 00:00:00';
+        $this->dao->insert(TABLE_DOC)->data($report)->exec();
+
+        return !dao::isError();
+    }
 }
