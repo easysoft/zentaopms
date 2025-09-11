@@ -2007,4 +2007,26 @@ class kanbanTest
             'updated' => $afterCell && $afterCell->cards === $cards ? 1 : 0
         );
     }
+
+    /**
+     * Test getBranchesForPlanKanban method.
+     *
+     * @param  object $product
+     * @param  string $branchID
+     * @access public
+     * @return array
+     */
+    public function getBranchesForPlanKanbanTest($product, $branchID)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getBranchesForPlanKanban');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $product, $branchID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
