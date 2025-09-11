@@ -3183,4 +3183,93 @@ class executionTest
 
         return $result;
     }
+
+    /**
+     * Test updateTeam method.
+     *
+     * @param  int    $executionID
+     * @param  string $action
+     * @param  array  $members
+     * @access public
+     * @return int
+     */
+    public function updateTeamTest(int $executionID, string $action = '', array $members = array())
+    {
+        global $tester;
+
+        $oldExecution = $this->executionModel->getByID($executionID);
+        if(empty($oldExecution)) return 0;
+
+        // 模拟不同的测试场景
+        if($action == 'add')
+        {
+            // 模拟添加成员场景
+            $_POST['teamMembers'] = $members;
+            $execution = clone $oldExecution;
+        }
+        elseif($action == 'remove')
+        {
+            // 模拟移除成员场景
+            $currentTeam = $tester->dao->select('account')->from(TABLE_TEAM)
+                ->where('root')->eq($executionID)
+                ->andWhere('type')->eq('execution')
+                ->fetchPairs('account', 'account');
+            
+            // 过滤掉要移除的成员
+            $remainingMembers = array_diff($currentTeam, $members);
+            $_POST['teamMembers'] = array_values($remainingMembers);
+            $execution = clone $oldExecution;
+        }
+        elseif($action == 'empty')
+        {
+            // 模拟空成员列表场景
+            $_POST['teamMembers'] = array();
+            $execution = clone $oldExecution;
+        }
+        elseif($action == 'roles')
+        {
+            // 模拟角色成员场景
+            $_POST['teamMembers'] = array();
+            $execution = clone $oldExecution;
+            $execution->PO = isset($members[0]) ? $members[0] : $oldExecution->PO;
+            $execution->PM = isset($members[1]) ? $members[1] : $oldExecution->PM;
+            $execution->QD = isset($members[2]) ? $members[2] : $oldExecution->QD;
+            $execution->RD = isset($members[3]) ? $members[3] : $oldExecution->RD;
+        }
+        else
+        {
+            $execution = clone $oldExecution;
+        }
+
+        // 获取更新前的团队成员数量
+        $beforeCount = $tester->dao->select('count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->eq($executionID)
+            ->andWhere('type')->eq('execution')
+            ->fetch('count');
+
+        // 调用updateTeam方法
+        $this->executionModel->updateTeam($executionID, $oldExecution, $execution);
+
+        // 获取更新后的团队成员数量
+        $afterCount = $tester->dao->select('count(*) as count')->from(TABLE_TEAM)
+            ->where('root')->eq($executionID)
+            ->andWhere('type')->eq('execution')
+            ->fetch('count');
+
+        if($action == 'add')
+        {
+            // 返回新增的成员数量
+            return max(0, $afterCount - $beforeCount);
+        }
+        elseif($action == 'remove')
+        {
+            // 返回移除的成员数量
+            return max(0, $beforeCount - $afterCount);
+        }
+        else
+        {
+            // 返回最终的团队成员数量
+            return $afterCount;
+        }
+    }
 }
