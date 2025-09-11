@@ -221,12 +221,12 @@ div
 /* Inject zai config to index page. */
 if($zaiConfig && !empty($zaiConfig->host) && !empty($zaiConfig->token))
 {
+    if(!hasPriv('aiapp', 'conversation')) $zaiConfig->privs = 'disable-all';
     to::head
     (
         h::js('window.zai = ' . js::value($zaiConfig) . ';'),
         h::importJs($app->getWebRoot() . 'js/zui3/ai.js', setID('aiJS'))
     );
-    jsVar('canConverse', hasPriv('aiapp', 'conversation'));
 }
 
 /**

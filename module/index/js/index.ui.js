@@ -1356,7 +1356,6 @@ $(document).ready(
 
             allAppsItemsMap.set(item.code, item);
         }
-        if(!canConverse) $('.ai-panel-root').remove();
     }
 );
 
