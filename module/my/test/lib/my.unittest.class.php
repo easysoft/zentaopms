@@ -818,4 +818,25 @@ class myTest
 
         return count($result);
     }
+
+    /**
+     * Test buildReviewingFlows method.
+     *
+     * @param  array $objectGroup
+     * @param  array $flows
+     * @param  array $objectNameFields
+     * @access public
+     * @return mixed
+     */
+    public function buildReviewingFlowsTest(array $objectGroup, array $flows, array $objectNameFields)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildReviewingFlows');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$objectGroup, $flows, $objectNameFields]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
