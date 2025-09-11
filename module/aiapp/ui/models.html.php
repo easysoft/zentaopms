@@ -13,7 +13,7 @@ namespace zin;
 div
 (
     setClass('models-view'),
-    setData(array('modelLang' => $lang->aiapp->model, 'actionLang' => $lang->actions, 'converseLang' => $lang->aiapp->converse, 'pageSummary' => $lang->aiapp->pageSummary)),
+    setData(array('modelLang' => $lang->aiapp->model, 'actionLang' => $lang->actions, 'converseLang' => $lang->aiapp->converse, 'pageSummary' => $lang->aiapp->pageSummary, 'canConverse' => hasPriv('aiapp', 'conversation'))),
     on::init()->call('initModelList'),
     dtable
     (

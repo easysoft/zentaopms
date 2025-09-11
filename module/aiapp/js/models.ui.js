@@ -16,11 +16,11 @@ window.initModelList = async function()
         model.index = index + 1;
     });
 
-    const {modelLang, actionLang, converseLang} = $('.models-view').data();
+    const {modelLang, actionLang, converseLang, canConverse} = $('.models-view').data();
     const cols = [
         {name: 'index', title: 'ID', type: 'id', sortType: false},
         {name: 'id', title: modelLang},
-        {name: 'actions', title: actionLang, width: 90, type: 'actions', actions: ['converse'], actionsMap: {
+        {name: 'actions', title: actionLang, width: 90, type: 'actions', actions: !canConverse ? [] : ['converse'], actionsMap: !canConverse ? null : {
             converse: {text: converseLang, onClick: (_event, info) => {
                 loadPage($.createLink('aiapp', 'conversation', `chat=NEW&params=${btoa(JSON.stringify({model: info.item.data.row}))}`));
             }},
