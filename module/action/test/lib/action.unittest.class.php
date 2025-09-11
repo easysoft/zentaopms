@@ -1494,4 +1494,20 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getDocLibLinkParameters method.
+     *
+     * @param  object $action
+     * @access public
+     * @return array|bool
+     */
+    public function getDocLibLinkParametersTest(object $action)
+    {
+        $result = $this->objectTao->getDocLibLinkParameters($action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
