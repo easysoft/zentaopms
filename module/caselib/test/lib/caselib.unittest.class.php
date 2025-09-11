@@ -334,4 +334,29 @@ class caselibTest
         
         return $result;
     }
+
+    /**
+     * Test processSteps method.
+     *
+     * @param  array $descs
+     * @param  array $stepTypes
+     * @param  array $expects
+     * @access public
+     * @return array
+     */
+    public function processStepsTest(array $descs, array $stepTypes, array $expects): array
+    {
+        global $tester;
+        $objectTao = $tester->loadTao('caselib');
+        
+        $reflection = new ReflectionClass($objectTao);
+        $method = $reflection->getMethod('processSteps');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($objectTao, $descs, $stepTypes, $expects);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
