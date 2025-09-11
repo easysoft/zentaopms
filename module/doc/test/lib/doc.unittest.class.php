@@ -2384,4 +2384,25 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test doInsertLib method.
+     *
+     * @param  object $lib
+     * @param  string $requiredFields
+     * @access public
+     * @return mixed
+     */
+    public function doInsertLibTest(object $lib, string $requiredFields = '')
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('doInsertLib');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $lib, $requiredFields);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
