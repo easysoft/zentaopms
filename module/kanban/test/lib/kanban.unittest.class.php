@@ -5,6 +5,7 @@ class kanbanTest
     {
          global $tester;
          $this->objectModel  = $tester->loadModel('kanban');
+         $this->objectTao    = $tester->loadTao('kanban');
          $this->projectModel = $tester->loadModel('project');
     }
 
@@ -1782,6 +1783,30 @@ class kanbanTest
     public function getCellByCardTest($cardID, $kanbanID)
     {
         $result = $this->objectModel->getCellByCard($cardID, $kanbanID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildRegionData method.
+     *
+     * @param  array $regionData
+     * @param  array $groups
+     * @param  array $laneGroup
+     * @param  array $columnGroup
+     * @param  array $cardGroup
+     * @access public
+     * @return array
+     */
+    public function buildRegionDataTest($regionData, $groups, $laneGroup, $columnGroup, $cardGroup)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildRegionData');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $regionData, $groups, $laneGroup, $columnGroup, $cardGroup);
         if(dao::isError()) return dao::getError();
 
         return $result;
