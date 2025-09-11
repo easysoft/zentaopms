@@ -1,0 +1,70 @@
+---
+title: 测试用例表基础数据
+desc: 为createCase方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 测试用例ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1-5
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1-3
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0-2
+  format: ""
+- field: module
+  note: 模块ID
+  range: 1-10
+  format: ""
+- field: story
+  note: 需求ID
+  range: 1-20
+  format: ""
+- field: title
+  note: 测试用例标题
+  range: '测试用例标题{1-20}'
+  format: ""
+- field: type
+  note: 用例类型
+  range: feature{10},performance{5},config{3},install{2}
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+- field: status
+  note: 用例状态
+  range: normal{10},wait{5},blocked{3},investigate{2}
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin{8},user1{6},user2{4},user3{2}
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59:1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: version
+  note: 版本
+  range: 1{15},2{3},3{2}
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{18},1{2}
+  format: ""

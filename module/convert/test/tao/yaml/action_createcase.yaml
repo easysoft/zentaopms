@@ -1,0 +1,66 @@
+---
+title: 操作记录表基础数据
+desc: 为createCase方法的action表提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 操作记录ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: testcase{20},story{10},task{10},bug{10}
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-50
+  format: ""
+- field: product
+  note: 关联产品
+  range: ',1,{15},2,{10},3,{5},[]{20}'
+  format: ""
+- field: project
+  note: 关联项目
+  range: 1-5
+  format: ""
+- field: execution
+  note: 关联执行
+  range: 0{10},1-3{40}
+  format: ""
+- field: actor
+  note: 操作者
+  range: admin{20},user1{15},user2{10},user3{5}
+  format: ""
+- field: action
+  note: 操作类型
+  range: opened{20},edited{10},closed{8},activated{7},assigned{5}
+  format: ""
+- field: date
+  note: 操作时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59:1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: comment
+  note: 操作备注
+  range: '操作备注{1-50},[]{25}'
+  format: ""
+- field: extra
+  note: 扩展信息
+  range: '[]{40},extra_info{10}'
+  format: ""
+- field: read
+  note: 已读标记
+  range: 0{30},1{20}
+  format: ""
+- field: vision
+  note: 视图类型
+  range: rnd{40},lite{10}
+  format: ""
+- field: efforted
+  note: 工时标记
+  range: 0{45},1{5}
+  format: ""

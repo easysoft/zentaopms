@@ -3397,4 +3397,28 @@ class convertTest
         }
     }
 
+    /**
+     * Test createCase method.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  object $data
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function createCaseTest($productID = 1, $projectID = 1, $executionID = 1, $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        try {
+            $result = $this->objectTao->createCase($productID, $projectID, $executionID, $data, $relations);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }
