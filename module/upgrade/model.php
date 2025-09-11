@@ -11560,7 +11560,7 @@ class upgradeModel extends model
             ->orderBy('id_asc')
             ->fetchPairs();
 
-        if(empty($typeList)) $testcaseStageList = $this->lang->testcase->stageList;
+        if(empty($testcaseStageList)) $testcaseStageList = $this->lang->testcase->stageList;
 
         $modules = $this->dao->select('root,id')->from(TABLE_MODULE)
             ->where('type')->eq('deliverable')
@@ -11982,6 +11982,8 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
+            $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
+            $this->dao->update(TABLE_APPROVAL)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
         }
     }
 }
