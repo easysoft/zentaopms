@@ -3767,4 +3767,31 @@ class convertTest
         }
     }
 
+    /**
+     * Test createWorkflowAction method.
+     *
+     * @param  array $relations
+     * @param  array $jiraActions
+     * @access public
+     * @return mixed
+     */
+    public function createWorkflowActionTest($relations = array(), $jiraActions = array())
+    {
+        try
+        {
+            // 通过反射调用protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createWorkflowAction');
+            $method->setAccessible(true);
+            $result = $method->invoke($this->objectTao, $relations, $jiraActions);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
 }
