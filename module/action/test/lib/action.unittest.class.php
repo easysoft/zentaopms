@@ -1379,4 +1379,20 @@ class actionTest
 
         return $action;
     }
+
+    /**
+     * Test getActionTable method.
+     *
+     * @param  string $period
+     * @access public
+     * @return string
+     */
+    public function getActionTableTest(string $period): string
+    {
+        $result = $this->objectTao->getActionTable($period);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
