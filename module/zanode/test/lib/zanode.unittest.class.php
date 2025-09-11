@@ -378,4 +378,72 @@ class zanodeTest
 
         return $result;
     }
+
+    /**
+     * 测试设置菜单。
+     * Test set menu.
+     *
+     * @param  bool $createHost
+     * @access public
+     * @return object
+     */
+    public function setMenuTest(bool $createHost): object
+    {
+        global $app;
+
+        // 备份原始菜单结构
+        $originalMenu = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? $app->lang->qa->menu->automation['subMenu']->zahost : null;
+
+        // 设置测试环境 - 创建虚拟菜单结构
+        if(!isset($app->lang->qa)) $app->lang->qa = new stdClass();
+        if(!isset($app->lang->qa->menu)) $app->lang->qa->menu = new stdClass();
+        if(!isset($app->lang->qa->menu->automation)) $app->lang->qa->menu->automation = array();
+        if(!isset($app->lang->qa->menu->automation['subMenu'])) $app->lang->qa->menu->automation['subMenu'] = new stdClass();
+        $app->lang->qa->menu->automation['subMenu']->zahost = 'test_zahost_menu';
+
+        $result = new stdClass();
+        $result->beforeCall = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? 1 : 0;
+
+        // 如果createHost为false，清理zahost数据确保hiddenHost返回true
+        if(!$createHost)
+        {
+            // 清理现有的zahost数据使hiddenHost返回true
+            $this->objectModel->dao->delete()->from(TABLE_ZAHOST)->where('type')->eq('zahost')->exec();
+        }
+        else
+        {
+            // 创建一个zahost数据使hiddenHost返回false
+            $hostData = new stdClass();
+            $hostData->name = 'test_host_for_menu';
+            $hostData->type = 'zahost';
+            $hostData->status = 'online';
+            $hostData->deleted = '0';
+            $hostData->extranet = '127.0.0.1';
+            $this->objectModel->dao->insert(TABLE_ZAHOST)->data($hostData)->exec();
+        }
+
+        // 调用被测方法
+        $this->setMenu();
+
+        $result->afterCall = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? 1 : 0;
+        $result->createHost = $createHost ? 1 : 0;
+
+        // 恢复原始状态
+        if($originalMenu !== null)
+        {
+            $app->lang->qa->menu->automation['subMenu']->zahost = $originalMenu;
+        }
+        else
+        {
+            unset($app->lang->qa->menu->automation['subMenu']->zahost);
+        }
+
+        // 清理测试数据
+        if($createHost)
+        {
+            $this->objectModel->dao->delete()->from(TABLE_ZAHOST)->where('name')->eq('test_host_for_menu')->exec();
+        }
+
+        return $result;
+    }
 }
