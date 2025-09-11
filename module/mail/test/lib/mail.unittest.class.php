@@ -438,4 +438,19 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test getImagesByFileID method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByFileIDTest($matches = array())
+    {
+        $result = $this->objectModel->getImagesByFileID($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
