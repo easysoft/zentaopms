@@ -1305,4 +1305,31 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test fetchMetricRecords method.
+     *
+     * @param  string $code
+     * @param  array  $fieldList
+     * @param  array  $query
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function fetchMetricRecordsTest($code = '', $fieldList = array(), $query = array(), $pager = null)
+    {
+        // 检查度量项是否存在，如果不存在则返回空数组
+        $metric = $this->objectModel->getByCode($code);
+        if(!$metric) return array();
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchMetricRecords');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $code, $fieldList, $query, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
