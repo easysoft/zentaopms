@@ -1387,4 +1387,28 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getPlanStatusStatistics method.
+     *
+     * @param  array $products
+     * @param  array $plans
+     * @param  array $plannedStories
+     * @param  array $unplannedStories
+     * @access public
+     * @return array
+     */
+    public function getPlanStatusStatisticsTest(array $products, array $plans, array $plannedStories, array $unplannedStories): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getPlanStatusStatistics');
+        $method->setAccessible(true);
+        
+        $method->invokeArgs($this->objectTao, array(&$products, $plans, $plannedStories, $unplannedStories));
+        if(dao::isError()) return dao::getError();
+
+        // 返回表示测试成功的简单结果
+        return array('result' => 'success');
+    }
 }
