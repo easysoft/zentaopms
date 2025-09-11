@@ -180,4 +180,19 @@ class aiapp extends control
         $this->view->title = $this->lang->aiapp->models;
         $this->display();
     }
+
+    /**
+     * 智能会话页面。
+     * Conversation page.
+     *
+     * @access public
+     * @return void
+     */
+    public function conversation($chat = '', $params = '')
+    {
+        $this->view->title = $this->lang->aiapp->conversation;
+        $this->view->currentChatID = $chat;
+        $this->view->params = $params;
+        $this->display();
+    }
 }
