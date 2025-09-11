@@ -3950,4 +3950,24 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test updateDuplicateStoryAndBug method.
+     *
+     * @param  array $duplicateLink
+     * @param  array $issueList
+     * @access public
+     * @return mixed
+     */
+    public function updateDuplicateStoryAndBugTest($duplicateLink = array(), $issueList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateDuplicateStoryAndBug');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $duplicateLink, $issueList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
