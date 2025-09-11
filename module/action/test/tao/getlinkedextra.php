@@ -13,6 +13,10 @@ cid=0
 - 步骤4：正常build类型 @1
 - 步骤5：无效类型 @0
 - 步骤6：execution边界情况 @0
+- 步骤7：revision类型映射测试 @0
+- 步骤8：bug类型映射到build测试 @1
+- 步骤9：kanban类型的execution处理 @0
+- 步骤10：roadmap类型处理 @1
 
 */
 
@@ -23,8 +27,8 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 // 2. zendata数据准备（根据需要配置）
 $execution = zenData('project');
 $execution->id->range('1-10');
-$execution->name->range('执行1,执行2,执行3,执行4,执行5,执行6,执行7,执行8,执行9,执行10');
-$execution->type->range('project{5},project{1},execution{4}');
+$execution->name->range('执行1,执行2,执行3,执行4,执行5,执行6,看板执行1,看板执行2,看板执行3,看板执行4');
+$execution->type->range('project{5},project{1},kanban{4}');
 $execution->multiple->range('1{10}');
 $execution->gen(10);
 
@@ -91,3 +95,24 @@ $action6 = new stdClass();
 $action6->extra = '6';
 $action6->objectType = 'story';
 r($actionTest->getLinkedExtraTest($action6, 'execution')) && p() && e('0'); // 步骤6：execution边界情况
+
+$action7 = new stdClass();
+$action7->extra = '1';
+$action7->objectType = 'story';
+r($actionTest->getLinkedExtraTest($action7, 'revision')) && p() && e('0'); // 步骤7：revision类型映射测试
+
+$action8 = new stdClass();
+$action8->extra = '1';
+$action8->objectType = 'story';
+r($actionTest->getLinkedExtraTest($action8, 'bug')) && p() && e('1'); // 步骤8：bug类型映射到build测试
+
+$action9 = new stdClass();
+$action9->extra = '7';
+$action9->execution = '7';
+$action9->objectType = 'story';
+r($actionTest->getLinkedExtraTest($action9, 'kanban')) && p() && e('0'); // 步骤9：kanban类型的execution处理
+
+$action10 = new stdClass();
+$action10->extra = '1';
+$action10->objectType = 'story';
+r($actionTest->getLinkedExtraTest($action10, 'roadmap')) && p() && e('1'); // 步骤10：roadmap类型处理
