@@ -1172,4 +1172,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test fetchAllTables method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function fetchAllTablesTest()
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchAllTables');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
