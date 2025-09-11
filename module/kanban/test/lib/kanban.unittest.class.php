@@ -2216,4 +2216,28 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test refreshERURCards method.
+     *
+     * @param  array  $cardPairs
+     * @param  int    $executionID
+     * @param  string $otherCardList
+     * @param  string $laneType
+     * @access public
+     * @return array
+     */
+    public function refreshERURCardsTest($cardPairs, $executionID, $otherCardList, $laneType = 'story')
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('refreshERURCards');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $cardPairs, $executionID, $otherCardList, $laneType);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
