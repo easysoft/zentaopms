@@ -3148,4 +3148,20 @@ class executionTest
         
         return 'executionCase';
     }
+
+    /**
+     * Test buildBatchUpdateExecutions method.
+     *
+     * @param  object $postData
+     * @param  array  $oldExecutions
+     * @access public
+     * @return array
+     */
+    public function buildBatchUpdateExecutionsTest($postData = null, $oldExecutions = array())
+    {
+        $result = $this->executionModel->buildBatchUpdateExecutions($postData, $oldExecutions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
