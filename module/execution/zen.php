@@ -510,8 +510,10 @@ class executionZen extends execution
         }
 
         /* Get linked branches. */
-        $products       = $this->loadModel('product')->getProducts($executionID);
-        $linkedBranches = array();
+        $branches            = $this->project->getBranchesByProject($executionID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $products            = $this->loadModel('product')->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);
+        $linkedBranches      = array();
         foreach($products as $product)
         {
             if(isset($product->branches))
@@ -749,7 +751,7 @@ class executionZen extends execution
                 return false;
             }
 
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate) and !empty($task->estimate))
+            if(!preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$task->estimate) and !empty($task->estimate))
             {
                 dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . $this->lang->task->error->estimateNumber;
                 return false;

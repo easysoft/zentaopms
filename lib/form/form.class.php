@@ -166,7 +166,7 @@ class form extends fixer
                 if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
                 if($field->control == 'file') continue;
 
-                $required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                $required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
                 if($field->control == 'multi-select' || $field->control == 'checkbox')
                 {
                     $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
@@ -488,6 +488,7 @@ class form extends fixer
         {
             $this->data = $data;
             $this->dataList[$rowIndex] = parent::get($fields);
+            $this->stripedFields = array();
         }
         return $this->dataList;
     }

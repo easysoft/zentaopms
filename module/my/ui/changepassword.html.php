@@ -20,6 +20,7 @@ formPanel
     (
         div(setClass('panel-title text-lg'), $lang->my->changePassword)
     ),
+    set::actions(array('submit')),
     on::change('#originalPassword,#password1,#password2', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
     h::import($config->webRoot . 'js/md5.js', 'js'),

@@ -98,7 +98,7 @@ else
                     input
                     (
                         set::name('consumed'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
+                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->consumed) : helper::formatHours((float)$task->consumed)),
                         set::disabled((!empty($currentTeam) || $task->isParent) ? true : false),
                     ),
                     !empty($currentTeam) ? formHidden('consumed', (float)$currentTeam->consumed) : null,
@@ -116,7 +116,7 @@ else
                     input
                     (
                         set::name('left'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
+                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->left) : helper::formatHours((float)$task->left)),
                         set::disabled($task->isParent ? true : false),
                     ),
                     $task->isParent ? formHidden('left', $task->left) : null,

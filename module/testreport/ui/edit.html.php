@@ -58,7 +58,8 @@ foreach($charts as $chartType => $chartOption)
                                 'type' => 'pie'
                             )
                         )
-                    )
+                    ),
+                    set::tooltip(array('show' => true, 'formatter' => "{b} : {d}%"))
                 )
             ),
             cell
@@ -128,7 +129,8 @@ $bugStageChart = div
                     )
                 ),
                 set::yAxis(array('type' => 'value')),
-                set::series($chartOption)
+                set::series($chartOption),
+                set::tooltip(array('trigger' => 'axis', 'axisPointer' => array('type' => 'shadow')))
             )
         ),
         cell
@@ -205,7 +207,8 @@ $bugHandleChart = div
                     )
                 ),
                 set::yAxis(array('type' => 'value')),
-                set::series($chartOption)
+                set::series($chartOption),
+                set::tooltip(array('trigger' => 'axis', 'axisPointer' => array('type' => 'shadow')))
             )
         ),
         cell
@@ -289,7 +292,8 @@ foreach($bugInfo as $infoKey => $infoValue)
                                 'type' => 'pie'
                             )
                         )
-                    )
+                    ),
+                    set::tooltip(array('show' => true, 'formatter' => "{b} : {d}%"))
                 )
             ),
             cell

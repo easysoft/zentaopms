@@ -44,12 +44,21 @@ class dbh
     private $statement;
 
     /**
-     * Database config.
+     * 应用配置信息。
+     * The app config.
      *
      * @var object
      * @access private
      */
     private $config;
+
+    /**
+     * Database dbConfig.
+     *
+     * @var object
+     * @access private
+     */
+    private $dbConfig;
 
     /**
      * The SQL string of last query.
@@ -60,8 +69,17 @@ class dbh
     private $sql;
 
     /**
-     * 这是用来记录SQL执行的文件和行号。
-     * This is used to record the file and line number where the SQL was executed.
+     * 主库还是从库的标记。
+     * Flag for master or slave.
+     *
+     * @var array
+     * @access public
+     */
+    public static $flags = [];
+
+    /**
+     * 触发SQL执行的文件和行号。
+     * The file and line number that triggered the SQL execution.
      *
      * @var array
      * @access public
@@ -78,24 +96,36 @@ class dbh
     public static $queries = [];
 
     /**
+     * SQL执行时长。
+     * The duration of SQL execution.
+     *
+     * @var array
+     * @access public
+     */
+    public static $durations = [];
+
+    /**
      * Constructor
      *
-     * @param object $config
-     * @param bool   $setSchema
-     * @param string $flag
+     * @param  object $dbConfig
+     * @param  bool   $setSchema
+     * @param  string $flag
      * @access public
      * @return void
      */
-    public function __construct($config, $setSchema = true, $flag = 'MASTER')
+    public function __construct($dbConfig, $setSchema = true, $flag = 'MASTER')
     {
-        $driver = $config->driver;
-        if($config->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
+        global $config;
+        $this->config = $config;
 
-        $dsn = "{$driver}:host={$config->host};port={$config->port}";
-        if($setSchema) $dsn .= ";dbname={$config->name}";
+        $driver = $dbConfig->driver;
+        if($dbConfig->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
 
-        $password = helper::decryptPassword($config->password);
-        $pdo = new PDO($dsn, $config->user, $password);
+        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        if($setSchema) $dsn .= ";dbname={$dbConfig->name}";
+
+        $password = helper::decryptPassword($dbConfig->password);
+        $pdo = new PDO($dsn, $dbConfig->user, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -103,26 +133,41 @@ class dbh
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $queries[] = "SET NAMES {$config->encoding}";
-            if(isset($config->strictMode) && empty($config->strictMode)) $queries[] = "SET @@sql_mode= ''";
+            $queries[] = "SET NAMES {$dbConfig->encoding}";
+            if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
-            $queries[] = "SET SCHEMA {$config->name}";
+            $queries[] = "SET SCHEMA {$dbConfig->name}";
         }
         if(!empty($queries))
         {
             foreach($queries as $query)
             {
-                $pdo->exec($query);
-                dbh::$traces[]  = 'vim +' . (__LINE__ - 1) . ' ' . __FILE__;
-                dbh::$queries[] = "[$flag] " . $query;
+                try
+                {
+                    $begin = microtime(true);
+                    $pdo->exec($query);
+                    $duration = microtime(true) - $begin;
+                }
+                catch (PDOException $e)
+                {
+                    $duration = microtime(true) - $begin;
+                    $this->sqlError($e);
+                }
+                finally
+                {
+                    dbh::$flags[]     = $flag;
+                    dbh::$queries[]   = $query;
+                    dbh::$durations[] = round($duration, 6);
+                    if(!empty($config->debug)) dbh::$traces[] = 'vim +' . (__LINE__ - 12) . ' ' . __FILE__;
+                }
             }
         }
 
-        $this->pdo    = $pdo;
-        $this->config = $config;
-        $this->flag   = $flag;
+        $this->pdo      = $pdo;
+        $this->dbConfig = $dbConfig;
+        $this->flag     = $flag;
     }
 
     /**
@@ -142,28 +187,13 @@ class dbh
     /**
      * Execute sql.
      *
-     * @param string $sql
+     * @param  string $sql
      * @access public
-     * @return PDOStatement|false
+     * @return int|false
      */
     public function exec($sql)
     {
-        $this->trace();
-
-        $sql = $this->formatSQL($sql);
-        if(!$sql) return true;
-
-        if(!empty($this->config->enableSqlite)) $this->pushSqliteQueue($sql);
-
-        try
-        {
-            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
-            return $this->pdo->exec($sql);
-        }
-        catch(PDOException $e)
-        {
-            $this->sqlError($e);
-        }
+        return $this->executeSql($sql, __FUNCTION__);
     }
 
     /**
@@ -176,18 +206,95 @@ class dbh
      */
     public function query($sql)
     {
-        $this->trace();
+        return $this->executeSql($sql, __FUNCTION__);
+    }
 
-        $sql = $this->formatSQL($sql);
+    /**
+     * Query raw sql.
+     *
+     * @param string $sql
+     * @access public
+     * @return PDOStatement|false
+     */
+    public function rawQuery($sql)
+    {
+        return $this->executeSql($sql, __FUNCTION__);
+    }
+
+    /**
+     * 执行SQL语句并记录执行时间和调用栈信息。
+     * Execute SQL and record the duration and trace info.
+     *
+     * @param  string $sql
+     * @param  string $mode exec|query|rawQuery
+     * @access private
+     * @return mixed
+     */
+    private function executeSql($sql, $mode)
+    {
+        if($mode == 'exec' || $mode == 'query')
+        {
+            $sql = $this->formatSQL($sql);
+            if(!$sql) return false;
+
+            if($mode == 'exec' && !empty($this->dbConfig->enableSqlite)) $this->pushSqliteQueue($sql);
+        }
+
         try
         {
-            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
-            return $this->pdo->query($sql);
+            $result   = false;
+            $begin    = microtime(true);
+            $method   = $mode == 'exec' ? 'exec' : 'query';
+            $result   = $this->pdo->$method($sql);
+            $duration = microtime(true) - $begin;
         }
         catch(PDOException $e)
         {
+            $duration = microtime(true) - $begin;
             $this->sqlError($e);
         }
+        finally
+        {
+            dbh::$flags[]     = $this->flag;
+            dbh::$queries[]   = dao::processKeywords($sql);
+            dbh::$durations[] = round($duration, 6);
+
+            if(!empty($this->config->debug))
+            {
+                $trace = $this->getTrace();
+                if($trace) dbh::$traces[] = 'vim +' . $trace['line'] . ' ' . $trace['file'];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 获取当前执行的 SQL 的调用栈信息。
+     * Get the call stack information of the currently executed SQL.
+     *
+     * @access private
+     * @return array
+     */
+    private function getTrace()
+    {
+        $traces = array_reverse(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+        foreach($traces as $key => $trace)
+        {
+            $class    = $trace['class'] ?? '';
+            $function = $trace['function'] ?? '';
+            if($class == 'settingModel' && strpos(',getItem,getItems,setItem,setItems,updateItem,deleteItems,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && strpos(',exec,fetch,fetchPairs,fetchGroup,explain,showTables,getTableEngines,descTable,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && $function == 'getProfiles') return $traces[$key + 1];
+            if($class == 'baseDAO' && $function == 'fetchAll')
+            {
+                if($traces[$key + 1]['class'] == 'baseDAO' && $traces[$key + 1]['function'] == 'extractSQLFields') return $traces[$key + 2];
+                return $trace;
+            }
+            if($class == 'baseDAO' && stripos($function, 'findBy') === 0) return $trace;
+            if($class == 'baseRouter' && $function == 'dbQuery') return $trace;
+            if($class == 'dbh' && strpos('exec,query,rawQuery', $function) !== false) return $trace;
+        }
+        return [];
     }
 
     /**
@@ -240,80 +347,6 @@ class dbh
     }
 
     /**
-     * Query raw sql.
-     *
-     * @param string $sql
-     * @access public
-     * @return PDOStatement|false
-     */
-    public function rawQuery($sql)
-    {
-        $this->trace();
-
-        try
-        {
-            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
-            return $this->pdo->query($sql);
-        }
-        catch(PDOException $e)
-        {
-            $this->sqlError($e);
-        }
-    }
-
-    /**
-     * 记录当前执行的 SQL 的文件和行号。
-     * Record the file and line number of the currently executed SQL.
-     *
-     * @access private
-     * @return bool
-     */
-    private function trace()
-    {
-        global $config;
-        if(empty($config->debug) || $config->debug < 3) return false;
-
-        $trace = $this->getTrace();
-        if(empty($trace)) return false;
-
-        $file = $trace['file'];
-        $line = $trace['line'];
-
-        dbh::$traces[] = "vim +$line $file";
-
-        return true;
-    }
-
-    /**
-     * 获取当前执行的 SQL 的调用栈信息。
-     * Get the call stack information of the currently executed SQL.
-     *
-     * @access private
-     * @return array
-     */
-    private function getTrace()
-    {
-        $traces = array_reverse(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
-        foreach($traces as $key => $trace)
-        {
-            $class    = $trace['class'] ?? '';
-            $function = $trace['function'] ?? '';
-            if($class == 'settingModel' && strpos(',getItem,getItems,setItem,setItems,updateItem,deleteItems,', ",$function,") !== false) return $trace;
-            if($class == 'baseDAO' && strpos(',exec,fetch,fetchPairs,fetchGroup,explain,showTables,getTableEngines,descTable,', ",$function,") !== false) return $trace;
-            if($class == 'baseDAO' && $function == 'getProfiles') return $traces[$key + 1];
-            if($class == 'baseDAO' && $function == 'fetchAll')
-            {
-                if($traces[$key + 1]['class'] == 'baseDAO' && $traces[$key + 1]['function'] == 'extractSQLFields') return $traces[$key + 2];
-                return $trace;
-            }
-            if($class == 'baseDAO' && stripos($function, 'findBy') === 0) return $trace;
-            if($class == 'baseRouter' && $function == 'dbQuery') return $trace;
-            if($class == 'dbh' && strpos('exec,query,rawQuery', $function) !== false) return $trace;
-        }
-        return [];
-    }
-
-    /**
      * Set attribute.
      *
      * @param int $attribute
@@ -334,14 +367,14 @@ class dbh
      */
     public function dbExists()
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
-                $sql = "SHOW DATABASES like '{$this->config->name}'";
+                $sql = "SHOW DATABASES like '{$this->dbConfig->name}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->config->name}'";
+                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->dbConfig->name}'";
                 break;
             default:
                 $sql = '';
@@ -359,20 +392,14 @@ class dbh
     public function tableExits($tableName)
     {
         $tableName = str_replace(array("'", '`'), "", $tableName);
-        $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
-        switch($this->config->driver)
+
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'oceanbase':
-            case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
-                break;
-            case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name='{$tableName}'";
-                break;
-            default:
-                $sql = '';
+            $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
+            return $this->rawQuery($sql)->fetch();
         }
 
+        $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
         return $this->rawQuery($sql)->fetch();
     }
 
@@ -385,13 +412,13 @@ class dbh
      */
     public function createDB($version)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
-                $sql = "CREATE DATABASE `{$this->config->name}`";
+                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 return $this->rawQuery($sql);
             case 'mysql':
-                $sql = "CREATE DATABASE `{$this->config->name}`";
+                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
                 {
                     $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
@@ -403,19 +430,19 @@ class dbh
                 return $this->rawQuery($sql);
             case 'dm':
                 /*
-                $tableSpace = strtoupper($this->config->name);
+                $tableSpace = strtoupper($this->dbConfig->name);
                 $res = $this->rawQuery("SELECT * FROM dba_data_files WHERE TABLESPACE_NAME = '$tableSpace'")->fetchAll();
 
                 if(empty($res))
                 {
-                    $createTableSpace = "CREATE TABLESPACE $tableSpace DATAFILE '{$this->config->name}.DBF' size 150 AUTOEXTEND ON";
-                    $createUser       = "CREATE USER {$this->config->name} IDENTIFIED by {$this->config->password} DEFAULT TABLESPACE {$this->config->name} DEFAULT INDEX TABLESPACE {$this->config->name}";
+                    $createTableSpace = "CREATE TABLESPACE $tableSpace DATAFILE '{$this->dbConfig->name}.DBF' size 150 AUTOEXTEND ON";
+                    $createUser       = "CREATE USER {$this->dbConfig->name} IDENTIFIED by {$this->dbConfig->password} DEFAULT TABLESPACE {$this->dbConfig->name} DEFAULT INDEX TABLESPACE {$this->dbConfig->name}";
 
                     $this->rawQuery($createTableSpace);
                     $this->rawQuery($createUser);
                 }
                 */
-                $createSchema = "CREATE SCHEMA {$this->config->name} AUTHORIZATION {$this->config->user}";
+                $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
                 return $this->rawQuery($createSchema);
             default:
                 return false;
@@ -431,14 +458,14 @@ class dbh
      */
     public function useDB($dbName)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':
-                return $this->exec("USE {$this->config->name}");
+                return $this->exec("USE {$this->dbConfig->name}");
 
             case 'dm':
-                return $this->exec("SET SCHEMA {$this->config->name}");
+                return $this->exec("SET SCHEMA {$this->dbConfig->name}");
 
             default:
                 return false;
@@ -456,7 +483,7 @@ class dbh
     {
         $this->sql = $sql;
 
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 return $this->formatDmSQL($sql);
@@ -537,7 +564,7 @@ class dbh
                 {
                     preg_match('/ON\s+([^.`\s]+\.)?`([^\s`]+)`/', $sql, $matches);
 
-                    $tableName = isset($matches[2]) ? str_replace($this->config->prefix, '', $matches[2]) : '';
+                    $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
             case 'ALTER':
@@ -569,9 +596,9 @@ class dbh
         /* DMDB must set IDENTITY_INSERT 'on' to insert id field. */
         if($action == 'INSERT' and stripos($fields, '"id"') !== FALSE)
         {
-            $tableBegin = strpos($sql, '"' . $this->config->prefix);
+            $tableBegin = strpos($sql, '"' . $this->dbConfig->prefix);
             $tableEnd   = strpos($sql, '"', $tableBegin + 1);
-            $tableName  = '' . $this->config->name . '."' . substr($sql, $tableBegin + 1, $tableEnd - $tableBegin - 1) . '"';
+            $tableName  = '' . $this->dbConfig->name . '."' . substr($sql, $tableBegin + 1, $tableEnd - $tableBegin - 1) . '"';
             return "SET IDENTITY_INSERT $tableName ON;" . $sql;
         }
 
@@ -613,7 +640,7 @@ class dbh
      */
     public function formatField($sql)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 $sql = str_replace('`', '"', $sql);
@@ -633,7 +660,7 @@ class dbh
      */
     public function formatFunction($sql)
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'dm':
                 /* DATE convert to TO_CHAR. */
@@ -677,60 +704,59 @@ class dbh
     /**
      * Format attribute of field.
      *
-     * @param string $sql
+     * @param  string $sql
      * @access public
      * @return string
      */
     public function formatAttr($sql)
     {
-        switch($this->config->driver)
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'dm':
-                $pos = stripos($sql, ' ENGINE');
-                if($pos > 0) $sql = substr($sql, 0, $pos);
+            $pos = stripos($sql, ' ENGINE');
+            if($pos > 0) $sql = substr($sql, 0, $pos);
 
-                $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
 
-                $replace = array(
-                    " AUTO_INCREMENT"           => ' IDENTITY(1, 1)',
-                    " int "                     => ' integer ',
-                    " mediumint "               => ' integer ',
-                    " smallint "                => ' integer ',
-                    " tinyint "                 => ' integer ',
-                    " varchar "                 => ' varchar(255) ',
-                    " char "                    => ' varchar(255) ',
-                    " mediumtext "              => ' text ',
-                    " mediumtext,"              => ' text,',
-                    " longtext "                => ' text ',
-                    "COLLATE 'utf8_general_ci'" => ' ',
-                    " unsigned "                => ' ',
-                    " zerofill "                => ' ',
-                    "0000-00-00"                => '1970-01-01',
-                );
+            $replace = array(
+                " AUTO_INCREMENT"           => ' IDENTITY(1, 1)',
+                " int "                     => ' integer ',
+                " mediumint "               => ' integer ',
+                " smallint "                => ' integer ',
+                " tinyint "                 => ' integer ',
+                " varchar "                 => ' varchar(255) ',
+                " char "                    => ' varchar(255) ',
+                " mediumtext "              => ' text ',
+                " mediumtext,"              => ' text,',
+                " longtext "                => ' text ',
+                "COLLATE 'utf8_general_ci'" => ' ',
+                " unsigned "                => ' ',
+                " zerofill "                => ' ',
+                "0000-00-00"                => '1970-01-01',
+            );
 
-                $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
-                $sql = str_ireplace(array_keys($replace), array_values($replace), $sql);
-                $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
-                $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
-                $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
+            $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
+            $sql = str_ireplace(array_keys($replace), array_values($replace), $sql);
+            $sql = preg_replace('/\,\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
+            $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
+            $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
 
-                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
-                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
-                if(!empty($datetimeMatch))
+            /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
+            preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
+            if(!empty($datetimeMatch))
+            {
+                foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+            }
+
+            if(strpos($sql, "ALTER TABLE") === 0)
+            {
+                $sql = $this->convertAlterTableSql($sql);
+                if(stripos($sql, "ADD") !== false)
                 {
-                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+                    // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
+                    $pattern = "/\s+AFTER\s+.+$/i";
+                    $sql     = preg_replace($pattern, "", $sql);
                 }
-
-                if(strpos($sql, "ALTER TABLE") === 0)
-                {
-                    $sql = $this->convertAlterTableSql($sql);
-                    if(stripos($sql, "ADD") !== false)
-                    {
-                        // 使用正则表达式匹配并去除 "AFTER" 关键字及其后面的内容
-                        $pattern = "/\s+AFTER\s+.+$/i";
-                        $sql     = preg_replace($pattern, "", $sql);
-                    }
-                }
+            }
         }
 
         return $sql;
@@ -920,9 +946,9 @@ class dbh
 
         if(!in_array($action, $allowedActions)) return null;
 
-        foreach($this->config->sqliteBlacklist as $table)
+        foreach($this->dbConfig->sqliteBlacklist as $table)
         {
-            $tableName = $this->config->prefix . $table;
+            $tableName = $this->dbConfig->prefix . $table;
             if(stripos($sql, $tableName) !== false) return null;
         }
 
@@ -963,11 +989,11 @@ class dbh
     public function checkUserPriv(): string
     {
         global $config;
-        if(!in_array($this->config->driver, $config->mysqlDriverList)) return '';
+        if(!in_array($this->dbConfig->driver, $config->mysqlDriverList)) return '';
 
-        $dbName = $this->config->name;
-        $user   = $this->config->user;
-        $host   = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
+        $dbName = $this->dbConfig->name;
+        $user   = $this->dbConfig->user;
+        $host   = ($this->dbConfig->host == 'localhost' || $this->dbConfig->host == '127.0.0.1') ? 'localhost' : '%';
 
         $privPairs = array();
         try
@@ -1013,7 +1039,7 @@ class dbh
      */
     public function getVersion(): string
     {
-        switch($this->config->driver)
+        switch($this->dbConfig->driver)
         {
             case 'oceanbase':
             case 'mysql':

@@ -26,6 +26,10 @@ timeout=0
 cid=1
 
 - 测试用例1的步骤数 @6
+- 测试用例1的步骤详情
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的version属性 @1
 - 测试用例2的步骤数 @4
 
 */
@@ -36,4 +40,5 @@ global $tester;
 $tester->loadModel('testcase');
 
 r(count($tester->testcase->getRelatedSteps($cases)[1])) && p('') && e('6'); // 测试用例1的步骤数
+r($tester->testcase->getRelatedSteps($cases)[1])        && p('1:id,case,version') && e('1,1,1'); // 测试用例1的步骤详情
 r(count($tester->testcase->getRelatedSteps($cases)[2])) && p('') && e('4'); // 测试用例2的步骤数

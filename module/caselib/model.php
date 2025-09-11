@@ -326,8 +326,11 @@ class caselibModel extends model
             $caseData->lib = $libID;
             if(!empty($data->id[$key]) && !$this->post->insert)
             {
-                $oldCase = $oldCases[$data->id[$key]];
-                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $data->id[$key], array());
+                $caseID = $data->id[$key];
+                if(!isset($oldCases[$caseID])) continue;
+
+                $oldCase = $oldCases[$caseID];
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $caseID, array());
                 $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
             }
             else
@@ -446,7 +449,7 @@ class caselibModel extends model
 
         $_SESSION['searchParams']['module'] = 'caselib';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
-        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->search->setDefaultParams('caselib', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
     }

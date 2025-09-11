@@ -5,13 +5,13 @@ version: 1.0.0
 
 fields:
   - field: id
-    range: 1
+    range: 1-10
   - field: date
     range: '`2023-04-23`'
   - field: type
     range: custom
   - field: status
-    range: wait
+    range: wait,doing,done,closed
   - field: finishedDate
     range: '`2023-04-23`'
   - field: closedDate

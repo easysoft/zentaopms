@@ -55,6 +55,14 @@ class settingModel extends model
 
         $item->value = strval($value);
         if($item->module == 'feedback') $item->vision = '';
+
+        /* 升级的时候，检查 vision 字段是否存在，不存在的话，unset。 */
+        if(!empty($this->app->upgrading))
+        {
+            $firstConfig = $this->dao->select('*')->from(TABLE_CONFIG)->limit(1)->fetch();
+            if(!isset($firstConfig->vision)) unset($item->vision);
+        }
+
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
 
         return !dao::isError();
@@ -320,19 +328,36 @@ class settingModel extends model
      * Set the sn of current zentaopms.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function setSN()
     {
-        $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
-        if($this->snNeededUpdate($sn))
+        $sn = $this->cookie->sn;
+        if(!isset($this->config->installed) || !$this->config->installed)
         {
-            $sn = $this->computeSN();
-            $this->setItem('system.common.global.sn', $sn);
+            if(!$sn) $sn = '';
+            if($this->snNeededUpdate($sn))
+            {
+                $sn = $this->computeSN();
+                helper::setcookie('sn', $sn, 0);
+            }
         }
-
-        if(!isset($this->config->global)) $this->config->global = new stdclass();
-        $this->config->global->sn = $sn;
+        else
+        {
+            if(!$sn)
+            {
+                $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
+                if($this->snNeededUpdate($sn))
+                {
+                    $sn = $this->computeSN();
+                }
+            }
+            $this->setItem('system.common.global.sn', $sn);
+            if(!isset($this->config->global)) $this->config->global = new stdclass();
+            $this->config->global->sn = $sn;
+            helper::setcookie('sn', $sn, 0);
+        }
+        return $sn;
     }
 
     /**

@@ -956,13 +956,14 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs(int $caseID, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkBugs(int $caseID, string $browseType = '', int $param = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('bug');
 
@@ -975,21 +976,24 @@ class testcase extends control
 
         /* 获取关联的bug。*/
         /* Get bugs to link. */
-        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
+        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID, $orderBy);
 
         /* bug 分页。*/
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal  = count($bugs2Link);
+        if(empty($recTotal)) $recTotal = count($bugs2Link);
         $pager     = new pager($recTotal, $recPerPage, $pageID);
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title     = $this->lang->testcase->linkBugs;
-        $this->view->case      = $case;
-        $this->view->bugs2Link = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->testcase->linkBugs;
+        $this->view->case       = $case;
+        $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
 
         $this->display();
     }
@@ -1232,14 +1236,16 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
-        if($_FILES)
+        if($_POST)
         {
             /* 获取上传的文件。 */
             /* Get file. */
             $file = $this->loadModel('file')->getUpload('file');
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
             if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
             $file = $file[0];
+            if(!$file || (isset($file['extension']) && $file['extension'] != 'csv')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
             /* 移动上传的文件。 */
             /* Move file. */
@@ -1757,6 +1763,7 @@ class testcase extends control
 
         if($_POST)
         {
+            $this->lang->testcase->title = $this->lang->testcase->sceneTitle;
             $scene = form::data($this->config->testcase->form->editScene)->get();
 
             $this->testcase->updateScene($scene, $oldScene);
@@ -1952,9 +1959,14 @@ class testcase extends control
      */
     public function importXmind(int $productID, string $branch)
     {
-        if($_FILES)
+        if($_POST)
         {
-            if($_FILES['file']['size'][0] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+            $file = $this->loadModel('file')->getUpload('file');
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
+            if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+
+            $file = $file[0];
+            if(!$file || (isset($file['extension']) && $file['extension'] != 'xmind')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */

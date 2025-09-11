@@ -295,10 +295,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $modules = array();
-        foreach($objects as $object) $modules[] = $object->id;
-
-        return implode('|', $modules);
+        return $objects;
     }
 
     /**
@@ -643,9 +640,7 @@ class treeTest
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_MODULE)->where('parent')->eq($param['parentModuleID'])->andWhere('deleted')->eq(0)->fetchAll();
 
-        $names = '';
-        foreach($objects as $object) $names .= ',' . $object->name;
-        return $names;
+        return $objects;
     }
 
     /**
@@ -833,9 +828,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $child = '';
-        foreach($objects as $object) $child .= isset($object[0]->children) ? $object[0]->id . ':' . count($object[0]->children) . ';' : "$object[0]->id:0;";
-        return $child;
+        return $objects;
     }
 
     /**

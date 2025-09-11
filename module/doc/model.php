@@ -1537,8 +1537,17 @@ class docModel extends model
                 ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
                 ->exec();
             if(dao::isError()) return false;
-
             $docID = $this->dao->lastInsertID();
+
+            /* Update order and path. */
+            $path = ",{$docID}";
+            if(!empty($doc->parent))
+            {
+                $parentDoc = $this->getByID($doc->parent);
+                $path      = $parentDoc->path . $path;
+            }
+            $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
+
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             $fileTitle = $this->file->saveAFile($file, 'doc', $docID);
             $docsAction[$docID] = $fileTitle;
@@ -2287,6 +2296,8 @@ class docModel extends model
         if($append && !isset($products[$append])) $products[$append] = $this->product->getByID($append);
         foreach($products as $id => $product)
         {
+            if(!$product) continue;
+
             if($product->status != 'closed' && $product->PO == $this->app->user->account)
             {
                 $myObjects[$id] = $product->name;

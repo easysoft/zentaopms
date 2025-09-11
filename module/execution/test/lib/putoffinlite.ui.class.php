@@ -36,7 +36,8 @@ class putoffExecutionTester extends tester
      */
     public function putoff($execution, $executionId)
     {
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($execution, $executionId);
         $form = $this->loadPage();
         $form->wait(1);

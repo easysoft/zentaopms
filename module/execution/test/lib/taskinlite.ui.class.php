@@ -13,7 +13,8 @@ class taskExecutionTester extends tester
      */
     public function checkTab($tab, $expectNum)
     {
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-project');
         $form->wait(1);
         $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab', 'assignedByMeTab', 'changedByMeTab');

@@ -40,6 +40,26 @@ if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true')
 }
 
 /**
+ * Ensure returned variable is an object
+ * 确保返回的变量是对象，如果是JSON字符串则转换为对象
+ *
+ * @param mixed $data   variable to check
+ * @return object|mixed object converted from variable or itself (if can't convert）
+ */
+function ensureObject($data)
+{
+    if(is_object($data)) return $data;
+
+    if(is_string($data))
+    {
+        $decoded = json_decode($data);
+        if(json_last_error() === JSON_ERROR_NONE) return $decoded;
+    }
+
+    return $data;
+}
+
+/**
  * Assert status code and set body as $_result.
  *
  * @param  int $code
@@ -56,7 +76,7 @@ function c($code)
 
     if($_result->status_code == $code or ($statusCodeStr[0] === '2' and $codeStr[0] === '2'))
     {
-        $_result = $_result->body;
+        $_result = ensureObject($_result->body);
         return true;
     }
 
@@ -343,4 +363,20 @@ function initReference($moduleName, $type = 'zen')
 
     if(!$class || !class_exists($class)) return false;
     return new ReflectionClass($class);
+}
+
+function callZenMethod($moduleName, $name, $args, $property = '')
+{
+    global $app;
+    $zenTest = $app->loadTarget($moduleName, '', 'zen');
+    $reflection = new ReflectionClass($zenTest);
+
+    $method = $reflection->getMethod($name);
+    $method->setAccessible(true);
+    $result = $method->invokeArgs($zenTest, $args);
+    if(empty($property)) return $result; // 如果不获取属性值，则返回被调用方法的返回值。
+
+    $zenProperty = $reflection->getProperty($property);
+    $zenProperty->setAccessible(true);
+    return $zenProperty->getValue($zenTest); // 返回zen的属性值。
 }

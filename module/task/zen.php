@@ -770,13 +770,18 @@ class taskZen extends task
      * 构造激活的任务数据。
      * Build the task data to activate.
      *
-     * @param  int       $taskID
+     * @param  int         $taskID
      * @access protected
-     * @return object
+     * @return object|bool
      */
-    protected function buildTaskForActivate(int $taskID): object
+    protected function buildTaskForActivate(int $taskID): object|bool
     {
         $task = form::data($this->config->task->form->activate, $taskID)->add('id', $taskID)->get();
+        if($task->left && $task->left < 0)
+        {
+            dao::$errors['left'] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->left);
+            return false;
+        }
         unset($task->comment);
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], (string)$this->post->uid);
@@ -1271,6 +1276,7 @@ class taskZen extends task
             if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
         if(!$task->left && !$task->consumed) dao::$errors['message'] = $this->lang->task->noticeTaskStart;
+        if($task->left && $task->left < 0) dao::$errors['left'] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->left);
         return !dao::isError();
     }
 
@@ -1317,6 +1323,9 @@ class taskZen extends task
         $task->canceledDate   = helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate,   0, 10);
         $task->closedDate     = helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate,     0, 10);
         $task->lastEditedDate = helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 0, 10);
+        $task->rawEstimate    = $task->estimate;
+        $task->rawConsumed    = $task->consumed;
+        $task->rawLeft        = $task->left;
         $task->estimate       = $task->estimate . $this->lang->execution->workHourUnit;
         $task->consumed       = $task->consumed . $this->lang->execution->workHourUnit;
         $task->left           = $task->left     . $this->lang->execution->workHourUnit;
@@ -2017,7 +2026,7 @@ class taskZen extends task
         if(!$execution || (!empty($execution) && $execution->multiple))
         {
             /* If the admin denied modification of closed executions, only query not closed executions. */
-            $queryMode = $execution && common::canModify('execution', $execution) ? '' : 'noclosed';
+            $queryMode = ($this->app->methodName == 'view' || ($execution && common::canModify('execution', $execution))) ? '' : 'noclosed';
 
             /* Get executions the current user can access. */
             $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
@@ -2153,15 +2162,14 @@ class taskZen extends task
             return sprintf($this->lang->task->report->tpl->feature, $productName);
         }
 
-        $fieldParams  = array();
-        $searchConfig = $this->session->tasksearchParams;
-        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        $searchConfig = $this->loadModel('search')->processSearchParams('task');
+        $fieldParams  = $searchConfig['params'];
         if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
 
         $leftConditions  = array();
         $rightConditions = array();
         $searchFields    = $this->session->taskForm;
-        $fieldNames      = json_decode($searchConfig['searchFields']);
+        $fieldNames      = $searchConfig['fields'];
         if(!$searchFields) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
 
         $this->app->loadLang('search');

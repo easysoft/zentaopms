@@ -15,7 +15,7 @@ class batchEditProjectTester extends tester
         $form = $this->initForm('project', 'browse', array(), 'appIframe-project');
         $form->dom->selectAllBtn->click();
         $form->dom->batchEditBtn->click();
-        $firstID = $form->dom->id_static_0->getText(); //获取第一行的ID
+        $firstID    = $form->dom->id_static_0->getText(); //获取第一行的ID
         $firstBegin = "begin[{$firstID}]";
         $firstEnd   = "end[{$firstID}]";
         $firstAcl   = "acl[{$firstID}]";
@@ -41,9 +41,10 @@ class batchEditProjectTester extends tester
     {
         /* 检查批量编辑页面提示信息 */
         $batchEditPage = $this->loadPage('project', 'batchEdit');
-        $existName = '敏捷项目2';
+        $existName     = '敏捷项目2';
         if($this->response('method') != 'view')
-        {   $firstNameTipDom  = "name[{$firstID}]Tip"; //第一行的名称提示信息
+        {
+            $firstNameTipDom  = "name[{$firstID}]Tip"; //第一行的名称提示信息
             /* 检查项目名称不能为空 */
             if($project['name'] == '')
             {

@@ -1309,40 +1309,6 @@ class productModel extends model
     }
 
     /**
-     * 为产品列表页和详情页构建操作按钮。
-     * Build operate menu.
-     *
-     * @param  object $product
-     * @access public
-     * @return array
-     */
-    public function buildOperateMenu(object $product): array
-    {
-        /* Declare menu list. */
-        $menuList = array
-        (
-            'main'   => array(),
-            'suffix' => array()
-        );
-
-        $params = "product=$product->id";
-
-        if($product->status != 'closed' && common::hasPriv('product', 'close')) $menuList['main'][] = $this->config->product->actionList['close'];
-        if($product->status == 'closed' && common::hasPriv('product', 'activate')) $menuList['main'][] = $this->config->product->actionList['activate'];
-
-        if(common::hasPriv('product', 'edit'))
-        {
-            unset($this->config->product->actionList['edit']['text']);
-            $this->config->product->actionList['edit']['url'] = helper::createLink('product', 'edit', $params);
-            $menuList['suffix'][] = $this->config->product->actionList['edit'];
-        }
-
-        if(common::hasPriv('product', 'delete')) $menuList['suffix'][] = $this->config->product->actionList['delete'];
-
-        return $menuList;
-    }
-
-    /**
      * Setting parameters for link.
      *
      * @param  string $module
@@ -1779,7 +1745,7 @@ class productModel extends model
         if(empty($productIdList)) return array();
 
         /* Get storie list by product ID list. */
-        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList);
+        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList, 'story', false);
 
         /* Get case count of each story. */
         $storyIdList      = array();
@@ -2070,7 +2036,6 @@ class productModel extends model
         if($module == 'product'    && in_array($method, array('doc', 'view')))                           return helper::createLink($module,    $method,  "productID=%s");
         if($module == 'product'    && in_array($method, array('create', 'showimport')))                  return helper::createLink($module,    'browse', "productID=%s&type=$extra");
         if($module == 'bug'        && in_array($method, array('edit', 'view')))                          return helper::createLink($module,    'browse', "productID=%s");
-        if($module == 'testcase'   && in_array($method, array('edit', 'view')))                          return helper::createLink($module,    'browse', "productID=%s");
         if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit', 'createstory'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
         if($module == 'testreport' && in_array($method, array('edit', 'browse')))                        return helper::createLink($module,    'browse', "objectID=%s");
         if($module == 'feedback'   && $this->config->vision == 'lite')                                   return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
@@ -2101,7 +2066,8 @@ class productModel extends model
             }
             return helper::createLink($module, $method, "productID=%s&branch={$branchID}&groupBy=&projectID=$projectID") . "#app=project";
         }
-        if($module == 'story' and $this->config->vision == 'or') return helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
+        if($module == 'testcase' && !in_array($method, array('browse', 'browsescene', 'groupcase', 'zerocase', 'create'))) return helper::createLink($module, 'browse', "productID=%s");
+        if($module == 'story'    && $this->config->vision == 'or') return helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
 
         return helper::createLink($module, $method, "productID=%s{$branchParam}{$extraParam}");
     }

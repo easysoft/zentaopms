@@ -97,12 +97,16 @@ class transfer extends control
     public function import(string $module, string $locate = '')
     {
         $locate = $locate ? $locate : $this->session->showImportURL;
-        if($_FILES)
+        if($this->server->request_method == 'POST')
         {
             $file = $this->loadModel('file')->getUpload('file');
+            if(empty($_FILES))  return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
+            if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
             if(!empty($file['error'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->uploadError[$file['error']]));
 
-            $file      = $file[0];
+            $file = $file[0];
+            if(!in_array(strtolower($file['extension']), array('xls', 'xlsx'))) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
+
             $shortName = $this->file->getSaveName($file['pathname']);
             if(empty($shortName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->emptyFileName));
 

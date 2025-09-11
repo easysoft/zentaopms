@@ -80,6 +80,7 @@ $filter->kanban       = new stdclass();
 $filter->group        = new stdclass();
 $filter->convert      = new stdclass();
 $filter->admin        = new stdclass();
+$filter->install      = new stdclass();
 
 $filter->index->index                   = new stdclass();
 $filter->block->default                 = new stdclass();
@@ -112,6 +113,7 @@ $filter->api->edit                      = new stdClass();
 $filter->mail->ztcloud                  = new stdclass();
 $filter->mail->batchdelete              = new stdclass();
 $filter->misc->checkupdate              = new stdclass();
+$filter->misc->installevent             = new stdclass();
 $filter->file->download                 = new stdclass();
 $filter->product->browse                = new stdclass();
 $filter->product->all                   = new stdclass();
@@ -210,6 +212,7 @@ $filter->admin->register                = new stdclass();
 $filter->admin->getcaptcha              = new stdclass();
 $filter->admin->sendcode                = new stdclass();
 $filter->admin->giftpackage             = new stdclass();
+$filter->install->step5                 = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -452,6 +455,10 @@ $filter->mail->batchdelete->get['idList'] = 'reg::idList';
 
 $filter->misc->checkupdate->get['browser'] = 'code';
 $filter->misc->checkupdate->get['note']    = 'reg::base64';
+
+$filter->misc->installevent->cookie['sn'] = 'string';
+
+$filter->install->step5->cookie['sn'] = 'string';
 
 $filter->sso->getbindusers->get['hash'] = 'reg::md5';
 $filter->sso->gettodolist->get['hash']  = 'reg::md5';

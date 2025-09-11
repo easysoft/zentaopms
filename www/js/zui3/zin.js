@@ -168,7 +168,8 @@
 
     function showFatalError(data, _info, options)
     {
-        zui.Modal.showError({error: data.startsWith('<!DOCTYPE html') ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
+        const isNormalPage = data.startsWith('<!DOCTYPE html');
+        zui.Modal.showError({error: isNormalPage ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg', html: !isNormalPage})
     }
 
     function initZinbar()
@@ -246,12 +247,18 @@
         return (zinbar && zinbar.$) ? zinbar.$.state.pagePerf : null;
     }
 
+    function triggerEvent(event, args, options)
+    {
+        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
+        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
+    }
+
     function triggerPerfEvent(stage)
     {
         if(!zinbar || !zinbar.$) return;
         if(zinbar.lastPerfEventType === stage) clearTimeout(zinbar.lastPerfEventTimer);
         zinbar.lastPerfEventTimer = setTimeout(() => {
-            $.apps.triggerEvent('updatePerfData.app', {stage: stage, perf: getPerfData()}, {silent: true});
+            triggerEvent('updatePerfData.app', {stage: stage, perf: getPerfData()}, {silent: true});
         }, 100);
         zinbar.lastPerfEventType = stage;
     }
@@ -271,12 +278,6 @@
         }
         updateZinbar(perf);
         triggerPerfEvent(stage);
-    }
-
-    function triggerEvent(event, args, options)
-    {
-        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
-        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
     }
 
     function showZinDebugInfo(data, options)
@@ -1303,9 +1304,17 @@
                         }
                         else
                         {
-                            const $item = $data.filter(`[data-name="${name}"]`);
-                            $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
-                            $item.zuiInit();
+                            const $items         = $data.filter(`[data-name="${name}"]`);
+                            const $oldMatchItems = $oldItems.filter(`[data-name="${name}"]`);
+                            if($oldMatchItems.length)
+                            {
+                                $oldMatchItems.replaceWith($items);
+                            }
+                            else
+                            {
+                                $oldItems.last().after($items);
+                            }
+                            $items.zuiInit();
                         }
                     });
 

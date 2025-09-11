@@ -94,6 +94,7 @@ toolbar
 );
 
 jsVar('markerTitle', $lang->release->marker);
+jsVar('integratedLabel', $lang->release->integratedLabel);
 jsVar('showBranch', $showBranch);
 jsVar('type', $type);
 jsVar('isFromDoc', $isFromDoc);

@@ -574,7 +574,7 @@ if($config->systemMode != 'light')
 
     $productManage->advance->tasks['lineManage']['steps'][] = array(
         'type'   => 'click',
-        'target' => '#actionBar button[data-id="manageLineModal"]',
+        'target' => '#actionBar button#manageLineBtn',
         'page'   => 'product-all',
         'title'  => $lang->tutorial->productManage->lineManage->step2->name,
         'desc'   => $lang->tutorial->productManage->lineManage->step2->desc

@@ -35,6 +35,11 @@ if(!empty($projectID))
 formPanel
 (
     set::title($lang->release->create),
+    set::titleClass('text-lg gap-0'),
+    to::titleSuffix
+    (
+        btn(setClass('ghost'), icon('help'), set::hint($lang->help), set::url('https://www.zentao.net/book/zentaopms/888.html'), set::target('_blank'))
+    ),
     on::change('[name=status]')->call('changeStatus'),
     on::change('[name=newSystem]')->call('setSystemBox'),
     on::change('[name=system]')->call('loadSystemBlock'),

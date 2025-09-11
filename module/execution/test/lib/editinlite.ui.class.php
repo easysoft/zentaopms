@@ -88,7 +88,8 @@ class editExecutionTester extends tester
      */
     public function edit($execution)
     {
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $this->inputFields($execution);
         if($this->checkFormTips('execution')) return $this->success('编辑看板表单页提示信息正确');
 

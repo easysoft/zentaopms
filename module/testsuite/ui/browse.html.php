@@ -32,13 +32,13 @@ toolbar
 (
     btngroup
     (
-        btn
+        hasPriv('testsuite', 'create') ? btn
         (
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('testsuite', 'create', "productID={$product->id}")),
             $lang->testsuite->create
-        )
+        ) : null
     )
 );
 
@@ -54,7 +54,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->testsuite->noTestsuite),
     set::createTip($lang->testsuite->create),
-    set::createLink(createLink('testsuite', 'create', "productID={$product->id}"))
+    hasPriv('testsuite', 'create') ? set::createLink(createLink('testsuite', 'create', "productID={$product->id}")) : null
 );
 
 render();

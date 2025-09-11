@@ -630,6 +630,11 @@ class yaml
      */
     public function fixPath()
     {
+        if($this->config->db->driver == 'dm')
+        {
+            echo 'error: Cann\'t fix path because the driver is dm.' . PHP_EOL;
+            return exit(1);
+        }
         $fieldPairs  = array();
         $table       = $this->config->db->prefix . $this->tableName;
         $tableFields = $this->dao->query("DESC {$table}")->fetchAll();

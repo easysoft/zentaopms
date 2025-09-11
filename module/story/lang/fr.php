@@ -227,6 +227,18 @@ $lang->story->linkCommit       = 'Related Commits';
 $lang->story->URS              = 'User requirements';
 $lang->story->estimateUnit     = "(Unit: {$lang->story->hour})";
 $lang->story->verifiedDate     = 'Verified Date';
+$lang->story->root             = 'Root';
+$lang->story->vision           = 'Vision';
+$lang->story->fromStory        = 'From Story';
+$lang->story->fromVersion      = 'From Version';
+$lang->story->approvedDate     = 'Approved Date';
+$lang->story->releasedDate     = 'Released Date';
+$lang->story->parentVersion    = 'Parent Version';
+$lang->story->demandVersion    = 'Demand Version';
+$lang->story->storyChanged     = 'Story Changed';
+$lang->story->demand           = 'Demand';
+$lang->story->unlinkReason     = 'Unlink Reason';
+$lang->story->retractedReason  = 'Retracted Reason';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
@@ -543,6 +555,7 @@ $lang->story->reviewTip = array();
 $lang->story->reviewTip['active']      = "Cette Story est déjà active, il n'y a pas de demande de révision.";
 $lang->story->reviewTip['notReviewer'] = "Vous n'êtes pas l'évaluateur de cette Story et ne pouvez pas effectuer d'opérations d'évaluation.";
 $lang->story->reviewTip['reviewed']    = "Révisé";
+$lang->story->reviewTip['noPriv']      = 'You do not have the authority to submit for review.';
 
 $lang->story->recallTip = array();
 $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";

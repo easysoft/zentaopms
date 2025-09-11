@@ -1,7 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::getTeamMemberPairs();
+timeout=0
+cid=1
+
+- 获取项目集1下所有团队成员数量 @4
+- 获取项目集2下所有团队成员数量 @1
+- 获取项目集1下所有团队成员真实姓名属性admin @A:admin
+- 获取项目集1下所有团队成员真实姓名属性user1 @U:用户1
+- 获取项目集1下所有团队成员真实姓名属性user3 @U:用户3
+- 获取项目集1下所有团队成员真实姓名属性user4 @U:用户4
+- 获取项目集2下所有团队成员真实姓名属性user2 @U:用户2
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+
+su('admin');
 
 $program = zenData('project');
 $program->id->range('1-5');
@@ -28,21 +47,6 @@ $team->gen(5);
 
 zenData('user')->gen(5);
 
-su('admin');
-
-/**
-
-title=测试 programModel::getTeamMemberPairs();
-cid=1
-pid=1
-
-获取项目集1下所有团队成员数量     >> 5
-获取项目集2下所有团队成员数量     >> 2
-获取项目集1下所有团队成员真实姓名 >> A:admin
-获取项目集2下所有团队成员真实姓名 >> U:用户2
-
-*/
-
 $programTester = new programTest();
 $teams1 = $programTester->getTeamMemberPairsTest(1);
 $teams2 = $programTester->getTeamMemberPairsTest(2);
@@ -50,4 +54,7 @@ $teams2 = $programTester->getTeamMemberPairsTest(2);
 r(count($teams1)) && p()        && e('4');           // 获取项目集1下所有团队成员数量
 r(count($teams2)) && p()        && e('1');           // 获取项目集2下所有团队成员数量
 r($teams1)        && p('admin') && e('A:admin');     // 获取项目集1下所有团队成员真实姓名
+r($teams1)        && p('user1') && e('U:用户1');     // 获取项目集1下所有团队成员真实姓名
+r($teams1)        && p('user3') && e('U:用户3');     // 获取项目集1下所有团队成员真实姓名
+r($teams1)        && p('user4') && e('U:用户4');     // 获取项目集1下所有团队成员真实姓名
 r($teams2)        && p('user2') && e('U:用户2');     // 获取项目集2下所有团队成员真实姓名

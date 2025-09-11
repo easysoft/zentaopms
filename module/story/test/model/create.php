@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 storyModel->create();
@@ -11,6 +10,10 @@ cid=0
  - 属性id @5
  - 属性title @test story
 - 如果传入执行，检查需求是否已经关联到执行了。 @1
+- 如果传入执行，检查执行信息。
+ - 属性project @11
+ - 属性product @1
+ - 属性story @6
 - 如果传入Bug，检查Bug是否已经关闭了。 @closed
 
 */
@@ -69,6 +72,7 @@ $story = new storyTest();
 $test1 = $story->createTest($data);
 $test2 = $story->createTest($data, 11);
 $test3 = $story->createTest($data, 0, 1);
-r((array)$test1)                 && p('id,title') && e('5,test story'); //检查创建后的数据。
-r(count($test2->linkedProjects)) && p()           && e('1');            //如果传入执行，检查需求是否已经关联到执行了。
-r($test3->linkedBug->status)     && p()           && e('closed');       //如果传入Bug，检查Bug是否已经关闭了。
+r((array)$test1)                 && p('id,title')              && e('5,test story'); // 检查创建后的数据。
+r(count($test2->linkedProjects)) && p()                        && e('1');            // 如果传入执行，检查需求是否已经关联到执行了。
+r($test2->linkedProjects[0])     && p('project,product,story') && e('11,1,6');       // 如果传入执行，检查执行信息。
+r($test3->linkedBug->status)     && p()                        && e('closed');       // 如果传入Bug，检查Bug是否已经关闭了。

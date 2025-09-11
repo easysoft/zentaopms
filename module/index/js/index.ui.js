@@ -126,7 +126,7 @@ function openApp(url, code, options)
     if(!app)
     {
         if(DEBUG) showLog(code, 'APP NOT FOUND!', url, options);
-        return zui.Messager.show('App not found.', {type: 'danger', time: 2000});
+        return zui.Modal.alert(appNotFound);
     }
 
     /* Create iframe for app */

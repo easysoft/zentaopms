@@ -37,6 +37,8 @@ class count_of_assigned_task extends baseCalc
         {
             foreach(explode(',', $row->teamMembers) as $user)
             {
+                if(!$user) continue;
+
                 if(!isset($this->result[$user])) $this->result[$user] = array();
                 $this->result[$user][$row->id] = $row->id;
             }

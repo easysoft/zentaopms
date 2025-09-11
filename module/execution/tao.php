@@ -837,6 +837,7 @@ class executionTao extends executionModel
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             $teamMembers[$account] = $member;
         }
+        if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint');
         $this->addProjectMembers($execution->project, $teamMembers);
     }
 

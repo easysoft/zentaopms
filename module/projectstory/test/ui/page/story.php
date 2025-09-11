@@ -34,22 +34,25 @@ class storyPage extends page
             'selectAllBtn'   => "//*[@id='stories']/div[3]/div/div/label",
             /* 指派 */
             'firstAssignTo'  => "//*[@id='stories']/div[2]/div[2]/div/div[7]/div/a/span",
-            'assignedTo'     => "//*[@data-name='assignedTo']/div/div",
             'assignBtn'      => "//*[@class='panel-body']/form/div[3]/div/button",
             'batchAssignBtn' => "//*[@id='stories']/div[3]/nav/button[4]/span[1]",
             'assignToAdmin'  => "//*[@class='item-content']/div",
             /* 运营管理界面 */
-            'allTab'          => '//*[@data-id="allstory"]',
-            'openTab'         => '//*[@data-id="unclosed"]',
-            'draftTab'        => '//*[@data-id="draft"]',
-            'reviewingTab'    => '//*[@data-id="reviewing"]',
-            'changingTab'     => '//*[@data-id="changing"]',
-            'allTabNum'       => '//*[@data-id="allstory"]/span[2]',
-            'openTabNum'      => '//*[@data-id="unclosed"]/span[2]',
-            'draftTabNum'     => '//*[@data-id="draft"]/span[2]',
-            'reviewingTabNum' => '//*[@data-id="reviewing"]/span[2]',
-            'changingTabNum'  => '//*[@data-id="changing"]/span[2]',
-            'firstStory'      => '//*[@id="stories"]/div[2]/div[1]/div/div[2]/div/a'
+            'allTab'           => '//*[@data-id="allstory"]',
+            'openTab'          => '//*[@data-id="unclosed"]',
+            'draftTab'         => '//*[@data-id="draft"]',
+            'reviewingTab'     => '//*[@data-id="reviewing"]',
+            'changingTab'      => '//*[@data-id="changing"]',
+            'allTabNum'        => '//*[@data-id="allstory"]/span[2]',
+            'openTabNum'       => '//*[@data-id="unclosed"]/span[2]',
+            'draftTabNum'      => '//*[@data-id="draft"]/span[2]',
+            'reviewingTabNum'  => '//*[@data-id="reviewing"]/span[2]',
+            'changingTabNum'   => '//*[@data-id="changing"]/span[2]',
+            'firstStory'       => '//*[@id="stories"]/div[2]/div[1]/div/div[2]/div/a',
+            'firstCheckbox'    => '//*[@id="stories"]/div[2]/div[1]/div/div[1]/div/div',
+            'batchEdit'        => '//*[@id="stories"]/div[3]/nav[1]/nav/button[1]',
+            'batchAssignlite'  => '//*[@id="stories"]/div[3]/nav[1]/button[3]',
+            'batchAssignInput' => '/html/body/div[2]/menu/footer/div/input'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

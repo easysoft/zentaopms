@@ -5,7 +5,19 @@ class viewPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'createBtn'   => '//*[@id="kanbanList"]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/nav/button[1]',
+            /*泳道*/
+            'laneMoreBtn'      => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]/div[1]/nav/button',
+            'editLaneNameBtn'  => '//*[@z-key-path="editLaneName"]',
+            'editLaneColorBtn' => '//*[@z-key-path="editLaneColor"]',
+            'firLane'          => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]',
+            'firLaneName'      => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div[1]/div[1]/div',
+            'firColor'         => '//*[@id="zin_kanban_editlanecolor_form"]/div[1]/div/div/div[1]',
+            /*看板列*/
+            'createBtn'     => '//*[@id="kanbanList"]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/nav/button[1]',
+            'columnMoreBtn' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/nav/button[2]',
+            'setColumnBtn'  => '//li[@z-type="item"][1]',
+            'firColumnName' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div/span[1]',
+            /*卡片*/
             'firCardName' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/div/div[1]/a',
             'moreBtn'     => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div[1]/div/nav/button',
             'progressNum' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/div/div[3]/div/div/div[2]'

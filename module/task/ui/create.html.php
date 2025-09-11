@@ -100,7 +100,7 @@ formGridPanel
         (
             set::tagName('div'),
             setID('teamTable'),
-            set::mode('add'),
+            set::mode(!empty($task->team) ? 'edit' : 'add'),
             !empty($task->team) ? set::data(array_values($task->team)) : null,
             set::sortable(true),
             set::size('sm'),

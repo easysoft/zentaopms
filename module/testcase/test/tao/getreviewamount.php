@@ -19,3 +19,15 @@ pid=1
 $testcase = new testcaseTest();
 
 r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
+
+su('user1');
+r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
+
+su('tester1');
+r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
+
+su('guest');
+r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
+
+su('po1');
+r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量

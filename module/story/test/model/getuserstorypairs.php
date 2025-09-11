@@ -4,12 +4,14 @@
 /**
 
 title=测试 storyModel->getUserStoryPairs();
+timeout=0
 cid=0
 
 - 获取指派给 user2 的需求数量，每页10条 @10
 - 获取指派给 user2 的用户需求，每页20条 @20
 - 获取指派给 user2 的所有需求总数 @40
 - 获取指派给 user2 的、不在产品5里的用户需求 @30
+- 获取指派给 user2 的、不在产品4,5里的用户需求 @0
 
 */
 
@@ -44,3 +46,6 @@ r(count($user2Stories))             && p() && e('10'); //获取指派给 user2 �
 r(count($adminRequirements))        && p() && e('20'); //获取指派给 user2 的用户需求，每页20条
 r(count($allUser2Stories))          && p() && e('40'); //获取指派给 user2 的所有需求总数
 r(count($user2StoriesSkipProducts)) && p() && e('30'); //获取指派给 user2 的、不在产品5里的用户需求
+
+$user2StoriesSkipProducts = $tester->story->getUserStoryPairs('user2', 100, 'story', array(4,5));
+r(count($user2StoriesSkipProducts)) && p() && e('0'); //获取指派给 user2 的、不在产品4,5里的用户需求

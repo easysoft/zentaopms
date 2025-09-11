@@ -16,7 +16,8 @@ class browsePage extends page
             'exportMenu'       => "//button[@type='button' and contains(@zui-toggle-dropdown,'export')]/i",
             'exportCaseButton' => "//menu/li/a[contains(@href,'=export&')]",
             'automation'       => "//a[contains(@href,'automation')]",
-            'batchEdit'        => "//span[text()='编辑']"
+            'batchEdit'        => "//span[text()='编辑']",
+            'onlyScene'        => "//*[@id='featureBar']/menu/li[7]/a"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);

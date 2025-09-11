@@ -375,7 +375,7 @@ class projectZen extends project
         $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $projectBranches     = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = empty($branchGroups) ? '' : array_keys($branchGroups);
+        $linkedProductIdList = empty($projectBranches) ? '' : array_keys($projectBranches);
         $parentProject       = $this->program->getByID($project->parent);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList, false);
         $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
@@ -483,8 +483,6 @@ class projectZen extends project
         {
             $this->view->disableModel = true;
         }
-
-        $this->display();
     }
 
     /**
@@ -1382,7 +1380,7 @@ class projectZen extends project
                 if($story->isParent) continue;
                 $project->storyPoints += $story->estimate;
             }
-            $project->storyPoints .= ' ' . $this->config->hourUnit;
+            $project->storyPoints = helper::formatHours($project->storyPoints) . ' ' . $this->config->hourUnit;
 
             $executions = zget($executionGroup, $project->id, array());
             $project->executionCount = count($executions);
@@ -1662,14 +1660,15 @@ class projectZen extends project
 
             $projectBudget = $project->budget === '' ? '0' : $project->budget;
 
-            $project->PM       = zget($users, $project->PM);
-            $project->status   = $this->processStatus('project', $project);
-            $project->model    = zget($this->lang->project->modelList, $project->model);
-            $project->budget   = !empty($projectBudget) ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
-            $project->parent   = $project->parentName;
-            $project->end      = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-            $project->invested = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
-            $project->progress = floor((float)$project->progress);
+            $project->PM        = zget($users, $project->PM);
+            $project->status    = $this->processStatus('project', $project);
+            $project->model     = zget($this->lang->project->modelList, $project->model);
+            $project->budget    = !empty($projectBudget) ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+            $project->parent    = $project->parentName;
+            $project->end       = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $project->invested  = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
+            $project->invested .= " {$this->lang->project->manDay}";
+            $project->progress  = floor((float)$project->progress) . '%';
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
@@ -1899,7 +1898,7 @@ class projectZen extends project
                 if(!isset($executionTasks[$task->execution])) $executionTasks[$task->execution] = array();
                 $executionTasks[$task->execution][$task->id] = $task;
             }
-            $executions = $this->loadModel('execution')->getByIdList($executionIdList);
+            $executions = $this->loadModel('execution')->getByIdList($executionIdList, '', $sort);
             $executions = $this->execution->batchProcessExecution($executions, $projectID, $productID, true, '', $executionTasks);
             $executionStats = array_values($executions);
         }

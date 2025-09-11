@@ -12,6 +12,7 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
+#[AllowDynamicProperties]
 class entry extends baseEntry
 {
     public function __construct()
@@ -31,6 +32,7 @@ class entry extends baseEntry
  * The baseEntry class file of ZenTao API.
  *
  */
+#[AllowDynamicProperties]
 class baseEntry
 {
     /**
@@ -558,7 +560,7 @@ class baseEntry
             }
             else
             {
-                $vs = implode(',', $object->$key);
+                $vs = explode(',', $object->$key);
                 foreach($vs as $v)
                 {
                     if($v === '') continue;

@@ -16,26 +16,8 @@ jsVar('orderBy', $orderBy);
 
 /* Get field list for data table. */
 if(str_contains($orderBy, 'line')) $orderBy = str_replace('line', 'productLine', $orderBy);
-$fnGetTableFieldList = function() use ($config)
-{
-    $fieldList = $this->loadModel('datatable')->getSetting('product');
-    $extendFieldList = $this->product->getFlowExtendFields();
-    foreach($extendFieldList as $extendField)
-    {
-        $extCol = $config->product->dtable->extendField;
-        $extCol['name']  = $extendField->field;
-        $extCol['title'] = $extendField->name;
 
-        $fieldList[$extendField->field] = $extCol;
-    }
-
-    end($fieldList);
-    $endField = key($fieldList);
-    $fieldList[$endField]['align'] = 'left';
-
-    return $fieldList;
-};
-$cols = $fnGetTableFieldList();
+$cols = $this->loadModel('datatable')->getSetting('product');
 
 /* Closure function for generating table data. */
 $productStats = initTableData($productStats, $cols, $this->product);
@@ -109,6 +91,7 @@ toolbar
     ) : null,
     $canManageLine ? btn
     (
+        set::id('manageLineBtn'),
         set::className('ghost text-primary pl-0'),
         set::icon('edit'),
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),

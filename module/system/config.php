@@ -9,7 +9,6 @@ $config->system->edit = new stdclass();
 $config->system->edit->requiredFields   = 'name';
 
 $config->system->groupPrivs = array();
-$config->system->groupPrivs['dashboard']     = 'backup|index';
 $config->system->groupPrivs['deletebackup']  = 'backup|delete';
 $config->system->groupPrivs['restorebackup'] = 'backup|restore';
 

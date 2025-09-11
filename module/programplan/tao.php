@@ -216,7 +216,7 @@ class programplanTao extends programplanModel
     {
         $this->app->loadLang('stage');
 
-        $datas = $stageIndex = $planIdList = $reviewDeadline = array();
+        $datas       = $stageIndex = $planIdList = $reviewDeadline = array();
         $today       = helper::today();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         foreach($plans as $plan)
@@ -572,6 +572,14 @@ class programplanTao extends programplanModel
         $this->setTreePath($stageID);
         $this->computeProgress($stageID, 'create');
 
+        /* Add the execution team members to parent executions. */
+        $stagePath = $this->dao->findByID($stageID)->from(TABLE_PROJECT)->fetch('path');
+        foreach(explode(',', $stagePath) as $stageParentID)
+        {
+            if(empty($stageParentID) || $stageParentID == $projectID) continue;
+            $this->execution->addExecutionMembers((int)$stageParentID, array($plan->PM));
+        }
+
         return $stageID;
     }
 
@@ -733,7 +741,7 @@ class programplanTao extends programplanModel
     {
         $this->app->loadLang('task');
         $groupName = $group;
-        $groupName = $group ? zget($users, $group) : $this->lang->task->noAssigned;
+        $groupName = $group != '/' ? zget($users, $group) : $this->lang->task->noAssigned;
 
         $dataGroup                = new stdclass();
         $dataGroup->id            = $groupID;

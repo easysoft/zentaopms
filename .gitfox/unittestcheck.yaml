@@ -86,8 +86,12 @@ spec:
                   ${GITFOX_WORKSPACE_BASE}
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
-                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* .
+                - mkdir ${GITFOX_WORKSPACE_BASE}/testcode
+                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* ${GITFOX_WORKSPACE_BASE}/testcode && cp -r ${GITFOX_WORKSPACE_BASE}/zentaopms/test ${GITFOX_WORKSPACE_BASE}/testcode/
+                - cd ${GITFOX_WORKSPACE_BASE}/testcode
                 - rm -rf tmp
+                - echo "<?php\n\$config->edition = 'ipd';"
+                - echo "<?php\n\$config->edition = 'ipd';" > config/ext/edition.php
           - name: 镜像构建
             type: run
             spec:
@@ -104,7 +108,7 @@ spec:
                   --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true
                   -t
                   hub.qc.oop.cc/zentao-ztf:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT}
-                  -f misc/ci/Dockerfile.test .
+                  -f misc/ci/Dockerfile.test ${GITFOX_WORKSPACE_BASE}/testcode
           - name: unit test
             type: run
             spec:

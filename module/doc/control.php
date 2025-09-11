@@ -226,9 +226,14 @@ class doc extends control
 
         if($type == 'productRelease')
         {
-            $children      = implode(',', array_column($this->view->data, 'releases'));
+            $releaseList = array();
+            foreach($this->view->data as $release)
+            {
+                if($release->id == $release->rowID) $releaseList[$release->id] = $release;
+            }
+            $children      = implode(',', array_column($releaseList, 'releases'));
             $childReleases = $this->loadModel('release')->getListByCondition(explode(',', $children), 0, true);
-            $this->view->data = $this->release->processReleaseListData($this->view->data, $childReleases, false);
+            $this->view->data = $this->release->processReleaseListData($releaseList, $childReleases, false);
         }
 
         $this->display();
@@ -583,14 +588,14 @@ class doc extends control
      *
      * @param  int    $libID
      * @param  string $type
-     * @param  int    $docID
+     * @param  mixed  $docID
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
+    public function browseTemplate(int $libID = 0, string $type = 'all', mixed $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
     {
         /* 添加内置的范围、分类、文档模板。*/
         /* Add the built-in scopes and type and doc template. */
@@ -613,11 +618,15 @@ class doc extends control
         $allModules   = array_column($allModules, 'fullName', 'id');
         foreach($templateList as $template) $template->moduleName = zget($allModules, $template->module);
 
+        $docVersion = 0;
+        if(is_string($docID) && strpos($docID, '_') !== false) list($docID, $docVersion) = explode('_', $docID);
+
         $this->view->title        = $this->lang->doc->template;
         $this->view->libID        = $libID;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->templateList = $templateList;
         $this->view->docID        = $docID;
+        $this->view->docVersion   = $docVersion;
         $this->view->orderBy      = $orderBy;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
@@ -965,8 +974,16 @@ class doc extends control
             $currentAccount  = $this->app->user->account;
             $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
             $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            $isInEditGroups  = false;
+            if(!empty($doc->groups))
+            {
+                foreach($this->app->user->groups as $groupID)
+                {
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInEditGroups = true;
+                }
+            }
 
-            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers && !$isInEditGroups) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 
@@ -1346,6 +1363,8 @@ class doc extends control
         $isApi = is_string($docID) && strpos($docID, 'api.') === 0;
         $docID = $isApi ? (int)str_replace('api.', '', $docID) : (int)$docID;
         $doc   = $isApi ? $this->loadModel('api')->getByID($docID, $version) : $this->doc->getByID($docID, $version, true);
+        $docParam = $version ? ($docID . '_' . $version) : $docID;
+        if($isApi) $docParam = 'api.' . $docParam;
         if(!$doc || !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -1363,7 +1382,7 @@ class doc extends control
 
         if($doc->templateType)
         {
-            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docParam&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
             return;
         }
 
@@ -1383,8 +1402,6 @@ class doc extends control
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->view->title = $doc->title;
-        $docParam = $version ? ($docID . '_' . $version) : $docID;
-        if($isApi) $docParam = 'api.' . $docParam;
         $libID = isset($lib->id) ? $lib->id : 0;
         echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docParam&mode=view");
     }
@@ -2330,6 +2347,7 @@ class doc extends control
             $data   = array('spaceID' => (int)$spaceID);
             $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
             $libIds = array_keys($libs);
+            foreach($libs as $lib) $lib->order = (int)$lib->order;
 
             if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
             if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
@@ -2389,6 +2407,7 @@ class doc extends control
 
         if(!empty($doc->rawContent))
         {
+            $doc->html    = $doc->content;
             $doc->content = $doc->rawContent;
             unset($doc->rawContent);
         }

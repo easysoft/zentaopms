@@ -684,7 +684,7 @@ class personnelModel extends model
             $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
 
             $viewProducts    = $this->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
-            $newViewProducts = trim(str_replace(",{$productID},", '', ",{$viewProducts},"), ',');
+            $newViewProducts = trim(str_replace(",{$productID},", ',', ",{$viewProducts},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('products')->eq($newViewProducts)->where('account')->eq($account)->exec();
         }
 
@@ -771,7 +771,7 @@ class personnelModel extends model
                 $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
 
                 $viewProjects    = $this->dao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
-                $newViewProjects = trim(str_replace(",{$projectID},", '', ",{$viewProjects},"), ',');
+                $newViewProjects = trim(str_replace(",{$projectID},", ',', ",{$viewProjects},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
             }
         }

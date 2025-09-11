@@ -225,9 +225,8 @@ foreach($actions as $key => $action)
 
     if(isset($action['icon']) && $action['icon'] == 'split')
     {
-        $canBatchCreateStory = $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
         $objectID = $app->tab == 'project' ? ($project->multiple ? $projectID : $executionID) : $executionID;
-        if($canBatchCreateStory)
+        if($story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild) && common::hasPriv($story->type, 'batchCreate'))
         {
             $actions[$key]['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
         }

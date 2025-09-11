@@ -1,5 +1,11 @@
 window.renderCell = function(result, {col, row})
 {
+    if(col.name == 'system' && row.data.releases)
+    {
+        result[0] = {className: 'overflow-hidden', html: result[0]};
+        result[result.length] = {html:'<span class="label gray-pale rounded-xl clip">' + integratedLabel + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+    }
+
     if(col.name == 'name')
     {
         if(row.data.marker == 1)

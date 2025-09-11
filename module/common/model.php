@@ -1143,6 +1143,7 @@ class commonModel extends model
         if(empty($maintenance)) return true;
 
         $maintenance = json_decode($maintenance);
+        if($this->app->moduleName == 'user' && $this->app->methodName == 'login') return true;
         if(!empty($this->app->user->admin)) return true;
 
         if(isset($maintenance->action) && in_array($maintenance->action, array('upgrade', 'downgrade', 'restore'))) helper::setStatus(503);
@@ -1455,28 +1456,36 @@ eof;
                 }
             }
 
-            $recomputedRights = array_merge($rights, $programRightGroup);
+            foreach($programRightGroup as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    $rights[$module][$method] = $label;
+                }
+            }
 
             /* Set base priv for project. */
             $projectRights = zget($this->app->user->rights['rights'], 'project', array());
-            if(isset($projectRights['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
-            if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
-            if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
+            if(isset($projectRights['browse']) and !isset($rights['project']['browse'])) $rights['project']['browse'] = 1;
+            if(isset($projectRights['kanban']) and !isset($rights['project']['kanban'])) $rights['project']['kanban'] = 1;
+            if(isset($projectRights['index'])  and !isset($rights['project']['index']))  $rights['project']['index']  = 1;
 
-            if(isset($projectPrivs->execution->linkStory))      $recomputedRights['execution']['linkstory']      = 1;
-            if(isset($projectPrivs->execution->batchLinkStory)) $recomputedRights['execution']['batchlinkstory'] = 1;
-            if(isset($projectPrivs->execution->unLinkStory))    $recomputedRights['execution']['unlinkstory']    = 1;
+            if(isset($projectPrivs->execution->linkStory))      $rights['execution']['linkstory']      = 1;
+            if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
+            if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
             if(isset($projectPrivs->story))
             {
                 foreach($projectPrivs->story as $method => $label)
                 {
                     $method = strtolower($method);
-                    $recomputedRights['story'][$method] = 1;
+                    $rights['story'][$method] = 1;
                 }
             }
 
-            $this->app->user->rights['rights'] = $recomputedRights;
+            $this->app->user->rights['rights'] = $rights;
         }
     }
 
@@ -2561,23 +2570,25 @@ eof;
      * @access protected
      * @return array|bool
      */
-    protected function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
+    public function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
     {
         $rawModule = $moduleName;
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $moduleName = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
-            $methodName = $actionData['url']['method'];
-            $params     = $actionData['url']['params'];
-            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
+            $moduleName     = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
+            $methodName     = $actionData['url']['method'];
+            $params         = $actionData['url']['params'];
+            $storySubdivide = in_array($moduleName, array('epic', 'requirement', 'story')) && $action == 'subdivide';
+            if(!$storySubdivide && !common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $moduleName = ($actionData['data-url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['data-url']['module'];
-            $methodName = $actionData['data-url']['method'];
-            $params     = $actionData['data-url']['params'];
-            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
+            $moduleName     = ($actionData['data-url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['data-url']['module'];
+            $methodName     = $actionData['data-url']['method'];
+            $params         = $actionData['data-url']['params'];
+            $storySubdivide = in_array($moduleName, array('epic', 'requirement', 'story')) && $action == 'subdivide';
+            if(!$storySubdivide && !common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['data-url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
         }
         elseif(empty($actionData['url']))

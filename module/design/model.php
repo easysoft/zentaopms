@@ -76,6 +76,20 @@ class designModel extends model
             }
 
             $designID = $this->dao->lastInsertID();
+            if($this->config->edition != 'open' && !empty($design->story))
+            {
+                if(!isset($stories[$design->story])) continue;
+
+                $relation = new stdClass();
+                $relation->AID      = $design->story;
+                $relation->AType    = $stories[$design->story]->type;
+                $relation->relation = 'generated';
+                $relation->BID      = $designID;
+                $relation->BType    = 'design';
+                $relation->product  = 0;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+
             $this->action->create('design', $designID, 'created');
         }
 
@@ -421,7 +435,7 @@ class designModel extends model
             ->where($this->session->designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
-            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($productID)->andWhere('product')->in(is_numeric($productID) ? "0,$productID" : array_merge($productID, array(0)))->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

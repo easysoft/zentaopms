@@ -1,18 +1,18 @@
 {
   "pkg": {
     "xuanxuan": {
-      "gitVersion": "02da3cc63dd6a5b60d04726a97578646178ee3e6",
+      "gitVersion": "6c3558721cc2c49edd0ba4b2c9a5734413150e71",
       "version": "9.3"
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "release/12.3"
+      "gitVersion": "release/12.4"
     },
     "zentaomax": {
-      "gitVersion": "release/7.3"
+      "gitVersion": "release/7.4"
     },
     "zentaoipd": {
-      "gitVersion": "release/4.3"
+      "gitVersion": "release/4.4"
     },
     "devops": {
       "gitRepo": "zentao/devops"
@@ -43,7 +43,7 @@
     }
   },
   "downgrade": {
-    "versions": "8.1,7.2,7.1,7.0"
+    "versions": "8.4,8.1,7.2,7.1,7.0"
   },
   "upload": {
     "bucket": "download",

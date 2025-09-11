@@ -329,4 +329,54 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
         return $this->objectModel->isClickable($release, $action);
     }
+
+    /*
+     * 当发布的状态变为正常时，设置需求的阶段。
+     * Set the stage of the stories when the release status is normal.
+     *
+     * @param  string $stage
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function setStoriesStageTest(string $stage, int $storyID)
+    {
+        $this->objectModel->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
+        $this->objectModel->setStoriesStage(1);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
+
+    /**
+     * 处理发布列表数据测试。
+     * Process release list data test.
+     *
+     * @param  int $productID
+     * @param  string $type
+     * @param  array $childReleases
+     * @param  bool $addActionsAndBuildLink
+     * @access public
+     * @return void
+     */
+    public function processReleaseListDataTest(int $productID, string $type = 'all', array $childReleases = array(), bool $addActionsAndBuildLink = true)
+    {
+        $releases = $this->objectModel->getList($productID, 0, $type);
+        return $this->objectModel->processReleaseListData($releases, $childReleases, $addActionsAndBuildLink);
+    }
+
+    /**
+     * 处理发布版本数据测试。
+     * Process release build data test.
+     *
+     * @param  int $releaseID
+     * @param  bool $addActionsAndBuildLink
+     * @access public
+     * @return array
+     */
+    public function processReleaseBuildsTest(int $releaseID, bool $addActionsAndBuildLink = true): array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        return $this->objectModel->processReleaseBuilds($release, $addActionsAndBuildLink);
+    }
 }

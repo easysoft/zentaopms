@@ -1186,18 +1186,26 @@ class user extends control
     {
         $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
-        $users = $this->user->getPairs(zget($parsedParams, 'params', ''), zget($parsedParams, 'usersToAppended', ''));
+
+        $usersToAppended = zget($parsedParams, 'usersToAppended', '');
+        $users           = $this->user->getPairs(zget($parsedParams, 'params', ''));
 
         $search   = $this->get->search;
-        $limit    = $this->get->limit;
+        $limit    = $this->config->maxCount;
         $index    = 0;
         $newUsers = array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
             if($search && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+            if(empty($search) && $usersToAppended && strpos(",{$usersToAppended},", ",{$account},") !== false)
+            {
+                $newUsers[] = array('value' => $account, 'text' => $realname);
+                continue;
+            }
+
             $index ++;
-            $newUsers[$account] = $realname;
+            $newUsers[] = array('value' => $account, 'text' => $realname);
         }
 
         echo json_encode($newUsers);

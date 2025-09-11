@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('searchUrl', createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&label={$label}&keyword=%s"));
+jsVar('searchUrl', createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&label={$label}&showArchived={$showArchived}&keyword=%s"));
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -50,14 +50,15 @@ $config->repo->dtable->branch->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->branch->fieldList['commitID']['link']);
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);
 $urlParams = array(
-    'repoID'     => $repo->id,
-    'objectID'   => $objectID,
-    'label'      => $label,
-    'keyword'    => urlencode($keyword),
-    'orderBy'    => '{name}_{sortType}',
-    'recTotal'   => $pager->recTotal,
-    'recPerPage' => $pager->recPerPage,
-    'pageID'     => $pager->pageID
+    'repoID'       => $repo->id,
+    'objectID'     => $objectID,
+    'label'        => $label,
+    'showArchived' => $showArchived,
+    'keyword'      => urlencode($keyword),
+    'orderBy'      => '{name}_{sortType}',
+    'recTotal'     => $pager->recTotal,
+    'recPerPage'   => $pager->recPerPage,
+    'pageID'       => $pager->pageID
 );
 dtable
 (

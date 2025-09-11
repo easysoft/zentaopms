@@ -673,7 +673,6 @@ class bugZen extends bug
             ->setDefault('product', $oldBug->product)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('resolvedDate', $oldBug->resolvedDate)
             ->add('lastEditedDate', $now)
             ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
@@ -1103,7 +1102,7 @@ class bugZen extends bug
         $this->view->resultFiles           = $resultFiles;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
-        $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
+        $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct((int)$bug->product, array(0, $this->view->branchID));
         $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
         $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->productID, $bug->branch, 'noclosed', true);
     }
@@ -1162,8 +1161,12 @@ class bugZen extends bug
 
         $this->assignVarsForEdit($bug, $product);
 
+        $duplicateBugs = $this->bug->getProductBugPairs($bug->product, $bug->branch);
+        unset($duplicateBugs[$bug->id]);
+
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
+        $this->view->duplicateBugs         = $duplicateBugs;
         $this->view->product               = $product;
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectID             = $bug->project;

@@ -55,6 +55,7 @@ class taskModel extends model
             if(!empty($task->assignedTo) && $task->assignedTo == 'closed') $task->assignedTo = '';
         }
 
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
@@ -101,8 +102,8 @@ class taskModel extends model
         $effort->project    = (int)$relation['project'];
         $effort->account    = $data->account;
         $effort->date       = $data->date;
-        $effort->consumed   = $data->consumed;
-        $effort->left       = $data->left;
+        $effort->consumed   = round((float)$data->consumed, 2);
+        $effort->left       = round((float)$data->left, 2);
         $effort->work       = isset($data->work) ? $data->work : '';
         $effort->vision     = $this->config->vision;
         $effort->order      = isset($data->order) ? $data->order : 0;
@@ -485,6 +486,12 @@ class taskModel extends model
             return false;
         }
 
+        if(!empty($task->left) && $task->left < 0)
+        {
+            dao::$errors['left'] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->left);
+            return false;
+        }
+
         /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
@@ -638,6 +645,11 @@ class taskModel extends model
                 if(in_array($field, explode(',', $this->config->task->batchedit->requiredFields))) continue;
                 if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = null;
             }
+
+            /* Format hours. */
+            if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+            if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+            if(isset($task->left))     $task->left     = round((float)$task->left, 2);
 
             /* Update a task.*/
             $this->dao->update(TABLE_TASK)->data($task)
@@ -885,6 +897,7 @@ class taskModel extends model
             $currentTask = !empty($task) ? clone $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
+            if(isset($task->mode)) $oldTask->mode = $task->mode;
 
             /* If the assignedTo is not empty, the current task assignedTo is assignedTo. */
             if(!empty($_POST['assignedTo']) && is_string($_POST['assignedTo']))
@@ -896,9 +909,13 @@ class taskModel extends model
             else
             {
                 $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
-                if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
-                $oldTask->team = $oldTeam;
             }
+
+            if(isset($task->mode) && $task->mode == 'multi' && strpos(',wait,doing,pause,', ",{$task->status},") !== false)  $currentTask->assignedTo = '';
+
+            if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = helper::now();
+
+            $oldTask->team = $oldTeam;
 
             /* Compute estimate and left. */
             $currentTask->estimate = 0;
@@ -918,6 +935,8 @@ class taskModel extends model
             if(!empty($task)) return $this->taskTao->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, !empty($efforts), $members);
 
             /* If task is empty, update the current task. */
+            $currentTask->consumed = round((float)$currentTask->consumed, 2);
+            $currentTask->left     = round((float)$currentTask->left, 2);
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
         return !dao::isError();
@@ -987,6 +1006,9 @@ class taskModel extends model
         /* Insert task data. */
         if(!empty($execution->isTpl)) $task->isTpl = $execution->isTpl;
         if(empty($task->assignedTo)) unset($task->assignedDate);
+        if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
+
         $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->autoCheck()
@@ -1285,10 +1307,12 @@ class taskModel extends model
         if($currentTeam)
         {
             $consumed = $currentTeam->consumed + (float)$this->post->currentConsumed;
+            $consumed = round((float)$consumed, 2);
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
             $task = $this->computeMultipleHours($oldTask, $task);
         }
 
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
 
         if(dao::isError()) return false;
@@ -2918,6 +2942,9 @@ class taskModel extends model
 
         foreach($workhour as $record)
         {
+            if(isset($record->consumed)) $record->consumed = round((float)$record->consumed, 2);
+            if(isset($record->left))     $record->left     = round((float)$record->left, 2);
+
             $this->addTaskEffort($record);
             $effortID = $this->dao->lastInsertID();
 
@@ -2930,7 +2957,7 @@ class taskModel extends model
             if(!empty($currentTeam))
             {
                 $currentTeam->status = $record->left == 0 ? 'done' : 'doing';
-                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task);
+                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task, (string)$lastDate);
                 $newTask = $this->computeMultipleHours($task, $newTask);
             }
 
@@ -3094,8 +3121,8 @@ class taskModel extends model
         {
             /* Update task team. */
             $team = new stdclass();
-            $team->consumed = $task->consumed;
-            $team->left     = $task->left;
+            $team->consumed = round((float)$task->consumed, 2);
+            $team->left     = round((float)$task->left, 2);
             $team->status   = empty($team->left) ? 'done' : 'doing';
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
 
@@ -3106,6 +3133,8 @@ class taskModel extends model
             $now = helper::now();
             if($team->status == 'done')
             {
+                if(isset($oldTask->team[$currentTeam->id])) $oldTask->team[$currentTeam->id]->status = $team->status; // 通过开始直接完成的情况，status会变成done
+
                 $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'current');
                 $task->assignedDate = $now;
             }
@@ -3120,6 +3149,8 @@ class taskModel extends model
             }
         }
 
+        if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
+        if(isset($task->left)) $task->left = round((float)$task->left, 2);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
 
         if(dao::isError()) return false;
@@ -3203,6 +3234,9 @@ class taskModel extends model
         $oldEffort = $this->getEffortByID($effort->id);
 
         if(!$this->taskTao->checkEffort($effort)) return false;
+
+        if(isset($effort->consumed)) $effort->consumed = round((float)$effort->consumed, 2);
+        if(isset($effort->left)) $effort->left = round((float)$effort->left, 2);
 
         $this->dao->update(TABLE_EFFORT)->data($effort)
             ->autoCheck()

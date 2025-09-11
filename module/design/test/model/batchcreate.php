@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 designModel->batchCreate();
+timeout=0
 cid=1
 
 - 批量创建概要设计

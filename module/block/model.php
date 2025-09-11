@@ -273,6 +273,7 @@ class blockModel extends model
             ->markRight(1)
             ->andWhere('vision')->eq($block->vision)
             ->andWhere('hidden')->eq('0')
+            ->andWhere('account')->eq($this->app->user->account)
             ->fetch('top');
 
         if(!$top) $top = 0;

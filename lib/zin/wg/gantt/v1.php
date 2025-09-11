@@ -29,10 +29,7 @@ class gantt extends wg
     {
         global $app;
         $currentLang = $app->getClientLang();
-        $langJSFile  = $app->getWwwRoot() . 'js/dhtmlxgantt/lang/' . $currentLang . '.js';
-
         $js = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        if($currentLang != 'en' && file_exists($langJSFile)) $js .= "\nwaitGantt(function(){\n" . file_get_contents($langJSFile) . "\n});\n";
         return $js;
     }
 
@@ -55,8 +52,6 @@ class gantt extends wg
     protected function build()
     {
         global $app;
-        $cssFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.css';
-        $jsFile  = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';
 
         list($id, $zooming, $colsWidth, $showChart) = $this->prop(array('id', 'zooming', 'colsWidth', 'showChart'));
         if(empty($id))           $id        = 'ganttView';
@@ -73,15 +68,12 @@ class gantt extends wg
 
         return div
         (
-            h::import($cssFile),
-            h::import($jsFile),
             jsVar('ganttID',         $id),
             jsVar('projectID',       $project ? $project->id : 0),
             jsVar('module',          $app->rawModule),
             jsVar('method',          $app->rawMethod),
             jsVar('jsRoot',          $app->getWebRoot()),
             jsVar('fileName',        $fileName),
-            jsVar('reviewPoints',    $reviewPoints),
             jsVar('ganttType',       $ganttType),
             jsVar('showFields',      $showFields),
             jsVar('showChart',       $showChart),
@@ -101,7 +93,7 @@ class gantt extends wg
             setID('ganttContainer'),
             on::click('.toggle-all-icon')->call('toggleAllTasks'),
             div(setID($id), setClass('gantt is-collapsed')),
-            div(setID('myCover'), div(setID('gantt_here')))
+            div(setID('myCover'), div(setID('gantt_here'), setData('reviewpoints', json_encode($reviewPoints))))
         );
     }
 }

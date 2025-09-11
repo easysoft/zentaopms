@@ -92,36 +92,49 @@ foreach($repos as $repo)
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
 );
-
-toolBar
-(
-    hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
+if($config->inCompose && empty($repoServers))
+{
+    toolBar
     (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $serverPairs ? item(set($batchCreateItem + array
-    (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
-    (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
-    (
-        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
-        $serverPairs ? dropDown
+        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
         (
-            btn(setClass('btn primary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::placement('bottom-end'),
-            set::items(array($createItem, $batchCreateItem))
-        ) : null
-    ) : null,
-);
+            'icon'  => 'plus',
+            'class' => 'btn primary'
+        ))) : null,
+    );
+}
+else
+{
+    toolBar
+    (
+        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
+        (
+            'icon'  => 'plus',
+            'class' => 'btn primary'
+        ))) : null,
+        !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $serverPairs ? item(set($batchCreateItem + array
+        (
+            'icon'  => 'plus',
+            'class' => 'btn primary'
+        ))) : null,
+        !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
+        (
+            'icon'  => 'plus',
+            'class' => 'btn primary'
+        ))) : null,
+        hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
+        (
+            btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
+            $serverPairs ? dropDown
+            (
+                btn(setClass('btn primary dropdown-toggle'),
+                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                set::placement('bottom-end'),
+                set::items(array($createItem, $batchCreateItem))
+            ) : null
+        ) : null,
+    );
+}
 
 dtable
 (

@@ -4,10 +4,14 @@
 /**
 
 title=测试 storyModel->fixBranchStoryStage();
+timeout=0
 cid=0
 
 - 不传入任何项目。 @0
-- 传入需求，检查结果。 @1
+- 传入需求，检查结果。 @testing
+- 传入需求，检查结果。 @wait
+- 传入需求，检查结果。 @tested
+- 传入需求，检查结果。 @tested
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -48,7 +52,13 @@ $stories = $storyModel->dao->select('*')->from(TABLE_STORY)->where('product')->e
 
 r($storyModel->fixBranchStoryStage(array()))  && p() && e('0');  //不传入任何项目。
 
-$oldStage = $stories[6]->stage;
-$stories  = $storyModel->fixBranchStoryStage($stories);
-$newStage = $stories[6]->stage;
-r(($oldStage == 'testing' && $newStage == 'wait')) && p() && e('1');  //传入需求，检查结果。
+$oldStage6 = $stories[6]->stage;
+$oldStage7 = $stories[7]->stage;
+$stories   = $storyModel->fixBranchStoryStage($stories);
+$newStage6 = $stories[6]->stage;
+$newStage7 = $stories[7]->stage;
+r($oldStage6) && p() && e('testing'); //传入需求，检查结果。
+r($newStage6) && p() && e('wait'); //传入需求，检查结果。
+
+r($oldStage7) && p() && e('tested'); //传入需求，检查结果。
+r($newStage7) && p() && e('tested'); //传入需求，检查结果。

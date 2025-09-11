@@ -8,8 +8,8 @@ class projectZenTest
         global $tester;
         $this->tester = $tester;
         $tester->app->setModuleName('project');
-        $tester->loadModel('project');
 
+        $this->objectModel    = $tester->loadModel('project');
         $this->projectZenTest = initReference('project');
     }
 
@@ -74,5 +74,54 @@ class projectZenTest
         $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$postData, $expect]);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * 格式化导出的项目数据。
+     * Format the export project data.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function formatExportProjectsTest($status, $orderBy)
+    {
+        $method = $this->projectZenTest->getMethod('formatExportProjects');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$status, $orderBy]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 设置编辑页面变量。
+     * Send variables to edit page.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function buildEditFormTest(int $projectID): object
+    {
+        global $config, $tester;
+        $config->project->unitList = '';
+        $project = $this->objectModel->fetchByID($projectID);
+
+        return callZenMethod('project', 'buildEditForm', [$projectID, $project], 'view');
+    }
+
+    /**
+     * 处理项目列表展示数据。
+     * Process project list display data.
+     *
+     * @access public
+     * @return array
+     */
+    public function processProjectListDataTest(): array
+    {
+        $projectList = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        return callZenMethod('project', 'processProjectListData', [$projectList]);
     }
 }
