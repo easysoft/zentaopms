@@ -2162,4 +2162,34 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test buildGroupCard method.
+     *
+     * @param  array  $cardGroup
+     * @param  array  $cardIdList
+     * @param  object $column
+     * @param  string $laneID
+     * @param  string $groupBy
+     * @param  string $browseType
+     * @param  string $searchValue
+     * @param  array  $avatarPairs
+     * @param  array  $users
+     * @param  array  $menus
+     * @access public
+     * @return array
+     */
+    public function buildGroupCardTest($cardGroup, $cardIdList, $column, $laneID, $groupBy, $browseType, $searchValue, $avatarPairs, $users, $menus)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildGroupCard');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $cardGroup, $cardIdList, $column, $laneID, $groupBy, $browseType, $searchValue, $avatarPairs, $users, $menus);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
