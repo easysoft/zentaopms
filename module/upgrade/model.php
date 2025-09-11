@@ -11690,7 +11690,7 @@ class upgradeModel extends model
      */
     public function upgradeProjectDeliverable(array $deliverableList)
     {
-        $projectList           = $this->dao->select('id,deliverable,workflowGroup,type')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll('id');
+        $projectList           = $this->dao->select('id,deliverable,workflowGroup,type,project')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll('id');
         $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
         $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('execution')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
         $fileList              = $this->dao->select('*')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('extra')->like('deliverable%')->fetchAll('id');
@@ -11699,6 +11699,8 @@ class upgradeModel extends model
         {
             $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
             if(empty($oldProjectDeliverable)) continue;
+
+            if($project->type != 'project' && isset($projectList[$project->project])) $project->workflowGroup = $projectList[$project->project]->workflowGroup; // 执行用项目的项目流程
 
             /* 解析项目的交付物配置。 */
             foreach($oldProjectDeliverable as $methodDeliverable)
