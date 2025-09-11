@@ -332,4 +332,22 @@ class zanodeTest
         
         return $method->invoke($this->objectModel, $node);
     }
+
+    /**
+     * 测试执行ZTF脚本。
+     * Test run ZTF script.
+     *
+     * @param  int    $scriptID
+     * @param  int    $caseID
+     * @param  int    $testtaskID
+     * @access public
+     * @return mixed
+     */
+    public function runZTFScriptTest(int $scriptID = 0, int $caseID = 0, int $testtaskID = 0): mixed
+    {
+        $result = $this->runZTFScript($scriptID, $caseID, $testtaskID);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
