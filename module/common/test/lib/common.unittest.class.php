@@ -2630,4 +2630,21 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test getBoardModuleAndMethod method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function getBoardModuleAndMethodTest(string $module, string $method, array $params = array()): array
+    {
+        $result = commonTao::getBoardModuleAndMethod($module, $method, $params);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
