@@ -172,7 +172,7 @@ class doc extends control
         $noSupport = false;
         if($this->view->fromReport)
         {
-            $project   = $this->loadModel('project')->fetchByID($this->session->project);
+            $project   = $this->loadModel('project')->fetchByID((int)$doc->project);
             $noSupport = in_array($type, array('HLDS', 'DDS', 'DBDS', 'ADS')) && in_array($project->model, array('scrum', 'agileplus', 'kanban'));
         }
         $this->view->noSupport = $noSupport;
