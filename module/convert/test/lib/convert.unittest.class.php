@@ -3705,4 +3705,30 @@ class convertTest
         }
     }
 
+    /**
+     * Test createWorkflowStatus method.
+     *
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function createWorkflowStatusTest($relations = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('createWorkflowStatus');
+        $method->setAccessible(true);
+        
+        try
+        {
+            $result = $method->invokeArgs($this->objectTao, array($relations));
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
 }
