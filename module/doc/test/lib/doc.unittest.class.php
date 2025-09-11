@@ -2405,4 +2405,24 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test filterDeletedDocs method.
+     *
+     * @param  array $docs
+     * @access public
+     * @return array
+     */
+    public function filterDeletedDocsTest(array $docs): array
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('filterDeletedDocs');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $docs);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
