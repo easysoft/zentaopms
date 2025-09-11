@@ -12,6 +12,9 @@ cid=0
 - 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action3  @execution
 - 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action4  @project
 - 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action5  @product
+- 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action6 属性2 @10
+- 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action7  @0
+- 执行actionTest模块的getDocLibLinkParametersTest方法，参数是$action8  @execution
 
 */
 
@@ -61,3 +64,27 @@ $action5->product = '7';
 $action5->project = '8';
 $action5->execution = '9';
 r($actionTest->getDocLibLinkParametersTest($action5)) && p('0') && e('product');
+
+// 测试步骤6：带逗号的libObjectID处理
+$action6 = new stdClass();
+$action6->objectID = 6;
+$action6->product = ',10,';
+$action6->project = '';
+$action6->execution = '';
+r($actionTest->getDocLibLinkParametersTest($action6)) && p('2') && e('10');
+
+// 测试步骤7：空的libObjectID导致返回false
+$action7 = new stdClass();
+$action7->objectID = 7;
+$action7->product = ',';
+$action7->project = '';
+$action7->execution = '';
+r($actionTest->getDocLibLinkParametersTest($action7)) && p() && e('0');
+
+// 测试步骤8：execution优先于project
+$action8 = new stdClass();
+$action8->objectID = 8;
+$action8->product = '';
+$action8->project = '11';
+$action8->execution = '12';
+r($actionTest->getDocLibLinkParametersTest($action8)) && p('0') && e('execution');
