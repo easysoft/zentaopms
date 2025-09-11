@@ -1292,4 +1292,26 @@ class actionTest
 
         return $action;
     }
+
+    /**
+     * Test processCreateRequirementsActionExtra method.
+     *
+     * @param  string $storyIds
+     * @access public
+     * @return object
+     */
+    public function processCreateRequirementsActionExtraTest(string $storyIds): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+
+        $action = new stdClass();
+        $action->extra = $storyIds;
+
+        $actionTao->processCreateRequirementsActionExtra($action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
 }
