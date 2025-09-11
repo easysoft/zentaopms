@@ -1,5 +1,14 @@
 <?php
 declare(strict_types = 1);
+
+class MockWorkflowField
+{
+    public function create($module, $field, $param = null, $flag = false)
+    {
+        return 1;
+    }
+}
+
 class convertTest
 {
     public function __construct()
@@ -3549,6 +3558,38 @@ class convertTest
         } catch (Error $e) {
             return 0;
         }
+    }
+
+    /**
+     * Test createBuildinField method.
+     *
+     * @param  string $module
+     * @param  array  $resolutions
+     * @param  array  $priList
+     * @param  bool   $buildin
+     * @access public
+     * @return mixed
+     */
+    public function createBuildinFieldTest($module, $resolutions, $priList, $buildin = false)
+    {
+        global $tester;
+        
+        if(!isset($this->objectTao->workflowfield))
+        {
+            $this->objectTao->workflowfield = $this->createMockWorkflowField();
+        }
+        
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('createBuildinField');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectTao, array($module, $resolutions, $priList, $buildin));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+    
+    private function createMockWorkflowField()
+    {
+        return new MockWorkflowField();
     }
 
 }
