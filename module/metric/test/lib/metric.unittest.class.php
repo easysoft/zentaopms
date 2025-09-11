@@ -1253,4 +1253,27 @@ class metricTest
         // 返回过滤后的实例数量，便于测试验证
         return count($result);
     }
+
+    /**
+     * Test getObjectsWithPager method.
+     *
+     * @param  object $metric
+     * @param  array  $query
+     * @param  object $pager
+     * @param  array  $extra
+     * @access public
+     * @return mixed
+     */
+    public function getObjectsWithPagerTest($metric = null, $query = array(), $pager = null, $extra = array())
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getObjectsWithPager');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $metric, $query, $pager, $extra);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
