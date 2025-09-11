@@ -1510,4 +1510,20 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getDoclibTypeParams method.
+     *
+     * @param  object $action
+     * @access public
+     * @return array
+     */
+    public function getDoclibTypeParamsTest(object $action): array
+    {
+        $result = $this->objectTao->getDoclibTypeParams($action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
