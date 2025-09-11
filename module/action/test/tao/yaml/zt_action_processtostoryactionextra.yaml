@@ -1,0 +1,63 @@
+---
+title: Action数据
+desc: 用于测试processToStoryActionExtra方法的Action数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 操作ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: story
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID列表
+  range: '1,2,3'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: extra
+  note: 用户故事ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: action
+  note: 操作类型
+  range: linked,changed,created
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: actor
+  note: 操作者
+  range: admin,user,guest
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: date
+  note: 操作时间
+  range: '2024-01-01 00:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

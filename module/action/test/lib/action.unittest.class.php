@@ -7,6 +7,7 @@ class actionTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('action');
+         $this->objectTao   = $tester->loadTao('action');
          $tester->dao->delete()->from(TABLE_ACTION)->where('action')->eq('login')->exec();
     }
 
@@ -1357,6 +1358,22 @@ class actionTest
         $action->extra = $extra;
 
         $actionTao->processLinkStoryAndBugActionExtra($action, $module, $method);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
+
+    /**
+     * Test processToStoryActionExtra method.
+     *
+     * @param  object $action
+     * @access public
+     * @return object
+     */
+    public function processToStoryActionExtraTest(object $action): object
+    {
+        $this->objectTao->processToStoryActionExtra($action);
 
         if(dao::isError()) return dao::getError();
 
