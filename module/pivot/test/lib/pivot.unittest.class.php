@@ -1456,4 +1456,24 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getNoAssignExecution method.
+     *
+     * @param  array $deptUsers
+     * @access public
+     * @return array
+     */
+    public function getNoAssignExecutionTest(array $deptUsers): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getNoAssignExecution');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($deptUsers));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
