@@ -1406,4 +1406,43 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test setDeleted method.
+     *
+     * @param  string $code
+     * @param  string $value
+     * @access public
+     * @return mixed
+     */
+    public function setDeletedTest($code = '', $value = '0')
+    {
+        global $tester;
+        
+        if(empty($code)) return 'invalid_code';
+        
+        // 记录更新前的状态
+        $beforeCount = $tester->dao->select('COUNT(*) as count')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('deleted')->eq($value)
+            ->fetch('count');
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('setDeleted');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $code, $value);
+        if(dao::isError()) return dao::getError();
+
+        // 记录更新后的状态
+        $afterCount = $tester->dao->select('COUNT(*) as count')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('deleted')->eq($value)
+            ->fetch('count');
+        
+        return $afterCount - $beforeCount;
+    }
 }
