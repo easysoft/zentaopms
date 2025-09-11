@@ -3316,4 +3316,61 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test createTask method.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  object $data
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function createTaskTest($projectID = 0, $executionID = 0, $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        try {
+            // Start output buffering to capture any output
+            ob_start();
+            
+            // Set up necessary session data for jira conversion
+            $originalJiraMethod = isset($this->objectTao->app->session->jiraMethod) ? $this->objectTao->app->session->jiraMethod : null;
+            $this->objectTao->app->session->jiraMethod = 'jira';
+
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createTask');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $projectID, $executionID, $data, $relations);
+            
+            // Clean output buffer
+            ob_end_clean();
+            
+            // Restore original session data
+            if($originalJiraMethod !== null) {
+                $this->objectTao->app->session->jiraMethod = $originalJiraMethod;
+            } else {
+                unset($this->objectTao->app->session->jiraMethod);
+            }
+            
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception | Error $e) {
+            // Clean output buffer even on exception
+            if(ob_get_level()) ob_end_clean();
+            
+            // Restore session data even on exception
+            if(isset($originalJiraMethod)) {
+                if($originalJiraMethod !== null) {
+                    $this->objectTao->app->session->jiraMethod = $originalJiraMethod;
+                } else {
+                    unset($this->objectTao->app->session->jiraMethod);
+                }
+            }
+            return false;
+        }
+    }
+
 }
