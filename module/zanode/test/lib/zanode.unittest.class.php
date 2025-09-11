@@ -283,4 +283,25 @@ class zanodeTest
 
         return $result;
     }
+
+    /**
+     * 测试销毁执行节点。
+     * Test destroy method.
+     *
+     * @param  int    $id
+     * @access public
+     * @return mixed
+     */
+    public function destroyTest(int $id): mixed
+    {
+        if($id <= 0) return '0';
+
+        $oldNode = $this->getNodeByID($id);
+        if(!$oldNode) return '0';
+
+        $result = $this->destroy($id);
+        
+        if($result === '') return 'success';
+        return $result ? $result : '0';
+    }
 }
