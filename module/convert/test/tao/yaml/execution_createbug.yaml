@@ -1,0 +1,26 @@
+title: 用于createBug方法测试的execution数据
+desc: 提供createBug方法测试需要的执行基础数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 执行A,执行B,执行C,测试执行,Demo执行
+- field: code
+  range: EXEC_A,EXEC_B,EXEC_C,TEST_EXEC,DEMO_EXEC
+- field: status
+  range: wait{2},doing{2},closed{1}
+- field: begin
+  range: 2023-01-01-2023-06-30
+- field: end
+  range: 2023-07-01-2023-12-31
+- field: openedBy
+  range: admin{3},user1{1},user2{1}
+- field: openedDate
+  range: 2023-01-01 00:00:00-2023-06-30 23:59:59
+- field: project
+  range: 1-3
+- field: type
+  range: stage
+- field: deleted
+  range: '0'
