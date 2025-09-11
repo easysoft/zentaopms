@@ -1007,6 +1007,18 @@ class metricTest
     }
 
     /**
+     * Test fetchMetricsByCodeList.
+     *
+     * @param  array $codeList
+     * @access public
+     * @return array
+     */
+    public function fetchMetricsByCodeList($codeList)
+    {
+        return $this->objectModel->fetchMetricsByCodeList($codeList);
+    }
+
+    /**
      * Test fetchMetricByCode.
      *
      * @param  string $code
