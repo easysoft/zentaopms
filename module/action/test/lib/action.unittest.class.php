@@ -1209,4 +1209,28 @@ class actionTest
         
         return 'processed';
     }
+
+    /**
+     * Test processStoryGradeActionExtra method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return object
+     */
+    public function processStoryGradeActionExtraTest(int $storyID): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+        
+        // 创建测试用的action对象
+        $action = new stdClass();
+        $action->objectID = $storyID;
+        $action->extra = '';
+        
+        $result = $actionTao->processStoryGradeActionExtra($action);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
