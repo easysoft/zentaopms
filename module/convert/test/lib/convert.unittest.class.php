@@ -3476,4 +3476,38 @@ class convertTest
         }
     }
 
+    /**
+     * Test createBuild method.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $systemID
+     * @param  object $data
+     * @param  array  $versionGroup
+     * @param  array  $issueList
+     * @access public
+     * @return mixed
+     */
+    public function createBuildTest($productID = 1, $projectID = 1, $systemID = 1, $data = null, $versionGroup = array(), $issueList = array())
+    {
+        try {
+            // Use reflection to access protected method
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createBuild');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $productID, $projectID, $systemID, $data, $versionGroup, $issueList);
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                return $errors;
+            }
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        } catch (Error $e) {
+            return $e->getMessage();
+        }
+    }
+
 }

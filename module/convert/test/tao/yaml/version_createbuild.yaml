@@ -1,0 +1,36 @@
+---
+title: createBuild版本数据
+desc: 用于测试convertTao::createBuild()方法的版本输入数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+
+- field: vname
+  note: 版本名称
+  range: v1.0{3}, v1.1{3}, v2.0{2}, v2.1{2}
+
+- field: releasedate
+  note: 发布日期
+  range: 2024-01-01 10:00:00{5}, 2024-06-01 15:30:00{3}, []{2}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: startdate
+  note: 开始日期
+  range: 2023-12-01 09:00:00{5}, 2024-05-01 10:00:00{3}, []{2}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: description
+  note: 版本描述
+  range: "版本描述信息{5}, 新功能发布{3}, []{2}"
+
+- field: released
+  note: 是否已发布
+  range: 1{6}, 0{3}, []{1}
+
+- field: archived
+  note: 是否已归档
+  range: 0{8}, 1{2}
