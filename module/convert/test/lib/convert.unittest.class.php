@@ -3255,4 +3255,22 @@ class convertTest
         return isset($mockUsers[$userKey]) ? $mockUsers[$userKey] : 'testuser';
     }
 
+    /**
+     * Test createProduct method.
+     *
+     * @param  object $project
+     * @param  array  $executions
+     * @access public
+     * @return mixed
+     */
+    public function createProductTest($project = null, $executions = array())
+    {
+        if($project === null) return false;
+        
+        $result = $this->objectTao->createProduct($project, $executions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
