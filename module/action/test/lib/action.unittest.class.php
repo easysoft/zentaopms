@@ -1395,4 +1395,35 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test addObjectNameForAction method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  array  $objectNames
+     * @param  string $actionType
+     * @param  string $extra
+     * @access public
+     * @return object
+     */
+    public function addObjectNameForActionTest(string $objectType, int $objectID, array $objectNames, string $actionType = '', string $extra = ''): object
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+
+        // 创建测试用的action对象
+        $action = new stdClass();
+        $action->objectType = $objectType;
+        $action->objectID = $objectID;
+        $action->action = $actionType;
+        $action->extra = $extra;
+        $action->objectName = '';
+
+        $actionTao->addObjectNameForAction($action, $objectNames, $objectType);
+
+        if(dao::isError()) return dao::getError();
+
+        return $action;
+    }
 }
