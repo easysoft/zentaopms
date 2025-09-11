@@ -1526,4 +1526,21 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getObjectLinkParams method.
+     *
+     * @param  object $action
+     * @param  string $vars
+     * @access public
+     * @return string
+     */
+    public function getObjectLinkParamsTest(object $action, string $vars): string
+    {
+        $result = $this->objectTao->getObjectLinkParams($action, $vars);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
