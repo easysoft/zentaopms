@@ -3273,4 +3273,25 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test processBuildinFieldData method.
+     *
+     * @param  string $module
+     * @param  object $data
+     * @param  object $object
+     * @param  array  $relations
+     * @param  bool   $buildinFlow
+     * @access public
+     * @return mixed
+     */
+    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
+    {
+        if($module === null || $data === null || $object === null) return false;
+        
+        $result = $this->objectTao->processBuildinFieldData($module, $data, $object, $relations, $buildinFlow);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
