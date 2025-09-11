@@ -1,0 +1,78 @@
+---
+title: 工作流测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 工作流ID
+  range: 1-5
+  type: int
+
+- field: parent
+  note: 父级工作流
+  range: []{5}
+  
+- field: child
+  note: 子级工作流
+  range: []{5}
+
+- field: type
+  note: 工作流类型
+  range: flow{5}
+
+- field: navigator
+  note: 导航类型
+  range: secondary{3}, primary{2}
+
+- field: app
+  note: 应用类型
+  range: scrum{2}, project{3}
+
+- field: position
+  note: 位置
+  range: before{3}, after{2}
+
+- field: module
+  note: 模块名称
+  range: jira10001, jira10002, jira10003, testmodule1, testmodule2
+
+- field: table
+  note: 数据表名
+  range: zt_flow_jira10001, zt_flow_jira10002, zt_flow_jira10003, zt_flow_testmodule1, zt_flow_testmodule2
+
+- field: name
+  note: 工作流名称
+  range: Task{2}, Bug{1}, Story{1}, Custom{1}
+  
+- field: icon
+  note: 图标
+  range: flow{5}
+
+- field: approval
+  note: 审批状态
+  range: disabled{5}
+
+- field: role
+  note: 角色
+  range: custom{5}
+
+- field: status  
+  note: 状态
+  range: wait{3}, active{2}
+
+- field: belong
+  note: 归属
+  range: project{5}
+
+- field: vision
+  note: 版本
+  range: rnd{5}
+
+- field: createdBy
+  note: 创建者
+  range: admin{3}, user1{1}, user2{1}
+
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00, 2024-01-02 11:00:00, 2024-01-03 12:00:00, 2024-01-04 13:00:00, 2024-01-05 14:00:00

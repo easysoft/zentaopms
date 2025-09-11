@@ -3646,4 +3646,33 @@ class convertTest
         }
     }
 
+    /**
+     * Test createWorkflow method.
+     *
+     * @param  array $relations
+     * @param  array $jiraActions
+     * @param  array $jiraResolutions
+     * @param  array $jiraPriList
+     * @access public
+     * @return mixed
+     */
+    public function createWorkflowTest($relations = array(), $jiraActions = array(), $jiraResolutions = array(), $jiraPriList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('createWorkflow');
+        $method->setAccessible(true);
+        
+        try
+        {
+            $result = $method->invokeArgs($this->objectTao, array($relations, $jiraActions, $jiraResolutions, $jiraPriList));
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
 }
