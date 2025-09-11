@@ -37,9 +37,10 @@ $lang->aiapp->miniProgramSquare  = 'Browse General Agent List';
 $lang->aiapp->collectMiniProgram = 'Collect General Agent';
 $lang->aiapp->miniProgramChat    = 'Execute General Agent';
 $lang->aiapp->view               = 'View General Agent Details';
-
+$lang->aiapp->browseConversation = 'Browse Conversation';
 $lang->aiapp->manageGeneralAgent = 'Manage General Agent';
 $lang->aiapp->models             = 'Browse Model List';
+
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
 $lang->aiapp->converse           = 'Converse';

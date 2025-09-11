@@ -3959,6 +3959,7 @@ $config->group->package->aiConversation = new stdclass();
 $config->group->package->aiConversation->order  = 2030;
 $config->group->package->aiConversation->subset = 'aiapp';
 $config->group->package->aiConversation->privs  = array();
+$config->group->package->aiConversation->privs['aiapp-conversation'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->applyZentaoAgent = new stdclass();
 $config->group->package->applyZentaoAgent->order  = 2040;
