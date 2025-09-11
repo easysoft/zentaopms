@@ -261,4 +261,21 @@ class zanodeTest
         $this->updateImageStatus($imageID, $data);
         return $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
     }
+
+    /**
+     * 测试通过执行节点创建镜像。
+     * Test create Image by zanode.
+     *
+     * @param  int    $zanodeID
+     * @param  object $data
+     * @access public
+     * @return mixed
+     */
+    public function createImageTest(int $zanodeID, object $data): mixed
+    {
+        $result = $this->objectModel->createImage($zanodeID, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
