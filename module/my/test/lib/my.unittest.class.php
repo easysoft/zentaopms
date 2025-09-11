@@ -6,6 +6,7 @@ class myTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('my');
+         $this->objectTao   = $tester->loadTao('my');
          $tester->dao->delete()->from(TABLE_ACTIONRECENT)->exec();
     }
 
@@ -699,5 +700,28 @@ class myTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getProductRelatedAssignedByMe method.
+     *
+     * @param  array  $objectIdList
+     * @param  string $objectType
+     * @param  string $module
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getProductRelatedAssignedByMeTest(array $objectIdList, string $objectType, string $module, string $orderBy, ?object $pager = null)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProductRelatedAssignedByMe');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$objectIdList, $objectType, $module, $orderBy, $pager]);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
     }
 }

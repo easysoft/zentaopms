@@ -1,0 +1,348 @@
+---
+title: Bug表测试数据
+desc: 为测试getProductRelatedAssignedByMe方法提供Bug数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 所属项目
+  range: 0{5},1{3},2{3},3{2},4{2}
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 所属产品
+  range: 1{3},2{3},3{3},4{3},5{3}
+  prefix: ""
+  postfix: ""
+
+- field: injection
+  note: 注入阶段
+  range: [{10}],unittest{2},functest{2},systest{1}
+  prefix: ""
+  postfix: ""
+
+- field: identify
+  note: 识别阶段
+  range: [{10}],unittest{2},functest{2},systest{1}
+  prefix: ""
+  postfix: ""
+
+- field: branch
+  note: 分支
+  range: 0{13},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: module
+  note: 所属模块
+  range: 0{5},1{3},2{3},3{2},4{2}
+  prefix: ""
+  postfix: ""
+
+- field: execution
+  note: 执行
+  range: 0{8},1{3},2{2},3{2}
+  prefix: ""
+  postfix: ""
+
+- field: plan
+  note: 计划
+  range: 0{10},1{2},2{2},3{1}
+  prefix: ""
+  postfix: ""
+
+- field: story
+  note: 相关需求
+  range: 0{10},1{2},2{2},3{1}
+  prefix: ""
+  postfix: ""
+
+- field: storyVersion
+  note: 需求版本
+  range: 1{12},2{2},3{1}
+  prefix: ""
+  postfix: ""
+
+- field: task
+  note: 相关任务
+  range: 0{12},1{2},2{1}
+  prefix: ""
+  postfix: ""
+
+- field: toTask
+  note: 转任务
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+
+- field: toStory
+  note: 转需求
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+
+- field: title
+  note: Bug标题
+  range: 登录页面无法正常显示,用户注册时验证码错误,支付接口返回异常,数据统计报表显示错误,文件上传功能失效,邮件发送失败,密码重置链接无效,用户权限验证失败,API接口响应超时,移动端页面兼容性问题,数据库连接异常,缓存清理失败,日志记录错误,系统配置项丢失,第三方服务集成失败
+  prefix: ""
+  postfix: ""
+
+- field: keywords
+  note: 关键词
+  range: [{8}],登录,注册,支付,API,移动端,数据库,缓存
+  prefix: ""
+  postfix: ""
+
+- field: severity
+  note: 严重程度
+  range: 1{3},2{5},3{5},4{2}
+  prefix: ""
+  postfix: ""
+
+- field: pri
+  note: 优先级
+  range: 1{3},2{5},3{5},4{2}
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: Bug类型
+  range: codeerror{8},config{3},install{2},security{1},performance{1}
+  prefix: ""
+  postfix: ""
+
+- field: os
+  note: 操作系统
+  range: [{5}],windows{4},linux{3},mac{2},android{1}
+  prefix: ""
+  postfix: ""
+
+- field: browser
+  note: 浏览器
+  range: [{5}],chrome{4},firefox{3},safari{2},edge{1}
+  prefix: ""
+  postfix: ""
+
+- field: hardware
+  note: 硬件
+  range: [{12}],pc{2},mobile{1}
+  prefix: ""
+  postfix: ""
+
+- field: found
+  note: 发现版本
+  range: [{8}],1.0{3},1.1{2},1.2{2}
+  prefix: ""
+  postfix: ""
+
+- field: steps
+  note: 重现步骤
+  range: 1. 打开页面\n2. 点击按钮\n3. 查看结果,1. 输入用户名\n2. 输入密码\n3. 点击登录,1. 选择文件\n2. 点击上传\n3. 等待结果,1. 访问API\n2. 发送请求\n3. 检查响应,1. 打开移动端\n2. 切换页面\n3. 观察显示,1. 执行操作\n2. 检查数据库\n3. 验证结果,1. 清理缓存\n2. 刷新页面\n3. 查看效果,1. 查看日志\n2. 分析错误\n3. 定位问题,1. 检查配置\n2. 修改设置\n3. 验证修改,1. 集成服务\n2. 测试连接\n3. 验证功能,重现步骤待补充{2},详细步骤见附件{2},按照测试用例执行{1}
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: Bug状态
+  range: active{6},resolved{4},testing{3},closed{2}
+  prefix: ""
+  postfix: ""
+
+- field: subStatus
+  note: 子状态
+  range: [{12}],tostory{2},totask{1}
+  prefix: ""
+  postfix: ""
+
+- field: color
+  note: 颜色
+  range: [{10}],#ff5d5d{3},#fdc137{2}
+  prefix: ""
+  postfix: ""
+
+- field: confirmed
+  note: 确认状态
+  range: 0{5},1{10}
+  prefix: ""
+  postfix: ""
+
+- field: activatedCount
+  note: 激活次数
+  range: 0{10},1{3},2{2}
+  prefix: ""
+  postfix: ""
+
+- field: activatedDate
+  note: 激活时间
+  range: [{10}],(-20d)-(-1d):R{5}
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: feedbackBy
+  note: 反馈者
+  range: [{10}],user1{2},user2{2},user3{1}
+  prefix: ""
+  postfix: ""
+
+- field: notifyEmail
+  note: 通知邮箱
+  range: [{12}],admin@test.com{2},user1@test.com{1}
+  prefix: ""
+  postfix: ""
+
+- field: openedBy
+  note: 创建者
+  range: admin{3},user1{4},user2{4},user3{2},user4{2}
+  prefix: ""
+  postfix: ""
+
+- field: openedDate
+  note: 创建时间
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: openedBuild
+  note: 影响版本
+  range: [{8}],trunk{3},1.0{2},1.1{2}
+  prefix: ""
+  postfix: ""
+
+- field: assignedTo
+  note: 指派给
+  range: [{3}],admin{3},user1{3},user2{3},user3{3}
+  prefix: ""
+  postfix: ""
+
+- field: assignedDate
+  note: 指派时间
+  range: [{3}],(-25d)-(-1d):R{12}
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: deadline
+  note: 截止时间
+  range: [{10}],(+1d)-(+30d):R{5}
+  format: YYYY-MM-DD
+  prefix: ""
+  postfix: ""
+
+- field: resolvedBy
+  note: 解决者
+  range: [{11}],admin{2},user1{2}
+  prefix: ""
+  postfix: ""
+
+- field: resolution
+  note: 解决方案
+  range: [{11}],fixed{2},duplicate{1},external{1}
+  prefix: ""
+  postfix: ""
+
+- field: resolvedDate
+  note: 解决时间
+  range: [{11}],(-15d)-(-1d):R{4}
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: resolvedBuild
+  note: 解决版本
+  range: [{11}],trunk{2},1.1{1},1.2{1}
+  prefix: ""
+  postfix: ""
+
+- field: closedBy
+  note: 关闭者
+  range: [{13}],admin{1},user1{1}
+  prefix: ""
+  postfix: ""
+
+- field: closedDate
+  note: 关闭时间
+  range: [{13}],(-10d)-(-1d):R{2}
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: duplicateBug
+  note: 重复Bug
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+
+- field: linkBug
+  note: 关联Bug
+  range: [{14}],1{1}
+  prefix: ""
+  postfix: ""
+
+- field: case
+  note: 相关用例
+  range: 0{12},1{2},2{1}
+  prefix: ""
+  postfix: ""
+
+- field: caseVersion
+  note: 用例版本
+  range: 1{13},2{2}
+  prefix: ""
+  postfix: ""
+
+- field: result
+  note: 测试结果
+  range: 0{12},1{2},2{1}
+  prefix: ""
+  postfix: ""
+
+- field: repo
+  note: 代码库
+  range: 0{13},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: mr
+  note: 合并请求
+  range: 0{14},1{1}
+  prefix: ""
+  postfix: ""
+
+- field: entry
+  note: 入口
+  range: [{12}],web{2},api{1}
+  prefix: ""
+  postfix: ""
+
+- field: lines
+  note: 代码行数
+  range: [{12}],10-100:R{3}
+  prefix: ""
+  postfix: ""
+
+- field: v1
+  note: 自定义字段1
+  range: [{15}]
+  prefix: ""
+  postfix: ""
+
+- field: v2
+  note: 自定义字段2
+  range: [{15}]
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除状态
+  range: 0{14},1{1}
+  prefix: ""
+  postfix: ""
