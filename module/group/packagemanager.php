@@ -237,13 +237,13 @@ $config->group->subset->testreport = new stdclass();
 $config->group->subset->testreport->order = 710;
 $config->group->subset->testreport->nav   = 'qa';
 
-$config->group->subset->autotest = new stdclass();
-$config->group->subset->autotest->order = 715;
-$config->group->subset->autotest->nav   = 'qa';
-
 $config->group->subset->caselib = new stdclass();
-$config->group->subset->caselib->order = 740;
-$config->group->subset->caselib->nav   = 'assetlib';
+$config->group->subset->caselib->order = 715;
+$config->group->subset->caselib->nav   = 'qa';
+
+$config->group->subset->autotest = new stdclass();
+$config->group->subset->autotest->order = 720;
+$config->group->subset->autotest->nav   = 'qa';
 
 $config->group->subset->storylib = new stdclass();
 $config->group->subset->storylib->order = 760;
