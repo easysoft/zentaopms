@@ -1359,4 +1359,29 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test fetchLatestMetricRecords method.
+     *
+     * @param  string      $code
+     * @param  array       $fieldList
+     * @param  array       $query
+     * @param  object|null $pager
+     * @access public
+     * @return mixed
+     */
+    public function fetchLatestMetricRecordsTest($code = null, $fieldList = array(), $query = array(), $pager = null)
+    {
+        if(!$code) return array();
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchLatestMetricRecords');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $code, $fieldList, $query, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
