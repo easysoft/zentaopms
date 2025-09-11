@@ -65,7 +65,7 @@ class searchTest
      * 测试生成查询表单数据。
      * Process query form datas test.
      *
-     * @param  object $fieldParams
+     * @param  array  $fieldParams
      * @param  string $field
      * @param  string $andOrName
      * @param  string $operatorName
@@ -73,23 +73,11 @@ class searchTest
      * @access public
      * @return object
      */
-    public function processQueryFormDatasTest(object $postData, string $field, string $andOrName, string $operatorName, string $valueName): object
+    public function processQueryFormDatasTest(array $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
     {
-        $_POST = (array)$postData;
+        $_POST = $fieldParams;
 
-        global $tester;
-        $tester->loadModel('bug');
-
-        $fieldParams = json_decode(json_encode($tester->config->bug->search['params']));
-
-        list($andOr, $operator, $value) = $this->objectModel->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
-
-        $queryFormData = new stdclass();
-        $queryFormData->andOr    = $andOr;
-        $queryFormData->operator = $operator;
-        $queryFormData->value    = $value;
-
-        return $queryFormData;
+        return $this->objectModel->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
     }
 
     /**
