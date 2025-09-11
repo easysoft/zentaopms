@@ -3,11 +3,13 @@ declare(strict_types=1);
 class pivotTest
 {
     private $objectModel;
+    private $objectTao;
 
     public function __construct()
     {
         global $tester;
         $this->objectModel = $tester->loadModel('pivot');
+        $this->objectTao   = $tester->loadTao('pivot');
         // $this->initPivot(); // 暂时注释掉初始化方法，避免数据库冲突
     }
 
@@ -1299,5 +1301,26 @@ class pivotTest
             $records[$index] = $record;
         }
         return $records;
+    }
+
+    /**
+     * Test fetchPivot method.
+     *
+     * @param  int         $id
+     * @param  string|null $version
+     * @access public
+     * @return object|bool
+     */
+    public function fetchPivotTest(int $id, ?string $version = null): object|bool
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchPivot');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $id, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

@@ -1,0 +1,105 @@
+---
+title: pivotspec表测试数据
+desc: fetchPivot方法的pivotspec表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: pivot
+  note: 透视表ID
+  range: 1,2,3,4,5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: '1','2','3','1','2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: driver
+  note: 数据库驱动
+  range: mysql{4},duckdb{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: mode
+  note: 模式
+  range: builder{4},custom{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 规格名称
+  range: V2版本透视表1,V3版本透视表2,V2版本透视表3,V1版本透视表4,V2版本透视表5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 规格描述
+  range: 这是V2版本的描述,这是V3版本的描述,这是V2版本的描述,这是V1版本的描述,这是V2版本的描述
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL查询语句
+  range: SELECT * FROM zt_task WHERE version='v2',SELECT * FROM zt_bug WHERE version='v3',SELECT * FROM zt_story WHERE version='v2',SELECT * FROM zt_project WHERE version='v1',SELECT * FROM zt_product WHERE version='v2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fields
+  note: 字段定义
+  range: '{"id":"ID-V2","name":"名称-V2"}','{"status":"状态-V3","type":"类型-V3"}','{"priority":"优先级-V2"}','{"title":"标题-V1"}','{"code":"编码-V2"}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: langs
+  note: 语言定义
+  range: '{"zh-cn":"中文-V2","en":"English-V2"}','{"zh-cn":"中文-V3","en":"English-V3"}','{"zh-cn":"中文-V2"}','{"zh-cn":"中文-V1"}','{"zh-cn":"中文-V2"}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vars
+  note: 变量定义
+  range: '{"var1":"value1-V2"}','{"var1":"value1-V3"}','{}','{}','{"var2":"value2-V2"}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objects
+  note: 对象定义
+  range: task-v2,bug-v3,story-v2,project-v1,product-v2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: settings
+  note: 设置信息
+  range: '{"display":"table-V2"}','{"display":"chart-V3"}','{"display":"grid-V2"}','{"display":"list-V1"}','{"display":"card-V2"}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: filters
+  note: 过滤器
+  range: '[{"field":"status","value":"active","version":"v2"}]','[{"field":"type","value":"bug","version":"v3"}]','[]','[{"field":"status","value":"open","version":"v1"}]','[{"field":"priority","value":"high","version":"v2"}]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-10 10:00:00,2024-01-11 11:00:00,2024-01-12 12:00:00,2024-01-13 13:00:00,2024-01-14 14:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
