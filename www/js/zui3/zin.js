@@ -43,17 +43,25 @@
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
     const localCacheFirst = config.clientCache === 'local-first';
     const isTutorial  = top.config.currentModule === 'tutorial';
+    let openedOldPage = false;
+    let oldPageCofnig = null;
 
     function getPageInfo()
     {
+        let pageConfig = openedOldPage ? oldPageCofnig : window.config;
+        if(openedOldPage && !pageConfig)
+        {
+            const oldPageLink = $.parseLink(openedOldPage);
+            pageConfig = {currentModule: oldPageLink.moduleName, currentMethod: oldPageLink.methodName};
+        }
         return {
             app: currentCode,
-            id: `${currentCode}.${config.currentModule}-${config.currentMethod}`,
-            path: `${config.currentModule}-${config.currentMethod}`,
+            id: `${currentCode}.${pageConfig.currentModule}-${pageConfig.currentMethod}`,
+            path: `${pageConfig.currentModule}-${pageConfig.currentMethod}`,
             url: currentAppUrl,
-            config: config,
-            currentModule: config.currentModule,
-            currentMethod: config.currentMethod,
+            config: pageConfig,
+            currentModule: pageConfig.currentModule,
+            currentMethod: pageConfig.currentMethod,
         };
     }
 
@@ -949,6 +957,7 @@
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
                     const iframeWindow = $iframe[0].contentWindow;
+                    oldPageCofnig = iframeWindow.config;
                     iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                     clearTimer();
                 });
@@ -960,6 +969,8 @@
         if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
+        openedOldPage = url;
+        triggerEvent('openOldPage');
         $page.data('timer', setTimeout(() =>
         {
             if($page.hasClass('loading') || $iframe.hasClass('invisible')) $page.trigger('oldPageLoad.app');
@@ -973,6 +984,8 @@
         const $page = $('#oldPage');
         if(!$page.length) return;
         $page.addClass('in hidden');
+        openedOldPage = null;
+        oldPageCofnig = null;
     }
 
     function getLoadSelector(selector)
