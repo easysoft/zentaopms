@@ -5,6 +5,7 @@ class chartTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('chart');
+        $this->objectTao   = $tester->loadTao('chart');
     }
 
     /**
@@ -681,6 +682,28 @@ class chartTest
     public function isChartHaveDataTest(array $options = array(), string $type = ''): bool
     {
         $result = $this->objectModel->isChartHaveData($options, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test switchFieldName method.
+     *
+     * @param  array  $fields
+     * @param  array  $langs
+     * @param  array  $metrics
+     * @param  string $index
+     * @access public
+     * @return string
+     */
+    public function switchFieldNameTest(array $fields, array $langs, array $metrics, string $index): string
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('switchFieldName');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $fields, $langs, $metrics, $index);
         if(dao::isError()) return dao::getError();
 
         return $result;
