@@ -7,13 +7,13 @@ title=测试 zanodeModel::__construct();
 timeout=0
 cid=0
 
-- 步骤1：验证父类构造方法存在属性parentCalled @1
-- 步骤2：验证语言设置存在属性langSet @1
-- 步骤3：验证多次调用都正常
+- 步骤1：正常构造对象验证父类构造方法调用属性parentCalled @1
+- 步骤2：验证语言设置被正确配置属性langSet @1
+- 步骤3：验证继承关系正确性属性inheritance @1
+- 步骤4：验证多次调用构造方法的稳定性
  - 属性parentCalled @1
  - 属性langSet @1
-- 步骤4：验证继承关系正确属性inheritance @1
-- 步骤5：验证对象模型正确属性objectModel @1
+- 步骤5：验证对象模型实例化正确性属性objectModel @1
 
 */
 
@@ -28,8 +28,8 @@ su('admin');
 $zanodeTest = new zanodeTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($zanodeTest->constructTest()) && p('parentCalled') && e('1'); // 步骤1：验证父类构造方法存在
-r($zanodeTest->constructTest()) && p('langSet') && e('1'); // 步骤2：验证语言设置存在
-r($zanodeTest->constructTest()) && p('parentCalled,langSet') && e('1,1'); // 步骤3：验证多次调用都正常
-r($zanodeTest->constructTest()) && p('inheritance') && e('1'); // 步骤4：验证继承关系正确
-r($zanodeTest->constructTest()) && p('objectModel') && e('1'); // 步骤5：验证对象模型正确
+r($zanodeTest->constructTest()) && p('parentCalled') && e('1'); // 步骤1：正常构造对象验证父类构造方法调用
+r($zanodeTest->constructTest()) && p('langSet') && e('1'); // 步骤2：验证语言设置被正确配置
+r($zanodeTest->constructTest()) && p('inheritance') && e('1'); // 步骤3：验证继承关系正确性
+r($zanodeTest->constructTest()) && p('parentCalled,langSet') && e('1,1'); // 步骤4：验证多次调用构造方法的稳定性
+r($zanodeTest->constructTest()) && p('objectModel') && e('1'); // 步骤5：验证对象模型实例化正确性
