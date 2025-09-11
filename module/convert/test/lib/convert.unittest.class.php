@@ -3990,4 +3990,23 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test processJiraIssueContent method.
+     *
+     * @param  array $issueList
+     * @access public
+     * @return mixed
+     */
+    public function processJiraIssueContentTest($issueList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processJiraIssueContent');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $issueList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
