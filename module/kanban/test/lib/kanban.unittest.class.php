@@ -2029,4 +2029,30 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test buildRDRegionData method.
+     *
+     * @param  array  $regionData
+     * @param  array  $groups
+     * @param  array  $laneGroup
+     * @param  array  $columnGroup
+     * @param  array  $cardGroup
+     * @param  string $searchValue
+     * @access public
+     * @return array
+     */
+    public function buildRDRegionDataTest(array $regionData, array $groups, array $laneGroup, array $columnGroup, array $cardGroup, string $searchValue = '')
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildRDRegionData');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $regionData, $groups, $laneGroup, $columnGroup, $cardGroup, $searchValue);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
