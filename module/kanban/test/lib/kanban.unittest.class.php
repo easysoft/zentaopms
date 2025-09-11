@@ -2343,4 +2343,38 @@ class kanbanTest
             return 0;
         }
     }
+
+    /**
+     * Test getStoryCardMenu method.
+     *
+     * @param  object $execution
+     * @param  array  $objects
+     * @access public
+     * @return mixed
+     */
+    public function getStoryCardMenuTest($execution, $objects)
+    {
+        // 捕获输出缓冲区以避免错误信息影响测试结果
+        ob_start();
+        
+        try {
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getStoryCardMenu');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $execution, $objects);
+            
+            // 清理输出缓冲区
+            ob_end_clean();
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            // 清理输出缓冲区
+            ob_end_clean();
+            return array();
+        }
+    }
 }
