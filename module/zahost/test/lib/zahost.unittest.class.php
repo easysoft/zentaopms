@@ -234,4 +234,19 @@ class zahostTest
         global $tester;
         return $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->fetchAll();
     }
+
+    /**
+     * 测试获取镜像键值对。
+     * Test get image pairs.
+     *
+     * @param  int $hostID
+     * @access public
+     * @return array
+     */
+    public function getImagePairsTest(int $hostID): array
+    {
+        $imagePairs = $this->objectModel->getImagePairs($hostID);
+        if(dao::isError()) return dao::getError();
+        return $imagePairs;
+    }
 }
