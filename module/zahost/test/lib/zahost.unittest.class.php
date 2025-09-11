@@ -313,4 +313,22 @@ class zahostTest
         if(dao::isError()) return dao::getError();
         return $imagePairs;
     }
+
+    /**
+     * 测试判断是否隐藏宿主机。
+     * Test hidden host.
+     *
+     * @access public
+     * @return string
+     */
+    public function hiddenHostTest(): string
+    {
+        // 开始输出缓冲，捕获任何输出
+        ob_start();
+        $result = $this->objectModel->hiddenHost();
+        ob_end_clean(); // 清除缓冲的输出
+        
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
 }
