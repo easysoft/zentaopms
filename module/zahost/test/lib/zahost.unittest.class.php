@@ -222,17 +222,46 @@ class zahostTest
      *
      * @param  int          $imageID
      * @access public
-     * @return array|object
+     * @return bool|array
      */
-    public function cancelDownloadTest(int $imageID): array|object
+    public function cancelDownloadTest(int $imageID): bool|array
     {
         $image = $this->objectModel->getImageByID($imageID);
+        if(!$image) return false;
+        
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
-        $this->objectModel->cancelDownload($image);
+        // Mock zahostTao getCurrentTask method
+        if(!isset($this->objectModel->zahostTao))
+        {
+            $this->objectModel->zahostTao = new class {
+                public function getCurrentTask($imageId, $data) {
+                    return (object)array(
+                        'id' => $imageId,
+                        'task' => $imageId,
+                        'rate' => '50%',
+                        'status' => 'inprogress',
+                        'path' => ''
+                    );
+                }
+            };
+        }
+
+        // Mock imageStatusList to avoid HTTP calls
+        $this->objectModel->imageStatusList = (object)array(
+            'code' => 'success',
+            'data' => (object)array(
+                'inprogress' => array(),
+                'completed' => array(),
+                'pending' => array(),
+                'failed' => array()
+            )
+        );
+
+        $result = $this->objectModel->cancelDownload($image);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getImageByID($imageID);
+        return $result;
     }
 
     /**
