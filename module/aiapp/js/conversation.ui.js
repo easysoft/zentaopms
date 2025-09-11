@@ -36,7 +36,7 @@ window.initAIConversations = function(initialParams, chat)
     ].join('\n'));
 
     const currentPageID = getPageInfo().id;
-    lastPageID = currentPageID;
+    lastPageID        = currentPageID;
     aiReactionsEffect = aiPanel.reactions.state$.subscribe((state) => {
         if(!state.zentaoPage || lastPageID === state.zentaoPage.id) return;
         lastPageID = state.zentaoPage.id;

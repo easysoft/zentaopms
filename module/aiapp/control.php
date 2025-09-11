@@ -190,9 +190,9 @@ class aiapp extends control
      */
     public function conversation($chat = '', $params = '')
     {
-        $this->view->title = $this->lang->aiapp->conversation;
+        $this->view->title         = $this->lang->aiapp->conversation;
         $this->view->currentChatID = $chat;
-        $this->view->params = $params;
+        $this->view->params        = $params;
         $this->display();
     }
 }

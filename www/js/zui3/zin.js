@@ -55,11 +55,11 @@
             pageConfig = {currentModule: oldPageLink.moduleName, currentMethod: oldPageLink.methodName};
         }
         return {
-            app: currentCode,
-            id: `${currentCode}.${pageConfig.currentModule}-${pageConfig.currentMethod}`,
-            path: `${pageConfig.currentModule}-${pageConfig.currentMethod}`,
-            url: currentAppUrl,
-            config: pageConfig,
+            app          : currentCode,
+            id           : `${currentCode}.${pageConfig.currentModule}-${pageConfig.currentMethod}`,
+            path         : `${pageConfig.currentModule}-${pageConfig.currentMethod}`,
+            url          : currentAppUrl,
+            config       : pageConfig,
             currentModule: pageConfig.currentModule,
             currentMethod: pageConfig.currentMethod,
         };
