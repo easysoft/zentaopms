@@ -795,4 +795,27 @@ class myTest
 
         return count($result);
     }
+
+    /**
+     * Test fetchRequirementsBySearch method.
+     *
+     * @param  string $myRequirementQuery
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  array  $requirementIDList
+     * @access public
+     * @return mixed
+     */
+    public function fetchRequirementsBySearchTest(string $myRequirementQuery, string $type, string $orderBy, ?object $pager = null, array $requirementIDList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchRequirementsBySearch');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$myRequirementQuery, $type, $orderBy, $pager, $requirementIDList]);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
