@@ -1631,4 +1631,33 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test buildBuildData method.
+     *
+     * @param  array $data
+     * @access public
+     * @return mixed
+     */
+    public function buildBuildDataTest($data = array())
+    {
+        try {
+            // 确保参数是数组类型
+            if($data === null) $data = array();
+
+            // 使用反射来访问protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('buildBuildData');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $data);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
