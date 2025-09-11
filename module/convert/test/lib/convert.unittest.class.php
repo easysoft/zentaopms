@@ -3443,4 +3443,37 @@ class convertTest
         }
     }
 
+    /**
+     * Test createTicket method.
+     *
+     * @param  int $productID
+     * @param  object $data
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function createTicketTest($productID = 1, $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        try {
+            // Use reflection to access protected method
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createTicket');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $productID, $data, $relations);
+            if(dao::isError()) 
+            {
+                $errors = dao::getError();
+                return $errors;
+            }
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        } catch (Error $e) {
+            return $e->getMessage();
+        }
+    }
+
 }
