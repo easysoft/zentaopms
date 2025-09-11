@@ -5,6 +5,7 @@ class jobTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('job');
+        $this->objectTao   = $tester->loadTao('job');
     }
 
     /**
@@ -370,6 +371,28 @@ class jobTest
     public function initJobTest($id, $job)
     {
         $result = $this->objectModel->initJob($id, $job);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test checkIframe method.
+     *
+     * @param  object $job
+     * @param  int    $jobID
+     * @access public
+     * @return mixed
+     */
+    public function checkIframeTest($job, $jobID = 0)
+    {
+        // Use reflection to access protected method
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkIframe');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $job, $jobID);
         
         if(dao::isError()) return dao::getError();
         
