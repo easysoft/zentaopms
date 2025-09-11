@@ -1344,4 +1344,25 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test processProductPlan method.
+     *
+     * @param  array  $products
+     * @param  string $conditions
+     * @access public
+     * @return array
+     */
+    public function processProductPlanTest(array $products, string $conditions): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processProductPlan');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, array(&$products, $conditions));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
