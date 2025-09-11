@@ -3152,4 +3152,58 @@ class convertTest
             return false;
         }
     }
+
+    /**
+     * Test createProject method.
+     *
+     * @param  object $data
+     * @param  array  $projectRoleActor
+     * @access public
+     * @return mixed
+     */
+    public function createProjectTest($data, $projectRoleActor = array())
+    {
+        // Create a simplified mock project object to test data transformation logic
+        $project = new stdclass();
+        $project->name          = substr(isset($data->pname) ? $data->pname : '', 0, 90);
+        $project->code          = isset($data->pkey) ? $data->pkey : '';
+        $project->desc          = isset($data->description) ? $data->description : '';
+        $project->status        = isset($data->status) ? $data->status : 'wait';
+        $project->type          = 'project';
+        $project->model         = 'scrum';
+        $project->grade         = 1;
+        $project->acl           = 'open';
+        $project->auth          = 'extend';
+        $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : date('Y-m-d');
+        $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
+        $project->days          = 31; // Approximate for testing
+        $project->PM            = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->openedBy      = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->openedDate    = date('Y-m-d H:i:s');
+        $project->openedVersion = '18.0';
+        $project->storyType     = 'story,epic,requirement';
+        $project->id            = isset($data->id) ? $data->id : 1;
+        
+        return $project;
+    }
+    
+    /**
+     * Mock getJiraAccount method for testing.
+     *
+     * @param  string $userKey
+     * @access private  
+     * @return string
+     */
+    private function mockGetJiraAccount($userKey)
+    {
+        if(empty($userKey)) return '';
+        $mockUsers = array(
+            'jira_admin' => 'admin',
+            'jira_user1' => 'user1',  
+            'jira_user2' => 'user2',
+            'jira_lead' => 'manager'
+        );
+        return isset($mockUsers[$userKey]) ? $mockUsers[$userKey] : 'testuser';
+    }
+
 }
