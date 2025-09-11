@@ -1323,4 +1323,25 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test mergePivotSpecData method.
+     *
+     * @param  mixed $pivots
+     * @param  bool  $isObject
+     * @access public
+     * @return mixed
+     */
+    public function mergePivotSpecDataTest($pivots, $isObject = true)
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('mergePivotSpecData');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $pivots, $isObject);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
