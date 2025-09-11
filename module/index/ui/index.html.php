@@ -226,6 +226,7 @@ if($zaiConfig && !empty($zaiConfig->host) && !empty($zaiConfig->token))
         h::js('window.zai = ' . js::value($zaiConfig) . ';'),
         h::importJs($app->getWebRoot() . 'js/zui3/ai.js', setID('aiJS'))
     );
+    jsVar('canConverse', hasPriv('aiapp', 'conversation'));
 }
 
 /**
