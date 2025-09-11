@@ -1116,6 +1116,24 @@ class actionTest
     }
 
     /**
+     * Test processAttribute method.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function processAttributeTest(string $type): string
+    {
+        global $tester;
+        $actionTao = $tester->loadTao('action');
+        $result = $actionTao->processAttribute($type);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkActionCanUndelete method.
      *
      * @param  object $action
