@@ -2647,4 +2647,56 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test updateDBWebRoot method.
+     *
+     * @param  mixed $dbConfig
+     * @access public
+     * @return mixed
+     */
+    public function updateDBWebRootTest($dbConfig = null)
+    {
+        global $config, $app;
+
+        // 备份原始状态
+        $originalConfig = isset($config) ? clone $config : null;
+        $originalApp = isset($app) ? clone $app : null;
+
+        try {
+            // 初始化测试环境
+            if(!isset($app)) $app = new stdClass();
+            if(!isset($config)) $config = new stdClass();
+
+            // 初始化基本配置
+            $config->webRoot = '/';
+            
+            // 确保不在CLI模式下运行（PHP_SAPI != 'cli'）
+            // 确保不在安装或升级模式
+            $app->installing = false;
+            $app->upgrading = false;
+
+            $result = $this->objectTao->updateDBWebRoot($dbConfig);
+            if(dao::isError()) return dao::getError();
+
+            // updateDBWebRoot方法的返回类型是void，但在某些条件下会return其他值
+            // 我们返回一个标识符来表示方法已成功执行
+            return is_null($result) ? 'success' : $result;
+
+        } catch (Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        } finally {
+            // 恢复原始状态
+            if($originalConfig !== null) {
+                $config = $originalConfig;
+            } else {
+                unset($GLOBALS['config']);
+            }
+            if($originalApp !== null) {
+                $app = $originalApp;
+            } else {
+                unset($GLOBALS['app']);
+            }
+        }
+    }
 }
