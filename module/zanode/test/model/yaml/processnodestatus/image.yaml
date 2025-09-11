@@ -1,0 +1,21 @@
+title: zt_image processNodeStatus测试数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: host
+    range: 1-10
+  - field: name
+    range: test_image{10}
+    format: "%s_%d"
+  - field: status
+    range: creating{3},completed{3},failed{4}
+  - field: osName
+    range: linux{8},windows{2}
+  - field: from
+    range: node{5},snapshot{5}
+  - field: createdDate
+    range: "(-1M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

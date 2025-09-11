@@ -304,4 +304,31 @@ class zanodeTest
         if($result === '') return 'success';
         return $result ? $result : '0';
     }
+
+    /**
+     * 测试计算执行节点状态。
+     * Test process node status.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return object
+     */
+    public function processNodeStatusTest(int $nodeID): object|bool
+    {
+        $node = $this->objectModel->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")
+            ->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
+            ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
+            ->where('t1.id')->eq($nodeID)
+            ->fetch();
+        
+        if(empty($node)) return false;
+        
+        // 调用protected方法processNodeStatus
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processNodeStatus');
+        $method->setAccessible(true);
+        
+        return $method->invoke($this->objectModel, $node);
+    }
 }
