@@ -1208,4 +1208,45 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test updateSyncTime method.
+     *
+     * @param  array $tables
+     * @access public
+     * @return mixed
+     */
+    public function updateSyncTimeTest($tables)
+    {
+        if(empty($tables)) 
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('updateSyncTime');
+            $method->setAccessible(true);
+            
+            $method->invoke($this->objectTao, $tables);
+            if(dao::isError()) return dao::getError();
+            
+            return 0;
+        }
+        
+        global $tester;
+        $dao = $tester->dao;
+        
+        $currentTime = helper::now();
+        
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateSyncTime');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $tables);
+        if(dao::isError()) return dao::getError();
+        
+        $updatedCount = $dao->select('COUNT(*)')->from(TABLE_DUCKDBQUEUE)
+            ->where('object')->in($tables)
+            ->andWhere('syncTime')->ge($currentTime)
+            ->fetch('COUNT(*)');
+        
+        return $updatedCount;
+    }
 }
