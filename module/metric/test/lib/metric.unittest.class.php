@@ -1276,4 +1276,33 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test processDAOWithDate method.
+     *
+     * @param  object $stmt
+     * @param  array  $query
+     * @param  string $dateType
+     * @access public
+     * @return mixed
+     */
+    public function processDAOWithDateTest($stmt = null, $query = array(), $dateType = 'day')
+    {
+        global $tester;
+        
+        if($stmt === null)
+        {
+            $stmt = $tester->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+        }
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processDAOWithDate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $stmt, $query, $dateType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
