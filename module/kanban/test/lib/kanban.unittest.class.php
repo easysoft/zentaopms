@@ -2055,4 +2055,39 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test initCardItem method.
+     *
+     * @param  int   $cardID
+     * @param  int   $cellID
+     * @param  int   $order
+     * @param  array $avatarPairs
+     * @param  array $users
+     * @access public
+     * @return array
+     */
+    public function initCardItemTest($cardID, $cellID, $order, $avatarPairs, $users)
+    {
+        global $tester;
+        
+        // 获取卡片数据
+        $card = $tester->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        if(!$card) return array('error' => 'Card not found');
+        
+        // 获取单元格数据
+        $cell = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('id')->eq($cellID)->fetch();
+        if(!$cell) return array('error' => 'Cell not found');
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('initCardItem');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $card, $cell, $order, $avatarPairs, $users);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
