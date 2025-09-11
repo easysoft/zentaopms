@@ -227,6 +227,11 @@ class zanodeTest
      */
     public function deleteSnapshotTest(int $snapshotID)
     {
+        if($snapshotID <= 0) return '~~';
+        
+        $snapshot = $this->getImageByID($snapshotID);
+        if(!$snapshot) return '~~';
+        
         $result = $this->deleteSnapshot($snapshotID);
         if($result !== true) return $result;
 
