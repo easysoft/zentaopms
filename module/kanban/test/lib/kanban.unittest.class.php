@@ -1938,4 +1938,28 @@ class kanbanTest
             'afterAssignedTo' => $afterCard ? $afterCard->assignedTo : ''
         );
     }
+
+    /**
+     * Test buildObjectCard method.
+     *
+     * @param  object $objectCard
+     * @param  object $object
+     * @param  string $fromType
+     * @param  array  $creators
+     * @access public
+     * @return object
+     */
+    public function buildObjectCardTest($objectCard, $object, $fromType, $creators)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildObjectCard');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $objectCard, $object, $fromType, $creators);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
