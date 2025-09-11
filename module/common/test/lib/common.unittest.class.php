@@ -2442,4 +2442,97 @@ class commonTest
         $result = commonModel::getDotStyle($showCount, $unreadCount);
         return $result;
     }
+
+    /**
+     * Test checkPrivByRights method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $acls
+     * @param  mixed  $object
+     * @access public
+     * @return mixed
+     */
+    public function checkPrivByRightsTest(string $module, string $method, array $acls, mixed $object)
+    {
+        global $app, $lang;
+        
+        // 备份原始状态
+        $originalApp = isset($app) ? clone $app : null;
+        $originalLang = isset($lang) ? $lang : null;
+        
+        try {
+            // 初始化必要的全局变量
+            if(!isset($app)) $app = new stdClass();
+            if(!isset($lang)) $lang = new stdClass();
+            
+            // 设置应用tab，用于checkPrivByRights方法中的逻辑判断
+            $app->tab = 'system';
+            
+            // 初始化语言分组配置
+            if(!isset($lang->navGroup)) $lang->navGroup = new stdClass();
+            $lang->navGroup->user = 'system';
+            $lang->navGroup->task = 'project';
+            $lang->navGroup->story = 'product';
+            $lang->navGroup->requirement = 'product';
+            $lang->navGroup->epic = 'product';
+            $lang->navGroup->bug = 'qa';
+            $lang->navGroup->my = 'my';
+            
+            // 初始化菜单配置以满足checkPrivByRights方法的检查
+            $lang->system = new stdClass();
+            $lang->system->menu = array('user' => array(), 'team' => array());
+            $lang->project = new stdClass();
+            $lang->project->menu = array('task' => array());
+            $lang->qa = new stdClass();
+            $lang->qa->menu = array('bug' => array());
+            $lang->my = new stdClass();
+            $lang->my->menu = array('team' => array());
+            
+            // 通过反射访问protected static方法
+            $reflectionClass = new ReflectionClass('commonTao');
+            $method_reflection = $reflectionClass->getMethod('checkPrivByRights');
+            $method_reflection->setAccessible(true);
+            
+            // 模拟特殊情况：当object为'no_db_priv'时，模拟hasDBPriv返回false
+            if($object === 'no_db_priv') {
+                // 创建一个会导致hasDBPriv返回false的对象
+                // 需要设置用户权限为限制权限，并且对象不属于当前用户
+                $app->user = new stdClass();
+                $app->user->account = 'testuser';
+                $app->user->admin = false;
+                $app->user->rights = array('rights' => array('my' => array('limited' => true)));
+                
+                $mockObject = new stdClass();
+                $mockObject->openedBy = 'other_user'; // 不是当前用户
+                $mockObject->assignedTo = 'other_user'; // 不是当前用户
+                $mockObject->addedBy = 'other_user'; // 不是当前用户
+                
+                $result = $method_reflection->invokeArgs(null, array($module, $method, $acls, $mockObject));
+            } else {
+                // 正常调用
+                // 设置用户为管理员，或者确保有权限
+                $app->user = new stdClass();
+                $app->user->account = 'admin';
+                $app->user->admin = true;
+                
+                $result = $method_reflection->invokeArgs(null, array($module, $method, $acls, $object));
+            }
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result ? '1' : '0';
+            
+        } catch (Exception $e) {
+            return '0';
+        } finally {
+            // 恢复原始状态
+            if($originalApp !== null) {
+                $app = $originalApp;
+            }
+            if($originalLang !== null) {
+                $lang = $originalLang;
+            }
+        }
+    }
 }
