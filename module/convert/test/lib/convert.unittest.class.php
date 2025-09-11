@@ -3675,4 +3675,34 @@ class convertTest
         }
     }
 
+    /**
+     * Test createWorkflowField method.
+     *
+     * @param  array $relations
+     * @param  array $fields
+     * @param  array $fieldOptions
+     * @param  array $jiraResolutions
+     * @param  array $jiraPriList
+     * @access public
+     * @return mixed
+     */
+    public function createWorkflowFieldTest($relations = array(), $fields = array(), $fieldOptions = array(), $jiraResolutions = array(), $jiraPriList = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('createWorkflowField');
+        $method->setAccessible(true);
+        
+        try
+        {
+            $result = $method->invokeArgs($this->objectTao, array($relations, $fields, $fieldOptions, $jiraResolutions, $jiraPriList));
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 'exception: ' . $e->getMessage();
+        }
+    }
+
 }
