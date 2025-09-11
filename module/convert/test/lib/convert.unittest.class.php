@@ -3421,4 +3421,26 @@ class convertTest
         }
     }
 
+    /**
+     * Test createFeedback method.
+     *
+     * @param  int    $productID
+     * @param  object $data
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function createFeedbackTest($productID = 1, $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        try {
+            $result = $this->objectTao->createFeedback($productID, $data, $relations);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }
