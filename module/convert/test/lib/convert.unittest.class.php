@@ -1579,4 +1579,30 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test buildResolutionData method.
+     *
+     * @param  array $data
+     * @access public
+     * @return mixed
+     */
+    public function buildResolutionDataTest($data = array())
+    {
+        try {
+            // 使用反射来访问protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('buildResolutionData');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $data);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
