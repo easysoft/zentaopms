@@ -423,4 +423,19 @@ class mailTest
         
         return $result;
     }
+
+    /**
+     * Test getImages method.
+     *
+     * @param  string $body
+     * @access public
+     * @return array
+     */
+    public function getImagesTest($body)
+    {
+        $result = $this->objectModel->getImages($body);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
