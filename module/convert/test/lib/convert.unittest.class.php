@@ -4009,4 +4009,30 @@ class convertTest
         return $result;
     }
 
+    /**
+     * Test processJiraContent method.
+     *
+     * @param  string $content
+     * @param  array  $fileList
+     * @access public
+     * @return mixed
+     */
+    public function processJiraContentTest($content = '', $fileList = array())
+    {
+        try {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('processJiraContent');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $content, $fileList);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
 }
