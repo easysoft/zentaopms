@@ -1902,4 +1902,40 @@ class kanbanTest
             return array('result' => 0); // 其他情况
         }
     }
+
+    /**
+     * Test updateCardAssignedTo method.
+     *
+     * @param  int    $cardID
+     * @param  string $oldAssignedToList
+     * @param  array  $users
+     * @access public
+     * @return array
+     */
+    public function updateCardAssignedToTest($cardID, $oldAssignedToList, $users)
+    {
+        global $tester;
+        
+        // 获取操作前的卡片assignedTo值
+        $beforeCard = $tester->dao->select('assignedTo')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateCardAssignedTo');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectTao, $cardID, $oldAssignedToList, $users);
+        
+        if(dao::isError()) return array('result' => 'error', 'message' => dao::getError());
+        
+        // 获取操作后的卡片assignedTo值
+        $afterCard = $tester->dao->select('assignedTo')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        
+        // 返回操作前后的assignedTo值以便断言验证
+        return array(
+            'result' => 'success',
+            'beforeAssignedTo' => $beforeCard ? $beforeCard->assignedTo : '',
+            'afterAssignedTo' => $afterCard ? $afterCard->assignedTo : ''
+        );
+    }
 }
