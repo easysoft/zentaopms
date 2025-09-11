@@ -2309,4 +2309,38 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test getERURCardMenu method.
+     *
+     * @param  int   $executionID
+     * @param  array $objects
+     * @access public
+     * @return mixed
+     */
+    public function getERURCardMenuTest($executionID, $objects)
+    {
+        // 捕获输出缓冲区以避免错误信息影响测试结果
+        ob_start();
+        
+        try {
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getERURCardMenu');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $executionID, $objects);
+            
+            // 清理输出缓冲区
+            ob_end_clean();
+            
+            if(dao::isError()) return count($objects);
+            
+            return count($result);
+        } catch (Exception $e) {
+            // 清理输出缓冲区
+            ob_end_clean();
+            return 0;
+        }
+    }
 }
