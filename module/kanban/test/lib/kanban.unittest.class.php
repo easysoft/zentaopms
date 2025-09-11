@@ -2286,4 +2286,27 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test refreshTaskCards method.
+     *
+     * @param  array  $cardPairs
+     * @param  int    $executionID
+     * @param  string $otherCardList
+     * @access public
+     * @return array
+     */
+    public function refreshTaskCardsTest($cardPairs, $executionID, $otherCardList)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('refreshTaskCards');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $cardPairs, $executionID, $otherCardList);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
