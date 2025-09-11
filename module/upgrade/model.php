@@ -11582,7 +11582,7 @@ class upgradeModel extends model
             ->fetchPairs();
 
         $testDeliverable = $this->dao->select('category')->from(TABLE_DELIVERABLE)
-            ->where('buitin')->eq('1')
+            ->where('builtin')->eq('1')
             ->andWhere('module')->in($testModules)
             ->fetchPairs();
 
@@ -11592,7 +11592,7 @@ class upgradeModel extends model
             if(empty($name)) continue;
             if(!empty($testDeliverable[$key]))
             {
-                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
                 unset($modules[$key]);
             }
         }
@@ -11611,7 +11611,7 @@ class upgradeModel extends model
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
         $deliverable->template    = '[]';
-        $deliverable->buitin      = '1';
+        $deliverable->builtin     = '1';
 
         $deliverableStage = new stdClass();
         $deliverableStage->stage    = 'project';
@@ -11657,7 +11657,7 @@ class upgradeModel extends model
     {
         foreach($modules as $key => $name)
         {
-            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
         }
         return true;
     }
@@ -11674,7 +11674,7 @@ class upgradeModel extends model
     {
         foreach($modules as $key => $name)
         {
-            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('buitin')->eq('1')->exec();
+            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
         }
         return true;
     }
