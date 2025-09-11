@@ -724,4 +724,29 @@ class myTest
 
         return count($result);
     }
+
+    /**
+     * Test fetchTasksBySearch method.
+     *
+     * @param  string $query
+     * @param  string $moduleName
+     * @param  string $account
+     * @param  array  $taskIdList
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function fetchTasksBySearchTest(string $query, string $moduleName, string $account, array $taskIdList, string $orderBy, int $limit, ?object $pager = null)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchTasksBySearch');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($this->objectTao, [$query, $moduleName, $account, $taskIdList, $orderBy, $limit, $pager]);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
