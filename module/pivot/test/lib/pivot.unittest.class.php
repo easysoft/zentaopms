@@ -1411,4 +1411,26 @@ class pivotTest
         // 返回表示测试成功的简单结果
         return array('result' => 'success');
     }
+
+    /**
+     * Test getExecutionList method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $executionIDList
+     * @access public
+     * @return array
+     */
+    public function getExecutionListTest(string $begin, string $end, array $executionIDList = array()): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getExecutionList');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($begin, $end, $executionIDList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
