@@ -1,22 +1,32 @@
 let lastPageID        = '';
 let aiReactionsEffect = null;
 let aiPanel           = zui.AIPanel.shared;
-let lastParamsID      = $.parseLink($.apps.getAppUrl()).vars.map(x => x[1]).join();
+let lastParamsID      = ($.parseLink($.apps.getAppUrl()).vars || []).map(x => x[1]).join();
 
-function handleParams(params, chat)
+function openInAIPanel(chat, params)
 {
     if(!params || !aiPanel) return;
     if(typeof params === 'string') try {params = JSON.parse(params);} catch {}
     if(!params || typeof params !== 'object') return;
-    aiPanel.open(params, chat);
+    aiPanel.open({chatID: chat, postMessage: params});
 }
 
-window.initAIConversations = function(initialParams, chat)
+window.initAIConversations = function(chat, initialParams)
 {
     aiPanel = aiPanel || zui.AIPanel.shared;
     if(!aiPanel) return;
 
     aiPanel.toggleEmbed(true);
+
+    const currentPageID = getPageInfo().id;
+    lastPageID        = currentPageID;
+    aiReactionsEffect = aiPanel.reactions.state$.subscribe((state) => {
+        if(!state.zentaoPage || lastPageID === state.zentaoPage.id) return;
+        lastPageID = state.zentaoPage.id;
+        aiPanel.toggleEmbed(lastPageID === currentPageID);
+    });
+
+    if(initialParams || chat) setTimeout(() => openInAIPanel(chat, initialParams), 600);
 
     const parent$ = window.parent.$;
     if(parent$('body').hasClass('ai-embed-injected')) return;
@@ -34,18 +44,6 @@ window.initAIConversations = function(initialParams, chat)
         '.ai-panel.is-embed .ai-panel-header {display: none}',
         '</style>'
     ].join('\n'));
-
-    const currentPageID = getPageInfo().id;
-    lastPageID        = currentPageID;
-    aiReactionsEffect = aiPanel.reactions.state$.subscribe((state) => {
-        if(!state.zentaoPage || lastPageID === state.zentaoPage.id) return;
-        lastPageID = state.zentaoPage.id;
-        aiPanel.toggleEmbed(lastPageID === currentPageID);
-    });
-
-    if(initialParams) handleParams(initialParams, chat);
-
-    console.log('> initAIConversations', {initialParams, aiPanel, lastPageID});
 }
 
 window.onPageUnmount = function()
@@ -69,7 +67,9 @@ window.beforePageLoad = function(options)
     if(paramsID === lastParamsID) return false;
 
     lastParamsID = paramsID;
-    handleParams(link.params.params, link.params.chat);
+    const params = link.vars[1][1];
+    if(params) params = atob(params);
+    openInAIPanel(link.vars[0][1], params);
 
     return false;
 };

@@ -185,14 +185,16 @@ class aiapp extends control
      * 智能会话页面。
      * Conversation page.
      *
+     * @param string $chat   要打开的会话 ID，ID 中的 _ 会被替换为 -，如果设置为 NEW，则打开新会话。 The chat ID to open, _ will be replaced with -, if set to NEW, open a new chat. The default is an empty string.
+     * @param string $params 会话参数，JSON 字符串，使用 base64 编码。 The chat parameters, JSON string, using base64 encoding.
      * @access public
      * @return void
      */
     public function conversation($chat = '', $params = '')
     {
         $this->view->title         = $this->lang->aiapp->conversation;
-        $this->view->currentChatID = $chat;
-        $this->view->params        = $params;
+        $this->view->currentChatID = empty($chat) ? '' : str_replace('_', '-', $chat);
+        $this->view->params        = empty($params) ? '' : helper::safe64Decode($params);
         $this->display();
     }
 }

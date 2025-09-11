@@ -13,5 +13,5 @@ namespace zin;
 div
 (
     setClass('ai-conversations'),
-    on::init()->call('window.initAIConversations', $params, $currentChatID)
+    on::init()->call('window.initAIConversations', $currentChatID, $params)
 );
