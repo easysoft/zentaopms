@@ -310,4 +310,28 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test checkStepChanged method.
+     *
+     * @param  array $oldSteps
+     * @param  array $steps
+     * @access public
+     * @return bool|array
+     */
+    public function checkStepChangedTest(array $oldSteps, array $steps): bool|array
+    {
+        global $tester;
+        $objectTao = $tester->loadTao('caselib');
+        
+        $reflection = new ReflectionClass($objectTao);
+        $method = $reflection->getMethod('checkStepChanged');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($objectTao, $oldSteps, $steps);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
