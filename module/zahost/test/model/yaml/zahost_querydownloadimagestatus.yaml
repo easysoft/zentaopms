@@ -1,0 +1,89 @@
+---
+title: zt_host for queryDownloadImageStatus test
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: zahost-01,zahost-02,zahost-03,test-host,dev-host
+- field: type
+  range: zahost{5}
+- field: hostType
+  range: physical{3},virtual{2}
+- field: mac
+  range: 00:11:22:33:44:55,AA:BB:CC:DD:EE:FF,12:34:56:78:9A:BC,FE:DC:BA:98:76:54,11:22:33:44:55:66
+- field: memory
+  range: 8GB{2},16GB{2},32GB{1}
+- field: diskSize
+  range: 500GB{2},1TB{2},2TB{1}
+- field: status
+  range: online{3},offline{1},wait{1}
+- field: secret
+  range: secret123{2},password456{2},token789{1}
+- field: desc
+  range: 测试宿主机01,测试宿主机02,测试宿主机03,开发环境宿主机,生产环境宿主机
+- field: tokenSN
+  range: token_abc123{2},token_def456{2},token_xyz789{1}
+- field: tokenTime
+  range: "(-1D)-(+1D):-2H"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: oldTokenSN
+  range: old_token_123{2},old_token_456{2},old_token_789{1}
+- field: vsoft
+  range: qemu{3},vmware{1},virtualbox{1}
+- field: heartbeat
+  range: "(-1H)-(+5M):-10S"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: zap
+  range: 8082{3},8083{1},8084{1}
+- field: vnc
+  range: 5900{2},5901{2},5902{1}
+- field: ztf
+  range: 8085{2},8086{2},8087{1}
+- field: zd
+  range: 8088{2},8089{2},8090{1}
+- field: ssh
+  range: 22{4},2222{1}
+- field: parent
+  range: 0{5}
+- field: image
+  range: 0{5}
+- field: admin
+  range: 0{5}
+- field: serverRoom
+  range: 0{5}
+- field: cpuNumber
+  range: 4{2},8{2},16{1}
+- field: cpuCores
+  range: 4{2},8{2},16{1}
+- field: osName
+  range: Ubuntu 20.04{2},CentOS 8{2},Debian 11{1}
+- field: osKernel
+  range: 5.4.0{2},4.18.0{2},5.10.0{1}
+- field: extranet
+  range: 192.168.1.100{1},192.168.1.101{1},192.168.1.102{1},10.0.0.100{1},10.0.0.101{1}
+- field: username
+  range: root{3},admin{1},user{1}
+- field: password
+  range: password123{2},admin123{2},root123{1}
+- field: port
+  range: 22{4},2222{1}
+- field: system
+  range: ubuntu{2},centos{2},debian{1}
+- field: createdBy
+  range: admin{3},system{1},user{1}
+- field: createdDate
+  range: "(-7D)-(+1D):-2H"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  range: admin{2},user{2},[]{1}
+- field: editedDate
+  range: "(-3D)-(+1D):-1H"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  range: 0{5}
