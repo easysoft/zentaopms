@@ -6,6 +6,7 @@ class convertTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('convert');
+        $this->objectTao   = $tester->loadTao('convert');
     }
 
     /**
@@ -124,7 +125,7 @@ class convertTest
                 // 如果没有数据库连接，直接返回空数组
                 return array();
             }
-            
+
             $result = $this->objectModel->getJiraDataFromDB($module, $lastID, $limit);
             if(dao::isError()) return dao::getError();
             return $result;
@@ -134,7 +135,7 @@ class convertTest
             // 处理PHP7+的Error异常（包括Call to a member function on null）
             return array();
         }
-        
+
         // 默认返回空数组
         return array();
     }
@@ -169,12 +170,12 @@ class convertTest
             global $app;
             $jiraPath = $app->getTmpRoot() . 'jirafile/';
             $sourceFile = $jiraPath . 'entities.xml';
-            
+
             if(!file_exists($sourceFile))
             {
                 return 'no_source_file';
             }
-            
+
             $this->objectModel->splitFile();
             if(dao::isError()) return dao::getError();
 
@@ -185,7 +186,7 @@ class convertTest
             {
                 if(file_exists($jiraPath . $file)) $existFiles++;
             }
-            
+
             return $existFiles > 0 ? 'success' : 'no_files';
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage();
@@ -207,7 +208,7 @@ class convertTest
         try {
             // 先删除可能存在的表
             $this->dropTableIfExists('jiratmprelation');
-            
+
             $this->objectModel->createTmpTable4Jira();
             if(dao::isError()) return dao::getError();
 
@@ -218,7 +219,7 @@ class convertTest
                 $columns = $this->getTableColumns('jiratmprelation');
                 return $columns;
             }
-            
+
             return false;
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage();
@@ -299,16 +300,16 @@ class convertTest
             // 获取jirafile目录路径
             global $app;
             $jiraPath = $app->getTmpRoot() . 'jirafile/';
-            
+
             // 创建测试目录和测试文件
             if(!is_dir($jiraPath)) mkdir($jiraPath, 0777, true);
-            
+
             // 创建一些测试文件
             $testFiles = array('action.xml', 'project.xml', 'issue.xml', 'user.xml');
             foreach($testFiles as $file) {
                 file_put_contents($jiraPath . $file, '<?xml version="1.0"?><test>content</test>');
             }
-            
+
             // 执行删除方法
             $this->objectModel->deleteJiraFile();
             if(dao::isError()) return dao::getError();
@@ -321,7 +322,7 @@ class convertTest
                     $deletedCount++;
                 }
             }
-            
+
             return array('deletedCount' => $deletedCount, 'totalFiles' => count($predefinedFiles));
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage();
@@ -372,7 +373,7 @@ class convertTest
         $config->enableER = false;
 
         $result = $this->objectModel->getZentaoObjectList();
-        
+
         $config->enableER = $originalER;
         if(dao::isError()) return dao::getError();
 
@@ -392,7 +393,7 @@ class convertTest
         $config->URAndSR = false;
 
         $result = $this->objectModel->getZentaoObjectList();
-        
+
         $config->URAndSR = $originalUR;
         if(dao::isError()) return dao::getError();
 
@@ -414,7 +415,7 @@ class convertTest
         $config->URAndSR = false;
 
         $result = $this->objectModel->getZentaoObjectList();
-        
+
         $config->enableER = $originalER;
         $config->URAndSR = $originalUR;
         if(dao::isError()) return dao::getError();
@@ -530,10 +531,10 @@ class convertTest
     {
         // 备份原始POST数据
         $originalPost = $_POST;
-        
+
         // 设置测试POST数据
         $_POST = $postData;
-        
+
         try {
             $result = $this->objectModel->checkImportJira($step);
             if(dao::isError()) {
@@ -542,7 +543,7 @@ class convertTest
                 $_POST = $originalPost;
                 return $errors;
             }
-            
+
             // 恢复原始POST数据
             $_POST = $originalPost;
             return $result;
@@ -566,12 +567,12 @@ class convertTest
         // 备份原始session数据
         global $app;
         $originalJiraRelation = $app->session->jiraRelation ?? null;
-        
+
         // 设置测试session数据
         if(!empty($sessionData['jiraRelation'])) {
             $app->session->set('jiraRelation', $sessionData['jiraRelation']);
         }
-        
+
         try {
             $result = $this->objectModel->getObjectDefaultValue($step);
             if(dao::isError()) {
@@ -584,7 +585,7 @@ class convertTest
                 }
                 return $errors;
             }
-            
+
             // 恢复原始session数据
             if($originalJiraRelation !== null) {
                 $app->session->set('jiraRelation', $originalJiraRelation);
@@ -636,7 +637,7 @@ class convertTest
             // 检查基本参数验证逻辑
             if(empty($relations['zentaoObject'])) return count(array());
             if(!in_array($step, array_keys($relations['zentaoObject']))) return count(array());
-            
+
             // 模拟正常情况：step存在且有匹配数据
             if(!empty($relations['zentaoObject']) && in_array($step, array_keys($relations['zentaoObject']))) {
                 // 模拟返回状态列表
@@ -646,9 +647,9 @@ class convertTest
                 );
                 return count($mockResult);
             }
-            
+
             return count(array());
-            
+
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage();
         }
@@ -730,7 +731,7 @@ class convertTest
             // 备份原始session数据
             global $app;
             $originalJiraApi = $app->session->jiraApi ?? null;
-            
+
             // 设置测试session数据
             if(!empty($jiraApiData)) {
                 $app->session->set('jiraApi', json_encode($jiraApiData));
@@ -738,19 +739,19 @@ class convertTest
                 // 清空jiraApi session数据
                 $app->session->set('jiraApi', '');
             }
-            
+
             $result = $this->objectModel->checkJiraApi();
-            
+
             // checkJiraApi方法本身处理错误，不需要在这里检查dao错误
             // 直接返回结果
-            
+
             // 恢复原始session数据
             if($originalJiraApi !== null) {
                 $app->session->set('jiraApi', $originalJiraApi);
             } else {
                 $app->session->destroy('jiraApi');
             }
-            
+
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
@@ -785,7 +786,7 @@ class convertTest
             // 备份原始session数据
             global $app;
             $originalJiraApi = $app->session->jiraApi ?? null;
-            
+
             // 检查是否有session数据，如果没有则设置默认测试数据
             if(empty($app->session->jiraApi)) {
                 $testJiraApi = array(
@@ -795,17 +796,17 @@ class convertTest
                 );
                 $app->session->set('jiraApi', json_encode($testJiraApi));
             }
-            
+
             $result = $this->objectModel->callJiraAPI($url, $start);
             if(dao::isError()) return dao::getError();
-            
+
             // 恢复原始session数据
             if($originalJiraApi !== null) {
                 $app->session->set('jiraApi', $originalJiraApi);
             } else {
                 $app->session->destroy('jiraApi');
             }
-            
+
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
@@ -816,7 +817,7 @@ class convertTest
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
-            // 恢复原始session数据  
+            // 恢复原始session数据
             if(isset($originalJiraApi) && $originalJiraApi !== null) {
                 $app->session->set('jiraApi', $originalJiraApi);
             } else {
@@ -840,11 +841,11 @@ class convertTest
             global $app;
             $originalJiraMethod = $app->session->jiraMethod ?? null;
             $originalJiraUser = $app->session->jiraUser ?? null;
-            
+
             // 设置测试session数据
             $app->session->set('jiraMethod', 'test');
             $app->session->set('jiraUser', array('mode' => 'account'));
-            
+
             // 创建模拟的getJiraData方法
             $originalGetJiraData = null;
             if(method_exists($this->objectModel, 'getJiraData')) {
@@ -854,30 +855,30 @@ class convertTest
                     1 => (object)array('account' => 'admin', 'email' => 'admin@test.com'),
                     2 => (object)array('account' => 'testuser', 'email' => 'test@test.com')
                 );
-                
+
                 // 使用反射来模拟getJiraData方法的返回值
                 $mockModel = $this->createMockConvertModel();
                 $mockModel->mockUsers = $mockUsers;
                 $mockModel->session = $app->session;
-                
+
                 $result = $mockModel->getJiraAccount($userKey);
             } else {
                 $result = 'method_not_found';
             }
-            
+
             // 恢复原始session数据
             if($originalJiraMethod !== null) {
                 $app->session->set('jiraMethod', $originalJiraMethod);
             } else {
                 $app->session->destroy('jiraMethod');
             }
-            
+
             if($originalJiraUser !== null) {
                 $app->session->set('jiraUser', $originalJiraUser);
             } else {
                 $app->session->destroy('jiraUser');
             }
-            
+
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
@@ -923,24 +924,24 @@ class convertTest
             // 备份原始session数据
             global $app;
             $originalJiraUser = $app->session->jiraUser ?? null;
-            
+
             // 设置测试用户配置
             if(!empty($userConfig)) {
                 $app->session->set('jiraUser', $userConfig);
             } else {
                 $app->session->set('jiraUser', array('mode' => 'account'));
             }
-            
+
             $result = $this->objectModel->processJiraUser($jiraAccount, $jiraEmail);
             if(dao::isError()) return dao::getError();
-            
+
             // 恢复原始session数据
             if($originalJiraUser !== null) {
                 $app->session->set('jiraUser', $originalJiraUser);
             } else {
                 $app->session->destroy('jiraUser');
             }
-            
+
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
@@ -972,13 +973,13 @@ class convertTest
         return new class {
             public $mockUsers = array();
             public $session;
-            
+
             public function getJiraAccount(string $userKey): string
             {
                 if(empty($userKey)) return '';
-                
+
                 $users = $this->mockUsers;
-                
+
                 if(strpos($userKey, 'JIRAUSER') !== false)
                 {
                     $userID = str_replace('JIRAUSER', '', $userKey);
@@ -994,7 +995,7 @@ class convertTest
                 }
                 return $userKey;
             }
-            
+
             public function processJiraUser(string $jiraAccount, string $jiraEmail): string
             {
                 $userConfig = $this->session->jiraUser;
@@ -1025,21 +1026,21 @@ class convertTest
     {
         try {
             global $app;
-            
+
             // 创建临时测试文件目录
             $tmpRoot = $app->getTmpRoot() . 'jirafile/';
             if(!is_dir($tmpRoot)) mkdir($tmpRoot, 0755, true);
-            
+
             // 关闭错误输出以避免XML解析错误干扰测试
             $oldErrorReporting = error_reporting(0);
-            
+
             $result = $this->objectModel->getVersionGroup();
-            
+
             // 恢复错误报告设置
             error_reporting($oldErrorReporting);
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             if(isset($oldErrorReporting)) error_reporting($oldErrorReporting);
@@ -1272,15 +1273,15 @@ class convertTest
             global $app;
             $originalJiraMethod = $app->session->jiraMethod ?? null;
             $originalJiraApi = $app->session->jiraApi ?? null;
-            
+
             // 设置测试session数据
             $app->session->set('jiraMethod', 'db');
-            
+
             // 模拟sourceDBH连接
             if(empty($this->objectModel->sourceDBH)) {
                 $this->objectModel->sourceDBH = $app->dbh;
             }
-            
+
             $result = $this->objectModel->getJiraArchivedProject($dataList);
             if(dao::isError()) {
                 $errors = dao::getError();
@@ -1288,7 +1289,7 @@ class convertTest
                 $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
                 return $errors;
             }
-            
+
             // 恢复原始session数据
             $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
             return $result;
@@ -1318,13 +1319,13 @@ class convertTest
     private function restoreSessionData($originalJiraMethod, $originalJiraApi)
     {
         global $app;
-        
+
         if($originalJiraMethod !== null) {
             $app->session->set('jiraMethod', $originalJiraMethod);
         } else {
             $app->session->destroy('jiraMethod');
         }
-        
+
         if($originalJiraApi !== null) {
             $app->session->set('jiraApi', $originalJiraApi);
         } else {
@@ -1362,7 +1363,7 @@ class convertTest
                 $projectRoleActor[] = (object)array('pid' => '1001', 'roletype' => 'atlassian-group-role-actor', 'roletypeparameter' => 'developers');
                 $projectRoleActor[] = (object)array('pid' => '1002', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'user001');
                 $projectRoleActor[] = (object)array('pid' => '', 'roletype' => 'atlassian-user-role-actor', 'roletypeparameter' => 'user002');
-                
+
                 $memberShip[] = (object)array('parent_name' => 'developers', 'child_id' => '100');
                 $memberShip[] = (object)array('parent_name' => 'developers', 'child_id' => '101');
                 $memberShip[] = (object)array('parent_name' => 'testers', 'child_id' => '102');
@@ -1397,7 +1398,7 @@ class convertTest
     private function restoreJiraMethodSession($originalJiraMethod)
     {
         global $app;
-        
+
         if($originalJiraMethod !== null) {
             $app->session->set('jiraMethod', $originalJiraMethod);
         } else {
@@ -1421,7 +1422,7 @@ class convertTest
 
             // 设置测试session数据
             $app->session->set('jiraMethod', 'db');
-            
+
             // 模拟sourceDBH连接
             if(empty($this->objectModel->sourceDBH)) {
                 $this->objectModel->sourceDBH = $app->dbh;
@@ -1446,6 +1447,32 @@ class convertTest
                 $this->restoreJiraMethodSession($originalJiraMethod);
             }
             return array();
+        }
+    }
+
+    /**
+     * Test buildUserData method.
+     *
+     * @param  array $data
+     * @access public
+     * @return mixed
+     */
+    public function buildUserDataTest($data = array())
+    {
+        try {
+            // 使用反射来访问protected方法
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('buildUserData');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $data);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
         }
     }
 }
