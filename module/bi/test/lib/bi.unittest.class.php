@@ -1190,4 +1190,22 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * Test fetchTableQueue method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function fetchTableQueueTest()
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchTableQueue');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
