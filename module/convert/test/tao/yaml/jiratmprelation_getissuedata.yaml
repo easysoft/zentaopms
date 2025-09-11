@@ -1,0 +1,34 @@
+---
+title: jiratmprelation表数据定义 - getIssueData测试
+desc: 为测试getIssueData方法创建的测试数据，包含各种边界条件和过滤条件的测试数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: AType
+  note: A类型字段
+  range: jissue{3},jother{2},jproject{3},juser{2}
+  format: ""
+- field: AID
+  note: A对象ID
+  range: 10001-10010
+  format: ""
+- field: BType
+  note: B类型字段
+  range: zissue{3},zother{2},zproject{3},zuser{2}
+  format: ""
+- field: BID
+  note: B对象ID，包含空值用于边界测试
+  range: []{2},20001{3},20002{3},20003{2}
+  format: ""
+- field: extra
+  note: 额外字段，用于过滤条件测试
+  range: issue{5},other{3},[]{2}
+  format: ""
