@@ -2309,4 +2309,41 @@ class convertTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test importJiraUser method.
+     *
+     * @param  array $dataList
+     * @access public
+     * @return mixed
+     */
+    public function importJiraUserTest($dataList = array())
+    {
+        try {
+            global $app;
+            $originalJiraUser = $app->session->jiraUser ?? null;
+            $app->session->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => 'account'));
+
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('importJiraUser');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $dataList);
+            if(dao::isError()) return dao::getError();
+
+            if($originalJiraUser !== null) {
+                $app->session->set('jiraUser', $originalJiraUser);
+            } else {
+                $app->session->destroy('jiraUser');
+            }
+            return $result;
+        } catch (Exception|Error $e) {
+            if(isset($originalJiraUser) && $originalJiraUser !== null) {
+                $app->session->set('jiraUser', $originalJiraUser);
+            } else {
+                $app->session->destroy('jiraUser');
+            }
+            return get_class($e) === 'Exception' ? 'exception: ' . $e->getMessage() : 'error: ' . $e->getMessage();
+        }
+    }
 }
