@@ -1,0 +1,75 @@
+---
+title: createWorkflowGroup测试数据
+desc: 为createWorkflowGroup方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 工作流组ID
+  range: 1-10
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 0{10}
+  format: ""
+- field: type
+  note: 工作流组类型
+  range: project{5},product{5}
+  format: ""
+- field: projectModel
+  note: 项目模式
+  range: scrum{3},,waterfall{2},{5}
+  format: ""
+- field: projectType
+  note: 项目类型
+  range: product{5},project{5}
+  format: ""
+- field: name
+  note: 工作流组名称
+  range: 测试项目1工作流组模板,测试项目2工作流组模板,测试项目3工作流组模板,测试产品1工作流组模板,测试产品2工作流组模板,测试产品3工作流组模板,测试产品4工作流组模板,测试产品5工作流组模板,默认工作流组1,默认工作流组2
+  format: ""
+- field: code
+  note: 工作流组代码
+  range: test1,test2,test3,test4,test5,prod1,prod2,prod3,default1,default2
+  format: ""
+- field: desc
+  note: 工作流组描述
+  range: []{5},这是测试工作流组{5}
+  format: ""
+- field: disabledModules
+  note: 禁用模块
+  range: []{10}
+  format: ""
+- field: status
+  note: 状态
+  range: normal{8},wait{2}
+  format: ""
+- field: exclusive
+  note: 是否独占
+  range: 1{8},0{2}
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd{10}
+  format: ""
+- field: main
+  note: 是否主流程
+  range: 0{8},1{2}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: []{5},admin{5}
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: []{5},2023-01-01 00:00:00-2023-12-31 23:59:59{5}
+  format: YYYY-MM-DD hh:mm:ss

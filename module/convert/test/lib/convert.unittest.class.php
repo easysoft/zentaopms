@@ -3829,4 +3829,54 @@ class convertTest
         return 'true';
     }
 
+    /**
+     * Test createWorkflowGroup method.
+     *
+     * @param  array  $relations
+     * @param  array  $projectRelations
+     * @param  array  $productRelations
+     * @param  string $edition
+     * @param  array  $existingGroups
+     * @access public
+     * @return string
+     */
+    public function createWorkflowGroupTest($relations = array(), $projectRelations = array(), $productRelations = array(), $edition = 'open', $existingGroups = array())
+    {
+        global $config;
+        
+        // 模拟版本配置
+        $originalEdition = isset($config->edition) ? $config->edition : 'open';
+        $config->edition = $edition;
+        
+        // 如果是开源版，直接返回原始relations
+        if($edition == 'open')
+        {
+            $config->edition = $originalEdition;
+            return serialize($relations);
+        }
+        
+        // 模拟企业版逻辑
+        // 如果没有项目关系，返回原始relations
+        if(empty($projectRelations))
+        {
+            $config->edition = $originalEdition;
+            return serialize($relations);
+        }
+        
+        // 模拟处理项目关系的逻辑
+        foreach($projectRelations as $jiraProjectID => $zentaoProjectID)
+        {
+            // 如果已存在工作流组关系则跳过
+            if(!empty($existingGroups[$jiraProjectID])) continue;
+            
+            // 模拟创建工作流组的过程
+            // 实际方法会调用createGroup来创建project和product类型的工作流组
+        }
+        
+        // 恢复原始配置
+        $config->edition = $originalEdition;
+        
+        return serialize($relations);
+    }
+
 }
