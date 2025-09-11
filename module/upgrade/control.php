@@ -1072,4 +1072,21 @@ class upgrade extends control
         $this->view->fromVersion    = $fromVersion;
         $this->display();
     }
+
+    /**
+     * 升级周报数据。
+     * Upgrade weekly reports.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWeeklyReport()
+    {
+        if($_POST)
+        {
+            $data = isset($_POST['data']) ? $_POST['data'] : array();
+            if($data) $this->upgrade->upgradeWeeklyReport($data);
+            $this->send(array('result' => 'success'));
+        }
+    }
 }
