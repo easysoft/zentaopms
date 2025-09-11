@@ -3095,4 +3095,31 @@ class convertTest
 
         return 'true';
     }
+
+    /**
+     * Test createTeamMember method.
+     *
+     * @param  int    $objectID
+     * @param  string $createdBy
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function createTeamMemberTest(int $objectID = 1, string $createdBy = 'admin', string $type = 'project'): bool
+    {
+        try {
+            // Use reflection to access protected method
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createTeamMember');
+            $method->setAccessible(true);
+            
+            $result = $method->invoke($this->objectTao, $objectID, $createdBy, $type);
+            if(dao::isError()) return false;
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        } catch (Error $e) {
+            return false;
+        }
+    }
 }
