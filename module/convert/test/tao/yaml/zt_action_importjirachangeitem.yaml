@@ -1,0 +1,28 @@
+---
+title: ChangeItem测试的Action数据
+desc: 为importJiraChangeItem方法测试提供Action数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-10
+- field: objectType
+  note: 对象类型
+  range: 'story, task, bug'
+- field: objectID
+  note: 对象ID
+  range: 1-3
+- field: actor
+  note: 操作者
+  range: 'admin, user1, user2'
+- field: action
+  note: 动作
+  range: 'commented'
+- field: date
+  note: 日期
+  range: '2024-01-01 00:00:00, 2024-01-02 00:00:00'
+- field: comment
+  note: 评论内容
+  range: 'Test comment 1, Test comment 2'

@@ -1,0 +1,25 @@
+---
+title: ChangeItem测试的临时关联数据
+desc: 为importJiraChangeItem方法测试提供临时关联数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-10
+- field: AType
+  note: A类型
+  range: 'jissue{3}, jchangeitem{2}'
+- field: AID
+  note: A对象ID
+  range: 1-5
+- field: BType
+  note: B类型
+  range: 'zstory{2}, ztask{1}, zaction{2}'
+- field: BID
+  note: B对象ID
+  range: 1-5
+- field: extra
+  note: 额外信息
+  range: 'issue{3}, {2}'
