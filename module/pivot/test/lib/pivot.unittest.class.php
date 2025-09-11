@@ -1476,4 +1476,24 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getTeamTasks method.
+     *
+     * @param  array $taskIDList
+     * @access public
+     * @return array
+     */
+    public function getTeamTasksTest(array $taskIDList): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getTeamTasks');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($taskIDList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
