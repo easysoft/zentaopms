@@ -2111,4 +2111,31 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test buildGroupKanban method.
+     *
+     * @param  array  $lanes
+     * @param  array  $columns
+     * @param  array  $cardGroup
+     * @param  string $searchValue
+     * @param  string $groupBy
+     * @param  string $browseType
+     * @param  array  $menus
+     * @access public
+     * @return array
+     */
+    public function buildGroupKanbanTest($lanes, $columns, $cardGroup, $searchValue, $groupBy, $browseType, $menus)
+    {
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildGroupKanban');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $lanes, $columns, $cardGroup, $searchValue, $groupBy, $browseType, $menus);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
