@@ -1433,4 +1433,27 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getBugGroup method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  int    $product
+     * @param  int    $execution
+     * @access public
+     * @return array
+     */
+    public function getBugGroupTest(string $begin, string $end, int $product, int $execution): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getBugGroup');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($begin, $end, $product, $execution));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
