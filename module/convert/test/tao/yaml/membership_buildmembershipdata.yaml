@@ -1,0 +1,52 @@
+---
+title: 成员关系构建方法测试数据
+desc: 用于buildMemberShipData方法的测试数据
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: parent_id
+  note: 父级ID
+  range: 1001-1010
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: child_id
+  note: 子级ID
+  range: 2001-2010
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: membership_type
+  note: 成员关系类型
+  range: group{4}, user{4}, admin{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: parent_name
+  note: 父级名称
+  range: developers{3}, testers{3}, managers{2}, administrators{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: child_name
+  note: 子级名称
+  range: user001{2}, user002{2}, admin{2}, tester001{2}, manager001{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
