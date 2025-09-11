@@ -27,6 +27,24 @@ class zanodeTest
     }
 
     /**
+     * 测试构造方法。
+     * Test __construct method.
+     *
+     * @access public
+     * @return object
+     */
+    public function constructTest(): object
+    {
+        $zanodeModel = new zanodeModel();
+        $result = new stdClass();
+        $result->parentCalled = method_exists($zanodeModel, '__construct');
+        $result->langSet = isset($zanodeModel->app->lang->host);
+        $result->inheritance = is_a($zanodeModel, 'model');
+        $result->objectModel = is_a($this->objectModel, 'zanodeModel');
+        return $result;
+    }
+
+    /**
      * 测试自动化设置。
      * Test set automation setting.
      *
