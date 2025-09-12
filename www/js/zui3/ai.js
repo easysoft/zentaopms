@@ -43,6 +43,39 @@ function registerZentaoAIPlugin(lang)
             viewProps:   {mode: 'simple'}
         });
     });
+
+    plugin.defineSuggestion(
+    {
+        title   : lang.storyReview,
+        icon    : 'lightbulb',
+        type    : 'zentao',
+        priority: 5,
+        command : '.reviewStory',
+        hint    : lang.storyReviewHint,
+        when    : ({state}) => {
+            const page = state?.zentaoPage;
+            return page && page.path === 'story-view';
+        },
+    });
+
+    plugin.bindEvent('updatepage', function(_context, data)
+    {
+        if(data.page.path === 'story-view')
+        {
+            const pageWindow         = $.apps.getLastApp().iframe.contentWindow;
+            const page$              = pageWindow.$;
+            const $firstSectionTitle = page$('#mainContent .detail-sections[zui-key="main"] > .detail-section').first().children('.detail-section-title,.flex.items-center').first();
+            if(!$firstSectionTitle.length) return;
+
+            let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
+            if(!$injectActions.length)
+            {
+                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${this.getLang('aiReview')}</button></div>`).appendTo($firstSectionTitle);
+                $firstSectionTitle.find('span').first().addClass('flex-auto');
+            }
+        }
+    });
+
 }
 
 $(() => {
