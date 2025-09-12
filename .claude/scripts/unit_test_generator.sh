@@ -169,7 +169,7 @@ process_method() {
 
     # 构建Claude命令
     local claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
-    local claude_command="claude -p \"$claude_prompt\" --dangerously-skip-permissions"
+    local claude_command="claude -p \"$claude_prompt\" --dangerously-skip-permissions < /dev/null 2>&1"
 
     # 调用Claude生成测试脚本
     claude_generate_test "$claude_command" "$test_file_path"
