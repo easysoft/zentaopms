@@ -11198,7 +11198,8 @@ class upgradeModel extends model
     }
 
     /**
-     * getUpgradeWeeklyReports
+     * 获取需要更新的周报数据。
+     * Get weekly reports that need to be updated.
      *
      * @access public
      * @return array
