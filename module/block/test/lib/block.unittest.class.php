@@ -975,4 +975,42 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test getBlockTitle method in zen layer.
+     *
+     * @param  array  $modules
+     * @param  string $module
+     * @param  array  $codes
+     * @param  string $code
+     * @param  array  $params
+     * @access public
+     * @return string
+     */
+    public function getBlockTitleTest(array $modules, string $module, array $codes, string $code, array $params)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('getBlockTitle');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($blockZen, $modules, $module, $codes, $code, $params);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
