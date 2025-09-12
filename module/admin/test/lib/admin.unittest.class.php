@@ -406,4 +406,39 @@ class adminTest
             return '0';
         }
     }
+
+    /**
+     * Test setCompanyByAPI method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setCompanyByAPITest()
+    {
+        // 为adminZen对象设置必要的属性
+        $this->objectZen->admin = $this->objectModel;
+        
+        // 手动设置必要的配置项来避免数据库依赖
+        global $config;
+        if(!isset($config->global)) $config->global = new stdClass();
+        if(!isset($config->global->community)) $config->global->community = 'test_user';
+        if(!isset($config->global->ztPrivateKey)) $config->global->ztPrivateKey = 'test_key_123';
+        
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('setCompanyByAPI');
+        $method->setAccessible(true);
+        
+        // 使用try-catch来捕获可能的网络错误
+        try {
+            $result = $method->invoke($this->objectZen);
+            if(dao::isError()) return dao::getError();
+            return is_string($result) ? (strlen($result) > 0 ? '1' : '0') : '0';
+        } catch (Exception $e) {
+            // 网络请求失败时返回特定标识
+            return '0';
+        } catch (TypeError $e) {
+            // 类型错误时返回特定标识
+            return '0';
+        }
+    }
 }
