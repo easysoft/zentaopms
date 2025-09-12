@@ -168,9 +168,13 @@ function openApp(url, code, options)
         }
         else
         {
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write(apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`));
-            iframe.contentWindow.document.close();
+            const writeToDoc = () => {
+                iframe.contentDocument.open();
+                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`);
+                iframe.contentDocument.write(html);
+                iframe.contentDocument.close();
+            };
+            if(!iframe.contentDocument.body.children.length) setTimeout(() => writeToDoc(), 500);
         }
         iframe.onload = iframe.onreadystatechange = function(e)
         {
