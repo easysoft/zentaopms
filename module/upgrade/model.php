@@ -11841,9 +11841,9 @@ class upgradeModel extends model
      * Buildin baseline review flow.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function buildinBaselineReview()
+    public function buildinBaselineReview(): bool
     {
         $reviewFlow = new stdclass();
         $reviewFlow->flow        = '1';
@@ -11862,6 +11862,52 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
             }
         }
+
+        return true;
+    }
+
+    /**
+     * 升级检查单分类到项目流程下。
+     * Upgrade reviewcl category.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeReviewclCategory(): bool
+    {
+        $this->loadModel('custom');
+        $clientLang   = $this->app->getClientLang();
+        $categoryList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('reviewcl')
+            ->andWhere('section')->eq('waterfallCategoryList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        $categoryPlusList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('reviewcl')
+            ->andWhere('section')->eq('waterfallplusCategoryList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if(empty($categoryList) && empty($categoryPlusList)) return true;
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('waterfall,waterfallplus')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            if($workflow->projectModel == 'waterfall' && !empty($categoryList))
+            {
+                foreach($categoryList as $key => $value) $this->custom->setItem("{$clientLang}.reviewcl.{$workflow->id}CategoryList.{$key}.1", $value);
+            }
+
+            if($workflow->projectModel == 'waterfallplus' && !empty($categoryPlusList))
+            {
+                foreach($categoryPlusList as $key => $value) $this->custom->setItem("{$clientLang}.reviewcl.{$workflow->id}CategoryList.{$key}.1", $value);
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_LANG)->where('section')->in('waterfallCategoryList,waterfallplusCategoryList')->exec();
+        return true;
     }
 
     /**
