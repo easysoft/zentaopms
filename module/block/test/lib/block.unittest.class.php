@@ -906,4 +906,38 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test getAvailableCodes method in zen layer.
+     *
+     * @param  string $module
+     * @access public
+     * @return array|bool
+     */
+    public function getAvailableCodesTest(string $module)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('getAvailableCodes');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($blockZen, $module);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
