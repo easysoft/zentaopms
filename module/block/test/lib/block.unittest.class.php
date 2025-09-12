@@ -872,4 +872,38 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test getAvailableModules method in zen layer.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return array
+     */
+    public function getAvailableModulesTest(string $dashboard)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('getAvailableModules');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($blockZen, $dashboard);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
