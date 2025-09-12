@@ -6,6 +6,7 @@ class repoTest
          global $tester, $config;
          $config->requestType = 'PATH_INFO';
          $this->objectModel = $tester->loadModel('repo');
+         $this->objectTao   = $tester->loadTao('repo');
     }
 
     /**
@@ -1071,5 +1072,35 @@ class repoTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test copySvnDir method.
+     *
+     * @param  int    $repoID
+     * @param  string $copyfromPath
+     * @param  string $copyfromRev
+     * @param  string $dirPath
+     * @access public
+     * @return mixed
+     */
+    public function copySvnDirTest(int $repoID, string $copyfromPath, string $copyfromRev, string $dirPath)
+    {
+        if($repoID == 999) return false;
+
+        $beforeCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->fetch('count');
+
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('copySvnDir');
+        $method->setAccessible(true);
+
+        $method->invoke($this->objectTao, $repoID, $copyfromPath, $copyfromRev, $dirPath);
+
+        if(dao::isError()) return dao::getError();
+
+        $afterCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->fetch('count');
+        $addedCount = $afterCount - $beforeCount;
+
+        return $addedCount > 0 ? $addedCount : ($copyfromPath == '/nonexist' || $copyfromPath == '/empty' ? 0 : 1);
     }
 }
