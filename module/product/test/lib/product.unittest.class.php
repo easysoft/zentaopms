@@ -1375,4 +1375,19 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test filterNoCasesStory method.
+     *
+     * @param  array  $storyIDList
+     * @access public
+     * @return int
+     */
+    public function filterNoCasesStoryTest(array $storyIDList): int
+    {
+        $result = $this->objectModel->filterNoCasesStory($storyIDList);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
