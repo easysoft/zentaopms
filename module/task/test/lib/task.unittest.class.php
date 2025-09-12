@@ -2584,4 +2584,26 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * Test recordTaskVersion method.
+     *
+     * @param  object $task
+     * @access public
+     * @return int
+     */
+    public function recordTaskVersionTest(object $task): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('recordTaskVersion');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invoke($this->objectTao, $task);
+            if(dao::isError()) return 0;
+            return $result ? 1 : 0;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
