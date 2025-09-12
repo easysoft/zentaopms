@@ -18,7 +18,7 @@ $lang->zai->syncingHint              = 'Closing this page during sync will pause
 $lang->zai->syncedWithFailedHint     = 'Some data sync failed, please try again later';
 $lang->zai->cannotFindMemoryInZai    = 'Cannot find knowledge base with specified key in ZAI, please reset sync target.';
 $lang->zai->confirmResetSync         = 'Do you want to reset sync status? This will create a new knowledge base in ZAI.';
-$lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primaty px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
+$lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
 
 $lang->zai->zentaoVectorization       = 'Zentao Data Vectorization';
 $lang->zai->vectorized                = 'Data Vectorization';

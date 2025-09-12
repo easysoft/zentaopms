@@ -18,7 +18,7 @@ $lang->zai->syncingHint              = 'Fermer cette page pendant la synchronisa
 $lang->zai->syncedWithFailedHint     = 'Certaines données de synchronisation ont échoué, veuillez réessayer plus tard';
 $lang->zai->cannotFindMemoryInZai    = 'Impossible de trouver la base de connaissances avec la clé spécifiée dans ZAI, veuillez réinitialiser la cible de synchronisation.';
 $lang->zai->confirmResetSync         = 'Voulez-vous réinitialiser l\'état de synchronisation ? Cela créera une nouvelle base de connaissances dans ZAI.';
-$lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primaty px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
+$lang->zai->settingTips              = 'Please install <a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI service</a> to get the key.';
 
 $lang->zai->zentaoVectorization       = 'Vectorisation des Données Zentao';
 $lang->zai->vectorized                = 'Vectorisation des Données';

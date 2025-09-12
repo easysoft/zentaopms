@@ -18,7 +18,7 @@ $lang->zai->syncingHint              = '同步过程中，关闭此页面将会�
 $lang->zai->syncedWithFailedHint     = '一些数据同步失败，请稍后再试';
 $lang->zai->cannotFindMemoryInZai    = '无法在 ZAI 中找到指定 key 的知识库，请重置同步目标。';
 $lang->zai->confirmResetSync         = '是否重置同步状态，这将在 ZAI 中创建新的知识库。';
-$lang->zai->settingTips              = '请安装<a class="btn btn-link text-primaty px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服务</a>获取密钥。';
+$lang->zai->settingTips              = '请安装<a class="btn btn-link text-primary px-1" style="text-decoration: none;" href="%s" target="_blank">ZAI服务</a>获取密钥。';
 
 $lang->zai->zentaoVectorization       = '禅道数据向量化';
 $lang->zai->vectorized                = '数据向量化';
