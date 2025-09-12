@@ -296,4 +296,25 @@ class projectTest
 
         return $result;
     }
+
+    /**
+     * Test insertMember method.
+     *
+     * @param  array $members
+     * @param  int   $projectID
+     * @param  array $oldJoin
+     * @access public
+     * @return mixed
+     */
+    public function insertMemberTest($members = array(), $projectID = 0, $oldJoin = array())
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('insertMember');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $members, $projectID, $oldJoin);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
