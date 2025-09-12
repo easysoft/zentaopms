@@ -709,4 +709,46 @@ class apiTest
             'objectDropdown' => isset($apiZen->view->objectDropdown) && !empty($apiZen->view->objectDropdown)
         );
     }
+
+    /**
+     * Test getMethod method.
+     *
+     * @param  string $filePath
+     * @param  string $ext
+     * @access public
+     * @return object|array
+     */
+    public function getMethodTest(string $filePath, string $ext = '')
+    {
+        global $tester;
+
+        // 加载api控制器类、模型类和apiZen类
+        require_once dirname(__FILE__, 3) . '/control.php';
+        require_once dirname(__FILE__, 3) . '/model.php';
+        require_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建apiZen实例
+        $apiZen = new apiZen();
+        
+        // 为apiZen对象注入必要的依赖
+        $apiZen->config = $tester->config;
+        $apiZen->session = $tester->session;
+        $apiZen->app = $tester->app;
+        $apiZen->lang = $tester->lang;
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($apiZen);
+        $method = $reflection->getMethod('getMethod');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invoke($apiZen, $filePath, $ext);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (ReflectionException $e) {
+            return array('error' => 'ReflectionException: ' . $e->getMessage());
+        }
+    }
 }
