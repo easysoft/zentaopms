@@ -1653,4 +1653,32 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getProductReviewers method.
+     *
+     * @param  int   $productID
+     * @param  array $storyReviewers
+     * @access public
+     * @return int
+     */
+    public function getProductReviewersTest(int $productID, array $storyReviewers = array()): int
+    {
+        // 先检查产品是否存在
+        $product = $this->objectModel->loadModel('product')->getByID($productID);
+        if(empty($product)) return 0;
+
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProductReviewers');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invoke($this->objectTao, $productID, $storyReviewers);
+            if(dao::isError()) return 0;
+            if($result === false || empty($result)) return 0;
+            return count($result);
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
