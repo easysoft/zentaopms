@@ -1733,4 +1733,23 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test computeStage method.
+     *
+     * @param  array $children
+     * @access public
+     * @return string
+     */
+    public function computeStageTest(array $children): string
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('computeStage');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $children);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
