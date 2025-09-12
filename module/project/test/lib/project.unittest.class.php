@@ -492,4 +492,39 @@ class projectTest
 
         return $result;
     }
+
+    /**
+     * Test unlinkTeamMember method.
+     *
+     * @param  mixed  $projectIdList
+     * @param  string $type
+     * @param  string $account
+     * @param  string $realname
+     * @param  array  $changes
+     * @access public
+     * @return mixed
+     */
+    public function unlinkTeamMemberTest($projectIdList = 0, $type = '', $account = '', $realname = '', $changes = array())
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('unlinkTeamMember');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $projectIdList, $type, $account, $realname, $changes);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(strpos($e->getMessage(), 'Table') !== false && strpos($e->getMessage(), 'doesn\'t exist') !== false)
+            {
+                return 'TABLE_NOT_EXISTS';
+            }
+            return $e->getMessage();
+        }
+    }
 }
