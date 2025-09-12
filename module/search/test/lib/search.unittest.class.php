@@ -1267,4 +1267,25 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test processDocRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processDocRecordTest(object $record, array $objectList): object
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processDocRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($record, $objectList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
