@@ -2197,4 +2197,23 @@ class testcaseTest
         // 返回数组数量用于测试验证
         return count($result);
     }
+
+    /**
+     * Test saveScene method.
+     *
+     * @param  array $sceneData
+     * @param  array $sceneList
+     * @access public
+     * @return mixed
+     */
+    public function saveSceneTest(array $sceneData, array $sceneList): mixed
+    {
+        // 确保id是整数类型
+        if(isset($sceneData['id'])) $sceneData['id'] = (int)$sceneData['id'];
+        
+        $result = $this->objectModel->saveScene($sceneData, $sceneList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
