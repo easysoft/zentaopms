@@ -1087,4 +1087,29 @@ class searchTest
 
         return count($result);
     }
+
+    /**
+     * Test checkRelatedObjectPriv method.
+     *
+     * @param  string $objectType
+     * @param  string $table
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $products
+     * @param  string $executions
+     * @access public
+     * @return int
+     */
+    public function checkRelatedObjectPrivTest(string $objectType, string $table, array $results, array $objectIdList, string $products, string $executions): int
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkRelatedObjectPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($objectType, $table, $results, $objectIdList, $products, $executions));
+        if(dao::isError()) return -1;
+
+        return count($result);
+    }
 }
