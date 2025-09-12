@@ -305,4 +305,23 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test syncDynamics method.
+     *
+     * @param  int $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncDynamicsTest(int $limit = 2)
+    {
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('syncDynamics');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
