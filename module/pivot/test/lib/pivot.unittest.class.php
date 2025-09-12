@@ -1572,4 +1572,21 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test fetchPivotDrills method.
+     *
+     * @param  int          $pivotID
+     * @param  string       $version
+     * @param  string|array $fields
+     * @access public
+     * @return array
+     */
+    public function fetchPivotDrillsTest(int $pivotID, string $version, string|array $fields): array
+    {
+        $result = $this->objectTao->fetchPivotDrills($pivotID, $version, $fields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
