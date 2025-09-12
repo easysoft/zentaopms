@@ -33,11 +33,6 @@ class weekly extends control
      */
     public function commonAction($projectID = 0)
     {
-        if(common::hasPriv('weekly', 'exportweeklyreport'))
-        {
-            $this->lang->TRActions = "<div class='btn-toolbar pull-right'>" . html::a($this->createLink('weekly', 'exportweeklyreport', 'module=' . $this->app->getModuleName() . '&projectID=' . $projectID), $this->lang->export, '', "class='btn btn-primary' data-width='30%' id='exportreport' data-group='project'") . '</div';
-        }
-
         $this->loadModel('project')->setMenu($projectID);
     }
 
@@ -63,8 +58,6 @@ class weekly extends control
 
         $this->view->title = $this->lang->weekly->common;
         $this->view->date  = $date;
-
-        $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->project, $date);
         $this->display();
     }
 
