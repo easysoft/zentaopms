@@ -1,0 +1,44 @@
+---
+title: Doc data for appendFiles test
+desc: Test data for doc table used in appendFiles method testing
+
+fields:
+- field: id
+  note: Document ID
+  range: 1-10
+- field: lib
+  note: Library ID
+  range: 1-5
+- field: module
+  note: Module Name
+  range: 'module{5}, project{3}, product{2}'
+- field: title
+  note: Document Title
+  range: 'Test Document {1-10}'
+- field: keywords
+  note: Keywords
+  range: 'test,document{5}, search,index{3}, file,content{2}'
+- field: type
+  note: Document Type
+  range: 'text{4}, url{3}, file{3}'
+- field: status
+  note: Status
+  range: 'normal{8}, draft{2}'
+- field: version
+  note: Version
+  range: 1-3
+- field: addedBy
+  note: Added By
+  range: 'admin{5}, user1{3}, user2{2}'
+- field: addedDate
+  note: Added Date
+  range: '2023-01-01 00:00:00'
+- field: editedBy
+  note: Edited By
+  range: 'admin{5}, user1{3}, user2{2}'
+- field: editedDate
+  note: Edited Date
+  range: '2023-01-01 00:00:00'
+- field: deleted
+  note: Deleted
+  range: '0{9}, 1{1}'

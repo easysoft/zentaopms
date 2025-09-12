@@ -1,0 +1,41 @@
+---
+title: File data for appendFiles test
+desc: Test data for file table used in appendFiles method testing
+
+fields:
+- field: id
+  note: File ID
+  range: 1-10
+- field: pathname
+  note: File Path
+  range: '/tmp/zentao_test_file{1-10}.txt'
+- field: title
+  note: File Title
+  range: 'Test File {1-10}'
+- field: extension
+  note: File Extension
+  range: 'txt{4}, docx{3}, doc{2}, pdf{1}'
+- field: size
+  note: File Size
+  range: 1024-10240
+- field: objectType
+  note: Object Type
+  range: 'doc{10}'
+- field: objectID
+  note: Object ID
+  range: 1-10
+- field: addedBy
+  note: Added By
+  range: 'admin{5}, user1{3}, user2{2}'
+- field: addedDate
+  note: Added Date
+  range: '2023-01-01 00:00:00'
+- field: extra
+  note: Extra Info
+  range: 'editor{5}, []{5}'
+- field: deleted
+  note: Deleted
+  range: '0{9}, 1{1}'
+- field: public
+  note: Public
+  range: '1{8}, 0{2}'

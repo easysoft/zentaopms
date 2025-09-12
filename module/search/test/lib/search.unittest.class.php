@@ -1331,4 +1331,24 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test appendFiles method.
+     *
+     * @param  object $object
+     * @access public
+     * @return object
+     */
+    public function appendFilesTest(object $object): object
+    {
+        // 使用反射访问受保护方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('appendFiles');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($object));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
