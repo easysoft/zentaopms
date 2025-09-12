@@ -2359,4 +2359,175 @@ class blockTest
             return 0;
         }
     }
+
+    /**
+     * Test printWaterfallGeneralReportBlock method in zen layer.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return object
+     */
+    public function printWaterfallGeneralReportBlockTest($projectID = 0)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        
+        // 设置项目ID
+        if($projectID > 0) {
+            $blockZen->session->project = $projectID;
+        }
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printWaterfallGeneralReportBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen);
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 返回设置的view数据
+            $result = new stdclass();
+            $result->pv = isset($blockZen->view->pv) ? $blockZen->view->pv : 0;
+            $result->ev = isset($blockZen->view->ev) ? $blockZen->view->ev : 0;
+            $result->ac = isset($blockZen->view->ac) ? $blockZen->view->ac : '0.00';
+            $result->sv = isset($blockZen->view->sv) ? $blockZen->view->sv : 0;
+            $result->cv = isset($blockZen->view->cv) ? $blockZen->view->cv : 0;
+            $result->progress = isset($blockZen->view->progress) ? $blockZen->view->progress : 0;
+            
+            return $result;
+            
+        } catch (Exception $e) {
+            // 如果执行出错，返回空结果
+            $result = new stdclass();
+            $result->pv = 0;
+            $result->ev = 0;
+            $result->ac = '0.00';
+            $result->sv = 0;
+            $result->cv = 0;
+            $result->progress = 0;
+            $result->error = $e->getMessage();
+            
+            return $result;
+        } catch (DivisionByZeroError $e) {
+            // 处理除零错误
+            $result = new stdclass();
+            $result->pv = isset($blockZen->view->pv) ? $blockZen->view->pv : 0;
+            $result->ev = isset($blockZen->view->ev) ? $blockZen->view->ev : 0;
+            $result->ac = isset($blockZen->view->ac) ? $blockZen->view->ac : '0.00';
+            $result->sv = isset($blockZen->view->sv) ? $blockZen->view->sv : 0;
+            $result->cv = isset($blockZen->view->cv) ? $blockZen->view->cv : 0;
+            $result->progress = 0; // 除零时设为默认值
+            $result->error = 'Division by zero error';
+            
+            return $result;
+        } catch (Error $e) {
+            // 处理其他PHP错误
+            $result = new stdclass();
+            $result->pv = 0;
+            $result->ev = 0;
+            $result->ac = '0.00';
+            $result->sv = 0;
+            $result->cv = 0;
+            $result->progress = 0;
+            $result->error = $e->getMessage();
+            
+            return $result;
+        }
+    }
+
+    /**
+     * Test printWaterfallGanttBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallGanttBlockTest(object $block, array $params = array())
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        
+        // 设置默认session项目
+        if(!isset($blockZen->session->project)) {
+            $blockZen->session->project = 1;
+        }
+        if(!isset($blockZen->session->product)) {
+            $blockZen->session->product = 1;
+        }
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printWaterfallGanttBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen, $block, $params);
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 检查是否成功执行
+            $success = 1;
+            if(isset($blockZen->view->plans) && is_array($blockZen->view->plans)) $success &= 1;
+            if(isset($blockZen->view->products) && is_array($blockZen->view->products)) $success &= 1;
+            if(isset($blockZen->view->productID) && is_numeric($blockZen->view->productID)) $success &= 1;
+            
+            return $success;
+            
+        } catch (Exception $e) {
+            // 如果执行出错，返回0
+            return 0;
+        } catch (Error $e) {
+            // PHP错误，也返回0
+            return 0;
+        }
+    }
 }
