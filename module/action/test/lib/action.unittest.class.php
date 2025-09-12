@@ -1753,4 +1753,20 @@ class actionTest
         
         return array($replaceName, $replaceCode);
     }
+
+    /**
+     * Test checkActionExist method.
+     *
+     * @param  int $actionID
+     * @access public
+     * @return object|array
+     */
+    public function checkActionExistTest(int $actionID): object|array
+    {
+        if($actionID <= 0) return array('result' => 'fail', 'message' => '页面不存在。');
+        $action = $this->objectModel->getById($actionID);
+
+        if(!$action) return array('result' => 'fail', 'message' => '页面不存在。');
+        return $action;
+    }
 }

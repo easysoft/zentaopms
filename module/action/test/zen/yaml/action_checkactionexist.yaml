@@ -1,0 +1,70 @@
+---
+title: action表checkActionExist方法测试数据
+desc: 用于测试checkActionExist方法的action表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 操作ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: bug,task,story,product,project
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-100
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1-10
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1-10
+  format: ""
+- field: actor
+  note: 操作者
+  range: admin,user1,user2,user3,test
+  format: ""
+- field: action
+  note: 操作类型
+  range: created,edited,deleted,assigned,changed
+  format: ""
+- field: date
+  note: 操作时间
+  range: (-1M)-0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: comment
+  note: 操作备注
+  range: 创建了任务,修改了bug,删除了需求,分配了任务,变更了状态
+  format: ""
+- field: files
+  note: 附件信息
+  range: '','{\"file1\":\"test.txt\"}','{\"file2\":\"doc.pdf\"}'
+  format: ""
+- field: extra
+  note: 扩展信息
+  range: '',extra1,extra2,extra3
+  format: ""
+- field: read
+  note: 是否已读
+  range: 0,1
+  format: ""
+- field: vision
+  note: 视图模式
+  range: rnd
+  format: ""
+- field: efforted
+  note: 是否已消耗工时
+  range: 0,1
+  format: ""
