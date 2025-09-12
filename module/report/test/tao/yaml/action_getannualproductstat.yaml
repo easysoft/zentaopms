@@ -1,0 +1,26 @@
+---
+title: 操作记录表测试数据 - getAnnualProductStat方法
+desc: 用于测试年度产品统计方法的操作记录数据
+
+fields:
+- field: id
+  note: 操作ID
+  range: 1-30
+- field: objectType
+  note: 对象类型
+  range: 'productplan{15},story{10},product{5}'
+- field: objectID
+  note: 对象ID
+  range: 1-15{25},16-20{5}
+- field: actor
+  note: 操作者
+  range: 'admin{15},user1{8},user2{7}'
+- field: action
+  note: 操作类型
+  range: 'opened{20},edited{5},closed{3},activated{2}'
+- field: date
+  note: 操作时间
+  range: '2023-01-15 10:30:00{8},2023-06-15 14:20:00{7},2024-02-15 09:45:00{8},2024-05-15 16:15:00{7}'
+- field: extra
+  note: 额外信息
+  range: '[]{25},normal{3},terminate{2}'

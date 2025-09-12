@@ -1,0 +1,32 @@
+---
+title: 产品计划表测试数据 - getAnnualProductStat方法
+desc: 用于测试年度产品统计方法的产品计划数据
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-15
+- field: product
+  note: 所属产品ID
+  range: 1-5{12},6-10{3}
+- field: title
+  note: 计划标题
+  range: '计划{1-15}'
+- field: status
+  note: 计划状态
+  range: 'wait{5},doing{5},done{3},closed{2}'
+- field: begin
+  note: 开始日期
+  range: '2023-01-01{3},2023-06-01{4},2024-01-01{4},2024-03-01{4}'
+- field: end
+  note: 结束日期
+  range: '2023-12-31{3},2023-12-31{4},2024-12-31{4},2024-12-31{4}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{8},user1{4},user2{3}'
+- field: createdDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00{5},2023-06-15 10:30:00{3},2024-01-01 00:00:00{4},2024-03-15 14:20:00{3}'
+- field: deleted
+  note: 删除标记
+  range: '0{14},1{1}'

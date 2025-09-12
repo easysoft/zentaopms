@@ -6,6 +6,7 @@ class reportTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('report');
+         $this->objectTao   = $tester->loadTao('report');
          $tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
     }
 
@@ -507,6 +508,26 @@ class reportTest
     public function getContributionCountTipsTest($mode)
     {
         $result = $this->objectModel->getContributionCountTips($mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAnnualProductStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getAnnualProductStatTest(array $accounts, string $year): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAnnualProductStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+
         if(dao::isError()) return dao::getError();
 
         return $result;
