@@ -22,6 +22,8 @@ window.initModelList = async function()
         {name: 'id', title: modelLang},
         {name: 'actions', title: actionLang, width: 90, type: 'actions', onRenderCell(_result, {col, row})
         {
+            if(!canConverse) return [{html: ''}];
+
             let link          = $.createLink('aiapp', 'conversation', `chat=NEW&params=${btoa(JSON.stringify({model: row.data.id}))}`);
             let disabledClass = '';
             if(!row.data.abilities.includes('chat'))
@@ -29,7 +31,7 @@ window.initModelList = async function()
                 link          = '';
                 disabledClass = 'pointer-events-none disabled';
             }
-            return [{html: !canConverse ? '' : `<a class="btn size-sm ghost text-primary ${disabledClass}" href="${link}">${converseLang}</a>`}];
+            return [{html: `<a class="btn size-sm ghost text-primary ${disabledClass}" href="${link}">${converseLang}</a>`}];
         }},
     ];
     $('#modelsList').zui('dtable').render({cols, data: models});
