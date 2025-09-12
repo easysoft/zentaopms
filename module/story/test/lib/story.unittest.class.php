@@ -1815,4 +1815,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getTasksForTrack method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getTasksForTrackTest(array $storyIdList): array
+    {
+        $result = $this->objectTao->getTasksForTrack($storyIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
