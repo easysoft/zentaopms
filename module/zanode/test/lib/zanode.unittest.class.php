@@ -3,6 +3,7 @@ declare(strict_types = 1);
 class zanodeTest
 {
     private $objectModel;
+    private $objectTao;
 
     public function __construct()
     {
@@ -10,6 +11,7 @@ class zanodeTest
         $app->rawModule = 'zanode';
         $app->rawMethod = 'browse';
         $this->objectModel = $tester->loadModel('zanode');
+        $this->objectTao   = $tester->loadTao('zanode');
     }
 
     /**
@@ -445,5 +447,40 @@ class zanodeTest
         }
 
         return $result;
+    }
+
+    /**
+     * 测试通过主机ID获取此主机下所有的子主机。
+     * Test getSubZahostListByID method.
+     *
+     * @param  int    $hostID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getSubZahostListByIDTest(int $hostID, string $orderBy = 'id_desc'): object|int
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getSubZahostListByID');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $hostID, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果是数组，返回一个包含数量和结果的对象
+        if(is_array($result))
+        {
+            $returnObj = new stdClass();
+            $returnObj->count = count($result);
+            // 对于非空数组，设置data属性
+            if(count($result) > 0)
+            {
+                $returnObj->data = $result;
+            }
+            return $returnObj;
+        }
+
+        return count($result);
     }
 }
