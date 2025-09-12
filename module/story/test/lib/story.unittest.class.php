@@ -1752,4 +1752,25 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test updateLane method.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function updateLaneTest(int $storyID, string $storyType)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateLane');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $storyID, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        // updateLane方法实际没有返回值，返回执行状态
+        return $result === null ? 'success' : $result;
+    }
 }

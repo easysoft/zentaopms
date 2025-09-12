@@ -1,0 +1,101 @@
+---
+title: 项目数据表用于updateLane测试
+desc: 用于测试storyTao::updateLane()方法的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  loop: 0
+  format: ""
+- field: project
+  note: 父项目ID
+  range: 0{5}, 1-2{5}
+  loop: 0
+  format: ""
+- field: isTpl
+  note: 是否模板
+  range: 0{9}, 1{1}
+  loop: 0
+  format: ""
+- field: charter
+  note: 项目章程ID
+  range: 0
+  loop: 0
+  format: ""
+- field: model
+  note: 项目模型
+  range: scrum{4}, waterfall{3}, kanban{3}
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: sprint{4}, stage{3}, kanban{3}
+  loop: 0
+  format: ""
+- field: category
+  note: 项目类别
+  range: ''
+  loop: 0
+  format: ""
+- field: lifetime
+  note: 生命周期
+  range: short{3}, long{4}, ongoing{3}
+  loop: 0
+  format: ""
+- field: budget
+  note: 预算
+  range: 10000-100000
+  loop: 0
+  format: ""
+- field: budgetUnit
+  note: 预算单位
+  range: CNY
+  loop: 0
+  format: ""
+- field: attribute
+  note: 项目属性
+  range: ''
+  loop: 0
+  format: ""
+- field: percent
+  note: 完成百分比
+  range: 0-100
+  loop: 0
+  format: ""
+- field: milestone
+  note: 是否里程碑
+  range: 0{8}, 1{2}
+  loop: 0
+  format: ""
+- field: output
+  note: 交付物
+  range: ''
+  loop: 0
+  format: ""
+- field: auth
+  note: 权限控制
+  range: extend{5}, reset{5}
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 敏捷项目{4}, 瀑布项目{3}, 看板项目{3}
+  loop: 0
+  format: ""
+- field: code
+  note: 项目代码
+  range: sprint, stage, kanban
+  loop: 3
+  loopfix: '_'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{8}, 1{2}
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: wait{2}, doing{4}, suspended{1}, closed{3}
+  loop: 0
+  format: ""
