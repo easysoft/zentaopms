@@ -6,6 +6,7 @@ class projectreleaseTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('projectrelease');
+        $this->objectTao   = $tester->loadTao('projectrelease');
     }
 
     /**
@@ -98,5 +99,27 @@ class projectreleaseTest
         if(dao::isError()) return dao::getError();
 
         return $isClickable ? 1 : 2;
+    }
+
+    /**
+     * 测试获取分支名称。
+     * Test get branch name.
+     *
+     * @param  int     $productID
+     * @param  string  $branch
+     * @param  array   $branchGroup
+     * @access public
+     * @return string|array
+     */
+    public function getBranchNameTest(int $productID, string $branch, array $branchGroup): string|array
+    {
+        $reflectionClass = new ReflectionClass($this->objectTao);
+        $method = $reflectionClass->getMethod('getBranchName');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $productID, $branch, $branchGroup);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
