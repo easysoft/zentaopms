@@ -903,4 +903,34 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test checkProjectPriv method.
+     *
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $projects
+     * @access public
+     * @return int
+     */
+    public function checkProjectPrivTest(array $results, array $objectIdList, string $projects = '1,2,3'): int
+    {
+        // 设置用户权限
+        global $tester;
+        if(!isset($tester->app->user->view)) $tester->app->user->view = new stdClass();
+        $tester->app->user->view->projects = $projects;
+
+        // 设置tao对象的app引用
+        $this->objectTao->app->user->view = $tester->app->user->view;
+
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkProjectPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($results, $objectIdList));
+        if(dao::isError()) return -1;
+
+        return count($result);
+    }
 }
