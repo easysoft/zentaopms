@@ -5,6 +5,7 @@ class webhookTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('webhook');
+         $this->objectTao   = $tester->loadTao('webhook');
     }
 
     /**
@@ -460,6 +461,25 @@ class webhookTest
     {
         $result = $this->objectModel->sendToUser($webhook, $sendData, $actionID, $appendUser);
 
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getDingdingSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getDingdingSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getDingdingSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
         if(dao::isError()) return dao::getError();
 
         return $result;
