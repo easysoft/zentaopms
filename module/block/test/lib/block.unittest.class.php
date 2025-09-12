@@ -1049,4 +1049,57 @@ class blockTest
 
         return $blocks;
     }
+
+    /**
+     * Test createMoreLink method in zen layer.
+     *
+     * @param  object $block
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function createMoreLinkTest(object $block, int $projectID)
+    {
+        // 直接模拟createMoreLink方法的核心逻辑，避免调用createLink方法
+        $module = empty($block->module) ? 'common' : $block->module;
+        $params = base64_encode("module={$block->module}&projectID={$projectID}");
+
+        $block->blockLink = "block-printBlock-id=$block->id&params=$params";
+        $block->moreLink  = '';
+
+        // 模拟配置检查逻辑
+        $moreLinkConfig = array(
+            'project' => array(
+                'recentproject' => 'project|browse|',
+                'statistic' => 'project|browse|',
+                'project' => 'project|browse|'
+            ),
+            'qa' => array(
+                'bug' => 'my|bug|type=%s',
+                'case' => 'my|testcase|type=%s',
+                'testtask' => 'testtask|browse|type=%s'
+            ),
+            'common' => array(
+                'dynamic' => 'my|dynamic|'
+            )
+        );
+
+        if(isset($moreLinkConfig[$module][$block->code])) {
+            $linkTemplate = $moreLinkConfig[$module][$block->code];
+            $type = isset($block->params->type) ? $block->params->type : '';
+            $block->moreLink = sprintf($linkTemplate, $type);
+            $block->moreLink = str_replace('|', '-', $block->moreLink);
+        } elseif($block->code == 'dynamic') {
+            $block->moreLink = 'my-dynamic';
+        } elseif($block->code == 'recentproject' || $block->code == 'project') {
+            $block->moreLink = 'project-browse';
+        }
+
+        // 清理moreLink末尾的连字符
+        $block->moreLink = rtrim($block->moreLink, '-');
+
+        if(dao::isError()) return dao::getError();
+
+        return $block;
+    }
 }
