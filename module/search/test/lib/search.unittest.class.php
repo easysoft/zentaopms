@@ -1288,4 +1288,26 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test processRiskRecord method.
+     *
+     * @param  object $record
+     * @param  string $module
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processRiskRecordTest(object $record, string $module, array $objectList): object
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processRiskRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($record, $module, $objectList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
