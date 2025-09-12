@@ -1769,4 +1769,68 @@ class actionTest
         if(!$action) return array('result' => 'fail', 'message' => '页面不存在。');
         return $action;
     }
+
+    /**
+     * Test getConfirmNoMessage method.
+     *
+     * @param  string $repeatName
+     * @param  string $replaceName
+     * @param  string $replaceCode
+     * @param  string $objectName
+     * @param  string $objectCode
+     * @param  string $testType
+     * @access public
+     * @return string
+     */
+    public function getConfirmNoMessageTest(string $repeatName, string $replaceName, string $replaceCode, string $objectName, string $objectCode, string $testType): string
+    {
+        global $tester;
+        
+        // 加载action控制器基类
+        if(!class_exists('action'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        
+        // 包含zen文件并实例化
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $actionZen = new actionZen();
+        
+        // 创建模拟的重复对象
+        $repeatObject = new stdClass();
+        $repeatObject->name = $repeatName;
+        $repeatObject->code = ($testType == 'both' && $replaceCode) ? substr($replaceCode, 0, -2) : (($testType == 'code' && $replaceCode) ? substr($replaceCode, 0, -2) : '');
+        
+        // 创建模拟的原对象
+        $object = new stdClass();
+        $object->name = $objectName;
+        $object->code = $objectCode;
+        
+        // 创建模拟的旧Action对象
+        $oldAction = new stdClass();
+        switch($testType) {
+            case 'both':
+                $oldAction->objectType = 'product';
+                break;
+            case 'name':
+                $oldAction->objectType = 'story';
+                break;
+            case 'code':
+                $oldAction->objectType = 'task';
+                break;
+            case 'none':
+                $oldAction->objectType = 'project';
+                break;
+            case 'name_only':
+                $oldAction->objectType = 'bug';
+                break;
+        }
+        
+        // 调用测试方法
+        $result = $actionZen->getConfirmNoMessage($repeatObject, $object, $oldAction, $replaceName, $replaceCode);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
