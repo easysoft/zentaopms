@@ -554,4 +554,26 @@ class reportTest
 
         return count($result);
     }
+
+    /**
+     * Test buildAnnualCaseStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @param  array  $actionStat
+     * @param  array  $resultStat
+     * @access public
+     * @return mixed
+     */
+    public function buildAnnualCaseStatTest(array $accounts, string $year, array $actionStat, array $resultStat): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildAnnualCaseStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year, $actionStat, $resultStat);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
