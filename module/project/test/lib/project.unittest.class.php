@@ -350,4 +350,52 @@ class projectTest
 
         return $result;
     }
+
+    /**
+     * Test buildLinkForProject method.
+     *
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function buildLinkForProjectTest($method = '')
+    {
+        // Capture output to get error messages
+        ob_start();
+        $errorOccurred = false;
+        $result = null;
+
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $testMethod = $reflection->getMethod('buildLinkForProject');
+            $testMethod->setAccessible(true);
+
+            $result = $testMethod->invoke($this->objectTao, $method);
+            if(dao::isError()) return dao::getError();
+        }
+        catch(Exception $e)
+        {
+            $errorOccurred = true;
+            $result = $e->getMessage();
+        }
+        catch(Error $e)
+        {
+            $errorOccurred = true;
+            $result = $e->getMessage();
+        }
+
+        $output = ob_get_clean();
+
+        // If there's captured output (error messages), process it
+        if(!empty($output))
+        {
+            // Clean HTML tags and extract meaningful error message
+            $cleanOutput = strip_tags($output);
+            $cleanOutput = trim($cleanOutput);
+            return $cleanOutput;
+        }
+
+        return $result;
+    }
 }
