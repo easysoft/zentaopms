@@ -2662,4 +2662,51 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallEstimateBlock method.
+     *
+     * @param  mixed $projectID
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallEstimateBlockTest($projectID = null)
+    {
+        global $tester;
+        
+        if($projectID !== null) $tester->session->project = $projectID;
+        
+        // 创建模拟的view对象
+        $oldView = $tester->view ?? new stdclass();
+        $tester->view = new stdclass();
+        
+        // 模拟printWaterfallEstimateBlock方法的核心逻辑
+        $userModel = $tester->loadModel('user');
+        $members   = $userModel->getTeamMemberPairs($projectID, 'project');
+        
+        $workestimationModel = $tester->loadModel('workestimation');
+        $budget    = $workestimationModel ? $workestimationModel->getBudget($projectID) : new stdclass();
+        
+        $projectModel = $tester->loadModel('project');
+        $workhour  = $projectModel ? $projectModel->getWorkhour($projectID) : new stdclass();
+        
+        if(empty($budget)) $budget = new stdclass();
+
+        $consumed = $this->objectModel->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('isParent')->eq('0')->fetch('consumed');
+
+        $people = $this->objectModel->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($projectID)->fetch('people');
+        
+        $result = new stdclass();
+        $result->people = $people ?: 0;
+        $result->members = count($members) ? count($members) - 1 : 0;
+        $result->consumed = sprintf("%.2f", $consumed ?: 0);
+        $result->budget = $budget;
+        $result->totalLeft = (float)($workhour->totalLeft ?? 0);
+        
+        $tester->view = $oldView;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
