@@ -1847,4 +1847,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test buildReorderResult method.
+     *
+     * @param  array $parent
+     * @access public
+     * @return array
+     */
+    public function buildReorderResultTest(array $parent): array
+    {
+        $result = array();
+        $this->objectTao->buildReorderResult($parent, $result);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
