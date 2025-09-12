@@ -12075,5 +12075,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVAL)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
         }
+
+        $this->dao->exec('ALTER TABLE ' . TABLE_REVIEW . ' DROP `doc`');
     }
 }
