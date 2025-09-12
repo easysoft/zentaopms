@@ -1830,4 +1830,21 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test buildStoryTree method.
+     *
+     * @param  array $stories
+     * @param  int   $parentId
+     * @param  array $originStories
+     * @access public
+     * @return array
+     */
+    public function buildStoryTreeTest(array $stories, int $parentId = 0, array $originStories = array()): array
+    {
+        $result = $this->objectTao->buildStoryTree($stories, $parentId, $originStories);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
