@@ -101,6 +101,54 @@ function registerZentaoAIPlugin(lang)
         }
     })
 
+    const objectIcons = {
+        story   : 'file-text',
+        demand  : 'file-text',
+        bug     : 'bug',
+        doc     : 'doc',
+        design  : 'design',
+        feedback: 'feedback',
+    };
+    const zentaoVersion = window.config?.version || '';
+    const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
+
+    ["story", "demand", "bug", "doc", "design", "feedback"].forEach(objectType => {
+        if(objectType === "feedback" && !zentaoEdition) return;
+        if(objectType === "demand" && zentaoEdition !== "ipd") return;
+        plugin.defineContextProvider({
+            code: `${objectType}Lib`,
+            title: `{{${objectType}}}`,
+            icon:  objectIcons[objectType],
+            when:  ({store}) => !!store.globalMemory,
+            data:
+            {
+                memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
+            },
+            generate: (userPrompt, { plugin }) => {
+                const objectName = plugin?.getLang(objectType) ?? objectType;
+                const matches = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+                if(matches.length)
+                {
+                    return matches.map(match => {
+                        const objectID = match[2];
+                        return {
+                            code: `${objectType}-${objectID}`,
+                            recommend: true,
+                            title: `${objectName} #${objectID}`,
+                            data: () => ({
+                                memory:
+                                {
+                                    collections:    ['$global'],
+                                    content_filter: {attrs: {objectKey: `${objectType}-${objectID}`}},
+                                },
+                            })
+                        };
+                    });
+                }
+                if(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})`, 'i').test(userPrompt)) return {};
+            }
+        })
+    });
 
     plugin.defineContextProvider(
     {
