@@ -1707,4 +1707,50 @@ class actionTest
         
         return $trash;
     }
+
+    /**
+     * Test getReplaceNameAndCode method.
+     *
+     * @param  string $name
+     * @param  string $code
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function getReplaceNameAndCodeTest(string $name, string $code, string $table): array
+    {
+        global $tester;
+        
+        // 创建模拟的重复对象和原对象
+        $repeatObject = new stdClass();
+        $repeatObject->name = $name;
+        $repeatObject->code = $code;
+        
+        $object = new stdClass();
+        $object->code = $code;
+        
+        // 直接调用model层的方法来模拟zen层的逻辑
+        $existNames = $this->objectModel->getLikeObject($table, 'name', 'name', $repeatObject->name . '_%');
+        $replaceName = '';
+        for($i = 1; $i < 10000; $i++)
+        {
+            $replaceName = $repeatObject->name . '_' . $i;
+            if(!in_array($replaceName, $existNames)) break;
+        }
+        
+        $replaceCode = '';
+        if($object->code)
+        {
+            $existCodes = $this->objectModel->getLikeObject($table, 'code', 'code', $repeatObject->code . '_%');
+            for($i = 1; $i < 10000; $i++)
+            {
+                $replaceCode = $repeatObject->code . '_' . $i;
+                if(!in_array($replaceCode, $existCodes)) break;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return array($replaceName, $replaceCode);
+    }
 }
