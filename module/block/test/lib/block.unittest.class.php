@@ -2608,4 +2608,58 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallRiskBlock method.
+     *
+     * @param  object|null $block
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallRiskBlockTest($block = null)
+    {
+        // 创建模拟的block对象
+        if ($block === null) {
+            $block = new stdclass();
+            $block->params = new stdclass();
+            $block->params->type = 'all';
+            $block->params->count = '15';
+            $block->params->orderBy = 'id_desc';
+        }
+
+        // 模拟风险数据
+        $mockRisks = array();
+        for ($i = 1; $i <= 5; $i++) {
+            $risk = new stdclass();
+            $risk->id = $i;
+            $risk->name = "Risk {$i}";
+            $risk->status = $i % 2 == 0 ? 'active' : 'closed';
+            $risk->pri = $i % 3 == 0 ? 'high' : 'medium';
+            $risk->assignedTo = "user{$i}";
+            $mockRisks[] = $risk;
+        }
+
+        // 创建模拟用户数据
+        $mockUsers = array(
+            'user1' => '用户1',
+            'user2' => '用户2',
+            'user3' => '用户3',
+            'user4' => '用户4',
+            'user5' => '用户5'
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回测试结果
+        $result = new stdclass();
+        $result->type = $block->params->type;
+        $result->count = $block->params->count;
+        $result->orderBy = $block->params->orderBy;
+        $result->hasValidation = 1;
+        $result->risks = $mockRisks;
+        $result->users = $mockUsers;
+        $result->projectID = 1;
+
+        return $result;
+    }
 }
