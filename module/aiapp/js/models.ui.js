@@ -20,10 +20,16 @@ window.initModelList = async function()
     const cols = [
         {name: 'index', title: 'ID', type: 'id', sortType: false},
         {name: 'id', title: modelLang},
-        {name: 'actions', title: actionLang, width: 90, type: 'actions', actions: !canConverse ? [] : ['converse'], actionsMap: !canConverse ? null : {
-            converse: {text: converseLang, onClick: (_event, info) => {
-                loadPage($.createLink('aiapp', 'conversation', `chat=NEW&params=${btoa(JSON.stringify({model: info.item.data.row}))}`));
-            }},
+        {name: 'actions', title: actionLang, width: 90, type: 'actions', onRenderCell(_result, {col, row})
+        {
+            let link          = $.createLink('aiapp', 'conversation', `chat=NEW&params=${btoa(JSON.stringify({model: row.data.id}))}`);
+            let disabledClass = '';
+            if(!row.data.abilities.includes('chat'))
+            {
+                link          = '';
+                disabledClass = 'pointer-events-none disabled';
+            }
+            return [{html: !canConverse ? '' : `<a class="btn size-sm ghost text-primary ${disabledClass}" href="${link}">${converseLang}</a>`}];
         }},
     ];
     $('#modelsList').zui('dtable').render({cols, data: models});
