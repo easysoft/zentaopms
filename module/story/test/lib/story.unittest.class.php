@@ -1795,4 +1795,24 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test checkConditions method.
+     *
+     * @param  string $method
+     * @param  object $story
+     * @access public
+     * @return bool
+     */
+    public function checkConditionsTest(string $methodName, object $story): bool
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkConditions');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $methodName, $story);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
