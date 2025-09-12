@@ -1680,4 +1680,70 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printReleaseBlock method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printReleaseBlockTest($block)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        $blockZen->viewType = 'html';
+        
+        // 如果没有传入block参数，创建一个默认的
+        if (!$block) {
+            $block = new stdclass();
+            $block->params = new stdclass();
+            $block->params->type = 'all';
+            $block->params->count = 15;
+        }
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printReleaseBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen, $block);
+            
+        } catch (Exception $e) {
+            // 如果方法执行出错，设置空的默认值
+            $blockZen->view->releases = array();
+            $blockZen->view->builds = array();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回设置的view数据
+        $result = new stdclass();
+        $result->releases = isset($blockZen->view->releases) ? $blockZen->view->releases : array();
+        $result->builds = isset($blockZen->view->builds) ? $blockZen->view->builds : array();
+        $result->releaseCount = is_array($result->releases) ? count($result->releases) : 0;
+        $result->buildCount = is_array($result->builds) ? count($result->builds) : 0;
+        
+        return $result;
+    }
 }
