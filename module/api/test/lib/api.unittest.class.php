@@ -555,6 +555,44 @@ class apiTest
     }
 
     /**
+     * Test generateLibsDropMenu method.
+     *
+     * @param  object $lib
+     * @param  int    $version
+     * @access public
+     * @return array|string
+     */
+    public function generateLibsDropMenuTest($lib, $version = 0)
+    {
+        global $tester;
+
+        // 加载api控制器类、模型类和apiZen类
+        require_once dirname(__FILE__, 3) . '/control.php';
+        require_once dirname(__FILE__, 3) . '/model.php';
+        require_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建apiZen实例
+        $apiZen = new apiZen();
+
+        // 为apiZen对象注入必要的依赖
+        $apiZen->config = $tester->config;
+        $apiZen->session = $tester->session;
+        $apiZen->app = $tester->app;
+        $apiZen->lang = $tester->lang;
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($apiZen);
+        $method = $reflection->getMethod('generateLibsDropMenu');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($apiZen, $lib, $version);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test parseDocSpaceParam method.
      *
      * @param  array     $libs
