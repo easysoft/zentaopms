@@ -1144,4 +1144,51 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printZentaoDynamicBlock method in zen layer.
+     *
+     * @access public
+     * @return object
+     */
+    public function printZentaoDynamicBlockTest()
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('printZentaoDynamicBlock');
+        $method->setAccessible(true);
+        
+        // 执行方法
+        $method->invoke($blockZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回设置的view数据
+        $result = new stdclass();
+        $result->dynamics = isset($blockZen->view->dynamics) ? $blockZen->view->dynamics : array();
+        $result->hasInternet = isset($blockZen->session->hasInternet) ? $blockZen->session->hasInternet : null;
+        $result->isSlowNetwork = isset($blockZen->session->isSlowNetwork) ? $blockZen->session->isSlowNetwork : null;
+        
+        return $result;
+    }
 }
