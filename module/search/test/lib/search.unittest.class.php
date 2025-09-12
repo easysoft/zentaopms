@@ -873,4 +873,34 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test checkProgramPriv method.
+     *
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $programs
+     * @access public
+     * @return array
+     */
+    public function checkProgramPrivTest(array $results, array $objectIdList, string $programs = '1,2,3'): array
+    {
+        // 设置用户权限
+        global $tester;
+        if(!isset($tester->app->user->view)) $tester->app->user->view = new stdClass();
+        $tester->app->user->view->programs = $programs;
+
+        // 设置tao对象的app引用
+        $this->objectTao->app->user->view = $tester->app->user->view;
+
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkProgramPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($results, $objectIdList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
