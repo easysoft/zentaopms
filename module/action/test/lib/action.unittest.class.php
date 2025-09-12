@@ -1675,4 +1675,36 @@ class actionTest
         
         return $result;
     }
+
+    /**
+     * Test processTrash method.
+     *
+     * @param  object $trash
+     * @param  array  $projectList
+     * @param  array  $productList
+     * @param  array  $executionList
+     * @access public
+     * @return object
+     */
+    public function processTrashTest(object $trash, array $projectList = array(), array $productList = array(), array $executionList = array()): object
+    {
+        global $tester;
+        
+        // 加载action控制器基类
+        if(!class_exists('action'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        
+        // 包含zen文件并实例化
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $actionZen = new actionZen();
+        
+        // 调用测试方法
+        $actionZen->processTrash($trash, $projectList, $productList, $executionList);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $trash;
+    }
 }
