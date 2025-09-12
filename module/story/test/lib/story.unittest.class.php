@@ -1634,4 +1634,23 @@ class storyTest
 
         return array_sum($result);
     }
+
+    /**
+     * Test getUnClosedTotal method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getUnClosedTotalTest(string $storyType = 'story'): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getUnClosedTotal');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

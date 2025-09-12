@@ -1,0 +1,42 @@
+---
+title: Story getUnClosedTotal测试数据
+desc: 为getUnClosedTotal方法准备的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{8},2{7},3{5}
+  format: ""
+- field: type
+  note: 需求类型
+  range: story{10},requirement{6},epic{4}
+  format: ""
+- field: status
+  note: 需求状态
+  range: active{8},draft{4},reviewing{4},closed{4}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{18},1{2}
+  format: ""
+- field: title
+  note: 需求标题
+  range: 需求标题{20}
+  format: ""
+- field: openedBy
+  note: 创建人
+  range: admin{15},user{5}
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: (-1D)-0
+  format: YYYY-MM-DD hh:mm:ss
