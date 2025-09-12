@@ -851,4 +851,26 @@ class searchTest
 
         return $_SESSION[$formSessionName] ?? array();
     }
+
+    /**
+     * Test checkProductPriv method.
+     *
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $products
+     * @access public
+     * @return array
+     */
+    public function checkProductPrivTest(array $results, array $objectIdList, string $products): array
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkProductPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($results, $objectIdList, $products));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
