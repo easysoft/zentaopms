@@ -6,6 +6,7 @@ class projectTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('project');
+        $this->objectTao   = $tester->loadTao('project');
     }
 
     /**
@@ -271,6 +272,26 @@ class projectTest
     public function recordFirstEndTest($projectID = 0)
     {
         $result = $this->objectModel->recordFirstEnd($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test doStart method.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function doStartTest($projectID = 0, $project = null)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('doStart');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $projectID, $project);
         if(dao::isError()) return dao::getError();
 
         return $result;
