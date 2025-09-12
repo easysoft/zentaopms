@@ -1120,4 +1120,46 @@ class searchTest
 
         return dao::isError() ? -1 : count($result);
     }
+
+    /**
+     * Test markKeywords method directly.
+     *
+     * @param  string $content
+     * @param  string $keywords
+     * @access public
+     * @return string
+     */
+    public function markKeywordsDirectTest(string $content, string $keywords): string
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('markKeywords');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($content, $keywords));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processRecordTest(object $record, array $objectList): object
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($record, $objectList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
