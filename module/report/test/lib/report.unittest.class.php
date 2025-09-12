@@ -532,4 +532,26 @@ class reportTest
 
         return $result;
     }
+
+    /**
+     * Test getAnnualExecutionStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getAnnualExecutionStatTest(array $accounts, string $year): mixed
+    {
+        ob_start();
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAnnualExecutionStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
