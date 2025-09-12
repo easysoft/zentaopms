@@ -1553,4 +1553,23 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectAndExecutionNameQuery method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectAndExecutionNameQueryTest(): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProjectAndExecutionNameQuery');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
