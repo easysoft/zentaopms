@@ -443,38 +443,23 @@ class searchTest
     }
 
     /**
-     * Test decode.
+     * Test decode method.
      *
-     * @param  int    $key
+     * @param  string $string
      * @access public
      * @return string
      */
-    public function decodeTest($key)
+    public function decodeTest(string $string): string
     {
-        global $tester;
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('decode');
+        $method->setAccessible(true);
 
-        $result = array();
-        while(!isset($result['finished']))
-        {
-            if(empty($result))
-            {
-                $result = $this->objectModel->buildAllIndex();
-            }
-            else
-            {
-                $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
-            }
-        }
-
-        $objects = $this->objectModel->decode($key);
+        $result = $method->invokeArgs($this->objectTao, array($string));
         if(dao::isError()) return dao::getError();
 
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
