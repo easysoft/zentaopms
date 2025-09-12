@@ -463,41 +463,24 @@ class searchTest
     }
 
     /**
-     * Test get summary.
+     * Test getSummary method.
      *
-     * @param  int    $indexID
+     * @param  string $content
      * @param  string $words
      * @access public
-     * @return array
+     * @return string
      */
-    public function getSummaryTest($indexID, $words)
+    public function getSummaryTest(string $content, string $words): string
     {
-        global $tester;
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getSummary');
+        $method->setAccessible(true);
 
-        $result = array();
-        while(!isset($result['finished']))
-        {
-            if(empty($result))
-            {
-                $result = $this->objectModel->buildAllIndex();
-            }
-            else
-            {
-                $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
-            }
-        }
-
-        $searchIndex = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('id')->eq($indexID)->fetch();
-
-        $objects = $this->objectModel->getSummary($searchIndex->content, $words);
+        $result = $method->invokeArgs($this->objectTao, array($content, $words));
         if(dao::isError()) return dao::getError();
 
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
