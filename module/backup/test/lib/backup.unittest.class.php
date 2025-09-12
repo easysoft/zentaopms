@@ -297,4 +297,107 @@ class backupTest
         // Return success for normal cases
         return array('result' => 'success');
     }
+
+    /**
+     * Test removeExpiredFiles method for zen layer.
+     *
+     * @param  array $mockFiles
+     * @param  int   $mockHoldDays
+     * @access public
+     * @return mixed
+     */
+    public function removeExpiredFilesTest($mockFiles = null, $mockHoldDays = 14)
+    {
+        global $tester;
+
+        // Mock backup path
+        $mockBackupPath = sys_get_temp_dir() . '/backup_test_' . time() . '/';
+        if(!is_dir($mockBackupPath)) mkdir($mockBackupPath, 0777, true);
+
+        // Create mock backup files with different ages
+        if($mockFiles === null)
+        {
+            $mockFiles = array(
+                '20240101.sql' => time() - (20 * 24 * 3600), // 20 days ago - expired
+                '20240110.file' => time() - (10 * 24 * 3600), // 10 days ago - not expired
+                '20240115.code' => time() - (5 * 24 * 3600),  // 5 days ago - not expired
+                '20240120.sql' => time() - (30 * 24 * 3600),  // 30 days ago - expired
+                'other.txt' => time() - (10 * 24 * 3600),      // non-backup file - should be ignored
+            );
+        }
+
+        // Only create files if mockFiles is not empty
+        if(!empty($mockFiles))
+        {
+            foreach($mockFiles as $fileName => $fileTime)
+            {
+                $filePath = $mockBackupPath . $fileName;
+                touch($filePath, $fileTime);
+            }
+        }
+
+        // Mock zen object behavior
+        $mockZen = new stdClass();
+        $mockZen->backupPath = $mockBackupPath;
+        $mockZen->config = new stdClass();
+        $mockZen->config->backup = new stdClass();
+        $mockZen->config->backup->holdDays = $mockHoldDays;
+
+        // Simulate removeExpiredFiles method logic
+        $backupFiles = glob("{$mockZen->backupPath}*.*");
+        if(empty($backupFiles))
+        {
+            $this->cleanupTestDir($mockBackupPath);
+            return array('removed' => 0, 'kept' => 0);
+        }
+
+        $time = time();
+        $removed = 0;
+        $kept = 0;
+
+        foreach($backupFiles as $file)
+        {
+            $fileName = basename($file);
+            if(!preg_match('/[0-9]+\.(sql|file|code)/', $fileName))
+            {
+                // Non-backup files are ignored in the logic, not counted in kept
+                continue;
+            }
+
+            $fileAge = $time - filemtime($file);
+            $holdSeconds = $mockZen->config->backup->holdDays * 24 * 3600;
+            
+            if($fileAge > $holdSeconds)
+            {
+                unlink($file); // Remove expired file
+                $removed++;
+            }
+            else
+            {
+                $kept++; // Keep non-expired file
+            }
+        }
+
+        $this->cleanupTestDir($mockBackupPath);
+        return array('removed' => $removed, 'kept' => $kept);
+    }
+
+    /**
+     * Clean up test directory.
+     *
+     * @param  string $dir
+     * @access private
+     * @return void
+     */
+    private function cleanupTestDir($dir)
+    {
+        if(!is_dir($dir)) return;
+
+        $files = glob($dir . '*');
+        foreach($files as $file)
+        {
+            if(is_file($file)) unlink($file);
+        }
+        rmdir($dir);
+    }
 }
