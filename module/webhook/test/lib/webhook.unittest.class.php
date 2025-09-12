@@ -484,4 +484,23 @@ class webhookTest
 
         return $result;
     }
+
+    /**
+     * Test getWeixinSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getWeixinSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getWeixinSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
