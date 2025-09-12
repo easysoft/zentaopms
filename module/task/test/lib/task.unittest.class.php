@@ -2514,6 +2514,27 @@ class taskTest
     }
 
     /**
+     * Test getRequiredFields4Edit method.
+     *
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function getRequiredFields4EditTest(object $task)
+    {
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getRequiredFields4Edit');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $task);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test formatDatetime method.
      *
      * @param  object $task
