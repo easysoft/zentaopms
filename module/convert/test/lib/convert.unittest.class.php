@@ -3298,7 +3298,48 @@ class convertTest
     {
         if($module === null || $data === null || $object === null) return false;
 
-        $result = $this->objectTao->processBuildinFieldData($module, $data, $object, $relations, $buildinFlow);
+        // 创建模拟对象来支持测试
+        $mockTao = new class extends convertTao {
+            public function __construct()
+            {
+                // 模拟语言配置
+                $this->lang = new stdclass();
+                $this->lang->convert = new stdclass();
+                $this->lang->convert->jira = new stdclass();
+                $this->lang->convert->jira->buildinFields = array(
+                    'summary'              => array('jiraField' => 'summary', 'buildin' => false),
+                    'pri'                  => array('jiraField' => 'priority', 'buildin' => false),
+                    'resolution'           => array('jiraField' => 'resolution', 'buildin' => false),
+                    'reporter'             => array('jiraField' => 'reporter'),
+                    'duedate'              => array('jiraField' => 'duedate', 'buildin' => false),
+                    'resolutiondate'       => array('jiraField' => 'resolutiondate', 'buildin' => false),
+                    'votes'                => array('jiraField' => 'votes'),
+                    'environment'          => array('jiraField' => 'environment'),
+                    'timeoriginalestimate' => array('jiraField' => 'timeoriginalestimate'),
+                    'timespent'            => array('jiraField' => 'timespent'),
+                    'desc'                 => array('jiraField' => 'description', 'buildin' => false)
+                );
+
+                // 模拟配置
+                $this->config = new stdclass();
+                $this->config->edition = 'biz'; // 使用企业版配置
+            }
+
+            public function getJiraAccount(string $userKey): string
+            {
+                if(empty($userKey)) return '';
+                
+                // 模拟用户映射
+                $userMap = array(
+                    'jira_user_key' => 'jira_user',
+                    'reporter_key' => 'reporter_user'
+                );
+                
+                return isset($userMap[$userKey]) ? $userMap[$userKey] : $userKey;
+            }
+        };
+
+        $result = $mockTao->processBuildinFieldData($module, $data, $object, $relations, $buildinFlow);
         if(dao::isError()) return dao::getError();
 
         return $result;
