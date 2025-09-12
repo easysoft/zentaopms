@@ -576,4 +576,24 @@ class reportTest
 
         return $result;
     }
+
+    /**
+     * Test getOutputData method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getOutputDataTest(array $accounts, string $year): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getOutputData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
