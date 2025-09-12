@@ -1310,4 +1310,25 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test unify method.
+     *
+     * @param  string $string
+     * @param  string $to
+     * @access public
+     * @return string
+     */
+    public function unifyTest(string $string, string $to = ','): string
+    {
+        // 使用反射访问私有静态方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('unify');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs(null, array($string, $to));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
