@@ -286,4 +286,23 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test syncPublicClasses method.
+     *
+     * @param  int $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncPublicClassesTest(int $limit = 3)
+    {
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('syncPublicClasses');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
