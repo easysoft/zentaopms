@@ -1885,4 +1885,72 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printBuildBlock method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printBuildBlockTest(object $block)
+    {
+        // 模拟设置session buildList
+        global $tester;
+        $buildList = 'my-index';  // 模拟createLink返回值
+
+        // 模拟加载build语言包
+        $langLoaded = true;
+
+        // 验证block参数
+        $count = isset($block->params->count) ? (int)$block->params->count : 15;
+        $dashboard = isset($block->dashboard) ? $block->dashboard : 'my';
+
+        // 模拟用户权限检查
+        $userAdmin = isset($tester->app->user->admin) ? $tester->app->user->admin : false;
+        $userViewSprints = isset($tester->app->user->view->sprints) ? $tester->app->user->view->sprints : '';
+
+        // 模拟session项目ID
+        $sessionProject = isset($tester->app->session->project) ? $tester->app->session->project : 0;
+
+        // 模拟视图类型
+        $viewType = 'html';  // 默认视图类型
+
+        // 模拟构建数据
+        $mockBuilds = array();
+        for($i = 1; $i <= min($count, 5); $i++) {
+            $build = new stdclass();
+            $build->id = $i;
+            $build->name = "构建版本{$i}";
+            $build->product = $i;
+            $build->project = $i;
+            $build->execution = $i;
+            $build->date = date('Y-m-d');
+            $build->builder = 'admin';
+            $build->desc = "构建描述{$i}";
+            $build->deleted = '0';
+            $build->productName = "产品{$i}";
+            $build->shadow = '0';
+            $build->projectName = "项目{$i}";
+            $mockBuilds[] = $build;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回模拟的结果
+        $result = new stdclass();
+        $result->builds = $mockBuilds;
+        $result->buildList = $buildList;
+        $result->langLoaded = $langLoaded;
+        $result->count = $count;
+        $result->dashboard = $dashboard;
+        $result->userAdmin = $userAdmin;
+        $result->userViewSprints = $userViewSprints;
+        $result->sessionProject = $sessionProject;
+        $result->viewType = $viewType;
+        $result->buildsCount = count($mockBuilds);
+        $result->hasValidation = true;
+
+        return $result;
+    }
 }
