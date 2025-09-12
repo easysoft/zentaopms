@@ -2512,4 +2512,30 @@ class taskTest
 
         return array($oldTaskCopy, $taskCopy);
     }
+
+    /**
+     * Test formatDatetime method.
+     *
+     * @param  object $task
+     * @access public
+     * @return object|null
+     */
+    public function formatDatetimeTest(object $task = null): object|null
+    {
+        if($task === null)
+        {
+            $task = new stdclass();
+        }
+
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('formatDatetime');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $task);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
