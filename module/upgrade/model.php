@@ -11947,6 +11947,11 @@ class upgradeModel extends model
             ->andWhere('t2.name')->eq($this->lang->other)
             ->fetchGroup('workflowGroup');
 
+        $actionIdList    = array();
+        $reviewclActions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('reviewcl')->fetchGroup('objectID', 'id');
+        foreach($reviewclActions as $actions) $actionIdList = arrayUnion($actionIdList, $actions);
+        $reviewclHistory = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in(array_keys($actionIdList))->fetchGroup('action', 'id');
+
         $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
 
         $deliverable = new stdClass();
@@ -12000,6 +12005,7 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
                 $flowID = $this->dao->lastInsertID();
 
+                /* 迁移评审对象对应的检查清单。 */
                 if(empty($reviewclList[$projectModel])) continue;
                 foreach($reviewclList[$projectModel] as $reviewcl)
                 {
@@ -12013,6 +12019,25 @@ class upgradeModel extends model
                     $reviewclData->workflowGroup = $groupID;
                     $reviewclData->object        = $flowID;
                     $this->dao->insert(TABLE_REVIEWCL)->data($reviewclData)->exec();
+                    $reviewclID = $this->dao->lastInsertID();
+
+                    /* 迁移检查清单历史记录。 */
+                    if(empty($reviewclActions[$reviewcl->id])) continue;
+                    foreach($reviewclActions[$reviewcl->id] as $action)
+                    {
+                        $actionData = clone $action;
+                        unset($actionData->id);
+                        $actionData->objectID = $reviewclID;
+                        $this->dao->insert(TABLE_ACTION)->data($actionData)->exec();
+
+                        $actionID = $this->dao->lastInsertID();
+                        foreach($reviewclHistory[$action->id] as $history)
+                        {
+                            unset($history->id);
+                            $history->action = $actionID;
+                            $this->dao->insert(TABLE_HISTORY)->data($history)->exec();
+                        }
+                    }
                 }
             }
         }
