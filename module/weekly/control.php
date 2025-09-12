@@ -46,6 +46,8 @@ class weekly extends control
      */
     public function index($projectID = 0, $date = '')
     {
+        if(!common::hasPriv('weekly', 'view')) return $this->locate($this->createLink('user', 'deny', 'module=weekly&method=view'));
+
         $this->commonAction($projectID);
         if(!$date) $date = helper::today();
         $date = date('Y-m-d', strtotime($date));
