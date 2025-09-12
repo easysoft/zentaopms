@@ -222,6 +222,8 @@ div
 if($zaiConfig && !empty($zaiConfig->host) && !empty($zaiConfig->token))
 {
     if(!hasPriv('aiapp', 'conversation')) $zaiConfig->privs = 'disable-all';
+    $this->app->loadLang('aiapp');
+    $zaiConfig->langData = $lang->aiapp->langData;
     to::head
     (
         h::js('window.zai = ' . js::value($zaiConfig) . ';'),

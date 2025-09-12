@@ -48,3 +48,21 @@ $lang->aiapp->pageSummary        = '共 %s 项';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = '暂无数据';
+
+$lang->aiapp->langData                     = new stdClass();
+$lang->aiapp->langData->name               = '禅道';
+$lang->aiapp->langData->storyReview        = '需求评审';
+$lang->aiapp->langData->storyReviewHint    = '对当前页面需求进行评审';
+$lang->aiapp->langData->storyReviewMessage = "下面是要进行评审的需求：\n\n### 需求标题\n\n{title}\n\n### 需求描述\n\n{spec}\n\n### 需求验收标准\n\n{verify}";
+$lang->aiapp->langData->aiReview           = 'AI 评审';
+$lang->aiapp->langData->currentPage        = '当前页面';
+$lang->aiapp->langData->story              = '需求';
+$lang->aiapp->langData->demand             = '需求池需求';
+$lang->aiapp->langData->bug                = 'BUG';
+$lang->aiapp->langData->doc                = '文档';
+$lang->aiapp->langData->design             = '设计';
+$lang->aiapp->langData->feedback           = '反馈';
+$lang->aiapp->langData->currentDocContent  = '当前文档';
+$lang->aiapp->langData->globalMemoryTitle  = '禅道';
+$lang->aiapp->langData->zaiConfigNotValid  = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
+$lang->aiapp->langData->unauthorizedError  = '授权失败，无效的 API 密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';

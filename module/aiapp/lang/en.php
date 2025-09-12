@@ -48,3 +48,21 @@ $lang->aiapp->pageSummary        = 'Total %s items.';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
+
+$lang->aiapp->langData                     = new stdClass();
+$lang->aiapp->langData->name               = 'ZenTao';
+$lang->aiapp->langData->storyReview        = 'Story Review';
+$lang->aiapp->langData->storyReviewHint    = 'Review the story on the current page';
+$lang->aiapp->langData->storyReviewMessage = "Here is the story to be reviewed:\n\n### Story Title\n\n{title}\n\n### Story Description\n\n{spec}\n\n### Acceptance Criteria\n\n{verify}";
+$lang->aiapp->langData->aiReview           = 'AI Review';
+$lang->aiapp->langData->currentPage        = 'Current Page';
+$lang->aiapp->langData->story              = 'Story';
+$lang->aiapp->langData->demand             = 'Demand Pool Story';
+$lang->aiapp->langData->bug                = 'Bug';
+$lang->aiapp->langData->doc                = 'Document';
+$lang->aiapp->langData->design             = 'Design';
+$lang->aiapp->langData->feedback           = 'Feedback';
+$lang->aiapp->langData->currentDocContent  = 'Current Document';
+$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->zaiConfigNotValid  = 'ZAI configuration has not been set up yet. Please contact the administrator to <a href="{zaiConfigUrl}">configure ZAI</a>.<br>If the configuration has been completed, please try reloading the page.';
+$lang->aiapp->langData->unauthorizedError  = 'Authorization failed, invalid API key. Please contact the administrator to <a href="{zaiConfigUrl}">configure ZAI</a>.<br>If the configuration has been completed, please try reloading the page.';
