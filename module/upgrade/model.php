@@ -12115,7 +12115,7 @@ class upgradeModel extends model
             $deliverable->status      = $review->status;
             $deliverable->version     = $review->version;
 
-            $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+            $this->dao->replace(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
