@@ -702,4 +702,20 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * 设置没有任务的执行数据。
+     * Set execution stat when has no task.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function setNoTaskExecutionTest(array $projectIdList): array
+    {
+        $result = $this->program->setNoTaskExecution($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
