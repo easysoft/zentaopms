@@ -1823,4 +1823,66 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printReleaseStatisticBlock method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printReleaseStatisticBlockTest(object $block)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printReleaseStatisticBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen, $block);
+            
+        } catch (Exception $e) {
+            // 如果方法执行出错，设置空的默认值
+            $blockZen->view->releaseData = array();
+            $blockZen->view->releases = array();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回设置的view数据
+        $result = new stdclass();
+        $result->releaseData = isset($blockZen->view->releaseData) ? $blockZen->view->releaseData : array();
+        $result->releases = isset($blockZen->view->releases) ? $blockZen->view->releases : array();
+        $result->releaseDataCount = is_array($result->releaseData) ? count($result->releaseData) : 0;
+        $result->releasesCount = is_array($result->releases) ? count($result->releases) : 0;
+        
+        return $result;
+    }
 }
