@@ -11260,6 +11260,7 @@ class upgradeModel extends model
         $deliverable->status      = 'disabled';
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
+        $deliverable->trimmable   = '1';
         $deliverable->template    = '[]';
 
         $deliverableStage = new stdClass();
@@ -11611,6 +11612,7 @@ class upgradeModel extends model
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
         $deliverable->template    = '[]';
+        $deliverable->trimmable   = '1';
         $deliverable->builtin     = '1';
 
         $deliverableStage = new stdClass();
@@ -11953,6 +11955,7 @@ class upgradeModel extends model
         $deliverable->status      = 'enabled';
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
+        $deliverable->trimmable   = '1';
         $deliverable->template    = '[]';
 
         $deliverableStage = new stdClass();
