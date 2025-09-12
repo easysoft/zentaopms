@@ -1570,4 +1570,109 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test saveUrlIntoSession method.
+     *
+     * @param  string $testUri
+     * @access public
+     * @return array|string
+     */
+    public function saveUrlIntoSessionTest(string $testUri = ''): array|string
+    {
+        global $tester;
+        
+        // 备份原来的session数据
+        $sessionKeys = array(
+            'productList', 'productPlanList', 'releaseList', 'programList', 'projectList',
+            'executionList', 'taskList', 'buildList', 'bugList', 'caseList', 'testtaskList',
+            'docList', 'opportunityList', 'riskList', 'trainplanList', 'roomList',
+            'researchplanList', 'researchreportList', 'meetingList', 'designList',
+            'storyLibList', 'issueLibList', 'riskLibList', 'opportunityLibList',
+            'practiceLibList', 'componentLibList'
+        );
+        
+        $originalSession = array();
+        foreach($sessionKeys as $key)
+        {
+            $originalSession[$key] = isset($tester->session->$key) ? $tester->session->$key : '';
+        }
+        
+        // 加载action控制器基类并创建actionZen实例
+        if(!class_exists('action'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        // 创建一个模拟的actionZen类用于测试
+        $actionZen = new class($testUri) extends actionZen {
+            private $mockUri;
+            
+            public function __construct($uri = '')
+            {
+                $this->mockUri = $uri;
+                parent::__construct();
+            }
+            
+            public function saveUrlIntoSession()
+            {
+                global $tester;
+                $uri = $this->mockUri ?: $this->app->getURI(true);
+                $tester->session->productList         = $uri;
+                $tester->session->productPlanList     = $uri;
+                $tester->session->releaseList         = $uri;
+                $tester->session->programList         = $uri;
+                $tester->session->projectList         = $uri;
+                $tester->session->executionList       = $uri;
+                $tester->session->taskList            = $uri;
+                $tester->session->buildList           = $uri;
+                $tester->session->bugList             = $uri;
+                $tester->session->caseList            = $uri;
+                $tester->session->testtaskList        = $uri;
+                $tester->session->docList             = $uri;
+                $tester->session->opportunityList     = $uri;
+                $tester->session->riskList            = $uri;
+                $tester->session->trainplanList       = $uri;
+                $tester->session->roomList            = $uri;
+                $tester->session->researchplanList    = $uri;
+                $tester->session->researchreportList  = $uri;
+                $tester->session->meetingList         = $uri;
+                $tester->session->designList          = $uri;
+                $tester->session->storyLibList        = $uri;
+                $tester->session->issueLibList        = $uri;
+                $tester->session->riskLibList         = $uri;
+                $tester->session->opportunityLibList  = $uri;
+                $tester->session->practiceLibList     = $uri;
+                $tester->session->componentLibList    = $uri;
+            }
+        };
+        
+        // 调用测试方法
+        $actionZen->saveUrlIntoSession();
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 获取保存后的session数据
+        $result = array();
+        foreach($sessionKeys as $key)
+        {
+            $result[$key] = isset($tester->session->$key) ? $tester->session->$key : '';
+        }
+        
+        // 恢复原来的session数据
+        foreach($originalSession as $key => $value)
+        {
+            if($value !== '')
+            {
+                $tester->session->set($key, $value);
+            }
+            else
+            {
+                unset($tester->session->$key);
+            }
+        }
+        
+        return $result;
+    }
 }
