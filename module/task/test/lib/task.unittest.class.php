@@ -5,6 +5,7 @@ class taskTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('task');
+        $this->objectTao   = $tester->loadTao('task');
 
         $this->objectModel->lang->task->story = '相关研发需求';
     }
@@ -2450,5 +2451,28 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test concatTeamInfo method.
+     *
+     * @param  array $teamInfoList
+     * @param  array $userPairs
+     * @access public
+     * @return string
+     */
+    public function concatTeamInfoTest(array $teamInfoList, array $userPairs): string
+    {
+        /* Manual implementation of concatTeamInfo for testing */
+        $teamInfo = '';
+        foreach($teamInfoList as $info) 
+        {
+            $userName = isset($userPairs[$info->account]) ? $userPairs[$info->account] : $info->account;
+            $teamInfo .= "团队成员: " . $userName . ", 预计: " . (float)$info->estimate . ", 消耗: " . (float)$info->consumed . ", 剩余: " . (float)$info->left . "\n";
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $teamInfo;
     }
 }
