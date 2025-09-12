@@ -1954,21 +1954,12 @@ $lang->webhook->methodOrder[35] = 'chooseDept';
 
 /* AI methods. */
 $lang->resource->ai = new stdclass();
-$lang->resource->ai->models                  = 'modelBrowse';
-$lang->resource->ai->modelView               = 'modelView';
-$lang->resource->ai->modelCreate             = 'modelCreate';
-$lang->resource->ai->modelEdit               = 'modelEdit';
-$lang->resource->ai->modelEnable             = 'modelEnable';
-$lang->resource->ai->modelDisable            = 'modelDisable';
-$lang->resource->ai->modelDelete             = 'modelDelete';
-$lang->resource->ai->modelTestConnection     = 'modelTestConnection';
 $lang->resource->ai->promptPublish           = 'promptPublish';
 $lang->resource->ai->promptUnpublish         = 'promptUnpublish';
 $lang->resource->ai->prompts                 = 'promptBrowse';
 $lang->resource->ai->promptView              = 'promptView';
 $lang->resource->ai->promptExecute           = 'promptExecute';
 $lang->resource->ai->promptExecutionReset    = 'promptExecutionReset';
-$lang->resource->ai->chat                    = 'chat';
 $lang->resource->ai->createMiniProgram       = 'createMiniProgram';
 $lang->resource->ai->editMiniProgram         = 'editMiniProgram';
 $lang->resource->ai->testMiniProgram         = 'testMiniProgram';
@@ -1980,13 +1971,6 @@ $lang->resource->ai->deleteMiniProgram       = 'deleteMiniProgram';
 $lang->resource->ai->exportMiniProgram       = 'exportMiniProgram';
 $lang->resource->ai->importMiniProgram       = 'importMiniProgram';
 $lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
-$lang->resource->ai->assistants              = 'assistants';
-$lang->resource->ai->assistantCreate         = 'assistantCreate';
-$lang->resource->ai->assistantEdit           = 'assistantEdit';
-$lang->resource->ai->assistantDelete         = 'assistantDelete';
-$lang->resource->ai->assistantView           = 'assistantView';
-$lang->resource->ai->assistantPublish        = 'assistantPublish';
-$lang->resource->ai->assistantWithdraw       = 'assistantWithdraw';
 
 $lang->resource->aiapp = new stdclass();
 $lang->resource->aiapp->square             = 'miniProgramSquare';
