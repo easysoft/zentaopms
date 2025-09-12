@@ -102,6 +102,34 @@ function registerZentaoAIPlugin(lang)
     })
 
 
+    plugin.defineContextProvider(
+    {
+        code     : 'currentDocContent',
+        title    : lang.currentDocContent,
+        icon     : 'doc',
+        recommend: true,
+        hidden   : true,
+        when: () => {
+            if(!window.config) return;
+
+            const pageWindow = $.apps.getLastApp().iframe.contentWindow;
+            const page$      = pageWindow.$;
+            const editor     = page$("[z-use-editor]").zui();
+            return !!editor;
+        },
+        data: async () => {
+            const pageWindow = $.apps.getLastApp().iframe.contentWindow;
+            const page$      = pageWindow.$;
+            const editor     = page$("[z-use-editor]").zui();
+            const html       = await editor.getHtml();
+            const text       = $(html).text();
+            return {prompt: ["当前文档内容：", text].join(TWO_BREAKS)};
+        },
+        generate: (userPrompt, { plugin }) => {
+            if (new RegExp(`@(${lang.currentDocContent})`, 'i').test(userPrompt)) return {};
+        }
+    });
+
     plugin.defineContextProvider({
         code : 'globalMemory',
         title: lang.globalMemoryTitle,
