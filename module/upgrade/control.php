@@ -545,10 +545,11 @@ class upgrade extends control
      * @param  string $skipMoveFile
      * @param  string $skipUpdateDocs
      * @param  string $skipUpdateDocTemplates
+     * @param  string $skipUpdateWeeklyReports
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateWeeklyReports = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -593,6 +594,17 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocTemplates', $mergedTemplateList);
                 return $this->locate(inlink('upgradeDocTemplates', "fromVersion={$fromVersion}"));
+            }
+        }
+
+        /* 如果有需要升级的周报，显示升级周报界面。*/
+        if($skipUpdateWeeklyReports == 'no')
+        {
+            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports();
+            if(!empty($upgradeWeeklyReports))
+            {
+                $this->session->set('upgradeWeeklyReports', $upgradeWeeklyReports);
+                $this->locate(inlink('upgradeWeeklyReports', "fromVersion={$fromVersion}"));
             }
         }
 
@@ -1033,6 +1045,47 @@ class upgrade extends control
             $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
             if(is_string($wikis)) $wikis = explode(',', $wikis);
             if($wikis) $this->upgrade->upgradeWikiTemplates($wikis);
+            $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * 升级周报数据。
+     * Upgrade weekly reports.
+     *
+     * @param  string $fromVersion
+     * @param  string $processed
+     * @access public
+     * @return void
+     */
+    public function upgradeWeeklyReports(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeReports = $this->session->upgradeWeeklyReports;
+        if($processed === 'yes' || empty($upgradeReports))
+        {
+            if(!empty($upgradeReports)) $this->session->set('upgradeWeeklyReports', true);
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateWeeklyReports=yes"));
+        }
+
+        $this->view->title          = $this->lang->upgrade->upgradeWeeklyReports;
+        $this->view->upgradeReports = $upgradeReports;
+        $this->view->fromVersion    = $fromVersion;
+        $this->display();
+    }
+
+    /**
+     * 升级周报数据。
+     * Upgrade weekly reports.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWeeklyReport()
+    {
+        if($_POST)
+        {
+            $data = isset($_POST['data']) ? $_POST['data'] : array();
+            if($data) $this->upgrade->upgradeWeeklyReport($data);
             $this->send(array('result' => 'success'));
         }
     }

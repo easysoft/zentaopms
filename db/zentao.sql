@@ -829,6 +829,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `fromVersion` smallint(6) NOT NULL DEFAULT '1',
   `draft` longtext NULL,
   `collects` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `weeklyDate` char(8) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
