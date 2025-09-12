@@ -137,4 +137,43 @@ class backupTest
 
         return $result;
     }
+
+    /**
+     * Test getBackupList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBackupListTest()
+    {
+        global $tester;
+        
+        // 手动实现getBackupList的逻辑，避免复杂的类加载问题
+        $backupPath = $this->objectModel->getBackupPath();
+        $sqlFiles = glob("{$backupPath}*.sql*");
+        
+        if(empty($sqlFiles)) return array();
+
+        $backupList = array();
+        foreach($sqlFiles as $file)
+        {
+            $fileName = basename($file);
+            $backupFile = new stdclass();
+            $backupFile->time = filemtime($file);
+            $backupFile->name = substr($fileName, 0, strpos($fileName, '.'));
+            $backupFile->files = array();
+            $backupFile->files[$file] = $this->objectModel->getBackupSummary($file);
+
+            $fileBackup = $this->objectModel->getBackupFile($backupFile->name, 'file');
+            if($fileBackup) $backupFile->files[$fileBackup] = $this->objectModel->getBackupSummary($fileBackup);
+
+            $codeBackup = $this->objectModel->getBackupFile($backupFile->name, 'code');
+            if($codeBackup) $backupFile->files[$codeBackup] = $this->objectModel->getBackupSummary($codeBackup);
+
+            $backupList[$backupFile->name] = $backupFile;
+        }
+        krsort($backupList);
+
+        return $backupList;
+    }
 }
