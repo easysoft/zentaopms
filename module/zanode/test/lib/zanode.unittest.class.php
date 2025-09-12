@@ -527,4 +527,46 @@ class zanodeTest
 
         return $returnObj;
     }
+
+    /**
+     * 测试通过主机ID列表获取主机列表。
+     * Test getHostsByIDList method.
+     *
+     * @param  array $hostIDList
+     * @access public
+     * @return object
+     */
+    public function getHostsByIDListTest(array $hostIDList): object
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getHostsByIDList');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $hostIDList);
+        if(dao::isError()) return dao::getError();
+
+        // 返回包含结果信息的对象
+        $returnObj = new stdClass();
+        if(is_array($result))
+        {
+            $returnObj->count = count($result);
+            $returnObj->data = $result;
+            // 如果有结果，提取第一个结果的关键信息用于测试断言
+            if(count($result) > 0)
+            {
+                $first = reset($result);  // 获取数组第一个元素（key可能不是0）
+                $returnObj->firstId = $first->id ?? null;
+                $returnObj->firstStatus = $first->status ?? null;
+                $returnObj->firstHeartbeat = $first->heartbeat ?? null;
+            }
+        }
+        else
+        {
+            $returnObj->count = 0;
+            $returnObj->data = array();
+        }
+
+        return $returnObj;
+    }
 }
