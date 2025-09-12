@@ -825,4 +825,30 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test initOldSession method.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @param  bool   $clearSession
+     * @access public
+     * @return array
+     */
+    public function initOldSessionTest(string $module, array $fields, array $fieldParams, bool $clearSession = true): array
+    {
+        $formSessionName = $module . 'Form';
+
+        // 根据参数决定是否清理session数据
+        if($clearSession) {
+            unset($_SESSION[$formSessionName]);
+        }
+
+        $this->objectTao->initOldSession($module, $fields, $fieldParams);
+
+        if(dao::isError()) return dao::getError();
+
+        return $_SESSION[$formSessionName] ?? array();
+    }
 }
