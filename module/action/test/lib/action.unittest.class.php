@@ -1543,4 +1543,31 @@ class actionTest
 
         return $result;
     }
+
+    /**
+     * Test getTrashesHeaderNavigation method.
+     *
+     * @param  array $objectTypeList
+     * @access public
+     * @return array
+     */
+    public function getTrashesHeaderNavigationTest(array $objectTypeList): array
+    {
+        global $tester;
+        
+        // 加载action控制器基类
+        if(!class_exists('action'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        
+        // 包含zen文件并实例化
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $actionZen = new actionZen();
+        $result = $actionZen->getTrashesHeaderNavigation($objectTypeList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
