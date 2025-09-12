@@ -977,4 +977,26 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test checkTodoPriv method.
+     *
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $table
+     * @access public
+     * @return int
+     */
+    public function checkTodoPrivTest(array $results, array $objectIdList, string $table): int
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkTodoPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($results, $objectIdList, $table));
+        if(dao::isError()) return -1;
+
+        return count($result);
+    }
 }
