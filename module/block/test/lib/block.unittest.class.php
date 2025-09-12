@@ -2709,4 +2709,79 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printWaterfallProgressBlock method.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallProgressBlockTest($projectID = null)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        
+        // 设置项目ID
+        if($projectID !== null) {
+            $blockZen->session->project = $projectID;
+        }
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printWaterfallProgressBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen);
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 返回设置的view数据
+            $result = new stdclass();
+            $result->charts = isset($blockZen->view->charts) ? $blockZen->view->charts : array();
+            $result->hasCharts = !empty($result->charts);
+            $result->pvCount = isset($result->charts['pv']) ? count($result->charts['pv']) : 0;
+            $result->evCount = isset($result->charts['ev']) ? count($result->charts['ev']) : 0;
+            $result->acCount = isset($result->charts['ac']) ? count($result->charts['ac']) : 0;
+            
+            return $result;
+            
+        } catch (Exception $e) {
+            // 如果执行出错，返回空结果
+            $result = new stdclass();
+            $result->charts = array();
+            $result->hasCharts = false;
+            $result->pvCount = 0;
+            $result->evCount = 0;
+            $result->acCount = 0;
+            $result->error = $e->getMessage();
+            
+            return $result;
+        }
+    }
 }
