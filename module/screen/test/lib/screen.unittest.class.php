@@ -9,6 +9,7 @@ class screenTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('screen');
+         $this->objectTao   = $tester->loadTao('screen');
          // Skip initScreen for __constructTest to avoid SQL errors
     }
 
@@ -1437,6 +1438,37 @@ class screenTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test processRadarData method.
+     *
+     * @param  string $sql
+     * @param  object $settings
+     * @access public
+     * @return mixed
+     */
+    public function processRadarDataTest($sql, $settings)
+    {
+        $indicator = array();
+        $seriesData = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processRadarData');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($sql, $settings, &$indicator, &$seriesData));
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'result' => $result,
+            'resultCount' => count($result),
+            'indicator' => $indicator,
+            'indicatorCount' => count($indicator),
+            'seriesData' => $seriesData,
+            'seriesDataCount' => count($seriesData)
+        );
     }
 
 }
