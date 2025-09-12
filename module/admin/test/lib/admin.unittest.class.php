@@ -6,6 +6,16 @@ class adminTest
         global $tester;
         $this->objectModel = $tester->loadModel('admin');
         $this->user        = $tester->loadModel('user');
+        
+        // 加载admin控制器基类
+        if(!class_exists('admin'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        
+        // 包含zen文件并实例化
+        require_once dirname(__FILE__, 3) . '/zen.php';
+        $this->objectZen = new adminZen();
     }
 
     /**
@@ -255,5 +265,25 @@ class adminTest
 
         // 对于非空参数，返回1表示执行成功
         return 1;
+    }
+
+    /**
+     * Test syncExtensions method.
+     *
+     * @param  string $type
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncExtensionsTest(string $type = 'plugin', int $limit = 5)
+    {
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('syncExtensions');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $type, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
