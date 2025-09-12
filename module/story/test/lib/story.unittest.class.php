@@ -1773,4 +1773,26 @@ class storyTest
         // updateLane方法实际没有返回值，返回执行状态
         return $result === null ? 'success' : $result;
     }
+
+    /**
+     * Test getAffectedChildren method.
+     *
+     * @param  object $story
+     * @param  array  $users
+     * @access public
+     * @return object|array
+     */
+    public function getAffectedChildrenTest(object $story, array $users = array()): object|array
+    {
+        if(empty($users)) $users = array('admin' => '管理员');
+        
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAffectedChildren');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $story, $users);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
