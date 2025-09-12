@@ -11223,7 +11223,7 @@ class upgradeModel extends model
             if($report->weekStart < $report->projectBegin) unset($reports[$key]);
 
             if($report->projectStatus == 'doing')     $report->projectEnd = $thisSunday;
-            if($report->projectStatus == 'suspended') $report->projectEnd = $project->suspendedDate;
+            if($report->projectStatus == 'suspended') $report->projectEnd = $report->suspendedDate;
             if($report->projectStatus == 'closed')    $report->projectEnd = $report->realEnd;
 
             /* Filter date > project end date report. */
