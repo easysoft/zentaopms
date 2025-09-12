@@ -1112,4 +1112,44 @@ class searchTest
 
         return count($result);
     }
+
+    /**
+     * Test checkPriv method.
+     *
+     * @param  array $results
+     * @param  array $objectPairs
+     * @param  bool  $isAdmin
+     * @param  string $userProducts
+     * @param  string $userExecutions
+     * @access public
+     * @return int
+     */
+    public function checkPrivTest(array $results, array $objectPairs = array(), bool $isAdmin = false, string $userProducts = '1,2,3', string $userExecutions = '1,2,3'): int
+    {
+        global $tester;
+
+        // 备份并设置用户权限
+        $oldAdmin = $tester->app->user->admin;
+        $tester->app->user->admin = $isAdmin;
+        if(!isset($tester->app->user->view)) $tester->app->user->view = new stdClass();
+        $oldProducts = isset($tester->app->user->view->products) ? $tester->app->user->view->products : '';
+        $oldSprints = isset($tester->app->user->view->sprints) ? $tester->app->user->view->sprints : '';
+        $tester->app->user->view->products = $userProducts;
+        $tester->app->user->view->sprints = $userExecutions;
+
+        $this->objectTao->app = $tester->app;
+
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($results, $objectPairs));
+
+        // 恢复用户状态
+        $tester->app->user->admin = $oldAdmin;
+        $tester->app->user->view->products = $oldProducts;
+        $tester->app->user->view->sprints = $oldSprints;
+
+        return dao::isError() ? -1 : count($result);
+    }
 }
