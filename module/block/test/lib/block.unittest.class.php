@@ -5,6 +5,7 @@ class blockTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('block');
+         $this->objectTao   = $tester->loadTao('block');
     }
 
      /**
@@ -838,6 +839,35 @@ class blockTest
     public function getModelType4ProjectsTest($projectIdList)
     {
         $result = $this->objectModel->getModelType4Projects($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initBlock method in zen layer.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return bool
+     */
+    public function zenInitBlockTest(string $dashboard)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;  // 设置block属性
+        
+        $result = $blockZen->initBlock($dashboard);
+        
         if(dao::isError()) return dao::getError();
 
         return $result;
