@@ -503,4 +503,23 @@ class webhookTest
 
         return $result;
     }
+
+    /**
+     * Test getFeishuSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getFeishuSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getFeishuSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
