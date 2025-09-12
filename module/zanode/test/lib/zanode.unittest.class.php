@@ -483,4 +483,48 @@ class zanodeTest
 
         return count($result);
     }
+
+    /**
+     * 测试通过查询条件获取执行节点列表。
+     * Test getZaNodeListByQuery method.
+     *
+     * @param  string $query
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function getZaNodeListByQueryTest(string $query = '', string $orderBy = 'id_desc', ?object $pager = null): object
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getZaNodeListByQuery');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $query, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        // 返回包含结果信息的对象
+        $returnObj = new stdClass();
+        if(is_array($result))
+        {
+            $returnObj->count = count($result);
+            $returnObj->data = $result;
+            // 如果有结果，返回第一个结果的部分信息用于测试
+            if(count($result) > 0)
+            {
+                $first = $result[0];
+                $returnObj->firstId = $first->id ?? null;
+                $returnObj->firstType = $first->type ?? null;
+                $returnObj->firstStatus = $first->status ?? null;
+            }
+        }
+        else
+        {
+            $returnObj->count = 0;
+            $returnObj->data = array();
+        }
+
+        return $returnObj;
+    }
 }
