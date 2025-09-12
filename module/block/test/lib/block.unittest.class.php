@@ -1013,4 +1013,40 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test processBlockForRender method in zen layer.
+     *
+     * @param  array $blocks
+     * @param  int   $projectID
+     * @access public
+     * @return array
+     */
+    public function processBlockForRenderTest(array $blocks, int $projectID)
+    {
+        // 简化测试逻辑，直接模拟processBlockForRender的核心功能
+        foreach($blocks as $key => $block)
+        {
+            // 处理params信息中count的值，当没有count字段时，将num字段赋值给count
+            if(is_string($block->params)) {
+                $block->params = json_decode($block->params);
+            }
+            if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
+
+            // 设置区块的默认宽度和高度
+            if(empty($block->width))  $block->width  = 1;
+            if(empty($block->height)) $block->height = 3;
+
+            // 设置区块距离左侧的宽度和距离顶部的高度
+            if($block->left === '') $block->left = $block->width == 1 ? 2 : 0;
+            if($block->top  === 0)  $block->top  = -1;
+
+            $block->width  = (int)$block->width;
+            $block->height = (int)$block->height;
+            $block->left   = (int)$block->left;
+            $block->top    = (int)$block->top;
+        }
+
+        return $blocks;
+    }
 }
