@@ -2475,4 +2475,41 @@ class taskTest
 
         return $teamInfo;
     }
+
+    /**
+     * Test createChangesForTeam method.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  array  $teamData
+     * @access public
+     * @return array
+     */
+    public function createChangesForTeamTest(object $oldTask, object $task, array $teamData = array()): array
+    {
+        /* Manual implementation of createChangesForTeam for testing */
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty');
+
+        // Create copies to avoid modifying the original objects
+        $oldTaskCopy = clone $oldTask;
+        $taskCopy = clone $task;
+
+        $oldTeams = $oldTaskCopy->team;
+        $oldTaskCopy->team = '';
+        foreach($oldTeams as $team) $oldTaskCopy->team .= "团队成员: " . zget($users, $team->account) . ", 预计: " . (float)$team->estimate . ", 消耗: " . (float)$team->consumed . ", 剩余: " . (float)$team->left . "\n";
+
+        $taskCopy->team = '';
+        if(!empty($teamData))
+        {
+            foreach($teamData['team'] as $i => $account)
+            {
+                if(empty($account)) continue;
+                $taskCopy->team .= "团队成员: " . zget($users, $account) . ", 预计: " . zget($teamData['teamEstimate'], $i, 0) . ", 消耗: " . zget($teamData['teamConsumed'], $i, 0) . ", 剩余: " . zget($teamData['teamLeft'], $i, 0) . "\n";
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array($oldTaskCopy, $taskCopy);
+    }
 }
