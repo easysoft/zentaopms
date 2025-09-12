@@ -343,4 +343,31 @@ class adminTest
 
         return $result;
     }
+
+    /**
+     * Test sendCodeByAPI method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function sendCodeByAPITest(string $type = 'mobile')
+    {
+        // 为adminZen对象设置必要的属性
+        $this->objectZen->admin = $this->objectModel;
+        
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('sendCodeByAPI');
+        $method->setAccessible(true);
+        
+        // 使用try-catch来捕获可能的网络错误
+        try {
+            $result = $method->invoke($this->objectZen, $type);
+            if(dao::isError()) return dao::getError();
+            return is_string($result) ? (strlen($result) > 0 ? '1' : '0') : '0';
+        } catch (Exception $e) {
+            // 网络请求失败时返回特定标识
+            return '0';
+        }
+    }
 }
