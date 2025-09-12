@@ -1615,4 +1615,23 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getFinishClosedTotal method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return int
+     */
+    public function getFinishClosedTotalTest(string $storyType = 'story'): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getFinishClosedTotal');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return array_sum($result);
+    }
 }
