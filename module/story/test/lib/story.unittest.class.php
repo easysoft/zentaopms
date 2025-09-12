@@ -1681,4 +1681,21 @@ class storyTest
             return 0;
         }
     }
+
+    /**
+     * Test checkCanSubdivide method.
+     *
+     * @param  object $story
+     * @param  bool   $isShadowProduct
+     * @access public
+     * @return bool
+     */
+    public function checkCanSubdivideTest(object $story, bool $isShadowProduct): bool
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkCanSubdivide');
+        $method->setAccessible(true);
+
+        return $method->invoke($this->objectTao, $story, $isShadowProduct);
+    }
 }
