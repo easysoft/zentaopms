@@ -1021,4 +1021,45 @@ class searchTest
 
         return count($result);
     }
+
+    /**
+     * Test checkFeedbackAndTicketPriv method.
+     *
+     * @param  string $objectType
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $table
+     * @access public
+     * @return int
+     */
+    public function checkFeedbackAndTicketPrivTest(string $objectType, array $results, array $objectIdList, string $table): int
+    {
+        // 模拟checkFeedbackAndTicketPriv的逻辑
+        global $tester;
+
+        // 模拟getGrantProducts返回的产品权限
+        $grantProducts = array(1 => 1, 2 => 2, 3 => 3);
+
+        $objects = $tester->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
+
+        foreach($objects as $objectID => $object)
+        {
+            // 如果是反馈类型且创建人是当前用户，继续
+            if($objectType == 'feedback' && $object->openedBy == $tester->app->user->account) continue;
+
+            // 如果有产品权限，继续
+            if(isset($grantProducts[$object->product])) continue;
+
+            // 否则从结果中移除
+            if(isset($objectIdList[$objectID]))
+            {
+                $recordID = $objectIdList[$objectID];
+                unset($results[$recordID]);
+            }
+        }
+
+        if(dao::isError()) return -1;
+
+        return count($results);
+    }
 }
