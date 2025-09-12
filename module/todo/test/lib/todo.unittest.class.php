@@ -5,6 +5,7 @@ class todoTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('todo');
+        $this->objectTao   = $tester->loadTao('todo');
         $tester->app->loadClass('dao');
     }
 
@@ -475,6 +476,27 @@ class todoTest
         $method->setAccessible(true);
         
         $result = $method->invoke($this->objectModel, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getCycleDailyTodoDate method.
+     *
+     * @param  object $todo
+     * @param  object|string $lastCycle
+     * @param  string $today
+     * @access public
+     * @return false|string
+     */
+    public function getCycleDailyTodoDateTest(object $todo, object|string $lastCycle, string $today): false|string
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getCycleDailyTodoDate');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todo, $lastCycle, $today);
         if(dao::isError()) return dao::getError();
 
         return $result;
