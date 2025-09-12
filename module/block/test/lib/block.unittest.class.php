@@ -2155,4 +2155,58 @@ class blockTest
         // 返回模拟的结果 - 简化为数值以便测试
         return count(array($cardGroup, $barGroup));
     }
+
+    /**
+     * Test printProjectStatisticBlock method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return bool
+     */
+    public function printProjectStatisticBlockTest(object $block)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printProjectStatisticBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen, $block);
+            
+            // 检查是否成功执行且没有错误
+            if(dao::isError()) return false;
+            
+            return true;
+            
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
