@@ -1102,4 +1102,46 @@ class blockTest
 
         return $block;
     }
+
+    /**
+     * Test printDynamicBlock method in zen layer.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDynamicBlockTest()
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化view对象
+        $blockZen->view = new stdclass();
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('printDynamicBlock');
+        $method->setAccessible(true);
+        
+        // 执行方法
+        $method->invoke($blockZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回设置的view数据
+        $result = new stdclass();
+        $result->actions = isset($blockZen->view->actions) ? $blockZen->view->actions : array();
+        $result->users = isset($blockZen->view->users) ? $blockZen->view->users : array();
+        
+        return $result;
+    }
 }
