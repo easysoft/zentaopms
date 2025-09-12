@@ -2559,4 +2559,29 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * Test getTeamInfoList method.
+     *
+     * @param  array $teamList
+     * @param  array $teamSourceList
+     * @param  array $teamEstimateList
+     * @param  array $teamConsumedList
+     * @param  array $teamLeftList
+     * @access public
+     * @return array
+     */
+    public function getTeamInfoListTest(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
+    {
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getTeamInfoList');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
