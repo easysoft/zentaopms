@@ -41,6 +41,39 @@ class projectTest
     }
 
     /**
+     * Test updateMemberView method.
+     *
+     * @param  int   $projectID
+     * @param  array $accounts
+     * @param  array $oldJoin
+     * @access public
+     * @return mixed
+     */
+    public function updateMemberViewTest($projectID = 0, $accounts = array(), $oldJoin = array())
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('updateMemberView');
+            $method->setAccessible(true);
+
+            $method->invoke($this->objectTao, $projectID, $accounts, $oldJoin);
+
+            if(dao::isError()) return dao::getError();
+
+            return true;
+        }
+        catch(Exception $e)
+        {
+            if(strpos($e->getMessage(), 'Table') !== false && strpos($e->getMessage(), 'doesn\'t exist') !== false)
+            {
+                return 'TABLE_NOT_EXISTS';
+            }
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Test getTeamListByType method.
      *
      * @param  string $type
