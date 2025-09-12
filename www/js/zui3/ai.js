@@ -76,6 +76,39 @@ function registerZentaoAIPlugin(lang)
         }
     });
 
+    plugin.defineContextProvider(
+    {
+        code: 'currentPage',
+        title: lang.currentPage,
+        icon: 'globe',
+        recommend: true,
+        when: () => $.apps,
+        data: () => {
+            const pageWindow = $.apps.getLastApp().iframe.contentWindow;
+            const page$ = pageWindow.$;
+            const $mainContainer = page$('#mainContainer');
+            const pageContent = $mainContainer.length ? $mainContainer.text() : page$('body').text();
+            return {
+                prompt: [
+                    `当前页面标题：${document.title}`,
+                    "当前页面内容：",
+                    pageContent
+                ].join(TWO_BREAKS)
+            };
+        },
+        generate: (userPrompt, {plugin}) => {
+            if(new RegExp(`@(${lang.currentPage})`, 'i').test(userPrompt)) return {};
+        }
+    })
+
+
+    plugin.defineContextProvider({
+        code : 'globalMemory',
+        title: lang.globalMemoryTitle,
+        icon : 'book',
+        when : context => !!context.store.globalMemory,
+        data : {memory: {collections: ['$global']}},
+    });
 }
 
 $(() => {
