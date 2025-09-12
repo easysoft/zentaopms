@@ -1,0 +1,37 @@
+---
+title: 测试执行区块测试数据
+desc: 用于测试printCaseBlock方法的测试执行数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 测试执行ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+- field: task
+  note: 所属测试任务
+  range: 1{8},2{8},3{6},4{4},5{4}
+- field: case
+  note: 关联测试用例
+  range: 1-30
+- field: version
+  note: 用例版本
+  range: 1{20},2{6},3{4}
+- field: assignedTo
+  note: 指派给
+  range: admin{12},user1{8},user2{6},user3{4}
+- field: lastRunner
+  note: 最后执行人
+  range: admin{10},user1{8},user2{6},user3{4},[]{2}
+- field: lastRunDate
+  note: 最后执行时间
+  range: (`-30D`)-(`-1D`):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: lastRunResult
+  note: 最后执行结果
+  range: pass{12},fail{8},blocked{6},skipped{4}
+- field: status
+  note: 执行状态
+  range: wait{10},doing{8},done{12}
