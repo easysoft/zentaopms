@@ -4,22 +4,57 @@
 # 作者: Auto-generated script
 # 日期: $(date +%Y-%m-%d)
 
-if [ "$#" -eq 0 ]; then
-    echo "Usage: $0 <csv_file_name> [-c]"
+echo_usage() {
+    echo "Usage: $0 [-c] [-s START_LINE] <csv_file_name>"
     echo "This script generates unit test scripts based on the provided CSV file."
+    echo "  -c              Continue processing on error (default is to break)."
+    echo "  -s START_LINE   Start processing from line START_LINE. Default is 2 (the first line is header)."
     exit 1
+}
+
+# 检查参数数量
+if [ "$#" -eq 0 ]; then
+    echo_usage
+fi
+
+# 检查是否提供了 CSV 文件名
+if [ -z "$1" ]; then
+    echo_usage
 fi
 
 # 错误处理策略
 ON_ERROR_STRATEGY="break" # 默认为 break
 
-while getopts ":c" opt; do
-  case ${opt} in
-    c )
-      ON_ERROR_STRATEGY="continue"
-      ;;
-  esac
+# 默认从第2行开始（跳过标题行）
+START_LINE=2
+
+# 解析命令行选项
+while getopts ":cs:" opt; do # 注意 's:' 表示 s 选项需要一个参数
+    case ${opt} in
+        c )
+            ON_ERROR_STRATEGY="continue"
+            ;;
+        s )
+            # 验证 START_LINE 是否为正整数
+            if ! [[ "$OPTARG" =~ ^[0-9]+$ ]] || [ "$OPTARG" -lt 1 ]; then
+                echo "Invalid start line: '$OPTARG'. Must be a positive integer."
+                exit 1
+            fi
+            START_LINE="$OPTARG"
+            ;;
+        \? )
+            echo "Invalid Option: -$OPTARG" 1>&2
+            exit 1
+            ;;
+        : )
+            echo "Invalid Option: -$OPTARG requires an argument" 1>&2
+            exit 1
+            ;;
+    esac
 done
+
+# 移除已处理的选项和参数
+shift $((OPTIND -1))
 
 # 设置变量
 BASE_PATH=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")/../..")
@@ -54,7 +89,7 @@ check_prerequisites() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 前置条件检查完成" | tee -a "$LOG_FILE"
 }
 
-# 调用 claude 生成测试脚本
+# 调用Claude生成测试脚本
 claude_generate_test() {
     local claude_command="$1"
     local test_file_path="$2"
@@ -73,10 +108,10 @@ claude_generate_test() {
 
     # 执行Claude命令并捕获输出
     local claude_output
-    if claude_output=$($claude_command); then
+    if claude_output=$($claude_command < /dev/null 2>&1); then
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Claude命令执行成功" | tee -a "$LOG_FILE"
 
-        # 将Claude输出保存到测试文件
+        # 记录测试文件已生成到日志
         echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已生成: $test_file_path" | tee -a "$LOG_FILE"
 
         # 记录详细的Claude输出到日志
@@ -139,6 +174,7 @@ process_method() {
     # 调用Claude生成测试脚本
     claude_generate_test "$claude_command" "$test_file_path"
 
+    # 返回Claude生成测试脚本的结果
     return $?
 }
 
@@ -152,14 +188,22 @@ main() {
     # 读取CSV文件（跳过第一行标题）
     local line_count=$(wc -l < "$CSV_FILE")
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] CSV文件总行数: $line_count (包含标题行)" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 从第 $START_LINE 行开始处理 (跳过前面的数据行和标题行)." | tee -a "$LOG_FILE"
 
     # 使用while循环读取CSV文件
     while IFS=',' read -r module class method || [ -n "$module" ]; do
         ((CURRENT_LINE++))
 
-        # 跳过第一行标题
+        # 跳过标题行
         if [ $CURRENT_LINE -eq 1 ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 跳过标题行" | tee -a "$LOG_FILE"
             continue
+        fi
+
+        # 跳过指定行数之前的数据行和标题行
+        if [ $CURRENT_LINE -lt $START_LINE ]; then
+             echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 跳过第 $CURRENT_LINE 行 (在起始行 $START_LINE 之前)." | tee -a "$LOG_FILE"
+             continue
         fi
 
         # 清理字段中的回车符和空白字符
@@ -193,9 +237,6 @@ main() {
         if [ $((TOTAL_PROCESSED % 10)) -eq 0 ]; then
             echo "$(date '+%Y-%m-%d %H:%M:%S') [PROGRESS] 已处理 $TOTAL_PROCESSED 个方法" | tee -a "$LOG_FILE"
         fi
-
-        # 避免频繁调用Claude，添加短暂延迟
-        sleep 1
 
     done < "$CSV_FILE"
 
