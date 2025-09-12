@@ -1225,4 +1225,24 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test processTaskRecord method.
+     *
+     * @param  object $record
+     * @access public
+     * @return object
+     */
+    public function processTaskRecordTest(object $record): object
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('processTaskRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($record));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
