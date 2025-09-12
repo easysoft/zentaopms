@@ -12115,8 +12115,19 @@ class upgradeModel extends model
             $deliverable->status      = $review->status;
             $deliverable->version     = $review->version;
 
-            $this->dao->replace(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
-            $deliverableID = $this->dao->lastInsertID();
+            $deliverableID = $this->dao->select('id')->from(TABLE_PROJECTDELIVERABLE)
+                ->where('project')->eq($deliverable->project)
+                ->andWhere('deliverable')->eq($deliverable->deliverable)
+                ->andWhere('doc')->eq($deliverable->doc)
+                ->fetch('id');
+
+            /* 保证交付物在项目下的唯一性，如果不存在，则插入。 */
+            if(!$deliverableID)
+            {
+                $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+                $deliverableID = $this->dao->lastInsertID();
+            }
+
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVAL)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
