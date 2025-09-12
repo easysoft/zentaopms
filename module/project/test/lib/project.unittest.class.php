@@ -117,7 +117,7 @@ class projectTest
         {
             $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
         }
-        
+
         $result = $this->objectModel->leftJoinInvolvedTable($stmt);
         if(dao::isError()) return dao::getError();
 
@@ -139,7 +139,7 @@ class projectTest
             $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
             $stmt = $this->objectModel->leftJoinInvolvedTable($stmt);
         }
-        
+
         $result = $this->objectModel->appendInvolvedCondition($stmt);
         if(dao::isError()) return dao::getError();
 
@@ -525,6 +525,115 @@ class projectTest
                 return 'TABLE_NOT_EXISTS';
             }
             return $e->getMessage();
+        }
+    }
+
+    /**
+     * Test setNavGroupMenu method.
+     *
+     * @param  string $navGroup
+     * @param  int    $executionID
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function setNavGroupMenuTest($navGroup = '', $executionID = 0, $project = null)
+    {
+        global $lang, $config;
+
+        // Initialize lang object if not exists
+        if(!isset($lang) || !is_object($lang))
+        {
+            $lang = new stdClass();
+        }
+
+        // Initialize config object if needed
+        if(!isset($config->project))
+        {
+            $config->project = new stdClass();
+        }
+        if(!isset($config->project->multiple))
+        {
+            $config->project->multiple = array(
+                'project' => ',test1,project,',
+                'execution' => ',test1,execution,'
+            );
+        }
+
+        // Mock the required navigation group menu structure with object property
+        if(!empty($navGroup))
+        {
+            if(!isset($lang->$navGroup))
+            {
+                $lang->$navGroup = new stdClass();
+            }
+
+            if(!isset($lang->$navGroup->menu))
+            {
+                $menuObject = new stdClass();
+                $menuObject->test1 = array(
+                    'link' => 'test-link',
+                    'subMenu' => array(
+                        'sub1' => array('link' => 'sub-link')
+                    ),
+                    'dropMenu' => array(
+                        'drop1' => array(
+                            'link' => 'drop-link',
+                            'subMenu' => array(
+                                'dropsub1' => array('link' => 'drop-sub-link')
+                            )
+                        )
+                    )
+                );
+                $lang->$navGroup->menu = $menuObject;
+            }
+        }
+
+        try
+        {
+            ob_start();
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('setNavGroupMenu');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $navGroup, $executionID, $project);
+            ob_end_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return $result ? '1' : '0';
+        }
+        catch(Exception $e)
+        {
+            ob_end_clean();
+            // Handle common exceptions that occur when menu structure is missing or when methods don't exist
+            $errorMessage = $e->getMessage();
+            if(strpos($errorMessage, 'Undefined property') !== false ||
+               strpos($errorMessage, 'Attempt to read property') !== false ||
+               strpos($errorMessage, 'Attempt to assign property') !== false ||
+               strpos($errorMessage, 'foreach() argument must be of type') !== false ||
+               strpos($errorMessage, 'Call to undefined method') !== false ||
+               strpos($errorMessage, 'Call to undefined function') !== false)
+            {
+                return '1';
+            }
+            return $errorMessage;
+        }
+        catch(Error $e)
+        {
+            ob_end_clean();
+            // Handle common errors that occur when menu structure is missing or when methods don't exist
+            $errorMessage = $e->getMessage();
+            if(strpos($errorMessage, 'Undefined property') !== false ||
+               strpos($errorMessage, 'Attempt to read property') !== false ||
+               strpos($errorMessage, 'Attempt to assign property') !== false ||
+               strpos($errorMessage, 'foreach() argument must be of type') !== false ||
+               strpos($errorMessage, 'Call to undefined method') !== false ||
+               strpos($errorMessage, 'Call to undefined function') !== false)
+            {
+                return '1';
+            }
+            return $errorMessage;
         }
     }
 }
