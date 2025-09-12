@@ -2298,4 +2298,65 @@ class blockTest
             return 0;
         }
     }
+
+    /**
+     * Test printWaterfallReportBlock method in zen layer.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printWaterfallReportBlockTest()
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
+        
+        try {
+            // 检查项目是否存在
+            $projectID = common::isTutorialMode() ? 2 : $blockZen->session->project;
+            $project = $tester->loadModel('project')->getByID($projectID);
+            
+            // 如果项目不存在，返回0
+            if(!$project) {
+                return 0;
+            }
+            
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printWaterfallReportBlock');
+            $method->setAccessible(true);
+            
+            // 执行方法
+            $method->invoke($blockZen);
+            
+            if(dao::isError()) return dao::getError();
+            
+            return 1;
+        } catch (Exception $e) {
+            return 0;
+        } catch (TypeError $e) {
+            return 0;
+        }
+    }
 }
