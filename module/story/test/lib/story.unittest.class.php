@@ -1714,4 +1714,23 @@ class storyTest
 
         return $method->invoke($this->objectTao, $story);
     }
+
+    /**
+     * Test getChildItems method.
+     *
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function getChildItemsTest(array $stories): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getChildItems');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $stories);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
