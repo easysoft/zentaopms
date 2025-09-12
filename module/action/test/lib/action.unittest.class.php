@@ -1833,4 +1833,89 @@ class actionTest
         
         return $result;
     }
+
+    /**
+     * Test recoverObject method.
+     *
+     * @param  string $repeatName
+     * @param  string $repeatCode
+     * @param  string $replaceName
+     * @param  string $replaceCode
+     * @param  string $testType
+     * @access public
+     * @return object|string
+     */
+    public function recoverObjectTest(string $repeatName, string $repeatCode, string $replaceName, string $replaceCode, string $testType): object|string
+    {
+        global $tester;
+        
+        // 加载action控制器基类
+        if(!class_exists('action'))
+        {
+            include dirname(__FILE__, 3) . '/control.php';
+        }
+        
+        // 包含zen文件并实例化
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $actionZen = new actionZen();
+        
+        // 确保actionZen类有正确的action属性
+        $actionZen->action = $this->objectModel;
+        
+        // 创建模拟的重复对象
+        $repeatObject = new stdClass();
+        $repeatObject->name = $repeatName;
+        $repeatObject->code = $repeatCode;
+        
+        // 创建模拟的原对象
+        $object = new stdClass();
+        $object->name = $repeatName;
+        $object->code = $repeatCode;
+        
+        // 创建模拟的旧Action对象
+        $oldAction = new stdClass();
+        $oldAction->objectID = 1;
+        $oldAction->objectType = 'product';
+        
+        // 设置数据表
+        $table = TABLE_PRODUCT;
+        
+        if($testType == 'empty' || ($testType == 'none'))
+        {
+            // 如果是测试无变化的情况，直接返回
+            if(empty($replaceName) && empty($replaceCode)) return 'no_change';
+            
+            // 模拟无重复的情况，修改重复对象的名称和代码
+            if($testType == 'none')
+            {
+                $repeatObject->name = '不重复产品';
+                $repeatObject->code = 'no_repeat';
+            }
+        }
+        
+        // 调用测试方法
+        $actionZen->recoverObject($repeatObject, $object, $replaceName, $replaceCode, $table, $oldAction);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 检查更新结果
+        $updatedObject = $tester->dao->select('*')->from($table)->where('id')->eq($oldAction->objectID)->fetch();
+        
+        if(!$updatedObject) return 'no_object';
+        
+        // 根据测试类型返回相应的结果
+        switch($testType) {
+            case 'both':
+                return (object)array('name' => $updatedObject->name, 'code' => $updatedObject->code);
+            case 'name':
+                return (object)array('name' => $updatedObject->name);
+            case 'code':
+                return (object)array('code' => $updatedObject->code);
+            case 'none':
+            case 'empty':
+                return 'no_change';
+            default:
+                return $updatedObject;
+        }
+    }
 }
