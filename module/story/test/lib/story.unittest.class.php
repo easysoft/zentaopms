@@ -5,6 +5,7 @@ class storyTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('story');
+         $this->objectTao   = $tester->loadTao('story');
          su('admin');
     }
 
@@ -1593,5 +1594,25 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         return count($result);
+    }
+
+    /**
+     * Test getStoriesCountByProductIDs method.
+     *
+     * @param  array  $productIDs
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getStoriesCountByProductIDsTest(array $productIDs, string $storyType = 'requirement'): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStoriesCountByProductIDs');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $productIDs, $storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
