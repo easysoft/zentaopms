@@ -1698,4 +1698,20 @@ class storyTest
 
         return $method->invoke($this->objectTao, $story, $isShadowProduct);
     }
+
+    /**
+     * Test checkCanSplit method.
+     *
+     * @param  object $story
+     * @access public
+     * @return bool
+     */
+    public function checkCanSplitTest(object $story): bool
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('checkCanSplit');
+        $method->setAccessible(true);
+
+        return $method->invoke($this->objectTao, $story);
+    }
 }
