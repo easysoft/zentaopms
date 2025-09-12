@@ -522,4 +522,26 @@ class webhookTest
 
         return $result;
     }
+
+    /**
+     * Test getActionText method.
+     *
+     * @param  object $data
+     * @param  object $action
+     * @param  object $object
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function getActionTextTest($data, $action, $object, $users)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getActionText');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $data, $action, $object, $users);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
