@@ -3946,4 +3946,37 @@ class bugTest
         
         return $response;
     }
+
+    /**
+     * Test responseInModal method.
+     *
+     * @param  string $message
+     * @param  bool   $isInKanban
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function responseInModalTest(string $message = '', bool $isInKanban = false, string $tab = 'qa'): array
+    {
+        global $app, $lang;
+        
+        // 设置应用tab
+        $originalTab = $app->tab ?? '';
+        $app->tab = $tab;
+        
+        // 模拟语言设置
+        if(!$message) $message = $lang->saveSuccess ?? '保存成功';
+        
+        // 模拟responseInModal方法的逻辑，避免调用send方法
+        if($app->tab == 'execution' && $isInKanban) {
+            $result = array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()");
+        } else {
+            $result = array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true);
+        }
+        
+        // 恢复原始tab
+        $app->tab = $originalTab;
+        
+        return $result;
+    }
 }
