@@ -202,4 +202,25 @@ class ciTest
 
         return $result;
     }
+
+    /**
+     * Test parseZtfResult method.
+     *
+     * @param  object $post
+     * @param  int    $taskID
+     * @param  int    $productID
+     * @param  int    $jobID
+     * @param  int    $compileID
+     * @access public
+     * @return bool
+     */
+    public function parseZtfResultTest(object $post, int $taskID, int $productID, int $jobID, int $compileID): bool
+    {
+        $method = $this->objectZen->getMethod('parseZtfResult');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), [$post, $taskID, $productID, $jobID, $compileID]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
