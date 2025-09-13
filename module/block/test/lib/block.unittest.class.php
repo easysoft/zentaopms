@@ -3444,4 +3444,58 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printProductOverviewBlock method.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return object
+     */
+    public function printProductOverviewBlockTest($block, $params = array())
+    {
+        global $tester;
+        $result = new stdclass();
+
+        // 创建blockModel的别名为block类
+        if(!class_exists('block'))
+        {
+            class_alias('blockModel', 'block');
+        }
+
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->dao = $tester->dao;
+        $blockZen->view = new stdclass();
+        $blockZen->config = $tester->config;
+
+        // 调用被测试方法 - 需要通过反射调用protected方法
+        $reflection = new ReflectionClass(get_class($blockZen));
+        $method = $reflection->getMethod('printProductOverviewBlock');
+        $method->setAccessible(true);
+
+        ob_start();
+        try {
+            $method->invoke($blockZen, $block, $params);
+            $result->success = true;
+            $result->error = null;
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+        }
+        $output = ob_get_clean();
+
+        $result->output = $output;
+        $result->blockWidth = isset($block->width) ? $block->width : 0;
+        $result->params = $params;
+
+        return $result;
+    }
 }
