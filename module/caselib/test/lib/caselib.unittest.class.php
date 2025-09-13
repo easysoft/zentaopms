@@ -359,4 +359,25 @@ class caselibTest
         
         return $result;
     }
+
+    /**
+     * Test saveLibState method.
+     *
+     * @param  int   $libID
+     * @param  array $libraries
+     * @access public
+     * @return int
+     */
+    public function saveLibStateTest(int $libID = 0, array $libraries = array()): int
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('saveLibState');
+        $zenInstance = $zen->newInstance();
+        
+        $result = $method->invoke($zenInstance, $libID, $libraries);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
