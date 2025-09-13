@@ -1,0 +1,186 @@
+---
+title: 需求数据定义
+desc: 为previewPlanStory方法测试提供需求数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视野
+  range: rnd
+  format: ""
+- field: parent
+  note: 父需求ID
+  range: 0
+  format: ""
+- field: isParent
+  note: 是否为父需求
+  range: 0
+  format: ""
+- field: root
+  note: 根需求ID
+  range: 0
+  format: ""
+- field: path
+  note: 路径
+  range: ''
+  format: ""
+- field: grade
+  note: 等级
+  range: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0
+  format: ""
+- field: module
+  note: 模块ID
+  range: 0
+  format: ""
+- field: plan
+  note: 计划ID
+  range: 1{3},2{2},3{3},''
+  format: ""
+- field: source
+  note: 来源
+  range: ''
+  format: ""
+- field: sourceNote
+  note: 来源备注
+  range: ''
+  format: ""
+- field: fromBug
+  note: 来源Bug
+  range: 0
+  format: ""
+- field: feedback
+  note: 反馈ID
+  range: 0
+  format: ""
+- field: title
+  note: 需求标题
+  range: 需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10
+  format: ""
+- field: keywords
+  note: 关键词
+  range: ''
+  format: ""
+- field: type
+  note: 需求类型
+  range: story
+  format: ""
+- field: category
+  note: 类别
+  range: feature
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+- field: estimate
+  note: 估算工时
+  range: 1-8
+  format: ""
+- field: status
+  note: 状态
+  range: active,draft,closed
+  format: ""
+- field: subStatus
+  note: 子状态
+  range: ''
+  format: ""
+- field: color
+  note: 颜色
+  range: ''
+  format: ""
+- field: stage
+  note: 阶段
+  range: wait,planned,projected,developing,developed,testing,tested,verified
+  format: ""
+- field: version
+  note: 版本
+  range: 1
+  format: ""
+- field: parentVersion
+  note: 父版本
+  range: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2
+  format: ""
+- field: assignedDate
+  note: 指派时间
+  range: 0000-00-00 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: lastEditedBy
+  note: 最后编辑者
+  range: ''
+  format: ""
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: 0000-00-00 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: reviewedBy
+  note: 评审者
+  range: ''
+  format: ""
+- field: reviewedDate
+  note: 评审时间
+  range: 0000-00-00 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: closedBy
+  note: 关闭者
+  range: ''
+  format: ""
+- field: closedDate
+  note: 关闭时间
+  range: 0000-00-00 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: closedReason
+  note: 关闭原因
+  range: ''
+  format: ""
+- field: toBug
+  note: 转Bug
+  range: 0
+  format: ""
+- field: childStories
+  note: 子需求
+  range: ''
+  format: ""
+- field: linkStories
+  note: 关联需求
+  range: ''
+  format: ""
+- field: duplicateStory
+  note: 重复需求
+  range: 0
+  format: ""
+- field: mailto
+  note: 抄送给
+  range: ''
+  format: ""
+- field: deleted
+  note: 已删除
+  range: 0
+  format: ""

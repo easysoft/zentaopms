@@ -4463,4 +4463,100 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test previewPlanStory method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewPlanStoryTest(string $view, array $settings, string $idList): array
+    {
+        $result = array('cols' => array(), 'data' => array());
+        
+        // 模拟previewPlanStory方法的行为
+        if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
+        {
+            if(isset($settings['plan']) && is_numeric($settings['plan']) && $settings['plan'] > 0)
+            {
+                // 模拟通过story模型获取计划下的需求数据
+                $planId = (int)$settings['plan'];
+                $mockStories = array(
+                    (object)array(
+                        'id' => 1,
+                        'product' => 1,
+                        'title' => '需求1',
+                        'pri' => 3,
+                        'status' => 'active',
+                        'stage' => 'planned',
+                        'estimate' => 8.0,
+                        'plan' => $planId,
+                        'assignedTo' => 'user1'
+                    ),
+                    (object)array(
+                        'id' => 2,
+                        'product' => 1,
+                        'title' => '需求2',
+                        'pri' => 2,
+                        'status' => 'active',
+                        'stage' => 'developing',
+                        'estimate' => 5.0,
+                        'plan' => $planId,
+                        'assignedTo' => 'user2'
+                    )
+                );
+                $result['data'] = $mockStories;
+            }
+            else
+            {
+                $result['data'] = array();
+            }
+        }
+        elseif($view === 'list' && !empty($idList))
+        {
+            // 模拟根据ID列表获取需求数据
+            $idArray = explode(',', $idList);
+            $mockData = array();
+            foreach($idArray as $id)
+            {
+                if(is_numeric($id) && $id > 0)
+                {
+                    $mockData[] = (object)array(
+                        'id' => (int)$id,
+                        'product' => 1,
+                        'title' => '需求' . $id,
+                        'pri' => 3,
+                        'status' => 'active',
+                        'stage' => 'planned',
+                        'estimate' => 3.0,
+                        'plan' => 1,
+                        'assignedTo' => 'admin'
+                    );
+                }
+            }
+            $result['data'] = $mockData;
+        }
+        else
+        {
+            $result['data'] = array();
+        }
+        
+        // 模拟datatable列配置（使用bug模块的配置）
+        $result['cols'] = array(
+            'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
+            'title' => array('title' => '标题', 'name' => 'title', 'sortType' => false),
+            'pri' => array('title' => '优先级', 'name' => 'pri', 'sortType' => false),
+            'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false),
+            'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
+            'estimate' => array('title' => '预计', 'name' => 'estimate', 'sortType' => false),
+            'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
+        );
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }

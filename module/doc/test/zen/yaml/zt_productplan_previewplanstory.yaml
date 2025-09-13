@@ -1,0 +1,74 @@
+---
+title: 产品计划数据定义
+desc: 为previewPlanStory方法测试提供产品计划数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0
+  format: ""
+- field: parent
+  note: 父计划ID
+  range: 0
+  format: ""
+- field: title
+  note: 计划标题
+  range: 计划1,计划2,计划3,计划4,计划5
+  format: ""
+- field: status
+  note: 计划状态
+  range: wait,doing,done,closed
+  format: ""
+- field: desc
+  note: 计划描述
+  range: '描述1,描述2,描述3,描述4,描述5'
+  format: ""
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01
+  format: "YYYY-MM-DD"
+- field: end
+  note: 结束日期
+  range: 2024-03-31,2024-05-31,2024-08-31,2024-10-31,2024-12-31
+  format: "YYYY-MM-DD"
+- field: finishedDate
+  note: 完成时间
+  range: null
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: closedDate
+  note: 关闭时间
+  range: null
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: order
+  note: 排序
+  range: ''
+  format: ""
+- field: closedReason
+  note: 关闭原因
+  range: ''
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 已删除
+  range: 0
+  format: ""
