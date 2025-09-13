@@ -6,6 +6,7 @@ class bugTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
+        $this->objectZen   = $tester->loadZen('bug');
     }
 
     /**
@@ -1571,6 +1572,22 @@ class bugTest
     public function getLinkedCommitsTest(int $repoID, array $revisions): array
     {
         $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkBugExecutionPriv method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return bool|int
+     */
+    public function checkBugExecutionPrivTest(object $bug): bool|int
+    {
+        $result = $this->objectZen->checkBugExecutionPriv($bug);
 
         if(dao::isError()) return dao::getError();
 
