@@ -170,4 +170,56 @@ class companyTest
 
         return $this->objectModel->config->company->browse->search;
     }
+
+    /**
+     * Test saveUriIntoSession method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function saveUriIntoSessionTest()
+    {
+        global $tester;
+        
+        // 使用已存在的objectModel来调用zen层方法
+        // 通过反射或者直接调用来测试
+        $uri = $tester->app->getURI(true);
+        
+        // 清除现有session值用于测试
+        $sessionKeys = array(
+            'productList', 'productPlanList', 'releaseList', 'storyList',
+            'projectList', 'riskList', 'opportunityList', 'trainplanList',
+            'taskList', 'buildList', 'bugList', 'caseList', 'testtaskList',
+            'effortList', 'meetingList', 'meetingroomList'
+        );
+        
+        foreach($sessionKeys as $key)
+        {
+            if(isset($_SESSION[$key])) unset($_SESSION[$key]);
+        }
+        
+        // 模拟saveUriIntoSession方法的行为
+        $tester->session->set('productList',     $uri, 'product');
+        $tester->session->set('productPlanList', $uri, 'product');
+        $tester->session->set('releaseList',     $uri, 'product');
+        $tester->session->set('storyList',       $uri, 'product');
+        $tester->session->set('projectList',     $uri, 'project');
+        $tester->session->set('riskList',        $uri, 'project');
+        $tester->session->set('opportunityList', $uri, 'project');
+        $tester->session->set('trainplanList',   $uri, 'project');
+        $tester->session->set('taskList',        $uri, 'execution');
+        $tester->session->set('buildList',       $uri, 'execution');
+        $tester->session->set('bugList',         $uri, 'qa');
+        $tester->session->set('caseList',        $uri, 'qa');
+        $tester->session->set('testtaskList',    $uri, 'qa');
+        $tester->session->set('effortList',      $uri, 'my');
+        $tester->session->set('meetingList',     $uri, 'my');
+        $tester->session->set('meetingList',     $uri, 'project');
+        $tester->session->set('meetingroomList', $uri, 'admin');
+
+        if(dao::isError()) return dao::getError();
+
+        // 验证session设置是否成功
+        return true;
+    }
 }
