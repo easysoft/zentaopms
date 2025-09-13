@@ -4089,4 +4089,51 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printDocDynamicBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocDynamicBlockTest()
+    {
+        // 直接调用doc model的getDynamic方法进行测试，因为printDocDynamicBlock主要调用此方法
+        global $app;
+        $app->loadClass('pager', true);
+        $pager = new pager(0, 30, 1);
+        
+        $docModel = $this->objectModel->loadModel('doc');
+        $userModel = $this->objectModel->loadModel('user');
+        
+        // 创建返回结果对象
+        $result = new stdClass();
+        $result->success = true;
+        
+        try {
+            // 获取文档动态数据
+            $actions = $docModel->getDynamic($pager);
+            $users = array();
+            
+            if (!empty($actions)) {
+                $actors = array_unique(array_column($actions, 'actor'));
+                $users = $userModel->getPairs('nodeleted|noletter|all', '', 0, $actors);
+            }
+            
+            $result->actions = $actions;
+            $result->actionsCount = count($actions);
+            $result->users = $users;
+            $result->usersCount = count($users);
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->actions = array();
+            $result->actionsCount = 0;
+            $result->users = array();
+            $result->usersCount = 0;
+        }
+        
+        return $result;
+    }
 }
