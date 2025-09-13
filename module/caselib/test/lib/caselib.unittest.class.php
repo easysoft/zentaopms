@@ -1013,4 +1013,89 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test processCasesForExport method.
+     *
+     * @param  array  $cases
+     * @param  int    $libID
+     * @param  array  $postData
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function processCasesForExportTest(array $cases, int $libID, array $postData = array(), string $type = 'array')
+    {
+        global $tester;
+        
+        // 设置POST数据模拟
+        $_POST['fileType'] = $postData['fileType'] ?? 'csv';
+
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('processCasesForExport');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $cases, $libID);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'keys') return array_keys($result);
+        if($type == 'first_case' && !empty($result)) return reset($result);
+        if($type == 'first_case_id' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->id ?? '';
+        }
+        if($type == 'first_case_title' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->title ?? '';
+        }
+        if($type == 'first_case_module' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->module ?? '';
+        }
+        if($type == 'first_case_pri' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->pri ?? '';
+        }
+        if($type == 'first_case_type' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->type ?? '';
+        }
+        if($type == 'first_case_status' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->status ?? '';
+        }
+        if($type == 'first_case_openedBy' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->openedBy ?? '';
+        }
+        if($type == 'first_case_openedDate' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->openedDate ?? '';
+        }
+        if($type == 'first_case_stepDesc' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->stepDesc ?? '';
+        }
+        if($type == 'first_case_stepExpect' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->stepExpected ?? '';
+        }
+        if($type == 'first_case_stage' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->stage ?? '';
+        }
+        if($type == 'first_case_files' && !empty($result)) {
+            $firstCase = reset($result);
+            return $firstCase->files ?? '';
+        }
+        if($type == 'has_linkCase' && !empty($result)) {
+            $firstCase = reset($result);
+            return isset($firstCase->linkCase) && !empty($firstCase->linkCase) ? 1 : 0;
+        }
+        if($type == 'is_empty') return empty($result) ? 1 : 0;
+
+        return $result;
+    }
 }
