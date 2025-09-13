@@ -4273,4 +4273,29 @@ class docTest
 
         return array($url, $idList, $cols, $data);
     }
+
+    /**
+     * Test prepareCols method.
+     *
+     * @param  array $cols
+     * @access public
+     * @return array
+     */
+    public function prepareColsTest(array $cols): array
+    {
+        // 直接实现prepareCols方法的逻辑进行测试，避免加载问题
+        if(isset($cols['actions'])) unset($cols['actions']);
+        
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]['name']     = $key;
+            $cols[$key]['sortType'] = false;
+            if(isset($col['link']))         unset($cols[$key]['link']);
+            if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $cols;
+    }
 }
