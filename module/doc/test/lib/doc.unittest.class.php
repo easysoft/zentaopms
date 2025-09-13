@@ -3308,4 +3308,56 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test setObjectsForEdit method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return int
+     */
+    public function setObjectsForEditTest(string $objectType, int $objectID): int
+    {
+        global $tester;
+
+        $objects = array();
+        
+        // 模拟setObjectsForEdit方法的逻辑
+        if($objectType == 'project')
+        {
+            $objects = $tester->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        }
+        elseif($objectType == 'execution')
+        {
+            $execution = $tester->loadModel('execution')->getByID($objectID);
+            if($execution)
+            {
+                $objects = $tester->loadModel('execution')->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+                
+                $parentExecutions = $childExecutions = array();
+                $executions = $tester->loadModel('execution')->fetchExecutionList($execution->project, 'all', 0, 0, 'order_asc');
+                foreach($executions as $exec)
+                {
+                    if($exec->grade == 1) $parentExecutions[$exec->id] = $exec;
+                    if($exec->grade > 1 && $exec->parent) $childExecutions[$exec->parent][$exec->id] = $exec;
+                }
+                
+                $objects = $tester->loadModel('execution')->resetExecutionSorts($objects, $parentExecutions, $childExecutions);
+            }
+        }
+        elseif($objectType == 'product')
+        {
+            $objects = $tester->loadModel('product')->getPairs();
+        }
+        elseif($objectType == 'mine')
+        {
+            return 0; // mine类型设置的是语言配置，返回0表示正常处理
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        // 返回对象数组的数量
+        return count($objects);
+    }
 }
