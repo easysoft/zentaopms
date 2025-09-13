@@ -3633,4 +3633,69 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printExecutionOverviewBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @param  string $code
+     * @param  int    $project
+     * @param  bool   $showClosed
+     * @access public
+     * @return object
+     */
+    public function printExecutionOverviewBlockTest($block = null, $params = array(), $code = 'executionoverview', $project = 0, $showClosed = false)
+    {
+        global $tester;
+        
+        if(!class_exists('block'))
+        {
+            class_alias('blockModel', 'block');
+        }
+        
+        if(!class_exists('blockZen'))
+        {
+            include_once dirname(__FILE__, 3) . '/zen.php';
+        }
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        
+        // 如果没有传入block参数，创建一个默认的
+        if (!$block) {
+            $block = new stdclass();
+            $block->params = new stdclass();
+        }
+        
+        try {
+            // 使用反射调用被测试的protected方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printExecutionOverviewBlock');
+            $method->setAccessible(true);
+            $method->invoke($blockZen, $block, $params, $code, $project, $showClosed);
+        } catch (Exception $e) {
+            // 如果发生错误，返回错误信息
+            return "Error: " . $e->getMessage();
+        }
+        
+        // 获取结果
+        $result = new stdclass();
+        $result->groups = isset($blockZen->view->groups) ? $blockZen->view->groups : array();
+        $result->block = $block;
+        $result->params = $params;
+        $result->code = $code;
+        $result->project = $project;
+        $result->showClosed = $showClosed;
+        
+        return $result;
+    }
 }
