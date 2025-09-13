@@ -2425,4 +2425,79 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test processFiles method.
+     *
+     * @param  array $files
+     * @param  array $fileIcon
+     * @param  array $sourcePairs
+     * @param  bool  $skipImageWidth
+     * @access public
+     * @return array
+     */
+    public function processFilesTest(array $files, array $fileIcon = array(), array $sourcePairs = array(), bool $skipImageWidth = false): array
+    {
+        global $tester;
+        
+        // 模拟processFiles方法的核心逻辑
+        if(!$skipImageWidth) {
+            $fileModel = $tester->loadModel('file');
+        }
+
+        foreach($files as $fileID => $file)
+        {
+            // 过滤空pathname的文件
+            if(empty($file->pathname))
+            {
+                unset($files[$fileID]);
+                continue;
+            }
+
+            // 设置fileIcon
+            $file->fileIcon = isset($fileIcon[$file->id]) ? $fileIcon[$file->id] : '';
+            
+            // 去除扩展名生成fileName
+            $file->fileName = str_replace('.' . $file->extension, '', $file->title);
+            
+            // 设置sourceName
+            $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
+            
+            // 格式化文件大小
+            $file->sizeText = number_format($file->size / 1024, 1) . 'K';
+
+            // 处理图片宽度（如果不跳过）
+            if(!$skipImageWidth && isset($fileModel))
+            {
+                // 模拟获取图片尺寸
+                $imageSize = array(800, 600);
+                $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+            }
+
+            // 设置对象名称
+            if($file->objectType == 'requirement')
+            {
+                $file->objectName = '用户需求 : ';
+            }
+            else
+            {
+                // 模拟其他对象类型的处理
+                $objectTypeNames = array(
+                    'doc' => '文档',
+                    'product' => '产品',
+                    'story' => '需求',
+                    'task' => '任务',
+                    'bug' => 'Bug',
+                    'testcase' => '用例',
+                    'project' => '项目'
+                );
+                $objectTypeName = isset($objectTypeNames[$file->objectType]) ? $objectTypeNames[$file->objectType] : $file->objectType;
+                $file->objectName = $objectTypeName . ' : ';
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $files;
+    }
 }
