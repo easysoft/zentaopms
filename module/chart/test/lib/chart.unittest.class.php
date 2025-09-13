@@ -763,4 +763,24 @@ class chartTest
         
         return $chart;
     }
+
+    /**
+     * Test getMenuItems method.
+     *
+     * @param  array $menus
+     * @access public
+     * @return array
+     */
+    public function getMenuItemsTest(array $menus): array
+    {
+        // 模拟getMenuItems方法的逻辑
+        $items = array();
+        foreach($menus as $menu)
+        {
+            if($menu->parent == 0) continue;
+            $items[] = $menu;
+        }
+
+        return $items;
+    }
 }
