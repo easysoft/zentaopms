@@ -6,7 +6,7 @@ class bugTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
-        $this->objectZen   = $tester->loadZen('bug');
+        $this->objectTao   = $tester->loadTao('bug');
     }
 
     /**
@@ -1848,6 +1848,42 @@ class bugTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getBatchResolveVars method.
+     *
+     * @param  array $bugIDList
+     * @access public
+     * @return array|int
+     */
+    public function getBatchResolveVarsTest(array $bugIDList): array|int
+    {
+        global $tester;
+
+        if(empty($bugIDList)) return 0;
+
+        $oldBugs = array();
+        foreach($bugIDList as $bugID)
+        {
+            $bug = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+            if($bug) $oldBugs[] = $bug;
+        }
+
+        if(empty($oldBugs)) return 0;
+
+        $bug = reset($oldBugs);
+        $productID = $bug->product;
+        $product = $this->objectModel->loadModel('product')->getByID($productID);
+        if(!$product) return 0;
+
+        $stmt = $tester->dao->query($this->objectModel->loadModel('tree')->buildMenuQuery($productID, 'bug'));
+        $modules = array();
+        while($module = $stmt->fetch()) $modules[$module->id] = $module;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(count($modules), 'modules');
     }
 
 }
