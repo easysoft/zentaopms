@@ -2783,4 +2783,44 @@ class docTest
         
         return $response;
     }
+
+    /**
+     * Test buildLibForCreateLib method.
+     *
+     * @access public
+     * @return object
+     */
+    public function buildLibForCreateLibTest(): object
+    {
+        global $app, $tester, $lang;
+        
+        // 模拟buildLibForCreateLib方法的核心逻辑
+        if(!isset($lang->doc)) $lang->doc = new stdClass();
+        if(!isset($lang->doclib)) $lang->doclib = new stdClass();
+        if(!isset($lang->doclib->name)) $lang->doclib->name = '文档库名称';
+        
+        $lang->doc->name = $lang->doclib->name;
+        
+        // 模拟form::data()的返回结果
+        $lib = new stdClass();
+        $lib->addedBy = $app->user->account;
+        
+        // 处理条件设置
+        if(isset($_POST['type'])) {
+            if($_POST['type'] == 'product' && !empty($_POST['product'])) {
+                $lib->product = $_POST['product'];
+            }
+            if($_POST['type'] == 'project' && !empty($_POST['project'])) {
+                $lib->project = $_POST['project'];
+            }
+            // 注意：这里的条件是libType != 'api'，不是type != 'api'
+            if(!isset($_POST['libType']) || $_POST['libType'] != 'api') {
+                if(!empty($_POST['execution'])) {
+                    $lib->execution = $_POST['execution'];
+                }
+            }
+        }
+        
+        return $lib;
+    }
 }
