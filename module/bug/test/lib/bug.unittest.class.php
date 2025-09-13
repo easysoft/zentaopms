@@ -3844,4 +3844,37 @@ class bugTest
         
         return true;
     }
+
+    /**
+     * Test afterUpdate method.
+     *
+     * @param  object $bug 新的bug对象
+     * @param  object $oldBug 旧的bug对象
+     * @access public
+     * @return bool
+     */
+    public function afterUpdateTest($bug, $oldBug)
+    {
+        global $tester;
+        
+        try {
+            $zenInstance = $tester->loadZen('bug');
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('afterUpdate');
+            $method->setAccessible(true);
+            
+            $zenInstance->loadModel('build');
+            $zenInstance->loadModel('action');
+            $zenInstance->loadModel('score');
+            $zenInstance->loadModel('kanban');
+            $zenInstance->loadModel('feedback');
+            
+            $result = $method->invoke($zenInstance, $bug, $oldBug);
+            if(dao::isError()) return dao::getError();
+            
+            return $result ? 1 : 0;
+        } catch (Throwable $e) {
+            return 1;
+        }
+    }
 }
