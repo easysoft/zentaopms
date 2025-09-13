@@ -7,6 +7,7 @@ class bugTest
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
         $this->objectTao   = $tester->loadTao('bug');
+        $this->objectZen   = $tester->loadZen('bug');
     }
 
     /**
@@ -2019,6 +2020,69 @@ class bugTest
             // 如果调用失败，模拟返回true（因为setViewMenu总是返回true）
             return true;
         }
+    }
+
+    /**
+     * Test prepareBrowseParams method.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function prepareBrowseParamsTest(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    {
+        global $tester;
+        
+        // 设置cookie模拟
+        if(!isset($_COOKIE['bugModule'])) $_COOKIE['bugModule'] = 1;
+        
+        // 创建zen实例
+        $zen = initReference('bug');
+        $method = $zen->getMethod('prepareBrowseParams');
+        $zenInstance = $zen->newInstance();
+        
+        // 设置必要的属性
+        $zenInstance->cookie = (object)array('bugModule' => 1);
+        $zenInstance->app = $tester->app;
+        
+        $result = $method->invokeArgs($zenInstance, array($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID));
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test prepareEditExtras method.
+     *
+     * @param  object $formData
+     * @param  object $oldBug
+     * @access public
+     * @return object|false|array
+     */
+    public function prepareEditExtrasTest(object $formData, object $oldBug): object|false|array
+    {
+        global $tester;
+        
+        // 模拟$_POST数据
+        $_POST['lastEditedDate'] = $oldBug->lastEditedDate ?? '';
+        $tester->post->lastEditedDate = $_POST['lastEditedDate'];
+        
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('prepareEditExtras');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $formData, $oldBug);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
     }
 
 }
