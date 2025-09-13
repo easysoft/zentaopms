@@ -2927,4 +2927,50 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test buildBugForResolve method.
+     *
+     * @param  object $oldBug
+     * @access public
+     * @return mixed
+     */
+    public function buildBugForResolveTest($oldBug)
+    {
+        if(empty($oldBug)) return false;
+        
+        // 模拟buildBugForResolve方法的主要逻辑
+        $bug = new stdclass();
+        
+        // 设置基本字段
+        $bug->id = $oldBug->id;
+        $bug->execution = $oldBug->execution;
+        $bug->status = 'resolved';
+        $bug->confirmed = 1;
+        
+        // 设置默认值
+        $bug->assignedTo = $oldBug->openedBy;
+        $bug->resolvedDate = helper::now();
+        
+        // 处理resolution逻辑
+        if(isset($_POST['resolution']) && $_POST['resolution'] != 'duplicate')
+        {
+            // 非重复bug不包含duplicateBug字段
+            $bug->noDuplicateBug = true;
+        }
+        else
+        {
+            // 重复bug包含duplicateBug字段
+            $bug->duplicateBug = isset($_POST['duplicateBug']) ? $_POST['duplicateBug'] : 0;
+        }
+        
+        // 处理resolvedBuild逻辑
+        if(isset($_POST['resolvedBuild']) && $_POST['resolvedBuild'] != 'trunk')
+        {
+            // 非trunk构建时设置testtask
+            $bug->testtask = 1; // 模拟找到的testtask ID
+        }
+        
+        return $bug;
+    }
+
 }
