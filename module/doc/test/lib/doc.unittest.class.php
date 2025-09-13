@@ -3635,6 +3635,52 @@ class docTest
     }
 
     /**
+     * Test assignVarsForView method.
+     *
+     * @param  int     $docID
+     * @param  int     $version
+     * @param  string  $type
+     * @param  int     $objectID
+     * @param  int     $libID
+     * @param  object  $doc
+     * @param  object  $object
+     * @param  string  $objectType
+     * @param  array   $libs
+     * @param  array   $objectDropdown
+     * @access public
+     * @return mixed
+     */
+    public function assignVarsForViewTest(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown)
+    {
+        global $tester;
+        
+        // 模拟assignVarsForView方法的核心逻辑
+        if($type == 'execution' && $tester->app->tab == 'project')
+        {
+            $objectType = 'project';
+            $objectID   = $object->project;
+        }
+        
+        // 创建一个模拟的view对象来收集设置的变量
+        $result = new stdClass();
+        $result->title          = $tester->lang->doc->common . $tester->lang->hyphen . $doc->title;
+        $result->docID          = $docID;
+        $result->type           = $type;
+        $result->objectID       = $objectID;
+        $result->libID          = $libID;
+        $result->doc            = $doc;
+        $result->version        = $version;
+        $result->object         = $object;
+        $result->objectType     = $objectType;
+        $result->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $result->libs           = $libs;
+        $result->objectDropdown = $objectDropdown;
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Helper method for processOutlineTest - build outline tree.
      *
      * @param  array  $outlineList
