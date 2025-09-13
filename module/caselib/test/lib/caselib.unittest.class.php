@@ -710,4 +710,61 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getStepsAndExpectsFromImportFile method.
+     *
+     * @param  string $field
+     * @param  int    $row
+     * @param  string $cellValue
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getStepsAndExpectsFromImportFileTest(string $field, int $row, string $cellValue, string $type = 'array')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getStepsAndExpectsFromImportFile');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $field, $row, $cellValue);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'first_content' && !empty($result)) {
+            $firstKey = key($result);
+            return $result[$firstKey]['content'] ?? '';
+        }
+        if($type == 'first_type' && !empty($result)) {
+            $firstKey = key($result);
+            return $result[$firstKey]['type'] ?? '';
+        }
+        if($type == 'first_number' && !empty($result)) {
+            $firstKey = key($result);
+            return $result[$firstKey]['number'] ?? '';
+        }
+        if($type == 'has_group' && !empty($result)) {
+            foreach($result as $step) {
+                if(isset($step['type']) && $step['type'] == 'group') return 1;
+            }
+            return 0;
+        }
+        if($type == 'has_item' && !empty($result)) {
+            foreach($result as $step) {
+                if(isset($step['type']) && $step['type'] == 'item') return 1;
+            }
+            return 0;
+        }
+        if($type == 'keys') return array_keys($result);
+        if($type == 'content_only') {
+            $contents = array();
+            foreach($result as $step) {
+                if(isset($step['content'])) $contents[] = $step['content'];
+            }
+            return implode('|', $contents);
+        }
+
+        return $result;
+    }
 }
