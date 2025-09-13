@@ -2,11 +2,19 @@
 class ciTest
 {
     private $objectModel;
+    private $objectZen;
 
     public function __construct()
     {
         global $tester;
         $this->objectModel = $tester->loadModel('ci');
+        $tester->app->setModuleName('ci');
+        
+        // Load ci classes
+        include_once dirname(dirname(dirname(__FILE__))) . '/model.php';
+        include_once dirname(dirname(dirname(__FILE__))) . '/control.php';
+        include_once dirname(dirname(dirname(__FILE__))) . '/zen.php';
+        $this->objectZen   = new ReflectionClass('ciZen');
     }
 
     /**
@@ -175,5 +183,23 @@ class ciTest
         if($taskID) return $this->objectModel->loadModel('testtask')->getByID($taskID);
 
         return $this->objectModel->dao->select('*')->from(TABLE_TESTTASK)->orderBy('id_desc')->fetch();
+    }
+
+    /**
+     * Test getProductIdAndJobID method.
+     *
+     * @param  array  $params
+     * @param  object $post
+     * @access public
+     * @return array
+     */
+    public function getProductIdAndJobIDTest(array $params, object $post): array
+    {
+        $method = $this->objectZen->getMethod('getProductIdAndJobID');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), [$params, $post]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
