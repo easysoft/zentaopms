@@ -3392,4 +3392,56 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printQaStatisticBlock method.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printQaStatisticBlockTest($block)
+    {
+        global $tester;
+        $result = new stdclass();
+        
+        // 创建blockModel的别名为block类
+        if(!class_exists('block'))
+        {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->dao = $tester->dao;
+        $blockZen->view = new stdclass();
+        
+        // 调用被测试方法 - 需要通过反射调用protected方法
+        $reflection = new ReflectionClass(get_class($blockZen));
+        $method = $reflection->getMethod('printQaStatisticBlock');
+        $method->setAccessible(true);
+        
+        ob_start();
+        try {
+            $method->invoke($blockZen, $block);
+            $result->success = true;
+            $result->error = null;
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+        }
+        $output = ob_get_clean();
+        
+        $result->output = $output;
+        $result->blockType = isset($block->params->type) ? $block->params->type : '';
+        $result->blockCount = isset($block->params->count) ? (int)$block->params->count : 0;
+        
+        return $result;
+    }
 }
