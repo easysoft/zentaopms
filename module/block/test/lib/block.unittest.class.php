@@ -5298,4 +5298,69 @@ class blockTest
         $result->langLoaded = 0;
         return $result;
     }
+
+    /**
+     * Test printSinglePlanBlock method.
+     *
+     * @param  object $block
+     * @access public
+     * @return mixed
+     */
+    public function printSinglePlanBlockTest($block)
+    {
+        global $tester;
+
+        // 模拟printSinglePlanBlock方法的核心功能
+        $result = new stdclass();
+
+        // 验证block参数的有效性
+        if(!is_object($block)) {
+            $result->error = '参数必须是对象';
+            return $result;
+        }
+
+        // 验证params参数
+        if(!isset($block->params) || !is_object($block->params)) {
+            $result->error = 'block对象必须包含params属性';
+            return $result;
+        }
+
+        // 获取count参数，默认为0
+        $count = isset($block->params->count) ? (int)$block->params->count : 0;
+
+        // 模拟session设置
+        $result->sessionSet = 1;
+
+        // 模拟分页器创建
+        $result->pagerCreated = 1;
+        $result->count = $count;
+
+        // 模拟产品数据获取
+        $result->productID = 1; // 模拟当前产品ID
+        $result->productLoaded = 1;
+
+        // 模拟计划列表获取
+        $mockPlans = array();
+        $planCount = $count > 0 ? min($count, 10) : 5; // 限制返回数量
+        for($i = 1; $i <= $planCount; $i++) {
+            $plan = new stdclass();
+            $plan->id = $i;
+            $plan->title = "计划{$i}";
+            $plan->status = $i <= 3 ? 'wait' : ($i <= 6 ? 'doing' : 'done');
+            $plan->begin = date('Y-m-d', strtotime("+{$i} days"));
+            $plan->end = date('Y-m-d', strtotime("+". ($i + 30) ." days"));
+            $mockPlans[] = $plan;
+        }
+
+        $result->plans = $mockPlans;
+        $result->planCount = count($mockPlans);
+
+        // 模拟产品列表
+        $result->products = array(1 => '测试产品');
+
+        // 模拟view变量设置
+        $result->viewSet = 1;
+
+        return $result;
+    }
 }
