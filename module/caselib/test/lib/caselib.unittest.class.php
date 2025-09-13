@@ -1098,4 +1098,50 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test processStepForExport method.
+     *
+     * @param  object $case
+     * @param  array  $relatedSteps
+     * @param  array  $postData
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function processStepForExportTest(object $case, array $relatedSteps, array $postData = array(), string $type = 'case')
+    {
+        global $tester;
+        
+        // 设置POST数据模拟
+        $_POST['fileType'] = $postData['fileType'] ?? 'csv';
+
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('processStepForExport');
+        $zenInstance = $zen->newInstance();
+
+        // 执行方法
+        $method->invoke($zenInstance, $case, $relatedSteps);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'stepDesc') return $case->stepDesc ?? '';
+        if($type == 'stepExpect') return $case->stepExpect ?? '';
+        if($type == 'stepDesc_length') return strlen($case->stepDesc ?? '');
+        if($type == 'stepExpect_length') return strlen($case->stepExpected ?? '');
+        if($type == 'has_stepDesc') return isset($case->stepDesc) && !empty($case->stepDesc) ? 1 : 0;
+        if($type == 'has_stepExpect') return isset($case->stepExpect) && !empty($case->stepExpected) ? 1 : 0;
+        if($type == 'stepDesc_lines') return substr_count($case->stepDesc ?? '', "\n") + 1;
+        if($type == 'stepExpect_lines') return substr_count($case->stepExpected ?? '', "\n") + 1;
+        if($type == 'has_csv_escape') return strpos($case->stepDesc ?? '', '""') !== false || strpos($case->stepExpected ?? '', '""') !== false ? 1 : 0;
+        if($type == 'first_step_number') {
+            $stepDesc = $case->stepDesc ?? '';
+            if(preg_match('/^([0-9.]+)\./', $stepDesc, $matches)) {
+                return $matches[1];
+            }
+            return '';
+        }
+
+        return $case;
+    }
 }
