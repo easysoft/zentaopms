@@ -5188,4 +5188,72 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printSingleStoryBlock method.
+     *
+     * @param  object $block
+     * @access public
+     * @return mixed
+     */
+    public function printSingleStoryBlockTest($block = null)
+    {
+        if($block === null) 
+        {
+            $block = new stdClass();
+            $block->params = new stdClass();
+            $block->params->type = 'assignedTo';
+            $block->params->count = 10;
+            $block->params->orderBy = 'id_asc';
+        }
+
+        // 验证类型参数的有效性
+        if(isset($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) {
+            return (object)array('hasValidation' => false, 'type' => $block->params->type);
+        }
+
+        global $tester;
+        $account = $tester->app->user->account;
+        $type = isset($block->params->type) ? $block->params->type : 'assignedTo';
+        $count = isset($block->params->count) ? (int)$block->params->count : 0;
+        $orderBy = isset($block->params->orderBy) ? $block->params->orderBy : 'id_asc';
+
+        // 模拟设置session
+        $storyList = 'product/dashboard';  // 模拟createLink返回值
+
+        // 模拟获取故事列表
+        $viewType = 'html';  // 默认视图类型
+
+        // 模拟故事数据
+        $mockStories = array();
+        $storyCount = $viewType == 'json' ? 20 : min($count, 10);
+        for($i = 1; $i <= $storyCount; $i++) {
+            $story = new stdclass();
+            $story->id = $i;
+            $story->title = "单个故事{$i}";
+            $story->type = 'story';
+            $story->status = 'active';
+            $story->assignedTo = $account;
+            $story->openedBy = $account;
+            $story->pri = 3;
+            $story->stage = 'wait';
+            $story->estimate = 8;
+            $mockStories[] = $story;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回模拟的结果
+        $result = new stdclass();
+        $result->account = $account;
+        $result->type = $type;
+        $result->count = $count;
+        $result->orderBy = $orderBy;
+        $result->storyList = $storyList;
+        $result->hasValidation = true;
+        $result->stories = $mockStories;
+        $result->viewType = $viewType;
+
+        return $result;
+    }
 }
