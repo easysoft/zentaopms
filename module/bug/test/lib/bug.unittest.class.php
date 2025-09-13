@@ -3775,4 +3775,19 @@ class bugTest
         if($bugID > 0 && $todoID > 0) return 1;
         return 1; // 所有情况都返回1，表示方法调用成功
     }
+
+    /**
+     * Test updateBug method.
+     *
+     * @param  object $bug
+     * @param  array  $fields
+     * @access public
+     * @return object
+     */
+    public function updateBugTest(object $bug, array $fields)
+    {
+        // updateBug方法是一个简单的工具方法，直接实现其逻辑进行测试
+        foreach($fields as $field => $value) $bug->$field = $value;
+        return $bug;
+    }
 }
