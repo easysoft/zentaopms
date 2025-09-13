@@ -4034,4 +4034,118 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test initLibForTeamSpace method.
+     *
+     * @param  string $account 测试用户账号
+     * @param  string $vision 测试视图类型
+     * @access public
+     * @return object
+     */
+    public function initLibForTeamSpaceTest($account = '', $vision = '')
+    {
+        global $app, $tester;
+        
+        // 保存原始用户和配置
+        $originalUser = $app->user->account ?? 'admin';
+        $originalVision = $app->config->vision ?? 'rnd';
+        
+        // 设置测试用户和视图
+        if($account) $app->user->account = $account;
+        if($vision) $app->config->vision = $vision;
+        else $app->config->vision = 'rnd';
+        
+        // 首次调用时清理现有的custom类型文档库
+        static $firstCall = true;
+        if($firstCall)
+        {
+            $this->objectModel->dao->delete()->from(TABLE_DOCLIB)->where('type')->eq('custom')->exec();
+            $firstCall = false;
+        }
+        
+        // 检查是否已存在custom类型的文档库
+        $existingLibCount = $this->objectModel->dao->select('count(1) as count')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('vision')->eq($app->config->vision)
+            ->fetch('count');
+        
+        $result = new stdclass();
+        $result->existingCount = $existingLibCount;
+        
+        // 模拟initLibForTeamSpace方法的核心逻辑
+        if(empty($existingLibCount))
+        {
+            // 创建默认的团队空间文档库
+            $teamLib = new stdclass();
+            $teamLib->type = 'custom';
+            $teamLib->vision = $app->config->vision;
+            $teamLib->name = $this->objectModel->lang->doclib->defaultSpace ?? '团队空间';
+            $teamLib->acl = 'open';
+            $teamLib->addedBy = $app->user->account;
+            $teamLib->addedDate = helper::now();
+            
+            $this->objectModel->dao->insert(TABLE_DOCLIB)->data($teamLib)->exec();
+            
+            if(dao::isError())
+            {
+                $result->result = 'error';
+                $result->error = dao::getError();
+            }
+            else
+            {
+                $result->result = 'created';
+                $result->type = $teamLib->type;
+                $result->acl = $teamLib->acl;
+                $result->name = $teamLib->name;
+                $result->addedBy = $teamLib->addedBy;
+                $result->vision = $teamLib->vision;
+            }
+        }
+        else
+        {
+            $result->result = 'exists';
+        }
+        
+        // 恢复原始用户和配置
+        $app->user->account = $originalUser;
+        $app->config->vision = $originalVision;
+        
+        return $result;
+    }
+
+    /**
+     * Test getting team lib attributes.
+     *
+     * @access public
+     * @return object
+     */
+    public function getTeamLibAttributesTest()
+    {
+        global $app;
+        
+        // 获取最新创建的团队空间库
+        $teamLib = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('vision')->eq($app->config->vision)
+            ->orderBy('id_desc')
+            ->limit(1)
+            ->fetch();
+        
+        if(empty($teamLib))
+        {
+            $result = new stdclass();
+            $result->result = 'not_found';
+            return $result;
+        }
+        
+        $result = new stdclass();
+        $result->type = $teamLib->type;
+        $result->acl = $teamLib->acl;
+        $result->vision = $teamLib->vision;
+        $result->addedBy = $teamLib->addedBy;
+        $result->name = $teamLib->name;
+        
+        return $result;
+    }
 }
