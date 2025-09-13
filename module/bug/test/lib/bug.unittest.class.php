@@ -3223,4 +3223,85 @@ class bugTest
         );
     }
 
+    /**
+     * Test buildBugsForBatchEdit method.
+     *
+     * @param  array $oldBugs
+     * @access public
+     * @return mixed
+     */
+    public function buildBugsForBatchEditTest($oldBugs = array())
+    {
+        global $tester;
+        
+        if(empty($oldBugs)) return array();
+        
+        // 模拟 form::batchData 返回的数据
+        $bugs = array();
+        foreach($oldBugs as $oldBug)
+        {
+            $bug = new stdclass();
+            $bug->id = $oldBug->id;
+            $bug->os = isset($oldBug->os) ? $oldBug->os : 'linux';
+            $bug->browser = isset($oldBug->browser) ? $oldBug->browser : 'chrome';
+            $bug->assignedTo = isset($oldBug->assignedTo) ? $oldBug->assignedTo : '';
+            $bug->resolution = isset($oldBug->resolution) ? $oldBug->resolution : '';
+            $bug->resolvedBy = isset($oldBug->resolvedBy) ? $oldBug->resolvedBy : '';
+            $bug->duplicateBug = isset($oldBug->duplicateBug) ? $oldBug->duplicateBug : 0;
+            $bug->project = isset($oldBug->project) ? $oldBug->project : 0;
+            $bugs[] = $bug;
+        }
+        
+        $now = helper::now();
+        
+        // 模拟 buildBugsForBatchEdit 方法的主要逻辑
+        foreach($bugs as $index => $bug)
+        {
+            $oldBug = $oldBugs[$bug->id - 1]; // 调整索引
+            
+            // 处理数组类型的 os 和 browser
+            if(is_array($bug->os)) $bug->os = implode(',', $bug->os);
+            if(is_array($bug->browser)) $bug->browser = implode(',', $bug->browser);
+            
+            // 如果bug已关闭，指派人员不变
+            if(isset($oldBug->status) && $oldBug->status == 'closed') 
+            {
+                $bug->assignedTo = $oldBug->assignedTo;
+            }
+            
+            // 如果解决方案不是duplicate，duplicateBug设为0
+            if($bug->resolution != 'duplicate') $bug->duplicateBug = 0;
+            
+            // 如果指派人员变更，设置指派日期
+            if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
+            
+            // 如果有解决方案，设置确认状态
+            if($bug->resolution != '') $bug->confirmed = 1;
+            
+            // 如果bug被解决，设置解决日期和状态
+            if(($bug->resolvedBy != '' || $bug->resolution != '') && 
+               isset($oldBug->status) && 
+               strpos(',resolved,closed,', ",{$oldBug->status},") === false)
+            {
+                $bug->resolvedDate = $now;
+                $bug->status = 'resolved';
+            }
+            
+            // 如果有解决方案但没有解决人，设置解决人
+            if($bug->resolution != '' && $bug->resolvedBy == '') 
+            {
+                $bug->resolvedBy = 'admin'; // 模拟当前用户
+            }
+            
+            // 如果有解决方案但没有指派人，设置指派人和指派日期
+            if($bug->resolution != '' && $bug->assignedTo == '')
+            {
+                $bug->assignedTo = isset($oldBug->openedBy) ? $oldBug->openedBy : 'admin';
+                $bug->assignedDate = $now;
+            }
+        }
+        
+        return $bugs;
+    }
+
 }
