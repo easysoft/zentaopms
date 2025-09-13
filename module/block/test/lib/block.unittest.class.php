@@ -3948,4 +3948,83 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printProjectTeamBlock method.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printProjectTeamBlockTest($block = null)
+    {
+        global $tester;
+
+        $result = new stdclass();
+        $result->success = false;
+        $result->error = '';
+        $result->projects = null;
+        $result->projectCount = 0;
+        $result->hasProjects = false;
+
+        try {
+            if(!$block) {
+                $block = new stdclass();
+                $block->params = new stdclass();
+                $block->params->count = 15;
+                $block->params->type = 'all';
+                $block->params->orderBy = 'id_desc';
+            }
+
+            include_once dirname(__FILE__, 3) . '/model.php';
+
+            if(!class_exists('block'))
+            {
+                class_alias('blockModel', 'block');
+            }
+
+            include_once dirname(__FILE__, 3) . '/zen.php';
+
+            $blockZen = new blockZen();
+            $blockZen->block = $this->objectModel;
+
+            // 初始化必要的属性
+            $blockZen->app = $tester->app;
+            $blockZen->view = new stdclass();
+
+            // 使用反射访问受保护的方法
+            $reflection = new ReflectionClass($blockZen);
+            $method = $reflection->getMethod('printProjectTeamBlock');
+            $method->setAccessible(true);
+
+            ob_start();
+            $method->invoke($blockZen, $block);
+            $output = ob_get_clean();
+
+            $result->success = true;
+            $result->error = null;
+
+            // 检查是否设置了projects属性
+            if(isset($blockZen->view->projects)) {
+                $result->hasProjects = true;
+                $result->projectCount = count($blockZen->view->projects);
+                $result->projects = $blockZen->view->projects;
+            } else {
+                $result->hasProjects = false;
+                $result->projectCount = 0;
+                $result->projects = null;
+            }
+
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->hasProjects = false;
+            $result->projectCount = 0;
+            $result->projects = null;
+        }
+
+        $result->output = isset($output) ? $output : '';
+
+        return $result;
+    }
 }
