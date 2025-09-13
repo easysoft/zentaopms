@@ -1958,4 +1958,35 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test setEditMenu method.
+     *
+     * @param  int    $bugID
+     * @param  string $tab
+     * @access public
+     * @return int
+     */
+    public function setEditMenuTest(int $bugID, string $tab): int
+    {
+        global $tester, $app;
+        
+        // 获取bug对象
+        $bug = $this->objectModel->getById($bugID);
+        if(!$bug) return 0;
+        
+        // 设置app tab
+        $app->tab = $tab;
+        
+        $zen = initReference('bug');
+        $method = $zen->getMethod('setEditMenu');
+        
+        $zenInstance = $zen->newInstance();
+        
+        $result = $method->invokeArgs($zenInstance, array($bug));
+        
+        if(dao::isError()) return 0;
+        
+        return $result ? 1 : 0;
+    }
+
 }
