@@ -1626,4 +1626,20 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test checkBugsForBatchUpdate method.
+     *
+     * @param  array $bugs
+     * @access public
+     * @return bool
+     */
+    public function checkBugsForBatchUpdateTest(array $bugs): bool
+    {
+        $result = $this->objectZen->checkBugsForBatchUpdate($bugs);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
