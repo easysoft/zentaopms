@@ -630,4 +630,26 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsForExportTemplate method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array|int
+     */
+    public function getFieldsForExportTemplateTest(string $type = 'normal')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getFieldsForExportTemplate');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+
+        return $result;
+    }
 }
