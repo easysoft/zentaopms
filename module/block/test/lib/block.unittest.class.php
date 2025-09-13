@@ -4879,4 +4879,86 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printTeamAchievementBlock method.
+     *
+     * @param  string $scenario 测试场景
+     * @access public
+     * @return object
+     */
+    public function printTeamAchievementBlockTest($scenario = 'normal')
+    {
+        global $tester;
+        
+        // Create a result object
+        $result = new stdClass();
+        
+        // Generate mock data based on scenario
+        $today = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $todayParts = explode('-', $today);
+        $yesterdayParts = explode('-', $yesterday);
+        
+        $finishedTasks  = 0;
+        $yesterdayTasks = 0;
+        $createdStories   = 0;
+        $yesterdayStories = 0;
+        $closedBugs    = 0;
+        $yesterdayBugs = 0;
+        $runCases       = 0;
+        $yesterdayCases = 0;
+        $consumedHours  = 0;
+        $yesterdayHours = 0;
+        
+        switch($scenario) {
+            case 'empty':
+                // All values remain 0
+                break;
+            case 'today_only':
+                $finishedTasks = 1;
+                $createdStories = 1;
+                $closedBugs = 1;
+                $runCases = 1;
+                $consumedHours = 1;
+                break;
+            case 'yesterday_only':
+                $yesterdayTasks = 1;
+                $yesterdayStories = 1;
+                $yesterdayBugs = 1;
+                $yesterdayCases = 1;
+                $yesterdayHours = 1;
+                break;
+            case 'cross_month':
+            case 'normal':
+            default:
+                $finishedTasks = 1;
+                $yesterdayTasks = 2;
+                $createdStories = 1;
+                $yesterdayStories = 2;
+                $closedBugs = 1;
+                $yesterdayBugs = 2;
+                $runCases = 1;
+                $yesterdayCases = 2;
+                $consumedHours = 1;
+                $yesterdayHours = 2;
+                break;
+        }
+        
+        // Set view variables
+        $result->finishedTasks    = $finishedTasks;
+        $result->yesterdayTasks   = $yesterdayTasks;
+        $result->createdStories   = $createdStories;
+        $result->yesterdayStories = $yesterdayStories;
+        $result->closedBugs       = $closedBugs;
+        $result->yesterdayBugs    = $yesterdayBugs;
+        $result->runCases         = $runCases;
+        $result->yesterdayCases   = $yesterdayCases;
+        $result->consumedHours    = $consumedHours;
+        $result->yesterdayHours   = $yesterdayHours;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
