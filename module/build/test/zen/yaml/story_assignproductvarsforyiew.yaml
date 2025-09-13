@@ -1,0 +1,154 @@
+---
+title: Test story data for buildZen::assignProductVarsForView method
+desc: 提供测试构建版本产品变量视图分配方法的需求数据
+author: Claude Code AI
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{4}, 2{3}, 3{3}
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{5}, 1{2}, 2{2}, "1,2"{1}
+  format: ""
+- field: module
+  note: 模块ID
+  range: 0{6}, 1{2}, 2{2}
+  format: ""
+- field: plan
+  note: 计划ID
+  range: 0{5}, 1{3}, 2{2}
+  format: ""
+- field: source
+  note: 来源
+  range: 'customer{4}, user{3}, po{3}'
+  format: ""
+- field: sourceNote
+  note: 来源备注
+  range: '来源说明{5}, ""{5}'
+  format: ""
+- field: fromBug
+  note: 来源Bug ID
+  range: 0{8}, 10{1}, 11{1}
+  format: ""
+- field: feedback
+  note: 反馈ID
+  range: 0{8}, 1{1}, 2{1}
+  format: ""
+- field: title
+  note: 需求标题
+  range: '用户登录功能{2}, 数据统计功能{2}, 报表导出功能{2}, 权限管理功能{2}, 系统配置功能{2}'
+  format: ""
+- field: keywords
+  note: 关键词
+  range: '登录,认证{2}, 统计,报表{2}, 导出,Excel{2}, 权限,角色{2}, 配置,系统{2}'
+  format: ""
+- field: type
+  note: 需求类型
+  range: 'story{8}, epic{1}, requirement{1}'
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1{2}, 2{3}, 3{3}, 4{2}
+  format: ""
+- field: estimate
+  note: 预计工时
+  range: 8{3}, 16{3}, 24{2}, 40{2}
+  format: ""
+- field: status
+  note: 需求状态
+  range: 'draft{2}, active{4}, developing{2}, testing{1}, closed{1}'
+  format: ""
+- field: stage
+  note: 需求阶段
+  range: 'wait{3}, planned{3}, projected{2}, developing{1}, testing{1}'
+  format: ""
+- field: version
+  note: 版本号
+  range: 1{8}, 2{2}
+  format: ""
+- field: openedBy
+  note: 创建人
+  range: 'admin{4}, user1{3}, user2{3}'
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01{3}, 2024-01-15{4}, 2024-02-01{3}'
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: 'admin{3}, user1{3}, user2{2}, ""{2}'
+  format: ""
+- field: assignedDate
+  note: 指派时间
+  range: '2024-01-02{3}, 2024-01-16{3}, 2024-02-02{2}, 0000-00-00 00:00:00{2}'
+  format: ""
+- field: lastEditedBy
+  note: 最后编辑人
+  range: 'admin{4}, user1{3}, user2{3}'
+  format: ""
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '2024-01-03{3}, 2024-01-17{4}, 2024-02-03{3}'
+  format: ""
+- field: reviewedBy
+  note: 评审人
+  range: 'admin{3}, user1{3}, user2{2}, ""{2}'
+  format: ""
+- field: reviewedDate
+  note: 评审时间
+  range: '2024-01-04{3}, 2024-01-18{3}, 2024-02-04{2}, 0000-00-00 00:00:00{2}'
+  format: ""
+- field: closedBy
+  note: 关闭人
+  range: 'admin{1}, ""{9}'
+  format: ""
+- field: closedDate
+  note: 关闭时间
+  range: '2024-02-10{1}, 0000-00-00 00:00:00{9}'
+  format: ""
+- field: closedReason
+  note: 关闭原因
+  range: 'done{1}, ""{9}'
+  format: ""
+- field: toBug
+  note: 转Bug ID
+  range: 0{10}
+  format: ""
+- field: childStories
+  note: 子需求
+  range: '""{10}'
+  format: ""
+- field: linkStories
+  note: 关联需求
+  range: '""{9}, "2,3"{1}'
+  format: ""
+- field: linkRequirements
+  note: 关联需求文档
+  range: '""{10}'
+  format: ""
+- field: duplicateStory
+  note: 重复需求
+  range: 0{10}
+  format: ""
+- field: reviewResult
+  note: 评审结果
+  range: '""{9}, pass{1}'
+  format: ""
+- field: needNotReview
+  note: 无需评审
+  range: 0{9}, 1{1}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  format: ""
