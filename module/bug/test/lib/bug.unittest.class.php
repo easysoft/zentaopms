@@ -1886,4 +1886,32 @@ class bugTest
         return array(count($modules), 'modules');
     }
 
+    /**
+     * Test setBrowseCookie method.
+     *
+     * @param  object $product
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @access public
+     * @return bool
+     */
+    public function setBrowseCookieTest(object $product, string $branch, string $browseType, int $param, string $orderBy): bool
+    {
+        global $app;
+        
+        $app->rawModule = 'bug';
+        $app->rawMethod = 'browse';
+        
+        $zen = initReference('bug');
+        $method = $zen->getMethod('setBrowseCookie');
+        
+        $result = $method->invokeArgs($zen->newInstance(), array($product, $branch, $browseType, $param, $orderBy));
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
