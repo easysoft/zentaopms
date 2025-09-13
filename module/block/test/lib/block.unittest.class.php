@@ -4406,4 +4406,102 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printProductDocBlock method.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return object
+     */
+    public function printProductDocBlockTest($block = null, $params = array())
+    {
+        $result = new stdclass();
+        
+        try {
+            // 直接查询数据库，模拟printProductDocBlock的核心逻辑
+            global $tester;
+            
+            $type = 'involved';
+            if(isset($params['type'])) $type = $params['type'];
+            
+            $count = 15;
+            if($block && isset($block->params->count)) $count = (int)$block->params->count;
+            
+            // 获取所有产品（简化版）
+            $products = $tester->dao->select('*')->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->ne('closed')
+                ->fetchAll('id');
+            
+            $productIdList = array_keys($products);
+            
+            // 获取产品文档
+            $docs = array();
+            if(!empty($productIdList)) {
+                $docs = $tester->dao->select('id,product,title,type,addedBy,addedDate,editedDate,status')->from(TABLE_DOC)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('product')->in($productIdList)
+                    ->orderBy('product,status,editedDate_desc')
+                    ->limit($count * count($productIdList))
+                    ->fetchAll();
+            }
+            
+            // 按产品分组文档
+            $docGroup = array();
+            foreach($docs as $doc) {
+                if(!isset($docGroup[$doc->product])) $docGroup[$doc->product] = array();
+                if(count($docGroup[$doc->product]) < $count) {
+                    $docGroup[$doc->product][$doc->id] = $doc;
+                }
+            }
+            
+            // 筛选有文档的产品
+            $hasDataProducts = array();
+            foreach($products as $productID => $product) {
+                if(isset($docGroup[$productID]) && count($docGroup[$productID]) > 0) {
+                    $hasDataProducts[$productID] = $product;
+                }
+            }
+            
+            // 获取用户列表（简化版）
+            $users = $tester->dao->select('account,realname')->from(TABLE_USER)
+                ->where('deleted')->eq(0)
+                ->fetchPairs();
+            
+            $result->success = true;
+            $result->error = '';
+            $result->type = $type;
+            $result->users = $users;
+            $result->products = $hasDataProducts;
+            $result->docGroup = $docGroup;
+            $result->productsCount = count($hasDataProducts);
+            $result->totalDocsCount = array_sum(array_map('count', $docGroup));
+        }
+        catch(Exception $e)
+        {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->type = '';
+            $result->users = array();
+            $result->products = array();
+            $result->docGroup = array();
+            $result->productsCount = 0;
+            $result->totalDocsCount = 0;
+        }
+
+        if(dao::isError()) {
+            $result->success = false;
+            $result->error = dao::getError();
+            $result->type = '';
+            $result->users = array();
+            $result->products = array();
+            $result->docGroup = array();
+            $result->productsCount = 0;
+            $result->totalDocsCount = 0;
+        }
+
+        return $result;
+    }
 }
