@@ -1727,4 +1727,28 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getKanbanVariable method.
+     *
+     * @param  array $output
+     * @access public
+     * @return array
+     */
+    public function getKanbanVariableTest(array $output): array
+    {
+        global $tester;
+        
+        $zenInstance = $tester->loadZen('bug');
+        
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getKanbanVariable');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $output);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
