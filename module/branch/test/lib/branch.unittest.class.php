@@ -5,6 +5,7 @@ class branchTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('branch');
+         $this->objectZen   = $tester->loadZen('branch');
     }
 
     /**
@@ -474,6 +475,25 @@ class branchTest
         
         if(dao::isError()) return dao::getError();
         
+        return $result;
+    }
+
+    /**
+     * Test setParamsForLink method.
+     *
+     * @param  string $module
+     * @param  string $link
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function setParamsForLinkTest(string $module, string $link, int $projectID, int $productID): string
+    {
+        $result = $this->objectZen->setParamsForLink($module, $link, $projectID, $productID);
+
+        if(dao::isError()) return dao::getError();
+
         return $result;
     }
 }
