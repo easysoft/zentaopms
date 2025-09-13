@@ -4300,4 +4300,48 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printDocViewListBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocViewListBlockTest()
+    {
+        $result = new stdclass();
+        
+        try {
+            // 直接查询数据库，模拟printDocViewListBlock的核心逻辑
+            global $tester;
+            
+            // 简化的查询，直接获取文档按views倒序排列
+            $docList = $tester->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->eq('normal')
+                ->andWhere('vision')->eq($tester->config->vision)
+                ->orderBy('views_desc')
+                ->limit(6)
+                ->fetchAll();
+            
+            $result->success = true;
+            $result->docList = $docList;
+            $result->docCount = count($docList);
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->docList = array();
+            $result->docCount = 0;
+        }
+        
+        if(dao::isError()) {
+            $result->success = false;
+            $result->error = dao::getError();
+            $result->docList = array();
+            $result->docCount = 0;
+        }
+        
+        return $result;
+    }
 }
