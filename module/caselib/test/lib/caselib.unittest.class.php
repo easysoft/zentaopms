@@ -970,4 +970,47 @@ class caselibTest
         
         return $result;
     }
+
+    /**
+     * Test getExportCasesFields method.
+     *
+     * @param  array  $postData
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getExportCasesFieldsTest(array $postData = array(), string $type = 'array')
+    {
+        global $tester;
+        
+        // 设置POST数据模拟
+        if(!empty($postData['exportFields'])) {
+            $_POST['exportFields'] = $postData['exportFields'];
+        } else {
+            unset($_POST['exportFields']);
+        }
+
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getExportCasesFields');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'keys') return array_keys($result);
+        if($type == 'values') return array_values($result);
+        if($type == 'first_key' && !empty($result)) return key($result);
+        if($type == 'first_value' && !empty($result)) return reset($result);
+        if($type == 'has_id') return isset($result['id']) ? 1 : 0;
+        if($type == 'has_title') return isset($result['title']) ? 1 : 0;
+        if($type == 'has_module') return isset($result['module']) ? 1 : 0;
+        if($type == 'has_precondition') return isset($result['precondition']) ? 1 : 0;
+        if($type == 'has_stepDesc') return isset($result['stepDesc']) ? 1 : 0;
+        if($type == 'has_stepExpect') return isset($result['stepExpect']) ? 1 : 0;
+        if($type == 'is_empty') return empty($result) ? 1 : 0;
+
+        return $result;
+    }
 }
