@@ -830,4 +830,53 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getDataForImport method.
+     *
+     * @param  int    $maxImport
+     * @param  string $tmpFile
+     * @param  array  $fields
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getDataForImportTest(int $maxImport, string $tmpFile, array $fields, string $type = 'both')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getDataForImport');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $maxImport, $tmpFile, $fields);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'caseData_count') return count($result[0]);
+        if($type == 'stepVars') return $result[1];
+        if($type == 'caseData') return $result[0];
+        if($type == 'both') return $result;
+        if($type == 'first_case_title' && !empty($result[0])) {
+            $firstCase = reset($result[0]);
+            return $firstCase->title ?? '';
+        }
+        if($type == 'first_case_module' && !empty($result[0])) {
+            $firstCase = reset($result[0]);
+            return $firstCase->module ?? '';
+        }
+        if($type == 'first_case_type' && !empty($result[0])) {
+            $firstCase = reset($result[0]);
+            return $firstCase->type ?? '';
+        }
+        if($type == 'has_steps' && !empty($result[0])) {
+            $firstCase = reset($result[0]);
+            return isset($firstCase->steps) ? 1 : 0;
+        }
+        if($type == 'has_expects' && !empty($result[0])) {
+            $firstCase = reset($result[0]);
+            return isset($firstCase->expects) ? 1 : 0;
+        }
+        if($type == 'is_empty') return empty($result[0]) ? 1 : 0;
+
+        return $result;
+    }
 }
