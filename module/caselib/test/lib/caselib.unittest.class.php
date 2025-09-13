@@ -1128,11 +1128,11 @@ class caselibTest
         if($type == 'stepDesc') return $case->stepDesc ?? '';
         if($type == 'stepExpect') return $case->stepExpect ?? '';
         if($type == 'stepDesc_length') return strlen($case->stepDesc ?? '');
-        if($type == 'stepExpect_length') return strlen($case->stepExpected ?? '');
+        if($type == 'stepExpected_length') return strlen($case->stepExpected ?? '');
         if($type == 'has_stepDesc') return isset($case->stepDesc) && !empty($case->stepDesc) ? 1 : 0;
-        if($type == 'has_stepExpect') return isset($case->stepExpect) && !empty($case->stepExpected) ? 1 : 0;
+        if($type == 'has_stepExpected') return isset($case->stepExpected) && !empty($case->stepExpected) ? 1 : 0;
         if($type == 'stepDesc_lines') return substr_count($case->stepDesc ?? '', "\n") + 1;
-        if($type == 'stepExpect_lines') return substr_count($case->stepExpected ?? '', "\n") + 1;
+        if($type == 'stepExpected_lines') return substr_count($case->stepExpected ?? '', "\n") + 1;
         if($type == 'has_csv_escape') return strpos($case->stepDesc ?? '', '""') !== false || strpos($case->stepExpected ?? '', '""') !== false ? 1 : 0;
         if($type == 'first_step_number') {
             $stepDesc = $case->stepDesc ?? '';
@@ -1141,6 +1141,44 @@ class caselibTest
             }
             return '';
         }
+
+        return $case;
+    }
+
+    /**
+     * Test processStageForExport method.
+     *
+     * @param  object $case
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function processStageForExportTest(object $case, string $type = 'case')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('processStageForExport');
+        $zenInstance = $zen->newInstance();
+
+        // 执行方法
+        $method->invoke($zenInstance, $case);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'stage') return $case->stage ?? '';
+        if($type == 'stage_length') return strlen($case->stage ?? '');
+        if($type == 'has_stage') return isset($case->stage) && !empty($case->stage) ? 1 : 0;
+        if($type == 'stage_lines') return substr_count($case->stage ?? '', "\n") + 1;
+        if($type == 'stage_count') return count(explode("\n", $case->stage ?? ''));
+        if($type == 'first_stage') {
+            $stages = explode("\n", $case->stage ?? '');
+            return !empty($stages) ? trim($stages[0]) : '';
+        }
+        if($type == 'last_stage') {
+            $stages = explode("\n", $case->stage ?? '');
+            return !empty($stages) ? trim(end($stages)) : '';
+        }
+        if($type == 'has_newlines') return strpos($case->stage ?? '', "\n") !== false ? 1 : 0;
+        if($type == 'is_empty') return empty($case->stage) ? 1 : 0;
 
         return $case;
     }
