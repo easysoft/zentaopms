@@ -652,4 +652,32 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getRowsForExportTemplate method.
+     *
+     * @param  int    $num
+     * @param  array  $modules
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getRowsForExportTemplateTest(int $num, array $modules, string $type = 'array')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getRowsForExportTemplate');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $num, $modules);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'first_module' && !empty($result)) return $result[0]->module ?? '';
+        if($type == 'first_stepDesc' && !empty($result)) return $result[0]->stepDesc ?? '';
+        if($type == 'first_hasTypeValue' && !empty($result)) return isset($result[0]->typeValue) ? 1 : 0;
+        if($type == 'first_hasStageValue' && !empty($result)) return isset($result[0]->stageValue) ? 1 : 0;
+
+        return $result;
+    }
 }
