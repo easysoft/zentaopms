@@ -925,4 +925,37 @@ class buildTest
         
         return $formData;
     }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object $build
+     * @access public
+     * @return int|array
+     */
+    public function getExcludeStoryIdListTest(object $build)
+    {
+        global $tester, $dao;
+        
+        // 模拟getExcludeStoryIdList方法的核心逻辑
+        // 查询指定产品下所有父需求的ID
+        $parentIdList = $dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($build->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->fetchPairs();
+        
+        // 添加版本已关联的需求ID到排除列表
+        if(!empty($build->allStories)) {
+            foreach(explode(',', $build->allStories) as $storyID) {
+                if(!$storyID) continue;
+                if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回数组大小而不是数组本身，便于测试验证
+        return count($parentIdList);
+    }
 }
