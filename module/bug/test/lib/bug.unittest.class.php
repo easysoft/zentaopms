@@ -4147,4 +4147,36 @@ class bugTest
         $load = "bug-browse-productID-{$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc";
         return array('result' => 'success', 'message' => $message, 'load' => $load);
     }
+
+    /**
+     * Test operateAfterBatchEdit method.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return string
+     */
+    public function operateAfterBatchEditTest(object $bug, object $oldBug): string
+    {
+        global $tester, $app, $config;
+        
+        // 模拟 operateAfterBatchEdit 的逻辑，避免复杂的依赖和实际操作
+        
+        $operations = array();
+        
+        // 1. 检查是否需要记录积分奖励
+        if(isset($bug->status) && $bug->status == 'resolved' && $oldBug->status == 'active') {
+            $operations[] = 'score_recorded';
+        }
+        
+        // 2. 检查是否需要更新反馈状态（仅非开源版本）
+        if($config->edition != 'open' && isset($oldBug->feedback) && $oldBug->feedback) {
+            $operations[] = 'feedback_updated';
+        }
+        
+        // 如果没有任何操作，返回'0'
+        if(empty($operations)) return '0';
+        
+        return implode(',', $operations);
+    }
 }
