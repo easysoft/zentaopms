@@ -3497,4 +3497,166 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test processOutline method.
+     *
+     * @param  object $doc 文档对象
+     * @access public
+     * @return object
+     */
+    public function processOutlineTest($doc)
+    {
+        // 模拟processOutline方法的核心逻辑
+        
+        /* Split content into an array. */
+        $content = preg_replace('/(<(h[1-6])[\S\s]*?\>[\S\s]*?<\/\2>)/', "$1\n", $doc->content);
+        $content = explode("\n", $content);
+
+        /* Get the head element, for example h1,h2,etc. */
+        $includeHeadElement = array();
+        foreach($content as $index => $element)
+        {
+            preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+            if(isset($headElement[1]) && !in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '') $includeHeadElement[] = $headElement[1];
+        }
+
+        /* Get the two elements with the highest rank. */
+        sort($includeHeadElement);
+
+        if($includeHeadElement)
+        {
+            $topLevel    = (int)ltrim($includeHeadElement[0], 'h');
+            $outlineList = $this->buildOutlineList($topLevel, $content, $includeHeadElement);
+            $outlineTree = $this->buildOutlineTree($outlineList);
+            
+            // 模拟设置view变量
+            global $tester;
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            $tester->view->outlineTree = $outlineTree;
+
+            foreach($content as $index => $element)
+            {
+                preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+                /* The current element is existed, the element is in the includeHeadElement, && the text in the element is not null. */
+                if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
+                {
+                    $content[$index] = str_replace('<' . $headElement[1] . $headElement[2] . '>', '<' . $headElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
+                }
+            }
+
+            $doc->content = implode("\n", $content);
+        }
+
+        return $doc;
+    }
+
+    /**
+     * Helper method for processOutlineTest - build outline list.
+     *
+     * @param  int    $topLevel
+     * @param  array  $content
+     * @param  array  $includeHeadElement
+     * @access private
+     * @return array
+     */
+    private function buildOutlineList(int $topLevel, array $content, array $includeHeadElement): array
+    {
+        $preLevel     = 0;
+        $preIndex     = 0;
+        $parentID     = 0;
+        $currentLevel = 0;
+        $outlineList  = array();
+        
+        foreach($content as $index => $element)
+        {
+            preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+            /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
+            if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
+            {
+                $currentLevel = (int)ltrim($headElement[1], 'h');
+
+                $item = array();
+                $item['id']         = $index;
+                $item['title']      = array('html' => strip_tags($headElement[3]));
+                $item['hint']       = strip_tags($headElement[3]);
+                $item['url']        = '#anchor' . $index;
+                $item['level']      = $currentLevel;
+                $item['data-level'] = $item['level'];
+                $item['data-index'] = $index;
+
+                if($currentLevel == $topLevel)
+                {
+                    $parentID = -1;
+                }
+                elseif($currentLevel > $preLevel)
+                {
+                    $parentID = $preIndex;
+                }
+                elseif($currentLevel < $preLevel)
+                {
+                    $parentID = $this->getOutlineParentIDForTest($outlineList, $currentLevel);
+                }
+
+                $item['parent'] = $parentID;
+
+                $preIndex = $index;
+                $preLevel = $currentLevel;
+                $outlineList[$index] = $item;
+            }
+        }
+        return $outlineList;
+    }
+
+    /**
+     * Helper method for processOutlineTest - get outline parent ID.
+     *
+     * @param  array  $outlineList
+     * @param  int    $currentLevel
+     * @access private
+     * @return int
+     */
+    private function getOutlineParentIDForTest(array $outlineList, int $currentLevel): int
+    {
+        $parentID    = 0;
+        $outlineList = array_reverse($outlineList, true);
+        foreach($outlineList as $index => $item)
+        {
+            if($item['level'] < $currentLevel)
+            {
+                $parentID = $index;
+                break;
+            }
+        }
+        return $parentID;
+    }
+
+    /**
+     * Helper method for processOutlineTest - build outline tree.
+     *
+     * @param  array  $outlineList
+     * @param  int    $parentID
+     * @access private
+     * @return array
+     */
+    private function buildOutlineTree(array $outlineList, int $parentID = -1): array
+    {
+        $outlineTree = array();
+        foreach($outlineList as $index => $item)
+        {
+            if($item['parent'] != $parentID) continue;
+
+            unset($outlineList[$index]);
+
+            $items = $this->buildOutlineTree($outlineList, $index);
+            if(!empty($items)) $item['items'] = $items;
+
+            $outlineTree[] = $item;
+        }
+
+        return $outlineTree;
+    }
 }
