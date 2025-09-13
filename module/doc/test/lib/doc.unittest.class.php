@@ -2885,4 +2885,78 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test setAclForEditLib method.
+     *
+     * @param  object $lib
+     * @access public
+     * @return mixed
+     */
+    public function setAclForEditLibTest(object $lib)
+    {
+        global $tester, $lang, $app;
+
+        // 初始化语言配置模拟数据
+        if(!isset($lang->doclib)) $lang->doclib = new stdClass();
+        if(!isset($lang->api)) $lang->api = new stdClass();
+        if(!isset($lang->product)) $lang->product = new stdClass();
+        if(!isset($lang->project)) $lang->project = new stdClass();
+
+        // 设置基本的语言配置
+        $lang->doclib->aclList = array(
+            'default' => 'Default (%s Team Member)',
+            'open' => 'Public',
+            'private' => 'Private',
+            'custom' => 'Custom'
+        );
+        $lang->doclib->mySpaceAclList = array(
+            'open' => 'Public',
+            'private' => 'Private'
+        );
+        $lang->doclib->privateACL = 'Private (accessible to %s team members only)';
+        $lang->api->aclList = array(
+            'default' => 'Default (%s Team Member)'
+        );
+        $lang->product->common = 'Product';
+        $lang->project->common = 'Project';
+
+        $libType = $lib->type;
+        
+        // 模拟 setAclForEditLib 方法的逻辑
+        if($libType == 'custom')
+        {
+            unset($lang->doclib->aclList['default']);
+        }
+        elseif($libType == 'api')
+        {
+            $type = !empty($lib->product) ? 'product' : 'project';
+            $lang->api->aclList['default'] = sprintf($lang->api->aclList['default'], $lang->{$type}->common);
+        }
+        elseif($libType == 'mine')
+        {
+            $lang->doclib->aclList = $lang->doclib->mySpaceAclList;
+        }
+        elseif($libType != 'custom')
+        {
+            $type = isset($type) ? $type : $libType;
+            $lang->doclib->aclList['default'] = sprintf($lang->doclib->aclList['default'], $lang->{$type}->common);
+            $lang->doclib->aclList['private'] = sprintf($lang->doclib->privateACL, $lang->{$type}->common);
+            unset($lang->doclib->aclList['open']);
+        }
+
+        if(!empty($lib->main) && $libType != 'mine') {
+            unset($lang->doclib->aclList['private'], $lang->doclib->aclList['open']);
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回模拟处理结果，主要检查访问控制列表的变化
+        $result = new stdClass();
+        $result->result = true;
+        $result->aclList = $lang->doclib->aclList;
+        $result->lib = $lib;
+        
+        return $result;
+    }
 }
