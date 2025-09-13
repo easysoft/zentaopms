@@ -4255,4 +4255,60 @@ class bugTest
         // 默认情况：返回success表示方法调用成功
         return 'success';
     }
+
+    /**
+     * Test initBug method.
+     *
+     * @param  array $fields
+     * @access public
+     * @return object
+     */
+    public function initBugTest(array $fields = array())
+    {
+        // initBug是一个内部工具方法，直接实现其逻辑进行测试
+        $bug = new stdclass();
+        $bug->projectID   = 0;
+        $bug->moduleID    = 0;
+        $bug->executionID = 0;
+        $bug->productID   = 0;
+        $bug->taskID      = 0;
+        $bug->storyID     = 0;
+        $bug->buildID     = 0;
+        $bug->caseID      = 0;
+        $bug->runID       = 0;
+        $bug->testtask    = 0;
+        $bug->version     = 0;
+        $bug->title       = '';
+        $bug->steps       = '';  // 简化测试，不使用lang
+        $bug->os          = '';
+        $bug->browser     = '';
+        $bug->assignedTo  = '';
+        $bug->deadline    = '';
+        $bug->mailto      = '';
+        $bug->keywords    = '';
+        $bug->severity    = 3;
+        $bug->type        = 'codeerror';
+        $bug->pri         = 3;
+        $bug->color       = '';
+        $bug->feedbackBy  = '';
+        $bug->notifyEmail = '';
+
+        $bug->project      = '';
+        $bug->branch       = '';
+        $bug->execution    = '';
+        $bug->projectModel = '';
+        $bug->projects   = array();
+        $bug->executions = array();
+        $bug->products   = array();
+        $bug->stories    = array();
+        $bug->builds     = array();
+        $bug->branches   = array();
+
+        if(!empty($fields))
+        {
+            foreach($fields as $field => $value) $bug->$field = $value;
+        }
+
+        return $bug;
+    }
 }
