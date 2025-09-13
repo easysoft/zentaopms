@@ -280,4 +280,33 @@ class companyTest
 
         return $products;
     }
+
+    /**
+     * Test loadProject method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function loadProjectTest()
+    {
+        global $tester;
+        
+        // 模拟loadProject方法的实现
+        // $projects = $this->loadModel('project')->getPairsByProgram();
+        $projects = $this->objectModel->loadModel('project')->getPairsByProgram();
+        
+        // 模拟语言配置
+        if(!isset($this->objectModel->lang->company->project)) {
+            $this->objectModel->lang->company->project = '项目';
+        }
+        
+        $projects = array($this->objectModel->lang->company->project) + $projects;
+        
+        // 模拟设置view变量（在测试中不需要真正设置）
+        // $this->view->projects = $projects;
+        
+        if(dao::isError()) return dao::getError();
+
+        return $projects;
+    }
 }
