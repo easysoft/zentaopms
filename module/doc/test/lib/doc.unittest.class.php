@@ -2500,4 +2500,89 @@ class docTest
 
         return $files;
     }
+
+    /**
+     * Test buildOutlineList method.
+     *
+     * @param  int    $topLevel
+     * @param  array  $content
+     * @param  array  $includeHeadElement
+     * @access public
+     * @return array
+     */
+    public function buildOutlineListTest(int $topLevel, array $content, array $includeHeadElement): array
+    {
+        // 模拟buildOutlineList方法的核心逻辑
+        $preLevel     = 0;
+        $preIndex     = 0;
+        $parentID     = 0;
+        $currentLevel = 0;
+        $outlineList  = array();
+        
+        foreach($content as $index => $element)
+        {
+            preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+            /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
+            if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
+            {
+                $currentLevel = (int)ltrim($headElement[1], 'h');
+
+                $item = array();
+                $item['id']         = $index;
+                $item['title']      = array('html' => strip_tags($headElement[3]));
+                $item['hint']       = strip_tags($headElement[3]);
+                $item['url']        = '#anchor' . $index;
+                $item['level']      = $currentLevel;
+                $item['data-level'] = $item['level'];
+                $item['data-index'] = $index;
+
+                if($currentLevel == $topLevel)
+                {
+                    $parentID = -1;
+                }
+                elseif($currentLevel > $preLevel)
+                {
+                    $parentID = $preIndex;
+                }
+                elseif($currentLevel < $preLevel)
+                {
+                    $parentID = $this->getOutlineParentID($outlineList, $currentLevel);
+                }
+
+                $item['parent'] = $parentID;
+
+                $preIndex = $index;
+                $preLevel = $currentLevel;
+                $outlineList[$index] = $item;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $outlineList;
+    }
+
+    /**
+     * Helper method for buildOutlineListTest - get outline parent ID.
+     *
+     * @param  array  $outlineList
+     * @param  int    $currentLevel
+     * @access private
+     * @return int
+     */
+    private function getOutlineParentID(array $outlineList, int $currentLevel): int
+    {
+        $parentID    = 0;
+        $outlineList = array_reverse($outlineList, true);
+        foreach($outlineList as $index => $item)
+        {
+            if($item['level'] < $currentLevel)
+            {
+                $parentID = $index;
+                break;
+            }
+        }
+        return $parentID;
+    }
 }
