@@ -5568,4 +5568,74 @@ class blockTest
         // 返回输出的JSON数据和实际结果
         return array('output' => $output, 'result' => $result, 'view' => $blockZen->view);
     }
+
+    /**
+     * Test organizaExternalData method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function organizaExternalDataTest(object $block = null)
+    {
+        global $tester;
+        global $app;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $app;
+        $blockZen->config = $app->config;
+        $blockZen->view = new stdclass();
+        $blockZen->dao = $tester->dao;
+        $blockZen->get = new stdclass();
+        $blockZen->user = $tester->loadModel('user');
+        
+        // 初始化app中需要的属性
+        if(!isset($blockZen->app->company)) {
+            $blockZen->app->company = new stdclass();
+            $blockZen->app->company->admins = ',admin,';
+        }
+        
+        // 模拟GET参数
+        if(isset($_GET['lang'])) $blockZen->get->lang = $_GET['lang'];
+        if(isset($_GET['sso'])) $blockZen->get->sso = $_GET['sso'];
+        
+        // 准备默认block对象
+        if($block === null) {
+            $block = new stdclass();
+            $block->params = new stdclass();
+            $block->params->account = 'admin';
+        }
+        
+        // 使用反射调用私有方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('organizaExternalData');
+        $method->setAccessible(true);
+        
+        try {
+            $method->invoke($blockZen, $block);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回用户信息和视图数据
+        $result = new stdclass();
+        $result->user = isset($blockZen->app->user) ? $blockZen->app->user : null;
+        $result->sso = isset($blockZen->view->sso) ? $blockZen->view->sso : '';
+        $result->sign = isset($blockZen->view->sign) ? $blockZen->view->sign : '';
+        
+        return $result;
+    }
 }
