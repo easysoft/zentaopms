@@ -4559,4 +4559,101 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test previewProductBug method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewProductBugTest(string $view = 'setting', array $settings = array(), string $idList = ''): array
+    {
+        $result = array();
+        
+        // 模拟datatable列配置（使用bug模块的配置）
+        $result['cols'] = array(
+            'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
+            'title' => array('title' => '标题', 'name' => 'title', 'sortType' => false),
+            'pri' => array('title' => '优先级', 'name' => 'pri', 'sortType' => false),
+            'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false),
+            'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
+            'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
+        );
+        
+        // 根据不同的视图和设置返回模拟数据
+        if($view == 'setting' && isset($settings['action']) && $settings['action'] == 'preview')
+        {
+            $product = isset($settings['product']) ? (int)$settings['product'] : 1;
+            $condition = isset($settings['condition']) ? $settings['condition'] : 'active';
+            
+            if($condition == 'customSearch')
+            {
+                // 自定义搜索的情况
+                $mockData = array();
+                for($i = 1; $i <= 3; $i++)
+                {
+                    $bug = new stdClass();
+                    $bug->id = $i;
+                    $bug->title = "自定义搜索Bug{$i}";
+                    $bug->pri = $i;
+                    $bug->status = 'active';
+                    $bug->stage = 'testing';
+                    $bug->assignedTo = 'admin';
+                    $mockData[] = $bug;
+                }
+                $result['data'] = $mockData;
+            }
+            else
+            {
+                // 根据产品ID和条件生成模拟数据
+                $count = ($product <= 5 && $product > 0) ? 5 : 0; // 有效产品有数据，无效产品无数据
+                $mockData = array();
+                
+                for($i = 1; $i <= $count; $i++)
+                {
+                    $bug = new stdClass();
+                    $bug->id = $i;
+                    $bug->title = "产品{$product}Bug{$i}";
+                    $bug->pri = ($i % 4) + 1;
+                    $bug->status = $condition;
+                    $bug->stage = 'testing';
+                    $bug->assignedTo = 'user' . ($i % 3 + 1);
+                    $mockData[] = $bug;
+                }
+                
+                $result['data'] = $mockData;
+            }
+        }
+        elseif($view == 'list' && !empty($idList))
+        {
+            // list视图模式，根据ID列表返回数据
+            $ids = explode(',', $idList);
+            $mockData = array();
+            
+            foreach($ids as $id)
+            {
+                $bug = new stdClass();
+                $bug->id = (int)$id;
+                $bug->title = "Bug{$id}列表项";
+                $bug->pri = ((int)$id % 4) + 1;
+                $bug->status = 'active';
+                $bug->stage = 'testing';
+                $bug->assignedTo = 'admin';
+                $mockData[] = $bug;
+            }
+            
+            $result['data'] = $mockData;
+        }
+        else
+        {
+            $result['data'] = array();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
