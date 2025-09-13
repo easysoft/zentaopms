@@ -577,4 +577,57 @@ class caselibTest
             $app->methodName = $oldMethodName;
         }
     }
+
+    /**
+     * Test prepareEditExtras method.
+     *
+     * @param  array $formDataArray
+     * @param  int   $libID
+     * @access public
+     * @return object|array
+     */
+    public function prepareEditExtrasTest(array $formDataArray, int $libID)
+    {
+        // 创建一个模拟的form数据对象
+        $formData = new class {
+            public $data;
+            
+            public function __construct()
+            {
+                $this->data = new stdClass();
+            }
+            
+            public function add($fieldName, $value)
+            {
+                $this->data->$fieldName = $value;
+                return $this;
+            }
+            
+            public function stripTags($field, $allowedTags)
+            {
+                return $this;
+            }
+            
+            public function get()
+            {
+                return $this->data;
+            }
+        };
+
+        // 设置初始数据
+        foreach($formDataArray as $key => $value)
+        {
+            $formData->data->$key = $value;
+        }
+
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('prepareEditExtras');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $formData, $libID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
