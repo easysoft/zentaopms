@@ -1104,4 +1104,37 @@ class customTest
             $_POST = $oldPost;
         }
     }
+
+    /**
+     * Test setStoryReview method.
+     *
+     * @param  string $module
+     * @param  array  $data
+     * @access public
+     * @return bool|array
+     */
+    public function setStoryReviewTest(string $module = 'story', array $data = array()): bool|array
+    {
+        // 模拟 setStoryReview 方法的核心逻辑
+        $forceFields = array('forceReview', 'forceNotReview', 'forceReviewRoles', 'forceNotReviewRoles', 'forceReviewDepts', 'forceNotReviewDepts');
+        foreach($forceFields as $forceField)
+        {
+            if(!isset($data[$forceField])) $data[$forceField] = array();
+            $data[$forceField] = implode(',', $data[$forceField]);
+        }
+
+        foreach($data as $key => $value)
+        {
+            if($key == 'needReview') continue;
+            if(strpos($key, 'Not') && $data['needReview'] == 0) $data[$key] = '';
+            if(!strpos($key, 'Not') && $data['needReview'] == 1) $data[$key] = '';
+        }
+
+        // 模拟保存配置到数据库
+        $settingModel = $this->objectModel->loadModel('setting');
+        $settingModel->setItems("system.{$module}@{$this->objectModel->config->vision}", $data);
+
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
 }

@@ -1,0 +1,56 @@
+---
+title: zt_config data for setStoryReview method testing
+desc: YAML configuration for zt_config table data generation used in setStoryReview testing
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1001-1100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 产品视角
+  range: 'rnd{5},or{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: owner
+  note: 配置所有者
+  range: 'system{8}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: 'story{3},requirement{2},demand{2},epic{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: section
+  note: 配置段
+  range: '[]{8}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: key
+  note: 配置键名
+  range: 'needReview{2},forceReview{2},forceNotReview{2},forceReviewRoles{1},forceNotReviewRoles{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: value
+  note: 配置值
+  range: '1{4},0{2},admin{1},qa{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
