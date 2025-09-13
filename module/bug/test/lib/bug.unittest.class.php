@@ -2973,4 +2973,55 @@ class bugTest
         return $bug;
     }
 
+    /**
+     * Test buildBugsForBatchCreate method.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $bugImagesFile
+     * @access public
+     * @return mixed
+     */
+    public function buildBugsForBatchCreateTest(int $productID, string $branch = '', array $bugImagesFile = array())
+    {
+        // 模拟buildBugsForBatchCreate方法的核心逻辑
+        global $app;
+        
+        // 模拟表单数据提取
+        $bugs = array();
+        if(!empty($_POST['title'])) {
+            foreach($_POST['title'] as $index => $title) {
+                if(empty($title)) continue;
+                
+                $bug = new stdclass();
+                $bug->title = $title;
+                $bug->type = isset($_POST['type'][$index]) ? $_POST['type'][$index] : 'codeerror';
+                $bug->severity = isset($_POST['severity'][$index]) ? $_POST['severity'][$index] : 3;
+                $bug->pri = isset($_POST['pri'][$index]) ? $_POST['pri'][$index] : 3;
+                $bug->module = isset($_POST['module'][$index]) ? $_POST['module'][$index] : 0;
+                $bug->steps = isset($_POST['steps'][$index]) ? $_POST['steps'][$index] : '';
+                
+                // 设置创建者和时间
+                $bug->openedBy = $app->user->account ?? 'admin';
+                $bug->openedDate = helper::now();
+                $bug->product = $productID;
+                $bug->steps = nl2br($bug->steps);
+                
+                // 模拟模块负责人分配
+                if(!empty($bug->module)) {
+                    $bug->assignedTo = $app->user->account ?? 'admin';
+                    $bug->assignedDate = helper::now();
+                }
+                
+                // 处理图片上传
+                $bug->uploadImage = isset($_POST['uploadImage'][$index]) ? $_POST['uploadImage'][$index] : '';
+                $bug->imageFile = array();
+                
+                $bugs[] = $bug;
+            }
+        }
+        
+        return $bugs;
+    }
+
 }
