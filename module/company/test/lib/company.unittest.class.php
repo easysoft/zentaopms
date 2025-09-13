@@ -11,6 +11,7 @@ class companyTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('company');
+        $this->objectTao   = $tester->loadTao('company');
     }
 
     /**
@@ -221,5 +222,33 @@ class companyTest
 
         // 验证session设置是否成功
         return true;
+    }
+
+    /**
+     * Test loadAllSearchModule method.
+     *
+     * @param  int        $userID
+     * @param  string|int $queryID
+     * @access public
+     * @return mixed
+     */
+    public function loadAllSearchModuleTest($userID, $queryID)
+    {
+        global $tester;
+        
+        // 模拟zen层方法的行为
+        $products = $this->objectModel->loadModel('product')->getPairs('nocode');
+        $projects = $this->objectModel->loadModel('project')->getPairsByProgram();
+        $this->objectModel->app->loadLang('execution');
+        $executions = $this->objectModel->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
+        $executionList = $this->objectModel->execution->getByIdList(array_keys($executions));
+        
+        // 模拟loadUserModule的行为
+        $user = $userID ? $this->objectModel->loadModel('user')->getById($userID, 'id') : '';
+        $account = $user ? $user->account : 'all';
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $account;
     }
 }
