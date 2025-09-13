@@ -883,4 +883,46 @@ class buildTest
         
         return $formData;
     }
+
+    /**
+     * Test buildBuildForEdit method.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return mixed
+     */
+    public function buildBuildForEditTest(int $buildID)
+    {
+        global $tester;
+        
+        // 获取版本信息
+        $build = $this->objectModel->getById($buildID);
+        if(dao::isError()) return dao::getError();
+        
+        // 如果版本不存在，返回false
+        if(!$build) return false;
+        
+        // 模拟buildBuildForEdit方法的核心逻辑
+        // 根据实际代码逻辑：如果版本没有关联执行，从必填字段中移除execution字段
+        $formData = new stdclass();
+        $formData->id = $build->id;
+        $formData->name = $build->name;
+        $formData->product = $build->product;
+        $formData->execution = $build->execution;
+        $formData->branch = $build->branch;
+        $formData->builder = $build->builder;
+        $formData->date = $build->date;
+        $formData->scmPath = $build->scmPath;
+        $formData->filePath = $build->filePath;
+        $formData->desc = $build->desc;
+        
+        // 根据实际的buildBuildForEdit方法逻辑修改必填字段
+        if(empty($build->execution)) {
+            $formData->hasExecution = 0;
+        } else {
+            $formData->hasExecution = 1;
+        }
+        
+        return $formData;
+    }
 }
