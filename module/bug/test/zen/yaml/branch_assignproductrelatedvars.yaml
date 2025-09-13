@@ -1,0 +1,21 @@
+---
+title: 为assignProductRelatedVars方法提供测试分支数据
+desc: 分支数据用于测试分支产品的相关变量分配
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 6-10
+- field: name
+  range: 'branch{1-5}, 分支{6-10}'
+- field: status
+  range: 'active{8},closed{2}'
+- field: order
+  range: 1-10
+- field: deleted
+  range: '0'
+- field: createdBy
+  range: 'admin'
+- field: createdDate
+  range: '2023-01-01 00:00:00'
