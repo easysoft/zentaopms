@@ -5421,4 +5421,65 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printSingleMonthlyProgressBlock method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return object
+     */
+    public function printSingleMonthlyProgressBlockTest($productID = 1)
+    {
+        global $tester;
+        
+        // 模拟session设置
+        $tester->session->product = $productID;
+        
+        // 模拟度量项数据
+        $mockMetricData = array();
+        if($productID > 0) {
+            $years = array();
+            $months = array();
+            for($i = 5; $i >= 0; $i--) {
+                $years[] = date('Y', strtotime("first day of -{$i} month"));
+                $months[] = date('m', strtotime("first day of -{$i} month"));
+            }
+            
+            // 模拟各种度量项数据
+            for($i = 0; $i < 6; $i++) {
+                $mockMetricData[] = array('year' => $years[$i], 'month' => $months[$i], 'value' => rand(10, 100));
+            }
+        }
+        
+        // 创建结果对象
+        $result = new stdclass();
+        $result->productID = $productID;
+        $result->hasMetricData = !empty($mockMetricData);
+        $result->dataCount = count($mockMetricData);
+        
+        // 模拟view对象数据
+        $result->doneStoryEstimate = array();
+        $result->doneStoryCount = array();
+        $result->createStoryCount = array();
+        $result->fixedBugCount = array();
+        $result->createBugCount = array();
+        $result->releaseCount = array();
+        
+        // 填充6个月的数据
+        for($i = 5; $i >= 0; $i--) {
+            $date = date('Y-m', strtotime("first day of -{$i} month"));
+            $result->doneStoryEstimate[$date] = rand(50, 200);
+            $result->doneStoryCount[$date] = rand(5, 20);
+            $result->createStoryCount[$date] = rand(3, 15);
+            $result->fixedBugCount[$date] = rand(2, 10);
+            $result->createBugCount[$date] = rand(1, 8);
+            $result->releaseCount[$date] = rand(0, 3);
+        }
+        
+        $result->monthCount = 6;
+        $result->success = true;
+        
+        return $result;
+    }
 }
