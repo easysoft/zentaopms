@@ -4034,4 +4034,70 @@ class bugTest
         
         return array('result' => 'success', 'message' => $message, 'load' => $location);
     }
+
+    /**
+     * Test responseAfterDelete method.
+     *
+     * @param  object $bug
+     * @param  string $from
+     * @param  string $message
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function responseAfterDeleteTest(object $bug, string $from, string $message = '', array $params = array()): array
+    {
+        global $app, $lang, $session;
+        
+        // 设置默认消息
+        if(!$message) $message = $lang->saveSuccess ?? '保存成功';
+        
+        // 模拟JSON视图响应
+        if(isset($params['viewType']) && $params['viewType'] == 'json') {
+            return array('result' => 'success', 'message' => $message);
+        }
+        
+        // 模拟bug转任务的确认逻辑
+        if(isset($bug->toTask) && $bug->toTask) {
+            // 模拟任务数据
+            $task = new stdClass();
+            $task->deleted = isset($params['taskDeleted']) ? $params['taskDeleted'] : false;
+            
+            if(!$task->deleted) {
+                $confirmedURL = "task-view-taskID-{$bug->toTask}";
+                $canceledURL = "bug-view-bugID-{$bug->id}";
+                $message = sprintf("Bug #%s 已转为任务 #%s，是否同时更新任务状态？", $bug->id, $bug->toTask);
+                
+                return array(
+                    'result' => 'success', 
+                    'load' => array(
+                        'confirm' => $message, 
+                        'confirmed' => $confirmedURL, 
+                        'canceled' => $canceledURL
+                    )
+                );
+            }
+        }
+        
+        // 模拟弹窗模式响应
+        if(isset($params['isInModal']) && $params['isInModal']) {
+            return array('result' => 'success', 'load' => true);
+        }
+        
+        // 模拟任务看板删除响应
+        if($from == 'taskkanban') {
+            return array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()");
+        }
+        
+        // 默认响应 - 模拟session->bugList
+        $defaultLocation = "bug-browse-productID-{$bug->product}";
+        $bugListLocation = isset($params['bugListLocation']) ? $params['bugListLocation'] : $defaultLocation;
+        
+        return array(
+            'result' => 'success', 
+            'message' => $message, 
+            'load' => $bugListLocation, 
+            'closeModal' => true
+        );
+    }
 }
