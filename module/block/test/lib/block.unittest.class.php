@@ -5514,4 +5514,58 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printBlock4Json method.
+     *
+     * @param  object|null $view
+     * @access public
+     * @return mixed
+     */
+    public function printBlock4JsonTest($view = null)
+    {
+        global $tester;
+
+        // 创建blockZen实例
+        include_once dirname(__FILE__, 3) . '/model.php';
+
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+
+        // 设置view对象
+        if($view !== null) {
+            $blockZen->view = $view;
+        } else {
+            // 创建默认view对象用于测试
+            $blockZen->view = new stdclass();
+            $blockZen->view->app = 'test_app';
+            $blockZen->view->config = 'test_config';
+            $blockZen->view->lang = 'test_lang';
+            $blockZen->view->header = 'test_header';
+            $blockZen->view->position = 'test_position';
+            $blockZen->view->moduleTree = 'test_tree';
+            $blockZen->view->testData = 'test_value';
+        }
+
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('printBlock4Json');
+        $method->setAccessible(true);
+
+        // 捕获输出
+        ob_start();
+        $result = $method->invoke($blockZen);
+        $output = ob_get_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回输出的JSON数据和实际结果
+        return array('output' => $output, 'result' => $result, 'view' => $blockZen->view);
+    }
 }
