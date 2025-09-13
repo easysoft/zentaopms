@@ -445,4 +445,34 @@ class caselibTest
             'hasLastRunDate' => isset($config->testcase->search['fields']['lastRunDate']) ? 1 : 0
         );
     }
+
+    /**
+     * Test assignCaseParamsForCreateCase method.
+     *
+     * @param  int $param
+     * @access public
+     * @return array
+     */
+    public function assignCaseParamsForCreateCaseTest(int $param): array
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('assignCaseParamsForCreateCase');
+        $zenInstance = $zen->newInstance();
+        
+        // Execute method
+        $method->invoke($zenInstance, $param);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // Return view variables for verification
+        return array(
+            'caseTitle' => $zenInstance->view->caseTitle ?? '',
+            'type' => $zenInstance->view->type ?? '',
+            'stage' => $zenInstance->view->stage ?? '',
+            'pri' => $zenInstance->view->pri ?? 0,
+            'precondition' => $zenInstance->view->precondition ?? '',
+            'keywords' => $zenInstance->view->keywords ?? '',
+            'stepsCount' => is_array($zenInstance->view->steps ?? array()) ? count($zenInstance->view->steps) : 0
+        );
+    }
 }
