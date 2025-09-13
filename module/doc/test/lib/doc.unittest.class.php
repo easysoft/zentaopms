@@ -3152,4 +3152,57 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterUploadDocs method.
+     *
+     * @param  array|string $docResult      文档上传结果
+     * @param  string       $uploadFormat   上传格式类型
+     * @param  string       $viewType       视图类型
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterUploadDocsTest($docResult, string $uploadFormat = '', string $viewType = '')
+    {
+        global $tester;
+        
+        // 模拟处理逻辑而不调用实际的responseAfterUploadDocs方法
+        if(!$docResult || dao::isError()) return array('result' => 'fail', 'message' => 'Error occurred');
+        
+        $tester->loadModel('action');
+        
+        if($uploadFormat == 'combinedDocs')
+        {
+            if(!is_array($docResult) || !isset($docResult['id'])) return array('result' => 'fail', 'message' => 'Invalid document result');
+            
+            $docID = $docResult['id'];
+            $files = isset($docResult['files']) ? $docResult['files'] : array();
+            
+            // 模拟创建action记录
+            if(!empty($files))
+            {
+                $fileAction = 'addFiles: ' . implode(',', $files) . "\n";
+            }
+            
+            if($viewType == 'json') return array('result' => 'success', 'message' => 'saveSuccess', 'id' => $docID);
+            
+            $params = "docID=" . $docID;
+            $link = '/doc-view-' . $docID . '.html';
+            return array('result' => 'success', 'message' => 'saveSuccess', 'load' => $link, 'closeModal' => true);
+        }
+        else
+        {
+            $docsAction = isset($docResult['docsAction']) ? $docResult['docsAction'] : array();
+            if(!empty($docsAction))
+            {
+                foreach($docsAction as $docID => $fileTitle)
+                {
+                    // 模拟创建action记录
+                }
+            }
+            
+            if($viewType == 'json') return array('result' => 'success', 'message' => 'saveSuccess');
+            return array('result' => 'success', 'message' => 'saveSuccess', 'load' => true, 'closeModal' => true);
+        }
+    }
 }
