@@ -1609,4 +1609,21 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test checkBugsForBatchCreate method.
+     *
+     * @param  array $bugs
+     * @access public
+     * @return array
+     */
+    public function checkBugsForBatchCreateTest(array $bugs): array
+    {
+        $result = $this->objectZen->checkBugsForBatchCreate($bugs);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
