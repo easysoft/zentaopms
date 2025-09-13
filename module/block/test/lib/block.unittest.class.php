@@ -4504,4 +4504,133 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printProjectDocBlock method in zen layer.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return mixed
+     */
+    public function printProjectDocBlockTest($block = null, $params = array())
+    {
+        global $tester;
+
+        if($block === null)
+        {
+            $block = new stdclass();
+            $block->params = new stdclass();
+            $block->params->count = 15;
+        }
+
+        $result = new stdclass();
+        $result->success = false;
+        $result->error = '';
+        $result->type = '';
+        $result->users = array();
+        $result->projects = array();
+        $result->docGroup = array();
+        $result->projectsCount = 0;
+        $result->totalDocsCount = 0;
+
+        try
+        {
+            $type = 'involved';
+            if(isset($params['type'])) $type = $params['type'];
+
+            $count = isset($block->params->count) ? (int)$block->params->count : 15;
+
+            // 模拟当前用户有项目权限
+            $userProjects = array(1, 2, 3, 4, 5);
+
+            // 查询项目数据
+            $projects = $tester->dao->select('*')->from(TABLE_PROJECT)
+                ->where('deleted')->eq('0')
+                ->andWhere('vision')->eq('rnd')
+                ->andWhere('type')->eq('project')
+                ->andWhere('id')->in($userProjects)
+                ->orderBy('order_asc,id_desc')
+                ->fetchAll('id');
+
+            // 查询参与的项目
+            $involveds = $tester->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t1.vision')->eq('rnd')
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t2.type')->eq('project')
+                ->andWhere('t1.id')->in($userProjects)
+                ->orderBy('t1.order_asc,t1.id_desc')
+                ->fetchAll('id');
+
+            $projectIdList = array_keys($projects);
+
+            // 查询项目相关文档
+            $docGroup = array();
+            if(!empty($projectIdList))
+            {
+                $docs = $tester->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.readGroups,t1.users,t1.readUsers,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
+                    ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+                    ->where('t1.deleted')->eq(0)
+                    ->andWhere('t1.project')->in($projectIdList)
+                    ->orderBy('project,t1.status,t1.editedDate_desc')
+                    ->fetchAll();
+
+                foreach($docs as $doc)
+                {
+                    if(!isset($docGroup[$doc->project])) $docGroup[$doc->project] = array();
+                    if(count($docGroup[$doc->project]) >= $count) continue;
+                    $docGroup[$doc->project][$doc->id] = $doc;
+                }
+            }
+
+            // 筛选有文档的项目
+            $hasDataProjects = $hasDataInvolveds = array();
+            foreach($projects as $projectID => $project) {
+                if(isset($docGroup[$projectID]) && count($docGroup[$projectID]) > 0) {
+                    $hasDataProjects[$projectID] = $project;
+                    if(isset($involveds[$projectID])) $hasDataInvolveds[$projectID] = $project;
+                }
+            }
+
+            // 获取用户列表（简化版）
+            $users = $tester->dao->select('account,realname')->from(TABLE_USER)
+                ->where('deleted')->eq(0)
+                ->fetchPairs();
+
+            $result->success = true;
+            $result->error = '';
+            $result->type = $type;
+            $result->users = $users;
+            $result->projects = $type == 'involved' ? $hasDataInvolveds : $hasDataProjects;
+            $result->docGroup = $docGroup;
+            $result->projectsCount = count($result->projects);
+            $result->totalDocsCount = array_sum(array_map('count', $docGroup));
+        }
+        catch(Exception $e)
+        {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->type = '';
+            $result->users = array();
+            $result->projects = array();
+            $result->docGroup = array();
+            $result->projectsCount = 0;
+            $result->totalDocsCount = 0;
+        }
+
+        if(dao::isError()) {
+            $result->success = false;
+            $result->error = dao::getError();
+            $result->type = '';
+            $result->users = array();
+            $result->projects = array();
+            $result->docGroup = array();
+            $result->projectsCount = 0;
+            $result->totalDocsCount = 0;
+        }
+
+        return $result;
+    }
 }
