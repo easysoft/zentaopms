@@ -1642,4 +1642,25 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getBrowseBranch method.
+     *
+     * @param  string $branch
+     * @param  string $productType
+     * @access public
+     * @return string
+     */
+    public function getBrowseBranchTest(string $branch, string $productType): string
+    {
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('getBrowseBranch');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $branch, $productType);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
