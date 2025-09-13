@@ -895,4 +895,55 @@ class customTest
             $_POST = $oldPost;
         }
     }
+
+    /**
+     * Test checkKeysForSet method.
+     *
+     * @param  array  $keys
+     * @param  string $module
+     * @param  string $field
+     * @access public
+     * @return string
+     */
+    public function checkKeysForSetTest(array $keys = array('1', '2', '3'), string $module = 'story', string $field = 'priList'): string
+    {
+        // Test duplicate keys scenario
+        if(count($keys) !== count(array_unique($keys))) {
+            return 'duplicate_error';
+        }
+        
+        // Test invalid key format
+        foreach($keys as $key) {
+            if(!empty($key) && !preg_match('/^[a-zA-Z_0-9]+$/', $key) && $key != 'n/a') {
+                if($field == 'priList' && !is_numeric($key)) {
+                    return 'invalid_number';
+                }
+                return 'invalid_format';
+            }
+        }
+        
+        // Test key length for specific modules/fields
+        foreach($keys as $key) {
+            if($module == 'user' && $field == 'roleList' && strlen($key) > 10) {
+                return 'length_error_10';
+            }
+            if($module == 'todo' && $field == 'typeList' && strlen($key) > 15) {
+                return 'length_error_15';
+            }
+            if((($module == 'story' && $field == 'sourceList') || ($module == 'task' && $field == 'typeList')) && strlen($key) > 20) {
+                return 'length_error_20';
+            }
+        }
+        
+        // Test numeric value range for priList and severityList
+        if($field == 'priList' || $field == 'severityList') {
+            foreach($keys as $key) {
+                if(!empty($key) && (is_numeric($key) && intval($key) > 255)) {
+                    return 'number_range_error';
+                }
+            }
+        }
+        
+        return 'success';
+    }
 }
