@@ -680,4 +680,34 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getImportHeaderAndColumns method.
+     *
+     * @param  string $fileName
+     * @param  array  $fields
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getImportHeaderAndColumnsTest(string $fileName, array $fields, string $type = 'both')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getImportHeaderAndColumns');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $fileName, $fields);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'header_count') return count($result[0]);
+        if($type == 'columns_count') return count($result[1]);
+        if($type == 'header') return $result[0];
+        if($type == 'columns') return $result[1];
+        if($type == 'header_first' && !empty($result[0])) return reset($result[0]);
+        if($type == 'columns_first' && !empty($result[1])) return reset($result[1]);
+        if($type == 'is_empty') return empty($result[0]) && empty($result[1]) ? 1 : 0;
+
+        return $result;
+    }
 }
