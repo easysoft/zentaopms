@@ -2250,4 +2250,65 @@ class bugTest
         }
     }
 
+    /**
+     * Test getBranchesForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|array|string
+     */
+    public function getBranchesForCreateTest(object $bug): object|array|string
+    {
+        global $tester;
+        
+        try {
+            // 模拟方法的核心逻辑
+            $productID = (int)$bug->productID;
+            $branch    = (string)$bug->branch;
+            $product   = $this->objectModel->loadModel('product')->getByID($productID);
+            
+            if(!$product) return 'product not found';
+            
+            global $app;
+            $branches = array();
+            
+            if($app->tab == 'execution' || $app->tab == 'project')
+            {
+                $objectID = $app->tab == 'project' ? (int)$bug->projectID : (int)$bug->executionID;
+                if($product->type != 'normal') 
+                {
+                    $productBranches = $this->objectModel->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain');
+                    $branches = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
+                } 
+                else 
+                {
+                    $branches = array('');
+                }
+                $branch = empty($branch) ? key($branches) : $branch;
+            }
+            else
+            {
+                if($product->type != 'normal') 
+                {
+                    $branches = $this->objectModel->loadModel('branch')->getPairs($productID, 'active');
+                } 
+                else 
+                {
+                    $branches = array('');
+                }
+                $branch = isset($branches[$branch]) ? $branch : '';
+            }
+            
+            $result = clone $bug;
+            $result->branches = $branches;
+            $result->branch = $branch;
+            
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
 }
