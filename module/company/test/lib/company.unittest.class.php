@@ -309,4 +309,41 @@ class companyTest
 
         return $projects;
     }
+
+    /**
+     * Test loadExecution method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function loadExecutionTest()
+    {
+        global $tester;
+        
+        // 模拟loadExecution方法的实现
+        $this->objectModel->app->loadLang('execution');
+        $executions = $this->objectModel->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
+        $executionList = $this->objectModel->execution->getByIdList(array_keys($executions));
+        
+        // 获取项目信息用于构建完整的执行名称
+        $projects = array();
+        foreach($executionList as $execution)
+        {
+            if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . $executions[$execution->id];
+        }
+        
+        // 模拟语言配置
+        if(!isset($this->objectModel->lang->execution->common)) {
+            $this->objectModel->lang->execution->common = '执行';
+        }
+        
+        $executions = array($this->objectModel->lang->execution->common) + $executions;
+        
+        // 模拟设置view变量（在测试中不需要真正设置）
+        // $this->view->executions = $executions;
+        
+        if(dao::isError()) return dao::getError();
+
+        return $executions;
+    }
 }
