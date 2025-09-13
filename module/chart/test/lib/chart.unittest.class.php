@@ -734,4 +734,33 @@ class chartTest
         if(dao::isError()) return dao::getError();
         return $charts;
     }
+
+    /**
+     * Test getChartToFilter method.
+     *
+     * @param  int   $groupID
+     * @param  int   $chartID
+     * @param  array $filterValues
+     * @access public
+     * @return object|null
+     */
+    public function getChartToFilterTest(int $groupID, int $chartID, array $filterValues = array()): object|null
+    {
+        $chart = $this->objectModel->getByID($chartID);
+        if(!$chart) return null;
+
+        $chart->currentGroup = $groupID;
+
+        if(!empty($filterValues))
+        {
+            if(is_string($chart->filters)) $chart->filters = json_decode($chart->filters, true);
+            if(!$chart->filters) $chart->filters = array();
+            
+            foreach($filterValues as $key => $value) $chart->filters[$key]['default'] = $value;
+        }
+
+        if(dao::isError()) return dao::getError();
+        
+        return $chart;
+    }
 }
