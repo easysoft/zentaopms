@@ -3229,4 +3229,69 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printProjectDynamicBlock method in zen layer.
+     *
+     * @param  object $block
+     * @access public
+     * @return object
+     */
+    public function printProjectDynamicBlockTest(object $block = null)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->config = $tester->app->config;
+        $blockZen->lang = $tester->app->lang;
+        $blockZen->view = new stdclass();
+        
+        // 设置测试用的session项目ID
+        $blockZen->session->project = 1;
+        
+        // 如果传入的block为null，创建默认的block对象
+        if($block === null)
+        {
+            $block = new stdclass();
+            $block->params = new stdclass();
+            $block->params->count = 10;
+        }
+        
+        // 处理params为null的情况
+        if(!isset($block->params) || $block->params === null)
+        {
+            $block->params = new stdclass();
+            $block->params->count = 10;
+        }
+        
+        // 使用反射访问受保护的方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('printProjectDynamicBlock');
+        $method->setAccessible(true);
+        
+        // 执行方法
+        $method->invoke($blockZen, $block);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回设置的view数据
+        $result = new stdclass();
+        $result->actions = isset($blockZen->view->actions) ? count($blockZen->view->actions) : 0;
+        $result->users = isset($blockZen->view->users) ? $blockZen->view->users : array();
+        
+        return $result;
+    }
 }
