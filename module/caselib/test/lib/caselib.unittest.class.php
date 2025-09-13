@@ -380,4 +380,28 @@ class caselibTest
         
         return $result;
     }
+
+    /**
+     * Test setBrowseSessionAndCookie method.
+     *
+     * @param  int    $libID
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function setBrowseSessionAndCookieTest(int $libID = 0, string $browseType = 'all', int $param = 0)
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('setBrowseSessionAndCookie');
+        $zenInstance = $zen->newInstance();
+        
+        // Execute method
+        $method->invoke($zenInstance, $libID, $browseType, $param);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // Method returns void, so we return success indicator
+        return true;
+    }
 }
