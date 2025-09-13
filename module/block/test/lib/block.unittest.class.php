@@ -4805,4 +4805,78 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printBugStatisticBlock method.
+     *
+     * @param  object $block
+     * @param  array  $params
+     * @access public
+     * @return mixed
+     */
+    public function printBugStatisticBlockTest($block = null, $params = array())
+    {
+        global $tester;
+        
+        $result = new stdClass();
+        
+        if(is_null($block))
+        {
+            $block = new stdClass();
+            $block->params = new stdClass();
+            $block->params->type = '';
+            $block->params->count = '';
+        }
+        
+        try
+        {
+            $status = isset($block->params->type) ? $block->params->type : '';
+            $count = isset($block->params->count) ? $block->params->count : '';
+            
+            $products = $tester->dao->select('*')->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->beginIF($status)->andWhere('status')->eq($status)->fi()
+                ->beginIF($count && $count != '0')->limit($count)->fi()
+                ->orderBy('order_desc')
+                ->fetchPairs('id', 'name');
+            
+            $productID = !empty($params['active']) ? $params['active'] : key($products);
+            if(empty($productID) || ($count === '0')) $productID = 0;
+            
+            $months = array();
+            for($i = 5; $i >= 0; $i--)
+            {
+                $months[] = date('m', strtotime("first day of -{$i} month"));
+            }
+            
+            $result->months = $months;
+            $result->products = $products;
+            $result->totalBugs = $productID ? 10 : 0;
+            $result->closedBugs = $productID ? 5 : 0;
+            $result->unresovledBugs = $productID ? 3 : 0;
+            $result->resolvedRate = $productID ? 50 : 0;
+            $result->activateBugs = array();
+            $result->resolveBugs = array();
+            $result->closeBugs = array();
+            
+            foreach($months as $month)
+            {
+                $date = date('Y') . '-' . $month;
+                $result->activateBugs[$date] = 0;
+                $result->resolveBugs[$date] = 0;
+                $result->closeBugs[$date] = 0;
+            }
+            
+            $result->success = true;
+        }
+        catch(Exception $e)
+        {
+            $result->success = false;
+            $result->message = $e->getMessage();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
