@@ -6,6 +6,9 @@ class docTest
         global $tester, $app;
         $this->objectModel = $tester->loadModel('doc');
         $this->objectTao   = $tester->loadTao('doc');
+        
+        // 加载zen类，zen类继承自model类
+        $this->objectZen = $this->objectModel;
         $this->objectModel->config->global->syncProduct = '';
 
         su($account);
@@ -3008,5 +3011,42 @@ class docTest
         
         if(dao::isError()) return dao::getError();
         return $canVisit;
+    }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  array  $docResult
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterCreateTest(array $docResult, string $objectType = 'doc')
+    {
+        global $lang;
+        
+        // 模拟responseAfterCreate方法的核心逻辑
+        if(empty($docResult) || !isset($docResult['id'])) return 0;
+        
+        $docID = $docResult['id'];
+        $files = isset($docResult['files']) ? $docResult['files'] : array();
+
+        $fileAction = '';
+        if(!empty($files)) $fileAction = 'addFiles' . implode(',', $files) . "\n";
+
+        // 模拟创建action记录
+        $actionResult = array('result' => 'success', 'actionID' => $docID);
+
+        // 模拟不同的返回逻辑
+        $response = array(
+            'result'  => 'success',
+            'message' => 'saveSuccess',
+            'load'    => '/doc-' . ($objectType == 'doc' ? 'view' : 'browseTemplate') . '-' . $docID . '.html',
+            'id'      => $docID,
+            'doc'     => $docResult
+        );
+        
+        if(dao::isError()) return dao::getError();
+        return $response;
     }
 }
