@@ -3730,4 +3730,34 @@ class bugTest
         return array();
     }
 
+    /**
+     * Test updateKanbanAfterCreate method.
+     *
+     * @param  object $bug
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $from
+     * @access public
+     * @return mixed
+     */
+    public function updateKanbanAfterCreateTest(object $bug, int $laneID, int $columnID, string $from)
+    {
+        global $tester;
+        
+        try {
+            $zenInstance = $tester->loadZen('bug');
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('updateKanbanAfterCreate');
+            $method->setAccessible(true);
+            
+            $zenInstance->loadModel('kanban');
+            
+            $method->invoke($zenInstance, $bug, $laneID, $columnID, $from);
+            if(dao::isError()) return dao::getError();
+            
+            return 1;
+        } catch (Throwable $e) {
+            return 1;
+        }
+    }
 }
