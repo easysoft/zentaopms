@@ -1,0 +1,34 @@
+---
+title: 产品数据
+desc: 用于测试 getProductsForCreate 方法的产品数据
+
+fields:
+- field: id
+  range: 1-10
+  type: int
+
+- field: name
+  range: 产品1,产品2,产品3,正常产品,关闭产品,项目产品,执行产品
+  postfix: ""
+
+- field: code
+  range: product1,product2,product3,normal,closed,project,execution
+  postfix: ""
+
+- field: type
+  range: normal{3},branch{2},platform{2}
+
+- field: status
+  range: normal{5},closed{2}
+
+- field: line
+  range: 0{3},1{2},2{2}
+
+- field: createdBy
+  range: admin{4},user1{3}
+
+- field: createdDate
+  range: 2024-01-01 00:00:00{2},2024-06-01 00:00:00{3},2024-12-01 00:00:00{2}
+
+- field: deleted
+  range: '0'{6},'1'{1}
