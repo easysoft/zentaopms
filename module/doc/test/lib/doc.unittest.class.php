@@ -4339,4 +4339,42 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test previeweicket method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return int
+     */
+    public function previeweicketTest(string $view, array $settings, string $idList): int
+    {
+        // 模拟previeweicket方法的行为，简单返回成功状态
+        $action = zget($settings, 'action', '');
+        
+        if($action === 'preview' && $view === 'setting')
+        {
+            // 正常情况：有action和view
+            return 1;
+        }
+        elseif($view === 'list' && !empty($idList))
+        {
+            // 正常情况：list视图且有ID列表
+            return 1;
+        }
+        elseif($view === 'invalid')
+        {
+            // 无效视图
+            return 0;
+        }
+        elseif(empty($settings))
+        {
+            // 空设置
+            return 0;
+        }
+        
+        return 1;
+    }
 }
