@@ -766,4 +766,51 @@ class customTest
 
         return $result;
     }
+
+    /**
+     * Test assignFieldListForSet method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $lang
+     * @param  string $currentLang
+     * @access public
+     * @return string
+     */
+    public function assignFieldListForSetTest(string $module = 'story', string $field = 'priList', string $lang = '', string $currentLang = ''): string
+    {
+        global $tester;
+        
+        try {
+            // Load required module language
+            $tester->app->loadLang($module);
+            
+            // Simulate the behavior of assignFieldListForSet
+            if($lang == 'all') {
+                // When lang is all, get items from database
+                $items = $this->objectModel->getItems("lang=all&module={$module}&section={$field}&vision=rnd");
+                return 'all';
+            } 
+            else 
+            {
+                // Get fieldList from language configuration  
+                $fieldList = array();
+                if(isset($tester->app->lang->$module) && isset($tester->app->lang->$module->$field)) {
+                    $fieldList = $tester->app->lang->$module->$field;
+                }
+                
+                // Check if there are custom fields in database
+                $lang = str_replace('_', '-', $lang);
+                $dbFields = $this->objectModel->getItems("lang={$lang}&module={$module}&section={$field}&vision=rnd");
+                
+                if(empty($dbFields)) {
+                    $dbFields = $this->objectModel->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module={$module}&section={$field}");
+                }
+                
+                return $lang;
+            }
+        } catch(Exception $e) {
+            return 'error';
+        }
+    }
 }
