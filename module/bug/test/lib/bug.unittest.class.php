@@ -1703,4 +1703,28 @@ class bugTest
         return is_array($result) ? count($result) : 0;
     }
 
+    /**
+     * Test getBranchOptions method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return mixed
+     */
+    public function getBranchOptionsTest($productID = 0)
+    {
+        // 创建一个临时的zen实例
+        $zenInstance = $tester->loadZen('bug');
+        
+        // 使用反射调用私有的方法
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getBranchOptions');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, (int)$productID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
