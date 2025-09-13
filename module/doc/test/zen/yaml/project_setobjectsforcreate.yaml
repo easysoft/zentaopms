@@ -1,0 +1,29 @@
+---
+title: setObjectsForCreate项目数据
+desc: 用于测试setObjectsForCreate方法的项目测试数据
+
+fields:
+- field: id
+  range: 1-20
+  note: 项目/执行ID
+- field: name
+  range: 项目1,项目2,项目3,项目4,项目5,执行1,执行2,执行3,执行4,执行5,执行6,执行7,执行8,执行9,执行10,项目6,项目7,项目8,项目9,项目10
+  note: 项目/执行名称
+- field: type
+  range: project{5},sprint{10},project{5}
+  note: 类型
+- field: project
+  range: 0{5},1{5},2{5},0{5}
+  note: 所属项目
+- field: isTpl
+  range: 0{18},1{2}
+  note: 是否模板
+- field: status
+  range: wait{6},doing{8},suspended{2},closed{4}
+  note: 状态
+- field: grade
+  range: 0{5},1{15}
+  note: 项目等级
+- field: deleted
+  range: 0{19},1{1}
+  note: 删除状态

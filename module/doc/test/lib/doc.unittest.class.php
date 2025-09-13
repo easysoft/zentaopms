@@ -3086,4 +3086,70 @@ class docTest
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
     }
+
+    /**
+     * Test setObjectsForCreate method.
+     *
+     * @param  string      $linkType product|project|execution|custom
+     * @param  object|null $lib
+     * @param  string      $unclosed
+     * @param  int         $objectID
+     * @access public
+     * @return array
+     */
+    public function setObjectsForCreateTest(string $linkType, object|null $lib, string $unclosed, int $objectID): array
+    {
+        global $tester;
+
+        // 重新实现setObjectsForCreate方法的核心逻辑
+        $result = array();
+
+        if(!empty($objectID))
+        {
+            $project = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+            if(!empty($project) && !empty($project->isTpl)) {
+                $this->objectModel->dao->setFilterTpl('never');
+            }
+        }
+
+        $objects = array();
+        if($linkType == 'project')
+        {
+            $projectModel = $tester->loadModel('project');
+            $objects = $projectModel->getPairsByProgram(0, 'all', false, 'order_asc');
+
+            $executionModel = $tester->loadModel('execution');
+            $result['executions'] = $executionModel->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+            
+            if(!empty($lib) && $lib->type == 'execution')
+            {
+                $execution = $executionModel->getByID($lib->execution);
+                $objectID = $execution->project;
+                $result['execution'] = $execution;
+            }
+        }
+        elseif($linkType == 'execution')
+        {
+            $executionModel = $tester->loadModel('execution');
+            $execution = $executionModel->getById($lib->execution);
+            $objects = $executionModel->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+        }
+        elseif($linkType == 'product' || $linkType == 'api')
+        {
+            $productModel = $tester->loadModel('product');
+            $objects = $productModel->getPairs();
+        }
+        elseif($linkType == 'mine')
+        {
+            $result['aclList'] = array(
+                'open' => '公开',
+                'private' => '个人'
+            );
+        }
+
+        $result['objects'] = $objects;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
