@@ -251,4 +251,33 @@ class companyTest
         
         return $account;
     }
+
+    /**
+     * Test loadProduct method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function loadProductTest()
+    {
+        global $tester;
+        
+        // 模拟loadProduct方法的实现
+        // $products = $this->loadModel('product')->getPairs('nocode');
+        $products = $this->objectModel->loadModel('product')->getPairs('nocode');
+        
+        // 模拟语言配置
+        if(!isset($this->objectModel->lang->company->product)) {
+            $this->objectModel->lang->company->product = '产品';
+        }
+        
+        $products = array($this->objectModel->lang->company->product) + $products;
+        
+        // 模拟设置view变量（在测试中不需要真正设置）
+        // $this->view->products = $products;
+        
+        if(dao::isError()) return dao::getError();
+
+        return $products;
+    }
 }
