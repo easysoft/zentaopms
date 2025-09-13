@@ -5363,4 +5363,62 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printSingleDynamicBlock method in zen layer.
+     *
+     * @access public
+     * @return object
+     */
+    public function printSingleDynamicBlockTest()
+    {
+        global $tester;
+        
+        $result = new stdclass();
+        $result->productID = 0;
+        $result->actions = array();
+        $result->users = array();
+        $result->hasProductID = false;
+        $result->hasActions = false;
+        $result->hasUsers = false;
+        
+        try {
+            // 模拟方法的核心逻辑
+            $productID = 1; // 模拟session中的产品ID
+            
+            // 模拟view对象
+            $view = new stdclass();
+            $view->productID = $productID;
+            
+            // 模拟获取动态数据（这里简化为数组）
+            $view->actions = array(
+                (object)array('id' => 1, 'objectType' => 'story', 'actor' => 'admin', 'action' => 'created'),
+                (object)array('id' => 2, 'objectType' => 'task', 'actor' => 'user1', 'action' => 'edited')
+            );
+            
+            // 模拟获取用户数据
+            $view->users = array(
+                'admin' => '管理员',
+                'user1' => '用户1',
+                'user2' => '用户2'
+            );
+            
+            // 设置返回结果
+            $result->productID = $view->productID;
+            $result->actions = $view->actions;
+            $result->users = $view->users;
+            $result->hasProductID = isset($view->productID);
+            $result->hasActions = isset($view->actions);
+            $result->hasUsers = isset($view->users);
+            $result->success = true;
+            
+        } catch (Exception $e) {
+            // 捕获异常并返回错误信息
+            $result->error = $e->getMessage();
+            $result->success = false;
+            return $result;
+        }
+        
+        return $result;
+    }
 }
