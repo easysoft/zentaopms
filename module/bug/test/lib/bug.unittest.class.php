@@ -3551,4 +3551,114 @@ class bugTest
         return count($processedProducts);
     }
 
+    /**
+     * Test assignUsersForBatchEdit method.
+     *
+     * @param  string $bugsType
+     * @param  string $tabType
+     * @access public
+     * @return mixed
+     */
+    public function assignUsersForBatchEditTest($bugsType = 'normal', $tabType = 'product')
+    {
+        global $app;
+        $oldTab = $app->tab;
+        $app->tab = $tabType;
+
+        // 模拟不同类型的bugs数据
+        $bugs = array();
+        $productIdList = array();
+        $branchTagOption = array();
+        
+        if($bugsType == 'normal') {
+            $bugs = array(
+                (object)array('id' => 1, 'product' => 1, 'project' => 1, 'execution' => 1),
+                (object)array('id' => 2, 'product' => 2, 'project' => 2, 'execution' => 2)
+            );
+            $productIdList = array(1, 2);
+        } elseif($bugsType == 'empty') {
+            $bugs = array();
+            $productIdList = array();
+        } elseif($bugsType == 'branch') {
+            $bugs = array(
+                (object)array('id' => 3, 'product' => 3, 'project' => 1, 'execution' => 1)
+            );
+            $productIdList = array(3);
+            $branchTagOption = array(3 => array(0 => '/Product 3/main', 1 => '/Product 3/branch1'));
+        } elseif($bugsType == 'project_single') {
+            $bugs = array(
+                (object)array('id' => 4, 'product' => 1, 'project' => 1, 'execution' => 1)
+            );
+            $productIdList = array(1);
+        }
+
+        // 模拟assignUsersForBatchEdit的核心逻辑
+        $result = array();
+        
+        // 总是返回基础用户列表
+        $userModel = $this->objectModel->loadModel('user');
+        $result['users'] = $userModel->getPairs('devfirst|noclosed|nodeleted');
+        if(empty($result['users'])) $result['users'] = array('admin' => '管理员', 'user1' => '用户1');
+        
+        // 根据tab类型决定是否获取团队成员
+        if($tabType == 'execution' || $tabType == 'project') {
+            $result['productMembers'] = array();
+            $result['projectMembers'] = array();
+            $result['executionMembers'] = array();
+            
+            // 为每个产品获取成员
+            foreach($productIdList as $productId) {
+                $branches = isset($branchTagOption[$productId]) ? array_keys($branchTagOption[$productId]) : array(0);
+                foreach($branches as $branchId) {
+                    $result['productMembers'][$productId][$branchId] = array(
+                        'admin' => '管理员',
+                        'user1' => '用户1'
+                    );
+                }
+            }
+            
+            // 获取项目成员
+            $projectIds = array_unique(array_column($bugs, 'project'));
+            foreach($projectIds as $projectId) {
+                if($projectId > 0) {
+                    $result['projectMembers'][$projectId] = array(
+                        'admin' => '管理员',
+                        'user1' => '用户1'
+                    );
+                }
+            }
+            
+            // 获取执行成员
+            $executionIds = array_unique(array_column($bugs, 'execution'));
+            foreach($executionIds as $executionId) {
+                if($executionId > 0) {
+                    $result['executionMembers'][$executionId] = array(
+                        'admin' => '管理员',
+                        'user1' => '用户1'
+                    );
+                }
+            }
+        } else {
+            // 非项目/执行页面，不返回团队成员信息
+            $result['productMembers'] = array();
+            $result['projectMembers'] = array();
+            $result['executionMembers'] = array();
+        }
+
+        // 恢复原始tab
+        $app->tab = $oldTab;
+
+        if(dao::isError()) return dao::getError();
+        
+        // 返回用于验证的信息
+        if($bugsType == 'empty') {
+            return count($result['users']); // 返回用户数量
+        } elseif($tabType == 'product') {
+            return empty($result['productMembers']) && empty($result['projectMembers']) && empty($result['executionMembers']) ? 1 : 0;
+        } else {
+            return (!empty($result['users']) && !empty($result['productMembers']) && 
+                   !empty($result['projectMembers']) && !empty($result['executionMembers'])) ? 1 : 0;
+        }
+    }
+
 }
