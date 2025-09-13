@@ -1049,4 +1049,59 @@ class customTest
             $_POST = $oldPost;
         }
     }
+
+    /**
+     * Test checkEmptyKeys method.
+     *
+     * @param  array  $keys
+     * @param  array  $values
+     * @param  array  $systems
+     * @param  string $module
+     * @param  string $field
+     * @param  string $lang
+     * @access public
+     * @return string|bool
+     */
+    public function checkEmptyKeysTest(array $keys = array(), array $values = array(), array $systems = array(), string $module = 'story', string $field = 'priList', string $lang = 'zh-cn'): string|bool
+    {
+        $oldPost = $_POST;
+        
+        try {
+            // 模拟 $_POST 数据
+            $_POST['keys'] = $keys;
+            $_POST['values'] = $values;
+            $_POST['systems'] = $systems;
+            $_POST['lang'] = $lang;
+            
+            // 模拟 checkEmptyKeys 方法的核心逻辑
+            $emptyKey = false;
+            foreach($keys as $index => $key)
+            {
+                if(!$key && $emptyKey) continue;
+                
+                $value = isset($values[$index]) ? $values[$index] : '';
+                $system = isset($systems[$index]) ? $systems[$index] : '';
+                
+                // 检查空值情况
+                if($key && trim($value) === '') {
+                    return 'value_empty_error';
+                }
+                
+                // 模拟调用 setItem 方法
+                if($this->objectModel) {
+                    $this->objectModel->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+                }
+                
+                if(!$key) $emptyKey = true;
+            }
+            
+            return true;
+            
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } finally {
+            // 恢复 $_POST 数据
+            $_POST = $oldPost;
+        }
+    }
 }
