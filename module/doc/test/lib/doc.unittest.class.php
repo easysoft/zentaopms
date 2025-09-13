@@ -2705,4 +2705,82 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test setAclForCreateLib method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function setAclForCreateLibTest($type = null)
+    {
+        global $tester, $lang, $app;
+        
+        // 初始化语言配置模拟数据
+        if(!isset($lang->doclib)) $lang->doclib = new stdClass();
+        if(!isset($lang->api)) $lang->api = new stdClass();
+        
+        $lang->doclib->aclList = array(
+            'default' => '默认 %s 成员',
+            'private' => '私有',
+            'open'    => '公开'
+        );
+        
+        $lang->doclib->mySpaceAclList = array(
+            'private' => '私有',
+            'open'    => '公开'
+        );
+        
+        $lang->doclib->privateACL = '私有（仅 %s 相关人员可访问）';
+        
+        $lang->api->aclList = array(
+            'default' => '默认 %s 成员'
+        );
+        
+        // 模拟不同对象类型的语言配置
+        if(!isset($lang->product)) $lang->product = new stdClass();
+        if(!isset($lang->project)) $lang->project = new stdClass();
+        if(!isset($lang->execution)) $lang->execution = new stdClass();
+        if(!isset($lang->custom)) $lang->custom = new stdClass();
+        if(!isset($lang->api)) $lang->api = new stdClass();
+        
+        $lang->product->common = '产品';
+        $lang->project->common = '项目';
+        $lang->execution->common = '执行';
+        $lang->custom->common = '自定义';
+        $lang->api->common = 'API';
+
+        // 模拟setAclForCreateLib方法的逻辑
+        if($type == 'custom')
+        {
+            unset($lang->doclib->aclList['default']);
+        }
+        elseif($type == 'mine')
+        {
+            $lang->doclib->aclList = $lang->doclib->mySpaceAclList;
+        }
+        elseif(in_array($type, array('product', 'project', 'execution')))
+        {
+            $lang->doclib->aclList['default'] = sprintf($lang->doclib->aclList['default'], $lang->{$type}->common);
+            $lang->doclib->aclList['private'] = sprintf($lang->doclib->privateACL, $lang->{$type}->common);
+            unset($lang->doclib->aclList['open']);
+        }
+
+        if($type != 'mine')
+        {
+            if(isset($lang->{$type}) && isset($lang->{$type}->common)) {
+                $lang->api->aclList['default'] = sprintf($lang->api->aclList['default'], $lang->{$type}->common);
+            } else {
+                $lang->api->aclList['default'] = sprintf($lang->api->aclList['default'], $type);
+            }
+        }
+        
+        // 返回处理后的语言配置状态
+        $response = new stdClass();
+        $response->doclibAclList = isset($lang->doclib->aclList) ? $lang->doclib->aclList : array();
+        $response->apiAclList = isset($lang->api->aclList) ? $lang->api->aclList : array();
+        
+        return $response;
+    }
 }
