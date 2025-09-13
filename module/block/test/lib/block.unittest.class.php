@@ -5731,4 +5731,41 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test buildProjectStatistic method.
+     *
+     * @param  object $project
+     * @param  array  $data
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function buildProjectStatisticTest($project, $data, $pager = null)
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        try {
+            $method = new ReflectionMethod($blockZen, 'buildProjectStatistic');
+            $method->setAccessible(true);
+            $result = $method->invoke($blockZen, $project, $data, $pager);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
