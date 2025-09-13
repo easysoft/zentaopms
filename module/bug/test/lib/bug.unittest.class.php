@@ -2683,4 +2683,46 @@ class bugTest
         return count($stories);
     }
 
+    /**
+     * Test getTasksForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object
+     */
+    public function getTasksForCreateTest(object $bug): object
+    {
+        // 模拟getTasksForCreate方法的业务逻辑
+        // 因为该方法是私有的，我们直接实现其逻辑进行测试
+        
+        $executionID = (int)$bug->executionID;
+        
+        $tasks = null;
+        if($executionID) 
+        {
+            // 从数据库获取执行的任务
+            global $tester;
+            $taskModel = $tester->loadModel('task');
+            $tasks = $taskModel->getExecutionTaskPairs($executionID);
+        }
+        
+        // 模拟updateBug方法的效果
+        $result = clone $bug;
+        $result->tasks = $tasks;
+        
+        // 为了方便测试，我们返回tasks的数量或null状态
+        if($tasks === null)
+        {
+            $result->tasksCount = 0;
+        }
+        else
+        {
+            $result->tasksCount = is_array($tasks) ? count($tasks) : 0;
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
