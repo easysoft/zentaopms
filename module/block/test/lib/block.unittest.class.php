@@ -3884,4 +3884,68 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printRecentProjectBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printRecentProjectBlockTest()
+    {
+        global $tester;
+        $result = new stdclass();
+        
+        // 创建blockModel的别名为block类
+        if(!class_exists('block'))
+        {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->dao = $tester->dao;
+        $blockZen->view = new stdclass();
+        
+        // 调用被测试方法 - 需要通过反射调用protected方法
+        $reflection = new ReflectionClass(get_class($blockZen));
+        $method = $reflection->getMethod('printRecentProjectBlock');
+        $method->setAccessible(true);
+        
+        ob_start();
+        try {
+            $method->invoke($blockZen);
+            $result->success = true;
+            $result->error = null;
+            
+            // 检查是否设置了projects属性
+            if(isset($blockZen->view->projects)) {
+                $result->hasProjects = true;
+                $result->projectCount = count($blockZen->view->projects);
+                $result->projects = $blockZen->view->projects;
+            } else {
+                $result->hasProjects = false;
+                $result->projectCount = 0;
+                $result->projects = null;
+            }
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->hasProjects = false;
+            $result->projectCount = 0;
+            $result->projects = null;
+        }
+        $output = ob_get_clean();
+        
+        $result->output = $output;
+        
+        return $result;
+    }
 }
