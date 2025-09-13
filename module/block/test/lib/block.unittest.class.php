@@ -4027,4 +4027,66 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test printDocStatisticBlock method in zen layer.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printDocStatisticBlockTest()
+    {
+        global $tester;
+        $result = new stdclass();
+        
+        try {
+            // 创建blockModel的别名为block类
+            if(!class_exists('block'))
+            {
+                class_alias('blockModel', 'block');
+            }
+            
+            include_once dirname(__FILE__, 3) . '/zen.php';
+            
+            $blockZen = new blockZen();
+            $blockZen->block = $this->objectModel;
+            
+            // 初始化必要的属性
+            $blockZen->app = $tester->app;
+            $blockZen->session = $tester->app->session;
+            $blockZen->dao = $tester->dao;
+            $blockZen->view = new stdclass();
+            
+            // 模拟执行 printDocStatisticBlock 方法
+            ob_start();
+            $blockZen->printDocStatisticBlock();
+            $output = ob_get_clean();
+            
+            // 获取视图中的统计信息
+            if(isset($blockZen->view->statistic)) {
+                $statistic = $blockZen->view->statistic;
+                $result->totalDocs = $statistic->totalDocs;
+                $result->todayEditedDocs = $statistic->todayEditedDocs;
+                $result->myEditedDocs = $statistic->myEditedDocs;
+                $result->success = true;
+            } else {
+                $result->totalDocs = 0;
+                $result->todayEditedDocs = 0;
+                $result->myEditedDocs = 0;
+                $result->success = false;
+                $result->error = 'No statistic data found';
+            }
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->totalDocs = 0;
+            $result->todayEditedDocs = 0;
+            $result->myEditedDocs = 0;
+        }
+        
+        $result->output = isset($output) ? $output : '';
+        
+        return $result;
+    }
 }
