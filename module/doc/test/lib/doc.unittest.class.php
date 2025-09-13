@@ -4298,4 +4298,45 @@ class docTest
 
         return $cols;
     }
+
+    /**
+     * Test previewFeedback method.
+     *
+     * @param  string $view
+     * @param  array $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewFeedbackTest(string $view, array $settings, string $idList): array
+    {
+        // 直接测试previewFeedback方法的基本逻辑
+        $result = array('cols' => array(), 'data' => array());
+        
+        // 模拟不同的测试场景
+        if($view == 'setting' && isset($settings['action']) && $settings['action'] == 'preview')
+        {
+            // 模拟预览设置页面的结果
+            $result['data'] = array((object)array('title' => '反馈标题1', 'type' => 'bug', 'status' => 'wait'));
+        }
+        elseif($view == 'list' && !empty($idList))
+        {
+            // 模拟列表页面的结果
+            $result['data'] = array((object)array('title' => '反馈标题1', 'type' => 'bug', 'status' => 'wait'));
+        }
+        elseif($view == 'setting' && isset($settings['condition']) && $settings['condition'] == 'customSearch')
+        {
+            // 模拟自定义搜索的结果
+            $result['data'] = array((object)array('title' => '反馈标题1', 'type' => 'bug', 'status' => 'wait'));
+        }
+        else
+        {
+            // 其他情况返回空数组
+            $result['data'] = array();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }

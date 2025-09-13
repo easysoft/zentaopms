@@ -1,0 +1,109 @@
+---
+title: 反馈数据预览测试数据
+desc: 用于测试previewFeedback方法的反馈数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 反馈ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品ID
+  range: 1{10},2{10}
+- field: module
+  note: 模块ID
+  range: 0{5},1{5},2{5},3{5}
+- field: title
+  note: 反馈标题
+  range: '反馈1,反馈2,反馈3,反馈4,反馈5,用户建议1,用户建议2,问题反馈1,问题反馈2,功能请求'
+- field: type
+  note: 反馈类型
+  range: 'bug{6},story{6},suggestion{4},others{4}'
+- field: solution
+  note: 解决方案
+  range: 'tostory{5},tobug{5},totask{5},replied{5}'
+- field: desc
+  note: 反馈描述
+  range: '这是一个测试反馈描述,用户反馈的问题描述,功能改进建议,系统问题报告'
+  loop: 5
+- field: pri
+  note: 优先级
+  range: 1{4},2{8},3{6},4{2}
+- field: status
+  note: 状态
+  range: 'wait{6},doing{4},done{6},closed{4}'
+- field: subStatus
+  note: 子状态
+  range: ''
+- field: public
+  note: 是否公开
+  range: '0{10},1{10}'
+- field: notify
+  note: 是否通知
+  range: '0{12},1{8}'
+- field: notifyEmail
+  note: 通知邮箱
+  range: 'user1@test.com,user2@test.com,admin@test.com'
+- field: source
+  note: 反馈来源
+  range: 'web{10},api{5},mobile{5}'
+- field: likes
+  note: 点赞信息
+  range: ''
+- field: result
+  note: 结果ID
+  range: 0{15},1{3},2{2}
+- field: faq
+  note: FAQ ID
+  range: 0{18},1{1},2{1}
+- field: openedBy
+  note: 创建者
+  range: 'admin{8},user1{6},user2{4},guest{2}'
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00{5},2024-01-02 11:00:00{5},2024-01-03 12:00:00{5},2024-01-04 13:00:00{5}'
+- field: reviewedBy
+  note: 审核者
+  range: 'admin{10},[]{10}'
+- field: reviewedDate
+  note: 审核时间
+  range: '0000-00-00 00:00:00{10},2024-01-05 14:00:00{10}'
+- field: processedBy
+  note: 处理者
+  range: 'admin{8},user1{6},[]{6}'
+- field: processedDate
+  note: 处理时间
+  range: '0000-00-00 00:00:00{12},2024-01-06 15:00:00{8}'
+- field: closedBy
+  note: 关闭者
+  range: '[]{16},admin{4}'
+- field: closedDate
+  note: 关闭时间
+  range: '0000-00-00 00:00:00{16},2024-01-07 16:00:00{4}'
+- field: closedReason
+  note: 关闭原因
+  range: '[]{16},resolved{2},duplicate{1},outdated{1}'
+- field: editedBy
+  note: 编辑者
+  range: '[]{10},admin{5},user1{5}'
+- field: editedDate
+  note: 编辑时间
+  range: '0000-00-00 00:00:00{10},2024-01-08 17:00:00{10}'
+- field: assignedTo
+  note: 指派给
+  range: '[]{8},admin{6},user1{6}'
+- field: assignedBy
+  note: 指派者
+  range: '[]{8},admin{6},user1{6}'
+- field: assignedDate
+  note: 指派时间
+  range: '0000-00-00 00:00:00{8},2024-01-09 18:00:00{12}'
+- field: mailto
+  note: 邮件发送列表
+  range: ''
+- field: deleted
+  note: 是否删除
+  range: '0{18},1{2}'
