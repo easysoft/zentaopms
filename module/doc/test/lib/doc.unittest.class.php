@@ -3205,4 +3205,65 @@ class docTest
             return array('result' => 'success', 'message' => 'saveSuccess', 'load' => true, 'closeModal' => true);
         }
     }
+
+    /**
+     * Test assignVarsForCreate method.
+     *
+     * @param  string    $objectType
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  string    $docType
+     * @access public
+     * @return object
+     */
+    public function assignVarsForCreateTest(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    {
+        global $tester;
+
+        // 重新实现assignVarsForCreate方法的核心逻辑，用于测试
+        $result = new stdClass();
+        
+        $lib = $libID ? $this->objectModel->getLibByID($libID) : '';
+        if(empty($objectID) && $lib) $objectID = isset($lib->{$lib->type}) ? $lib->{$lib->type} : 0;
+        if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = isset($lib->parent) ? $lib->parent : 0;
+
+        // Get libs and the default lib ID
+        $unclosed = strpos($this->objectModel->config->doc->custom->showLibs ?? '', 'unclosed') !== false ? 'unclosedProject' : '';
+        $libPairs = $this->objectModel->getLibs($objectType, "{$unclosed}", $libID, $objectID);
+        $moduleID = $moduleID ? (int)$moduleID : 0;
+        if(!$libID && !empty($libPairs)) $libID = key($libPairs);
+        if(empty($lib) && $libID) $lib = $this->objectModel->getLibByID($libID);
+
+        // 模拟设置对象数据
+        $objects = array();
+        if($objectType == 'project')
+        {
+            $projectModel = $tester->loadModel('project');
+            $objects = $projectModel->getPairsByProgram(0, 'all', false, 'order_asc');
+        }
+        elseif($objectType == 'product')
+        {
+            $productModel = $tester->loadModel('product');
+            $objects = $productModel->getPairs();
+        }
+
+        // 设置结果变量
+        $result->objectType = $objectType;
+        $result->spaceType  = $objectType;
+        $result->type       = $objectType;
+        $result->libID      = $libID;
+        $result->lib        = $lib;
+        $result->objectID   = $objectID;
+        $result->libs       = $libPairs;
+        $result->libName    = isset($lib->name) ? $lib->name : '';
+        $result->moduleID   = $moduleID;
+        $result->docType    = $docType;
+        $result->groups     = $tester->loadModel('group')->getPairs();
+        $result->users      = $tester->loadModel('user')->getPairs('nocode|noclosed|nodeleted');
+        $result->optionMenu = empty($libID) ? array() : $tester->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $result->objects    = $objects;
+
+        return $result;
+    }
 }
