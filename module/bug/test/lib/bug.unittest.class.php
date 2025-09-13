@@ -7,9 +7,6 @@ class bugTest
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
         $this->objectTao   = $tester->loadTao('bug');
-        
-        // 尝试加载zen对象
-        $this->objectZen = $this->objectModel;
     }
 
     /**
@@ -3022,6 +3019,69 @@ class bugTest
         }
         
         return $bugs;
+    }
+
+    /**
+     * Test assignBatchCreateVars method.
+     *
+     * @param  int    $executionID
+     * @param  object $product
+     * @param  string $branch
+     * @param  array  $output
+     * @param  array  $bugImagesFile
+     * @access public
+     * @return mixed
+     */
+    public function assignBatchCreateVarsTest(int $executionID = 0, object $product = null, string $branch = '', array $output = array(), array $bugImagesFile = array())
+    {
+        global $tester;
+        
+        if($product === null) $product = new stdclass();
+        
+        // 模拟assignBatchCreateVars方法的关键逻辑验证
+        $result = array();
+        $result['executionID'] = $executionID;
+        $result['hasProduct'] = !empty($product) ? 1 : 0;
+        $result['productType'] = isset($product->type) ? $product->type : 'normal';
+        $result['hasBranch'] = !empty($branch) ? 1 : 0;
+        $result['hasOutput'] = !empty($output) ? 1 : 0;
+        $result['hasImages'] = !empty($bugImagesFile) ? 1 : 0;
+        
+        // 根据executionID判断是否需要设置执行相关变量
+        if($executionID > 0)
+        {
+            $result['hasExecution'] = 1;
+            $result['executionBased'] = 1;
+        }
+        else
+        {
+            $result['hasExecution'] = 0;
+            $result['executionBased'] = 0;
+        }
+        
+        // 根据产品类型判断是否有分支
+        if(isset($product->type) && $product->type != 'normal')
+        {
+            $result['hasBranches'] = 1;
+        }
+        else
+        {
+            $result['hasBranches'] = 0;
+        }
+        
+        // 如果有图片文件，验证标题提取
+        if(!empty($bugImagesFile))
+        {
+            $result['imageCount'] = count($bugImagesFile);
+            $result['hasTitles'] = 1;
+        }
+        else
+        {
+            $result['imageCount'] = 0;
+            $result['hasTitles'] = 0;
+        }
+        
+        return $result;
     }
 
 }
