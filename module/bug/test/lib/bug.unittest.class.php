@@ -1775,4 +1775,28 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getAssignedToPairs method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function getAssignedToPairsTest(object $bug): array
+    {
+        global $tester;
+        
+        $zenInstance = $tester->loadZen('bug');
+        
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getAssignedToPairs');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $bug);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
