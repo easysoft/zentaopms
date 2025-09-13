@@ -404,4 +404,45 @@ class caselibTest
         // Method returns void, so we return success indicator
         return true;
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $libID
+     * @param  array  $libraries
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $libID, array $libraries, int $queryID, string $actionURL): array
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('buildSearchForm');
+        $zenInstance = $zen->newInstance();
+        
+        // Execute method
+        $method->invoke($zenInstance, $libID, $libraries, $queryID, $actionURL);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // Return search configuration for verification
+        global $config;
+        $libValues = $config->testcase->search['params']['lib']['values'] ?? array();
+        return array(
+            'module' => $config->testcase->search['module'] ?? '',
+            'actionURL' => $config->testcase->search['actionURL'] ?? '',
+            'queryID' => $config->testcase->search['queryID'] ?? 0,
+            'libOperator' => $config->testcase->search['params']['lib']['operator'] ?? '',
+            'libControl' => $config->testcase->search['params']['lib']['control'] ?? '',
+            'libHasAll' => isset($libValues['all']) ? 1 : 0,
+            'libAllValue' => $libValues['all'] ?? '',
+            'hasProduct' => isset($config->testcase->search['fields']['product']) ? 1 : 0,
+            'hasBranch' => isset($config->testcase->search['fields']['branch']) ? 1 : 0,
+            'hasScene' => isset($config->testcase->search['fields']['scene']) ? 1 : 0,
+            'hasLastRunner' => isset($config->testcase->search['fields']['lastRunner']) ? 1 : 0,
+            'hasLastRunResult' => isset($config->testcase->search['fields']['lastRunResult']) ? 1 : 0,
+            'hasLastRunDate' => isset($config->testcase->search['fields']['lastRunDate']) ? 1 : 0
+        );
+    }
 }
