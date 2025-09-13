@@ -4179,4 +4179,35 @@ class bugTest
         
         return implode(',', $operations);
     }
+
+    /**
+     * Test getToBeProcessedData method.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return array
+     */
+    public function getToBeProcessedDataTest(object $bug, object $oldBug): array
+    {
+        try {
+            $zen = initReference('bug');
+            $method = $zen->getMethod('getToBeProcessedData');
+            $method->setAccessible(true);
+            
+            $zenInstance = $zen->newInstance();
+            $result = $method->invokeArgs($zenInstance, array($bug, $oldBug));
+
+            if(dao::isError()) return dao::getError();
+
+            // 转换结果为可测试的格式
+            $toTaskCount = count($result[0]);
+            $unlinkPlanCount = count($result[1]);
+            $link2PlanCount = count($result[2]);
+            
+            return array($toTaskCount, $unlinkPlanCount, $link2PlanCount, $result[0], $result[1], $result[2]);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
