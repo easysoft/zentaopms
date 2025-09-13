@@ -4243,4 +4243,61 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printDocRecentUpdateBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocRecentUpdateBlockTest()
+    {
+        global $app;
+        $app->loadClass('pager', true);
+        $pager = new pager(0, 6, 1);
+        
+        $docModel = $this->objectModel->loadModel('doc');
+        
+        $result = new stdClass();
+        $result->success = true;
+        $result->error = '';
+        
+        try {
+            $docList = $docModel->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc', $pager);
+            $libList = array();
+            
+            if (!empty($docList)) {
+                foreach($docList as $doc) {
+                    if(isset($doc->editedDate)) {
+                        $doc->editedDate = substr($doc->editedDate, 0, 10);
+                        $doc->editInterval = helper::getDateInterval($doc->editedDate);
+                    }
+                    if(isset($doc->lib)) {
+                        $libList[] = $doc->lib;
+                    }
+                }
+            }
+            
+            $result->docList = $docList ? $docList : array();
+            $result->docCount = is_array($docList) ? count($docList) : 0;
+            $result->libList = $libList;
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->docList = array();
+            $result->docCount = 0;
+            $result->libList = array();
+        }
+        
+        if(dao::isError()) {
+            $result->success = false;
+            $result->error = dao::getError();
+            $result->docList = array();
+            $result->docCount = 0;
+            $result->libList = array();
+        }
+        
+        return $result;
+    }
 }
