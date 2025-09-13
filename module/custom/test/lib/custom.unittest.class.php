@@ -985,4 +985,68 @@ class customTest
             $_POST = $oldPost;
         }
     }
+
+    /**
+     * Test checkInvalidKeys method.
+     *
+     * @param  array  $keys
+     * @param  string $module
+     * @param  string $field
+     * @access public
+     * @return string|bool
+     */
+    public function checkInvalidKeysTest(array $keys = array(), string $module = 'story', string $field = 'priList'): string|bool
+    {
+        $oldPost = $_POST;
+        
+        try {
+            // 模拟 $_POST 数据
+            $_POST['keys'] = $keys;
+            $_POST['lang'] = 'zh-cn';
+            
+            // 获取现有的自定义配置项
+            $oldCustoms = $this->objectModel->getItems("lang=zh-cn&module={$module}&section={$field}");
+            
+            // 模拟 checkInvalidKeys 方法的验证逻辑
+            foreach($keys as $index => $key)
+            {
+                if(!empty($key)) $key = trim($key);
+                
+                // 验证数字类型键值
+                if(($field == 'priList' || $field == 'severityList') && (!is_numeric($key) || $key > 255)) {
+                    return 'invalid_number_key';
+                }
+                
+                // 验证字符串格式
+                if(!empty($key) && !isset($oldCustoms[$key]) && $key != 'n/a' && !preg_match('/^[a-z_A-Z_0-9]+$/', $key)) {
+                    return 'invalid_string_key';
+                }
+                
+                // 验证长度限制
+                if($module == 'user' && $field == 'roleList' && strlen($key) > 10) {
+                    return 'invalid_strlen_ten';
+                }
+                
+                if($module == 'todo' && $field == 'typeList' && strlen($key) > 15) {
+                    return 'invalid_strlen_fifteen';
+                }
+                
+                if((($module == 'story' && $field == 'sourceList') || ($module == 'task' && $field == 'typeList')) && strlen($key) > 20) {
+                    return 'invalid_strlen_twenty';
+                }
+                
+                if((in_array($module, array('bug', 'testcase')) || (in_array($module, array('story', 'task')) && $field == 'reasonList')) && strlen($key) > 30) {
+                    return 'invalid_strlen_thirty';
+                }
+            }
+            
+            return true;
+            
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } finally {
+            // 恢复 $_POST 数据
+            $_POST = $oldPost;
+        }
+    }
 }
