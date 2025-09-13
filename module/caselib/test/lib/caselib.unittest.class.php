@@ -1182,4 +1182,51 @@ class caselibTest
 
         return $case;
     }
+
+    /**
+     * Test processFileForExport method.
+     *
+     * @param  object $case
+     * @param  array  $relatedFiles
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function processFileForExportTest(object $case, array $relatedFiles, string $type = 'case')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('processFileForExport');
+        $zenInstance = $zen->newInstance();
+
+        // 执行方法
+        $method->invoke($zenInstance, $case, $relatedFiles);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'files') return $case->files ?? '';
+        if($type == 'files_length') return strlen($case->files ?? '');
+        if($type == 'has_files') return isset($case->files) && !empty($case->files) ? 1 : 0;
+        if($type == 'files_count') return substr_count($case->files ?? '', '<br />');
+        if($type == 'has_html_link') return strpos($case->files ?? '', '<a href=') !== false ? 1 : 0;
+        if($type == 'has_download_link') return strpos($case->files ?? '', '/file-download-') !== false ? 1 : 0;
+        if($type == 'has_blank_target') return strpos($case->files ?? '', 'target="_blank"') !== false ? 1 : 0;
+        if($type == 'has_br_tag') return strpos($case->files ?? '', '<br />') !== false ? 1 : 0;
+        if($type == 'first_file_title') {
+            $files = $case->files ?? '';
+            if(preg_match('/<a[^>]*>([^<]+)<\/a>/i', $files, $matches)) {
+                return trim($matches[1]);
+            }
+            return '';
+        }
+        if($type == 'first_file_id') {
+            $files = $case->files ?? '';
+            if(preg_match('/fileID=(\d+)/', $files, $matches)) {
+                return $matches[1];
+            }
+            return '';
+        }
+        if($type == 'is_empty') return empty($case->files) ? 1 : 0;
+
+        return $case;
+    }
 }
