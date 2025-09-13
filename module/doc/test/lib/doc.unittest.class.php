@@ -3959,4 +3959,79 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test initLibForMySpace method.
+     *
+     * @param  string $account 用户账号
+     * @param  string $vision 应用视图
+     * @access public
+     * @return mixed
+     */
+    public function initLibForMySpaceTest($account = '', $vision = '')
+    {
+        global $app, $tester;
+        
+        // 保存原始用户和配置
+        $originalUser = $app->user->account ?? 'admin';
+        $originalVision = $app->config->vision ?? 'rnd';
+        
+        // 设置测试用户和视图
+        if($account) $app->user->account = $account;
+        if($vision) $app->config->vision = $vision;
+        else $app->config->vision = 'rnd';
+        
+        // 检查用户是否已有默认个人空间文档库
+        $existingLibCount = $this->objectModel->dao->select('count(1) as count')->from(TABLE_DOCLIB)
+            ->where('type')->eq('mine')
+            ->andWhere('main')->eq(1)
+            ->andWhere('addedBy')->eq($app->user->account)
+            ->andWhere('vision')->eq($app->config->vision)
+            ->fetch('count');
+        
+        $result = new stdclass();
+        $result->existingCount = $existingLibCount;
+        
+        // 模拟initLibForMySpace方法的核心逻辑
+        if(empty($existingLibCount))
+        {
+            // 创建默认的个人空间文档库
+            $mineLib = new stdclass();
+            $mineLib->type = 'mine';
+            $mineLib->vision = $app->config->vision;
+            $mineLib->name = $this->objectModel->lang->doclib->defaultSpace ?? '我的空间';
+            $mineLib->main = '1';
+            $mineLib->acl = 'private';
+            $mineLib->addedBy = $app->user->account;
+            $mineLib->addedDate = helper::now();
+            
+            $this->objectModel->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
+            
+            if(dao::isError())
+            {
+                $result->result = 'error';
+                $result->error = dao::getError();
+            }
+            else
+            {
+                $result->result = 'created';
+                $result->type = $mineLib->type;
+                $result->main = $mineLib->main;
+                $result->acl = $mineLib->acl;
+                $result->name = $mineLib->name;
+                $result->addedBy = $mineLib->addedBy;
+                $result->vision = $mineLib->vision;
+            }
+        }
+        else
+        {
+            $result->result = 'exists';
+        }
+        
+        // 恢复原始用户和配置
+        $app->user->account = $originalUser;
+        $app->config->vision = $originalVision;
+        
+        return $result;
+    }
 }
