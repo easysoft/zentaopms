@@ -1799,4 +1799,30 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getExportFileName method.
+     *
+     * @param  int         $executionID
+     * @param  string      $browseType
+     * @param  object|bool $product
+     * @access public
+     * @return string
+     */
+    public function getExportFileNameTest(int $executionID, string $browseType, object|bool $product): string
+    {
+        global $tester;
+        
+        $zenInstance = $tester->loadZen('bug');
+        
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getExportFileName');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $executionID, $browseType, $product);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
