@@ -4423,4 +4423,34 @@ class bugTest
         
         return $chartOption;
     }
+
+    /**
+     * Test processRepoIssueActions method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function processRepoIssueActionsTest($repoID = null)
+    {
+        try {
+            // 使用反射调用受保护的方法
+            $zenClass = initReference('bug');
+            $method = $zenClass->getMethod('processRepoIssueActions');
+            $zenInstance = $zenClass->newInstance();
+            
+            $result = $method->invokeArgs($zenInstance, array($repoID));
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 返回相关配置以供断言
+            return array(
+                'repoID' => $zenInstance->view->repoID ?? null,
+                'mainActions' => $zenInstance->config->bug->actions->view['mainActions'] ?? null,
+                'suffixActions' => $zenInstance->config->bug->actions->view['suffixActions'] ?? null
+            );
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
