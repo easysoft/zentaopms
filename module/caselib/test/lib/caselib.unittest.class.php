@@ -1229,4 +1229,50 @@ class caselibTest
 
         return $case;
     }
+
+    /**
+     * Test processLinkCaseForExport method.
+     *
+     * @param  object $case
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function processLinkCaseForExportTest(object $case, string $type = 'case')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('processLinkCaseForExport');
+        $zenInstance = $zen->newInstance();
+
+        // 执行方法
+        $method->invoke($zenInstance, $case);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'linkCase') return $case->linkCase ?? '';
+        if($type == 'linkCase_length') return strlen($case->linkCase ?? '');
+        if($type == 'has_linkCase') return isset($case->linkCase) && !empty($case->linkCase) ? 1 : 0;
+        if($type == 'linkCase_count') return substr_count($case->linkCase ?? '', '; ') + 1;
+        if($type == 'has_semicolon') return strpos($case->linkCase ?? '', '; ') !== false ? 1 : 0;
+        if($type == 'has_newlines') return strpos($case->linkCase ?? '', "\n") !== false ? 1 : 0;
+        if($type == 'first_linkCase') {
+            $linkCases = explode('; ', $case->linkCase ?? '');
+            return !empty($linkCases) ? trim($linkCases[0]) : '';
+        }
+        if($type == 'last_linkCase') {
+            $linkCases = explode('; ', $case->linkCase ?? '');
+            return !empty($linkCases) ? trim(end($linkCases)) : '';
+        }
+        if($type == 'linkCase_parts_count') {
+            if(empty($case->linkCase)) return 0;
+            return count(explode('; ', $case->linkCase));
+        }
+        if($type == 'has_id_format') {
+            $linkCase = $case->linkCase ?? '';
+            return preg_match('/\(#\d+\)/', $linkCase) ? 1 : 0;
+        }
+        if($type == 'is_empty') return empty($case->linkCase) ? 1 : 0;
+
+        return $case;
+    }
 }
