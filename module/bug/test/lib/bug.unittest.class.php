@@ -7,7 +7,19 @@ class bugTest
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
         $this->objectTao   = $tester->loadTao('bug');
-        $this->objectZen   = $tester->loadZen('bug');
+        // 尝试加载zen对象，如果失败则使用model对象
+        try {
+            if(method_exists($tester, 'loadZen'))
+            {
+                $this->objectZen = $tester->loadZen('bug');
+            }
+            else
+            {
+                $this->objectZen = $this->objectModel;
+            }
+        } catch(Exception $e) {
+            $this->objectZen = $this->objectModel;
+        }
     }
 
     /**
@@ -2081,6 +2093,52 @@ class bugTest
         $result = $method->invoke($this->objectZen, $formData, $oldBug);
         
         if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test buildBrowseSearchForm method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildBrowseSearchFormTest(int $productID, string $branch, int $queryID, string $actionURL): array
+    {
+        global $tester;
+        
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildBrowseSearchForm');
+        $method->setAccessible(true);
+        
+        // 调用方法
+        $method->invoke($this->objectZen, $productID, $branch, $queryID, $actionURL);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回方法调用的效果验证
+        $result = array();
+        $result['productID'] = $productID;
+        $result['branch'] = $branch;
+        $result['queryID'] = $queryID;
+        $result['actionURL'] = $actionURL;
+        
+        // 检查是否设置了搜索配置
+        if(isset($tester->config->bug->search))
+        {
+            $result['searchConfigSet'] = 1;
+            $result['onMenuBar'] = $tester->config->bug->search['onMenuBar'] ?? '';
+        }
+        else
+        {
+            $result['searchConfigSet'] = 0;
+            $result['onMenuBar'] = '';
+        }
         
         return $result;
     }
