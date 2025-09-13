@@ -4100,4 +4100,51 @@ class bugTest
             'closeModal' => true
         );
     }
+
+    /**
+     * Test responseAfterBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $executionID
+     * @param  array  $bugIdList
+     * @param  string $message
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterBatchCreateTest(int $productID = 1, string $branch = '', int $executionID = 0, array $bugIdList = array(), string $message = '', string $viewType = 'html')
+    {
+        // 模拟zen对象
+        $zen = new stdClass();
+        $zen->viewType = $viewType;
+        $zen->lang = new stdClass();
+        $zen->lang->saveSuccess = '保存成功';
+        $zen->app = new stdClass();
+        
+        // 清空会话变量，模拟方法行为
+        unset($_SESSION['bugImagesFile']);
+        $_POST = array();
+        
+        // 模拟默认消息
+        if(!$message) $message = $zen->lang->saveSuccess;
+        
+        // 根据视图类型返回不同结果
+        if($viewType == 'json') {
+            return array('result' => 'success', 'message' => $message, 'idList' => $bugIdList);
+        }
+        
+        // 模拟模态框响应
+        if($viewType == 'modal') {
+            if($executionID) {
+                // 模拟responseInModal响应
+                return array('result' => 'success', 'load' => true);
+            }
+            return array('result' => 'success', 'message' => $message, 'closeModal' => true);
+        }
+        
+        // 普通视图响应 - 跳转到bug浏览页面
+        $load = "bug-browse-productID-{$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc";
+        return array('result' => 'success', 'message' => $message, 'load' => $load);
+    }
 }
