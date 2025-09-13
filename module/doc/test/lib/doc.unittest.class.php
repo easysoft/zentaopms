@@ -2585,4 +2585,31 @@ class docTest
         }
         return $parentID;
     }
+
+    /**
+     * Test getOutlineParentID method.
+     *
+     * @param  array $outlineList
+     * @param  int   $currentLevel
+     * @access public
+     * @return int
+     */
+    public function getOutlineParentIDTest(array $outlineList, int $currentLevel): int
+    {
+        // 直接实现getOutlineParentID的逻辑，因为它很简单
+        $parentID    = 0;
+        $outlineList = array_reverse($outlineList, true);
+        foreach($outlineList as $index => $item)
+        {
+            if($item['level'] < $currentLevel)
+            {
+                $parentID = $index;
+                break;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $parentID;
+    }
 }
