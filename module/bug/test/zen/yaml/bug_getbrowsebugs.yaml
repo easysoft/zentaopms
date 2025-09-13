@@ -1,0 +1,106 @@
+---
+title: getBrowseBugs方法的测试数据
+desc: 为getBrowseBugs方法提供测试数据
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-20
+  
+- field: product
+  note: 产品ID
+  range: 1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,0,0,0,0,0
+  
+- field: project
+  note: 项目ID
+  range: 1-5:R
+  
+- field: execution
+  note: 执行ID
+  range: 101-105:R
+  
+- field: module
+  note: 模块ID
+  range: 0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4
+  
+- field: branch
+  note: 分支ID
+  range: 0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1
+  
+- field: title
+  note: Bug标题
+  range: Bug测试标题{20}
+  prefix: "[测试]"
+  
+- field: type
+  note: Bug类型
+  range: [codeerror,interface,config,install,security,performance,standard,automation,others]{20}
+  
+- field: status
+  note: Bug状态
+  range: [active,resolved,closed]{20}
+  
+- field: pri
+  note: 优先级
+  range: 1-4:R
+  
+- field: severity
+  note: 严重程度
+  range: 1-4:R
+  
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2,user3,user4
+  
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:24h
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2,user3,user4,""
+  
+- field: assignedDate
+  note: 指派日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:24h
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: resolvedBy
+  note: 解决者
+  range: admin,user1,user2,user3,"",""
+  
+- field: resolvedDate
+  note: 解决日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:24h,0000-00-00 00:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: closedBy
+  note: 关闭者
+  range: admin,user1,"",""
+  
+- field: closedDate
+  note: 关闭日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:24h,0000-00-00 00:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: confirmed
+  note: 是否确认
+  range: 0,1
+  
+- field: activatedCount
+  note: 激活次数
+  range: 0-3:R
+  
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin,user1,user2,""
+  
+- field: lastEditedDate
+  note: 最后编辑日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:24h,0000-00-00 00:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: deleted
+  note: 是否删除
+  range: 0{19},1{1}

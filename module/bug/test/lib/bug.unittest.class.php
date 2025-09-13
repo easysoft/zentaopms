@@ -1663,4 +1663,44 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getBrowseBugs method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  array  $executions
+     * @param  int    $moduleID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array|int
+     */
+    public function getBrowseBugsTest(int $productID, string $branch = 'all', string $browseType = 'all', array $executions = array(), int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array|int
+    {
+        global $tester;
+        
+        // 创建分页对象
+        if($pager === null) {
+            $tester->loadClass('pager', true);
+            $pager = new pager(0, 20, 1);
+        }
+        
+        // 创建一个临时的zen实例，设置必要的属性
+        $zenInstance = $tester->loadZen('bug');
+        $zenInstance->projectID = 0; // 设置默认项目ID
+        
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getBrowseBugs');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $productID, $branch, $browseType, $executions, $moduleID, $queryID, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? count($result) : 0;
+    }
+
 }
