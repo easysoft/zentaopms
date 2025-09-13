@@ -512,4 +512,65 @@ class buildTest
 
         return $result;
     }
+
+    /**
+     * Test assignCreateData method.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  int    $projectID
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function assignCreateDataTest(int $productID, int $executionID, int $projectID, string $status)
+    {
+        global $tester;
+        
+        // 通过直接调用模块和模型的方法来测试业务逻辑
+        $noClosedParam = (isset($tester->config->CRExecution) && $tester->config->CRExecution == 0) ? '|noclosed' : '';
+        $executions    = $tester->loadModel('execution')->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc' . $noClosedParam);
+        $executionID   = empty($executionID) && !empty($executions) ? (int)key($executions) : $executionID;
+        
+        $productGroups = array();
+        $branchGroups  = array();
+        if($executionID || $projectID)
+        {
+            $productGroups = $tester->loadModel('product')->getProducts($executionID ? $executionID : $projectID, $status);
+            $branchGroups  = $tester->loadModel('project')->getBranchesByProject($executionID ? $executionID : $projectID);
+        }
+        
+        $productID = $productID ? $productID : key($productGroups);
+        $branches  = $products = array();
+        
+        // Set branches and products.
+        if(!empty($productGroups[$productID]) && $productGroups[$productID]->type != 'normal' && !empty($branchGroups[$productID]))
+        {
+            $branchPairs = $tester->loadModel('branch')->getPairs($productID, 'active');
+            foreach($branchGroups[$productID] as $branchID => $branch)
+            {
+                if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
+            }
+        }
+        
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
+        
+        $users     = $tester->loadModel('user')->getPairs('nodeleted|noclosed');
+        $lastBuild = $this->objectModel->getLast($executionID, $projectID);
+        $project   = $tester->loadModel('project')->getByID($projectID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回计算结果进行验证
+        return array(
+            'products'    => $products,
+            'branches'    => $branches,
+            'users'       => count($users),
+            'executions'  => count($executions),
+            'productID'   => $productID,
+            'executionID' => $executionID,
+            'lastBuild'   => $lastBuild,
+            'project'     => $project
+        );
+    }
 }

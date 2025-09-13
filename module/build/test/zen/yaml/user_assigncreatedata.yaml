@@ -1,0 +1,46 @@
+---
+title: 用户数据for assignCreateData测试
+desc: 为assignCreateData方法提供用户测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: account
+  note: 用户账号
+  range: 'admin,user1,user2,user3,user4,user5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: realname
+  note: 真实姓名
+  range: '管理员,用户一,用户二,用户三,用户四,用户五'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: role
+  note: 用户角色
+  range: 'admin{1},dev{3},qa{2},pm{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0{8},1{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,70 @@
+---
+title: 项目数据for assignCreateData测试
+desc: 为assignCreateData方法提供项目测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 项目名称
+  range: 'Project{5},Execution{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 项目类型
+  range: 'project{5},sprint{3},stage{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: parent
+  note: 父项目ID
+  range: 0,1,2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 项目状态
+  range: 'wait{2},doing{5},suspended{1},closed{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: begin
+  note: 开始时间
+  range: '2023-01-01:2023-06-30'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD"
+
+- field: end
+  note: 结束时间  
+  range: '2023-07-01:2023-12-31'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD"
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
