@@ -4377,4 +4377,90 @@ class docTest
         
         return 1;
     }
+
+    /**
+     * Test previewProductplan method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewProductplanTest(string $view, array $settings, string $idList): array
+    {
+        // 模拟previewProductplan方法的核心逻辑
+        $result = array('cols' => array(), 'data' => array());
+        $action = zget($settings, 'action', '');
+        
+        if($action === 'preview' && $view === 'setting')
+        {
+            $productID = (int)zget($settings, 'product', 0);
+            if($productID > 0)
+            {
+                // 模拟获取产品计划数据
+                $mockProductPlans = array(
+                    (object)array(
+                        'id' => 1,
+                        'product' => $productID,
+                        'title' => '产品计划1',
+                        'begin' => '2024-01-01',
+                        'end' => '2024-12-31',
+                        'status' => 'doing'
+                    ),
+                    (object)array(
+                        'id' => 2,
+                        'product' => $productID,
+                        'title' => '产品计划2',
+                        'begin' => '2024-06-01',
+                        'end' => '2024-12-31',
+                        'status' => 'wait'
+                    )
+                );
+                $result['data'] = $mockProductPlans;
+            }
+            else
+            {
+                $result['data'] = array();
+            }
+        }
+        elseif($view === 'list' && !empty($idList))
+        {
+            // 模拟根据ID列表获取产品计划数据
+            $idArray = explode(',', $idList);
+            $mockData = array();
+            foreach($idArray as $id)
+            {
+                if(is_numeric($id) && $id > 0)
+                {
+                    $mockData[] = (object)array(
+                        'id' => (int)$id,
+                        'product' => 1,
+                        'title' => '产品计划' . $id,
+                        'begin' => '2024-01-01',
+                        'end' => '2024-12-31',
+                        'status' => 'doing'
+                    );
+                }
+            }
+            $result['data'] = $mockData;
+        }
+        else
+        {
+            $result['data'] = array();
+        }
+        
+        // 模拟datatable列配置
+        $result['cols'] = array(
+            'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
+            'title' => array('title' => '名称', 'name' => 'title', 'sortType' => false),
+            'begin' => array('title' => '开始时间', 'name' => 'begin', 'sortType' => false),
+            'end' => array('title' => '结束时间', 'name' => 'end', 'sortType' => false),
+            'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false)
+        );
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }

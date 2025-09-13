@@ -1,0 +1,70 @@
+---
+title: 产品计划预览测试数据
+desc: 用于测试docZen::previewProductplan()方法的产品计划数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品计划ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1{5},2{5},3{5},4{3},5{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 计划名称
+  range: V1.0版本计划,V2.0版本计划,V3.0版本计划,迭代计划1,迭代计划2,功能优化计划,性能提升计划,Bug修复计划,用户体验优化,API接口完善,数据库优化,安全加固计划,测试覆盖计划,文档完善计划,部署优化计划,监控告警计划,备份恢复计划,权限管理优化,界面改版计划,移动端适配
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: begin
+  note: 开始时间
+  range: 2024-01-01{5},2024-03-01{5},2024-06-01{5},2024-09-01{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: end
+  note: 结束时间
+  range: 2024-03-31{5},2024-06-30{5},2024-09-30{5},2024-12-31{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 计划状态
+  range: wait{5},doing{8},done{4},closed{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 计划描述
+  range: 重要版本发布计划{5},日常迭代开发计划{8},维护优化计划{4},历史计划{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedBy
+  note: 创建者
+  range: admin{10},pm1{5},pm2{3},user1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00{5},2023-06-01 14:30:00{5},2024-01-01 09:15:00{5},2024-06-01 16:45:00{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
