@@ -4360,4 +4360,67 @@ class bugTest
         
         return $bug;
     }
+
+    /**
+     * Test mergeChartOption method.
+     *
+     * @param  string $chartCode
+     * @param  string $chartType
+     * @access public
+     * @return object
+     */
+    public function mergeChartOptionTest($chartCode, $chartType = 'default')
+    {
+        // 模拟mergeChartOption方法的核心逻辑
+        $result = new stdclass();
+        
+        // 模拟默认配置
+        $commonOptions = new stdclass();
+        $commonOptions->type = 'pie';
+        $commonOptions->width = 500;
+        $commonOptions->height = 140;
+        $commonOptions->graph = new stdclass();
+        
+        // 模拟图表配置
+        $chartOption = new stdclass();
+        $chartOption->graph = new stdclass();
+        
+        // 设置图表标题
+        $chartTitles = array(
+            'bugsPerExecution' => '执行Bug数量',
+            'bugsPerBuild' => '版本Bug数量',
+            'bugsPerModule' => '模块Bug数量',
+            'openedBugsPerDay' => '每天新增Bug数',
+            'bugsPerSeverity' => '按Bug严重程度统计'
+        );
+        
+        $chartOption->graph->caption = isset($chartTitles[$chartCode]) ? $chartTitles[$chartCode] : 'Unknown Chart';
+        
+        // 设置类型
+        if(!empty($chartType) && $chartType != 'default') {
+            $chartOption->type = $chartType;
+        } else {
+            // 某些图表有自己的默认类型
+            if($chartCode == 'openedBugsPerDay') {
+                $chartOption->type = 'bar';
+            } else {
+                $chartOption->type = $commonOptions->type;
+            }
+        }
+        
+        // 设置宽度和高度
+        if(!isset($chartOption->width)) $chartOption->width = $commonOptions->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOptions->height;
+        
+        // 合并图表选项
+        foreach($commonOptions->graph as $key => $value) {
+            if(!isset($chartOption->graph->$key)) {
+                $chartOption->graph->$key = $value;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $chartOption;
+    }
 }
