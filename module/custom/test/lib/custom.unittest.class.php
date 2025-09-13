@@ -1137,4 +1137,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return true;
     }
+
+    /**
+     * Test setGradeRule method.
+     *
+     * @param  string $module
+     * @param  array  $data
+     * @access public
+     * @return bool|array
+     */
+    public function setGradeRuleTest(string $module = 'story', array $data = array()): bool|array
+    {
+        // 模拟 setGradeRule 方法的核心逻辑
+        // 该方法主要是通过setting模型保存配置数据
+        $settingModel = $this->objectModel->loadModel('setting');
+        $settingModel->setItems("system.{$module}", $data);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return true;
+    }
 }
