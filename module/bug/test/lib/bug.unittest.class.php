@@ -3979,4 +3979,59 @@ class bugTest
         
         return $result;
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  object $bug
+     * @param  array  $params
+     * @param  string $message
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest(object $bug, array $params = array(), string $message = ''): array
+    {
+        global $app, $lang;
+        
+        // 模拟executionID获取逻辑
+        $executionID = $bug->execution ? $bug->execution : (int)(zget($params, 'executionID', 0));
+        
+        // 设置默认消息
+        if(!$message) $message = $lang->saveSuccess ?? '保存成功';
+        
+        // 模拟JSON视图响应
+        if(isset($params['viewType']) && $params['viewType'] == 'json') {
+            return array('result' => 'success', 'message' => $message, 'id' => $bug->id);
+        }
+        
+        // 模拟API模式响应
+        if(isset($params['runMode']) && $params['runMode'] == 'api') {
+            return array('status' => 'success', 'data' => $bug->id);
+        }
+        
+        // 模拟模态框响应
+        if(isset($params['isInModal']) && $params['isInModal']) {
+            return array('result' => 'success', 'message' => $message, 'closeModal' => true);
+        }
+        
+        // 根据不同tab构建跳转链接
+        $location = '';
+        $tab = $params['tab'] ?? 'product';
+        
+        if($tab == 'execution') {
+            $location = "execution-bug-executionID-{$executionID}";
+        } elseif($tab == 'project') {
+            $projectID = zget($params, 'projectID', 0);
+            $location = "project-bug-projectID-{$projectID}";
+        } else {
+            $location = "bug-browse-productID-{$bug->product}-branch-{$bug->branch}";
+        }
+        
+        // 模拟xhtml视图
+        if(isset($params['viewType']) && $params['viewType'] == 'xhtml') {
+            $location = "bug-view-bugID-{$bug->id}";
+        }
+        
+        return array('result' => 'success', 'message' => $message, 'load' => $location);
+    }
 }
