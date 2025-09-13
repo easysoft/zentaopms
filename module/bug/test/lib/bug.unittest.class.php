@@ -1751,4 +1751,28 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getProductMembersForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function getProductMembersForCreateTest(object $bug): array
+    {
+        global $tester;
+        
+        $zenInstance = $tester->loadZen('bug');
+        
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getProductMembersForCreate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $bug);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
