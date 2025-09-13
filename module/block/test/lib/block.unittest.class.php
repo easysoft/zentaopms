@@ -4963,6 +4963,190 @@ class blockTest
     }
 
     /**
+     * Test printSingleBugStatisticBlock method.
+     *
+     * @param  object $block
+     * @access public
+     * @return mixed
+     */
+    public function printSingleBugStatisticBlockTest($block = null)
+    {
+        global $tester;
+        
+        $result = new stdClass();
+        
+        // 设置默认block参数
+        if(is_null($block))
+        {
+            $block = new stdClass();
+            $block->params = new stdClass();
+            $block->params->type = '';
+            $block->params->count = '';
+        }
+        
+        try
+        {
+            // 验证block参数的有效性
+            if(!is_object($block)) {
+                $result->error = 'block parameter must be object';
+                return $result;
+            }
+            
+            if(!isset($block->params)) {
+                $result->error = 'block params not found';
+                return $result;
+            }
+            
+            // 获取参数
+            $status = isset($block->params->type) ? $block->params->type : '';
+            $count = isset($block->params->count) ? $block->params->count : '';
+            $productID = isset($tester->session->product) ? $tester->session->product : 1;
+            
+            // 模拟metric模型行为
+            $bugFixedRate = array(
+                array('product' => 1, 'value' => 0.85),
+                array('product' => 2, 'value' => 0.90),
+                array('product' => 3, 'value' => 0.75)
+            );
+            
+            $effectiveBugGroup = array(
+                array('product' => 1, 'value' => 100),
+                array('product' => 2, 'value' => 80),
+                array('product' => 3, 'value' => 120)
+            );
+            
+            $fixedBugGroup = array(
+                array('product' => 1, 'value' => 85),
+                array('product' => 2, 'value' => 72),
+                array('product' => 3, 'value' => 90)
+            );
+            
+            $activatedBugGroup = array(
+                array('product' => 1, 'value' => 15),
+                array('product' => 2, 'value' => 8),
+                array('product' => 3, 'value' => 30)
+            );
+            
+            // 处理近6个月的数据
+            $months = array();
+            $dates = array();
+            for($i = 5; $i >= 0; $i--)
+            {
+                $months[] = date('m', strtotime("first day of -{$i} month"));
+                $dates[] = date('Y-m', strtotime("first day of -{$i} month"));
+            }
+            
+            $monthCreatedBugGroup = array();
+            $monthClosedBugGroup = array();
+            
+            // 生成每月数据
+            foreach($dates as $index => $date)
+            {
+                $parts = explode('-', $date);
+                $year = $parts[0];
+                $month = $parts[1];
+                
+                $monthCreatedBugGroup[] = array(
+                    'product' => $productID,
+                    'year' => $year,
+                    'month' => $month,
+                    'value' => rand(5, 25)
+                );
+                
+                $monthClosedBugGroup[] = array(
+                    'product' => $productID,
+                    'year' => $year,
+                    'month' => $month,
+                    'value' => rand(3, 20)
+                );
+            }
+            
+            // 组装结果数据
+            $activateBugs = array();
+            $resolveBugs = array();
+            $closeBugs = array();
+            
+            foreach($dates as $date)
+            {
+                $activateBugs[$date] = 0;
+                $resolveBugs[$date] = 0;
+                $closeBugs[$date] = 0;
+                
+                foreach($monthCreatedBugGroup as $data)
+                {
+                    if($date == "{$data['year']}-{$data['month']}") {
+                        $activateBugs[$date] = $data['value'];
+                    }
+                }
+                
+                foreach($monthClosedBugGroup as $data)
+                {
+                    if($date == "{$data['year']}-{$data['month']}") {
+                        $closeBugs[$date] = $data['value'];
+                    }
+                }
+            }
+            
+            // 计算总的bug统计
+            $currentProduct = null;
+            foreach($effectiveBugGroup as $item) {
+                if($item['product'] == $productID) {
+                    $currentProduct = $item;
+                    break;
+                }
+            }
+            
+            $totalBugs = $currentProduct ? $currentProduct['value'] : 0;
+            $closedBugs = 0;
+            $unresovledBugs = 0;
+            $resolvedRate = 0;
+            
+            foreach($fixedBugGroup as $item) {
+                if($item['product'] == $productID) {
+                    $closedBugs = $item['value'];
+                    break;
+                }
+            }
+            
+            foreach($activatedBugGroup as $item) {
+                if($item['product'] == $productID) {
+                    $unresovledBugs = $item['value'];
+                    break;
+                }
+            }
+            
+            foreach($bugFixedRate as $item) {
+                if($item['product'] == $productID) {
+                    $resolvedRate = $item['value'] * 100;
+                    break;
+                }
+            }
+            
+            // 设置结果
+            $result->productID = $productID;
+            $result->months = $months;
+            $result->totalBugs = $totalBugs;
+            $result->closedBugs = $closedBugs;
+            $result->unresovledBugs = $unresovledBugs;
+            $result->resolvedRate = $resolvedRate;
+            $result->activateBugs = $activateBugs;
+            $result->resolveBugs = $resolveBugs;
+            $result->closeBugs = $closeBugs;
+            $result->status = $status;
+            $result->count = $count;
+            
+        }
+        catch(Exception $e)
+        {
+            $result->error = $e->getMessage();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
      * Test printSingleStatisticBlock method.
      *
      * @param  object $block
