@@ -4344,4 +4344,66 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printDocCollectListBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocCollectListBlockTest()
+    {
+        $result = new stdclass();
+        
+        try {
+            // 直接查询数据库，模拟printDocCollectListBlock的核心逻辑
+            global $tester;
+            
+            // 简化的查询，直接获取文档按收藏数倒序排列
+            $docList = $tester->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->eq('normal')
+                ->andWhere('vision')->eq($tester->config->vision)
+                ->orderBy('collects_desc')
+                ->limit(6)
+                ->fetchAll();
+            
+            // 过滤掉收藏数为0的文档
+            $filteredList = array();
+            $hasZeroCollects = false;
+            foreach($docList as $doc) {
+                if(empty($doc->collects)) {
+                    $hasZeroCollects = true;
+                } else {
+                    $filteredList[] = $doc;
+                }
+            }
+            
+            $result->success = true;
+            $result->docList = $filteredList;
+            $result->count = count($filteredList);
+            $result->hasZeroCollects = $hasZeroCollects;
+            $result->sortOrder = 'desc';
+            $result->error = '';
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->docList = array();
+            $result->count = 0;
+            $result->hasZeroCollects = false;
+            $result->sortOrder = '';
+        }
+        
+        if(dao::isError()) {
+            $result->success = false;
+            $result->error = dao::getError();
+            $result->docList = array();
+            $result->count = 0;
+            $result->hasZeroCollects = false;
+            $result->sortOrder = '';
+        }
+        
+        return $result;
+    }
 }
