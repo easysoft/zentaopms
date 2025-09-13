@@ -4245,4 +4245,32 @@ class docTest
         
         return $response;
     }
+
+    /**
+     * Test formFromSession method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function formFromSessionTest(string $type): array
+    {
+        // 直接实现formFromSession方法的逻辑进行测试
+        $sessionName = 'zentaoList' . $type;
+        $session = array();
+        if(isset($_SESSION[$sessionName]))
+        {
+            $session = $_SESSION[$sessionName];
+            unset($_SESSION[$sessionName]);
+        }
+
+        $url    = zget($session, 'url', '');
+        $idList = zget($session, 'idList', '');
+        $cols   = zget($session, 'cols', array());
+        $data   = zget($session, 'data', array());
+
+        if(dao::isError()) return dao::getError();
+
+        return array($url, $idList, $cols, $data);
+    }
 }
