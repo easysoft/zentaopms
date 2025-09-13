@@ -1914,4 +1914,48 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test setCreateMenu method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $output
+     * @access public
+     * @return bool
+     */
+    public function setCreateMenuTest(int $productID, string $branch, array $output): bool
+    {
+        global $tester, $app;
+        
+        // 设置app属性
+        if(isset($output['executionID']))
+        {
+            $app->tab = 'execution';
+            $tester->session->set('execution', $output['executionID']);
+        }
+        elseif(isset($output['projectID']))
+        {
+            $app->tab = 'project';
+        }
+        else
+        {
+            $app->tab = 'qa';
+        }
+        
+        $zen = initReference('bug');
+        $method = $zen->getMethod('setCreateMenu');
+        
+        $zenInstance = $zen->newInstance();
+        
+        // 模拟products属性避免重定向
+        $products = $tester->loadModel('product')->getPairs('noclosed', 0, '', 'all');
+        $zenInstance->products = $products;
+        
+        $result = $method->invokeArgs($zenInstance, array($productID, $branch, $output));
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
