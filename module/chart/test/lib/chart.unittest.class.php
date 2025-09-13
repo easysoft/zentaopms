@@ -708,4 +708,30 @@ class chartTest
 
         return $result;
     }
+
+    /**
+     * Test getChartsToView method.
+     *
+     * @param  array $chartList
+     * @access public
+     * @return array
+     */
+    public function getChartsToViewTest(array $chartList): array
+    {
+        // 模拟getChartsToView方法的逻辑
+        $charts = array();
+        foreach($chartList as $chart)
+        {
+            $group = $chart['groupID'];
+            $chartObj = $this->objectModel->getByID($chart['chartID']);
+            if($chartObj)
+            {
+                $chartObj->currentGroup = $group;
+                $charts[] = $chartObj;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        return $charts;
+    }
 }
