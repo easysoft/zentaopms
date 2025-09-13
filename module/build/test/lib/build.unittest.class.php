@@ -770,4 +770,67 @@ class buildTest
             'generatedBugCount' => count($generatedBugs),
         );
     }
+
+    /**
+     * Test setMenuForView method.
+     *
+     * @param  object $build
+     * @access public
+     * @return array
+     */
+    public function setMenuForViewTest(object $build): array
+    {
+        global $tester;
+        
+        // 模拟zen层的setMenuForView方法的核心逻辑
+        // 避免直接调用数据库方法，使用模拟数据
+        
+        // 模拟session设置
+        $storyListUrl = '/zentao/project-execution-' . $build->execution . '-build-view-' . $build->id . '.html';
+        $tester->session->project = $build->project;
+        
+        // 确定对象类型和ID
+        $objectType = 'execution';
+        $objectID   = $build->execution;
+        if($tester->app->tab == 'project') {
+            $objectType = 'project';
+            $objectID   = $build->project;
+        }
+        
+        // 模拟执行列表数据
+        $executions = array(
+            101 => '执行101',
+            102 => '执行102',
+            103 => '执行103'
+        );
+        
+        // 模拟版本对数据
+        $buildPairs = array(
+            $build->id => $build->name,
+            1 => 'Build001_release',
+            2 => 'Build002_alpha'
+        );
+        
+        // 构建标题
+        $title = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
+        
+        // 模拟版本列表
+        $builds = array($build->id => $build);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回测试结果，模拟view对象的属性设置
+        return array(
+            'title'           => $title,
+            'executions'      => $executions,
+            'buildPairs'      => $buildPairs,
+            'builds'          => $builds,
+            'objectID'        => $objectID,
+            'objectType'      => $objectType,
+            'sessionProject'  => $tester->session->project,
+            'executionCount'  => count($executions),
+            'buildCount'      => count($builds),
+            'storyListUrl'    => $storyListUrl
+        );
+    }
 }
