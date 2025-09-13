@@ -3266,4 +3266,46 @@ class docTest
 
         return $result;
     }
+
+    /**
+     * Test assignVarsForUploadDocs method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $docType
+     * @access public
+     * @return object
+     */
+    public function assignVarsForUploadDocsTest(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): object
+    {
+        global $tester;
+
+        // 首先调用assignVarsForCreate获取基础变量
+        $result = $this->assignVarsForCreateTest($objectType, $objectID, $libID, $moduleID, $docType);
+        
+        // 获取文档和章节数据
+        $chapterAndDocs = $this->objectModel->getDocsOfLibs(array($libID), $objectType);
+        $modulePairs = empty($libID) ? array() : $tester->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        
+        // 检查父文档
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) {
+            $chapterAndDocs[$doc->parent] = $this->objectModel->fetchByID($doc->parent);
+        }
+        
+        // 构建嵌套文档结构
+        $chapterAndDocs = $this->objectModel->buildNestedDocs($chapterAndDocs, $modulePairs);
+
+        // 设置上传文档特有的变量
+        $lib = $result->lib;
+        $result->title = empty($lib) ? '' : (isset($lib->name) ? ($lib->name . ' - 上传文档') : '上传文档');
+        $result->linkType = $objectType;
+        $result->spaces = ($objectType == 'mine' || $objectType == 'custom') ? $this->objectModel->getSubSpacesByType($objectType, false) : array();
+        $result->optionMenu = $chapterAndDocs;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
