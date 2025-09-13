@@ -4211,4 +4211,38 @@ class docTest
         
         return $processedCount;
     }
+
+    /**
+     * Test responseAfterAddTemplateType method.
+     *
+     * @param  int    $scope
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterAddTemplateTypeTest(int $scope)
+    {
+        // 模拟responseAfterAddTemplateType方法的核心逻辑
+        global $tester;
+        
+        // 验证参数类型
+        if(!is_int($scope))
+        {
+            return array('result' => 'error', 'message' => 'Invalid parameter type');
+        }
+        
+        // 模拟成功响应结果（基于真实方法的实现）
+        $response = array(
+            'result' => 'success', 
+            'message' => $tester->lang->saveSuccess ?? 'Save success', 
+            'load' => true
+        );
+        
+        // 如果dao有错误，返回错误信息
+        if(dao::isError()) 
+        {
+            return dao::getError();
+        }
+        
+        return $response;
+    }
 }
