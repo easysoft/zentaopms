@@ -798,4 +798,36 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getColumnsForShowImport method.
+     *
+     * @param  array  $firstRow
+     * @param  array  $fields
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getColumnsForShowImportTest(array $firstRow, array $fields, string $type = 'array')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getColumnsForShowImport');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance, $firstRow, $fields);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'keys') return array_keys($result);
+        if($type == 'values') return array_values($result);
+        if($type == 'first_key' && !empty($result)) return key($result);
+        if($type == 'first_value' && !empty($result)) return reset($result);
+        if($type == 'is_empty') return empty($result) ? 1 : 0;
+        if($type == 'has_zero_key') return isset($result[0]) ? 1 : 0;
+        if($type == 'has_one_key') return isset($result[1]) ? 1 : 0;
+        if($type == 'specific_key' && !empty($result)) return isset($result[0]) ? $result[0] : '';
+
+        return $result;
+    }
 }
