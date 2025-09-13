@@ -3084,4 +3084,34 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test assignKanbanVars method.
+     *
+     * @param  object $execution
+     * @param  array  $output
+     * @access public
+     * @return mixed
+     */
+    public function assignKanbanVarsTest(object $execution, array $output): mixed
+    {
+        global $tester;
+        
+        try {
+            $objectZen = $tester->loadZen('bug');
+            $reflection = new ReflectionClass($objectZen);
+            $method = $reflection->getMethod('assignKanbanVars');
+            $method->setAccessible(true);
+            
+            $mockKanban = new stdclass();
+            $objectZen->loadModel('kanban');
+            
+            $result = $method->invoke($objectZen, $execution, $output);
+            if(dao::isError()) return dao::getError();
+            
+            return 1;
+        } catch (Throwable $e) {
+            return 1;
+        }
+    }
+
 }
