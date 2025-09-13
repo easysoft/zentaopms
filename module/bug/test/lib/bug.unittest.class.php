@@ -1593,4 +1593,20 @@ class bugTest
 
         return $result;
     }
+
+    /**
+     * Test checkRquiredForEdit method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return bool|array
+     */
+    public function checkRquiredForEditTest(object $bug): bool|array
+    {
+        $result = $this->objectZen->checkRquiredForEdit($bug);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
