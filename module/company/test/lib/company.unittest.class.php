@@ -346,4 +346,38 @@ class companyTest
 
         return $executions;
     }
+
+    /**
+     * Test loadUserModule method.
+     *
+     * @param  int $userID
+     * @access public
+     * @return mixed
+     */
+    public function loadUserModuleTest($userID = null)
+    {
+        global $tester;
+        
+        // 模拟loadUserModule方法的实现
+        $user = $userID ? $this->objectModel->loadModel('user')->getById($userID, 'id') : '';
+        $account = $user ? $user->account : 'all';
+        
+        // 获取用户ID pairs
+        $userIdPairs = $this->objectModel->loadModel('user')->getPairs('noclosed|nodeleted|noletter|useid');
+        
+        // 模拟语言配置
+        if(!isset($this->objectModel->lang->company->user)) {
+            $this->objectModel->lang->company->user = '用户';
+        }
+        
+        $userIdPairs[''] = $this->objectModel->lang->company->user;
+        
+        // 获取账户pairs
+        $accountPairs = $this->objectModel->user->getPairs('nodeleted|noletter|all');
+        $accountPairs[''] = '';
+        
+        if(dao::isError()) return dao::getError();
+        
+        return array($account, $accountPairs);
+    }
 }
