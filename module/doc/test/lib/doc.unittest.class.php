@@ -2612,4 +2612,33 @@ class docTest
 
         return $parentID;
     }
+
+    /**
+     * Test buildOutlineTree method.
+     *
+     * @param  array $outlineList
+     * @param  int   $parentID
+     * @access public
+     * @return array
+     */
+    public function buildOutlineTreeTest(array $outlineList, int $parentID = -1): array
+    {
+        // 模拟buildOutlineTree方法的核心逻辑
+        $outlineTree = array();
+        foreach($outlineList as $index => $item)
+        {
+            if($item['parent'] != $parentID) continue;
+
+            unset($outlineList[$index]);
+
+            $items = $this->buildOutlineTreeTest($outlineList, $index);
+            if(!empty($items)) $item['items'] = $items;
+
+            $outlineTree[] = $item;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $outlineTree;
+    }
 }

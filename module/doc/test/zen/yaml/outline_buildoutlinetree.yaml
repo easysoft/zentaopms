@@ -1,0 +1,32 @@
+---
+title: buildOutlineTree方法测试数据
+desc: 为buildOutlineTree方法提供测试数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 大纲项ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+- field: title
+  note: 大纲标题
+  range: '一级标题{10},二级标题{20},三级标题{30}'
+  prefix: ""
+  postfix: ""
+- field: level
+  note: 大纲层级
+  range: 1-6
+  prefix: ""
+  postfix: ""
+- field: parent
+  note: 父级ID
+  range: -1,0-50
+  prefix: ""
+  postfix: ""
+- field: url
+  note: 锚点链接
+  range: '#anchor1,#anchor2,#anchor3'
+  prefix: ""
+  postfix: ""
