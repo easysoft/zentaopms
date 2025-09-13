@@ -1,0 +1,37 @@
+---
+title: 文档库测试数据
+desc: 用于printDocMyCollectionBlock方法测试的doclib表数据
+
+fields:
+- field: id
+  range: 1-5
+  note: 文档库ID
+
+- field: type
+  range: 'product{3},project{2}'
+  note: 文档库类型
+
+- field: vision
+  range: 'rnd{5}'
+  note: 视图类型
+
+- field: name
+  range: '产品文档库{3},项目文档库{2}'
+  note: 文档库名称
+
+- field: acl
+  range: 'open{3},private{2}'
+  note: 访问控制
+
+- field: deleted
+  range: '0{4},1{1}'
+  note: 是否删除
+
+- field: addedBy
+  range: 'admin{5}'
+  note: 创建者
+
+- field: addedDate
+  range: '(-30d)-(-10d):5d'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  note: 创建时间
