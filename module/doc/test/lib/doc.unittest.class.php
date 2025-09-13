@@ -3049,4 +3049,41 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $response;
     }
+
+    /**
+     * Test responseAfterMove method.
+     *
+     * @param  string $space            空间信息，格式为 "spaceType.spaceID"
+     * @param  int    $libID           文档库ID
+     * @param  int    $docID           文档ID
+     * @param  bool   $spaceTypeChanged 空间类型是否改变
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterMoveTest(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false)
+    {
+        // 模拟 responseAfterMove 方法的业务逻辑
+        list($spaceType, $spaceID) = explode('.', $space);
+        
+        // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
+        if($docID) {
+            // 文档移动的响应
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
+            return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
+        }
+        
+        if($spaceTypeChanged) {
+            // 空间类型改变，跳转到对应页面
+            $method = 'mySpace';
+            if($spaceType == 'custom')  $method = 'teamSpace';
+            if($spaceType == 'product') $method = 'productSpace';
+            if($spaceType == 'project') $method = 'projectSpace';
+            $locateLink = '/doc-' . $method . '-' . $spaceID . '-' . $libID . '.html';
+            return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'load' => $locateLink);
+        } else {
+            // 空间类型未改变，返回选择空间的响应
+            $docAppAction = array('selectSpace', (int)$spaceID, $libID);
+            return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
+        }
+    }
 }
