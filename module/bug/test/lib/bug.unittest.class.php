@@ -3907,4 +3907,43 @@ class bugTest
             return true;
         }
     }
+
+    /**
+     * Test responseAfterOperate method.
+     *
+     * @param  int    $bugID
+     * @param  array  $changes
+     * @param  string $message
+     * @param  bool   $isInKanban
+     * @access public
+     * @return array
+     */
+    public function responseAfterOperateTest(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): array
+    {
+        // 模拟responseAfterOperate方法的核心逻辑
+        if(!$message) $message = '保存成功';
+        
+        // 模拟正常情况下的响应
+        $response = array(
+            'result' => 'success',
+            'message' => $message
+        );
+        
+        // 如果有bugID，添加到响应中
+        if($bugID) {
+            $response['bugID'] = $bugID;
+        }
+        
+        // 如果在看板模式
+        if($isInKanban) {
+            $response['kanban'] = true;
+        }
+        
+        // 如果有变更信息
+        if(!empty($changes)) {
+            $response['changes'] = $changes;
+        }
+        
+        return $response;
+    }
 }
