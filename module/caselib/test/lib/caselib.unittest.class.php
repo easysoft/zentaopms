@@ -767,4 +767,35 @@ class caselibTest
 
         return $result;
     }
+
+    /**
+     * Test getFieldsForImport method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array|int|string
+     */
+    public function getFieldsForImportTest(string $type = 'array')
+    {
+        $zen = initReference('caselib');
+        $method = $zen->getMethod('getFieldsForImport');
+        $zenInstance = $zen->newInstance();
+
+        $result = $method->invoke($zenInstance);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'keys') return array_keys($result);
+        if($type == 'values') return array_values($result);
+        if($type == 'first_key' && !empty($result)) return key($result);
+        if($type == 'first_value' && !empty($result)) return reset($result);
+        if($type == 'has_title') return isset($result['标题']) ? 1 : 0;
+        if($type == 'has_module') return isset($result['所属模块']) ? 1 : 0;
+        if($type == 'has_precondition') return isset($result['前置条件']) ? 1 : 0;
+        if($type == 'has_stepDesc') return isset($result['步骤']) ? 1 : 0;
+        if($type == 'has_stepExpect') return isset($result['预期']) ? 1 : 0;
+
+        return $result;
+    }
 }
