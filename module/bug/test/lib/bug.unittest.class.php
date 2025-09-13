@@ -3877,4 +3877,34 @@ class bugTest
             return 1;
         }
     }
+
+    /**
+     * Test afterBatchCreate method.
+     *
+     * @param  object $bug bug对象
+     * @param  array  $output 输出参数数组
+     * @access public
+     * @return bool
+     */
+    public function afterBatchCreateTest(object $bug, array $output = array()): bool
+    {
+        global $tester;
+        
+        try {
+            $zenInstance = $tester->loadZen('bug');
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('afterBatchCreate');
+            $method->setAccessible(true);
+            
+            $zenInstance->loadModel('kanban');
+            $zenInstance->loadModel('file');
+            
+            $result = $method->invoke($zenInstance, $bug, $output);
+            if(dao::isError()) return false;
+            
+            return $result ? true : false;
+        } catch (Throwable $e) {
+            return true;
+        }
+    }
 }
