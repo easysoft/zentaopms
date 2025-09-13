@@ -5638,4 +5638,97 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test getProjectsStatisticData method.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectsStatisticDataTest($projectIdList = array())
+    {
+        global $tester;
+        
+        include_once dirname(__FILE__, 3) . '/model.php';
+        
+        if (!class_exists('block')) {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->config = $tester->app->config;
+        $blockZen->dao = $tester->dao;
+        
+        // 模拟metric模型
+        $blockZen->metric = new stdclass();
+        $blockZen->metric->getResultByCodeWithArray = function($code, $filters, $mode, $extra, $vision) use ($projectIdList) {
+            // 模拟不同类型的统计数据
+            switch($code) {
+                case 'count_of_opened_risk_in_project':
+                    $result = array();
+                    foreach($projectIdList as $id) {
+                        $result[] = array('project' => $id, 'value' => rand(1, 10));
+                    }
+                    return $result;
+                    
+                case 'count_of_opened_issue_in_project':
+                    $result = array();
+                    foreach($projectIdList as $id) {
+                        $result[] = array('project' => $id, 'value' => rand(1, 8));
+                    }
+                    return $result;
+                    
+                case 'day_of_invested_in_project':
+                case 'consume_of_task_in_project':
+                case 'left_of_task_in_project':
+                case 'scale_of_story_in_project':
+                case 'count_of_finished_story_in_project':
+                case 'count_of_unclosed_story_in_project':
+                case 'count_of_task_in_project':
+                case 'count_of_wait_task_in_project':
+                case 'count_of_doing_task_in_project':
+                case 'count_of_bug_in_project':
+                case 'count_of_closed_bug_in_project ':
+                case 'count_of_activated_bug_in_project':
+                    $result = array();
+                    foreach($projectIdList as $id) {
+                        $result[] = array('project' => $id, 'value' => rand(5, 50));
+                    }
+                    return $result;
+                    
+                default:
+                    return array();
+            }
+        };
+        
+        // 模拟loadModel方法
+        $blockZen->loadModel = function($modelName) use ($tester, $blockZen) {
+            if($modelName == 'metric') {
+                return $blockZen->metric;
+            }
+            return $tester->loadModel($modelName);
+        };
+        
+        // 使用反射调用私有方法
+        $reflection = new ReflectionClass($blockZen);
+        $method = $reflection->getMethod('getProjectsStatisticData');
+        $method->setAccessible(true);
+        
+        try {
+            $result = $method->invoke($blockZen, $projectIdList);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
