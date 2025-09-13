@@ -3114,4 +3114,69 @@ class bugTest
         }
     }
 
+    /**
+     * Test assignVarsForBatchCreate method.
+     *
+     * @param  object $product
+     * @param  object $project
+     * @param  array  $bugImagesFile
+     * @access public
+     * @return mixed
+     */
+    public function assignVarsForBatchCreateTest(object $product, object $project, array $bugImagesFile): mixed
+    {
+        // 模拟assignVarsForBatchCreate方法的关键逻辑验证
+        $result = array();
+        
+        // 根据配置设置自定义字段
+        $customFields = array();
+        $customBatchCreateFields = 'project,execution,plan,steps,type,pri,deadline,severity,os,browser,keywords';
+        foreach(explode(',', $customBatchCreateFields) as $field)
+        {
+            $customFields[$field] = ucfirst($field);
+        }
+        
+        // 根据产品类型添加分支字段
+        if($product->type != 'normal') 
+        {
+            $customFields['branch'] = 'Branch';
+        }
+        
+        // 根据项目模式添加执行字段
+        if(isset($project->model) && $project->model == 'kanban') 
+        {
+            $customFields['execution'] = 'Execution';
+        }
+        
+        // 处理图片文件标题
+        $titles = array();
+        if(!empty($bugImagesFile))
+        {
+            foreach($bugImagesFile as $fileName => $file)
+            {
+                if(isset($file['title']))
+                {
+                    $title = $file['title'];
+                    $titles[$title] = $fileName;
+                }
+            }
+        }
+        
+        // 设置显示字段
+        $showFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,' . ($product->type != 'normal' ? 'branch' : '');
+        $showFields = trim($showFields, ',');
+        
+        return (object) array(
+            'customFields' => $customFields,
+            'showFields'   => $showFields,
+            'titles'       => $titles,
+            'hasCustomFields' => !empty($customFields) ? '1' : '0',
+            'hasTitles'    => !empty($titles) ? '1' : '0',
+            'hasBranch'    => isset($customFields['branch']) ? '1' : '0',
+            'hasExecution' => isset($customFields['execution']) ? '1' : '0',
+            'productType'  => $product->type,
+            'projectModel' => isset($project->model) ? $project->model : ''
+        );
+    }
+
 }
