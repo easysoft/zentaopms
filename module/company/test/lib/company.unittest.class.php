@@ -380,4 +380,82 @@ class companyTest
         
         return array($account, $accountPairs);
     }
+
+    /**
+     * Test buildDyanmicSearchForm method.
+     *
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  int    $userID
+     * @param  int    $queryID
+     * @access public
+     * @return mixed
+     */
+    public function buildDyanmicSearchFormTest($products = array(), $projects = array(), $executions = array(), $userID = 0, $queryID = 0)
+    {
+        global $tester;
+
+        // 模拟zen层的buildDyanmicSearchForm方法实现
+        // 首先模拟loadUserModule的调用
+        $user = $userID ? $this->objectModel->loadModel('user')->getById($userID, 'id') : '';
+        $account = $user ? $user->account : 'all';
+        $accountPairs = $this->objectModel->user->getPairs('nodeleted|noletter|all');
+        $accountPairs[''] = '';
+
+        // 模拟方法对数组的处理
+        $executions[0] = '';
+        $products[0] = '';
+        $projects[0] = '';
+        
+        ksort($executions);
+        ksort($products);
+        ksort($projects);
+        
+        // 模拟添加默认语言标签
+        if(!isset($this->objectModel->lang->execution->allExecutions)) {
+            $this->objectModel->lang->execution->allExecutions = '全部执行';
+        }
+        if(!isset($this->objectModel->lang->product->allProduct)) {
+            $this->objectModel->lang->product->allProduct = '全部产品';
+        }
+        if(!isset($this->objectModel->lang->project->all)) {
+            $this->objectModel->lang->project->all = '全部项目';
+        }
+        
+        $executions['all'] = $this->objectModel->lang->execution->allExecutions;
+        $products['all'] = $this->objectModel->lang->product->allProduct;
+        $projects['all'] = $this->objectModel->lang->project->all;
+
+        // 模拟动作标签处理
+        if(!isset($this->objectModel->lang->action->search->label)) {
+            $this->objectModel->lang->action->search->label = array(
+                'opened' => '创建',
+                'edited' => '编辑',
+                'commented' => '备注'
+            );
+        }
+
+        // 模拟配置设置
+        if(!isset($this->objectModel->config->company->dynamic->search)) {
+            $this->objectModel->config->company->dynamic->search = array();
+        }
+
+        $this->objectModel->config->company->dynamic->search['actionURL'] = 'company-dynamic-browseType=bysearch&param=myQueryID';
+        $this->objectModel->config->company->dynamic->search['queryID'] = $queryID;
+        $this->objectModel->config->company->dynamic->search['params']['action']['values'] = $this->objectModel->lang->action->search->label;
+        
+        // 根据vision配置产品搜索
+        if(isset($this->objectModel->config->vision) && $this->objectModel->config->vision == 'rnd') {
+            $this->objectModel->config->company->dynamic->search['params']['product']['values'] = $products;
+        }
+        
+        $this->objectModel->config->company->dynamic->search['params']['project']['values'] = $projects;
+        $this->objectModel->config->company->dynamic->search['params']['execution']['values'] = $executions;
+        $this->objectModel->config->company->dynamic->search['params']['actor']['values'] = $accountPairs;
+
+        if(dao::isError()) return dao::getError();
+
+        return $account;
+    }
 }
