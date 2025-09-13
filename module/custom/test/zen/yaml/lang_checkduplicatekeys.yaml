@@ -1,0 +1,44 @@
+---
+title: 检查重复key值测试数据
+desc: 用于测试checkDuplicateKeys方法的lang表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lang
+  note: 语言标识
+  range: zh-cn{50}, en{30}, zh-tw{20}
+  prefix: ""
+  postfix: ""
+- field: module
+  note: 模块名
+  range: story{30}, task{25}, bug{20}, testcase{15}, testtask{10}
+  prefix: ""
+  postfix: ""
+- field: section
+  note: 字段名
+  range: priList{40}, typeList{30}, statusList{20}, severityList{10}
+  prefix: ""
+  postfix: ""
+- field: key
+  note: 键值
+  range: 1-10{50}, key1-key5{30}, custom1-custom3{20}
+  prefix: ""
+  postfix: ""
+- field: value
+  note: 值
+  range: '高{20}, 中{20}, 低{20}, 正常{20}, 激活{20}'
+  prefix: ""
+  postfix: ""
+- field: system
+  note: 系统标识
+  range: '1{80}, 0{20}'
+  prefix: ""
+  postfix: ""
