@@ -3698,4 +3698,77 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test printQaOverviewBlock method.
+     *
+     * @param  object $block
+     * @param  bool   $clearData
+     * @access public
+     * @return array
+     */
+    public function printQaOverviewBlockTest($block, $clearData = false)
+    {
+        global $tester;
+        $result = new stdclass();
+        
+        if($clearData)
+        {
+            $tester->dao->delete()->from(TABLE_CASE)->exec();
+        }
+
+        // 创建blockModel的别名为block类
+        if(!class_exists('block'))
+        {
+            class_alias('blockModel', 'block');
+        }
+        
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        
+        $blockZen = new blockZen();
+        $blockZen->block = $this->objectModel;
+        
+        // 初始化必要的属性
+        $blockZen->app = $tester->app;
+        $blockZen->session = $tester->app->session;
+        $blockZen->dao = $tester->dao;
+        $blockZen->view = new stdclass();
+        $blockZen->lang = $tester->app->lang;
+        
+        // 确保testcase语言已加载
+        $tester->app->loadLang('testcase');
+
+        // 模拟session设置
+        if($block->module != 'my' && isset($block->dashboard) && $block->dashboard == 'project')
+        {
+            $blockZen->session->project = 1;
+        }
+        else
+        {
+            $blockZen->session->project = 0;
+        }
+
+        // 调用被测试方法 - 需要通过反射调用protected方法
+        $reflection = new ReflectionClass(get_class($blockZen));
+        $method = $reflection->getMethod('printQaOverviewBlock');
+        $method->setAccessible(true);
+        
+        ob_start();
+        try {
+            $method->invoke($blockZen, $block);
+            $result->success = true;
+            $result->error = null;
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+        }
+        $output = ob_get_clean();
+        
+        $result->output = $output;
+        $result->total        = $blockZen->view->total ?? 0;
+        $result->casePairs    = $blockZen->view->casePairs ?? array();
+        $result->casePercents = $blockZen->view->casePercents ?? array();
+        
+        return $result;
+    }
 }
