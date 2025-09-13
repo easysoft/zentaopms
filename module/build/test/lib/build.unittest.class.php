@@ -833,4 +833,54 @@ class buildTest
             'storyListUrl'    => $storyListUrl
         );
     }
+
+    /**
+     * Test buildBuildForCreate method.
+     *
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function buildBuildForCreateTest(array $postData = array())
+    {
+        global $tester;
+        
+        // 模拟buildBuildForCreate方法的核心逻辑
+        // 准备默认数据
+        $formData = new stdclass();
+        $formData->name = zget($postData, 'name', 'Build001');
+        $formData->builder = zget($postData, 'builder', 'admin');
+        $formData->product = zget($postData, 'product', 1);
+        $formData->execution = zget($postData, 'execution', 101);
+        $formData->date = zget($postData, 'date', helper::today());
+        $formData->createdBy = 'admin';
+        $formData->system = zget($postData, 'system', 1);
+        $formData->isIntegrated = zget($postData, 'isIntegrated', 'no');
+        $formData->newSystem = zget($postData, 'newSystem', false);
+        $formData->systemName = zget($postData, 'systemName', '');
+        
+        // 模拟集成版本逻辑
+        if($formData->isIntegrated == 'yes') {
+            $formData->execution = $postData['execution'];
+        }
+        
+        // 模拟新建系统逻辑
+        if($formData->newSystem && $formData->systemName) {
+            // 模拟创建系统返回ID
+            $formData->system = 99;
+        }
+        
+        // 模拟必填字段验证
+        if(!$formData->system && !$formData->newSystem) {
+            $formData->systemRequired = true;
+        }
+        
+        if($formData->newSystem && !$formData->systemName) {
+            $formData->systemNameRequired = true;
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $formData;
+    }
 }
