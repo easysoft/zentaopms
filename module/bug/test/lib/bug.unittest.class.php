@@ -1825,4 +1825,29 @@ class bugTest
         return $result;
     }
 
+    /**
+     * Test getExportFields method.
+     *
+     * @param  int         $executionID
+     * @param  object|bool $product
+     * @access public
+     * @return string
+     */
+    public function getExportFieldsTest(int $executionID, object|bool $product): string
+    {
+        global $tester;
+        
+        $zenInstance = $tester->loadZen('bug');
+        
+        $reflection = new ReflectionClass($zenInstance);
+        $method = $reflection->getMethod('getExportFields');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($zenInstance, $executionID, $product);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
