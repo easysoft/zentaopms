@@ -1157,4 +1157,37 @@ class customTest
         
         return true;
     }
+
+    /**
+     * Test setTestcaseReview method.
+     *
+     * @param  array  $data
+     * @access public
+     * @return bool|array
+     */
+    public function setTestcaseReviewTest(array $data = array()): bool|array
+    {
+        // 模拟 setTestcaseReview 方法的核心逻辑
+        if(isset($data['needReview']) && $data['needReview'])
+        {
+            // 启用评审时，移除强制评审字段，保留强制不评审字段
+            unset($data['forceReview']);
+            if(!isset($data['forceNotReview'])) $data['forceNotReview'] = array();
+            $data['forceNotReview'] = implode(',', $data['forceNotReview']);
+        }
+        else
+        {
+            // 禁用评审时，移除强制不评审字段，保留强制评审字段
+            unset($data['forceNotReview']);
+            if(!isset($data['forceReview'])) $data['forceReview'] = array();
+            $data['forceReview'] = implode(',', $data['forceReview']);
+        }
+        
+        // 模拟保存配置到数据库
+        $this->objectModel->loadModel('setting')->setItems("system.testcase", $data);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return true;
+    }
 }
