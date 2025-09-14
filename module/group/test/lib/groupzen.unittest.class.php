@@ -40,4 +40,24 @@ class groupZenTest
 
         return $config->group->package->{$packageCode}->privs;
     }
+
+    /**
+     * 测试appendResourcePackages方法。
+     * Test appendResourcePackages.
+     *
+     * @access public
+     * @return array
+     */
+    public function appendResourcePackagesTest()
+    {
+        global $config;
+        $method = $this->groupZenTest->getMethod('appendResourcePackages');
+        $method->invoke($this->groupZenTest->newInstance());
+
+        $result = array();
+        $result['subsets'] = $config->group->subset;
+        $result['packages'] = $config->group->package;
+        
+        return $result;
+    }
 }
