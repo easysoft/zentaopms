@@ -8,6 +8,8 @@ class executionZenTest
         global $tester;
         $this->tester      = $tester;
         $this->objectModel = $tester->loadModel('execution');
+        $this->objectZen   = $tester->loadZen('execution');
+        $this->executionZenTest = new ReflectionClass($this->objectZen);
     }
 
     /**
@@ -1038,5 +1040,23 @@ class executionZenTest
         } catch(Exception $e) {
             return 0;
         }
+    }
+
+    /**
+     * Test checkPostForCreate method.
+     *
+     * @access public
+     * @return bool|array
+     */
+    public function checkPostForCreateTest(): bool|array
+    {
+        $method = $this->executionZenTest->getMethod('checkPostForCreate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
     }
 }
