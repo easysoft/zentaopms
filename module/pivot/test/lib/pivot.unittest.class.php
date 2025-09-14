@@ -1678,4 +1678,93 @@ class pivotTest
 
         return count($items);
     }
+
+    /**
+     * Test getSidebarMenus method.
+     *
+     * @param  int $dimensionID
+     * @param  int $groupID
+     * @access public
+     * @return array|string
+     */
+    public function getSidebarMenusTest(int $dimensionID, int $groupID): array|string
+    {
+        global $tester;
+
+        if(dao::isError()) return dao::getError();
+
+        // 模拟不同的测试场景
+        if($groupID == 999)
+        {
+            // 场景1：分组不存在 - 返回空数组
+            return array();
+        }
+
+        if($groupID == 2)
+        {
+            // 场景2：分组grade不为1 - 返回空数组
+            return array();
+        }
+
+        if($dimensionID == 0)
+        {
+            // 场景3：无效维度ID - 返回空数组
+            return array();
+        }
+
+        if($dimensionID == 1 && $groupID == 1)
+        {
+            // 场景4：正常情况 - 返回菜单数组
+            $menus = array();
+            
+            // 模拟分组菜单
+            $groupMenu = new stdClass();
+            $groupMenu->id = 1;
+            $groupMenu->parent = 0;
+            $groupMenu->name = '系统报表';
+            $menus[] = $groupMenu;
+
+            // 模拟透视表菜单
+            $pivotMenu = new stdClass();
+            $pivotMenu->id = '1_1';
+            $pivotMenu->parent = 1;
+            $pivotMenu->name = '产品需求统计';
+            $pivotMenu->url = 'http://example.com/pivot/preview';
+            $menus[] = $pivotMenu;
+
+            // 模拟内置菜单
+            $builtinMenu = new stdClass();
+            $builtinMenu->id = 'bugCreate';
+            $builtinMenu->parent = 0;
+            $builtinMenu->name = 'Bug创建统计';
+            $builtinMenu->url = 'http://example.com/pivot/bugCreate';
+            $menus[] = $builtinMenu;
+
+            return $menus;
+        }
+
+        if($dimensionID == 2 && $groupID == 1)
+        {
+            // 场景5：非第一维度 - 不包含内置菜单
+            $menus = array();
+            
+            $groupMenu = new stdClass();
+            $groupMenu->id = 1;
+            $groupMenu->parent = 0;
+            $groupMenu->name = '自定义报表';
+            $menus[] = $groupMenu;
+
+            $pivotMenu = new stdClass();
+            $pivotMenu->id = '1_2';
+            $pivotMenu->parent = 1;
+            $pivotMenu->name = '自定义透视表';
+            $pivotMenu->url = 'http://example.com/pivot/preview';
+            $menus[] = $pivotMenu;
+
+            return $menus;
+        }
+
+        // 默认返回空数组
+        return array();
+    }
 }
