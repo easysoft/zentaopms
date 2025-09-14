@@ -1681,4 +1681,40 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test initMetricRecords method.
+     *
+     * @param  object $recordCommon
+     * @param  string $scope
+     * @param  string $date
+     * @access public
+     * @return mixed
+     */
+    public function initMetricRecordsTest($recordCommon = null, $scope = 'system', $date = 'now')
+    {
+        if($recordCommon === null)
+        {
+            $recordCommon = new stdClass();
+            $recordCommon->value = 0;
+            $recordCommon->metricID = 1;
+            $recordCommon->metricCode = 'test_metric';
+            $recordCommon->date = helper::now();
+            $recordCommon->calcType = 'cron';
+            $recordCommon->calculatedBy = 'system';
+        }
+
+        global $tester;
+        $metricZen = $tester->loadZen('metric');
+
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($metricZen);
+        $method = $reflection->getMethod('initMetricRecords');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($metricZen, $recordCommon, $scope, $date);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

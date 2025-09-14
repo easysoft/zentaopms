@@ -259,4 +259,23 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test initMetricRecords method.
+     *
+     * @param  object $recordCommon
+     * @param  string $scope
+     * @param  string $date
+     * @access public
+     * @return mixed
+     */
+    public function initMetricRecordsZenTest($recordCommon, $scope, $date = 'now')
+    {
+        $method = $this->metricZenTest->getMethod('initMetricRecords');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($recordCommon, $scope, $date));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
