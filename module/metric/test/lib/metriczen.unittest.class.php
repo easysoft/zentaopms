@@ -477,4 +477,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareActionPriv method.
+     *
+     * @param  array $metrics
+     * @access public
+     * @return mixed
+     */
+    public function prepareActionPrivZenTest($metrics)
+    {
+        $method = $this->metricZenTest->getMethod('prepareActionPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($metrics));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
