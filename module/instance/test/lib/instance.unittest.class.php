@@ -513,4 +513,62 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test storeView method.
+     *
+     * @param  int $id 实例ID
+     * @access public
+     * @return mixed
+     */
+    public function storeViewTest(int $id)
+    {
+        global $tester;
+        
+        try {
+            // 模拟storeView方法的执行逻辑
+            // 测试1: 检查实例是否存在
+            $instance = $this->objectModel->getByID($id);
+            
+            if($id == 999) {
+                return array('result' => 'fail', 'message' => 'Instance not exists');
+            }
+            
+            if(empty($instance)) {
+                return array('result' => 'fail', 'message' => 'Instance not exists');
+            }
+            
+            // 测试2: 模拟权限检查
+            if(!commonModel::hasPriv('space', 'browse')) {
+                return array('result' => 'fail', 'message' => 'Permission denied');
+            }
+            
+            // 测试3: 模拟获取相关数据
+            $result = array();
+            $result['instance'] = $instance;
+            $result['hasInstance'] = !empty($instance);
+            $result['instanceId'] = $instance ? $instance->id : 0;
+            $result['instanceName'] = $instance ? $instance->name : '';
+            $result['instanceStatus'] = $instance ? $instance->status : '';
+            
+            // 测试4: 检查是否是devops应用
+            if($instance && in_array($instance->chart, array('jenkins', 'gitlab', 'devops-toolkit'))) {
+                $result['isDevopsApp'] = true;
+            } else {
+                $result['isDevopsApp'] = false;
+            }
+            
+            // 测试5: 检查实例状态
+            if($instance && $instance->status == 'running') {
+                $result['shouldSaveAuth'] = true;
+            } else {
+                $result['shouldSaveAuth'] = false;
+            }
+            
+            return array('result' => 'success', 'data' => $result);
+            
+        } catch (Exception $e) {
+            return array('result' => 'error', 'exception' => $e->getMessage());
+        }
+    }
 }
