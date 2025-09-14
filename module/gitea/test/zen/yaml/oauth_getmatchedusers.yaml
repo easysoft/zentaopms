@@ -1,0 +1,19 @@
+---
+title: OAuth绑定数据定义用于测试getMatchedUsers方法
+desc: 包含用户绑定关系数据以测试已绑定用户的匹配逻辑
+author: Claude
+version: 1.0
+
+fields:
+- field: account
+  note: 禅道用户账号
+  range: admin,user1,user2
+- field: openID
+  note: Gitea用户账号
+  range: admin,gitea_user1,gitea_user2
+- field: providerType
+  note: 提供商类型
+  range: gitea{3}
+- field: providerID
+  note: Gitea服务器ID
+  range: 1{3}
