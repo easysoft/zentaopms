@@ -316,4 +316,28 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test calcMetric method.
+     *
+     * @param  object $statement
+     * @param  array  $calcList
+     * @access public
+     * @return mixed
+     */
+    public function calcMetricZenTest($statement, $calcList)
+    {
+        try {
+            $method = $this->metricZenTest->getMethod('calcMetric');
+            $method->setAccessible(true);
+
+            $method->invokeArgs($this->metricZenTest->newInstance(), array($statement, $calcList));
+            if(dao::isError()) return dao::getError();
+            return true;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
 }
