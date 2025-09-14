@@ -443,4 +443,35 @@ class extensionTest
             return $errorResult;
         }
     }
+
+    /**
+     * Test checkCompatible method.
+     *
+     * @param  string $extension
+     * @param  object $condition
+     * @param  string $ignoreCompatible
+     * @param  string $ignoreLink
+     * @param  string $installType
+     * @access public
+     * @return bool
+     */
+    public function checkCompatibleTest(string $extension, object $condition, string $ignoreCompatible, string $ignoreLink, string $installType)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('checkCompatible');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension, $condition, $ignoreCompatible, $ignoreLink, $installType));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
 }
