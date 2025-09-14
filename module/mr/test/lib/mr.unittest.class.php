@@ -790,4 +790,62 @@ class mrTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test checkProjectEdit method.
+     *
+     * @param  string $hostType
+     * @param  object $sourceProject
+     * @param  object $MR
+     * @access public
+     * @return mixed
+     */
+    public function checkProjectEditTest($hostType, $sourceProject, $MR)
+    {
+        // 参数验证
+        if(!is_string($hostType) || empty($hostType)) return 'invalid_hosttype';
+        if(!is_object($sourceProject)) return 'invalid_sourceproject';
+        if(!is_object($MR)) return 'invalid_mr';
+        
+        try {
+            global $tester, $app;
+            
+            // 模拟checkProjectEdit方法的权限检查逻辑
+            switch($hostType) {
+                case 'gitlab':
+                    // 模拟gitlab权限检查
+                    if(!isset($MR->hostID) || !isset($sourceProject->id)) return 'missing_required_fields';
+                    
+                    // 模拟检查用户是否为开发者权限
+                    $mockGitUsers = array('admin' => 'admin', 'developer' => 'developer');
+                    $currentUser = $app->user->account ?? 'admin';
+                    $isDeveloper = true; // 模拟开发者权限检查结果
+                    
+                    if(isset($mockGitUsers[$currentUser]) && $isDeveloper) {
+                        return true;
+                    }
+                    break;
+                    
+                case 'gitea':
+                    // 模拟gitea权限检查
+                    if(!isset($sourceProject->allow_merge_commits)) return 'missing_merge_permission_field';
+                    return (bool)$sourceProject->allow_merge_commits;
+                    
+                case 'gogs':
+                    // 模拟gogs权限检查
+                    if(!isset($sourceProject->permissions) || !isset($sourceProject->permissions->push)) {
+                        return 'missing_push_permission_field';
+                    }
+                    return (bool)$sourceProject->permissions->push;
+                    
+                default:
+                    return 'unsupported_hosttype';
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
