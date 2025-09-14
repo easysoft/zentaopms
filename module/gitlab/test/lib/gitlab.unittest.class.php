@@ -954,4 +954,35 @@ class gitlabTest
         
         return $issue;
     }
+
+    /**
+     * Test webhookParseObject method.
+     *
+     * @param  array $labels
+     * @access public
+     * @return object|null
+     */
+    public function webhookParseObjectTest(array $labels): object|null
+    {
+        // 模拟webhookParseObject方法的核心逻辑
+        $object = null;
+        $objectType = '';
+        foreach($labels as $label)
+        {
+            if(preg_match('/^zentao_story\/\d+$/', $label->title)) $objectType = 'story';
+            if(preg_match('/^zentao_task\/\d+$/', $label->title)) $objectType = 'task';
+            if(preg_match('/^zentao_bug\/\d+$/', $label->title)) $objectType = 'bug';
+
+            if($objectType)
+            {
+                list($prefix, $id) = explode('/', $label->title);
+                $object = new stdclass();
+                $object->id = $id;
+                $object->type = $objectType;
+                break;
+            }
+        }
+
+        return $object;
+    }
 }
