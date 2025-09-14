@@ -185,4 +185,23 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test calculateMetric method.
+     *
+     * @param  array $classifiedCalcGroup
+     * @access public
+     * @return mixed
+     */
+    public function calculateMetricZenTest($classifiedCalcGroup)
+    {
+        $method = $this->metricZenTest->getMethod('calculateMetric');
+        $method->setAccessible(true);
+
+        ob_start();
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($classifiedCalcGroup));
+        ob_get_clean();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

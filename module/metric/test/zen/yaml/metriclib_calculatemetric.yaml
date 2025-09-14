@@ -1,0 +1,63 @@
+---
+title: 度量库数据定义
+desc: 用于测试calculateMetric方法的度量库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: metricID
+  note: 度量ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: metricCode
+  note: 度量编码
+  range: test_metric_1,test_metric_2,test_metric_3,reuse_metric
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: value
+  note: 度量值
+  range: 1-100:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: date
+  note: 记录日期
+  range: 2024-01-01 00:00:00,2024-02-01 00:00:00,2024-03-01 00:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: system
+  note: 系统级度量
+  range: 0,1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID  
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

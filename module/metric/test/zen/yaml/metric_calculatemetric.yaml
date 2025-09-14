@@ -1,0 +1,56 @@
+---
+title: 度量数据定义
+desc: 用于测试calculateMetric方法的度量数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 度量ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 度量编码
+  range: test_metric_1,test_metric_2,test_metric_3,reuse_metric,error_metric
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 度量名称
+  range: 测试度量1,测试度量2,测试度量3,复用度量,异常度量
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: scope
+  note: 度量范围
+  range: system,product,project
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: stage
+  note: 度量阶段
+  range: wait,released
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: builtin
+  note: 内置度量
+  range: 0,1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
