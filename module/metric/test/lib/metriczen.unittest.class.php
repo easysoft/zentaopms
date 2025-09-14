@@ -221,4 +221,22 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareReuseMetricResult method.
+     *
+     * @param  object $calc
+     * @param  array  $options
+     * @access public
+     * @return mixed
+     */
+    public function prepareReuseMetricResultZenTest($calc, $options)
+    {
+        $method = $this->metricZenTest->getMethod('prepareReuseMetricResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($calc, $options));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
