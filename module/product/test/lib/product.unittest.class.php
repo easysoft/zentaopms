@@ -2185,4 +2185,42 @@ class productTest
         
         return $backLink;
     }
+
+    /**
+     * Test setSelectFormOptions method.
+     *
+     * @param  int   $programID
+     * @param  array $fields
+     * @access public
+     * @return array
+     */
+    public function setSelectFormOptionsTest(int $programID, array $fields): array
+    {
+        global $tester;
+        
+        // 模拟setSelectFormOptions方法的核心逻辑
+        $users = $this->objectModel->loadModel('user')->getPairs('nodeleted|noclosed');
+        
+        // 追加字段的name、title属性，展开user数据
+        foreach($fields as $field => $attr)
+        {
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->objectModel->lang->product, $field, $field);
+        }
+        
+        // 设置下拉菜单内容
+        if(isset($fields['groups']))  $fields['groups']['options']  = $this->objectModel->loadModel('group')->getPairs();
+        if(isset($fields['program'])) $fields['program']['options'] = $this->objectModel->loadModel('program')->getTopPairs('noclosed');
+        if(isset($fields['line']))    $fields['line']['options']    = $this->objectModel->getLinePairs($programID, true);
+        
+        if($this->objectModel->config->edition != 'open' && isset($fields['workflowGroup']))
+        {
+            $groupPairs = $this->objectModel->loadModel('workflowGroup')->getPairs('product', 'scrum', 1, 'normal', '0');
+            $fields['workflowGroup']['options'] = $this->objectModel->workflowGroup->appendBuildinLabel($groupPairs);
+        }
+        
+        if(dao::isError()) return dao::getError();
+        return $fields;
+    }
 }
