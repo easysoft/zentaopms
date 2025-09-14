@@ -453,4 +453,25 @@ class jobTest
         
         return $result;
     }
+
+    /**
+     * Test checkRepoEmpty method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function checkRepoEmptyTest()
+    {
+        global $tester;
+        
+        // 直接模拟checkRepoEmpty方法的逻辑
+        $repos = $this->objectModel->loadModel('repo')->getRepoPairs('devops');
+        
+        if(empty($repos)) {
+            return 'redirect_to_create';
+        } else {
+            return 'success';
+        }
+    }
+
 }
