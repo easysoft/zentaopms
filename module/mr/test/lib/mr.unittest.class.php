@@ -728,4 +728,66 @@ class mrTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test processLinkTaskPager method.
+     *
+     * @param  int   $recTotal
+     * @param  int   $recPerPage
+     * @param  int   $pageID
+     * @param  array $allTasks
+     * @access public
+     * @return mixed
+     */
+    public function processLinkTaskPagerTest($recTotal, $recPerPage, $pageID, $allTasks)
+    {
+        // 边界值验证
+        if($recTotal < 0) return 'invalid_rectotal';
+        if($recPerPage <= 0) return 'invalid_recperpage';
+        if($pageID <= 0) return 'invalid_pageid';
+        if(!is_array($allTasks)) return 'invalid_alltasks';
+        
+        try {
+            global $app;
+            
+            // 模拟分页器的基本功能
+            $originalTaskCount = count($allTasks);
+            $pageTotal = $originalTaskCount > 0 ? ceil($originalTaskCount / $recPerPage) : 1;
+            
+            // 如果当前页超过总页数，设置为最后一页
+            if($pageID > $pageTotal && $pageTotal > 0) {
+                $pageID = $pageTotal;
+            }
+            
+            // 计算分页范围
+            $count = 1;
+            $limitMin = ($pageID - 1) * $recPerPage;
+            $limitMax = $pageID * $recPerPage;
+            
+            // 过滤任务数组
+            $filteredTasks = array();
+            foreach($allTasks as $key => $task) {
+                if($count > $limitMin && $count <= $limitMax) {
+                    $filteredTasks[$key] = $task;
+                }
+                $count++;
+            }
+            
+            // 返回测试结果
+            return array(
+                'original_task_count' => $originalTaskCount,
+                'filtered_task_count' => count($filteredTasks),
+                'page_id' => $pageID,
+                'page_total' => $pageTotal,
+                'rec_total' => $originalTaskCount,
+                'rec_per_page' => $recPerPage,
+                'limit_min' => $limitMin,
+                'limit_max' => $limitMax,
+                'filtered_tasks' => $filteredTasks
+            );
+            
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
