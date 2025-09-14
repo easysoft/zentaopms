@@ -2893,4 +2893,57 @@ class productTest
             'unauthPrograms' => count($productZen->view->unauthPrograms),
         );
     }
+
+    /**
+     * Test buildProductForCreate method.
+     *
+     * @param  int $workflowGroup
+     * @access public
+     * @return object|array
+     */
+    public function buildProductForCreateTest(int $workflowGroup = 0): object|array
+    {
+        global $tester, $app;
+        
+        // 创建productZen实例并初始化相关属性
+        $productZen = new productZen();
+        $productZen->config = $tester->config;
+        $productZen->app = $tester->app;
+        $productZen->loadModel('file');
+        
+        // 模拟完整的POST数据，确保form::data能够正常工作
+        $_POST = array(
+            'name' => '测试产品',
+            'code' => 'test_product',
+            'PO' => 'admin',
+            'QD' => 'admin',
+            'RD' => 'admin',
+            'type' => 'normal',
+            'status' => 'normal',
+            'desc' => '这是一个测试产品',
+            'acl' => 'open',
+            'groups' => '',
+            'whitelist' => '',
+            'reviewer' => '',
+            'PMT' => '',
+            'program' => '0',
+            'line' => '0',
+            'uid' => 'test-uid-' . time(),
+            'createdBy' => 'admin',
+            'createdDate' => date('Y-m-d H:i:s'),
+            'createdVersion' => $tester->config->version ?? '1.0'
+        );
+        
+        // 设置post对象
+        $productZen->post = (object)$_POST;
+        
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('buildProductForCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($workflowGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
