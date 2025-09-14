@@ -101,4 +101,23 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareTree method.
+     *
+     * @param  string $scope
+     * @param  string $stage
+     * @param  array  $modules
+     * @access public
+     * @return mixed
+     */
+    public function prepareTreeZenTest($scope, $stage, $modules)
+    {
+        $method = $this->metricZenTest->getMethod('prepareTree');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($scope, $stage, $modules));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
