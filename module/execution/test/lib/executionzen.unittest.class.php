@@ -1376,4 +1376,36 @@ class executionZenTest
 
         return is_array($result) ? count($result) : $result;
     }
+
+    /**
+     * Test getPrintKanbanData method.
+     *
+     * @param  int   $executionID
+     * @param  array $stories
+     * @access public
+     * @return mixed
+     */
+    public function getPrintKanbanDataTest(int $executionID, array $stories = array())
+    {
+        global $app;
+        // Set up user view
+        if(!isset($app->user)) $app->user = new stdClass();
+        if(!isset($app->user->view)) $app->user->view = new stdClass();
+        if(!isset($app->user->account)) $app->user->account = 'admin';
+        
+        if($this->executionZenTest === null) {
+            return array(array(), array());
+        }
+
+        // Use reflection to call the protected method
+        $method = $this->executionZenTest->getMethod('getPrintKanbanData');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $executionID, $stories);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
