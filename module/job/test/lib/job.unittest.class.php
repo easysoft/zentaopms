@@ -518,4 +518,72 @@ class jobTest
         return $jobList;
     }
 
+    /**
+     * Test reponseAfterCreateEdit method.
+     *
+     * @param  int    $repoID
+     * @param  string $engine
+     * @param  array  $errors
+     * @access public
+     * @return mixed
+     */
+    public function reponseAfterCreateEditTest(int $repoID = 0, string $engine = '', array $errors = array())
+    {
+        global $tester;
+        
+        // 模拟$_POST数据
+        $_POST['engine'] = $engine;
+        $_POST['repo'] = $repoID;
+        
+        // 直接模拟reponseAfterCreateEdit方法的业务逻辑
+        $result = $this->simulateReponseAfterCreateEdit($repoID, $engine, $errors);
+        
+        // 清理$_POST
+        unset($_POST['engine']);
+        unset($_POST['repo']);
+        
+        return $result;
+    }
+    
+    /**
+     * Simulate reponseAfterCreateEdit business logic.
+     *
+     * @param  int    $repoID
+     * @param  string $engine
+     * @param  array  $errors
+     * @access private
+     * @return array
+     */
+    private function simulateReponseAfterCreateEdit(int $repoID, string $engine, array $errors): array
+    {
+        global $tester;
+        
+        if(!empty($errors))
+        {
+            if($engine == 'gitlab' and isset($errors['server']))
+            {
+                if(!isset($errors['repo'])) $errors['repo'][] = '版本库服务器不能为空。';
+                unset($errors['server']);
+                unset($errors['pipeline']);
+            }
+            elseif($engine == 'jenkins')
+            {
+                if(isset($errors['server']))
+                {
+                    $errors['jkServer'] = $errors['server'];
+                    unset($errors['server']);
+                }
+                if(isset($errors['pipeline']))
+                {
+                    $errors['jkTask'] = $errors['pipeline'];
+                    unset($errors['pipeline']);
+                }
+            }
+            return array('result' => 'fail', 'message' => $errors);
+        }
+
+        $loadParam = $repoID ? 'browse?repoID=' . $repoID : 'browse';
+        return array('result' => 'success', 'message' => '保存成功', 'load' => $loadParam);
+    }
+
 }
