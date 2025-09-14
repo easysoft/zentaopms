@@ -461,4 +461,20 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processUnitList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processUnitListZenTest()
+    {
+        $method = $this->metricZenTest->getMethod('processUnitList');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
