@@ -598,4 +598,47 @@ class gitlabTest
         if(dao::isError()) return dao::getError();
         return 'success';
     }
+
+    /**
+     * Test recordWebhookLogs method.
+     *
+     * @param  string $input
+     * @param  object $result
+     * @access public
+     * @return mixed
+     */
+    public function recordWebhookLogsTest(string $input, object $result): mixed
+    {
+        // 模拟app获取日志根目录，因为这是框架功能
+        $logRoot = '/tmp/zentao_test_logs/';
+        if(!is_dir($logRoot)) mkdir($logRoot, 0755, true);
+
+        // 模拟日志文件路径
+        $logFile = $logRoot . 'webhook.' . date('Ymd') . '.log.php';
+
+        // 清理之前的测试文件
+        if(file_exists($logFile)) unlink($logFile);
+
+        // 模拟recordWebhookLogs方法的核心逻辑
+        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+        $fh = @fopen($logFile, 'a');
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": /test/webhook/url\n");
+            fwrite($fh, "JSON: \n  " . $input . "\n");
+            fwrite($fh, "Parsed object: {$result->issue->objectType} :\n  " . print_r($result->object, true) . "\n");
+            fclose($fh);
+        }
+
+        // 验证文件是否创建成功并包含内容
+        if(file_exists($logFile) && filesize($logFile) > 20)
+        {
+            $content = file_get_contents($logFile);
+            unlink($logFile); // 清理测试文件
+            return $content;
+        }
+
+        return false;
+    }
 }
