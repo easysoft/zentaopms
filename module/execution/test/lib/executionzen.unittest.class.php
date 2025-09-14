@@ -1636,4 +1636,25 @@ class executionZenTest
 
         return array($pmUsers, $poUsers, $qdUsers, $rdUsers);
     }
+
+    /**
+     * Test initFieldsForCreate method.
+     *
+     * @param  int   $projectID
+     * @param  array $output
+     * @access public
+     * @return mixed
+     */
+    public function initFieldsForCreateTest($projectID, $output = array())
+    {
+        $method = $this->executionZenTest->getMethod('initFieldsForCreate');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $projectID, $output);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
