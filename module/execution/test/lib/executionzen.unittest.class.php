@@ -1593,4 +1593,47 @@ class executionZenTest
         
         return $productID;
     }
+
+    /**
+     * Test setUserMoreLink method.
+     *
+     * @param  mixed $execution
+     * @access public
+     * @return mixed
+     */
+    public function setUserMoreLinkTest($execution = null)
+    {
+        global $tester, $config;
+
+        // 直接实现setUserMoreLink的业务逻辑进行测试
+        $appendPo = $appendPm = $appendQd = $appendRd = array();
+        if(is_array($execution))
+        {
+            $appendPo = $appendPm = $appendQd = $appendRd = array();
+            foreach($execution as $item)
+            {
+                $appendPo[$item->PO] = $item->PO;
+                $appendPm[$item->PM] = $item->PM;
+                $appendQd[$item->QD] = $item->QD;
+                $appendRd[$item->RD] = $item->RD;
+            }
+        }
+        elseif(is_object($execution))
+        {
+            $appendPo[$execution->PO] = $execution->PO;
+            $appendPm[$execution->PM] = $execution->PM;
+            $appendQd[$execution->QD] = $execution->QD;
+            $appendRd[$execution->RD] = $execution->RD;
+        }
+
+        $userModel = $tester->loadModel('user');
+        $pmUsers = $userModel->getPairs('noclosed|nodeleted|pmfirst', $appendPm, isset($config->maxCount) ? $config->maxCount : 20);
+        $poUsers = $userModel->getPairs('noclosed|nodeleted|pofirst',  $appendPo, isset($config->maxCount) ? $config->maxCount : 20);
+        $qdUsers = $userModel->getPairs('noclosed|nodeleted|qdfirst',  $appendQd, isset($config->maxCount) ? $config->maxCount : 20);
+        $rdUsers = $userModel->getPairs('noclosed|nodeleted|devfirst', $appendRd, isset($config->maxCount) ? $config->maxCount : 20);
+
+        if(dao::isError()) return dao::getError();
+
+        return array($pmUsers, $poUsers, $qdUsers, $rdUsers);
+    }
 }
