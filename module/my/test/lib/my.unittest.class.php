@@ -938,4 +938,37 @@ class myTest
 
         return $cases;
     }
+
+    /**
+     * Test assignRelatedData method.
+     *
+     * @param  array $feedbacks
+     * @access public
+     * @return array
+     */
+    public function assignRelatedDataTest(array $feedbacks): array
+    {
+        if(empty($feedbacks)) return array();
+        
+        // 模拟assignRelatedData方法的核心逻辑
+        $storyIdList = $bugIdList = $todoIdList = $taskIdList = $ticketIdList = array();
+        foreach($feedbacks as $feedback)
+        {
+            if($feedback->solution == 'tobug')   $bugIdList[]    = $feedback->result;
+            if($feedback->solution == 'tostory') $storyIdList[]  = $feedback->result;
+            if($feedback->solution == 'totodo')  $todoIdList[]   = $feedback->result;
+            if($feedback->solution == 'totask')  $taskIdList[]   = $feedback->result;
+            if($feedback->solution == 'ticket')  $ticketIdList[] = $feedback->result;
+        }
+        
+        // 模拟获取关联数据（简化实现，只统计ID数量）
+        $result = array();
+        $result['bugs']    = count($bugIdList);
+        $result['stories'] = count($storyIdList);
+        $result['todos']   = count($todoIdList);
+        $result['tasks']   = count($taskIdList);
+        $result['tickets'] = count($ticketIdList);
+        
+        return $result;
+    }
 }

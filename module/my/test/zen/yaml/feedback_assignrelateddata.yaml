@@ -1,0 +1,54 @@
+---
+title: 反馈关联数据测试数据定义
+desc: 用于测试assignRelatedData方法的反馈数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 反馈ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-3
+  format: ""
+- field: module
+  note: 模块ID
+  range: 0-5
+  format: ""
+- field: title
+  note: 反馈标题
+  range: '测试反馈{4},用户反馈{3},功能建议{3}'
+  format: ""
+- field: type
+  note: 反馈类型
+  range: 'bug,feature,improvement'
+  format: ""
+- field: solution
+  note: 解决方案类型
+  range: 'tobug{2},tostory{2},totodo{2},totask{2},ticket{2}'
+  format: ""
+- field: desc
+  note: 反馈描述
+  range: '这是一个测试反馈描述{10}'
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+- field: status
+  note: 状态
+  range: 'wait,replied,closed'
+  format: ""
+- field: subStatus
+  note: 子状态
+  range: '[]'
+  format: ""
+- field: result
+  note: 关联结果ID
+  range: 1-20
+  format: ""
