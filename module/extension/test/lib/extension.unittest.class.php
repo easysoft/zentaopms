@@ -96,4 +96,25 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test getHookFile method.
+     *
+     * @param  string $extension
+     * @param  string $hook
+     * @access public
+     * @return string|false
+     */
+    public function getHookFileTest(string $extension, string $hook)
+    {
+        $extensionZen = $this->objectModel->loadZen('extension');
+        $reflection = new ReflectionClass($extensionZen);
+        $method = $reflection->getMethod('getHookFile');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($extensionZen, array($extension, $hook));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
