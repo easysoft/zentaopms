@@ -1148,4 +1148,27 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildMembers method.
+     *
+     * @param  array $currentMembers
+     * @param  array $members2Import
+     * @param  array $deptUsers
+     * @param  int   $days
+     * @access public
+     * @return array
+     */
+    public function buildMembersTest(array $currentMembers = array(), array $members2Import = array(), array $deptUsers = array(), int $days = 0): array
+    {
+        $method = $this->executionZenTest->getMethod('buildMembers');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $currentMembers, $members2Import, $deptUsers, $days);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
