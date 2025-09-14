@@ -15,8 +15,43 @@ class executionTest
         $app->moduleName = 'execution';
 
         $this->executionModel = $tester->loadModel('execution');
+        $this->objectModel    = $this->executionModel;
+        $this->objectZen      = $tester->loadZen('execution');
         $this->treeModel      = $tester->loadModel('tree');
         $this->productModel   = $tester->loadModel('product');
+    }
+
+    /**
+     * Test assignTaskKanbanVars method.
+     *
+     * @param  object $execution
+     * @access public
+     * @return mixed
+     */
+    public function assignTaskKanbanVarsTest($execution = null)
+    {
+        if($execution === null)
+        {
+            $execution = new stdClass();
+            $execution->id = 1;
+            $execution->project = 1;
+        }
+
+        $originalView = isset($this->objectZen->view) ? $this->objectZen->view : null;
+        $this->objectZen->view = new stdClass();
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('assignTaskKanbanVars');
+        $method->setAccessible(true);
+        $method->invoke($this->objectZen, $execution);
+
+        if(dao::isError()) return dao::getError();
+
+        $viewData = $this->objectZen->view;
+        $this->objectZen->view = $originalView;
+
+        return $viewData;
     }
 
     /**
@@ -3271,5 +3306,97 @@ class executionTest
             // 返回最终的团队成员数量
             return $afterCount;
         }
+    }
+
+    /**
+     * Test assignKanbanVars method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return array
+     */
+    public function assignKanbanVarsTest($executionID = 1)
+    {
+        /* Load zen object and mock view object. */
+        $executionZen = $this->objectZen;
+        if(!$executionZen) $executionZen = $this->objectModel;
+        
+        /* Create a mock view object to capture assigned variables. */
+        $mockView = new stdclass();
+        $mockView->users = array();
+        $mockView->userList = array();
+        $mockView->productID = 0;
+        $mockView->branchID = 0;
+        $mockView->productNames = array();
+        $mockView->productNum = 0;
+        $mockView->allPlans = array();
+        $mockView->isLimited = false;
+        
+        $executionZen->view = $mockView;
+        
+        /* Call assignKanbanVars method using reflection since it's protected. */
+        $reflection = new ReflectionClass($executionZen);
+        $method = $reflection->getMethod('assignKanbanVars');
+        $method->setAccessible(true);
+        $method->invoke($executionZen, $executionID);
+        
+        /* Extract result from view object. */
+        $result = array();
+        $result['users'] = isset($executionZen->view->users) ? $executionZen->view->users : array();
+        $result['userList'] = isset($executionZen->view->userList) ? $executionZen->view->userList : array();
+        $result['productID'] = isset($executionZen->view->productID) ? $executionZen->view->productID : 0;
+        $result['branchID'] = isset($executionZen->view->branchID) ? $executionZen->view->branchID : 0;
+        $result['productNames'] = isset($executionZen->view->productNames) ? $executionZen->view->productNames : array();
+        $result['productNum'] = isset($executionZen->view->productNum) ? $executionZen->view->productNum : 0;
+        $result['allPlans'] = isset($executionZen->view->allPlans) ? $executionZen->view->allPlans : array();
+        $result['isLimited'] = isset($executionZen->view->isLimited) ? $executionZen->view->isLimited : false;
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test assignCountForStory method.
+     *
+     * @param  int    $executionID
+     * @param  array  $stories
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function assignCountForStoryTest(int $executionID, array $stories, string $storyType): array
+    {
+        /* Load zen object and mock view object. */
+        $executionZen = $this->objectZen;
+        if(!$executionZen) $executionZen = $this->objectModel;
+
+        /* Create a mock view object to capture assigned variables. */
+        $mockView = new stdclass();
+        $mockView->stories = array();
+        $mockView->storyTasks = array();
+        $mockView->storyBugs = array();
+        $mockView->storyCases = array();
+        $mockView->summary = new stdclass();
+
+        $executionZen->view = $mockView;
+
+        /* Call assignCountForStory method using reflection since it's protected. */
+        $reflection = new ReflectionClass($executionZen);
+        $method = $reflection->getMethod('assignCountForStory');
+        $method->setAccessible(true);
+        $method->invoke($executionZen, $executionID, $stories, $storyType);
+
+        /* Extract result from view object. */
+        $result = array();
+        $result['stories'] = isset($executionZen->view->stories) ? $executionZen->view->stories : array();
+        $result['storyTasks'] = isset($executionZen->view->storyTasks) ? $executionZen->view->storyTasks : array();
+        $result['storyBugs'] = isset($executionZen->view->storyBugs) ? $executionZen->view->storyBugs : array();
+        $result['storyCases'] = isset($executionZen->view->storyCases) ? $executionZen->view->storyCases : array();
+        $result['summary'] = isset($executionZen->view->summary) ? $executionZen->view->summary : new stdclass();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

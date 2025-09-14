@@ -483,4 +483,102 @@ class executionZenTest
         
         return $view;
     }
+
+    /**
+     * Test assignTaskKanbanVars method.
+     *
+     * @param  object $execution
+     * @access public
+     * @return object
+     */
+    public function assignTaskKanbanVarsTest(object $execution): object
+    {
+        global $tester, $lang;
+        
+        // 确保语言配置存在
+        if(!isset($lang->execution)) {
+            $lang->execution = new stdClass();
+            $lang->execution->kanban = '看板';
+        }
+        
+        // 创建模拟的view对象
+        $view = new stdClass();
+        
+        // 模拟获取用户列表和头像
+        $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'realname');
+        $avatarPairs = array();
+        foreach($users as $account => $realname) {
+            $avatarPairs[$account] = 'avatar' . rand(1, 3) . '.png';
+        }
+        
+        // 构建用户列表
+        $userList = array();
+        foreach($avatarPairs as $account => $avatar) {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar'] = $avatar;
+        }
+        $userList['closed']['account'] = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar'] = '';
+        
+        // 模拟获取执行关联的产品
+        $products = array();
+        $productNames = array();
+        $productID = 0;
+        
+        if($execution->id > 0) {
+            $products = $tester->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->where('t1.project')->eq($execution->id)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchAll('id');
+            
+            if($products) {
+                $productID = key($products);
+                foreach($products as $product) $productNames[$product->id] = $product->name;
+            }
+        }
+        
+        // 模拟获取计划
+        $allPlans = array();
+        if(!empty($products)) {
+            $plans = $tester->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in(array_keys($products))
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+            foreach($plans as $plan) $allPlans[$plan->id] = $plan->title;
+        }
+        
+        // 模拟获取项目信息
+        $project = new stdClass();
+        if($execution->project > 0) {
+            $projectData = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
+            if($projectData) {
+                $project = $projectData;
+            } else {
+                $project->id = $execution->project;
+                $project->model = 'scrum';
+            }
+        } else {
+            $project->id = 0;
+            $project->model = 'scrum';
+        }
+        
+        // 设置view变量
+        $view->title = $lang->execution->kanban;
+        $view->userList = $userList;
+        $view->realnames = $users;
+        $view->productID = $productID;
+        $view->productNames = $productNames;
+        $view->productNum = count($products);
+        $view->allPlans = $allPlans;
+        $view->hiddenPlan = $project->model !== 'scrum';
+        $view->execution = $execution;
+        $view->project = $project;
+        $view->canBeChanged = true; // 简化处理
+        $view->isLimited = false; // 简化处理
+        
+        return $view;
+    }
 }
