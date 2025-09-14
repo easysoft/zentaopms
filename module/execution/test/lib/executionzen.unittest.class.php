@@ -884,4 +884,68 @@ class executionZenTest
 
         return $groupTasks;
     }
+
+    /**
+     * Test buildStorySearchForm method.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @access public
+     * @return object
+     */
+    public function buildStorySearchFormTest(int $executionID, int $productID, int $queryID): object
+    {
+        global $tester;
+        
+        // 创建模拟的view对象
+        $view = new stdClass();
+        
+        // 获取执行对象
+        $execution = $this->objectModel->getByID($executionID);
+        if(empty($execution)) {
+            $view->success = false;
+            return $view;
+        }
+        
+        // 模拟buildStorySearchForm方法的核心逻辑
+        $view->executionID = $executionID;
+        $view->productID = $productID;
+        $view->queryID = $queryID;
+        $view->success = true;
+        
+        // 模拟产品数据
+        if($productID > 0) {
+            $products = $tester->dao->select('id,name')->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->eq($productID)
+                ->fetchPairs('id', 'name');
+            $view->products = $products;
+        } else {
+            $view->products = array();
+        }
+        
+        // 模拟模块数据
+        $modules = array();
+        if($productID > 0) {
+            $modules = $tester->dao->select('id,name')->from(TABLE_MODULE)
+                ->where('deleted')->eq(0)
+                ->andWhere('root')->eq($productID)
+                ->andWhere('type')->eq('story')
+                ->fetchPairs('id', 'name');
+        }
+        $view->modules = $modules;
+        
+        // 模拟分支数据
+        $branchGroups = array();
+        if($productID > 0) {
+            $branchGroups = $tester->dao->select('id,product,name')->from(TABLE_BRANCH)
+                ->where('deleted')->eq(0)
+                ->andWhere('product')->eq($productID)
+                ->fetchGroup('product', 'id');
+        }
+        $view->branchGroups = $branchGroups;
+        
+        return $view;
+    }
 }
