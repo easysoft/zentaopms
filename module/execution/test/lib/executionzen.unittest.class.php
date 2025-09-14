@@ -2264,4 +2264,30 @@ class executionZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  object $execution
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedObjectsTest($execution)
+    {
+        try {
+            $obj = $this->objectModel->loadZen('execution');
+            
+            // Use reflection to call the protected method
+            $reflection = new ReflectionClass($obj);
+            $method = $reflection->getMethod('getLinkedObjects');
+            $method->setAccessible(true);
+            $result = $method->invoke($obj, $execution);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
