@@ -507,23 +507,71 @@ class extensionTest
     }
 
     /**
+     * Test checkDepends method.
+     *
+     * @param  object $condition
+     * @param  array $installedExts
+     * @access public
+     * @return bool
+     */
+    public function checkDependsTest(object $condition, array $installedExts)
+    {
+        // 模拟checkDepends方法的逻辑进行测试
+        $depends = $condition->depends;
+        if($depends)
+        {
+            $dependsExt = '';
+            $hasFailedDepends = false;
+            foreach($depends as $code => $limit)
+            {
+                $noDepends = false;
+                if(isset($installedExts[$code]))
+                {
+                    if($this->compareForLimitTest($installedExts[$code]->version, $limit, 'noBetween')) $noDepends = true;
+                }
+                else
+                {
+                    $noDepends = true;
+                }
+
+                if($noDepends) 
+                {
+                    $dependsExt .= $code;
+                    $hasFailedDepends = true;
+                }
+            }
+
+            if($hasFailedDepends)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Test version of compareForLimit method.
      *
      * @param  string       $version
      * @param  array|string $limit
      * @param  string       $type
-     * @access private
+     * @access public
      * @return bool
      */
-    private function compareForLimitTest(string $version, array|string $limit, string $type = 'between'): bool
+    public function compareForLimitTest(string $version, array|string $limit, string $type = 'between'): bool
     {
         $result = false;
         if(empty($limit))   return true;
-        if($limit == 'all') return true;
-
-        if(!empty($limit['min']) && $version >= $limit['min'])           $result = true;
-        if(!empty($limit['max']) && $version <= $limit['max'])           $result = true;
-        if(!empty($limit['max']) && $version > $limit['max'] && $result) $result = false;
+        if($limit == 'all')
+        {
+            $result = true;
+        }
+        else
+        {
+            if(!empty($limit['min']) && $version >= $limit['min'])           $result = true;
+            if(!empty($limit['max']) && $version <= $limit['max'])           $result = true;
+            if(!empty($limit['max']) && $version > $limit['max'] && $result) $result = false;
+        }
 
         if($type != 'between') return !$result;
 
