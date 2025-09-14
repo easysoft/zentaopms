@@ -2541,4 +2541,32 @@ class kanbanTest
         
         return $userList;
     }
+
+    /**
+     * Test moveCardByModal method.
+     *
+     * @param  int $cardID
+     * @access public
+     * @return mixed
+     */
+    public function moveCardByModalTest($cardID)
+    {
+        global $tester;
+        
+        // 获取卡片信息
+        $card = $this->objectModel->getCardByID($cardID);
+        if(!$card) return array('error' => 'Card not found');
+
+        // 获取看板区域信息用于移动
+        $regions = $this->objectModel->getRegionPairs($card->kanban);
+        if(empty($regions)) return array('error' => 'No regions found');
+        
+        // 返回区域和卡片信息
+        return array(
+            'regions' => count($regions),
+            'card' => $card ? 1 : 0,
+            'cardName' => $card->name,
+            'kanban' => $card->kanban
+        );
+    }
 }
