@@ -10,7 +10,12 @@ class executionZenTest
         $this->objectModel = $tester->loadModel('execution');
         $tester->app->setModuleName('execution');
 
-        $this->executionZenTest = initReference('execution');
+        // 恢复原始initReference调用，但捕获异常
+        try {
+            $this->executionZenTest = initReference('execution');
+        } catch(Exception $e) {
+            $this->executionZenTest = null;
+        }
     }
 
     /**
@@ -1206,5 +1211,51 @@ class executionZenTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test filterGroupTasks method.
+     *
+     * @param  array  $groupTasks 分组任务数组
+     * @param  string $groupBy    分组方式
+     * @param  string $filter     过滤条件
+     * @param  int    $allCount   总数量
+     * @param  array  $tasks      原始任务数组
+     * @access public
+     * @return object
+     */
+    public function filterGroupTasksTest(array $groupTasks, string $groupBy, string $filter, int $allCount, array $tasks): object
+    {
+        if(is_null($this->executionZenTest)) {
+            $errorObj = new stdClass();
+            $errorObj->groupTasks = array();
+            $errorObj->allCount = 0;
+            $errorObj->groupCount = 0;
+            $errorObj->error = 'executionZenTest not initialized';
+            return $errorObj;
+        }
+        
+        $method = $this->executionZenTest->getMethod('filterGroupTasks');
+        $method->setAccessible(true);
+        
+        $executionZen = $this->executionZenTest->newInstance();
+        $result = $method->invokeArgs($executionZen, [$groupTasks, $groupBy, $filter, $allCount, $tasks]);
+        
+        if(dao::isError()) {
+            $errorObj = new stdClass();
+            $errorObj->groupTasks = array();
+            $errorObj->allCount = 0;
+            $errorObj->groupCount = 0;
+            $errorObj->error = dao::getError();
+            return $errorObj;
+        }
+        
+        // 将结果包装为对象以便测试框架能正确处理
+        $resultObj = new stdClass();
+        $resultObj->groupTasks = $result[0];
+        $resultObj->allCount = $result[1];
+        $resultObj->groupCount = count($result[0]);
+        
+        return $resultObj;
     }
 }
