@@ -411,4 +411,76 @@ class executionZenTest
 
         return $view;
     }
+
+    /**
+     * Test assignModuleForStory method.
+     *
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function assignModuleForStoryTest(string $type, int $param, string $storyType, int $executionID, int $productID): object
+    {
+        global $tester;
+        
+        // 创建模拟的execution对象
+        $execution = new stdClass();
+        $execution->id = $executionID;
+        $execution->name = "执行{$executionID}";
+        $execution->hasProduct = $executionID <= 3 ? '1' : '0';
+        $execution->multiple = $executionID <= 3 ? '1' : '0';
+        
+        // 创建模拟的view对象
+        $view = new stdClass();
+        
+        // 模拟cookie中的模块参数
+        if($type == 'bymodule' && $param > 0) {
+            $module = new stdClass();
+            $module->id = $param;
+            $module->name = "模块{$param}";
+            $view->module = $module;
+        }
+        
+        // 模拟配置
+        global $config;
+        if(!isset($config->execution)) $config->execution = new stdClass();
+        if(!isset($config->execution->story)) $config->execution->story = new stdClass();
+        $config->execution->story->showModule = '1';
+        
+        // 模拟模块对列表
+        $modulePairs = array();
+        if($config->execution->story->showModule) {
+            $modules = $tester->dao->select('id,name')->from(TABLE_MODULE)
+                ->where('type')->eq('story')
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            $modulePairs = $modules;
+        }
+        
+        // 模拟模块树
+        $moduleTree = '';
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        
+        if(!$execution->hasProduct && !$execution->multiple) {
+            // 单产品模块树
+            $moduleTree = "<ul class='tree'><li><a href='#'>产品{$productID}模块树</a></li></ul>";
+        } else {
+            // 项目需求模块树
+            $moduleTree = "<ul class='tree'><li><a href='#'>执行{$executionID}模块树</a></li></ul>";
+        }
+        
+        // 设置视图变量
+        $view->moduleTree = $moduleTree;
+        $view->modulePairs = $modulePairs;
+        $view->moduleID = $type == 'bymodule' ? $param : 0;
+        
+        // 返回检查用的附加信息
+        $view->view_module = (isset($view->module) && $view->module->id > 0) ? 1 : 0;
+        
+        return $view;
+    }
 }
