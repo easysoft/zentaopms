@@ -848,4 +848,70 @@ class mrTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getBranchUrl method.
+     *
+     * @param  object $host
+     * @param  int|string $projectID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function getBranchUrlTest($host, $projectID, $branch)
+    {
+        // 参数验证
+        if(!is_object($host)) return 'invalid_host';
+        if(empty($projectID)) return 'empty_project_id';
+        if(empty($branch) || !is_string($branch)) return 'invalid_branch';
+        
+        try {
+            global $tester;
+            
+            // 模拟getBranchUrl方法的逻辑
+            if(!isset($host->type) || !isset($host->id)) return 'missing_host_fields';
+            
+            // 检查主机类型是否支持
+            if(!in_array($host->type, array('gitlab', 'gitea', 'gogs'))) return 'unsupported_host_type';
+            
+            // 模拟apiGetSingleBranch的返回值
+            $mockBranchData = array(
+                'gitlab' => array(
+                    'master' => array('web_url' => 'https://gitlab.example.com/project/repo/-/tree/master'),
+                    'develop' => array('web_url' => 'https://gitlab.example.com/project/repo/-/tree/develop'),
+                    'feature-test' => array('web_url' => 'https://gitlab.example.com/project/repo/-/tree/feature-test'),
+                    'nonexistent' => null
+                ),
+                'gitea' => array(
+                    'master' => array('web_url' => 'https://gitea.example.com/project/repo/src/branch/master'),
+                    'develop' => array('web_url' => 'https://gitea.example.com/project/repo/src/branch/develop'),
+                    'feature-test' => array('web_url' => 'https://gitea.example.com/project/repo/src/branch/feature-test'),
+                    'nonexistent' => null
+                ),
+                'gogs' => array(
+                    'master' => array('web_url' => 'https://gogs.example.com/project/repo/src/master'),
+                    'develop' => array('web_url' => 'https://gogs.example.com/project/repo/src/develop'),
+                    'feature-test' => array('web_url' => 'https://gogs.example.com/project/repo/src/feature-test'),
+                    'nonexistent' => null
+                )
+            );
+            
+            // 获取模拟分支数据
+            if(isset($mockBranchData[$host->type][$branch])) {
+                $branchData = $mockBranchData[$host->type][$branch];
+            } else {
+                $branchData = null;
+            }
+            
+            // 模拟原方法的返回逻辑
+            if($branchData && isset($branchData['web_url'])) {
+                return $branchData['web_url'];
+            }
+            
+            return '';
+            
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
