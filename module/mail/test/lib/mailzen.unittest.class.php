@@ -46,4 +46,21 @@ class mailZenTest
 
         return $result;
     }
+
+    /**
+     * Test getHasMailUserPairs method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getHasMailUserPairsZenTest()
+    {
+        $method = $this->mailZenTest->getMethod('getHasMailUserPairs');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->mailZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

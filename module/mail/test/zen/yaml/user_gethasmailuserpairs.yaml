@@ -1,0 +1,35 @@
+---
+title: user数据定义 - getHasMailUserPairs方法测试
+desc: 测试获取有邮箱用户键值对方法的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+- field: company
+  note: 公司ID
+  range: 1{10}
+- field: type
+  note: 用户类型
+  range: inside{10}
+- field: dept
+  note: 部门ID
+  range: 1{10}
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,user5,nomail1,nomail2,deleted1,deleted2
+- field: password
+  note: 用户密码
+  range: '123456{10}'
+- field: role
+  note: 用户角色
+  range: admin,qa,dev,pm,td,dev,qa,pm,admin,dev
+- field: realname
+  note: 用户真实姓名
+  range: 管理员,测试用户1,测试用户2,测试用户3,测试用户4,测试用户5,无邮箱用户1,无邮箱用户2,已删除用户1,已删除用户2
+- field: email
+  note: 用户邮箱
+  range: 'admin@zentao.com,user1@zentao.com,user2@zentao.com,user3@zentao.com,user4@zentao.com,user5@zentao.com,[],[],[],[]'
+- field: deleted
+  note: 是否删除
+  range: '0,0,0,0,0,0,0,0,1,1'
