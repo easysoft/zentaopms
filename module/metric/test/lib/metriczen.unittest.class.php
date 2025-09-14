@@ -29,4 +29,20 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildMetricForEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildMetricForEditZenTest()
+    {
+        $method = $this->metricZenTest->getMethod('buildMetricForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
