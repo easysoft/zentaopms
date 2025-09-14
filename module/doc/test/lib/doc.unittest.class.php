@@ -5457,4 +5457,98 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $returnData;
     }
+
+    /**
+     * Test processReleaseListData method.
+     *
+     * @param  array $releaseList
+     * @param  array $childReleases
+     * @access public
+     * @return array
+     */
+    public function processReleaseListDataTest(array $releaseList, array $childReleases): array
+    {
+        // 确保doc模型类已加载
+        global $tester;
+        $docModel = $tester->loadModel('doc');
+        
+        // 先包含model.php，再包含zen.php
+        $modulePath = $tester->app->getModulePath('', 'doc');
+        helper::import($modulePath . 'model.php');
+        helper::import($modulePath . 'zen.php');
+        
+        $docZen = new docZen();
+        
+        // 使用reflection来调用protected方法
+        $reflection = new ReflectionClass($docZen);
+        $method = $reflection->getMethod('processReleaseListData');
+        $method->setAccessible(true);
+        
+        $result = $method->invokeArgs($docZen, array($releaseList, $childReleases));
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getDocChildrenByRecursion method.
+     *
+     * @param  int $docID
+     * @param  int $level
+     * @access public
+     * @return array
+     */
+    public function getDocChildrenByRecursionTest(int $docID, int $level): array
+    {
+        global $tester;
+        
+        // 加载doc模型
+        $docModel = $tester->loadModel('doc');
+        
+        // 检查zen方法是否在model中可用
+        if(method_exists($docModel, 'getDocChildrenByRecursion'))
+        {
+            // 通过反射调用protected方法
+            $reflection = new ReflectionClass($docModel);
+            $method = $reflection->getMethod('getDocChildrenByRecursion');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($docModel, array($docID, $level));
+        }
+        else
+        {
+            // 如果model中没有该方法，表明可能需要特殊的加载方式
+            // 创建一个临时的zen实例来测试
+            $modulePath = $tester->app->getModulePath('', 'doc');
+            
+            // 确保先加载model类
+            if(!class_exists('doc') && file_exists($modulePath . 'model.php'))
+            {
+                helper::import($modulePath . 'model.php');
+                // 动态创建doc类别名
+                if(!class_exists('doc')) class_alias('docModel', 'doc');
+            }
+            
+            // 再加载zen类
+            if(file_exists($modulePath . 'zen.php'))
+            {
+                helper::import($modulePath . 'zen.php');
+                $docZen = new docZen();
+                
+                // 初始化$doc属性指向自己，因为zen类中的方法会调用$this->doc
+                $docZen->doc = $docModel;
+                
+                $reflection = new ReflectionClass($docZen);
+                $method = $reflection->getMethod('getDocChildrenByRecursion');
+                $method->setAccessible(true);
+                $result = $method->invokeArgs($docZen, array($docID, $level));
+            }
+            else
+            {
+                return array();
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
