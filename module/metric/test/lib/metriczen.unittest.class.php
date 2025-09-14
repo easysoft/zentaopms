@@ -358,4 +358,22 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getCreateEditInfo method.
+     *
+     * @param  object $view
+     * @param  string $fields
+     * @access public
+     * @return mixed
+     */
+    public function getCreateEditInfoZenTest($view, $fields = 'createdBy,implementedBy,offlineBy,lastEdited')
+    {
+        $method = $this->metricZenTest->getMethod('getCreateEditInfo');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($view, $fields));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
