@@ -1,0 +1,96 @@
+---
+title: 插件依赖测试数据
+desc: 用于测试 extensionZen::getDependsByDB() 方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 插件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 插件名称
+  range: ['基础插件', '测试插件A', '测试插件B', '依赖插件C', '独立插件D']
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 插件代码
+  range: ['base_plugin', 'test_plugin_a', 'test_plugin_b', 'depend_plugin_c', 'independent_plugin_d']
+  prefix: ""
+  postfix: ""
+
+- field: version
+  note: 插件版本
+  range: ['1.0.0', '1.1.0', '1.2.0', '2.0.0', '1.5.0']
+  prefix: ""
+  postfix: ""
+
+- field: author
+  note: 作者
+  range: ['ZenTao Team', 'Developer A', 'Developer B']
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 插件描述
+  range: ['基础功能插件', '测试功能A', '测试功能B', '依赖功能C', '独立功能D']
+  prefix: ""
+  postfix: ""
+
+- field: license
+  note: 许可证
+  range: ['GPL', 'MIT', 'Apache']
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 插件类型
+  range: 'extension{5}'
+  prefix: ""
+  postfix: ""
+
+- field: site
+  note: 插件站点
+  range: ['http://zentao.net', 'http://test.com']
+  prefix: ""
+  postfix: ""
+
+- field: zentaoCompatible
+  note: 禅道兼容版本
+  range: ['18.0', '17.0', '16.0']
+  prefix: ""
+  postfix: ""
+
+- field: installedTime
+  note: 安装时间
+  range: '2023-01-01 00:00:00{1}, 2023-06-01 12:00:00{2}, 2023-12-01 10:30:00{2}'
+  prefix: ""
+  postfix: ""
+
+- field: depends
+  note: 依赖关系JSON
+  range: ['{}', '{"base_plugin":{"min":"1.0.0","max":"2.0.0"}}', '{"base_plugin":"all"}', '{"base_plugin":{"min":"1.1.0"}}', '{"other_plugin":"all"}']
+  prefix: ""
+  postfix: ""
+
+- field: dirs
+  note: 目录信息
+  range: ['[]', '["dir1","dir2"]']
+  prefix: ""
+  postfix: ""
+
+- field: files
+  note: 文件信息
+  range: ['[]', '["file1.php","file2.js"]']
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 插件状态
+  range: ['installed{3}', 'available{1}', 'deactivated{1}']
+  prefix: ""
+  postfix: ""

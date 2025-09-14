@@ -117,4 +117,31 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test getDependsByDB method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function getDependsByDBTest(string $extension)
+    {
+        try
+        {
+            $zen = initReference('extension');
+            $func = $zen->getMethod('getDependsByDB');
+            $zenInstance = $zen->newInstance();
+            $zenInstance->extension = $this->objectModel;
+            
+            $result = $func->invokeArgs($zenInstance, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return is_array($result) ? $result : array();
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
+    }
 }
