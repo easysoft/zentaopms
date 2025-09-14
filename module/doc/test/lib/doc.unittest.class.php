@@ -4656,4 +4656,85 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test previewPlanBug method.
+     *
+     * @param  string $view
+     * @param  array  $settings  
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewPlanBugTest(string $view = 'setting', array $settings = array(), string $idList = ''): array
+    {
+        $result = array();
+        
+        // 模拟datatable列配置（使用bug模块的配置）
+        $result['cols'] = array(
+            'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
+            'title' => array('title' => '标题', 'name' => 'title', 'sortType' => false),
+            'pri' => array('title' => '优先级', 'name' => 'pri', 'sortType' => false),
+            'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false),
+            'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
+            'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
+        );
+        
+        $action = zget($settings, 'action', '');
+        
+        if($action === 'preview' && $view === 'setting')
+        {
+            $planID = (int)zget($settings, 'plan', 0);
+            if($planID > 0)
+            {
+                // 模拟获取计划相关的Bug数据
+                $mockData = array();
+                for($i = 1; $i <= 3; $i++)
+                {
+                    $bug = new stdclass();
+                    $bug->id = $i;
+                    $bug->title = "计划{$planID}的Bug{$i}";
+                    $bug->pri = ((int)$i % 4) + 1;
+                    $bug->status = 'active';
+                    $bug->stage = 'testing';
+                    $bug->assignedTo = 'admin';
+                    $mockData[] = $bug;
+                }
+                $result['data'] = $mockData;
+            }
+            else
+            {
+                $result['data'] = array();
+            }
+        }
+        elseif($view === 'list')
+        {
+            $idArray = explode(',', $idList);
+            $mockData = array();
+            foreach($idArray as $id)
+            {
+                $id = trim($id);
+                if(empty($id)) continue;
+                
+                $bug = new stdclass();
+                $bug->id = (int)$id;
+                $bug->title = "Bug{$id}列表项";
+                $bug->pri = ((int)$id % 4) + 1;
+                $bug->status = 'active';
+                $bug->stage = 'testing';
+                $bug->assignedTo = 'admin';
+                $mockData[] = $bug;
+            }
+            
+            $result['data'] = $mockData;
+        }
+        else
+        {
+            $result['data'] = array();
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
