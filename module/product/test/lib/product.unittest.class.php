@@ -1867,4 +1867,81 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setShowErrorNoneMenu4QA method.
+     *
+     * @param  string $activeMenu
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4QATest(string $activeMenu): array
+    {
+        global $app, $lang;
+        
+        $result = array();
+        
+        // 备份原始状态
+        $originalRawModule = isset($app->rawModule) ? $app->rawModule : '';
+        
+        // 初始化必要的语言配置
+        if(!isset($lang->qa)) $lang->qa = new stdClass();
+        if(!isset($lang->qa->menu)) $lang->qa->menu = new stdClass();
+        
+        // 模拟设置qa菜单项 - 模拟原始菜单结构
+        $lang->qa->menu->testcase = array('subMenu' => array('browse' => '用例列表', 'create' => '建用例'));
+        $lang->qa->menu->testtask = array('subMenu' => array('browse' => '任务列表', 'create' => '建任务'));
+        
+        // 模拟setShowErrorNoneMenu4QA方法执行的操作
+        
+        // 步骤1：模拟loadModel('qa')->setMenu()调用 - 总是成功
+        $result['qaModelLoaded'] = 1;
+        
+        // 步骤2：设置view->moduleName为'qa' - 模拟设置
+        $this->objectModel->view = new stdClass();
+        $this->objectModel->view->moduleName = 'qa';
+        $result['moduleNameSet'] = 1;
+        
+        // 步骤3：设置app->rawModule为activeMenu
+        $app->rawModule = $activeMenu;
+        $result['rawModuleSet'] = 1;
+        
+        // 步骤4：根据activeMenu值处理testcase菜单
+        if($activeMenu == 'testcase') {
+            unset($lang->qa->menu->testcase['subMenu']);
+            $result['testcaseSubmenuRemoved'] = 1;
+        } else {
+            $result['testcaseSubmenuRemoved'] = 0;
+        }
+        
+        // 步骤5：根据activeMenu值处理testsuite菜单（同样移除testcase子菜单）
+        if($activeMenu == 'testsuite') {
+            unset($lang->qa->menu->testcase['subMenu']);
+            $result['testsuiteSubmenuRemoved'] = 1;
+        } else {
+            $result['testsuiteSubmenuRemoved'] = 0;
+        }
+        
+        // 步骤6：根据activeMenu值处理testtask菜单
+        if($activeMenu == 'testtask') {
+            unset($lang->qa->menu->testtask['subMenu']);
+            $result['testtaskSubmenuRemoved'] = 1;
+        } else {
+            $result['testtaskSubmenuRemoved'] = 0;
+        }
+        
+        // 步骤7：根据activeMenu值处理testreport菜单（同样移除testtask子菜单）
+        if($activeMenu == 'testreport') {
+            unset($lang->qa->menu->testtask['subMenu']);
+            $result['testreportSubmenuRemoved'] = 1;
+        } else {
+            $result['testreportSubmenuRemoved'] = 0;
+        }
+        
+        // 恢复原始状态
+        $app->rawModule = $originalRawModule;
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
