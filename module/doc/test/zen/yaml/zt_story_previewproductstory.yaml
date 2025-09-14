@@ -1,0 +1,44 @@
+---
+title: 产品需求预览测试数据
+desc: 用于测试previewProductStory方法的测试数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1
+- field: title
+  note: 需求标题
+  range: 产品需求1,产品需求2,产品需求3,产品需求4,产品需求5
+- field: status
+  note: 需求状态
+  range: active{8},draft{2}
+- field: type
+  note: 需求类型
+  range: story
+- field: stage
+  note: 需求阶段
+  range: planned{3},developing{4},testing{3}
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: estimate
+  note: 预计工时
+  range: 3.0-8.0:0.5
+- field: assignedTo
+  note: 指派人
+  range: admin{4},user1{3},user2{3}
+- field: openedBy
+  note: 创建人
+  range: admin
+- field: openedDate
+  note: 创建时间
+  range: (-1W)-(+0W):1D
+- field: vision
+  note: 版本
+  range: rnd
+- field: category
+  note: 类别
+  range: feature{8},performance{2}

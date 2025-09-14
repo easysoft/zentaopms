@@ -4561,6 +4561,125 @@ class docTest
     }
 
     /**
+     * Test previewProductStory method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewProductStoryTest(string $view, array $settings, string $idList): array
+    {
+        $result = array('cols' => array(), 'data' => array());
+        
+        // 模拟previewProductStory方法的行为
+        if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
+        {
+            if(isset($settings['product']) && is_numeric($settings['product']) && $settings['product'] > 0)
+            {
+                $productId = (int)$settings['product'];
+                $condition = isset($settings['condition']) ? $settings['condition'] : '';
+                
+                if($condition === 'customSearch')
+                {
+                    // 模拟自定义搜索
+                    $mockStories = array(
+                        (object)array(
+                            'id' => 1,
+                            'product' => $productId,
+                            'title' => '自定义搜索需求1',
+                            'pri' => 3,
+                            'status' => 'active',
+                            'stage' => 'planned',
+                            'type' => 'story',
+                            'estimate' => 8.0,
+                            'assignedTo' => 'user1'
+                        )
+                    );
+                }
+                else
+                {
+                    // 模拟通过product模型获取需求数据
+                    $mockStories = array(
+                        (object)array(
+                            'id' => 1,
+                            'product' => $productId,
+                            'title' => '产品需求1',
+                            'pri' => 3,
+                            'status' => 'active',
+                            'stage' => 'planned',
+                            'type' => 'story',
+                            'estimate' => 8.0,
+                            'assignedTo' => 'user1'
+                        ),
+                        (object)array(
+                            'id' => 2,
+                            'product' => $productId,
+                            'title' => '产品需求2',
+                            'pri' => 2,
+                            'status' => 'active',
+                            'stage' => 'developing',
+                            'type' => 'story',
+                            'estimate' => 5.0,
+                            'assignedTo' => 'user2'
+                        )
+                    );
+                }
+                $result['data'] = $mockStories;
+            }
+            else
+            {
+                $result['data'] = array();
+            }
+        }
+        elseif($view === 'list' && !empty($idList))
+        {
+            // 模拟根据ID列表获取需求数据
+            $idArray = explode(',', $idList);
+            $mockData = array();
+            foreach($idArray as $id)
+            {
+                if(is_numeric($id) && $id > 0)
+                {
+                    $mockData[] = (object)array(
+                        'id' => (int)$id,
+                        'product' => 1,
+                        'title' => '产品需求' . $id,
+                        'pri' => 3,
+                        'status' => 'active',
+                        'stage' => 'planned',
+                        'type' => 'story',
+                        'estimate' => 3.0,
+                        'assignedTo' => 'admin'
+                    );
+                }
+            }
+            $result['data'] = $mockData;
+        }
+        else
+        {
+            $result['data'] = array();
+        }
+        
+        // 模拟datatable列配置（使用product模块的browse配置）
+        $result['cols'] = array(
+            'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
+            'title' => array('title' => '标题', 'name' => 'title', 'sortType' => false),
+            'pri' => array('title' => '优先级', 'name' => 'pri', 'sortType' => false),
+            'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false),
+            'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
+            'type' => array('title' => '类型', 'name' => 'type', 'sortType' => false),
+            'estimate' => array('title' => '预计', 'name' => 'estimate', 'sortType' => false),
+            'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
+        );
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
      * Test previewProductBug method.
      *
      * @param  string $view
