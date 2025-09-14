@@ -1171,4 +1171,40 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildMembersForManageMembers method.
+     *
+     * @param  int   $executionID
+     * @param  array $membersData
+     * @access public
+     * @return mixed
+     */
+    public function buildMembersForManageMembersTest(int $executionID, array $membersData = array())
+    {
+        global $tester;
+
+        // Mock execution object
+        $execution = new stdClass();
+        $execution->id = $executionID;
+        $execution->days = 20; // Default execution days for testing
+
+        // Mock form::batchData()->get() by simulating $_POST data
+        $_POST = array();
+        foreach($membersData as $index => $memberData) {
+            foreach($memberData as $field => $value) {
+                $_POST[$field][$index] = $value;
+            }
+        }
+
+        $method = $this->executionZenTest->getMethod('buildMembersForManageMembers');
+        $method->setAccessible(true);
+
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $execution);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

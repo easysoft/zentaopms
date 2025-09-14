@@ -3399,4 +3399,220 @@ class executionTest
 
         return $result;
     }
+
+    /**
+     * Test assignTesttaskVars method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return mixed
+     */
+    public function assignTesttaskVarsTest($tasks = array())
+    {
+        $originalView = isset($this->objectZen->view) ? $this->objectZen->view : null;
+        $this->objectZen->view = new stdClass();
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('assignTesttaskVars');
+        $method->setAccessible(true);
+        $method->invoke($this->objectZen, $tasks);
+
+        if(dao::isError()) return dao::getError();
+
+        $viewData = $this->objectZen->view;
+        $this->objectZen->view = $originalView;
+
+        return $viewData;
+    }
+
+    /**
+     * Test buildGroupMultiTask method.
+     *
+     * @param  string $groupBy 分组字段
+     * @param  object $task 任务对象
+     * @param  array  $users 用户数组
+     * @param  array  $groupTasks 分组任务数组
+     * @access public
+     * @return array
+     */
+    public function buildGroupMultiTaskTest($groupBy = '', $task = null, $users = array(), $groupTasks = array())
+    {
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildGroupMultiTask');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $groupBy, $task, $users, $groupTasks);
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildImportBugSearchForm method.
+     *
+     * @param  object $execution
+     * @param  int    $queryID
+     * @param  array  $products
+     * @param  array  $executions
+     * @param  array  $projects
+     * @access public
+     * @return array
+     */
+    public function buildImportBugSearchFormTest(object $execution, int $queryID, array $products, array $executions, array $projects)
+    {
+        // Save original config to restore later
+        $originalConfig = isset($this->objectModel->config->bug->search) ? $this->objectModel->config->bug->search : null;
+        
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildImportBugSearchForm');
+        $method->setAccessible(true);
+        
+        $method->invoke($this->objectZen, $execution, $queryID, $products, $executions, $projects);
+        
+        if(dao::isError()) return dao::getError();
+
+        // Return the modified config for testing
+        $result = isset($this->objectModel->config->bug->search) ? $this->objectModel->config->bug->search : array();
+        
+        // Restore original config
+        if($originalConfig !== null)
+        {
+            $this->objectModel->config->bug->search = $originalConfig;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Test checkPostForCreate method.
+     *
+     * @access public
+     * @return bool|array
+     */
+    public function checkPostForCreateTest(): bool|array
+    {
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('checkPostForCreate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test buildExecutionForCreate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildExecutionForCreateTest()
+    {
+        global $app;
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildExecutionForCreate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test checkCFDDate method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $minDate
+     * @param  string $maxDate
+     * @access public
+     * @return mixed
+     */
+    public function checkCFDDateTest(string $begin, string $end, string $minDate, string $maxDate)
+    {
+        global $app;
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('checkCFDDate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $begin, $end, $minDate, $maxDate);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test buildProductSwitcher method.
+     *
+     * @param  int   $executionID
+     * @param  int   $productID
+     * @param  array $products
+     * @access public
+     * @return mixed
+     */
+    public function buildProductSwitcherTest(int $executionID, int $productID, array $products)
+    {
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildProductSwitcher');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen, $executionID, $productID, $products);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test buildMembersForManageMembers method.
+     *
+     * @param  int   $executionID
+     * @param  array $membersData
+     * @access public
+     * @return mixed
+     */
+    public function buildMembersForManageMembersTest(int $executionID, array $membersData = array())
+    {
+        global $app;
+
+        // Mock execution object
+        $execution = new stdClass();
+        $execution->id = $executionID;
+        $execution->days = 20; // Default execution days for testing
+
+        // Mock form::batchData()->get() by simulating $_POST data
+        $_POST = array();
+        foreach($membersData as $index => $memberData) {
+            foreach($memberData as $field => $value) {
+                $_POST[$field][$index] = $value;
+            }
+        }
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildMembersForManageMembers');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectZen, $execution);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
