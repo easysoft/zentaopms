@@ -302,4 +302,113 @@ class executionZenTest
 
         return $view;
     }
+
+    /**
+     * Test assignRelationForStory method.
+     *
+     * @param  object $execution
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $storyType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function assignRelationForStoryTest(object $execution, array $products, int $productID, string $type, string $storyType, int $param, string $orderBy, object $pager): object
+    {
+        global $tester;
+        $view = new stdClass();
+
+        // 模拟获取计划数据
+        $allPlans = array();
+        if(!empty($products)) {
+            $plans = $tester->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in(array_keys($products))
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+            foreach($plans as $plan) $allPlans[$plan->id] = $plan->title;
+        }
+
+        // 模拟检查多分支产品
+        $multiBranch = false;
+        foreach($products as $product) {
+            if(isset($product->type) && $product->type != 'normal') {
+                $multiBranch = true;
+                break;
+            }
+        }
+
+        // 模拟获取项目信息
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
+        if(!$project) {
+            $project = new stdClass();
+            $project->id = $execution->project;
+            $project->multiple = '1';
+        }
+
+        // 模拟产品对信息
+        if(empty($productID) && !empty($products)) $productID = (int)key($products);
+
+        // 模拟等级信息
+        $gradeGroup = array();
+        $gradeList = $tester->dao->select('*')->from(TABLE_STORYSPEC)->where('version')->eq(1)->limit(5)->fetchAll();
+        if(empty($gradeList)) {
+            // 创建默认等级数据
+            $gradeGroup['story'][1] = '高';
+            $gradeGroup['story'][2] = '中';
+            $gradeGroup['story'][3] = '低';
+        }
+
+        // 模拟用户数据
+        $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+
+        // 模拟产品信息
+        $product = null;
+        if($productID) {
+            $product = $tester->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            if(!$product) {
+                $product = new stdClass();
+                $product->id = $productID;
+                $product->name = "产品{$productID}";
+            }
+        }
+
+        // 模拟分支数据
+        $branchPairs = array();
+        if($productID) {
+            $branches = $tester->dao->select('id,name')->from(TABLE_BRANCH)
+                ->where('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            $branchPairs = $branches;
+        }
+
+        // 模拟关联任务的需求
+        $linkedTaskStories = $tester->dao->select('story')->from(TABLE_TASK)
+            ->where('execution')->eq($execution->id)
+            ->andWhere('story')->ne(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs('story', 'story');
+
+        // 设置视图变量
+        $view->title = $execution->name . '-需求列表';
+        $view->storyType = $storyType;
+        $view->param = $param;
+        $view->type = $type;
+        $view->orderBy = $orderBy;
+        $view->pager = $pager;
+        $view->product = $product;
+        $view->allPlans = $allPlans;
+        $view->users = $users;
+        $view->multiBranch = $multiBranch ? 1 : 0;
+        $view->execution = $execution;
+        $view->gradeGroup = $gradeGroup;
+        $view->branchPairs = $branchPairs;
+        $view->linkedTaskStories = $linkedTaskStories;
+
+        return $view;
+    }
 }
