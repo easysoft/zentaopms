@@ -84,4 +84,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareDataset method.
+     *
+     * @param  object $calcGroup
+     * @access public
+     * @return mixed
+     */
+    public function prepareDatasetZenTest($calcGroup)
+    {
+        $method = $this->metricZenTest->getMethod('prepareDataset');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($calcGroup));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
