@@ -1717,4 +1717,33 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getUniqueKeyByRecord method from zen layer.
+     *
+     * @param  array  $record
+     * @param  string $scope
+     * @access public
+     * @return mixed
+     */
+    public function getUniqueKeyByRecordZenTest($record = null, $scope = '')
+    {
+        if($record === null) return '';
+
+        global $tester;
+        
+        // 使用tao对象，它包含zen层的方法
+        $metricTao = $this->objectTao;
+
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($metricTao);
+        $method = $reflection->getMethod('getUniqueKeyByRecord');
+        $method->setAccessible(true);
+        
+        $recordObj = (object)$record;
+        $result = $method->invoke($metricTao, $recordObj, $scope);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
