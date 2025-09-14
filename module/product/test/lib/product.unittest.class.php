@@ -2161,4 +2161,28 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBackLink4Create method.
+     *
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
+    public function getBackLink4CreateTest(string $extra): string
+    {
+        global $tester;
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $backLink = '';
+        $from     = zget($output, 'from', '');
+        if($from == 'qa')     $backLink = '/qa/index';
+        if($from == 'global') $backLink = '/product/all';
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $backLink;
+    }
 }
