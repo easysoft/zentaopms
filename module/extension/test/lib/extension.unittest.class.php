@@ -550,6 +550,35 @@ class extensionTest
     }
 
     /**
+     * Test checkFile method.
+     *
+     * @param  string $extension
+     * @param  string $overrideFile
+     * @param  string $overrideLink
+     * @access public
+     * @return bool
+     */
+    public function checkFileTest(string $extension, string $overrideFile, string $overrideLink)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('checkFile');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension, $overrideFile, $overrideLink));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
+    /**
      * Test version of compareForLimit method.
      *
      * @param  string       $version
