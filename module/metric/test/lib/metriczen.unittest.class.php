@@ -169,4 +169,20 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getValidObjects method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getValidObjectsZenTest()
+    {
+        $method = $this->metricZenTest->getMethod('getValidObjects');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
