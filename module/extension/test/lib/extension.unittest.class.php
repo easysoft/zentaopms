@@ -233,4 +233,33 @@ class extensionTest
             return 'Exception: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test installExtension method.
+     *
+     * @param  string $extension
+     * @param  string $type
+     * @param  string $upgrade
+     * @access public
+     * @return bool
+     */
+    public function installExtensionTest(string $extension, string $type, string $upgrade)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('installExtension');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension, $type, $upgrade));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
 }

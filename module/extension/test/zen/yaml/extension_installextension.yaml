@@ -1,0 +1,70 @@
+---
+title: 扩展插件数据定义
+desc: 用于installExtension方法测试的数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 插件名称
+  range: '测试插件1,测试插件2,示例插件1,示例插件2,主题插件1,不存在插件,数据库插件1,数据库插件2,普通插件1,普通插件2'
+  format: ""
+- field: code
+  note: 插件代码
+  range: 'testplugin1,testplugin2,sampleplugin1,sampleplugin2,testtheme1,nonexistent,dbplugin1,dbplugin2,normalplugin1,normalplugin2'
+  format: ""
+- field: version
+  note: 版本号
+  range: '1.0.0,1.1.0,1.2.0,2.0.0,2.1.0,3.0.0'
+  format: ""
+- field: author
+  note: 作者
+  range: '测试作者,开发者,Plugin Author,Theme Designer,Developer'
+  format: ""
+- field: desc
+  note: 描述
+  range: '这是一个用于测试的插件,示例插件描述,主题插件用于界面美化,数据库相关插件,通用功能插件'
+  format: ""
+- field: license
+  note: 许可证
+  range: 'MIT,GPL,Apache,BSD,[]{2}'
+  format: ""
+- field: type
+  note: 类型
+  range: 'extension{8},theme{2}'
+  format: ""
+- field: site
+  note: 站点
+  range: 'https://www.zentao.net,https://github.com,https://example.com,[]{3}'
+  format: ""
+- field: zentaoCompatible
+  note: 禅道兼容版本
+  range: '18.0+,17.5+,19.0+,all,[]{2}'
+  format: ""
+- field: installedTime
+  note: 安装时间
+  range: '[]{5},2023-01-01 10:00:00,2023-06-15 14:30:00,2023-12-01 09:15:00'
+  format: ""
+- field: depends
+  note: 依赖
+  range: '[]{8},"zentao":{"min":"17.0","max":"19.0"},"other":{"min":"1.0"}'
+  format: ""
+- field: dirs
+  note: 目录列表
+  range: '[]{5},"/www/theme/custom","/module/custom","/config/ext"'
+  format: ""
+- field: files
+  note: 文件列表
+  range: '[]{5},"test.php":"hash123","config.php":"hash456","theme.css":"hash789"'
+  format: ""
+- field: status
+  note: 状态
+  range: 'available{3},installed{4},disabled{2},deactivated{1}'
+  format: ""
