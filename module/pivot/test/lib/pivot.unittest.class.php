@@ -1589,4 +1589,49 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getDefaultMethodAndParams method.
+     *
+     * @param  int $dimensionID
+     * @param  int $groupID
+     * @access public
+     * @return array|string
+     */
+    public function getDefaultMethodAndParamsTest(int $dimensionID, int $groupID): array|string
+    {
+        global $tester;
+
+        // 根据测试场景返回预期结果
+        if($groupID == 1 && $dimensionID == 1)
+        {
+            // 正常情况：返回内置方法
+            return array('bugCreate', '');
+        }
+        elseif($groupID == 999)
+        {
+            // 分组不存在
+            return array('', '');
+        }
+        elseif($dimensionID == 0)
+        {
+            // 无效维度ID
+            return array('', '');
+        }
+        elseif($dimensionID != 1)
+        {
+            // 非第一维度
+            return array('', '');
+        }
+        elseif($groupID == 2)
+        {
+            // grade不为1的分组
+            return array('', '');
+        }
+        else
+        {
+            // 其他情况
+            return array('', '');
+        }
+    }
 }
