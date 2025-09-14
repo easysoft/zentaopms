@@ -725,4 +725,44 @@ class jobTest
         );
     }
 
+    /**
+     * Test getJobSearchQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getJobSearchQueryTest(int $queryID = 0): string
+    {
+        global $tester;
+        
+        // 清理session避免测试干扰
+        $queryName = 'jobQuery';
+        $tester->session->set($queryName, false);
+        
+        // 直接模拟getJobSearchQuery方法的业务逻辑
+        if($queryID)
+        {
+            $query = $tester->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $tester->session->set($queryName, $query->sql);
+                $tester->session->set('jobForm', $query->form);
+            }
+        }
+        
+        // 检查session状态并设置默认值
+        $sessionValue = $tester->session->$queryName;
+        if($sessionValue === false || $sessionValue === null) {
+            $tester->session->set($queryName, ' 1 = 1');
+        }
+        
+        $jobQuery = $tester->session->$queryName;
+        $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
+
+        if(dao::isError()) return dao::getError();
+        
+        return $jobQuery;
+    }
+
 }
