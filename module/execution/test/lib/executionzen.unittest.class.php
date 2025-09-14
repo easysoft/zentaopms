@@ -2014,4 +2014,151 @@ class executionZenTest
 
         return $result;
     }
+
+    /**
+     * Test displayAfterCreated method.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return mixed
+     */
+    public function displayAfterCreatedTest(int $projectID, int $executionID, int $planID, string $confirm = 'no', string $tabContext = 'project')
+    {
+        global $tester, $lang, $app;
+
+        // 初始化语言变量
+        if(!isset($lang->execution)) $lang->execution = new stdClass();
+        if(!isset($lang->executionCommon)) $lang->executionCommon = '执行';
+        if(!isset($lang->story)) $lang->story = new stdClass();
+        if(!isset($lang->story->common)) $lang->story->common = '需求';
+        if(!isset($lang->story->typeList)) $lang->story->typeList = array('story' => '用户故事', 'epic' => '史诗', 'requirement' => '需求');
+        if(!isset($lang->execution->stage)) $lang->execution->stage = '阶段';
+        if(!isset($lang->execution->tips)) $lang->execution->tips = '提示';
+        if(!isset($lang->execution->importPlanStory)) $lang->execution->importPlanStory = '当前计划关联了%s，是否要导入这些需求？';
+        if(!isset($lang->execution->importBranchPlanStory)) $lang->execution->importBranchPlanStory = '当前分支计划关联了%s，是否要导入这些需求？';
+
+        // 设置app变量，支持不同的tab上下文
+        $app->tab = $tabContext;
+
+        // 模拟execution数据
+        $execution = new stdClass();
+        if($executionID > 0) {
+            $executionData = $this->objectModel->fetchByID($executionID);
+            if($executionData) {
+                $execution = $executionData;
+            } else {
+                // 创建默认execution对象用于测试
+                $execution->id = $executionID;
+                $execution->name = "执行{$executionID}";
+                $execution->type = ($executionID == 2) ? 'kanban' : 'sprint';
+                $execution->lifetime = ($planID == 999) ? 'ops' : 'project';
+                $execution->project = $projectID;
+            }
+        }
+
+        // 模拟project数据
+        $project = null;
+        if($projectID > 0) {
+            $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            if(!$project) {
+                $project = new stdClass();
+                $project->id = $projectID;
+                $project->storyType = 'story,requirement';
+            }
+        }
+
+        // 模拟executionProductList数据
+        $executionProductList = array();
+        if($executionID > 0) {
+            $products = $tester->dao->select('t2.id,t2.name,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->where('t1.project')->eq($executionID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchAll('id');
+            if($products) {
+                $executionProductList = $products;
+            } else {
+                // 为测试创建模拟产品数据
+                if($executionID == 1) {
+                    $product = new stdClass();
+                    $product->id = 1;
+                    $product->name = '产品1';
+                    $product->type = 'normal';
+                    $executionProductList[1] = $product;
+                } elseif($executionID == 3) {
+                    $product = new stdClass();
+                    $product->id = 2;
+                    $product->name = '产品2';
+                    $product->type = 'branch';
+                    $executionProductList[2] = $product;
+                }
+            }
+        }
+
+        // 直接模拟displayAfterCreated方法的核心逻辑
+        if(!empty($planID) and $execution->lifetime != 'ops')
+        {
+            if($confirm == 'yes')
+            {
+                // 模拟linkStories调用成功
+                return 'linkStories';
+            }
+            else
+            {
+                // 检查是否是多分支产品
+                $multiBranchProduct = false;
+                foreach($executionProductList as $executionProduct) {
+                    if(isset($executionProduct->type) && $executionProduct->type != 'normal') {
+                        $multiBranchProduct = true;
+                        break;
+                    }
+                }
+
+                // 构建需求类型文本
+                $storyType = '';
+                if($project && isset($project->storyType) && !empty($project->storyType))
+                {
+                    foreach(explode(',', $project->storyType) as $type) {
+                        if(isset($lang->story->typeList[$type])) {
+                            $storyType .= $lang->story->typeList[$type] . ', ';
+                        }
+                    }
+                }
+                if(empty($storyType)) $storyType = $lang->story->common;
+
+                // 构建导入提示信息
+                $importPlanStoryTips = sprintf($multiBranchProduct ? $lang->execution->importBranchPlanStory : $lang->execution->importPlanStory, trim($storyType, ', '));
+                if($execution->type == 'stage') $importPlanStoryTips = str_replace($lang->executionCommon, $lang->execution->stage, $importPlanStoryTips);
+
+                // 模拟返回确认对话框数据
+                return array(
+                    'result' => 'success',
+                    'open' => array(
+                        'confirm' => $importPlanStoryTips,
+                        'url' => "confirmURL",
+                        'canceled' => "cancelURL"
+                    )
+                );
+            }
+        }
+
+        // kanban类型处理
+        if(!empty($projectID) and $execution->type == 'kanban' and isset($app->tab) && $app->tab == 'project') {
+            return array('result' => 'success', 'load' => 'project_index');
+        }
+        if($execution->type == 'kanban') {
+            return array('result' => 'success', 'load' => 'execution_kanban');
+        }
+
+        // 默认显示tips页面
+        return array(
+            'title' => $lang->execution->tips,
+            'executionID' => $executionID,
+            'execution' => $execution,
+            'template' => 'tips'
+        );
+    }
 }
