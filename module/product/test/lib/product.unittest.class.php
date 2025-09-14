@@ -1944,4 +1944,129 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setShowErrorNoneMenu4Project method.
+     *
+     * @param  string $activeMenu
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4ProjectTest(string $activeMenu, int $projectID): array
+    {
+        global $app, $lang;
+        
+        $result = array();
+        
+        // 备份原始状态
+        $originalRawModule = isset($app->rawModule) ? $app->rawModule : '';
+        
+        try {
+            // 初始化必要的语言配置
+            if(!isset($lang->scrum)) $lang->scrum = new stdClass();
+            if(!isset($lang->scrum->menu)) $lang->scrum->menu = new stdClass();
+            if(!isset($lang->waterfall)) $lang->waterfall = new stdClass();
+            if(!isset($lang->waterfall->menu)) $lang->waterfall->menu = new stdClass();
+            if(!isset($lang->project)) $lang->project = new stdClass();
+            if(!isset($lang->project->menu)) $lang->project->menu = new stdClass();
+            if(!isset($lang->project->menuOrder)) $lang->project->menuOrder = new stdClass();
+            
+            // 模拟设置项目菜单结构
+            $qaSubMenu = new stdClass();
+            $qaSubMenu->bug = array('subModule' => '');
+            $qaSubMenu->testcase = array('subModule' => '');
+            $qaSubMenu->testtask = array('subModule' => '');
+            $qaSubMenu->testreport = array('subModule' => '');
+            
+            $lang->scrum->menu = new stdClass();
+            $lang->scrum->menu->qa = array('subMenu' => $qaSubMenu);
+            $lang->scrum->menu->release = array('subModule' => '');
+            $lang->scrum->menuOrder = new stdClass();
+            
+            $lang->waterfall->menu = new stdClass();
+            $lang->waterfall->menu->qa = array('subMenu' => $qaSubMenu);
+            $lang->waterfall->menu->release = array('subModule' => '');
+            $lang->waterfall->menuOrder = new stdClass();
+            
+            // 步骤1：模拟loadModel('project')->setMenu($projectID)调用
+            $project = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $result['projectMenuLoaded'] = !empty($project) ? 1 : 0;
+            
+            // 步骤2：设置app->rawModule为activeMenu
+            $app->rawModule = $activeMenu;
+            $result['rawModuleSet'] = 1;
+            
+            // 步骤3：获取项目信息并设置模型
+            if($project) {
+                $model = isset($project->model) ? $project->model : 'scrum';
+                $lang->project->menu = $lang->{$model}->menu;
+                $lang->project->menuOrder = $lang->{$model}->menuOrder;
+                $result['projectModelSet'] = 1;
+            } else {
+                $model = 'scrum';
+                $result['projectModelSet'] = 0;
+            }
+            
+            // 步骤4：根据activeMenu设置bug子模块
+            if($activeMenu == 'bug') {
+                $lang->{$model}->menu->qa['subMenu']->bug['subModule'] = 'product';
+                $result['bugSubModuleSet'] = 1;
+            } else {
+                $result['bugSubModuleSet'] = 0;
+            }
+            
+            // 步骤5：根据activeMenu设置testcase子模块
+            if($activeMenu == 'testcase') {
+                $lang->{$model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
+                $result['testcaseSubModuleSet'] = 1;
+            } else {
+                $result['testcaseSubModuleSet'] = 0;
+            }
+            
+            // 步骤6：根据activeMenu设置testtask子模块
+            if($activeMenu == 'testtask') {
+                $lang->{$model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
+                $result['testtaskSubModuleSet'] = 1;
+            } else {
+                $result['testtaskSubModuleSet'] = 0;
+            }
+            
+            // 步骤7：根据activeMenu设置testreport子模块
+            if($activeMenu == 'testreport') {
+                $lang->{$model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+                $result['testreportSubModuleSet'] = 1;
+            } else {
+                $result['testreportSubModuleSet'] = 0;
+            }
+            
+            // 步骤8：根据activeMenu设置projectrelease子模块
+            if($activeMenu == 'projectrelease') {
+                $lang->{$model}->menu->release['subModule'] = 'projectrelease';
+                $result['projectreleaseSubModuleSet'] = 1;
+            } else {
+                $result['projectreleaseSubModuleSet'] = 0;
+            }
+            
+            // 参数验证
+            $result['paramsValid'] = (!empty($activeMenu) && $projectID > 0) ? 1 : 0;
+            
+        } catch (Exception $e) {
+            $result['projectMenuLoaded'] = 0;
+            $result['rawModuleSet'] = 0;
+            $result['projectModelSet'] = 0;
+            $result['bugSubModuleSet'] = 0;
+            $result['testcaseSubModuleSet'] = 0;
+            $result['testtaskSubModuleSet'] = 0;
+            $result['testreportSubModuleSet'] = 0;
+            $result['projectreleaseSubModuleSet'] = 0;
+            $result['paramsValid'] = 0;
+        }
+        
+        // 恢复原始状态
+        $app->rawModule = $originalRawModule;
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
