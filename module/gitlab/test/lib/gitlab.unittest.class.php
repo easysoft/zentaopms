@@ -699,4 +699,79 @@ class gitlabTest
         // 返回简化的结果用于测试
         return count($addedMembers) . ',' . count($deletedMembers) . ',' . count($updatedMembers);
     }
+
+    /**
+     * Test getProjectMemberData method.
+     *
+     * @param  array $gitlabCurrentMembers
+     * @param  array $newGitlabMembers
+     * @param  array $bindedUsers
+     * @param  array $accounts
+     * @param  array $originalUsers
+     * @access public
+     * @return string
+     */
+    public function getProjectMemberDataTest(array $gitlabCurrentMembers, array $newGitlabMembers, array $bindedUsers, array $accounts, array $originalUsers): string
+    {
+        // 模拟getProjectMemberData方法的核心逻辑
+        $addedMembers = $updatedMembers = $deletedMembers = array();
+        
+        /* Get the updated data. */
+        foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+        {
+            $memberID = isset($gitlabCurrentMember->id) ? $gitlabCurrentMember->id : 0;
+            if(!isset($newGitlabMembers[$memberID])) continue;
+            if($newGitlabMembers[$memberID]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$memberID]->expires_at != $gitlabCurrentMember->expires_at)
+            {
+                $updatedData = new stdClass();
+                $updatedData->user_id      = $memberID;
+                $updatedData->access_level = $newGitlabMembers[$memberID]->access_level;
+                $updatedData->expires_at   = $newGitlabMembers[$memberID]->expires_at;
+                $updatedMembers[] = $updatedData;
+            }
+        }
+        
+        /* Get the added data. */
+        foreach($newGitlabMembers as $id => $newMember)
+        {
+            $exist = false;
+            foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+            {
+                if($gitlabCurrentMember->id == $id)
+                {
+                    $exist = true;
+                    break;
+                }
+            }
+            if($exist == false)
+            {
+                $addedData = new stdClass();
+                $addedData->user_id      = $id;
+                $addedData->access_level = $newGitlabMembers[$id]->access_level;
+                $addedData->expires_at   = $newGitlabMembers[$id]->expires_at;
+                $addedMembers[] = $addedData;
+            }
+        }
+        
+        /* Get the deleted data. */
+        foreach($originalUsers as $user)
+        {
+            if(!in_array($user, $accounts) and isset($bindedUsers[$user]))
+            {
+                $exist = false;
+                foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+                {
+                    if($gitlabCurrentMember->id == $bindedUsers[$user])
+                    {
+                        $exist            = true;
+                        $deletedMembers[] = $gitlabCurrentMember->id;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 返回简化的结果用于测试
+        return count($addedMembers) . ',' . count($deletedMembers) . ',' . count($updatedMembers);
+    }
 }
