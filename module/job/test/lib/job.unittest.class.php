@@ -474,4 +474,48 @@ class jobTest
         }
     }
 
+    /**
+     * Test getJobList method.
+     *
+     * @param  int    $repoID
+     * @param  string $jobQuery
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getJobListTest(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null)
+    {
+        global $tester;
+        
+        // 模拟jobZen::getJobList的业务逻辑
+        $tester->loadModel('gitlab');
+        $products = $tester->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+        $jobList  = $this->objectModel->getList($repoID, $jobQuery, $orderBy, null);
+        
+        foreach($jobList as $job)
+        {
+            if($job->engine == 'jenkins')
+            {
+                if(strpos($job->pipeline, '/job/') === 0) $job->pipeline = trim(substr($job->pipeline, 5), '/');
+            }
+            else
+            {
+                $job->branch   = empty($job->pipeline) ? '' : zget(json_decode($job->pipeline), 'reference', '');
+                $job->pipeline = $job->repoName;
+            }
+
+            $job->lastExec    = $job->lastExec ? $job->lastExec : '';
+            $job->triggerType = $this->objectModel->getTriggerConfig($job);
+            $job->buildSpec   = !empty($job->pipeline) ? urldecode($job->pipeline) . '@' . $job->jenkinsName : $job->jenkinsName;
+            $job->engine      = zget($tester->lang->job->engineList, $job->engine);
+            $job->frame       = zget($tester->lang->job->frameList, $job->frame);
+            $job->productName = zget($products, $job->product, '');
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $jobList;
+    }
+
 }
