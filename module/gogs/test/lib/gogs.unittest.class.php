@@ -74,4 +74,30 @@ class gogsTest
 
         return $result;
     }
+
+    /**
+     * Test getMatchedUsers method.
+     *
+     * @param  int   $gogsID
+     * @param  array $gogsUsers
+     * @access public
+     * @return mixed
+     */
+    public function getMatchedUsersTest(int $gogsID, array $gogsUsers): mixed
+    {
+        global $tester;
+        
+        // 创建zen实例并设置必需的依赖
+        $zen = initReference('gogs');
+        $method = $zen->getMethod('getMatchedUsers');
+        $method->setAccessible(true);
+        
+        // 创建一个zen实例
+        $zenInstance = $zen->newInstance();
+        
+        $result = $method->invoke($zenInstance, $gogsID, $gogsUsers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
