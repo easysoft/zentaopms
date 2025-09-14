@@ -63,4 +63,23 @@ class mailZenTest
 
         return $result;
     }
+
+    /**
+     * Test sendQueue method.
+     *
+     * @param  object $queue
+     * @param  bool   $includeMe
+     * @access public
+     * @return mixed
+     */
+    public function sendQueueZenTest(object $queue, bool $includeMe = false)
+    {
+        $method = $this->mailZenTest->getMethod('sendQueue');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->mailZenTest->newInstance(), array($queue, $includeMe));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
