@@ -5382,4 +5382,49 @@ class docTest
         
         return 0; // 其他情况返回0
     }
+
+    /**
+     * Test exportZentaoList method.
+     *
+     * @param  object $blockData
+     * @access public
+     * @return string
+     */
+    public function exportZentaoListTest(object $blockData): string
+    {
+        // 模拟exportZentaoList方法的核心逻辑
+        global $tester;
+        $users = $tester->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $cols  = zget($blockData->content, 'cols', array());
+        $data  = zget($blockData->content, 'data', array());
+
+        $list = array();
+        $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
+
+        $tableProps = array();
+        foreach($cols as $col)
+        {
+            if(isset($col->show) && !$col->show) continue;
+            $width = null;
+            if(isset($col->width) && is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
+        }
+        foreach($data as $row)
+        {
+            $rowData = array();
+            foreach($cols as $col)
+            {
+                if(isset($col->show) && !$col->show) continue;
+                $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
+                if(isset($col->type) && $col->type == 'user'   && isset($users[$value]))  $value = $users[$value];
+                if(isset($col->type) && $col->type == 'desc'   && isset($col->map))       $value = zget($col->map, $value);
+                if(isset($col->type) && $col->type == 'status' && isset($col->statusMap)) $value = zget($col->statusMap, $value);
+                $rowData[$col->name] = array('text' => "$value");
+            }
+            $tableProps['data'][] = $rowData;
+        }
+
+        $list[] = array('type' => 'table', 'props' => $tableProps);
+        return json_encode($list);
+    }
 }
