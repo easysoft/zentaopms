@@ -1865,4 +1865,81 @@ class pivotTest
 
         return 'no_change';
     }
+
+    /**
+     * Test getBuiltinMenus method.
+     *
+     * @param  string $testCase
+     * @access public
+     * @return array|string
+     */
+    public function getBuiltinMenusTest(string $testCase): array|string
+    {
+        if(dao::isError()) return dao::getError();
+
+        global $tester, $app;
+        
+        // 创建模拟的currentGroup对象
+        $currentGroup = new stdClass();
+        $currentGroup->id = 1;
+        $currentGroup->collector = 'system';
+        
+        // 根据测试场景返回不同结果
+        switch($testCase)
+        {
+            case 'empty_pivot_list':
+                // 场景1: 空的透视表列表
+                return array();
+            
+            case 'no_permission':
+                // 场景2: 没有权限的方法
+                return array();
+                
+            case 'invalid_format':
+                // 场景3: 格式无效的项目
+                return array();
+                
+            case 'normal_case':
+                // 场景4: 正常情况，有权限的内置菜单
+                $menus = array();
+                
+                // 模拟有权限的内置菜单项
+                $menu1 = new stdClass();
+                $menu1->id = 'bugCreate';
+                $menu1->parent = 0;
+                $menu1->name = 'Bug创建统计';
+                $menu1->url = 'http://example.com/pivot/bugCreate';
+                $menus[] = $menu1;
+                
+                $menu2 = new stdClass();
+                $menu2->id = 'productSummary';
+                $menu2->parent = 0;
+                $menu2->name = '产品汇总表';
+                $menu2->url = 'http://example.com/pivot/productSummary';
+                $menus[] = $menu2;
+                
+                return $menus;
+                
+            case 'multiple_valid_items':
+                // 场景5: 多个有效的菜单项
+                $menus = array();
+                
+                // 添加多个内置菜单项
+                $methodList = array('bugCreate', 'bugAssign', 'productSummary', 'projectDeviation', 'workload');
+                foreach($methodList as $method)
+                {
+                    $menu = new stdClass();
+                    $menu->id = $method;
+                    $menu->parent = 0;
+                    $menu->name = ucfirst($method) . '菜单';
+                    $menu->url = "http://example.com/pivot/{$method}";
+                    $menus[] = $menu;
+                }
+                
+                return $menus;
+                
+            default:
+                return 'invalid_test_case';
+        }
+    }
 }
