@@ -204,4 +204,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareMetricRecord method.
+     *
+     * @param  array $calcList
+     * @access public
+     * @return mixed
+     */
+    public function prepareMetricRecordZenTest($calcList)
+    {
+        $method = $this->metricZenTest->getMethod('prepareMetricRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($calcList));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
