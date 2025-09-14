@@ -2753,4 +2753,45 @@ class productTest
 
         return is_array($result) ? count($result) : 0;
     }
+
+    /**
+     * Test getCreatedLocate method.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  string $tab
+     * @param  bool   $inModal
+     * @access public
+     * @return array
+     */
+    public function getCreatedLocateTest(int $productID, int $programID, string $tab = 'product', bool $inModal = false): array
+    {
+        global $tester;
+        
+        // 创建productZen实例并初始化相关属性
+        $productZen = new productZen();
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->moduleName = 'product';
+        
+        // 设置tab值
+        $productZen->app->tab = $tab;
+        
+        // 模拟模态框环境
+        if($inModal) {
+            $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+            $_SERVER['HTTP_X_ZUI_MODAL'] = true;
+        } else {
+            unset($_SERVER['HTTP_X_REQUESTED_WITH']);
+            unset($_SERVER['HTTP_X_ZUI_MODAL']);
+        }
+
+        $method = $this->objectZen->getMethod('getCreatedLocate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
