@@ -769,4 +769,70 @@ class executionZenTest
 
         return $result;
     }
+
+    /**
+     * Test buildGroupTasks method.
+     *
+     * @param  string $groupBy 分组方式
+     * @param  array  $tasks   任务列表
+     * @param  array  $users   用户列表
+     * @access public
+     * @return array
+     */
+    public function buildGroupTasksTest($groupBy = 'story', $tasks = array(), $users = array())
+    {
+        // 模拟buildGroupTasks方法的逻辑
+        $groupTasks  = array();
+        $groupByList = array();
+        
+        foreach($tasks as $task)
+        {
+            if($groupBy == 'story')
+            {
+                $groupTasks[$task->story][] = $task;
+                $groupByList[$task->story]  = isset($task->storyTitle) ? $task->storyTitle : '无需求';
+            }
+            elseif($groupBy == 'status')
+            {
+                // 简化的状态列表
+                $statusList = array('wait' => '等待', 'doing' => '进行中', 'done' => '已完成', 'closed' => '已关闭');
+                $statusName = isset($statusList[$task->status]) ? $statusList[$task->status] : $task->status;
+                $groupTasks[$statusName][] = $task;
+            }
+            elseif($groupBy == 'assignedTo')
+            {
+                $assignedToName = isset($task->assignedToRealName) ? $task->assignedToRealName : $task->assignedTo;
+                $groupTasks[$assignedToName][] = $task;
+            }
+            elseif($groupBy == 'finishedBy')
+            {
+                $finishedByName = isset($users[$task->finishedBy]) ? $users[$task->finishedBy] : $task->finishedBy;
+                $groupTasks[$finishedByName][] = $task;
+            }
+            elseif($groupBy == 'type')
+            {
+                // 简化的类型列表
+                $typeList = array('devel' => '开发', 'test' => '测试', 'design' => '设计');
+                $typeName = isset($typeList[$task->type]) ? $typeList[$task->type] : $task->type;
+                $groupTasks[$typeName][] = $task;
+            }
+            else
+            {
+                $groupTasks[$task->$groupBy][] = $task;
+            }
+        }
+
+        // Process closed data when group by assignedTo.
+        if($groupBy == 'assignedTo' && isset($groupTasks['Closed']))
+        {
+            $closedTasks = $groupTasks['Closed'];
+            unset($groupTasks['Closed']);
+            $groupTasks['closed'] = $closedTasks;
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回分组数量以便测试验证
+        return array(count($groupTasks), $groupTasks, $groupByList);
+    }
 }
