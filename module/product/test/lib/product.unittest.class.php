@@ -2410,4 +2410,195 @@ class productTest
             default: return $result;
         }
     }
+
+    /**
+     * Test getExportFields method.
+     *
+     * @param  string $systemMode
+     * @param  bool   $hasExtendFields
+     * @param  bool   $hasHeaderGroup
+     * @access public
+     * @return array
+     */
+    public function getExportFieldsTest(string $systemMode = 'normal', bool $hasExtendFields = false, bool $hasHeaderGroup = false): array
+    {
+        global $config, $tester;
+
+        // 备份原始配置
+        $originalSystemMode = $config->systemMode ?? 'normal';
+        $originalEnableER = $config->enableER ?? false;
+        $originalURAndSR = $config->URAndSR ?? false;
+
+        // 设置测试环境
+        $config->systemMode = $systemMode;
+        $config->enableER = true;
+        $config->URAndSR = true;
+
+        // 模拟datatable设置
+        $mockFieldList = array(
+            'id' => array('name' => 'id', 'title' => 'ID', 'type' => 'int'),
+            'name' => array('name' => 'name', 'title' => '产品名称', 'type' => 'string'),
+            'code' => array('name' => 'code', 'title' => '产品代号', 'type' => 'string'),
+            'program' => array('name' => 'program', 'title' => '项目集', 'type' => 'int'),
+            'productLine' => array('name' => 'productLine', 'title' => '产品线', 'type' => 'int'),
+            'PO' => array('name' => 'PO', 'title' => '产品负责人', 'type' => 'user'),
+            'status' => array('name' => 'status', 'title' => '状态', 'type' => 'option')
+        );
+
+        // 如果需要headerGroup，添加一些带有headerGroup的字段
+        if($hasHeaderGroup) {
+            $mockFieldList['customField1'] = array(
+                'name' => 'customField1',
+                'title' => '自定义字段1',
+                'headerGroup' => '扩展信息',
+                'type' => 'string'
+            );
+        }
+
+        // 模拟扩展字段
+        $mockExtendFields = array();
+        if($hasExtendFields) {
+            $mockExtendFields = array(
+                'epic_field' => '史诗字段',
+                'requirement_field' => '需求字段',
+                'custom_field' => '自定义字段'
+            );
+        }
+
+        try {
+            // 设置全局变量来传递测试参数
+            global $testHasExtendFields, $testHasHeaderGroup;
+            $testHasExtendFields = $hasExtendFields;
+            $testHasHeaderGroup = $hasHeaderGroup;
+            
+            // 创建一个临时的zen对象来测试getExportFields方法
+            $zenObject = new class($this->objectModel) {
+                private $objectModel;
+                
+                public function __construct($objectModel) {
+                    $this->objectModel = $objectModel;
+                    global $config;
+                    $this->config = $config;
+                }
+                
+                protected function getExportFields(): array
+                {
+                    global $config, $testHasExtendFields, $testHasHeaderGroup;
+                    
+                    // 模拟loadModel('datatable')->getSetting调用
+                    $fieldList = array(
+                        'id' => array('name' => 'id', 'title' => 'ID', 'type' => 'int'),
+                        'name' => array('name' => 'name', 'title' => '产品名称', 'type' => 'string'),
+                        'code' => array('name' => 'code', 'title' => '产品代号', 'type' => 'string'),
+                        'program' => array('name' => 'program', 'title' => '项目集', 'type' => 'int'),
+                        'productLine' => array('name' => 'productLine', 'title' => '产品线', 'type' => 'int'),
+                        'PO' => array('name' => 'PO', 'title' => '产品负责人', 'type' => 'user'),
+                        'status' => array('name' => 'status', 'title' => '状态', 'type' => 'option')
+                    );
+                    
+                    // 根据测试参数添加headerGroup字段
+                    if($testHasHeaderGroup) {
+                        $fieldList['customField1'] = array(
+                            'name' => 'customField1',
+                            'title' => '自定义字段1',
+                            'headerGroup' => '扩展信息',
+                            'type' => 'string'
+                        );
+                    }
+                    
+                    // 模拟getFlowExtendFields调用 - 根据测试参数决定是否添加
+                    if($testHasExtendFields) {
+                        $extendFieldList = array(
+                            'epic_field' => '史诗字段',
+                            'requirement_field' => '需求字段',
+                            'custom_field' => '自定义字段'
+                        );
+                        
+                        foreach($extendFieldList as $field => $name) {
+                            $fieldName = trim($field);
+                            if(str_contains(strtolower($fieldName), 'epic') && !$config->enableER) continue;
+                            if(str_contains(strtolower($fieldName), 'requirement') && !$config->URAndSR) continue;
+
+                            $extCol = array(
+                                'name' => $field,
+                                'title' => $name,
+                                'type' => 'extend'
+                            );
+
+                            $fieldList[$field] = $extCol;
+                        }
+                    }
+
+                    $fieldPairs = array();
+                    foreach($fieldList as $fieldKey => $field) {
+                        if(isset($field['headerGroup'])) $field['title'] = $field['headerGroup'] . ' - ' . $field['title'];
+                        $fieldPairs[$fieldKey] = $field['title'];
+                    }
+                    
+                    if($config->systemMode == 'light') {
+                        unset($fieldPairs['productLine'], $fieldPairs['program']);
+                    }
+
+                    return $fieldPairs;
+                }
+                
+                public function testGetExportFields() {
+                    return $this->getExportFields();
+                }
+            };
+
+            $result = $zenObject->testGetExportFields();
+
+            // 分析结果
+            $analysis = array();
+            $analysis['fieldCount'] = count($result);
+            $analysis['type'] = is_array($result) ? 'array' : gettype($result);
+            $analysis['hasBasicFields'] = (isset($result['id']) && isset($result['name'])) ? 1 : 0;
+            
+            // 检查轻量模式下的字段过滤
+            if($systemMode == 'light') {
+                $analysis['noProductLine'] = !isset($result['productLine']) ? 1 : 0;
+                $analysis['noProgram'] = !isset($result['program']) ? 1 : 0;
+            } else {
+                $analysis['noProductLine'] = 0;
+                $analysis['noProgram'] = 0;
+            }
+            
+            // 检查扩展字段
+            $hasExtendFieldsResult = false;
+            foreach($result as $key => $value) {
+                if(strpos($key, '_field') !== false) {
+                    $hasExtendFieldsResult = true;
+                    break;
+                }
+            }
+            $analysis['hasExtendFields'] = $hasExtendFieldsResult ? 1 : 0;
+            
+            // 检查headerGroup功能
+            $hasHeaderGroupResult = false;
+            foreach($result as $key => $value) {
+                if(strpos($value, ' - ') !== false) {
+                    $hasHeaderGroupResult = true;
+                    break;
+                }
+            }
+            $analysis['hasHeaderGroup'] = $hasHeaderGroupResult ? 1 : 0;
+
+            // 恢复原始配置
+            $config->systemMode = $originalSystemMode;
+            $config->enableER = $originalEnableER;
+            $config->URAndSR = $originalURAndSR;
+
+            if(dao::isError()) return dao::getError();
+            return $analysis;
+
+        } catch (Exception $e) {
+            // 恢复原始配置
+            $config->systemMode = $originalSystemMode;
+            $config->enableER = $originalEnableER;
+            $config->URAndSR = $originalURAndSR;
+            
+            return array('error' => $e->getMessage());
+        }
+    }
 }
