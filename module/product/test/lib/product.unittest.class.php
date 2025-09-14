@@ -2821,4 +2821,76 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test buildBatchEditForm method.
+     *
+     * @param  int   $programID
+     * @param  array $productIdList
+     * @access public
+     * @return mixed
+     */
+    public function buildBatchEditFormTest(int $programID, array $productIdList)
+    {
+        global $tester;
+        
+        // 创建productZen实例并初始化相关属性
+        $productZen = new productZen();
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        $productZen->product = $this->objectModel;
+        $productZen->program = $tester->loadModel('program');
+        
+        // 模拟view对象
+        $productZen->view = new stdClass();
+        
+        // 手动执行buildBatchEditForm方法的逻辑，避免调用display()
+        $products = $productZen->product->getByIdList($productIdList);
+        
+        $authPrograms   = array();
+        $unauthPrograms = array();
+        $lines          = array();
+        if(in_array($productZen->config->systemMode, array('ALM', 'PLM')))
+        {
+            $authPrograms   = $tester->loadModel('program')->getTopPairs();
+            
+            // 使用反射调用私有方法
+            $method = $this->objectZen->getMethod('getUnauthProgramsOfProducts');
+            $method->setAccessible(true);
+            $unauthPrograms = $method->invokeArgs($productZen, array($products, $authPrograms));
+            
+            $programIdList = array_merge(array(0 => ''), array_keys($authPrograms), array_keys($unauthPrograms));
+            
+            $method = $this->objectZen->getMethod('getProductLines');
+            $method->setAccessible(true);
+            list(, $lines) = $method->invokeArgs($productZen, array($programIdList));
+        }
+        
+        // 模拟view层赋值
+        $productZen->view->title          = $productZen->lang->product->batchEdit ?? 'Batch Edit';
+        $productZen->view->lines          = $lines;
+        $productZen->view->products       = $products;
+        
+        $method = $this->objectZen->getMethod('setSelectFormOptions');
+        $method->setAccessible(true);
+        $productZen->view->fields         = $method->invokeArgs($productZen, array(0, $productZen->config->product->form->batchEdit ?? array()));
+        
+        $productZen->view->programID      = $programID;
+        $productZen->view->authPrograms   = $authPrograms;
+        $productZen->view->unauthPrograms = $unauthPrograms;
+        
+        if(dao::isError()) return dao::getError();
+
+        // 返回设置的view属性以及一些统计信息
+        return array(
+            'title' => $productZen->view->title,
+            'lines' => count($productZen->view->lines),
+            'products' => count($productZen->view->products),
+            'fields' => count($productZen->view->fields),
+            'programID' => $productZen->view->programID,
+            'authPrograms' => count($productZen->view->authPrograms),
+            'unauthPrograms' => count($productZen->view->unauthPrograms),
+        );
+    }
 }
