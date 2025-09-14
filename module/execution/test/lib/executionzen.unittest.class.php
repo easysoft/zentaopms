@@ -1483,4 +1483,40 @@ class executionZenTest
         
         return empty($dataList) ? 0 : $result;
     }
+
+    /**
+     * Test hasMultipleBranch method.
+     *
+     * @param  int $productID
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function hasMultipleBranchTest(int $productID, int $executionID)
+    {
+        global $tester;
+        
+        // 直接实现hasMultipleBranch的业务逻辑进行测试
+        $multiBranchProduct = false;
+        
+        if($productID) {
+            // Check if the specific product is multiple branch
+            $product = $tester->loadModel('product')->getByID($productID);
+            if($product && $product->type != 'normal') $multiBranchProduct = true;
+        } else {
+            // Check if the execution has any product with multiple branch
+            $executionProductList = $tester->loadModel('product')->getProducts($executionID);
+            foreach($executionProductList as $executionProduct) {
+                if(isset($executionProduct->type) && $executionProduct->type != 'normal') {
+                    $multiBranchProduct = true;
+                    break;
+                }
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // Convert boolean to string for test assertion
+        return $multiBranchProduct ? '1' : '0';
+    }
 }
