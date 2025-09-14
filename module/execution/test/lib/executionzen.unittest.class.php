@@ -1349,4 +1349,31 @@ class executionZenTest
 
         return $result;
     }
+
+    /**
+     * Test getImportBugs method.
+     *
+     * @param  int    $executionID
+     * @param  array  $productIdList
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getImportBugsTest(int $executionID, array $productIdList, string $browseType, int $queryID, object $pager)
+    {
+        if($this->executionZenTest === null) {
+            return 0;
+        }
+
+        // Use reflection to call the protected method
+        $method = $this->executionZenTest->getMethod('getImportBugs');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->executionZenTest, $executionID, $productIdList, $browseType, $queryID, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? count($result) : $result;
+    }
 }
