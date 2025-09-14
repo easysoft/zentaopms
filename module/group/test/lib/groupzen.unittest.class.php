@@ -60,4 +60,25 @@ class groupZenTest
         
         return $result;
     }
+
+    /**
+     * 测试appendWorkflowMenu方法。
+     * Test appendWorkflowMenu method.
+     *
+     * @param  string $packageCode
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function appendWorkflowMenuTest(string $packageCode, string $module, string $method)
+    {
+        global $config;
+        $appendMethod = $this->groupZenTest->getMethod('appendWorkflowMenu');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $appendMethod->invoke($groupInstance, $packageCode, $module, $method);
+
+        return isset($config->group->package->{$packageCode}->privs) ? $config->group->package->{$packageCode}->privs : array();
+    }
 }
