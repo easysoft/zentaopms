@@ -14,6 +14,8 @@ class mailTest
          $this->dao         = $dao;
          $this->tester      = $tester;
          $this->objectModel = $tester->loadModel('mail');
+         $this->objectTao   = $tester->loadTao('mail');
+         $this->objectZen   = $tester->loadZen('mail');
     }
 
     /**
@@ -464,6 +466,20 @@ class mailTest
     public function getImagesByPathTest($matches = array())
     {
         $result = $this->objectModel->getImagesByPath($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getConfigForEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getConfigForEditTest()
+    {
+        $result = $this->objectZen->getConfigForEdit();
         if(dao::isError()) return dao::getError();
 
         return $result;
