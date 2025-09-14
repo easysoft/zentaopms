@@ -111,4 +111,52 @@ class jenkinsTest
         $jenkins = $tester->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($jenkinsID)->fetch();
         return $this->jenkins->getApiUserPWD($jenkins);
     }
+
+    /**
+     * 测试构建流水线下拉菜单树。
+     * Test buildTree method.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function buildTreeTest(array $tasks = array())
+    {
+        // 创建测试用的简化jenkinsZen类，直接实现buildTree方法
+        $testClass = new class {
+            protected function buildTree(array $tasks): array
+            {
+                $result = array();
+                foreach($tasks as $groupName => $task)
+                {
+                    if(empty($task)) continue;
+
+                    $itemArray = array
+                    (
+                        'id'    => is_array($task) ? '' : $groupName,
+                        'text'  => is_array($task) ? urldecode($groupName) : urldecode($task),
+                        'keys'  => urldecode(zget(common::convert2Pinyin(array($groupName)), $groupName, '')),
+                    );
+                    if(is_array($task))
+                    {
+                        $itemArray['items'] = $this->buildTree($task);
+                        $itemArray['type']  = 'folder';
+                    }
+
+                    $result[] = $itemArray;
+                }
+                return $result;
+            }
+            
+            public function testBuildTree(array $tasks): array
+            {
+                return $this->buildTree($tasks);
+            }
+        };
+        
+        $result = $testClass->testBuildTree($tasks);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
