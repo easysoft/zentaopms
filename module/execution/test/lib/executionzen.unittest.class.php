@@ -1103,4 +1103,27 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test processBuildListData method.
+     *
+     * @param  array $buildList
+     * @param  int   $executionID
+     * @access public
+     * @return array
+     */
+    public function processBuildListDataTest(array $buildList, int $executionID = 0): array
+    {
+        global $tester;
+        
+        $method = $this->executionZenTest->getMethod('processBuildListData');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $buildList, $executionID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
