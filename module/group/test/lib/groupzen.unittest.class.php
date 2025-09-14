@@ -193,4 +193,21 @@ class groupZenTest
         
         return $result;
     }
+
+    /**
+     * 测试getNavGroup方法。
+     * Test getNavGroup method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getNavGroupTest()
+    {
+        $method = $this->groupZenTest->getMethod('getNavGroup');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $result = $method->invoke($groupInstance);
+        
+        return $result;
+    }
 }
