@@ -159,4 +159,42 @@ class jenkinsTest
         
         return $result;
     }
+
+    /**
+     * 测试检查Jenkins账号信息是否正确。
+     * Test checkTokenAccess method.
+     *
+     * @param  string $url
+     * @param  string $account
+     * @param  string $password
+     * @param  string $token
+     * @access public
+     * @return bool
+     */
+    public function checkTokenAccessTest(string $url = '', string $account = '', string $password = '', string $token = '')
+    {
+        // 创建测试用的简化jenkinsZen类，直接实现checkTokenAccess方法
+        $testClass = new class {
+            protected function checkTokenAccess(string $url, string $account, string $password, string $token): bool
+            {
+                global $lang;
+                
+                $password = $token ? $token : $password;
+                $response = json_decode(common::http("{$url}/api/json", '', array(CURLOPT_USERPWD => "{$account}:{$password}")));
+                if(empty($response) || empty($response->_class)) dao::$errors['account'] = $lang->jenkins->error->unauthorized ?? 'Unauthorized access';
+                return dao::isError();
+            }
+            
+            public function testCheckTokenAccess(string $url, string $account, string $password, string $token): bool
+            {
+                return $this->checkTokenAccess($url, $account, $password, $token);
+            }
+        };
+        
+        // 清理之前的错误信息
+        dao::$errors = array();
+        
+        $result = $testClass->testCheckTokenAccess($url, $account, $password, $token);
+        return $result;
+    }
 }
