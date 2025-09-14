@@ -136,4 +136,37 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test startTime method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function startTimeZenTest()
+    {
+        $method = $this->metricZenTest->getMethod('startTime');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test endTime method.
+     *
+     * @param  float $beginTime
+     * @access public
+     * @return mixed
+     */
+    public function endTimeZenTest($beginTime)
+    {
+        $method = $this->metricZenTest->getMethod('endTime');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($beginTime));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
