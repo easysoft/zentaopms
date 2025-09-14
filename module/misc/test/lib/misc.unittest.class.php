@@ -6,7 +6,7 @@ class miscTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('misc');
-        $this->objectTao   = $tester->loadTao('misc');
+        $this->objectZen   = $tester->loadZen('misc');
     }
 
     /**
@@ -17,7 +17,22 @@ class miscTest
      */
     public function helloTest()
     {
-        $result = $this->objectTao->hello();
+        $result = $this->objectZen->hello();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test encodeStatistics method.
+     *
+     * @param  array $statistics
+     * @access public
+     * @return mixed
+     */
+    public function encodeStatisticsTest($statistics = array())
+    {
+        $result = $this->objectZen->encodeStatistics($statistics);
         if(dao::isError()) return dao::getError();
 
         return $result;
