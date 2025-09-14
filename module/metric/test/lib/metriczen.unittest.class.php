@@ -65,4 +65,23 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterEdit method.
+     *
+     * @param  int    $metricID
+     * @param  string $afterEdit
+     * @param  string $location
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterEditZenTest($metricID, $afterEdit, $location = '')
+    {
+        $method = $this->metricZenTest->getMethod('responseAfterEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($metricID, $afterEdit, $location));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
