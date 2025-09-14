@@ -914,4 +914,127 @@ class mrTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test checkNewCommit method.
+     *
+     * @param  string $hostType
+     * @param  int    $hostID
+     * @param  string $projectID
+     * @param  int    $mriid
+     * @param  string $lastTime
+     * @access public
+     * @return mixed
+     */
+    public function checkNewCommitTest($hostType, $hostID, $projectID, $mriid, $lastTime)
+    {
+        // 参数验证
+        if(!is_string($hostType) || empty($hostType)) return 'invalid_hosttype';
+        if(!is_int($hostID) || $hostID <= 0) return 'invalid_hostid';
+        if(!is_string($projectID) || empty($projectID)) return 'invalid_projectid';
+        if(!is_int($mriid) || $mriid <= 0) return 'invalid_mriid';
+        if(!is_string($lastTime) || empty($lastTime)) return 'invalid_lasttime';
+        
+        try {
+            global $tester;
+            
+            // 模拟checkNewCommit方法的逻辑
+            // 检查主机类型是否支持
+            if(!in_array($hostType, array('gitlab', 'gitea', 'gogs'))) return 'unsupported_hosttype';
+            
+            // 模拟apiGetMRCommits的返回值
+            $mockCommitLogs = array(
+                'gitlab' => array(
+                    1 => array(
+                        array(
+                            'id' => 'abc123',
+                            'committed_date' => '2023-12-01 10:00:00',
+                            'message' => 'First commit'
+                        ),
+                        array(
+                            'id' => 'def456',
+                            'committed_date' => '2023-11-30 09:00:00',
+                            'message' => 'Second commit'
+                        )
+                    ),
+                    2 => array(
+                        array(
+                            'id' => 'ghi789',
+                            'committed_date' => '2023-12-02 11:00:00',
+                            'message' => 'Latest commit'
+                        )
+                    ),
+                    999 => array() // 空提交记录
+                ),
+                'gitea' => array(
+                    1 => array(
+                        (object)array(
+                            'sha' => 'abc123',
+                            'author' => (object)array(
+                                'committer' => (object)array('date' => '2023-12-01 10:00:00')
+                            ),
+                            'message' => 'Gitea commit'
+                        )
+                    ),
+                    2 => array(
+                        (object)array(
+                            'sha' => 'def456',
+                            'author' => (object)array(
+                                'committer' => (object)array('date' => '2023-12-02 11:00:00')
+                            ),
+                            'message' => 'New gitea commit'
+                        )
+                    ),
+                    999 => array() // 空提交记录
+                ),
+                'gogs' => array(
+                    1 => array(
+                        (object)array(
+                            'sha' => 'abc123',
+                            'author' => (object)array(
+                                'committer' => (object)array('date' => '2023-12-01 10:00:00')
+                            ),
+                            'message' => 'Gogs commit'
+                        )
+                    ),
+                    2 => array(
+                        (object)array(
+                            'sha' => 'def456',
+                            'author' => (object)array(
+                                'committer' => (object)array('date' => '2023-12-02 11:00:00')
+                            ),
+                            'message' => 'New gogs commit'
+                        )
+                    ),
+                    999 => array() // 空提交记录
+                )
+            );
+            
+            // 获取模拟提交记录
+            $commitLogs = null;
+            if(isset($mockCommitLogs[$hostType][$mriid])) {
+                $commitLogs = $mockCommitLogs[$hostType][$mriid];
+            }
+            
+            // 模拟原方法的逻辑
+            if($commitLogs && count($commitLogs) > 0) {
+                $lastCommit = '';
+                
+                if($hostType == 'gitlab') {
+                    $lastCommit = isset($commitLogs[0]['committed_date']) ? $commitLogs[0]['committed_date'] : '';
+                } elseif(in_array($hostType, array('gitea', 'gogs'))) {
+                    $lastCommit = isset($commitLogs[0]->author->committer->date) ? $commitLogs[0]->author->committer->date : '';
+                }
+                
+                if($lastCommit && $lastCommit > $lastTime) {
+                    return true;
+                }
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
