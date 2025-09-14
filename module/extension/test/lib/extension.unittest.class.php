@@ -408,4 +408,39 @@ class extensionTest
             return $errorResult;
         }
     }
+
+    /**
+     * Test checkExtractPath method.
+     *
+     * @param  string $extension
+     * @param  object $checkResult
+     * @access public
+     * @return object
+     */
+    public function checkExtractPathTest(string $extension, object $checkResult)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('checkExtractPath');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension, $checkResult));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $errorResult = new stdClass();
+            $errorResult->result = 'fail';
+            $errorResult->error = 'Exception: ' . $e->getMessage();
+            $errorResult->errors = '';
+            $errorResult->mkdirCommands = '';
+            $errorResult->chmodCommands = '';
+            $errorResult->dirs2Created = array();
+            return $errorResult;
+        }
+    }
 }
