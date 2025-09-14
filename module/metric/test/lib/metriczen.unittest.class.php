@@ -278,4 +278,24 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildRecordCommonFields method.
+     *
+     * @param  int    $metricID
+     * @param  string $code
+     * @param  string $date
+     * @param  array  $dateValues
+     * @access public
+     * @return mixed
+     */
+    public function buildRecordCommonFieldsZenTest($metricID, $code, $date, $dateValues)
+    {
+        $method = $this->metricZenTest->getMethod('buildRecordCommonFields');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($metricID, $code, $date, $dateValues));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
