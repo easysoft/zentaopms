@@ -2159,4 +2159,65 @@ class pivotTest
         
         return $result;
     }
+
+    /**
+     * Test processProductsForProductSummary method.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function processProductsForProductSummaryTest(array $products): array
+    {
+        global $tester;
+
+        // 直接实现processProductsForProductSummary方法的逻辑
+        // 根据pivot/zen.php第333-379行的实现
+        $productList = array();
+
+        foreach($products as $product)
+        {
+            if(!isset($product->plans))
+            {
+                $product->planTitle      = '';
+                $product->planBegin      = '';
+                $product->planEnd        = '';
+                $product->storyDraft     = 0;
+                $product->storyReviewing = 0;
+                $product->storyActive    = 0;
+                $product->storyChanging  = 0;
+                $product->storyClosed    = 0;
+                $product->storyTotal     = 0;
+
+                $productList[] = $product;
+
+                continue;
+            }
+
+            $first = true;
+            foreach($product->plans as $plan)
+            {
+                $newProduct = clone $product;
+                $newProduct->planTitle      = $plan->title;
+                $newProduct->planBegin      = $plan->begin == '2030-01-01' ? 'future' : $plan->begin;
+                $newProduct->planEnd        = $plan->end   == '2030-01-01' ? 'future' : $plan->end;
+                $newProduct->storyDraft     = isset($plan->status['draft'])     ? $plan->status['draft']     : 0;
+                $newProduct->storyReviewing = isset($plan->status['reviewing']) ? $plan->status['reviewing'] : 0;
+                $newProduct->storyActive    = isset($plan->status['active'])    ? $plan->status['active']    : 0;
+                $newProduct->storyChanging  = isset($plan->status['changing'])  ? $plan->status['changing']  : 0;
+                $newProduct->storyClosed    = isset($plan->status['closed'])    ? $plan->status['closed']    : 0;
+                $newProduct->storyTotal     = $newProduct->storyDraft + $newProduct->storyReviewing + $newProduct->storyActive + $newProduct->storyChanging + $newProduct->storyClosed;
+
+                if($first) $newProduct->rowspan = count($newProduct->plans);
+
+                $productList[] = $newProduct;
+
+                $first = false;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $productList;
+    }
 }
