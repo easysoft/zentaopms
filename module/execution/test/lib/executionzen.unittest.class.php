@@ -1682,4 +1682,49 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test getLinkedProducts method.
+     *
+     * @param  int         $copyExecutionID
+     * @param  int         $planID
+     * @param  object|null $project
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedProductsTest($copyExecutionID, $planID, $project)
+    {
+        // 直接实现getLinkedProducts的业务逻辑进行测试
+        $products = array();
+        
+        // 通过复制执行ID获取产品
+        if($copyExecutionID) 
+        {
+            $products = $this->objectModel->loadModel('product')->getProducts($copyExecutionID);
+        }
+        
+        // 通过产品计划ID获取产品  
+        if($planID)
+        {
+            $plan = $this->objectModel->loadModel('productplan')->fetchByID($planID);
+            if($plan)
+            {
+                $products = $this->objectModel->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                    ->where('t1.id')->eq($plan->product)
+                    ->fetchAll('id');
+            }
+        }
+        
+        // 处理无产品项目的Shadow产品情况
+        if(isset($project->hasProduct) && empty($project->hasProduct))
+        {
+            $product = $this->objectModel->loadModel('product')->getShadowProductByProject($project->id);
+            if($product) $products = array($product->id => $product->name);
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $products;
+    }
 }

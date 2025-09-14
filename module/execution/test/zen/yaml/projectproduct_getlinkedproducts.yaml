@@ -1,0 +1,19 @@
+---
+title: projectproduct表getLinkedProducts方法测试数据
+desc: 用于测试execution模块getLinkedProducts方法的项目产品关联数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  range: 1-5
+  note: 项目ID
+- field: product
+  range: 1-5
+  note: 产品ID
+- field: branch
+  range: '0{3},1{1},2{1}'
+  note: 分支ID
+- field: plan
+  range: '1{2},2{1},3{1},4{1}'
+  note: 计划ID
