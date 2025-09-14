@@ -177,4 +177,36 @@ class messageTest
         unset($tester->config->message->browser->pollTime);
         return $settings;
     }
+
+    /**
+     * 测试设置下拉菜单的相关变量。
+     * Test assign for dropmenu vars.
+     *
+     * @param  string $active
+     * @access public
+     * @return array
+     */
+    public function assignDropmenuVarsTest(string $active = 'unread'): array
+    {
+        global $tester;
+
+        $messageZen = $tester->loadZen('message');
+
+        /* Mock view object */
+        if(!isset($messageZen->view)) $messageZen->view = new stdclass();
+
+        /* Call the method being tested */
+        $messageZen->assignDropmenuVars($active);
+
+        if(dao::isError()) return dao::getError();
+
+        /* Return view variables for verification */
+        $result = array();
+        if(isset($messageZen->view->allMessages)) $result['allMessages'] = $messageZen->view->allMessages;
+        if(isset($messageZen->view->unreadCount)) $result['unreadCount'] = $messageZen->view->unreadCount;
+        if(isset($messageZen->view->unreadMessages)) $result['unreadMessages'] = $messageZen->view->unreadMessages;
+        if(isset($messageZen->view->active)) $result['active'] = $messageZen->view->active;
+
+        return $result;
+    }
 }
