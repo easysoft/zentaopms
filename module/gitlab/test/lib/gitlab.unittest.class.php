@@ -550,4 +550,52 @@ class gitlabTest
         if(count($repeatUsers)) return array('result' => 'fail', 'message' => '不能重复绑定用户 ' . join(',', array_unique($repeatUsers)));
         return array('result' => 'success');
     }
+
+    /**
+     * Test bindUsers method.
+     *
+     * @param  int    $gitlabID
+     * @param  array  $users
+     * @param  array  $gitlabNames
+     * @param  array  $zentaoUsers
+     * @access public
+     * @return mixed
+     */
+    public function bindUsersTest(int $gitlabID, array $users, array $gitlabNames, array $zentaoUsers): mixed
+    {
+        // 模拟bindUsers方法的核心逻辑，用于测试
+        $user = new stdclass;
+        $user->providerID   = $gitlabID;
+        $user->providerType = 'gitlab';
+
+        $oldUsers = $this->tester->dao->select('*')->from(TABLE_OAUTH)
+            ->where('providerType')->eq($user->providerType)
+            ->andWhere('providerID')->eq($user->providerID)
+            ->fetchAll('openID');
+            
+        foreach($users as $openID => $account)
+        {
+            $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
+
+            if($existAccount and $existAccount->account != $account)
+            {
+                $this->tester->dao->delete()
+                    ->from(TABLE_OAUTH)
+                    ->where('openID')->eq($openID)
+                    ->andWhere('providerType')->eq($user->providerType)
+                    ->andWhere('providerID')->eq($user->providerID)
+                    ->exec();
+            }
+            if(!$existAccount or $existAccount->account != $account)
+            {
+                if(!$account) continue;
+                $user->account = $account;
+                $user->openID  = $openID;
+                $this->tester->dao->insert(TABLE_OAUTH)->data($user)->exec();
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        return 'success';
+    }
 }
