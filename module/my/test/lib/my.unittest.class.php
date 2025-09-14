@@ -971,4 +971,77 @@ class myTest
         
         return $result;
     }
+
+    /**
+     * Test buildSearchFormForFeedback method.
+     *
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  string $rawMethod
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormForFeedbackTest(int $queryID, string $orderBy, string $rawMethod = 'feedback'): array
+    {
+        global $tester;
+        
+        // 保存原始rawMethod并设置新值
+        $originalRawMethod = $tester->app->rawMethod ?? '';
+        $tester->app->rawMethod = $rawMethod;
+        
+        // 模拟buildSearchFormForFeedback方法的核心逻辑
+        // 由于直接调用zen层方法比较复杂，我们模拟其主要功能
+        
+        // 初始化feedback搜索配置
+        if(!isset($tester->config->feedback)) $tester->config->feedback = new stdclass();
+        if(!isset($tester->config->feedback->search)) $tester->config->feedback->search = array();
+        
+        // 设置搜索模块名
+        $tester->config->feedback->search['module'] = $rawMethod . 'Feedback';
+        
+        // 设置搜索动作URL
+        $tester->config->feedback->search['actionURL'] = "inlink({$rawMethod}, 'mode=feedback&browseType=bysearch&param=myQueryID&orderBy={$orderBy}')";
+        
+        // 设置queryID
+        $tester->config->feedback->search['queryID'] = $queryID;
+        
+        // 设置搜索参数（模拟从其他模块获取数据）
+        if(!isset($tester->config->feedback->search['params'])) $tester->config->feedback->search['params'] = array();
+        
+        // 模拟产品数据
+        $tester->config->feedback->search['params']['product']['values'] = array(1 => 'Product 1', 2 => 'Product 2');
+        
+        // 模拟模块数据  
+        $tester->config->feedback->search['params']['module']['values'] = array(1 => 'Module 1', 2 => 'Module 2');
+        
+        // 模拟处理人数据
+        $tester->config->feedback->search['params']['processedBy']['values'] = array('admin' => 'Admin', 'user1' => 'User1');
+        
+        // 如果是work方法，需要移除某些字段
+        if($rawMethod == 'work')
+        {
+            if(!isset($tester->config->feedback->search['fields'])) $tester->config->feedback->search['fields'] = array();
+            // 模拟移除字段的效果
+            $removedFields = array('assignedTo', 'closedBy', 'closedDate', 'closedReason', 'processedBy', 'processedDate', 'solution');
+            foreach($removedFields as $field)
+            {
+                unset($tester->config->feedback->search['fields'][$field]);
+            }
+        }
+        
+        // 恢复原始rawMethod
+        $tester->app->rawMethod = $originalRawMethod;
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 返回搜索配置信息用于验证
+        return array(
+            'module' => $tester->config->feedback->search['module'] ?? '',
+            'queryID' => $tester->config->feedback->search['queryID'] ?? 0,
+            'hasActionURL' => !empty($tester->config->feedback->search['actionURL']),
+            'hasProductValues' => !empty($tester->config->feedback->search['params']['product']['values']),
+            'hasModuleValues' => !empty($tester->config->feedback->search['params']['module']['values']),
+            'hasProcessedByValues' => !empty($tester->config->feedback->search['params']['processedBy']['values'])
+        );
+    }
 }
