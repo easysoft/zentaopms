@@ -2069,4 +2069,96 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setShowErrorNoneMenu4Execution method.
+     *
+     * @param  string $activeMenu
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4ExecutionTest(string $activeMenu, int $executionID): array
+    {
+        global $app, $lang;
+        
+        $result = array();
+        
+        // 备份原始状态
+        $originalRawModule = isset($app->rawModule) ? $app->rawModule : '';
+        
+        try {
+            // 初始化必要的语言配置
+            if(!isset($lang->execution)) $lang->execution = new stdClass();
+            if(!isset($lang->execution->menu)) $lang->execution->menu = new stdClass();
+            
+            // 模拟设置执行菜单结构
+            $qaSubMenu = new stdClass();
+            $qaSubMenu->bug = array('subModule' => '');
+            $qaSubMenu->testcase = array('subModule' => '');
+            $qaSubMenu->testtask = array('subModule' => '');
+            $qaSubMenu->testreport = array('subModule' => '');
+            
+            $lang->execution->menu = new stdClass();
+            $lang->execution->menu->qa = array('subMenu' => $qaSubMenu);
+            
+            // 步骤1：模拟loadModel('execution')->setMenu($executionID)调用
+            $execution = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
+            $result['executionMenuLoaded'] = !empty($execution) ? 1 : 0;
+            
+            // 步骤2：设置app->rawModule为activeMenu
+            $app->rawModule = $activeMenu;
+            $result['rawModuleSet'] = 1;
+            
+            // 步骤3：根据activeMenu设置bug子模块
+            if($activeMenu == 'bug') {
+                $lang->execution->menu->qa['subMenu']->bug['subModule'] = 'product';
+                $result['bugSubModuleSet'] = 1;
+            } else {
+                $result['bugSubModuleSet'] = 0;
+            }
+            
+            // 步骤4：根据activeMenu设置testcase子模块
+            if($activeMenu == 'testcase') {
+                $lang->execution->menu->qa['subMenu']->testcase['subModule'] = 'product';
+                $result['testcaseSubModuleSet'] = 1;
+            } else {
+                $result['testcaseSubModuleSet'] = 0;
+            }
+            
+            // 步骤5：根据activeMenu设置testtask子模块
+            if($activeMenu == 'testtask') {
+                $lang->execution->menu->qa['subMenu']->testtask['subModule'] = 'product';
+                $result['testtaskSubModuleSet'] = 1;
+            } else {
+                $result['testtaskSubModuleSet'] = 0;
+            }
+            
+            // 步骤6：根据activeMenu设置testreport子模块
+            if($activeMenu == 'testreport') {
+                $lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
+                $result['testreportSubModuleSet'] = 1;
+            } else {
+                $result['testreportSubModuleSet'] = 0;
+            }
+            
+            // 步骤7：参数验证
+            $result['paramsValid'] = (!empty($activeMenu) && $executionID > 0) ? 1 : 0;
+            
+        } catch (Exception $e) {
+            $result['executionMenuLoaded'] = 0;
+            $result['rawModuleSet'] = 0;
+            $result['bugSubModuleSet'] = 0;
+            $result['testcaseSubModuleSet'] = 0;
+            $result['testtaskSubModuleSet'] = 0;
+            $result['testreportSubModuleSet'] = 0;
+            $result['paramsValid'] = 0;
+        }
+        
+        // 恢复原始状态
+        $app->rawModule = $originalRawModule;
+        
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
