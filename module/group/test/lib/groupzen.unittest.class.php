@@ -81,4 +81,37 @@ class groupZenTest
 
         return isset($config->group->package->{$packageCode}->privs) ? $config->group->package->{$packageCode}->privs : array();
     }
+
+    /**
+     * 测试managePrivByGroup方法。
+     * Test managePrivByGroup method.
+     *
+     * @param  int    $groupID
+     * @param  string $nav
+     * @param  string $version
+     * @access public
+     * @return array
+     */
+    public function managePrivByGroupTest(int $groupID = 0, string $nav = '', string $version = '')
+    {
+        ob_start();
+        $method = $this->groupZenTest->getMethod('managePrivByGroup');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $method->invoke($groupInstance, $groupID, $nav, $version);
+        ob_end_clean();
+        
+        $result = array();
+        $result['groupID'] = isset($groupInstance->view->groupID) ? $groupInstance->view->groupID : null;
+        $result['nav'] = isset($groupInstance->view->nav) ? $groupInstance->view->nav : null;
+        $result['version'] = isset($groupInstance->view->version) ? $groupInstance->view->version : null;
+        $result['group'] = isset($groupInstance->view->group) ? (is_object($groupInstance->view->group) ? 'object' : 'null') : 'null';
+        $result['title'] = isset($groupInstance->view->title) ? 'string' : 'null';
+        $result['subsets'] = isset($groupInstance->view->subsets) ? count($groupInstance->view->subsets) : 0;
+        $result['packages'] = isset($groupInstance->view->packages) ? count($groupInstance->view->packages) : 0;
+        $result['allPrivList'] = isset($groupInstance->view->allPrivList) ? count($groupInstance->view->allPrivList) : 0;
+        $result['selectedPrivList'] = isset($groupInstance->view->selectedPrivList) ? count($groupInstance->view->selectedPrivList) : 0;
+        
+        return $result;
+    }
 }

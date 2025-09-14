@@ -1,0 +1,63 @@
+---
+title: group表数据 - managePrivByGroup测试
+desc: 用于测试managePrivByGroup方法的测试数据
+author: ZenTao
+version: 1.0
+
+fields:
+- field: id
+  note: 组ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 0{3},1,2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视野
+  range: rnd{4},lite{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 组名称
+  range: 管理员,开发,测试,产品经理,项目经理
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色
+  range: admin,dev,qa,po,pm
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 描述
+  range: 系统管理员组,开发人员组,测试人员组,产品负责人组,项目经理组
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制列表
+  range: '{"actions":{"user":["view","edit"],"product":["view","create"]}}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: developer
+  note: 开发者标记
+  range: 1{4},0{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
