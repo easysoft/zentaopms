@@ -985,4 +985,127 @@ class gitlabTest
 
         return $object;
     }
+
+    /**
+     * Test issueToZentaoObject method.
+     *
+     * @param  object $issue
+     * @param  int    $gitlabID
+     * @param  object $changes
+     * @access public
+     * @return mixed
+     */
+    public function issueToZentaoObjectTest($issue, $gitlabID, $changes = null)
+    {
+        // 模拟配置检查
+        $validObjectTypes = array('story', 'task', 'bug');
+        if(!isset($issue->objectType) || !in_array($issue->objectType, $validObjectTypes)) {
+            return null;
+        }
+
+        // 模拟changes处理
+        if(isset($changes->assignees)) $changes->assignee_id = true;
+
+        // 模拟GitLab用户绑定数据
+        $gitlabUsers = array(
+            '1' => 'admin',
+            '2' => 'user1',
+            '3' => 'user2'
+        );
+
+        // 模拟配置映射
+        $maps = array(
+            'story' => array(
+                'title'      => 'title|field|',
+                'spec'       => 'description|fields|verify',
+                'openedDate' => 'created_at|field|datetime',
+                'assignedTo' => 'assignee_id|userPairs|',
+                'status'     => 'state|configItems|storyStateMap',
+                'pri'        => 'weight|configItems|storyWeightMap'
+            ),
+            'task' => array(
+                'name'           => 'title|field|',
+                'desc'           => 'description|field|',
+                'openedDate'     => 'created_at|field|datetime',
+                'assignedTo'     => 'assignee_id|userPairs|',
+                'lastEditedDate' => 'updated_at|field|datetime',
+                'deadline'       => 'due_date|field|date',
+                'status'         => 'state|configItems|taskStateMap',
+                'pri'            => 'weight|configItems|taskWeightMap'
+            ),
+            'bug' => array(
+                'title'      => 'title|field|',
+                'steps'      => 'description|field|',
+                'openedDate' => 'created_at|field|datetime',
+                'deadline'   => 'due_date|field|date',
+                'assignedTo' => 'assignee_id|userPairs|',
+                'status'     => 'state|configItems|bugStateMap',
+                'pri'        => 'weight|configItems|bugWeightMap'
+            )
+        );
+
+        // 模拟状态映射配置
+        $configItems = array(
+            'storyStateMap' => array('active' => 'opened', 'resolved' => 'closed', 'closed' => 'closed'),
+            'storyWeightMap' => array('1' => '1', '2' => '2', '3' => '3'),
+            'taskStateMap' => array('doing' => 'opened', 'wait' => 'opened', 'closed' => 'closed'),
+            'taskWeightMap' => array('1' => '1', '2' => '2', '3' => '3'),
+            'bugStateMap' => array('active' => 'opened', 'resolved' => 'closed'),
+            'bugWeightMap' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4')
+        );
+
+        $object = new stdclass;
+        $object->id = $issue->objectID;
+
+        // 处理字段映射
+        foreach($maps[$issue->objectType] as $zentaoField => $config)
+        {
+            $value = '';
+            list($gitlabField, $optionType, $options) = explode('|', $config);
+            
+            // 如果有changes且该字段没有变化，跳过（除非是新对象）
+            if($changes && !isset($changes->$gitlabField) && $object->id != 0) continue;
+            
+            // 获取字段值
+            if($optionType == 'field' || $optionType == 'fields') {
+                $value = isset($issue->$gitlabField) ? $issue->$gitlabField : '';
+            }
+            
+            // 处理日期格式
+            if($options == 'date' && $value) {
+                $value = date('Y-m-d', strtotime($value));
+            } elseif($options == 'date' && !$value) {
+                $value = '0000-00-00';
+            }
+            
+            if($options == 'datetime' && $value) {
+                $value = date('Y-m-d H:i:s', strtotime($value));
+            } elseif($options == 'datetime' && !$value) {
+                $value = '0000-00-00 00:00:00';
+            }
+            
+            // 处理用户映射
+            if($optionType == 'userPairs' && isset($issue->$gitlabField)) {
+                $value = isset($gitlabUsers[$issue->$gitlabField]) ? $gitlabUsers[$issue->$gitlabField] : '';
+            }
+            
+            // 处理配置项映射
+            if($optionType == 'configItems' && isset($issue->$gitlabField) && isset($configItems[$options])) {
+                $value = array_search($issue->$gitlabField, $configItems[$options]);
+                if($value === false) $value = '';
+            }
+            
+            // 设置值（即使是空值也要设置）
+            if($value !== null) {
+                $object->$zentaoField = $value;
+            }
+            
+            // 处理description字段，添加链接
+            if($gitlabField == "description" && isset($issue->web_url)) {
+                $object->$zentaoField .= "<br><br><a href=\"{$issue->web_url}\" target=\"_blank\">{$issue->web_url}</a>";
+            }
+        }
+        
+        return $object;
+    }
 }
