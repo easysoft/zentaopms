@@ -239,4 +239,24 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getRecordByCodeAndDate method.
+     *
+     * @param  string $code
+     * @param  object $calc
+     * @param  string $date
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getRecordByCodeAndDateZenTest($code, $calc, $date, $type = 'single')
+    {
+        $method = $this->metricZenTest->getMethod('getRecordByCodeAndDate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($code, $calc, $date, $type));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
