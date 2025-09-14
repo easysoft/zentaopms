@@ -8,6 +8,12 @@ class productTest
     public productModel $objectModel;
 
     /**
+     * @var ReflectionClass
+     * @access private
+     */
+    public $objectZen;
+
+    /**
      * __construct
      *
      * @param  mixed  $user
@@ -29,6 +35,7 @@ class productTest
         $this->objectModel = $tester->loadModel('product');
         $this->objectModel->app->user->admin            = true;
         $this->objectModel->config->global->syncProduct = '';
+        $this->objectZen = initReference('product');
         $tester->app->loadClass('dao');
     }
 
@@ -2690,5 +2697,30 @@ class productTest
         }
 
         return $data;
+    }
+
+    /**
+     * Test getUnauthProgramsOfProducts method.
+     *
+     * @param  array $products
+     * @param  array $authPrograms
+     * @access public
+     * @return array
+     */
+    public function getUnauthProgramsOfProductsTest(array $products = array(), array $authPrograms = array())
+    {
+        global $tester;
+        
+        // 创建productZen实例并初始化program模型
+        $productZen = new productZen();
+        $productZen->program = $tester->loadModel('program');
+        
+        $method = $this->objectZen->getMethod('getUnauthProgramsOfProducts');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($products, $authPrograms));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
