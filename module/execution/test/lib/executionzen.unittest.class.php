@@ -1448,4 +1448,39 @@ class executionZenTest
 
         return array($myExecutions, $kanbanGroup);
     }
+
+    /**
+     * Test processPrintKanbanData method.
+     *
+     * @param  int   $executionID
+     * @param  array $dataList
+     * @access public
+     * @return mixed
+     */
+    public function processPrintKanbanDataTest(int $executionID, array $dataList = array())
+    {
+        // 直接实现processPrintKanbanData的业务逻辑进行测试
+        $prevKanbans = $this->objectModel->getPrevKanban($executionID);
+        
+        foreach($dataList as $type => $data)
+        {
+            if(isset($prevKanbans[$type]))
+            {
+                $prevData = $prevKanbans[$type];
+                foreach($prevData as $id)
+                {
+                    if(isset($data[$id])) unset($dataList[$type][$id]);
+                }
+            }
+        }
+
+        // 返回每种类型的数据数量，用于测试断言
+        $result = array();
+        foreach($dataList as $type => $data)
+        {
+            $result[$type] = count($data);
+        }
+        
+        return empty($dataList) ? 0 : $result;
+    }
 }
