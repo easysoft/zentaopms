@@ -2290,4 +2290,53 @@ class executionZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getAfterCreateLocation method.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $model
+     * @param  array  $options 测试选项（tab, plans, vision等）
+     * @access public
+     * @return mixed
+     */
+    public function getAfterCreateLocationTest($projectID, $executionID, $model = '', $options = array())
+    {
+        try {
+            // 保存原始值
+            $originalPost = $_POST;
+            $originalTab = isset($this->tester->app->tab) ? $this->tester->app->tab : null;
+            $originalVision = isset($this->tester->config->vision) ? $this->tester->config->vision : null;
+            
+            // 设置测试环境
+            if(isset($options['tab'])) $this->tester->app->tab = $options['tab'];
+            if(isset($options['plans'])) $_POST['plans'] = $options['plans'];
+            if(isset($options['vision'])) $this->tester->config->vision = $options['vision'];
+            
+            $obj = $this->objectModel->loadZen('execution');
+            
+            // Use reflection to call the protected method
+            $reflection = new ReflectionClass($obj);
+            $method = $reflection->getMethod('getAfterCreateLocation');
+            $method->setAccessible(true);
+            $result = $method->invoke($obj, $projectID, $executionID, $model);
+
+            // 恢复原始值
+            $_POST = $originalPost;
+            if($originalTab !== null) $this->tester->app->tab = $originalTab;
+            if($originalVision !== null) $this->tester->config->vision = $originalVision;
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e) {
+            // 恢复原始值
+            $_POST = $originalPost;
+            if(isset($originalTab)) $this->tester->app->tab = $originalTab;
+            if(isset($originalVision)) $this->tester->config->vision = $originalVision;
+            
+            return array('error' => $e->getMessage());
+        }
+    }
 }
