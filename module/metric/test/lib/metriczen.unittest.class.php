@@ -427,4 +427,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getPagerExtra method.
+     *
+     * @param  int $tableWidth
+     * @access public
+     * @return mixed
+     */
+    public function getPagerExtraZenTest($tableWidth)
+    {
+        $method = $this->metricZenTest->getMethod('getPagerExtra');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($tableWidth));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
