@@ -206,4 +206,31 @@ class extensionTest
             return $errorResult;
         }
     }
+
+    /**
+     * Test copyHookFiles method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return mixed
+     */
+    public function copyHookFilesTest(string $extension)
+    {
+        try
+        {
+            $zen = initReference('extension');
+            $func = $zen->getMethod('copyHookFiles');
+            $zenInstance = $zen->newInstance();
+            $zenInstance->extension = $this->objectModel;
+            
+            $result = $func->invokeArgs($zenInstance, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return $result === null ? '~~' : $result;
+        }
+        catch(Exception $e)
+        {
+            return 'Exception: ' . $e->getMessage();
+        }
+    }
 }
