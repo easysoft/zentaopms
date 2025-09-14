@@ -6,6 +6,10 @@ class hostTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('host');
+        $this->tester = $tester;
+        $tester->app->setModuleName('host');
+        
+        $this->hostZenTest = initReference('host');
     }
 
     /**
@@ -59,6 +63,29 @@ class hostTest
         
         $result = $method->invoke($this->objectModel, $rootID, $hosts);
         if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkFormData method.
+     *
+     * @param  object $formData
+     * @access public
+     * @return mixed
+     */
+    public function checkFormDataTest($formData)
+    {
+        $method = $this->hostZenTest->getMethod('checkFormData');
+        $method->setAccessible(true);
+        
+        dao::$errors = array();
+        $result = $method->invokeArgs($this->hostZenTest->newInstance(), array($formData));
+        
+        if(dao::isError()) 
+        {
+            return dao::getError();
+        }
 
         return $result;
     }
