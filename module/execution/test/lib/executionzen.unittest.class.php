@@ -231,4 +231,75 @@ class executionZenTest
         
         return $view;
     }
+
+    /**
+     * Test assignCountForStory method.
+     *
+     * @param  int    $executionID
+     * @param  array  $stories
+     * @param  string $storyType
+     * @access public
+     * @return object
+     */
+    public function assignCountForStoryTest(int $executionID, array $stories, string $storyType): object
+    {
+        global $tester;
+
+        // 创建模拟的view对象
+        $view = new stdClass();
+
+        /* Get related tasks, bugs, cases count of each story. */
+        $storyIdList = array();
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(empty($story->children)) continue;
+
+            foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+        }
+
+        $view->stories = $stories;
+        
+        // 模拟获取各种统计数据
+        if(!empty($storyIdList)) {
+            // 模拟任务统计
+            $view->storyTasks = $tester->dao->select('story, count(*) as tasks')
+                ->from(TABLE_TASK)
+                ->where('story')->in($storyIdList)
+                ->andWhere('execution')->eq($executionID)
+                ->andWhere('deleted')->eq(0)
+                ->groupBy('story')
+                ->fetchPairs('story', 'tasks');
+
+            // 模拟Bug统计
+            $view->storyBugs = $tester->dao->select('story, count(*) as bugs')
+                ->from(TABLE_BUG)
+                ->where('story')->in($storyIdList)
+                ->andWhere('execution')->eq($executionID)
+                ->andWhere('deleted')->eq(0)
+                ->groupBy('story')
+                ->fetchPairs('story', 'bugs');
+
+            // 模拟用例统计
+            $view->storyCases = $tester->dao->select('story, count(*) as cases')
+                ->from(TABLE_CASE)
+                ->where('story')->in($storyIdList)
+                ->andWhere('deleted')->eq(0)
+                ->groupBy('story')
+                ->fetchPairs('story', 'cases');
+        } else {
+            $view->storyTasks = array();
+            $view->storyBugs = array();
+            $view->storyCases = array();
+        }
+
+        // 模拟产品摘要信息
+        $view->summary = new stdClass();
+        $view->summary->storyCount = count($stories);
+        $view->summary->taskCount = array_sum($view->storyTasks);
+        $view->summary->bugCount = array_sum($view->storyBugs);
+        $view->summary->caseCount = array_sum($view->storyCases);
+
+        return $view;
+    }
 }

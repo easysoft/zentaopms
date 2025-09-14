@@ -1,0 +1,49 @@
+---
+title: Test case data for assignCountForStory test
+desc: Test data for execution zen assignCountForStory method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Case ID
+  range: 1-10
+- field: product
+  note: Product ID
+  range: 1{6},2{3},3{1}
+- field: story
+  note: Related story ID
+  range: 1{2},2{2},3{2},4{1},0{3}
+- field: title
+  note: Case title
+  range: 测试用例{1-10}
+- field: type
+  note: Case type
+  range: feature{6},performance{2},config{1},other{1}
+- field: stage
+  note: Test stage
+  range: unittest{3},feature{4},integration{2},system{1}
+- field: pri
+  note: Priority
+  range: 1{2},2{3},3{3},4{2}
+- field: status
+  note: Case status
+  range: normal{7},blocked{2},investigate{1}
+- field: openedBy
+  note: Opened by
+  range: admin{5},user1{3},user2{2}
+- field: openedDate
+  note: Open date
+  range: '2024-01-01 00:00:00','2024-02-01 00:00:00','2024-03-01 00:00:00'
+- field: lastEditedBy
+  note: Last edited by
+  range: admin{4},user1{3},user2{3}
+- field: lastEditedDate
+  note: Last edited date
+  range: '2024-01-01 00:00:00','2024-02-01 00:00:00','2024-03-01 00:00:00'
+- field: version
+  note: Case version
+  range: 1{8},2{2}
+- field: deleted
+  note: Deleted flag
+  range: 0
