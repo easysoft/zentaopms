@@ -165,4 +165,32 @@ class groupZenTest
         
         return $result;
     }
+
+    /**
+     * 测试buildProjectAdminForm方法。
+     * Test buildProjectAdminForm method.
+     *
+     * @param array $postData
+     * @access public
+     * @return array
+     */
+    public function buildProjectAdminFormTest($postData = array())
+    {
+        foreach($postData as $key => $value)
+        {
+            $_POST[$key] = $value;
+        }
+        
+        $method = $this->groupZenTest->getMethod('buildProjectAdminForm');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $result = $method->invoke($groupInstance);
+        
+        foreach($postData as $key => $value)
+        {
+            unset($_POST[$key]);
+        }
+        
+        return $result;
+    }
 }
