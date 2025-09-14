@@ -720,4 +720,53 @@ class executionZenTest
         
         return $view;
     }
+
+    /**
+     * Test assignTesttaskVars method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return mixed
+     */
+    public function assignTesttaskVarsTest($tasks = array())
+    {
+        /* Compute rowspan. */
+        $productGroup = array();
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        
+        foreach($tasks as $task)
+        {
+            $productGroup[$task->product][] = $task;
+            if($task->status == 'wait')    $waitCount ++;
+            if($task->status == 'doing')   $testingCount ++;
+            if($task->status == 'blocked') $blockedCount ++;
+            if($task->status == 'done')    $doneCount ++;
+            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = 'trunk';
+        }
+
+        $lastProduct = '';
+        foreach($tasks as $taskID => $task)
+        {
+            $task->rawStatus = $task->status;
+            $task->status    = $task->status; // Simplified status processing
+            $task->rowspan   = 0;
+            if($lastProduct !== $task->product)
+            {
+                $lastProduct = $task->product;
+                if(!empty($productGroup[$task->product])) $task->rowspan = count($productGroup[$task->product]);
+            }
+        }
+
+        $result = new stdClass();
+        $result->waitCount    = $waitCount;
+        $result->testingCount = $testingCount;
+        $result->blockedCount = $blockedCount;
+        $result->doneCount    = $doneCount;
+        $result->tasks        = $tasks;
+
+        return $result;
+    }
 }
