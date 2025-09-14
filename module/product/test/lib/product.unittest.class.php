@@ -2946,4 +2946,58 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test buildProductForEdit method.
+     *
+     * @param  int $productID
+     * @param  int $workflowGroup
+     * @access public
+     * @return object|array
+     */
+    public function buildProductForEditTest(int $productID = 1, int $workflowGroup = 0): object|array
+    {
+        global $tester, $app;
+        
+        // 创建productZen实例并初始化相关属性
+        $productZen = new productZen();
+        $productZen->config = $tester->config;
+        $productZen->app = $tester->app;
+        $productZen->loadModel('file');
+        
+        // 模拟完整的POST数据，确保form::data能够正常工作
+        $_POST = array(
+            'name' => '编辑的测试产品',
+            'code' => 'edited_test_product',
+            'PO' => 'admin',
+            'QD' => 'admin',
+            'RD' => 'admin',
+            'type' => 'normal',
+            'status' => 'normal',
+            'desc' => '这是一个编辑的测试产品',
+            'acl' => 'open',
+            'groups' => '',
+            'whitelist' => '',
+            'reviewer' => '',
+            'PMT' => '',
+            'program' => '0',
+            'line' => '0',
+            'uid' => 'test-uid-edit-' . time(),
+            'createdBy' => 'admin',
+            'createdDate' => date('Y-m-d H:i:s'),
+            'createdVersion' => $tester->config->version ?? '1.0'
+        );
+        
+        // 设置post对象
+        $productZen->post = (object)$_POST;
+        
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('buildProductForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($productID, $workflowGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
