@@ -568,4 +568,45 @@ class personnelTest
 
         return $return ? $return : 'no_parent_update';
     }
+
+    /**
+     * Test setSelectObjectTips method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function setSelectObjectTipsTest(int $objectID, string $objectType, string $module): array
+    {
+        global $tester;
+        
+        $tester->app->loadLang('personnel');
+        $tester->app->loadLang('execution');
+        $tester->app->loadLang('product');
+        $tester->app->loadLang('program');
+        $tester->app->loadLang('project');
+        
+        $tester->lang->personnel->selectObjectTips = '请选择一个%s白名单';
+        
+        $objectName = $tester->lang->projectCommon . $tester->lang->execution->or . $tester->lang->execution->common;
+        if($objectType == 'program') $objectName = $tester->lang->program->common;
+        if($objectType == 'product') $objectName = $tester->lang->productCommon;
+        if($objectType == 'project') $objectName = $tester->lang->projectCommon;
+        $tip = sprintf($tester->lang->personnel->selectObjectTips, $objectName);
+        
+        if($objectType == 'sprint' && $module == 'execution')
+        {
+            $execution = $this->objectModel->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch();
+            $tip = !empty($execution) && $execution->type == 'kanban' ? str_replace($tester->lang->execution->common, $tester->lang->execution->kanban, $tip) : $tip;
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return array(
+            'tips' => $tip,
+            'objectName' => $objectName
+        );
+    }
 }
