@@ -1848,4 +1848,47 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getPagerExtra method.
+     *
+     * @param  int $tableWidth
+     * @access public
+     * @return mixed
+     */
+    public function getPagerExtraTest($tableWidth = 300)
+    {
+        global $tester;
+        $metricZen = $tester->loadZen('metric');
+        
+        $result = $metricZen->getPagerExtra($tableWidth);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test formatException method.
+     *
+     * @param  mixed $exception
+     * @access public
+     * @return mixed
+     */
+    public function formatExceptionTest($exception = null)
+    {
+        if($exception === null)
+        {
+            // 创建一个标准异常对象用于测试
+            $exception = new Exception('Test error message', 123);
+        }
+        
+        global $tester;
+        
+        // 使用tester的loadZen方法加载zen层
+        $metricZen = $tester->loadZen('metric');
+        $result = $metricZen->formatException($exception);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

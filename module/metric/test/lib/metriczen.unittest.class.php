@@ -444,4 +444,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test formatException method.
+     *
+     * @param  mixed $exception
+     * @access public
+     * @return mixed
+     */
+    public function formatExceptionZenTest($exception)
+    {
+        $method = $this->metricZenTest->getMethod('formatException');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($exception));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
