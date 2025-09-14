@@ -4972,4 +4972,95 @@ class docTest
         
         return $result;
     }
+
+    /**
+     * Test previewER method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewERTest(string $view, array $settings = array(), string $idList = ''): array
+    {
+        $result = array('cols' => array(), 'data' => array());
+        
+        // 模拟previewStory方法的行为，因为previewER调用了previewStory('epic', $view, $settings, $idList)
+        if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
+        {
+            if(isset($settings['product']) && is_numeric($settings['product']) && $settings['product'] > 0)
+            {
+                $product = (int)$settings['product'];
+                $condition = $settings['condition'] ?? 'all';
+                
+                if($condition === 'customSearch' && isset($settings['field']))
+                {
+                    // 自定义搜索模拟数据
+                    $mockData = array();
+                    for($i = 1; $i <= 2; $i++)
+                    {
+                        $epic = new stdclass();
+                        $epic->id = $i;
+                        $epic->title = "业务需求{$i}";
+                        $epic->product = $product;
+                        $epic->type = 'epic';
+                        $epic->status = 'active';
+                        $epic->pri = $i;
+                        $mockData[] = $epic;
+                    }
+                    $result['data'] = $mockData;
+                }
+                else
+                {
+                    // 按条件搜索模拟数据
+                    $mockData = array();
+                    for($i = 1; $i <= 3; $i++)
+                    {
+                        $epic = new stdclass();
+                        $epic->id = $i;
+                        $epic->title = "产品{$product}的{$condition}业务需求{$i}";
+                        $epic->product = $product;
+                        $epic->type = 'epic';
+                        $epic->status = $condition === 'all' ? 'active' : $condition;
+                        $epic->pri = $i;
+                        $mockData[] = $epic;
+                    }
+                    $result['data'] = $mockData;
+                }
+            }
+        }
+        elseif($view === 'list' && !empty($idList))
+        {
+            // 根据ID列表获取业务需求
+            $idArray = explode(',', $idList);
+            $mockData = array();
+            foreach($idArray as $id)
+            {
+                $id = trim($id);
+                if(empty($id)) continue;
+                
+                $epic = new stdclass();
+                $epic->id = (int)$id;
+                $epic->title = "业务需求{$id}";
+                $epic->product = 1;
+                $epic->type = 'epic';
+                $epic->status = 'active';
+                $epic->pri = ((int)$id % 4) + 1;
+                $mockData[] = $epic;
+            }
+            $result['data'] = $mockData;
+        }
+        
+        // 模拟datatable列配置
+        $result['cols'] = array(
+            'id' => array('name' => 'id', 'title' => 'ID', 'type' => 'id'),
+            'title' => array('name' => 'title', 'title' => '标题', 'type' => 'text'),
+            'product' => array('name' => 'product', 'title' => '产品', 'type' => 'text'),
+            'status' => array('name' => 'status', 'title' => '状态', 'type' => 'status'),
+            'pri' => array('name' => 'pri', 'title' => '优先级', 'type' => 'text')
+        );
+        
+        return $result;
+    }
 }
