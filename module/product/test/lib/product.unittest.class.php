@@ -2794,4 +2794,31 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getEditedLocate method.
+     *
+     * @param  int   $productID
+     * @param  int   $programID
+     * @access public
+     * @return array
+     */
+    public function getEditedLocateTest(int $productID, int $programID): array
+    {
+        global $tester;
+        
+        // 创建productZen实例并初始化相关属性
+        $productZen = new productZen();
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->session = $tester->session;
+        
+        $method = $this->objectZen->getMethod('getEditedLocate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
