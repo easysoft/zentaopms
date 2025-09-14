@@ -1,0 +1,82 @@
+---
+title: job_assigneditdata
+author: Claude
+version: "1.0"
+desc: job测试数据for assignEditData方法
+
+fields:
+- field: id
+  note: 作业ID
+  range: 1-5
+- field: name
+  note: 作业名称
+  range: Test Job 1,Build Job,Deploy Job
+- field: repo
+  note: 关联代码库ID
+  range: 1-5
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: frame
+  note: 框架类型
+  range: phpunit,junit,pytest
+- field: engine
+  note: 引擎类型
+  range: jenkins,gitlab-ci,github-actions
+- field: autoRun
+  note: 自动运行
+  range: '1'
+- field: server
+  note: 服务器ID
+  range: 1-3
+- field: pipeline
+  note: 流水线配置
+  range: /job/testJob/,/job/buildJob/,/job/deployJob/
+- field: triggerType
+  note: 触发类型
+  range: tag,push,mr
+- field: sonarqubeServer
+  note: Sonarqube服务器ID
+  range: 0-2
+- field: projectKey
+  note: 项目键
+  range: zentaopms,test-project,demo-project
+- field: svnDir
+  note: SVN目录
+  range: /trunk,/branches,/tags
+- field: atDay
+  note: 执行日期
+  range: 0-6
+- field: atTime
+  note: 执行时间
+  range: '22'
+- field: customParam
+  note: 自定义参数
+  range: '[]'
+- field: comment
+  note: 备注
+  range: test comment,build comment,deploy comment
+- field: triggerActions
+  note: 触发动作
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+- field: createdDate
+  note: 创建时间
+  range: '`2023-12-13 13:14:34`'
+- field: editedBy
+  note: 编辑者
+  range: admin,user1,user2
+- field: editedDate
+  note: 编辑时间
+  range: '`2023-12-13 13:14:34`'
+- field: lastStatus
+  note: 最后状态
+  range: success,failed,running
+- field: lastTag
+  note: 最后标签
+  range: v1.0,v1.1,v1.2
+- field: deleted
+  note: 删除状态
+  range: '0'

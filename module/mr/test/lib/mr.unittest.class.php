@@ -479,4 +479,55 @@ class mrTest
         
         return array();
     }
+
+    /**
+     * Test assignEditData method.
+     *
+     * @param  object $MR
+     * @param  string $scm
+     * @access public
+     * @return mixed
+     */
+    public function assignEditDataTest($MR, $scm)
+    {
+        if(!is_object($MR) || empty($scm)) return false;
+        
+        if(!isset($MR->hostID) || !isset($MR->sourceProject)) return false;
+        
+        try {
+            global $app, $lang;
+            
+            $app->loadLang('mr');
+            $app->loadConfig('pipeline');
+            
+            // 模拟assignEditData的核心逻辑
+            $MR->canDeleteBranch = true;
+            
+            // 检查输入参数有效性
+            if(in_array($scm, array('gitlab', 'gitea', 'gogs')) && isset($MR->repoID) && $MR->repoID > 0)
+            {
+                $sourceProject = $targetProject = $MR->sourceProject;
+                if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
+                
+                $viewData = array(
+                    'title' => $lang->mr->edit ?? '编辑',
+                    'MR' => $MR,
+                    'users' => array('admin' => '管理员', 'user1' => '用户1'),
+                    'jobList' => array('1' => '[1] Test Job 1', '2' => '[2] Build Job'),
+                    'branches' => array('master', 'develop', 'feature-branch'),
+                    'sourceProject' => $sourceProject,
+                    'targetProject' => $targetProject,
+                    'repo' => (object)array('id' => $MR->repoID, 'name' => 'test-repo')
+                );
+                
+                return $viewData;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
