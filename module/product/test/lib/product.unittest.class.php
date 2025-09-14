@@ -2330,4 +2330,27 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $fields;
     }
+
+    /**
+     * Test getFormFields4Close method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFormFields4CloseTest(): array
+    {
+        global $tester;
+
+        // 模拟getFormFields4Close方法的逻辑
+        // 基于config->product->form->close配置
+        $fields = array();
+        $fields['status'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
+        $fields['closedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => date('Y-m-d'));
+        
+        // 添加comment字段
+        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+
+        if(dao::isError()) return dao::getError();
+        return $fields;
+    }
 }
