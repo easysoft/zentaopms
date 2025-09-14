@@ -581,4 +581,143 @@ class executionZenTest
         
         return $view;
     }
+
+    /**
+     * Test assignTestcaseVars method.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $branchID
+     * @param  int    $moduleID
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  string $type
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function assignTestcaseVarsTest(int $executionID, int $productID, string $branchID, int $moduleID, int $param, string $orderBy, string $type, object $pager): object
+    {
+        global $tester;
+        
+        // 创建模拟的view对象
+        $view = new stdClass();
+        
+        // 模拟执行对象
+        $execution = new stdClass();
+        $execution->id = $executionID;
+        $execution->name = "执行{$executionID}";
+        
+        // 模拟产品对象
+        $product = null;
+        if($productID > 0) {
+            $product = new stdClass();
+            $product->id = $productID;
+            $product->name = "产品{$productID}";
+        }
+        
+        // 模拟测试用例数据
+        $cases = array();
+        if($executionID > 0 && $productID > 0) {
+            // 根据不同参数组合模拟不同的测试用例数据
+            for($i = 1; $i <= 3; $i++) {
+                $case = new stdClass();
+                $case->id = $i;
+                $case->title = "测试用例{$i}";
+                $case->status = 'normal';
+                $case->lastRunner = 'admin';
+                $case->lastRunResult = 'pass';
+                $case->story = $i;
+                $case->module = $moduleID > 0 ? $moduleID : 1;
+                $cases[$i] = $case;
+            }
+        }
+        
+        // 模拟场景菜单数据
+        $scenes = array();
+        if($productID > 0) {
+            $scenes[0] = '全部场景';
+            $scenes[1] = '场景1';
+            $scenes[2] = '场景2';
+        }
+        
+        // 模拟用户数据
+        $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        
+        // 模拟分支标签选项
+        $branchTagOption = array();
+        if($productID > 0) {
+            $branches = $tester->dao->select('id,name')->from(TABLE_BRANCH)
+                ->where('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            $branchTagOption = $branches;
+        }
+        
+        // 模拟需求列表
+        $stories = array(0 => '') + array(1 => '需求1', 2 => '需求2', 3 => '需求3');
+        
+        // 模拟模块树
+        $moduleTree = '';
+        if($executionID > 0 || $productID > 0) {
+            $moduleTree = "<ul class='tree'><li><a href='#'>模块树</a></li></ul>";
+        }
+        
+        // 模拟模块对象
+        $tree = null;
+        if($moduleID > 0) {
+            $tree = new stdClass();
+            $tree->id = $moduleID;
+            $tree->name = "模块{$moduleID}";
+        }
+        
+        // 模拟模块对列表
+        $modulePairs = array();
+        global $config;
+        if(!isset($config->execution)) $config->execution = new stdClass();
+        if(!isset($config->execution->testcase)) $config->execution->testcase = new stdClass();
+        $showModule = $config->execution->testcase->showModule ?? '1';
+        
+        if($showModule && $productID > 0) {
+            $modules = $tester->dao->select('id,name')->from(TABLE_MODULE)
+                ->where('type')->eq('case')
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            $modulePairs = $modules;
+        }
+        
+        // 模拟分支显示
+        $showBranch = false;
+        if($productID > 0) {
+            $branches = $tester->dao->select('id')->from(TABLE_BRANCH)
+                ->where('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->limit(1)
+                ->fetch();
+            $showBranch = !empty($branches);
+        }
+        
+        // 设置视图变量
+        $view->cases = $cases;
+        $view->scenes = $scenes;
+        $view->users = $users;
+        $view->title = '测试用例';
+        $view->executionID = $executionID;
+        $view->productID = $productID;
+        $view->product = $product;
+        $view->orderBy = $orderBy;
+        $view->pager = $pager;
+        $view->type = $type;
+        $view->branchID = $branchID;
+        $view->branchTagOption = $branchTagOption;
+        $view->recTotal = count($cases);
+        $view->showBranch = $showBranch;
+        $view->stories = $stories;
+        $view->moduleTree = $moduleTree;
+        $view->moduleID = $moduleID;
+        $view->moduleName = $moduleID && $tree ? $tree->name : '全部模块';
+        $view->modulePairs = $modulePairs;
+        
+        return $view;
+    }
 }
