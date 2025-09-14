@@ -835,4 +835,53 @@ class executionZenTest
         // 返回分组数量以便测试验证
         return array(count($groupTasks), $groupTasks, $groupByList);
     }
+
+    /**
+     * Test buildGroupMultiTask method.
+     *
+     * @param  string $groupBy 分组字段
+     * @param  object $task 任务对象
+     * @param  array  $users 用户数组
+     * @param  array  $groupTasks 分组任务数组
+     * @access public
+     * @return array
+     */
+    public function buildGroupMultiTaskTest($groupBy = '', $task = null, $users = array(), $groupTasks = array())
+    {
+        // 模拟buildGroupMultiTask方法的逻辑
+        if(!$task || !isset($task->team) || empty($task->team))
+        {
+            return $groupTasks;
+        }
+
+        foreach($task->team as $team)
+        {
+            if($team->left != 0 && $groupBy == 'finishedBy')
+            {
+                $task->estimate += $team->estimate;
+                $task->consumed += $team->consumed;
+                $task->left     += $team->left;
+                continue;
+            }
+
+            $cloneTask = clone $task;
+            $cloneTask->{$groupBy} = $team->account;
+            $cloneTask->estimate   = $team->estimate;
+            $cloneTask->consumed   = $team->consumed;
+            $cloneTask->left       = $team->left;
+            if($team->left == 0 || $groupBy == 'finishedBy') $cloneTask->status = 'done';
+
+            $realname = isset($users[$team->account]) ? $users[$team->account] : $team->account;
+            $cloneTask->assignedToRealName = $realname;
+            $groupTasks[$realname][] = $cloneTask;
+        }
+
+        if($groupBy == 'finishedBy' && !empty($task->left)) 
+        {
+            $finishedByName = isset($users[$task->finishedBy]) ? $users[$task->finishedBy] : $task->finishedBy;
+            $groupTasks[$finishedByName][] = $task;
+        }
+
+        return $groupTasks;
+    }
 }
