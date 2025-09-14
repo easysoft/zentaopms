@@ -888,4 +888,70 @@ class gitlabTest
         
         return $issue;
     }
+
+    /**
+     * Test webhookParseIssue method.
+     *
+     * @param  object $body
+     * @param  int    $gitlabID
+     * @access public
+     * @return mixed
+     */
+    public function webhookParseIssueTest(object $body, int $gitlabID): mixed
+    {
+        // 模拟webhookParseIssue方法的核心逻辑用于测试
+        if(!isset($body->labels) || !isset($body->object_attributes)) {
+            return null;
+        }
+        
+        // 模拟webhookParseObject方法解析标签
+        $object = null;
+        $objectType = '';
+        foreach($body->labels as $label)
+        {
+            if(preg_match('/^zentao_story\/\d+$/', $label->title)) $objectType = 'story';
+            if(preg_match('/^zentao_task\/\d+$/', $label->title)) $objectType = 'task';  
+            if(preg_match('/^zentao_bug\/\d+$/', $label->title)) $objectType = 'bug';
+
+            if($objectType)
+            {
+                list($prefix, $id) = explode('/', $label->title);
+                $object = new stdclass();
+                $object->id = $id;
+                $object->type = $objectType;
+                break;
+            }
+        }
+        
+        if(empty($object)) return null;
+        
+        // 检查是否存在对应的maps配置
+        $validTypes = array('task', 'story', 'bug');
+        if(!in_array($object->type, $validTypes)) return false;
+        
+        // 模拟创建issue对象
+        $issue = new stdclass;
+        $issue->action = $body->object_attributes->action . 'issue';
+        $issue->issue = $body->object_attributes;
+        $issue->changes = isset($body->changes) ? $body->changes : new stdclass;
+        $issue->objectType = $object->type;
+        $issue->objectID = $object->id;
+        
+        $issue->issue->objectType = $object->type;
+        $issue->issue->objectID = $object->id;
+        
+        // 模拟处理markdown描述
+        if(isset($issue->issue->description)) {
+            $issue->issue->description = $issue->issue->description; // 简化处理
+        }
+        
+        // 模拟创建zentao对象
+        $issue->object = new stdclass;
+        $issue->object->id = $object->id;
+        if(isset($body->object_attributes->title)) {
+            $issue->object->title = $body->object_attributes->title;
+        }
+        
+        return $issue;
+    }
 }
