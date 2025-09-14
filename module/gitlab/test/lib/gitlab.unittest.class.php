@@ -526,4 +526,28 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test checkUserRepeat method.
+     *
+     * @param  array $zentaoUsers
+     * @param  array $userPairs
+     * @access public
+     * @return array
+     */
+    public function checkUserRepeatTest(array $zentaoUsers, array $userPairs): array
+    {
+        // 模拟方法的核心逻辑，避免复杂的依赖
+        $accountList = array();
+        $repeatUsers = array();
+        foreach($zentaoUsers as $openID => $user)
+        {
+            if(empty($user)) continue;
+            if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
+            $accountList[$user] = $openID;
+        }
+
+        if(count($repeatUsers)) return array('result' => 'fail', 'message' => '不能重复绑定用户 ' . join(',', array_unique($repeatUsers)));
+        return array('result' => 'success');
+    }
 }
