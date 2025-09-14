@@ -2267,4 +2267,67 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $fields;
     }
+
+    /**
+     * Test getFormFields4Edit method.
+     *
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function getFormFields4EditTest(object $product): array
+    {
+        global $tester, $app;
+
+        // 获取产品的项目集ID
+        $programID = (int)$product->program;
+        
+        // 模拟config->product->form->edit配置
+        $editFormFields = array();
+        $editFormFields['program'] = array('type' => 'int', 'control' => 'select', 'required' => false, 'default' => 0, 'options' => array());
+        $editFormFields['line'] = array('type' => 'int', 'control' => 'select', 'required' => false, 'default' => 0, 'options' => array());
+        $editFormFields['name'] = array('type' => 'string', 'control' => 'text', 'required' => true, 'filter' => 'trim');
+        $editFormFields['code'] = array('type' => 'string', 'control' => 'text', 'required' => false, 'filter' => 'trim');
+        $editFormFields['PO'] = array('type' => 'account', 'control' => 'select', 'required' => false, 'default' => '', 'options' => array());
+        $editFormFields['QD'] = array('type' => 'account', 'control' => 'select', 'required' => false, 'default' => '', 'options' => array());
+        $editFormFields['RD'] = array('type' => 'account', 'control' => 'select', 'required' => false, 'default' => '', 'options' => array());
+        $editFormFields['type'] = array('type' => 'string', 'control' => 'select', 'required' => false, 'default' => 'normal', 'options' => array());
+        $editFormFields['status'] = array('type' => 'string', 'control' => 'select', 'required' => false, 'default' => 'normal', 'options' => array());
+        $editFormFields['desc'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+        $editFormFields['acl'] = array('type' => 'string', 'control' => 'radio', 'required' => false, 'default' => 'private', 'width' => 'full', 'options' => array());
+        $editFormFields['groups'] = array('type' => 'array', 'control' => 'multi-select', 'required' => false, 'default' => '', 'filter' => 'join', 'width' => 'full', 'options' => array());
+        $editFormFields['whitelist'] = array('type' => 'array', 'control' => 'multi-select', 'required' => false, 'default' => '', 'width' => 'full', 'filter' => 'join', 'options' => array());
+
+        // 调用setSelectFormOptions来设置表单选项
+        $fields = $this->setSelectFormOptionsTest($programID, $editFormFields);
+        
+        // 添加changeProjects隐藏字段
+        $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
+
+        // 模拟检查程序权限并将不存在的项目集添加到项目集列表中
+        $hasPrivPrograms = $app->user->view->programs ?? '';
+        if($programID && strpos(",{$hasPrivPrograms},", ",{$programID},") === false) {
+            $fields['program']['control'] = 'hidden';
+        }
+        if(isset($fields['program']) && !isset($fields['program']['options'][$programID]) && $programID) {
+            $program = $this->objectModel->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+            if($program) {
+                $fields['program']['options'][$programID] = $program->name;
+            }
+        }
+
+        // 根据产品设置默认值
+        foreach($fields as $field => $attr) {
+            if(isset($product->{$field})) {
+                $fields[$field]['default'] = $product->{$field};
+            }
+            // 模拟必填字段判断
+            if($field == 'name') {
+                $fields[$field]['required'] = true;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $fields;
+    }
 }
