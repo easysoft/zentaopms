@@ -393,4 +393,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processWeekConf method.
+     *
+     * @param  string $dateConf
+     * @access public
+     * @return mixed
+     */
+    public function processWeekConfZenTest($dateConf)
+    {
+        $method = $this->metricZenTest->getMethod('processWeekConf');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($dateConf));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
