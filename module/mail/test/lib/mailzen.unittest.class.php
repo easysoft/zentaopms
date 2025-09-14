@@ -82,4 +82,21 @@ class mailZenTest
 
         return $result;
     }
+
+    /**
+     * Test deleteSentQueue method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function deleteSentQueueZenTest()
+    {
+        $method = $this->mailZenTest->getMethod('deleteSentQueue');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->mailZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+
+        return 'success';
+    }
 }
