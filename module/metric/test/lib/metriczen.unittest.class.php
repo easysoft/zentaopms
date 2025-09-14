@@ -376,4 +376,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getOldMetricInfo method.
+     *
+     * @param  int $oldMetricID
+     * @access public
+     * @return mixed
+     */
+    public function getOldMetricInfoZenTest($oldMetricID)
+    {
+        $method = $this->metricZenTest->getMethod('getOldMetricInfo');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($oldMetricID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
