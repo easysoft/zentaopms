@@ -2723,4 +2723,34 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getProducts4DropMenu method.
+     *
+     * @param  string $shadow
+     * @param  string $module
+     * @access public
+     * @return int
+     */
+    public function getProducts4DropMenuTest(string $shadow = '0', string $module = '')
+    {
+        global $tester;
+        
+        // 创建productZen实例并初始化相关模型
+        $productZen = new productZen();
+        $productZen->loadModel('product');
+        $productZen->loadModel('workflow');
+        $productZen->loadModel('feedback');
+        $productZen->config = $tester->config;
+        $productZen->app = $tester->app;
+        $productZen->session = $tester->session;
+        
+        $method = $this->objectZen->getMethod('getProducts4DropMenu');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($shadow, $module));
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? count($result) : 0;
+    }
 }
