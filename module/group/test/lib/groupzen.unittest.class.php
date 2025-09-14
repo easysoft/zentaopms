@@ -114,4 +114,30 @@ class groupZenTest
         
         return $result;
     }
+
+    /**
+     * 测试managePrivByModule方法。
+     * Test managePrivByModule method.
+     *
+     * @access public
+     * @return array
+     */
+    public function managePrivByModuleTest()
+    {
+        ob_start();
+        $method = $this->groupZenTest->getMethod('managePrivByModule');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $method->invoke($groupInstance);
+        ob_end_clean();
+        
+        $result = array();
+        $result['title'] = isset($groupInstance->view->title) ? 'string' : 'null';
+        $result['groups'] = isset($groupInstance->view->groups) ? count($groupInstance->view->groups) : 0;
+        $result['subsets'] = isset($groupInstance->view->subsets) ? count($groupInstance->view->subsets) : 0;
+        $result['packages'] = isset($groupInstance->view->packages) ? count($groupInstance->view->packages) : 0;
+        $result['privs'] = isset($groupInstance->view->privs) ? count($groupInstance->view->privs) : 0;
+        
+        return $result;
+    }
 }
