@@ -1317,4 +1317,36 @@ class executionZenTest
         // 方法执行成功，返回1表示成功
         return 1;
     }
+
+    /**
+     * Test buildExecutionKanbanData method.
+     *
+     * @param  array $projectIdList
+     * @param  array $executions
+     * @access public
+     * @return mixed
+     */
+    public function buildExecutionKanbanDataTest(array $projectIdList, array $executions)
+    {
+        global $app;
+
+        // Set up user view
+        if(!isset($app->user)) $app->user = new stdClass();
+        if(!isset($app->user->view)) $app->user->view = new stdClass();
+        if(!isset($app->user->view->sprints)) $app->user->view->sprints = '4,5,6,7,8,9,10';
+        if(!isset($app->user->account)) $app->user->account = 'admin';
+
+        if($this->executionZenTest === null) {
+            return array(0, array(), array(), array());
+        }
+
+        // Use reflection to call the protected method
+        $method = $this->executionZenTest->getMethod('buildExecutionKanbanData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->executionZenTest, $projectIdList, $executions);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
