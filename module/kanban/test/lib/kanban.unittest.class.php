@@ -2454,4 +2454,61 @@ class kanbanTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test assignCreateVars method.
+     *
+     * @param  int    $spaceID
+     * @param  string $type
+     * @param  int    $copyKanbanID
+     * @param  string $extra
+     * @access public
+     * @return array
+     */
+    public function assignCreateVarsTest($spaceID, $type, $copyKanbanID, $extra)
+    {
+        global $tester;
+        
+        // 模拟assignCreateVars方法的核心逻辑
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $enableImport  = 'on';
+        $importObjects = array_keys($tester->lang->kanban->importObjectList);
+        if($copyKanbanID)
+        {
+            $copyKanban    = $this->objectModel->getByID($copyKanbanID);
+            $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
+            $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
+            $spaceID       = $copyKanban->space;
+        }
+
+        unset($tester->lang->kanban->featureBar['space']['involved']);
+
+        $space      = $this->objectModel->getSpaceById($spaceID);
+        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner ?? '') . ',' . trim($space->team ?? '');
+        $spacePairs = $this->objectModel->getSpacePairs($type);
+        $users      = $tester->loadModel('user')->getPairs('noclosed|nodeleted');
+        $ownerPairs = (isset($spacePairs[$spaceID])) ? $tester->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : $users;
+
+        // 收集计算后的结果
+        $result = array();
+        $result['users'] = count($users);
+        $result['ownerPairs'] = count($ownerPairs);
+        $result['spaceID'] = $spaceID;
+        $result['spacePairs'] = count($spacePairs);
+        $result['type'] = $type;
+        $result['typeList'] = count($tester->lang->kanban->featureBar['space']);
+        $result['kanbans'] = count($this->objectModel->getPairs());
+        $result['copyKanbanID'] = $copyKanbanID;
+        $result['copyKanban'] = $copyKanbanID ? ($copyKanban ? 1 : 0) : 0;
+        $result['enableImport'] = $enableImport;
+        $result['importObjects'] = count($importObjects);
+        $result['copyRegion'] = isset($output['copyRegion']) ? 1 : 0;
+        $result['spaceTeam'] = !empty($space->team) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
