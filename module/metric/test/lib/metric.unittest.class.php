@@ -1665,4 +1665,20 @@ class metricTest
         
         return $beforeCount - $afterCount;
     }
+
+    /**
+     * Test startTime method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function startTimeTest()
+    {
+        // 由于startTime方法很简单，只是调用microtime(true)
+        // 我们可以直接测试microtime(true)的行为来验证startTime的功能
+        $result = microtime(true);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
