@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 class gogsTest
 {
     private $gogs;
@@ -44,5 +45,33 @@ class gogsTest
         if(dao::isError()) return dao::getError();
 
         return is_array($result) ? count($result) : 0;
+    }
+
+    /**
+     * Test checkToken method.
+     *
+     * @param  object $gogs
+     * @access public
+     * @return mixed
+     */
+    public function checkTokenTest(object $gogs): mixed
+    {
+        global $tester;
+        
+        // 创建zen实例并设置必需的依赖
+        $zen = initReference('gogs');
+        $method = $zen->getMethod('checkToken');
+        $method->setAccessible(true);
+        
+        // 创建一个zen实例
+        $zenInstance = $zen->newInstance();
+        
+        // 动态添加gogs属性
+        $zenInstance->gogs = $this->gogs;
+        
+        $result = $method->invoke($zenInstance, $gogs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
