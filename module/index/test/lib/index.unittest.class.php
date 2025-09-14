@@ -32,4 +32,25 @@ class indexZenTest
 
         return $result;
     }
+
+    /**
+     * Test getViewMethodForAssetLib method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getViewMethodForAssetLibTest(int $objectID, string $objectType)
+    {
+        $reflection = new ReflectionClass('indexZen');
+        $method = $reflection->getMethod('getViewMethodForAssetLib');
+        $method->setAccessible(true);
+        
+        $indexZen = new indexZen();
+        $result = $method->invoke($indexZen, $objectID, $objectType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
