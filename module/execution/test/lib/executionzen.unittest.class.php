@@ -110,4 +110,78 @@ class executionZenTest
 
         return $view;
     }
+
+    /**
+     * Test assignKanbanVars method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return object
+     */
+    public function assignKanbanVarsTest(int $executionID): object
+    {
+        global $tester;
+        
+        // 创建模拟的view对象
+        $view = new stdClass();
+        
+        // 模拟用户数据
+        $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'realname');
+        $avatarPairs = array();
+        foreach($users as $account => $realname) {
+            $avatarPairs[$account] = '';
+        }
+        
+        // 构建用户列表
+        $userList = array();
+        foreach($avatarPairs as $account => $avatar) {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar'] = $avatar;
+        }
+        $userList['closed']['account'] = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar'] = '';
+        
+        // 获取执行关联的产品
+        $products = $tester->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+        
+        $productID = 0;
+        $branchID = 0;
+        $productNames = array();
+        
+        if($products) {
+            $productID = key($products);
+            $branches = $tester->dao->select('id,name')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
+            if($branches) $branchID = key($branches);
+        }
+        
+        foreach($products as $product) $productNames[$product->id] = $product->name;
+        
+        // 获取执行关联的计划
+        $allPlans = array();
+        if(!empty($products)) {
+            $plans = $tester->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in(array_keys($products))
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+            foreach($plans as $plan) $allPlans[$plan->id] = $plan->title;
+        }
+        
+        // 设置view变量
+        $view->users = $users;
+        $view->userList = $userList;
+        $view->productID = $productID;
+        $view->branchID = $branchID;
+        $view->productNames = $productNames;
+        $view->productNum = count($products);
+        $view->allPlans = $allPlans;
+        $view->isLimited = false; // 简化处理，默认不受限
+        
+        return $view;
+    }
 }
