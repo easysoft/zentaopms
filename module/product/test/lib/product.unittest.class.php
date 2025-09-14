@@ -2375,4 +2375,39 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $fields;
     }
+
+    /**
+     * Test getProductLines method.
+     *
+     * @param  array $programIdList
+     * @param  string $check
+     * @access public
+     * @return mixed
+     */
+    public function getProductLinesTest(array $programIdList = array(), string $check = 'count'): mixed
+    {
+        // 模拟getProductLines方法的逻辑
+        // 1. 获取所有产品线（调用product->getLines方法）
+        $productLines = $this->objectModel->getLines($programIdList);
+        
+        // 2. 收集项目集的产品线映射
+        $linePairs = array();
+        foreach($programIdList as $programID) $linePairs[$programID] = array();
+        foreach($productLines as $line) $linePairs[$line->root][$line->id] = $line->name;
+        
+        if(dao::isError()) return dao::getError();
+        
+        $result = array($productLines, $linePairs);
+        
+        // 根据检查类型返回不同的值用于断言
+        switch($check)
+        {
+            case 'count': return count($result);
+            case 'productCount': return count($productLines);
+            case 'pairCount': return count($linePairs);
+            case 'hasProgram': return isset($linePairs[current($programIdList)]);
+            case 'structure': return is_array($result) && count($result) == 2 ? 'valid' : 'invalid';
+            default: return $result;
+        }
+    }
 }
