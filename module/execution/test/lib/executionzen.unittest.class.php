@@ -2205,4 +2205,63 @@ class executionZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkLinkPlan method.
+     *
+     * @param  int   $executionID
+     * @param  array $oldPlans
+     * @param  array $postPlans
+     * @access public
+     * @return mixed
+     */
+    public function checkLinkPlanTest(int $executionID, array $oldPlans, array $postPlans = array())
+    {
+        // 备份原始POST数据
+        $originalPost = $_POST;
+
+        try {
+            // 设置POST数据
+            $_POST = array();
+            if(!empty($postPlans)) $_POST['plans'] = $postPlans;
+
+            $obj = $this->objectModel->loadZen('execution');
+            
+            // Use reflection to call the protected method
+            $reflection = new ReflectionClass($obj);
+            $method = $reflection->getMethod('checkLinkPlan');
+            $method->setAccessible(true);
+            $result = $method->invoke($obj, $executionID, $oldPlans);
+
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(EndResponseException $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            
+            // Capture the response content from EndResponseException
+            // This indicates the method called $this->send() which means there were new plans to link
+            $content = $e->getContent();
+            if(!empty($content)) {
+                $decoded = json_decode($content, true);
+                if($decoded !== null) {
+                    return $decoded;
+                }
+                // If JSON decode fails, try to extract result
+                if(strpos($content, '"result":"success"') !== false) {
+                    return array('result' => 'success');
+                }
+            }
+            return array('result' => 'success');
+        }
+        catch(Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return array('error' => $e->getMessage());
+        }
+    }
 }
