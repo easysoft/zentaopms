@@ -15,11 +15,7 @@ class mrTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('mr');
-
-        /* Init gitlab mr data. */
-        $this->objectModel->apiReopenMR(1, '3', 36);
-        $this->objectModel->apiCloseMR(1, '3', 38);
-        $this->objectModel->apiCloseMR(1, '3', 138);
+        $this->objectTao   = $tester->loadTao('mr');
     }
 
     /**
@@ -456,5 +452,31 @@ class mrTest
             $app->rawModule = $originalRawModule;
             return 'error: ' . $e->getMessage();
         }
+    }
+
+    /**
+     * Test getAllProjects method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function getAllProjectsTest($repo)
+    {
+        if(empty($repo) || !is_object($repo)) return array();
+        if(empty($repo->SCM)) return array();
+        
+        $scm = strtolower($repo->SCM);
+        $methodName = 'get' . ucfirst($scm) . 'Projects';
+        
+        if(!in_array($scm, array('gitlab', 'gitea', 'gogs'))) return array();
+        
+        if(isset($repo->serviceHost) && isset($repo->serviceProject))
+        {
+            $projectList = array($repo->serviceProject => $repo->serviceProject);
+            return $this->objectModel->{$methodName}((int)$repo->serviceHost, $projectList);
+        }
+        
+        return array();
     }
 }
