@@ -110,4 +110,45 @@ class fileZenTest
             'called' => true
         );
     }
+
+    /**
+     * Test updateFileName method.
+     *
+     * @param  int    $fileID   文件ID
+     * @param  string $fileName 文件名
+     * @param  string $extension 扩展名
+     * @access public
+     * @return array
+     */
+    public function updateFileNameZenTest(int $fileID, string $fileName = '', string $extension = ''): array
+    {
+        // 设置POST数据
+        $_POST['fileName'] = $fileName;
+        $_POST['extension'] = $extension;
+        
+        try 
+        {
+            $method = $this->fileZenTest->getMethod('updateFileName');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->fileZenTest->newInstance(), array($fileID));
+            
+            if(dao::isError()) 
+            {
+                $result = array('result' => 'fail', 'message' => 'Database error');
+            }
+        }
+        catch(Exception $e)
+        {
+            $result = array('result' => 'fail', 'message' => $e->getMessage());
+        }
+        finally
+        {
+            // 清理POST数据
+            unset($_POST['fileName']);
+            unset($_POST['extension']);
+        }
+        
+        return $result;
+    }
 }
