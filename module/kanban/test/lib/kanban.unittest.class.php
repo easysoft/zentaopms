@@ -2511,4 +2511,34 @@ class kanbanTest
         
         return $result;
     }
+
+    /**
+     * Test setUserAvatar method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setUserAvatarTest()
+    {
+        global $tester;
+        
+        // 获取用户列表
+        $users = $tester->loadModel('user')->getPairs('noletter|nodeleted');
+        $avatarPairs = $tester->loadModel('user')->getAvatarPairs('all');
+        
+        $userList = array();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
+        }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
+
+        if(dao::isError()) return dao::getError();
+        
+        return $userList;
+    }
 }
