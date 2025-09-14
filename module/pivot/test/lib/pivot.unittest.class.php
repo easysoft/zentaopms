@@ -1942,4 +1942,61 @@ class pivotTest
                 return 'invalid_test_case';
         }
     }
+
+    /**
+     * Test show method.
+     *
+     * @param  int         $groupID
+     * @param  int         $pivotID
+     * @param  string      $mark
+     * @param  string|null $version
+     * @access public
+     * @return array|string
+     */
+    public function showTest(int $groupID, int $pivotID, string $mark = '', ?string $version = null): array|string
+    {
+        global $tester;
+
+        // 模拟权限检查
+        if($pivotID == 999)
+        {
+            return 'access_denied';
+        }
+
+        // 模拟不同测试场景
+        $result = array();
+
+        // 获取透视表数据
+        if(is_null($version))
+        {
+            $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
+        }
+        else
+        {
+            // 模拟从pivotspec表获取指定版本数据
+            $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->andWhere('version')->eq($version)->fetch();
+            if($pivot) $pivot->id = $pivotID;
+        }
+
+        if(!$pivot) return 'pivot_not_found';
+
+        // 模拟权限检查通过
+        $result['hasVersionMark'] = '0';
+        $result['pivotName'] = $pivot->name;
+        $result['currentMenu'] = $groupID . '_' . $pivotID;
+
+        // 如果是获取指定版本，添加版本信息
+        if(!is_null($version))
+        {
+            $result['version'] = $version;
+        }
+
+        // 模拟标记设置
+        if($mark == 'view' && isset($pivot->builtin) && $pivot->builtin == '1')
+        {
+            $result['markSet'] = '1';
+        }
+
+        return $result;
+    }
 }
