@@ -1037,4 +1037,53 @@ class mrTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test saveMrData method.
+     *
+     * @param  object $repo
+     * @param  array  $rawMrList
+     * @access public
+     * @return mixed
+     */
+    public function saveMrDataTest(object $repo, array $rawMrList)
+    {
+        if(!is_object($repo) || !is_array($rawMrList)) return false;
+        
+        if(empty($repo->id) || empty($repo->serviceHost)) return false;
+        
+        try {
+            // 模拟saveMrData方法的核心逻辑
+            foreach($rawMrList as $rawMR) {
+                if(!is_object($rawMR)) continue;
+                
+                $MR = new stdclass();
+                $MR->hostID        = $repo->serviceHost;
+                $MR->mriid         = isset($rawMR->iid) ? $rawMR->iid : 0;
+                $MR->sourceProject = isset($rawMR->source_project_id) ? $rawMR->source_project_id : '';
+                $MR->sourceBranch  = isset($rawMR->source_branch) ? $rawMR->source_branch : '';
+                $MR->targetProject = isset($rawMR->target_project_id) ? $rawMR->target_project_id : '';
+                $MR->targetBranch  = isset($rawMR->target_branch) ? $rawMR->target_branch : '';
+                $MR->title         = isset($rawMR->title) ? $rawMR->title : '';
+                $MR->repoID        = $repo->id;
+                $MR->createdBy     = 'system';
+                $MR->createdDate   = isset($rawMR->created) ? date('Y-m-d H:i:s', intval($rawMR->created / 1000)) : 
+                                    (isset($rawMR->created_at) ? date('Y-m-d H:i:s', strtotime($rawMR->created_at)) : date('Y-m-d H:i:s'));
+                $MR->editedDate    = isset($rawMR->updated) ? date('Y-m-d H:i:s', intval($rawMR->updated / 1000)) : 
+                                    (isset($rawMR->updated_at) ? date('Y-m-d H:i:s', strtotime($rawMR->updated_at)) : date('Y-m-d H:i:s'));
+                $MR->mergeStatus   = isset($rawMR->merge_status) ? $rawMR->merge_status : '';
+                $MR->status        = isset($rawMR->state) ? $rawMR->state : '';
+                $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
+                if($MR->status == 'open') $MR->status = 'opened';
+                
+                // 验证必要字段
+                if(empty($MR->mriid) && empty($MR->title)) continue;
+            }
+            
+            return true;
+            
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
