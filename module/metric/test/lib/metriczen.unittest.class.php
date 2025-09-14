@@ -298,4 +298,22 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test completeMissingRecords method.
+     *
+     * @param  array $records
+     * @param  object $metric
+     * @access public
+     * @return mixed
+     */
+    public function completeMissingRecordsZenTest($records, $metric)
+    {
+        $method = $this->metricZenTest->getMethod('completeMissingRecords');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($records, $metric));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

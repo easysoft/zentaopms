@@ -1,0 +1,31 @@
+---
+title: 为 completeMissingRecords 方法准备度量配置数据
+desc: 包含不同范围和类型的度量配置数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: purpose
+  range: [efficiency, scale, quality, value, quantity]
+- field: scope
+  range: [system{2}, product{1}, project{1}, execution{1}]
+- field: object
+  range: [system{2}, product{1}, project{1}, execution{1}]
+- field: stage
+  range: released{5}
+- field: name
+  range: [系统测试度量1, 系统测试度量2, 产品测试度量1, 项目测试度量1, 执行测试度量1]
+- field: code
+  range: [test_metric, empty_metric, product_metric, project_metric, override_metric]
+- field: dateType
+  range: [day{3}, week{1}, month{1}]
+- field: unit
+  range: [count{3}, percent{1}, hour{1}]
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: 2023-01-01 00:00:00{5}
+- field: builtin
+  range: ['0']{5}
