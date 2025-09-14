@@ -262,4 +262,34 @@ class extensionTest
             return false;
         }
     }
+
+    /**
+     * Test extractPackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return object
+     */
+    public function extractPackageTest(string $extension)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('extractPackage');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $errorResult = new stdClass();
+            $errorResult->result = 'fail';
+            $errorResult->error = 'Exception: ' . $e->getMessage();
+            return $errorResult;
+        }
+    }
 }

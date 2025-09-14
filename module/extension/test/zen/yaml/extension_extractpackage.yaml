@@ -1,0 +1,70 @@
+---
+title: extractPackage方法测试数据
+desc: 为extractPackage方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 插件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 插件名称
+  range: 测试插件1,测试插件2,示例插件1,示例插件2,演示插件1,演示插件2,测试扩展1,测试扩展2,样例插件1,样例插件2
+  format: ""
+- field: code
+  note: 插件代码
+  range: testplugin1,testplugin2,sampleplugin1,sampleplugin2,demoplugin1,demoplugin2,testext1,testext2,exampleplugin1,exampleplugin2
+  format: ""
+- field: version
+  note: 插件版本
+  range: 1.0.0,1.1.0,2.0.0,2.1.0,3.0.0,3.1.0,4.0.0,4.1.0,5.0.0,5.1.0
+  format: ""
+- field: author
+  note: 作者
+  range: 测试作者1,测试作者2,开发者1,开发者2,作者A,作者B,开发团队1,开发团队2,测试人员1,测试人员2
+  format: ""
+- field: desc
+  note: 插件描述
+  range: 这是一个测试插件,示例插件描述,演示用插件,测试扩展功能,样例插件说明,开发测试插件,功能测试插件,单元测试插件,集成测试插件,性能测试插件
+  format: ""
+- field: license
+  note: 许可证
+  range: MIT,Apache 2.0,GPL v3,BSD,ZPL
+  format: ""
+- field: type
+  note: 插件类型
+  range: extension{10}
+  format: ""
+- field: site
+  note: 网站地址
+  range: http://example.com,https://test.org,http://demo.net,https://sample.com,http://plugin.org
+  format: ""
+- field: zentaoCompatible
+  note: 禅道兼容版本
+  range: '18.0,19.0,20.0,21.0,22.0'
+  format: ""
+- field: installedTime
+  note: 安装时间
+  range: '2024-01-01 10:00:00,2024-02-01 11:00:00,2024-03-01 12:00:00,2024-04-01 13:00:00,2024-05-01 14:00:00'
+  format: ""
+- field: depends
+  note: 依赖插件
+  range: '',plugin1,plugin2,extension1,extension2
+  format: ""
+- field: dirs
+  note: 目录信息
+  range: '',/extension/testplugin1,/extension/testplugin2,/extension/sampleplugin,/extension/demoplugin
+  format: ""
+- field: files
+  note: 文件信息
+  range: '',test.php,sample.php,demo.php,example.php
+  format: ""
+- field: status
+  note: 插件状态
+  range: available,installed,deactivated,available,installed,deactivated,available,installed,deactivated,available
+  format: ""
