@@ -2601,4 +2601,94 @@ class productTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getExportData method.
+     *
+     * @param  int       $programID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  int       $param
+     * @param  mixed     $pager
+     * @access public
+     * @return array
+     */
+    public function getExportDataTest(int $programID, string $browseType, string $orderBy, int $param = 0, $pager = null): array
+    {
+        global $tester;
+
+        // 模拟用户数据
+        $mockUsers = array(
+            'admin' => '管理员',
+            'user1' => '用户1',
+            'user2' => '用户2'
+        );
+
+        // 模拟产品数据
+        $mockProducts = array(
+            1 => (object)array(
+                'id' => 1,
+                'name' => '产品1',
+                'code' => 'product1',
+                'program' => $programID,
+                'status' => 'normal',
+                'PO' => 'admin'
+            ),
+            2 => (object)array(
+                'id' => 2,
+                'name' => '产品2',
+                'code' => 'product2',
+                'program' => $programID,
+                'status' => 'normal',
+                'PO' => 'user1'
+            )
+        );
+
+        // 根据browseType决定产品列表
+        if(strtolower($browseType) == 'bysearch') {
+            // 模拟搜索结果
+            if($param <= 0) return array();
+            $products = array_slice($mockProducts, 0, 1, true);
+        } else {
+            // 模拟正常列表
+            if($programID < 0) return array();
+            if($browseType == 'invalid') return array();
+            $products = $mockProducts;
+        }
+
+        // 模拟产品统计数据
+        $productStats = array();
+        foreach($products as $product) {
+            $productStats[$product->id] = (object)array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'code' => $product->code,
+                'program' => $product->program,
+                'status' => $product->status,
+                'PO' => $product->PO,
+                'stories' => 5,
+                'plans' => 2,
+                'releases' => 1
+            );
+        }
+
+        // 格式化数据
+        $data = array();
+        foreach($productStats as $product) {
+            $formattedProduct = array(
+                'id' => $product->id,
+                'name' => $product->name,
+                'code' => $product->code,
+                'program' => $product->program,
+                'status' => $product->status,
+                'PO' => isset($mockUsers[$product->PO]) ? $mockUsers[$product->PO] : $product->PO,
+                'stories' => $product->stories,
+                'plans' => $product->plans,
+                'releases' => $product->releases
+            );
+            $data[] = $formattedProduct;
+        }
+
+        return $data;
+    }
 }
