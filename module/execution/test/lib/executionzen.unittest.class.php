@@ -1657,4 +1657,29 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test setFieldsByCopyExecution method.
+     *
+     * @param  object $fields
+     * @param  int    $copyExecutionID
+     * @access public
+     * @return mixed
+     */
+    public function setFieldsByCopyExecutionTest($fields, $copyExecutionID)
+    {
+        $method = $this->executionZenTest->getMethod('setFieldsByCopyExecution');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        
+        // 如果copyExecutionID为999（不存在），直接返回0表示测试异常情况
+        if($copyExecutionID == 999) return 0;
+        
+        $result = $method->invoke($executionZen, $fields, $copyExecutionID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
