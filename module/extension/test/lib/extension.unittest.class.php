@@ -292,4 +292,31 @@ class extensionTest
             return $errorResult;
         }
     }
+
+    /**
+     * Test copyPackageFiles method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function copyPackageFilesTest(string $extension)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('copyPackageFiles');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return is_array($result) ? $result : array();
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
+    }
 }
