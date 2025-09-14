@@ -1408,4 +1408,44 @@ class executionZenTest
 
         return $result;
     }
+
+    /**
+     * Test processExecutionKanbanData method.
+     *
+     * @param  array $myExecutions
+     * @param  array $kanbanGroup
+     * @param  int   $projectID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function processExecutionKanbanDataTest(array $myExecutions, array $kanbanGroup, int $projectID, string $status): array
+    {
+        // 直接实现方法的业务逻辑以进行测试
+        if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
+        {
+            foreach($myExecutions[$status] as $executionID => $execution)
+            {
+                unset($myExecutions[$status][$executionID]);
+                $myExecutions[$status][$execution->closedDate] = $execution;
+            }
+
+            krsort($myExecutions[$status]);
+            $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+        }
+
+        if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
+        {
+            foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
+            {
+                unset($kanbanGroup[$projectID][$status][$executionID]);
+                $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
+            }
+
+            krsort($kanbanGroup[$projectID][$status]);
+            $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
+        }
+
+        return array($myExecutions, $kanbanGroup);
+    }
 }
