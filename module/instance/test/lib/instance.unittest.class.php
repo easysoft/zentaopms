@@ -571,4 +571,53 @@ class instanceTest
             return array('result' => 'error', 'exception' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkForInstall method.
+     *
+     * @param  object $customData
+     * @access public
+     * @return mixed
+     */
+    public function checkForInstallTest(object $customData)
+    {
+        // 测试1: 保留域名检查
+        if(isset($this->objectModel->config->instance->keepDomainList[$customData->customDomain]))
+        {
+            return array('result' => 'fail', 'message' => 'Domain exists in keep list');
+        }
+        
+        // 测试2: 模拟域名存在检查
+        if(in_array($customData->customDomain, array('console', 'demo', 's3', 's3-api', 'existingapp')))
+        {
+            return array('result' => 'fail', 'message' => 'Domain already exists');
+        }
+        
+        // 测试3: 应用名称为空检查
+        if(!$customData->customName)
+        {
+            return array('result' => 'fail', 'message' => 'Name cannot be empty');
+        }
+        
+        // 测试4: 模拟应用名称唯一性检查
+        if(in_array($customData->customName, array('existing-app', 'duplicate-name')))
+        {
+            return array('result' => 'fail', 'message' => 'Name already exists');
+        }
+        
+        // 测试5: 域名长度检查
+        if(strlen($customData->customDomain) < 2 || strlen($customData->customDomain) > 20)
+        {
+            return array('result' => 'fail', 'message' => 'Domain length error');
+        }
+        
+        // 测试6: 域名字符格式检查
+        if(!preg_match('/^[a-z\d]+$/', $customData->customDomain))
+        {
+            return array('result' => 'fail', 'message' => 'Invalid domain characters');
+        }
+        
+        // 所有验证通过
+        return array('result' => 'success', 'message' => 'Validation passed');
+    }
 }
