@@ -319,4 +319,31 @@ class extensionTest
             return array();
         }
     }
+
+    /**
+     * Test backupDB method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return string|false
+     */
+    public function backupDBTest(string $extension)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('backupDB');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
 }
