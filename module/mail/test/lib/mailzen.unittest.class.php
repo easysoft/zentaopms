@@ -29,4 +29,21 @@ class mailZenTest
 
         return $result;
     }
+
+    /**
+     * Test getConfigForSave method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getConfigForSaveZenTest()
+    {
+        $method = $this->mailZenTest->getMethod('getConfigForSave');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->mailZenTest->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
