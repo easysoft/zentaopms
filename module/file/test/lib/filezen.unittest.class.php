@@ -51,4 +51,63 @@ class fileZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test unlinkRealFile method.
+     *
+     * @param  object $file 文件对象
+     * @access public
+     * @return mixed
+     */
+    public function unlinkRealFileZenTest($file): array
+    {
+        // 记录调用前的状态
+        $beforeCount = 0;
+        if(!empty($file) && isset($file->pathname))
+        {
+            $beforeCount = $this->tester->dao->select('COUNT(1) as count')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch('count');
+        }
+
+        try 
+        {
+            $method = $this->fileZenTest->getMethod('unlinkRealFile');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->fileZenTest->newInstance(), array($file));
+        }
+        catch(TypeError $e)
+        {
+            // 处理类型错误，比如null对象
+            return array(
+                'beforeCount' => $beforeCount,
+                'afterCount' => $beforeCount,
+                'called' => false,
+                'error' => 'type_error'
+            );
+        }
+        catch(Exception $e)
+        {
+            return array(
+                'beforeCount' => $beforeCount,
+                'afterCount' => $beforeCount,
+                'called' => false,
+                'error' => $e->getMessage()
+            );
+        }
+        
+        // 检查调用后的状态
+        $afterCount = 0;
+        if(!empty($file) && isset($file->pathname))
+        {
+            $afterCount = $this->tester->dao->select('COUNT(1) as count')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch('count');
+        }
+
+        if(dao::isError()) return dao::getError();
+        
+        return array(
+            'beforeCount' => $beforeCount,
+            'afterCount' => $afterCount,
+            'called' => true
+        );
+    }
 }
