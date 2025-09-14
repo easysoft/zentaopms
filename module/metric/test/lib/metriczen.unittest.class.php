@@ -340,4 +340,22 @@ class metricZenTest
             return 'Error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getCalcFields method.
+     *
+     * @param  object $calc
+     * @param  object $row
+     * @access public
+     * @return mixed
+     */
+    public function getCalcFieldsZenTest($calc, $row)
+    {
+        $method = $this->metricZenTest->getMethod('getCalcFields');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($calc, $row));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
