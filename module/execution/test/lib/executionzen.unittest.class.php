@@ -8,8 +8,9 @@ class executionZenTest
         global $tester;
         $this->tester      = $tester;
         $this->objectModel = $tester->loadModel('execution');
-        $this->objectZen   = $tester->loadZen('execution');
-        $this->executionZenTest = new ReflectionClass($this->objectZen);
+        $tester->app->setModuleName('execution');
+
+        $this->executionZenTest = initReference('execution');
     }
 
     /**
@@ -1072,6 +1073,31 @@ class executionZenTest
         $method->setAccessible(true);
         
         $result = $method->invoke($this->objectZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * Test checkCFDDate method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $minDate
+     * @param  string $maxDate
+     * @access public
+     * @return mixed
+     */
+    public function checkCFDDateTest(string $begin, string $end, string $minDate, string $maxDate)
+    {
+        global $tester;
+        
+        $method = $this->executionZenTest->getMethod('checkCFDDate');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $begin, $end, $minDate, $maxDate);
         
         if(dao::isError()) return dao::getError();
         
