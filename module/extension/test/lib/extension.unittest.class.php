@@ -374,4 +374,38 @@ class extensionTest
             return false;
         }
     }
+
+    /**
+     * Test checkExtensionPaths method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return mixed
+     */
+    public function checkExtensionPathsTest(string $extension)
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('checkExtensionPaths');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $errorResult = new stdClass();
+            $errorResult->result = 'fail';
+            $errorResult->error = 'Exception: ' . $e->getMessage();
+            $errorResult->errors = '';
+            $errorResult->mkdirCommands = '';
+            $errorResult->chmodCommands = '';
+            $errorResult->dirs2Created = array();
+            return $errorResult;
+        }
+    }
 }
