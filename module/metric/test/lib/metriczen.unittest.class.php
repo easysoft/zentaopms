@@ -410,4 +410,21 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getViewTableWidth method.
+     *
+     * @param  array $headers
+     * @access public
+     * @return mixed
+     */
+    public function getViewTableWidthZenTest($headers)
+    {
+        $method = $this->metricZenTest->getMethod('getViewTableWidth');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($headers));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
