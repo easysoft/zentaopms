@@ -1949,4 +1949,69 @@ class executionZenTest
 
         return 1;
     }
+
+    /**
+     * Test correctErrorLang method.
+     *
+     * @param  string $tabValue
+     * @access public
+     * @return array
+     */
+    public function correctErrorLangTest($tabValue = '')
+    {
+        global $app, $lang, $config;
+
+        // 备份原始数据
+        $originalTab = isset($app->tab) ? $app->tab : '';
+        $originalLang = clone $lang;
+        $originalConfig = clone $config;
+
+        // 设置测试参数
+        if($tabValue !== '') $app->tab = $tabValue;
+
+        // 准备语言测试数据
+        if(!isset($lang->execution)) $lang->execution = new stdClass();
+        if(!isset($lang->error)) $lang->error = new stdClass();
+        if(!isset($lang->project)) $lang->project = new stdClass();
+
+        $lang->execution->teamName = '团队名称';
+        $lang->execution->name = '执行名称';
+        $lang->execution->code = '执行代号';
+        $lang->execution->execName = '执行名称';
+        $lang->execution->execCode = '执行代号';
+        $lang->error->repeat = '重复错误';
+
+        // 确保config配置存在
+        if(!isset($config->execution)) $config->execution = new stdClass();
+        if(!isset($config->execution->create)) $config->execution->create = new stdClass();
+        if(!isset($config->execution->create->requiredFields)) 
+        {
+            $config->execution->create->requiredFields = 'name,code';
+        }
+
+        // 调用被测方法
+        if($this->executionZenTest)
+        {
+            $method = $this->executionZenTest->getMethod('correctErrorLang');
+            $method->setAccessible(true);
+            $method->invokeArgs($this->executionZenTest->newInstance(), array());
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        // 收集结果
+        $result = array();
+        $result['execution_team'] = isset($lang->execution->team) ? $lang->execution->team : '';
+        $result['error_unique'] = isset($lang->error->unique) ? $lang->error->unique : '';
+        $result['project_name'] = isset($lang->project->name) ? $lang->project->name : '';
+        $result['project_code'] = isset($lang->project->code) ? $lang->project->code : '';
+        $result['app_tab'] = $app->tab;
+
+        // 恢复原始数据
+        $app->tab = $originalTab;
+        $lang = $originalLang;
+        $config = $originalConfig;
+
+        return $result;
+    }
 }
