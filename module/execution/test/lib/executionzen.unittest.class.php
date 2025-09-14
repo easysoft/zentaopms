@@ -1126,4 +1126,26 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildProductSwitcher method.
+     *
+     * @param  int   $executionID
+     * @param  int   $productID
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function buildProductSwitcherTest(int $executionID, int $productID, array $products): array
+    {
+        $method = $this->executionZenTest->getMethod('buildProductSwitcher');
+        $method->setAccessible(true);
+        
+        $executionZen = new executionZen();
+        $result = $method->invoke($executionZen, $executionID, $productID, $products);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
