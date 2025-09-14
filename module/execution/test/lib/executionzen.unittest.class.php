@@ -948,4 +948,95 @@ class executionZenTest
         
         return $view;
     }
+
+    /**
+     * Test buildImportBugSearchForm method.
+     *
+     * @param  object $execution
+     * @param  int    $queryID
+     * @param  array  $products
+     * @param  array  $executions
+     * @param  array  $projects
+     * @access public
+     * @return int
+     */
+    public function buildImportBugSearchFormTest(object $execution, int $queryID, array $products, array $executions, array $projects)
+    {
+        global $tester;
+        
+        try {
+            // Create execution zen instance
+            $executionZen = $tester->loadZen('execution');
+            
+            // Create reflection to access protected method
+            $reflection = new ReflectionClass($executionZen);
+            $method = $reflection->getMethod('buildImportBugSearchForm');
+            $method->setAccessible(true);
+            
+            // Initialize config structure if not exists
+            if(!isset($tester->config->bug)) $tester->config->bug = new stdClass();
+            if(!isset($tester->config->bug->search)) $tester->config->bug->search = array();
+            
+            // Save original config to restore later
+            $originalConfig = $tester->config->bug->search;
+            
+            // Initialize basic search config structure
+            $tester->config->bug->search = array(
+                'actionURL' => '',
+                'queryID' => 0,
+                'fields' => array(
+                    'product' => 1,
+                    'execution' => 1,
+                    'plan' => 1,
+                    'module' => 1,
+                    'project' => 1,
+                    'openedBuild' => 1,
+                    'confirmed' => 1,
+                    'resolvedBy' => 1,
+                    'closedBy' => 1,
+                    'status' => 1,
+                    'toTask' => 1,
+                    'toStory' => 1,
+                    'resolution' => 1,
+                    'resolvedBuild' => 1,
+                    'resolvedDate' => 1,
+                    'closedDate' => 1,
+                    'branch' => 1
+                ),
+                'params' => array(
+                    'product' => array('values' => array()),
+                    'execution' => array('values' => array()),
+                    'plan' => array('values' => array()),
+                    'module' => array('values' => array()),
+                    'project' => array('values' => array()),
+                    'openedBuild' => array('values' => array()),
+                    'confirmed' => array('values' => array()),
+                    'resolvedBy' => array('values' => array()),
+                    'closedBy' => array('values' => array()),
+                    'status' => array('values' => array()),
+                    'toTask' => array('values' => array()),
+                    'toStory' => array('values' => array()),
+                    'resolution' => array('values' => array()),
+                    'resolvedBuild' => array('values' => array()),
+                    'resolvedDate' => array('values' => array()),
+                    'closedDate' => array('values' => array()),
+                    'branch' => array('values' => array())
+                ),
+                'module' => ''
+            );
+            
+            // Call the method
+            $method->invoke($executionZen, $execution, $queryID, $products, $executions, $projects);
+            
+            if(dao::isError()) return 0;
+
+            // Restore original config
+            $tester->config->bug->search = $originalConfig;
+            
+            // Return success
+            return 1;
+        } catch(Exception $e) {
+            return 0;
+        }
+    }
 }
