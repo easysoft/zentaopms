@@ -45,4 +45,24 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  int    $metricID
+     * @param  string $afterCreate
+     * @param  string $from
+     * @param  string $location
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterCreateZenTest($metricID, $afterCreate, $from, $location = '')
+    {
+        $method = $this->metricZenTest->getMethod('responseAfterCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($metricID, $afterCreate, $from, $location));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
