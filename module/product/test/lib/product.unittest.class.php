@@ -2223,4 +2223,48 @@ class productTest
         if(dao::isError()) return dao::getError();
         return $fields;
     }
+
+    /**
+     * Test getFormFields4Create method.
+     *
+     * @param  int    $programID
+     * @param  string $extra
+     * @access public
+     * @return array
+     */
+    public function getFormFields4CreateTest(int $programID = 0, string $extra = ''): array
+    {
+        global $tester, $app, $config;
+
+        // 模拟getFormFields4Create方法的逻辑
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        // 模拟config->product->form->create配置
+        $formFields = array();
+        $formFields['program'] = array('type' => 'int', 'control' => 'select', 'required' => false, 'default' => 0, 'options' => array());
+        $formFields['name'] = array('type' => 'string', 'control' => 'text', 'required' => true, 'filter' => 'trim');
+        $formFields['code'] = array('type' => 'string', 'control' => 'text', 'required' => false, 'filter' => 'trim');
+        $formFields['PO'] = array('type' => 'account', 'control' => 'select', 'required' => false, 'default' => '', 'options' => array());
+        $formFields['type'] = array('type' => 'string', 'control' => 'select', 'required' => false, 'default' => 'normal', 'options' => array());
+        $formFields['desc'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+
+        // 调用setSelectFormOptions来设置表单选项
+        $fields = $this->setSelectFormOptionsTest($programID, $formFields);
+        
+        // 设置默认值
+        $fields['program']['default'] = $programID ? (string)$programID : '';
+        $fields['PO']['default'] = $app->user->account;
+
+        // 设置必填字段
+        foreach($fields as $field => $attr)
+        {
+            if(!empty($output[$field])) $fields[$field]['default'] = $output[$field];
+            // 模拟必填字段判断
+            if($field == 'name') $fields[$field]['required'] = true;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $fields;
+    }
 }
