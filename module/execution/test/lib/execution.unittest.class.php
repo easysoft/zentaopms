@@ -3615,4 +3615,39 @@ class executionTest
         return $result;
     }
 
+    /**
+     * Test setRecentExecutions method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function setRecentExecutionsTest(int $executionID)
+    {
+        // Get original config values for later restoration
+        $originalRecentExecutions = isset($this->objectZen->config->execution->recentExecutions) ? $this->objectZen->config->execution->recentExecutions : '';
+        $originalLastExecution = isset($this->objectZen->config->execution->lastExecution) ? $this->objectZen->config->execution->lastExecution : '';
+
+        // Use reflection to call the protected method
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('setRecentExecutions');
+        $method->setAccessible(true);
+        $method->invoke($this->objectZen, $executionID);
+
+        if(dao::isError()) return dao::getError();
+
+        // Get the updated config values
+        $updatedRecentExecutions = isset($this->objectZen->config->execution->recentExecutions) ? $this->objectZen->config->execution->recentExecutions : '';
+        $updatedLastExecution = isset($this->objectZen->config->execution->lastExecution) ? $this->objectZen->config->execution->lastExecution : '';
+
+        $result = new stdClass();
+        $result->originalRecentExecutions = $originalRecentExecutions;
+        $result->originalLastExecution = $originalLastExecution;
+        $result->updatedRecentExecutions = $updatedRecentExecutions;
+        $result->updatedLastExecution = $updatedLastExecution;
+        $result->executionID = $executionID;
+
+        return $result;
+    }
+
 }
