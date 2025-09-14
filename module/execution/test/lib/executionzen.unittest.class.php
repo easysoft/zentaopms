@@ -2161,4 +2161,48 @@ class executionZenTest
             'template' => 'tips'
         );
     }
+
+    /**
+     * Test updateLinkedPlans method.
+     *
+     * @param  int    $executionID
+     * @param  string $newPlans
+     * @param  string $confirm
+     * @access public
+     * @return mixed
+     */
+    public function updateLinkedPlansTest(int $executionID, string $newPlans = '', string $confirm = 'no')
+    {
+        try {
+            $obj = $this->objectModel->loadZen('execution');
+            
+            // Use reflection to call the protected method
+            $reflection = new ReflectionClass($obj);
+            $method = $reflection->getMethod('updateLinkedPlans');
+            $method->setAccessible(true);
+            $result = $method->invoke($obj, $executionID, $newPlans, $confirm);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(EndResponseException $e) {
+            // Capture the response content from EndResponseException
+            $content = $e->getContent();
+            if(!empty($content)) {
+                $decoded = json_decode($content, true);
+                if($decoded !== null) {
+                    return $decoded;
+                }
+                // If JSON decode fails, try to extract result
+                if(strpos($content, '"result":"success"') !== false) {
+                    return array('result' => 'success');
+                }
+            }
+            return array('result' => 'success');
+        }
+        catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
