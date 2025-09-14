@@ -544,6 +544,51 @@ class jobTest
         
         return $result;
     }
+
+    /**
+     * Test getSubversionDir method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function getSubversionDirTest($repo)
+    {
+        global $tester;
+        
+        // 模拟getSubversionDir方法的业务逻辑
+        if($repo->SCM == 'Subversion')
+        {
+            $dirs = array();
+            $path = empty($repo->prefix) ? '/' : $repo->prefix;
+            
+            // 模拟获取SVN tags
+            $tags = array();
+            if($repo->prefix == '/trunk/src') {
+                $tags['/trunk/src/modules'] = 'modules';
+                $tags['/trunk/src/components'] = 'components';
+            } elseif($repo->prefix == '/trunk') {
+                $tags['/trunk/modules'] = 'modules';
+            } elseif(empty($repo->prefix)) {
+                $tags['/tags/v1.0'] = 'v1.0';
+                $tags['/tags/v2.0'] = 'v2.0';
+            }
+            
+            if($tags)
+            {
+                $dirs['/'] = $path ? $path : '/';
+                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
+                
+                if(dao::isError()) return dao::getError();
+                
+                return $dirs;
+            }
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return null;
+    }
     
     /**
      * Simulate reponseAfterCreateEdit business logic.
