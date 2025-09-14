@@ -140,4 +140,29 @@ class groupZenTest
         
         return $result;
     }
+
+    /**
+     * 测试buildUpdateViewForm方法。
+     * Test buildUpdateViewForm method.
+     *
+     * @param array $actions
+     * @param bool  $actionallchecker
+     * @access public
+     * @return array
+     */
+    public function buildUpdateViewFormTest($actions = array(), $actionallchecker = false)
+    {
+        $_POST['actions'] = $actions;
+        if($actionallchecker) $_POST['actionallchecker'] = 1;
+        
+        $method = $this->groupZenTest->getMethod('buildUpdateViewForm');
+        $groupInstance = $this->groupZenTest->newInstance();
+        
+        $result = $method->invoke($groupInstance);
+        
+        unset($_POST['actions']);
+        unset($_POST['actionallchecker']);
+        
+        return $result;
+    }
 }
