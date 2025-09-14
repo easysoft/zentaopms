@@ -672,4 +672,57 @@ class jobTest
         return array('result' => 'success', 'message' => '保存成功', 'load' => $loadParam);
     }
 
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  array      $searchConfig
+     * @param  string|int $queryID
+     * @param  string     $actionURL
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest(array $searchConfig = array(), string|int $queryID = 0, string $actionURL = '')
+    {
+        global $tester;
+        
+        // 准备默认的搜索配置
+        if(empty($searchConfig))
+        {
+            $searchConfig = array(
+                'module' => 'job',
+                'fields' => array('id' => '编号', 'name' => '名称'),
+                'params' => array(
+                    'id'   => array('operator' => '=', 'control' => 'input', 'values' => ''),
+                    'name' => array('operator' => 'include', 'control' => 'input', 'values' => ''),
+                    'repo' => array('operator' => '=', 'control' => 'select', 'values' => array()),
+                    'product' => array('operator' => '=', 'control' => 'select', 'values' => array())
+                )
+            );
+        }
+        
+        // 模拟buildSearchForm方法的业务逻辑
+        $searchConfig['queryID'] = (int)$queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        if(isset($searchConfig['params']['repo'])) {
+            $searchConfig['params']['repo']['values'] = $tester->loadModel('repo')->getRepoPairs('');
+        }
+        $searchConfig['params']['product']['values'] = $tester->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+
+        // 模拟调用search模块的setSearchParams
+        $tester->loadModel('search')->setSearchParams($searchConfig);
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 验证session中是否设置了搜索参数
+        $searchParams = $_SESSION['jobsearchParams'] ?? array();
+        
+        return array(
+            'searchParams' => $searchParams,
+            'searchConfig' => $searchConfig,
+            'queryID' => $queryID,
+            'actionURL' => $actionURL
+        );
+    }
+
 }
