@@ -1059,4 +1059,22 @@ class executionZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildExecutionForCreate method.
+     *
+     * @access public
+     * @return object|bool
+     */
+    public function buildExecutionForCreateTest()
+    {
+        $method = $this->executionZenTest->getMethod('buildExecutionForCreate');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectZen);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
 }
