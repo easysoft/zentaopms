@@ -346,4 +346,32 @@ class extensionTest
             return false;
         }
     }
+
+    /**
+     * Test togglePackageDisable method.
+     *
+     * @param  string $extension
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function togglePackageDisableTest(string $extension, string $action = 'disabled')
+    {
+        try
+        {
+            $extensionZen = $this->objectModel->loadZen('extension');
+            $reflection = new ReflectionClass($extensionZen);
+            $method = $reflection->getMethod('togglePackageDisable');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($extensionZen, array($extension, $action));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
 }
