@@ -76,4 +76,18 @@ class giteaTest
             return 'Error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test checkToken method.
+     *
+     * @param  object $giteaData
+     * @access public
+     * @return mixed
+     */
+    public function checkTokenTest($giteaData)
+    {
+        // 由于checkToken是protected方法，在测试脚本中直接调用
+        // 这里只是提供接口，实际调用在测试脚本中完成
+        return $giteaData;
+    }
 }
