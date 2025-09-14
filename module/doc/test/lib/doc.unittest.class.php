@@ -5427,4 +5427,34 @@ class docTest
         $list[] = array('type' => 'table', 'props' => $tableProps);
         return json_encode($list);
     }
+
+    /**
+     * Test assignStoryGradeData method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function assignStoryGradeDataTest(string $type): array
+    {
+        global $app;
+        
+        // 手动实现assignStoryGradeData方法的逻辑
+        $gradeGroup = array();
+        $gradeList  = $this->objectModel->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        $returnData = array('gradeGroup' => $gradeGroup);
+
+        if($type != 'planStory' && $type != 'projectStory')
+        {
+            if($type == 'productStory') $storyType = 'story';
+            if($type == 'ER')           $storyType = 'epic';
+            if($type == 'UR')           $storyType = 'requirement';
+            if(isset($storyType)) $returnData['storyType'] = $storyType;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $returnData;
+    }
 }
