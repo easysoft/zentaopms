@@ -3000,4 +3000,38 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test buildProductForClose method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return mixed
+     */
+    public function buildProductForCloseTest(int $productID)
+    {
+        global $tester;
+
+        // 创建productZen实例
+        $productZen = new productZen();
+
+        // 模拟POST数据
+        $_POST = array(
+            'comment' => '关闭产品的备注信息',
+            'closedReason' => 'finished',
+            'uid' => 'test-uid-close-' . time()
+        );
+
+        // 设置post对象
+        $productZen->post = (object)$_POST;
+
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('buildProductForClose');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($productID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
