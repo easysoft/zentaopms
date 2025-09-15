@@ -3599,4 +3599,32 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getStoriesByStoryType method from zen layer.
+     *
+     * @param  int     $productID
+     * @param  string  $branch
+     * @param  string  $storyType
+     * @param  string  $orderBy
+     * @param  mixed   $pager
+     * @access public
+     * @return mixed
+     */
+    public function getStoriesByStoryTypeTest(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', $pager = null)
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('story');
+        $productZen->loadModel('dao');
+        $productZen->app = $tester->app;
+        $productZen->dao = $tester->dao;
+        $productZen->config = $tester->config;
+        
+        $result = $productZen->getStoriesByStoryType($productID, $branch, $storyType, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
