@@ -3972,4 +3972,64 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test saveSession4Roadmap method.
+     *
+     * @param  string $currentURI
+     * @access public
+     * @return array
+     */
+    public function saveSession4RoadmapTest(string $currentURI = '/product/roadmap/'): array
+    {
+        global $tester;
+
+        try {
+            $productZen = new productZen();
+            
+            // 创建模拟app对象
+            $mockApp = new class($currentURI) {
+                private $uri;
+                
+                public function __construct($uri)
+                {
+                    $this->uri = $uri;
+                }
+                
+                public function getURI($flag = false): string
+                {
+                    return $this->uri;
+                }
+            };
+            $productZen->app = $mockApp;
+            
+            // 创建模拟session对象
+            $sessionData = array();
+            $mockSession = new class($sessionData) {
+                private $data;
+                
+                public function __construct(&$data)
+                {
+                    $this->data = &$data;
+                }
+                
+                public function set($key, $value, $module): bool
+                {
+                    $this->data["{$module}_{$key}"] = $value;
+                    return true;
+                }
+            };
+            $productZen->session = $mockSession;
+
+            $method = $this->objectZen->getMethod('saveSession4Roadmap');
+            $method->setAccessible(true);
+            $method->invokeArgs($productZen, array());
+
+            if(dao::isError()) return dao::getError();
+
+            return $sessionData;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
