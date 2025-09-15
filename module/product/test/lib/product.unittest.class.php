@@ -4435,4 +4435,29 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getActiveStoryTypeForTrack method.
+     *
+     * @param  int $projectID
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getActiveStoryTypeForTrackTest(int $projectID = 0, int $productID = 0): array
+    {
+        try {
+            $productZen = new productZen();
+            
+            $method = $this->objectZen->getMethod('getActiveStoryTypeForTrack');
+            $method->setAccessible(true);
+            
+            $result = $method->invokeArgs($productZen, array($projectID, $productID));
+            if(dao::isError()) return dao::getError();
+            
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
