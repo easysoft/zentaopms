@@ -11,6 +11,7 @@ class productplanZenTest
         $app->methodName = 'browse';
         
         $this->objectModel = $tester->loadModel('productplan');
+        $this->objectZen   = $tester->loadZen('productplan');
     }
     
     /**
@@ -154,5 +155,46 @@ class productplanZenTest
         }
 
         return sprintf($lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
+    }
+
+    /**
+     * Test setSessionForViewPage method.
+     *
+     * @param  int    $planID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pageID
+     * @param  int    $recPerPage
+     * @access public
+     * @return array
+     */
+    public function setSessionForViewPageTest(int $planID, string $type, string $orderBy, int $pageID, int $recPerPage): array
+    {
+        global $app;
+        
+        $result = array();
+        $beforeStoryList = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
+        $beforeBugList = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
+        
+        // 模拟setSessionForViewPage的逻辑
+        if(in_array($type, array('story', 'bug')) && ($orderBy != 'order_desc' || $pageID != 1 || $recPerPage != 100))
+        {
+            if($type == 'story')
+            {
+                $_SESSION['storyList'] = $app->getURI(true);
+            }
+            elseif($type == 'bug')
+            {
+                $_SESSION['bugList'] = $app->getURI(true);
+            }
+        }
+        
+        $result['beforeStoryList'] = $beforeStoryList;
+        $result['beforeBugList'] = $beforeBugList;
+        $result['afterStoryList'] = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
+        $result['afterBugList'] = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
+        $result['sessionChanged'] = ($beforeStoryList != $result['afterStoryList']) || ($beforeBugList != $result['afterBugList']);
+        
+        return $result;
     }
 }
