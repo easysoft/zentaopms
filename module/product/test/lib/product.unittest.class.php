@@ -3309,4 +3309,30 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getBranchID method.
+     *
+     * @param  object|null $product
+     * @param  string      $branch
+     * @access public
+     * @return string
+     */
+    public function getBranchIDTest(object|null $product, string $branch): string
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('branch');
+        
+        // 模拟cookie数据 - 设置为空，因为实际运行时cookie可能为空
+        $productZen->cookie = (object)array('preBranch' => '');
+        
+        $method = $this->objectZen->getMethod('getBranchID');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($productZen, array($product, $branch));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
