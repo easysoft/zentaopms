@@ -3034,4 +3034,47 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test prepareManageLineExtras method.
+     *
+     * @param  array $formData
+     * @access public
+     * @return array|false
+     */
+    public function prepareManageLineExtrasTest(array $formData): array|false
+    {
+        global $tester;
+        
+        // 创建productZen实例
+        $productZen = new productZen();
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+
+        // 创建一个扩展的form类来模拟行为
+        $form = new class extends form {
+            private $mockData;
+            
+            public function setMockData($data) {
+                $this->mockData = (object)$data;
+            }
+            
+            public function get(string $fields = ''): mixed {
+                return $this->mockData;
+            }
+        };
+        
+        // 设置模拟数据
+        $form->setMockData($formData);
+
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('prepareManageLineExtras');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($form));
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
