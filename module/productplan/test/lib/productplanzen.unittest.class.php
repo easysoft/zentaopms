@@ -263,4 +263,19 @@ class productplanZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildViewSummary method.
+     *
+     * @param  array $stories
+     * @access public
+     * @return mixed
+     */
+    public function buildViewSummaryTest($stories)
+    {
+        $result = $this->objectZen->buildViewSummary($stories);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
