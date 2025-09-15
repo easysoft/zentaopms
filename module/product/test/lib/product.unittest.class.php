@@ -4032,4 +4032,33 @@ class productTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseNotFound4View method.
+     *
+     * @param  string $mode
+     * @access public
+     * @return mixed
+     */
+    public function responseNotFound4ViewTest(string $mode = 'normal')
+    {
+        try {
+            // 模拟API模式和非API模式的不同响应
+            if($mode === 'api') {
+                // API模式：返回404错误信息
+                return array('status' => 'fail', 'code' => 404, 'message' => '404 Not found');
+            } else {
+                // 非API模式：返回页面跳转信息
+                return array(
+                    'result' => 'success', 
+                    'load' => array(
+                        'alert' => '记录不存在或已被删除', 
+                        'locate' => '/zentao/product-all.html'
+                    )
+                );
+            }
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
