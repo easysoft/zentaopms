@@ -73,6 +73,7 @@ spec:
             spec:
               container: hub.zentao.net/ci/zentao-package:master
               script:
+                - export DELETE_TEST="false"
                 - mkdir -pv ${ZENTAO_RELEASE_PATH}
                 - mkdir -pv /opt/build/zentaopms
                 - test -d $PWD/zentaoext/zentaomax && rm -rf
