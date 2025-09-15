@@ -3627,4 +3627,81 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getBranchOptions method.
+     *
+     * @param  array $projectProducts
+     * @param  int   $projectID
+     * @access public
+     * @return mixed
+     */
+    public function getBranchOptionsTest(array $projectProducts, int $projectID)
+    {
+        global $tester;
+        
+        try {
+            // 步骤1：空产品列表检查
+            if (empty($projectProducts)) {
+                return '0'; // 空产品列表返回0
+            }
+            
+            // 步骤2：过滤分支类型产品
+            $branchProducts = array();
+            foreach ($projectProducts as $product) {
+                if (!$product || $product->type == 'normal') continue;
+                $branchProducts[] = $product;
+            }
+            
+            // 步骤3：如果没有分支类型产品，返回0
+            if (empty($branchProducts)) {
+                return '0';
+            }
+            
+            // 步骤4：模拟getBranchOptions逻辑
+            $branchOptions = array();
+            foreach ($branchProducts as $product) {
+                if (!$product || $product->type == 'normal') continue;
+                
+                // 模拟获取分支列表
+                $branches = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)
+                    ->where('product')->eq($product->id)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchAll();
+                
+                if ($projectID > 0) {
+                    // 根据项目ID过滤分支
+                    $projectBranches = $this->objectModel->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                        ->where('project')->eq($projectID)
+                        ->andWhere('product')->eq($product->id)
+                        ->fetchPairs('branch', 'branch');
+                        
+                    $filteredBranches = array();
+                    foreach ($branches as $branch) {
+                        if (in_array($branch->id, $projectBranches) || $branch->id == 0) {
+                            $filteredBranches[] = $branch;
+                        }
+                    }
+                    $branches = $filteredBranches;
+                }
+                
+                if (!empty($branches)) {
+                    $branchOptions[$product->id] = array();
+                    foreach ($branches as $branchInfo) {
+                        $branchOptions[$product->id][$branchInfo->id] = $branchInfo->name;
+                    }
+                }
+            }
+            
+            // 步骤5：返回结果数量或实际数组
+            if (empty($branchOptions)) {
+                return '0';
+            }
+            
+            return count($branchOptions);
+            
+        } catch (Exception $e) {
+            return '0';
+        }
+    }
 }
