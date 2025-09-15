@@ -4294,4 +4294,5 @@ class bugTest
             return array('error' => $e->getMessage());
         }
     }
+
 }
