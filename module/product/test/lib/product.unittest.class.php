@@ -3952,4 +3952,24 @@ class productTest
             return array('error' => $e->getMessage(), 'success' => 0);
         }
     }
+
+    /**
+     * Test getStoryIdList method.
+     *
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function getStoryIdListTest(array $stories): array
+    {
+        $method = $this->objectZen->getMethod('getStoryIdList');
+        $method->setAccessible(true);
+        
+        // 创建 productZen 实例来调用方法
+        $productZen = new productZen();
+        $result = $method->invokeArgs($productZen, array($stories));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
