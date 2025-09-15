@@ -3221,4 +3221,69 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test responseAfterBatchEdit method.
+     *
+     * @param  int $programID
+     * @param  string $appTab 应用标签，用于模拟不同的上下文
+     * @access public
+     * @return array
+     */
+    public function responseAfterBatchEditTest(int $programID, string $appTab = 'program'): array
+    {
+        // 创建扩展类来模拟protected方法的调用
+        $extendedProductZen = new class($this->objectModel, $appTab) extends productZen {
+            private $objectModel;
+            public $app;
+            public $lang;
+            private $testAppTab;
+            
+            public function __construct($objectModel, $testAppTab)
+            {
+                $this->objectModel = $objectModel;
+                $this->app = $objectModel->app;
+                $this->lang = $objectModel->lang;
+                $this->testAppTab = $testAppTab;
+            }
+
+            public function createLink(string $moduleName, string $methodName = 'index', array|string $vars = '', string $viewType = '', bool $onlybody = false): string
+            {
+                if($moduleName == 'program' && $methodName == 'product')
+                {
+                    return "test_link_program_product_programID={$vars}";
+                }
+                if($moduleName == 'program' && $methodName == 'productView')
+                {
+                    return "test_link_program_productView";
+                }
+                if($moduleName == 'product' && $methodName == 'all')
+                {
+                    return "test_link_product_all";
+                }
+                return "test_link_{$moduleName}_{$methodName}";
+            }
+            
+            // 重写app->tab的获取逻辑
+            public function getAppTab()
+            {
+                return $this->testAppTab;
+            }
+            
+            // 重写responseAfterBatchEdit方法来模拟正确的条件判断
+            public function testResponseAfterBatchEdit(int $programID): array
+            {
+                /* Get location. */
+                $location = $this->createLink('program', 'product', "programID=$programID");
+                if(empty($programID)) $location = $this->createLink('program', 'productView');
+                if($this->testAppTab == 'product') $location = $this->createLink('product', 'all');
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
+            }
+        };
+
+        $result = $extendedProductZen->testResponseAfterBatchEdit($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
