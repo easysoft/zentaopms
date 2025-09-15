@@ -3364,4 +3364,47 @@ class productTest
 
         return $result === null ? 'success' : $result;
     }
+
+    /**
+     * Test saveAndModifyCookie4Browse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $param
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return int
+     */
+    public function saveAndModifyCookie4BrowseTest(int $productID, string $branch, int $param, string $browseType, string $orderBy): int
+    {
+        global $tester;
+
+        try {
+            $productZen = new productZen();
+            $productZen->loadModel('product');
+
+            // 模拟app对象和cookie
+            $productZen->app = (object)array('tab' => 'product');
+            $productZen->cookie = (object)array(
+                'preProductID' => $productID == 2 ? 1 : $productID,
+                'preBranch' => $branch == 'dev' ? 'main' : $branch
+            );
+
+            // 设置初始cookie状态
+            $_COOKIE['preProductID'] = (string)($productID == 2 ? 1 : $productID);
+            $_COOKIE['preBranch'] = $branch == 'dev' ? 'main' : $branch;
+            $_COOKIE['storyModule'] = '0';
+
+            $method = $this->objectZen->getMethod('saveAndModifyCookie4Browse');
+            $method->setAccessible(true);
+            $method->invokeArgs($productZen, array($productID, $branch, $param, $browseType, $orderBy));
+
+            if(dao::isError()) return 0;
+
+            return 1;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
