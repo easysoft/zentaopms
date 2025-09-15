@@ -1871,8 +1871,11 @@ eof;
 
         $commonModel = new commonModel();
 
-        $workflow = $commonModel->loadModel('workflow')->getByModule($module);
-        if($workflow && $workflow->buildin == '0') return true;
+        if($config->edition != 'open')
+        {
+            $workflow = $commonModel->loadModel('workflow')->getByModule($module);
+            if($workflow && $workflow->buildin == '0') return true;
+        }
 
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
