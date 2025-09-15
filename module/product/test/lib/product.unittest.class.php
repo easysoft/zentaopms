@@ -4304,4 +4304,27 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getEmptyHour method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getEmptyHourTest(): object
+    {
+        // 直接包含zen文件
+        include_once dirname(dirname(__FILE__)) . '/../zen.php';
+        $productZen = new productZen();
+        
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($productZen);
+        $method = $reflection->getMethod('getEmptyHour');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($productZen);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
