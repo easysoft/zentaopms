@@ -12071,6 +12071,7 @@ class upgradeModel extends model
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($this->config->edition == 'ipd')->andWhere('t2.category')->notin(array_keys($this->lang->review->reviewPoint->titleList))->fi() // IPD 模式下，只升级非评审点的评审。
+            ->orderBy('t1.id_desc')
             ->fetchAll('id');
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
@@ -12114,16 +12115,19 @@ class upgradeModel extends model
                 $doc->project   = $review->project;
                 $doc->addedBy   = $review->createdBy;
                 $doc->addedDate = $review->createdDate;
+                $doc->version   = 1;
                 $doc->type      = $files ? 'attachment' : 'text';
 
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc = $this->dao->lastInsertID();
                 $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
 
-                $docContent->doc   = $review->doc;
-                $docContent->title = $review->title;
-                $docContent->files = $files;
+                $docContent->doc     = $review->doc;
+                $docContent->title   = $review->title;
+                $docContent->files   = $files;
+                $docContent->version = 1;
                 $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
             }
             elseif($review->doc && $files)
             {
