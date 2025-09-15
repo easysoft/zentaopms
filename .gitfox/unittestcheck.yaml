@@ -88,7 +88,7 @@ spec:
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
                 - mkdir ${GITFOX_WORKSPACE_BASE}/testcode
-                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* ${GITFOX_WORKSPACE_BASE}/testcode && cp -r ${GITFOX_WORKSPACE_BASE}/zentaopms/test ${GITFOX_WORKSPACE_BASE}/testcode/
+                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* ${GITFOX_WORKSPACE_BASE}/testcode && ls ${GITFOX_WORKSPACE_BASE}/testcode/
                 - cd ${GITFOX_WORKSPACE_BASE}/testcode
                 - rm -rf tmp
                 - echo "<?php\n\$config->edition = 'ipd';"
