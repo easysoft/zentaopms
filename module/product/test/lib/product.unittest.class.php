@@ -3739,4 +3739,39 @@ class productTest
         
         return $result;
     }
+
+    /**
+     * Test getKanbanList method.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return mixed
+     */
+    public function getKanbanListTest(string $browseType = 'my')
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('product');
+        $productZen->loadModel('program');
+        $productZen->dao = $tester->dao;
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        
+        // 获取私有方法
+        $method = $this->objectZen->getMethod('getKanbanList');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($browseType));
+        if(dao::isError()) return dao::getError();
+
+        // 简化返回结果以便测试
+        if(empty($result)) return '0';
+        
+        $count = count($result);
+        if($count == 0) return '0';
+        
+        return $count;
+    }
 }
