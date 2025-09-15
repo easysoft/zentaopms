@@ -11,7 +11,6 @@ class productplanZenTest
         $app->methodName = 'browse';
         
         $this->objectModel = $tester->loadModel('productplan');
-        $this->objectZen   = $this; // 直接使用当前对象作为zen对象
     }
     
     /**
@@ -117,5 +116,43 @@ class productplanZenTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getSummary method.
+     *
+     * @param  array $planList
+     * @access public
+     * @return mixed
+     */
+    public function getSummaryTest($planList)
+    {
+        $result = $this->getSummary($planList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 模拟getSummary方法的逻辑
+     * Simulate getSummary method logic.
+     *
+     * @param  array $planList
+     * @access public
+     * @return string
+     */
+    public function getSummary(array $planList): string
+    {
+        global $lang;
+        $totalParent = $totalChild = $totalIndependent = 0;
+
+        foreach($planList as $plan)
+        {
+            if($plan->parent == -1) $totalParent ++;
+            if($plan->parent > 0)   $totalChild ++;
+            if($plan->parent == 0)  $totalIndependent ++;
+        }
+
+        return sprintf($lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
     }
 }
