@@ -1,0 +1,42 @@
+---
+title: pipeline数据定义用于uninstall测试
+desc: 为uninstall方法提供流水线测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 流水线ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 流水线名称
+  range: pipeline{5}
+  format: ""
+- field: instanceID
+  note: 关联的实例ID
+  range: 1,2,3,4,5
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{5}
+  format: ""
+- field: type
+  note: 流水线类型
+  range: jenkins{2},gitlab{3}
+  format: ""
+- field: url
+  note: 流水线URL
+  range: http://pipeline{5}.example.com
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00
+  format: "YYYY-MM-DD hh:mm:ss"

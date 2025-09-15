@@ -1,0 +1,42 @@
+---
+title: 公司管理员测试数据
+desc: 用于测试getProgramAuthedUsers方法的公司管理员数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 公司ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 公司名称
+  range: 测试公司
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: admins
+  note: 管理员列表
+  range: admin,superuser
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 公司状态
+  range: normal
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

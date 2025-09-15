@@ -1,0 +1,66 @@
+---
+title: 产品路线图区块测试数据
+desc: 为printScrumRoadMapBlock方法提供测试数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E,产品F,产品G,产品H,产品I,产品J
+  
+- field: code
+  note: 产品代码
+  range: PA,PB,PC,PD,PE,PF,PG,PH,PI,PJ
+  
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  
+- field: type
+  note: 产品类型
+  range: normal{10}
+  
+- field: line
+  note: 产品线
+  range: 0{5},1-3{5}
+  
+- field: PO
+  note: 产品经理
+  range: admin,user1,user2,user3,user4
+  
+- field: QD
+  note: 测试负责人
+  range: tester1,tester2,admin
+  
+- field: RD
+  note: 研发负责人
+  range: dev1,dev2,admin
+  
+- field: acl
+  note: 访问控制
+  range: open{6},private{2},custom{2}
+  
+- field: createdBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+  
+- field: createdDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00,2024-02-01 00:00:00,2024-03-01 00:00:00
+  
+- field: order
+  note: 排序
+  range: 1-10
+  
+- field: vision
+  note: 视图
+  range: rnd{10}
+  
+- field: deleted
+  note: 是否删除
+  range: 0{10}

@@ -1,0 +1,103 @@
+---
+title: Story数据定义
+desc: 为docZen::previewStory()方法生成测试数据
+
+fields:
+- field: id
+  range: 1-20
+- field: vision
+  range: rnd{20}
+- field: parent
+  range: 0{15}, 1-5{5}
+- field: isParent
+  range: 0{15}, 1{5}
+- field: root
+  range: 1-20
+- field: path
+  range: ',1,{5}, ,2,{5}, ,3,{5}, ,4,{5}'
+- field: grade
+  range: 1{10}, 2{10}
+- field: product
+  range: 1{8}, 2{7}, 3{5}
+- field: branch
+  range: 0{20}
+- field: module
+  range: 0{10}, 1-5{10}
+- field: plan
+  range: 0{10}, 1{5}, 2{5}
+- field: source
+  range: customer{5}, user{5}, po{5}, market{5}
+- field: sourceNote
+  range: '客户反馈{3}, 用户调研{3}, 产品规划{4}, 市场需求{3}, 竞品分析{3}, 内部需求{4}'
+- field: fromBug
+  range: 0{18}, 1-2{2}
+- field: feedback
+  range: 0{18}, 1-2{2}
+- field: title
+  range: '用户登录需求{3}, 数据导出功能{3}, 权限管理需求{3}, 报表统计功能{3}, 文档管理需求{3}, 系统集成需求{3}, 界面优化需求{3}'
+- field: keywords
+  range: '登录,用户{3}, 导出,数据{3}, 权限,管理{3}, 报表,统计{3}, 文档,管理{3}, 集成,系统{3}, 界面,优化{2}'
+- field: type
+  range: story{10}, epic{5}, requirement{5}
+- field: category
+  range: feature{15}, interface{3}, performance{2}
+- field: pri
+  range: 1{2}, 2{6}, 3{10}, 4{2}
+- field: estimate
+  range: 0{5}, 1{3}, 2{3}, 3{3}, 5{3}, 8{3}
+- field: status
+  range: active{8}, draft{4}, closed{4}, changed{4}
+- field: substatus
+  range: ''{15}, done{3}, subdivided{2}
+- field: color
+  range: ''{18}, '#3da7f5{1}, #00da88{1}'
+- field: stage
+  range: wait{5}, planned{5}, projected{5}, developing{3}, developed{2}
+- field: openedBy
+  range: admin{8}, user1{4}, user2{4}, user3{4}
+- field: openedDate
+  range: '2024-01-01 00:00:00{5}, 2024-02-01 00:00:00{5}, 2024-03-01 00:00:00{5}, 2024-04-01 00:00:00{5}'
+- field: assignedTo
+  range: admin{5}, user1{5}, user2{5}, user3{5}
+- field: assignedDate
+  range: '2024-01-02 00:00:00{5}, 2024-02-02 00:00:00{5}, 2024-03-02 00:00:00{5}, 2024-04-02 00:00:00{5}'
+- field: lastEditedBy
+  range: admin{8}, user1{4}, user2{4}, user3{4}
+- field: lastEditedDate
+  range: '2024-01-03 00:00:00{5}, 2024-02-03 00:00:00{5}, 2024-03-03 00:00:00{5}, 2024-04-03 00:00:00{5}'
+- field: reviewedBy
+  range: ''{10}, admin{5}, user1{3}, user2{2}
+- field: reviewedDate
+  range: '0000-00-00 00:00:00{10}, 2024-01-04 00:00:00{5}, 2024-02-04 00:00:00{3}, 2024-03-04 00:00:00{2}'
+- field: closedBy
+  range: ''{16}, admin{2}, user1{2}
+- field: closedDate
+  range: '0000-00-00 00:00:00{16}, 2024-01-05 00:00:00{2}, 2024-02-05 00:00:00{2}'
+- field: closedReason
+  range: ''{16}, done{2}, cancel{2}
+- field: toBug
+  range: 0{18}, 1{1}, 2{1}
+- field: childStories
+  range: ''{15}, 1,2{3}, 3,4{2}
+- field: linkStories
+  range: ''{18}, 1{1}, 2{1}
+- field: linkRequirements
+  range: ''{18}, 1{1}, 2{1}
+- field: duplicateStory
+  range: 0{20}
+- field: reviewResult
+  range: ''{15}, pass{3}, clarify{2}
+- field: urChanged
+  range: 0{20}
+- field: feedbackBy
+  range: ''{15}, user1{3}, user2{2}
+- field: notifyEmail
+  range: ''{18}, user1@test.com{1}, user2@test.com{1}
+- field: version
+  range: 1{15}, 2{3}, 3{2}
+- field: lib
+  range: 0{20}
+- field: fromLib
+  range: 0{20}
+- field: deleted
+  range: 0{20}

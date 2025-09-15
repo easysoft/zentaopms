@@ -6,7 +6,30 @@ class reportTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('report');
+         $this->objectTao   = $tester->loadTao('report');
          $tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
+    }
+
+    /**
+     * Test __construct method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function __constructTest()
+    {
+        global $tester;
+        $report = $tester->loadModel('report');
+        if(dao::isError()) return dao::getError();
+
+        // 验证对象是否正确实例化
+        $result = array();
+        $result['isReportModel'] = $report instanceof reportModel ? '1' : '0';
+        $result['hasDao'] = isset($report->dao) ? '1' : '0';
+        $result['hasConfig'] = isset($report->config) ? '1' : '0';
+        $result['hasLang'] = isset($report->lang) ? '1' : '0';
+        
+        return $result;
     }
 
     /**
@@ -208,6 +231,22 @@ class reportTest
     {
         $count = $this->objectModel->getUserYearActions($accounts, date('Y'));
 
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
+    /**
+     * Test getUserYearContributionCount method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getUserYearContributionCountTest(array $accounts, string $year): mixed
+    {
+        $count = $this->objectModel->getUserYearContributionCount($accounts, $year);
         if(dao::isError()) return dao::getError();
 
         return $count;
@@ -457,5 +496,104 @@ class reportTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Test getContributionCountTips method.
+     *
+     * @param  string $mode
+     * @access public
+     * @return mixed
+     */
+    public function getContributionCountTipsTest($mode)
+    {
+        $result = $this->objectModel->getContributionCountTips($mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAnnualProductStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getAnnualProductStatTest(array $accounts, string $year): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAnnualProductStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAnnualExecutionStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getAnnualExecutionStatTest(array $accounts, string $year): mixed
+    {
+        ob_start();
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getAnnualExecutionStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
+    /**
+     * Test buildAnnualCaseStat method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @param  array  $actionStat
+     * @param  array  $resultStat
+     * @access public
+     * @return mixed
+     */
+    public function buildAnnualCaseStatTest(array $accounts, string $year, array $actionStat, array $resultStat): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('buildAnnualCaseStat');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year, $actionStat, $resultStat);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getOutputData method.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function getOutputDataTest(array $accounts, string $year): mixed
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getOutputData');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $accounts, $year);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

@@ -1,0 +1,37 @@
+---
+title: Project data for buildExecutionKanbanData test
+desc: Test data for project table used in buildExecutionKanbanData method testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Project ID
+  range: 1-10
+- field: project
+  note: Parent project ID
+  range: 0,1,2,1,1,2,2,3,3,3
+- field: type
+  note: Project type
+  range: project{3},sprint{7}
+- field: name
+  note: Project name
+  range: 项目1,项目2,项目3,执行1,执行2,执行3,执行4,执行5,执行6,执行7
+- field: status
+  note: Project status
+  range: wait{2},doing{3},suspended{2},closed{3}
+- field: closedDate
+  note: Closed date
+  range: '[]{7},2023-01-01 00:00:00,2023-01-02 00:00:00,2023-01-03 00:00:00'
+- field: begin
+  note: Begin date
+  range: '2023-01-01'
+- field: end
+  note: End date  
+  range: '2023-12-31'
+- field: openedBy
+  note: Opened by user
+  range: admin
+- field: openedDate
+  note: Opened date
+  range: '2023-01-01 00:00:00'

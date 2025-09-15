@@ -1,0 +1,170 @@
+---
+title: 故事数据
+desc: getAffectedChildren方法的测试数据
+
+fields:
+- field: id
+  note: 故事ID
+  range: 1-20
+- field: product
+  note: 产品ID
+  range: 1
+- field: branch
+  note: 分支ID
+  range: 0
+- field: module
+  note: 模块ID
+  range: 0
+- field: parent
+  note: 父故事ID
+  range: '[1-5]{5}, 0{15}'
+- field: root
+  note: 根故事ID
+  range: '[1-5]{15}, 0{5}'
+- field: path
+  note: 路径
+  range: '[,1,2,3,]{15}, []{5}'
+- field: isParent
+  note: 是否父故事
+  range: '[0]{15}, [1]{5}'
+- field: grade
+  note: 等级
+  range: '[1]{15}, [2]{5}'
+- field: title
+  note: 故事标题
+  range: '软件需求{5}:02d, 用户故事{10}:02d, 需求规格{5}:02d'
+- field: type
+  note: 故事类型
+  range: 'story'
+- field: category
+  note: 分类
+  range: 'feature'
+- field: pri
+  note: 优先级
+  range: '1-4'
+- field: estimate
+  note: 估算工时
+  range: '0-10'
+- field: status
+  note: 状态
+  range: '[active]{10}, [draft]{5}, [closed]{3}, [changing]{2}'
+- field: stage
+  note: 阶段
+  range: '[wait]{5}, [planned]{7}, [projected]{3}, [developed]{3}, [tested]{2}'
+- field: openedBy
+  note: 创建者
+  range: '[admin]{10}, [user1]{5}, [user2]{3}, [user3]{2}'
+- field: openedDate
+  note: 创建日期
+  range: '2024-01-01 00:00:00:1D'
+- field: assignedTo
+  note: 指派给
+  range: '[admin]{8}, [user1]{6}, [user2]{4}, []{2}'
+- field: assignedDate
+  note: 指派日期
+  range: '2024-01-01 10:00:00:1D'
+- field: closedBy
+  note: 关闭者
+  range: '[], [admin]{5}, [user1]{3}'
+- field: closedDate
+  note: 关闭日期
+  range: '[], [2024-01-15 15:00:00]{3}'
+- field: closedReason
+  note: 关闭原因
+  range: '[], [done]{3}, [cancel]{2}'
+- field: lastEditedBy
+  note: 最后编辑者
+  range: '[admin]{10}, [user1]{5}, [user2]{3}, []{2}'
+- field: lastEditedDate
+  note: 最后编辑日期
+  range: '2024-01-02 09:00:00:1D'
+- field: reviewedBy
+  note: 评审者
+  range: '[], [admin]{5}, [user1]{3}'
+- field: reviewedDate
+  note: 评审日期
+  range: '[], [2024-01-03 14:00:00]{3}'
+- field: changedBy
+  note: 变更者
+  range: '[], [admin]{3}'
+- field: changedDate
+  note: 变更日期
+  range: '[], [2024-01-04 16:00:00]{3}'
+- field: activatedDate
+  note: 激活日期
+  range: '[], [2024-01-05 11:00:00]{5}'
+- field: approvedDate
+  note: 审批日期
+  range: '[], [2024-01-06]{3}'
+- field: releasedDate
+  note: 发布日期
+  range: '[], [2024-01-20 12:00:00]{2}'
+- field: vision
+  note: 视野
+  range: 'rnd'
+- field: source
+  note: 来源
+  range: '[], [customer]{5}, [user]{3}'
+- field: sourceNote
+  note: 来源备注
+  range: '[]'
+- field: fromBug
+  note: 来源Bug
+  range: 0
+- field: feedback
+  note: 反馈
+  range: 0
+- field: keywords
+  note: 关键词
+  range: '[]'
+- field: color
+  note: 颜色
+  range: '[]'
+- field: stagedBy
+  note: 阶段负责人
+  range: '[]'
+- field: mailto
+  note: 邮件通知
+  range: '[]'
+- field: lib
+  note: 库
+  range: 0
+- field: fromStory
+  note: 来源故事
+  range: 0
+- field: fromVersion
+  note: 来源版本
+  range: 1
+- field: toBug
+  note: 转Bug
+  range: 0
+- field: linkStories
+  note: 关联故事
+  range: '[]'
+- field: linkRequirements
+  note: 关联需求
+  range: '[]'
+- field: docs
+  note: 文档
+  range: '[]'
+- field: docVersions
+  note: 文档版本
+  range: '[]'
+- field: plan
+  note: 计划
+  range: '[]'
+- field: subStatus
+  note: 子状态
+  range: '[]'
+- field: twins
+  note: 孪生故事
+  range: '[]'
+- field: dupStory
+  note: 重复故事
+  range: 0
+- field: version
+  note: 版本
+  range: 1
+- field: deleted
+  note: 是否删除
+  range: 0

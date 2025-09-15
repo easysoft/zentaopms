@@ -1,0 +1,48 @@
+---
+title: assignTaskKanbanVars方法测试数据-用户表
+desc: 为assignTaskKanbanVars方法生成用户测试数据
+author: Claude
+version: 1
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: company
+  note: 公司ID
+  range: 1
+- field: type
+  note: 用户类型
+  range: inside
+- field: dept
+  note: 部门ID
+  range: 1-5
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,test1,test2,test3,demo,guest
+- field: password
+  note: 密码
+  range: c4ca4238a0b923820dcc509a6f75849b{10}
+- field: role
+  note: 角色
+  range: admin{1},dev{3},qa{3},pm{2},po{1}
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户一,用户二,用户三,用户四,测试一,测试二,测试三,演示用户,访客
+- field: nickname
+  note: 昵称
+  range: Admin,User1,User2,User3,User4,Test1,Test2,Test3,Demo,Guest
+- field: avatar
+  note: 头像
+  range: avatar1.png{3},avatar2.png{3},avatar3.png{2},[]{2}
+- field: email
+  note: 邮箱
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,test1@test.com,test2@test.com,test3@test.com,demo@test.com,guest@test.com
+- field: gender
+  note: 性别
+  range: m{5},f{5}
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}

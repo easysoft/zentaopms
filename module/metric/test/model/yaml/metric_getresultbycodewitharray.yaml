@@ -1,0 +1,57 @@
+---
+title: metric表测试数据-getResultByCodeWithArray方法
+desc: 用于测试getResultByCodeWithArray方法的度量表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: purpose
+  note: 用途
+  range: 'scale,predict'
+- field: scope
+  note: 范围
+  range: 'system,program,project,product'
+- field: object
+  note: 对象
+  range: 'bug,story,task,case'
+- field: stage
+  note: 阶段
+  range: 'released'
+- field: type
+  note: 类型
+  range: 'php'
+- field: name
+  note: 度量项名称
+  range: '测试度量1,测试度量2,缺陷统计,需求统计,任务统计,用户统计,项目统计,产品统计,执行统计,用例统计'
+- field: alias
+  note: 别名
+  range: 'Test Metric 1,Test Metric 2,Bug Count,Story Count,Task Count,User Count,Project Count,Product Count,Execution Count,Case Count'
+- field: code
+  note: 度量项代码
+  range: 'test_metric_1,test_metric_2,bug_count,story_count,task_count,user_count,project_count,product_count,execution_count,case_count'
+- field: unit
+  note: 单位
+  range: '个,件,条'
+- field: dateType
+  note: 日期类型
+  range: 'day,week,month,year'
+- field: collector
+  note: 采集器
+  range: 'SELECT COUNT(*) as value FROM zt_bug WHERE deleted = "0"'
+- field: desc
+  note: 描述
+  range: '度量项描述{10}'
+- field: definition
+  note: 定义
+  range: '度量项定义{10}'
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00'

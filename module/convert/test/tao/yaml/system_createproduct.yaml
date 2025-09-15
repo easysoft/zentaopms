@@ -1,0 +1,29 @@
+---
+title: 应用系统数据定义
+desc: 为createProduct方法测试准备系统数据
+
+fields:
+- field: id
+  note: 系统ID
+  range: 1-100
+- field: name
+  note: 系统名称
+  range: 测试应用{1-10}
+- field: product
+  note: 关联产品ID
+  range: 1-10
+- field: status
+  note: 系统状态
+  range: active
+- field: desc
+  note: 系统描述
+  range: ''
+- field: integrated
+  note: 是否集成
+  range: 0
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00'

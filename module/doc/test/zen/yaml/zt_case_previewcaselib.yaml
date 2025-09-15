@@ -1,0 +1,59 @@
+---
+title: 用例库测试数据定义
+desc: previewCaselib方法测试用的用例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: lib
+  note: 用例库ID
+  range: 1{5}, 2{3}, 999{2}
+- field: product
+  note: 产品ID
+  range: 1{8}, 2{2}
+- field: module
+  note: 模块ID
+  range: 1{4}, 2{3}, 3{3}
+- field: title
+  note: 用例标题
+  range: "测试用例1{2}, 测试用例2{3}, 性能测试用例{2}, API测试用例{2}, 界面测试用例{1}"
+- field: type
+  note: 用例类型
+  range: feature{6}, performance{2}, interface{1}, unit{1}
+- field: pri
+  note: 优先级
+  range: 1{2}, 2{3}, 3{4}, 4{1}
+- field: status
+  note: 状态
+  range: normal{7}, blocked{1}, investigate{1}, draft{1}
+- field: stage
+  note: 适用阶段
+  range: unittest{3}, feature{4}, integrate{2}, system{1}
+- field: keywords
+  note: 关键词
+  range: 功能测试{4}, 性能测试{2}, 接口测试{2}, 单元测试{2}
+- field: version
+  note: 版本号
+  range: 1{8}, 2{2}
+- field: openedBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+- field: openedDate
+  note: 创建日期
+  range: (-10d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{4}, user1{3}, user2{2}, ""{1}
+- field: lastEditedDate
+  note: 最后编辑日期
+  range: (-5d)-(now)
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: "0"{9}, "1"{1}

@@ -1,0 +1,39 @@
+---
+title: processJiraContent测试数据
+desc: 用于测试processJiraContent方法的文件数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 文件名称
+  range: image.png,document.pdf,avatar.jpg,screenshot.png,data.txt
+  prefix: ""
+  postfix: ""
+- field: extension
+  note: 文件扩展名
+  range: png,pdf,jpg,png,txt
+  prefix: ""
+  postfix: ""
+- field: size
+  note: 文件大小
+  range: 1024-102400
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: story,bug,task,ticket
+  prefix: ""
+  postfix: ""
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  prefix: ""
+  postfix: ""

@@ -1,0 +1,59 @@
+---
+title: 产品计划批量编辑测试数据
+desc: 为buildPlansForBatchEdit方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{5},2{3},3{2}
+- field: branch
+  note: 分支ID
+  range: 0{8},1{2}
+- field: parent
+  note: 父计划ID
+  range: 0{6},-1{2},1{1},2{1}
+- field: title
+  note: 计划标题
+  range: "计划1,计划2,计划3,计划4,计划5,父计划1,父计划2,子计划1,子计划2,独立计划"
+- field: status
+  note: 计划状态
+  range: wait{4},doing{3},done{2},closed{1}
+- field: desc
+  note: 计划描述
+  range: "描述内容1,描述内容2,描述内容3,描述内容4,描述内容5,父计划描述1,父计划描述2,子计划描述1,子计划描述2,独立计划描述"
+- field: begin
+  note: 开始日期
+  range: "2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01,2030-01-01{3},2024-06-01,2024-07-01"
+- field: end
+  note: 结束日期
+  range: "2024-01-31,2024-02-28,2024-03-31,2024-04-30,2024-05-31,2030-01-01{3},2024-06-30,2024-07-31"
+- field: finishedDate
+  note: 完成日期
+  range: "[]{6},2024-02-01,2024-03-01,2024-04-01,2024-05-01"
+- field: closedDate
+  note: 关闭日期
+  range: "[]{9},2024-08-01"
+- field: order
+  note: 排序
+  range: 1-10
+- field: closedReason
+  note: 关闭原因
+  range: "[]{9},done"
+- field: createdBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+- field: createdDate
+  note: 创建时间
+  range: "2024-01-01 00:00:00,2024-01-02 00:00:00,2024-01-03 00:00:00,2024-01-04 00:00:00,2024-01-05 00:00:00,2024-01-06 00:00:00,2024-01-07 00:00:00,2024-01-08 00:00:00,2024-01-09 00:00:00,2024-01-10 00:00:00"
+- field: deleted
+  note: 是否删除
+  range: 0{9},1{1}

@@ -1,0 +1,44 @@
+---
+title: Execution数据用于assignVarsForEdit测试
+desc: 提供execution表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 101-103
+- field: name
+  note: 执行名称
+  range: 'Execution{1}, Execution{2}, Execution{3}'
+  prefix: "Test "
+- field: type
+  note: 执行类型
+  range: 'sprint{2}, stage{1}'
+- field: status
+  note: 执行状态
+  range: 'wait{1}, doing{2}'
+- field: project
+  note: 所属项目
+  range: '11{2}, 12{1}'
+- field: desc
+  note: 执行描述
+  range: '[Execution description for testing]{2}, []{1}'
+- field: begin
+  note: 开始日期
+  range: '2023-01-01-2023-06-30'
+  format: 'YYYY-MM-DD'
+- field: end
+  note: 结束日期
+  range: '2023-07-01-2023-12-31'
+  format: 'YYYY-MM-DD'
+- field: openedBy
+  note: 创建者
+  range: 'admin{2}, user1{1}'
+- field: openedDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00-2023-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: deleted
+  note: 是否删除
+  range: '0{3}'

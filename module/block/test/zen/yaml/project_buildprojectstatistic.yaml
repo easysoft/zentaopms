@@ -1,0 +1,46 @@
+---
+title: 项目统计数据配置
+desc: 用于测试buildProjectStatistic方法的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  
+- field: project
+  note: 父项目ID
+  range: 0,1,2
+  
+- field: model
+  note: 项目模型
+  range: scrum{3},kanban{1},waterfall{1}
+  
+- field: type
+  note: 项目类型
+  range: project{3},stage{2}
+  
+- field: name
+  note: 项目名称
+  range: 敏捷项目1,敏捷项目2,敏捷项目3,看板项目1,瀑布项目1
+  
+- field: code
+  note: 项目代码
+  range: proj1,proj2,proj3,kan1,wf1
+  
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01
+  
+- field: end
+  note: 结束日期
+  range: 2024-12-31,2099-12-31{3},2024-06-30
+  
+- field: status
+  note: 项目状态
+  range: doing{3},wait{1},closed{1}
+  
+- field: deleted
+  note: 删除状态
+  range: 0{5}

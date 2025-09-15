@@ -1,0 +1,20 @@
+title: AI消息测试数据
+desc: 用于deleteHistoryMessagesByID方法的测试数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  range: 1-20
+- field: appID
+  range: 1{10},2{5},3{5}
+- field: user
+  range: 1{8},2{6},3{6}
+- field: type
+  range: req{8},res{8},ntf{4}
+- field: content
+  range: 测试消息内容1{5},测试消息内容2{5},测试消息内容3{5},测试消息内容4{5}
+- field: createdDate
+  range: "2024-09-01 10:00:00"
+- field: modifiedDate
+  range: "2024-09-01 10:00:00"

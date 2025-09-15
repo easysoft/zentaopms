@@ -37,6 +37,51 @@ class storeTest
     }
 
     /**
+     * Test __construct method.
+     *
+     * @param  string $appName
+     * @access public
+     * @return object
+     */
+    public function __constructTest(string $appName = '')
+    {
+        global $config, $app;
+        
+        // 创建新的store模型实例进行测试
+        $storeModel = new storeModel($appName);
+        
+        // 返回测试结果对象
+        $result = new stdClass();
+        $result->appName = $appName;
+        $result->hasHeaders = !empty($config->cloud->api->headers);
+        $result->authHeaderExists = false;
+        $result->channelChanged = false;
+        
+        // 检查API headers是否正确设置
+        if($result->hasHeaders)
+        {
+            foreach($config->cloud->api->headers as $header)
+            {
+                if(strpos($header, $config->cloud->api->auth) !== false)
+                {
+                    $result->authHeaderExists = true;
+                    break;
+                }
+            }
+        }
+        
+        // 检查channel是否被改变
+        if($config->cloud->api->switchChannel && isset($app->session->cloudChannel))
+        {
+            $result->channelChanged = ($config->cloud->api->channel === $app->session->cloudChannel);
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
      * 测试根据关键字查询应用市场应用列表。
      * Test get app list from cloud market.
      *
@@ -197,10 +242,25 @@ class storeTest
      * @access public
      * @return object|null
      */
-    public function pickHighestVersionTest(string $currentVersion, int $appID)
+    public function pickHighestVersionTest(array $versionList): object|null
     {
-        $versionList = $this->getUpgradableVersions($currentVersion, $appID);
-        $result      = $this->pickHighestVersion($versionList);
+        $result = $this->pickHighestVersion($versionList);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 测试设置应用最新版本。
+     * Test set app latest version.
+     *
+     * @param  array  $appList
+     * @access public
+     * @return array
+     */
+    public function batchSetLatestVersionsTest(array $appList): array
+    {
+        $result = $this->batchSetLatestVersions($appList);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 }

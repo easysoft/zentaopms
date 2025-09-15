@@ -1,0 +1,126 @@
+---
+title: IM聊天数据用于toggleModel测试
+desc: 为toggleModel方法提供聊天相关测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 聊天ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: gid
+  note: 聊天组ID，包含AI模型相关的聊天
+  range: 'ai-1{3}, ai-2{3}, ai-3{2}, ai-5{2}, normal-group{5}'
+  prefix: ""
+  postfix: "&"
+  loop: 0
+  format: ""
+- field: name
+  note: 聊天名称
+  range: 'AI助手聊天{8}, 普通群聊{5}, 项目讨论{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 聊天类型
+  range: 'group{10}, one2one{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: admins
+  note: 管理员
+  range: 'admin{10}, user1{3}, user2{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: committers
+  note: 提交者
+  range: '[]{8}, admin,user1{4}, admin,user2{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: subject
+  note: 主题ID
+  range: '0{12}, 1{2}, 2{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: public
+  note: 是否公开
+  range: '0{8}, 1{7}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{8}, user1{4}, user2{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-30d)-(-1d):1d
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  note: 编辑者
+  range: '[]{10}, admin{3}, user1{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '[]{10}, (-10d)-(today):1d{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: lastActiveTime
+  note: 最后活跃时间
+  range: '[]{5}, (-7d)-(today):1d{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: dismissDate
+  note: 解散时间
+  range: '[]{13}, (-5d)-(today):1d{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: adminInvite
+  note: 管理员邀请
+  range: '0{10}, 1{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: avatar
+  note: 头像
+  range: '[]{12}, /avatar/ai.png{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: archiveDate
+  note: 归档时间
+  range: '[]{10}, (-5d)-(today):1d{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"

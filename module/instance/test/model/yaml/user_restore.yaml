@@ -1,0 +1,66 @@
+---
+title: user restore test data
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: '1-5'
+  - field: account
+    range: '`admin`,`test_user`,`backup_user`,`restore_user`,`demo_user`'
+  - field: password
+    range: '`21232f297a57a5a743894a0e4a801fc3`,`5d41402abc4b2a76b9719d911017c592`,`098f6bcd4621d373cade4e832627b4f6`,`d8578edf8458ce06fbc5bb76a58c5ca4`,`fe01ce2a7fbac8fafaed7c982a04e229`'
+  - field: role
+    range: '`admin`,`user`,`user`,`user`,`user`'
+  - field: realname
+    range: '`系统管理员`,`测试用户`,`备份用户`,`还原用户`,`演示用户`'
+  - field: nickname
+    range: '`Admin`,`Tester`,`Backup`,`Restore`,`Demo`'
+  - field: avatar
+    range: ""
+  - field: birthday
+    range: '`0000-00-00`'
+  - field: gender
+    range: '`m`,`f`,`m`,`f`,`m`'
+  - field: email
+    range: '`admin@zentao.com`,`test@zentao.com`,`backup@zentao.com`,`restore@zentao.com`,`demo@zentao.com`'
+  - field: skype
+    range: ""
+  - field: qq
+    range: ""
+  - field: mobile
+    range: '`13800000001`,`13800000002`,`13800000003`,`13800000004`,`13800000005`'
+  - field: phone
+    range: ""
+  - field: address
+    range: ""
+  - field: zipcode
+    range: ""
+  - field: join
+    range: '`2023-01-01`,`2023-06-01`,`2023-07-01`,`2023-08-01`,`2023-09-01`'
+  - field: visits
+    range: '`100`,`50`,`30`,`20`,`10`'
+  - field: ip
+    range: '`127.0.0.1`'
+  - field: last
+    range: '`2024-09-08 12:00:00`'
+  - field: fails
+    range: "0"
+  - field: locked
+    range: '`0000-00-00 00:00:00`'
+  - field: feedback
+    range: ""
+  - field: ranzhi
+    range: ""
+  - field: ldap
+    range: ""
+  - field: score
+    range: "0"
+  - field: scoreLevel
+    range: "0"
+  - field: deleted
+    range: "0"
+  - field: clientStatus
+    range: '`online`'
+  - field: clientLang
+    range: '`zh-cn`'
+...

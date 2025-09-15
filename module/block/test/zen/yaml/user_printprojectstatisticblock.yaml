@@ -1,0 +1,52 @@
+---
+title: 用户数据测试文件
+desc: 用于测试printProjectStatisticBlock方法的用户数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,pm1,pm2,dev1,dev2,qa1
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户一,用户二,用户三,用户四,项目经理一,项目经理二,开发一,开发二,测试一
+  format: ""
+- field: role
+  note: 用户角色
+  range: admin{1},user{4},pm{2},dev{2},qa{1}
+  format: ""
+- field: dept
+  note: 部门ID
+  range: 1{5},2{3},3{2}
+  format: ""
+- field: email
+  note: 邮箱地址
+  range: '[@test.com]'
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: join
+  note: 加入时间
+  range: 2020-01-01-2024-01-01
+  format: "YYYY-MM-DD"
+- field: deleted
+  note: 删除标记
+  range: 0{9},1{1}
+  format: ""
+- field: gender
+  note: 性别
+  range: m{6},f{4}
+  format: ""
+- field: last
+  note: 最后登录时间
+  range: (-7d)-(now):3600
+  format: "timestamp"

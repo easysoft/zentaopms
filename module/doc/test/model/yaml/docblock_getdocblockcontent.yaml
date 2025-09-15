@@ -1,0 +1,32 @@
+---
+title: docblock表数据配置
+desc: 用于测试getDocBlockContent方法的docblock表数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: doc
+  note: 关联文档ID
+  range: 1-5
+  format: ""
+- field: type
+  note: 文档块类型
+  range: text,image,table,code
+  format: ""
+- field: settings
+  note: 设置信息
+  range: '{"width": 100, "height": 200}'
+  format: ""
+- field: content
+  note: 内容
+  range: '{"title": "测试文档块", "description": "这是一个测试文档块"}, {"data": [1, 2, 3], "type": "array"}, {"name": "示例", "value": "测试值"}, "", invalid_json'
+  format: ""
+- field: extra
+  note: 额外信息
+  range: extra1,extra2,extra3,''
+  format: ""

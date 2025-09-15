@@ -1,0 +1,89 @@
+---
+title: Story data for refreshStoryCards test
+desc: Test data for story cards refresh functionality
+
+fields:
+- field: id
+  range: 1-10
+- field: title
+  range: Story_1,Story_2,Story_3,Story_4,Story_5,Story_6,Story_7,Story_8,Story_9,Story_10
+- field: status
+  range: active{7},closed{1},changed{2}
+- field: stage
+  range: projected{3},designing{1},developed{2},testing{2},verified{1},closed{1}
+- field: version
+  range: 1{10}
+- field: product
+  range: 1{10}
+- field: branch
+  range: 0{10}
+- field: module
+  range: 0{10}
+- field: plan
+  range: 0{10}
+- field: source
+  range: customer{5},user{3},po{2}
+- field: sourceNote
+  range: ''
+- field: fromBug
+  range: 0{10}
+- field: feedback
+  range: 0{10}
+- field: type
+  range: story{10}
+- field: estimate
+  range: 1{5},2{3},3{2}
+- field: pri
+  range: 1{2},2{4},3{4}
+- field: spec
+  range: Story specification content{10}
+- field: verify
+  range: Story verification content{10}
+- field: keywords
+  range: test{5},story{5}
+- field: openedBy
+  range: admin{5},user1{3},user2{2}
+- field: openedDate
+  range: '`2023-01-01 00:00:00`{3},`2023-01-02 00:00:00`{3},`2023-01-03 00:00:00`{4}'
+- field: assignedTo
+  range: user1{4},user2{3},admin{3}
+- field: assignedDate
+  range: '`2023-01-01 00:00:00`{3},`2023-01-02 00:00:00`{3},`2023-01-03 00:00:00`{4}'
+- field: mailto
+  range: ''
+- field: lastEditedBy
+  range: admin{5},user1{3},user2{2}
+- field: lastEditedDate
+  range: '`2023-01-05 00:00:00`{5},`2023-01-06 00:00:00`{5}'
+- field: closedBy
+  range: []{9},admin{1}
+- field: closedDate
+  range: '[]{9},`2023-01-10 00:00:00`{1}'
+- field: closedReason
+  range: '[]{9},done{1}'
+- field: toBug
+  range: 0{10}
+- field: childStories
+  range: ''
+- field: linkStories
+  range: ''
+- field: duplicateStory
+  range: 0{10}
+- field: reviewedBy
+  range: ''
+- field: reviewedDate
+  range: '[]{10}'
+- field: deleted
+  range: 0{10}
+- field: vision
+  range: rnd{10}
+- field: parent
+  range: 0{10}
+- field: isParent
+  range: 0{10}
+- field: root
+  range: 0{10}
+- field: path
+  range: ',1,{1},',2,'{1},',3,'{1},',4,'{1},',5,'{1},',6,'{1},',7,'{1},',8,'{1},',9,'{1},',10,'{1}'
+- field: grade
+  range: 0{10}

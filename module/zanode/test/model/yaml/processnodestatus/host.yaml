@@ -1,0 +1,31 @@
+title: zt_host processNodeStatus测试数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+  - field: type
+    range: node{15},host{5}
+  - field: hostType
+    range: "virtual{10},physics{10}"
+  - field: status
+    range: running{5},ready{3},online{3},offline{2},shutoff{3},creating_img{4}
+  - field: parent
+    range: 0{5},11-15{15}
+  - field: name
+    range: node{10},host{10}
+    format: "%s%d"
+  - field: heartbeat
+    range: "(-2M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: extranet
+    fields:
+      - field: prefix
+        range: '10.0.0.'
+      - field: suffix
+        range: "1-20"
+  - field: deleted
+    range: 0
+  - field: osName
+    range: linux{15},windows{5}

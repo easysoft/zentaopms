@@ -1,0 +1,40 @@
+---
+title: getCreateEditInfo方法测试用户数据
+desc: 为getCreateEditInfo方法测试提供用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: admin123,user123,user223,user323,user423
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

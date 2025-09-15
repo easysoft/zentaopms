@@ -1,0 +1,108 @@
+---
+title: createMoreLink方法测试数据
+desc: 为blockZen::createMoreLink()方法提供测试数据
+
+fields:
+- field: id
+  note: 区块ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: account
+  note: 用户账号
+  range: admin{5}, user{10}, test{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: module
+  note: 模块名称
+  range: project{3}, product{3}, qa{2}, common{2}, my{2}, execution{3}, doc{2}, todo{1}, scrumproject{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: code
+  note: 区块代码
+  range: recentproject{2}, statistic{2}, project{2}, dynamic{2}, story{2}, task{2}, bug{2}, case{2}, testtask{2}, plan{2}, release{2}, build{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: title
+  note: 区块标题
+  range: 最近项目{2}, 统计数据{2}, 项目列表{2}, 最新动态{2}, 需求列表{2}, 任务列表{2}, Bug列表{2}, 用例列表{2}, 版本发布{2}, 计划列表{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: params
+  note: 区块参数JSON字符串
+  range: '{"type":"assignedTo","count":20}{5}, {"type":"openedBy","count":15}{5}, {"type":"all","count":10}{5}, ""{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: dashboard
+  note: 仪表板
+  range: project{5}, product{5}, execution{5}, qa{3}, my{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: vision
+  note: 视图
+  range: rnd{15}, lite{3}, or{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: width
+  note: 区块宽度
+  range: 1{10}, 2{8}, 3{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: height
+  note: 区块高度
+  range: 3{8}, 5{6}, 6{4}, 8{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: left
+  note: 左侧位置
+  range: 0{10}, 1{5}, 2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: top
+  note: 顶部位置
+  range: 0{8}, 3{6}, 5{4}, -1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: hidden
+  note: 是否隐藏
+  range: 0{18}, 1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

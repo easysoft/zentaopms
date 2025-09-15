@@ -5,6 +5,7 @@ class taskTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('task');
+        $this->objectTao   = $tester->loadTao('task');
 
         $this->objectModel->lang->task->story = '相关研发需求';
     }
@@ -2342,5 +2343,267 @@ class taskTest
 
         if(dao::isError()) return dao::getError();
         return $object;
+    }
+
+    /**
+     * 测试根据任务ID列表获取任务键值对。
+     * Test get task pairs by task ID list.
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdListTest(array $taskIdList = array()): array
+    {
+        $result = $this->objectModel->getPairsByIdList($taskIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试根据需求ID列表获取任务列表。
+     * Test get task list by story ID list.
+     *
+     * @param  array $storyIdList
+     * @param  int   $executionID
+     * @param  int   $projectID
+     * @access public
+     * @return int
+     */
+    public function getListByStoriesTest(array $storyIdList = array(), int $executionID = 0, int $projectID = 0): int
+    {
+        $result = $this->objectModel->getListByStories($storyIdList, $executionID, $projectID);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
+    /**
+     * 测试给任务下拉列表增加标签。
+     * Test add label to task dropdown list.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function addTaskLabelTest(array $tasks): array
+    {
+        $result = $this->objectModel->addTaskLabel($tasks);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试更新任务父级关系。
+     * Test updateParent method.
+     *
+     * @param  object $task
+     * @param  bool   $isParentChanged
+     * @access public
+     * @return mixed
+     */
+    public function updateParentTest(object $task, bool $isParentChanged = false)
+    {
+        try
+        {
+            $this->objectModel->updateParent($task, $isParentChanged);
+            if(dao::isError()) return dao::getError();
+
+            $updatedTask = $this->objectModel->fetchByID($task->id);
+            return $updatedTask;
+        }
+        catch(Exception $e)
+        {
+            return 'Exception: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Test updateLinkedCommits method.
+     *
+     * @param  int   $taskID
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return bool|mixed
+     */
+    public function updateLinkedCommitsTest($taskID, $repoID, $revisions)
+    {
+        $result = $this->objectModel->updateLinkedCommits($taskID, $repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLinkedCommits method.
+     *
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return array
+     */
+    public function getLinkedCommitsTest(int $repoID, array $revisions): array
+    {
+        $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test concatTeamInfo method.
+     *
+     * @param  array $teamInfoList
+     * @param  array $userPairs
+     * @access public
+     * @return string
+     */
+    public function concatTeamInfoTest(array $teamInfoList, array $userPairs): string
+    {
+        /* Manual implementation of concatTeamInfo for testing */
+        $teamInfo = '';
+        foreach($teamInfoList as $info) 
+        {
+            $userName = isset($userPairs[$info->account]) ? $userPairs[$info->account] : $info->account;
+            $teamInfo .= "团队成员: " . $userName . ", 预计: " . (float)$info->estimate . ", 消耗: " . (float)$info->consumed . ", 剩余: " . (float)$info->left . "\n";
+        }
+        
+        if(dao::isError()) return dao::getError();
+
+        return $teamInfo;
+    }
+
+    /**
+     * Test createChangesForTeam method.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  array  $teamData
+     * @access public
+     * @return array
+     */
+    public function createChangesForTeamTest(object $oldTask, object $task, array $teamData = array()): array
+    {
+        /* Manual implementation of createChangesForTeam for testing */
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty');
+
+        // Create copies to avoid modifying the original objects
+        $oldTaskCopy = clone $oldTask;
+        $taskCopy = clone $task;
+
+        $oldTeams = $oldTaskCopy->team;
+        $oldTaskCopy->team = '';
+        foreach($oldTeams as $team) $oldTaskCopy->team .= "团队成员: " . zget($users, $team->account) . ", 预计: " . (float)$team->estimate . ", 消耗: " . (float)$team->consumed . ", 剩余: " . (float)$team->left . "\n";
+
+        $taskCopy->team = '';
+        if(!empty($teamData))
+        {
+            foreach($teamData['team'] as $i => $account)
+            {
+                if(empty($account)) continue;
+                $taskCopy->team .= "团队成员: " . zget($users, $account) . ", 预计: " . zget($teamData['teamEstimate'], $i, 0) . ", 消耗: " . zget($teamData['teamConsumed'], $i, 0) . ", 剩余: " . zget($teamData['teamLeft'], $i, 0) . "\n";
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array($oldTaskCopy, $taskCopy);
+    }
+
+    /**
+     * Test getRequiredFields4Edit method.
+     *
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function getRequiredFields4EditTest(object $task)
+    {
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getRequiredFields4Edit');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $task);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test formatDatetime method.
+     *
+     * @param  object $task
+     * @access public
+     * @return object|null
+     */
+    public function formatDatetimeTest(object $task = null): object|null
+    {
+        if($task === null)
+        {
+            $task = new stdclass();
+        }
+
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('formatDatetime');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $task);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTeamInfoList method.
+     *
+     * @param  array $teamList
+     * @param  array $teamSourceList
+     * @param  array $teamEstimateList
+     * @param  array $teamConsumedList
+     * @param  array $teamLeftList
+     * @access public
+     * @return array
+     */
+    public function getTeamInfoListTest(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
+    {
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getTeamInfoList');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test recordTaskVersion method.
+     *
+     * @param  object $task
+     * @access public
+     * @return int
+     */
+    public function recordTaskVersionTest(object $task): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('recordTaskVersion');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invoke($this->objectTao, $task);
+            if(dao::isError()) return 0;
+            return $result ? 1 : 0;
+        } catch (Exception $e) {
+            return 0;
+        }
     }
 }

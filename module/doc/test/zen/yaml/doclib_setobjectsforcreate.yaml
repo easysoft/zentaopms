@@ -1,0 +1,29 @@
+---
+title: setObjectsForCreate方法测试数据
+desc: 用于测试docZen::setObjectsForCreate()方法的测试数据定义
+
+fields:
+- field: id
+  range: 1-10
+  note: 文档库ID
+- field: type
+  range: project{2},execution{2},product{2},custom{2},mine{2}
+  note: 文档库类型
+- field: name
+  range: 项目文档库{2},执行文档库{2},产品文档库{2},团队文档库{2},我的文档库{2}
+  note: 文档库名称
+- field: project
+  range: 1{2},0{8}
+  note: 关联项目ID
+- field: execution
+  range: 0{2},6{2},0{6}
+  note: 关联执行ID
+- field: product
+  range: 0{4},1{2},0{4}
+  note: 关联产品ID
+- field: acl
+  range: open{6},private{2},custom{2}
+  note: 访问控制
+- field: deleted
+  range: 0
+  note: 删除状态

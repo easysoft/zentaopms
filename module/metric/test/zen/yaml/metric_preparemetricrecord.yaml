@@ -1,0 +1,31 @@
+---
+title: 为 prepareMetricRecord 方法准备度量数据
+desc: 包含不同范围和状态的度量数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: purpose
+  range: [efficiency, scale, quality, value, quantity]
+- field: scope
+  range: [system, product, project, execution]
+- field: object
+  range: [system, product, project, execution, user]
+- field: stage
+  range: [wait, released]
+- field: name
+  range: [系统度量1, 产品度量1, 项目度量1, 执行度量1, 用户度量1]
+- field: code
+  range: [system_metric_1, product_metric_1, project_metric_1, execution_metric_1, user_metric_1]
+- field: dateType
+  range: [year, month, week, day, nodate]
+- field: unit
+  range: [count, percent, hour, day, ratio]
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: 2023-01-01 00:00:00{5}
+- field: builtin
+  range: ['0']{5}

@@ -1,0 +1,22 @@
+---
+title: project data for assignBugVars test
+desc: Test data for execution assignBugVars method
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: "执行1,执行2,执行3,执行4,执行5,执行6,执行7,执行8,执行9,执行10"
+- field: code
+  range: "exec001,exec002,exec003,exec004,exec005,exec006,exec007,exec008,exec009,exec010"
+- field: type
+  range: "sprint{5},stage{3},kanban{2}"
+- field: status
+  range: "doing{7},wait{2},closed{1}"
+- field: model
+  range: "scrum{4},waterfall{3},kanban{3}"
+- field: auth
+  range: "extend"
+- field: hasProduct
+  range: 1

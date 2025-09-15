@@ -1,0 +1,31 @@
+---
+title: Team data for buildExecutionKanbanData test
+desc: Test data for team table used in buildExecutionKanbanData method testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Team member ID
+  range: 1-15
+- field: root
+  note: Execution ID
+  range: 4,5,6,7,8,9,10,4,5,6,7,8,9,10,4
+- field: type
+  note: Team type
+  range: execution
+- field: account
+  note: User account
+  range: admin{7},user1{4},user2{4}
+- field: role
+  note: User role
+  range: 研发
+- field: join
+  note: Join date
+  range: '2023-01-01'
+- field: days
+  note: Working days
+  range: 1-15
+- field: hours
+  note: Working hours
+  range: 1-8

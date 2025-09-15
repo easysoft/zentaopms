@@ -1,0 +1,55 @@
+---
+title: 系统数据
+desc: buildBuildForCreate方法系统相关测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 系统ID
+  range: 1-5
+- field: name
+  note: 系统名称
+  range: MainSystem,TestSystem,DevSystem,SystemA,SystemB
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: integrated
+  note: 是否集成
+  range: '0,1'
+- field: latestRelease
+  note: 最新发布ID
+  range: 0-5
+- field: latestDate
+  note: 最新发布日期
+  range: '2024-01-01 00:00:00:2024-12-31 23:59:59:30D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: children
+  note: 子系统
+  range: '1,2,3,[]'
+- field: status
+  note: 状态
+  range: active,inactive
+- field: desc
+  note: 系统描述
+  range: '主要系统,测试系统,开发系统,[]'
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00:2024-12-31 23:59:59:1D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin,user1,user2,[]
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00:2024-12-31 23:59:59:1D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'

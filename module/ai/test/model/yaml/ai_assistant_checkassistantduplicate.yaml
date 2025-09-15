@@ -1,0 +1,38 @@
+---
+title: AI助手重复检查测试数据
+desc: 用于测试checkAssistantDuplicate方法的测试数据
+
+fields:
+- field: id
+  note: 助手ID
+  range: 1-5
+- field: name
+  note: 助手名称
+  range: Assistant1{2},Assistant2,Assistant3,DeletedAssistant
+- field: modelId
+  note: 模型ID
+  range: 1{3},2{2}
+- field: desc
+  note: 助手描述
+  range: Test assistant description{5}
+- field: systemMessage
+  note: 系统消息
+  range: You are a helpful assistant{5}
+- field: greetings
+  note: 问候语
+  range: Hello! How can I help you today?{5}
+- field: icon
+  note: 图标
+  range: coding-1{5}
+- field: enabled
+  note: 是否启用
+  range: '1'{5}
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00'{5}
+- field: publishedDate
+  note: 发布时间
+  range: '2024-01-01 10:00:00'{5}
+- field: deleted
+  note: 是否删除
+  range: '0'{4},'1'

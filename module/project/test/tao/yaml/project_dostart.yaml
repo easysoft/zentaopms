@@ -1,0 +1,92 @@
+---
+title: 项目启动测试数据
+desc: 为doStart方法提供测试数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: [项目A,项目B,项目C,测试项目{7}]
+  format: ""
+- field: code
+  note: 项目代码
+  range: [PROJ001,PROJ002,PROJ003,TEST{7}]
+  format: ""
+- field: type
+  note: 项目类型
+  range: project{10}
+  format: ""
+- field: status
+  note: 项目状态
+  range: [wait{3},doing{2},suspended{2},closed{3}]
+  format: ""
+- field: begin
+  note: 计划开始日期
+  range: 2024-01-01-2024-12-31
+  format: ""
+- field: end
+  note: 计划结束日期
+  range: 2024-06-01-2025-12-31
+  format: ""
+- field: realBegan
+  note: 实际开始日期
+  range: [0000-00-00{5},2024-01-01-2024-12-31{5}]
+  format: ""
+- field: realEnd
+  note: 实际结束日期
+  range: [0000-00-00{8},2024-06-01-2024-12-31{2}]
+  format: ""
+- field: PM
+  note: 项目经理
+  range: [admin,user1,user2,test{7}]
+  format: ""
+- field: desc
+  note: 项目描述
+  range: [项目描述信息,测试用项目{9}]
+  format: ""
+- field: acl
+  note: 访问控制
+  range: [open{3},private{4},program{3}]
+  format: ""
+- field: parent
+  note: 父项目ID
+  range: [0{8},1{1},2{1}]
+  format: ""
+- field: model
+  note: 项目模型
+  range: [scrum{4},waterfall{3},kanban{3}]
+  format: ""
+- field: budget
+  note: 预算
+  range: [0{5},10000{2},50000{2},100000{1}]
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: [admin,user1,user2{8}]
+  format: ""
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: lastEditedBy
+  note: 最后编辑者
+  range: [admin{5},user1{3},user2{2}]
+  format: ""
+- field: lastEditedDate
+  note: 最后编辑日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: ['0'{9},'1'{1}]
+  format: ""
+- field: vision
+  note: 视图类型
+  range: rnd{10}
+  format: ""

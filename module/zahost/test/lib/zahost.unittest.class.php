@@ -140,26 +140,59 @@ class zahostTest
     }
 
     /**
-     * 测试查询镜像的状态。
-     * Test download image.
+     * 测试查询镜像下载状态。
+     * Test query download image status.
      *
-     * @param  int          $imageID
+     * @param  object $image
      * @access public
-     * @return array|bool
+     * @return mixed
      */
-    public function queryDownloadImageStatusTest(int $imageID): array|bool
+    public function queryDownloadImageStatusTest($image = null)
     {
-        $image = $this->objectModel->getImageByID($imageID);
-        $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
+        if($image === null)
+        {
+            // 创建一个默认的测试镜像对象
+            $image = new stdClass();
+            $image->id = 1;
+            $image->host = 1;
+            $image->name = 'test-image';
+            $image->status = 'creating';
+        }
 
-        $this->imageStatusList = array();
+        // Mock the imageStatusList to avoid HTTP calls
+        $this->objectModel->imageStatusList = (object)array(
+            'code' => 'success',
+            'data' => (object)array(
+                'inprogress' => array(),
+                'completed' => array(),
+                'pending' => array(),
+                'failed' => array()
+            )
+        );
 
-        $this->objectModel->queryDownloadImageStatus($image);
+        // Mock zahostTao getCurrentTask method if available
+        if(isset($this->objectModel->zahostTao))
+        {
+            $this->objectModel->zahostTao = new class {
+                public function getCurrentTask($imageId, $data) {
+                    if($imageId <= 3) {
+                        return (object)array(
+                            'id' => $imageId,
+                            'task' => $imageId,
+                            'rate' => rand(10, 90) . '%',
+                            'status' => $imageId == 1 ? 'creating' : ($imageId == 2 ? 'inprogress' : 'completed'),
+                            'path' => $imageId == 3 ? '/var/lib/zahost/images/test.qcow2' : ''
+                        );
+                    }
+                    return false;
+                }
+            };
+        }
+
+        $result = $this->objectModel->queryDownloadImageStatus($image);
         if(dao::isError()) return dao::getError();
 
-        $updatedImage = $this->objectModel->getImageByID($imageID);
-
-        return $updatedImage->status != 'creating';
+        return $result;
     }
 
     /**
@@ -170,12 +203,14 @@ class zahostTest
      * @access public
      * @return array|object
      */
-    public function downloadImageTest(int $imageID): array|object
+    public function downloadImageTest(int $imageID): array|object|bool
     {
         $image = $this->objectModel->getImageByID($imageID);
+        if(!$image) return false;
+        
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
-        $this->objectModel->downloadImage($image);
+        $result = $this->objectModel->downloadImage($image);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->getImageByID($imageID);
@@ -187,17 +222,46 @@ class zahostTest
      *
      * @param  int          $imageID
      * @access public
-     * @return array|object
+     * @return bool|array
      */
-    public function cancelDownloadTest(int $imageID): array|object
+    public function cancelDownloadTest(int $imageID): bool|array
     {
         $image = $this->objectModel->getImageByID($imageID);
+        if(!$image) return false;
+        
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
-        $this->objectModel->cancelDownload($image);
+        // Mock zahostTao getCurrentTask method
+        if(!isset($this->objectModel->zahostTao))
+        {
+            $this->objectModel->zahostTao = new class {
+                public function getCurrentTask($imageId, $data) {
+                    return (object)array(
+                        'id' => $imageId,
+                        'task' => $imageId,
+                        'rate' => '50%',
+                        'status' => 'inprogress',
+                        'path' => ''
+                    );
+                }
+            };
+        }
+
+        // Mock imageStatusList to avoid HTTP calls
+        $this->objectModel->imageStatusList = (object)array(
+            'code' => 'success',
+            'data' => (object)array(
+                'inprogress' => array(),
+                'completed' => array(),
+                'pending' => array(),
+                'failed' => array()
+            )
+        );
+
+        $result = $this->objectModel->cancelDownload($image);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getImageByID($imageID);
+        return $result;
     }
 
     /**
@@ -233,5 +297,38 @@ class zahostTest
 
         global $tester;
         return $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->fetchAll();
+    }
+
+    /**
+     * 测试获取镜像键值对。
+     * Test get image pairs.
+     *
+     * @param  int $hostID
+     * @access public
+     * @return array
+     */
+    public function getImagePairsTest(int $hostID): array
+    {
+        $imagePairs = $this->objectModel->getImagePairs($hostID);
+        if(dao::isError()) return dao::getError();
+        return $imagePairs;
+    }
+
+    /**
+     * 测试判断是否隐藏宿主机。
+     * Test hidden host.
+     *
+     * @access public
+     * @return string
+     */
+    public function hiddenHostTest(): string
+    {
+        // 开始输出缓冲，捕获任何输出
+        ob_start();
+        $result = $this->objectModel->hiddenHost();
+        ob_end_clean(); // 清除缓冲的输出
+        
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
     }
 }

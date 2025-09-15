@@ -1,0 +1,56 @@
+---
+title: buildSearchFormForBrowse项目测试数据
+desc: 用于测试产品模块搜索表单构建功能的项目测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: Project1,Project2,Project3,Project4,Project5,Project6,Project7,Project8,Project9,Project10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: wait{3},doing{4},suspended{1},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: project
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: hasProduct
+  note: 是否有产品
+  range: 1{8},0{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 项目模式
+  range: scrum{5},waterfall{3},kanban{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

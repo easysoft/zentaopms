@@ -1,0 +1,37 @@
+---
+title: 执行节点数据定义 - runZTFScript测试
+desc: 为runZTFScript方法提供执行节点测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 节点ID
+- field: name
+  range: test-node-1,test-node-2,test-node-3,test-node-4,test-node-5
+  note: 节点名称
+- field: type
+  range: node
+  note: 节点类型
+- field: status
+  range: running{3},shutoff{2}
+  note: 节点状态
+- field: extranet
+  range: 192.168.1.100,192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.104
+  note: 节点IP地址
+- field: ztf
+  range: 8080,8081,8082,[]{2}
+  note: ZTF端口
+- field: tokenSN
+  range: token123,token456,token789,[]{2}
+  note: 认证Token
+- field: deleted
+  range: 0
+  note: 删除状态
+- field: hostType
+  range: []{5}
+  note: 主机类型
+- field: parent
+  range: []{5}
+  note: 父节点ID

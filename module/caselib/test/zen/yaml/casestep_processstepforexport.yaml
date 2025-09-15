@@ -1,0 +1,36 @@
+---
+title: 用例步骤导出处理测试数据
+desc: 为processStepForExport方法提供测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 步骤ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+
+- field: parent
+  note: 父步骤ID，用于构建层级关系
+  range: 0{5}, 1{3}, 2{2}, 5{3}, 8{2}, 0{5}
+
+- field: case
+  note: 所属用例ID
+  range: 1{4}, 2{6}, 3{4}, 4{3}, 5{3}
+
+- field: version
+  note: 版本号
+  range: 1{20}
+
+- field: type
+  note: 步骤类型
+  range: step{12}, group{4}, item{4}
+
+- field: desc
+  note: 步骤描述
+  range: '步骤1,步骤1.1,步骤1.1.1,步骤2,步骤组A,步骤A.1,步骤A.2,步骤组B,步骤B.1,步骤B.1.1,包含"引号"的步骤,步骤<script>,步骤&amp;,多行\n步骤内容,简单步骤,复杂步骤,边界步骤,异常步骤,测试步骤,验证步骤'
+
+- field: expect
+  note: 预期结果
+  range: '预期1,预期1.1,预期1.1.1,预期2,预期组A,预期A.1,预期A.2,预期组B,预期B.1,预期B.1.1,包含"引号"的预期,预期<script>,预期&amp;,多行\n预期内容,简单预期,复杂预期,边界预期,异常预期,测试预期,验证预期'

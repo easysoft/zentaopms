@@ -1,0 +1,43 @@
+---
+title: product表getAllProductsForCreate方法测试数据
+desc: 用于测试execution模块getAllProductsForCreate方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 产品ID
+- field: name
+  range: '正常产品1,正常产品2,正常产品3,正常产品4,正常产品5,关闭产品1,关闭产品2,删除产品1,测试产品1,测试产品2'
+  note: 产品名称
+- field: code
+  range: 'prod1{1},prod2{1},prod3{1},prod4{1},prod5{1},closeprod1{1},closeprod2{1},delprod{1},testprod1{1},testprod2{1}'
+  note: 产品代号
+- field: type
+  range: 'normal{8},platform{2}'
+  note: 产品类型
+- field: status
+  range: 'normal{6},closed{2},developing{2}'
+  note: 产品状态，normal表示正常，closed表示关闭
+- field: program
+  range: 1-3
+  note: 项目集ID
+- field: line
+  range: 1-5
+  note: 产品线ID
+- field: PO
+  range: 'admin{3},user1{3},user2{2},user3{2}'
+  note: 产品负责人
+- field: QD
+  range: 'admin{2},user1{3},user2{3},user3{2}'
+  note: 测试负责人
+- field: RD
+  range: 'admin{2},user1{3},user2{3},user3{2}'
+  note: 发布负责人
+- field: acl
+  range: 'open{7},private{2},custom{1}'
+  note: 访问控制
+- field: deleted
+  range: '0{9},1{1}'
+  note: 删除状态，0表示正常，1表示已删除

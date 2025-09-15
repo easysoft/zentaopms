@@ -1,0 +1,86 @@
+---
+title: 执行表数据定义
+desc: 用于importUnitResult方法测试的执行数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: project
+  note: 所属项目
+  range: 1-5
+- field: parent
+  note: 父级执行
+  range: 0
+- field: name
+  note: 执行名称
+  range: 执行1,执行2,执行3,执行4,执行5{5}
+- field: code
+  note: 执行代码
+  range: EXE001,EXE002,EXE003,EXE004,EXE005{5}
+- field: type
+  note: 执行类型
+  range: sprint{10}
+- field: stage
+  note: 执行阶段
+  range: developing{10}
+- field: status
+  note: 执行状态
+  range: wait{3},doing{5},done{2}
+- field: begin
+  note: 开始时间
+  range: "2024-01-01"
+- field: end
+  note: 结束时间
+  range: "2024-12-31"
+- field: realBegan
+  note: 实际开始时间
+  range: "2024-01-01"
+- field: realEnd
+  note: 实际结束时间
+  range: "2024-12-31"
+- field: openedBy
+  note: 创建人
+  range: admin{10}
+- field: openedDate
+  note: 创建时间
+  range: "2024-01-01 00:00:00"
+- field: closedBy
+  note: 关闭人
+  range: ""
+- field: closedDate
+  note: 关闭时间
+  range: "0000-00-00 00:00:00"
+- field: canceledBy
+  note: 取消人
+  range: ""
+- field: canceledDate
+  note: 取消时间
+  range: "0000-00-00 00:00:00"
+- field: PO
+  note: 产品经理
+  range: admin{10}
+- field: PM
+  note: 项目经理
+  range: admin{10}
+- field: QD
+  note: 测试经理
+  range: admin{10}
+- field: RD
+  note: 发布经理
+  range: admin{10}
+- field: team
+  note: 团队成员
+  range: admin{10}
+- field: acl
+  note: 访问控制
+  range: open{10}
+- field: order
+  note: 排序
+  range: 0
+- field: vision
+  note: 界面
+  range: rnd{10}
+- field: deleted
+  note: 删除状态
+  range: "0"{10}

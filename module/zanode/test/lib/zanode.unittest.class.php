@@ -3,6 +3,7 @@ declare(strict_types = 1);
 class zanodeTest
 {
     private $objectModel;
+    private $objectTao;
 
     public function __construct()
     {
@@ -10,6 +11,7 @@ class zanodeTest
         $app->rawModule = 'zanode';
         $app->rawMethod = 'browse';
         $this->objectModel = $tester->loadModel('zanode');
+        $this->objectTao   = $tester->loadTao('zanode');
     }
 
     /**
@@ -24,6 +26,24 @@ class zanodeTest
     public function __call($name, $arguments)
     {
         return $this->objectModel->$name(...$arguments);
+    }
+
+    /**
+     * 测试构造方法。
+     * Test __construct method.
+     *
+     * @access public
+     * @return object
+     */
+    public function constructTest(): object
+    {
+        $zanodeModel = new zanodeModel();
+        $result = new stdClass();
+        $result->parentCalled = method_exists($zanodeModel, '__construct');
+        $result->langSet = isset($zanodeModel->app->lang->host);
+        $result->inheritance = is_a($zanodeModel, 'model');
+        $result->objectModel = is_a($this->objectModel, 'zanodeModel');
+        return $result;
     }
 
     /**
@@ -209,6 +229,11 @@ class zanodeTest
      */
     public function deleteSnapshotTest(int $snapshotID)
     {
+        if($snapshotID <= 0) return '~~';
+        
+        $snapshot = $this->getImageByID($snapshotID);
+        if(!$snapshot) return '~~';
+        
         $result = $this->deleteSnapshot($snapshotID);
         if($result !== true) return $result;
 
@@ -226,6 +251,7 @@ class zanodeTest
     public function getVncUrlTest(int $nodeID): bool|object
     {
         $node = $this->getNodeByID($nodeID);
+        if(!$node) return false;
         return $this->getVncUrl($node);
     }
 
@@ -242,5 +268,305 @@ class zanodeTest
     {
         $this->updateImageStatus($imageID, $data);
         return $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+    }
+
+    /**
+     * 测试通过执行节点创建镜像。
+     * Test create Image by zanode.
+     *
+     * @param  int    $zanodeID
+     * @param  object $data
+     * @access public
+     * @return mixed
+     */
+    public function createImageTest(int $zanodeID, object $data): mixed
+    {
+        $result = $this->objectModel->createImage($zanodeID, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试销毁执行节点。
+     * Test destroy method.
+     *
+     * @param  int    $id
+     * @access public
+     * @return mixed
+     */
+    public function destroyTest(int $id): mixed
+    {
+        if($id <= 0) return '0';
+
+        $oldNode = $this->getNodeByID($id);
+        if(!$oldNode) return '0';
+
+        $result = $this->destroy($id);
+        
+        if($result === '') return 'success';
+        return $result ? $result : '0';
+    }
+
+    /**
+     * 测试计算执行节点状态。
+     * Test process node status.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return object
+     */
+    public function processNodeStatusTest(int $nodeID): object|bool
+    {
+        $node = $this->objectModel->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")
+            ->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
+            ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
+            ->where('t1.id')->eq($nodeID)
+            ->fetch();
+        
+        if(empty($node)) return false;
+        
+        // 调用protected方法processNodeStatus
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processNodeStatus');
+        $method->setAccessible(true);
+        
+        return $method->invoke($this->objectModel, $node);
+    }
+
+    /**
+     * 测试执行ZTF脚本。
+     * Test run ZTF script.
+     *
+     * @param  int    $scriptID
+     * @param  int    $caseID
+     * @param  int    $testtaskID
+     * @access public
+     * @return mixed
+     */
+    public function runZTFScriptTest(int $scriptID = 0, int $caseID = 0, int $testtaskID = 0): mixed
+    {
+        $result = $this->runZTFScript($scriptID, $caseID, $testtaskID);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * 测试连接Agent服务。
+     * Test link agent service.
+     *
+     * @param  object $data
+     * @access public
+     * @return mixed
+     */
+    public function linkAgentServiceTest(object $data): mixed
+    {
+        // 检查必要参数是否存在
+        if(!isset($data->image) || !isset($data->parent)) return false;
+        if($data->image === null || $data->parent === null) return false;
+        
+        // 检查镜像是否存在
+        $image = $this->getImageByID($data->image);
+        if(!$image) return false;
+        
+        // 检查宿主机是否存在
+        $host = $this->getHostByID($data->parent);
+        if(!$host) return false;
+        
+        $result = $this->linkAgentService($data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试设置菜单。
+     * Test set menu.
+     *
+     * @param  bool $createHost
+     * @access public
+     * @return object
+     */
+    public function setMenuTest(bool $createHost): object
+    {
+        global $app;
+
+        // 备份原始菜单结构
+        $originalMenu = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? $app->lang->qa->menu->automation['subMenu']->zahost : null;
+
+        // 设置测试环境 - 创建虚拟菜单结构
+        if(!isset($app->lang->qa)) $app->lang->qa = new stdClass();
+        if(!isset($app->lang->qa->menu)) $app->lang->qa->menu = new stdClass();
+        if(!isset($app->lang->qa->menu->automation)) $app->lang->qa->menu->automation = array();
+        if(!isset($app->lang->qa->menu->automation['subMenu'])) $app->lang->qa->menu->automation['subMenu'] = new stdClass();
+        $app->lang->qa->menu->automation['subMenu']->zahost = 'test_zahost_menu';
+
+        $result = new stdClass();
+        $result->beforeCall = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? 1 : 0;
+
+        // 如果createHost为false，清理zahost数据确保hiddenHost返回true
+        if(!$createHost)
+        {
+            // 清理现有的zahost数据使hiddenHost返回true
+            $this->objectModel->dao->delete()->from(TABLE_ZAHOST)->where('type')->eq('zahost')->exec();
+        }
+        else
+        {
+            // 创建一个zahost数据使hiddenHost返回false
+            $hostData = new stdClass();
+            $hostData->name = 'test_host_for_menu';
+            $hostData->type = 'zahost';
+            $hostData->status = 'online';
+            $hostData->deleted = '0';
+            $hostData->extranet = '127.0.0.1';
+            $this->objectModel->dao->insert(TABLE_ZAHOST)->data($hostData)->exec();
+        }
+
+        // 调用被测方法
+        $this->setMenu();
+
+        $result->afterCall = isset($app->lang->qa->menu->automation['subMenu']->zahost) ? 1 : 0;
+        $result->createHost = $createHost ? 1 : 0;
+
+        // 恢复原始状态
+        if($originalMenu !== null)
+        {
+            $app->lang->qa->menu->automation['subMenu']->zahost = $originalMenu;
+        }
+        else
+        {
+            unset($app->lang->qa->menu->automation['subMenu']->zahost);
+        }
+
+        // 清理测试数据
+        if($createHost)
+        {
+            $this->objectModel->dao->delete()->from(TABLE_ZAHOST)->where('name')->eq('test_host_for_menu')->exec();
+        }
+
+        return $result;
+    }
+
+    /**
+     * 测试通过主机ID获取此主机下所有的子主机。
+     * Test getSubZahostListByID method.
+     *
+     * @param  int    $hostID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getSubZahostListByIDTest(int $hostID, string $orderBy = 'id_desc'): object|int
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getSubZahostListByID');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $hostID, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果是数组，返回一个包含数量和结果的对象
+        if(is_array($result))
+        {
+            $returnObj = new stdClass();
+            $returnObj->count = count($result);
+            // 对于非空数组，设置data属性
+            if(count($result) > 0)
+            {
+                $returnObj->data = $result;
+            }
+            return $returnObj;
+        }
+
+        return count($result);
+    }
+
+    /**
+     * 测试通过查询条件获取执行节点列表。
+     * Test getZaNodeListByQuery method.
+     *
+     * @param  string $query
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return object
+     */
+    public function getZaNodeListByQueryTest(string $query = '', string $orderBy = 'id_desc', ?object $pager = null): object
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getZaNodeListByQuery');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $query, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        // 返回包含结果信息的对象
+        $returnObj = new stdClass();
+        if(is_array($result))
+        {
+            $returnObj->count = count($result);
+            $returnObj->data = $result;
+            // 如果有结果，返回第一个结果的部分信息用于测试
+            if(count($result) > 0)
+            {
+                $first = $result[0];
+                $returnObj->firstId = $first->id ?? null;
+                $returnObj->firstType = $first->type ?? null;
+                $returnObj->firstStatus = $first->status ?? null;
+            }
+        }
+        else
+        {
+            $returnObj->count = 0;
+            $returnObj->data = array();
+        }
+
+        return $returnObj;
+    }
+
+    /**
+     * 测试通过主机ID列表获取主机列表。
+     * Test getHostsByIDList method.
+     *
+     * @param  array $hostIDList
+     * @access public
+     * @return object
+     */
+    public function getHostsByIDListTest(array $hostIDList): object
+    {
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getHostsByIDList');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $hostIDList);
+        if(dao::isError()) return dao::getError();
+
+        // 返回包含结果信息的对象
+        $returnObj = new stdClass();
+        if(is_array($result))
+        {
+            $returnObj->count = count($result);
+            $returnObj->data = $result;
+            // 如果有结果，提取第一个结果的关键信息用于测试断言
+            if(count($result) > 0)
+            {
+                $first = reset($result);  // 获取数组第一个元素（key可能不是0）
+                $returnObj->firstId = $first->id ?? null;
+                $returnObj->firstStatus = $first->status ?? null;
+                $returnObj->firstHeartbeat = $first->heartbeat ?? null;
+            }
+        }
+        else
+        {
+            $returnObj->count = 0;
+            $returnObj->data = array();
+        }
+
+        return $returnObj;
     }
 }

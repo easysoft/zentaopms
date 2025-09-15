@@ -1,0 +1,105 @@
+---
+title: Team member data for createTeamMember test
+desc: Test data for team table in createTeamMember method test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 团队成员ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: 项目或执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: project{5}, execution{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账户
+  range: admin, user1, user2, user3, testuser
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色
+  range: []{5}, developer{3}, manager{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: position
+  note: 职位
+  range: []{8}, leader{1}, member{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: limited
+  note: 是否受限
+  range: no{8}, yes{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: join
+  note: 加入日期
+  range: (2024-01-01)-(2024-12-31):30D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: YYYY-MM-DD
+- field: days
+  note: 工作天数
+  range: 0-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: hours
+  note: 工作时数
+  range: 0.0-8.0:0.5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: estimate
+  note: 预估工时
+  range: 0.00-100.00:1.00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: consumed
+  note: 消耗工时
+  range: 0.00-80.00:1.00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: left
+  note: 剩余工时
+  range: 0.00-50.00:1.00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 0-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

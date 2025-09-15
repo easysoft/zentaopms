@@ -14,6 +14,28 @@ class mailTest
          $this->dao         = $dao;
          $this->tester      = $tester;
          $this->objectModel = $tester->loadModel('mail');
+         $this->objectTao   = $tester->loadTao('mail');
+         $this->objectZen   = $tester->loadZen('mail');
+    }
+
+    /**
+     * Test __construct method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function __constructTest()
+    {
+        $result = new stdClass();
+        $result->isMailModel = $this->objectModel instanceof mailModel;
+        $result->hasMTA = isset($this->objectModel->mta);
+        $result->hasErrors = isset($this->objectModel->errors);
+        $result->hasConfig = isset($this->objectModel->config);
+        $result->mtaType = $this->objectModel->mta ? get_class($this->objectModel->mta) : '';
+        
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -345,5 +367,121 @@ class mailTest
         if(!$object) return false;
 
         return $this->objectModel->getObjectTitle($object, $objectType);
+    }
+
+    /**
+     * Test setImages method.
+     *
+     * @param  array $images
+     * @access public
+     * @return mixed
+     */
+    public function setImagesTest($images = array())
+    {
+        $this->objectModel->setImages($images);
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->imageCount = count($images);
+        $result->uniqueImageCount = count(array_filter(array_unique($images)));
+        
+        return $result;
+    }
+
+    /**
+     * Test setErrorLang method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setErrorLangTest()
+    {
+        $this->objectModel->setErrorLang();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->mta = $this->objectModel->mta;
+        $result->currentLang = $this->objectModel->app->getClientLang();
+        
+        return $result;
+    }
+
+    /**
+     * Test clear method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function clearTest()
+    {
+        $this->objectModel->clear();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->processed = true;
+        $result->mta = $this->objectModel->mta;
+        
+        return $result;
+    }
+
+    /**
+     * Test getImages method.
+     *
+     * @param  string $body
+     * @access public
+     * @return array
+     */
+    public function getImagesTest($body)
+    {
+        $result = $this->objectModel->getImages($body);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getImagesByFileID method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByFileIDTest($matches = array())
+    {
+        $result = $this->objectModel->getImagesByFileID($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getImagesByPath method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByPathTest($matches = array())
+    {
+        $result = $this->objectModel->getImagesByPath($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getConfigForEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getConfigForEditTest()
+    {
+        $result = $this->objectZen->getConfigForEdit();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

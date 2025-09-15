@@ -1,0 +1,42 @@
+---
+title: 看板单元格数据定义
+desc: 用于测试updateExecutionCell方法的看板单元格测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 单元格ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+
+- field: kanban
+  note: 看板ID（执行ID）
+  range: 1{5}, 2{5}, 3{5}, 4{5}
+  prefix: ""
+  postfix: ""
+
+- field: lane
+  note: 泳道ID
+  range: 1{10}, 2{10}
+  prefix: ""
+  postfix: ""
+
+- field: column
+  note: 列ID
+  range: 1{7}, 2{7}, 3{6}
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 单元格类型
+  range: common{15}, story{3}, task{2}
+  prefix: ""
+  postfix: ""
+
+- field: cards
+  note: 卡片ID列表（逗号分隔）
+  range: ',1,2,'{3}, ',3,4,5,'{4}, ',6,7,'{3}, ',8,'{2}, ''{8}
+  prefix: ""
+  postfix: ""

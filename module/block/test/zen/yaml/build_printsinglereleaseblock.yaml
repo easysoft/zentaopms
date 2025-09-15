@@ -1,0 +1,15 @@
+---
+title: Build测试数据
+desc: printSingleReleaseBlock方法的build表测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-8
+- field: product
+  range: 1{5},2{2},3{1}
+- field: name
+  range: Build 1,Build 2,Build 3,Build 4,Build 5,Build 6,Build 7,Build 8
+- field: deleted
+  range: "0"

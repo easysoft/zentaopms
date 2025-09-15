@@ -1,0 +1,94 @@
+---
+title: AI提示词创建测试数据
+desc: 为createPrompt方法测试提供基础数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 提示词ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 提示词名称
+  range: existing_prompt,test_prompt{9}
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 提示词描述
+  range: 这是一个测试提示词{1},用于测试的描述{9}
+  prefix: ""
+  postfix: ""
+- field: model
+  note: 关联模型ID
+  range: 0-5
+  prefix: ""
+  postfix: ""
+- field: module
+  note: 应用模块
+  range: story,task,bug,doc
+  prefix: ""
+  postfix: ""
+- field: source
+  note: 数据源字段
+  range: ',story.title,story.spec,',',task.name,task.desc,',',bug.title,bug.steps,'
+  prefix: ""
+  postfix: ""
+- field: targetForm
+  note: 目标表单
+  range: story.change,task.edit,bug.edit
+  prefix: ""
+  postfix: ""
+- field: purpose
+  note: 用途说明
+  range: 用于润色{1},用于优化{2},用于生成{7}
+  prefix: ""
+  postfix: ""
+- field: elaboration
+  note: 详细说明
+  range: 详细的使用说明{1},具体的操作指导{2},完整的处理流程{7}
+  prefix: ""
+  postfix: ""
+- field: role
+  note: 角色定义
+  range: 产品经理,开发工程师,测试工程师,文案编辑
+  prefix: ""
+  postfix: ""
+- field: characterization
+  note: 角色特征
+  range: 专业且严谨{1},经验丰富{2},技能全面{7}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 状态
+  range: draft{3},active{7}
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: admin,test,demo
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00-2023-12-31 18:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+- field: editedBy
+  note: 编辑者
+  range: admin,test,demo
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: 2023-01-01 10:00:00-2023-12-31 18:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除标志
+  range: '0'
+  prefix: ""
+  postfix: ""

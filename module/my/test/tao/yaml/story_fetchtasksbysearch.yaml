@@ -1,0 +1,47 @@
+---
+title: 需求测试数据  
+desc: 用于 fetchTasksBySearch 方法的需求测试数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: 1{6},2{3},3{1}
+- field: title
+  note: 需求标题
+  range: 用户登录功能{2},产品管理模块{2},测试用例管理{2},缺陷跟踪系统{2},项目统计报表{2}
+- field: type
+  note: 需求类型
+  range: story{8},epic{1},requirement{1}
+- field: status
+  note: 需求状态
+  range: draft{2},active{5},closed{2},changed{1}
+- field: stage
+  note: 需求阶段
+  range: wait{3},planned{4},projected{2},released{1}
+- field: pri
+  note: 优先级
+  range: 1{2},2{4},3{3},4{1}
+- field: estimate
+  note: 预计工时
+  range: 8{3},16{4},24{2},40{1}
+- field: openedBy
+  note: 由谁创建
+  range: admin{6},user{3},test{1}
+- field: openedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00{3},2023-01-10 10:00:00{4},2023-01-20 15:00:00{3}
+- field: assignedTo
+  note: 指派给
+  range: admin{4},user{3},test{2},''{}
+- field: deleted
+  note: 是否删除
+  range: '0'
+- field: version
+  note: 版本号
+  range: '1'{8},'2'{2}
+- field: vision
+  note: 视野
+  range: rnd{10}

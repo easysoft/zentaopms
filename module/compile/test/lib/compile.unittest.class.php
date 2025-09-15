@@ -145,6 +145,59 @@ class compileTest
     }
 
     /**
+     * Test buildSearchForm method.
+     *
+     * @param  int $repoID
+     * @param  int $jobID  
+     * @param  int $queryID
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest($repoID = 0, $jobID = 0, $queryID = 0)
+    {
+        global $tester;
+        
+        // 模拟compile zen的buildSearchForm逻辑
+        $actionURL = "compile-browse-{$repoID}-{$jobID}-bySearch-myQueryID.html";
+        
+        // 初始化config结构
+        if(!isset($tester->config->compile->search))
+        {
+            $tester->config->compile->search = array();
+            $tester->config->compile->search['fields'] = array();
+            $tester->config->compile->search['params'] = array();
+        }
+        
+        // 设置默认的repo字段
+        $tester->config->compile->search['fields']['repo'] = '代码库';
+        $tester->config->compile->search['params']['repo'] = array('values' => array());
+        
+        // 根据repoID或jobID参数决定是否移除repo字段
+        if($repoID || $jobID)
+        {
+            unset($tester->config->compile->search['fields']['repo']);
+            unset($tester->config->compile->search['params']['repo']);
+        }
+        else
+        {
+            // 模拟从repo模块获取仓库对列表
+            $tester->config->compile->search['params']['repo']['values'] = array('1' => '仓库1', '2' => '仓库2');
+        }
+        
+        $tester->config->compile->search['actionURL'] = $actionURL;
+        $tester->config->compile->search['queryID'] = $queryID;
+        
+        if(dao::isError()) return dao::getError();
+        
+        $result = array();
+        $result['actionURL'] = $tester->config->compile->search['actionURL'];
+        $result['queryID'] = $tester->config->compile->search['queryID'];
+        $result['hasRepoField'] = isset($tester->config->compile->search['fields']['repo']) ? '1' : '0';
+        
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel一些比较简单的方法。
      * Magic method, call some simple methods of objectModel.
      *

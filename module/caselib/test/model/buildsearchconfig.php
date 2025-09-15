@@ -20,8 +20,6 @@ cid=1
 
 */
 
-
-
 $caselib = new caselibTest();
 $searchConfig = $caselib->objectModel->buildSearchConfig(1);
 

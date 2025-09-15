@@ -1,0 +1,52 @@
+---
+title: jiratmprelation table for createTmpRelation test
+desc: Test data for jiratmprelation table used in createTmpRelation method testing
+
+fields:
+- field: id
+  note: Primary key ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: AType
+  note: Source object type
+  range: 'juser,jproject,jtask,jbug,jissue'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: AID
+  note: Source object ID
+  range: '1-1000,admin,user001,BUG-001,TASK-001'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: BType
+  note: Target object type
+  range: 'zuser,zproject,ztask,zbug,zissue'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: BID
+  note: Target object ID
+  range: '1-1000,admin001,user002,ZEN-001,ZEN-TASK-001'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: extra
+  note: Extra information field
+  range: '[]{3},issue{2},migration{2},workflow{2},custom{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

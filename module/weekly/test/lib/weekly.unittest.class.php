@@ -447,4 +447,21 @@ class weeklyTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
     }
+
+    /**
+     * Test getLeft
+     *
+     * @param  int    $projectID
+     * @param  string $date
+     * @access public
+     * @return float
+     */
+    public function getLeftTest($projectID, $date = '')
+    {
+        $objects = $this->objectModel->getLeft($projectID, $date);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
 }

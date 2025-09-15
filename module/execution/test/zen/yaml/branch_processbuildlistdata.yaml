@@ -1,0 +1,26 @@
+title: table zt_branch for processBuildListData test
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+  - field: product
+    range: 1-5
+  - field: name
+    range: "主分支{5},开发分支{5},测试分支{5},发布分支{5}"
+  - field: default
+    range: 1{5},0{15}
+  - field: status
+    range: active{18},closed{2}
+  - field: desc
+    range: "分支描述{10},""{10}
+  - field: createdDate
+    range: "20241101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: closedDate
+    range: ""
+  - field: order
+    range: 1-20
+  - field: deleted
+    range: 0{18},1{2}

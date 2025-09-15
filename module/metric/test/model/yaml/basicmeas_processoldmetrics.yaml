@@ -1,0 +1,48 @@
+---
+title: 为processOldMetrics方法提供基础测量数据
+desc: 提供basicmeas表的测试数据以支持processOldMetrics方法的测试
+
+fields:
+- field: id
+  note: 基础测量ID
+  range: 1-10
+  
+- field: purpose  
+  note: 目的
+  range: '基础度量目的1,基础度量目的2,基础度量目的3,基础度量目的4,基础度量目的5,基础度量目的6,基础度量目的7,基础度量目的8,基础度量目的9,基础度量目的10'
+  
+- field: scope
+  note: 作用范围
+  range: 'system,product,project,execution,user'
+  
+- field: object
+  note: 对象类型
+  range: 'story,task,bug,case,project'
+  
+- field: name
+  note: 基础测量名称
+  range: '基础度量项1,基础度量项2,基础度量项3,基础度量项4,基础度量项5,基础度量项6,基础度量项7,基础度量项8,基础度量项9,基础度量项10'
+  
+- field: code
+  note: 基础测量代码
+  range: 'metric1,metric2,metric3,metric4,metric5,metric6,metric7,metric8,metric9,metric10'
+  
+- field: unit
+  note: 单位
+  range: '个,次,项,条,人,天,小时,百分比,元,台'
+  
+- field: configure
+  note: 配置信息
+  range: '{"type":"sql","sql":"SELECT COUNT(*) FROM zt_story"},{"type":"php","method":"getStoryCount"},{"type":"sql","sql":"SELECT COUNT(*) FROM zt_task"},{"type":"php","method":"getTaskCount"},{"type":"sql","sql":"SELECT COUNT(*) FROM zt_bug"},{"type":"php","method":"getBugCount"},{"type":"sql","sql":"SELECT COUNT(*) FROM zt_case"},{"type":"php","method":"getCaseCount"},{"type":"sql","sql":"SELECT COUNT(*) FROM zt_project"},{"type":"php","method":"getProjectCount"}'
+  
+- field: params
+  note: 参数
+  range: '[]{10}'
+  
+- field: definition
+  note: 定义
+  range: '度量项定义1,度量项定义2,度量项定义3,度量项定义4,度量项定义5,度量项定义6,度量项定义7,度量项定义8,度量项定义9,度量项定义10'
+  
+- field: deleted
+  note: 是否删除
+  range: '0{10}'

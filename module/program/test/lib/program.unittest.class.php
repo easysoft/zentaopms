@@ -599,4 +599,123 @@ class programTest
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
     }
+
+    /**
+     * 挂起一个项目集。
+     * Suspend a program.
+     *
+     * @param  int    $programID
+     * @param  array  $postData
+     * @access public
+     * @return bool
+     */
+    public function suspendTest(int $programID, array $postData): bool
+    {
+        $postDataObj = new stdclass();
+        $postDataObj->status = 'suspended';
+        $postDataObj->comment = isset($postData['comment']) ? $postData['comment'] : '';
+        $postDataObj->uid = isset($postData['uid']) ? $postData['uid'] : '';
+        foreach($postData as $field => $value) $postDataObj->{$field} = $value;
+
+        $result = $this->program->suspend($programID, $postDataObj);
+
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * Test checkPriv method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivTest(int $programID): bool
+    {
+        $result = $this->program->checkPriv($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getChildrenPairsByID method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function getChildrenPairsByIDTest(int $programID): array
+    {
+        $result = $this->program->getChildrenPairsByID($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductPairsByID method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function getProductPairsByIDTest(int $programID): array
+    {
+        $result = $this->program->getProductPairsByID($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function setMenuTest(int $programID): array
+    {
+        $this->program->setMenu($programID);
+        if(dao::isError()) return dao::getError();
+
+        $result = array();
+        $result['switcherMenu'] = $this->program->lang->switcherMenu ?? '';
+        $result['programID'] = $programID;
+
+        return $result;
+    }
+
+    /**
+     * Test getSwitcher method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest(int $programID): string
+    {
+        $result = $this->program->getSwitcher($programID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 设置没有任务的执行数据。
+     * Set execution stat when has no task.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function setNoTaskExecutionTest(array $projectIdList): array
+    {
+        $result = $this->program->setNoTaskExecution($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

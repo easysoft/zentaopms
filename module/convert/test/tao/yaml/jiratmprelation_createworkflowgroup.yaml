@@ -1,0 +1,31 @@
+---
+title: createWorkflowGroup Jira临时关系测试数据
+desc: 为createWorkflowGroup方法提供Jira临时关系测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关系ID
+  range: 1-20
+  format: ""
+- field: AID
+  note: A端ID
+  range: 1-10
+  format: ""
+- field: AType
+  note: A端类型
+  range: jproject{10},juser{5},jissue{5}
+  format: ""
+- field: BID
+  note: B端ID
+  range: 1-10
+  format: ""
+- field: BType
+  note: B端类型
+  range: zworkflowgroup{5},zproject{10},zuser{5}
+  format: ""
+- field: extra
+  note: 额外信息
+  range: []{15},{\"created\":\"2023-01-01\"}{5}
+  format: ""

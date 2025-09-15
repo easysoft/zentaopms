@@ -1,0 +1,56 @@
+---
+title: 任务列表区块测试数据
+desc: 用于测试printTaskBlock方法的任务数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 任务名称
+  range: 开发任务{5},测试任务{5},设计任务{5},文档任务{5}
+- field: type
+  note: 任务类型
+  range: devel{8},test{6},design{4},study{2}
+- field: status
+  note: 任务状态
+  range: wait{6},doing{8},done{6}
+- field: assignedTo
+  note: 指派给
+  range: admin{8},user1{6},user2{4},user3{2}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10},user1{6},user2{4}
+- field: openedDate
+  note: 创建时间
+  range: (`-30D`)-(`-1D`):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: estimate
+  note: 预计工时
+  range: 1-16
+- field: consumed
+  note: 消耗工时
+  range: 0-8
+- field: left
+  note: 剩余工时
+  range: 0-8
+- field: deadline
+  note: 截止日期
+  range: (`+1D`)-(`+30D`):2D
+  format: YYYY-MM-DD
+- field: project
+  note: 所属项目
+  range: 1-5
+- field: execution
+  note: 所属执行
+  range: 1-10
+- field: story
+  note: 相关需求
+  range: 0{10},1-20{10}

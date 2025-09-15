@@ -3,14 +3,12 @@ author: Qiyu Xie
 version: "1.0"
 fields:
   - field: id
-    range: 1-1000
+    range: 1-10
   - field: host
     range: 2
   - field: name
-    fields:
-      - field: name1
-        range: snapshot
-      - field: name2
-        range: 1-1000
+    range: 'snapshot1,snapshot2,snapshot3,snapshot4,snapshot5'
   - field: status
-    range: completed,restoring,running
+    range: 'completed,restoring,creating,running,failed'
+  - field: from
+    range: snapshot

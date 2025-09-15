@@ -1,0 +1,20 @@
+---
+title: metric数据定义
+desc: 为printShortProductOverview方法提供测试数据
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-10
+  
+- field: code
+  note: 度量项代码
+  range: count_of_product{1},count_of_annual_created_release{1},count_of_marker_release{1},other_metric{7}
+  
+- field: builtin
+  note: 内置度量项
+  range: 1{10}
+  
+- field: deleted
+  note: 删除状态
+  range: 0{10}

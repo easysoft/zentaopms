@@ -379,4 +379,187 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
         return $this->objectModel->processReleaseBuilds($release, $addActionsAndBuildLink);
     }
+
+    /**
+     * Test getPageSummary method.
+     *
+     * @param  array  $releases
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getPageSummaryTest(array $releases, string $type): string
+    {
+        $result = $this->objectModel->getPageSummary($releases, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test sendmail method.
+     *
+     * @param  int $releaseID
+     * @access public
+     * @return string
+     */
+    public function sendmailTest(int $releaseID): string
+    {
+        if(empty($releaseID)) {
+            $this->objectModel->sendmail($releaseID);
+            return 'empty'; // 空releaseID应该直接返回
+        }
+        
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) {
+            return 'no_release'; // 发布不存在
+        }
+        
+        // Mock mail model to avoid actual sending
+        $originalMail = $this->objectModel->app->loadModel('mail');
+        $this->objectModel->sendmail($releaseID);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return 'success'; // 成功执行
+    }
+
+    /**
+     * 获取发送邮件的人员。
+     * Get notify list.
+     *
+     * @param  int $releaseID
+     * @access public
+     * @return false|array
+     */
+    public function getNotifyListTest(int $releaseID): false|array
+    {
+        $release = $this->objectModel->getByID($releaseID);
+        if(!$release) return false;
+
+        $result = $this->objectModel->getNotifyList($release);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test sendMail2Feedback method.
+     *
+     * @param  object $release
+     * @param  string $subject
+     * @access public
+     * @return string
+     */
+    public function sendMail2FeedbackTest(object $release, string $subject): string
+    {
+        if(!$release) return 'no_release';
+        
+        if(!$release->stories && !$release->bugs) return 'no_data';
+        
+        // 模拟检查是否存在有效的notifyEmail
+        $stories = $release->stories ? explode(',', trim($release->stories, ',')) : array();
+        $bugs = $release->bugs ? explode(',', trim($release->bugs, ',')) : array();
+        
+        $hasNotifyEmail = false;
+        
+        if($stories) {
+            $storyNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+                ->where('id')->in($stories)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchAll();
+            if($storyNotifyList) $hasNotifyEmail = true;
+        }
+        
+        if($bugs) {
+            $bugNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+                ->where('id')->in($bugs)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchAll();
+            if($bugNotifyList) $hasNotifyEmail = true;
+        }
+        
+        if(!$hasNotifyEmail) return 'no_email';
+        
+        // 实际调用sendMail2Feedback方法
+        $this->objectModel->sendMail2Feedback($release, $subject);
+        
+        if(dao::isError()) return dao::getError();
+        
+        return 'success';
+    }
+
+    /**
+     * Test processRelated method.
+     *
+     * @param  int    $releaseID
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function processRelatedTest(int $releaseID, object $release): array
+    {
+        try {
+            // 记录操作前的关联数据数量
+            $beforeCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetch('count');
+            
+            $this->objectModel->processRelated($releaseID, $release);
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 记录操作后的关联数据数量
+            $afterCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetch('count');
+            
+            // 获取所有关联数据
+            $relatedData = $this->objectModel->dao->select('*')->from(TABLE_RELEASERELATED)
+                ->where('release')->eq($releaseID)
+                ->fetchAll();
+            
+            return array(
+                'beforeCount' => $beforeCount,
+                'afterCount' => $afterCount,
+                'relatedData' => $relatedData
+            );
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test updateRelated method.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return mixed
+     */
+    public function updateRelatedTest(int $releaseID, string $objectType, int|string|array $objectIdList): mixed
+    {
+        $result = $this->objectModel->updateRelated($releaseID, $objectType, $objectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test deleteRelated method.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return mixed
+     */
+    public function deleteRelatedTest(int $releaseID, string $objectType, int|string|array $objectIdList): mixed
+    {
+        $result = $this->objectModel->deleteRelated($releaseID, $objectType, $objectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

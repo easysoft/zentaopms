@@ -1946,4 +1946,274 @@ class testcaseTest
         $result = $this->objectModel->buildSearchConfig($productID, $branch);
         return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
     }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @access public
+     * @return mixed
+     */
+    public function setMenuTest(int $productID, int|string $branch = 0): mixed
+    {
+        $this->objectModel->setMenu($productID, $branch);
+        if(dao::isError()) return dao::getError();
+        
+        return true;
+    }
+
+    /**
+     * Test processDatas method.
+     *
+     * @param  mixed $datas
+     * @access public
+     * @return mixed
+     */
+    public function processDatasTest($datas)
+    {
+        $result = $this->objectModel->processDatas($datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processStepsOrExpects method.
+     *
+     * @param  string $steps
+     * @access public
+     * @return array
+     */
+    public function processStepsOrExpectsTest(string $steps): array
+    {
+        $result = $this->objectModel->processStepsOrExpects($steps);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processStepsChanged method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return bool
+     */
+    public function processStepsChangedTest(string $testType): bool
+    {
+        // 创建测试用例对象
+        $case = new stdclass();
+        
+        // 创建旧步骤数据
+        $oldStep = array();
+        $oldStep1 = new stdclass();
+        $oldStep1->desc = '步骤描述1';
+        $oldStep1->expect = '期望结果1';
+        $oldStep1->type = 'step';
+        $oldStep[] = $oldStep1;
+        
+        $oldStep2 = new stdclass();
+        $oldStep2->desc = '步骤描述2';
+        $oldStep2->expect = '期望结果2';
+        $oldStep2->type = 'group';
+        $oldStep[] = $oldStep2;
+
+        // 根据测试类型设置不同的新步骤数据
+        switch($testType)
+        {
+            case 'same_content':
+                // 相同内容
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_count':
+                // 不同数量
+                $case->steps = array('步骤描述1');
+                $case->expects = array('期望结果1');
+                $case->stepType = array('step');
+                break;
+                
+            case 'different_desc':
+                // 不同描述
+                $case->steps = array('步骤描述1修改', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_expect':
+                // 不同期望
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1修改', '期望结果2');
+                $case->stepType = array('step', 'group');
+                break;
+                
+            case 'different_type':
+                // 不同类型
+                $case->steps = array('步骤描述1', '步骤描述2');
+                $case->expects = array('期望结果1', '期望结果2');
+                $case->stepType = array('item', 'group');
+                break;
+        }
+
+        // 使用反射来调用保护方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processStepsChanged');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $case, $oldStep);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getXmindImport method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return string|false
+     */
+    public function getXmindImportTest(string $fileName): string|false
+    {
+        if(!file_exists($fileName)) return false;
+        
+        // Check if file can be loaded as XML (suppress XML errors)
+        libxml_use_internal_errors(true);
+        $xmlNode = simplexml_load_file($fileName);
+        libxml_clear_errors();
+        if($xmlNode === false) return false;
+        
+        $result = $this->objectModel->getXmindImport($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test saveXmindImport method.
+     *
+     * @param  array $scenes
+     * @param  array $testcases
+     * @access public
+     * @return array
+     */
+    public function saveXmindImportTest(array $scenes, array $testcases): array
+    {
+        $result = $this->objectModel->saveXmindImport($scenes, $testcases);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test saveTestcase method.
+     *
+     * @param  object $testcase
+     * @param  array  $sceneIdList
+     * @access public
+     * @return array
+     */
+    public function saveTestcaseTest(object $testcase, array $sceneIdList): array
+    {
+        $result = $this->objectModel->saveTestcase($testcase, $sceneIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processCaseSteps method.
+     *
+     * @param  object $case
+     * @param  object $testcase
+     * @access public
+     * @return object
+     */
+    public function processCaseStepsTest(object $case, object $testcase): object
+    {
+        // 使用反射来调用保护方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processCaseSteps');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $case, $testcase);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test xmlToArray method.
+     *
+     * @param  string $xmlString
+     * @param  array  $options
+     * @access public
+     * @return mixed
+     */
+    public function xmlToArrayTest(string $xmlString, array $options = array()): mixed
+    {
+        // 创建SimpleXMLElement对象
+        $xml = simplexml_load_string($xmlString);
+        if($xml === false) return false;
+        
+        // 使用反射来调用私有方法
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('xmlToArray');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $xml, $options);
+        if(dao::isError()) return dao::getError();
+
+        // 返回数组的序列化字符串，便于测试验证
+        if(is_array($result))
+        {
+            return json_encode($result, JSON_UNESCAPED_UNICODE);
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Test getXmlTagsArray method.
+     *
+     * @param  string $xmlString
+     * @param  array  $namespaces
+     * @param  array  $options
+     * @access public
+     * @return mixed
+     */
+    public function getXmlTagsArrayTest(string $xmlString, array $namespaces, array $options): mixed
+    {
+        // 创建SimpleXMLElement对象
+        $xml = simplexml_load_string($xmlString);
+        if($xml === false) return false;
+        
+        $result = $this->objectModel->getXmlTagsArray($xml, $namespaces, $options);
+        if(dao::isError()) return dao::getError();
+
+        // 返回数组数量用于测试验证
+        return count($result);
+    }
+
+    /**
+     * Test saveScene method.
+     *
+     * @param  array $sceneData
+     * @param  array $sceneList
+     * @access public
+     * @return mixed
+     */
+    public function saveSceneTest(array $sceneData, array $sceneList): mixed
+    {
+        // 确保id是整数类型
+        if(isset($sceneData['id'])) $sceneData['id'] = (int)$sceneData['id'];
+        
+        $result = $this->objectModel->saveScene($sceneData, $sceneList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

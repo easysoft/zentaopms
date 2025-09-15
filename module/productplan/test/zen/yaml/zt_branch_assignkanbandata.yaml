@@ -1,0 +1,42 @@
+---
+title: 分支表测试数据
+desc: 为assignKanbanData方法生成测试分支数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: "2{2},4{3}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: "主分支,开发分支,测试分支,发布分支,维护分支"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: "active{4},closed{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: "0{5}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

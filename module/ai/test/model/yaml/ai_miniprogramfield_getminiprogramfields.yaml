@@ -1,0 +1,37 @@
+---
+title: getMiniProgramFields方法的测试数据
+desc: 用于测试getMiniProgramFields方法的ai_miniprogramfield表数据
+author: Claude AI
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: appID
+  note: 小程序应用ID
+  range: 1{5},2{5},3{5},999{2},0{3}
+
+- field: name
+  note: 字段名称
+  range: 教育背景{2},职位信息{2},工作经验{2},掌握技能{2},职业目标{2},兴趣领域{2},规划时长{2},补充信息{2},身份描述{2},工作内容描述{2}
+
+- field: type
+  note: 字段类型
+  range: text{8},textarea{6},radio{3},checkbox{3}
+
+- field: placeholder
+  note: 占位符文本
+  range: 学历/专业{2},行业领域/职位描述{2},简要概述工作成果{2},关键技能、熟练程度{2},请输入你的职业目标{2},请输入更多你感兴趣的领域{2},职位/角色/职责{2},请输入工作内容{2},请输入更多补充信息{2},[]{2}
+
+- field: options
+  note: 选项内容
+  range: 1年,3-5年,10年{2},是,否{2},初级,中级,高级{2},必须,优先,可选{2},[]{8}
+
+- field: required
+  note: 是否必填
+  range: 1{12},0{8}

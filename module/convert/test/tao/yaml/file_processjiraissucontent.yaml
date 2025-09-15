@@ -1,0 +1,27 @@
+---
+title: file测试数据
+desc: 为processJiraIssueContent方法提供文件测试数据
+
+fields:
+- field: id
+  range: 1-15
+- field: pathname
+  range: ''
+- field: title
+  range: [image1.png{3},image2.jpg{3},doc1.pdf{3},doc2.txt{3},file.zip{3}]
+- field: extension
+  range: [png{3},jpg{3},pdf{3},txt{3},zip{3}]
+- field: size
+  range: 1000-50000
+- field: objectType
+  range: [story{5},bug{5},task{5}]
+- field: objectID
+  range: 1-5:R
+- field: addedBy
+  range: admin
+- field: addedDate
+  range: '2023-01-01 00:00:00':'2023-12-31 23:59:59'
+- field: downloads
+  range: 0-10
+- field: extra
+  range: ''

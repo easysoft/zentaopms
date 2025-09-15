@@ -1,0 +1,41 @@
+---
+title: kanbanspace表测试数据
+desc: 看板空间数据
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: 私人看板{3},团队看板{3},项目看板{4}
+- field: type
+  range: private{1},cooperation{2},public{3},team{4}
+- field: owner
+  range: admin{4},user1{3},user2{3}
+- field: team
+  range: 1{4},2{3},3{3}
+- field: acl
+  range: open{5},private{3},custom{2}
+- field: whitelist
+  range: []{5},user1,user2{3},admin,user1{2}
+- field: desc
+  range: 测试看板空间描述{3},项目管理看板{3},个人任务看板{4}
+- field: createdBy
+  range: admin{5},user1{3},user2{2}
+- field: createdDate
+  range: (-10d)-(-1d)
+- field: lastEditedBy
+  range: admin{4},user1{3},user2{2},[]{1}
+- field: lastEditedDate
+  range: (-5d)-(now),[]{1}
+- field: closedBy
+  range: []{8},admin{1},user1{1}
+- field: closedDate
+  range: []{8},(-3d)-(-1d){2}
+- field: activatedBy
+  range: []{7},admin{2},user1{1}
+- field: activatedDate
+  range: []{7},(-2d)-(now){3}
+- field: status
+  range: active{7},closed{2},wait{1}
+- field: deleted
+  range: 0{9},1{1}

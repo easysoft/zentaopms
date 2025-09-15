@@ -7,6 +7,7 @@ class programplanTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('programplan');
+         $this->objectTao   = $tester->loadTao('programplan');
          $tester->dao->delete()->from(TABLE_PROJECTSPEC)->exec();
 
          $this->objectModel->app->user->admin = true;
@@ -61,7 +62,7 @@ class programplanTest
      *
      * @param  array $idList
      * @access public
-     * @return array
+     * @return int
      */
     public function getByListTest($idList = array())
     {
@@ -69,7 +70,7 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
@@ -528,5 +529,21 @@ class programplanTest
     {
         $this->objectModel->syncParentData($executionID, $parentID);
         return $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
+    }
+
+    /**
+     * Test setPlanBaseline method.
+     *
+     * @param  array $oldPlans
+     * @param  array $plans
+     * @access public
+     * @return array
+     */
+    public function setPlanBaselineTest(array $oldPlans, array $plans): array
+    {
+        $result = $this->objectTao->setPlanBaseline($oldPlans, $plans);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

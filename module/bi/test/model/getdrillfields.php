@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+/**
+
+title=测试 biModel::getDrillFields();
+timeout=0
+cid=0
+
+- 测试步骤1：正常情况属性name @ZenTao
+- 测试步骤2：空钻取数据 @~~
+- 测试步骤3：行索引不存在 @~~
+- 测试步骤4：列键不存在 @~~
+- 测试步骤5：多层嵌套
+ - 属性title @Bug Title
+ - 属性status @active
+
+*/
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+
+$biTest = new biTest();
+
+r($biTest->getDrillFieldsTest(0, 'product', array(0 => array('drillFields' => array('product' => array('name' => 'ZenTao', 'id' => 1)))))) && p('name') && e('ZenTao'); // 测试步骤1：正常情况
+r($biTest->getDrillFieldsTest(0, 'product', array())) && p() && e('~~'); // 测试步骤2：空钻取数据
+r($biTest->getDrillFieldsTest(1, 'product', array(0 => array('drillFields' => array('product' => array('name' => 'ZenTao')))))) && p() && e('~~'); // 测试步骤3：行索引不存在
+r($biTest->getDrillFieldsTest(0, 'task', array(0 => array('drillFields' => array('product' => array('name' => 'ZenTao')))))) && p() && e('~~'); // 测试步骤4：列键不存在
+r($biTest->getDrillFieldsTest(0, 'bug', array(0 => array('drillFields' => array('bug' => array('title' => 'Bug Title', 'id' => 100, 'status' => 'active')))))) && p('title,status') && e('Bug Title,active'); // 测试步骤5：多层嵌套

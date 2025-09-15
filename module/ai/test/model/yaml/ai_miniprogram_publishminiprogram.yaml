@@ -1,0 +1,112 @@
+---
+title: AI小程序发布功能测试数据
+desc: 为publishMiniProgram方法提供测试数据，包括不同发布状态的小程序数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 小程序ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 小程序名称
+  range: 职业发展导航,工作汇报,市场分析报告,健身计划,广告创意大师,文章撰写助手,视频脚本创意工坊,邮件起草助手,新人介绍,调研问卷生成器
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: category
+  note: 小程序分类
+  range: personal{3},work{4},creative{2},life{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 小程序描述
+  range: 测试小程序描述{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 关联的AI模型ID
+  range: 1-5:R,~~{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: icon
+  note: 小程序图标
+  range: technologist-6,technologist-2,chart-6,cactus-5,palette-3,writinghand-3,notebook-3,computer-6,pencil-7,search-6
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5},system{3},user1{1},user2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 09:00:00,2024-01-02 09:00:00,2024-01-03 09:00:00,2024-01-04 09:00:00,2024-01-05 09:00:00,2024-01-06 09:00:00,2024-01-07 09:00:00,2024-01-08 09:00:00,2024-01-09 09:00:00,2024-01-10 09:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: admin{8},user1{1},user2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: 2024-01-01 10:00:00,2024-01-02 10:00:00,2024-01-03 10:00:00,2024-01-04 10:00:00,2024-01-05 10:00:00,2024-01-06 10:00:00,2024-01-07 10:00:00,2024-01-08 10:00:00,2024-01-09 10:00:00,2024-01-10 10:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: published
+  note: 发布状态
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: publishedDate
+  note: 发布时间
+  range: ~~{5},2024-01-06 10:00:00,2024-01-07 11:00:00,2024-01-08 12:00:00,2024-01-09 13:00:00,2024-01-10 14:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: prompt
+  note: 提示信息
+  range: 请帮我生成{5},假设我是{3},请为我提供{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: builtIn
+  note: 内置标识
+  range: 1{7},0{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

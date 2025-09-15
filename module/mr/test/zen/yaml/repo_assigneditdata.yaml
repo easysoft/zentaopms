@@ -1,0 +1,49 @@
+---
+title: repo_assigneditdata
+author: Claude
+version: "1.0"
+desc: repo测试数据for assignEditData方法
+
+fields:
+- field: id
+  note: 代码库ID
+  range: 1-5
+- field: product
+  note: 产品ID
+  range: 1-3,0
+- field: name
+  note: 代码库名称
+  range: test-repo1,test-repo2,unittest-repo
+- field: encoding
+  note: 编码
+  range: '`utf-8`'
+- field: path
+  note: 代码库路径
+  range: '`https://gitlab.example.com/test/repo1`'
+- field: SCM
+  note: 版本控制类型
+  range: Gitlab,Gitea,Gogs
+- field: serviceHost
+  note: 服务主机ID
+  range: 1-3
+- field: serviceProject
+  note: 服务项目ID
+  range: 1-10
+- field: commits
+  note: 提交数
+  range: 0-100
+- field: password
+  note: 密码
+  range: testpassword123
+- field: encrypt
+  note: 加密方式
+  range: base64
+- field: synced
+  note: 同步状态
+  range: 1
+- field: lastCommit
+  note: 最后提交时间
+  range: '`2023-12-13 13:14:34`'
+- field: extra
+  note: 额外信息
+  range: 1-5

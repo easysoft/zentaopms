@@ -5,6 +5,7 @@ class webhookTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('webhook');
+         $this->objectTao   = $tester->loadTao('webhook');
     }
 
     /**
@@ -391,5 +392,156 @@ class webhookTest
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->dao->select('*')->from(TABLE_NOTIFY)->where('id')->in($idList)->fetchAll('id');
+    }
+
+    /**
+     * Test getDataByType method.
+     *
+     * @param  string $type
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
+     * @param  string $email
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getDataByTypeTest($type, $title, $text, $mobile, $email, $objectType, $objectID)
+    {
+        // 创建模拟的 webhook 对象
+        $webhook = new stdclass();
+        $webhook->type = $type;
+        $webhook->params = 'text,title,objectType';
+
+        // 创建模拟的 action 对象
+        $action = new stdclass();
+        $action->text = '测试动作文本';
+        $action->title = $title;
+        $action->objectType = $objectType;
+
+        $result = $this->objectModel->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 解析JSON为对象以便测试框架可以使用p()语法检查属性
+        return json_decode($result);
+    }
+
+    /**
+     * Test fetchHook method.
+     *
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
+     * @access public
+     * @return mixed
+     */
+    public function fetchHookTest($webhook, $sendData, $actionID = 0, $appendUser = '')
+    {
+        $result = $this->objectModel->fetchHook($webhook, $sendData, $actionID, $appendUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test sendToUser method.
+     *
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
+     * @access public
+     * @return string|false
+     */
+    public function sendToUserTest($webhook, $sendData, $actionID, $appendUser = '')
+    {
+        $result = $this->objectModel->sendToUser($webhook, $sendData, $actionID, $appendUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getDingdingSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getDingdingSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getDingdingSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getWeixinSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getWeixinSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getWeixinSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getFeishuSecret method.
+     *
+     * @param  object $webhook
+     * @access public
+     * @return object|false
+     */
+    public function getFeishuSecretTest($webhook)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getFeishuSecret');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $webhook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getActionText method.
+     *
+     * @param  object $data
+     * @param  object $action
+     * @param  object $object
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    public function getActionTextTest($data, $action, $object, $users)
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getActionText');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectTao, $data, $action, $object, $users);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

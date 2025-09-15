@@ -1,0 +1,34 @@
+---
+title: 透视表下钻配置测试数据
+desc: 用于测试fetchPivotDrills方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: pivot
+  note: 透视表ID
+  range: 1-3
+- field: version
+  note: 版本号
+  range: 1,2,3
+- field: field
+  note: 字段名称  
+  range: name,status,category
+- field: object
+  note: 对象类型
+  range: bug,story
+- field: whereSql
+  note: WHERE SQL条件
+  range: 'status = "active"','deleted = "0"','type = "story"'
+- field: condition
+  note: 条件配置JSON
+  range: '{"field":"status","operator":"=","value":"active"}','{"field":"deleted","operator":"=","value":"0"}','{}'
+- field: status
+  note: 状态
+  range: published,design
+- field: account
+  note: 创建者
+  range: admin,user1
+- field: type
+  note: 类型
+  range: manual,auto

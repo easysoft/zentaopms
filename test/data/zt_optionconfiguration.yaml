@@ -1,0 +1,19 @@
+---
+title: OptionConfiguration表测试数据
+desc: JIRA选项配置数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: fieldconfig
+  note: 字段配置
+  range: 2001,2002,2003,2004,2005,2001,2002,2003,2004,2005
+- field: fieldid
+  note: 字段ID
+  range: issuetype{10}
+- field: optionid
+  note: 选项ID
+  range: 3001,3002,3003,3004,3005,3001,3002,3003,3004,3005

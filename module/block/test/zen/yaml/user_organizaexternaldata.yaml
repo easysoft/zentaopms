@@ -1,0 +1,66 @@
+---
+title: organizaExternalData方法测试用户数据
+desc: 为测试blockZen::organizaExternalData()方法生成测试用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3{7}
+  prefix: ""
+  postfix: ""
+
+- field: password
+  note: 用户密码
+  range: 123456{10}
+  prefix: ""
+  postfix: ""
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户{7}
+  prefix: ""
+  postfix: ""
+
+- field: role
+  note: 用户角色
+  range: admin{1},dev{4},test{5}
+  prefix: ""
+  postfix: ""
+
+- field: ranzhi
+  note: 然之账号
+  range: admin,user1,user2,user3{7}
+  prefix: ""
+  postfix: ""
+
+- field: dept
+  note: 部门ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除状态
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 用户类型
+  range: inside{10}
+  prefix: ""
+  postfix: ""
+
+- field: company
+  note: 公司ID
+  range: 1{10}
+  prefix: ""
+  postfix: ""

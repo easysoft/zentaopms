@@ -1,0 +1,24 @@
+---
+title: Jira临时关系数据用于importJiraAction测试
+desc: 用于测试Jira Action导入功能的临时关系表数据
+
+fields:
+- field: AType
+  range: [jaction, zaction, jissueid]
+  note: A端类型
+
+- field: AID
+  range: 1-100
+  note: A端ID
+
+- field: BType  
+  range: [zaction, jaction, zstory, ztask, zbug]
+  note: B端类型
+
+- field: BID
+  range: 101-300
+  note: B端ID
+
+- field: extra
+  range: [action, issue, '']
+  note: 额外标识信息

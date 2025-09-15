@@ -1,0 +1,39 @@
+---
+title: 为assignModuleForStory方法生成项目执行测试数据
+desc: 包含不同类型的执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目执行ID
+  range: 1-5
+  type: int
+
+- field: name
+  note: 执行名称
+  range: 执行1,执行2,执行3,执行4,执行5
+
+- field: type
+  note: 项目类型
+  range: sprint{3},stage{2}
+
+- field: parent
+  note: 父项目ID
+  range: 0{2},1{3}
+  type: int
+
+- field: hasProduct
+  note: 是否关联产品
+  range: 1{3},0{2}
+  type: char
+
+- field: multiple
+  note: 是否多产品
+  range: 1{3},0{2}
+  type: char
+
+- field: deleted
+  note: 删除状态
+  range: 0
+  type: char

@@ -264,4 +264,20 @@ class testsuiteTest
     {
         return $this->objectModel->deleteCaseBySuiteID($cases, $suiteID);
     }
+
+    /**
+     * 测试获取产品下用例关联的需求
+     * Test get case linked stories by productID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getCaseLinkedStoriesTest(int $productID): array
+    {
+        $result = $this->objectModel->getCaseLinkedStories($productID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

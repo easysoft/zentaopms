@@ -1,0 +1,37 @@
+---
+title: project表getAllProductsForCreate方法测试数据
+desc: 用于测试execution模块getAllProductsForCreate方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目ID
+- field: name
+  range: '正常项目1,正常项目2,有产品项目,无产品项目,关闭项目,删除项目,测试项目1,测试项目2,测试项目3,测试项目4'
+  note: 项目名称
+- field: hasProduct
+  range: '1{7},0{3}'
+  note: 是否关联产品，1表示有产品，0表示无产品
+- field: model
+  range: 'scrum{4},waterfall{3},kanban{2},agileplus{1}'
+  note: 项目模式
+- field: status
+  range: 'wait{3},doing{4},suspended{2},closed{1}'
+  note: 项目状态
+- field: type
+  range: 'project{8},sprint{2}'
+  note: 项目类型
+- field: parent
+  range: 0-2
+  note: 父项目ID
+- field: deleted
+  range: '0{9},1{1}'
+  note: 删除状态，0表示正常，1表示已删除
+- field: begin
+  range: '2024-01-01{3},2024-02-01{3},2024-03-01{4}'
+  note: 项目开始时间
+- field: end
+  range: '2024-12-31{3},2025-01-31{3},2025-02-28{4}'
+  note: 项目结束时间

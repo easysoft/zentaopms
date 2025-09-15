@@ -1,0 +1,42 @@
+---
+title: Bug test data for getBugCardMenu method
+desc: Test data for kanban getBugCardMenu method unit test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: Product ID  
+  range: 1{5}
+  format: ""
+- field: title
+  note: Bug title
+  range: Bug1,Bug2,Bug3,Bug4,Bug5
+  format: ""
+- field: status
+  note: Bug status
+  range: active,resolved,closed,active,active
+  format: ""
+- field: openedBy
+  note: Opened by user
+  range: admin{5}
+  format: ""
+- field: openedDate
+  note: Opened date
+  range: 2023-01-01 10:00:00{5}
+  format: ""
+- field: assignedTo
+  note: Assigned to user
+  range: user1,user2,admin,user1,user2
+  format: ""
+- field: deleted
+  note: Delete flag
+  range: 0{5}
+  format: ""

@@ -1,0 +1,23 @@
+---
+title: Module数据定义
+desc: 用于测试checkActionCanUndelete方法的module数据
+
+fields:
+- field: id
+  note: module ID
+  range: 1-10
+- field: name
+  note: 模块名称
+  range: 'module1, module2, module3, module4, module5'
+- field: parent
+  note: 父模块ID
+  range: 0{3}, 1{2}, 2{2}, 999{3}
+- field: type
+  note: 模块类型
+  range: 'story{3}, task{2}, bug{2}, case{2}, doc{1}'
+- field: deleted
+  note: 是否删除
+  range: '1{5}, 0{5}'
+- field: root
+  note: 根模块ID
+  range: 1-5

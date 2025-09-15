@@ -1,0 +1,77 @@
+---
+title: 分支数据定义 - getBranchAndTagOption测试
+desc: 为getBranchAndTagOption方法提供测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1{10},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: master{3},develop{3},feature/user-auth{2},feature/payment{2},release/v1.0{2},release/v2.0{2},hotfix/bug-123{3},feature/new-ui{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: default
+  note: 是否默认分支
+  range: 1{5},0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{15},closed{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 分支描述
+  range: 主分支{3},开发分支{3},用户认证功能分支{2},支付功能分支{2},版本发布分支{4},紧急修复分支{3},新UI分支{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: (-30D)-(-1D):1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD"
+- field: closedDate
+  note: 关闭日期
+  range: []{15},(+1D)-(+30D):1D{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD"
+- field: order
+  note: 排序
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{18},1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

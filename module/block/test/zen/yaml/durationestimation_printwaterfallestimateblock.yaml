@@ -1,0 +1,29 @@
+---
+title: 工期评估数据配置
+fields:
+  - field: id
+    range: 1-5
+  - field: project
+    range: 1,2,3,0,999
+  - field: people
+    range: 5,8,12,0,6
+  - field: stage
+    range: 0
+  - field: workload
+    range: ''
+  - field: worktimeRate
+    range: ''
+  - field: startDate
+    range: ''
+  - field: endDate
+    range: ''
+  - field: createdBy
+    range: ''
+  - field: createdDate
+    range: ''
+  - field: editedBy
+    range: ''
+  - field: editedDate
+    range: ''
+  - field: deleted
+    range: '0'

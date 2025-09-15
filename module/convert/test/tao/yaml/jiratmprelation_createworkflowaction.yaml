@@ -1,0 +1,28 @@
+---
+title: JIRA临时关系表测试数据
+desc: 用于测试createWorkflowAction方法的JIRA关系数据
+
+fields:
+- field: id
+  note: 关系ID
+  range: 1-20
+  
+- field: AType
+  note: A类型
+  range: jflowaction{20}
+  
+- field: AID
+  note: A对象ID
+  range: action1{5},action2{5},action3{5},action4{5}
+  
+- field: BType
+  note: B类型
+  range: zworkflowaction{20}
+  
+- field: BID
+  note: B对象ID
+  range: bugaction1{5},storyaction1{5},taskaction1{5},productaction1{5}
+  
+- field: extra
+  note: 额外信息
+  range: bug{5},story{5},task{5},product{5}

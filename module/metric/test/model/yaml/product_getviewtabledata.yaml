@@ -1,0 +1,34 @@
+---
+title: getViewTableData方法测试用product数据
+desc: 为测试getViewTableData方法提供的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 测试产品1,测试产品2,测试产品3
+  format: ""
+- field: code
+  note: 产品代码
+  range: test_product_1,test_product_2,test_product_3
+  format: ""
+- field: status
+  note: 状态
+  range: normal{3}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{2},user{1}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{3}
+  format: ""

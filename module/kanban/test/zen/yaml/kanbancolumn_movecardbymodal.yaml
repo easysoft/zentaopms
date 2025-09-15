@@ -1,0 +1,77 @@
+---
+title: Test moveCardByModal kanban column data
+desc: Testing kanban column data for moveCardByModal method
+
+fields:
+- field: id
+  note: Column ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: kanban
+  note: Kanban ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: region
+  note: Region ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: group
+  note: Group ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: name
+  note: Column name
+  range: "Backlog,Ready,Developing,Testing,Done,Todo,Doing,Wait,Pause,Close"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: type
+  note: Column type
+  range: "columnbacklog,columnready,columndeveloping,columntesting,columndone,columnwait,columndoing,columnpause,columnclose,column"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: color
+  note: Column color
+  range: "#333,#2b519c,#e48610,#d2313d,#2a9f23,#777,#d2691e,#2e8b8b,#2f8b58,#4168e0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: limit
+  note: WIP limit
+  range: -1,5,10
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: order
+  note: Order
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: parent
+  note: Parent column
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: archived
+  note: Archived
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: deleted
+  note: Deleted
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0

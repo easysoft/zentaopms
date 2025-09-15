@@ -1,0 +1,30 @@
+---
+title: getUserPriv分组测试数据
+desc: 为getUserPriv方法提供用户分组权限测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分组ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分组名称
+  range: 管理组,开发组,测试组,产品组,项目组,用户组,访客组,运维组,财务组,人事组
+  format: ""
+- field: role
+  note: 分组角色
+  range: admin,dev{3},qa{2},po{2},pm{1},others{1}
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{5},private{3},custom{2}
+  format: ""
+- field: desc
+  note: 分组描述
+  range: 系统管理员组,开发人员组,测试人员组,产品经理组,项目经理组,普通用户组,访客用户组,运维人员组,财务人员组,人事管理组
+  format: ""

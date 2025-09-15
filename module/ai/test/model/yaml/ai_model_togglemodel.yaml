@@ -1,0 +1,98 @@
+---
+title: AI模型切换状态测试数据
+desc: 为toggleModel方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 模型类型
+  range: 'chat{5}, code{3}, translate{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vendor
+  note: 模型厂商
+  range: 'openai{4}, zhipu{3}, baidu{2}, aliyun{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: credentials
+  note: 凭证信息
+  range: 'test-credentials{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: proxy
+  note: 代理设置
+  range: '[]{7}, proxy-config{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 模型名称
+  range: 'GPT-4{2}, GPT-3.5{2}, ChatGLM{2}, ERNIE{2}, Qwen{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 模型描述
+  range: '模型描述信息{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}, user1{3}, user2{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-30d)-(-1d):1d
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  note: 编辑者
+  range: '[]{5}, admin{3}, user1{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '[]{5}, (-10d)-(today):1d{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: enabled
+  note: 是否启用
+  range: '0{3}, 1{7}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

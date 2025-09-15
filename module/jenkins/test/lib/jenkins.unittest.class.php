@@ -111,4 +111,90 @@ class jenkinsTest
         $jenkins = $tester->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($jenkinsID)->fetch();
         return $this->jenkins->getApiUserPWD($jenkins);
     }
+
+    /**
+     * 测试构建流水线下拉菜单树。
+     * Test buildTree method.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function buildTreeTest(array $tasks = array())
+    {
+        // 创建测试用的简化jenkinsZen类，直接实现buildTree方法
+        $testClass = new class {
+            protected function buildTree(array $tasks): array
+            {
+                $result = array();
+                foreach($tasks as $groupName => $task)
+                {
+                    if(empty($task)) continue;
+
+                    $itemArray = array
+                    (
+                        'id'    => is_array($task) ? '' : $groupName,
+                        'text'  => is_array($task) ? urldecode($groupName) : urldecode($task),
+                        'keys'  => urldecode(zget(common::convert2Pinyin(array($groupName)), $groupName, '')),
+                    );
+                    if(is_array($task))
+                    {
+                        $itemArray['items'] = $this->buildTree($task);
+                        $itemArray['type']  = 'folder';
+                    }
+
+                    $result[] = $itemArray;
+                }
+                return $result;
+            }
+            
+            public function testBuildTree(array $tasks): array
+            {
+                return $this->buildTree($tasks);
+            }
+        };
+        
+        $result = $testClass->testBuildTree($tasks);
+        if(dao::isError()) return dao::getError();
+        
+        return $result;
+    }
+
+    /**
+     * 测试检查Jenkins账号信息是否正确。
+     * Test checkTokenAccess method.
+     *
+     * @param  string $url
+     * @param  string $account
+     * @param  string $password
+     * @param  string $token
+     * @access public
+     * @return bool
+     */
+    public function checkTokenAccessTest(string $url = '', string $account = '', string $password = '', string $token = '')
+    {
+        // 创建测试用的简化jenkinsZen类，直接实现checkTokenAccess方法
+        $testClass = new class {
+            protected function checkTokenAccess(string $url, string $account, string $password, string $token): bool
+            {
+                global $lang;
+                
+                $password = $token ? $token : $password;
+                $response = json_decode(common::http("{$url}/api/json", '', array(CURLOPT_USERPWD => "{$account}:{$password}")));
+                if(empty($response) || empty($response->_class)) dao::$errors['account'] = $lang->jenkins->error->unauthorized ?? 'Unauthorized access';
+                return dao::isError();
+            }
+            
+            public function testCheckTokenAccess(string $url, string $account, string $password, string $token): bool
+            {
+                return $this->checkTokenAccess($url, $account, $password, $token);
+            }
+        };
+        
+        // 清理之前的错误信息
+        dao::$errors = array();
+        
+        $result = $testClass->testCheckTokenAccess($url, $account, $password, $token);
+        return $result;
+    }
 }

@@ -1,0 +1,22 @@
+---
+title: product表updateLinkedPlans方法测试数据
+desc: 用于测试execution模块updateLinkedPlans方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 产品ID
+- field: name
+  range: '测试产品1{1},多分支产品{1},正常产品{2},关闭产品{1}'
+  note: 产品名称
+- field: type
+  range: 'normal{3},branch{2}'
+  note: 产品类型
+- field: status
+  range: 'normal{4},closed{1}'
+  note: 产品状态
+- field: deleted
+  range: '0{5}'
+  note: 删除状态

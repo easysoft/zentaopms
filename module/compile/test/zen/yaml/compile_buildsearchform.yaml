@@ -1,0 +1,112 @@
+---
+title: compile表buildSearchForm测试数据
+desc: 用于测试buildSearchForm方法的compile数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 构建名称
+  range: build{5}, test_build{3}, deploy_build{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: job
+  note: 任务ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: queue
+  note: 队列ID
+  range: 0-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: created,building,success,failure
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支
+  range: master,develop,feature{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: logs
+  note: 日志
+  range: Build started,Build in progress,Build completed,Build failed
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: atTime
+  note: 执行时间
+  range: 09:00,10:30,14:00,16:30,18:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: testtask
+  note: 测试任务ID
+  range: 0-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: tag
+  note: 标签
+  range: v1.0,v1.1,v2.0,beta,alpha
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: times
+  note: 执行次数
+  range: 0-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2,tester
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (d-10d)-(d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: YYYY-MM-DD hh:mm:ss
+- field: updateDate
+  note: 更新时间
+  range: (d-5d)-(d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

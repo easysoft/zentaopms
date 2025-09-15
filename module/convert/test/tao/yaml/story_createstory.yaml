@@ -1,0 +1,46 @@
+---
+title: Story data for createStory test
+desc: Test data for story creation
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: Story ID
+  range: 1-1000
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Story title
+  range: '测试需求{5},用户故事{3},功能需求{2}'
+  format: ""
+- field: priority
+  note: Priority level
+  range: 1-4
+  format: ""
+- field: status
+  note: Story status
+  range: 'active{3},draft{2},closed{1}'
+  format: ""
+- field: stage
+  note: Story stage
+  range: 'planned{2},developing{2},testing{1},released{1}'
+  format: ""
+- field: type
+  note: Story type
+  range: 'story{4},requirement{2}'
+  format: ""
+- field: product
+  note: Product ID
+  range: 1-5
+  format: ""
+- field: openedBy
+  note: Created by user
+  range: 'admin{3},user1{2},user2{1}'
+  format: ""
+- field: assignedTo
+  note: Assigned to user
+  range: 'admin{2},user1{2},user2{2}'
+  format: ""

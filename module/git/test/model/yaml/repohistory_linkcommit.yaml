@@ -1,0 +1,30 @@
+---
+title: 代码仓库提交历史测试数据
+desc: 用于测试linkCommit方法的提交历史数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 提交历史ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: repo
+  note: 仓库ID
+  range: 1-3
+- field: revision
+  note: 版本号
+  range: abc123{3},def456{3},ghi789{4}
+- field: commit
+  note: 提交序号
+  range: 1-10
+- field: comment
+  note: 提交说明
+  range: "Fix bug in design #1,Add feature for design #2,Update design #3"
+- field: committer
+  note: 提交人
+  range: admin{5},developer{5}
+- field: time
+  note: 提交时间
+  range: 2024-01-01 00:00:00~2024-12-31 23:59:59

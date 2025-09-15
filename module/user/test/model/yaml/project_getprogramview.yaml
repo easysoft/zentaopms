@@ -1,0 +1,50 @@
+---
+title: 项目集数据定义
+desc: 用于测试getProgramView方法的项目集测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目集ID
+
+- field: type
+  range: 'program{8},project{2}'
+  note: 项目类型
+
+- field: name
+  range: '项目集1,项目集2,项目集3,项目集4,项目集5,项目集6,项目集7,项目集8,子项目1,子项目2'
+  note: 项目集名称
+
+- field: code
+  range: 'PROG001,PROG002,PROG003,PROG004,PROG005,PROG006,PROG007,PROG008,PROJ001,PROJ002'
+  note: 项目集代码
+
+- field: acl
+  range: 'open{3},private{2},program{5}'
+  note: 访问控制
+
+- field: PM
+  range: 'admin{3},user1{2},user2{2},user3{2},[]{1}'
+  note: 项目经理
+
+- field: openedBy
+  range: 'admin{2},user1{2},user2{2},user3{2},user4{2}'
+  note: 创建者
+
+- field: parent
+  range: '0{8},1{1},2{1}'
+  note: 父项目集
+
+- field: path
+  range: ',1,,2,,3,,4,,5,,6,,7,,8,,1,9,,2,10,'
+  note: 路径
+
+- field: status
+  range: 'wait{2},doing{5},done{2},closed{1}'
+  note: 状态
+
+- field: deleted
+  range: '0'
+  note: 删除状态

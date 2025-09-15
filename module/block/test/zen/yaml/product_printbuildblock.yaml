@@ -1,0 +1,37 @@
+---
+title: 产品数据用于构建区块测试
+desc: 用于测试printBuildBlock方法的产品数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 移动应用{1},Web平台{1},桌面软件{1},API服务{1},数据平台{1}
+- field: code
+  note: 产品代码
+  range: mobile,web,desktop,api,data
+- field: shadow
+  note: 是否影子产品
+  range: 0{4},1{1}
+- field: type
+  note: 产品类型
+  range: normal{4},branch{1}
+- field: status
+  note: 产品状态
+  range: normal{4},closed{1}
+- field: acl
+  note: 访问控制
+  range: open{3},private{2}
+- field: createdBy
+  note: 创建者
+  range: admin{3},user1{2}
+- field: createdDate
+  note: 创建时间
+  range: (`-90D`)-(`-30D`):10D
+  format: YYYY-MM-DD hh:mm:ss

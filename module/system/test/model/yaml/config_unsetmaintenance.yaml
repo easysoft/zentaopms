@@ -1,0 +1,38 @@
+---
+title: unsetMaintenance方法测试数据配置
+desc: 用于测试系统解除维护模式的配置数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 配置ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图类型
+  range: rnd{10}
+  format: ""
+- field: owner
+  note: 配置所有者
+  range: system{10}
+  format: ""
+- field: module
+  note: 模块名称
+  range: system{10}
+  format: ""
+- field: section
+  note: 配置段落
+  range: ""{10}
+  format: ""
+- field: key
+  note: 配置键名
+  range: maintenance{2}, test_key1{2}, test_key2{2}, test_key3{2}, test_key4{2}
+  format: ""
+- field: value
+  note: 配置值
+  range: "1"{2}, "enabled"{2}, "test"{6}
+  format: ""

@@ -1,0 +1,47 @@
+---
+title: Release测试数据
+desc: printSingleReleaseBlock方法的release表测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: "1,2,3"
+- field: product
+  range: 1{5},2{2},3{3}
+- field: branch
+  range: "0"
+- field: shadow
+  range: "0"
+- field: build
+  range: "1,2,3,4,5"
+- field: name
+  range: Release 1.0,Release 1.1,Release 2.0,Release 2.1,Release 3.0
+- field: marker
+  range: "0"
+- field: date
+  range: 2024-01-01,2024-02-01,2024-03-01
+- field: stories
+  range: ""
+- field: bugs
+  range: ""
+- field: leftBugs
+  range: ""
+- field: desc
+  range: Release description
+- field: mailto
+  range: ""
+- field: notify
+  range: ""
+- field: status
+  range: normal{8},terminate{2}
+- field: subStatus
+  range: ""
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: 2024-01-01 10:00:00
+- field: deleted
+  range: "0"

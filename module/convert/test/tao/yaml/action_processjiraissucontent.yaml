@@ -1,0 +1,31 @@
+---
+title: action测试数据
+desc: 为processJiraIssueContent方法提供操作记录测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: objectType
+  range: [story{3},bug{3},task{4}]
+- field: objectID
+  range: 1-3:R
+- field: product
+  range: 1-3:R
+- field: project
+  range: 1-3:R
+- field: actor
+  range: admin
+- field: action
+  range: [opened{3},edited{3},commented{4}]
+- field: date
+  range: '2023-01-01 09:00:00':'2023-12-31 18:00:00'
+- field: comment
+  range: [操作评论内容1,操作评论内容2,操作评论内容3,'','备注信息1','备注信息2',处理说明1,处理说明2,处理说明3,处理说明4]
+- field: extra
+  range: ''
+- field: read
+  range: '0'
+- field: vision
+  range: rnd
+- field: efforted
+  range: 0

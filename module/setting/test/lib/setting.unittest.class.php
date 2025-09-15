@@ -261,4 +261,18 @@ class settingTest
 
         return $objects;
     }
+
+    /**
+     * Test compute SN method.
+     *
+     * @access public
+     * @return string
+     */
+    public function computeSNTest()
+    {
+        $result = $this->objectModel->computeSN();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

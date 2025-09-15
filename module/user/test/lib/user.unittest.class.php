@@ -1165,4 +1165,379 @@ class userTest
     {
         return $this->objectModel->isClickable($user, $action);
     }
+
+    /**
+     * Test getUserAcls method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function getUserAclsTest(string $account)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getUserAcls');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test uploadAvatar method.
+     *
+     * @access public
+     * @return array
+     */
+    public function uploadAvatarTest(): array
+    {
+        $result = $this->objectModel->uploadAvatar();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initViewObjects method.
+     *
+     * @param  bool $force
+     * @access public
+     * @return mixed
+     */
+    public function initViewObjectsTest(bool $force = false)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initViewObjects');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $force);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProgramView method.
+     *
+     * @param  string $account
+     * @param  array  $allPrograms
+     * @param  array  $manageObjects
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $programStakeholderGroup
+     * @access public
+     * @return mixed
+     */
+    public function getProgramViewTest(string $account = '', array $allPrograms = array(), array $manageObjects = array(), array $stakeholders = array(), array $whiteList = array(), array $programStakeholderGroup = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductView method.
+     *
+     * @param  string $account
+     * @param  array  $allProducts
+     * @param  array  $manageObjects
+     * @param  array  $whiteList
+     * @access public
+     * @return mixed
+     */
+    public function getProductViewTest(string $account = '', array $allProducts = array(), array $manageObjects = array(), array $whiteList = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProductView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allProducts, $manageObjects, $whiteList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProjectView method.
+     *
+     * @param  string $account
+     * @param  array  $allProjects
+     * @param  array  $manageObjects
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $projectStakeholderGroup
+     * @access public
+     * @return mixed
+     */
+    public function getProjectViewTest(string $account = '', array $allProjects = array(), array $manageObjects = array(), array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $projectStakeholderGroup = array())
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProjectView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getManageListGroupByType method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function getManageListGroupByTypeTest(string $account = '')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getManageListGroupByType');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProgramStakeholder method.
+     *
+     * @param  mixed $programProduct
+     * @access public
+     * @return mixed
+     */
+    public function getProgramStakeholderTest($programProduct = null)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramStakeholder');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $programProduct);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test mergeAclsToUserView method.
+     *
+     * @param  string $account
+     * @param  object $userView
+     * @param  array  $acls
+     * @param  string $projects
+     * @access public
+     * @return mixed
+     */
+    public function mergeAclsToUserViewTest(string $account, object $userView, array $acls, string $projects)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('mergeAclsToUserView');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $account, $userView, $acls, $projects);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getObjectsAuthedUsers method.
+     *
+     * @param  array  $objects
+     * @param  string $objectType
+     * @param  array  $stakeholderGroup
+     * @param  array  $teamsGroup
+     * @param  array  $whiteListGroup
+     * @param  array  $adminsGroup
+     * @param  array  $parentStakeholderGroup
+     * @param  array  $parentPMGroup
+     * @access public
+     * @return array
+     */
+    public function getObjectsAuthedUsersTest(array $objects, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getObjectsAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($objects, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLatestUserView method.
+     *
+     * @param  string $account
+     * @param  string $view
+     * @param  object $object
+     * @param  string $objectType
+     * @param  array  $stakeholderGroup
+     * @param  array  $teamsGroup
+     * @param  array  $whiteListGroup
+     * @param  array  $adminsGroup
+     * @param  array  $parentStakeholderGroup
+     * @param  array  $parentPMGroup
+     * @access public
+     * @return string
+     */
+    public function getLatestUserViewTest(string $account, string $view, object $object, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): string
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getLatestUserView');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($account, $view, $object, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkProgramPriv method.
+     *
+     * @param  object $program
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProgramPrivTest(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProgramPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($program, $account, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkProjectPriv method.
+     *
+     * @param  object $project
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProjectPrivTest(object $project, string $account, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProjectPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($project, $account, $stakeholders, $teams, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkProductPriv method.
+     *
+     * @param  object $product
+     * @param  string $account
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return bool
+     */
+    public function checkProductPrivTest(object $product, string $account, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('checkProductPriv');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($product, $account, $teams, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProgramAuthedUsers method.
+     *
+     * @param  object $program
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return array
+     */
+    public function getProgramAuthedUsersTest(object $program, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProgramAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($program, $stakeholders, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProjectAuthedUsers method.
+     *
+     * @param  object $project
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @param  array  $admins
+     * @access public
+     * @return array
+     */
+    public function getProjectAuthedUsersTest(object $project, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getProjectAuthedUsers');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($project, $stakeholders, $teams, $whiteList, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试保存旧版用户模板方法。
+     * Test saveOldUserTemplate method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function saveOldUserTemplateTest(string $type): array
+    {
+        $this->objectModel->saveOldUserTemplate($type);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        $result = dao::isError() ? 0 : 1;
+        return array('result' => $result, 'errors' => $errors);
+    }
 }

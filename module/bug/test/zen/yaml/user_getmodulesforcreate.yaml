@@ -1,0 +1,49 @@
+---
+title: User test data for bug getModulesForCreate
+desc: Test data for user table
+
+fields:
+- field: id
+  range: 1-5
+- field: dept
+  range: 1{5}
+- field: account
+  range: admin,user1,user2,user3,user4
+- field: password
+  range: 123456{5}
+- field: realname
+  range: 管理员,用户1,用户2,用户3,用户4
+- field: role
+  range: admin,dev,qa,pm,po
+- field: email
+  range: admin@example.com,user1@example.com,user2@example.com,user3@example.com,user4@example.com
+- field: avatar
+  range: []{5}
+- field: phone
+  range: []{5}
+- field: address
+  range: []{5}
+- field: zipcode
+  range: []{5}
+- field: join
+  range: 2023-01-01{5}
+- field: visits
+  range: 0{5}
+- field: ip
+  range: []{5}
+- field: last
+  range: 0000-00-00 00:00:00{5}
+- field: fails
+  range: 0{5}
+- field: locked
+  range: 0000-00-00 00:00:00{5}
+- field: ranzhi
+  range: []{5}
+- field: ldap
+  range: []{5}
+- field: score
+  range: 0{5}
+- field: scorelevel
+  range: 0{5}
+- field: deleted
+  range: 0{5}

@@ -1,0 +1,28 @@
+---
+title: grouppriv表数据 - managePrivByGroup测试
+desc: 用于测试managePrivByGroup方法的权限数据
+author: ZenTao
+version: 1.0
+
+fields:
+- field: group
+  note: 组ID
+  range: 1{10},2{5},3{8},4{6},5{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名
+  range: user{8},product{6},project{5},task{4},bug{3},story{3},doc{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: method
+  note: 方法名
+  range: view{10},create{8},edit{6},delete{4},browse{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

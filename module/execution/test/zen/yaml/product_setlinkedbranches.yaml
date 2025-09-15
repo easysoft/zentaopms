@@ -1,0 +1,19 @@
+---
+title: setLinkedBranches方法测试数据-产品表
+desc: 用于测试executionZen::setLinkedBranches方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: 产品1,产品2,产品3,测试产品{5},演示产品{2}
+- field: code
+  range: PRD001,PRD002,PRD003,TEST{5},DEMO{2}
+- field: type
+  range: normal{8},branch{2}
+- field: status
+  range: normal{7},closed{2},developing{1}
+- field: deleted
+  range: 0{9},1{1}

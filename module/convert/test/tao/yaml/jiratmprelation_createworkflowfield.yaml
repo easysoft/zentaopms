@@ -1,0 +1,34 @@
+---
+title: Jira临时关系表测试数据
+desc: 用于测试createWorkflowField方法的临时关系数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关系ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: AType
+  note: A类型
+  range: jcustomfield
+  format: ""
+- field: AID
+  note: A标识
+  range: customfield_10001,customfield_10002,customfield_10003
+  format: ""
+- field: BType
+  note: B类型
+  range: zworkflowfield
+  format: ""
+- field: BID
+  note: B标识
+  range: testfield1,testfield2,testfield3
+  format: ""
+- field: extra
+  note: 额外信息
+  range: testmodule,testmodule2,testmodule3
+  format: ""

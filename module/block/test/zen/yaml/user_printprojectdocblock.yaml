@@ -1,0 +1,103 @@
+---
+title: User data for printProjectDocBlock test
+desc: Test data for users in document block functionality
+author: Claude AI
+version: 1
+
+fields:
+- field: id
+  range: 1-10
+  note: User ID
+- field: dept
+  range: 1{4},2{3},3{3}
+  note: Department ID
+- field: account
+  range: admin{1},user1{1},user2{1},user3{1},user4{1},user5{1},user6{1},user7{1},user8{1},user9{1}
+  note: User account
+- field: password
+  range: 5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9{10}
+  note: User password hash
+- field: role
+  range: dev{4},qa{3},pm{2},po{1}
+  note: User role
+- field: realname
+  range: 管理员{1},用户一{1},用户二{1},用户三{1},用户四{1},用户五{1},用户六{1},用户七{1},用户八{1},用户九{1}
+  note: User real name
+- field: nickname
+  range: ""
+  note: User nickname
+- field: commiter
+  range: ""
+  note: Commiter name
+- field: avatar
+  range: ""
+  note: User avatar
+- field: birthday
+  range: 1980-01-01-1995-12-31:365D
+  note: User birthday
+- field: gender
+  range: m{6},f{4}
+  note: User gender
+- field: email
+  range: admin@test.com{1},user1@test.com{1},user2@test.com{1},user3@test.com{1},user4@test.com{1},user5@test.com{1},user6@test.com{1},user7@test.com{1},user8@test.com{1},user9@test.com{1}
+  note: User email
+- field: skype
+  range: ""
+  note: Skype account
+- field: qq
+  range: ""
+  note: QQ number
+- field: mobile
+  range: ""
+  note: Mobile phone
+- field: phone
+  range: ""
+  note: Phone number
+- field: address
+  range: ""
+  note: User address
+- field: zipcode
+  range: ""
+  note: Zip code
+- field: join
+  range: 2024-01-01-2024-06-01:30D
+  note: Join date
+- field: visits
+  range: 0-100:5
+  note: Visit count
+- field: ip
+  range: ""
+  note: Last IP
+- field: last
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:7D
+  note: Last login time
+- field: fails
+  range: 0
+  note: Login fail count
+- field: locked
+  range: 0000-00-00 00:00:00
+  note: Locked time
+- field: feedback
+  range: ""
+  note: Feedback info
+- field: ranzhi
+  range: ""
+  note: Ranzhi account
+- field: ldap
+  range: ""
+  note: LDAP account
+- field: score
+  range: 0{8},100{2}
+  note: User score
+- field: scoreLevel
+  range: 0
+  note: Score level
+- field: deleted
+  range: 0
+  note: Is deleted
+- field: clientStatus
+  range: online{6},offline{4}
+  note: Client status
+- field: clientLang
+  range: zh-cn{8},en{2}
+  note: Client language

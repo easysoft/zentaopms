@@ -1,0 +1,35 @@
+---
+title: 为assignProjectRelatedVars方法提供测试Execution数据
+desc: 执行数据用于测试项目相关变量的分配
+
+fields:
+- field: id
+  range: 101-110
+- field: name
+  range: '执行1,执行2,执行3,执行4,执行5,执行6,执行7,执行8,执行9,执行10'
+- field: code
+  range: 'execution{1-10}'
+- field: project
+  range: '1{2},2{2},3{2},4{2},5{2}'
+- field: type
+  range: 'sprint{6},stage{3},kanban{1}'
+- field: status
+  range: 'wait{3},doing{5},closed{2}'
+- field: acl
+  range: 'open{8},private{2}'
+- field: whitelist
+  range: ''
+- field: begin
+  range: '2023-01-01'
+- field: end
+  range: '2023-06-30'
+- field: openedBy
+  range: 'admin'
+- field: openedDate
+  range: '2023-01-01 00:00:00'
+- field: openedVersion
+  range: '1.0.0'
+- field: order
+  range: 1-10
+- field: deleted
+  range: '0'

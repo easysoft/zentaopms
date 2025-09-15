@@ -129,9 +129,13 @@ class treeTest
      * @access public
      * @return array
      */
-    public function buildTreeArrayTest(array & $treeMenu, array $modules, object $module, string $moduleName = '/'): array
+    public function buildTreeArrayTest(array & $treeMenu, array $modules, object $module, string $moduleName = '/', string $divide = '/'): array
     {
-        $this->objectModel->buildTreeArray($treeMenu, $modules, $module, $moduleName);
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('buildTreeArray');
+        $method->setAccessible(true);
+        
+        $method->invokeArgs($this->objectModel, array(&$treeMenu, $modules, $module, $moduleName, $divide));
 
         if(dao::isError()) return dao::getError();
 
@@ -852,5 +856,166 @@ class treeTest
             return $error[0];
         }
         return $object;
+    }
+
+    /**
+     * Test getOptionMenuByBranch method.
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $startModule
+     * @param  string $branch
+     * @param  string $param
+     * @param  string $grade
+     * @param  string $divide
+     * @access public
+     * @return array
+     */
+    public function getOptionMenuByBranchTest(int $rootID, string $type = 'story', int $startModule = 0, string $branch = 'all', string $param = 'nodeleted', string $grade = 'all', string $divide = '/'): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getOptionMenuByBranch');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $rootID, $type, $startModule, $branch, $param, $grade, $divide);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildTree method.
+     *
+     * @param  object        $module
+     * @param  string        $type
+     * @param  string        $parent
+     * @param  array         $userFunc
+     * @param  array|string  $extra
+     * @param  string        $branch
+     * @access public
+     * @return mixed
+     */
+    public function buildTreeTest($module, $type, $parent = '0', $userFunc = array(), $extra = array(), $branch = 'all')
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('buildTree');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectModel, $module, $type, $parent, $userFunc, $extra, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test createEpicLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
+    public function createEpicLinkTest($type, $module, $parent = '0', $extra = array())
+    {
+        $result = $this->objectModel->createEpicLink($type, $module, $parent, $extra);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test createManageLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return object
+     */
+    public function createManageLinkTest($type, $module)
+    {
+        $result = $this->objectModel->createManageLink($type, $module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test createSceneLink method.
+     *
+     * @param  string       $type
+     * @param  object       $module
+     * @param  string       $parent
+     * @param  array|string $extra
+     * @access public
+     * @return object
+     */
+    public function createSceneLinkTest($type, $module, $parent = '', $extra = array())
+    {
+        $result = $this->objectModel->createSceneLink($type, $module, $parent, $extra);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test createPracticeLink method.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createPracticeLinkTest($type, $module)
+    {
+        $result = $this->objectModel->createPracticeLink($type, $module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setModuleLang method.
+     *
+     * @access public
+     * @return object
+     */
+    public function setModuleLangTest()
+    {
+        global $lang;
+        
+        // 清空现有的module语言项
+        unset($lang->module);
+        
+        $this->objectModel->setModuleLang();
+
+        if(dao::isError()) return dao::getError();
+
+        return $lang->module;
+    }
+
+    /**
+     * Test getGroupPairs method.
+     *
+     * @param  int    $dimensionID
+     * @param  int    $parentGroup
+     * @param  int    $grade
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGroupPairsTest($dimensionID = 0, $parentGroup = 0, $grade = 2, $type = 'chart')
+    {
+        $result = $this->objectModel->getGroupPairs($dimensionID, $parentGroup, $grade, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

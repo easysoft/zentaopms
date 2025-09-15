@@ -510,4 +510,138 @@ class productPlan
         if(dao::isError()) return dao::getError();
         return array('测试通过');
     }
+
+    /**
+     * Test buildPlansForBatchEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildPlansForBatchEditTest()
+    {
+        global $tester;
+        $productplanZen = $tester->loadZen('productplan');
+        $result = $productplanZen->buildPlansForBatchEdit();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setSessionForViewPage method.
+     *
+     * @param  int    $planID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pageID
+     * @param  int    $recPerPage
+     * @access public
+     * @return array
+     */
+    public function setSessionForViewPageTest(int $planID, string $type, string $orderBy, int $pageID, int $recPerPage): array
+    {
+        global $tester;
+        $productplanZen = $tester->loadZen('productplan');
+        
+        $result = array();
+        $beforeStoryList = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
+        $beforeBugList = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
+        
+        $reflection = new ReflectionClass($productplanZen);
+        $method = $reflection->getMethod('setSessionForViewPage');
+        $method->setAccessible(true);
+        $method->invoke($productplanZen, $planID, $type, $orderBy, $pageID, $recPerPage);
+        
+        if(dao::isError()) return dao::getError();
+        
+        $result['beforeStoryList'] = $beforeStoryList;
+        $result['beforeBugList'] = $beforeBugList;
+        $result['afterStoryList'] = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
+        $result['afterBugList'] = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
+        $result['sessionChanged'] = ($beforeStoryList != $result['afterStoryList']) || ($beforeBugList != $result['afterBugList']);
+        
+        return $result;
+    }
+
+    /**
+     * Test assignViewData method.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function assignViewDataTest(object $plan): array
+    {
+        global $tester;
+        $productplanZen = $tester->loadZen('productplan');
+        
+        $reflection = new ReflectionClass($productplanZen);
+        $method = $reflection->getMethod('assignViewData');
+        $method->setAccessible(true);
+        $method->invoke($productplanZen, $plan);
+        
+        if(dao::isError()) return dao::getError();
+        
+        $result = array();
+        $result['parentPlan'] = isset($productplanZen->view->parentPlan) ? $productplanZen->view->parentPlan : null;
+        $result['childrenPlans'] = isset($productplanZen->view->childrenPlans) ? count($productplanZen->view->childrenPlans) : 0;
+        $result['plan'] = isset($productplanZen->view->plan) ? $productplanZen->view->plan->id : null;
+        $result['gradeGroupSet'] = isset($productplanZen->view->gradeGroup) ? 'set' : 'not_set';
+        $result['actionsSet'] = isset($productplanZen->view->actions) ? count($productplanZen->view->actions) : 0;
+        $result['usersSet'] = isset($productplanZen->view->users) ? 'set' : 'not_set';
+        $result['plansSet'] = isset($productplanZen->view->plans) ? 'set' : 'not_set';
+        $result['modulesSet'] = isset($productplanZen->view->modules) ? 'set' : 'not_set';
+        
+        return $result;
+    }
+
+    /**
+     * Test buildLinkStorySearchForm method.
+     *
+     * @param  object $plan
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function buildLinkStorySearchFormTest(object $plan, int $queryID, string $orderBy): array
+    {
+        global $tester;
+        
+        // 设置必要的session数据
+        $_SESSION['project'] = 1;
+        
+        // 获取productplanZen实例
+        $productplanZen = $tester->loadZen('productplan');
+        
+        // 设置测试环境
+        $productplanZen->app->moduleName = 'productplan';
+        $productplanZen->app->methodName = 'view';
+        
+        try {
+            $reflection = new ReflectionClass($productplanZen);
+            $method = $reflection->getMethod('buildLinkStorySearchForm');
+            $method->setAccessible(true);
+            $method->invoke($productplanZen, $plan, $queryID, $orderBy);
+            
+            if(dao::isError()) return dao::getError();
+            
+            $result = array();
+            $result['actionURL'] = isset($productplanZen->config->product->search['actionURL']) ? $productplanZen->config->product->search['actionURL'] : null;
+            $result['queryID'] = isset($productplanZen->config->product->search['queryID']) ? $productplanZen->config->product->search['queryID'] : null;
+            $result['style'] = isset($productplanZen->config->product->search['style']) ? $productplanZen->config->product->search['style'] : null;
+            $result['titleField'] = isset($productplanZen->config->product->search['fields']['title']) ? 'set' : 'not_set';
+            $result['productValues'] = isset($productplanZen->config->product->search['params']['product']['values']) ? 'set' : 'not_set';
+            $result['planValues'] = isset($productplanZen->config->product->search['params']['plan']['values']) ? 'set' : 'not_set';
+            $result['moduleValues'] = isset($productplanZen->config->product->search['params']['module']['values']) ? 'set' : 'not_set';
+            $result['statusParams'] = isset($productplanZen->config->product->search['params']['status']) ? 'set' : 'not_set';
+            $result['branchField'] = isset($productplanZen->config->product->search['fields']['branch']) ? 'set' : 'not_set';
+            $result['gradeValues'] = isset($productplanZen->config->product->search['params']['grade']['values']) ? 'set' : 'not_set';
+            $result['productFieldUnset'] = !isset($productplanZen->config->product->search['fields']['product']);
+            
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }

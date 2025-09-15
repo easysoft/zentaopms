@@ -1007,6 +1007,18 @@ class metricTest
     }
 
     /**
+     * Test fetchMetricsByCodeList.
+     *
+     * @param  array $codeList
+     * @access public
+     * @return array
+     */
+    public function fetchMetricsByCodeList($codeList)
+    {
+        return $this->objectModel->fetchMetricsByCodeList($codeList);
+    }
+
+    /**
      * Test fetchMetricByCode.
      *
      * @param  string $code
@@ -1060,6 +1072,41 @@ class metricTest
         $metric = new stdclass();
         $metric->collector = ",{$user},";
         $this->objectModel->updateMetricFields($metricID, $metric);
+    }
+
+    /**
+     * Test getObjectTable method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return mixed
+     */
+    public function getObjectTableTest($header = null, $data = null, $dateType = 'day', $withCalcTime = true)
+    {
+        $result = $this->objectModel->getObjectTable($header, $data, $dateType, $withCalcTime);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getObjectOptions method.
+     *
+     * @param  array  $data
+     * @param  string $type
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getObjectOptions($data = array(), $type = 'line', $chartType = 'line')
+    {
+        $result = $this->objectModel->getObjectOptions($data, $type, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
 

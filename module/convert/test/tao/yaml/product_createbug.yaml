@@ -1,0 +1,22 @@
+title: 用于createBug方法测试的product数据
+desc: 提供createBug方法测试需要的产品基础数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 产品A,产品B,产品C,测试产品,Demo产品
+- field: code
+  range: PROD_A,PROD_B,PROD_C,TEST_PROD,DEMO_PROD
+- field: status
+  range: normal{4},closed{1}
+- field: createdBy
+  range: admin{3},user1{1},user2{1}
+- field: createdDate
+  range: 2023-01-01 00:00:00-2023-06-30 23:59:59
+- field: acl
+  range: open{3},private{1},custom{1}
+- field: type
+  range: normal
+- field: deleted
+  range: '0'

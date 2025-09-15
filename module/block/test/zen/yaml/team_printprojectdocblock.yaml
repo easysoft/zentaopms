@@ -1,0 +1,49 @@
+---
+title: Team data for printProjectDocBlock test
+desc: Test data for project team in document block functionality
+author: Claude AI
+version: 1
+
+fields:
+- field: id
+  range: 1-30
+  note: Team member ID
+- field: root
+  range: 1{6},2{6},3{6},4{6},5{6}
+  note: Project root ID
+- field: type
+  range: project
+  note: Team type
+- field: account
+  range: admin{10},user1{10},user2{10}
+  note: Team member account
+- field: role
+  range: 产品经理{5},开发工程师{10},测试工程师{8},项目经理{5},UI设计师{2}
+  note: Team member role
+- field: limited
+  range: no{25},yes{5}
+  note: Is limited
+- field: join
+  range: 2024-01-01-2024-06-01:7D
+  note: Join date
+- field: days
+  range: 100{10},150{10},200{10}
+  note: Work days
+- field: hours
+  range: 8.0{20},7.5{5},6.0{5}
+  note: Work hours per day
+- field: estimate
+  range: 100{10},200{10},300{10}
+  note: Estimated hours
+- field: consumed
+  range: 50{10},100{10},150{10}
+  note: Consumed hours
+- field: left
+  range: 50{10},100{10},150{10}
+  note: Left hours
+- field: order
+  range: 1-30
+  note: Team order
+- field: weekly
+  range: 40{20},35{10}
+  note: Weekly hours

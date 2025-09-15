@@ -1,0 +1,59 @@
+---
+title: 文档动态区块测试-action表数据
+desc: 为printDocDynamicBlock方法提供action表测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-20
+  
+- field: objectType
+  note: 对象类型
+  range: doc{8},doclib{6},api{6}
+  
+- field: objectID
+  note: 对象ID
+  range: 1-30:R
+  
+- field: actor
+  note: 操作用户
+  range: admin{5},user1{5},user2{4},test{3},guest{3}
+  
+- field: action
+  note: 动作类型
+  range: created{6},edited{5},commented{4},opened{3},deleted{2}
+  
+- field: date
+  note: 操作时间
+  range: 2024-01-01 10:00:00-2024-01-20 18:00:00:1H
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: comment
+  note: 备注信息
+  range: '[操作了文档,编辑了内容,添加了评论,创建了新文档,删除了文档]'
+  
+- field: vision
+  note: 视图类型
+  range: rnd{20}
+  
+- field: read
+  note: 已读状态
+  range: 0{15},1{5}
+  
+- field: product
+  note: 产品ID
+  range: 1-10,''
+  
+- field: project
+  note: 项目ID
+  range: 1-15,0
+  
+- field: execution
+  note: 执行ID
+  range: 1-12,0
+  
+- field: extra
+  note: 额外信息
+  range: ''

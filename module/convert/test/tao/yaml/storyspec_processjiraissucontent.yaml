@@ -1,0 +1,15 @@
+---
+title: storyspec测试数据
+desc: 为processJiraIssueContent方法提供需求规格测试数据
+
+fields:
+- field: story
+  range: 1-5
+- field: version
+  range: 1
+- field: title
+  range: [需求标题1,需求标题2,需求标题3,需求标题4,需求标题5]
+- field: spec
+  range: [需求详细描述内容1,需求详细描述内容2,需求详细描述内容3,需求详细描述内容4,需求详细描述内容5]
+- field: verify
+  range: ['','验收标准1','验收标准2','验收标准3','验收标准4']

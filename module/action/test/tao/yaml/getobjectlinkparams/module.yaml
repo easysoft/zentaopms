@@ -1,0 +1,31 @@
+---
+title: module表测试数据
+desc: 模块数据
+
+fields:
+- field: id
+  range: 1-10
+- field: root
+  range: 1{4},2{3},3{3}
+- field: branch
+  range: 0{7},1{2},2{1}
+- field: name
+  range: 需求模块{3},任务模块{3},测试模块{4}
+- field: parent
+  range: 0{3},1{3},2{2},3{2}
+- field: path
+  range: ',1,'{2},',1,2,'{2},',1,3,'{3},',2,'{3}
+- field: grade
+  range: 1{3},2{4},3{3}
+- field: order
+  range: 10{2},20{3},30{3},40{2}
+- field: type
+  range: story{4},task{3},case{3}
+- field: owner
+  range: admin{4},user1{3},user2{3}
+- field: short
+  range: story{3},task{3},test{4}
+- field: collector
+  range: '[]{5}',admin{2},user1{2},user2{1}
+- field: deleted
+  range: 0{9},1{1}

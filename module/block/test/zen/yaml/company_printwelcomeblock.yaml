@@ -1,0 +1,63 @@
+---
+title: 公司表数据
+desc: printWelcomeBlock方法测试数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: 公司ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 公司名称
+  range: "禅道软件（青岛）有限公司{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: phone
+  note: 公司电话
+  range: "0532-86893080{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fax
+  note: 公司传真
+  range: "0532-86893080{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: address
+  note: 公司地址
+  range: "青岛高新区华贯路6号{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: zipcode
+  note: 邮编
+  range: "266000{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: website
+  note: 网站
+  range: "https://www.zentao.net{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "0{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,160 @@
+---
+title: 瀑布项目风险区块测试数据
+desc: 用于测试printWaterfallRiskBlock方法的风险数据
+
+fields:
+- field: id
+  note: 风险ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1{5},2{3},3{2}
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0
+  format: ""
+- field: name
+  note: 风险名称
+  range: 数据库连接失败风险,服务器性能风险,用户需求变更风险,第三方接口不稳定风险,开发人员离职风险,测试环境不稳定风险,部署延期风险,安全漏洞风险,浏览器兼容性风险,数据迁移风险
+  format: ""
+- field: source
+  note: 风险来源
+  range: requirement{3},technology{4},management{3}
+  format: ""
+- field: category
+  note: 风险类别
+  range: technical{4},business{3},resource{3}
+  format: ""
+- field: strategy
+  note: 应对策略
+  range: accept,mitigate,transfer,avoid
+  format: ""
+- field: status
+  note: 风险状态
+  range: active{7},closed{3}
+  format: ""
+- field: impact
+  note: 影响级别
+  range: high{3},medium{4},low{3}
+  format: ""
+- field: probability
+  note: 发生概率
+  range: high{2},medium{5},low{3}
+  format: ""
+- field: rate
+  note: 风险级别
+  range: high{3},medium{4},low{3}
+  format: ""
+- field: pri
+  note: 优先级
+  range: high{3},medium{4},low{3}
+  format: ""
+- field: identifiedDate
+  note: 识别日期
+  range: '2024-01-01':'2024-12-31':30D
+  format: YYYY-MM-DD
+- field: prevention
+  note: 预防措施
+  range: 定期备份数据库,监控服务器性能,及时沟通需求变化,建立备用接口,知识转移和文档化,维护测试环境稳定性,提前规划部署计划,进行安全审计,测试多浏览器兼容性,制定数据迁移方案
+  format: ""
+- field: remedy
+  note: 应急措施
+  range: 启用备用数据库,增加服务器资源,重新评估需求,切换备用接口,紧急招聘开发人员,修复测试环境,调整部署时间,修复安全漏洞,修复兼容性问题,执行数据回滚
+  format: ""
+- field: plannedClosedDate
+  note: 计划关闭日期
+  range: '2024-06-01':'2024-12-31':30D
+  format: YYYY-MM-DD
+- field: actualClosedDate
+  note: 实际关闭日期
+  range: []{7},'2024-01-15','2024-02-20','2024-03-10'
+  format: YYYY-MM-DD
+- field: lib
+  note: 风险库ID
+  range: 0
+  format: ""
+- field: from
+  note: 来源ID
+  range: 0
+  format: ""
+- field: version
+  note: 版本
+  range: 1
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2,user3,user4
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59':1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: assignedTo
+  note: 指派给
+  range: user1,user2,user3,user4,user5,admin,user1,user2,user3,user4
+  format: ""
+- field: assignedDate
+  note: 指派时间
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59':1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: []{8},admin,user1
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: []{8},'2024-06-01 10:30:00','2024-07-15 14:20:00'
+  format: YYYY-MM-DD hh:mm:ss
+- field: resolvedBy
+  note: 解决者
+  range: []{7},admin,user2,user3
+  format: ""
+- field: resolvedDate
+  note: 解决时间
+  range: []{7},'2024-05-15 09:30:00','2024-06-20 16:45:00','2024-07-10 11:15:00'
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedBy
+  note: 关闭者
+  range: []{7},admin,user1,user2
+  format: ""
+- field: closedDate
+  note: 关闭时间
+  range: []{7},'2024-06-01 17:30:00','2024-07-01 09:15:00','2024-08-01 14:20:00'
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedReason
+  note: 关闭原因
+  range: []{7},resolved,transferred,bydesign
+  format: ""
+- field: activatedBy
+  note: 激活者
+  range: []{10}
+  format: ""
+- field: activatedDate
+  note: 激活时间
+  range: []{10}
+  format: ""
+- field: canceledBy
+  note: 取消者
+  range: []{10}
+  format: ""
+- field: canceledDate
+  note: 取消时间
+  range: []{10}
+  format: ""
+- field: hangupBy
+  note: 挂起者
+  range: []{10}
+  format: ""
+- field: hangupDate
+  note: 挂起时间
+  range: []{10}
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0
+  format: ""

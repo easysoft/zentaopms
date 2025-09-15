@@ -247,6 +247,8 @@ class metricZen extends metric
             ->fetchPairs('id', 'closedDate');
 
         $this->validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
+
+        return $this->validObjects;
     }
 
     /**

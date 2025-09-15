@@ -570,4 +570,110 @@ class groupTest
 
         return array('depend' => $depend, 'recommend' => $recommend);
     }
+
+    /**
+     * Test getProgramsForAdminGroup method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramsForAdminGroupTest()
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProgramsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsForAdminGroup method.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function getProductsForAdminGroupTest($programs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProductsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $programs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsForAdminGroup method return count.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return int
+     */
+    public function getProductsForAdminGroupCountTest($programs = array())
+    {
+        $result = $this->getProductsForAdminGroupTest($programs);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
+    /**
+     * Test processDepends method.
+     *
+     * @param  array $depends
+     * @param  array $privs
+     * @param  array $excludes
+     * @param  array $processedPrivs
+     * @access public
+     * @return array
+     */
+    public function processDependsTest($depends, $privs, $excludes, $processedPrivs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('processDepends');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $depends, $privs, $excludes, $processedPrivs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkNavSubset method.
+     *
+     * @param  string $nav
+     * @param  string $subset
+     * @access public
+     * @return bool
+     */
+    public function checkNavSubsetTest($nav, $subset)
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('checkNavSubset');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $nav, $subset);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPrivsByParents method.
+     *
+     * @param  string $selectedSubset
+     * @param  string $selectedPackages
+     * @access public
+     * @return array
+     */
+    public function getPrivsByParentsTest($selectedSubset, $selectedPackages = '')
+    {
+        $result = $this->objectModel->getPrivsByParents($selectedSubset, $selectedPackages);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

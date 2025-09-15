@@ -1,0 +1,39 @@
+---
+title: User数据用于assignVarsForEdit测试
+desc: 提供user表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-5
+- field: account
+  note: 用户账号
+  range: 'admin, user1, user2, user3, user4'
+- field: realname
+  note: 真实姓名
+  range: 'Administrator, Test User1, Test User2, Test User3, Test User4'
+- field: role
+  note: 用户角色
+  range: 'admin{1}, dev{2}, qa{1}, pm{1}'
+- field: password
+  note: 密码
+  range: '123456{5}'
+  format: md5
+- field: email
+  note: 邮箱
+  range: 'admin@test.com, user1@test.com, user2@test.com, user3@test.com, user4@test.com'
+- field: deleted
+  note: 是否删除
+  range: '0{5}'
+- field: status
+  note: 用户状态
+  range: 'active{5}'
+- field: gender
+  note: 性别
+  range: 'm{3}, f{2}'
+- field: joins
+  note: 入职日期
+  range: '2022-01-01-2023-12-31'
+  format: 'YYYY-MM-DD'

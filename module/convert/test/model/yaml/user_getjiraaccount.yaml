@@ -1,0 +1,26 @@
+---
+title: Jira用户数据定义
+desc: 为getJiraAccount方法测试提供用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-1000
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{1},testuser{1},jirauser{1},normaluser{1},user.with.dots{1}
+- field: realname
+  note: 用户真实姓名
+  range: Administrator{1},Test User{1},Jira User{1},Normal User{1},User With Dots{1}
+- field: email
+  note: 用户邮箱
+  range: admin@test.com{1},testuser@example.com{1},jirauser@company.org{1},normal@domain.net{1},user.dots@email.com{1}
+- field: usercode
+  note: 用户代码
+  range: ADMIN001{1},TEST002{1},JIRA003{1},NORM004{1},DOTS005{1}
