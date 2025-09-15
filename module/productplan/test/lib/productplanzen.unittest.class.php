@@ -226,4 +226,41 @@ class productplanZenTest
         
         return $result;
     }
+
+    /**
+     * Test buildBugSearchForm method.
+     *
+     * @param  object $plan
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function buildBugSearchFormTest(object $plan, int $queryID, string $orderBy): array
+    {
+        global $config;
+        
+        $beforeActionURL = isset($config->bug->search['actionURL']) ? $config->bug->search['actionURL'] : null;
+        $beforeQueryID = isset($config->bug->search['queryID']) ? $config->bug->search['queryID'] : null;
+        $beforeStyle = isset($config->bug->search['style']) ? $config->bug->search['style'] : null;
+        
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildBugSearchForm');
+        $method->setAccessible(true);
+        $method->invoke($this->objectZen, $plan, $queryID, $orderBy);
+        
+        if(dao::isError()) return dao::getError();
+        
+        $result = array();
+        $result['actionURL'] = isset($config->bug->search['actionURL']) ? $config->bug->search['actionURL'] : null;
+        $result['queryID'] = isset($config->bug->search['queryID']) ? $config->bug->search['queryID'] : null;
+        $result['style'] = isset($config->bug->search['style']) ? $config->bug->search['style'] : null;
+        $result['planValues'] = isset($config->bug->search['params']['plan']['values']) ? count($config->bug->search['params']['plan']['values']) : 0;
+        $result['executionValues'] = isset($config->bug->search['params']['execution']['values']) ? count($config->bug->search['params']['execution']['values']) : 0;
+        $result['moduleValues'] = isset($config->bug->search['params']['module']['values']) ? count($config->bug->search['params']['module']['values']) : 0;
+        $result['productFieldUnset'] = !isset($config->bug->search['fields']['product']);
+        $result['branchHandled'] = true;
+        
+        return $result;
+    }
 }
