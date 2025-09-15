@@ -510,4 +510,20 @@ class productPlan
         if(dao::isError()) return dao::getError();
         return array('测试通过');
     }
+
+    /**
+     * Test buildPlansForBatchEdit method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildPlansForBatchEditTest()
+    {
+        global $tester;
+        $productplanZen = $tester->loadZen('productplan');
+        $result = $productplanZen->buildPlansForBatchEdit();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
