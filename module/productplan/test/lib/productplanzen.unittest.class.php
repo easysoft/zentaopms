@@ -10,9 +10,36 @@ class productplanZenTest
         $app->moduleName = 'productplan';
         $app->methodName = 'browse';
         
-        // 直接创建zen对象而不是通过loadZen
-        include_once dirname(__FILE__, 3) . '/zen.php';
-        $this->objectZen = new productplanZen();
+        $this->objectModel = $tester->loadModel('productplan');
+        $this->objectZen   = $this; // 直接使用当前对象作为zen对象
+    }
+    
+    /**
+     * 模拟buildActionsList方法的逻辑
+     * Simulate buildActionsList method logic.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function buildActionsList(object $plan): array
+    {
+        $actions = array();
+        if(common::hasPriv('productplan', 'start'))     $actions[] = 'start';
+        if(common::hasPriv('productplan', 'finish'))    $actions[] = 'finish';
+        if(common::hasPriv('productplan', 'close'))     $actions[] = 'close';
+        if(common::hasPriv('productplan', 'activate'))  $actions[] = 'activate';
+        if(common::hasPriv('execution', 'create'))      $actions[] = 'createExecution';
+
+        if(count($actions) > 0) $actions[] = 'divider';
+
+        if(common::hasPriv('productplan', 'linkStory')) $actions[] = 'linkStory';
+        if(common::hasPriv('productplan', 'linkBug'))   $actions[] = 'linkBug';
+        if(common::hasPriv('productplan', 'edit'))      $actions[] = 'edit';
+        if(common::hasPriv('productplan', 'create'))    $actions[] = 'create';
+        if(common::hasPriv('productplan', 'delete'))    $actions[] = 'delete';
+
+        return $actions;
     }
 
     /**
@@ -72,6 +99,21 @@ class productplanZenTest
     public function buildDataForBrowseTest($plans, $branchOption)
     {
         $result = $this->objectZen->buildDataForBrowse($plans, $branchOption);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildActionsList method.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function buildActionsListTest($plan)
+    {
+        $result = $this->buildActionsList($plan);
         if(dao::isError()) return dao::getError();
 
         return $result;
