@@ -486,6 +486,12 @@ class taskModel extends model
             return false;
         }
 
+        if(!empty($task->left) && $task->left < 0)
+        {
+            dao::$errors['left'] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->left);
+            return false;
+        }
+
         /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 

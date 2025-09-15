@@ -200,6 +200,7 @@ class mailTao extends mailModel
         if(!$objectModel) return false;
 
         $getObjectMethod = $objectType == 'kanbancard' ? 'getCardByID' : 'getByID';
+        if($objectType == 'task') $getObjectMethod = 'fetchByID';
         if(method_exists($objectModel, $getObjectMethod))
         {
             $object = call_user_func(array($objectModel, $getObjectMethod), $objectID);
@@ -208,6 +209,7 @@ class mailTao extends mailModel
         {
             $object = $this->fetchByID($objectID, $objectType);
         }
+
         if(!$object) return false;
 
         if($objectType == 'doc' && $object->contentType == 'markdown')

@@ -13,7 +13,8 @@ class grouptaskTester extends tester
      */
     public function checkGroupData($groupData, $nums)
     {
-        $this->switchVision('lite', 5);
+        $currentVision = $this->page->getCookie('vision');
+        if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form  = $this->initForm('execution', 'grouptask', array('execution' => '2', 'groupBy' => $groupData ), 'appIframe-project');
         preg_match_all('/\d+(?:\.\d+)?/', $form->dom->task->getText(), $matches);
         if($matches[0][0] != $nums['tasks'])   return $this->failed('总任务数目错误');

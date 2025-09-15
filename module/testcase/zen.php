@@ -1610,6 +1610,7 @@ class testcaseZen extends testcase
             if(!isset($fromCases[$caseID])) continue;
 
             $case = clone $fromCases[$caseID];
+            $case->lib             = 0;
             $case->steps           = array();
             $case->expects         = array();
             $case->stepType        = array();

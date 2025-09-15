@@ -10,7 +10,7 @@ $(document).on('click', '#toStory', function()
     });
 });
 
-$(document).on('click', '#toTaskButton', function()
+window.clickToTask = function()
 {
     const projectID   = $('[name="taskProjects"]').val();
     const executionID = $('[name="execution"]').val() ? $('[name="execution"]').val() : 0;
@@ -32,7 +32,7 @@ $(document).on('click', '#toTaskButton', function()
     {
         zui.Modal.alert(errorNoExecution);
     }
-});
+};
 
 function changeTaskProjects(event)
 {

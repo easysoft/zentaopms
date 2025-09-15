@@ -13,6 +13,7 @@ namespace zin;
 jsVar('type', strtolower($design->type));
 detailHeader
 (
+    set::backUrl(createLink('design', 'browse', "projectID={$design->project}")),
     to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name))), $design->deleted ? span(setClass('label danger'), $lang->deleted) : null),
 );
 
@@ -93,7 +94,7 @@ detailBody
     (
         set::prefix
         (
-            array(array('icon' => 'back', 'text' => $lang->goback, 'data-back' => 'design-browse,projectstory-track,my-effort,my-index', 'className' => 'open-url'))
+            array(array('icon' => 'back', 'text' => $lang->goback, 'data-back' => 'design-browse,projectstory-track,my-effort,my-index', 'data-url' => createLink('design', 'browse', "projectID={$design->project}"), 'className' => 'open-url'))
         ),
         set::main($operateMenus),
         set::suffix($commonActions),

@@ -2,7 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
-su('admin');
+
+zenData('userview')->gen(0);
 
 $task = zenData('task');
 $task->id->range('1-20');
@@ -67,7 +68,7 @@ timeout=0
 cid=1
 
 - 查看指派给用户1的任务第20条的name属性 @任务20
-- 检查指派给用户1的任务数量 @8
+- 检查指派给用户1的任务数量 @10
 - 查看由用户1关闭的任务第16条的name属性 @任务16
 - 检查由用户1关闭的任务数量 @2
 - 查看由用户1完成的任务第20条的name属性 @任务20
@@ -79,10 +80,11 @@ cid=1
 - 查看不存在的项目下由用户1完成的任务数量 @0
 
 */
+su('admin');
 $task = new taskTest();
 
 r($task->getUserTasksTest('user1', 'assignedTo'))                               && p('20:name') && e('任务20'); // 查看指派给用户1的任务
-r(count($task->getUserTasksTest('user1', 'assignedTo')))                        && p()          && e('8');      // 检查指派给用户1的任务数量
+r(count($task->getUserTasksTest('user1', 'assignedTo')))                        && p()          && e('10');     // 检查指派给用户1的任务数量
 r($task->getUserTasksTest('user1', 'closedBy'))                                 && p('16:name') && e('任务16'); // 查看由用户1关闭的任务
 r(count($task->getUserTasksTest('user1', 'closedBy')))                          && p()          && e('2');      // 检查由用户1关闭的任务数量
 r($task->getUserTasksTest('user1', 'finishedBy'))                               && p('20:name') && e('任务20'); // 查看由用户1完成的任务

@@ -2439,6 +2439,7 @@ class storyModel extends model
     {
         $now         = helper::now();
         $childIdList = $this->getAllChildId($storyID, false);
+        $childList   = $this->getByList($childIdList);
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
              ->set('stage')->eq('closed')
@@ -2453,7 +2454,13 @@ class storyModel extends model
              ->exec();
 
         $this->loadModel('action');
-        foreach($childIdList as $childID) $this->action->create('story', $childID, 'closedbyparent');
+        foreach($childList as $child)
+        {
+            $preStatus = $child->status;
+            $isChanged = !empty($child->changedBy) ? true : false;
+            if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+            $this->loadModel('action')->create('story', $child->id, 'closedbyparent', '', ucfirst($closedReason) . "|$preStatus");
+        }
     }
 
     /**
@@ -2764,10 +2771,11 @@ class storyModel extends model
             $products = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
         }
 
-        $this->loadModel('search')->setQuery('story', $queryID);
+        $type = in_array($type, array('requirement', 'epic')) ? $type : 'story';
+        $this->loadModel('search')->setQuery($type, $queryID);
 
         $allProduct     = "`product` = 'all'";
-        $queryVar       = in_array($type, array('requirement', 'epic')) ? "{$type}Query" : 'storyQuery';
+        $queryVar       = "{$type}Query";
         $storyQuery     = $this->session->{$queryVar};
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
@@ -4988,7 +4996,7 @@ class storyModel extends model
     public function getActivateStatus(int $storyID, bool $hasTwins = true): string
     {
         $status     = 'active';
-        $action     = 'closed,reviewrejected,closedbysystem';
+        $action     = 'closed,reviewrejected,closedbysystem,closedbyparent';
         $action     = $hasTwins ? $action . ',synctwins' : $action;
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
@@ -5001,7 +5009,7 @@ class storyModel extends model
 
         /* Set the status of the story to previous status in latest action log. */
         $lastAction = $lastRecord->action;
-        if(strpos(',closed,reviewrejected,', ",$lastAction,") !== false)
+        if(strpos(',closed,reviewrejected,closedbyparent,', ",$lastAction,") !== false)
         {
             $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
             if($status == 'closed') $status = 'active'; /* Set the status to active if last status before close it is closed as well. */

@@ -23,6 +23,17 @@ function loadResult()
 {
     loadCurrentPage({url: resultsLink, selector: '#casesResults', partial: true});
     window.waitDom('#casesResults .result-item', function(){ $('#casesResults .result-item').first().trigger('click');})
+    $(document).off('mouseover', 'li.file').on('mouseover', 'li.file', function()
+    {
+        $(this).children('span.right-icon').removeClass("hidden");
+        $(this).addClass('backgroundColor');
+    });
+
+    $(document).off('mouseout', 'li.file').on('mouseout', 'li.file', function()
+    {
+        $(this).children('span.right-icon').addClass("hidden");
+        $(this).removeClass('backgroundColor');
+    });
 }
 
 /**

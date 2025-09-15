@@ -587,7 +587,6 @@ class bugModel extends model
     public function activate(object $bug, array $kanbanParams = array()): bool
     {
         $oldBug = parent::fetchByID($bug->id);
-        $bug    = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->check('openedBuild', 'notempty')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
@@ -613,7 +612,7 @@ class bugModel extends model
         if($changes || $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
+            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $bug->comment);
             $this->action->logHistory($actionID, $changes);
         }
         if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
@@ -815,7 +814,7 @@ class bugModel extends model
 
         $_SESSION['searchParams']['module'] = 'bug';
         $searchConfig = $this->config->bug->search;
-        $searchConfig['params'] = $this->loadModel('search')->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->loadModel('search')->setDefaultParams('bug', $searchConfig['fields'], $searchConfig['params']);
         return $searchConfig;
     }
 

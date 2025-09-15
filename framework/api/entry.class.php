@@ -560,7 +560,7 @@ class baseEntry
             }
             else
             {
-                $vs = implode(',', $object->$key);
+                $vs = explode(',', $object->$key);
                 foreach($vs as $v)
                 {
                     if($v === '') continue;

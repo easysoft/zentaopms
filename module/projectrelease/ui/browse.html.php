@@ -96,6 +96,7 @@ toolbar
 );
 
 jsVar('markerTitle', $lang->release->marker);
+jsVar('integratedLabel', $lang->release->integratedLabel);
 jsVar('canViewProjectbuild', hasPriv('projectbuild', 'view'));
 
 $cols = $this->loadModel('datatable')->getSetting('projectrelease');

@@ -15,7 +15,6 @@ class cancelTaskTester extends tester
     {
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
         $form->dom->xpath['cancelBtn']  = "//a[@title='{$this->lang->task->cancel}']";
-        $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         if(in_array($status, array('done', 'cancel', 'closed')))
         {
             if(is_object($form->dom->cancelBtn)) return $this->failed('错误的显示了取消按钮');

@@ -168,7 +168,8 @@
 
     function showFatalError(data, _info, options)
     {
-        zui.Modal.showError({error: data.startsWith('<!DOCTYPE html') ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
+        const isNormalPage = data.startsWith('<!DOCTYPE html');
+        zui.Modal.showError({error: isNormalPage ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg', html: !isNormalPage})
     }
 
     function initZinbar()

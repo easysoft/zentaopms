@@ -653,6 +653,8 @@ if(!defined('TABLE_SYSTEM'))         define('TABLE_SYSTEM', '`' . $config->db->p
 define('JIRA_TMPRELATION',       '`jiratmprelation`');
 define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
+if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
+
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;

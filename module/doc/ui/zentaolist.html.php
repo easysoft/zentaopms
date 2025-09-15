@@ -102,6 +102,7 @@ div
         set::localPager(),
         set::footPager($pagerSetting),
         set::footer(array('flex', 'pager')),
+        $type == 'productRelease' ? set::rowKey('rowID') : null,
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     ) : null,

@@ -29,7 +29,7 @@ class navbar extends wg
 
     protected function getExecutionMoreItem($executionID)
     {
-        if(defined('TUTORIAL')) return;
+        if(commonModel::isTutorialMode()) return;
 
         global $lang, $app;
 
@@ -106,7 +106,8 @@ class navbar extends wg
 
     protected function getAppBtnItem()
     {
-        if(defined('TUTORIAL')) return;
+        if(commonModel::isTutorialMode()) return;
+
         global $app, $config, $lang;
 
         $condition = '';

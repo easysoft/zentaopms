@@ -45,6 +45,8 @@ foreach(explode(',', $config->bug->edit->requiredFields) as $field)
     }
 }
 
+$assignedToList = array_merge($users, array('closed' => 'Closed'));
+
 formBatchPanel
 (
     set::title($lang->bug->batchEdit),
@@ -184,7 +186,7 @@ formBatchPanel
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
         set::control('picker'),
-        set::items($users),
+        set::items($assignedToList),
         set::width('200px'),
         set::required(isset($requiredFields['assignedTo'])),
         set::ditto(true),

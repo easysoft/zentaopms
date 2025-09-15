@@ -46,4 +46,17 @@ class executionZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 给详情页面分配变量。
+     * Given variables to view page.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function assignViewVarsTest(int $executionID): object
+    {
+        return callZenMethod('execution', 'assignViewVars', [$executionID], 'view');
+    }
 }

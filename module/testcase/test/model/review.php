@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
 zenData('case')->gen(10);
+zenData('story')->gen(10);
 
 /**
 

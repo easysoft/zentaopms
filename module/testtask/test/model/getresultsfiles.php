@@ -22,7 +22,7 @@ cid=1
  - 属性step @4: 4 6: 6
 - 测试获取结果 7 8 9 的文件
  - 属性result @9: 9
- - 属性step @~~
+ - 属性step @8: 8
 - 测试获取结果 10 11 12 的文件
  - 属性result @11: 11
  - 属性step @10: 10 12: 12
@@ -55,7 +55,7 @@ $testtask = new testtaskTest();
 
 r($testtask->getResultsFilesTest($resultIdList[0])) && p('result,step') && e('1: 1 3: 3,2: 2');       // 测试获取结果 1 2 3 的文件
 r($testtask->getResultsFilesTest($resultIdList[1])) && p('result,step') && e('5: 5,4: 4 6: 6');       // 测试获取结果 4 5 6 的文件
-r($testtask->getResultsFilesTest($resultIdList[2])) && p('result,step') && e('9: 9,~~');              // 测试获取结果 7 8 9 的文件
+r($testtask->getResultsFilesTest($resultIdList[2])) && p('result,step') && e('9: 9,8: 8');            // 测试获取结果 7 8 9 的文件
 r($testtask->getResultsFilesTest($resultIdList[3])) && p('result,step') && e('11: 11,10: 10 12: 12'); // 测试获取结果 10 11 12 的文件
 r($testtask->getResultsFilesTest($resultIdList[4])) && p('result,step') && e('13: 13 15: 15,~~');     // 测试获取结果 13 14 15 的文件
 r($testtask->getResultsFilesTest($resultIdList[5])) && p('result,step') && e('17: 17,16: 16 18: 18'); // 测试获取结果 16 17 18 的文件

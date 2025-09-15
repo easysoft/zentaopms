@@ -30,8 +30,8 @@ class search extends control
         $searchForm   = $module . 'Form';
         $searchParams = $module . 'searchParams';
         $searchConfig = $this->search->processSearchParams($module);
-        $fields       = $searchConfig['fields'];
-        $params       = $searchConfig['params'];
+        $fields       = $searchConfig['fields'] ?? [];
+        $params       = $searchConfig['params'] ?? [];
 
         if(!$this->session->$searchForm)
         {

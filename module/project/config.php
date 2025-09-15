@@ -233,7 +233,7 @@ $config->project->linkMap->projectstory['linkstory'] = array('', '', 'projectID=
 $config->project->linkMap->projectstory['track']     = array('projectstory', 'story', 'projectID=%s', '');
 
 $config->project->linkMap->bug = array();
-$config->project->linkMap->bug['create'] = array('', '', 'productID=0&branch=0&extras=projectID=%s', '');
+$config->project->linkMap->bug['create'] = array('project', 'bug', 'projectID=%s', '');
 $config->project->linkMap->bug['edit']   = array('project', 'bug', 'projectID=%s', '');
 
 $config->project->linkMap->story = array();

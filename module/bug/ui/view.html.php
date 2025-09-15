@@ -158,7 +158,7 @@ modal
         div
         (
             setClass('toolbar gap-4 w-full justify-center'),
-            btn($lang->bug->nextStep, setID('toTaskButton'), setClass('primary')),
+            btn($lang->bug->nextStep, setID('toTaskButton'), setClass('primary'), setData(array('on' => 'click', 'call' => 'clickToTask'))),
             btn($lang->cancel, setID('cancelButton'), setData(array('dismiss' => 'modal')))
         )
     ),

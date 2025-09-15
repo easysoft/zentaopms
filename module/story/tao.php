@@ -576,26 +576,22 @@ class storyTao extends storyModel
         $rawQuery = $this->dao->get();
 
         /* 获取阶段序列和关联的多分支产品需求。 */
-        $stageOrderList  = implode(',', array_keys($this->lang->story->stageList));
-        $branchStoryList = $this->dao->select('t1.*,t2.branch as productBranch')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $branches = $this->dao->select('t1.story, t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.story')->in(array_keys($stories))
             ->andWhere('t1.branch')->eq(BRANCH_MAIN)
             ->andWhere('t3.type')->ne('normal')
-            ->fetchAll();
+            ->fetchGroup('branch', 'story');
 
-        /* 对需求做分组。 */
-        $branches = array();
-        foreach($branchStoryList as $story) $branches[$story->productBranch][$story->story] = $story->story;
-
-        /* Take the earlier stage. */
-        foreach($branches as $branchID => $storyIdList)
+        /* Replace branch stage with the story stage. */
+        foreach($branches as $branchID => $branchList)
         {
-            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq((int)$branchID)->fetchPairs('story', 'stage');
+            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($branchList))->andWhere('branch')->eq((int)$branchID)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)
             {
-                if(strpos($stageOrderList, $stories[$storyID]->stage) > strpos($stageOrderList, $stage)) $stories[$storyID]->stage = $stage;
+                if($stories[$storyID]->branch != $branchID) continue;
+                $stories[$storyID]->stage = $stage;
             }
         }
 

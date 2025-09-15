@@ -237,13 +237,13 @@ $config->group->subset->testreport = new stdclass();
 $config->group->subset->testreport->order = 710;
 $config->group->subset->testreport->nav   = 'qa';
 
-$config->group->subset->autotest = new stdclass();
-$config->group->subset->autotest->order = 715;
-$config->group->subset->autotest->nav   = 'qa';
-
 $config->group->subset->caselib = new stdclass();
-$config->group->subset->caselib->order = 740;
-$config->group->subset->caselib->nav   = 'assetlib';
+$config->group->subset->caselib->order = 715;
+$config->group->subset->caselib->nav   = 'qa';
+
+$config->group->subset->autotest = new stdclass();
+$config->group->subset->autotest->order = 720;
+$config->group->subset->autotest->nav   = 'qa';
 
 $config->group->subset->storylib = new stdclass();
 $config->group->subset->storylib->order = 760;
@@ -3660,7 +3660,7 @@ $config->group->package->manageDoc->privs['doc-createSpace']  = array('edition' 
 $config->group->package->manageDoc->privs['doc-createLib']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-moveLib', 'doc-sortDoclib'));
 $config->group->package->manageDoc->privs['doc-editSpace']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-deleteSpace'));
 $config->group->package->manageDoc->privs['doc-editLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-moveLib', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-moveDoc', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index', 'doc-edit'), 'recommend' => array('doc-moveDoc', 'doc-sortDoc'));
 $config->group->package->manageDoc->privs['doc-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-moveDoc', 'doc-sortDoc'));
 $config->group->package->manageDoc->privs['doc-collect']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit'));
 $config->group->package->manageDoc->privs['doc-showFiles']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-editLib'));

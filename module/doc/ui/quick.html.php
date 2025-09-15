@@ -36,6 +36,7 @@ docApp
     set::libID($libID),
     set::docID($docID),
     set::noSpace(),
+    set::fetcher(false),
     set::noModule(),
     set::spaceType('quick'),
     set::homeName(false),

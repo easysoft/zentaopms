@@ -36,7 +36,7 @@ featureBar
 
 toolbar
 (
-    $objectType != 'project' && $objectType != 'execution' ? btngroup
+    $objectType != 'project' && $objectType != 'execution' && hasPriv('testreport', 'create') ? btngroup
     (
         btn
         (
