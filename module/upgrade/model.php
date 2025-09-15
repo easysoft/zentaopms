@@ -11257,7 +11257,7 @@ class upgradeModel extends model
         $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
 
         $deliverable = new stdClass();
-        $deliverable->status      = 'disabled';
+        $deliverable->status      = 'enabled';
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
         $deliverable->trimmable   = '1';
