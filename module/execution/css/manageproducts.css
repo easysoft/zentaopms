@@ -1,9 +1,0 @@
-#productsBox .product {border: 1px solid #ddd; margin-bottom: 5px; position: relative; height: 40px; border-radius: 4px;}
-#productsBox .product:hover {background: #f1f1f1;}
-#productsBox .product.checked,
-#productsBox .product.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
-#productsBox .product .checkbox-primary {padding: 9px; cursor: pointer;}
-#productsBox .product.has-branch {padding-right: 40%;}
-#productsBox .product.has-branch > .picker {position: absolute; width: 40% !important; right: 3px; top: 3px; background-color: unset;}
-#productsBox .product.has-branch > .picker > .picker-selections {background: rgba(0,0,0,.05);}
-#productsBox .product.has-branch > .picker > .picker-selections:hover {background: #fff;}

@@ -1,9 +1,0 @@
-.duplicate-input {border-left-width: 0; border-radius: 0 2px 2px 0; padding-left: 9px;}
-.duplicate-input:focus {border-left-width: 1px; padding-left: 8px;}
-
-.c-id {width: 50px !important;}
-.c-branch, .c-module, .c-os {width: 120px;}
-.c-execution {width: 130px;}
-.c-build, .c-browser, .c-keywords {width: 100px;}
-.c-steps, .c-title, .c-plan, .c-assigned, .c-resolution {width: 150px;}
-.c-pri, .c-severity {width: 80px;}

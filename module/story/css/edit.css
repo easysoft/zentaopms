@@ -1,8 +1,0 @@
-#product_chosen .chosen-single {border-right-width: 1px}
-.linkStoryTitle {white-space: nowrap; text-overflow: ellipsis;}
-.linkStoryTd > ul {margin-top: -10px;}
-.titleBox {margin: 0px 10px 10px 10px;}
-.needNotReviewBox {width: 130px;}
-.needNotReviewBox span.input-group-addon {border: 1px solid #dcdcdc; border-left-width: 0px; width:130px;}
-#moduleIdBox .chosen-container, #planIdBox .chosen-container {min-width: unset;}
-#legendTwins .form-group {margin-top: 10px;}
