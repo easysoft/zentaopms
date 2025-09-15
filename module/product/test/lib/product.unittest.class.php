@@ -4415,4 +4415,24 @@ class productTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getCustomFieldsForTrack method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function getCustomFieldsForTrackTest($storyType = '')
+    {
+        $productZen = new productZen();
+        
+        $method = $this->objectZen->getMethod('getCustomFieldsForTrack');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($storyType));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
