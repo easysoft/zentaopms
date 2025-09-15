@@ -3704,4 +3704,39 @@ class productTest
             return '0';
         }
     }
+
+    /**
+     * Test getBranchAndTagOption method.
+     *
+     * @param  int         $projectID
+     * @param  object|null $product
+     * @param  bool        $isProjectStory
+     * @access public
+     * @return mixed
+     */
+    public function getBranchAndTagOptionTest(int $projectID = 0, object|null $product = null, bool $isProjectStory = false)
+    {
+        global $tester;
+        
+        // 创建productZen实例
+        $productZen = new productZen();
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        
+        // 获取私有方法
+        $method = $this->objectZen->getMethod('getBranchAndTagOption');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($projectID, $product, $isProjectStory));
+        if(dao::isError()) return dao::getError();
+
+        // 返回易于测试的结果格式
+        if(empty($result[0]) && empty($result[1])) return '0';
+        
+        // 如果有分支数据，返回分支数量的字符串
+        if(!empty($result[0])) return count($result[0]);
+        
+        return $result;
+    }
 }
