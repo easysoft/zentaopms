@@ -1,6 +1,0 @@
-.group-item {display: block; width: 100px; float: left; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default;}
-.group-item .checkbox-primary {margin-left: 2px;}
-.group-item .checkbox-primary > input {cursor: pointer;}
-.group-item .checkbox-primary > label {width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
-.table th {vertical-align: top;}
-.main-table tbody > tr > td {border-bottom: 0px;}

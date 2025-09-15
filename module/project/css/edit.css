@@ -1,8 +1,0 @@
-#budget {border-right: 0px;}
-#budgetUnit {border-left: 0px;}
-#plansBox .row {display: inline-table; width: 102%;}
-#plansBox .col-sm-4 {float: none; display: inline-block;}
-#dateRange, .futureBox {vertical-align: top !important;  padding-top: 13px !important;}
-#endList {vertical-align: top; padding-top: 13px;}
-#linkPlan {padding-top: 25px !important;}
-#projectType {padding-top: 7px !important;}

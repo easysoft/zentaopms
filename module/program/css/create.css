@@ -1,7 +1,0 @@
-#budget {border-right: 0px;}
-#budget:focus {border-right: 1px solid #0c64eb;}
-#budgetUnit {border-left: 0px;}
-#budgetUnit:focus {border-left: 1px solid #0c64eb;}
-#dateRange, .futureBox {vertical-align: top !important; padding-top: 13px !important;}
-#endList {vertical-align: top; padding-top: 13px;}
-[lang^=en] #endList {padding-top: 20px;}
