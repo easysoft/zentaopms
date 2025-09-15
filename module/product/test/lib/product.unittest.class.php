@@ -3538,4 +3538,30 @@ class productTest
 
         return count($result);
     }
+
+    /**
+     * Test getProductPlans method from zen layer.
+     *
+     * @param  array  $projectProducts 项目产品数组
+     * @param  int    $projectID 项目ID
+     * @param  string $storyType 需求类型
+     * @param  bool   $isProjectStory 是否为项目需求
+     * @access public
+     * @return mixed
+     */
+    public function getProductPlansTest(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory)
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('product');
+        $productZen->loadModel('execution');
+        
+        $method = $this->objectZen->getMethod('getProductPlans');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($productZen, array($projectProducts, $projectID, $storyType, $isProjectStory));
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? count($result) : $result;
+    }
 }
