@@ -173,13 +173,9 @@ function registerZentaoAIPlugin(lang)
 }
 
 $(() => {
-    const AIPanel       = zui.AIPanel;
-    const ZentaoAIStore = zui.ZentaoAIStore;
-    const pageType      = getZentaoPageType();
-
-    if(pageType !== 'home')
+    if(getZentaoPageType() !== 'home')
     {
-        const panel = AIPanel.shared;
+        const panel = zui.AIPanel.shared;
         if(panel)
         {
             zui.bindCommands(document.body, {
@@ -200,11 +196,11 @@ $(() => {
         const langData = zaiConfig.langData;
         registerZentaoAIPlugin(langData);
 
-        const aiStore = ZentaoAIStore.createFromZentao(zaiConfig);
+        const aiStore = zui.ZAIStore.createFromZentao(zaiConfig);
         if(!aiStore) return
 
         let userAvatarProps;
-        const aiPanel = AIPanel.init(
+        const aiPanel = zui.AIPanel.init(
         {
             store:    aiStore,
             position: {left: 24, top: 24, bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
@@ -243,7 +239,7 @@ $(() => {
 
         $(document).on('updatepage.app openapp.apps openOldPage.apps', (e, args) =>
         {
-                const panel = AIPanel.shared;
+                const panel = zui.AIPanel.shared;
                 if(!panel) return;
 
                 const pageInfo = e.type === 'openapp' ? args[0]?.getPageInfo?.() : args[0];
