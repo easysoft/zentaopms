@@ -3407,4 +3407,41 @@ class productTest
             return 0;
         }
     }
+
+    /**
+     * Test getModuleId method.
+     *
+     * @param  int    $param
+     * @param  string $browseType
+     * @param  string $appTab
+     * @param  string $cookieStoryModule
+     * @param  string $cookieStoryModuleParam
+     * @access public
+     * @return int
+     */
+    public function getModuleIdTest(int $param, string $browseType, string $appTab = 'product', string $cookieStoryModule = '', string $cookieStoryModuleParam = ''): int
+    {
+        global $tester;
+
+        try {
+            $productZen = new productZen();
+
+            // 模拟app对象和cookie
+            $productZen->app = (object)array('tab' => $appTab);
+            $productZen->cookie = (object)array(
+                'storyModule' => $cookieStoryModule,
+                'storyModuleParam' => $cookieStoryModuleParam
+            );
+
+            $method = $this->objectZen->getMethod('getModuleId');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($productZen, array($param, $browseType));
+
+            if(dao::isError()) return 0;
+
+            return $result;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
