@@ -4034,6 +4034,88 @@ class productTest
     }
 
     /**
+     * Test saveBackUriSessionForDynamic method.
+     *
+     * @access public
+     * @return array
+     */
+    public function saveBackUriSessionForDynamicTest(): array
+    {
+        try {
+            global $tester;
+            
+            $productZen = new productZen();
+            
+            // 创建session数据存储
+            $sessionData = array();
+            
+            // 模拟app对象，提供getURI方法
+            $mockApp = new class() {
+                public function getURI(bool $full = false): string
+                {
+                    return '/test/uri';
+                }
+            };
+            $productZen->app = $mockApp;
+            
+            // 模拟session对象，记录set操作
+            $mockSession = new class($sessionData) {
+                private $data;
+                
+                public function __construct(&$sessionData)
+                {
+                    $this->data = &$sessionData;
+                }
+                
+                public function set(string $key, string $value, string $module = ''): void
+                {
+                    if($module) {
+                        $this->data[$module][$key] = $value;
+                    } else {
+                        $this->data[$key] = $value;
+                    }
+                }
+            };
+            $productZen->session = $mockSession;
+            
+            // 使用反射调用被测试的protected方法
+            $method = $this->objectZen->getMethod('saveBackUriSessionForDynamic');
+            $method->setAccessible(true);
+            $method->invokeArgs($productZen, array());
+            
+            if(dao::isError()) return dao::getError();
+            
+            // 检查结果
+            $result = array();
+            $result['result'] = true;
+            $result['productList'] = isset($sessionData['product']['productList']) ? $sessionData['product']['productList'] : '';
+            $result['productPlanList'] = isset($sessionData['product']['productPlanList']) ? $sessionData['product']['productPlanList'] : '';
+            $result['releaseList'] = isset($sessionData['product']['releaseList']) ? $sessionData['product']['releaseList'] : '';
+            $result['storyList'] = isset($sessionData['product']['storyList']) ? $sessionData['product']['storyList'] : '';
+            $result['projectList'] = isset($sessionData['project']['projectList']) ? $sessionData['project']['projectList'] : '';
+            $result['executionList'] = isset($sessionData['execution']['executionList']) ? $sessionData['execution']['executionList'] : '';
+            $result['taskList'] = isset($sessionData['execution']['taskList']) ? $sessionData['execution']['taskList'] : '';
+            $result['buildList'] = isset($sessionData['execution']['buildList']) ? $sessionData['execution']['buildList'] : '';
+            $result['bugList'] = isset($sessionData['qa']['bugList']) ? $sessionData['qa']['bugList'] : '';
+            $result['caseList'] = isset($sessionData['qa']['caseList']) ? $sessionData['qa']['caseList'] : '';
+            $result['testtaskList'] = isset($sessionData['qa']['testtaskList']) ? $sessionData['qa']['testtaskList'] : '';
+            
+            // 统计设置的session数量
+            $sessionCount = 0;
+            foreach(array('product', 'project', 'execution', 'qa') as $module) {
+                if(isset($sessionData[$module])) {
+                    $sessionCount += count($sessionData[$module]);
+                }
+            }
+            $result['sessionCount'] = $sessionCount;
+            
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
      * Test responseNotFound4View method.
      *
      * @param  string $mode
