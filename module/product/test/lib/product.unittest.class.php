@@ -4276,4 +4276,32 @@ class productTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getProductList4Kanban method.
+     *
+     * @param  array  $productList
+     * @param  array  $planList
+     * @param  array  $projectList
+     * @param  array  $releaseList
+     * @param  array  $projectProduct
+     * @access public
+     * @return array
+     */
+    public function getProductList4KanbanTest(array $productList = array(), array $planList = array(), array $projectList = array(), array $releaseList = array(), array $projectProduct = array()): array
+    {
+        // 直接包含zen文件
+        include_once dirname(dirname(__FILE__)) . '/../zen.php';
+        $productZen = new productZen();
+        
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($productZen);
+        $method = $reflection->getMethod('getProductList4Kanban');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($productZen, $productList, $planList, $projectList, $releaseList, $projectProduct);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
