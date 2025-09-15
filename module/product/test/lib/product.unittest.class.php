@@ -3150,4 +3150,75 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test responseAfterEdit method.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  string $hookMessage
+     * @access public
+     * @return array
+     */
+    public function responseAfterEditTest(int $productID, int $programID, string $hookMessage = ''): array
+    {
+        global $tester;
+        // 创建productZen实例
+        $productZen = new productZen();
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        $productZen->app = $tester->app;
+        $productZen->session = $tester->session;
+
+        // 创建一个扩展的productZen类来模拟executeHooks和getEditedLocate方法
+        $extendedProductZen = new class($productZen, $hookMessage) extends productZen {
+            private $mockHookMessage;
+            private $originalZen;
+
+            public function __construct($originalZen, $hookMessage)
+            {
+                $this->originalZen = $originalZen;
+                $this->mockHookMessage = $hookMessage;
+                $this->lang = $originalZen->lang;
+                $this->config = $originalZen->config;
+                $this->app = $originalZen->app;
+                $this->session = $originalZen->session;
+                $this->moduleName = 'product';
+            }
+
+            public function executeHooks(int $objectID): string
+            {
+                return $this->mockHookMessage ?: '';
+            }
+
+            protected function getEditedLocate($productID, $programID): array
+            {
+                $moduleName = $programID ? 'program' : 'product';
+                $methodName = $programID ? 'product' : 'view';
+                $param = $programID ? "programID=$programID" : "product=$productID";
+                $location = "test_link_{$moduleName}_{$methodName}";
+
+                if(!$programID) {
+                    // 模拟session设置
+                    $this->session->set('productList', "test_link_product_browse", 'product');
+                }
+
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
+            }
+
+            public function createLink(string $moduleName, string $methodName = 'index', array|string $vars = [], string $viewType = '', bool $onlybody = false): string
+            {
+                return "test_link_{$moduleName}_{$methodName}";
+            }
+        };
+
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('responseAfterEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($extendedProductZen, array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
