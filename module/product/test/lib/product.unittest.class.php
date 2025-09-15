@@ -3774,4 +3774,89 @@ class productTest
         
         return $count;
     }
+
+    /**
+     * Test saveSession4Browse method.
+     *
+     * @param  object|null $product 产品对象
+     * @param  string      $browseType 浏览类型
+     * @param  string      $tab 当前标签
+     * @access public
+     * @return mixed
+     */
+    public function saveSession4BrowseTest(?object $product, string $browseType, string $tab = 'product')
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->dao = $tester->dao;
+        $productZen->app = $tester->app;
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        $productZen->session = $tester->session;
+        
+        // 设置app->tab用于测试不同场景
+        $productZen->app->tab = $tab;
+        
+        // 模拟app->getURI方法
+        $productZen->app = new class($productZen->app) {
+            private $originalApp;
+            
+            public function __construct($originalApp)
+            {
+                $this->originalApp = $originalApp;
+                $this->tab = $originalApp->tab;
+            }
+            
+            public function getURI(bool $full = false): string
+            {
+                return '/test/uri/path';
+            }
+            
+            public function __get($name)
+            {
+                return $this->originalApp->$name ?? null;
+            }
+            
+            public function __set($name, $value)
+            {
+                $this->originalApp->$name = $value;
+            }
+        };
+        
+        // 清空session中相关数据
+        $productZen->session->set('productList', '', 'product');
+        $productZen->session->set('storyList', '', 'product');
+        $productZen->session->set('storyList', '', 'project');
+        $productZen->session->set('currentProductType', '');
+        $productZen->session->set('storyBrowseType', '');
+        
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('saveSession4Browse');
+        $method->setAccessible(true);
+        
+        $method->invokeArgs($productZen, array($product, $browseType));
+        if(dao::isError()) return dao::getError();
+        
+        // 检查结果
+        $result = array();
+        
+        // 检查productList session
+        $productList = $productZen->session->productList;
+        $result['productList'] = !empty($productList) ? 'true' : 'empty';
+        
+        // 检查storyList session
+        $storyList = $productZen->session->storyList;
+        $result['storyList'] = !empty($storyList) ? 'true' : 'empty';
+        
+        // 检查currentProductType session
+        $currentProductType = $productZen->session->currentProductType;
+        $result['currentProductType'] = !empty($currentProductType) ? $currentProductType : 'empty';
+        
+        // 检查storyBrowseType session
+        $storyBrowseType = $productZen->session->storyBrowseType;
+        $result['storyBrowseType'] = !empty($storyBrowseType) ? $storyBrowseType : 'empty';
+        
+        return $result;
+    }
 }
