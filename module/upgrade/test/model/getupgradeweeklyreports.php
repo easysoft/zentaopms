@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+<?php
+/**
+
+title=测试 projectModel->getUpgradeWeeklyReports();
+timeout=0
+cid=1
+
+- 检查周报数量 @8
+- 检查周报信息
+ - 属性project @2
+ - 属性weekStart @2025-01-08
+ - 属性projectStatus @doing
+ - 属性projectBegin @2025-01-01
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+$projectTable = zenData('project')->loadYaml('project');
+$projectTable->realBegan->range('`0000-00-00`,`2025-01-01`,`0000-00-00`,`2025-06-01`');
+$projectTable->realEnd->range('`0000-00-00`{3},`2025-10-01`');
+$projectTable->suspendedDate->range('`0000-00-00`{2},`2025-06-01`,`0000-00-00`');
+$projectTable->gen(5);
+
+zenData('weeklyreport')->loadYaml('weeklyreport')->gen(30);
+zenData('user')->gen(5);
+su('admin');
+
+global $tester;
+$upgradeModel = $tester->loadModel('upgrade');
+$result       = $upgradeModel->getUpgradeWeeklyReports();
+
+r(count($result)) && p()                                               && e('8');                             // 检查周报数量
+r($result[0])     && p('project,weekStart,projectStatus,projectBegin') && e('2,2025-01-08,doing,2025-01-01'); // 检查周报信息

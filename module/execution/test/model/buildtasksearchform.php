@@ -32,6 +32,10 @@ $module = zenData('module');
 $module->name->range('1,2,3,4,5')->prefix('模块');
 $module->gen(5);
 
+$module = zenData('module');
+$module->name->range('1,2,3,4,5')->prefix('模块');
+$module->gen(5);
+
 su('admin');
 
 /**

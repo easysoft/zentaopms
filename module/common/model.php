@@ -494,7 +494,9 @@ class commonModel extends model
 
         if(helper::isAjaxRequest())
         {
-            echo json_encode(array('load' => $denyLink));
+            $isModal = helper::isAjaxRequest('modal');
+            if($isModal) header("Location: $denyLink");
+            if(!$isModal) echo json_encode(array('load' => $denyLink));
         }
         else
         {

@@ -509,7 +509,7 @@ function initPageEntity(object $object): array
  * @access public
  * @return array
  */
-function initTableData(array $items, array &$fieldList, ?object $model = null, string $moduleName = ''): array
+function initTableData(array $items, array &$fieldList, ?object $model = null): array
 {
     if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
     if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))

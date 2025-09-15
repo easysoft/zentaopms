@@ -810,7 +810,10 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
   `templateDesc` text NULL,
+  `objects` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
+  `cycle` char(10) NOT NULL DEFAULT '',
+  `cycleConfig` text NULL,
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
@@ -827,6 +830,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `fromVersion` smallint(6) NOT NULL DEFAULT '1',
   `draft` longtext NULL,
   `collects` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `weeklyDate` char(8) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -847,9 +851,10 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `product`   ON `zt_doc`(`product`);
-CREATE INDEX `execution` ON `zt_doc`(`execution`);
-CREATE INDEX `lib`       ON `zt_doc`(`lib`);
+CREATE INDEX `product`      ON `zt_doc`(`product`);
+CREATE INDEX `execution`    ON `zt_doc`(`execution`);
+CREATE INDEX `lib`          ON `zt_doc`(`lib`);
+CREATE INDEX `templateType` ON `zt_doc`(`templateType`);
 
 -- DROP TABLE IF EXISTS `zt_docaction`;
 CREATE TABLE IF NOT EXISTS `zt_docaction` (
@@ -15491,7 +15496,7 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tai
 (494, 329, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', NULL, 630, '0');
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('1','0','*','*','*','moduleName=weekly&methodName=computeWeekly','更新项目周报','zentao',0,'normal');
+('1','0','*','*','*','moduleName=weekly&methodName=createCycleReport','定时生成报告','zentao',1,'normal');
 
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (

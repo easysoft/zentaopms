@@ -309,6 +309,7 @@ class install extends control
             $mode = form::data()->get()->mode;
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('custom')->disableFeaturesByMode($mode);
+            $this->loadModel('weekly')->addBuiltinWeeklyTemplate();
             return $this->send(array('result' => 'success', 'load' => inlink('step5')));
         }
 

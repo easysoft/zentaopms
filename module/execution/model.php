@@ -4173,6 +4173,7 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL

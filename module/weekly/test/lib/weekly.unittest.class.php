@@ -373,4 +373,78 @@ class weeklyTest
 
         return $objects;
     }
+
+    /**
+     * 添加内置报告模板范围。
+     * Add built-in report template scope.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function addBuiltinScopeTest(): bool|object
+    {
+        $scopeID = $this->objectModel->addBuiltinScope();
+        if(!$scopeID) return false;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($scopeID)->fetch();
+    }
+
+    /**
+     * 添加内置分类。
+     * Add built-in category.
+     *
+     * @access public
+     * @return object
+     */
+    public function addBuiltinCategoryTest(): object
+    {
+        $scopeID    = $this->objectModel->addBuiltinScope();
+        $categroyID = $this->objectModel->addBuiltinCategory($scopeID);
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($categroyID)->fetch();
+    }
+
+    /**
+     * 添加内置报告模板。
+     * Add builtin report template.
+     *
+     * @access public
+     * @return array|object
+     */
+    public function addBuiltinTemplateTest(): array|object
+    {
+        $scopeID    = $this->objectModel->addBuiltinScope();
+        $categroyID = $this->objectModel->addBuiltinCategory($scopeID);
+        $this->objectModel->addBuiltinTemplate($scopeID, $categroyID, array());
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
+    }
+
+    /**
+     * 获取内置项目周报模板内容。
+     * Get builtin project weekly report template content.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBuildinRawContentTest(): array
+    {
+        $content = $this->objectModel->getBuildinRawContent(array());
+        return json_decode($content, true);
+    }
+
+    /**
+     * 添加内置项目周报模板。
+     * Add builtin project weekly report template.
+     *
+     * @access public
+     * @return bool|object
+     */
+    public function addBuiltinWeeklyTemplateTest():bool|object
+    {
+        $result = $this->objectModel->addBuiltinWeeklyTemplate();
+        if(!$result) return false;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
+    }
 }
