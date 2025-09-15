@@ -3335,4 +3335,33 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test setMenu4Browse method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function setMenu4BrowseTest(int $projectID, int $productID, string $branch, string $storyType)
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('product');
+        $productZen->loadModel('project');
+        
+        // 模拟app对象
+        $productZen->app = (object)array('tab' => 'product');
+        
+        $method = $this->objectZen->getMethod('setMenu4Browse');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($productZen, array($projectID, $productID, $branch, $storyType));
+        if(dao::isError()) return dao::getError();
+
+        return $result === null ? 'success' : $result;
+    }
 }
