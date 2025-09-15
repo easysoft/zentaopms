@@ -1465,7 +1465,6 @@ class fileModel extends model
             }
         }
 
-        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
 
         if(!isset($oldObject->{$filesName})) $oldObject->{$filesName} = array();

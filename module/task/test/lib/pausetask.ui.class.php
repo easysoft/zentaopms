@@ -15,7 +15,6 @@ class pauseTaskTester extends tester
     {
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
         $form->dom->xpath['pauseBtn']   = "//a[@title='{$this->lang->task->pause}']";
-        $form->dom->xpath['taskStatus'] = "//*[@title='{$this->lang->task->status}']/..//span";
         if($status != 'doing')
         {
             if(is_object($form->dom->pauseBtn)) return $this->failed('错误的显示了暂停按钮');

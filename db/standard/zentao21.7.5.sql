@@ -676,9 +676,9 @@ CREATE TABLE `zt_bug` (
   KEY `assignedTo` (`assignedTo`),
   KEY `deleted` (`deleted`),
   KEY `project` (`project`),
-  KEY `feedback` (`feedback`),
   KEY `product_status_deleted` (`product`,`status`,`deleted`),
-  KEY `idx_repo` (`repo`)
+  KEY `idx_repo` (`repo`),
+  KEY `feedback` (`feedback`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_build` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -745,7 +745,7 @@ CREATE TABLE `zt_case` (
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
   `frequency` enum('1','2','3') NOT NULL DEFAULT '1',
-  `order` tinyint unsigned NOT NULL DEFAULT '0',
+  `order` mediumint unsigned NOT NULL DEFAULT '0',
   `openedBy` char(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
@@ -1803,8 +1803,8 @@ CREATE TABLE `zt_kanbancell` (
   `type` char(30) NOT NULL DEFAULT '',
   `cards` mediumtext,
   PRIMARY KEY (`id`),
-  KEY `lane` (`lane`),
-  UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
+  UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`),
+  KEY `lane` (`lane`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_kanbancolumn` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -3416,9 +3416,9 @@ CREATE TABLE `zt_story` (
   KEY `parent` (`parent`),
   KEY `product` (`product`),
   KEY `root` (`root`),
-  KEY `feedback` (`feedback`),
   KEY `status` (`status`),
-  KEY `assignedTo` (`assignedTo`)
+  KEY `assignedTo` (`assignedTo`),
+  KEY `feedback` (`feedback`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_storyestimate` (
   `story` mediumint NOT NULL DEFAULT '0',
@@ -3555,8 +3555,8 @@ CREATE TABLE `zt_task` (
   KEY `parent` (`parent`),
   KEY `path` (`path`),
   KEY `assignedTo` (`assignedTo`),
-  KEY `feedback` (`feedback`),
-  KEY `order` (`order`)
+  KEY `order` (`order`),
+  KEY `feedback` (`feedback`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_taskestimate` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -3752,8 +3752,8 @@ CREATE TABLE `zt_ticket` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `feedback` (`feedback`),
-  KEY `product` (`product`)
+  KEY `product` (`product`),
+  KEY `feedback` (`feedback`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -3800,10 +3800,10 @@ CREATE TABLE `zt_todo` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
-  KEY `feedback` (`feedback`),
   KEY `assignedTo` (`assignedTo`),
   KEY `finishedBy` (`finishedBy`),
-  KEY `date` (`date`)
+  KEY `date` (`date`),
+  KEY `feedback` (`feedback`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `zt_traincategory` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,

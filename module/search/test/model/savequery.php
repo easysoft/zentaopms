@@ -12,6 +12,9 @@ cid=1
 
 - 标题非空测试第title条的0属性 @『标题』不能为空。
 - 测试保存的查询的模块属性module @bug
+- 业需使用需求的模块名属性module @story
+- 用需使用需求的模块名属性module @story
+- 需求使用需求的模块名属性module @story
 
 */
 
@@ -65,5 +68,8 @@ include($app->getModuleRoot() . '/search/control.php');
 $app->control = new search();
 
 $search = new searchTest();
-r($search->saveQueryTest($module, $title[0], $where, $queryForm))   && p('title:0') && e('『标题』不能为空。'); //标题非空测试
-r($search->saveQueryTest($module, $title[1], $where, $queryForm))   && p('module') && e('bug');                 //测试保存的查询的模块
+r($search->saveQueryTest($module, $title[0], $where, $queryForm))       && p('title:0') && e('『标题』不能为空。'); //标题非空测试
+r($search->saveQueryTest($module, $title[1], $where, $queryForm))       && p('module') && e('bug');   //测试保存的查询的模块
+r($search->saveQueryTest('epic',  $title[1], $where, $queryForm))       && p('module') && e('story'); //业需使用需求的模块名
+r($search->saveQueryTest('requirement', $title[1], $where, $queryForm)) && p('module') && e('story'); //用需使用需求的模块名
+r($search->saveQueryTest('story', $title[1], $where, $queryForm))       && p('module') && e('story'); //需求使用需求的模块名

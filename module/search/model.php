@@ -28,7 +28,7 @@ class searchModel extends model
         $funcModel = $this->session->$cacheKey['funcModel'] ?? '';
         $funcName  = $this->session->$cacheKey['funcName']  ?? '';
         $funcArgs  = $this->session->$cacheKey['funcArgs']  ?? [];
-        if(!$funcModel || !$funcName || !$funcArgs) return $this->session->{$module . 'searchParams'} ?? [];
+        if(!$funcModel || !$funcName || !$funcArgs) return $_SESSION[$module . 'searchParams'] ?? [];
 
         $funcArgs['cacheSearchFunc'] = $cacheSearchFunc;
         return $this->loadModel($funcModel)->$funcName(...array_values($funcArgs)); // PHP 8.0以下只能展开索引数组。PHP 8.0 below can only unpack indexed arrays.
@@ -122,8 +122,8 @@ class searchModel extends model
         /* Init vars. */
         $module       = $this->post->module;
         $searchConfig = $this->processSearchParams($module, true);
-        $searchFields = $searchConfig['fields'];
-        $fieldParams  = $searchConfig['params'];
+        $searchFields = $searchConfig['fields'] ?? [] ;
+        $fieldParams  = $searchConfig['params'] ?? [];
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -195,7 +195,7 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->post->module;
         $searchConfig = $this->processSearchParams($module, true);
-        $fieldParams  = $searchConfig['params'];
+        $fieldParams  = $searchConfig['params'] ?? [];
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -523,6 +523,8 @@ class searchModel extends model
             ->remove('onMenuBar')
             ->get();
         if($this->post->onMenuBar) $query->shortcut = '1';
+        if(in_array($query->module, array('epic', 'requirement'))) $query->module = 'story'; // 用需业需保存为story
+
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(dao::isError()) return false;
@@ -627,6 +629,9 @@ class searchModel extends model
      */
     public function getList(string $keywords, array|string $type, ?object $pager = null): array
     {
+        $filter   = $this->app->loadClass('sqlfilter');
+        $keywords = $filter->getRecommendedFilter($keywords, 'medium');
+
         list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords);
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
@@ -639,9 +644,9 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
-        $stmt = $this->dao->select("*, {$scoreColumn} as score")->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+        $table = "SELECT *, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) AS score FROM " . TABLE_SEARCHINDEX;
+        $stmt  = $this->dao->select('*')->from("({$table})")->alias('t1')
+            ->where("(score >= 1 {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)

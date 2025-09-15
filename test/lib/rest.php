@@ -117,6 +117,7 @@ class rest
     {
         $headers['Accept']       = 'application/json';
         $headers['Content-Type'] = 'application/json';
+        $data = json_encode($data);
 
         $resp = requests::put($this->base . $url, $headers, $data, $options = array());
         try

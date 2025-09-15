@@ -13,6 +13,7 @@ class executionForLiteTester extends tester
     public function checkTab($sort, $tab, $expectNum)
     {
         $this->switchVision('lite');
+        $this->page->wait(5)->refresh();
         $form = $this->initForm('project', 'execution', '', 'appIframe-project');
         $status = [
             'all'       => '全部',
@@ -29,6 +30,7 @@ class executionForLiteTester extends tester
 
         /*添加断言，判断标签下条数是否符合预期*/
         $num = $form->dom->getElement("//*[@id='featureBar']/menu/li[$sort]/a/span[2]")->element->getText();
+        $form->wait(2);
         if($num == $expectNum) return $this->success($status[$tab] . '标签下条数显示正确');
         return $this->failed($status[$tab] . '标签下条数显示不正确');
     }

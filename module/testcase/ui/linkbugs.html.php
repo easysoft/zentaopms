@@ -31,6 +31,8 @@ dtable
     set::cols($config->testcase->linkbugs->dtable->fieldList),
     set::data($bugs2Link),
     set::userMap($users),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}")),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager())

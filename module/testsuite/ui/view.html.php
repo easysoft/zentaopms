@@ -48,7 +48,7 @@ detailHeader
 $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
 $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');
 $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-$hasCheckbox    = ($canBeChanged && $canBatchEdit && $canBatchUnlink && $canBatchRun);
+$hasCheckbox    = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchRun));
 
 $batchItems = array(
     $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,

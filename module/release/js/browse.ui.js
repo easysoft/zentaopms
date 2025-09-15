@@ -1,5 +1,11 @@
 window.renderCell = function(result, {col, row})
 {
+    if(col.name == 'system' && row.data.releases)
+    {
+        result[0] = {className: 'overflow-hidden', html: result[0]};
+        result[result.length] = {html:'<span class="label gray-pale rounded-xl clip">' + integratedLabel + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+    }
+
     if(col.name == 'name')
     {
         if(row.data.marker == 1)
@@ -14,7 +20,7 @@ window.renderCell = function(result, {col, row})
         result = [];
         if(!row.data.build.name) return result;
 
-        let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
+        let branchLabel = showBranch && typeof row.data.build.branchName != 'undefined' ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
         if(isFromDoc)
         {
             result.push({html: branchLabel + row.data.build.name});

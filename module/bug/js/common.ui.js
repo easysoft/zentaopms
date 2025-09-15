@@ -35,7 +35,6 @@ function changeProduct(event)
         loadProductCases(productID);
         loadProductStories(productID, bug.storyID);
         loadProductBugs(productID, bug.id);
-        if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
 }
 
@@ -74,7 +73,6 @@ function changeProject(event)
             loadExecutionLabel(projectID);
             loadExecutions(productID, projectID);
             loadAssignedTo(productID, projectID);
-            if(methodName == 'edit' && edition == 'max') loadIdentify();
         });
     }
     else
@@ -84,7 +82,6 @@ function changeProject(event)
         loadExecutionLabel(projectID);
         loadExecutions(productID, projectID);
         loadAssignedTo(productID, projectID);
-        if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
 }
 

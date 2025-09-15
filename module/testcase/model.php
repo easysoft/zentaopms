@@ -674,7 +674,7 @@ class testcaseModel extends model
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldCase, $case);
-        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
+        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $this->post->comment, ucfirst($case->result));
         $this->action->logHistory($actionID, $changes);
         return true;
     }
@@ -752,15 +752,16 @@ class testcaseModel extends model
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
+    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0, string $orderBy = 'id_asc'): array
     {
         if($browseType != 'bySearch') return array();
 
         $case      = $this->getByID($caseID);
-        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', 'id');
+        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', $orderBy);
         foreach($bugs2Link as $key => $bug2Link)
         {
             if($bug2Link->case != 0) unset($bugs2Link[$key]);
@@ -1487,18 +1488,21 @@ class testcaseModel extends model
         if(empty($projects)) return false;
 
         $this->loadModel('action');
-        $projects   = array_unique($projects);
+        $projects   = array_filter(array_unique($projects));
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id', false);
         foreach($projects as $projectID)
         {
+            if(!isset($objectInfo[$projectID])) continue;
+
             $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+            $lastOrder++;
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $case->product;
             $data->case    = $caseID;
             $data->version = 1;
-            $data->order   = ++ $lastOrder;
+            $data->order   = $lastOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
             $object     = $objectInfo[$projectID];
@@ -2977,7 +2981,7 @@ class testcaseModel extends model
 
         $_SESSION['searchParams']['module'] = 'testcase';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
-        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->search->setDefaultParams('testcase', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
     }

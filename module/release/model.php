@@ -110,20 +110,28 @@ class releaseModel extends model
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select('id,name,execution,project')
-            ->from(TABLE_BUILD)
-            ->where('deleted')->eq(0)
+        $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+            ->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
             ->fetchAll('id');
 
+        $this->loadModel('branch');
         foreach($releases as $release)
         {
             $releaseBuilds = array();
             foreach(explode(',', $release->build) as $buildID)
             {
                 if(!$buildID || !isset($builds[$buildID])) continue;
-                $releaseBuilds[] = $builds[$buildID];
+                $releaseBuilds[$buildID] = $builds[$buildID];
             }
             $release->builds = $releaseBuilds;
+
+            $branchName = array();
+            foreach(explode(',', trim($release->branch, ',')) as $releaseBranch) $branchName[] = $releaseBranch === '0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
+            $branchName = implode(',', $branchName);
+
+            $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
 
             $release->projectName = array();
             foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zget($projectPairs, $projectID, '');
@@ -1386,7 +1394,7 @@ class releaseModel extends model
      *
      * @param  array  $releaseList
      * @param  array  $childReleases
-     * @param  int    $addActionsAndBuildLink
+     * @param  bool   $addActionsAndBuildLink
      * @access public
      * @return array
      */
@@ -1403,30 +1411,7 @@ class releaseModel extends model
             $release->rowspan = $buildCount;
             if($addActionsAndBuildLink) $release->actions = $this->buildActionList($release);
 
-            if(!empty($release->builds))
-            {
-                foreach($release->builds as $build)
-                {
-                    $releaseInfo = clone $release;
-
-                    if($addActionsAndBuildLink)
-                    {
-                        $moduleName   = $build->execution ? 'build' : 'projectbuild';
-                        $canClickable = false;
-                        if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
-                        if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
-                        $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
-                    }
-
-                    $releaseInfo->build = $build;
-
-                    $releases[] = $releaseInfo;
-                }
-            }
-            else
-            {
-                $releases[] = $release;
-            }
+            $releases = array_merge($releases, $this->processReleaseBuilds($release, $addActionsAndBuildLink));
 
             if(empty($release->releases)) continue;
 
@@ -1436,12 +1421,53 @@ class releaseModel extends model
                 {
                     $child = clone $childReleases[$childID];
                     $child = current($this->processReleaseListData(array($child)));
-
                     $child->rowID  = "{$release->id}-{$childID}";
                     $child->parent = $release->id;
-                    $releases[$child->rowID] = $child;
+                    $releases = array_merge($releases, $this->processReleaseBuilds($child, $addActionsAndBuildLink));
                 }
             }
+        }
+
+        return $releases;
+    }
+
+    /**
+     * 处理发布构建信息。
+     * Process release builds.
+     *
+     * @param  object $release
+     * @param  bool   $addActionsAndBuildLink
+     * @access public
+     * @return array
+     */
+    public function processReleaseBuilds(object $release, bool $addActionsAndBuildLink): array
+    {
+        $releases = array();
+
+        if(!empty($release->builds))
+        {
+            foreach($release->builds as $build)
+            {
+                $releaseInfo = clone $release;
+
+                if($addActionsAndBuildLink)
+                {
+                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                    $canClickable = false;
+                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
+                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
+                    $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
+                }
+
+                $releaseInfo->build       = $build;
+                $releaseInfo->projectName = $build->projectName;
+
+                $releases[] = $releaseInfo;
+            }
+        }
+        else
+        {
+            $releases[] = $release;
         }
 
         return $releases;

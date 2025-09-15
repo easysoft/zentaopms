@@ -136,3 +136,4 @@ $lang->release->markerList[0] = '否';
 
 $lang->release->failTips        = '部署/上线失败';
 $lang->release->versionErrorTip = "版本号只能包含大小写英文字母、数字、减号（-）、点（.） 、下划线（_）";
+$lang->release->integratedLabel = '集成';

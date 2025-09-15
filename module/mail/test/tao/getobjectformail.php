@@ -4,6 +4,7 @@
 /**
 
 title=测试 mailModel->getObjectForMail();
+timeout=0
 cid=0
 
 - 不传入任何参数 @0

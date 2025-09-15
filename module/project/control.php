@@ -651,9 +651,10 @@ class project extends control
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('project', 'browse'))));
         }
 
-        $products        = $this->loadModel('product')->getProducts($projectID);
-        $projectBranches = $this->project->getBranchesByProject($projectID);
-        $linkedBranches  = array();
+        $projectBranches     = $this->project->getBranchesByProject($projectID);
+        $linkedProductIdList = empty($projectBranches) ? '' : array_keys($projectBranches);
+        $products            = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList, false);
+        $linkedBranches      = array();
         foreach($products as $product)
         {
             $product->roadmaps = '';

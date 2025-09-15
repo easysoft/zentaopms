@@ -59,11 +59,13 @@ class scm
      * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
+     * @param  string $label
+     * @param  int    $showArchived
      * @return array
      */
-    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '')
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', int $showArchived = 0)
     {
-        return $this->engine->branch($showDetail, $orderBy, $limit, $pageID, $label);
+        return $this->engine->branch($showDetail, $orderBy, $limit, $pageID, $label, $showArchived);
     }
 
     /**

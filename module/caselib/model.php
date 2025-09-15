@@ -449,7 +449,7 @@ class caselibModel extends model
 
         $_SESSION['searchParams']['module'] = 'caselib';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
-        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        $searchConfig['params'] = $this->search->setDefaultParams('caselib', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
     }

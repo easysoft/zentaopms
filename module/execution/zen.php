@@ -510,8 +510,10 @@ class executionZen extends execution
         }
 
         /* Get linked branches. */
-        $products       = $this->loadModel('product')->getProducts($executionID);
-        $linkedBranches = array();
+        $branches            = $this->project->getBranchesByProject($executionID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $products            = $this->loadModel('product')->getProducts($executionID, 'all', '', true, $linkedProductIdList, false);
+        $linkedBranches      = array();
         foreach($products as $product)
         {
             if(isset($product->branches))

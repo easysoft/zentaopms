@@ -43,7 +43,7 @@ $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, plan, story, task,
     title, keywords, severity, pri, type, os, browser,
-    steps, status, deadline, activatedCount, confirmed, mailto,
+    steps, status, deadline, activatedCount, activatedDate, confirmed, mailto,
     openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,

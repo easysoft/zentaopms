@@ -88,7 +88,7 @@ class projectrelease extends control
         $execution = $this->loadModel('execution')->getByID($executionID);
 
         $this->view->title         = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->products      = $this->product->getProductPairsByProject($projectID);
+        $this->view->products      = $this->product->getPairs('all', 0, '', 'all');
         $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
         $this->view->projectID     = $projectID;
         $this->view->executionID   = $executionID;
