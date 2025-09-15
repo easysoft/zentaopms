@@ -4389,4 +4389,30 @@ class productTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processProjectListData method.
+     *
+     * @param  array $projectList
+     * @access public
+     * @return array
+     */
+    public function processProjectListDataTest(array $projectList): array
+    {
+        try {
+            global $tester;
+
+            $productZen = new productZen();
+
+            $method = $this->objectZen->getMethod('processProjectListData');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($productZen, array($projectList));
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
