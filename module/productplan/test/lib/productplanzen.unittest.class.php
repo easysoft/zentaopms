@@ -4,7 +4,15 @@ class productplanZenTest
 {
     public function __construct()
     {
-        // 简化构造方法，避免加载问题
+        global $tester, $app;
+        $app->rawModule  = 'productplan';
+        $app->rawMethod  = 'browse';
+        $app->moduleName = 'productplan';
+        $app->methodName = 'browse';
+        
+        // 直接创建zen对象而不是通过loadZen
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $this->objectZen = new productplanZen();
     }
 
     /**
@@ -50,6 +58,22 @@ class productplanZenTest
             $result->branches = array(); // 简化返回
         }
         
+        return $result;
+    }
+
+    /**
+     * Test buildDataForBrowse method.
+     *
+     * @param  array $plans
+     * @param  array $branchOption
+     * @access public
+     * @return mixed
+     */
+    public function buildDataForBrowseTest($plans, $branchOption)
+    {
+        $result = $this->objectZen->buildDataForBrowse($plans, $branchOption);
+        if(dao::isError()) return dao::getError();
+
         return $result;
     }
 }
