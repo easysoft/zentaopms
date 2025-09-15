@@ -3077,4 +3077,77 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  string $viewType
+     * @param  string $hookMessage
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest(int $productID, int $programID, string $viewType = '', string $hookMessage = ''): array
+    {
+        global $tester;
+
+        // 创建productZen实例
+        $productZen = new productZen();
+        $productZen->lang = $tester->lang;
+        $productZen->config = $tester->config;
+        $productZen->app = $tester->app;
+        $productZen->viewType = $viewType;
+
+        // 模拟executeHooks方法的返回值
+        if($hookMessage)
+        {
+            $productZen->lang->saveSuccess = '保存成功';
+        }
+        else
+        {
+            $productZen->lang->saveSuccess = '保存成功';
+        }
+
+        // 创建一个扩展的productZen类来模拟executeHooks和getCreatedLocate方法
+        $extendedProductZen = new class($productZen, $hookMessage) extends productZen {
+            private $mockHookMessage;
+            private $originalZen;
+
+            public function __construct($originalZen, $hookMessage)
+            {
+                $this->originalZen = $originalZen;
+                $this->mockHookMessage = $hookMessage;
+                $this->lang = $originalZen->lang;
+                $this->config = $originalZen->config;
+                $this->app = $originalZen->app;
+                $this->viewType = $originalZen->viewType;
+                $this->moduleName = 'product';
+            }
+
+            public function executeHooks(int $objectID): string
+            {
+                return $this->mockHookMessage ?: '';
+            }
+
+            protected function getCreatedLocate($productID, $programID): array
+            {
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'test_location', 'closeModal' => true);
+            }
+
+            public function createLink(string $moduleName, string $methodName = 'index', array|string $vars = [], string $viewType = '', bool $onlybody = false): string
+            {
+                return "test_link_{$moduleName}_{$methodName}";
+            }
+        };
+
+        // 使用反射调用被测试的protected方法
+        $method = $this->objectZen->getMethod('responseAfterCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($extendedProductZen, array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
