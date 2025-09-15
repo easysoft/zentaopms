@@ -3564,4 +3564,39 @@ class productTest
 
         return is_array($result) ? count($result) : $result;
     }
+
+    /**
+     * Test getStories method from zen layer.
+     *
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  string  $branchID
+     * @param  int     $moduleID
+     * @param  int     $param
+     * @param  string  $storyType
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  mixed   $pager
+     * @access public
+     * @return mixed
+     */
+    public function getStoriesZenTest(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', $pager = null)
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->loadModel('story');
+        $productZen->loadModel('product');
+        $productZen->app = $tester->app;
+        $productZen->app->rawModule = $projectID ? 'projectstory' : 'product';
+        $productZen->products = array();
+        
+        // 模拟配置
+        $productZen->config = $tester->config;
+        
+        $result = $productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
