@@ -44,6 +44,8 @@ build/*.gz
 **/test/model/data/sql/*.sql
 **/test/tao/data/*.yaml
 **/test/tao/data/sql/*.sql
+**/test/zen/data/*.yaml
+**/test/zen/data/sql/*.sql
 **/metric/test/calc/**/data/*.yaml
 **/metric/test/calc/**/data/sql/*.sql
 
