@@ -185,11 +185,12 @@ class projectModel extends model
      */
     public static function isClickable(object $project, string $action)
     {
+        global $config;
         $action = strtolower($action);
 
         if($action == 'publishtemplate')   return $project->status == 'wait' || $project->status == 'closed';
         if($action == 'disabletemplate')   return $project->status == 'doing';
-        if($action == 'deletedeliverable') return $project->status == 'draft';
+        if($action == 'deletedeliverable') return !$project->review && !in_array($project->category, $config->project->templateCategoryList);
 
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
