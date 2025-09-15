@@ -33,11 +33,6 @@ class weekly extends control
      */
     public function commonAction($projectID = 0)
     {
-        if(common::hasPriv('weekly', 'exportweeklyreport'))
-        {
-            $this->lang->TRActions = "<div class='btn-toolbar pull-right'>" . html::a($this->createLink('weekly', 'exportweeklyreport', 'module=' . $this->app->getModuleName() . '&projectID=' . $projectID), $this->lang->export, '', "class='btn btn-primary' data-width='30%' id='exportreport' data-group='project'") . '</div';
-        }
-
         $this->loadModel('project')->setMenu($projectID);
     }
 
@@ -51,6 +46,8 @@ class weekly extends control
      */
     public function index($projectID = 0, $date = '')
     {
+        if(!common::hasPriv('weekly', 'view')) return $this->locate($this->createLink('user', 'deny', 'module=weekly&method=view'));
+
         $this->commonAction($projectID);
         if(!$date) $date = helper::today();
         $date = date('Y-m-d', strtotime($date));
@@ -63,8 +60,6 @@ class weekly extends control
 
         $this->view->title = $this->lang->weekly->common;
         $this->view->date  = $date;
-
-        $this->lang->modulePageNav = $this->weekly->getPageNav($this->view->project, $date);
         $this->display();
     }
 
@@ -90,5 +85,21 @@ class weekly extends control
             $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->andWhere('weekStart')->eq($weekStart)->exec();
             $this->weekly->save($projectID, $date);
         }
+    }
+
+    /**
+     *  定时创建报告。
+     *  Generate weekly report.
+     *
+     * @access public
+     * @return void
+     */
+    public function createCycleReport()
+    {
+        if(in_array($this->config->edition, array('open', 'biz'))) return print('Support min edition is max');
+
+        $errors = $this->loadModel('reporttemplate')->createCycleReport();
+        if($errors) return print(json_encode($errors));
+        return print('success');
     }
 }

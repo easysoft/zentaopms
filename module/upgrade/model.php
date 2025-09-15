@@ -11201,4 +11201,67 @@ class upgradeModel extends model
 
         return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
     }
+
+    /**
+     * 获取需要更新的周报数据。
+     * Get weekly reports that need to be updated.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeWeeklyReports(): array
+    {
+        $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.status as projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.status')->ne('wait')
+            ->orderBy('t1.project asc, t1.weekStart asc')
+            ->fetchAll();
+        if(empty($reports)) return array();
+
+        $thisSunday = date('Y-m-d', strtotime('this Sunday'));
+        foreach($reports as $key => $report)
+        {
+            if($report->projectStatus == 'doing') $report->realBegan = !helper::isZeroDate($report->realBegan) ? $report->realBegan : $report->weekStart;
+            if(helper::isZeroDate($report->realBegan)) unset($reports[$key]);
+
+            /* Filter date < project begin date report. */
+            $report->projectBegin = date('Y-m-d', strtotime($report->realBegan));
+            if($report->weekStart < $report->projectBegin) unset($reports[$key]);
+
+            if($report->projectStatus == 'doing')     $report->projectEnd = $thisSunday;
+            if($report->projectStatus == 'suspended') $report->projectEnd = $report->suspendedDate;
+            if($report->projectStatus == 'closed')    $report->projectEnd = $report->realEnd;
+
+            /* Filter date > project end date report. */
+            $report->projectEnd = date('Y-m-d', strtotime($report->projectEnd));
+            if($report->weekStart > $report->projectEnd) unset($reports[$key]);
+        }
+        return array_values($reports);
+    }
+
+    /**
+     * 升级周报数据。
+     * Upgrade Weekly Report.
+     *
+     * @param  array $data
+     * @access public
+     * @return bool
+     */
+    public function upgradeWeeklyReport(array $data): bool
+    {
+        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7);
+        $weekNumber = empty($weekNumber) ? 1 : $weekNumber;
+        $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
+
+        $report = new stdclass();
+        $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+        $report->project      = $data['project'];
+        $report->templateType = 'weekly';
+        $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
+        $report->addedBy      = 'system';
+        $report->addedDate    = $data['weekStart'] . ' 00:00:00';
+        $this->dao->insert(TABLE_DOC)->data($report)->exec();
+
+        return !dao::isError();
+    }
 }

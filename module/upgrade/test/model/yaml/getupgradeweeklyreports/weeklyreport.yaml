@@ -1,0 +1,15 @@
+title: weeklyreport.
+desc: weeklyreport data.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 1-5
+  - field: weekStart
+    range: "20250101 000000:7D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: staff
+    range: 1-10

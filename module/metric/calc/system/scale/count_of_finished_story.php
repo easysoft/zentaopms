@@ -28,7 +28,7 @@ class count_of_finished_story extends baseCalc
 
     public function calculate($row)
     {
-        if($row->stage == 'closed' and $row->closedReason == 'done') $this->result ++;
+        if($row->status == 'closed' and $row->closedReason == 'done') $this->result ++;
     }
 
     public function getResult($options = array())

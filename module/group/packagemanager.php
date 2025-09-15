@@ -301,6 +301,10 @@ $config->group->subset->metric = new stdclass();
 $config->group->subset->metric->order = 890;
 $config->group->subset->metric->nav   = 'bi';
 
+$config->group->subset->reporttemplate = new stdclass();
+$config->group->subset->reporttemplate->order = 900;
+$config->group->subset->reporttemplate->nav   = 'bi';
+
 $config->group->subset->systemteam = new stdclass();
 $config->group->subset->systemteam->order = 920;
 $config->group->subset->systemteam->nav   = 'system';
@@ -2235,15 +2239,28 @@ $config->group->package->browseProjectRelease->privs  = array();
 $config->group->package->browseProjectRelease->privs['projectrelease-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('projectrelease-create', 'projectrelease-edit', 'projectrelease-view'));
 $config->group->package->browseProjectRelease->privs['projectrelease-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('projectrelease-browse'), 'recommend' => array('projectrelease-create', 'projectrelease-edit'));
 
-$config->group->package->projectWeekly = new stdclass();
-$config->group->package->projectWeekly->order  = 5;
-$config->group->package->projectWeekly->subset = 'projectreport';
-$config->group->package->projectWeekly->privs  = array();
-$config->group->package->projectWeekly->privs['weekly-index']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index'), 'recommend' => array());
-$config->group->package->projectWeekly->privs['weekly-exportweeklyreport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-index'), 'recommend' => array('weekly-index'));
+$config->group->package->browseProjectReport = new stdclass();
+$config->group->package->browseProjectReport->order  = 5;
+$config->group->package->browseProjectReport->subset = 'projectreport';
+$config->group->package->browseProjectReport->privs  = array();
+$config->group->package->browseProjectReport->privs['weekly-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
+$config->group->package->browseProjectReport->privs['weekly-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
+
+$config->group->package->manageProjectReport = new stdclass();
+$config->group->package->manageProjectReport->order  = 10;
+$config->group->package->manageProjectReport->subset = 'projectreport';
+$config->group->package->manageProjectReport->privs  = array();
+$config->group->package->manageProjectReport->privs['weekly-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('weekly-browse', 'weekly-edit'), 'recommend' => array());
+$config->group->package->manageProjectReport->privs['weekly-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse', 'weekly-view'), 'recommend' => array('weekly-create'));
+
+$config->group->package->deleteProjectReport = new stdclass();
+$config->group->package->deleteProjectReport->order  = 15;
+$config->group->package->deleteProjectReport->subset = 'projectreport';
+$config->group->package->deleteProjectReport->privs  = array();
+$config->group->package->deleteProjectReport->privs['weekly-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('weekly-browse'), 'recommend' => array());
 
 $config->group->package->projectMilestone = new stdclass();
-$config->group->package->projectMilestone->order  = 10;
+$config->group->package->projectMilestone->order  = 20;
 $config->group->package->projectMilestone->subset = 'projectreport';
 $config->group->package->projectMilestone->privs  = array();
 $config->group->package->projectMilestone->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index', 'weekly-index'), 'recommend' => array('milestone-saveOtherProblem'));
@@ -3635,6 +3652,31 @@ $config->group->package->manageMetric->privs['metric-implement']   = array('edit
 $config->group->package->manageMetric->privs['metric-delist']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('metric-browse'), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('metric-browse'), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-recalculate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->browseReportTemplate = new stdclass();
+$config->group->package->browseReportTemplate->order  = 10;
+$config->group->package->browseReportTemplate->subset = 'reporttemplate';
+$config->group->package->browseReportTemplate->privs  = array();
+$config->group->package->browseReportTemplate->privs['reporttemplate-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('reporttemplate-view'));
+$config->group->package->browseReportTemplate->privs['reporttemplate-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('reporttemplate-browse'), 'recommend' => array());
+
+$config->group->package->manageReportTemplate = new stdclass();
+$config->group->package->manageReportTemplate->order  = 15;
+$config->group->package->manageReportTemplate->subset = 'reporttemplate';
+$config->group->package->manageReportTemplate->privs  = array();
+$config->group->package->manageReportTemplate->privs['reporttemplate-addcategory']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-editcategory'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-editcategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-addcategory'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array('reporttemplate-pause'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reporttemplate-browse', 'reporttemplate-view'), 'recommend' => array('reporttemplate-create', 'reporttemplate-pause'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-pause']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('reporttemplate-browse'), 'recommend' => array('reporttemplate-create', 'reporttemplate-edit'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-cron']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('reporttemplate-browse', 'reporttemplate-edit'), 'recommend' => array('reporttemplate-create', 'reporttemplate-edit'));
+
+$config->group->package->deleteReportTemplate = new stdclass();
+$config->group->package->deleteReportTemplate->order  = 20;
+$config->group->package->deleteReportTemplate->subset = 'reporttemplate';
+$config->group->package->deleteReportTemplate->privs  = array();
+$config->group->package->deleteReportTemplate->privs['reporttemplate-deletecategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('reporttemplate-browse'), 'recommend' => array());
+$config->group->package->deleteReportTemplate->privs['reporttemplate-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reporttemplate-browse', 'reporttemplate-view'), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;

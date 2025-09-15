@@ -217,8 +217,7 @@ $lang->upgrade->fromVersions['21_7_1']      = '21.7.1';
 $lang->upgrade->fromVersions['21_7_2']      = '21.7.2';
 $lang->upgrade->fromVersions['21_7_3']      = '21.7.3';
 $lang->upgrade->fromVersions['21_7_4']      = '21.7.4';
-$lang->upgrade->fromVersions['21_7_5']        = '21.7.5';
-$lang->upgrade->fromVersions['21_7_5']        = '21.7.5'; // pms insert position.
+$lang->upgrade->fromVersions['21_7_5']      = '21.7.5'; // pms insert position.
 
 global $config;
 /* Lite. */
