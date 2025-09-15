@@ -3286,4 +3286,27 @@ class productTest
 
         return $result;
     }
+
+    /**
+     * Test getBrowseProduct method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return object|null
+     */
+    public function getBrowseProductTest(int $productID): object|null
+    {
+        global $tester;
+        
+        $productZen = new productZen();
+        $productZen->product = $tester->loadModel('product');
+        $productZen->products = array(1 => '产品1', 2 => '产品2', 3 => '产品3');
+        
+        $method = $this->objectZen->getMethod('getBrowseProduct');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($productZen, array($productID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
