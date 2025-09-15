@@ -11368,15 +11368,16 @@ class upgradeModel extends model
             {
                 foreach($workflowGroups as $workflowGroup)
                 {
+                    if($workflowGroup->projectModel == 'kanban') $workflowGroup->projectModel = 'scrum_kanban';
                     if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
                     if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
-                    if(empty($otherActivity[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($projectModules[$workflowGroup->id], $workflowGroup->id);
+                    if(empty($otherActivity[$workflowGroup->id]) && isset($projectModules[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($projectModules[$workflowGroup->id], $workflowGroup->id);
 
                     $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
                     $deliverable->workflowGroup = $workflowGroup->id;
                     $deliverable->desc          = $oldDeliverable->desc;
-                    $deliverable->module        = $otherModules[$workflowGroup->id];
-                    $deliverable->activity      = $otherActivity[$workflowGroup->id];
+                    $deliverable->module        = isset($otherModules[$workflowGroup->id]) ? $otherModules[$workflowGroup->id] : '0';
+                    $deliverable->activity      = isset($otherActivity[$workflowGroup->id]) ? $otherActivity[$workflowGroup->id] : '0';
                     $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
                     $deliverable->createdBy     = $oldDeliverable->createdBy;
                     $deliverable->createdDate   = !empty($oldDeliverable->createdDate) ? $oldDeliverable->createdDate : null;
@@ -11431,7 +11432,7 @@ class upgradeModel extends model
                         }
 
                         /* 按照交付物配置生成交付物检查规则。 */
-                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops', 'kanban')))
+                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops')))
                         {
                             /* 将原来不同类型的迭代合并成一个迭代。 */
                             $deliverableStage->stage = 'sprint';
@@ -12070,6 +12071,7 @@ class upgradeModel extends model
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($this->config->edition == 'ipd')->andWhere('t2.category')->notin(array_keys($this->lang->review->reviewPoint->titleList))->fi() // IPD 模式下，只升级非评审点的评审。
+            ->orderBy('t1.id_desc')
             ->fetchAll('id');
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
@@ -12113,16 +12115,19 @@ class upgradeModel extends model
                 $doc->project   = $review->project;
                 $doc->addedBy   = $review->createdBy;
                 $doc->addedDate = $review->createdDate;
+                $doc->version   = 1;
                 $doc->type      = $files ? 'attachment' : 'text';
 
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc = $this->dao->lastInsertID();
                 $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
 
-                $docContent->doc   = $review->doc;
-                $docContent->title = $review->title;
-                $docContent->files = $files;
+                $docContent->doc     = $review->doc;
+                $docContent->title   = $review->title;
+                $docContent->files   = $files;
+                $docContent->version = 1;
                 $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
             }
             elseif($review->doc && $files)
             {
