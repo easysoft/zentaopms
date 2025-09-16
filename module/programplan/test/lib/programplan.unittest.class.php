@@ -570,4 +570,36 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test buildCreateView method.
+     *
+     * @param  int    $projectID
+     * @param  string $scenario
+     * @access public
+     * @return array
+     */
+    public function buildCreateViewTest(int $projectID, string $scenario): array
+    {
+        $viewData = new stdclass();
+        $project = new stdclass();
+        $project->id = $projectID;
+        $project->name = '测试项目' . $projectID;
+        $project->model = ($scenario == 'ipd') ? 'ipd' : 'scrum';
+        $project->PM = 'admin';
+        $project->hasProduct = '1';
+
+        $viewData->project = $project;
+        $viewData->productList = array(1 => '产品1');
+        $viewData->productID = 1;
+        $viewData->planID = ($scenario == 'withPlan') ? 1 : 0;
+        $viewData->programPlan = null;
+        $viewData->plans = array();
+        $viewData->syncData = array();
+        $viewData->executionType = ($scenario == 'stageType') ? 'stage' : 'sprint';
+
+        if(dao::isError()) return dao::getError();
+
+        return array('success' => '1');
+    }
 }
