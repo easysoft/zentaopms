@@ -23,6 +23,9 @@ zenData('user')->loadYaml('user_printactionforgitlab', false, 2)->gen(10);
 
 su('admin');
 
+global $config;
+$config->requestType = 'PATH_INFO';
+
 $actionTest = new actionTest();
 
 $invalidAction = new stdclass();
