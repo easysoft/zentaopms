@@ -398,4 +398,53 @@ class projectzenTest
 
         return $results;
     }
+
+    /**
+     * Test processBuildListData method.
+     *
+     * @param  array $buildList
+     * @param  int   $projectID
+     * @access public
+     * @return mixed
+     */
+    public function processBuildListDataTest($buildList = array(), $projectID = null)
+    {
+        try
+        {
+            global $tester, $config, $lang;
+
+            // 初始化必要的配置和语言
+            if(!isset($config->build)) $config->build = new stdClass();
+            if(!isset($config->build->dtable)) $config->build->dtable = new stdClass();
+            if(!isset($config->build->dtable->fieldList)) $config->build->dtable->fieldList = array();
+
+            $config->build->dtable->fieldList['product'] = array('title' => '产品');
+            $config->build->dtable->fieldList['branch'] = array('title' => '分支');
+            $config->build->dtable->fieldList['execution'] = array('title' => '执行');
+            $config->build->dtable->fieldList['name'] = array('title' => '名称', 'link' => '');
+
+            if(!isset($lang->project)) $lang->project = new stdClass();
+            if(!isset($lang->project->executionList)) $lang->project->executionList = array();
+            if(!isset($lang->branch)) $lang->branch = new stdClass();
+            if(!isset($lang->branch->main)) $lang->branch->main = '主干';
+
+            // 加载必要的模型
+            $this->objectZen->loadModel('build');
+            $this->objectZen->loadModel('branch');
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('processBuildListData');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $buildList, $projectID);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }

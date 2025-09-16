@@ -1,0 +1,53 @@
+---
+title: Build数据定义
+desc: 为processBuildListData方法测试提供build数据
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+- field: project
+  note: 项目ID
+  range: 1-3
+- field: product
+  note: 产品ID
+  range: 1-2
+- field: branch
+  note: 分支ID，支持多分支用逗号分隔
+  range: '0,1,2,1,2'
+- field: execution
+  note: 执行ID
+  range: 0-5
+- field: builds
+  note: 子版本信息（JSON格式）
+  range: ['','[{"executionName":"执行1"}]','[{"executionName":"执行2"}]']
+- field: name
+  note: 版本名称
+  range: 'v1.0.{}.{},v2.0.{}.{},v3.0.{}.{}'
+- field: system
+  note: 系统标识
+  range: 0-2
+- field: scmPath
+  note: 代码路径
+  range: ['/trunk/src','/branches/v1.0','/branches/v2.0','']
+- field: filePath
+  note: 文件路径
+  range: ['/files/build1.zip','/files/build2.zip','']
+- field: date
+  note: 版本日期
+  range: '2024-01-01,2024-01-02,2024-01-03'
+- field: stories
+  note: 关联需求
+  range: ['1,2','2,3','']
+- field: bugs
+  note: 关联Bug
+  range: ['1','2','']
+- field: artifactRepoID
+  note: 制品库ID
+  range: 0-2
+- field: builder
+  note: 构建者
+  range: admin,user1,user2
+- field: deleted
+  note: 是否删除
+  range: '0'
