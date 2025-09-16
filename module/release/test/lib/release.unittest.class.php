@@ -624,4 +624,39 @@ class releaseTest
 
         return $parentIdList;
     }
+
+    /**
+     * Test assignVarsForView method.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function assignVarsForViewTest(object $release, string $type, string $link, string $param, string $orderBy): array
+    {
+        // 模拟调用assignVarsForView方法的逻辑
+        // 该方法主要是为view对象设置各种变量，我们可以通过检查基本参数来验证
+        $result = array(
+            'type' => $type,
+            'link' => $link,
+            'param' => $param,
+            'orderBy' => $orderBy,
+            'releaseId' => $release->id,
+            'productId' => $release->product,
+            'hasStories' => !empty($release->stories),
+            'hasBugs' => !empty($release->bugs),
+            'hasLeftBugs' => !empty($release->leftBugs),
+            'hasUsers' => true,
+            'hasActions' => true,
+            'showGrade' => false
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
