@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_getnotexistrepos.unittest.class.php';
 
 $table = zenData('repo');
 $table->id->range('1-10');
@@ -28,7 +28,7 @@ $table->gen(10);
 
 su('admin');
 
-$repoZenTest = new repoZenTest();
+$repoZenTest = new repoZenGetNotExistReposTest();
 
 // 测试步骤1：有效服务器对象，存在GitLab项目，部分已存在于禅道
 $server1 = new stdClass();
