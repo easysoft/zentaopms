@@ -12169,7 +12169,8 @@ class upgradeModel extends model
                 $doc->type      = $files ? 'attachment' : 'text';
 
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
-                $review->doc = $this->dao->lastInsertID();
+                $review->doc        = $this->dao->lastInsertID();
+                $review->docVersion = 1;
                 $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
 
                 $docContent->doc     = $review->doc;
