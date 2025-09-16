@@ -45,12 +45,13 @@ class settingModel extends model
      *
      * @param  string  $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
      * @param  mixed   $value
+     * @param  string  $delimiter
      * @access public
      * @return bool
      */
-    public function setItem(string $path, mixed $value = ''): bool
+    public function setItem(string $path, mixed $value = '', string $delimiter = '.'): bool
     {
-        $item = $this->parseItemPath($path);
+        $item = $this->parseItemPath($path, $delimiter);
         if(empty($item)) return false;
 
         $item->value = strval($value);
@@ -160,10 +161,11 @@ class settingModel extends model
      * Parse item path
      *
      * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @param  string      $delimiter
      * @access public
      * @return object|bool
      */
-    public function parseItemPath(string $path): object|bool
+    public function parseItemPath(string $path, string $delimiter = '.'): object|bool
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
@@ -179,12 +181,12 @@ class settingModel extends model
             $path    = preg_replace("/^{$account}/", 'account', $path);
         }
 
-        $level   = substr_count($path, '.');
+        $level   = substr_count($path, $delimiter);
         $section = '';
 
         if($level <= 1) return false;
-        if($level == 2) list($owner, $module, $key) = explode('.', $path);
-        if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
+        if($level == 2) list($owner, $module, $key) = explode($delimiter, $path);
+        if($level == 3) list($owner, $module, $section, $key) = explode($delimiter, $path);
         if($replace) $owner = $account;
 
         $item = new stdclass();

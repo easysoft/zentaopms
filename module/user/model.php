@@ -1975,7 +1975,7 @@ class userModel extends model
             $this->dao->update(TABLE_USERVIEW)->data($userView)->where('account')->eq($account)->exec();
         }
 
-        $this->loadModel('setting')->setItem("$account.common.userview.updateTime", time());
+        $this->loadModel('setting')->setItem("$account|common|userview|updateTime", time(), '|');
 
         return $userView;
     }
