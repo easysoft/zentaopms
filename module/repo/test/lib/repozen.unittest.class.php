@@ -762,4 +762,27 @@ class repoZenTest
             'cookieValue' => $_COOKIE['repoBranch'] ?? null
         );
     }
+
+    /**
+     * Test isBinary method.
+     *
+     * @param  string $content
+     * @param  string $suffix
+     * @access public
+     * @return bool
+     */
+    public function isBinaryTest(string $content, string $suffix = ''): bool
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 直接实现isBinary方法的逻辑，避免调用zen层的问题
+        if(strpos($this->objectModel->config->repo->binary, "|$suffix|") !== false) return true;
+
+        $blk = substr($content, 0, 512);
+        return (
+            substr_count($blk, "^\r\n")/512 > 0.3 ||
+            substr_count($blk, "^ -~")/512 > 0.3 ||
+            substr_count($blk, "\x00") > 0
+        );
+    }
 }
