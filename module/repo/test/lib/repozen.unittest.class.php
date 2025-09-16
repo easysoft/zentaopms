@@ -785,4 +785,25 @@ class repoZenTest
             substr_count($blk, "\x00") > 0
         );
     }
+
+    /**
+     * Test strposAry method.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAryTest(string $str, array $checkAry): bool
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 直接实现strposAry方法的逻辑
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
+    }
 }
