@@ -785,4 +785,22 @@ class programTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test removeSubjectToCurrent method.
+     *
+     * @param  array $parents
+     * @param  int   $programID
+     * @access public
+     * @return array
+     */
+    public function removeSubjectToCurrentTest(array $parents, int $programID): array
+    {
+        $children = $this->program->dao->select('*')->from(TABLE_PROGRAM)->where('path')->like("%,$programID,%")->fetchPairs('id', 'id');
+        foreach($children as $childID) unset($parents[$childID]);
+
+        if(dao::isError()) return dao::getError();
+
+        return $parents;
+    }
 }
