@@ -21,8 +21,8 @@ su('admin');
 global $tester;
 $cacheModel = $tester->loadModel('cache');
 
-r($cacheModel->clear(true)) && p() && e('~~');
-r($cacheModel->clear(false)) && p() && e('~~');
-r($cacheModel->clear()) && p() && e('~~');
-r($cacheModel->clear(true)) && p() && e('~~');
-r($cacheModel->clear(false)) && p() && e('~~');
+r($cacheModel->clear(true)) && p() && e(0);
+r($cacheModel->clear(false)) && p() && e(0);
+r($cacheModel->clear()) && p() && e(0);
+r($cacheModel->clear(true)) && p() && e(0);
+r($cacheModel->clear(false)) && p() && e(0);
