@@ -696,4 +696,31 @@ class programplanTest
 
         return $viewData;
     }
+
+    /**
+     * Test computeFieldsCreateView method.
+     *
+     * @param  object $viewData
+     * @access public
+     * @return array
+     */
+    public function computeFieldsCreateViewTest(object $viewData): array
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->zenInstance);
+            $method = $reflection->getMethod('computeFieldsCreateView');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->zenInstance, $viewData);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
