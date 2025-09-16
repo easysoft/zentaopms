@@ -7,7 +7,13 @@ class programplanTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('programplan');
-         $this->objectTao   = $tester->loadTao('programplan');
+         $this->objectTao = $tester->loadTao('programplan');
+
+         // 初始化zen对象
+         $zen = initReference('programplan', 'zen');
+         $this->zenInstance = $zen->newInstance();
+         $this->zenInstance->programplan = $this->objectModel;
+
          $tester->dao->delete()->from(TABLE_PROJECTSPEC)->exec();
 
          $this->objectModel->app->user->admin = true;
@@ -233,6 +239,24 @@ class programplanTest
 
         $objects = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($plans[0]->parent)->andWhere('type')->eq('stage')->fetchAll();
         return $objects;
+    }
+
+
+    /**
+     * Test buildPlansForCreate method.
+     *
+     * @param  int       $projectID
+     * @param  int       $parentID
+     * @access public
+     * @return array|false
+     */
+    public function buildPlansForCreateTest(int $projectID, int $parentID)
+    {
+        $result = $this->zenInstance->buildPlansForCreate($projectID, $parentID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
