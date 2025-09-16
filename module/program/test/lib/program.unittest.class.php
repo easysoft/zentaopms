@@ -855,4 +855,39 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test buildTree method.
+     *
+     * @param  array $programs
+     * @param  int   $parentID
+     * @access public
+     * @return array
+     */
+    public function buildTreeTest(array $programs, int $parentID = 0): array
+    {
+        $result = array();
+        foreach($programs as $program)
+        {
+            if($program->type != 'program') continue;
+            if($program->parent == $parentID)
+            {
+                $itemArray = array
+                (
+                    'id'    => $program->id,
+                    'text'  => $program->name,
+                    'label' => '',
+                    'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
+                    'items' => $this->buildTreeTest($programs, $program->id)
+                );
+
+                if(empty($itemArray['items'])) unset($itemArray['items']);
+                $result[] = $itemArray;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
