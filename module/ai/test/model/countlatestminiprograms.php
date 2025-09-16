@@ -58,7 +58,6 @@ r($aiTest->countLatestMiniProgramsTest()) && p() && e('0'); // 步骤3：已删�
 // 步骤4：修改为未发布
 $table->gen(0);
 $table->published->range('0'); // 未发布
-$table->publishedDate->range('`NULL`');
 $table->deleted->range('0'); // 未删除
 $table->gen(1);
 r($aiTest->countLatestMiniProgramsTest()) && p() && e('0'); // 步骤4：未发布不统计
