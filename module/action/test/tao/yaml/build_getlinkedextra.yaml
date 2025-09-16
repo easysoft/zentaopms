@@ -1,0 +1,18 @@
+---
+title: 版本测试数据
+desc: 用于测试getLinkedExtra方法的版本数据
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+- field: name
+  note: 版本名称
+  range: 版本1.0,版本1.1,版本2.0,Beta版,RC版,正式版,测试版,预发布版,紧急修复版,稳定版
+- field: execution
+  note: 执行ID
+  range: 6-15
+- field: deleted
+  note: 是否删除
+  range: 0{10}
