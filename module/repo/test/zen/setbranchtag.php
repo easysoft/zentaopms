@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_setbranchtag.unittest.class.php';
 
 zenData('repo');
 $table = zenData('repo');
@@ -29,7 +29,7 @@ $table->gen(10);
 
 su('admin');
 
-$repoZenTest = new repoZenTest();
+$repoZenTest = new repoZenSetBranchTagTest();
 
 // 创建测试用的repo对象
 $gitRepo = new stdClass();
