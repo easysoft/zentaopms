@@ -17,7 +17,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('repo');
@@ -62,7 +62,7 @@ $pipelineTable->gen(2);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$repoTest = new repoTest();
+$repoTest = new repoZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($repoTest->buildCreateFormTest(1)) && p('title') && e('代码库-创建'); // 步骤1：正常项目ID
