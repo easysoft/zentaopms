@@ -5021,7 +5021,7 @@ class executionModel extends model
                 }
             }
 
-            $prefixLabel = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> ";
+            $prefixLabel = "<span class='pri-{$task->pri} mr-1'>" . zget($this->lang->task->priList, $task->pri) . '</span> ';
             if($task->isParent > 0)
             {
                 $prefixLabel .= "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->parentAB}</span>";
