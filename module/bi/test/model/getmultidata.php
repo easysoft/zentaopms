@@ -7,13 +7,15 @@ title=测试 biModel::getMultiData();
 timeout=0
 cid=0
 
-- 步骤1：正常设置参数，单个y轴指标 @status
-- 步骤2：多个y轴指标的设置参数 @array('id', 'name')
-- 步骤3：包含过滤条件的查询 @status
+- 步骤1：正常情况测试单个y轴指标 @status
+- 步骤2：多个y轴指标测试
+ - 第1条的0属性 @id
+ - 第1条的1属性 @name
+- 步骤3：包含过滤条件 @status
 - 步骤4：启用排序功能 @status
-- 步骤5：空设置参数的边界测试 @~~
+- 步骤5：空设置参数边界测试 @~~
 - 步骤6：不同聚合函数测试 @status
-- 步骤7：日期分组测试 @date
+- 步骤7：日期分组测试 @openedDate
 
 */
 
@@ -39,9 +41,9 @@ $biTest = new biTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'))), 'SELECT id, status FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('0') && e('status'); // 步骤1：正常情况测试单个y轴指标
-r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'), array('field' => 'name', 'valOrAgg' => 'count'))), 'SELECT id, name, status FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('1') && e(array('id', 'name')); // 步骤2：多个y轴指标测试
+r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'), array('field' => 'name', 'valOrAgg' => 'count'))), 'SELECT id, name, status FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('1:0,1') && e('id,name'); // 步骤2：多个y轴指标测试
 r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'))), 'SELECT id, status FROM zt_task WHERE deleted = "0"', array('status' => array('operator' => '=', 'value' => "'wait'")), 'mysql', false)) && p('0') && e('status'); // 步骤3：包含过滤条件
 r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'))), 'SELECT id, status FROM zt_task WHERE deleted = "0"', array(), 'mysql', true)) && p('0') && e('status'); // 步骤4：启用排序功能
 r($biTest->getMultiDataTest(array('xaxis' => array(), 'yaxis' => array()), 'SELECT id FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('0') && e('~~'); // 步骤5：空设置参数边界测试
 r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'status')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'sum'))), 'SELECT id, status FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('0') && e('status'); // 步骤6：不同聚合函数测试
-r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'openedDate', 'group' => 'YEAR')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'))), 'SELECT id, openedDate FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('0') && e('date'); // 步骤7：日期分组测试
+r($biTest->getMultiDataTest(array('xaxis' => array(array('field' => 'openedDate', 'group' => 'YEAR')), 'yaxis' => array(array('field' => 'id', 'valOrAgg' => 'count'))), 'SELECT id, openedDate FROM zt_task WHERE deleted = "0"', array(), 'mysql', false)) && p('0') && e('openedDate'); // 步骤7：日期分组测试
