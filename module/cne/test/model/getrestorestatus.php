@@ -7,11 +7,21 @@ title=测试 cneModel::getRestoreStatus();
 timeout=0
 cid=0
 
-- 步骤1：正常实例和有效备份名查询恢复状态 @object
-- 步骤2：不存在的实例ID查询恢复状态属性message @Instance not found
-- 步骤3：无效实例ID（0）查询恢复状态属性message @Instance not found
-- 步骤4：空备份名查询恢复状态属性message @Backup name cannot be empty
-- 步骤5：无效实例ID（999）查询恢复状态属性message @Instance not found
+- 步骤1：正常实例和有效备份名查询恢复状态
+ - 属性code @600
+ - 属性message @CNE服务器出错
+- 步骤2：不存在的实例ID查询恢复状态
+ - 属性code @404
+ - 属性message @Instance not found
+- 步骤3：无效实例ID（0）查询恢复状态
+ - 属性code @404
+ - 属性message @Instance not found
+- 步骤4：空备份名查询恢复状态
+ - 属性code @400
+ - 属性message @Backup name cannot be empty
+- 步骤5：无效实例ID（999）查询恢复状态
+ - 属性code @404
+ - 属性message @Instance not found
 
 */
 
@@ -31,8 +41,8 @@ su('admin');
 $cneTest = new cneTest();
 
 // 测试步骤
-r($cneTest->getRestoreStatusTest(1, 'backup-restore-001')) && p() && e('object'); // 步骤1：正常实例和有效备份名查询恢复状态
-r($cneTest->getRestoreStatusTest(999, 'backup-test')) && p('message') && e('Instance not found'); // 步骤2：不存在的实例ID查询恢复状态
-r($cneTest->getRestoreStatusTest(0, 'backup-test')) && p('message') && e('Instance not found'); // 步骤3：无效实例ID（0）查询恢复状态
-r($cneTest->getRestoreStatusTest(1, '')) && p('message') && e('Backup name cannot be empty'); // 步骤4：空备份名查询恢复状态
-r($cneTest->getRestoreStatusTest(999, 'backup-test')) && p('message') && e('Instance not found'); // 步骤5：无效实例ID（999）查询恢复状态
+r($cneTest->getRestoreStatusTest(1, 'backup-restore-001')) && p('code,message') && e('600,CNE服务器出错');               // 步骤1：正常实例和有效备份名查询恢复状态
+r($cneTest->getRestoreStatusTest(999, 'backup-test'))      && p('code,message') && e('404,Instance not found');          // 步骤2：不存在的实例ID查询恢复状态
+r($cneTest->getRestoreStatusTest(0, 'backup-test'))        && p('code,message') && e('404,Instance not found');          // 步骤3：无效实例ID（0）查询恢复状态
+r($cneTest->getRestoreStatusTest(1, ''))                   && p('code,message') && e('400,Backup name cannot be empty'); // 步骤4：空备份名查询恢复状态
+r($cneTest->getRestoreStatusTest(999, 'backup-test'))      && p('code,message') && e('404,Instance not found');          // 步骤5：无效实例ID（999）查询恢复状态
