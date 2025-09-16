@@ -146,4 +146,27 @@ class repoZenTest
 
         return $productBranches;
     }
+
+    /**
+     * Test getLinkExecutions method.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function getLinkExecutionsTest($products)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $executions = array();
+        foreach($products as $product)
+        {
+            if(empty($product) || !is_object($product)) continue;
+
+            $productExecutions = $this->objectModel->loadModel('product')->getExecutionPairsByProduct($product->id);
+            $executions += $productExecutions;
+        }
+
+        return $executions;
+    }
 }

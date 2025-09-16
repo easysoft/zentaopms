@@ -1,0 +1,49 @@
+---
+title: Project execution test data for repoZen::getLinkExecutions()
+desc: Test data for project execution pairs
+author: ZenTao Team
+version: 1.0
+
+fields:
+- field: id
+  note: Execution ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: Execution name
+  range: Execution{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Project type
+  range: execution{15},project{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Execution status
+  range: wait{5},doing{10},suspended{3},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: Is deleted
+  range: 0{18},1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: Project grade
+  range: 1{10},2{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
