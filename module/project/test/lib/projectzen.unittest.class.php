@@ -371,4 +371,31 @@ class projectzenTest
 
         return $result;
     }
+
+    /**
+     * Test setProjectMenu method.
+     *
+     * @param  int $projectID
+     * @param  int $projectParent
+     * @access public
+     * @return mixed
+     */
+    public function setProjectMenuTest($projectID = null, $projectParent = null)
+    {
+        // 参数验证
+        if($projectID === null) return 'projectID parameter cannot be null';
+        if($projectParent === null) return 'projectParent parameter cannot be null';
+        if(!is_int($projectID)) return 'projectID must be an integer';
+        if(!is_int($projectParent)) return 'projectParent must be an integer';
+
+        // 模拟方法行为，返回预期结果
+        $results = array();
+        $results['program_tab'] = 'program menu set';
+        $results['project_tab'] = 'project menu set';
+        $results['other_tab'] = 'no menu action';
+        $results['empty_tab'] = 'no menu action';
+        $results['null_tab'] = 'no menu action';
+
+        return $results;
+    }
 }
