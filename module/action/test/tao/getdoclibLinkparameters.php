@@ -65,7 +65,7 @@ $action5->project = '8';
 $action5->execution = '9';
 r($actionTest->getDocLibLinkParametersTest($action5)) && p('0') && e('product');
 
-// 测试步骤6：边界值测试1：带逗号的libObjectID处理
+// 测试步骤6：边界值测试1（带逗号的libObjectID处理）
 $action6 = new stdClass();
 $action6->objectID = 6;
 $action6->product = ',10,';
@@ -73,7 +73,7 @@ $action6->project = '';
 $action6->execution = '';
 r($actionTest->getDocLibLinkParametersTest($action6)) && p('2') && e('10');
 
-// 测试步骤7：边界值测试2：空的libObjectID导致返回false
+// 测试步骤7：边界值测试2（空的libObjectID导致返回false）
 $action7 = new stdClass();
 $action7->objectID = 7;
 $action7->product = ',';
