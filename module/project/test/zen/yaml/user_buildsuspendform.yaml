@@ -1,0 +1,134 @@
+---
+title: 用户暂停表单测试数据
+desc: 用于测试 projectZen::buildSuspendForm() 方法的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+
+- field: dept
+  note: 部门ID
+  range: 1-5
+
+- field: account
+  note: 用户账号
+  range: 'admin,user1,user2,user3,pm1,pm2,qa1,qa2,test1,test2,dev1,dev2,rd1,rd2,guest'
+
+- field: password
+  note: 密码
+  range: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3{15}'
+
+- field: role
+  note: 角色
+  range: 'admin{1},pm{4},qa{2},dev{4},test{2},guest{2}'
+
+- field: realname
+  note: 真实姓名
+  range: '管理员,用户1,用户2,用户3,项目经理1,项目经理2,质量工程师1,质量工程师2,测试工程师1,测试工程师2,开发工程师1,开发工程师2,发布经理1,发布经理2,访客用户'
+
+- field: nickname
+  note: 昵称
+  range: 'admin,user1,user2,user3,pm1,pm2,qa1,qa2,test1,test2,dev1,dev2,rd1,rd2,guest'
+
+- field: commiter
+  note: 提交者
+  range: '{15}'
+
+- field: avatar
+  note: 头像
+  range: '{15}'
+
+- field: birthday
+  note: 生日
+  range: '1990-01-01,1985-05-15,1992-12-20,1988-03-10,1995-07-25,1980-11-05,1993-04-18,1987-09-22,1991-06-30,1989-02-14,1994-10-08,1986-08-12,1996-01-25,1983-12-03,1997-05-20'
+  format: 'YYYY-MM-DD'
+
+- field: gender
+  note: 性别
+  range: 'm{8},f{7}'
+
+- field: email
+  note: 邮箱
+  range: 'admin@zentao.com,user1@zentao.com,user2@zentao.com,user3@zentao.com,pm1@zentao.com,pm2@zentao.com,qa1@zentao.com,qa2@zentao.com,test1@zentao.com,test2@zentao.com,dev1@zentao.com,dev2@zentao.com,rd1@zentao.com,rd2@zentao.com,guest@zentao.com'
+
+- field: skype
+  note: Skype
+  range: '{15}'
+
+- field: qq
+  note: QQ号码
+  range: '123456789,987654321,555666777,111222333,888999000,{10}'
+
+- field: mobile
+  note: 手机号
+  range: '13800138000,13900139000,15800158000,18600186000,17700177000,{10}'
+
+- field: phone
+  note: 电话
+  range: '010-12345678,021-87654321,0755-11223344,0571-99887766,{11}'
+
+- field: address
+  note: 地址
+  range: '北京市朝阳区,上海市浦东新区,深圳市南山区,杭州市西湖区,广州市天河区,{10}'
+
+- field: zipcode
+  note: 邮编
+  range: '100000,200000,518000,310000,510000,{10}'
+
+- field: join
+  note: 入职日期
+  range: '2024-01-01,2023-06-15,2022-03-20,2023-09-10,2024-02-28,2023-12-05,2023-04-18,2022-07-22,2023-11-30,2024-01-14,2023-08-08,2022-12-25,2024-03-03,2023-05-20,2024-04-15'
+  format: 'YYYY-MM-DD'
+
+- field: visits
+  note: 访问次数
+  range: 1-100
+
+- field: ip
+  note: IP地址
+  range: '192.168.1.1,192.168.1.10,192.168.1.20,192.168.1.30,10.0.0.1,10.0.0.10,172.16.1.1,172.16.1.10,{7}'
+
+- field: last
+  note: 最后登录时间
+  range: '1726522800-1726527000:3600'
+  format: timestamp
+
+- field: fails
+  note: 失败次数
+  range: '0{12},1{2},2{1}'
+
+- field: locked
+  note: 锁定时间
+  range: '0000-00-00 00:00:00{14},2024-09-16 10:30:00{1}'
+  format: 'YYYY-MM-DD hh:mm:ss'
+
+- field: feedback
+  note: 反馈
+  range: '{15}'
+
+- field: ranzhi
+  note: 然之账号
+  range: '{15}'
+
+- field: score
+  note: 积分
+  range: 0-1000
+
+- field: scoreLevel
+  note: 积分等级
+  range: 0-5
+
+- field: deleted
+  note: 是否删除
+  range: '0{14},1{1}'
+
+- field: clientStatus
+  note: 客户端状态
+  range: 'online{10},away{3},busy{2}'
+
+- field: clientLang
+  note: 客户端语言
+  range: 'zh-cn{12},en{2},zh-tw{1}'
