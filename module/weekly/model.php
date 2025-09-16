@@ -683,7 +683,7 @@ class weeklyModel extends model
             $langData->section = 'categoryList';
             $langData->key     = $key;
             $langData->value   = $value;
-            $this->dao->insert(TABLE_LANG)->data($langData)->exec();
+            $this->dao->replace(TABLE_LANG)->data($langData)->get();
         }
 
         $category = new stdClass();
