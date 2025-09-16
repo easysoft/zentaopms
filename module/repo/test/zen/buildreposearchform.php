@@ -16,14 +16,14 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_buildreposearchform.unittest.class.php';
 
 zenData('product');
 zenData('project');
 
 su('admin');
 
-$repoTest = new repoZenTest();
+$repoTest = new repoZenBuildRepoSearchFormTest();
 
 r($repoTest->buildRepoSearchFormTest(array('1' => 'Product A', '2' => 'Product B'), array('10' => 'Project X', '20' => 'Project Y'), 100, 'name_asc', 30, 2, 5)) && p('queryID') && e('5');
 r($repoTest->buildRepoSearchFormTest(array(), array(), 0, 'id_desc', 20, 1, 0)) && p('queryID') && e('0');
