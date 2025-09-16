@@ -299,4 +299,37 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test removeAssociatedExecutions method.
+     *
+     * @param  array $executionIdList
+     * @access public
+     * @return mixed
+     */
+    public function removeAssociatedExecutionsTest($executionIdList = array())
+    {
+        try
+        {
+            global $tester;
+
+            // 初始化必要的模型和依赖
+            if(!isset($this->objectZen->project)) $this->objectZen->project = $this->objectModel;
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('removeAssociatedExecutions');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($this->objectZen, $executionIdList);
+
+            if(dao::isError()) return dao::getError();
+
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
