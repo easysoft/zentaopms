@@ -1,0 +1,41 @@
+---
+title: 产品计划数据
+desc: 用于测试getCopyProject方法的产品计划数据
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-5
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{2}, 2{2}, 3{1}
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{4}, 1{1}
+  format: ""
+- field: title
+  note: 计划标题
+  range: V1.0计划{2}, V2.0计划{2}, V3.0计划{1}
+  format: ""
+- field: begin
+  note: 开始时间
+  range: 2024-01-01{2}, 2024-06-01{2}, 2024-09-01{1}
+  format: ""
+- field: end
+  note: 结束时间
+  range: 2024-06-30{2}, 2024-12-31{2}, 2024-10-01{1}
+  format: ""
+- field: status
+  note: 计划状态
+  range: wait{2}, doing{2}, done{1}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'{5}
+  format: ""
+- field: desc
+  note: 计划描述
+  range: 这是产品计划描述{5}
+  format: ""

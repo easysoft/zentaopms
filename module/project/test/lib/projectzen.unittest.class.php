@@ -12,6 +12,13 @@ class projectzenTest
         include_once dirname(__FILE__, 3) . '/control.php';
         include_once dirname(__FILE__, 3) . '/zen.php';
         $this->objectZen = new projectZen();
+
+        // 初始化zen对象的依赖属性
+        $this->objectZen->project = $this->objectModel;
+        $this->objectZen->product = $tester->loadModel('product');
+        $this->objectZen->loadModel = function($modelName) use ($tester) {
+            return $tester->loadModel($modelName);
+        };
     }
 
     /**
@@ -66,5 +73,32 @@ class projectzenTest
         if($projectID === -1) return 'negative project id';
 
         return 'method signature validated';
+    }
+
+    /**
+     * Test getCopyProject method.
+     *
+     * @param  int $copyProjectID
+     * @access public
+     * @return mixed
+     */
+    public function getCopyProjectTest($copyProjectID = null)
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('getCopyProject');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $copyProjectID);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 }
