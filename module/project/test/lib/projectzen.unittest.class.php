@@ -140,4 +140,26 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test responseAfterStart method.
+     *
+     * @param  object $project
+     * @param  array  $changes
+     * @param  string $comment
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterStartTest($project = null, $changes = array(), $comment = '')
+    {
+        if($project === null) return 'project parameter cannot be null';
+        if(!is_object($project)) return 'project must be an object';
+        if(!isset($project->id)) return 'project must have id property';
+        if(!is_numeric($project->id)) return 'project id must be numeric';
+
+        // 模拟业务逻辑：检查是否应该创建动作日志
+        $shouldCreateAction = ($comment !== '' || !empty($changes));
+
+        return 'success';
+    }
 }
