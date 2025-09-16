@@ -741,4 +741,48 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test buildProgramForCreate method.
+     *
+     * @param  array  $postData
+     * @access public
+     * @return object
+     */
+    public function buildProgramForCreateTest($postData = array())
+    {
+        global $tester, $app, $config;
+
+        foreach($postData as $key => $value)
+        {
+            $_POST[$key] = $value;
+            $tester->post->{$key} = $value;
+        }
+
+        $tester->app->loadConfig('program');
+        $tester->app->loadConfig('project');
+        $fields = $config->program->form->create;
+        if(isset($tester->post->longTime) && $tester->post->longTime) $fields['end']['skipRequired'] = true;
+
+        foreach(explode(',', trim($config->program->create->requiredFields, ',')) as $field)
+        {
+            if($field == 'end') continue;
+            if(isset($fields[$field])) $fields[$field]['required'] = true;
+        }
+
+        $program = form::data($fields)
+            ->setDefault('openedBy', $app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('code', '')
+            ->setIF(isset($tester->post->longTime) && $tester->post->longTime, 'end', LONG_TIME)
+            ->setIF(isset($tester->post->acl) && $tester->post->acl == 'open', 'whitelist', '')
+            ->add('type', 'program')
+            ->join('whitelist', ',')
+            ->get();
+
+        $result = $tester->loadModel('file')->processImgURL($program, $config->program->editor->create['id'], isset($tester->post->uid) ? $tester->post->uid : '');
+        $_POST = array();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
