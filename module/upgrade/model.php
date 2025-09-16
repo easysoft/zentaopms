@@ -11454,6 +11454,8 @@ class upgradeModel extends model
                     }
                 }
             }
+
+            $this->createOtherDeliverable($workflowGroup->id); // 创建名为其他的交付物类型。
         }
 
         /* 将已升级的历史交付物数据删掉。 */
@@ -11498,36 +11500,47 @@ class upgradeModel extends model
         $moduleID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
 
-        /* 创建名为其他的交付物类型。 */
-        if($extra == 'other')
-        {
-            $deliverable = new stdclass();
-            $deliverable->name          = $this->lang->other;
-            $deliverable->category      = 'other';
-            $deliverable->module        = $moduleID;
-            $deliverable->workflowGroup = $workflowGroupID;
-            $deliverable->template      = '[]';
-            $deliverable->trimmable     = '1';
-            $deliverable->builtin       = '1';
-            $deliverable->status        = 'enabled';
-            $deliverable->createdBy     = 'system';
-            $deliverable->createdDate   = helper::now();
-
-            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
-            $deliverableID = $this->dao->lastInsertID();
-
-            $stageList = $this->loadModel('deliverable')->buildStageList($workflowGroupID);
-            foreach($stageList as $key => $stage)
-            {
-                $deliverableStage = new stdclass();
-                $deliverableStage->deliverable = $deliverableID;
-                $deliverableStage->stage       = $key;
-                $deliverableStage->required    = '0';
-                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
-            }
-        }
-
         return $moduleID;
+    }
+
+    /**
+     * 创建名为其他的交付物类型。
+     * Create other deliverable.
+     *
+     * @param  int    $workflowGroupID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function createOtherDeliverable(int $workflowGroupID)
+    {
+        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('root')->eq($workflowGroupID)->andWhere('extra')->eq('other')->fetch('id');
+
+        /* 创建名为其他的交付物类型。 */
+        $deliverable = new stdclass();
+        $deliverable->name          = $this->lang->other;
+        $deliverable->category      = 'other';
+        $deliverable->module        = $moduleID;
+        $deliverable->workflowGroup = $workflowGroupID;
+        $deliverable->template      = '[]';
+        $deliverable->trimmable     = '1';
+        $deliverable->builtin       = '1';
+        $deliverable->status        = 'enabled';
+        $deliverable->createdBy     = 'system';
+        $deliverable->createdDate   = helper::now();
+
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $stageList = $this->loadModel('deliverable')->buildStageList($workflowGroupID);
+        foreach($stageList as $key => $stage)
+        {
+            $deliverableStage = new stdclass();
+            $deliverableStage->deliverable = $deliverableID;
+            $deliverableStage->stage       = $key;
+            $deliverableStage->required    = '0';
+            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+        }
     }
 
     /**
