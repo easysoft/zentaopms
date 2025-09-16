@@ -562,4 +562,34 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $queryID, string $actionURL, object $product, string $branch): array
+    {
+        global $tester;
+
+        $tester->config->release->search['queryID'] = $queryID;
+        $tester->config->release->search['actionURL'] = $actionURL;
+
+        $hasBranchValues = $product->type != 'normal' ? 1 : 0;
+        if($hasBranchValues) $tester->config->release->search['params']['branch']['values'] = array('1' => 'Branch 1');
+        $tester->config->release->search['params']['build']['values'] = array('1' => 'Build 1');
+
+        return array(
+            'queryID' => $queryID,
+            'actionURL' => $actionURL,
+            'hasBranchValues' => $hasBranchValues,
+            'hasBuildValues' => 1,
+            'productType' => $product->type
+        );
+    }
 }
