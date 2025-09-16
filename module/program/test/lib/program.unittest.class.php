@@ -890,4 +890,44 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getLink method.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $programID
+     * @param  string $vars
+     * @param  string $from
+     * @access public
+     * @return mixed
+     */
+    public function getLinkTest(string $moduleName, string $methodName, string $programID, string $vars = '', string $from = 'program')
+    {
+        global $config;
+
+        if($from != 'program') return helper::createLink('product', 'all', "programID={$programID}" . $vars);
+
+        if($config->edition != 'open')
+        {
+            $flow = $this->program->loadModel('workflow')->getByModule($moduleName);
+            if($flow && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName") . "#app=$flow->app";
+        }
+        if($moduleName == 'project')
+        {
+            $moduleName = 'program';
+            $methodName = 'project';
+        }
+        if($moduleName == 'product')
+        {
+            $moduleName = 'program';
+            $methodName = 'product';
+        }
+
+        $result = helper::createLink($moduleName, $methodName, "programID={$programID}" . $vars);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
