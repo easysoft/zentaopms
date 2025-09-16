@@ -11256,7 +11256,8 @@ class upgradeModel extends model
         $report = new stdclass();
         $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
         $report->project      = $data['project'];
-        $report->templateType = 'weekly';
+        $report->templateType = 'projectReport';
+        $report->module       = 'week';
         $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
         $report->addedBy      = 'system';
         $report->addedDate    = $data['weekStart'] . ' 00:00:00';
