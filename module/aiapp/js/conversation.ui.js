@@ -11,6 +11,67 @@ function openInAIPanel(chat, params)
     aiPanel.open({chatID: chat, postMessage: params});
 }
 
+function injectEmbedStyle()
+{
+    const $$ = window.parent.$;
+    if($$('body').hasClass('ai-embed-injected')) return;
+
+    $$('body').addClass('ai-embed-injected');
+    $$('head').append([
+        '<style>',
+        '.ai-panel-root[z-mode="embed"] {left: var(--zt-menu-width)!important;}',
+        '.hide-menu .ai-panel-root[z-mode="embed"] {left: var(--zt-menu-fold-width)!important;}',
+
+        '.ai-panel.is-embed {min-width: 1200px;  margin: calc(var(--zt-header-height) + 12px) auto 0; position: static; height: calc(100% - var(--zt-header-height) - 28px);}',
+        '@media (min-width: 1400px) {.ai-panel.is-embed {padding: 0 2.5rem}}',
+        '@media (min-width: 1720px) {.ai-panel.is-embed {max-width: 1720px;}}',
+        '.ai-panel.is-embed .ai-chats-panel {box-shadow: 0 0 0 1px rgba(var(--color-border-rgb), 1), var(--shadow); outline: none; width: 100%!important; backdrop-filter: none; height: calc(100% - 32px)!important; position: relative; transition: none; border-radius: var(--radius)}',
+        '.ai-panel.is-embed .ai-panel-header {display: none}',
+        '.ai-panel-root[z-last-mode="embed"].is-mode-changing .ai-panel {opacity: 0; transition: none}',
+        '</style>'
+    ].join('\n'));
+}
+
+function showToggleInParent(event)
+{
+    event.stopPropagation();
+    event.preventDefault();
+
+    const $$      = window.parent.$;
+    const $toggle = $(this);
+
+    let id = $toggle.attr('id') || $toggle.data('takeOverToggleID');
+    if(!id)
+    {
+        id = zui.nextGid();
+        $toggle.data('takeOverToggleID', id);
+    }
+    const toggleID = `aipp-conversation-toggle_${id}`;
+    let $trigger = $$(toggleID);
+    if(!$trigger.length)
+    {
+        const data = $toggle.data();
+        $trigger = $$(`<div id="${toggleID}" class="state aipp-conversation-toggle"></div>`).attr('zui-toggle-dropdown', $toggle.attr('zui-toggle-dropdown')).css({position: 'fixed', cursor: 'pointer'});
+        Object.keys(data).forEach(key => $trigger.attr(`data-${key}`, data[key]));
+        $trigger.appendTo($$('body'));
+        $trigger.on('hidden', () => $trigger.remove());
+    }
+    const boundRect = $toggle[0].getBoundingClientRect();
+    $trigger.css({left: boundRect.left + $$('#menu').width(), top: boundRect.top, width: boundRect.width, height: boundRect.height});
+    $trigger.trigger('click');
+}
+
+function takeOverToggles()
+{
+    const $toolbar     = $('#toolbar > .toolbar');
+    const takeOverFlag = 'aipp-conversation.takeOverToggles';
+
+    if($toolbar.data(takeOverFlag)) return;
+    $toolbar.data(takeOverFlag, true);
+
+    $toolbar.children('[zui-toggle-dropdown]').on('click.takeOverToggles', showToggleInParent);
+}
+
 window.initAIConversations = function(chat, initialParams)
 {
     aiPanel = aiPanel || zui.AIPanel.shared;
@@ -28,23 +89,8 @@ window.initAIConversations = function(chat, initialParams)
 
     if(initialParams || chat) setTimeout(() => openInAIPanel(chat, initialParams), 600);
 
-    const parent$ = window.parent.$;
-    if(parent$('body').hasClass('ai-embed-injected')) return;
-
-    parent$('body').addClass('ai-embed-injected');
-    parent$('head').append([
-        '<style>',
-        '.ai-panel-root[z-mode="embed"] {left: var(--zt-menu-width)!important;}',
-        '.hide-menu .ai-panel-root[z-mode="embed"] {left: var(--zt-menu-fold-width)!important;}',
-
-        '.ai-panel.is-embed {min-width: 1200px;  margin: calc(var(--zt-header-height) + 12px) auto 0; position: static; height: calc(100% - var(--zt-header-height) - 28px);}',
-        '@media (min-width: 1400px) {.ai-panel.is-embed {padding: 0 2.5rem}}',
-        '@media (min-width: 1720px) {.ai-panel.is-embed {max-width: 1720px;}}',
-        '.ai-panel.is-embed .ai-chats-panel {box-shadow: 0 0 0 1px rgba(var(--color-border-rgb), 1), var(--shadow); outline: none; width: 100%!important; backdrop-filter: none; height: calc(100% - 32px)!important; position: relative; transition: none; border-radius: var(--radius)}',
-        '.ai-panel.is-embed .ai-panel-header {display: none}',
-        '.ai-panel-root[z-last-mode="embed"].is-mode-changing .ai-panel {opacity: 0; transition: none}',
-        '</style>'
-    ].join('\n'));
+    injectEmbedStyle();
+    takeOverToggles();
 }
 
 window.onPageUnmount = function()
@@ -56,6 +102,9 @@ window.onPageUnmount = function()
     }
 
     if(aiPanel) aiPanel.toggleEmbed(false);
+
+    $('#toolbar > .toolbar').children('[zui-toggle-dropdown]').off('click.takeOverToggles');
+    window.parent.$('.aipp-conversation-toggle').remove();
 };
 
 window.beforePageLoad = function(options)
