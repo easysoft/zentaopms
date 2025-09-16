@@ -124,4 +124,21 @@ class projectZenTest
         $projectList = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         return callZenMethod('project', 'processProjectListData', [$projectList]);
     }
+
+    /**
+     * 测试检查工作日是否合法。
+     * Test checkWorkdaysLegtimate method.
+     *
+     * @param  object $project
+     * @access public
+     * @return bool
+     */
+    public function checkWorkdaysLegtimateTest($project): bool
+    {
+        $method = $this->projectZenTest->getMethod('checkWorkdaysLegtimate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$project]);
+        return $result;
+    }
 }
