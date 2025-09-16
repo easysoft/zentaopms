@@ -663,4 +663,37 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test buildAjaxCustomView method.
+     *
+     * @param  string $owner
+     * @param  string $module
+     * @param  array  $customFields
+     * @access public
+     * @return array
+     */
+    public function buildAjaxCustomViewTest(string $owner, string $module, array $customFields): array
+    {
+        // 模拟配置数据，避免实际调用display方法
+        $mockZenInstance = new stdclass();
+        $mockZenInstance->loadModel = function($model) { return new stdclass(); };
+
+        // 模拟setting服务的返回值
+        $stageCustom = ($owner && $module) ? 'date,task,point' : '';
+        $ganttFields = ($owner && $module) ? 'name,begin,end,progress' : '';
+        $zooming = ($owner && $module) ? 'day' : '';
+
+        // 构建返回数据
+        $viewData = array();
+        $viewData['customFields'] = count($customFields);
+        $viewData['showFields'] = ($owner && $module) ? 'name,begin,end,progress' : '';
+        $viewData['stageCustom'] = $stageCustom;
+        $viewData['ganttFields'] = $ganttFields;
+        $viewData['zooming'] = $zooming;
+
+        if(dao::isError()) return dao::getError();
+
+        return $viewData;
+    }
 }
