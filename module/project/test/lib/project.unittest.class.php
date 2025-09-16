@@ -756,4 +756,29 @@ class projectTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildUsers method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildUsersTest()
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('buildUsers');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
