@@ -807,4 +807,20 @@ class programplanTest
 
         return array('success' => '1', 'type' => $type, 'projectID' => $projectID);
     }
+
+    /**
+     * Test sortPlans method.
+     *
+     * @param  array $plans
+     * @access public
+     * @return array
+     */
+    public function sortPlansTest(array $plans): array
+    {
+        $result = $this->zenInstance->sortPlans($plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
