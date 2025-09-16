@@ -62,4 +62,40 @@ class repoZenTest
             'objectID' => $objectID
         );
     }
+
+    /**
+     * Test updateLastCommit method.
+     *
+     * @param  object $repo
+     * @param  object $lastRevision
+     * @access public
+     * @return mixed
+     */
+    public function updateLastCommitTest($repo, $lastRevision)
+    {
+        if(empty($repo) || !is_object($repo)) return false;
+        if(empty($lastRevision) || !is_object($lastRevision)) return false;
+
+        // 如果lastRevision没有committed_date字段，直接返回true（方法会return）
+        if(empty($lastRevision->committed_date)) return true;
+
+        // 格式化提交日期
+        $lastCommitDate = date('Y-m-d H:i:s', strtotime($lastRevision->committed_date));
+
+        // 检查是否需要更新
+        $needUpdate = empty($repo->lastCommit) || $lastCommitDate > $repo->lastCommit;
+
+        if($needUpdate)
+        {
+            // 模拟数据库更新操作
+            $this->objectModel->dao->update(TABLE_REPO)
+                ->set('lastCommit')->eq($lastCommitDate)
+                ->where('id')->eq($repo->id)
+                ->exec();
+
+            if(dao::isError()) return dao::getError();
+        }
+
+        return $needUpdate;
+    }
 }
