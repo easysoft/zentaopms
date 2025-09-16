@@ -141,6 +141,7 @@ $cols[] = array('name' => $lang->task->deadline,    'class' => 'text-left w-32')
 $cols[] = array('name' => $lang->task->realStarted, 'class' => 'text-left w-32');
 $cols[] = array('name' => $lang->task->progress,    'class' => 'text-left w-24');
 
+$data = array();
 foreach($postponed as $task)
 {
     $data[] = array
