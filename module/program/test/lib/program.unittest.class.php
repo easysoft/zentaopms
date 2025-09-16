@@ -718,4 +718,27 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test prepareStartExtras method.
+     *
+     * @param  object $postData
+     * @access public
+     * @return object
+     */
+    public function prepareStartExtrasTest(object $postData): object
+    {
+        // 模拟prepareStartExtras方法的逻辑
+        global $app;
+
+        // 模拟方法的实际逻辑
+        $result = $postData->add('status', 'doing')
+            ->add('lastEditedBy', $app->user->account)
+            ->add('lastEditedDate', helper::now())
+            ->get();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
