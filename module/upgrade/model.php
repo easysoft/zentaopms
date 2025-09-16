@@ -11222,7 +11222,11 @@ class upgradeModel extends model
         foreach($reports as $key => $report)
         {
             if($report->projectStatus == 'doing') $report->realBegan = !helper::isZeroDate($report->realBegan) ? $report->realBegan : $report->weekStart;
-            if(helper::isZeroDate($report->realBegan)) unset($reports[$key]);
+            if(helper::isZeroDate($report->realBegan))
+            {
+                unset($reports[$key]);
+                continue;
+            }
 
             /* Filter date < project begin date report. */
             $report->projectBegin = date('Y-m-d', strtotime($report->realBegan));
