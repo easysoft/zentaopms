@@ -1,0 +1,31 @@
+---
+title: 发布Bug导出测试数据
+desc: 用于测试buildBugDataForExport方法的发布和Bug数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 发布ID
+  range: 1-10
+- field: name
+  note: 发布名称
+  range: Release{1-10}
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: bugs
+  note: 关联的解决Bug ID列表
+  range: '1,2,3', '4,5', '', ''
+- field: leftBugs
+  note: 关联的遗留Bug ID列表
+  range: '6,7', '', '8,9', ''
+- field: branch
+  note: 分支ID
+  range: 0
+- field: status
+  note: 发布状态
+  range: normal
+- field: date
+  note: 发布日期
+  range: 2023-12-01
