@@ -1,0 +1,44 @@
+---
+title: 版本库分支和标签测试数据
+desc: 用于测试getBranchAndTagItems方法的版本库数据
+
+fields:
+- field: id
+  note: 版本库ID
+  range: 1-10
+- field: name
+  note: 版本库名称
+  range: test-repo{2},git-main{2},svn-trunk,gitlab-project{2},mock-repo{3}
+- field: SCM
+  note: 版本控制系统类型
+  range: Git{6},Subversion{2},Gitlab{2}
+- field: product
+  note: 关联产品ID
+  range: 1-5
+- field: projects
+  note: 关联项目ID
+  range: 1-5
+- field: path
+  note: 版本库路径
+  range: /test/repo1,/test/repo2,/test/git1,/test/git2,/test/svn,/test/gitlab1,/test/gitlab2,/test/mock1,/test/mock2,/test/mock3
+- field: encoding
+  note: 字符编码
+  range: UTF-8{10}
+- field: client
+  note: 客户端工具
+  range: git{8},svn{2}
+- field: account
+  note: 用户账号
+  range: admin,user{4},test{3},demo{2}
+- field: password
+  note: 用户密码
+  range: '{10}'
+- field: acl
+  note: 访问控制
+  range: '[]'
+- field: synced
+  note: 同步状态
+  range: 0{5},1{5}
+- field: deleted
+  note: 删除状态
+  range: 0{10}
