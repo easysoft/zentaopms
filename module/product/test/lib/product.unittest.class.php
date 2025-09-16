@@ -4448,16 +4448,47 @@ class productTest
     {
         try {
             $productZen = new productZen();
-            
+
             $method = $this->objectZen->getMethod('getActiveStoryTypeForTrack');
             $method->setAccessible(true);
-            
+
             $result = $method->invokeArgs($productZen, array($projectID, $productID));
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             return array('error' => $e->getMessage());
         }
+    }
+
+    /**
+     * Test buildProductForActivate method.
+     *
+     * @param  int    $productID
+     * @param  string $vision
+     * @access public
+     * @return mixed
+     */
+    public function buildProductForActivateTest(int $productID = 0, string $vision = ''): mixed
+    {
+        if($productID <= 0) return array();
+
+        global $config;
+        $originalVision = $config->vision;
+        if($vision) $config->vision = $vision;
+
+        $_POST['uid'] = 'test_uid';
+
+        $productZen = new productZen();
+        $method = $this->objectZen->getMethod('buildProductForActivate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($productZen, array($productID));
+
+        $config->vision = $originalVision;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
