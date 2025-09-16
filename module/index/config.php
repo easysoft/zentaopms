@@ -35,7 +35,6 @@ $config->index->oldPages[] = 'ai-prompts';
 $config->index->oldPages[] = 'ai-promptview';
 $config->index->oldPages[] = 'api-debug';
 $config->index->oldPages[] = 'datatable-ajaxoldcustom';
-$config->index->oldPages[] = 'weekly-index';
 $config->index->oldPages[] = 'kanban-importticket';
 $config->index->oldPages[] = 'message-ajaxgetdropmenuforold';
 $config->index->oldPages[] = 'product-ajaxgetolddropmenu';
