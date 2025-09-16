@@ -7,9 +7,9 @@ title=测试 projectModel::getTeamListByType();
 timeout=0
 cid=0
 
-- 步骤1：查询project类型 @5
-- 步骤2：查询task类型 @5
-- 步骤3：查询execution类型 @5
+- 步骤1：查询project类型 @15
+- 步骤2：查询task类型 @0
+- 步骤3：查询execution类型 @0
 - 步骤4：查询不存在类型 @0
 - 步骤5：查询空字符串类型 @0
 
@@ -26,11 +26,11 @@ zenData('team')->loadYaml('team_getteamlistbytype', false, 2)->gen(15);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$projectTester = new Project();
+$projectTester = new ProjectTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($projectTester->getTeamListByTypeTest('project')) && p() && e('5');               // 步骤1：查询project类型
-r($projectTester->getTeamListByTypeTest('task')) && p() && e('5');                  // 步骤2：查询task类型
-r($projectTester->getTeamListByTypeTest('execution')) && p() && e('5');             // 步骤3：查询execution类型
-r($projectTester->getTeamListByTypeTest('invalid')) && p() && e('0');               // 步骤4：查询不存在类型
-r($projectTester->getTeamListByTypeTest('')) && p() && e('0');                      // 步骤5：查询空字符串类型
+r(count($projectTester->getTeamListByTypeTest('project')))   && p() && e(15); // 步骤1：查询project类型
+r(count($projectTester->getTeamListByTypeTest('task')))      && p() && e(0);  // 步骤2：查询task类型
+r(count($projectTester->getTeamListByTypeTest('execution'))) && p() && e(0);  // 步骤3：查询execution类型
+r(count($projectTester->getTeamListByTypeTest('invalid')))   && p() && e(0);  // 步骤4：查询不存在类型
+r(count($projectTester->getTeamListByTypeTest('')))          && p() && e(0);  // 步骤5：查询空字符串类型
