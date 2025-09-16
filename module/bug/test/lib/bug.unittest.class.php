@@ -7,6 +7,7 @@ class bugTest
         global $tester;
         $this->objectModel = $tester->loadModel('bug');
         $this->objectTao   = $tester->loadTao('bug');
+        $this->objectZen   = initReference('bug');
     }
 
     /**
