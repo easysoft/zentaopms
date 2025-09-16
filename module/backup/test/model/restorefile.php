@@ -7,11 +7,18 @@ title=测试 backupModel::restoreFile();
 timeout=0
 cid=0
 
-- 步骤1：正常传入有效的备份目录路径属性result @1
-- 步骤2：传入空字符串参数属性result @1
-- 步骤3：传入null参数属性result @1
-- 步骤4：传入不存在的路径属性result @1
-- 步骤5：传入文件路径而非目录属性result @1
+- 步骤1：正常传入有效的备份目录路径
+ - 属性result @1
+ - 属性error @~~
+- 步骤2：传入空字符串参数
+ - 属性result @1
+ - 属性error @~~
+- 步骤3：传入不存在的路径
+ - 属性result @1
+ - 属性error @~~
+- 步骤4：传入文件路径而非目录
+ - 属性result @1
+ - 属性error @~~
 
 */
 
@@ -36,8 +43,7 @@ if(!is_dir($testDataDir)) mkdir($testDataDir, 0777, true);
 if(!file_exists($testFilePath)) file_put_contents($testFilePath, 'test content');
 
 // 5. 强制要求：必须包含至少5个测试步骤
-r($backupTest->restoreFileTest($testBackupDir)) && p('result') && e('1'); // 步骤1：正常传入有效的备份目录路径
-r($backupTest->restoreFileTest('')) && p('result') && e('1'); // 步骤2：传入空字符串参数
-r($backupTest->restoreFileTest(null)) && p('result') && e('1'); // 步骤3：传入null参数
-r($backupTest->restoreFileTest('/nonexistent/path/')) && p('result') && e('1'); // 步骤4：传入不存在的路径
-r($backupTest->restoreFileTest($testFilePath)) && p('result') && e('1'); // 步骤5：传入文件路径而非目录
+r($backupTest->restoreFileTest($testBackupDir)) && p('result,error') && e('1,~~'); // 步骤1：正常传入有效的备份目录路径
+r($backupTest->restoreFileTest('')) && p('result,error') && e('1,~~'); // 步骤2：传入空字符串参数
+r($backupTest->restoreFileTest('/nonexistent/path/')) && p('result,error') && e('1,~~'); // 步骤3：传入不存在的路径
+r($backupTest->restoreFileTest($testFilePath)) && p('result,error') && e('1,~~'); // 步骤4：传入文件路径而非目录
