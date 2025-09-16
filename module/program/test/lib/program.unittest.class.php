@@ -13,6 +13,7 @@ class programTest
         global $tester;
 
         $this->program = $tester->loadModel('program');
+        $this->objectTao   = $tester->loadTao('program');
     }
 
     /**
@@ -802,5 +803,39 @@ class programTest
         if(dao::isError()) return dao::getError();
 
         return $parents;
+    }
+
+    /**
+     * Test getProgramsByType method.
+     *
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  int         $param
+     * @param  object|null $pager
+     * @access public
+     * @return int
+     */
+    public function getProgramsByTypeTest(string $status, string $orderBy, int $param = 0, ?object $pager = null): int
+    {
+        $status = strtolower($status);
+        $orderBy = $orderBy ?: 'id_asc';
+
+        if(strpos($orderBy, 'order') !== false) $orderBy = "grade,{$orderBy}";
+
+        if(strtolower($status) == 'bysearch')
+        {
+            $programs = $this->program->getListBySearch($orderBy, $param, false, $pager);
+        }
+        else
+        {
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array(), $pager);
+            if(!$topObjects) $topObjects = array(0);
+
+            $programs = $this->program->getList($status, $orderBy, 'child', array_keys($topObjects));
+        }
+
+        if(dao::isError()) return 0;
+
+        return count($programs);
     }
 }
