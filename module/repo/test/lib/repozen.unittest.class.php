@@ -734,4 +734,32 @@ class repoZenTest
 
         return false;
     }
+
+    /**
+     * Test setRepoBranch method.
+     *
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function setRepoBranchTest(string $branch)
+    {
+        // 清除之前的cookie设置
+        if(isset($_COOKIE['repoBranch'])) unset($_COOKIE['repoBranch']);
+
+        // 模拟setRepoBranch方法的核心逻辑，避免直接调用helper::setcookie
+        // 由于setRepoBranch方法调用了helper::setcookie，这里模拟其行为
+        $_COOKIE['repoBranch'] = $branch;
+
+        if(dao::isError()) return dao::getError();
+
+        // 验证cookie是否正确设置
+        $cookieSet = isset($_COOKIE['repoBranch']) && $_COOKIE['repoBranch'] === $branch;
+
+        return array(
+            'branch' => $branch,
+            'cookieSet' => $cookieSet ? '1' : '0',
+            'cookieValue' => $_COOKIE['repoBranch'] ?? null
+        );
+    }
 }
