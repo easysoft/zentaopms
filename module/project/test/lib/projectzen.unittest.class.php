@@ -141,4 +141,25 @@ class projectZenTest
         $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$project]);
         return $result;
     }
+
+    /**
+     * 测试prepareProject方法。
+     * Test prepareProject method.
+     *
+     * @param  array $testData
+     * @param  int   $hasProduct
+     * @access public
+     * @return object|false
+     */
+    public function prepareProjectTest($testData, $hasProduct)
+    {
+        $_POST    = $this->buildPostData($testData);
+        $postData = form::data($this->tester->config->project->form->edit);
+        $method   = $this->projectZenTest->getMethod('prepareProject');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$postData, $hasProduct]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
