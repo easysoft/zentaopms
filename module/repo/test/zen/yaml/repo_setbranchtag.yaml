@@ -1,0 +1,58 @@
+---
+title: 代码库分支标签设置测试数据
+desc: 用于测试repoZen::setBranchTag方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 代码库ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 代码库名称
+  range: GitRepo{5},GitlabRepo{5},SvnRepo{5},TestRepo{5}
+  format: ""
+- field: SCM
+  note: 代码库类型
+  range: Git{8},Gitlab{7},Subversion{5}
+  format: ""
+- field: path
+  note: 代码库路径
+  range: /test/git/repo{1-10},/test/gitlab/repo{11-15},/test/svn/repo{16-20}
+  format: ""
+- field: product
+  note: 关联产品
+  range: 1-10
+  format: ""
+- field: projects
+  note: 关联项目
+  range: 1-10
+  format: ""
+- field: encoding
+  note: 编码格式
+  range: UTF-8{15},GBK{3},GB2312{2}
+  format: ""
+- field: client
+  note: 客户端路径
+  range: git{8},svn{5},gitlab{7}
+  format: ""
+- field: account
+  note: 账号
+  range: admin,user{5},test{3}
+  format: ""
+- field: password
+  note: 密码
+  range: 123456{10},password{5},test123{5}
+  format: ""
+- field: synced
+  note: 是否已同步
+  range: 0{10},1{10}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{19},1{1}
+  format: ""
