@@ -12,6 +12,9 @@ cid=0
 - 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'normal', 'execution'  @1
 - 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'empty', 'project'  @10
 - 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'branch', 'execution'  @1
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'single_project', 'project'  @1
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'multi_branch', 'project'  @1
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是'no_execution', 'execution'  @1
 
 */
 
@@ -27,11 +30,11 @@ $user->deleted->range('0{10}');
 $user->gen(10);
 
 $product = zenData('product');
-$product->id->range('1-3');
-$product->name->range('产品1,产品2,产品3');
-$product->type->range('normal,branch,normal');
-$product->deleted->range('0{3}');
-$product->gen(3);
+$product->id->range('1-4');
+$product->name->range('产品1,产品2,产品3,产品4');
+$product->type->range('normal,branch,normal,branch');
+$product->deleted->range('0{4}');
+$product->gen(4);
 
 $project = zenData('project');
 $project->id->range('1,2,11,12');
@@ -39,31 +42,31 @@ $project->name->range('项目1,项目2,项目集1,项目集2');
 $project->type->range('project{2},program{2}');
 $project->model->range('scrum{2},kanban{2}');
 $project->parent->range('0{2},0{2}');
-$project->multiple->range('1{2},0{2}');
+$project->multiple->range('1,0,1,0');
 $project->deleted->range('0{4}');
 $project->gen(4);
 
 $execution = zenData('project', 'execution');
-$execution->id->range('101,102');
-$execution->project->range('1,2');
-$execution->name->range('执行1,执行2');
-$execution->type->range('sprint,kanban');
-$execution->parent->range('1,2');
-$execution->deleted->range('0{2}');
-$execution->gen(2);
+$execution->id->range('101,102,103');
+$execution->project->range('1,2,1');
+$execution->name->range('执行1,执行2,执行3');
+$execution->type->range('sprint,kanban,sprint');
+$execution->parent->range('1,2,1');
+$execution->deleted->range('0{3}');
+$execution->gen(3);
 
 $team = zenData('team');
-$team->root->range('1,1,2,2,101,101,102,102');
-$team->type->range('project{4},execution{4}');
-$team->account->range('admin,dev1,user1,dev2,admin,qa1,user2,qa2');
-$team->gen(8);
+$team->root->range('1,1,2,2,101,101,102,102,103,103');
+$team->type->range('project{4},execution{6}');
+$team->account->range('admin,dev1,user1,dev2,admin,qa1,user2,qa2,dev1,qa1');
+$team->gen(10);
 
 $branch = zenData('branch');
-$branch->id->range('1-3');
-$branch->product->range('2{3}');
-$branch->name->range('分支1,分支2,分支3');
-$branch->deleted->range('0{3}');
-$branch->gen(3);
+$branch->id->range('1-5');
+$branch->product->range('2,2,2,4,4');
+$branch->name->range('分支1,分支2,分支3,分支4,分支5');
+$branch->deleted->range('0{5}');
+$branch->gen(5);
 
 // 用户登录
 su('admin');
@@ -85,3 +88,12 @@ r($bugTest->assignUsersForBatchEditTest('empty', 'project')) && p() && e('10');
 
 // 测试步骤5：带分支产品的bugs数据在执行标签页下 - 设置分支团队成员返回1
 r($bugTest->assignUsersForBatchEditTest('branch', 'execution')) && p() && e('1');
+
+// 测试步骤6：单项目模式下批量编辑 - 隐藏计划字段返回1
+r($bugTest->assignUsersForBatchEditTest('single_project', 'project')) && p() && e('1');
+
+// 测试步骤7：多分支产品在项目标签页下 - 设置多分支团队成员返回1
+r($bugTest->assignUsersForBatchEditTest('multi_branch', 'project')) && p() && e('1');
+
+// 测试步骤8：无执行的bugs数据在执行标签页下 - 仅设置项目成员返回1
+r($bugTest->assignUsersForBatchEditTest('no_execution', 'execution')) && p() && e('1');

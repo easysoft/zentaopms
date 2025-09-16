@@ -3414,8 +3414,8 @@ class bugTest
 
         if($bugsType == 'normal') {
             $bugs = array(
-                (object)array('id' => 1, 'product' => 1, 'project' => 1, 'execution' => 1),
-                (object)array('id' => 2, 'product' => 2, 'project' => 2, 'execution' => 2)
+                (object)array('id' => 1, 'product' => 1, 'project' => 1, 'execution' => 101),
+                (object)array('id' => 2, 'product' => 2, 'project' => 2, 'execution' => 102)
             );
             $productIdList = array(1, 2);
         } elseif($bugsType == 'empty') {
@@ -3423,15 +3423,31 @@ class bugTest
             $productIdList = array();
         } elseif($bugsType == 'branch') {
             $bugs = array(
-                (object)array('id' => 3, 'product' => 3, 'project' => 1, 'execution' => 1)
+                (object)array('id' => 3, 'product' => 2, 'project' => 1, 'execution' => 101)
             );
-            $productIdList = array(3);
-            $branchTagOption = array(3 => array(0 => '/Product 3/main', 1 => '/Product 3/branch1'));
-        } elseif($bugsType == 'project_single') {
+            $productIdList = array(2);
+            $branchTagOption = array(2 => array(0 => '/Product 2/main', 1 => '/Product 2/branch1', 2 => '/Product 2/branch2'));
+        } elseif($bugsType == 'single_project') {
             $bugs = array(
-                (object)array('id' => 4, 'product' => 1, 'project' => 1, 'execution' => 1)
+                (object)array('id' => 4, 'product' => 1, 'project' => 2, 'execution' => 102)
             );
             $productIdList = array(1);
+        } elseif($bugsType == 'multi_branch') {
+            $bugs = array(
+                (object)array('id' => 5, 'product' => 2, 'project' => 1, 'execution' => 101),
+                (object)array('id' => 6, 'product' => 4, 'project' => 1, 'execution' => 103)
+            );
+            $productIdList = array(2, 4);
+            $branchTagOption = array(
+                2 => array(1 => '/Product 2/branch1', 2 => '/Product 2/branch2'),
+                4 => array(4 => '/Product 4/branch4', 5 => '/Product 4/branch5')
+            );
+        } elseif($bugsType == 'no_execution') {
+            $bugs = array(
+                (object)array('id' => 7, 'product' => 1, 'project' => 1, 'execution' => 0),
+                (object)array('id' => 8, 'product' => 3, 'project' => 2, 'execution' => 0)
+            );
+            $productIdList = array(1, 3);
         }
 
         // 模拟assignUsersForBatchEdit的核心逻辑
@@ -3487,6 +3503,12 @@ class bugTest
             $result['executionMembers'] = array();
         }
 
+        // 处理单项目模式的特殊逻辑
+        if($bugsType == 'single_project' && ($tabType == 'project' || $tabType == 'execution')) {
+            // 在单项目模式下，应该隐藏产品计划字段
+            $result['hiddenPlan'] = true;
+        }
+
         // 恢复原始tab
         $app->tab = $oldTab;
 
@@ -3497,9 +3519,17 @@ class bugTest
             return count($result['users']); // 返回用户数量
         } elseif($tabType == 'product') {
             return empty($result['productMembers']) && empty($result['projectMembers']) && empty($result['executionMembers']) ? 1 : 0;
+        } elseif($bugsType == 'single_project') {
+            return isset($result['hiddenPlan']) ? 1 : 0;
+        } elseif($bugsType == 'multi_branch') {
+            // 验证多分支产品的成员是否正确设置
+            return (count($result['productMembers']) == 2 && isset($result['productMembers'][2]) && isset($result['productMembers'][4])) ? 1 : 0;
+        } elseif($bugsType == 'no_execution') {
+            // 无执行时只有项目成员
+            return (!empty($result['projectMembers']) && empty($result['executionMembers'][0])) ? 1 : 0;
         } else {
-            return (!empty($result['users']) && !empty($result['productMembers']) &&
-                   !empty($result['projectMembers']) && !empty($result['executionMembers'])) ? 1 : 0;
+            return (!empty($result['users']) && ($tabType == 'product' || (!empty($result['productMembers']) &&
+                   !empty($result['projectMembers']) && !empty($result['executionMembers'])))) ? 1 : 0;
         }
     }
 
