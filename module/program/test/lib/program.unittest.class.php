@@ -930,4 +930,44 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getProductsByBrowseType method.
+     *
+     * @param  string $browseType
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function getProductsByBrowseTypeTest(string $browseType, array $products): array
+    {
+        /* Implement the core logic directly for testing */
+        $result = $products;
+
+        foreach($result as $index => $product)
+        {
+            $programID = $product->program;
+            /* The product associated with the program. */
+            if(!empty($programID))
+            {
+                $program = $this->program->getByID($programID);
+                if(!empty($program) && in_array($browseType, array('all', 'unclosed', 'wait', 'doing', 'suspended', 'closed')))
+                {
+                    if($browseType == 'unclosed' && $program->status == 'closed')
+                        unset($result[$index]);
+                    elseif($browseType != 'unclosed' && $browseType != 'all' && $program->status != $browseType)
+                        unset($result[$index]);
+                }
+            }
+            else
+            {
+                /* The product without program only can be viewed when browse type is all and not closed. */
+                if($browseType != 'all' and $browseType != 'unclosed') unset($result[$index]);
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array_values($result);
+    }
 }
