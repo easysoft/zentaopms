@@ -698,4 +698,33 @@ class projectTest
 
         return true;
     }
+
+    /**
+     * Test getOtherProducts method.
+     *
+     * @param  array $programProducts
+     * @param  array $branchGroups
+     * @param  array $linkedBranches
+     * @param  array $linkedProducts
+     * @access public
+     * @return mixed
+     */
+    public function getOtherProductsTest($programProducts = array(), $branchGroups = array(), $linkedBranches = array(), $linkedProducts = array())
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('getOtherProducts');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
