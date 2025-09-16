@@ -46,12 +46,15 @@ function showToggleInParent(event)
         id = zui.nextGid();
         $toggle.data('takeOverToggleID', id);
     }
-    const toggleID = `aipp-conversation-toggle_${id}`;
+    const toggleID = id === 'messageBar' ? id : `aipp-conversation-toggle_${id}`;
     let $trigger = $$(toggleID);
     if(!$trigger.length)
     {
         const data = $toggle.data();
-        $trigger = $$(`<div id="${toggleID}" class="state aipp-conversation-toggle"></div>`).attr('zui-toggle-dropdown', $toggle.attr('zui-toggle-dropdown')).css({position: 'fixed', cursor: 'pointer'});
+        if(data.call === 'fetchMessage' && !data.params) data.params = 'false, options.fetcher';
+        $trigger = $$(`<div id="${toggleID}" class="state aipp-conversation-toggle"></div>`)
+            .attr('zui-toggle-dropdown', $toggle.attr('zui-toggle-dropdown'))
+            .css({position: 'fixed', cursor: 'pointer'});
         Object.keys(data).forEach(key => $trigger.attr(`data-${key}`, data[key]));
         $trigger.appendTo($$('body'));
         $trigger.on('hidden', () => $trigger.remove());
