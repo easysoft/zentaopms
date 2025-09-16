@@ -1,0 +1,16 @@
+*.svg
+*.yml
+*.yaml
+*.md
+*.txt
+*.xml
+*.json
+*.sql
+CHANGELOG
+www/static/
+
+# ai test
+.claude/
+.qwen/
+@branch:ai/unit-test/claude
+@branch:ai/ui-test/qwen
