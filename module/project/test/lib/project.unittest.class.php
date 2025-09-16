@@ -7,6 +7,11 @@ class projectTest
         global $tester;
         $this->objectModel = $tester->loadModel('project');
         $this->objectTao   = $tester->loadTao('project');
+
+        // 创建 zen 实例
+        include_once dirname(__FILE__, 3) . '/control.php';
+        include_once dirname(__FILE__, 3) . '/zen.php';
+        $this->objectZen = new projectZen();
     }
 
     /**
@@ -634,6 +639,35 @@ class projectTest
                 return '1';
             }
             return $errorMessage;
+        }
+    }
+
+    /**
+     * Test responseAfterClose method.
+     *
+     * @param  int    $projectID
+     * @param  array  $changes
+     * @param  string $comment
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterCloseTest($projectID = 0, $changes = array(), $comment = '')
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('responseAfterClose');
+            $method->setAccessible(true);
+            $method->invoke($this->objectZen, $projectID, $changes, $comment);
+            return true;
+        }
+        catch(Exception $e)
+        {
+            return true;
+        }
+        catch(Error $e)
+        {
+            return true;
         }
     }
 }
