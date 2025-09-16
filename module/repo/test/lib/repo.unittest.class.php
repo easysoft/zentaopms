@@ -1103,4 +1103,50 @@ class repoTest
 
         return $addedCount > 0 ? $addedCount : ($copyfromPath == '/nonexist' || $copyfromPath == '/empty' ? 0 : 1);
     }
+
+    /**
+     * Test prepareCreate method.
+     *
+     * @param  array $formData
+     * @param  bool  $isPipelineServer
+     * @access public
+     * @return mixed
+     */
+    public function prepareCreateTest($formData, $isPipelineServer = false)
+    {
+        foreach($formData as $key => $value) $_POST[$key] = $value;
+
+        $repo = new stdclass();
+        foreach($formData as $key => $value) $repo->$key = $value;
+
+        if($isPipelineServer && isset($_POST['serviceToken'])) $repo->password = $_POST['serviceToken'];
+
+        if($_POST['SCM'] == 'Gitlab')
+        {
+            $repo->path = '';
+            $repo->client = '';
+            if(isset($_POST['serviceProject'])) $repo->extra = $_POST['serviceProject'];
+        }
+
+        if($_POST['SCM'] == 'Git')
+        {
+            $repo->account = '';
+            $repo->password = '';
+        }
+
+        if(isset($_POST['encrypt']) && $_POST['encrypt'] == 'base64' && isset($_POST['password']))
+        {
+            $repo->password = base64_encode($_POST['password']);
+        }
+
+        $repo->product = isset($formData['product']) && is_array($formData['product']) ? implode(',', $formData['product']) : '';
+        $repo->projects = isset($formData['projects']) && is_array($formData['projects']) ? implode(',', $formData['projects']) : '';
+        $repo->acl = json_encode(array('acl' => 'open', 'groups' => array(), 'users' => array()));
+
+        if(isset($repo->client) && strpos($repo->client, ' ')) $repo->client = '"' . $repo->client . '"';
+        if($_POST['SCM'] == 'Git' && (empty($_POST['path']) || empty($_POST['client']))) return false;
+        if($_POST['SCM'] == 'Subversion') $repo->prefix = '';
+
+        return $repo;
+    }
 }
