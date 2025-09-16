@@ -39,16 +39,16 @@ class cneTest
     public function __constructTest(string $appName = '', bool $switchChannel = null): array
     {
         global $config, $app;
-        
+
         $config->CNE->api->auth = 'Authorization';
         $config->CNE->api->token = 'test-token';
         $config->cloud->api->auth = 'X-API-Key';
         $config->cloud->api->token = 'cloud-token';
         $config->cloud->api->switchChannel = !is_null($switchChannel) ? $switchChannel : false;
-        
+
         if($switchChannel) $app->session->cloudChannel = 'test-channel';
         else $app->session->cloudChannel = null;
-        
+
         try {
             $cneModel = new cneModel($appName);
             $result['error'] = gettype($cneModel->error);
@@ -61,7 +61,7 @@ class cneTest
             $result['cloudApiHeaders'] = true;
             $result['channelSet'] = $switchChannel ? true : false;
         }
-        
+
         return $result;
     }
 
@@ -150,7 +150,7 @@ class cneTest
     public function instancesMetricsTest(array $instances = array(), bool $volumesMetrics = true): array
     {
         $this->objectModel->error = new stdclass();
-        
+
         // 如果没有传入实例数组，尝试从数据库获取
         if(empty($instances))
         {
@@ -204,7 +204,7 @@ class cneTest
         $apiParams->chart     = $instance->chart;
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->channel   = ''; // 测试空channel的情况
-        
+
         $result = $this->objectModel->startApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -227,7 +227,7 @@ class cneTest
         $apiParams->chart     = 'invalid-chart';
         $apiParams->namespace = 'invalid-namespace';
         $apiParams->channel   = 'invalid-channel';
-        
+
         $result = $this->objectModel->startApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -248,7 +248,7 @@ class cneTest
         $apiParams = new stdclass();
         $apiParams->cluster = '';
         // 缺少name、chart、namespace等参数
-        
+
         $result = $this->objectModel->startApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -261,7 +261,7 @@ class cneTest
      * @access public
      * @return null
      */
-    public function startAppWithNullParamsTest(): null
+    public function startAppWithNullParamsTest()
     {
         // 模拟传入null参数的情况
         try {
@@ -314,7 +314,7 @@ class cneTest
         $apiParams->chart     = $instance->chart;
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->channel   = ''; // 测试空channel的情况
-        
+
         $result = $this->objectModel->stopApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -341,7 +341,7 @@ class cneTest
         $apiParams->chart     = 'invalid-chart';
         $apiParams->namespace = 'invalid-namespace';
         $apiParams->channel   = 'invalid-channel';
-        
+
         $result = $this->objectModel->stopApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -368,7 +368,7 @@ class cneTest
         $apiParams->chart     = $instance->chart;
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->channel   = 'custom-channel';
-        
+
         $result = $this->objectModel->stopApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -393,7 +393,7 @@ class cneTest
         $apiParams = new stdclass();
         $apiParams->cluster = '';
         // 缺少name、chart、namespace等参数
-        
+
         $result = $this->objectModel->stopApp($apiParams);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
@@ -420,7 +420,7 @@ class cneTest
         $apiParams->chart     = 'test-chart';
         $apiParams->namespace = 'test-namespace';
         $apiParams->channel   = 'test-channel';
-        
+
         // 模拟服务器错误响应
         $errorResult = new stdclass();
         $errorResult->code = 600;
@@ -510,7 +510,7 @@ class cneTest
     public function getSettingsMappingTest(array $mappings = array()): object|null
     {
         $this->objectModel->error = new stdclass();
-        
+
         // 创建模拟实例对象
         $instance = new stdclass();
         $instance->id = 1;
@@ -536,12 +536,12 @@ class cneTest
             // 测试自定义mappings的情况
             $mapping = $mappings[0];
             $result = new stdclass();
-            
+
             if(isset($mapping['key']))
             {
                 $result->{$mapping['key']} = 'test_value_for_' . $mapping['key'];
             }
-            
+
             return $result;
         }
         else
@@ -574,33 +574,33 @@ class cneTest
             // 测试无效实例ID
             return false;
         }
-        
+
         if($instanceID > 0 && $instanceID <= 10)
         {
             // 创建模拟配置对象
             $config = new stdclass();
             $config->code = 200;
-            
+
             // 模拟原始API数据
             $resources = new stdclass();
             $resources->cpu = 2;
             $resources->memory = 4096;
-            
+
             $oversold = new stdclass();
             $oversold->cpu = 0;
             $oversold->memory = 0;
-            
+
             // 添加原始数据
             $config->resources = $resources;
             $config->oversold = $oversold;
-            
+
             // 按照原方法逻辑处理数据
             $config->min = $config->oversold;
             $config->max = $config->resources;
-            
+
             return $config;
         }
-        
+
         return false;
     }
 
@@ -666,7 +666,7 @@ class cneTest
             $status->ready = true;
             $status->restarts = 0;
             $status->age = '2d';
-            
+
             $statusList[$instance->k8name] = $status;
         }
 
@@ -858,7 +858,7 @@ class cneTest
     public function getVolumesMetricsTest(int $instanceID): object
     {
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         $result = $this->objectModel->getVolumesMetrics($instance);
         if(dao::isError()) return dao::getError();
 
@@ -900,10 +900,10 @@ class cneTest
         try {
             // 模拟getAppVolumes方法返回空值（无block device）
             $this->objectModel->getAppVolumes = function() { return false; };
-            
+
             $result = $this->objectModel->getDiskSettings($instance, $component);
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             // 如果发生异常，返回默认的磁盘设置对象
@@ -931,7 +931,7 @@ class cneTest
     {
         $this->objectModel->error = new stdclass();
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -959,7 +959,7 @@ class cneTest
     {
         $this->objectModel->error = new stdclass();
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -985,7 +985,7 @@ class cneTest
     public function getBackupListTest(int $instanceID): object
     {
         $this->objectModel->error = new stdclass();
-        
+
         if($instanceID === 999 || $instanceID === 0)
         {
             $error = new stdclass();
@@ -993,9 +993,9 @@ class cneTest
             $error->message = 'Instance not found';
             return $error;
         }
-        
+
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -1022,7 +1022,7 @@ class cneTest
     public function deleteBackupTest(int $instanceID, string $backupName): object
     {
         $this->objectModel->error = new stdclass();
-        
+
         if($instanceID === 999 || $instanceID === 0)
         {
             $error = new stdclass();
@@ -1030,7 +1030,7 @@ class cneTest
             $error->message = 'Instance not found';
             return $error;
         }
-        
+
         if(empty($backupName))
         {
             $error = new stdclass();
@@ -1038,9 +1038,9 @@ class cneTest
             $error->message = 'Backup name cannot be empty';
             return $error;
         }
-        
+
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -1068,7 +1068,7 @@ class cneTest
     public function restoreTest(int $instanceID, string $backupName, string $account = ''): object
     {
         $this->objectModel->error = new stdclass();
-        
+
         if($instanceID === 999 || $instanceID === 0)
         {
             $error = new stdclass();
@@ -1076,7 +1076,7 @@ class cneTest
             $error->message = 'Instance not found';
             return $error;
         }
-        
+
         if(empty($backupName))
         {
             $error = new stdclass();
@@ -1084,9 +1084,9 @@ class cneTest
             $error->message = 'Backup name cannot be empty';
             return $error;
         }
-        
+
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -1113,7 +1113,7 @@ class cneTest
     public function getRestoreStatusTest(int $instanceID, string $backupName): object
     {
         $this->objectModel->error = new stdclass();
-        
+
         if($instanceID === 999 || $instanceID === 0)
         {
             $error = new stdclass();
@@ -1121,7 +1121,7 @@ class cneTest
             $error->message = 'Instance not found';
             return $error;
         }
-        
+
         if(empty($backupName))
         {
             $error = new stdclass();
@@ -1129,9 +1129,9 @@ class cneTest
             $error->message = 'Backup name cannot be empty';
             return $error;
         }
-        
+
         $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        
+
         if(is_null($instance))
         {
             $error = new stdclass();
@@ -1196,26 +1196,26 @@ class cneTest
     public function getAppVolumesTest(int $instanceID, bool|string $component = false): object|array|false
     {
         $this->objectModel->error = new stdclass();
-        
+
         if($instanceID === 999)
         {
             // 测试不存在的实例ID
             return false;
         }
-        
+
         if($instanceID === 0)
         {
             // 测试无效的实例ID
             return false;
         }
-        
+
         // 创建模拟实例对象
         $instance = new stdclass();
         $instance->id = $instanceID;
         $instance->k8name = "test-app-{$instanceID}";
         $instance->spaceData = new stdclass();
         $instance->spaceData->k8space = 'test-namespace';
-        
+
         // 根据不同的测试场景返回不同的结果
         if($instanceID === 1)
         {
@@ -1230,7 +1230,7 @@ class cneTest
             $volume1->setting_keys = new stdclass();
             $volume1->setting_keys->size = new stdclass();
             $volume1->setting_keys->size->path = 'persistence.size';
-            
+
             return array($volume1);
         }
         elseif($instanceID === 2)
@@ -1248,10 +1248,10 @@ class cneTest
                 $volume->setting_keys = new stdclass();
                 $volume->setting_keys->size = new stdclass();
                 $volume->setting_keys->size->path = 'mysql.persistence.size';
-                
+
                 return array($volume);
             }
-            
+
             return array();
         }
         elseif($instanceID === 3)
@@ -1269,10 +1269,10 @@ class cneTest
                 $volume->setting_keys = new stdclass();
                 $volume->setting_keys->size = new stdclass();
                 $volume->setting_keys->size->path = 'redis.persistence.size';
-                
+
                 return array($volume);
             }
-            
+
             return array();
         }
         elseif($instanceID === 4)
@@ -1288,7 +1288,7 @@ class cneTest
             $volume->setting_keys = new stdclass();
             $volume->setting_keys->size = new stdclass();
             $volume->setting_keys->size->path = 'config.size';
-            
+
             return array($volume);
         }
         elseif($instanceID === 5)
@@ -1296,7 +1296,7 @@ class cneTest
             // 测试空数据卷数组
             return array();
         }
-        
+
         // 默认情况返回false
         return false;
     }
@@ -1314,7 +1314,7 @@ class cneTest
     public function apiGetTest(string $url, array|object $data = array(), array $header = array(), string $host = ''): object
     {
         // 模拟不同的测试场景，避免实际API调用
-        
+
         // 检查URL参数
         if(empty($url))
         {
@@ -1324,7 +1324,7 @@ class cneTest
             $error->message = 'URL cannot be empty';
             return $error;
         }
-        
+
         // 检查无效URL格式
         if(strpos($url, '/invalid') !== false)
         {
@@ -1334,7 +1334,7 @@ class cneTest
             $error->message = 'CNE服务器错误';
             return $error;
         }
-        
+
         // 根据URL路径返回不同的模拟响应
         if(strpos($url, '/api/cne/app/status') !== false)
         {
@@ -1355,7 +1355,7 @@ class cneTest
             $response->code = 200;
             $response->message = 'success';
             $response->data = new stdclass();
-            
+
             // 根据传入的data参数构建响应数据
             if(is_array($data) && isset($data['name']))
             {
@@ -1369,7 +1369,7 @@ class cneTest
             {
                 $response->data->name = 'default-app';
             }
-            
+
             $response->data->namespace = 'default';
             return $response;
         }
@@ -1424,7 +1424,7 @@ class cneTest
     public function apiPostTest(string $url, array|object $data = array(), array $header = array(), string $host = ''): object
     {
         // 模拟不同的测试场景，避免实际API调用
-        
+
         // 检查URL参数
         if(empty($url))
         {
@@ -1434,7 +1434,7 @@ class cneTest
             $error->message = 'URL cannot be empty';
             return $error;
         }
-        
+
         // 检查无效URL格式
         if(strpos($url, '/invalid') !== false)
         {
@@ -1444,7 +1444,7 @@ class cneTest
             $error->message = 'CNE服务器错误';
             return $error;
         }
-        
+
         // 根据URL路径返回不同的模拟响应
         if(strpos($url, '/api/cne/app/install') !== false)
         {
@@ -1466,7 +1466,7 @@ class cneTest
             $response->data = new stdclass();
             $response->data->name = is_object($data) && isset($data->name) ? $data->name : 'new-app';
             $response->data->status = 'created';
-            
+
             // 模拟apiPost方法中201转200的逻辑
             $response->code = 200;
             return $response;
@@ -1546,9 +1546,9 @@ class cneTest
         // 由于cneServerError是protected方法，我们通过模拟网络错误来间接测试它
         // apiPost在网络错误时会调用cneServerError方法
         $result = $this->apiPostTest('/api/cne/app/network-error', array());
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1577,16 +1577,16 @@ class cneTest
     public function translateErrorTest(object $apiResult, bool $debug = false): object
     {
         global $config;
-        
+
         // 保存原始debug配置
         $originalDebug = isset($config->debug) ? $config->debug : false;
         $config->debug = $debug;
-        
+
         // 由于translateError是protected方法，通过apiGet或apiPost方法间接测试
         // 这里模拟translateError的行为
         $result = new stdclass();
         $result->code = $apiResult->code;
-        
+
         // 模拟CNE错误列表的翻译
         $errorList = array(
             400 => '请求集群接口失败',
@@ -1599,20 +1599,20 @@ class cneTest
             41005 => '证书解析失败',
             41006 => '密钥解析失败'
         );
-        
+
         $result->message = isset($errorList[$apiResult->code]) ? $errorList[$apiResult->code] : 'CNE服务器出错';
-        
+
         // 在调试模式下添加原始错误码和消息
         if($debug && isset($apiResult->code) && isset($apiResult->message))
         {
             $result->message .= " [{$apiResult->code}]: [{$apiResult->message}]";
         }
-        
+
         // 恢复原始debug配置
         $config->debug = $originalDebug;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 }
