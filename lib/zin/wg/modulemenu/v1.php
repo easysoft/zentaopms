@@ -317,6 +317,15 @@ class moduleMenu extends wg
                 ($hasActionDropdown || $hasToggleBtn) ? row
                 (
                     setClass('justify-end p-1 flex-none'),
+                    $this->prop('createModuleLink') ? btn
+                    (
+                        set::type('ghost'),
+                        set::icon('plus'),
+                        set::size('sm'),
+                        set::caret(false),
+                        set::url($this->prop('createModuleLink')),
+                        setData(array('toggle' => 'modal', 'size' => 'sm'))
+                    ) : null,
                     $hasActionDropdown ? $actions : div(),
                     $hasToggleBtn ? btn
                     (

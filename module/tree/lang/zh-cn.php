@@ -11,6 +11,7 @@
  */
 $lang->tree                       = new stdclass();
 $lang->tree->common               = '模块维护';
+$lang->tree->create               = '添加模块';
 $lang->tree->edit                 = '编辑模块';
 $lang->tree->delete               = '删除模块';
 $lang->tree->browse               = '通用模块维护';
