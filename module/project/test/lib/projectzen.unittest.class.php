@@ -447,4 +447,39 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test getUnmodifiableProducts method.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function getUnmodifiableProductsTest($projectID = null, $project = null)
+    {
+        try
+        {
+            global $tester;
+
+            // 初始化必要的模型和依赖
+            if(!isset($this->objectZen->project)) $this->objectZen->project = $this->objectModel;
+            if(!isset($this->objectZen->product)) $this->objectZen->product = $tester->loadModel('product');
+            if(!isset($this->objectZen->dao)) $this->objectZen->dao = $tester->dao;
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('getUnmodifiableProducts');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $projectID, $project);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
