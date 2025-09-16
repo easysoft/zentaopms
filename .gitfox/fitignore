@@ -11,6 +11,6 @@ www/static/
 
 # ai test
 .claude/
-.qwen
+.qwen/
 @branch:ai/unit-test/claude
 @branch:ai/ui-test/qwen
