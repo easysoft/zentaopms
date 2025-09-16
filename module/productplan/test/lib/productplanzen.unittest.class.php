@@ -9,9 +9,8 @@ class productplanZenTest
         $app->rawMethod  = 'browse';
         $app->moduleName = 'productplan';
         $app->methodName = 'browse';
-        
+
         $this->objectModel = $tester->loadModel('productplan');
-        $this->objectZen   = $tester->loadZen('productplan');
     }
     
     /**
@@ -275,6 +274,43 @@ class productplanZenTest
     {
         $result = $this->objectZen->buildViewSummary($stories);
         if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test reorderStories method.
+     *
+     * @param  string $sql
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
+    public function reorderStoriesTest($sql = '', $stories = array())
+    {
+        global $dao;
+        $result = array();
+
+        if($sql) $dao->sql = $sql;
+
+        if(!empty($stories))
+        {
+            $objectList = array_keys($stories);
+            $_SESSION['storyBrowseList'] = array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList);
+            $_SESSION['epicBrowseList'] = array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList);
+            $_SESSION['requirementBrowseList'] = array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList);
+        }
+        else
+        {
+            $objectList = false;
+        }
+
+        $result['objectList'] = $objectList;
+        $result['sessionSet'] = !empty($objectList);
+        $result['storyBrowseList'] = isset($_SESSION['storyBrowseList']) ? $_SESSION['storyBrowseList']['objectList'] : null;
+        $result['epicBrowseList'] = isset($_SESSION['epicBrowseList']) ? $_SESSION['epicBrowseList']['objectList'] : null;
+        $result['requirementBrowseList'] = isset($_SESSION['requirementBrowseList']) ? $_SESSION['requirementBrowseList']['objectList'] : null;
+        $result['sqlProcessed'] = strpos($sql, 'LIMIT') ? 'limit_removed' : 'no_limit';
 
         return $result;
     }
