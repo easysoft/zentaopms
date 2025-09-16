@@ -602,4 +602,23 @@ class programplanTest
 
         return array('success' => '1');
     }
+
+    /**
+     * Test prepareEditPlan method.
+     *
+     * @param  int         $planID
+     * @param  int         $projectID
+     * @param  object      $plan
+     * @param  object|null $parentStage
+     * @access public
+     * @return object|false
+     */
+    public function prepareEditPlanTest(int $planID, int $projectID, object $plan, ?object $parentStage = null): object|false
+    {
+        $result = $this->zenInstance->prepareEditPlan($planID, $projectID, $plan, $parentStage);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
