@@ -592,4 +592,36 @@ class releaseTest
             'productType' => $product->type
         );
     }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getExcludeStoryIdListTest(object $release): array
+    {
+        // 直接查询父需求ID列表
+        $parentIdList = $this->objectModel->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($release->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->andWhere('status')->notIN('draft,reviewing,changing')
+            ->fetchPairs();
+
+        // 处理发布中的需求ID
+        if(isset($release->stories))
+        {
+            foreach(explode(',', $release->stories) as $storyID)
+            {
+                if(!$storyID) continue;
+                if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $parentIdList;
+    }
 }
