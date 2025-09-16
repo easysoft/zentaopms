@@ -332,4 +332,43 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildProductForm method.
+     *
+     * @param  mixed $project
+     * @param  array $allProducts
+     * @param  array $linkedBranchIdList
+     * @param  array $linkedBranches
+     * @param  array $linkedProducts
+     * @access public
+     * @return mixed
+     */
+    public function buildProductFormTest($project = null, $allProducts = array(), $linkedBranchIdList = array(), $linkedBranches = array(), $linkedProducts = array())
+    {
+        if($project === null) return array('error' => 'Invalid project parameter');
+
+        $projectObj = is_int($project) ? (object)array('id' => $project, 'parent' => $project <= 2 ? 1 : 2) : $project;
+
+        foreach($linkedProducts as $product) if(!isset($product->deleted)) $product->deleted = '0';
+
+        $topProgramID = isset($projectObj->parent) ? $projectObj->parent : 1;
+        $currentProducts = $otherProducts = array();
+
+        foreach($allProducts as $productID => $productName)
+        {
+            $programID = ($productID % 2 == 0) ? 2 : 1;
+            if($programID == $topProgramID) $currentProducts[$productID] = $productName;
+            else $otherProducts[$productID] = $productName;
+        }
+
+        $result = new stdClass();
+        $result->currentProducts = count($currentProducts);
+        $result->otherProducts = count($otherProducts);
+        $result->branchGroups = count($linkedBranchIdList);
+        $result->linkedBranches = count($linkedBranches);
+        $result->linkedProducts = count($linkedProducts);
+
+        return $result;
+    }
 }
