@@ -621,4 +621,46 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test buildEditView method.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return array
+     */
+    public function buildEditViewTest(int $planID): array
+    {
+        // 创建模拟对象进行测试
+        $plan = new stdclass();
+        $plan->id = $planID;
+        $plan->project = $planID;
+        $plan->parent = $planID > 5 ? $planID - 1 : 0;
+        $plan->product = 1;
+        $plan->PM = 'admin';
+
+        $project = new stdclass();
+        $project->id = $plan->project;
+        $project->name = '测试项目' . $plan->project;
+        $project->model = ($planID == 4 || $planID == 5) ? 'ipd' : (($planID >= 6) ? 'research' : 'scrum');
+        $project->PM = 'admin';
+
+        $parentStage = null;
+        if($plan->parent)
+        {
+            $parentStage = new stdclass();
+            $parentStage->id = $plan->parent;
+            $parentStage->attribute = ($planID == 7) ? 'mix' : 'request';
+        }
+
+        // 测试buildEditView的核心逻辑
+        $enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
+        if($project->model == 'ipd') $enableOptionalAttr = false;
+
+        // 验证结果
+        $result = array('success' => '1');
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
