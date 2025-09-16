@@ -727,4 +727,33 @@ class projectTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildMembers method.
+     *
+     * @param  array $currentMembers
+     * @param  array $members2Import
+     * @param  array $deptUsers
+     * @param  int   $days
+     * @access public
+     * @return mixed
+     */
+    public function buildMembersTest($currentMembers = array(), $members2Import = array(), $deptUsers = array(), $days = 0)
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('buildMembers');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $currentMembers, $members2Import, $deptUsers, $days);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
