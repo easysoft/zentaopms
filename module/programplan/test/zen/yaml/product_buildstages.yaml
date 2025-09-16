@@ -1,0 +1,32 @@
+---
+title: 产品数据配置
+desc: 用于测试buildStages方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: name
+  note: 产品名称
+  range: '产品A,产品B,产品C,产品D,产品E'
+- field: code
+  note: 产品代码
+  range: 'PROD001,PROD002,PROD003,PROD004,PROD005'
+- field: type
+  note: 产品类型
+  range: 'normal{4},branch{1}'
+- field: status
+  note: 状态
+  range: 'normal{4},closed{1}'
+- field: acl
+  note: 访问控制
+  range: 'open{3},private{2}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}'
+- field: createdDate
+  note: 创建日期
+  range: '2024-01-01{5}'
+- field: deleted
+  note: 删除状态
+  range: '0{5}'

@@ -723,4 +723,39 @@ class programplanTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildStages method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $baselineID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @access public
+     * @return int|string
+     */
+    public function buildStagesTest(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): int|string
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->zenInstance);
+            $method = $reflection->getMethod('buildStages');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->zenInstance, $projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+
+            if(dao::isError()) return 'error';
+
+            if(is_array($result)) return count($result);
+
+            return 0;
+        }
+        catch(Throwable $e)
+        {
+            return 'error';
+        }
+    }
 }

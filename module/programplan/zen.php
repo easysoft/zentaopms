@@ -387,7 +387,6 @@ class programplanZen extends programplan
         {
             $sort   = common::appendOrder($orderBy);
             $stages = $this->programplan->getPlans($projectID, $productID, $sort);
-            $this->view->dateDetails  = $dateDetails;
 
             return $stages;
         }
