@@ -1,0 +1,41 @@
+---
+title: 项目浏览视图数据配置
+desc: 用于测试buildBrowseView方法的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+- field: name
+  note: 项目名称
+  range: '项目A,项目B,项目C,测试项目D,演示项目E'
+- field: type
+  note: 项目类型
+  range: 'project{3},stage{2}'
+- field: status
+  note: 状态
+  range: 'wait,doing{2},done,suspended'
+- field: parent
+  note: 父项目ID
+  range: '0{3},1{2}'
+- field: model
+  note: 项目模型
+  range: 'scrum{2},waterfall,agileplus,ipd'
+- field: begin
+  note: 开始日期
+  range: '2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01'
+- field: end
+  note: 结束日期
+  range: '2024-06-01,2024-07-01,2024-08-01,2024-09-01,2024-10-01'
+- field: PM
+  note: 项目经理
+  range: 'admin,user1,user2,user3,user4'
+- field: hasProduct
+  note: 是否关联产品
+  range: '1{4},0{1}'
+- field: deleted
+  note: 删除状态
+  range: '0{4},1{1}'
+- field: grade
+  note: 项目等级
+  range: '1{2},2{2},3{1}'

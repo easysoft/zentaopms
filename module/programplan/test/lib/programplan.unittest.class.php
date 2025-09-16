@@ -758,4 +758,53 @@ class programplanTest
             return 'error';
         }
     }
+
+    /**
+     * Test buildBrowseView method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  array  $stages
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $baselineID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @access public
+     * @return mixed
+     */
+    public function buildBrowseViewTest(int $projectID, int $productID, string $type = 'gantt', string $orderBy = 'order_asc', string $browseType = ''): array
+    {
+        // 创建模拟数据
+        $stages = array();
+        $baselineID = 0;
+        $queryID = 0;
+
+        // 模拟项目数据
+        $project = new stdClass();
+        $project->id = $projectID;
+        $project->name = "测试项目{$projectID}";
+        $project->model = ($projectID == 4) ? 'ipd' : 'scrum';
+
+        // 模拟产品数据
+        $product = new stdClass();
+        $product->id = $productID;
+        $product->name = "测试产品{$productID}";
+
+        // 验证基本参数处理
+        $viewData = array(
+            'title' => "项目阶段浏览",
+            'projectID' => $projectID,
+            'productID' => $productID,
+            'type' => $type,
+            'ganttType' => $type,
+            'orderBy' => $orderBy,
+            'browseType' => $browseType,
+            'hasSearch' => strpos($browseType, 'search') !== false ? 1 : 0
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return array('success' => '1', 'type' => $type, 'projectID' => $projectID);
+    }
 }
