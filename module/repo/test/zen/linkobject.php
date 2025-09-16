@@ -17,7 +17,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_linkobject.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('repo');
@@ -46,7 +46,7 @@ $relationTable->gen(20);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$repoTest = new repoZenTest();
+$repoTest = new repoZenLinkObjectTest();
 
 // 5. 必须包含至少5个测试步骤
 r($repoTest->linkObjectTest(1, 'abc123', 'story')) && p('result') && e('success'); // 步骤1：正常关联story对象
