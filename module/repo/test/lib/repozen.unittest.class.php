@@ -115,4 +115,35 @@ class repoZenTest
         $tags = array('v1.0', 'v2.0');
         return array($branches, $tags);
     }
+
+    /**
+     * Test getLinkBranches method.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function getLinkBranchesTest($products)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $productBranches = array();
+        foreach($products as $product)
+        {
+            if(empty($product) || !is_object($product)) continue;
+
+            if($product->type != 'normal')
+            {
+                $branches = $this->objectModel->loadModel('branch')->getPairs($product->id, 'noempty');
+                foreach($branches as $branchID => $branchName)
+                {
+                    $branches[$branchID] = $product->name . ' / ' . $branchName;
+                }
+
+                $productBranches += $branches;
+            }
+        }
+
+        return $productBranches;
+    }
 }
