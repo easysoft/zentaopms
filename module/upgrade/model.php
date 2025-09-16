@@ -11285,7 +11285,7 @@ class upgradeModel extends model
                 }
             }
 
-            foreach(array_filter($this->lang->design->plusTypeList) as $value)
+            foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
             {
                 if(empty($value) || $module->projectModel != 'waterfallplus') continue;
                 $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
@@ -11454,6 +11454,8 @@ class upgradeModel extends model
                     }
                 }
             }
+
+            $this->createOtherDeliverable($workflowGroup->id); // 创建名为其他的交付物类型。
         }
 
         /* 将已升级的历史交付物数据删掉。 */
@@ -11499,6 +11501,46 @@ class upgradeModel extends model
         $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
 
         return $moduleID;
+    }
+
+    /**
+     * 创建名为其他的交付物类型。
+     * Create other deliverable.
+     *
+     * @param  int    $workflowGroupID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function createOtherDeliverable(int $workflowGroupID)
+    {
+        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('root')->eq($workflowGroupID)->andWhere('extra')->eq('other')->fetch('id');
+
+        /* 创建名为其他的交付物类型。 */
+        $deliverable = new stdclass();
+        $deliverable->name          = $this->lang->other;
+        $deliverable->category      = 'other';
+        $deliverable->module        = $moduleID;
+        $deliverable->workflowGroup = $workflowGroupID;
+        $deliverable->template      = '[]';
+        $deliverable->trimmable     = '1';
+        $deliverable->builtin       = '1';
+        $deliverable->status        = 'enabled';
+        $deliverable->createdBy     = 'system';
+        $deliverable->createdDate   = helper::now();
+
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $stageList = $this->loadModel('deliverable')->buildStageList($workflowGroupID);
+        foreach($stageList as $key => $stage)
+        {
+            $deliverableStage = new stdclass();
+            $deliverableStage->deliverable = $deliverableID;
+            $deliverableStage->stage       = $key;
+            $deliverableStage->required    = '0';
+            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+        }
     }
 
     /**
@@ -11697,6 +11739,7 @@ class upgradeModel extends model
         $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
         $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('execution')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
         $fileList              = $this->dao->select('*')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('extra')->like('deliverable%')->fetchAll('id');
+        $otherDeliverablePairs = $this->dao->select('workflowGroup, id')->from(TABLE_DELIVERABLE)->where('category')->eq('other')->andWhere('builtin')->eq('1')->fetchPairs();
 
         foreach($projectList as $project)
         {
@@ -11715,7 +11758,14 @@ class upgradeModel extends model
                         if(empty($config['doc']) && empty($config['file'])) continue;
 
                         $oldDeliverableID = $config['deliverable'];
-                        $deliverableID    = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
+                        if(strpos($oldDeliverableID, 'new_') !== false)
+                        {
+                            $deliverableID = $otherDeliverablePairs[$project->workflowGroup]; // 其他类型的交付物。
+                        }
+                        else
+                        {
+                            $deliverableID = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
+                        }
 
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
