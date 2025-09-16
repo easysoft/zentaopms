@@ -98,4 +98,21 @@ class repoZenTest
 
         return $needUpdate;
     }
+
+    /**
+     * Test getBrowseInfo method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function getBrowseInfoTest($repo)
+    {
+        if(empty($repo) || !is_object($repo)) return false;
+        if($repo->SCM != 'Gitlab') return null;
+
+        $branches = array('master' => 'master', 'develop' => 'develop');
+        $tags = array('v1.0', 'v2.0');
+        return array($branches, $tags);
+    }
 }
