@@ -825,4 +825,40 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForCancel method.
+     *
+     * @param  object $oldTask
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForCancelTest(object $oldTask)
+    {
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Setup basic cancel form data. */
+        $_POST['comment'] = '任务取消测试';
+
+        try
+        {
+            $method = $this->taskZenTest->getMethod('buildTaskForCancel');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$oldTask]);
+
+            /* Clean up POST data. */
+            $_POST = array();
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* Clean up POST data on exception. */
+            $_POST = array();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
