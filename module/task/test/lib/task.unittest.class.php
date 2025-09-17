@@ -2725,4 +2725,70 @@ class taskTest
 
         return $result;
     }
+
+    /**
+     * Test buildBatchCreateForm method.
+     *
+     * @param  object $execution
+     * @param  int    $storyID
+     * @param  int    $moduleID
+     * @param  int    $taskID
+     * @param  array  $output
+     * @access public
+     * @return object
+     */
+    public function buildBatchCreateFormTest(object $execution, int $storyID = 0, int $moduleID = 0, int $taskID = 0, array $output = array()): object
+    {
+        global $tester;
+
+        /* Load zen object only when needed to avoid initialization errors. */
+        if($this->objectZen === null) $this->objectZen = $tester->loadZen('task');
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildBatchCreateForm');
+        $method->setAccessible(true);
+
+        try
+        {
+            $method->invoke($this->objectZen, $execution, $storyID, $moduleID, $taskID, $output);
+
+            $result = new stdClass();
+            $result->title = isset($this->objectZen->view->title) ? $this->objectZen->view->title : '';
+            $result->execution = isset($this->objectZen->view->execution) ? $this->objectZen->view->execution->id : 0;
+            $result->project = isset($this->objectZen->view->project) ? $this->objectZen->view->project->id : 0;
+            $result->modules = isset($this->objectZen->view->modules) ? count($this->objectZen->view->modules) : 0;
+            $result->parent = isset($this->objectZen->view->parent) ? $this->objectZen->view->parent : 0;
+            $result->storyID = isset($this->objectZen->view->storyID) ? $this->objectZen->view->storyID : 0;
+            $result->story = isset($this->objectZen->view->story) ? (is_object($this->objectZen->view->story) ? $this->objectZen->view->story->id : 0) : 0;
+            $result->moduleID = isset($this->objectZen->view->moduleID) ? $this->objectZen->view->moduleID : 0;
+            $result->stories = isset($this->objectZen->view->stories) ? count($this->objectZen->view->stories) : 0;
+            $result->members = isset($this->objectZen->view->members) ? count($this->objectZen->view->members) : 0;
+            $result->taskConsumed = isset($this->objectZen->view->taskConsumed) ? $this->objectZen->view->taskConsumed : 0;
+            $result->hideStory = isset($this->objectZen->view->hideStory) ? $this->objectZen->view->hideStory : false;
+            $result->showFields = isset($this->objectZen->view->showFields) ? $this->objectZen->view->showFields : '';
+            $result->manageLink = isset($this->objectZen->view->manageLink) ? $this->objectZen->view->manageLink : '';
+
+            /* Check parent task specific fields. */
+            if($taskID > 0)
+            {
+                $result->parentTitle = isset($this->objectZen->view->parentTitle) ? $this->objectZen->view->parentTitle : '';
+                $result->parentPri = isset($this->objectZen->view->parentPri) ? $this->objectZen->view->parentPri : 0;
+                $result->parentTask = isset($this->objectZen->view->parentTask) ? $this->objectZen->view->parentTask->id : 0;
+            }
+
+            /* Check kanban specific fields. */
+            if($execution->type == 'kanban')
+            {
+                $result->regionID = isset($this->objectZen->view->regionID) ? $this->objectZen->view->regionID : 0;
+                $result->laneID = isset($this->objectZen->view->laneID) ? $this->objectZen->view->laneID : 0;
+                $result->regionPairs = isset($this->objectZen->view->regionPairs) ? count($this->objectZen->view->regionPairs) : 0;
+                $result->lanePairs = isset($this->objectZen->view->lanePairs) ? count($this->objectZen->view->lanePairs) : 0;
+            }
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return (object)array('error' => $e->getMessage());
+        }
+    }
 }
