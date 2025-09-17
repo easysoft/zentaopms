@@ -661,7 +661,7 @@ class weeklyModel extends model
             if(!empty($scopeMaps)) $this->setting->setItem("system.reporttemplate.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
         }
 
-        return array_push($scopeMaps);
+        return array_pop($scopeMaps);
     }
 
     /**
