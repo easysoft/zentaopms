@@ -961,4 +961,41 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildEffortForFinish method.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  string $currentConsumed
+     * @param  string $comment
+     * @access public
+     * @return object|array
+     */
+    public function buildEffortForFinishTest(object $oldTask, object $task, string $currentConsumed = '', string $comment = ''): object|array
+    {
+        global $tester;
+
+        // 模拟 POST 数据
+        $_POST['currentConsumed'] = $currentConsumed;
+        if(!empty($comment)) $_POST['comment'] = $comment;
+
+        // 模拟用户登录
+        $tester->app->user = new stdclass();
+        $tester->app->user->account = 'admin';
+
+        $method = $this->taskZenTest->getMethod('buildEffortForFinish');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$oldTask, $task]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
