@@ -1454,4 +1454,33 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * 测试检查当前用户在该执行中是否是受限用户。
+     * Test isLimitedInExecution method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function isLimitedInExecutionTest(int $executionID)
+    {
+        try {
+            $method = $this->taskZenTest->getMethod('isLimitedInExecution');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$executionID]);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
