@@ -6,6 +6,7 @@ class testcaseTest
          global $tester;
          $this->objectModel = $tester->loadModel('testcase');
          $this->objectTao   = $tester->loadTao('testcase');
+         $this->objectZen   = $tester->loadZen('testcase');
     }
 
     /**
@@ -3859,5 +3860,64 @@ class testcaseTest
         }
 
         return $libCase;
+    }
+
+    /**
+     * Test importCases method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function importCasesTest(array $cases): array
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+        $result = $zen->importCases($cases);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processScene method.
+     *
+     * @param  array $result
+     * @access public
+     * @return array
+     */
+    public function processSceneTest(array $result): array
+    {
+        // 通过反射访问 protected 方法
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('processScene');
+        $method->setAccessible(true);
+
+        $processedResult = $method->invoke($this->objectZen, $result);
+        if(dao::isError()) return dao::getError();
+
+        return $processedResult;
+    }
+
+    /**
+     * Test processChildScene method.
+     *
+     * @param  array  $results
+     * @param  string $parent
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function processChildSceneTest(array $results, string $parent, string $type): array
+    {
+        // 通过反射访问 protected 方法
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('processChildScene');
+        $method->setAccessible(true);
+
+        $processedResult = $method->invoke($this->objectZen, $results, $parent, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $processedResult;
     }
 }

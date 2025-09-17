@@ -990,4 +990,24 @@ class testcaseZenTest
 
         return $method->invoke($zenTest, $result);
     }
+
+    /**
+     * Test processChildScene method.
+     *
+     * @param  array  $results
+     * @param  string $parent
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function processChildSceneTest(array $results, string $parent, string $type): array
+    {
+        global $app;
+        $zenTest = $app->loadTarget('testcase', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('processChildScene');
+        $method->setAccessible(true);
+
+        return $method->invoke($zenTest, $results, $parent, $type);
+    }
 }
