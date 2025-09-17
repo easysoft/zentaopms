@@ -2103,4 +2103,36 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkGitRepo method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function checkGitRepoTest($executionID = null)
+    {
+        try
+        {
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('checkGitRepo');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$executionID]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
