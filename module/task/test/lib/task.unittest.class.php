@@ -2939,4 +2939,204 @@ class taskTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForStart method.
+     *
+     * @param  object $oldTask
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForStartTest(object $oldTask)
+    {
+        if(!$this->objectZen) return false;
+
+        $method = new ReflectionMethod($this->objectZen, 'buildTaskForStart');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $oldTask);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test buildTaskForFinish method.
+     *
+     * @param  object $oldTask
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForFinishTest(object $oldTask)
+    {
+        if(!$this->objectZen) return false;
+
+        $method = new ReflectionMethod($this->objectZen, 'buildTaskForFinish');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $oldTask);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test buildTaskForClose method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForCloseTest(int $taskID)
+    {
+        if(!$this->objectZen) return false;
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        if(empty($oldTask)) return false;
+
+        $method = new ReflectionMethod($this->objectZen, 'buildTaskForClose');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $oldTask);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test checkLegallyDate method.
+     *
+     * @param  object $task
+     * @param  bool   $isDateLimit
+     * @param  object $parent
+     * @param  int    $rowID
+     * @access public
+     * @return mixed
+     */
+    public function checkLegallyDateTest($task, $isDateLimit = false, $parent = null, $rowID = null)
+    {
+        global $tester;
+
+        // 如果zen对象不存在，尝试直接创建
+        if(!$this->objectZen) {
+            try {
+                $this->objectZen = $tester->loadZen('task');
+            } catch (Exception $e) {
+                // 如果zen加载失败，尝试直接实例化taskZen
+                global $app;
+                $this->objectZen = new taskZen();
+            }
+        }
+
+        try
+        {
+            dao::$errors = array(); // 清空错误数组
+            $this->objectZen->checkLegallyDate($task, $isDateLimit, $parent, $rowID);
+            if(dao::isError()) return dao::$errors;
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test formatExportTask method.
+     *
+     * @param  object $task
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  array  $users
+     * @access public
+     * @return object
+     */
+    public function formatExportTaskTest(object $task, array $projects = array(), array $executions = array(), array $users = array()): object
+    {
+        global $tester;
+
+        try
+        {
+            // 直接加载zen对象
+            $zenObj = $tester->loadZen('task');
+
+            // 确保lang对象正确初始化
+            global $lang, $app;
+            if(!isset($zenObj->lang) && isset($lang)) {
+                $zenObj->lang = $lang;
+            }
+
+            // 确保post对象正确初始化
+            if(!isset($zenObj->post)) {
+                $zenObj->post = (object)$_POST;
+            }
+
+            dao::$errors = array(); // 清空错误数组
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenObj);
+            if(!$reflection->hasMethod('formatExportTask')) {
+                return (object)array('error' => 'Method formatExportTask not found in class ' . get_class($zenObj));
+            }
+
+            $method = $reflection->getMethod('formatExportTask');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($zenObj, array($task, $projects, $executions, $users));
+
+            // 检查是否有dao错误
+            if(dao::isError()) {
+                $errors = dao::getError();
+                $errorMsg = '';
+                if(is_array($errors)) {
+                    $errorMsg = implode(', ', $errors);
+                } elseif(is_string($errors)) {
+                    $errorMsg = $errors;
+                } else {
+                    $errorMsg = 'Unknown error type: ' . gettype($errors);
+                }
+                return (object)array('error' => 'DAO Error: ' . $errorMsg);
+            }
+
+            // 检查结果
+            if($result === null) {
+                return (object)array('error' => 'Method returned null');
+            }
+
+            if(is_object($result) && property_exists($result, 'error') && empty($result->error)) {
+                return (object)array('error' => 'Method executed but result has empty error property');
+            }
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return (object)array('error' => 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+        }
+        catch(Throwable $e)
+        {
+            return (object)array('error' => 'Throwable: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+        }
+        catch(Error $e)
+        {
+            return (object)array('error' => 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+        }
+    }
 }

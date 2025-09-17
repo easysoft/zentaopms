@@ -1393,4 +1393,25 @@ class taskZenTest
 
         return $result;
     }
+
+    /**
+     * Test formatExportTask method.
+     *
+     * @param  object $task
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  array  $users
+     * @access public
+     * @return object
+     */
+    public function formatExportTaskTest(object $task, array $projects = array(), array $executions = array(), array $users = array()): object
+    {
+        $method = $this->taskZenTest->getMethod('formatExportTask');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->taskZenTest->newInstance(), array($task, $projects, $executions, $users));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
