@@ -517,4 +517,62 @@ class testcaseZenTest
             return array('executed' => '0', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test assignModuleAndSceneForBatchEdit method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $branches
+     * @param  array  $cases
+     * @param  array  $modules
+     * @access public
+     * @return array
+     */
+    public function assignModuleAndSceneForBatchEditTest(int $productID, string $branch, array $branches, array $cases, array $modules): array
+    {
+        global $tester;
+
+        try {
+            // 初始化必要的对象
+            if(!isset($tester->view)) $tester->view = new stdClass();
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->view = $tester->view;
+            if(!isset($zenInstance->tree)) {
+                $zenInstance->tree = $tester->loadModel('tree');
+            }
+            if(!isset($zenInstance->testcase)) {
+                $zenInstance->testcase = $tester->loadModel('testcase');
+            }
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('assignModuleAndSceneForBatchEdit');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($zenInstance, $productID, $branch, $branches, $cases, $modules);
+
+            // 更新tester的view对象
+            $tester->view = $zenInstance->view;
+
+            // 返回设置的视图变量用于验证
+            return array(
+                'executed' => '1',
+                'scenePairs' => isset($tester->view->scenePairs) ? count($tester->view->scenePairs) : '0',
+                'modulePairs' => isset($tester->view->modulePairs) ? count($tester->view->modulePairs) : '0',
+                'hasScenePairs' => isset($tester->view->scenePairs) ? '1' : '0',
+                'hasModulePairs' => isset($tester->view->modulePairs) ? '1' : '0'
+            );
+        } catch (Exception $e) {
+            return array('executed' => '0', 'error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('executed' => '0', 'error' => $e->getMessage());
+        }
+    }
 }
