@@ -998,4 +998,28 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForClose method.
+     *
+     * @param  object $oldTask
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForCloseTest(object $oldTask)
+    {
+        $method = $this->taskZenTest->getMethod('buildTaskForClose');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$oldTask]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
