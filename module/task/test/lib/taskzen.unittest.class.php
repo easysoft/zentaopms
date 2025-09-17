@@ -1545,4 +1545,30 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processTaskByStatus method.
+     *
+     * @param  object $task
+     * @param  object $oldTask
+     * @access public
+     * @return object
+     */
+    public function processTaskByStatusTest(object $task, object $oldTask): object
+    {
+        $method = $this->taskZenTest->getMethod('processTaskByStatus');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$task, $oldTask]);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
