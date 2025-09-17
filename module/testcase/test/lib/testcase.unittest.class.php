@@ -3751,4 +3751,32 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * 测试构建 mind 配置。
+     * Test buildMindConfig method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function buildMindConfigTest(string $type)
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('buildMindConfig');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zen, $type);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -923,4 +923,27 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * 测试构建 mind 配置。
+     * Test buildMindConfig method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function buildMindConfigTest(string $type)
+    {
+        try {
+            $result = callZenMethod('testcase', 'buildMindConfig', [$type]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
