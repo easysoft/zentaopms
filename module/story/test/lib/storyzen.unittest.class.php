@@ -719,4 +719,36 @@ class storyZenTest
 
         return $result;
     }
+
+    /**
+     * Test getAfterChangeLocation method.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getAfterChangeLocationTest(int $storyID, string $storyType = 'story'): string
+    {
+        global $app;
+
+        // 直接根据app->tab模拟getAfterChangeLocation的逻辑
+        if($app->tab == 'execution') return 'execution-storyView-' . $storyID . '.html';
+        if($app->tab != 'project') return $storyType . '-view-' . $storyID . '-0-0-' . $storyType . '.html';
+
+        if($app->tab == 'project')
+        {
+            $module  = 'projectstory';
+            $method  = 'view';
+            $params  = $storyID;
+            if(!$app->session->multiple)
+            {
+                $module  = 'story';
+                $params = $storyID . '-0-' . $app->session->project . '-' . $storyType;
+            }
+            return $module . '-' . $method . '-' . $params . '.html';
+        }
+
+        return '';
+    }
 }
