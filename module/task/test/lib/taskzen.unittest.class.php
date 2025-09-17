@@ -801,4 +801,28 @@ class taskZenTest
         /* Skip checkBatchEditTask validation for testing. */
         return $taskData;
     }
+
+    /**
+     * Test buildTaskForStart method.
+     *
+     * @param  object $oldTask
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForStartTest(object $oldTask)
+    {
+        $method = $this->taskZenTest->getMethod('buildTaskForStart');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$oldTask]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }

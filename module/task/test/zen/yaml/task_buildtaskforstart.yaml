@@ -1,0 +1,72 @@
+---
+title: 任务数据定义用于buildTaskForStart测试
+desc: 为buildTaskForStart方法测试生成任务数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 1-3
+
+- field: execution
+  note: 执行ID
+  range: 1-3
+
+- field: name
+  note: 任务名称
+  range: '任务{1-10}'
+
+- field: type
+  note: 任务类型
+  range: 'devel,test,design,study,misc'
+
+- field: status
+  note: 任务状态
+  range: 'wait{3},doing{2},done{2},cancel{1},closed{2}'
+
+- field: assignedTo
+  note: 指派给
+  range: 'user1,user2,user3,admin'
+
+- field: openedBy
+  note: 由谁创建
+  range: 'admin,user1,user2'
+
+- field: left
+  note: 预计剩余工时
+  range: '0{2},1,2,3,4,5,8,10'
+
+- field: consumed
+  note: 已消耗工时
+  range: '0{3},1,2,3,5'
+
+- field: estimate
+  note: 预计工时
+  range: '1,2,3,4,5,8,10,16'
+
+- field: pri
+  note: 优先级
+  range: '1,2,3,4'
+
+- field: mode
+  note: 任务模式
+  range: 'linear,multi'
+
+- field: realStarted
+  note: 实际开始时间
+  range: '2024-01-01 09:00:00,2024-01-02 10:00:00,2024-01-03 08:00:00'
+
+- field: finishedBy
+  note: 由谁完成
+  range: '[]{}6,admin,user1'
+
+- field: finishedDate
+  note: 完成时间
+  range: '[]{8},2024-01-03 18:00:00,2024-01-04 17:00:00'
