@@ -3670,4 +3670,58 @@ class testcaseTest
 
         return $stepChanged;
     }
+
+    /**
+     * Test checkCreateFormData method.
+     *
+     * @param  object $case
+     * @access public
+     * @return bool|array
+     */
+    public function checkCreateFormDataTest(object $case): bool|array
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('checkCreateFormData');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zen, $case);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkCasesForBatchEdit method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function checkCasesForBatchEditTest(array $cases): array
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('checkCasesForBatchEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zen, $cases);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

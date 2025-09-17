@@ -879,4 +879,26 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkCasesForBatchEdit method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function checkCasesForBatchEditTest(array $cases): array
+    {
+        try {
+            $result = callZenMethod('testcase', 'checkCasesForBatchEdit', [$cases]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
