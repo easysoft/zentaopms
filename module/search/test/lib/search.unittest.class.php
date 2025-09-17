@@ -1351,4 +1351,59 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test setSessionForIndex method.
+     *
+     * @param  string $uri
+     * @param  string $words
+     * @param  string|array $type
+     * @access public
+     * @return array
+     */
+    public function setSessionForIndexTest(string $uri, string $words, string|array $type): array
+    {
+        global $tester;
+
+        // 创建searchZen实例来访问setSessionForIndex方法
+        $searchZen = $tester->loadZen('search');
+
+        // 备份原始session数据
+        $originalSession = $_SESSION ?? array();
+
+        // 清空相关session数据
+        $sessionKeys = array('bugList', 'buildList', 'caseList', 'docList', 'productList',
+                           'productPlanList', 'programList', 'projectList', 'executionList',
+                           'releaseList', 'storyList', 'taskList', 'testtaskList', 'todoList',
+                           'effortList', 'reportList', 'testsuiteList', 'issueList', 'riskList',
+                           'opportunityList', 'trainplanList', 'caselibList', 'searchIngWord', 'searchIngType', 'referer');
+
+        foreach($sessionKeys as $key) unset($_SESSION[$key]);
+
+        // 设置HTTP_REFERER模拟
+        $_SERVER['HTTP_REFERER'] = 'http://example.com/test';
+
+        // 使用反射访问受保护方法
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('setSessionForIndex');
+        $method->setAccessible(true);
+
+        // 调用方法
+        $method->invokeArgs($searchZen, array($uri, $words, $type));
+
+        // 收集结果
+        $result = array();
+        foreach($sessionKeys as $key) {
+            if(isset($_SESSION[$key])) {
+                $result[$key] = $_SESSION[$key];
+            }
+        }
+
+        // 恢复原始session数据
+        $_SESSION = $originalSession;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
