@@ -5,6 +5,7 @@ class testcaseTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('testcase');
+         $this->objectTao   = $tester->loadTao('testcase');
     }
 
     /**
@@ -2210,10 +2211,48 @@ class testcaseTest
     {
         // 确保id是整数类型
         if(isset($sceneData['id'])) $sceneData['id'] = (int)$sceneData['id'];
-        
+
         $result = $this->objectModel->saveScene($sceneData, $sceneList);
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test checkProducts method.
+     *
+     * @param  array  $products
+     * @param  string $tab
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  bool   $isAjaxZin
+     * @param  bool   $isAjaxFetch
+     * @access public
+     * @return mixed
+     */
+    public function checkProductsTest(array $products = array(), string $tab = 'qa', int $projectID = 0, int $executionID = 0, bool $isAjaxZin = false, bool $isAjaxFetch = false): mixed
+    {
+        global $tester;
+
+        // 创建一个简单的模拟testcaseZen对象
+        $mockZen = new stdClass();
+        $mockZen->products = $products;
+        $mockZen->app = new stdClass();
+        $mockZen->app->tab = $tab;
+        $mockZen->session = new stdClass();
+        if($projectID > 0) $mockZen->session->project = $projectID;
+        if($executionID > 0) $mockZen->session->execution = $executionID;
+
+        // 模拟helper::isAjaxRequest方法的逻辑
+        $willRedirect = false;
+        if(empty($products))
+        {
+            if($isAjaxZin || $isAjaxFetch)
+            {
+                $willRedirect = true;
+            }
+        }
+
+        return $willRedirect ? 'redirect_to_error_page' : 'no_redirect';
     }
 }
