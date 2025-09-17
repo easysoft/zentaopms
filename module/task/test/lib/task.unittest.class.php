@@ -3507,4 +3507,40 @@ class taskTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterBatchEdit method.
+     *
+     * @param  array $allChanges
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterBatchEditTest(array $allChanges)
+    {
+        global $tester;
+
+        if(!$this->objectZen) {
+            try {
+                $this->objectZen = $tester->loadZen('task');
+            } catch (Exception $e) {
+                return array('error' => $e->getMessage());
+            }
+        }
+
+        if(!$this->objectZen) return array('error' => 'zen object not available');
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'responseAfterBatchEdit');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $allChanges);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }

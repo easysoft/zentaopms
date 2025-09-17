@@ -1647,4 +1647,49 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterBatchEdit method.
+     *
+     * @param  array $allChanges
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterBatchEditTest(array $allChanges)
+    {
+        try {
+            // 基础响应结构
+            $response = array();
+            $response['result'] = 'success';
+            $response['message'] = '保存成功';
+
+            if(!empty($allChanges))
+            {
+                foreach($allChanges as $taskID => $changes)
+                {
+                    $task = $this->tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+                    if(!$task || !$task->fromBug) continue;
+                    foreach($changes as $change)
+                    {
+                        if($change['field'] == 'status')
+                        {
+                            $response['callback'] = "confirmBug('任务 #{$task->fromBug} 产生的 Bug，请确认Bug状态。', {$task->id}, {$task->fromBug})";
+                            return $response;
+                        }
+                    }
+                }
+            }
+
+            $response['load'] = ''; // 模拟session->taskList为空的情况
+            return $response;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
