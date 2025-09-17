@@ -1,0 +1,47 @@
+---
+title: assignCreateVars 方法测试用任务数据
+desc: 为 taskZen::assignCreateVars 方法提供任务测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-20
+- field: project
+  range: 1-5
+- field: execution
+  range: 1-5
+- field: module
+  range: 0,101,102,103
+- field: story
+  range: 0,1,2,3,4,5
+- field: name
+  range: 测试任务1,测试任务2,开发任务3,设计任务4,测试任务5
+- field: type
+  range: devel,test,study,discuss,ui,affair,misc
+- field: mode
+  range: ''
+- field: pri
+  range: 1,2,3,4
+- field: estimate
+  range: 1-8
+- field: consumed
+  range: 0
+- field: left
+  range: 0
+- field: status
+  range: wait,doing,done,pause,cancel,closed
+- field: openedBy
+  range: admin,user1,user2,user3
+- field: openedDate
+  range: '2024-01-01 09:00:00'
+- field: assignedTo
+  range: admin,user1,user2,user3
+- field: assignedDate
+  range: '2024-01-01 09:00:00'
+- field: deleted
+  range: '0'
+- field: parent
+  range: 0,-1
+- field: isParent
+  range: 0
