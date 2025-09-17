@@ -841,4 +841,22 @@ class storyZenTest
         if($result === false && dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processFilterTitle method.
+     *
+     * @param  string $browseType 浏览类型
+     * @param  int    $param      参数
+     * @access public
+     * @return string
+     */
+    public function processFilterTitleTest(string $browseType, int $param): string
+    {
+        $method = $this->storyZenTest->getMethod('processFilterTitle');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$browseType, $param]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
