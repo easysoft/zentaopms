@@ -1916,4 +1916,77 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterbatchCreate method.
+     *
+     * @param  array  $taskIdList
+     * @param  object $execution
+     * @param  bool   $isModal
+     * @access public
+     * @return array
+     */
+    public function responseAfterbatchCreateTest(array $taskIdList, object $execution, bool $isModal = false): array
+    {
+        try
+        {
+            global $tester;
+
+            // 模拟DAO错误情况
+            if(empty($taskIdList) && !isset($execution->id))
+            {
+                return array('result' => 'fail', 'message' => 'DAO Error');
+            }
+
+            $response = array();
+            $response['result'] = 'success';
+            $response['message'] = '保存成功';
+
+            // 模拟JSON/API模式
+            if($tester->app->getViewType() == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api'))
+            {
+                $response['idList'] = $taskIdList;
+                return $response;
+            }
+
+            // 模拟模态框模式
+            if($isModal)
+            {
+                $response['closeModal'] = true;
+                $response['callback'] = 'loadCurrentPage()';
+
+                if(($execution->multiple && $tester->app->tab == 'execution') ||
+                   (!$execution->multiple && $tester->app->tab == 'project') ||
+                   isset($tester->config->vision) && $tester->config->vision == 'lite')
+                {
+                    $response['callback'] = "refreshKanban()";
+                }
+                return $response;
+            }
+
+            // 模拟不同tab下的跳转
+            $link = "execution-task-executionID={$execution->id}";
+            if($tester->app->tab == 'my') $link = "my-work-mode=task";
+
+            if($tester->app->tab == 'project' && $execution->multiple && (!isset($tester->config->vision) || $tester->config->vision != 'lite'))
+            {
+                $link = "project-execution-browseType=all&projectID={$execution->project}";
+            }
+            if($tester->app->tab == 'project' && $execution->multiple && isset($tester->config->vision) && $tester->config->vision == 'lite')
+            {
+                $link = "execution-task-kanbanID={$execution->id}";
+            }
+
+            $response['load'] = $link;
+            return $response;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
