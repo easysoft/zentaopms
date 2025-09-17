@@ -789,4 +789,21 @@ class storyZenTest
         if(dao::isError()) return implode(', ', dao::getError());
         return $result;
     }
+
+    /**
+     * Test buildStoryForActivate method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return mixed
+     */
+    public function buildStoryForActivateTest(int $storyID)
+    {
+        $method = $this->storyZenTest->getMethod('buildStoryForActivate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
