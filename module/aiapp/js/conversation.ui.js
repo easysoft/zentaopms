@@ -2,6 +2,9 @@ let lastPageID        = '';
 let aiReactionsEffect = null;
 let aiPanel           = zui.AIPanel.shared;
 let lastParamsID      = ($.parseLink($.apps.getAppUrl()).vars || []).map(x => x[1]).join();
+const takeOverFlag    = 'aiapp-conversation.takeOverToggles';
+const toggleEleClass  = 'aiapp-conversation-toggle';
+
 
 function openInAIPanel(chat, params)
 {
@@ -20,8 +23,8 @@ function injectEmbedStyle()
     $$('head').append([
         '<style>',
         '.ai-panel-root[z-mode="embed"] {left: var(--zt-menu-width)!important;}',
-        '.hide-menu .ai-panel-root[z-mode="embed"] {left: var(--zt-menu-fold-width)!important;}',
-
+        '.hide-menu .ai-panel-root[z-mode="embed"] {left: var(--zt-menu-fold-width)!important; display: none}',
+        'body[data-app="aiapp"] .ai-panel-root[z-mode="embed"] {display: block}',
         '.ai-panel.is-embed {min-width: 1200px;  margin: calc(var(--zt-header-height) + 12px) auto 0; position: static; height: calc(100% - var(--zt-header-height) - 28px);}',
         '@media (min-width: 1400px) {.ai-panel.is-embed {padding: 0 2.5rem}}',
         '@media (min-width: 1720px) {.ai-panel.is-embed {max-width: 1720px;}}',
@@ -46,18 +49,29 @@ function showToggleInParent(event)
         id = zui.nextGid();
         $toggle.data('takeOverToggleID', id);
     }
-    const toggleID = id === 'messageBar' ? id : `aipp-conversation-toggle_${id}`;
-    let $trigger = $$(toggleID);
+    const isMessageBar = id === 'messageBar';
+    const toggleID     = isMessageBar ? id : `${toggleEleClass}_${id}`;
+    let $trigger       = $$(toggleID);
     if(!$trigger.length)
     {
         const data = $toggle.data();
         if(data.call === 'fetchMessage' && !data.params) data.params = 'false, options.fetcher';
-        $trigger = $$(`<div id="${toggleID}" class="state aipp-conversation-toggle"></div>`)
+        $trigger = $$(`<div id="${toggleID}" class="state ${toggleEleClass}"></div>`)
             .attr('zui-toggle-dropdown', $toggle.attr('zui-toggle-dropdown'))
             .css({position: 'fixed', cursor: 'pointer'});
         Object.keys(data).forEach(key => $trigger.attr(`data-${key}`, data[key]));
         $trigger.appendTo($$('body'));
-        $trigger.on('hidden', () => $trigger.remove());
+        $trigger.on('hidden', () =>
+        {
+            $trigger.next('.dropdown-menu').remove();
+            $trigger.remove();
+        });
+        if(isMessageBar)
+        {
+            const $menu = $toggle.next('.dropdown-menu');
+            const $$menu = $$('<menu></menu>').attr('class', $menu.attr('class')).attr('style', $menu.attr('style')).addClass(toggleEleClass).html($menu.html());
+            $trigger.after($$menu);
+        }
     }
     const boundRect = $toggle[0].getBoundingClientRect();
     $trigger.css({left: boundRect.left + $$('#menu').width(), top: boundRect.top, width: boundRect.width, height: boundRect.height});
@@ -66,8 +80,7 @@ function showToggleInParent(event)
 
 function takeOverToggles()
 {
-    const $toolbar     = $('#toolbar > .toolbar');
-    const takeOverFlag = 'aipp-conversation.takeOverToggles';
+    const $toolbar = $('#toolbar > .toolbar');
 
     if($toolbar.data(takeOverFlag)) return;
     $toolbar.data(takeOverFlag, true);
@@ -106,8 +119,8 @@ window.onPageUnmount = function()
 
     if(aiPanel) aiPanel.toggleEmbed(false);
 
-    $('#toolbar > .toolbar').children('[zui-toggle-dropdown]').off('click.takeOverToggles');
-    window.parent.$('.aipp-conversation-toggle').remove();
+    $('#toolbar > .toolbar').children('[zui-toggle-dropdown]').off('click.takeOverToggles').data(takeOverFlag, false);
+    window.parent.$('.aiapp-conversation-toggle').remove();
 };
 
 window.beforePageLoad = function(options)
