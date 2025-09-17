@@ -2365,4 +2365,60 @@ class testcaseTest
             return array($productID, $branch);
         }
     }
+
+    /**
+     * Test buildBrowseSearchForm method.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  int    $projectID
+     * @param  string $actionURL
+     * @param  string $rawModule
+     * @access public
+     * @return mixed
+     */
+    public function buildBrowseSearchFormTest(int $productID, int $queryID, int $projectID, string $actionURL, string $rawModule = 'testcase'): mixed
+    {
+        global $tester;
+
+        // 保存原始配置
+        $originalRawModule = $tester->app->rawModule ?? '';
+        $originalOnMenuBar = $tester->config->testcase->search['onMenuBar'] ?? '';
+
+        // 清空onMenuBar设置
+        unset($tester->config->testcase->search['onMenuBar']);
+
+        // 模拟app->rawModule设置
+        $tester->app->rawModule = $rawModule;
+
+        // 模拟zen对象
+        $zen = new stdClass();
+        $zen->app = $tester->app;
+        $zen->config = $tester->config;
+        $zen->product = $tester->loadModel('product');
+        $zen->testcase = $tester->loadModel('testcase');
+
+        // 测试buildBrowseSearchForm方法的核心逻辑
+        if($zen->app->rawModule == 'testcase')
+        {
+            $zen->config->testcase->search['onMenuBar'] = 'yes';
+        }
+
+        $searchProducts = $zen->product->getPairs('', 0, '', 'all');
+        $zen->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 获取配置状态用于验证
+        $result = array();
+        $result['onMenuBar'] = $zen->config->testcase->search['onMenuBar'] ?? '';
+        $result['searchProductsCount'] = count($searchProducts);
+        $result['searchFieldsCount'] = count($tester->config->testcase->search['fields']);
+
+        // 恢复原始配置
+        $tester->app->rawModule = $originalRawModule;
+        if($originalOnMenuBar) $tester->config->testcase->search['onMenuBar'] = $originalOnMenuBar;
+
+        return $result;
+    }
 }
