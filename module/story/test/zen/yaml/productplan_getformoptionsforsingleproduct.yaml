@@ -1,0 +1,20 @@
+title: 测试getFormOptionsForSingleProduct方法的产品计划数据
+desc: 包含产品计划数据用于测试
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1-10
+- field: branch
+  range: 0{6},1{2},2{2}
+- field: title
+  range: V1.0计划,V2.0计划,V3.0计划,热修复计划,测试计划{5}
+- field: status
+  range: wait{3},doing{4},done{2},closed{1}
+- field: begin
+  range: 2023-01-01,2023-02-01,2023-03-01,2023-04-01,2023-05-01{5}
+- field: end
+  range: 2023-03-31,2023-05-31,2023-07-31,2023-09-30,2023-12-31{5}
+- field: deleted
+  range: 0

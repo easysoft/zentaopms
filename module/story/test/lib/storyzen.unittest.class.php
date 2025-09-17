@@ -433,4 +433,24 @@ class storyZenTest
 
         return array($products, $branches);
     }
+
+    /**
+     * Test getFormOptionsForSingleProduct method.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function getFormOptionsForSingleProductTest(int $productID, int $executionID, object $product): array
+    {
+        $method = $this->storyZenTest->getMethod('getFormOptionsForSingleProduct');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $executionID, $product]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
