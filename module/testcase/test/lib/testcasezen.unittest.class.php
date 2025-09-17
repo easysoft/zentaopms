@@ -640,4 +640,57 @@ class testcaseZenTest
             return array('executed' => '0', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildCaseForCreate method.
+     *
+     * @param  string $from
+     * @param  int    $param
+     * @param  int    $productID
+     * @param  int    $auto
+     * @param  int    $storyID
+     * @access public
+     * @return object
+     */
+    public function buildCaseForCreateTest(string $from = '', int $param = 0, int $productID = 1, int $auto = 0, int $storyID = 0): object
+    {
+        global $tester;
+
+        // 模拟POST数据
+        $_POST = array();
+        $_POST['product'] = $productID;
+        $_POST['title'] = '测试用例标题';
+        $_POST['type'] = 'feature';
+        $_POST['needReview'] = 0;
+
+        if($auto) {
+            $_POST['auto'] = 'auto';
+            $_POST['script'] = 'test script';
+        }
+
+        if($storyID) {
+            $_POST['story'] = $storyID;
+        }
+
+        // 模拟session数据
+        $tester->session->project = 1;
+        $tester->session->execution = 1;
+
+        // 模拟app数据
+        $tester->app->tab = 'qa';
+
+        try {
+            // 创建zen实例来测试
+            $zen = initReference('testcase');
+            $result = callZenMethod('testcase', 'buildCaseForCreate', [$from, $param]);
+
+            if(dao::isError()) return (object)dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return (object)array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return (object)array('error' => $e->getMessage());
+        }
+    }
 }
