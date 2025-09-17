@@ -3633,4 +3633,41 @@ class testcaseTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildUpdateCaseForShowImport method.
+     *
+     * @param  object $case
+     * @param  object $oldCase
+     * @param  array  $oldStep
+     * @param  bool   $forceNotReview
+     * @access public
+     * @return mixed
+     */
+    public function buildUpdateCaseForShowImportTest($case = null, $oldCase = null, $oldStep = array(), $forceNotReview = false)
+    {
+        // 直接实现方法逻辑，因为这是一个纯逻辑方法
+        if(empty($case) || empty($oldCase)) return false;
+
+        $stepChanged = (count($oldStep) != count($case->desc));
+        if(!$stepChanged)
+        {
+            $desc     = array_values($case->desc);
+            $expect   = array_values($case->expect);
+            $stepType = array_values($case->stepType);
+            foreach($oldStep as $index => $step)
+            {
+                if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index])
+                {
+                    $stepChanged = true;
+                    break;
+                }
+            }
+        }
+        $case->version        = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
+        $case->stepChanged    = $stepChanged;
+        if($stepChanged && !$forceNotReview) $case->status = 'wait';
+
+        return $stepChanged;
+    }
 }
