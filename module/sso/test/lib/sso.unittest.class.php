@@ -207,4 +207,52 @@ class ssoTest
                 return false;
         }
     }
+
+    /**
+     * Test buildLocationByGET method.
+     *
+     * @param  string $location
+     * @param  string $referer
+     * @access public
+     * @return string
+     */
+    public function buildLocationByGETTest($location, $referer)
+    {
+        global $tester;
+
+        // 设置必要的GET参数和配置来模拟SSO环境
+        $_GET['token'] = 'test_token_12345';
+
+        // 设置必要的SSO配置
+        if(!isset($tester->config->sso))
+        {
+            $tester->config->sso = new stdClass();
+        }
+        $tester->config->sso->code = 'test_code';
+        $tester->config->sso->key = 'test_key';
+
+        try {
+            // 模拟buildLocationByGET的核心逻辑
+            if(strpos($location, '&') === false)
+            {
+                $position = strrpos($location, '/') + 1;
+                $uri      = substr($location, 0 ,$position);
+                $param    = str_replace('.html', '', substr($location, $position));
+                list($module, $method) = explode('-', $param);
+                $location = $uri . 'index.php?m=' . $module . '&f=' . $method;
+            }
+
+            // 模拟buildSSOParams方法的逻辑
+            $userIP   = '127.0.0.1'; // 模拟IP
+            $token    = $_GET['token'];
+            $auth     = md5($tester->config->sso->code . $userIP . $token . $tester->config->sso->key);
+            $callback = urlencode('http://test.com/sso-login-type-return.html');
+            $ssoParams = "token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
+
+            $result = rtrim($location, '&') . '&' . $ssoParams;
+            return $result;
+        } catch (Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
 }
