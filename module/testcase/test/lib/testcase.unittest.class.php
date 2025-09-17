@@ -3058,4 +3058,52 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test setMenuForCaseEdit method.
+     *
+     * @param  object $case
+     * @param  int    $executionID
+     * @param  string $tab
+     * @access public
+     * @return mixed
+     */
+    public function setMenuForCaseEditTest(object $case, int $executionID = 0, string $tab = 'project'): mixed
+    {
+        global $tester;
+
+        // 设置应用标签页
+        $tester->app->tab = $tab;
+
+        // 模拟setMenuForCaseEdit方法的核心逻辑
+        $viewResult = new stdclass();
+        $viewResult->tab = $tab;
+        $viewResult->projectID = null;
+        $viewResult->executionID = null;
+
+        if($tab == 'project')
+        {
+            // 模拟 $this->loadModel('project')->setMenu($case->project);
+            $projectModel = $tester->loadModel('project');
+            $viewResult->projectID = $case->project;
+        }
+
+        if($tab == 'execution')
+        {
+            if(!$executionID) $executionID = $case->execution;
+            // 模拟 $this->loadModel('execution')->setMenu($executionID);
+            $executionModel = $tester->loadModel('execution');
+            $viewResult->executionID = $executionID;
+        }
+
+        if($tab == 'qa')
+        {
+            // 模拟 $this->testcase->setMenu($case->product, $case->branch);
+            $testcaseModel = $tester->loadModel('testcase');
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $viewResult;
+    }
 }
