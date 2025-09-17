@@ -1,0 +1,62 @@
+---
+title: 产品表数据
+desc: 为assignForBatchCreate方法提供产品测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: '产品A,产品B,产品C,产品D,产品E'
+  format: ""
+- field: code
+  note: 产品代号
+  range: 'PA,PB,PC,PD,PE'
+  format: ""
+- field: type
+  note: 产品类型
+  range: 'normal{3},branch{1},platform{1}'
+  format: ""
+- field: status
+  note: 产品状态
+  range: 'normal{4},closed{1}'
+  format: ""
+- field: desc
+  note: 产品描述
+  range: '产品A描述,产品B描述,产品C描述,产品D描述,产品E描述'
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: 'admin,po1,po2'
+  format: ""
+- field: QD
+  note: 测试负责人
+  range: 'admin,qd1,qd2'
+  format: ""
+- field: RD
+  note: 发布负责人
+  range: 'admin,rd1,rd2'
+  format: ""
+- field: createdBy
+  note: 由谁创建
+  range: 'admin'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 10:00:00'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  format: ""

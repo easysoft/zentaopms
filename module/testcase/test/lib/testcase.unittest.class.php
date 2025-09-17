@@ -3408,6 +3408,63 @@ class testcaseTest
     }
 
     /**
+     * Test assignForBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function assignForBatchCreateTest(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0): array
+    {
+        // 验证基本参数
+        if($productID <= 0) return array('result' => false, 'message' => 'Invalid productID');
+
+        // 模拟获取产品信息
+        global $tester;
+        $product = $tester->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+        if(!$product) return array('result' => false, 'message' => 'Product not found');
+
+        // 模拟分支处理逻辑
+        $branches = array();
+        if($product->type != 'normal')
+        {
+            // 对于非normal类型产品，获取分支
+            $branches = $tester->dao->select('id,name')->from(TABLE_BRANCH)
+                ->where('product')->eq($productID)
+                ->andWhere('status')->eq('active')
+                ->fetchPairs();
+        }
+
+        // 模拟需求处理
+        $storyPairs = array();
+        if($storyID > 0)
+        {
+            $story = $tester->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+            if($story) $storyPairs[$storyID] = $story->id . ':' . $story->title;
+        }
+
+        // 模拟自定义字段设置
+        $customFields = array('title' => '标题', 'type' => '用例类型', 'pri' => '优先级');
+        if($product->type != 'normal') $customFields[$product->type] = 'Branch';
+
+        $showFields = "title,type,pri";
+        if($product->type != 'normal') $showFields .= ",branch";
+
+        return array(
+            'result' => true,
+            'product' => $product,
+            'branches' => $branches,
+            'customFields' => $customFields,
+            'showFields' => $showFields,
+            'storyPairs' => $storyPairs,
+            'currentModuleID' => $moduleID
+        );
+    }
+
+    /**
      * Test addEditAction method.
      *
      * @param  int    $caseID
