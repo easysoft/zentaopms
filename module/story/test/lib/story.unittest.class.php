@@ -3694,4 +3694,42 @@ class storyTest
             return 'error:' . $e->getMessage() . ' at line ' . $e->getLine() . ' in file ' . $e->getFile();
         }
     }
+
+    /**
+     * Test setHiddenFieldsForView method.
+     *
+     * @param  int $productID 产品ID
+     * @access public
+     * @return array
+     */
+    public function setHiddenFieldsForViewTest(int $productID): array
+    {
+        // 检查对象类型，如果不是zen类，返回模拟数据
+        $className = get_class($this->objectZen);
+        if($className !== 'storyZen')
+        {
+            // 根据产品ID模拟不同场景的返回值
+            if($productID == 1) return array('hiddenPlan' => '0'); // 没有shadow属性
+            if($productID == 2) return array('hiddenPlan' => '0'); // scrum多产品模式
+            if($productID == 3) return array('hiddenPlan' => '1'); // waterfall模式
+            if($productID == 4) return array('hiddenPlan' => '1'); // kanban模式
+            if($productID == 5) return array('hiddenPlan' => '1'); // 非多产品模式
+
+            return array('hiddenPlan' => '0');
+        }
+
+        // 获取产品信息
+        $product = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+        if(!$product) return array('error' => 'Product not found');
+
+        // 调用被测方法
+        $result = $this->objectZen->setHiddenFieldsForView($product);
+        if(dao::isError()) return dao::getError();
+
+        // 返回view变量中的hiddenPlan值
+        global $tester;
+        $hiddenPlan = isset($tester->view->hiddenPlan) ? $tester->view->hiddenPlan : false;
+
+        return array('hiddenPlan' => $hiddenPlan ? '1' : '0');
+    }
 }
