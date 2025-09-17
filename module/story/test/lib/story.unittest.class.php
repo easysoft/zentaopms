@@ -2972,4 +2972,34 @@ class storyTest
 
         return $storyData;
     }
+
+    /**
+     * Test buildStoriesForBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function buildStoriesForBatchCreateTest($productID, $storyType)
+    {
+        global $tester;
+        try {
+            $storyZen = $tester->loadZen('story');
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($storyZen);
+            $method = $reflection->getMethod('buildStoriesForBatchCreate');
+            $method->setAccessible(true);
+            $result = $method->invoke($storyZen, $productID, $storyType);
+            // 如果有DAO错误，返回错误信息
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                return is_array($errors) ? implode(',', $errors) : $errors;
+            }
+            return $result ? $result : array();
+        } catch (Exception $e) {
+            return array();
+        }
+    }
 }
