@@ -1,0 +1,93 @@
+---
+title: 故事数据配置
+desc: 用于setFormOptionsForBatchEdit方法测试
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: vision
+  range: rnd{10}
+- field: parent
+  range: 0{10}
+- field: isParent
+  range: 0{10}
+- field: root
+  range: 1-10
+- field: path
+  range: ',1,',',2,',',3,',',4,',',5,',',6,',',7,',',8,',',9,',',10,'
+- field: grade
+  range: 1{10}
+- field: product
+  range: 1{5},2{3},3{2}
+- field: branch
+  range: 0{8},1{2}
+- field: module
+  range: 1801{5},1802{3},1803{2}
+- field: plan
+  range: '1'{3},'2'{3},''{4}
+- field: source
+  range: ''
+- field: sourceNote
+  range: ''
+- field: fromBug
+  range: 0{10}
+- field: feedback
+  range: 0{10}
+- field: title
+  range: 软件需求1,软件需求2,软件需求3,软件需求4,软件需求5,软件需求6,软件需求7,软件需求8,软件需求9,软件需求10
+- field: keywords
+  range: ''
+- field: type
+  range: story{10}
+- field: category
+  range: feature{10}
+- field: pri
+  range: 1-3
+- field: estimate
+  range: 1-8
+- field: status
+  range: active{8},closed{2}
+- field: stage
+  range: wait{5},planned{3},developed{2}
+- field: mailto
+  range: ''
+- field: openedBy
+  range: admin{10}
+- field: openedDate
+  range: 2024-01-01 00:00:00{10}
+- field: assignedTo
+  range: admin{5},user1{3},user2{2}
+- field: assignedDate
+  range: 2024-01-01 00:00:00{10}
+- field: lastEditedBy
+  range: admin{10}
+- field: lastEditedDate
+  range: 2024-01-01 00:00:00{10}
+- field: reviewedBy
+  range: ''
+- field: reviewedDate
+  range: '0000-00-00 00:00:00'{10}
+- field: closedBy
+  range: ''{8},admin{2}
+- field: closedDate
+  range: '0000-00-00 00:00:00'{8},2024-01-01 00:00:00{2}
+- field: closedReason
+  range: ''{8},done{2}
+- field: toLive
+  range: '0000-00-00'{10}
+- field: childStories
+  range: ''
+- field: linkStories
+  range: ''
+- field: linkRequirements
+  range: ''
+- field: duplicateStory
+  range: 0{10}
+- field: version
+  range: 1{10}
+- field: URChanged
+  range: 0{10}
+- field: deleted
+  range: 0{10}
