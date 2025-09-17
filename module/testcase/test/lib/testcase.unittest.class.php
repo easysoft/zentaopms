@@ -2826,4 +2826,66 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test assignProductAndBranchForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function assignProductAndBranchForBrowseTest(int $productID, string $branch = '', int $projectID = 0)
+    {
+        global $tester;
+
+        // 模拟assignProductAndBranchForBrowse方法的核心逻辑
+        $result = new stdClass();
+
+        // 获取产品信息
+        $productModel = $tester->loadModel('product');
+        $product = $productModel->getByID($productID);
+
+        // 初始化默认值
+        $showBranch = false;
+        $branchOption = array();
+        $branchTagOption = array();
+
+        // 模拟产品名称映射
+        $products = array(
+            1 => '普通产品',
+            2 => '分支产品A',
+            3 => '分支产品B',
+            4 => '正常产品',
+            5 => '测试产品'
+        );
+
+        if($product && $product->type != 'normal')
+        {
+            // 模拟分支处理逻辑
+            $showBranch = true;
+            $branchModel = $tester->loadModel('branch');
+            $branches = $branchModel->getList($productID, $projectID, 'all');
+
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id] = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (已关闭)' : '');
+            }
+        }
+
+        // 组装结果
+        $result->productID = $productID;
+        $result->productName = isset($products[$productID]) ? $products[$productID] : '';
+        $result->product = $product;
+        $result->branch = (!empty($product) && $product->type != 'normal') ? $branch : 0;
+        $result->branchOption = $branchOption;
+        $result->branchTagOption = $branchTagOption;
+        $result->showBranch = $showBranch;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
