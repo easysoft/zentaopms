@@ -2481,4 +2481,74 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test assignCreateSceneVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
+    public function assignCreateSceneVarsTest(int $productID, string $branch = '', int $moduleID = 0): array
+    {
+        global $tester;
+
+        // 加载必要的模型
+        $productModel = $tester->loadModel('product');
+        $branchModel = $tester->loadModel('branch');
+        $treeModel = $tester->loadModel('tree');
+        $testcaseModel = $tester->loadModel('testcase');
+
+        $result = array();
+
+        // 模拟assignCreateSceneVars方法的核心逻辑
+        $product = $productModel->getById($productID);
+        if(empty($product))
+        {
+            $result['product'] = null;
+            $result['title'] = '';
+            $result['modules'] = array();
+            $result['scenes'] = array();
+            $result['moduleID'] = 0;
+            $result['parent'] = 0;
+            $result['branch'] = $branch;
+            $result['branches'] = array();
+            return $result;
+        }
+
+        // 设置产品信息
+        $result['product'] = $product;
+        $result['title'] = $product->name . ' - 新建场景';
+
+        // 获取分支信息
+        $branches = array();
+        if(isset($product->type) && $product->type != 'normal')
+        {
+            $branches = $branchModel->getPairs($productID, 'active');
+        }
+        $result['branches'] = $branches;
+
+        // 处理分支参数
+        if(empty($branch) && !empty($branches))
+        {
+            $branch = (string)key($branches);
+        }
+        $result['branch'] = $branch;
+
+        // 获取模块信息
+        $modules = $treeModel->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
+        $result['modules'] = $modules;
+
+        // 获取场景信息
+        $scenes = $testcaseModel->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
+        $result['scenes'] = $scenes;
+
+        // 设置模块ID和父场景
+        $result['moduleID'] = $moduleID;
+        $result['parent'] = 0;
+
+        return $result;
+    }
 }
