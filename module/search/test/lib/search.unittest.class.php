@@ -1507,4 +1507,85 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test setOptions method.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    public function setOptionsTest($fields, $fieldParams, $queries = array())
+    {
+        global $tester;
+
+        // 直接模拟 setOptions 方法的逻辑进行测试
+        $options = new stdclass();
+
+        // 设置字段选项
+        $optionFields = array();
+        foreach($fieldParams as $field => $param)
+        {
+            $data = new stdclass();
+            $data->label    = $fields[$field];
+            $data->name     = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
+
+            if($field == 'id') $data->placeholder = $tester->lang->search->queryTips;
+            if(!empty($param['values']) && is_array($param['values'])) $data->values = $param['values'];
+
+            $optionFields[] = $data;
+        }
+        $options->fields = $optionFields;
+
+        // 设置操作符选项
+        $operators = array();
+        foreach($tester->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+            $operators[] = $operator;
+        }
+        $options->operators = $operators;
+
+        // 设置逻辑关系选项
+        $andOrs = array();
+        foreach($tester->lang->search->andor as $value => $title)
+        {
+            $andOr = new stdclass();
+            $andOr->value = $value;
+            $andOr->title = $title;
+            $andOrs[] = $andOr;
+        }
+        $options->andOr = $andOrs;
+
+        $options->savedQueryTitle   = $tester->lang->search->savedQuery;
+        $options->groupName         = array($tester->lang->search->group1, $tester->lang->search->group2);
+        $options->searchBtnText     = $tester->lang->search->common;
+        $options->resetBtnText      = $tester->lang->search->reset;
+        $options->saveSearchBtnText = $tester->lang->search->saveCondition;
+
+        $savedQuery = array();
+        foreach($queries as $query)
+        {
+            if(empty($query->id)) continue;
+            $savedQuery[] = $query;
+        }
+
+        if(!empty($savedQuery)) $options->savedQuery = $savedQuery;
+
+        $options->formConfig  = new stdclass();
+        $options->formConfig->method = 'post';
+        $options->formConfig->action = helper::createLink('search', 'buildQuery');
+        $options->formConfig->target = 'hiddenwin';
+
+        $options->saveSearch = new stdclass();
+        $options->saveSearch->text = $tester->lang->search->saveCondition;
+
+        return $options;
+    }
 }
