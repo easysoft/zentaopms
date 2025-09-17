@@ -1010,4 +1010,113 @@ class testcaseZenTest
 
         return $method->invoke($zenTest, $results, $parent, $type);
     }
+
+    /**
+     * Test processStepsForMindMap method.
+     *
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function processStepsForMindMapTest(object $case): object
+    {
+        global $app;
+        $zenTest = $app->loadTarget('testcase', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('processStepsForMindMap');
+        $method->setAccessible(true);
+
+        return $method->invoke($zenTest, $case);
+    }
+
+    /**
+     * 获取带有步骤信息的用例对象
+     * Get case with steps for testing.
+     *
+     * @param  int   $caseID
+     * @param  array $customSteps
+     * @access public
+     * @return object
+     */
+    public function getCaseWithSteps(int $caseID, array $customSteps = null): object
+    {
+        $case = new stdClass();
+        $case->id = $caseID;
+        $case->title = "测试用例{$caseID}";
+
+        if($customSteps !== null)
+        {
+            $case->steps = $customSteps;
+            return $case;
+        }
+
+        // 构造测试步骤数据
+        $steps = array();
+
+        if($caseID == 1) {
+            // 正常情况：包含常规步骤
+            $step1 = new stdClass();
+            $step1->id = 1;
+            $step1->step = '步骤1';
+            $step1->expect = '期望结果1';
+            $step1->type = 'step';
+            $step1->parent = 0;
+            $step1->grade = 1;
+            $steps[] = $step1;
+
+            $step2 = new stdClass();
+            $step2->id = 2;
+            $step2->step = '步骤2';
+            $step2->expect = '期望结果2';
+            $step2->type = 'step';
+            $step2->parent = 1;
+            $step2->grade = 2;
+            $steps[] = $step2;
+        }
+        elseif($caseID == 3) {
+            // 多层级步骤
+            $step1 = new stdClass();
+            $step1->id = 3;
+            $step1->step = '主步骤';
+            $step1->expect = '主期望';
+            $step1->type = 'step';
+            $step1->parent = 0;
+            $step1->grade = 1;
+            $steps[] = $step1;
+
+            $step2 = new stdClass();
+            $step2->id = 4;
+            $step2->step = '子步骤';
+            $step2->expect = '子期望';
+            $step2->type = 'step';
+            $step2->parent = 3;
+            $step2->grade = 2;
+            $steps[] = $step2;
+        }
+        elseif($caseID == 4) {
+            // 包含分组类型步骤
+            $step1 = new stdClass();
+            $step1->id = 5;
+            $step1->step = '分组步骤';
+            $step1->expect = '';
+            $step1->type = 'group';
+            $step1->parent = 0;
+            $step1->grade = 1;
+            $steps[] = $step1;
+        }
+        elseif($caseID == 5) {
+            // 期望值为空的步骤
+            $step1 = new stdClass();
+            $step1->id = 6;
+            $step1->step = '步骤描述';
+            $step1->expect = '';
+            $step1->type = 'step';
+            $step1->parent = 0;
+            $step1->grade = 1;
+            $steps[] = $step1;
+        }
+
+        $case->steps = $steps;
+        return $case;
+    }
 }
