@@ -972,4 +972,22 @@ class testcaseZenTest
     {
         return callZenMethod('testcase', 'importCases', [$cases]);
     }
+
+    /**
+     * Test processScene method.
+     *
+     * @param  array $result
+     * @access public
+     * @return array
+     */
+    public function processSceneTest(array $result): array
+    {
+        global $app;
+        $zenTest = $app->loadTarget('testcase', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('processScene');
+        $method->setAccessible(true);
+
+        return $method->invoke($zenTest, $result);
+    }
 }
