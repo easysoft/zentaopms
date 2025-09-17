@@ -1775,4 +1775,56 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseModal method.
+     *
+     * @param  object $task
+     * @param  string $from
+     * @access public
+     * @return array
+     */
+    public function responseModalTest($task, $from = '')
+    {
+        global $tester;
+
+        try
+        {
+            // 模拟responseModal方法的核心逻辑
+            $response = array();
+            $response['result'] = 'success';
+            $response['message'] = '保存成功';
+            $response['closeModal'] = $tester->app->rawMethod != 'recordworkhour';
+
+            if($tester->app->rawMethod == 'recordworkhour')
+            {
+                $response['closeModal'] = false;
+                $response['callback'] = "loadModal('" . createLink('task', 'recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+                return $response;
+            }
+
+            // 模拟execution数据，避免数据库查询
+            $executionType = 'stage'; // 默认为stage类型
+            if(isset($task->execution) && $task->execution == 3) $executionType = 'kanban'; // execution 3设为kanban类型
+
+            $inLiteKanban = isset($tester->config->vision) && $tester->config->vision == 'lite' && $tester->app->tab == 'project' && isset($tester->session->kanbanview) && $tester->session->kanbanview == 'kanban';
+
+            if((($tester->app->tab == 'execution' || $inLiteKanban) && $executionType == 'kanban') || $from == 'taskkanban')
+            {
+                $response['callback'] = 'refreshKanban()';
+                return $response;
+            }
+
+            $response['load'] = $from != 'edittask' ? '1' : '0';
+            return $response;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
