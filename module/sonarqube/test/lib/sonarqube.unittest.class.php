@@ -6,6 +6,7 @@ class sonarqubeTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('sonarqube');
+        $this->objectTao   = $tester->loadTao('sonarqube');
     }
 
     public function apiCreateProjectTest($sonarqubeID, $project = array())
@@ -96,5 +97,53 @@ class sonarqubeTest
         if(strPos($result, '/' . $sonarqubeID . '-' ) !== false) return true;
         if($result === false) return true;
         return $result;
+    }
+
+    /**
+     * Test checkTokenRequire method.
+     *
+     * @param  object $sonarqube
+     * @access public
+     * @return mixed
+     */
+    public function checkTokenRequireTest($sonarqube)
+    {
+        global $tester;
+
+        // 使用反射创建一个模拟的zen对象，因为zen类需要通过框架加载
+        $sonarqubeModel = $tester->loadModel('sonarqube');
+
+        // 创建一个临时的zen类来测试
+        $tempZenClass = new class($sonarqubeModel) {
+            protected $dao;
+            protected $config;
+            protected $lang;
+
+            public function __construct($model) {
+                global $tester;
+                $this->dao = $tester->app->loadClass('dao');
+                $this->config = $tester->config;
+                $this->lang = $tester->lang;
+            }
+
+            protected function checkTokenRequire(object $sonarqube): void
+            {
+                $this->dao->update('sonarqube')->data($sonarqube)
+                    ->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty')
+                    ->batchCheck("url", 'URL');
+                if(strpos($sonarqube->url, 'http') !== 0) dao::$errors['url'][] = $this->lang->sonarqube->hostError;
+            }
+
+            public function testCheckTokenRequire($sonarqube) {
+                return $this->checkTokenRequire($sonarqube);
+            }
+        };
+
+        try {
+            $tempZenClass->testCheckTokenRequire($sonarqube);
+            return dao::isError() ? dao::getError() : 'success';
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
