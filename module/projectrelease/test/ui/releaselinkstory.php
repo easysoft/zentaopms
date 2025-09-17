@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/releaselinkstory.ui.class.php';
+include '../lib/ui/releaselinkstory.ui.class.php';
 
 zendata('story')->loadYaml('story', false, 1)->gen(5);
 zendata('release')->loadYaml('projectrelease', false, 1)->gen(1);

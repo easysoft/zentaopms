@@ -26,7 +26,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/storyestimate.ui.class.php';
+include '../lib/ui/storyestimate.ui.class.php';
 global $config;
 
 $product = zenData('product');

@@ -8,7 +8,7 @@ timeout=0
 cid=88
 */
 chdir (__DIR__);
-include '../lib/closestory.ui.class.php';
+include '../lib/ui/closestory.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

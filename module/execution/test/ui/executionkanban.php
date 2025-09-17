@@ -14,7 +14,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/executionkanban.ui.class.php';
+include '../lib/ui/executionkanban.ui.class.php';
 global $config;
 
 $project = zenData('project');

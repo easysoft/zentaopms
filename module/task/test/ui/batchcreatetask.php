@@ -14,7 +14,7 @@ cid=1
 
 */
 chdir(__DIR__);
-include '../lib/batchcreatetask.ui.class.php';
+include '../lib/ui/batchcreatetask.ui.class.php';
 global $config;
 
 $user = zenData('user');

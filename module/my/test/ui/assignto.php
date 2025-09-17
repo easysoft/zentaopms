@@ -11,7 +11,7 @@ cid=2
 
 */
 chdir(__DIR__);
-include '../lib/assignto.ui.class.php';
+include '../lib/ui/assignto.ui.class.php';
 
 global $config;
 

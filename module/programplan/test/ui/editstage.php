@@ -20,7 +20,7 @@ cid=3
 
 */
 chdir(__DIR__);
-include '../lib/editstage.ui.class.php';
+include '../lib/ui/editstage.ui.class.php';
 
 zendata('project')->loadYaml('execution', false, 2)->gen(10);
 zendata('projectspec')->gen(0);

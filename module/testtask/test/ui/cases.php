@@ -8,7 +8,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/cases.ui.class.php';
+include '../lib/ui/cases.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

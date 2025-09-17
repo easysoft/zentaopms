@@ -20,7 +20,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/managemembersforlite.ui.class.php';
+include '../lib/ui/managemembersforlite.ui.class.php';
 global $config;
 
 $user = zenData('user');

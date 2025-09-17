@@ -22,7 +22,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createscene.ui.class.php';
+include '../lib/ui/createscene.ui.class.php';
 
 $module = zenData('module');
 $module->gen(0);

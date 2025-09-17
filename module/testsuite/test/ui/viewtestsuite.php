@@ -7,7 +7,7 @@ timeout=0
 cid=70
 */
 chdir(__DIR__);
-include '../lib/view.ui.class.php';
+include '../lib/ui/view.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

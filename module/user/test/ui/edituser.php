@@ -13,7 +13,7 @@ cid=2
 
 */
 chdir(__DIR__);
-include '../lib/edituser.ui.class.php';
+include '../lib/ui/edituser.ui.class.php';
 
 zendata('user')->loadYaml('user', false, 2)->gen(10);
 $tester = new editUserTester();

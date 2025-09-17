@@ -24,7 +24,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/switchtabinlite.ui.class.php';
+include '../lib/ui/switchtabinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

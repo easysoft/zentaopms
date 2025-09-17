@@ -29,7 +29,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/canceltask.ui.class.php';
+include '../lib/ui/canceltask.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

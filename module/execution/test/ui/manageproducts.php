@@ -29,7 +29,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/manageproducts.ui.class.php';
+include '../lib/ui/manageproducts.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-5');

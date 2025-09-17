@@ -8,7 +8,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/browsetask.ui.class.php';
+include '../lib/ui/browsetask.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');

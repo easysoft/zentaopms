@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-include '../lib/createbug.ui.class.php';
+include '../lib/ui/createbug.ui.class.php';
 
 /**
 

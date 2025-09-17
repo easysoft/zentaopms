@@ -10,7 +10,7 @@ cid=0
 */
 
 chdir(__DIR__);
-include '../lib/batcheditproduct.ui.class.php';
+include '../lib/ui/batcheditproduct.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-5');

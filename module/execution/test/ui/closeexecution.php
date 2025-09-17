@@ -20,7 +20,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/closeexecution.ui.class.php';
+include '../lib/ui/closeexecution.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

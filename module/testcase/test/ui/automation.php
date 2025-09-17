@@ -13,7 +13,7 @@ cid=1
  - 最终测试状态 @SUCCESS
 
 */
-include '../lib/testcase.ui.class.php';
+include '../lib/ui/testcase.ui.class.php';
 $product = zenData('product');
 $product->id->range('1');
 $product->program->range('0');

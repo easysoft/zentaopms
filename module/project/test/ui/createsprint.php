@@ -20,7 +20,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/createsprint.ui.class.php';
+include '../lib/ui/createsprint.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
 $tester = new createSprintTester();

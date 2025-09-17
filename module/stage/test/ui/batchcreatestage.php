@@ -34,7 +34,7 @@ cid=3
 
 */
 chdir(__DIR__);
-include '../lib/batchcreatestage.ui.class.php';
+include '../lib/ui/batchcreatestage.ui.class.php';
 
 $stage = zendata('stage');
 $stage->id->range('1-12');

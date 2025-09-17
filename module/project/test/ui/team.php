@@ -8,7 +8,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/team.ui.class.php';
+include '../lib/ui/team.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
 zendata('team')->loadYaml('team', false, 1)->gen(5);

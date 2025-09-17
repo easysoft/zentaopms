@@ -25,7 +25,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createscrum.ui.class.php';
+include '../lib/ui/createscrum.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 $tester = new createScrumTester();

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-include '../lib/repo.ui.class.php';
+include '../lib/ui/repo.ui.class.php';
 
 $tester = new repo();
 $maintain = array(

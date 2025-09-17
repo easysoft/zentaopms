@@ -11,7 +11,7 @@ cid=2
 
 */
 chdir(__DIR__);
-include '../lib/assigndesign.ui.class.php';
+include '../lib/ui/assigndesign.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 zendata('design')->loadYaml('design', false, 2)->gen(2);
