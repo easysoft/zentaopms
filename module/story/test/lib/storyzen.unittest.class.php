@@ -770,4 +770,23 @@ class storyZenTest
         if(dao::isError()) return implode(', ', dao::getError());
         return $result;
     }
+
+    /**
+     * Test getShowFields method.
+     *
+     * @param  string $fieldListStr
+     * @param  string $storyType
+     * @param  object $product
+     * @access public
+     * @return string
+     */
+    public function getShowFieldsTest(string $fieldListStr, string $storyType, object $product): string
+    {
+        $method = $this->storyZenTest->getMethod('getShowFields');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$fieldListStr, $storyType, $product]);
+        if(dao::isError()) return implode(', ', dao::getError());
+        return $result;
+    }
 }
