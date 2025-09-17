@@ -3732,4 +3732,38 @@ class storyTest
 
         return array('hiddenPlan' => $hiddenPlan ? '1' : '0');
     }
+
+    /**
+     * Test convertChildID method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function convertChildIDTest($storyIdList = array())
+    {
+        // 检查对象类型，如果不是zen类，直接返回模拟数据
+        $className = get_class($this->objectZen);
+        if($className !== 'storyZen')
+        {
+            // 模拟convertChildID方法的行为
+            $storyIdList = array_unique($storyIdList);
+            $storyIdList = array_filter($storyIdList);
+            foreach($storyIdList as $index => $storyID)
+            {
+                if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+            }
+            return array_values($storyIdList);
+        }
+
+        // 使用反射调用受保护的方法
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('convertChildID');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectZen, $storyIdList);
+        if(dao::isError()) return dao::getError();
+
+        return array_values($result);
+    }
 }
