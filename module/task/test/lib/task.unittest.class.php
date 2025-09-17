@@ -3357,4 +3357,154 @@ class taskTest
             }
         }
     }
+
+    /**
+     * Test isLimitedInExecution method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function isLimitedInExecutionTest($executionID)
+    {
+        if(!$this->objectZen)
+        {
+            return array('error' => 'taskZen object not available');
+        }
+
+        try {
+            // 使用反射调用受保护的方法
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('isLimitedInExecution');
+            $method->setAccessible(true);
+            $result = $method->invoke($this->objectZen, $executionID);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test prepareManageTeam method.
+     *
+     * @param  mixed $postData
+     * @param  int   $taskID
+     * @access public
+     * @return mixed
+     */
+    public function prepareManageTeamTest($postData = null, $taskID = 0)
+    {
+        global $tester;
+
+        // 创建模拟的 form 对象
+        if ($postData === null) {
+            $postData = new stdClass();
+        }
+
+        // 创建一个模拟form对象，具有add和get方法
+        $mockForm = new class($postData) {
+            private $data;
+
+            public function __construct($initialData = null) {
+                $this->data = $initialData ?: new stdClass();
+            }
+
+            public function add($key, $value) {
+                $this->data->$key = $value;
+                return $this;
+            }
+
+            public function get() {
+                return $this->data;
+            }
+        };
+
+        try {
+            // 使用 initReference 来获取 zen 类反射
+            $taskZenRef = initReference('task');
+            $method = $taskZenRef->getMethod('prepareManageTeam');
+            $method->setAccessible(true);
+
+            // 创建 zen 实例
+            $taskZenInstance = $taskZenRef->newInstance();
+
+            $result = $method->invokeArgs($taskZenInstance, [$mockForm, $taskID]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test processExportData method.
+     *
+     * @param  array $tasks
+     * @param  int   $projectID
+     * @access public
+     * @return array
+     */
+    public function processExportDataTest(array $tasks, int $projectID): array
+    {
+        try {
+            // 使用 initReference 来获取 zen 类反射
+            $taskZenRef = initReference('task');
+            $method = $taskZenRef->getMethod('processExportData');
+            $method->setAccessible(true);
+
+            // 创建 zen 实例
+            $taskZenInstance = $taskZenRef->newInstance();
+
+            $result = $method->invokeArgs($taskZenInstance, [$tasks, $projectID]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test processExportGroup method.
+     *
+     * @param  int    $executionID
+     * @param  array  $tasks
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function processExportGroupTest(int $executionID, array $tasks, string $orderBy): array
+    {
+        try {
+            // 使用 initReference 来获取 zen 类反射
+            $taskZenRef = initReference('task');
+            $method = $taskZenRef->getMethod('processExportGroup');
+            $method->setAccessible(true);
+
+            // 创建 zen 实例
+            $taskZenInstance = $taskZenRef->newInstance();
+
+            $result = $method->invokeArgs($taskZenInstance, [$executionID, $tasks, $orderBy]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
