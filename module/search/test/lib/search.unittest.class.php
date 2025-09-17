@@ -1406,4 +1406,26 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * Test getTypeList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTypeListTest()
+    {
+        global $tester;
+
+        $searchZen = $tester->loadZen('search');
+
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('getTypeList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($searchZen);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
