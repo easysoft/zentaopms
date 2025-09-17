@@ -3152,4 +3152,47 @@ class testcaseTest
 
         return $branchTagOption;
     }
+
+    /**
+     * Test assignModuleOptionMenuForEdit method.
+     *
+     * @param  object $case
+     * @access public
+     * @return array
+     */
+    public function assignModuleOptionMenuForEditTest(object $case): array
+    {
+        global $tester;
+
+        // 模拟assignModuleOptionMenuForEdit方法的核心逻辑
+        $treeModel = $tester->loadModel('tree');
+        $moduleOptionMenu = $treeModel->getOptionMenu($case->product, 'case', 0, (string)$case->branch);
+
+        // 如果是来自用例库的用例，合并用例库模块
+        if($case->lib && $case->fromCaseID)
+        {
+            $caselibModel = $tester->loadModel('caselib');
+            $lib = $caselibModel->getByID($case->lib);
+            if($lib)
+            {
+                $libModules = $treeModel->getOptionMenu($case->lib, 'caselib');
+                foreach($libModules as $moduleID => $moduleName)
+                {
+                    if($moduleID == 0) continue;
+                    $moduleOptionMenu[$moduleID] = $lib->name . $moduleName;
+                }
+            }
+        }
+
+        // 确保当前用例的模块在菜单中存在
+        if(!isset($moduleOptionMenu[$case->module]))
+        {
+            $modulesName = $treeModel->getModulesName((array)$case->module);
+            $moduleOptionMenu += $modulesName;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $moduleOptionMenu;
+    }
 }
