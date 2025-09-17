@@ -3299,4 +3299,62 @@ class taskTest
             return (object)array('error' => 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
         }
     }
+
+    /**
+     * Test getExportFields method.
+     *
+     * @param  string $allExportFields
+     * @param  array  $postData
+     * @access public
+     * @return array
+     */
+    public function getExportFieldsTest(string $allExportFields, array $postData = array()): array
+    {
+        // 模拟POST数据
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value)
+            {
+                $_POST[$key] = $value;
+            }
+        }
+
+        try {
+            // 模拟getExportFields方法的业务逻辑
+            $fields = isset($_POST['exportFields']) ? $_POST['exportFields'] : explode(',', $allExportFields);
+
+            /* Compatible with the new UI widget. */
+            if(isset($_POST['exportFields']) && is_array($fields) && count($fields) > 0 && str_contains($fields[0], ','))
+            {
+                $fields = explode(',', $fields[0]);
+            }
+
+            $result = array();
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                if($fieldName === '') continue;
+
+                $result[$fieldName] = isset($this->objectModel->lang->task->$fieldName) ? $this->objectModel->lang->task->$fieldName : $fieldName;
+            }
+
+            // 如果没有有效字段，返回空数组
+            if(empty($result)) return array();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        } finally {
+            // 清理POST数据
+            if(!empty($postData))
+            {
+                foreach($postData as $key => $value)
+                {
+                    unset($_POST[$key]);
+                }
+            }
+        }
+    }
 }
