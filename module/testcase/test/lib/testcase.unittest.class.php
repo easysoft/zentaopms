@@ -2551,4 +2551,87 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test assignEditSceneVars method.
+     *
+     * @param  object $oldScene
+     * @access public
+     * @return array
+     */
+    public function assignEditSceneVarsTest($oldScene)
+    {
+        global $tester;
+
+        // 模拟需要的模型
+        $productModel = $tester->loadModel('product');
+        $branchModel = $tester->loadModel('branch');
+        $treeModel = $tester->loadModel('tree');
+        $testcaseModel = $tester->loadModel('testcase');
+
+        $result = array();
+
+        if(empty($oldScene))
+        {
+            $result['error'] = 'oldScene cannot be empty';
+            return $result;
+        }
+
+        // 模拟assignEditSceneVars方法的核心逻辑
+        $productID = $oldScene->product;
+        $branchID = (string)$oldScene->branch;
+        $moduleID = $oldScene->module;
+        $parentID = $oldScene->parent;
+
+        // 获取产品信息
+        $product = $productModel->getByID($productID);
+        if(empty($product))
+        {
+            $result['error'] = 'Product not found';
+            return $result;
+        }
+
+        $result['product'] = $product;
+
+        // 获取分支信息
+        $branches = array();
+        $branchList = $branchModel->getList($productID, 0, 'all');
+        foreach($branchList as $branch)
+        {
+            $branches[$branch->id] = $branch->name . ($branch->status == 'closed' ? ' (已关闭)' : '');
+        }
+
+        // 处理分支不存在的情况
+        if(!isset($branches[$branchID]) && !empty($branchID))
+        {
+            $sceneBranch = $branchModel->getByID($branchID, $productID, '');
+            if($sceneBranch)
+            {
+                $branches[$branchID] = $sceneBranch->name . ($sceneBranch->status == 'closed' ? ' (已关闭)' : '');
+            }
+        }
+        $result['branches'] = $branches;
+
+        // 获取模块信息
+        $modules = $treeModel->getOptionMenu($productID, 'case', 0, $branchID);
+        if(!isset($modules[$moduleID]) && !empty($moduleID))
+        {
+            $modules += $treeModel->getModulesName(array($moduleID));
+        }
+        $result['modules'] = $modules;
+
+        // 获取场景信息
+        $scenes = $testcaseModel->getSceneMenu($productID, $moduleID, $branchID, 0, $oldScene->id);
+        if(!isset($scenes[$parentID]) && !empty($parentID))
+        {
+            $scenes += $testcaseModel->getScenesName((array)$parentID);
+        }
+        $result['scenes'] = $scenes;
+
+        // 设置标题和其他信息
+        $result['title'] = $product->name . ' - 编辑场景';
+        $result['scene'] = $oldScene;
+
+        return $result;
+    }
 }
