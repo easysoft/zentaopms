@@ -3724,4 +3724,31 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test checkCasesForShowImport method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return mixed
+     */
+    public function checkCasesForShowImportTest(array $cases)
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('checkCasesForShowImport');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zen, $cases);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
