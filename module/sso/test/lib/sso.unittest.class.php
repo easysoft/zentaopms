@@ -35,4 +35,20 @@ class ssoTest
 
         return $result;
     }
+
+    /**
+     * Test getFeishuUserToken method.
+     *
+     * @param  string $code
+     * @param  string $accessToken
+     * @access public
+     * @return array
+     */
+    public function getFeishuUserTokenTest($code, $accessToken)
+    {
+        $result = $this->objectZen->getFeishuUserToken($code, $accessToken);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
