@@ -478,4 +478,67 @@ class taskZenTest
 
         return $result;
     }
+
+    /**
+     * 测试构造任务记录日志的表单数据。
+     * Test build record workhour form.
+     *
+     * @param  int    $taskID
+     * @param  string $from
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function buildRecordFormTest(int $taskID, string $from = '', string $orderBy = ''): object
+    {
+        $error = '';
+
+        try
+        {
+            /* Set up HTTP_REFERER for testing. */
+            $_SERVER['HTTP_REFERER'] = 'http://localhost/zentao/task-recordworkhour-' . $taskID . '.html';
+
+            /* Create mock taskZen instance. */
+            $taskZenInstance = $this->taskZenTest->newInstance();
+            $taskZenInstance->view = new stdClass();
+
+            /* Get reflection method. */
+            $reflection = new ReflectionClass($taskZenInstance);
+            $method = $reflection->getMethod('buildRecordForm');
+            $method->setAccessible(true);
+
+            /* Use output buffering to capture display output. */
+            ob_start();
+            $method->invoke($taskZenInstance, $taskID, $from, $orderBy);
+            ob_end_clean();
+
+            $result = new stdClass();
+            $result->title = isset($taskZenInstance->view->title) ? $taskZenInstance->view->title : '';
+            $result->taskID = isset($taskZenInstance->view->task) ? $taskZenInstance->view->task->id : 0;
+            $result->taskMode = isset($taskZenInstance->view->task) ? $taskZenInstance->view->task->mode : '';
+            $result->taskAssignedTo = isset($taskZenInstance->view->task) ? $taskZenInstance->view->task->assignedTo : '';
+            $result->hasTeam = isset($taskZenInstance->view->task) && !empty($taskZenInstance->view->task->team);
+            $result->from = isset($taskZenInstance->view->from) ? $taskZenInstance->view->from : '';
+            $result->orderBy = isset($taskZenInstance->view->orderBy) ? $taskZenInstance->view->orderBy : '';
+            $result->effortsCount = isset($taskZenInstance->view->efforts) ? count($taskZenInstance->view->efforts) : 0;
+            $result->usersCount = isset($taskZenInstance->view->users) ? count($taskZenInstance->view->users) : 0;
+            $result->taskEffortFold = isset($taskZenInstance->view->taskEffortFold) ? $taskZenInstance->view->taskEffortFold : 0;
+
+            $result->error = '';
+        }
+        catch(Exception $e)
+        {
+            $error = $e->getMessage();
+            $result = new stdClass();
+            $result->error = $error;
+        }
+
+        if(dao::isError())
+        {
+            $result = new stdClass();
+            $result->error = dao::getError();
+        }
+
+        return $result;
+    }
 }
