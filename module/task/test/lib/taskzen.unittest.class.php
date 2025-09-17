@@ -580,4 +580,33 @@ class taskZenTest
             return false;
         }
     }
+
+    /**
+     * Test buildTasksForBatchAssignTo method.
+     *
+     * @param  array  $taskIdList
+     * @param  string $assignedTo
+     * @access public
+     * @return mixed
+     */
+    public function buildTasksForBatchAssignToTest(array $taskIdList, string $assignedTo)
+    {
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        try
+        {
+            $method = $this->taskZenTest->getMethod('buildTasksForBatchAssignTo');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$taskIdList, $assignedTo]);
+
+            if(dao::isError()) return dao::getError();
+            return count($result);
+        }
+        catch(Exception $e)
+        {
+            return 0;
+        }
+    }
 }
