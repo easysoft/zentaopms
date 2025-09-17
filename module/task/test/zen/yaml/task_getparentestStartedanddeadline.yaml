@@ -1,0 +1,114 @@
+---
+title: getParentEstStartedAndDeadline方法测试数据
+desc: 测试获取父任务开始时间和截止时间的方法
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+
+- field: parent
+  note: 父任务ID
+  range: 0{5},1{3},2{3},3{3},5{2},10{4}
+
+- field: path
+  note: 任务路径
+  range: ',1,2,3,4,5,'{5},',1,2,3,'{3},',5,6,7,'{3},',10,11,12,'{3},',2,'{2},',15,16,17,18,19,20,'{4}
+
+- field: project
+  note: 项目ID
+  range: 1{15},2{5}
+
+- field: execution
+  note: 执行ID
+  range: 1{10},2{5},3{5}
+
+- field: module
+  note: 模块ID
+  range: 0{5},1{10},2{5}
+
+- field: story
+  note: 需求ID
+  range: 0{15},1{3},2{2}
+
+- field: name
+  note: 任务名称
+  range: '任务1,任务2,任务3,任务4,任务5,父任务A,父任务B,父任务C,子任务1-1,子任务1-2,子任务2-1,子任务2-2,子任务3-1,子任务3-2,任务10,任务11,任务12,测试任务1,测试任务2,测试任务3'
+
+- field: type
+  note: 任务类型
+  range: devel{10},test{5},design{3},study{2}
+
+- field: pri
+  note: 优先级
+  range: 1{5},2{8},3{5},4{2}
+
+- field: estimate
+  note: 预计工时
+  range: 0{3},1{3},2{4},4{5},8{3},16{2}
+
+- field: consumed
+  note: 已消耗工时
+  range: 0{10},1{5},2{3},4{2}
+
+- field: left
+  note: 剩余工时
+  range: 0{5},1{5},2{5},4{3},8{2}
+
+- field: estStarted
+  note: 预计开始时间
+  range: 'NULL{5},2024-01-01{3},2024-01-15{3},2024-02-01{3},2024-02-15{3},2024-03-01{3}'
+
+- field: deadline
+  note: 截止时间
+  range: 'NULL{3},2024-02-01{3},2024-02-15{3},2024-03-01{3},2024-03-15{3},2024-04-01{3},2024-04-15{2}'
+
+- field: status
+  note: 任务状态
+  range: wait{5},doing{8},done{5},cancel{2}
+
+- field: assignedTo
+  note: 指派给
+  range: 'admin{5},user1{3},user2{3},user3{3},dev1{3},test1{3}'
+
+- field: assignedDate
+  note: 指派日期
+  range: 'NULL{5},2024-01-01 09:00:00{5},2024-01-15 10:00:00{5},2024-02-01 11:00:00{5}'
+
+- field: realStarted
+  note: 实际开始时间
+  range: 'NULL{10},2024-01-01 09:30:00{3},2024-01-15 10:30:00{3},2024-02-01 11:30:00{4}'
+
+- field: finishedBy
+  note: 完成者
+  range: '{10},admin{3},user1{3},user2{2},dev1{2}'
+
+- field: finishedDate
+  note: 完成时间
+  range: 'NULL{15},2024-02-01 18:00:00{2},2024-02-15 18:00:00{2},2024-03-01 18:00:00{1}'
+
+- field: closedBy
+  note: 关闭者
+  range: '{18},admin{1},user1{1}'
+
+- field: closedDate
+  note: 关闭时间
+  range: 'NULL{18},2024-03-01 19:00:00{1},2024-03-15 19:00:00{1}'
+
+- field: closedReason
+  note: 关闭原因
+  range: '{15},done{3},cancel{2}'
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: 'admin{10},user1{5},user2{3},dev1{2}'
+
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: 'NULL{5},2024-01-01 12:00:00{5},2024-01-15 13:00:00{5},2024-02-01 14:00:00{5}'
+
+- field: deleted
+  note: 是否删除
+  range: '0'

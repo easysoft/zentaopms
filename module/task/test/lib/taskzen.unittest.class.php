@@ -2172,4 +2172,41 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getParentEstStartedAndDeadline method.
+     *
+     * @param  array $parentIdList
+     * @access public
+     * @return mixed
+     */
+    public function getParentEstStartedAndDeadlineTest(array $parentIdList)
+    {
+        global $tester;
+
+        try
+        {
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Initialize required dependencies
+            $taskZenInstance->dao = $tester->dao;
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('getParentEstStartedAndDeadline');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$parentIdList]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
