@@ -1485,4 +1485,26 @@ class searchTest
 
         return $operators;
     }
+
+    /**
+     * Test setOptionAndOr method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setOptionAndOrTest()
+    {
+        global $tester;
+
+        $searchZen = $tester->loadZen('search');
+
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('setOptionAndOr');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($searchZen);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
