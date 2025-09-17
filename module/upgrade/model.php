@@ -11770,6 +11770,7 @@ class upgradeModel extends model
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
+                        $newProjectDeliverable->status      = 'draft';
 
                         /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
                         if(!empty($config['file']) && !empty($fileList[$config['file']]))
