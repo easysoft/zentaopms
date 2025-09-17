@@ -6,6 +6,7 @@ class storyTest
          global $tester;
          $this->objectModel = $tester->loadModel('story');
          $this->objectTao   = $tester->loadTao('story');
+         $this->objectZen   = $tester->loadZen('story');
          su('admin');
     }
 
@@ -1896,6 +1897,25 @@ class storyTest
         $result['laneOptions'] = $lanePairs;
         $result['laneDefault'] = $laneID;
 
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initStoryForCreate method.
+     *
+     * @param  int    $planID
+     * @param  int    $storyID
+     * @param  int    $bugID
+     * @param  int    $todoID
+     * @param  string $extra
+     * @access public
+     * @return object|array
+     */
+    public function initStoryForCreateTest(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object|array
+    {
+        $result = $this->objectZen->initStoryForCreate($planID, $storyID, $bugID, $todoID, $extra);
         if(dao::isError()) return dao::getError();
 
         return $result;
