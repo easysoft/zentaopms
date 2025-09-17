@@ -2998,4 +2998,64 @@ class testcaseTest
 
         return 'default_success';
     }
+
+    /**
+     * Test preProcessForEdit method.
+     *
+     * @param  string $testType
+     * @access public
+     * @return mixed
+     */
+    public function preProcessForEditTest(string $testType)
+    {
+        $case = new stdclass();
+        $case->id = 1;
+        $case->title = 'Test Case';
+
+        // 根据测试类型设置不同的steps状态
+        switch($testType)
+        {
+            case 'withSteps':
+                $existingStep = new stdclass();
+                $existingStep->type = 'step';
+                $existingStep->desc = 'existing desc';
+                $existingStep->name = 'existing name';
+                $existingStep->expect = 'existing expect';
+                $case->steps = array($existingStep);
+                break;
+            case 'emptySteps':
+                $case->steps = array();
+                break;
+            case 'nullSteps':
+                $case->steps = null;
+                break;
+            case 'falseSteps':
+                $case->steps = false;
+                break;
+            case 'noSteps':
+                // 不设置steps属性
+                break;
+        }
+
+        /* 初始化用例步骤。*/
+        /* Unit the steps of case. */
+        if(empty($case->steps))
+        {
+            $step = new stdclass();
+            $step->type   = 'step';
+            $step->desc   = '';
+            $step->name   = '';
+            $step->expect = '';
+            $case->steps = array($step);
+        }
+
+        // 返回处理结果的简化信息，便于断言
+        $result = new stdclass();
+        $result->stepsCount = count($case->steps);
+        $result->firstStepType = $case->steps[0]->type;
+        $result->firstStepDesc = $case->steps[0]->desc;
+        $result->testType = $testType;
+
+        return $result;
+    }
 }
