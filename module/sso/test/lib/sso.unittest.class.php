@@ -51,4 +51,20 @@ class ssoTest
 
         return $result;
     }
+
+    /**
+     * Test getBindFeishuUser method.
+     *
+     * @param  string $userToken
+     * @param  object $feishuConfig
+     * @access public
+     * @return array
+     */
+    public function getBindFeishuUserTest($userToken, $feishuConfig)
+    {
+        $result = $this->objectZen->getBindFeishuUser($userToken, $feishuConfig);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
