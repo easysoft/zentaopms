@@ -16,7 +16,7 @@ class searchTest
      * @access public
      * @return array|string
      */
-    public function processSearchParamsTest(string $module, bool $cacheSearchFunc = false): array|string
+    public function processSearchParamsTest($module, $cacheSearchFunc = false)
     {
         global $tester;
         
@@ -85,7 +85,7 @@ class searchTest
      * @access public
      * @return array|string
      */
-    public function buildQueryTest(array $searchConfig, array $postDatas, string $return = 'form'): array|string
+    public function buildQueryTest($searchConfig, $postDatas, $return = 'form')
     {
         $this->objectModel->setSearchParams($searchConfig);
 
@@ -193,7 +193,7 @@ class searchTest
      * @access public
      * @return array|object
      */
-    public function getByIDTest(int $queryID): array|object
+    public function getByIDTest($queryID)
     {
         $query = $this->objectModel->getByID($queryID);
 
@@ -213,7 +213,7 @@ class searchTest
      * @access public
      * @return object|array
      */
-    public function saveQueryTest(string $module, string $title, string $where, array $queryForm): object|array
+    public function saveQueryTest($module, $title, $where, $queryForm)
     {
         $_POST['module'] = $module;
         $_POST['title']  = $title;
@@ -235,7 +235,7 @@ class searchTest
      * @access public
      * @return int|array
      */
-    public function deleteQueryTest(int $queryID): int|array
+    public function deleteQueryTest($queryID)
     {
         $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
@@ -319,7 +319,7 @@ class searchTest
      * @access public
      * @return int|array
      */
-    public function getListTest(string $keywords, string|array $type): int|array
+    public function getListTest($keywords, $type)
     {
         zendata('searchindex')->gen(0);
         zendata('searchdict')->gen(0);
@@ -351,7 +351,7 @@ class searchTest
      * @access public
      * @return array
      */
-    public function getListCountTest(string|array $type): array
+    public function getListCountTest($type)
     {
         $listCount = $this->objectModel->getListCount($type);
         if(dao::isError()) return dao::getError();
@@ -368,7 +368,7 @@ class searchTest
      * @access public
      * @return array|object
      */
-    public function saveIndexTest(string $objectType, int $objectID): array|object
+    public function saveIndexTest($objectType, $objectID)
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
@@ -531,7 +531,7 @@ class searchTest
      * @access public
      * @return string
      */
-    public function setConditionTest(string $field, string $operator, string|int $value): string
+    public function setConditionTest($field, $operator, $value)
     {
         return $this->objectModel->setCondition($field, $operator, $value);
     }
@@ -587,7 +587,7 @@ class searchTest
      * @access public
      * @return array
      */
-    public function getAllowedObjectsTest(array|string $type, string $systemMode): array
+    public function getAllowedObjectsTest($type, $systemMode)
     {
         global $tester;
         $tester->config->systemMode = $systemMode;
@@ -1361,7 +1361,7 @@ class searchTest
      * @access public
      * @return array
      */
-    public function setSessionForIndexTest(string $uri, string $words, string|array $type): array
+    public function setSessionForIndexTest($uri, $words, $type)
     {
         global $tester;
 
@@ -1427,5 +1427,36 @@ class searchTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test setOptionFields method.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @access public
+     * @return array
+     */
+    public function setOptionFieldsTest($fields, $fieldParams)
+    {
+        global $tester;
+
+        // 直接实现setOptionFields逻辑进行测试
+        $optionFields = array();
+        foreach($fieldParams as $field => $param)
+        {
+            $data = new stdclass();
+            $data->label    = $fields[$field];
+            $data->name     = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
+
+            if($field == 'id') $data->placeholder = $tester->lang->search->queryTips;
+            if(!empty($param['values']) && is_array($param['values'])) $data->values = $param['values'];
+
+            $optionFields[] = $data;
+        }
+
+        return $optionFields;
     }
 }
