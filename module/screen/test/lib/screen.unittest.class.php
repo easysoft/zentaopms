@@ -1530,4 +1530,34 @@ class screenTest
         return $result;
     }
 
+    /**
+     * Test setSelectFilter method.
+     *
+     * @param  string $sourceID
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function setSelectFilterTest($sourceID, $filters)
+    {
+        global $tester;
+
+        // 包含model.php和zen.php文件
+        include_once dirname(__FILE__, 3) . '/model.php';
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建zen对象并调用方法
+        $screenZen = new screenZen();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($screenZen);
+        $method = $reflection->getMethod('setSelectFilter');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($screenZen, array($sourceID, $filters));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
