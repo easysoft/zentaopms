@@ -27,13 +27,13 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_buildsearchform.unittest.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$repoTest = new repoZenTest();
+$repoTest = new repoZenBuildSearchFormTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
 r($repoTest->buildSearchFormTest(123, 'index.php?m=repo&f=commits&repoID=1')) && p('queryID,hasSearchCommits') && e('123,1'); // 步骤1：正常情况
