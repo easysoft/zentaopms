@@ -806,4 +806,39 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildStoryForSubmitReview method.
+     *
+     * @param  int   $storyID 故事ID
+     * @param  array $postData POST数据模拟
+     * @access public
+     * @return mixed
+     */
+    public function buildStoryForSubmitReviewTest(int $storyID, array $postData = array())
+    {
+        // 模拟POST数据
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value)
+            {
+                $_POST[$key] = $value;
+            }
+        }
+
+        $method = $this->storyZenTest->getMethod('buildStoryForSubmitReview');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyID]);
+
+        // 清理POST数据
+        foreach($postData as $key => $value)
+        {
+            unset($_POST[$key]);
+        }
+
+        // 如果返回false，返回错误信息
+        if($result === false && dao::isError()) return dao::getError();
+        return $result;
+    }
 }
