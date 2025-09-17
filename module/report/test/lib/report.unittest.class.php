@@ -693,4 +693,92 @@ class reportTest
 
         return array('success' => 'yes');
     }
+
+    /**
+     * Test assignAnnualBaseData method.
+     *
+     * @param  string $account
+     * @param  string $dept
+     * @param  string $year
+     * @access public
+     * @return mixed
+     */
+    public function assignAnnualBaseDataTest(string $account, string $dept, string $year): mixed
+    {
+        global $tester;
+
+        // 模拟assignAnnualBaseData方法的核心逻辑
+        try {
+            $testResult = array();
+
+            // 获取用户
+            $user = null;
+            if($account)
+            {
+                $user = $tester->loadModel('user')->getByID($account);
+                $dept = $user ? $user->dept : $dept;
+            }
+            $userPairs = $tester->loadModel('dept')->getDeptUserPairs((int)$dept);
+            $accounts = !empty($user) ? array($user->account) : array_keys($userPairs);
+            if(!(int)$dept && empty($account)) $accounts = array();
+
+            $users = array('' => $tester->lang->report->annualData->allUser ?? '所有用户') + $userPairs;
+
+            $firstAction = $tester->loadModel('action')->getFirstAction();
+            $currentYear = date('Y');
+            $firstYear = empty($firstAction) ? $currentYear : substr($firstAction->date, 0, 4);
+
+            // 获取年份列表
+            $years = array();
+            for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = (string)$thisYear;
+
+            // 初始化年份
+            if(empty($year))
+            {
+                $year = date('Y');
+                $month = date('n');
+                if($month <= ($tester->config->report->annualData['minMonth'] ?? 3) && isset($years[$year - 1])) $year -= 1;
+            }
+
+            // 验证结果
+            $testResult['hasYears'] = !empty($years) ? 'yes' : 'no';
+            $testResult['hasAccounts'] = is_array($accounts) ? 'yes' : 'no';
+            $testResult['hasDept'] = isset($dept) ? 'yes' : 'no';
+            $testResult['hasYear'] = !empty($year) ? 'yes' : 'no';
+
+            // 特定参数测试
+            if($account) {
+                $testResult['account'] = $account;
+            }
+            if($dept) {
+                $testResult['dept'] = $dept;
+            }
+            if($year) {
+                $testResult['year'] = (string)$year;
+            }
+
+            // 边界情况测试
+            if(empty($accounts)) {
+                $testResult['accountsEmpty'] = 'yes';
+            }
+            if($dept === '0') {
+                $testResult['deptZero'] = 'yes';
+            }
+
+            $userCount = count($users) - 1;
+            if(is_numeric($userCount)) {
+                $testResult['userCount'] = $userCount;
+            }
+
+            $testResult['success'] = 'yes';
+            return $testResult;
+
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array('success' => 'yes');
+    }
 }

@@ -1,0 +1,62 @@
+---
+title: assignAnnualBaseData方法测试动作数据
+desc: 用于测试报告模块年度基础数据分配功能的动作历史数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-50
+
+- field: objectType
+  note: 对象类型
+  range: 'story{10},task{10},bug{10},case{10},product{5},project{5}'
+
+- field: objectID
+  note: 对象ID
+  range: 1-100:R
+
+- field: product
+  note: 产品ID
+  range: 1-5:R
+
+- field: project
+  note: 项目ID
+  range: 1-10:R
+
+- field: execution
+  note: 执行ID
+  range: 1-10:R
+
+- field: actor
+  note: 操作者
+  range: admin{10},user1{10},user2{10},user3{10},user4{10}
+
+- field: action
+  note: 动作类型
+  range: opened{10},edited{10},closed{10},assigned{10},created{10}
+
+- field: date
+  note: 操作时间
+  range: 2020-01-01 00:00:00,2021-06-15 12:30:00,2022-12-31 23:59:59,2023-03-15 10:15:30,2024-09-01 14:20:45
+
+- field: comment
+  note: 备注信息
+  range: '测试备注1,测试备注2,测试备注3,修改说明,创建说明'
+
+- field: extra
+  note: 额外信息
+  range: '[]'
+
+- field: read
+  note: 已读状态
+  range: '0{30},1{20}'
+
+- field: vision
+  note: 视图
+  range: 'rnd{40},lite{10}'
+
+- field: efforted
+  note: 工时状态
+  range: '0{45},1{5}'
