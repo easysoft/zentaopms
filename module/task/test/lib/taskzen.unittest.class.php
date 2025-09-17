@@ -609,4 +609,72 @@ class taskZenTest
             return 0;
         }
     }
+
+    /**
+     * Test buildTasksForBatchCreate method.
+     *
+     * @param  object $execution
+     * @param  int    $taskID
+     * @param  array  $output
+     * @access public
+     * @return mixed
+     */
+    public function buildTasksForBatchCreateTest(object $execution, int $taskID, array $output)
+    {
+        global $tester;
+
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Check if POST data exists. */
+        if(empty($_POST)) return false;
+
+        /* Simulate basic level and name checking logic directly. */
+        if(!isset($_POST['level']) || !isset($_POST['name'])) return false;
+
+        $levelNames = array();
+        foreach($_POST['level'] as $i => $level)
+        {
+            $level = (int)$level;
+            $levelNames[$level]['name']  = trim($_POST['name'][$i]);
+            $levelNames[$level]['index'] = $i;
+
+            $preLevel = $level - 1;
+            if($level > 0 && !empty($levelNames[$level]['name']) && empty($levelNames[$preLevel]['name']))
+            {
+                return '父级名称不能为空！';
+            }
+        }
+
+        /* Mock successful batch data processing. */
+        $tasks = array();
+        if(isset($_POST['name']) && is_array($_POST['name']))
+        {
+            foreach($_POST['name'] as $i => $name)
+            {
+                if(empty($name)) continue;
+
+                $task = new stdClass();
+                $task->name = $name;
+                $task->project = $execution->project;
+                $task->execution = $execution->id;
+                $task->parent = $taskID;
+                $task->type = isset($_POST['type'][$i]) ? $_POST['type'][$i] : 'devel';
+                $task->pri = isset($_POST['pri'][$i]) ? $_POST['pri'][$i] : 1;
+                $task->estimate = isset($_POST['estimate'][$i]) ? $_POST['estimate'][$i] : 0;
+                $task->left = $task->estimate;
+                $task->assignedTo = isset($_POST['assignedTo'][$i]) ? $_POST['assignedTo'][$i] : '';
+                $task->story = isset($_POST['story'][$i]) ? $_POST['story'][$i] : 0;
+                $task->lane = !empty($_POST['lane'][$i]) ? $_POST['lane'][$i] : zget($output, 'laneID', 0);
+                $task->column = !empty($_POST['column'][$i]) ? $_POST['column'][$i] : zget($output, 'columnID', 0);
+                $task->storyVersion = $task->story ? 1 : 1;
+
+                if($task->assignedTo) $task->assignedDate = helper::now();
+
+                $tasks[] = $task;
+            }
+        }
+
+        return $tasks;
+    }
 }

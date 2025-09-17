@@ -2791,4 +2791,152 @@ class taskTest
             return (object)array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildRecordForm method.
+     *
+     * @param  int    $taskID
+     * @param  string $from
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function buildRecordFormTest(int $taskID, string $from = '', string $orderBy = ''): object
+    {
+        global $tester;
+
+        /* Load zen object only when needed to avoid initialization errors. */
+        if($this->objectZen === null) $this->objectZen = $tester->loadZen('task');
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildRecordForm');
+        $method->setAccessible(true);
+
+        try
+        {
+            /* Capture view data before method call. */
+            $oldView = isset($this->objectZen->view) ? clone $this->objectZen->view : null;
+
+            /* Set up HTTP_REFERER for testing. */
+            $_SERVER['HTTP_REFERER'] = 'http://localhost/zentao/task-recordworkhour-' . $taskID . '.html';
+
+            $method->invoke($this->objectZen, $taskID, $from, $orderBy);
+
+            $result = new stdClass();
+            $result->title = isset($this->objectZen->view->title) ? $this->objectZen->view->title : '';
+            $result->taskID = isset($this->objectZen->view->task) ? $this->objectZen->view->task->id : 0;
+            $result->taskMode = isset($this->objectZen->view->task) ? $this->objectZen->view->task->mode : '';
+            $result->taskAssignedTo = isset($this->objectZen->view->task) ? $this->objectZen->view->task->assignedTo : '';
+            $result->hasTeam = isset($this->objectZen->view->task) && !empty($this->objectZen->view->task->team);
+            $result->from = isset($this->objectZen->view->from) ? $this->objectZen->view->from : '';
+            $result->orderBy = isset($this->objectZen->view->orderBy) ? $this->objectZen->view->orderBy : '';
+            $result->effortsCount = isset($this->objectZen->view->efforts) ? count($this->objectZen->view->efforts) : 0;
+            $result->usersCount = isset($this->objectZen->view->users) ? count($this->objectZen->view->users) : 0;
+            $result->taskEffortFold = isset($this->objectZen->view->taskEffortFold) ? $this->objectZen->view->taskEffortFold : 0;
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return (object)array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test buildTaskForEdit method.
+     *
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForEditTest(object $task)
+    {
+        global $tester;
+
+        /* Load zen object only when needed to avoid initialization errors. */
+        if($this->objectZen === null) $this->objectZen = $tester->loadZen('task');
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildTaskForEdit');
+        $method->setAccessible(true);
+
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $task);
+            if(dao::isError()) return false;
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Test buildTasksForBatchAssignTo method.
+     *
+     * @param  array  $taskIdList
+     * @param  string $assignedTo
+     * @access public
+     * @return mixed
+     */
+    public function buildTasksForBatchAssignToTest(array $taskIdList, string $assignedTo)
+    {
+        global $tester;
+
+        /* Load zen object only when needed to avoid initialization errors. */
+        if($this->objectZen === null) $this->objectZen = $tester->loadZen('task');
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildTasksForBatchAssignTo');
+        $method->setAccessible(true);
+
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $taskIdList, $assignedTo);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test buildTasksForBatchCreate method.
+     *
+     * @param  object $execution
+     * @param  int    $taskID
+     * @param  array  $output
+     * @access public
+     * @return mixed
+     */
+    public function buildTasksForBatchCreateTest(object $execution, int $taskID, array $output)
+    {
+        global $tester;
+
+        /* Load zen object only when needed to avoid initialization errors. */
+        if($this->objectZen === null) $this->objectZen = $tester->loadZen('task');
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('buildTasksForBatchCreate');
+        $method->setAccessible(true);
+
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        try
+        {
+            $result = $method->invoke($this->objectZen, $execution, $taskID, $output);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
