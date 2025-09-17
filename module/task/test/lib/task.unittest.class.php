@@ -3598,4 +3598,34 @@ class taskTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterRecord method.
+     *
+     * @param  object $task
+     * @param  array  $changes
+     * @param  string $from
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterRecordTest(object $task, array $changes = array(), string $from = ''): mixed
+    {
+        if(!$this->objectZen) {
+            return array('error' => 'Zen object not available');
+        }
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'responseAfterRecord');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $task, $changes, $from);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
