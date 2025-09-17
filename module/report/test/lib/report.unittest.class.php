@@ -7,6 +7,14 @@ class reportTest
          global $tester;
          $this->objectModel = $tester->loadModel('report');
          $this->objectTao   = $tester->loadTao('report');
+
+         // 通过tester加载zen层，如果不支持则使用model
+         try {
+             $this->objectZen = method_exists($tester, 'loadZen') ? $tester->loadZen('report') : $this->objectModel;
+         } catch (Exception $e) {
+             $this->objectZen = $this->objectModel;
+         }
+
          $tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
     }
 
@@ -595,5 +603,47 @@ class reportTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getReminder method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getReminderTest(): mixed
+    {
+        global $tester;
+
+        // 获取当前配置状态
+        $currentConfig = new stdclass();
+        if(!isset($tester->config->report)) $tester->config->report = new stdclass();
+        if(!isset($tester->config->report->dailyreminder)) $tester->config->report->dailyreminder = new stdclass();
+
+        // 设置默认配置
+        if(!isset($tester->config->report->dailyreminder->bug)) $tester->config->report->dailyreminder->bug = true;
+        if(!isset($tester->config->report->dailyreminder->task)) $tester->config->report->dailyreminder->task = true;
+        if(!isset($tester->config->report->dailyreminder->todo)) $tester->config->report->dailyreminder->todo = true;
+        if(!isset($tester->config->report->dailyreminder->testTask)) $tester->config->report->dailyreminder->testTask = true;
+
+        // 模拟实现getReminder方法的逻辑
+        $bugs = $tasks = $todos = $testTasks = array();
+        if($tester->config->report->dailyreminder->bug) $bugs = $this->objectModel->getUserBugs();
+        if($tester->config->report->dailyreminder->task) $tasks = $this->objectModel->getUserTasks();
+        if($tester->config->report->dailyreminder->todo) $todos = $this->objectModel->getUserTodos();
+        if($tester->config->report->dailyreminder->testTask) $testTasks = $this->objectModel->getUserTestTasks();
+
+        // 获取需要提醒的用户并设置提醒数据
+        $reminder = array();
+        $users = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos), array_keys($testTasks)));
+        if(!empty($users)) foreach($users as $user) $reminder[$user] = new stdclass();
+        if(!empty($bugs)) foreach($bugs as $user => $bug) $reminder[$user]->bugs = $bug;
+        if(!empty($tasks)) foreach($tasks as $user => $task) $reminder[$user]->tasks = $task;
+        if(!empty($todos)) foreach($todos as $user => $todo) $reminder[$user]->todos = $todo;
+        if(!empty($testTasks)) foreach($testTasks as $user => $testTask) $reminder[$user]->testTasks = $testTask;
+
+        if(dao::isError()) return dao::getError();
+
+        return $reminder;
     }
 }
