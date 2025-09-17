@@ -1,0 +1,109 @@
+---
+title: 任务批量编辑变量分配测试数据
+desc: 用于测试taskZen::assignBatchEditVars方法的测试数据
+
+fields:
+- field: id
+  range: 1-50
+  type: int
+
+- field: project
+  range: 1-5
+  type: int
+
+- field: parent
+  range: [0]{30}, [1-5]{20}
+  type: int
+
+- field: execution
+  range: 1-10
+  type: int
+
+- field: module
+  range: [0]{10}, [101-110]{40}
+  type: int
+
+- field: story
+  range: [0]{20}, [201-210]{30}
+  type: int
+
+- field: name
+  fields:
+  - field: prefix
+    range: 任务,测试任务,开发任务,需求任务
+  - field: id
+    range: 1-50
+
+- field: type
+  range: devel{30}, test{10}, design{5}, study{5}
+
+- field: pri
+  range: 1-4
+  type: int
+
+- field: estimate
+  range: 0.5-20.0:0.5
+  type: float
+
+- field: consumed
+  range: 0-15.0:0.5
+  type: float
+
+- field: left
+  range: 0-10.0:0.5
+  type: float
+
+- field: status
+  range: wait{20}, doing{15}, done{10}, cancel{5}
+
+- field: assignedTo
+  range: admin, user1, user2, user3, user4, tester1
+
+- field: openedBy
+  range: admin, user1, user2, projectManager
+
+- field: openedDate
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: finishedBy
+  range: [''], admin{5}, user1{3}, user2{2}
+
+- field: finishedDate
+  range: [null]{30}, 2024-02-01-2024-12-31{20}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: canceledBy
+  range: [''], admin{3}, user1{2}
+
+- field: canceledDate
+  range: [null]{45}, 2024-03-01-2024-12-31{5}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: closedBy
+  range: [''], admin{5}, user1{3}
+
+- field: closedDate
+  range: [null]{42}, 2024-04-01-2024-12-31{8}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: closedReason
+  range: [''], done{5}, cancel{3}
+
+- field: desc
+  range: 这是一个测试任务{20}, 开发功能任务{15}, 测试用例任务{10}, [']{5}
+
+- field: deadline
+  range: [null]{20}, 2024-06-01-2024-12-31{30}
+  format: YYYY-MM-DD
+
+- field: estStarted
+  range: [null]{15}, 2024-01-15-2024-12-15{35}
+  format: YYYY-MM-DD
+
+- field: realStarted
+  range: [null]{25}, 2024-02-01-2024-12-31{25}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  range: ['0']{48}, ['1']{2}

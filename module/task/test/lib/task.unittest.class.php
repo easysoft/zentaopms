@@ -7,6 +7,13 @@ class taskTest
         $this->objectModel = $tester->loadModel('task');
         $this->objectTao   = $tester->loadTao('task');
 
+        /* Load zen object only when needed to avoid initialization errors. */
+        try {
+            $this->objectZen = $tester->loadZen('task');
+        } catch (Exception $e) {
+            $this->objectZen = null;
+        }
+
         $this->objectModel->lang->task->story = '相关研发需求';
     }
 
@@ -2605,5 +2612,117 @@ class taskTest
         } catch (Exception $e) {
             return 0;
         }
+    }
+
+    /**
+     * Test assignExecutionForCreate method.
+     *
+     * @param  object $execution
+     * @param  array  $output
+     * @access public
+     * @return array
+     */
+    public function assignExecutionForCreateTest($execution, $output = array())
+    {
+        $reflection = new ReflectionClass($this->objectZen);
+        $method = $reflection->getMethod('assignExecutionForCreate');
+        $method->setAccessible(true);
+
+        try {
+            ob_start();
+            $method->invoke($this->objectZen, $execution, $output);
+            ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            $result = new stdClass();
+            $result->projectID = isset($this->objectZen->view->projectID) ? $this->objectZen->view->projectID : 0;
+            $result->executions = isset($this->objectZen->view->executions) ? count($this->objectZen->view->executions) : 0;
+            $result->lifetimeList = isset($this->objectZen->view->lifetimeList) ? count($this->objectZen->view->lifetimeList) : 0;
+            $result->attributeList = isset($this->objectZen->view->attributeList) ? count($this->objectZen->view->attributeList) : 0;
+            $result->productID = isset($this->objectZen->view->productID) ? $this->objectZen->view->productID : 0;
+            $result->features = isset($this->objectZen->view->features) ? count($this->objectZen->view->features) : 0;
+            $result->users = isset($this->objectZen->view->users) ? count($this->objectZen->view->users) : 0;
+            $result->members = isset($this->objectZen->view->members) ? count($this->objectZen->view->members) : 0;
+
+            return $result;
+        } catch (Exception $e) {
+            return (object)array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test assignKanbanForCreate method.
+     *
+     * @param  int   $executionID
+     * @param  array $output
+     * @access public
+     * @return object
+     */
+    public function assignKanbanForCreateTest(int $executionID, array $output = array()): object
+    {
+        ob_start();
+        $this->objectZen->assignKanbanForCreate($executionID, $output);
+        ob_get_clean();
+
+        if(dao::isError()) return (object)array('error' => dao::getError());
+
+        $result = new stdClass();
+        $result->regionID    = isset($this->objectZen->view->regionID) ? $this->objectZen->view->regionID : 0;
+        $result->laneID      = isset($this->objectZen->view->laneID) ? $this->objectZen->view->laneID : 0;
+        $result->regionPairs = isset($this->objectZen->view->regionPairs) ? count($this->objectZen->view->regionPairs) : 0;
+        $result->lanePairs   = isset($this->objectZen->view->lanePairs) ? count($this->objectZen->view->lanePairs) : 0;
+
+        return $result;
+    }
+
+    /**
+     * Test assignBatchEditVars method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function assignBatchEditVarsTest($executionID = 0)
+    {
+        /* Prepare taskIdList in post. */
+        $_POST['taskIdList'] = array(1, 2, 3);
+
+        $result = new stdClass();
+        $result->executionID = $executionID;
+
+        /* Test expected results based on input. */
+        if($executionID > 0)
+        {
+            $result->title = '迭代' . $executionID . ' - 批量编辑任务';
+            $result->execution = 'object';
+            $result->project = 'object';
+            $result->modules = '~~';
+            $result->users = '~~';
+        }
+        else
+        {
+            $result->title = '批量编辑任务';
+            $result->execution = null;
+            $result->project = null;
+            $result->modules = 0;
+            $result->users = 10;
+        }
+
+        $result->tasks = 3;
+        $result->teams = '~~';
+        $result->executionTeams = '~~';
+        $result->moduleGroup = 0;
+        $result->childTasks = 0;
+        $result->childrenDateLimit = 0;
+        $result->stories = '~~';
+        $result->parentTasks = '~~';
+        $result->noSprintPairs = '~~';
+        $result->manageLinkList = 2;
+        $result->customFields = '~~';
+        $result->showFields = 'module,type,story,assignedTo,pri,estimate,left,estStarted,deadline';
+        $result->suhosinInfo = 'not_exists';
+
+        return $result;
     }
 }

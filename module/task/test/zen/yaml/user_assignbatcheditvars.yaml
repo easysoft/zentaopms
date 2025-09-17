@@ -1,0 +1,108 @@
+---
+title: 用户数据
+desc: 用于测试任务批量编辑的用户数据
+
+fields:
+- field: id
+  range: 1-10
+  type: int
+
+- field: account
+  range: admin, user1, user2, user3, user4, tester1, tester2, projectManager, dev1, dev2
+
+- field: password
+  range: 21232f297a57a5a743894a0e4a801fc3{10}
+
+- field: realname
+  fields:
+  - field: prefix
+    range: 管理员,用户,测试员,项目经理,开发者
+  - field: id
+    range: 1-10
+
+- field: role
+  range: [''], admin{1}, user{6}, qa{2}, pm{1}
+
+- field: email
+  fields:
+  - field: account
+    range: admin, user1, user2, user3, user4, tester1, tester2, projectManager, dev1, dev2
+  - field: domain
+    range: '@test.com'
+
+- field: avatar
+  range: ['']
+
+- field: birthday
+  range: [0000-00-00]{3}, 1980-01-01-1995-12-31{7}
+  format: YYYY-MM-DD
+
+- field: gender
+  range: f{4}, m{6}
+
+- field: phone
+  range: [''], 13800138001, 13800138002, 13800138003
+
+- field: mobile
+  range: [''], 13900139001, 13900139002, 13900139003
+
+- field: qq
+  range: [''], 123456789, 987654321
+
+- field: yahoo
+  range: ['']
+
+- field: gtalk
+  range: ['']
+
+- field: wangwang
+  range: ['']
+
+- field: skype
+  range: ['']
+
+- field: dept
+  range: 0{2}, 1{3}, 2{3}, 3{2}
+  type: int
+
+- field: address
+  range: [''], 北京市朝阳区, 上海市浦东新区, 广州市天河区
+
+- field: zipcode
+  range: [''], 100000, 200000, 510000
+
+- field: join
+  range: 2023-01-01-2024-01-01
+  format: YYYY-MM-DD
+
+- field: visits
+  range: 0-100:R
+  type: int
+
+- field: ip
+  range: 127.0.0.1, 192.168.1.100, 192.168.1.101
+
+- field: last
+  range: 1640995200-1672531199:R
+  type: int
+
+- field: fails
+  range: 0{8}, 1{1}, 2{1}
+  type: int
+
+- field: locked
+  range: [0000-00-00 00:00:00]{9}, [2024-01-01 00:00:00]{1}
+
+- field: ranzhi
+  range: ['']
+
+- field: score
+  range: 0{5}, 10{3}, 20{2}
+  type: int
+
+- field: scoreLevel
+  range: 0{8}, 1{2}
+  type: int
+
+- field: deleted
+  range: ['0']{10}
