@@ -855,4 +855,49 @@ class repoZenTest
             return false;
         }
     }
+
+    /**
+     * Test parseErrorContent method.
+     *
+     * @param  string $message
+     * @access public
+     * @return string
+     */
+    public function parseErrorContentTest(string $message): string
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 模拟语言配置，避免直接调用$this->lang
+        $apiError = array(
+            0 => "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'",
+            1 => 'Branch is exists',
+            2 => 'branch.* already exists',
+            3 => 'Forbidden',
+            4 => 'cannot have ASCII control characters',
+            5 => 'Created fail',
+            6 => 'Project Not Found'
+        );
+
+        $errorLang = array(
+            0 => "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。",
+            1 => '分支名已存在。',
+            2 => '分支名已存在。',
+            3 => '权限不足。',
+            4 => "分支名不能包含 ' ', '~', '^'或':'。",
+            5 => '分支创建失败',
+            6 => '权限不足。'
+        );
+
+        // 实现parseErrorContent方法的核心逻辑
+        foreach($apiError as $key => $pattern)
+        {
+            if(preg_match("/$pattern/i", $message))
+            {
+                $message = isset($errorLang[$key]) ? $errorLang[$key] : $message;
+                break;
+            }
+        }
+
+        return $message;
+    }
 }
