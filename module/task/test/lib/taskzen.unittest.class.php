@@ -541,4 +541,43 @@ class taskZenTest
 
         return $result;
     }
+
+    /**
+     * Test buildTaskForEdit method.
+     *
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForEditTest(object $task)
+    {
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Setup POST data for form processing. */
+        foreach($task as $field => $value)
+        {
+            $_POST[$field] = $value;
+        }
+
+        try
+        {
+            $method = $this->taskZenTest->getMethod('buildTaskForEdit');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$task]);
+
+            /* Clean up POST data. */
+            $_POST = array();
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* Clean up POST data on exception. */
+            $_POST = array();
+            return false;
+        }
+    }
 }
