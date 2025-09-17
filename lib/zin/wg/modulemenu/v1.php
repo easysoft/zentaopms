@@ -90,6 +90,8 @@ class moduleMenu extends wg
                 'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'
             );
+            if(!empty($child->actions)) $item['actions'] = $child->actions;
+
             $items = $this->buildMenuTree($child->id);
             if($items) $item['items'] = $items;
             if($child->id == $activeKey || $child->id == 'product-' . $activeKey)
