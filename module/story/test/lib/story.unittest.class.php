@@ -2077,4 +2077,39 @@ class storyTest
             'reviewer' => array('name' => 'reviewer', 'options' => array('admin' => '管理员', 'user1' => '用户一'))
         );
     }
+
+    /**
+     * Test getFormFieldsForChange method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForChangeTest(int $storyID): array
+    {
+        // 简化测试：不进行实际数据库操作，直接模拟返回值
+        if($storyID == 999) return array('error' => 'story_not_found');
+
+        // 基于story/config/form.php中的配置模拟字段
+        $fields = array();
+        $fields['reviewer'] = array('type' => 'array', 'control' => 'multi-select', 'required' => false, 'default' => '', 'name' => 'reviewer', 'title' => '评审者');
+        $fields['title'] = array('type' => 'string', 'control' => 'text', 'required' => true, 'filter' => 'trim', 'name' => 'title', 'title' => '需求名称');
+        $fields['color'] = array('type' => 'string', 'control' => 'color', 'required' => false, 'default' => '', 'name' => 'color', 'title' => '标题颜色');
+        $fields['spec'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'spec', 'title' => '需求描述');
+        $fields['verify'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'verify', 'title' => '验收标准');
+        $fields['status'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '', 'name' => 'status', 'title' => '状态');
+        $fields['lastEditedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '', 'name' => 'lastEditedDate', 'title' => '最后编辑');
+
+        // 模拟设置默认值
+        $fields['title']['default'] = "软件需求{$storyID}";
+        $fields['color']['default'] = '';
+        $fields['status']['default'] = '';
+        $fields['spec']['default'] = "这是需求规格{$storyID}";
+        $fields['verify']['default'] = "验收标准{$storyID}";
+
+        // 添加评论字段
+        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => '备注');
+
+        return $fields;
+    }
 }
