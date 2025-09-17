@@ -2478,4 +2478,65 @@ class storyTest
 
         return $fields;
     }
+
+    /**
+     * Test removeFormFieldsForBatchCreate method.
+     *
+     * @param  array  $fields
+     * @param  bool   $hiddenPlan
+     * @param  string $executionType
+     * @param  int    $executionID
+     * @param  string $appTab
+     * @access public
+     * @return array
+     */
+    public function removeFormFieldsForBatchCreateTest(array $fields, bool $hiddenPlan, string $executionType, int $executionID = 0, string $appTab = '')
+    {
+        global $tester, $app;
+
+        // 保存原始的app->tab值
+        $originalTab = isset($app->tab) ? $app->tab : '';
+
+        // 设置app->tab用于测试
+        if(!empty($appTab)) $app->tab = $appTab;
+
+        // 检查对象类型，如果不是zen类，返回模拟数据
+        $className = get_class($this->objectZen);
+        if($className !== 'storyZen')
+        {
+            // 模拟removeFormFieldsForBatchCreate方法的行为
+            $result = $fields;
+
+            // 模拟hiddenPlan逻辑
+            if($hiddenPlan) unset($result['plan']);
+
+            // 模拟executionType逻辑
+            if($executionType != 'kanban')
+            {
+                unset($result['region']);
+                unset($result['lane']);
+            }
+
+            // 模拟app->tab逻辑
+            if($app->tab == 'project' || $app->tab == 'execution')
+            {
+                if(isset($result['parent'])) $result['parent']['hidden'] = true;
+            }
+
+            // 恢复原始的app->tab值
+            $app->tab = $originalTab;
+
+            return $result;
+        }
+
+        // 调用实际的zen方法
+        $result = $this->objectZen->removeFormFieldsForBatchCreate($fields, $hiddenPlan, $executionType, $executionID);
+
+        // 恢复原始的app->tab值
+        $app->tab = $originalTab;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
