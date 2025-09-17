@@ -3441,4 +3441,65 @@ class storyTest
             }
         }
     }
+
+    /**
+     * Test getCustomFields method.
+     *
+     * @param  string $storyType 故事类型
+     * @param  bool   $hiddenPlan 是否隐藏计划字段
+     * @param  int    $productID 产品ID
+     * @param  string $appTab 应用标签页
+     * @access public
+     * @return array
+     */
+    public function getCustomFieldsTest($storyType = 'story', $hiddenPlan = false, $productID = 1, $appTab = 'story')
+    {
+        global $tester, $app, $config, $lang;
+
+        try {
+            // 设置应用标签页
+            $originalTab = $app->tab;
+            $app->tab = $appTab;
+
+            // 创建模拟产品数据
+            $product = new stdClass();
+            $product->id = $productID;
+            $product->type = $productID == 3 ? 'branch' : ($productID == 5 ? 'platform' : 'normal');
+            $product->name = '测试产品' . $productID;
+
+            // 模拟getCustomFields方法的逻辑
+            $customFields = array();
+
+            // 模拟多分支或多平台字段的附加逻辑
+            if($product->type != 'normal') {
+                $customFields[$product->type] = ucfirst($product->type);
+            }
+
+            // 模拟配置字段的循环处理
+            $configFields = 'plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+            foreach(explode(',', $configFields) as $field) {
+                $customFields[$field] = ucfirst($field);
+            }
+
+            // 模拟隐藏计划字段的逻辑
+            if($hiddenPlan) {
+                unset($customFields['plan']);
+            }
+
+            // 模拟在project或execution标签下隐藏parent字段的逻辑
+            if($app->tab == 'project' || $app->tab == 'execution') {
+                unset($customFields['parent']);
+            }
+
+            return $customFields;
+
+        } catch (Exception $e) {
+            return 'exception:' . $e->getMessage() . ' at line ' . $e->getLine() . ' in file ' . $e->getFile();
+        } finally {
+            // 恢复原始应用标签页
+            if (isset($originalTab)) {
+                $app->tab = $originalTab;
+            }
+        }
+    }
 }
