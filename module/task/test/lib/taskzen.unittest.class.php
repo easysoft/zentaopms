@@ -912,4 +912,29 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildEffortForStart method.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @access public
+     * @return mixed
+     */
+    public function buildEffortForStartTest(object $oldTask, object $task)
+    {
+        $method = $this->taskZenTest->getMethod('buildEffortForStart');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$oldTask, $task]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
