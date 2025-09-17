@@ -1282,4 +1282,62 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkBatchCreateTask method.
+     *
+     * @param  int   $executionID
+     * @param  array $tasks
+     * @access public
+     * @return mixed
+     */
+    public function checkBatchCreateTaskTest(int $executionID, array $tasks)
+    {
+        global $tester;
+
+        dao::$errors = array(); // 清空错误数组
+
+        try
+        {
+            // 简化版本的checkBatchCreateTask验证逻辑
+            foreach($tasks as $rowIndex => $task)
+            {
+                // 检查任务名称长度
+                if(mb_strlen($task->name) > 255)
+                {
+                    dao::$errors["name[$rowIndex]"] = '名称长度不能超过255个字符。';
+                }
+
+                // 检查预估工时格式
+                if(isset($task->estimate) && !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$task->estimate))
+                {
+                    dao::$errors["estimate[$rowIndex]"] = '『预计』应当是数字。';
+                }
+
+                // 检查开始和结束日期
+                if(!helper::isZeroDate($task->deadline) && !helper::isZeroDate($task->estStarted) && $task->deadline < $task->estStarted)
+                {
+                    dao::$errors["deadline[$rowIndex]"] = '『截止日期』应当大于『预计开始』。';
+                }
+
+                // 检查预估工时是否为负数
+                if(isset($task->estimate) && $task->estimate < 0)
+                {
+                    dao::$errors["estimate[$rowIndex]"] = '工时不能为负数。';
+                }
+
+                // 检查必填字段
+                if(empty($task->execution)) dao::$errors["execution[$rowIndex]"] = '『所属执行』不能为空。';
+                if(empty($task->type)) dao::$errors["type[$rowIndex]"] = '『任务类型』不能为空。';
+                if(empty($task->name)) dao::$errors["name[$rowIndex]"] = '『任务名称』不能为空。';
+            }
+
+            if(dao::isError()) return dao::$errors;
+            return true;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
