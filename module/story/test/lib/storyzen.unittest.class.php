@@ -35,4 +35,24 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setMenuForCreate method.
+     *
+     * @param  int    $productID
+     * @param  int    $objectID
+     * @param  string $extra
+     * @access public
+     * @return mixed
+     */
+    public function setMenuForCreateTest(int $productID, int $objectID, string $extra = '')
+    {
+        $method = $this->storyZenTest->getMethod('setMenuForCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $objectID, $extra]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
