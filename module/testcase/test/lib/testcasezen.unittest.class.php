@@ -31,6 +31,25 @@ class testcaseZenTest
     }
 
     /**
+     * Test checkCreateFormData method.
+     *
+     * @param  object $case
+     * @access public
+     * @return bool|array
+     */
+    public function checkCreateFormDataTest(object $case): bool|array
+    {
+        // 清除之前的错误
+        dao::$errors = array();
+
+        $result = callZenMethod('testcase', 'checkCreateFormData', [$case]);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test assignLibForBatchEdit method.
      *
      * @param  int $libID
