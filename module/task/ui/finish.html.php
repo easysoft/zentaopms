@@ -15,15 +15,6 @@ namespace zin;
 if(!$canRecordEffort)
 {
     modalHeader();
-    if($task->assignedTo != $app->user->account && $task->mode == 'linear')
-    {
-        $deniedNotice = sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->finish);
-    }
-    else
-    {
-        $deniedNotice = sprintf($lang->task->deniedNotice, $lang->task->teamMember, $lang->task->finish);
-    }
-
     div
     (
         set::className('alert with-icon'),
