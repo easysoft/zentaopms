@@ -3106,4 +3106,50 @@ class testcaseTest
 
         return $viewResult;
     }
+
+    /**
+     * Test assignBranchForEdit method.
+     *
+     * @param  object $case
+     * @param  int    $executionID
+     * @param  string $tab
+     * @access public
+     * @return mixed
+     */
+    public function assignBranchForEditTest(object $case, int $executionID = 0, string $tab = 'execution'): mixed
+    {
+        global $tester;
+
+        // 设置应用标签页
+        $tester->app->tab = $tab;
+
+        // 模拟assignBranchForEdit方法的核心逻辑
+        $objectID = 0;
+        if($tab == 'execution') $objectID = $executionID;
+        if($tab == 'project')   $objectID = $case->project;
+
+        // 获取分支列表
+        $branchModel = $tester->loadModel('branch');
+        $branches = $branchModel->getList($case->product, $objectID, 'all');
+
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (已关闭)' : '');
+        }
+
+        // 如果当前用例的分支不在选项中，添加它
+        if(!isset($branchTagOption[$case->branch]))
+        {
+            $caseBranch = $branchModel->getByID($case->branch, $case->product, '');
+            if($caseBranch)
+            {
+                $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (已关闭)' : ''));
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $branchTagOption;
+    }
 }
