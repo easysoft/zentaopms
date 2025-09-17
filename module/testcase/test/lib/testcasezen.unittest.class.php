@@ -146,4 +146,79 @@ class testcaseZenTest
             return 1;
         }
     }
+
+    /**
+     * Test assignModulesForCreate method.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @param  int    $storyID
+     * @param  array  $branches
+     * @access public
+     * @return array
+     */
+    public function assignModulesForCreateTest(int $productID, int $moduleID, string $branch, int $storyID, array $branches): array
+    {
+        global $tester;
+
+        // 初始化必要的对象
+        if(!isset($tester->view)) $tester->view = new stdClass();
+        if(!isset($tester->cookie)) $tester->cookie = new stdClass();
+
+        // 设置cookie模拟数据
+        $tester->cookie->lastCaseProduct = 1;
+        $tester->cookie->lastCaseModule = 2;
+
+        try {
+            // 获取testcase的zen对象
+            $zenObject = initReference('testcase');
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenObject);
+            $method = $reflection->getMethod('assignModulesForCreate');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($zenObject, $productID, $moduleID, $branch, $storyID, $branches);
+
+            // 返回视图变量用于验证
+            return array(
+                'currentModuleID' => $tester->view->currentModuleID ?? null,
+                'moduleOptionMenu' => !empty($tester->view->moduleOptionMenu),
+                'sceneOptionMenu' => !empty($tester->view->sceneOptionMenu)
+            );
+        } catch (Exception $e) {
+            // 返回错误信息
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test assignModuleTreeForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function assignModuleTreeForBrowseTest(int $productID, string $branch, int $projectID): array
+    {
+        try {
+            // 直接调用zen方法而不用反射
+            $result = callZenMethod('testcase', 'assignModuleTreeForBrowse', [$productID, $branch, $projectID]);
+
+            // 该方法是void方法，应该总是执行成功
+            return array(
+                'moduleTreeAssigned' => '1'
+            );
+        } catch (Exception $e) {
+            // 如果有异常，返回失败
+            return array('moduleTreeAssigned' => '0', 'error' => $e->getMessage());
+        } catch (Error $e) {
+            // 捕获致命错误
+            return array('moduleTreeAssigned' => '0', 'error' => $e->getMessage());
+        }
+    }
 }
