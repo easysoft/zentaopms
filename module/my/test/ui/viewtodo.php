@@ -13,7 +13,7 @@ cid=2
 
 */
 chdir(__DIR__);
-include '../lib/viewtodo.ui.class.php';
+include '../lib/ui/viewtodo.ui.class.php';
 
 $todo = zendata('todo');
 $todo->id->range('1');

@@ -8,7 +8,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/createplan.ui.class.php';
+include '../lib/ui/createplan.ui.class.php';
 $product = zenData('product');
 $product->id->range('1');
 $product->name->range('产品01');

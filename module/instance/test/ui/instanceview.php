@@ -1,6 +1,6 @@
 <?php
 chdir(__DIR__);
-include '../lib/instance.ui.class.php';
+include '../lib/ui/instance.ui.class.php';
 $tester = new instance();
 $instance = zenData('pipeline')->loadYaml('pipeline')->gen(7);
 $type = 'GitFox';

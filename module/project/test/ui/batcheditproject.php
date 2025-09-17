@@ -22,7 +22,7 @@ cid=23
 
 */
 chdir(__DIR__);
-include '../lib/batcheditproject.ui.class.php';
+include '../lib/ui/batcheditproject.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-2');

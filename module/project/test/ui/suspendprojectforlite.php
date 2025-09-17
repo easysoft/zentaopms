@@ -13,7 +13,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/suspendprojectforlite.ui.class.php';
+include '../lib/ui/suspendprojectforlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

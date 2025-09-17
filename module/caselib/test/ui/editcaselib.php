@@ -16,7 +16,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/editcaselib.ui.class.php';
+include '../lib/ui/editcaselib.ui.class.php';
 
 $caselib = zenData('testsuite');
 $caselib->id->range('1');

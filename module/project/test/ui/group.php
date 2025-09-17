@@ -20,7 +20,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/group.ui.class.php';
+include '../lib/ui/group.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
 zendata('group')->loadYaml('group')->gen(0);

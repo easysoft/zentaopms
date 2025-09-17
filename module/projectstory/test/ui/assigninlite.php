@@ -13,7 +13,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/assigninlite.ui.class.php';
+include '../lib/ui/assigninlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

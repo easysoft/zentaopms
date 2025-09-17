@@ -29,7 +29,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/pausetask.ui.class.php';
+include '../lib/ui/pausetask.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

@@ -22,7 +22,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/kanban.ui.class.php';
+include '../lib/ui/kanban.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

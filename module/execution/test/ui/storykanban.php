@@ -31,7 +31,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/storykanban.ui.class.php';
+include '../lib/ui/storykanban.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

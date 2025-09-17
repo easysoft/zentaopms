@@ -18,7 +18,7 @@ cid=1
 
  */
 chdir(__DIR__);
-include '../lib/createuser.ui.class.php';
+include '../lib/ui/createuser.ui.class.php';
 
 zendata('user')->loadYaml('user', false, 2)->gen(10);
 $tester = new createUserTester();

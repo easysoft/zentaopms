@@ -12,7 +12,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/teamforlite.ui.class.php';
+include '../lib/ui/teamforlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

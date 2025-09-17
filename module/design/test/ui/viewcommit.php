@@ -12,7 +12,7 @@ cid=8
 */
 
 chdir(__DIR__);
-include '../lib/viewcommit.ui.class.php';
+include '../lib/ui/viewcommit.ui.class.php';
 
 $project = zendata('project');
 $project->id->range('1');

@@ -9,7 +9,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/changestatus.ui.class.php';
+include '../lib/ui/changestatus.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

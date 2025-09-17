@@ -10,7 +10,7 @@ cid=80
 
 */
 chdir(__DIR__);
-include '../lib/createstory.ui.class.php';
+include '../lib/ui/createstory.ui.class.php';
 include 'page/create.php';
 include 'page/batchcreate.php';
 

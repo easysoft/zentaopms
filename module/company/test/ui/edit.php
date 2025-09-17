@@ -17,7 +17,7 @@ cid=2
 */
 
 chdir(__DIR__);
-include '../lib/editcompany.ui.class.php';
+include '../lib/ui/editcompany.ui.class.php';
 
 $tester = new editCompanyTester();
 $tester->login();

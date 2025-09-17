@@ -26,7 +26,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/createstakeholder.ui.class.php';
+include '../lib/ui/createstakeholder.ui.class.php';
 global $config;
 
 $stakeholder = zenData('stakeholder');

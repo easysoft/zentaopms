@@ -16,7 +16,7 @@ cid=10
 
 */
 chdir(__DIR__);
-include '../lib/browse.ui.class.php';
+include '../lib/ui/browse.ui.class.php';
 
 $project = zendata('project');
 $project->id->range('1');

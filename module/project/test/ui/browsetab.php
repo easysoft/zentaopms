@@ -31,7 +31,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/browsetab.ui.class.php';
+include '../lib/ui/browsetab.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-9');

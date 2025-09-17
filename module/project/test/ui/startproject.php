@@ -16,7 +16,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/startproject.ui.class.php';
+include '../lib/ui/startproject.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
 

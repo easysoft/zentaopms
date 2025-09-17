@@ -21,7 +21,7 @@ cid=79
  -测试结果 @拆分业务需求成功
 */
 chdir(__DIR__);
-include '../lib/batchcreatur.ui.class.php';
+include '../lib/ui/batchcreatur.ui.class.php';
 include '../../../requirement/test/ui/page/batchcreate.php';
 include '../../../requirement/test/ui/page/view.php';
 

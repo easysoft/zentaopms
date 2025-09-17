@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createprojectbuild.ui.class.php';
+include '../lib/ui/createprojectbuild.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/exporthtml.ui.class.php';
+include '../lib/ui/exporthtml.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

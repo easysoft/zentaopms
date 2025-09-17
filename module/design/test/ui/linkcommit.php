@@ -12,7 +12,7 @@ cid=9
 */
 
 chdir(__DIR__);
-include '../lib/linkcommit.ui.class.php';
+include '../lib/ui/linkcommit.ui.class.php';
 
 $project = zendata('project');
 $project->id->range('1');

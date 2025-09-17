@@ -12,7 +12,7 @@ cid=1
 
  */
 chdir(__DIR__);
-include '../lib/manageproducts.ui.class.php';
+include '../lib/ui/manageproducts.ui.class.php';
 
 zendata('project')->loadYaml('execution', false, 2)->gen(10);
 zendata('product')->loadYaml('product', false, 2)->gen(10);

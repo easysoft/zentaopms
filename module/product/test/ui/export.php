@@ -10,7 +10,7 @@ cid=0
  - 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
-include '../lib/all.ui.class.php';
+include '../lib/ui/all.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-3');

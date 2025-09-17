@@ -22,7 +22,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/createspace.ui.class.php';
+include '../lib/ui/createspace.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

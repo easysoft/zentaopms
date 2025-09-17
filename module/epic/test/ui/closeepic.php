@@ -10,7 +10,7 @@ cid=90
 
 */
 chdir (__DIR__);
-include '../lib/closeepic.ui.class.php';
+include '../lib/ui/closeepic.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');
