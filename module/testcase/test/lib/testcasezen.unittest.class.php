@@ -110,4 +110,40 @@ class testcaseZenTest
 
         return $result;
     }
+
+    /**
+     * Test assignForImportFromLib method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @param  array  $libraries
+     * @param  int    $projectID
+     * @param  array  $cases
+     * @access public
+     * @return int
+     */
+    public function assignForImportFromLibTest(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries, int $projectID, array $cases): int
+    {
+        global $tester;
+
+        // 初始化必要的对象
+        if(!isset($tester->view)) $tester->view = new stdClass();
+        if(!isset($tester->config)) $tester->config = new stdClass();
+        if(!isset($tester->config->testcase)) $tester->config->testcase = new stdClass();
+        if(!isset($tester->config->testcase->search)) $tester->config->testcase->search = array();
+
+        try {
+            // 调用assignForImportFromLib方法
+            callZenMethod('testcase', 'assignForImportFromLib', [$productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID, $cases]);
+
+            // 返回0表示成功执行
+            return 0;
+        } catch (Exception $e) {
+            // 返回1表示执行失败
+            return 1;
+        }
+    }
 }
