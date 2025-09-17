@@ -1375,4 +1375,22 @@ class taskZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkCreateTestTasks method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return bool|array
+     */
+    public function checkCreateTestTasksTest(array $tasks): bool|array
+    {
+        $method = $this->taskZenTest->getMethod('checkCreateTestTasks');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->taskZenTest->newInstance(), array($tasks));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
