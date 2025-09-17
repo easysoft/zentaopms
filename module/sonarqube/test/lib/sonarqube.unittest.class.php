@@ -146,4 +146,60 @@ class sonarqubeTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test sortAndPage method.
+     *
+     * @param  array  $dataList
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return mixed
+     */
+    public function sortAndPageTest($dataList, $orderBy, $recPerPage, $pageID)
+    {
+        global $tester;
+
+        // 创建一个临时的zen类来测试
+        $tempZenClass = new class() {
+            protected $app;
+            protected $view;
+
+            public function __construct() {
+                global $tester;
+                $this->app = $tester->app;
+                $this->view = new stdClass();
+            }
+
+            protected function sortAndPage($dataList, $orderBy, $recPerPage, $pageID)
+            {
+                /* Data sort. */
+                list($order, $sort) = explode('_', $orderBy);
+                $orderList = array();
+                foreach($dataList as $data) $orderList[] = $data->$order;
+                array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $dataList);
+
+                /* Pager. */
+                $this->app->loadClass('pager', true);
+                $recTotal             = count($dataList);
+                $pager                = new pager($recTotal, $recPerPage, $pageID);
+                $dataList = array_chunk($dataList, $pager->recPerPage);
+
+                $this->view->pager = $pager;
+                return $dataList;
+            }
+
+            public function testSortAndPage($dataList, $orderBy, $recPerPage, $pageID) {
+                return $this->sortAndPage($dataList, $orderBy, $recPerPage, $pageID);
+            }
+        };
+
+        try {
+            $result = $tempZenClass->testSortAndPage($dataList, $orderBy, $recPerPage, $pageID);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
