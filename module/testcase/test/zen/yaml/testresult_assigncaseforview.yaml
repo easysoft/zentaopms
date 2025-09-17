@@ -1,0 +1,37 @@
+---
+title: assignCaseForView方法测试结果数据
+desc: 为测试结果提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-3
+  note: 测试结果ID
+- field: run
+  range: 1{2},2{1}
+  note: 测试运行ID
+- field: case
+  range: 1{2},2{1}
+  note: 测试用例ID
+- field: version
+  range: 1{2},2{1}
+  note: 用例版本
+- field: caseResult
+  range: pass{2},fail{1}
+  note: 测试结果
+- field: xml
+  range: '[]{2},<xml>测试XML内容</xml>{1}'
+  note: XML内容
+- field: duration
+  range: 0{1},10{1},30{1}
+  note: 执行时长（秒）
+- field: stepResults
+  range: '[]{2},pass:1;fail:0{1}'
+  note: 步骤结果
+- field: lastRunner
+  range: admin{2},user1{1}
+  note: 执行者
+- field: date
+  range: '(w){2},(+1d){1}'
+  note: 执行时间
