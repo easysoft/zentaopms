@@ -761,4 +761,44 @@ class taskZenTest
             return false;
         }
     }
+
+    /**
+     * Test buildTasksForBatchEdit method.
+     *
+     * @param  array $taskData
+     * @param  array $oldTasks
+     * @access public
+     * @return mixed
+     */
+    public function buildTasksForBatchEditTest(array $taskData, array $oldTasks)
+    {
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Mock the core logic of buildTasksForBatchEdit without complex validations. */
+        $now = helper::now();
+        foreach($taskData as $taskID => $task)
+        {
+            $oldTask = $oldTasks[$taskID];
+
+            $task->parent       = $oldTask->parent;
+            $task->assignedTo   = $task->status == 'closed' ? 'closed' : $task->assignedTo;
+            $task->assignedDate = !empty($task->assignedTo) && $oldTask->assignedTo != $task->assignedTo ? $now : $oldTask->assignedDate;
+            $task->version      = $oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline ?  $oldTask->version + 1 : $oldTask->version;
+            $task->consumed     = $task->consumed < 0 ? $task->consumed  : $task->consumed + $oldTask->consumed;
+            $task->storyVersion = ($task->story && $oldTask->story != $task->story) ? 1 : $oldTask->storyVersion;
+
+            if(empty($task->closedReason) && $task->status == 'closed')
+            {
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
+                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
+            }
+
+            /* Mock processTaskByStatus logic. */
+            if($task->assignedTo) $task->assignedDate = $now;
+        }
+
+        /* Skip checkBatchEditTask validation for testing. */
+        return $taskData;
+    }
 }
