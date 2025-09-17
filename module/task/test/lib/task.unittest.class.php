@@ -3628,4 +3628,86 @@ class taskTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkGitRepo method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function checkGitRepoTest($executionID = null)
+    {
+        if(!$this->objectZen) {
+            return array('error' => 'Zen object not available');
+        }
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'checkGitRepo');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $executionID);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getAssignedToOptions method.
+     *
+     * @param  string $manageLink
+     * @access public
+     * @return mixed
+     */
+    public function getAssignedToOptionsTest(string $manageLink = ''): mixed
+    {
+        if(!$this->objectZen) {
+            return array('error' => 'Zen object not available');
+        }
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'getAssignedToOptions');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $manageLink);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test processFilterTitle method.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function processFilterTitleTest(string $browseType, int $param = 0): mixed
+    {
+        if(!$this->objectZen) {
+            return array('error' => 'Zen object not available');
+        }
+
+        try {
+            $result = $this->objectZen->processFilterTitle($browseType, $param);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }

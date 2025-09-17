@@ -2209,4 +2209,50 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processFilterTitle method.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function processFilterTitleTest(string $browseType, int $param = 0)
+    {
+        global $tester;
+
+        try
+        {
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Initialize required dependencies
+            $taskZenInstance->lang = $tester->lang;
+            $taskZenInstance->config = $tester->config;
+            $taskZenInstance->session = $tester->session;
+            $taskZenInstance->app = $tester->app;
+
+            // Load required models
+            $taskZenInstance->loadModel = function($model) use ($tester) {
+                return $tester->loadModel($model);
+            };
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('processFilterTitle');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$browseType, $param]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
