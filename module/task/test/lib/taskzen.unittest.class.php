@@ -861,4 +861,55 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTestTasksForCreate method.
+     *
+     * @param  int   $executionID
+     * @param  array $postData
+     * @access public
+     * @return mixed
+     */
+    public function buildTestTasksForCreateTest(int $executionID, array $postData = array())
+    {
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Setup POST data for form processing. */
+        $_POST = $postData;
+
+        try
+        {
+            /* Get execution data for test. */
+            $execution = $this->tester->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+            if(!$execution)
+            {
+                $_POST = array();
+                return false;
+            }
+
+            $method = $this->taskZenTest->getMethod('buildTestTasksForCreate');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$executionID]);
+
+            /* Clean up POST data. */
+            $_POST = array();
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* Clean up POST data on exception. */
+            $_POST = array();
+            return array('error' => $e->getMessage());
+        }
+        catch(Error $e)
+        {
+            /* Handle PHP errors. */
+            $_POST = array();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
