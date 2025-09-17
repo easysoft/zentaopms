@@ -852,4 +852,31 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkTestcasesForBatchCreate method.
+     *
+     * @param  array $testcases
+     * @access public
+     * @return array|bool
+     */
+    public function checkTestcasesForBatchCreateTest(array $testcases)
+    {
+        global $tester;
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        try {
+            $result = callZenMethod('testcase', 'checkTestcasesForBatchCreate', [$testcases]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
