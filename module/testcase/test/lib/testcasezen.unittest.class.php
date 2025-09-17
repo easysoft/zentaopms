@@ -791,4 +791,19 @@ class testcaseZenTest
             return 0;
         }
     }
+
+    /**
+     * Test buildCasesByXmind method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $caseList
+     * @param  bool   $isInsert
+     * @access public
+     * @return array
+     */
+    public function buildCasesByXmindTest(int $productID, string $branch, array $caseList, bool $isInsert): array
+    {
+        return callZenMethod('testcase', 'buildCasesByXmind', [$productID, $branch, $caseList, $isInsert]);
+    }
 }
