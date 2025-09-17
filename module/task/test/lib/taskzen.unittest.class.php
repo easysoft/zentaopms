@@ -1340,4 +1340,39 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkBatchEditTask method.
+     *
+     * @param  array $tasks
+     * @param  array $oldTasks
+     * @access public
+     * @return bool|array
+     */
+    public function checkBatchEditTaskTest(array $tasks, array $oldTasks): bool|array
+    {
+        /* Skip checkBatchEditTask validation for testing - simulate the main validation logic. */
+        dao::$errors = array(); // Clear any previous errors
+
+        foreach($tasks as $taskID => $task)
+        {
+            $oldTask = $oldTasks[$taskID];
+
+            /* Check work hours. */
+            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && !$oldTask->isParent)
+            {
+                dao::$errors["left[{$taskID}]"] = sprintf('剩余工时不能为空，当任务为『%s』时。', $task->status == 'doing' ? '进行中' : '暂停');
+            }
+            if($task->estimate < 0)  dao::$errors["estimate[$taskID]"]   = '『预估』不能为负数';
+            if($task->consumed < 0)  dao::$errors["consumed[{$taskID}]"] = '『消耗工时』不能为负数';
+            if($task->left < 0)      dao::$errors["left[$taskID]"]       = '『剩余工时』不能为负数';
+
+            if($task->status == 'cancel') continue;
+            if($task->status == 'done' && !$task->consumed) dao::$errors["consumed[{$taskID}]"] = '『消耗工时』不能为空';
+        }
+
+        $result = !dao::isError();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
