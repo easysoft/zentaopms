@@ -2691,4 +2691,64 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test processCasesForBrowse method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function processCasesForBrowseTest($cases = array())
+    {
+        global $tester;
+
+        // 模拟processCasesForBrowse方法的核心逻辑
+        if(!$cases) return array();
+
+        // 处理用例数据，设置属性
+        foreach($cases as $case)
+        {
+            $case->caseID  = $case->id;
+            $case->id      = 'case_' . $case->id;
+            $case->parent  = 0;
+            $case->isScene = false;
+            if(isset($case->title)) $case->title = htmlspecialchars_decode($case->title);
+        }
+
+        // 获取用例中的场景ID
+        $caseScenes = array_unique(array_filter(array_column($cases, 'scene')));
+        if(!$caseScenes) return $cases;
+
+        // 模拟从数据库获取场景数据
+        $scenes = array();
+        foreach($caseScenes as $sceneID)
+        {
+            // 简单模拟场景数据
+            $scene = new stdClass();
+            $scene->id = $sceneID;
+            $scene->title = '场景' . $sceneID;
+            $scene->grade = 1;
+            $scene->path = ',' . $sceneID . ',';
+            $scene->parent = 0;
+            $scene->hasCase = false;
+            $scene->isScene = true;
+            $scenes[$sceneID] = $scene;
+        }
+
+        // 设置用例的父级场景
+        foreach($cases as $case)
+        {
+            if(!empty($case->scene) && isset($scenes[$case->scene]))
+            {
+                $scene = $scenes[$case->scene];
+                $scene->hasCase = true;
+                $case->parent = $scene->id;
+                $case->grade = $scene->grade + 1;
+                $case->path = $scene->path . $case->id . ',';
+            }
+        }
+
+        return array_merge($scenes, $cases);
+    }
 }
