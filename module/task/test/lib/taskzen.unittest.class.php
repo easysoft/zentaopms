@@ -169,4 +169,63 @@ class taskZenTest
 
         return $result;
     }
+
+    /**
+     * 测试 assignStoryForCreate 方法。
+     * Test assignStoryForCreate method.
+     *
+     * @param  int $executionID
+     * @param  int $moduleID
+     * @access public
+     * @return mixed
+     */
+    public function assignStoryForCreateTest(int $executionID, int $moduleID = 0): mixed
+    {
+        $success = 1;
+        $error = '';
+
+        try {
+            // 创建mock的taskZen实例
+            $taskZenInstance = $this->taskZenTest->newInstance();
+            $taskZenInstance->view = new stdClass();
+
+            // 初始化必要的依赖
+            $taskZenInstance->story = $this->tester->loadModel('story');
+            $taskZenInstance->app = $this->tester->app;
+            $taskZenInstance->config = $this->tester->config;
+
+            $method = $this->taskZenTest->getMethod('assignStoryForCreate');
+            $method->setAccessible(true);
+
+            $method->invokeArgs($taskZenInstance, [$executionID, $moduleID]);
+
+            // 检查view属性是否正确设置
+            $result = new stdClass();
+            $result->success = $success;
+            $result->executionID = $executionID;
+            $result->moduleID = $moduleID;
+            $result->hasTestStories = isset($taskZenInstance->view->testStories);
+            $result->hasTestStoryIdList = isset($taskZenInstance->view->testStoryIdList);
+            $result->hasStories = isset($taskZenInstance->view->stories);
+            $result->testStoriesCount = isset($taskZenInstance->view->testStories) ? count($taskZenInstance->view->testStories) : 0;
+            $result->error = '';
+
+        } catch(Exception $e) {
+            $success = 0;
+            $error = $e->getMessage();
+
+            $result = new stdClass();
+            $result->success = $success;
+            $result->executionID = $executionID;
+            $result->moduleID = $moduleID;
+            $result->hasTestStories = false;
+            $result->hasTestStoryIdList = false;
+            $result->hasStories = false;
+            $result->testStoriesCount = 0;
+            $result->error = $error;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
