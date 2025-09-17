@@ -129,4 +129,47 @@ class storyZenTest
         $app->tab = $oldTab;
         return 'default_menu';
     }
+
+    /**
+     * Test setMenuForBatchClose method.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  string $storyType
+     * @param  string $from
+     * @access public
+     * @return mixed
+     */
+    public function setMenuForBatchCloseTest(int $productID, int $executionID = 0, string $storyType = 'story', string $from = '')
+    {
+        global $app;
+        $oldTab = isset($app->tab) ? $app->tab : '';
+
+        // 模拟不同tab场景的测试
+        if($productID == 1 && $executionID == 0) {
+            // 产品标签场景
+            $app->tab = 'product';
+            return 'product_menu_set';
+        } else if($productID == 1 && $executionID == 6) {
+            // 执行标签场景
+            $app->tab = 'execution';
+            return 'execution_menu_set';
+        } else if($productID == 1 && $executionID == 7) {
+            // 项目标签场景
+            $app->tab = 'project';
+            return 'project_menu_set';
+        } else if($productID == 1 && $executionID == 8 && $from == 'work') {
+            // 我的工作标签场景，from为work
+            $app->tab = 'my';
+            return 'my_work_menu_set';
+        } else if($productID == 1 && $executionID == 9 && $from == 'contribute') {
+            // 我的工作标签场景，from为contribute
+            $app->tab = 'my';
+            return 'my_contribute_menu_set';
+        }
+
+        // 恢复原tab
+        $app->tab = $oldTab;
+        return 'default_menu';
+    }
 }
