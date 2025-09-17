@@ -1198,4 +1198,33 @@ class taskZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkLegallyDate method.
+     *
+     * @param  object $task
+     * @param  bool   $isDateLimit
+     * @param  object $parent
+     * @param  int    $rowID
+     * @access public
+     * @return mixed
+     */
+    public function checkLegallyDateTest($task, $isDateLimit = false, $parent = null, $rowID = null)
+    {
+        try
+        {
+            dao::$errors = array(); // 清空错误数组
+
+            $method = $this->taskZenTest->getMethod('checkLegallyDate');
+            $method->setAccessible(true);
+
+            $method->invokeArgs($this->taskZenTest->newInstance(), [$task, $isDateLimit, $parent, $rowID]);
+            if(dao::isError()) return dao::$errors;
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
