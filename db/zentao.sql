@@ -14313,6 +14313,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `category` char(30) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
   `type` enum('reviewed','taged') NOT NULL DEFAULT 'reviewed',
+  `status` varchar(20) NOT NULL DEFAULT '',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `range` text NULL,
   `data` text NULL,
