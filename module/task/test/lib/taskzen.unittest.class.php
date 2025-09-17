@@ -1483,4 +1483,66 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test prepareManageTeam method.
+     *
+     * @param  mixed $postData
+     * @param  int   $taskID
+     * @access public
+     * @return mixed
+     */
+    public function prepareManageTeamTest($postData = null, $taskID = 0)
+    {
+        global $tester;
+
+        // 创建模拟的 form 对象
+        if ($postData === null) {
+            $postData = new stdClass();
+        }
+
+        // 创建真正的form对象
+        helper::import(dirname(__FILE__, 4) . '/lib/form/form.class.php');
+        $mockForm = new form();
+
+        // 手动模拟add方法的效果
+        if (!method_exists($mockForm, 'add')) {
+            $mockForm = new class($postData) {
+                public $data;
+
+                public function __construct($initialData = null) {
+                    $this->data = $initialData ?: new stdClass();
+                }
+
+                public function add($key, $value) {
+                    $this->data->$key = $value;
+                    return $this;
+                }
+
+                public function get() {
+                    return $this->data;
+                }
+            };
+        }
+
+        try {
+            // 创建zen实例并设置必要的环境
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // 设置app和user环境
+            $taskZenInstance->app = $tester->app;
+
+            $method = $this->taskZenTest->getMethod('prepareManageTeam');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$mockForm, $taskID]);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
