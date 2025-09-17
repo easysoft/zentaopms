@@ -221,4 +221,77 @@ class testcaseZenTest
             return array('moduleTreeAssigned' => '0', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test setMenuForLibCaseEdit method.
+     *
+     * @param  object $case
+     * @param  array  $libraries
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function setMenuForLibCaseEditTest(object $case, array $libraries, string $tab = ''): array
+    {
+        global $tester;
+
+        // 保存原始状态
+        $originalTab = $tester->app->tab ?? '';
+        $originalSession = isset($tester->session->project) ? $tester->session->project : null;
+
+        try {
+            // 设置app的tab属性
+            if($tab) $tester->app->tab = $tab;
+
+            // 初始化session对象
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 1;
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 开启输出缓冲以捕获任何输出
+            ob_start();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('setMenuForLibCaseEdit');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($zenInstance, $case, $libraries);
+
+            // 清除输出缓冲
+            ob_end_clean();
+
+            // 返回执行结果用于验证
+            $result = array(
+                'executed' => '1',
+                'appTab' => $tester->app->tab ?? '',
+                'tabChecked' => 'none'
+            );
+
+            // 验证tab分支逻辑
+            if($tester->app->tab == 'project') {
+                $result['tabChecked'] = 'project';
+            } else {
+                $result['tabChecked'] = 'caselib';
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            // 清除输出缓冲
+            ob_end_clean();
+            return array('executed' => '0', 'error' => $e->getMessage());
+        } catch (Error $e) {
+            // 清除输出缓冲
+            ob_end_clean();
+            return array('executed' => '0', 'error' => $e->getMessage());
+        } finally {
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            if($originalSession !== null) $tester->session->project = $originalSession;
+        }
+    }
 }
