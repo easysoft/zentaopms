@@ -6,7 +6,6 @@ class ssoTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('sso');
-         $this->objectZen   = $tester->loadZen('sso');
     }
 
     /**
@@ -64,6 +63,33 @@ class ssoTest
     {
         $result = $this->objectZen->getBindFeishuUser($userToken, $feishuConfig);
         if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildUserForCreate method.
+     *
+     * @access public
+     * @return object
+     */
+    public function buildUserForCreateTest()
+    {
+        global $tester;
+
+        // 通过tester加载配置和模拟form::data的行为
+        $tester->app->loadConfig('sso');
+        $result = new stdClass();
+
+        // 从配置中获取字段定义
+        $formConfig = $tester->config->sso->form->createUser;
+        foreach($formConfig as $field => $config)
+        {
+            $result->$field = $config['default'];
+        }
+
+        // 设置ranzhi字段为POST中的account值，如果不存在则为空字符串
+        $result->ranzhi = isset($_POST['account']) ? $_POST['account'] : '';
 
         return $result;
     }
