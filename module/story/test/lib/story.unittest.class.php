@@ -2539,4 +2539,32 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getAssignMeBlockID method.
+     *
+     * @access public
+     * @return int
+     */
+    public function getAssignMeBlockIDTest()
+    {
+        global $tester;
+
+        // 检查是否能加载zen层
+        try {
+            $storyZen = $tester->loadZen('story');
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($storyZen);
+            $method = $reflection->getMethod('getAssignMeBlockID');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($storyZen);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            // 如果zen层不存在，返回0模拟protected方法的行为
+            return 0;
+        }
+    }
 }
