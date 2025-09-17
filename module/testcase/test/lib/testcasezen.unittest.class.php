@@ -960,4 +960,16 @@ class testcaseZenTest
     {
         return callZenMethod('testcase', 'initTestcase', [$storyID, $testcaseID, $bugID]);
     }
+
+    /**
+     * Test importCases method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function importCasesTest(array $cases): array
+    {
+        return callZenMethod('testcase', 'importCases', [$cases]);
+    }
 }
