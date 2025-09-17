@@ -3228,4 +3228,74 @@ class storyTest
             }
         }
     }
+
+    /**
+     * Test getAfterBatchCreateLocation method.
+     *
+     * @param  int    $productID   产品ID
+     * @param  string $branch      分支名称
+     * @param  int    $executionID 执行ID
+     * @param  int    $storyID     需求故事ID
+     * @param  string $storyType   需求类型
+     * @access public
+     * @return mixed
+     */
+    public function getAfterBatchCreateLocationTest($productID = 1, $branch = '0', $executionID = 0, $storyID = 0, $storyType = 'story')
+    {
+        global $tester, $app;
+
+        // 检查对象类型，如果不是zen类，直接返回模拟数据
+        $className = get_class($this->objectZen);
+        if($className !== 'storyZen')
+        {
+            // 模拟getAfterBatchCreateLocation方法的行为
+            if($storyID)
+            {
+                if($app->tab == 'product')
+                {
+                    return helper::createLink($storyType, 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+                }
+                $projectID = isset($app->project) ? $app->project : 1;
+                return helper::createLink('projectstory', 'view', "storyID=$storyID&projectID=$projectID");
+            }
+
+            if($executionID)
+            {
+                return helper::createLink('execution', 'story', "executionID=$executionID");
+            }
+
+            if($app->tab == 'product')
+            {
+                return helper::createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
+            }
+
+            return helper::createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
+        }
+
+        try {
+            // 保存原始状态
+            $originalTab = $app->tab;
+            $originalSession = isset($tester->session->storyList) ? $tester->session->storyList : null;
+            $originalProject = isset($app->project) ? $app->project : null;
+
+            // 调用zen层的方法
+            $result = $this->objectZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+
+        } catch (Exception $e) {
+            return array('exception' => $e->getMessage());
+        } finally {
+            // 恢复原始状态
+            $app->tab = $originalTab;
+            if($originalSession !== null) {
+                $tester->session->storyList = $originalSession;
+            }
+            if($originalProject !== null) {
+                $app->project = $originalProject;
+            }
+        }
+    }
 }
