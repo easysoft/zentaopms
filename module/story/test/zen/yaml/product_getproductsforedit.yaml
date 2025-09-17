@@ -1,0 +1,59 @@
+---
+title: 产品数据定义用于测试getProductsForEdit方法
+desc: 为getProductsForEdit方法测试提供不同状态和归属的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+- field: PO
+  note: 产品负责人
+  range: admin{3},user1{3},user2{2},admin{2}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 产品类型
+  range: normal{10}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 产品代号
+  range: PRD001-PRD010
+  prefix: ""
+  postfix: ""
+- field: acl
+  note: 访问控制
+  range: open{10}
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{10}
+  prefix: ""
+  postfix: ""
