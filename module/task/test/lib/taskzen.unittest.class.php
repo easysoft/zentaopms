@@ -1022,4 +1022,28 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildChartData method.
+     *
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function buildChartDataTest(string $chartType = '')
+    {
+        $method = $this->taskZenTest->getMethod('buildChartData');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invokeArgs($this->taskZenTest->newInstance(), [$chartType]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
