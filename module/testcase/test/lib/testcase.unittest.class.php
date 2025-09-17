@@ -3779,4 +3779,33 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test initTestcase method.
+     *
+     * @param  int $storyID
+     * @param  int $testcaseID
+     * @param  int $bugID
+     * @access public
+     * @return object
+     */
+    public function initTestcaseTest(int $storyID = 0, int $testcaseID = 0, int $bugID = 0): object
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('initTestcase');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zen, $storyID, $testcaseID, $bugID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -946,4 +946,18 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test initTestcase method.
+     *
+     * @param  int $storyID
+     * @param  int $testcaseID
+     * @param  int $bugID
+     * @access public
+     * @return object
+     */
+    public function initTestcaseTest(int $storyID = 0, int $testcaseID = 0, int $bugID = 0): object
+    {
+        return callZenMethod('testcase', 'initTestcase', [$storyID, $testcaseID, $bugID]);
+    }
 }
