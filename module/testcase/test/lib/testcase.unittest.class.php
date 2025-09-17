@@ -3577,4 +3577,60 @@ class testcaseTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildCasesByXmind method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $caseList
+     * @param  bool   $isInsert
+     * @access public
+     * @return mixed
+     */
+    public function buildCasesByXmindTest($productID = 1, $branch = '0', $caseList = array(), $isInsert = false)
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('buildCasesByXmind');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($zen, array($productID, $branch, $caseList, $isInsert));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Test buildDataForImportToLib method.
+     *
+     * @param  int    $caseID
+     * @param  int    $libID
+     * @access public
+     * @return mixed
+     */
+    public function buildDataForImportToLibTest($caseID = 0, $libID = 1)
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('buildDataForImportToLib');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($zen, array($caseID, $libID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

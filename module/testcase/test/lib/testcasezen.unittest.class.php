@@ -806,4 +806,31 @@ class testcaseZenTest
     {
         return callZenMethod('testcase', 'buildCasesByXmind', [$productID, $branch, $caseList, $isInsert]);
     }
+
+    /**
+     * Test buildDataForImportToLib method.
+     *
+     * @param  int    $caseID
+     * @param  int    $libID
+     * @access public
+     * @return array
+     */
+    public function buildDataForImportToLibTest(int $caseID, int $libID): array
+    {
+        global $tester;
+
+        try {
+            // 设置POST数据模拟
+            if($caseID == 0) {
+                $_POST['caseIdList'] = '1,2,3';
+            }
+
+            // 调用zen方法
+            return callZenMethod('testcase', 'buildDataForImportToLib', [$caseID, $libID]);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
