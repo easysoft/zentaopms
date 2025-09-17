@@ -216,6 +216,8 @@ function openApp(url, code, options)
     {
         updateApp(code, url, openedApp.currentTitle, 'show');
     }
+
+    $('body').attr('data-app', code);
     openedApp.zIndex = ++apps.zIndex;
     openedApp.$app.show().css('z-index', openedApp.zIndex);
     openedApp.getPageInfo = () => {
