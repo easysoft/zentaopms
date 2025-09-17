@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_processrepoid.unittest.class.php';
 
 $table = zenData('repo');
 $table->id->range('1-10');
@@ -36,7 +36,7 @@ $table->gen(5);
 
 su('admin');
 
-$repoTest = new repoZenTest();
+$repoTest = new repoTest();
 
 r($repoTest->processRepoIDTest(1, 1, array('Git'))) && p() && e('1');
 r($repoTest->processRepoIDTest(0, 1, array('Git'))) && p() && e('1');
