@@ -1,0 +1,43 @@
+---
+title: 产品数据用于assignForBrowse测试
+desc: 为assignForBrowse方法提供产品测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  type: int
+- field: program
+  note: 项目集ID
+  range: 0{5},1{5}
+  type: int
+- field: name
+  note: 产品名称
+  range: '产品1,产品2,产品3,产品4,产品5,测试产品{5}'
+  type: string
+- field: code
+  note: 产品代码
+  range: 'P001,P002,P003,P004,P005,TEST{5}'
+  type: string
+- field: type
+  note: 产品类型
+  range: 'normal{8},branch{2}'
+  type: string
+- field: status
+  note: 产品状态
+  range: 'normal{8},closed{2}'
+  type: string
+- field: createdBy
+  note: 创建者
+  range: 'admin{5},user1{3},user2{2}'
+  type: string
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00,2023-06-01 00:00:00,2023-12-01 00:00:00'
+  type: datetime
+- field: deleted
+  note: 是否删除
+  range: '0'
+  type: enum
