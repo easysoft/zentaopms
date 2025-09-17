@@ -29,4 +29,34 @@ class testcaseZenTest
         foreach($postData as $key => $value) $_POST[$key] = $value;
         return callZenMethod('testcase', 'buildDataForImportFromLib', [$productID, $branch, $libID]);
     }
+
+    /**
+     * Test setBrowseSession method.
+     *
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $moduleID
+     * @param  string      $browseType
+     * @param  string      $orderBy
+     * @access public
+     * @return array
+     */
+    public function setBrowseSessionTest(int $productID, string|bool $branch, int $moduleID, string $browseType = '', string $orderBy = ''): array
+    {
+        global $tester;
+
+        // 调用setBrowseSession方法
+        callZenMethod('testcase', 'setBrowseSession', [$productID, $branch, $moduleID, $browseType, $orderBy]);
+
+        // 返回设置的会话数据进行验证
+        return array(
+            'productID' => $tester->session->productID,
+            'branch' => $tester->session->branch,
+            'moduleID' => $tester->session->moduleID,
+            'browseType' => $tester->session->browseType,
+            'orderBy' => $tester->session->orderBy,
+            'caseBrowseType' => $tester->session->caseBrowseType,
+            'testcaseOrderBy' => $tester->session->testcaseOrderBy
+        );
+    }
 }
