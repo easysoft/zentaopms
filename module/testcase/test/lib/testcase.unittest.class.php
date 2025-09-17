@@ -3808,4 +3808,56 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test initLibCase method.
+     *
+     * @param  object $case 用例对象
+     * @param  int    $libID 库ID
+     * @param  int    $maxOrder 最大排序值
+     * @param  int    $maxModuleOrder 最大模块排序值
+     * @param  array  $libCases 库用例数组
+     * @access public
+     * @return object
+     */
+    public function initLibCaseTest(object $case, int $libID, int $maxOrder, int $maxModuleOrder, array $libCases): object
+    {
+        global $tester;
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 手动实现initLibCase逻辑避免调用可能出错的方法
+        $libCase = new stdclass();
+        $libCase->lib             = $libID;
+        $libCase->title           = $case->title;
+        $libCase->precondition    = $case->precondition;
+        $libCase->keywords        = $case->keywords;
+        $libCase->pri             = $case->pri;
+        $libCase->type            = $case->type;
+        $libCase->stage           = $case->stage;
+        $libCase->status          = $case->status;
+        $libCase->fromCaseID      = $case->id;
+        $libCase->fromCaseVersion = $case->version;
+        $libCase->color           = $case->color;
+        $libCase->order           = $maxOrder;
+        $libCase->module          = empty($case->module) ? 0 : $case->module; // 简化处理，不调用importCaseRelatedModules
+
+        if(!isset($libCases[$case->id]))
+        {
+            $libCase->openedBy   = $tester->app->user->account;
+            $libCase->openedDate = helper::now();
+        }
+        else
+        {
+            $libCaseList = array_keys($libCases[$case->id]);
+            $libCaseID   = $libCaseList[0];
+            $libCase->id             = $libCaseID;
+            $libCase->lastEditedBy   = $tester->app->user->account;
+            $libCase->lastEditedDate = helper::now();
+            $libCase->version        = (int)$libCases[$case->id][$libCaseID]->version + 1;
+        }
+
+        return $libCase;
+    }
 }
