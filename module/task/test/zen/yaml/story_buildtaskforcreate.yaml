@@ -1,0 +1,51 @@
+---
+title: buildTaskForCreate 方法测试用需求数据
+desc: 为 taskZen::buildTaskForCreate 方法提供需求测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1-3
+- field: branch
+  range: 0
+- field: module
+  range: 0,101,102,103
+- field: plan
+  range: 0,1,2
+- field: title
+  range: 用户登录功能,订单管理系统,数据分析报表,移动端适配,安全认证
+- field: spec
+  range: 详细需求描述1,详细需求描述2,详细需求描述3
+- field: verify
+  range: 验收标准1,验收标准2,验收标准3
+- field: type
+  range: story,requirement
+- field: pri
+  range: 1,2,3,4
+- field: estimate
+  range: 2,4,8,16
+- field: status
+  range: draft,active,closed
+- field: stage
+  range: wait,planned,projected,developing,developed,testing,tested,verified,released,closed
+- field: version
+  range: 1,2
+- field: openedBy
+  range: admin,user1,user2
+- field: openedDate
+  range: '2024-01-01 09:00:00'
+- field: assignedTo
+  range: user1,user2,user3
+- field: assignedDate
+  range: '2024-01-01 10:00:00'
+- field: closedBy
+  range: ''
+- field: closedDate
+  range: '0000-00-00 00:00:00'
+- field: closedReason
+  range: ''
+- field: deleted
+  range: '0'

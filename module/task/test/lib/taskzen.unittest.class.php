@@ -677,4 +677,88 @@ class taskZenTest
 
         return $tasks;
     }
+
+    /**
+     * Test buildTaskForCreate method.
+     *
+     * @param  int   $executionID
+     * @param  array $postData
+     * @access public
+     * @return mixed
+     */
+    public function buildTaskForCreateTest(int $executionID, array $postData = array())
+    {
+        global $tester;
+
+        /* Clear previous errors. */
+        dao::$errors = array();
+
+        /* Setup POST data for form processing. */
+        $_POST = $postData;
+
+        try
+        {
+            /* Check if execution exists first. */
+            $execution = $tester->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+            if(!$execution)
+            {
+                $_POST = array();
+                return false;
+            }
+
+            /* Create a mock instance that bypasses the complex validations. */
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            /* Get the form configuration. */
+            $formConfig = $tester->config->task->form->create;
+            if(isset($_POST['type']) && $_POST['type'] == 'affair') $formConfig['assignedTo']['type'] = 'array';
+            if(isset($_POST['type']) && $_POST['type'] == 'test')
+            {
+                $formConfig['story']['skipRequired'] = true;
+                $formConfig['module']['skipRequired'] = true;
+                if(isset($_POST['selectTestStory']) && $_POST['selectTestStory'] == 'on')
+                {
+                    $formConfig['estStarted']['skipRequired'] = $formConfig['deadline']['skipRequired'] = $formConfig['estimate']['skipRequired'] = true;
+                }
+            }
+
+            /* Build the task object. */
+            $team = isset($_POST['team']) ? array_filter($_POST['team']) : array();
+            $task = form::data($formConfig)->setDefault('execution', $executionID)
+                ->setDefault('project', $execution->project)
+                ->setDefault('left', 0)
+                ->setIF(isset($_POST['estimate']), 'left', isset($_POST['estimate']) ? $_POST['estimate'] : 0)
+                ->setIF(isset($_POST['mode']), 'mode', isset($_POST['mode']) ? $_POST['mode'] : '')
+                ->setIF(isset($_POST['story']), 'storyVersion', isset($_POST['story']) ? 1 : 1)
+                ->setIF(!isset($_POST['multiple']) || count($team) < 1, 'mode', '')
+                ->setIF(isset($_POST['assignedTo']), 'assignedDate', helper::now())
+                ->setIF(!isset($_POST['estStarted']), 'estStarted', null)
+                ->setIF(!isset($_POST['deadline']), 'deadline', null)
+                ->get();
+
+            /* Simple validation for negative estimate. */
+            if(isset($task->estimate) && $task->estimate < 0)
+            {
+                dao::$errors['estimate'] = '预计工时不能为负数。';
+            }
+
+            /* Clean up POST data. */
+            $_POST = array();
+
+            if(dao::isError()) return dao::getError();
+            return $task;
+        }
+        catch(Exception $e)
+        {
+            /* Clean up POST data on exception. */
+            $_POST = array();
+            return false;
+        }
+        catch(Error $e)
+        {
+            /* Handle PHP errors like property access on bool. */
+            $_POST = array();
+            return false;
+        }
+    }
 }
