@@ -2567,4 +2567,39 @@ class storyTest
             return 0;
         }
     }
+
+    /**
+     * Test buildStoryForEdit method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return mixed
+     */
+    public function buildStoryForEditTest($storyID = 1)
+    {
+        global $tester;
+
+        try {
+            $storyZen = $tester->loadZen('story');
+
+            // 使用反射来调用protected方法
+            $reflection = new ReflectionClass($storyZen);
+            $method = $reflection->getMethod('buildStoryForEdit');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($storyZen, $storyID);
+
+            // 如果有DAO错误，返回错误信息
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                return is_array($errors) ? implode(',', $errors) : $errors;
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            // 返回异常信息而不是false，便于调试
+            return array('exception' => $e->getMessage(), 'trace' => $e->getTraceAsString());
+        }
+    }
 }
