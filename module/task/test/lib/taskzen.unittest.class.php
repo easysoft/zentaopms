@@ -2055,4 +2055,52 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test setTaskByObjectID method.
+     *
+     * @param  int   $storyID
+     * @param  int   $moduleID
+     * @param  int   $taskID
+     * @param  int   $todoID
+     * @param  int   $bugID
+     * @param  array $output
+     * @access public
+     * @return mixed
+     */
+    public function setTaskByObjectIDTest(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output = array())
+    {
+        global $tester;
+
+        try
+        {
+            // Create mock taskZen instance
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Initialize required dependencies
+            $taskZenInstance->config = $tester->config;
+            $taskZenInstance->task = $tester->loadModel('task');
+            $taskZenInstance->todo = $tester->loadModel('todo');
+            $taskZenInstance->bug = $tester->loadModel('bug');
+            $taskZenInstance->dao = $tester->dao;
+            $taskZenInstance->cookie = $tester->app->cookie;
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('setTaskByObjectID');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$storyID, $moduleID, $taskID, $todoID, $bugID, $output]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
