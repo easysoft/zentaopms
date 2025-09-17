@@ -2135,4 +2135,41 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getAssignedToOptions method.
+     *
+     * @param  string $manageLink
+     * @access public
+     * @return mixed
+     */
+    public function getAssignedToOptionsTest(string $manageLink = '')
+    {
+        global $tester;
+
+        try
+        {
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Initialize required dependencies
+            $taskZenInstance->lang = $tester->lang;
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('getAssignedToOptions');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$manageLink]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
