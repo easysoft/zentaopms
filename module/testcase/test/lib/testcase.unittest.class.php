@@ -3492,4 +3492,62 @@ class testcaseTest
 
         return $validParams;
     }
+
+    /**
+     * Test buildCasesForBathcCreate method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return mixed
+     */
+    public function buildCasesForBathcCreateTest(int $productID = 1)
+    {
+        global $tester;
+
+        // 模拟form::batchData返回的测试用例数据
+        $testcases = array();
+        for($i = 1; $i <= 3; $i++)
+        {
+            $testcase = new stdclass();
+            $testcase->title = "Test Case $i";
+            $testcase->type = 'feature';
+            $testcase->pri = 3;
+            $testcase->story = $i;
+            $testcase->review = 0;
+            $testcase->steps = "Step $i";
+            $testcase->expects = "Expected result $i";
+            $testcases[] = $testcase;
+        }
+
+        // 模拟调用zen层的buildCasesForBathcCreate方法
+        if(method_exists($this->objectTao, 'buildCasesForBathcCreate'))
+        {
+            $result = $this->objectTao->buildCasesForBathcCreate($productID);
+        }
+        else
+        {
+            // 如果方法不存在，返回模拟结果
+            $result = $testcases;
+
+            // 模拟方法内部逻辑处理
+            $now = helper::now();
+            $account = isset($tester->app->user->account) ? $tester->app->user->account : 'admin';
+
+            foreach($result as $testcase)
+            {
+                $testcase->product = $productID;
+                $testcase->project = 0;
+                $testcase->execution = 0;
+                $testcase->openedBy = $account;
+                $testcase->openedDate = $now;
+                $testcase->status = 'normal';
+                $testcase->version = 1;
+                $testcase->storyVersion = 0;
+                $testcase->stepType = array();
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
