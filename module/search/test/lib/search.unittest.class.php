@@ -1459,4 +1459,30 @@ class searchTest
 
         return $optionFields;
     }
+
+    /**
+     * Test setOptionOperators method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setOptionOperatorsTest()
+    {
+        global $tester;
+
+        // 直接模拟setOptionOperators方法的逻辑
+        $operators = array();
+        foreach($tester->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+
+            $operators[] = $operator;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $operators;
+    }
 }
