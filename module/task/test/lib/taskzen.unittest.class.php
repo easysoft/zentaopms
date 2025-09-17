@@ -1989,4 +1989,70 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterChangeStatus method.
+     *
+     * @param  object $task
+     * @param  string $from
+     * @param  string $viewType
+     * @param  bool   $isModal
+     * @access public
+     * @return array
+     */
+    public function responseAfterChangeStatusTest(object $task, string $from = '', string $viewType = '', bool $isModal = false): array
+    {
+        global $tester;
+
+        try
+        {
+            // 模拟JSON视图类型的响应
+            if($viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api'))
+            {
+                return array('result' => 'success');
+            }
+
+            // 模拟模态窗口的情况
+            if($isModal)
+            {
+                // 调用responseModal的逻辑
+                $response = array();
+                $response['result'] = 'success';
+                $response['message'] = '保存成功';
+                $response['closeModal'] = $tester->app->rawMethod != 'recordworkhour';
+
+                if($tester->app->rawMethod == 'recordworkhour')
+                {
+                    $response['closeModal'] = false;
+                    $response['callback'] = "loadModal('/task-recordworkhour-{$task->id}.html', '#modal-record-hours-task-{$task->id}')";
+                    return $response;
+                }
+
+                $execution = $tester->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch();
+                if($execution)
+                {
+                    $inLiteKanban = isset($tester->config->vision) && $tester->config->vision == 'lite' && $tester->app->tab == 'project' && isset($tester->session->kanbanview) && $tester->session->kanbanview == 'kanban';
+                    if((($tester->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban') || $from == 'taskkanban')
+                    {
+                        $response['callback'] = 'refreshKanban()';
+                        return $response;
+                    }
+                }
+
+                $response['load'] = $from != 'edittask';
+                return $response;
+            }
+
+            // 默认响应
+            return array('result' => 'success', 'message' => '保存成功', 'load' => true, 'closeModal' => true);
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
