@@ -17,10 +17,11 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen_buildrepopaths.unittest.class.php';
 
 su('admin');
 
-$repoZenTest = new repoZenTest();
+$repoZenTest = new repoZenBuildRepoPathsTest();
 
 r($repoZenTest->buildRepoPathsTest(array(1 => 'project/module1', 2 => 'project/module2', 3 => 'other/test'))) && p('0:text') && e('other');
 r($repoZenTest->buildRepoPathsTest(array(1 => 'project/module1', 2 => 'project/module2', 3 => 'other/test'))) && p('1:text') && e('project');
