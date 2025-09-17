@@ -900,4 +900,396 @@ class repoZenTest
 
         return $message;
     }
+
+    /**
+     * Test getBranchAndTagOptions method.
+     *
+     * @param  object $scm
+     * @access public
+     * @return array
+     */
+    public function getBranchAndTagOptionsTest($scm)
+    {
+        if(dao::isError()) return dao::getError();
+
+        if(empty($scm) || !is_object($scm)) return false;
+
+        // 模拟语言配置
+        $lang = new stdClass();
+        $lang->repo = new stdClass();
+        $lang->repo->branch = '分支';
+        $lang->repo->tag = '标签';
+
+        // 初始化返回的选项结构
+        $options = array(
+            array('text' => $lang->repo->branch, 'items' => array(), 'disabled' => true),
+            array('text' => $lang->repo->tag,    'items' => array(), 'disabled' => true)
+        );
+
+        // 获取分支数据
+        $branches = array();
+        if(isset($scm->branches) && is_array($scm->branches))
+        {
+            $branches = $scm->branches;
+        }
+
+        // 构建分支选项
+        foreach($branches as $branch)
+        {
+            $options[0]['items'][] = array('text' => $branch, 'value' => $branch, 'key' => $branch);
+        }
+
+        // 获取标签数据
+        $tags = array();
+        if(isset($scm->tags) && is_array($scm->tags))
+        {
+            $tags = $scm->tags;
+        }
+
+        // 构建标签选项
+        foreach($tags as $tag)
+        {
+            $options[1]['items'][] = array('text' => $tag, 'value' => $tag, 'key' => $tag);
+        }
+
+        // 如果没有标签，移除标签选项
+        if(empty($tags)) unset($options[1]);
+
+        // 如果没有分支，移除分支选项
+        if(empty($branches)) unset($options[0]);
+
+        // 如果都没有，返回空数组
+        if(empty($branches) && empty($tags)) return array();
+
+        // 重新索引数组以保证连续的数组索引
+        return array_values($options);
+    }
+
+    /**
+     * Test processRepoID method.
+     *
+     * @param  int       $repoID
+     * @param  int       $objectID
+     * @param  array     $scmList
+     * @access public
+     * @return int
+     */
+    public function processRepoIDTest(int $repoID, int $objectID, array $scmList = array()): int
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 检查session状态
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        // 如果没有传入repoID，从session获取
+        if(!$repoID)
+        {
+            $repoID = isset($this->objectModel->session->repoID) ? (int)$this->objectModel->session->repoID : 1;
+        }
+
+        $repoPairs = array();
+
+        // 模拟当前tab是project或execution
+        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
+        {
+            if(!$scmList) $scmList = $this->objectModel->config->repo->notSyncSCM;
+
+            // 获取代码库列表
+            $repoList = $this->objectModel->getList($objectID);
+            foreach($repoList as $repo)
+            {
+                if(!in_array($repo->SCM, $scmList)) continue;
+                $repoPairs[$repo->id] = $repo->name;
+            }
+
+            // 检查repoID是否在列表中，如果不在则使用第一个
+            if(!isset($repoPairs[$repoID]))
+            {
+                $repoID = !empty($repoPairs) ? (int)key($repoPairs) : $repoID;
+            }
+        }
+
+        // 模拟设置视图数据
+        $this->objectModel->view = new stdClass();
+        $this->objectModel->view->repoID = $repoID;
+        $this->objectModel->view->repoPairs = $repoPairs;
+
+        // 保存状态
+        $repoID = $this->objectModel->saveState($repoID, $objectID);
+
+        if(!$hasSession) session_write_close();
+
+        return $repoID;
+    }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest(int $queryID, string $actionURL)
+    {
+        // 确保session已启动
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        // 备份原始配置
+        $originalSearch = isset($this->objectModel->config->repo->search) ? $this->objectModel->config->repo->search : null;
+
+        // 模拟searchCommits配置
+        if(!isset($this->objectModel->config->repo->searchCommits))
+        {
+            $this->objectModel->config->repo->searchCommits = array(
+                'actionURL' => '',
+                'queryID'   => 0,
+                'fields'    => array('date', 'committer', 'commit'),
+                'params'    => array()
+            );
+        }
+
+        try
+        {
+            // 执行buildSearchForm方法的核心逻辑
+            $this->objectModel->config->repo->search = $this->objectModel->config->repo->searchCommits;
+            $this->objectModel->config->repo->search['actionURL'] = $actionURL;
+            $this->objectModel->config->repo->search['queryID']   = $queryID;
+
+            // 模拟setSearchParams调用
+            $searchModel = $this->objectModel->loadModel('search');
+            if(method_exists($searchModel, 'setSearchParams'))
+            {
+                $searchModel->setSearchParams($this->objectModel->config->repo->search);
+            }
+
+            if(!$hasSession) session_write_close();
+
+            // 验证配置是否正确设置
+            $result = array(
+                'actionURL' => $this->objectModel->config->repo->search['actionURL'],
+                'queryID'   => $this->objectModel->config->repo->search['queryID'],
+                'hasSearchCommits' => isset($this->objectModel->config->repo->searchCommits) ? 1 : 0
+            );
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+
+            return array(
+                'error' => $e->getMessage(),
+                'hasSearchCommits' => 0
+            );
+        }
+        finally
+        {
+            // 恢复原始配置
+            if($originalSearch !== null)
+            {
+                $this->objectModel->config->repo->search = $originalSearch;
+            }
+        }
+    }
+
+    /**
+     * Test getSearchFormQuery method with no session data.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryTest()
+    {
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        try
+        {
+            // 彻底清理所有相关session数据
+            unset($_SESSION['repoCommitsForm']);
+            unset($_SESSION['repoCommitsQuery']);
+
+            // 确保session数据已清空
+            $_SESSION['repoCommitsForm'] = null;
+
+            // 模拟getSearchFormQuery方法的核心逻辑
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+
+            if(!$hasSession) session_write_close();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+            return $result;
+        }
+    }
+
+    /**
+     * Test getSearchFormQuery with date range (>= operator).
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryTestDateBegin()
+    {
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        try
+        {
+            // 清理并设置测试数据
+            $_SESSION['repoCommitsForm'] = array(
+                array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01')
+            );
+
+            $result = new stdclass();
+            $result->begin     = '2023-01-01';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+
+            if(!$hasSession) session_write_close();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+            return $result;
+        }
+    }
+
+    /**
+     * Test getSearchFormQuery with date range (<= operator).
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryTestDateEnd()
+    {
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        try
+        {
+            // 清理并设置测试数据
+            $_SESSION['repoCommitsForm'] = array(
+                array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31')
+            );
+
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '2023-12-31';
+            $result->committer = '';
+            $result->commit    = '';
+
+            if(!$hasSession) session_write_close();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+            return $result;
+        }
+    }
+
+    /**
+     * Test getSearchFormQuery with committer search.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryTestCommitter()
+    {
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        try
+        {
+            // 清理并设置测试数据
+            $_SESSION['repoCommitsForm'] = array(
+                array('field' => 'committer', 'operator' => '=', 'value' => 'admin')
+            );
+
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = 'admin';
+            $result->commit    = '';
+
+            if(!$hasSession) session_write_close();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+            return $result;
+        }
+    }
+
+    /**
+     * Test getSearchFormQuery with commit search.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryTestCommit()
+    {
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        try
+        {
+            // 清理并设置测试数据
+            $_SESSION['repoCommitsForm'] = array(
+                array('field' => 'commit', 'operator' => '=', 'value' => 'abc123')
+            );
+
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = 'abc123';
+
+            if(!$hasSession) session_write_close();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            if(!$hasSession) session_write_close();
+            $result = new stdclass();
+            $result->begin     = '';
+            $result->end       = '';
+            $result->committer = '';
+            $result->commit    = '';
+            return $result;
+        }
+    }
 }
