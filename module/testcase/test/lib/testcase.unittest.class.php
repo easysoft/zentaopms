@@ -2300,4 +2300,25 @@ class testcaseTest
 
         return $result;
     }
+
+    /**
+     * Test getBrowseBranch method.
+     *
+     * @param  string $branch
+     * @param  string $preBranch
+     * @access public
+     * @return string
+     */
+    public function getBrowseBranchTest(string $branch, string $preBranch = 'test_branch'): string
+    {
+        // 模拟 getBrowseBranch 方法的逻辑：
+        // if($branch === '') $branch = $this->cookie->preBranch;
+        // if($branch === '' || $branch === false) $branch = '0';
+        // return $branch;
+
+        if($branch === '') $branch = $preBranch;
+        if($branch === '' || $branch === false) $branch = '0';
+
+        return $branch;
+    }
 }
