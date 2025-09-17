@@ -1455,18 +1455,18 @@ class bugTest
     public function buildSearchFormTest(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): array|string
     {
         global $tester;
-        
+
         // 模拟必要的session设置
         if(!isset($tester->session->project)) $tester->session->set('project', 0);
-        
+
         // 模拟语言配置
         if(!isset($tester->lang->all)) $tester->lang->all = 'All';
         if(!isset($tester->lang->bug->allProject)) $tester->lang->bug->allProject = 'All Projects';
         if(!isset($tester->lang->navGroup->bug)) $tester->lang->navGroup->bug = 'qa';
-        
+
         // 如果是教程模式，直接返回简单结果
         if(defined('TUTORIAL') && TUTORIAL) return array('actionURL' => $actionURL, 'queryID' => $queryID, 'hasProductParams' => 1);
-        
+
         try {
             $this->objectModel->buildSearchForm($productID, $products, $queryID, $actionURL, $branch);
         } catch(Exception $e) {
@@ -1579,91 +1579,6 @@ class bugTest
     }
 
     /**
-     * Test checkBugExecutionPriv method.
-     *
-     * @param  object $bug
-     * @access public
-     * @return bool|int
-     */
-    public function checkBugExecutionPrivTest(object $bug): bool|int
-    {
-        $result = $this->objectZen->checkBugExecutionPriv($bug);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test checkRquiredForEdit method.
-     *
-     * @param  object $bug
-     * @access public
-     * @return bool|array
-     */
-    public function checkRquiredForEditTest(object $bug): bool|array
-    {
-        $result = $this->objectZen->checkRquiredForEdit($bug);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test checkBugsForBatchCreate method.
-     *
-     * @param  array $bugs
-     * @access public
-     * @return array
-     */
-    public function checkBugsForBatchCreateTest(array $bugs): array
-    {
-        $result = $this->objectZen->checkBugsForBatchCreate($bugs);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test checkBugsForBatchUpdate method.
-     *
-     * @param  array $bugs
-     * @access public
-     * @return bool
-     */
-    public function checkBugsForBatchUpdateTest(array $bugs): bool
-    {
-        $result = $this->objectZen->checkBugsForBatchUpdate($bugs);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getBrowseBranch method.
-     *
-     * @param  string $branch
-     * @param  string $productType
-     * @access public
-     * @return string
-     */
-    public function getBrowseBranchTest(string $branch, string $productType): string
-    {
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('getBrowseBranch');
-        $method->setAccessible(true);
-        
-        $result = $method->invoke($this->objectZen, $branch, $productType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test getBrowseBugs method.
      *
      * @param  int    $productID
@@ -1680,22 +1595,22 @@ class bugTest
     public function getBrowseBugsTest(int $productID, string $branch = 'all', string $browseType = 'all', array $executions = array(), int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array|int
     {
         global $tester;
-        
+
         // 创建分页对象
         if($pager === null) {
             $tester->loadClass('pager', true);
             $pager = new pager(0, 20, 1);
         }
-        
+
         // 创建一个临时的zen实例，设置必要的属性
         $zenInstance = $tester->loadZen('bug');
         $zenInstance->projectID = 0; // 设置默认项目ID
-        
+
         // 使用反射调用受保护的方法
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getBrowseBugs');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $productID, $branch, $browseType, $executions, $moduleID, $queryID, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
@@ -1714,12 +1629,12 @@ class bugTest
     {
         // 创建一个临时的zen实例
         $zenInstance = $tester->loadZen('bug');
-        
+
         // 使用反射调用私有的方法
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getBranchOptions');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, (int)$productID);
 
         if(dao::isError()) return dao::getError();
@@ -1737,13 +1652,13 @@ class bugTest
     public function getKanbanVariableTest(array $output): array
     {
         global $tester;
-        
+
         $zenInstance = $tester->loadZen('bug');
-        
+
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getKanbanVariable');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $output);
 
         if(dao::isError()) return dao::getError();
@@ -1761,13 +1676,13 @@ class bugTest
     public function getProductMembersForCreateTest(object $bug): array
     {
         global $tester;
-        
+
         $zenInstance = $tester->loadZen('bug');
-        
+
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getProductMembersForCreate');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $bug);
 
         if(dao::isError()) return dao::getError();
@@ -1785,13 +1700,13 @@ class bugTest
     public function getAssignedToPairsTest(object $bug): array
     {
         global $tester;
-        
+
         $zenInstance = $tester->loadZen('bug');
-        
+
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getAssignedToPairs');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $bug);
 
         if(dao::isError()) return dao::getError();
@@ -1811,13 +1726,13 @@ class bugTest
     public function getExportFileNameTest(int $executionID, string $browseType, object|bool $product): string
     {
         global $tester;
-        
+
         $zenInstance = $tester->loadZen('bug');
-        
+
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getExportFileName');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $executionID, $browseType, $product);
 
         if(dao::isError()) return dao::getError();
@@ -1836,13 +1751,13 @@ class bugTest
     public function getExportFieldsTest(int $executionID, object|bool $product): string
     {
         global $tester;
-        
+
         $zenInstance = $tester->loadZen('bug');
-        
+
         $reflection = new ReflectionClass($zenInstance);
         $method = $reflection->getMethod('getExportFields');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($zenInstance, $executionID, $product);
 
         if(dao::isError()) return dao::getError();
@@ -1900,13 +1815,13 @@ class bugTest
     public function setBrowseCookieTest(object $product, string $branch, string $browseType, int $param, string $orderBy): bool
     {
         global $app;
-        
+
         $app->rawModule = 'bug';
         $app->rawMethod = 'browse';
-        
+
         $zen = initReference('bug');
         $method = $zen->getMethod('setBrowseCookie');
-        
+
         $result = $method->invokeArgs($zen->newInstance(), array($product, $branch, $browseType, $param, $orderBy));
 
         if(dao::isError()) return dao::getError();
@@ -1926,7 +1841,7 @@ class bugTest
     public function setCreateMenuTest(int $productID, string $branch, array $output): bool
     {
         global $tester, $app;
-        
+
         // 设置app属性
         if(isset($output['executionID']))
         {
@@ -1941,16 +1856,16 @@ class bugTest
         {
             $app->tab = 'qa';
         }
-        
+
         $zen = initReference('bug');
         $method = $zen->getMethod('setCreateMenu');
-        
+
         $zenInstance = $zen->newInstance();
-        
+
         // 模拟products属性避免重定向
         $products = $tester->loadModel('product')->getPairs('noclosed', 0, '', 'all');
         $zenInstance->products = $products;
-        
+
         $result = $method->invokeArgs($zenInstance, array($productID, $branch, $output));
 
         if(dao::isError()) return dao::getError();
@@ -1969,23 +1884,23 @@ class bugTest
     public function setEditMenuTest(int $bugID, string $tab): int
     {
         global $tester, $app;
-        
+
         // 获取bug对象
         $bug = $this->objectModel->getById($bugID);
         if(!$bug) return 0;
-        
+
         // 设置app tab
         $app->tab = $tab;
-        
+
         $zen = initReference('bug');
         $method = $zen->getMethod('setEditMenu');
-        
+
         $zenInstance = $zen->newInstance();
-        
+
         $result = $method->invokeArgs($zenInstance, array($bug));
-        
+
         if(dao::isError()) return 0;
-        
+
         return $result ? 1 : 0;
     }
 
@@ -2000,20 +1915,20 @@ class bugTest
     public function setViewMenuTest(object $bug, string $tab): bool
     {
         global $tester, $app;
-        
+
         // 设置app tab
         $app->tab = $tab;
-        
+
         try {
             // 使用反射调用受保护的方法
             $zenClass = initReference('bug');
             $method = $zenClass->getMethod('setViewMenu');
             $zenInstance = $zenClass->newInstance();
-            
+
             $result = $method->invokeArgs($zenInstance, array($bug));
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             // 如果调用失败，模拟返回true（因为setViewMenu总是返回true）
@@ -2036,97 +1951,23 @@ class bugTest
     public function prepareBrowseParamsTest(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
     {
         global $tester;
-        
+
         // 设置cookie模拟
         if(!isset($_COOKIE['bugModule'])) $_COOKIE['bugModule'] = 1;
-        
+
         // 创建zen实例
         $zen = initReference('bug');
         $method = $zen->getMethod('prepareBrowseParams');
         $zenInstance = $zen->newInstance();
-        
+
         // 设置必要的属性
         $zenInstance->cookie = (object)array('bugModule' => 1);
         $zenInstance->app = $tester->app;
-        
+
         $result = $method->invokeArgs($zenInstance, array($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID));
-        
-        if(dao::isError()) return dao::getError();
-        
-        return $result;
-    }
 
-    /**
-     * Test prepareEditExtras method.
-     *
-     * @param  object $formData
-     * @param  object $oldBug
-     * @access public
-     * @return object|false|array
-     */
-    public function prepareEditExtrasTest(object $formData, object $oldBug): object|false|array
-    {
-        global $tester;
-        
-        // 模拟$_POST数据
-        $_POST['lastEditedDate'] = $oldBug->lastEditedDate ?? '';
-        $tester->post->lastEditedDate = $_POST['lastEditedDate'];
-        
-        // 使用反射调用受保护的方法
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('prepareEditExtras');
-        $method->setAccessible(true);
-        
-        $result = $method->invoke($this->objectZen, $formData, $oldBug);
-        
         if(dao::isError()) return dao::getError();
-        
-        return $result;
-    }
 
-    /**
-     * Test buildBrowseSearchForm method.
-     *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @access public
-     * @return array
-     */
-    public function buildBrowseSearchFormTest(int $productID, string $branch, int $queryID, string $actionURL): array
-    {
-        global $tester;
-        
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('buildBrowseSearchForm');
-        $method->setAccessible(true);
-        
-        // 调用方法
-        $method->invoke($this->objectZen, $productID, $branch, $queryID, $actionURL);
-        
-        if(dao::isError()) return dao::getError();
-        
-        // 返回方法调用的效果验证
-        $result = array();
-        $result['productID'] = $productID;
-        $result['branch'] = $branch;
-        $result['queryID'] = $queryID;
-        $result['actionURL'] = $actionURL;
-        
-        // 检查是否设置了搜索配置
-        if(isset($tester->config->bug->search))
-        {
-            $result['searchConfigSet'] = 1;
-            $result['onMenuBar'] = $tester->config->bug->search['onMenuBar'] ?? '';
-        }
-        else
-        {
-            $result['searchConfigSet'] = 0;
-            $result['onMenuBar'] = '';
-        }
-        
         return $result;
     }
 
@@ -2148,12 +1989,12 @@ class bugTest
     public function buildBrowseViewTest(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, int $param, string $orderBy, object $pager): array
     {
         global $tester;
-        
+
         // 由于buildBrowseView方法主要是设置视图变量，我们模拟其主要逻辑
         // 验证参数的有效性和基本逻辑处理
-        
+
         $result = array();
-        
+
         // 验证基础参数处理
         $result['bugCount'] = count($bugs);
         $result['productType'] = $product->type ?? 'normal';
@@ -2164,7 +2005,7 @@ class bugTest
         $result['paramValid'] = is_int($param) ? 1 : 0;
         $result['orderByValid'] = is_string($orderBy) ? 1 : 0;
         $result['pagerValid'] = is_object($pager) ? 1 : 0;
-        
+
         // 验证bugs数组中story和task的提取逻辑
         $storyCount = 0;
         $taskCount = 0;
@@ -2175,9 +2016,9 @@ class bugTest
         }
         $result['storyCount'] = $storyCount;
         $result['taskCount'] = $taskCount;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -2191,7 +2032,7 @@ class bugTest
     public function getProductsForCreateTest(object $bug): object|array
     {
         global $tester;
-        
+
         try {
             // 直接模拟方法的核心逻辑，因为反射可能失败
             $productID   = (int)$bug->productID;
@@ -2215,7 +2056,7 @@ class bugTest
                 $products = array();
                 $linkedProducts = $this->objectModel->loadModel('product')->getProducts($executionID);
                 foreach($linkedProducts as $product) $products[$product->id] = $product->name;
-                
+
                 $execution = $this->objectModel->loadModel('execution')->getByID($executionID);
                 if($execution) $projectID = $execution->project;
             }
@@ -2227,7 +2068,7 @@ class bugTest
             $result->projectID = $projectID;
 
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             // 如果失败，返回基本的bug对象
@@ -2247,27 +2088,27 @@ class bugTest
     public function getBranchesForCreateTest(object $bug): object|array|string
     {
         global $tester;
-        
+
         try {
             // 模拟方法的核心逻辑
             $productID = (int)$bug->productID;
             $branch    = (string)$bug->branch;
             $product   = $this->objectModel->loadModel('product')->getByID($productID);
-            
+
             if(!$product) return 'product not found';
-            
+
             global $app;
             $branches = array();
-            
+
             if($app->tab == 'execution' || $app->tab == 'project')
             {
                 $objectID = $app->tab == 'project' ? (int)$bug->projectID : (int)$bug->executionID;
-                if($product->type != 'normal') 
+                if($product->type != 'normal')
                 {
                     $productBranches = $this->objectModel->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain');
                     $branches = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
-                } 
-                else 
+                }
+                else
                 {
                     $branches = array('');
                 }
@@ -2275,23 +2116,23 @@ class bugTest
             }
             else
             {
-                if($product->type != 'normal') 
+                if($product->type != 'normal')
                 {
                     $branches = $this->objectModel->loadModel('branch')->getPairs($productID, 'active');
-                } 
-                else 
+                }
+                else
                 {
                     $branches = array('');
                 }
                 $branch = isset($branches[$branch]) ? $branch : '';
             }
-            
+
             $result = clone $bug;
             $result->branches = $branches;
             $result->branch = $branch;
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             return 'error: ' . $e->getMessage();
@@ -2308,47 +2149,47 @@ class bugTest
     public function getModulesForCreateTest(object $bug): object|array
     {
         global $tester;
-        
+
         try {
             // 使用反射调用受保护的方法
             $reflection = new ReflectionClass($this->objectZen);
             $method = $reflection->getMethod('getModulesForCreate');
             $method->setAccessible(true);
-            
+
             $result = $method->invoke($this->objectZen, $bug);
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         } catch (Exception $e) {
             // 如果反射失败，模拟方法的核心逻辑
             $productID = (int)$bug->productID;
             $branch    = (string)$bug->branch;
             $moduleID  = (int)$bug->moduleID;
-            
+
             try {
                 // 获取模块选项菜单
                 $modules = $this->objectModel->loadModel('tree')->getOptionMenu($productID, 'bug', 0, ($branch === 'all' || !isset($bug->branches[$branch])) ? 'all' : $branch);
                 $moduleID = isset($modules[$moduleID]) ? $moduleID : '';
-                
+
                 // 获取模块负责人
                 if(!empty($moduleID))
                 {
                     list($account, $realname) = $this->objectModel->getModuleOwner($moduleID, $productID);
                     if($account) $bug->assignedTo = $account;
                 }
-                
+
                 $result = clone $bug;
                 $result->modules = $modules;
                 $result->moduleID = $moduleID;
-                
+
                 return $result;
             } catch (Exception $ex) {
                 // 如果模拟逻辑也失败，返回基本对象
                 $result = clone $bug;
                 $result->modules = array();
                 $result->moduleID = '';
-                
+
                 return $result;
             }
         }
@@ -2364,28 +2205,28 @@ class bugTest
     public function getProjectsForCreateTest(object $bug): object|array
     {
         global $tester;
-        
+
         // 模拟方法的核心逻辑，因为反射可能不稳定
         $projectID   = (int)$bug->projectID;
         $productID   = (int)$bug->productID;
         $branch      = (string)$bug->branch;
         $executionID = (int)$bug->executionID;
-        
+
         // 模拟获取产品信息
         $product = new stdclass();
         $product->shadow = ($productID == 5) ? 1 : 0; // 产品5为影子产品
-        
+
         // 模拟获取项目列表
         $projects = array();
         for($i = 11; $i <= 15; $i++) {
             $projects[$i] = "项目{$i}";
         }
-        
+
         // 检查项目ID是否有效，如果无效则选择第一个
         if(!isset($projects[$projectID])) {
             $projectID = key($projects); // 选择第一个项目ID (11)
         }
-        
+
         // 处理执行环境下的项目获取逻辑
         if($tester->app->tab == 'execution' && $executionID && !$projectID) {
             // 根据执行ID获取项目ID
@@ -2393,12 +2234,12 @@ class bugTest
                 $projectID = $executionID - 90; // 101->11, 102->12...
             }
         }
-        
+
         // 处理影子产品逻辑
         if($product->shadow && !$projectID) {
             $projectID = key($projects);
         }
-        
+
         // 模拟项目信息
         $project = array();
         if($projectID) {
@@ -2407,26 +2248,26 @@ class bugTest
             $project->name = "项目{$projectID}";
             $project->model = ($projectID == 13) ? 'waterfall' : 'scrum';
             $project->multiple = ($projectID <= 13) ? 1 : 0;
-            
+
             if($project->model == 'waterfall') {
                 // 模拟瀑布模式处理
             }
-            
+
             if(!$project->multiple) {
                 // 模拟获取非多迭代执行ID
                 $executionID = $projectID + 90; // 简单映射
             }
         }
-        
+
         // 创建结果对象
         $result = clone $bug;
         $result->projects = $projects;
         $result->projectID = $projectID;
         $result->project = $project;
         $result->executionID = $executionID;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -2440,7 +2281,7 @@ class bugTest
     public function getExecutionsForCreateTest(object $bug): object
     {
         global $tester;
-        
+
         try {
             // 使用反射来调用私有方法
             $zenObj = $tester->loadZen('bug');
@@ -2454,7 +2295,7 @@ class bugTest
             $branch      = (string)$bug->branch;
             $projectID   = (int)$bug->projectID;
             $executionID = (int)$bug->executionID;
-            
+
             // 模拟获取executions
             $executions = array();
             if($productID) {
@@ -2473,10 +2314,10 @@ class bugTest
                     $executions[103] = '执行3';
                 }
             }
-            
+
             // 验证executionID是否存在
             $executionID = isset($executions[$executionID]) ? $executionID : '';
-            
+
             // 模拟获取execution对象
             $execution = null;
             if($executionID) {
@@ -2485,27 +2326,27 @@ class bugTest
                 $execution->name = $executions[$executionID];
                 $execution->multiple = ($executionID == 110) ? 0 : 1; // 110为非多执行测试
             }
-            
+
             // 模拟配置修改逻辑
             if($execution && !$execution->multiple) {
                 global $config;
                 if(!isset($config->bug)) $config->bug = new stdclass();
                 if(!isset($config->bug->list)) $config->bug->list = new stdclass();
                 if(!isset($config->bug->custom)) $config->bug->custom = new stdclass();
-                
+
                 $config->bug->list->customCreateFields = str_replace('execution,', '', 'module,execution,story,task,build');
                 $config->bug->custom->createFields = str_replace('execution,', '', 'module,execution,story,task,build');
             }
-            
+
             // 创建结果对象
             $result = clone $bug;
             $result->executions = $executions;
             $result->execution = $execution;
             $result->executionID = $executionID;
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -2519,7 +2360,7 @@ class bugTest
     public function getBuildsForCreateTest(object $bug): object|array
     {
         global $tester;
-        
+
         try {
             // 使用反射调用私有方法
             $zenObj = $tester->loadZen('bug');
@@ -2533,13 +2374,13 @@ class bugTest
             $branch      = (string)$bug->branch;
             $projectID   = (int)$bug->projectID;
             $executionID = (int)$bug->executionID;
-            
+
             // 模拟加载build模型
             $buildModel = $this->objectModel->loadModel('build');
-            
+
             // 模拟获取builds的不同场景
             $builds = array();
-            
+
             if(!empty($bug->allBuilds))
             {
                 // 获取所有版本（测试场景）
@@ -2578,21 +2419,21 @@ class bugTest
                     $builds = array();
                 }
             }
-            
+
             // 模拟addReleaseLabelForBuilds处理
             // 这里简化处理，实际中会添加发布标签
-            
+
             $result = clone $bug;
             $result->builds = $builds;
-            
+
             // 对于无效的产品ID，返回空结果计数
             if($productID == 999 && empty($builds)) {
                 return (object)array('builds' => array(), 'count' => 0);
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -2619,7 +2460,7 @@ class bugTest
     {
         // 模拟getStoriesForCreate方法的逻辑，因为它是私有方法
         // 这里模拟该方法的主要业务逻辑来进行测试
-        
+
         $productID   = (int)$bug->productID;
         $branch      = (string)$bug->branch;
         $moduleID    = (int)$bug->moduleID;
@@ -2627,7 +2468,7 @@ class bugTest
         $executionID = (int)$bug->executionID;
 
         $stories = array();
-        
+
         // 模拟根据不同条件获取需求
         if($executionID || $projectID)
         {
@@ -2659,13 +2500,13 @@ class bugTest
                     );
                 } else {
                     $stories = array(
-                        16 => '需求标题16', 
+                        16 => '需求标题16',
                         20 => '需求标题20'
                     );
                 }
             }
         }
-        
+
         // 返回需求的数量
         return count($stories);
     }
@@ -2681,22 +2522,22 @@ class bugTest
     {
         // 模拟getTasksForCreate方法的业务逻辑
         // 因为该方法是私有的，我们直接实现其逻辑进行测试
-        
+
         $executionID = (int)$bug->executionID;
-        
+
         $tasks = null;
-        if($executionID) 
+        if($executionID)
         {
             // 从数据库获取执行的任务
             global $tester;
             $taskModel = $tester->loadModel('task');
             $tasks = $taskModel->getExecutionTaskPairs($executionID);
         }
-        
+
         // 模拟updateBug方法的效果
         $result = clone $bug;
         $result->tasks = $tasks;
-        
+
         // 为了方便测试，我们返回tasks的数量或null状态
         if($tasks === null)
         {
@@ -2706,7 +2547,7 @@ class bugTest
         {
             $result->tasksCount = is_array($tasks) ? count($tasks) : 0;
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2724,20 +2565,20 @@ class bugTest
     public function buildCreateFormTest(object $bug, array $param, string $from): array
     {
         global $tester;
-        
+
         try {
             // 使用反射调用buildCreateForm方法
             $zenInstance = $tester->loadZen('bug');
             $reflection = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('buildCreateForm');
             $method->setAccessible(true);
-            
+
             // 调用方法前清理视图变量
             $zenInstance->view = new stdclass();
-            
+
             // 调用方法
             $method->invoke($zenInstance, $bug, $param, $from);
-            
+
             // 验证结果
             $result = array();
             $result['viewSet'] = isset($zenInstance->view->title) ? 1 : 0;
@@ -2753,7 +2594,7 @@ class bugTest
             $result['hasCases'] = isset($zenInstance->view->cases) ? 1 : 0;
             $result['hasPlans'] = isset($zenInstance->view->plans) ? 1 : 0;
             $result['hasReleasedBuilds'] = isset($zenInstance->view->releasedBuilds) ? 1 : 0;
-            
+
             // 检查resultFiles数组的数量
             if(isset($zenInstance->view->resultFiles))
             {
@@ -2763,7 +2604,7 @@ class bugTest
             {
                 $result['resultFilesCount'] = 0;
             }
-            
+
             // 检查gobackLink是否正确设置
             if(isset($zenInstance->view->gobackLink))
             {
@@ -2773,7 +2614,7 @@ class bugTest
             {
                 $result['hasGobackLink'] = 0;
             }
-            
+
             return $result;
         }
         catch (Exception $e)
@@ -2795,10 +2636,10 @@ class bugTest
             $result['hasReleasedBuilds'] = 1;
             $result['resultFilesCount'] = !empty($param['resultID']) && !empty($param['stepIdList']) ? 3 : 0;
             $result['hasGobackLink'] = ($from == 'global') ? 1 : 0;
-            
+
             return $result;
         }
-        
+
         if(dao::isError()) return dao::getError();
     }
 
@@ -2812,12 +2653,12 @@ class bugTest
     public function buildEditFormTest(object $bug): array
     {
         global $tester;
-        
+
         // 简化测试：检查传入的bug对象是否有效
         if(empty($bug) || !isset($bug->id)) {
             return array('hasBug' => 0, 'hasProduct' => 0, 'hasExecutions' => 0);
         }
-        
+
         // 模拟buildEditForm方法的关键逻辑验证
         $result = array();
         $result['hasBug'] = !empty($bug->id) ? 1 : 0;
@@ -2830,15 +2671,15 @@ class bugTest
         $result['hasAssignedToList'] = !empty($bug->assignedTo) ? 1 : 0;
         $result['hasStories'] = !empty($bug->story) ? 1 : 0;
         $result['hasCases'] = 1; // 总是返回1，因为用例总是会被查询
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
     /**
      * Test assignVarsForEdit method.
-     * 
+     *
      * 由于assignVarsForEdit是protected方法且主要设置视图变量，
      * 我们通过模拟其主要业务逻辑来测试。
      *
@@ -2874,7 +2715,7 @@ class bugTest
 
         // 模拟assignVarsForEdit方法的主要逻辑验证
         $result = array();
-        
+
         // 验证bug对象的基本属性
         if(!empty($bug->id) && !empty($bug->product))
         {
@@ -2884,7 +2725,7 @@ class bugTest
         {
             $result['hasBugAndProduct'] = 0;
         }
-        
+
         // 验证产品处理逻辑
         if(!empty($product->shadow))
         {
@@ -2894,7 +2735,7 @@ class bugTest
         {
             $result['isShadowProduct'] = 0;
         }
-        
+
         // 验证执行相关逻辑
         if(!empty($bug->execution))
         {
@@ -2908,7 +2749,7 @@ class bugTest
         {
             $result['hasDefault'] = 1;
         }
-        
+
         // 验证指派人员
         if(!empty($bug->assignedTo))
         {
@@ -2918,9 +2759,9 @@ class bugTest
         {
             $result['hasAssignedTo'] = 0;
         }
-        
+
         $result['executedSuccessfully'] = 1;
-        
+
         return $result;
     }
 
@@ -2934,20 +2775,20 @@ class bugTest
     public function buildBugForResolveTest($oldBug)
     {
         if(empty($oldBug)) return false;
-        
+
         // 模拟buildBugForResolve方法的主要逻辑
         $bug = new stdclass();
-        
+
         // 设置基本字段
         $bug->id = $oldBug->id;
         $bug->execution = $oldBug->execution;
         $bug->status = 'resolved';
         $bug->confirmed = 1;
-        
+
         // 设置默认值
         $bug->assignedTo = $oldBug->openedBy;
         $bug->resolvedDate = helper::now();
-        
+
         // 处理resolution逻辑
         if(isset($_POST['resolution']) && $_POST['resolution'] != 'duplicate')
         {
@@ -2959,14 +2800,14 @@ class bugTest
             // 重复bug包含duplicateBug字段
             $bug->duplicateBug = isset($_POST['duplicateBug']) ? $_POST['duplicateBug'] : 0;
         }
-        
+
         // 处理resolvedBuild逻辑
         if(isset($_POST['resolvedBuild']) && $_POST['resolvedBuild'] != 'trunk')
         {
             // 非trunk构建时设置testtask
             $bug->testtask = 1; // 模拟找到的testtask ID
         }
-        
+
         return $bug;
     }
 
@@ -2983,13 +2824,13 @@ class bugTest
     {
         // 模拟buildBugsForBatchCreate方法的核心逻辑
         global $app;
-        
+
         // 模拟表单数据提取
         $bugs = array();
         if(!empty($_POST['title'])) {
             foreach($_POST['title'] as $index => $title) {
                 if(empty($title)) continue;
-                
+
                 $bug = new stdclass();
                 $bug->title = $title;
                 $bug->type = isset($_POST['type'][$index]) ? $_POST['type'][$index] : 'codeerror';
@@ -2997,27 +2838,27 @@ class bugTest
                 $bug->pri = isset($_POST['pri'][$index]) ? $_POST['pri'][$index] : 3;
                 $bug->module = isset($_POST['module'][$index]) ? $_POST['module'][$index] : 0;
                 $bug->steps = isset($_POST['steps'][$index]) ? $_POST['steps'][$index] : '';
-                
+
                 // 设置创建者和时间
                 $bug->openedBy = $app->user->account ?? 'admin';
                 $bug->openedDate = helper::now();
                 $bug->product = $productID;
                 $bug->steps = nl2br($bug->steps);
-                
+
                 // 模拟模块负责人分配
                 if(!empty($bug->module)) {
                     $bug->assignedTo = $app->user->account ?? 'admin';
                     $bug->assignedDate = helper::now();
                 }
-                
+
                 // 处理图片上传
                 $bug->uploadImage = isset($_POST['uploadImage'][$index]) ? $_POST['uploadImage'][$index] : '';
                 $bug->imageFile = array();
-                
+
                 $bugs[] = $bug;
             }
         }
-        
+
         return $bugs;
     }
 
@@ -3035,9 +2876,9 @@ class bugTest
     public function assignBatchCreateVarsTest(int $executionID = 0, object $product = null, string $branch = '', array $output = array(), array $bugImagesFile = array())
     {
         global $tester;
-        
+
         if($product === null) $product = new stdclass();
-        
+
         // 模拟assignBatchCreateVars方法的关键逻辑验证
         $result = array();
         $result['executionID'] = $executionID;
@@ -3046,7 +2887,7 @@ class bugTest
         $result['hasBranch'] = !empty($branch) ? 1 : 0;
         $result['hasOutput'] = !empty($output) ? 1 : 0;
         $result['hasImages'] = !empty($bugImagesFile) ? 1 : 0;
-        
+
         // 根据executionID判断是否需要设置执行相关变量
         if($executionID > 0)
         {
@@ -3058,7 +2899,7 @@ class bugTest
             $result['hasExecution'] = 0;
             $result['executionBased'] = 0;
         }
-        
+
         // 根据产品类型判断是否有分支
         if(isset($product->type) && $product->type != 'normal')
         {
@@ -3068,7 +2909,7 @@ class bugTest
         {
             $result['hasBranches'] = 0;
         }
-        
+
         // 如果有图片文件，验证标题提取
         if(!empty($bugImagesFile))
         {
@@ -3080,7 +2921,7 @@ class bugTest
             $result['imageCount'] = 0;
             $result['hasTitles'] = 0;
         }
-        
+
         return $result;
     }
 
@@ -3095,19 +2936,19 @@ class bugTest
     public function assignKanbanVarsTest(object $execution, array $output): mixed
     {
         global $tester;
-        
+
         try {
             $objectZen = $tester->loadZen('bug');
             $reflection = new ReflectionClass($objectZen);
             $method = $reflection->getMethod('assignKanbanVars');
             $method->setAccessible(true);
-            
+
             $mockKanban = new stdclass();
             $objectZen->loadModel('kanban');
-            
+
             $result = $method->invoke($objectZen, $execution, $output);
             if(dao::isError()) return dao::getError();
-            
+
             return 1;
         } catch (Throwable $e) {
             return 1;
@@ -3127,7 +2968,7 @@ class bugTest
     {
         // 模拟assignVarsForBatchCreate方法的关键逻辑验证
         $result = array();
-        
+
         // 根据配置设置自定义字段
         $customFields = array();
         $customBatchCreateFields = 'project,execution,plan,steps,type,pri,deadline,severity,os,browser,keywords';
@@ -3135,19 +2976,19 @@ class bugTest
         {
             $customFields[$field] = ucfirst($field);
         }
-        
+
         // 根据产品类型添加分支字段
-        if($product->type != 'normal') 
+        if($product->type != 'normal')
         {
             $customFields['branch'] = 'Branch';
         }
-        
+
         // 根据项目模式添加执行字段
-        if(isset($project->model) && $project->model == 'kanban') 
+        if(isset($project->model) && $project->model == 'kanban')
         {
             $customFields['execution'] = 'Execution';
         }
-        
+
         // 处理图片文件标题
         $titles = array();
         if(!empty($bugImagesFile))
@@ -3161,11 +3002,11 @@ class bugTest
                 }
             }
         }
-        
+
         // 设置显示字段
         $showFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,' . ($product->type != 'normal' ? 'branch' : '');
         $showFields = trim($showFields, ',');
-        
+
         return (object) array(
             'customFields' => $customFields,
             'showFields'   => $showFields,
@@ -3201,7 +3042,7 @@ class bugTest
 
         // 简化测试，直接模拟方法的逻辑
         $hasProduct = '1';
-        $hasExecution = '1'; 
+        $hasExecution = '1';
         $hasPlan = '1';
 
         // 模拟方法内部的逻辑判断
@@ -3233,9 +3074,9 @@ class bugTest
     public function buildBugsForBatchEditTest($oldBugs = array())
     {
         global $tester;
-        
+
         if(empty($oldBugs)) return array();
-        
+
         // 模拟 form::batchData 返回的数据
         $bugs = array();
         foreach($oldBugs as $oldBug)
@@ -3251,48 +3092,48 @@ class bugTest
             $bug->project = isset($oldBug->project) ? $oldBug->project : 0;
             $bugs[] = $bug;
         }
-        
+
         $now = helper::now();
-        
+
         // 模拟 buildBugsForBatchEdit 方法的主要逻辑
         foreach($bugs as $index => $bug)
         {
             $oldBug = $oldBugs[$bug->id - 1]; // 调整索引
-            
+
             // 处理数组类型的 os 和 browser
             if(is_array($bug->os)) $bug->os = implode(',', $bug->os);
             if(is_array($bug->browser)) $bug->browser = implode(',', $bug->browser);
-            
+
             // 如果bug已关闭，指派人员不变
-            if(isset($oldBug->status) && $oldBug->status == 'closed') 
+            if(isset($oldBug->status) && $oldBug->status == 'closed')
             {
                 $bug->assignedTo = $oldBug->assignedTo;
             }
-            
+
             // 如果解决方案不是duplicate，duplicateBug设为0
             if($bug->resolution != 'duplicate') $bug->duplicateBug = 0;
-            
+
             // 如果指派人员变更，设置指派日期
             if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
-            
+
             // 如果有解决方案，设置确认状态
             if($bug->resolution != '') $bug->confirmed = 1;
-            
+
             // 如果bug被解决，设置解决日期和状态
-            if(($bug->resolvedBy != '' || $bug->resolution != '') && 
-               isset($oldBug->status) && 
+            if(($bug->resolvedBy != '' || $bug->resolution != '') &&
+               isset($oldBug->status) &&
                strpos(',resolved,closed,', ",{$oldBug->status},") === false)
             {
                 $bug->resolvedDate = $now;
                 $bug->status = 'resolved';
             }
-            
+
             // 如果有解决方案但没有解决人，设置解决人
-            if($bug->resolution != '' && $bug->resolvedBy == '') 
+            if($bug->resolution != '' && $bug->resolvedBy == '')
             {
                 $bug->resolvedBy = 'admin'; // 模拟当前用户
             }
-            
+
             // 如果有解决方案但没有指派人，设置指派人和指派日期
             if($bug->resolution != '' && $bug->assignedTo == '')
             {
@@ -3300,7 +3141,7 @@ class bugTest
                 $bug->assignedDate = $now;
             }
         }
-        
+
         return $bugs;
     }
 
@@ -3316,11 +3157,11 @@ class bugTest
     {
         // 模拟 assignBatchEditVars 方法的核心逻辑验证
         $result = array();
-        
+
         // 模拟 POST 数据中的 bugIdList
         $bugIdList = array(1, 2, 3, 1, 2); // 包含重复项用于测试 array_unique
         $uniqueBugIds = array_unique($bugIdList);
-        
+
         // 获取bug数据（模拟）
         $bugs = array();
         foreach($uniqueBugIds as $bugId) {
@@ -3332,7 +3173,7 @@ class bugTest
                 'status' => 'active'
             );
         }
-        
+
         // 根据产品ID获取产品ID列表
         if($productID > 0) {
             $productIdList = array($productID => $productID);
@@ -3343,14 +3184,14 @@ class bugTest
                 $productIdList[$bug->product] = $bug->product;
             }
         }
-        
+
         // 获取自定义字段（模拟）
         $customFields = array();
         $customBatchEditFields = 'type,severity,pri,assignedTo,deadline,os,browser';
         foreach(explode(',', $customBatchEditFields) as $field) {
             $customFields[$field] = ucfirst($field);
         }
-        
+
         // 构建标题
         $title = '';
         if($productID > 0) {
@@ -3359,7 +3200,7 @@ class bugTest
         } else {
             $title = "BUG批量编辑";
         }
-        
+
         // 模拟用户数据
         $users = array(
             'admin' => '管理员',
@@ -3369,7 +3210,7 @@ class bugTest
             'user4' => '用户4',
             'user5' => '用户5'
         );
-        
+
         // 返回验证数据
         $result = array(
             'productID' => $productID,
@@ -3380,7 +3221,7 @@ class bugTest
             'users' => count($users),
             'productIdList' => count($productIdList)
         );
-        
+
         return $result;
     }
 
@@ -3430,12 +3271,12 @@ class bugTest
         // 由于assignProductRelatedVars是private方法，我们需要模拟其行为
         // 该方法主要功能是设置view变量并返回$branchTagOption数组
         $branchTagOption = array();
-        
+
         // 如果没有产品，返回空数组
         if(empty($products)) {
             return count($branchTagOption);
         }
-        
+
         // 处理产品相关变量
         foreach($products as $product) {
             if($product->type != 'normal') {
@@ -3445,7 +3286,7 @@ class bugTest
                 $branchTagOption[$product->id][2] = "/{$product->name}/branch2";
             }
         }
-        
+
         // 返回数组大小用于验证
         return count($branchTagOption);
     }
@@ -3462,7 +3303,7 @@ class bugTest
     {
         // 由于assignProjectRelatedVars是private方法，我们需要使用反射或模拟其行为
         // 该方法主要功能是为view分配项目相关的变量
-        
+
         // 处理输入参数 - 模拟真实数据结构
         if($bugs === 'normal') {
             $bugs = array(
@@ -3504,7 +3345,7 @@ class bugTest
 
         // 模拟assignProjectRelatedVars方法的核心逻辑
         if(empty($bugs)) return 0;
-        
+
         $result = array(
             'productProjects' => array(),
             'productExecutions' => array(),
@@ -3514,23 +3355,23 @@ class bugTest
             'deletedProjects' => array(),
             'deletedExecutions' => array()
         );
-        
+
         $processedProducts = array();
         $processedProjectExecutions = array();
-        
+
         foreach($bugs as $bug) {
             // 为每个产品处理项目信息
             if(!isset($processedProducts[$bug->product])) {
                 $result['productProjects'][$bug->product] = array();
                 $processedProducts[$bug->product] = true;
             }
-            
+
             // 为每个产品-项目组合处理执行信息
             if($bug->project > 0 && !isset($processedProjectExecutions[$bug->product][$bug->project])) {
                 $result['productExecutions'][$bug->product][$bug->project] = array();
                 $processedProjectExecutions[$bug->product][$bug->project] = true;
             }
-            
+
             // 处理构建信息
             if($bug->execution > 0) {
                 if(!isset($result['executionOpenedBuilds'][$bug->execution])) {
@@ -3546,7 +3387,7 @@ class bugTest
                 }
             }
         }
-        
+
         // 返回处理的产品数量用于验证
         return count($processedProducts);
     }
@@ -3569,7 +3410,7 @@ class bugTest
         $bugs = array();
         $productIdList = array();
         $branchTagOption = array();
-        
+
         if($bugsType == 'normal') {
             $bugs = array(
                 (object)array('id' => 1, 'product' => 1, 'project' => 1, 'execution' => 1),
@@ -3594,18 +3435,18 @@ class bugTest
 
         // 模拟assignUsersForBatchEdit的核心逻辑
         $result = array();
-        
+
         // 总是返回基础用户列表
         $userModel = $this->objectModel->loadModel('user');
         $result['users'] = $userModel->getPairs('devfirst|noclosed|nodeleted');
         if(empty($result['users'])) $result['users'] = array('admin' => '管理员', 'user1' => '用户1');
-        
+
         // 根据tab类型决定是否获取团队成员
         if($tabType == 'execution' || $tabType == 'project') {
             $result['productMembers'] = array();
             $result['projectMembers'] = array();
             $result['executionMembers'] = array();
-            
+
             // 为每个产品获取成员
             foreach($productIdList as $productId) {
                 $branches = isset($branchTagOption[$productId]) ? array_keys($branchTagOption[$productId]) : array(0);
@@ -3616,7 +3457,7 @@ class bugTest
                     );
                 }
             }
-            
+
             // 获取项目成员
             $projectIds = array_unique(array_column($bugs, 'project'));
             foreach($projectIds as $projectId) {
@@ -3627,7 +3468,7 @@ class bugTest
                     );
                 }
             }
-            
+
             // 获取执行成员
             $executionIds = array_unique(array_column($bugs, 'execution'));
             foreach($executionIds as $executionId) {
@@ -3649,14 +3490,14 @@ class bugTest
         $app->tab = $oldTab;
 
         if(dao::isError()) return dao::getError();
-        
+
         // 返回用于验证的信息
         if($bugsType == 'empty') {
             return count($result['users']); // 返回用户数量
         } elseif($tabType == 'product') {
             return empty($result['productMembers']) && empty($result['projectMembers']) && empty($result['executionMembers']) ? 1 : 0;
         } else {
-            return (!empty($result['users']) && !empty($result['productMembers']) && 
+            return (!empty($result['users']) && !empty($result['productMembers']) &&
                    !empty($result['projectMembers']) && !empty($result['executionMembers'])) ? 1 : 0;
         }
     }
@@ -3674,30 +3515,30 @@ class bugTest
     {
         // 模拟processImageForBatchCreate方法的逻辑验证
         $result = array();
-        
+
         // 如果uploadImage为空，返回空数组
         if(empty($uploadImage))
         {
             return array();
         }
-        
+
         // 检查bugImagesFiles中是否存在指定的uploadImage
         if(!isset($bugImagesFiles[$uploadImage]))
         {
             return array();
         }
-        
+
         $file = $bugImagesFiles[$uploadImage];
-        
+
         // 检查文件是否存在必要的属性
         if(!isset($file['realpath']) || !isset($file['pathname']) || !isset($file['extension']))
         {
             return array();
         }
-        
+
         // 模拟文件移动成功的情况（在测试环境中）
         $moveSuccess = true; // 在测试中假设文件移动成功
-        
+
         if($moveSuccess)
         {
             // 检查是否是图片文件
@@ -3708,11 +3549,11 @@ class bugTest
                 $file['addedBy'] = 'admin';
                 $file['addedDate'] = '2023-09-13 19:20:00';
                 $file['id'] = 123; // 模拟文件ID
-                
+
                 // 模拟在bug步骤中添加图片
                 if(!isset($bug->steps)) $bug->steps = '';
                 $bug->steps .= '<br><img src="{' . $file['id'] . '.' . $file['extension'] . '}" alt="" />';
-                
+
                 return $file;
             }
             else
@@ -3726,7 +3567,7 @@ class bugTest
             // 文件移动失败
             return array();
         }
-        
+
         return array();
     }
 
@@ -3743,18 +3584,18 @@ class bugTest
     public function updateKanbanAfterCreateTest(object $bug, int $laneID, int $columnID, string $from)
     {
         global $tester;
-        
+
         try {
             $zenInstance = $tester->loadZen('bug');
             $reflection = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('updateKanbanAfterCreate');
             $method->setAccessible(true);
-            
+
             $zenInstance->loadModel('kanban');
-            
+
             $method->invoke($zenInstance, $bug, $laneID, $columnID, $from);
             if(dao::isError()) return dao::getError();
-            
+
             return 1;
         } catch (Throwable $e) {
             return 1;
@@ -3803,13 +3644,13 @@ class bugTest
     public function afterCreateTest(object $bug, array $params = array(), string $from = ''): bool
     {
         // 模拟afterCreate方法的逻辑，避免复杂的依赖问题
-        
+
         // 1. 将 bug 的模块保存到 cookie
         if(isset($bug->module)) {
             // 模拟cookie设置（在测试中只是简单检查）
             $cookieSet = true;
         }
-        
+
         // 2. 处理文件列表（如果存在）
         if(!empty($_POST['fileList'])) {
             $fileList = $_POST['fileList'];
@@ -3819,29 +3660,29 @@ class bugTest
                 $filesProcessed = true;
             }
         }
-        
+
         // 3. 获取看板变量
         $laneID = isset($params['laneID']) ? $params['laneID'] : 0;
         if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
-        
+
         // 简单的列ID逻辑
         $columnID = isset($params['columnID']) ? $params['columnID'] : 0;
-        
+
         // 4. 模拟更新看板逻辑
         if($bug->execution ?? 0) {
             $kanbanUpdated = true;
         }
-        
+
         // 5. 处理todo更新
         $todoID = isset($params['todoID']) ? $params['todoID'] : 0;
         if($todoID) {
             // 模拟todo状态更新
             $todoUpdated = true;
         }
-        
+
         // 模拟dao检查
         if(dao::isError()) return dao::getError();
-        
+
         return true;
     }
 
@@ -3856,22 +3697,22 @@ class bugTest
     public function afterUpdateTest($bug, $oldBug)
     {
         global $tester;
-        
+
         try {
             $zenInstance = $tester->loadZen('bug');
             $reflection = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('afterUpdate');
             $method->setAccessible(true);
-            
+
             $zenInstance->loadModel('build');
             $zenInstance->loadModel('action');
             $zenInstance->loadModel('score');
             $zenInstance->loadModel('kanban');
             $zenInstance->loadModel('feedback');
-            
+
             $result = $method->invoke($zenInstance, $bug, $oldBug);
             if(dao::isError()) return dao::getError();
-            
+
             return $result ? 1 : 0;
         } catch (Throwable $e) {
             return 1;
@@ -3889,19 +3730,19 @@ class bugTest
     public function afterBatchCreateTest(object $bug, array $output = array()): bool
     {
         global $tester;
-        
+
         try {
             $zenInstance = $tester->loadZen('bug');
             $reflection = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('afterBatchCreate');
             $method->setAccessible(true);
-            
+
             $zenInstance->loadModel('kanban');
             $zenInstance->loadModel('file');
-            
+
             $result = $method->invoke($zenInstance, $bug, $output);
             if(dao::isError()) return false;
-            
+
             return $result ? true : false;
         } catch (Throwable $e) {
             return true;
@@ -3922,28 +3763,28 @@ class bugTest
     {
         // 模拟responseAfterOperate方法的核心逻辑
         if(!$message) $message = '保存成功';
-        
+
         // 模拟正常情况下的响应
         $response = array(
             'result' => 'success',
             'message' => $message
         );
-        
+
         // 如果有bugID，添加到响应中
         if($bugID) {
             $response['bugID'] = $bugID;
         }
-        
+
         // 如果在看板模式
         if($isInKanban) {
             $response['kanban'] = true;
         }
-        
+
         // 如果有变更信息
         if(!empty($changes)) {
             $response['changes'] = $changes;
         }
-        
+
         return $response;
     }
 
@@ -3959,24 +3800,24 @@ class bugTest
     public function responseInModalTest(string $message = '', bool $isInKanban = false, string $tab = 'qa'): array
     {
         global $app, $lang;
-        
+
         // 设置应用tab
         $originalTab = $app->tab ?? '';
         $app->tab = $tab;
-        
+
         // 模拟语言设置
         if(!$message) $message = $lang->saveSuccess ?? '保存成功';
-        
+
         // 模拟responseInModal方法的逻辑，避免调用send方法
         if($app->tab == 'execution' && $isInKanban) {
             $result = array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()");
         } else {
             $result = array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true);
         }
-        
+
         // 恢复原始tab
         $app->tab = $originalTab;
-        
+
         return $result;
     }
 
@@ -3992,32 +3833,32 @@ class bugTest
     public function responseAfterCreateTest(object $bug, array $params = array(), string $message = ''): array
     {
         global $app, $lang;
-        
+
         // 模拟executionID获取逻辑
         $executionID = $bug->execution ? $bug->execution : (int)(zget($params, 'executionID', 0));
-        
+
         // 设置默认消息
         if(!$message) $message = $lang->saveSuccess ?? '保存成功';
-        
+
         // 模拟JSON视图响应
         if(isset($params['viewType']) && $params['viewType'] == 'json') {
             return array('result' => 'success', 'message' => $message, 'id' => $bug->id);
         }
-        
+
         // 模拟API模式响应
         if(isset($params['runMode']) && $params['runMode'] == 'api') {
             return array('status' => 'success', 'data' => $bug->id);
         }
-        
+
         // 模拟模态框响应
         if(isset($params['isInModal']) && $params['isInModal']) {
             return array('result' => 'success', 'message' => $message, 'closeModal' => true);
         }
-        
+
         // 根据不同tab构建跳转链接
         $location = '';
         $tab = $params['tab'] ?? 'product';
-        
+
         if($tab == 'execution') {
             $location = "execution-bug-executionID-{$executionID}";
         } elseif($tab == 'project') {
@@ -4026,12 +3867,12 @@ class bugTest
         } else {
             $location = "bug-browse-productID-{$bug->product}-branch-{$bug->branch}";
         }
-        
+
         // 模拟xhtml视图
         if(isset($params['viewType']) && $params['viewType'] == 'xhtml') {
             $location = "bug-view-bugID-{$bug->id}";
         }
-        
+
         return array('result' => 'success', 'message' => $message, 'load' => $location);
     }
 
@@ -4048,55 +3889,55 @@ class bugTest
     public function responseAfterDeleteTest(object $bug, string $from, string $message = '', array $params = array()): array
     {
         global $app, $lang, $session;
-        
+
         // 设置默认消息
         if(!$message) $message = $lang->saveSuccess ?? '保存成功';
-        
+
         // 模拟JSON视图响应
         if(isset($params['viewType']) && $params['viewType'] == 'json') {
             return array('result' => 'success', 'message' => $message);
         }
-        
+
         // 模拟bug转任务的确认逻辑
         if(isset($bug->toTask) && $bug->toTask) {
             // 模拟任务数据
             $task = new stdClass();
             $task->deleted = isset($params['taskDeleted']) ? $params['taskDeleted'] : false;
-            
+
             if(!$task->deleted) {
                 $confirmedURL = "task-view-taskID-{$bug->toTask}";
                 $canceledURL = "bug-view-bugID-{$bug->id}";
                 $message = sprintf("Bug #%s 已转为任务 #%s，是否同时更新任务状态？", $bug->id, $bug->toTask);
-                
+
                 return array(
-                    'result' => 'success', 
+                    'result' => 'success',
                     'load' => array(
-                        'confirm' => $message, 
-                        'confirmed' => $confirmedURL, 
+                        'confirm' => $message,
+                        'confirmed' => $confirmedURL,
                         'canceled' => $canceledURL
                     )
                 );
             }
         }
-        
+
         // 模拟弹窗模式响应
         if(isset($params['isInModal']) && $params['isInModal']) {
             return array('result' => 'success', 'load' => true);
         }
-        
+
         // 模拟任务看板删除响应
         if($from == 'taskkanban') {
             return array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()");
         }
-        
+
         // 默认响应 - 模拟session->bugList
         $defaultLocation = "bug-browse-productID-{$bug->product}";
         $bugListLocation = isset($params['bugListLocation']) ? $params['bugListLocation'] : $defaultLocation;
-        
+
         return array(
-            'result' => 'success', 
-            'message' => $message, 
-            'load' => $bugListLocation, 
+            'result' => 'success',
+            'message' => $message,
+            'load' => $bugListLocation,
             'closeModal' => true
         );
     }
@@ -4121,19 +3962,19 @@ class bugTest
         $zen->lang = new stdClass();
         $zen->lang->saveSuccess = '保存成功';
         $zen->app = new stdClass();
-        
+
         // 清空会话变量，模拟方法行为
         unset($_SESSION['bugImagesFile']);
         $_POST = array();
-        
+
         // 模拟默认消息
         if(!$message) $message = $zen->lang->saveSuccess;
-        
+
         // 根据视图类型返回不同结果
         if($viewType == 'json') {
             return array('result' => 'success', 'message' => $message, 'idList' => $bugIdList);
         }
-        
+
         // 模拟模态框响应
         if($viewType == 'modal') {
             if($executionID) {
@@ -4142,7 +3983,7 @@ class bugTest
             }
             return array('result' => 'success', 'message' => $message, 'closeModal' => true);
         }
-        
+
         // 普通视图响应 - 跳转到bug浏览页面
         $load = "bug-browse-productID-{$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc";
         return array('result' => 'success', 'message' => $message, 'load' => $load);
@@ -4159,24 +4000,24 @@ class bugTest
     public function operateAfterBatchEditTest(object $bug, object $oldBug): string
     {
         global $tester, $app, $config;
-        
+
         // 模拟 operateAfterBatchEdit 的逻辑，避免复杂的依赖和实际操作
-        
+
         $operations = array();
-        
+
         // 1. 检查是否需要记录积分奖励
         if(isset($bug->status) && $bug->status == 'resolved' && $oldBug->status == 'active') {
             $operations[] = 'score_recorded';
         }
-        
+
         // 2. 检查是否需要更新反馈状态（仅非开源版本）
         if($config->edition != 'open' && isset($oldBug->feedback) && $oldBug->feedback) {
             $operations[] = 'feedback_updated';
         }
-        
+
         // 如果没有任何操作，返回'0'
         if(empty($operations)) return '0';
-        
+
         return implode(',', $operations);
     }
 
@@ -4194,7 +4035,7 @@ class bugTest
             $zen = initReference('bug');
             $method = $zen->getMethod('getToBeProcessedData');
             $method->setAccessible(true);
-            
+
             $zenInstance = $zen->newInstance();
             $result = $method->invokeArgs($zenInstance, array($bug, $oldBug));
 
@@ -4204,7 +4045,7 @@ class bugTest
             $toTaskCount = count($result[0]);
             $unlinkPlanCount = count($result[1]);
             $link2PlanCount = count($result[2]);
-            
+
             return array($toTaskCount, $unlinkPlanCount, $link2PlanCount, $result[0], $result[1], $result[2]);
         } catch (Exception $e) {
             return array('error' => $e->getMessage());
@@ -4224,19 +4065,19 @@ class bugTest
     {
         // 模拟responseAfterBatchEdit方法的逻辑
         global $lang, $session;
-        
+
         // 设置默认消息
         if(!$message) $message = $lang->saveSuccess ?? '保存成功';
-        
+
         // 根据测试用例返回不同的结果用于断言
         if($testCase == 'result') {
             return 'success';
         }
-        
+
         if($testCase == 'message') {
             return $message;
         }
-        
+
         if($testCase == 'confirm') {
             if(!empty($toTaskIdList)) {
                 $taskID = key($toTaskIdList);
@@ -4244,14 +4085,14 @@ class bugTest
             }
             return '';
         }
-        
+
         if($testCase == 'load') {
             if(empty($toTaskIdList)) {
                 return $session->bugList ?? 'bug-browse';
             }
             return 'confirm_dialog';
         }
-        
+
         // 默认情况：返回success表示方法调用成功
         return 'success';
     }
@@ -4326,14 +4167,14 @@ class bugTest
 
         // 模拟extractObjectFromExtras方法的核心逻辑，避免复杂的框架依赖
         extract($output);
-        
+
         // 从resultID和caseID获取信息的模拟
         if(isset($runID) && $runID && isset($resultID) && $resultID) {
             // 模拟从result获取信息的逻辑
             $bug->title = 'Test Bug From Result';
             $bug->steps = 'Steps from result';
         }
-        
+
         // 从现有bugID复制信息的模拟
         if(isset($bugID) && $bugID) {
             // 模拟从现有bug获取信息的逻辑
@@ -4343,13 +4184,13 @@ class bugTest
             $bug->pri = 3;
             $bug->assignedTo = 'admin';
         }
-        
+
         // 从testtask获取buildID的模拟
         if(isset($testtask) && $testtask) {
             // 模拟从testtask获取buildID的逻辑
             $bug->buildID = 'trunk';
         }
-        
+
         // 从todoID获取信息的模拟
         if(isset($todoID) && $todoID) {
             // 模拟从todo获取信息的逻辑
@@ -4357,7 +4198,7 @@ class bugTest
             $bug->steps = 'Todo description ' . $todoID;
             $bug->pri = 2;
         }
-        
+
         return $bug;
     }
 
@@ -4373,18 +4214,18 @@ class bugTest
     {
         // 模拟mergeChartOption方法的核心逻辑
         $result = new stdclass();
-        
+
         // 模拟默认配置
         $commonOptions = new stdclass();
         $commonOptions->type = 'pie';
         $commonOptions->width = 500;
         $commonOptions->height = 140;
         $commonOptions->graph = new stdclass();
-        
+
         // 模拟图表配置
         $chartOption = new stdclass();
         $chartOption->graph = new stdclass();
-        
+
         // 设置图表标题
         $chartTitles = array(
             'bugsPerExecution' => '执行Bug数量',
@@ -4393,9 +4234,9 @@ class bugTest
             'openedBugsPerDay' => '每天新增Bug数',
             'bugsPerSeverity' => '按Bug严重程度统计'
         );
-        
+
         $chartOption->graph->caption = isset($chartTitles[$chartCode]) ? $chartTitles[$chartCode] : 'Unknown Chart';
-        
+
         // 设置类型
         if(!empty($chartType) && $chartType != 'default') {
             $chartOption->type = $chartType;
@@ -4407,20 +4248,20 @@ class bugTest
                 $chartOption->type = $commonOptions->type;
             }
         }
-        
+
         // 设置宽度和高度
         if(!isset($chartOption->width)) $chartOption->width = $commonOptions->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOptions->height;
-        
+
         // 合并图表选项
         foreach($commonOptions->graph as $key => $value) {
             if(!isset($chartOption->graph->$key)) {
                 $chartOption->graph->$key = $value;
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $chartOption;
     }
 
@@ -4438,11 +4279,11 @@ class bugTest
             $zenClass = initReference('bug');
             $method = $zenClass->getMethod('processRepoIssueActions');
             $zenInstance = $zenClass->newInstance();
-            
+
             $result = $method->invokeArgs($zenInstance, array($repoID));
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             // 返回相关配置以供断言
             return array(
                 'repoID' => $zenInstance->view->repoID ?? null,
