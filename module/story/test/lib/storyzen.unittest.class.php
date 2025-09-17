@@ -694,4 +694,29 @@ class storyZenTest
         $result['count'] = count($stories);
         return $result;
     }
+
+    /**
+     * Test getAfterCreateLocation method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $objectID
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
+    public function getAfterCreateLocationTest(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
+    {
+        global $app;
+
+        $method = $this->storyZenTest->getMethod('getAfterCreateLocation');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $objectID, $storyID, $storyType, $extra]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
