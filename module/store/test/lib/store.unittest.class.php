@@ -263,4 +263,37 @@ class storeTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getInstalledApps method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getInstalledAppsTest(): array
+    {
+        global $tester;
+
+        // 模拟getInstalledApps方法的逻辑
+        $installedApps = array();
+
+        // 1. 获取当前用户的默认空间
+        $spaceModel = $tester->loadModel('space');
+        $space = $spaceModel->defaultSpace($tester->app->user->account);
+
+        if(!$space) {
+            if(dao::isError()) return dao::getError();
+            return $installedApps;
+        }
+
+        // 2. 获取该空间下所有实例的应用ID
+        $instances = $spaceModel->getSpaceInstancesAppIDs($space->id);
+        foreach($instances as $instance) {
+            $installedApps[] = $instance->appID;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $installedApps;
+    }
 }

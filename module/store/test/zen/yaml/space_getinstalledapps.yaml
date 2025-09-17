@@ -1,0 +1,56 @@
+---
+title: space表和instance表数据定义 - getInstalledApps测试
+desc: 为测试storeZen::getInstalledApps()方法准备space和instance表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 空间ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 空间名称
+  range: 默认空间,开发空间,测试空间,生产空间,预发空间
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: k8space
+  note: K8S空间名
+  range: quickon-system{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: owner
+  note: 空间拥有者
+  range: admin,user1,user2,testuser,produser
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: default
+  note: 是否默认空间
+  range: 1,0,0,0,0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdAt
+  note: 创建时间
+  range: 2023-01-01 10:00:00-2023-12-31 23:59:59
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
