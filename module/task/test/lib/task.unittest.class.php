@@ -3543,4 +3543,59 @@ class taskTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseModal method.
+     *
+     * @param  object $task
+     * @param  string $from
+     * @access public
+     * @return array
+     */
+    public function responseModalTest($task, $from = '')
+    {
+        if(!$this->objectZen) return array('error' => 'zen object not available');
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'responseModal');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $task, $from);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  object $task
+     * @param  object $execution
+     * @param  string $afterChoose
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest($task, $execution, $afterChoose = 'continueAdding')
+    {
+        if(!$this->objectZen) return array('error' => 'zen object not available');
+
+        try {
+            $method = new ReflectionMethod($this->objectZen, 'responseAfterCreate');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $task, $execution, $afterChoose);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
