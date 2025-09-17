@@ -228,4 +228,59 @@ class taskZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 测试 assignKanbanForCreate 方法。
+     * Test assignKanbanForCreate method.
+     *
+     * @param  int   $executionID
+     * @param  array $output
+     * @access public
+     * @return mixed
+     */
+    public function assignKanbanForCreateTest(int $executionID, array $output = array()): mixed
+    {
+        global $tester;
+
+        $success = 1;
+        $error = '';
+
+        try {
+            // 创建mock的taskZen实例
+            $taskZenInstance = $this->taskZenTest->newInstance();
+            $taskZenInstance->view = new stdClass();
+
+            // 初始化必要的依赖
+            $taskZenInstance->loadModel('kanban');
+
+            $method = $this->taskZenTest->getMethod('assignKanbanForCreate');
+            $method->setAccessible(true);
+
+            $method->invokeArgs($taskZenInstance, [$executionID, $output]);
+
+            // 检查view属性是否正确设置
+            $result = new stdClass();
+            $result->success = $success;
+            $result->regionID = isset($taskZenInstance->view->regionID) ? $taskZenInstance->view->regionID : 0;
+            $result->laneID = isset($taskZenInstance->view->laneID) ? $taskZenInstance->view->laneID : 0;
+            $result->regionPairs = isset($taskZenInstance->view->regionPairs) ? count($taskZenInstance->view->regionPairs) : 0;
+            $result->lanePairs = isset($taskZenInstance->view->lanePairs) ? count($taskZenInstance->view->lanePairs) : 0;
+            $result->error = '';
+
+        } catch(Exception $e) {
+            $success = 0;
+            $error = $e->getMessage();
+
+            $result = new stdClass();
+            $result->success = $success;
+            $result->regionID = 0;
+            $result->laneID = 0;
+            $result->regionPairs = 0;
+            $result->lanePairs = 0;
+            $result->error = $error;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
