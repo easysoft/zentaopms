@@ -1,0 +1,87 @@
+---
+title: 项目数据定义
+desc: 用于测试assignExecutionForCreate方法的项目数据
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 0
+- field: isTpl
+  range: 0
+- field: model
+  range: 'scrum'
+- field: type
+  range: 'project,sprint,stage,kanban'
+- field: category
+  range: ''
+- field: lifetime
+  range: 'ops,long'
+- field: budget
+  range: '0'
+- field: budgetUnit
+  range: 'CNY'
+- field: attribute
+  range: 'internal,waterfall'
+- field: percent
+  range: 0.0
+- field: milestone
+  range: '0'
+- field: output
+  range: ''
+- field: auth
+  range: 'extend'
+- field: parent
+  range: 0
+- field: path
+  range: ',1,2,3,'
+- field: grade
+  range: 1
+- field: name
+  range: '项目1,执行1,阶段1,看板项目1,项目2'
+- field: code
+  range: 'PRJ001,EXEC001,STAGE001,KANBAN001,PRJ002'
+- field: hasProduct
+  range: 1
+- field: begin
+  range: '2024-01-01'
+- field: end
+  range: '2024-12-31'
+- field: realBegan
+  range: '2024-01-01'
+- field: realEnd
+  range: ''
+- field: status
+  range: 'wait,doing,suspended,closed'
+- field: subStatus
+  range: ''
+- field: pri
+  range: '1'
+- field: desc
+  range: '项目描述'
+- field: version
+  range: 0
+- field: parentVersion
+  range: 0
+- field: teamCount
+  range: 5
+- field: openedBy
+  range: 'admin'
+- field: openedDate
+  range: '2024-01-01 09:00:00'
+- field: openedVersion
+  range: '1.0'
+- field: lastEditedBy
+  range: 'admin'
+- field: lastEditedDate
+  range: '2024-01-01 09:00:00'
+- field: closedBy
+  range: ''
+- field: closedDate
+  range: ''
+- field: deleted
+  range: '0'
+- field: vision
+  range: 'rnd'
+- field: multiple
+  range: '1'

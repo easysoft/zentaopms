@@ -1,0 +1,67 @@
+---
+title: 用户数据定义
+desc: 用于测试assignExecutionForCreate方法的用户数据
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: 'admin,user1,user2,user3,user4,user5,user6,user7,user8,user9'
+- field: password
+  range: 'e10adc3949ba59abbe56e057f20f883e'
+- field: role
+  range: 'admin{1},dev{3},pm{2},qa{2},po{2}'
+- field: dept
+  range: 1-3
+- field: realname
+  range: '管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9'
+- field: nickname
+  range: ''
+- field: avatar
+  range: ''
+- field: birthday
+  range: '1990-01-01'
+- field: gender
+  range: 'm,f'
+- field: email
+  range: 'admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,user5@test.com,user6@test.com,user7@test.com,user8@test.com,user9@test.com'
+- field: skype
+  range: ''
+- field: qq
+  range: ''
+- field: mobile
+  range: '13800138000,13800138001,13800138002,13800138003,13800138004,13800138005,13800138006,13800138007,13800138008,13800138009'
+- field: phone
+  range: ''
+- field: address
+  range: ''
+- field: zipcode
+  range: ''
+- field: join
+  range: '2024-01-01'
+- field: visits
+  range: 1
+- field: ip
+  range: '127.0.0.1'
+- field: last
+  range: '2024-01-01 09:00:00'
+- field: fails
+  range: 0
+- field: locked
+  range: '0000-00-00 00:00:00'
+- field: feedback
+  range: 0
+- field: ranzhi
+  range: ''
+- field: ldap
+  range: ''
+- field: score
+  range: 0
+- field: scoreLevel
+  range: 0
+- field: deleted
+  range: '0'
+- field: clientStatus
+  range: 'online'
+- field: clientLang
+  range: 'zh-cn'
