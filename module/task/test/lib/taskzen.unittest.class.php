@@ -1414,4 +1414,44 @@ class taskZenTest
 
         return $result;
     }
+
+    /**
+     * Test generalCreateResponse method.
+     *
+     * @param  object $task
+     * @param  int    $executionID
+     * @param  string $afterChoose
+     * @access public
+     * @return array
+     */
+    public function generalCreateResponseTest(object $task, int $executionID, string $afterChoose): array
+    {
+        global $tester;
+
+        dao::$errors = array(); // Clear errors
+
+        try
+        {
+            // Create mock taskZen instance
+            $taskZenInstance = $this->taskZenTest->newInstance();
+
+            // Initialize required properties
+            $taskZenInstance->lang = $tester->lang;
+            $taskZenInstance->config = $tester->config;
+            $taskZenInstance->app = $tester->app;
+
+            // Get reflection method
+            $method = $this->taskZenTest->getMethod('generalCreateResponse');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($taskZenInstance, [$task, $executionID, $afterChoose]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
