@@ -3550,4 +3550,31 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildCasesForBathcEdit method.
+     *
+     * @param  array $oldCases 旧用例数据
+     * @param  array $oldSteps 旧步骤数据
+     * @access public
+     * @return mixed
+     */
+    public function buildCasesForBathcEditTest($oldCases = array(), $oldSteps = array())
+    {
+        global $tester;
+        $zen = $tester->loadZen('testcase');
+
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($zen);
+        $method = $reflection->getMethod('buildCasesForBathcEdit');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($zen, array($oldCases, $oldSteps));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

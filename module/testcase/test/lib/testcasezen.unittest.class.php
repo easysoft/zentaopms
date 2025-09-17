@@ -693,4 +693,27 @@ class testcaseZenTest
             return (object)array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildCasesForBathcEdit method.
+     *
+     * @param  array $oldCases 旧用例数据
+     * @param  array $oldSteps 旧步骤数据
+     * @access public
+     * @return mixed
+     */
+    public function buildCasesForBathcEditTest($oldCases = array(), $oldSteps = array())
+    {
+        global $tester;
+
+        try {
+            $result = callZenMethod('testcase', 'buildCasesForBathcEdit', [$oldCases, $oldSteps]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        } catch (Error $e) {
+            return $e->getMessage();
+        }
+    }
 }
