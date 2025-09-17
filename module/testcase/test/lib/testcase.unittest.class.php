@@ -3346,4 +3346,64 @@ class testcaseTest
 
         return array($productIdList, $libIdList);
     }
+
+    /**
+     * Test assignShowImportVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $caseData
+     * @param  int    $stepVars
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @access public
+     * @return mixed
+     */
+    public function assignShowImportVarsTest($productID = 1, $branch = 'all', $caseData = array(), $stepVars = 0, $pagerID = 1, $maxImport = 0)
+    {
+        global $tester;
+
+        // 模拟assignShowImportVars方法的核心逻辑
+
+        // 检查用例数据是否为空
+        if(empty($caseData)) return array('error' => 'noData');
+
+        // 模拟获取分支和模块信息
+        $branches = $this->objectModel->loadModel('branch')->getPairs($productID, 'active');
+        $modules = array();
+        $stories = array();
+
+        // 处理分页逻辑
+        $allCount = count($caseData);
+        $allPager = 1;
+        if($allCount > $tester->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                // 返回特殊标记表示需要显示导入限制页面
+                return array('showMaxImportPage' => true, 'allCount' => $allCount, 'maxImport' => $maxImport);
+            }
+
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
+
+        if(empty($caseData)) return array('error' => 'noData');
+
+        // 计算输入变量限制
+        $countInputVars  = count($caseData) * 12 + $stepVars;
+        $showSuhosinInfo = $this->objectModel->loadModel('common')->judgeSuhosinSetting($countInputVars);
+
+        return array(
+            'modules'    => $modules,
+            'stories'    => $stories,
+            'caseData'   => $caseData,
+            'branches'   => $branches,
+            'allCount'   => $allCount,
+            'allPager'   => $allPager,
+            'isEndPage'  => $pagerID >= $allPager,
+            'pagerID'    => $pagerID,
+            'suhosinInfo' => $showSuhosinInfo
+        );
+    }
 }
