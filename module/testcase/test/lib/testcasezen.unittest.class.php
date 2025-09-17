@@ -294,4 +294,58 @@ class testcaseZenTest
             if($originalSession !== null) $tester->session->project = $originalSession;
         }
     }
+
+    /**
+     * Test assignForEditLibCase method.
+     *
+     * @param  object $case
+     * @param  array  $libraries
+     * @access public
+     * @return array
+     */
+    public function assignForEditLibCaseTest(object $case, array $libraries): array
+    {
+        global $tester;
+
+        try {
+            // 初始化必要的对象
+            if(!isset($tester->view)) $tester->view = new stdClass();
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->view = $tester->view;
+            if(!isset($zenInstance->tree)) {
+                $zenInstance->tree = $tester->loadModel('tree');
+            }
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('assignForEditLibCase');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($zenInstance, $case, $libraries);
+
+            // 更新tester的view对象
+            $tester->view = $zenInstance->view;
+
+            // 返回设置的视图变量用于验证
+            return array(
+                'executed' => '1',
+                'title' => $tester->view->title ?? '',
+                'isLibCase' => $tester->view->isLibCase ?? false,
+                'libraries' => !empty($tester->view->libraries),
+                'moduleOptionMenu' => !empty($tester->view->moduleOptionMenu),
+                'libName' => $tester->view->libName ?? '',
+                'libID' => $tester->view->libID ?? 0
+            );
+        } catch (Exception $e) {
+            return array('executed' => '0', 'error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('executed' => '0', 'error' => $e->getMessage());
+        }
+    }
 }
