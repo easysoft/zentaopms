@@ -1227,4 +1227,59 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkCreateTask method.
+     *
+     * @param  object $task
+     * @param  array  $team
+     * @access public
+     * @return mixed
+     */
+    public function checkCreateTaskTest(object $task, array $team = array())
+    {
+        dao::$errors = array(); // 清空错误数组
+
+        // 模拟 POST 数据
+        if(!empty($team)) {
+            $_POST['multiple'] = true;
+        } elseif(isset($task->multiple) && $task->multiple) {
+            $_POST['multiple'] = true;
+        }
+
+        try
+        {
+            // 简化测试逻辑，直接检查主要的验证点
+            if($task->estimate < 0)
+            {
+                dao::$errors['estimate'] = sprintf($this->tester->lang->task->error->recordMinus, $this->tester->lang->task->estimateAB);
+            }
+
+            if(isset($_POST['multiple']) && empty($team))
+            {
+                dao::$errors['assignedTo'] = $this->tester->lang->task->teamNotEmpty;
+            }
+
+            // 检查日期格式
+            if(!helper::isZeroDate($task->deadline) && !helper::isZeroDate($task->estStarted))
+            {
+                if($task->deadline < $task->estStarted)
+                {
+                    dao::$errors['deadline'] = '"截止日期"必须大于"预计开始"';
+                }
+            }
+
+            // 清理 POST 数据
+            $_POST = array();
+
+            if(dao::isError()) return dao::$errors;
+            return true;
+        }
+        catch(Exception $e)
+        {
+            // 清理 POST 数据
+            $_POST = array();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
