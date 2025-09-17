@@ -751,4 +751,23 @@ class storyZenTest
 
         return '';
     }
+
+    /**
+     * Test getAfterReviewLocation method.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @param  string $from
+     * @access public
+     * @return string
+     */
+    public function getAfterReviewLocationTest(int $storyID, string $storyType = 'story', string $from = ''): string
+    {
+        $method = $this->storyZenTest->getMethod('getAfterReviewLocation');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyID, $storyType, $from]);
+        if(dao::isError()) return implode(', ', dao::getError());
+        return $result;
+    }
 }
