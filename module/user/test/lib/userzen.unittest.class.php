@@ -200,4 +200,20 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test responseForLoginFail method.
+     *
+     * @param  string $viewType
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function responseForLoginFailTest($viewType = '', $account = '')
+    {
+        $result = callZenMethod('user', 'responseForLoginFail', array($viewType, $account));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
