@@ -125,4 +125,30 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test printOptionMenuMHtml method.
+     *
+     * @param  array  $optionMenu
+     * @param  string $viewType
+     * @param  int    $rootID
+     * @access public
+     * @return mixed
+     */
+    public function printOptionMenuMHtmlTest(array $optionMenu = array(), string $viewType = '', int $rootID = 0)
+    {
+        // 开启输出缓冲
+        ob_start();
+
+        $treeZen = $this->objectZen->newInstance();
+        $method = $this->objectZen->getMethod('printOptionMenuMHtml');
+        $method->setAccessible(true);
+        $method->invoke($treeZen, $optionMenu, $viewType, $rootID);
+        if(dao::isError()) return dao::getError();
+
+        // 获取输出内容
+        $output = ob_get_clean();
+
+        return $output;
+    }
 }
