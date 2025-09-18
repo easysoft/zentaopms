@@ -109,4 +109,40 @@ class transferZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildNextList method.
+     *
+     * @param  array  $list
+     * @param  int    $lastID
+     * @param  string $fields
+     * @param  int    $pagerID
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function buildNextListTest(array $list = array(), int $lastID = 0, $fields = array(), int $pagerID = 1, string $module = '')
+    {
+        global $tester;
+
+        // 设置必要的配置
+        $tester->config->transfer = new stdClass();
+        $tester->config->transfer->lazyLoading = true;
+        $tester->config->transfer->showImportCount = 10;
+        $tester->config->transfer->actionModule = array('task', 'story', 'bug');
+
+        // 设置transfer对象的maxImport属性
+        $transferZen = $this->transferZenTest;
+        $transferZen->maxImport = 20;
+
+        try {
+            $result = callZenMethod('transfer', 'buildNextList', array($list, $lastID, $fields, $pagerID, $module));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        } catch(TypeError $e) {
+            return 'TypeError: ' . $e->getMessage();
+        }
+    }
 }
