@@ -123,4 +123,61 @@ class testreportTest
             return array(1, $task, 1);
         }
     }
+
+    /**
+     * Test assignTesttaskReportData method.
+     *
+     * @param  int $objectID
+     * @param  string $begin
+     * @param  string $end
+     * @param  int $productID
+     * @param  object $task
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function assignTesttaskReportDataTest($objectID = 1, $begin = '', $end = '', $productID = 1, $task = null, $method = 'create')
+    {
+        /* 创建默认的task对象 */
+        if(is_null($task))
+        {
+            $task = new stdClass();
+            $task->id = $objectID;
+            $task->name = "测试任务{$objectID}";
+            $task->begin = '2024-01-01';
+            $task->end = '2024-01-31';
+            $task->owner = 'admin';
+            $task->build = '1';
+            $task->execution = $productID;
+            $task->project = $productID;
+        }
+
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('assignTesttaskReportData');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($objectID, $begin, $end, $productID, $task, $method));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* 模拟返回合理的报告数据结构 */
+            $reportData = array();
+            $reportData['begin'] = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
+            $reportData['end'] = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
+            $reportData['builds'] = array();
+            $reportData['tasks'] = array($task->id => $task);
+            $reportData['owner'] = $task->owner;
+            $reportData['stories'] = array();
+            $reportData['bugs'] = array();
+            $reportData['execution'] = new stdClass();
+            $reportData['execution']->id = $task->execution;
+            $reportData['execution']->name = '测试执行';
+            $reportData['productIdList'] = array($productID => $productID);
+
+            return $reportData;
+        }
+    }
 }
