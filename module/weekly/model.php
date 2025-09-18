@@ -599,7 +599,7 @@ class weeklyModel extends model
      * @access public
      * @return bool
      */
-    public function addBuiltinWeeklyTemplate()
+    public function addBuiltinWeeklyTemplate(): bool
     {
         /* Set scope data. */
         $scopeID = $this->addBuiltinScope();
@@ -794,5 +794,33 @@ class weeklyModel extends model
         }
 
         return json_encode($rawContent);
+    }
+
+    /**
+     * 升级里程碑报告数据。
+     * Upgrade milestone report data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeMilestoneData(): bool
+    {
+        /* Set milestone report data. */
+        $report = new stdclass();
+        $report->addedBy   = 'system';
+        $report->addedDate = helper::now();
+
+        $stages = $this->dao->select('id,name,project')->from(TABLE_PROJECT)->where('type')->eq('stage')->andWhere('milestone')->eq('1')->fetchAll('id');
+        foreach($stages as $stageID => $stage)
+        {
+            $report->project      = $stage->project;
+            $report->execution    = $stageID;
+            $report->title        = sprintf($this->lang->weekly->milestoneTitle, $stage->name);
+            $report->templateType = 'projectReport';
+            $report->module       = 'milestone';
+            $this->dao->insert(TABLE_DOC)->data($report)->exec();
+        }
+
+        return !dao::isError();
     }
 }
