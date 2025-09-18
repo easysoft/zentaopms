@@ -1,0 +1,23 @@
+---
+title: 模块数据配置
+desc: 为buildLinkStorySearchForm方法测试生成模块数据
+
+fields:
+- field: id
+  range: 1-10
+- field: root
+  range: 1{5},2{5}
+- field: branch
+  range: 0{8},1{1},2{1}
+- field: name
+  range: 模块1,模块2,模块3,模块4,模块5,模块6,模块7,模块8,模块9,模块10
+- field: parent
+  range: 0{2},1{3},2{3},3{2}
+- field: grade
+  range: 1{5},2{5}
+- field: order
+  range: 1-10
+- field: type
+  range: story{10}
+- field: deleted
+  range: '0'

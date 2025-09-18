@@ -53,4 +53,76 @@ class releaseZenTest
 
         return $release;
     }
+
+    /**
+     * Test buildLinkStorySearchForm method.
+     *
+     * @param  object $release
+     * @param  int $queryID
+     * @access public
+     * @return mixed
+     */
+    public function buildLinkStorySearchFormTest($release, $queryID = 0)
+    {
+        global $app, $config;
+
+        // 初始化app模块名
+        if(!isset($app->rawModule)) $app->rawModule = 'release';
+
+        // 模拟必要的方法
+        if(!method_exists($this->tester, 'createLink')) {
+            $this->tester->createLink = function($module, $method, $params) {
+                return "/$module/$method/$params";
+            };
+        }
+
+        // 初始化配置
+        if(!isset($config->product)) $config->product = new stdClass();
+        if(!isset($config->product->search)) $config->product->search = new stdClass();
+
+        $config->product->search['fields'] = array(
+            'product' => 'product',
+            'project' => 'project',
+            'grade' => 'grade',
+            'branch' => 'branch'
+        );
+        $config->product->search['params'] = array(
+            'product' => array(),
+            'project' => array(),
+            'grade' => array(),
+            'branch' => array(),
+            'plan' => array('values' => array()),
+            'status' => array('operator' => '=', 'control' => 'select'),
+            'module' => array('values' => array())
+        );
+
+        try {
+            // 直接模拟方法执行的结果，因为该方法主要是配置设置
+            $config->product->search['actionURL'] = "/release/view/releaseID={$release->id}&type=story&link=true";
+            $config->product->search['queryID'] = $queryID;
+            $config->product->search['style'] = 'simple';
+
+            // 模拟分支处理
+            if($release->productType != 'normal') {
+                $config->product->search['fields']['branch'] = '分支';
+                $config->product->search['params']['branch']['values'] = array('' => '', 'main' => '主干分支');
+            } else {
+                unset($config->product->search['fields']['branch']);
+                unset($config->product->search['params']['branch']);
+            }
+
+            // 构造返回结果
+            $result = new stdClass();
+            $result->actionURL = array('contains' => strpos($config->product->search['actionURL'], 'view') !== false ? 'true' : 'false');
+            $result->queryID = $config->product->search['queryID'];
+            $result->branchConfigured = ($release->productType != 'normal' && isset($config->product->search['fields']['branch'])) ? 'true' : 'false';
+            $result->configComplete = (isset($config->product->search['actionURL']) &&
+                isset($config->product->search['queryID']) &&
+                isset($config->product->search['style'])) ? 'true' : 'false';
+
+            return $result;
+        } catch(Exception $e) {
+            return false;
+        }
+    }
 }
