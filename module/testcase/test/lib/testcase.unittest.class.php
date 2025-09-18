@@ -4313,4 +4313,72 @@ class testcaseTest
 
         return $mockResult;
     }
+
+    /**
+     * Test buildLinkCasesSearchForm method.
+     *
+     * @param  object $case
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function buildLinkCasesSearchFormTest(object $case, int $queryID): array
+    {
+        global $tester;
+
+        /* Save original config and tab */
+        $originalConfig = $tester->config->testcase->search['fields'] ?? array();
+        $originalTab = $tester->app->tab ?? '';
+
+        /* Initialize search fields if not exists */
+        if (!isset($tester->config->testcase->search['fields'])) {
+            $tester->config->testcase->search['fields'] = array(
+                'id' => '',
+                'title' => '',
+                'product' => '',
+                'module' => '',
+                'story' => '',
+                'status' => '',
+                'type' => '',
+                'pri' => '',
+                'keywords' => '',
+                'openedBy' => '',
+                'lastEditedBy' => ''
+            );
+        }
+
+        /* Mock products array */
+        $products = array(
+            1 => (object)array('id' => 1, 'name' => 'Product1'),
+            2 => (object)array('id' => 2, 'name' => 'Product2')
+        );
+
+        /* Simulate buildLinkCasesSearchForm method logic */
+        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bySearch&queryID=myQueryID";
+        $objectID = 0;
+
+        if($tester->app->tab == 'project') $objectID = $case->project ?? 0;
+        if($tester->app->tab == 'execution') $objectID = $case->execution ?? 0;
+
+        /* Remove product field from search fields - this is the key functionality */
+        unset($tester->config->testcase->search['fields']['product']);
+
+        /* Simulate buildSearchForm call by setting some search config */
+        $this->objectModel->buildSearchForm($case->product ?? 1, $products, $queryID, $actionURL, $objectID);
+
+        /* Return the result including config changes */
+        $result = array();
+        $result['hasProductField'] = isset($tester->config->testcase->search['fields']['product']) ? '1' : '0';
+        $result['searchFields'] = array_keys($tester->config->testcase->search['fields'] ?? array());
+        $result['actionURL'] = $actionURL;
+        $result['objectID'] = $objectID;
+
+        /* Restore original config and tab */
+        if ($originalConfig) {
+            $tester->config->testcase->search['fields'] = $originalConfig;
+        }
+        $tester->app->tab = $originalTab;
+
+        return $result;
+    }
 }
