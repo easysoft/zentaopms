@@ -2243,9 +2243,10 @@ $config->group->package->browseProjectReport = new stdclass();
 $config->group->package->browseProjectReport->order  = 5;
 $config->group->package->browseProjectReport->subset = 'projectreport';
 $config->group->package->browseProjectReport->privs  = array();
-$config->group->package->browseProjectReport->privs['weekly-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
-$config->group->package->browseProjectReport->privs['weekly-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
-$config->group->package->browseProjectReport->privs['weekly-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array());
+$config->group->package->browseProjectReport->privs['weekly-browse']             = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
+$config->group->package->browseProjectReport->privs['weekly-view']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
+$config->group->package->browseProjectReport->privs['weekly-exportReport']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array());
+$config->group->package->browseProjectReport->privs['weekly-exportWeeklyReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-index'), 'recommend' => array());
 
 $config->group->package->manageProjectReport = new stdclass();
 $config->group->package->manageProjectReport->order  = 10;
