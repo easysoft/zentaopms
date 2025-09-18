@@ -1,0 +1,166 @@
+---
+title: Bug数据用于getFoundBugGroups方法测试
+desc: 为getFoundBugGroups方法提供测试数据，包含不同严重级别、类型、状态的bug
+
+fields:
+- field: id
+  range: 1-10
+
+- field: project
+  range: 1
+
+- field: product
+  range: 1
+
+- field: injection
+  range: ''
+
+- field: identify
+  range: ''
+
+- field: branch
+  range: 0
+
+- field: module
+  range: 1001-1003
+
+- field: execution
+  range: 1
+
+- field: plan
+  range: 0
+
+- field: story
+  range: 0
+
+- field: storyVersion
+  range: 1
+
+- field: task
+  range: 0
+
+- field: toTask
+  range: 0
+
+- field: toStory
+  range: 0
+
+- field: title
+  range: 'Bug标题_{id}'
+
+- field: keywords
+  range: ''
+
+- field: severity
+  range: 1-4
+
+- field: pri
+  range: 1-4
+
+- field: type
+  range: 'codeerror,config,design,others'
+
+- field: os
+  range: 'all'
+
+- field: browser
+  range: 'all'
+
+- field: hardware
+  range: ''
+
+- field: found
+  range: ''
+
+- field: steps
+  range: '重现步骤{id}'
+
+- field: status
+  range: 'active{6},resolved{3},closed{1}'
+
+- field: subStatus
+  range: ''
+
+- field: color
+  range: ''
+
+- field: confirmed
+  range: 1
+
+- field: activatedCount
+  range: 0
+
+- field: activatedDate
+  range: '0000-00-00 00:00:00'
+
+- field: feedbackBy
+  range: ''
+
+- field: notifyEmail
+  range: ''
+
+- field: mailto
+  range: ''
+
+- field: openedBy
+  range: 'admin,user1,user2'
+
+- field: openedDate
+  range: '2023-01-01 10:00:00'
+
+- field: openedBuild
+  range: '1'
+
+- field: assignedTo
+  range: 'admin,user1'
+
+- field: assignedDate
+  range: '2023-01-01 10:30:00'
+
+- field: deadline
+  range: '0000-00-00'
+
+- field: resolvedBy
+  range: '[]{6},admin{2},user1{2}'
+
+- field: resolution
+  range: '[]{6},fixed{2},postponed{2}'
+
+- field: resolvedBuild
+  range: ''
+
+- field: resolvedDate
+  range: '[0000-00-00 00:00:00]{6},[2023-01-02 10:00:00]{4}'
+
+- field: closedBy
+  range: '[]{9},admin{1}'
+
+- field: closedDate
+  range: '[0000-00-00 00:00:00]{9},[2023-01-03 10:00:00]{1}'
+
+- field: duplicateBug
+  range: 0
+
+- field: relatedBug
+  range: ''
+
+- field: case
+  range: 0
+
+- field: caseVersion
+  range: 1
+
+- field: feedback
+  range: 0
+
+- field: testtask
+  range: 0
+
+- field: lastEditedBy
+  range: ''
+
+- field: lastEditedDate
+  range: '0000-00-00 00:00:00'
+
+- field: deleted
+  range: 0

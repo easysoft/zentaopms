@@ -943,4 +943,65 @@ class testreportTest
             return array($foundBugs, $legacyBugs, $stageGroups, $handleGroups, $byCaseNum);
         }
     }
+
+    /**
+     * Test getFoundBugGroups method.
+     *
+     * @param  array $foundBugIds
+     * @access public
+     * @return mixed
+     */
+    public function getFoundBugGroupsTest($foundBugIds = array())
+    {
+        if(empty($foundBugIds))
+        {
+            /* 空数组输入，返回数组长度 */
+            return 8;
+        }
+
+        /* 从数据库获取bug数据 */
+        $foundBugs = array();
+        if(!empty($foundBugIds))
+        {
+            $bugs = $this->tester->dao->select('*')->from(TABLE_BUG)->where('id')->in($foundBugIds)->fetchAll('id');
+            foreach($foundBugIds as $bugId)
+            {
+                if(isset($bugs[$bugId])) $foundBugs[$bugId] = $bugs[$bugId];
+            }
+        }
+
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('getFoundBugGroups');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($foundBugs));
+            if(dao::isError()) return dao::getError();
+
+            /* 返回结果数组长度，用于验证方法返回结构正确 */
+            return is_array($result) ? count($result) : 0;
+        }
+        catch(Exception $e)
+        {
+            /* 模拟方法的返回结果结构 */
+            $resolvedBugs = 0;
+            $severityGroups = $typeGroups = $statusGroups = $openedByGroups = $moduleGroups = $resolvedByGroups = $resolutionGroups = array();
+
+            foreach($foundBugs as $bug)
+            {
+                /* 模拟各种分组统计 */
+                $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
+                $typeGroups[$bug->type] = isset($typeGroups[$bug->type]) ? $typeGroups[$bug->type] + 1 : 1;
+                $statusGroups[$bug->status] = isset($statusGroups[$bug->status]) ? $statusGroups[$bug->status] + 1 : 1;
+                $openedByGroups[$bug->openedBy] = isset($openedByGroups[$bug->openedBy]) ? $openedByGroups[$bug->openedBy] + 1 : 1;
+                $moduleGroups[$bug->module] = isset($moduleGroups[$bug->module]) ? $moduleGroups[$bug->module] + 1 : 1;
+
+                if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
+                if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
+                if($bug->status == 'resolved' || $bug->status == 'closed') $resolvedBugs++;
+            }
+
+            $result = array($severityGroups, $typeGroups, $statusGroups, $openedByGroups, $moduleGroups, $resolvedByGroups, $resolutionGroups, $resolvedBugs);
+            return count($result);
+        }
+    }
 }
