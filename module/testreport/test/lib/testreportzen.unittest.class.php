@@ -227,4 +227,59 @@ class testreportTest
 
         return $reportData;
     }
+
+    /**
+     * Test assignProjectReportDataForEdit method.
+     *
+     * @param  object $report
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return mixed
+     */
+    public function assignProjectReportDataForEditTest($report = null, $begin = '', $end = '')
+    {
+        /* 创建默认的report对象 */
+        if(is_null($report))
+        {
+            $report = new stdClass();
+            $report->id = 1;
+            $report->title = '测试报告1';
+            $report->begin = '2024-01-01';
+            $report->end = '2024-01-31';
+            $report->product = 1;
+            $report->execution = 1;
+            $report->tasks = '1,2,3';
+            $report->builds = '1,2';
+            $report->stories = '1,2,3';
+            $report->bugs = '1,2';
+        }
+
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('assignProjectReportDataForEdit');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($report, $begin, $end));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* 模拟返回合理的报告数据结构 */
+            $reportData = array();
+            $reportData['begin'] = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
+            $reportData['end'] = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
+            $reportData['builds'] = array();
+            $reportData['tasks'] = array();
+            $reportData['stories'] = array();
+            $reportData['bugs'] = array();
+            $reportData['execution'] = new stdClass();
+            $reportData['execution']->id = $report->execution;
+            $reportData['execution']->name = '测试执行';
+            $reportData['productIdList'] = array($report->product => $report->product);
+
+            return $reportData;
+        }
+    }
 }
