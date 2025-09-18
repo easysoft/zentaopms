@@ -111,4 +111,43 @@ class testtaskZenTest
             $app->tab = $originalTab;
         }
     }
+
+    /**
+     * Test setSearchParamsForLinkCase method.
+     *
+     * @param  object $product
+     * @param  object $task
+     * @param  string $type
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function setSearchParamsForLinkCaseTest($product = null, $task = null, $type = '', $param = 0)
+    {
+        // 创建默认产品对象
+        if(!$product)
+        {
+            $product = new stdclass();
+            $product->id = 1;
+            $product->name = 'Test Product';
+            $product->shadow = 0;
+            $product->type = 'normal';
+        }
+
+        // 创建默认测试单对象
+        if(!$task)
+        {
+            $task = new stdclass();
+            $task->id = 1;
+            $task->build = 1;
+            $task->branch = '1';
+        }
+
+        $method = $this->testtaskZenTest->getMethod('setSearchParamsForLinkCase');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($product, $task, $type, (int)$param));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
