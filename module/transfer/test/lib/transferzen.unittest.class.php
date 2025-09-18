@@ -256,4 +256,36 @@ class transferZenTest
             return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         }
     }
+
+    /**
+     * Test processEstimate method.
+     *
+     * @param  int     $row
+     * @param  object  $object
+     * @access public
+     * @return mixed
+     */
+    public function processEstimateTest(int $row = 0, ?object $object = null)
+    {
+        global $tester;
+
+        // 设置必要的session数据
+        if(!isset($tester->session->taskTransferParams)) {
+            $tester->session->taskTransferParams = array('executionID' => 101);
+        }
+
+        try {
+            // 使用反射调用private方法
+            $result = callZenMethod('transfer', 'processEstimate', array($row, $object));
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(TypeError $e) {
+            return 'TypeError: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(Error $e) {
+            return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        }
+    }
 }
