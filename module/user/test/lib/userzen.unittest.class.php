@@ -125,4 +125,20 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test prepareCustomFields method.
+     *
+     * @param  string $method
+     * @param  string $requiredMethod
+     * @access public
+     * @return mixed
+     */
+    public function prepareCustomFieldsTest($method = 'batchCreate', $requiredMethod = 'create')
+    {
+        $result = callZenMethod('user', 'prepareCustomFields', array($method, $requiredMethod), 'view');
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
