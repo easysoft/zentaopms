@@ -1812,4 +1812,34 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test assembleExportData method.
+     *
+     * @param  array  $todos      待办数组
+     * @param  object $assemble   关联数据对象
+     * @param  object $todoLang   语言对象
+     * @param  array  $times      时间数组
+     * @access public
+     * @return mixed
+     */
+    public function assembleExportDataTest(array $todos, object $assemble, object $todoLang, array $times)
+    {
+        // 确保所有 todo 对象都有必需的属性
+        foreach($todos as $todo) {
+            if(!isset($todo->private)) $todo->private = 0;
+        }
+
+        $method = new ReflectionMethod('todoZen', 'assembleExportData');
+        $method->setAccessible(true);
+
+        // 抑制错误输出以避免干扰测试结果
+        ob_start();
+        $result = $method->invoke($this->todoZen, $todos, $assemble, $todoLang, $times);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
