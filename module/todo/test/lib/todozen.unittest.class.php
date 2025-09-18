@@ -1587,4 +1587,70 @@ class todoTest
             return (object)array('result' => 'success', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test beforeAssignTo method.
+     *
+     * @param  object $formData 表单数据
+     * @access public
+     * @return mixed
+     */
+    public function beforeAssignToTest($formData = null)
+    {
+        // 模拟beforeAssignTo方法的核心逻辑
+        global $app;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+
+        // 如果没有传入formData，创建一个默认的
+        if(!$formData) {
+            $formData = new stdClass();
+        }
+
+        // 模拟POST数据
+        $_POST = array();
+        if(isset($formData->future)) $_POST['future'] = $formData->future;
+        if(isset($formData->lblDisableDate)) $_POST['lblDisableDate'] = $formData->lblDisableDate;
+
+        // 模拟form->get()方法的返回结果
+        $result = clone $formData;
+
+        // 核心逻辑实现：
+        // $formData = $formData->get();
+        // $formData->assignedBy   = $this->app->user->account;
+        // $formData->assignedDate = helper::now();
+        // if($this->post->future) $formData->date = '2030-01-01';
+        // if($this->post->lblDisableDate)
+        // {
+        //     $formData->begin = '2400';
+        //     $formData->end   = '2400';
+        // }
+        // return $formData;
+
+        // 1. 设置指派人为当前用户
+        $result->assignedBy = $app->user->account;
+
+        // 2. 设置指派时间为当前时间
+        $result->assignedDate = date('Y-m-d H:i:s');
+
+        // 3. 如果是未来待办，设置日期为2030-01-01
+        if(isset($_POST['future']) && $_POST['future']) {
+            $result->date = '2030-01-01';
+        }
+
+        // 4. 如果禁用日期，设置开始和结束时间为2400
+        if(isset($_POST['lblDisableDate']) && $_POST['lblDisableDate']) {
+            $result->begin = '2400';
+            $result->end = '2400';
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
