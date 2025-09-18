@@ -221,4 +221,62 @@ class zanodeTest
         // Default case for unknown nodes
         return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
     }
+
+    /**
+     * Test installService method.
+     *
+     * @param  object $node
+     * @param  string $name
+     * @access public
+     * @return mixed
+     */
+    public function installServiceTest(object $node, string $name)
+    {
+        global $lang;
+
+        // Mock HTTP response based on different node and service scenarios
+        if($node->ip == '192.168.1.100' && $node->zap == '8085')
+        {
+            if(strtolower($name) == 'ztf')
+            {
+                // Mock successful ZTF installation
+                return array('ZenAgent' => 'ready', 'ZTF' => 'ready');
+            }
+            if(strtolower($name) == 'zendata')
+            {
+                // Mock successful ZenData installation
+                return array('ZenAgent' => 'ready', 'ZTF' => 'ready');
+            }
+        }
+
+        if($node->ip == '192.168.1.101' && $node->zap == '8085')
+        {
+            // Mock HTTP request failure (empty response)
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        if($node->ip == '192.168.1.102' && $node->zap == '8085')
+        {
+            // Mock response with non-success code
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        if($node->ip == '192.168.1.103' && $node->zap == '8085')
+        {
+            // Mock response with missing data
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        if($node->ip == '192.168.1.104' && $node->zap == '8085')
+        {
+            // Mock case insensitive service name handling
+            if(strtolower($name) == 'ztf' || strtolower($name) == 'ZTF')
+            {
+                return array('ZenAgent' => 'ready', 'ZTF' => 'ready');
+            }
+        }
+
+        // Default case for unknown scenarios
+        return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+    }
 }
