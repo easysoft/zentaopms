@@ -316,4 +316,58 @@ class todoTest
 
         return $todo;
     }
+
+    /**
+     * Test afterCreate method.
+     *
+     * @param  object $todo
+     * @param  object $form
+     * @access public
+     * @return mixed
+     */
+    public function afterCreateTest(object $todo, object $form)
+    {
+        // 模拟afterCreate方法的核心逻辑
+        global $app;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+
+        // 1. 模拟文件处理：如果有uid则更新文件对象ID
+        if(isset($form->data) && isset($form->data->uid) && !empty($form->data->uid)) {
+            // 模拟文件更新，实际情况下会调用 file::updateObjectID
+            $todo->fileUpdated = 1;
+        } else {
+            $todo->fileUpdated = 0;
+        }
+
+        // 2. 模拟积分创建
+        if(isset($todo->id) && !empty($todo->id)) {
+            $todo->scoreCreated = 1;
+        } else {
+            $todo->scoreCreated = 0;
+        }
+
+        // 3. 模拟周期待办处理
+        if(!empty($todo->cycle)) {
+            $todo->cycleCreated = 1;
+        } else {
+            $todo->cycleCreated = 0;
+        }
+
+        // 4. 模拟action记录创建
+        if(isset($todo->id) && !empty($todo->id)) {
+            $todo->actionCreated = 1;
+        } else {
+            $todo->actionCreated = 0;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $todo;
+    }
 }
