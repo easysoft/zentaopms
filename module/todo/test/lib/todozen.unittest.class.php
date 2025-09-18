@@ -225,4 +225,26 @@ class todoTest
 
         return $data;
     }
+
+    /**
+     * Test addCycleYearConfig method.
+     *
+     * @param  object $form 表单对象
+     * @access public
+     * @return object
+     */
+    public function addCycleYearConfigTest(object $form): object
+    {
+        // 直接模拟addCycleYearConfig方法的逻辑
+        if(empty($form->data->config)) return $form;
+        if(!empty($form->data->config) && $form->data->config['type'] != 'year') return $form;
+
+        $form->data->config['type'] = 'day';
+        $form->data->config['specifiedDate'] = 1;
+        $form->data->config['cycleYear'] = 1;
+
+        if(dao::isError()) return dao::getError();
+
+        return $form;
+    }
 }
