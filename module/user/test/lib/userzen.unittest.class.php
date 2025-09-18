@@ -47,4 +47,19 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test getUserForJSON method.
+     *
+     * @param  object $user
+     * @access public
+     * @return mixed
+     */
+    public function getUserForJSONTest($user = null)
+    {
+        $result = callZenMethod('user', 'getUserForJSON', array($user));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
