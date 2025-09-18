@@ -111,4 +111,18 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test prepareRolesAndGroups method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function prepareRolesAndGroupsTest()
+    {
+        $result = callZenMethod('user', 'prepareRolesAndGroups', array(), 'view');
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
