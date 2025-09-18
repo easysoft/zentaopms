@@ -1398,4 +1398,80 @@ class testcaseZenTest
             return array('executed' => '0', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getExportFields method.
+     *
+     * @param  string $productType 产品类型
+     * @param  array  $postFields  POST数据中的导出字段
+     * @access public
+     * @return int
+     */
+    public function getExportFieldsTest(string $productType, array $postFields = null): int
+    {
+        global $tester;
+
+        // 保存原始POST数据
+        $originalPost = $_POST;
+
+        try {
+            // 初始化必要的配置
+            if(!isset($tester->config)) $tester->config = new stdClass();
+            if(!isset($tester->config->testcase)) $tester->config->testcase = new stdClass();
+            $tester->config->testcase->exportFields = 'id,title,status,type,branch';
+
+            // 初始化语言配置
+            if(!isset($tester->lang)) $tester->lang = new stdClass();
+            if(!isset($tester->lang->testcase)) $tester->lang->testcase = new stdClass();
+            $tester->lang->testcase->id = 'ID';
+            $tester->lang->testcase->title = '用例标题';
+            $tester->lang->testcase->status = '用例状态';
+            $tester->lang->testcase->type = '用例类型';
+            $tester->lang->testcase->branch = '分支';
+
+            // 设置POST数据
+            if($postFields !== null) {
+                $_POST['exportFields'] = $postFields;
+            } else {
+                unset($_POST['exportFields']);
+            }
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 创建POST对象并设置exportFields属性
+            $zenInstance->post = new stdClass();
+            if($postFields !== null && !empty($postFields)) {
+                $zenInstance->post->exportFields = $postFields;
+            } else {
+                $zenInstance->post->exportFields = null;
+            }
+
+            $zenInstance->config = $tester->config;
+            $zenInstance->lang = $tester->lang;
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getExportFields');
+            $method->setAccessible(true);
+
+            // 调用方法并获取结果
+            $result = $method->invoke($zenInstance, $productType);
+
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+
+            // 返回字段数量
+            return count($result);
+        } catch (Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 0;
+        } catch (Error $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 0;
+        }
+    }
 }
