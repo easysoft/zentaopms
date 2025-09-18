@@ -73,4 +73,26 @@ class treeTest
 
         return $lang->tree;
     }
+
+    /**
+     * Test updateWorkflowLang method.
+     *
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function updateWorkflowLangTest(string $viewType = '')
+    {
+        global $app, $lang;
+
+        $app->loadLang('tree');
+
+        $treeZen = $this->objectZen->newInstance();
+        $method = $this->objectZen->getMethod('updateWorkflowLang');
+        $method->setAccessible(true);
+        $method->invoke($treeZen, $viewType);
+        if(dao::isError()) return dao::getError();
+
+        return $lang->tree;
+    }
 }
