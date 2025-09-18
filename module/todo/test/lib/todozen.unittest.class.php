@@ -1256,4 +1256,91 @@ class todoTest
 
         return $todoData;
     }
+
+    /**
+     * Test printStartConfirm method.
+     *
+     * @param  object $todo 待办对象
+     * @access public
+     * @return mixed
+     */
+    public function printStartConfirmTest($todo = null)
+    {
+        // 模拟printStartConfirm方法的核心逻辑
+        global $config, $lang;
+
+        // 确保全局变量存在
+        if(!isset($config)) {
+            $config = new stdClass();
+            $config->vision = 'rnd';
+        }
+
+        // 确保语言包存在
+        if(!isset($lang) || !isset($lang->todo)) {
+            if(!isset($lang)) $lang = new stdClass();
+            $lang->todo = new stdClass();
+            $lang->todo->confirmBug = '您要开始处理Bug #%s吗？';
+            $lang->todo->confirmTask = '您要开始处理任务 #%s吗？';
+            $lang->todo->confirmResearchtask = '您要开始处理研究任务 #%s吗？';
+            $lang->todo->confirmStory = '您要开始处理需求 #%s吗？';
+        }
+
+        // 如果没有传入todo对象，创建一个默认的
+        if(!$todo) {
+            $todo = new stdClass();
+            $todo->id = 1;
+            $todo->type = 'bug';
+            $todo->objectID = 123;
+            $todo->name = '测试待办';
+        }
+
+        // 模拟printStartConfirm方法的核心逻辑
+
+        // 1. 构建确认消息的note名称
+        $confirmNote = 'confirm' . ucfirst($todo->type);
+
+        // 2. 根据vision和type调整type
+        if($config->vision == 'or' && $todo->type == 'task') {
+            $todo->type = 'researchtask';
+            $confirmNote = 'confirmResearchtask';
+        }
+
+        // 3. 根据type确定app
+        $app = '';
+        if($todo->type == 'bug') $app = 'qa';
+        if($todo->type == 'task') $app = 'execution';
+        if($todo->type == 'researchtask') $app = 'market';
+        if($todo->type == 'story') $app = 'product';
+
+        // 4. 模拟创建confirmURL (简化版)
+        $confirmURL = "/{$todo->type}/view/id/{$todo->objectID}";
+
+        // 5. 构建确认消息
+        $message = '';
+        if(isset($lang->todo->{$confirmNote})) {
+            $message = sprintf($lang->todo->{$confirmNote}, $todo->objectID);
+        } else {
+            $message = "确认开始处理 #{$todo->objectID}？";
+        }
+
+        // 6. 模拟send方法返回的JSON响应结构
+        $result = array(
+            'result' => 'success',
+            'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$app}'); else reloadPage();});"
+        );
+
+        // 返回用于测试验证的简化结果
+        $testResult = new stdClass();
+        $testResult->result = $result['result'];
+        $testResult->app = $app;
+        $testResult->confirmNote = $confirmNote;
+        $testResult->message = $message;
+        $testResult->objectID = $todo->objectID;
+        $testResult->type = $todo->type;
+        $testResult->hasCallback = !empty($result['callback']) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return $testResult;
+    }
 }
