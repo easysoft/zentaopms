@@ -1563,4 +1563,35 @@ class testcaseZenTest
             return array(array('caseData' => array()), 0);
         }
     }
+
+    /**
+     * Test assignCreateSceneVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @access public
+     * @return mixed
+     */
+    public function assignCreateSceneVarsTest(int $productID, string $branch = '', int $moduleID = 0): mixed
+    {
+        global $tester;
+
+        // 调用zen方法
+        $result = callZenMethod('testcase', 'assignCreateSceneVars', [$productID, $branch, $moduleID]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回视图变量以便验证
+        return array(
+            'title' => isset($tester->view->title) ? $tester->view->title : '',
+            'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
+            'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
+            'moduleID' => isset($tester->view->moduleID) ? $tester->view->moduleID : 0,
+            'parent' => isset($tester->view->parent) ? $tester->view->parent : 0,
+            'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+            'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
+            'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+            'debug_view' => isset($tester->view) ? 'view_exists' : 'view_not_exists'
+        );
+    }
 }
