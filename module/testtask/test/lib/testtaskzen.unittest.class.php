@@ -44,4 +44,22 @@ class testtaskZenTest
             $app->tab = $originalTab;
         }
     }
+
+    /**
+     * Test getBrowseBranch method.
+     *
+     * @param  string $branch
+     * @param  string $productType
+     * @access public
+     * @return string
+     */
+    public function getBrowseBranchTest($branch = '', $productType = 'normal')
+    {
+        $method = $this->testtaskZenTest->getMethod('getBrowseBranch');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($branch, $productType));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
