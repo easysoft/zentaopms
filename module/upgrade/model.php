@@ -11514,13 +11514,15 @@ class upgradeModel extends model
      */
     public function createOtherDeliverable(int $workflowGroupID)
     {
-        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('root')->eq($workflowGroupID)->andWhere('extra')->eq('other')->fetch('id');
+        $moduleID   = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('root')->eq($workflowGroupID)->andWhere('extra')->eq('other')->fetch('id');
+        $activityID = $this->dao->select('id')->from(TABLE_ACTIVITY)->where('name')->eq($this->lang->other)->andWhere('workflowGroup')->eq($workflowGroupID)->fetch('id');
 
         /* 创建名为其他的交付物类型。 */
         $deliverable = new stdclass();
         $deliverable->name          = $this->lang->other;
         $deliverable->category      = 'other';
         $deliverable->module        = $moduleID;
+        $deliverable->activity      = $activityID;
         $deliverable->workflowGroup = $workflowGroupID;
         $deliverable->template      = '[]';
         $deliverable->trimmable     = '1';
