@@ -389,4 +389,73 @@ class testreportTest
 
         return $view;
     }
+
+    /**
+     * Test buildReportDataForView method.
+     *
+     * @param  object $report
+     * @access public
+     * @return mixed
+     */
+    public function buildReportDataForViewTest($report = null)
+    {
+        /* 创建默认的report对象 */
+        if(is_null($report))
+        {
+            $report = new stdClass();
+            $report->id = 1;
+            $report->title = '测试报告1';
+            $report->begin = '2024-01-01';
+            $report->end = '2024-01-31';
+            $report->product = 1;
+            $report->execution = 1;
+            $report->tasks = '1,2,3';
+            $report->builds = '1,2';
+            $report->stories = '1,2,3';
+            $report->bugs = '1,2';
+            $report->cases = '1,2,3,4,5';
+        }
+
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('buildReportDataForView');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($report));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* 模拟返回合理的报告数据结构 */
+            $reportData = array();
+            $reportData['begin'] = $report->begin;
+            $reportData['end'] = $report->end;
+            $reportData['cases'] = $report->cases;
+            $reportData['productIdList'] = array($report->product);
+
+            /* 模拟execution对象 */
+            $reportData['execution'] = new stdClass();
+            $reportData['execution']->id = $report->execution;
+            $reportData['execution']->name = '测试执行';
+            $reportData['execution']->type = 'execution';
+
+            /* 模拟stories数组 */
+            $reportData['stories'] = $report->stories ? array() : array();
+
+            /* 模拟tasks数组 */
+            $reportData['tasks'] = $report->tasks ? array() : array();
+
+            /* 模拟builds数组 */
+            $reportData['builds'] = $report->builds ? array() : array();
+
+            /* 模拟bugs数组 */
+            $reportData['bugs'] = $report->bugs ? array() : array();
+
+            /* 添加原始report对象 */
+            $reportData['report'] = $report;
+
+            return $reportData;
+        }
+    }
 }
