@@ -232,4 +232,40 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForClose method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForCloseTest($taskID = 1)
+    {
+        // 根据不同的taskID使用不同的测试数据
+        $testData = array(
+            1 => array('status' => 'done', 'comment' => '测试完成', 'realFinishedDate' => '2024-01-31 18:00:00', 'mailto' => array('admin', 'user1'), 'uid' => 'uid123'),
+            2 => array('status' => 'done', 'comment' => '', 'realFinishedDate' => '2024-01-31 15:30:00', 'mailto' => array(), 'uid' => 'uid456'),
+            3 => array('status' => 'done', 'comment' => '测试任务已完成，所有用例执行完毕', 'realFinishedDate' => '2024-02-28 17:45:00', 'mailto' => array('qa', 'pm'), 'uid' => ''),
+            4 => array('status' => 'done', 'comment' => '<p>带HTML标签的关闭注释</p>', 'realFinishedDate' => '2024-03-15 16:20:00', 'mailto' => array('test'), 'uid' => 'uid789'),
+            0 => array('status' => 'done', 'comment' => '无效ID测试', 'realFinishedDate' => '2024-12-31 23:59:59', 'mailto' => array(), 'uid' => 'invalid'),
+            999 => array('status' => 'done', 'comment' => '不存在的测试单', 'realFinishedDate' => '2024-12-31 12:00:00', 'mailto' => array('admin'), 'uid' => 'test999')
+        );
+
+        $data = isset($testData[$taskID]) ? $testData[$taskID] : $testData[1];
+
+        // 模拟表单数据
+        $_POST = $data;
+
+        $method = $this->testtaskZenTest->getMethod('buildTaskForClose');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array((int)$taskID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
