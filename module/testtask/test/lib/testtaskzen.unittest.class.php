@@ -666,4 +666,58 @@ class testtaskZenTest
             return 'error';
         }
     }
+
+    /**
+     * Test getProducts method.
+     *
+     * @param  string $tab
+     * @param  bool   $tutorialMode
+     * @param  bool   $onlybody
+     * @param  int    $sessionProject
+     * @param  int    $sessionExecution
+     * @access public
+     * @return mixed
+     */
+    public function getProductsTest($tab = 'qa', $tutorialMode = false, $onlybody = false, $sessionProject = 0, $sessionExecution = 0)
+    {
+        global $app;
+
+        // 保存原始状态
+        $originalTab = $app->tab;
+        $originalSession = array();
+        if(isset($app->session))
+        {
+            $originalSession['project'] = isset($app->session->project) ? $app->session->project : 0;
+            $originalSession['execution'] = isset($app->session->execution) ? $app->session->execution : 0;
+        }
+
+        try {
+            // 设置测试环境
+            $app->tab = $tab;
+            if(isset($app->session))
+            {
+                $app->session->project = $sessionProject;
+                $app->session->execution = $sessionExecution;
+            }
+
+            $method = $this->testtaskZenTest->getMethod('getProducts');
+            $method->setAccessible(true);
+
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $result = $method->invoke($testtaskZen);
+            if(dao::isError()) return dao::getError();
+
+            return is_array($result) ? $result : array();
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        } finally {
+            // 恢复原始状态
+            $app->tab = $originalTab;
+            if(isset($app->session) && !empty($originalSession))
+            {
+                $app->session->project = $originalSession['project'];
+                $app->session->execution = $originalSession['execution'];
+            }
+        }
+    }
 }
