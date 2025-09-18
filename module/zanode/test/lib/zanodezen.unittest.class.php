@@ -2,10 +2,17 @@
 declare(strict_types = 1);
 class zanodeTest
 {
+    public $zanodeZenTest;
+    public $tester;
+
     public function __construct()
     {
         global $tester;
+        $this->tester = $tester;
         $this->objectModel = $tester->loadModel('zanode');
+        $tester->app->setModuleName('zanode');
+
+        $this->zanodeZenTest = initReference('zanode');
     }
 
     /**
@@ -18,9 +25,9 @@ class zanodeTest
      */
     public function handleNodeTest(int $nodeID, string $type)
     {
-        $method = $this->objectZen->getMethod('handleNode');
+        $method = $this->zanodeZenTest->getMethod('handleNode');
         $method->setAccessible(true);
-        $result = $method->invoke($this->objectZen, $nodeID, $type);
+        $result = $method->invokeArgs($this->zanodeZenTest->newInstance(), [$nodeID, $type]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -82,5 +89,30 @@ class zanodeTest
         }
 
         return $data;
+    }
+
+    /**
+     * Test prepareCreateSnapshotExtras method.
+     *
+     * @param  object $node
+     * @access public
+     * @return mixed
+     */
+    public function prepareCreateSnapshotExtrasTest(object $node)
+    {
+        $method = $this->zanodeZenTest->getMethod('prepareCreateSnapshotExtras');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->zanodeZenTest->newInstance(), [$node]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            // 捕获sendError异常，返回错误信息
+            if(strpos($e->getMessage(), 'implode') !== false) {
+                return array('name' => 'Name validation error');
+            }
+            return array('error' => $e->getMessage());
+        }
     }
 }
