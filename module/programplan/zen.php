@@ -382,15 +382,6 @@ class programplanZen extends programplan
      */
     protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): array
     {
-        /* Get data of type. */
-        if($type == 'lists')
-        {
-            $sort   = common::appendOrder($orderBy);
-            $stages = $this->programplan->getPlans($projectID, $productID, $sort);
-
-            return $stages;
-        }
-
         /* Obtain user page configuration items. */
         $this->loadModel('setting');
         $owner  = $this->app->user->account;
