@@ -340,4 +340,114 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForImportUnitResult method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForImportUnitResultTest($productID = 1)
+    {
+        // 根据不同的productID使用不同的测试数据
+        $testData = array(
+            1 => array(
+                'execution' => 1,
+                'build' => 1,
+                'frame' => 'phpunit',
+                'owner' => 'admin',
+                'begin' => '2024-01-01',
+                'end' => '2024-01-31',
+                'name' => '单元测试导入任务',
+                'pri' => 3,
+                'desc' => '<p>从单元测试结果导入的测试任务</p>',
+                'mailto' => 'admin,qa',
+                'uid' => 'uid123'
+            ),
+            2 => array(
+                'execution' => 0,
+                'build' => 2,
+                'frame' => 'jest',
+                'owner' => 'user1',
+                'begin' => '2024-02-01',
+                'end' => '2024-02-28',
+                'name' => 'Jest单元测试',
+                'pri' => 2,
+                'desc' => '',
+                'mailto' => '',
+                'uid' => 'uid456'
+            ),
+            5 => array(
+                'execution' => 5,
+                'build' => 3,
+                'frame' => 'junit',
+                'owner' => 'tester',
+                'begin' => '2024-03-01',
+                'end' => '2024-03-31',
+                'name' => 'JUnit测试导入',
+                'pri' => 1,
+                'desc' => '<script>alert("xss")</script>Java单元测试结果导入',
+                'mailto' => 'qa,dev',
+                'uid' => ''
+            ),
+            0 => array(
+                'execution' => 0,
+                'build' => 1,
+                'frame' => '',
+                'owner' => '',
+                'begin' => '2024-12-01',
+                'end' => '2024-12-31',
+                'name' => '无效产品ID测试',
+                'pri' => 3,
+                'desc' => '测试无效产品ID的情况',
+                'mailto' => '',
+                'uid' => 'invalid'
+            ),
+            999 => array(
+                'execution' => 999,
+                'build' => 999,
+                'frame' => 'unknown',
+                'owner' => 'unknown',
+                'begin' => '2025-01-01',
+                'end' => '2025-01-31',
+                'name' => '不存在的产品测试',
+                'pri' => 4,
+                'desc' => '测试不存在的产品ID',
+                'mailto' => 'admin',
+                'uid' => 'test999'
+            )
+        );
+
+        $data = isset($testData[$productID]) ? $testData[$productID] : $testData[1];
+
+        // 保存原始$_POST和$_GET数据
+        $originalPost = $_POST;
+        $originalGet = $_GET;
+
+        // 模拟表单数据
+        $_POST = $data;
+        $_GET = array();
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $method = $this->testtaskZenTest->getMethod('buildTaskForImportUnitResult');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($testtaskZen, (int)$productID);
+            if(dao::isError()) return dao::getError();
+
+            // 恢复原始数据
+            $_POST = $originalPost;
+            $_GET = $originalGet;
+
+            return $result;
+        } catch(Exception $e) {
+            // 恢复原始数据
+            $_POST = $originalPost;
+            $_GET = $originalGet;
+
+            return array('error' => $e->getMessage());
+        }
+    }
 }
