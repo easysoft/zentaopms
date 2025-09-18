@@ -2439,4 +2439,53 @@ class testcaseZenTest
             return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Test fetchByJSON method.
+     *
+     * @param  string     $filePath
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @access public
+     * @return array
+     */
+    public function fetchByJSONTest(string $filePath, int $productID, int|string $branch): array
+    {
+        try {
+            global $tester;
+
+            // 检查JSON文件是否存在
+            $jsonFile = $filePath . '/content.json';
+            if(!file_exists($jsonFile)) {
+                return array('result' => 'fail', 'message' => 'JSON file not found');
+            }
+
+            $zenClass = new ReflectionClass('testcaseZen');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->app = $tester->app;
+            $zenInstance->lang = $tester->lang;
+
+            // 初始化classXmind属性
+            $zenInstance->classXmind = $tester->app->loadClass('xmind');
+
+            // 添加product model
+            $zenInstance->product = $tester->loadModel('product');
+
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('fetchByJSON');
+            $method->setAccessible(true);
+
+            $returnValue = $method->invoke($zenInstance, $filePath, $productID, $branch);
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
+        } catch (Error $e) {
+            return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
+        }
+    }
 }
