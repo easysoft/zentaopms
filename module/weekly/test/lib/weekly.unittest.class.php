@@ -464,4 +464,17 @@ class weeklyTest
 
         return $objects;
     }
+
+    /**
+     * 升级里程碑报告数据。
+     * Upgrade milestone report data.
+     *
+     * @access public
+     * @return array
+     */
+    public function upgradeMilestoneDataTest(): array
+    {
+        $this->objectModel->upgradeMilestoneData();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('module')->eq('milestone')->andWhere('templateType')->eq('projectReport')->fetchAll();
+    }
 }
