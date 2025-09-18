@@ -11232,8 +11232,12 @@ class upgradeModel extends model
                 continue;
             }
 
+            $beginTimestame = strtotime($report->realBegan);
+            $day            = date('w', $beginTimestame);
+            if($day == 0) $day = 7;
+            $report->projectBegin = date('Y-m-d', strtotime("- {$day} days", $beginTimestame));
+
             /* Filter date < project begin date report. */
-            $report->projectBegin = date('Y-m-d', strtotime($report->realBegan));
             if($report->weekStart < $report->projectBegin) unset($reports[$key]);
 
             if($report->projectStatus == 'doing')     $report->projectEnd = $thisSunday;
