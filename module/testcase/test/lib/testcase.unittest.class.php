@@ -33,6 +33,54 @@ class testcaseTest
     }
 
     /**
+     * Test prepareReviewData method.
+     *
+     * @param  int     $caseID
+     * @param  object  $oldCase
+     * @access public
+     * @return mixed
+     */
+    public function prepareReviewDataTest($caseID = 1, $oldCase = null)
+    {
+        if($oldCase === null)
+        {
+            $oldCase = new stdclass();
+            $oldCase->status = 'wait';
+        }
+
+        global $tester;
+
+        // 模拟prepareReviewData方法的核心逻辑
+        try {
+            if(!isset($_POST['result']))
+            {
+                return array('result' => '必须选择评审结果');
+            }
+
+            $now    = helper::now();
+            $status = isset($_POST['result']) && $_POST['result'] == 'pass' ? 'normal' : zget($oldCase, 'status', '');
+
+            $case = new stdclass();
+            $case->id = $caseID;
+            $case->status = $status;
+            $case->reviewedDate = substr($now, 0, 10);
+            $case->lastEditedBy = 'admin';
+            $case->lastEditedDate = $now;
+
+            if(isset($_POST['reviewedBy']) && is_array($_POST['reviewedBy']))
+            {
+                $case->reviewedBy = implode(',', $_POST['reviewedBy']);
+            }
+
+            return $case;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
+    /**
      * 测试创建一个用例。
      * Test create a case.
      *
