@@ -1494,4 +1494,52 @@ class testcaseZenTest
         // 返回数组的键数量
         return is_array($result) ? count($result) : 0;
     }
+
+    /**
+     * Test getModuleListForXmindExport method.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function getModuleListForXmindExportTest(int $productID, int $moduleID, string $branch)
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            if(!isset($zenInstance->tree)) {
+                $zenInstance->tree = $tester->loadModel('tree');
+            }
+
+            // 使用反射调用private方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getModuleListForXmindExport');
+            $method->setAccessible(true);
+
+            // 调用方法并获取结果
+            $result = $method->invoke($zenInstance, $productID, $moduleID, $branch);
+
+            if(dao::isError()) return dao::getError();
+
+            // 根据moduleID返回不同格式的结果
+            if($moduleID > 0) {
+                // 指定了moduleID，返回原始结果（数组或空数组）
+                return $result;
+            } else {
+                // moduleID为0，返回数组长度用于测试
+                return is_array($result) ? count($result) : 0;
+            }
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
