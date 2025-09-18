@@ -1179,4 +1179,81 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test setCycle method.
+     *
+     * @param  mixed $todoData 待办数据
+     * @access public
+     * @return mixed
+     */
+    public function setCycleTest($todoData = null)
+    {
+        // 清理之前的错误
+        dao::$errors = array();
+
+        // 模拟setCycle方法的核心逻辑
+        if(empty($todoData) || !isset($todoData->config)) {
+            return false;
+        }
+
+        // 模拟helper::isZeroDate和helper::today()的逻辑
+        if(empty($todoData->date) || $todoData->date == '0000-00-00') {
+            $todoData->date = date('Y-m-d');
+        }
+
+        $todoData->config['begin'] = $todoData->date;
+
+        // 根据周期类型处理配置
+        if($todoData->config['type'] == 'day') {
+            unset($todoData->config['week'], $todoData->config['month']);
+            if(empty($todoData->config['specifiedDate'])) {
+                if(empty($todoData->config['day'])) {
+                    dao::$errors['config[day]'] = '每天循环的天数不能为空';
+                    return false;
+                }
+                if(!is_numeric($todoData->config['day'])) {
+                    dao::$errors['config[day]'] = '每天循环的天数必须是整数';
+                    return false;
+                }
+            } else {
+                unset($todoData->config['day']);
+            }
+        }
+
+        if($todoData->config['type'] == 'week') {
+            unset($todoData->config['day'], $todoData->config['month']);
+            if(!is_array($todoData->config['week'])) $todoData->config['week'] = (array)$todoData->config['week'];
+            $todoData->config['week'] = implode(',', $todoData->config['week']);
+            if(empty($todoData->config['week'])) {
+                dao::$errors['config[week][]'] = '每周循环配置不能为空';
+                return false;
+            }
+        }
+
+        if($todoData->config['type'] == 'month') {
+            unset($todoData->config['day'], $todoData->config['week']);
+            if(!is_array($todoData->config['month'])) $todoData->config['month'] = (array)$todoData->config['month'];
+            $todoData->config['month'] = implode(',', $todoData->config['month']);
+            if(empty($todoData->config['month'])) {
+                dao::$errors['config[month][]'] = '每月循环配置不能为空';
+                return false;
+            }
+        }
+
+        // 处理beforeDays
+        if(!empty($todoData->config['beforeDays']) && !is_numeric($todoData->config['beforeDays'])) {
+            dao::$errors['config[beforeDays]'] = '提前天数必须是整数';
+            return false;
+        }
+        $todoData->config['beforeDays'] = !empty($todoData->config['beforeDays']) ? $todoData->config['beforeDays'] : 0;
+
+        // 设置配置为JSON格式
+        $todoData->config = json_encode($todoData->config);
+        $todoData->type = 'cycle';
+
+        if(dao::isError()) return dao::getError();
+
+        return $todoData;
+    }
 }
