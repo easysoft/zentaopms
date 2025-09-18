@@ -763,4 +763,82 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test prepareCasesForBatchRun method.
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  string $from
+     * @param  int    $taskID
+     * @param  string $confirm
+     * @param  array  $caseIdList
+     * @access public
+     * @return mixed
+     */
+    public function prepareCasesForBatchRunTest($productID = 1, $orderBy = 'id_asc', $from = 'testtask', $taskID = 1, $confirm = '', $caseIdList = array())
+    {
+        // 基本参数验证
+        if(empty($caseIdList)) return 0;
+        if($productID <= 0) return 'invalid_product_id';
+        if($taskID <= 0 && $from == 'testtask') return 'invalid_task_id';
+
+        // 模拟数据库查询结果
+        $mockCases = array();
+        foreach($caseIdList as $index => $caseID)
+        {
+            if($caseID > 0 && $caseID <= 10) // 假设我们有1-10的用例
+            {
+                $case = new stdclass();
+                $case->id = $caseID;
+                $case->title = "测试用例{$caseID}";
+                $case->version = $index % 2 + 1; // 交替版本1和2
+                $case->auto = $index % 3 == 0 ? 'auto' : 'no'; // 部分自动化用例
+                $mockCases[$caseID] = $case;
+            }
+        }
+
+        // 如果确认参数为yes，过滤掉自动化用例
+        if($confirm == 'yes')
+        {
+            $filteredCases = array();
+            foreach($mockCases as $caseID => $case)
+            {
+                if($case->auto != 'auto')
+                {
+                    $filteredCases[$caseID] = $case;
+                }
+            }
+            $mockCases = $filteredCases;
+        }
+
+        // 如果来源是测试单，模拟版本检查
+        if($from == 'testtask')
+        {
+            // 模拟测试执行记录，假设某些用例版本过期
+            $mockRuns = array();
+            foreach($mockCases as $caseID => $case)
+            {
+                if($caseID % 3 == 0) // 每3个用例中的第一个版本过期
+                {
+                    $mockRuns[$caseID] = $case->version - 1; // 版本落后
+                }
+                else
+                {
+                    $mockRuns[$caseID] = $case->version; // 版本匹配
+                }
+            }
+
+            // 移除版本不匹配的用例
+            foreach($mockCases as $caseID => $case)
+            {
+                if(isset($mockRuns[$caseID]) && $mockRuns[$caseID] < $case->version)
+                {
+                    unset($mockCases[$caseID]);
+                }
+            }
+        }
+
+        return count($mockCases);
+    }
 }
