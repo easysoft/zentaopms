@@ -95,10 +95,10 @@ $buildTable = function($title, $cols, $data, $total = array(), $tableClass = '')
     $trList = array();
     foreach($data as $row)
     {
-        $trList[] = h::tr(array_map(function($col) { return h::td(setClass(zget($col, 'class', '')), $col['value']); }, $row));
+        $trList[] = '<tr>' . implode(array_map(function($col) { return '<td class="' . zget($col, 'class', '') . '">' . $col['value'] . '</td>'; }, $row)) . '</tr>';
     }
-    if($total) $trList[] = h::tr(h::td(set::colspan(count($cols)), setClass(zget($total, 'class', '')), $total['content']));
-    $tbody = h::tbody($trList);
+    if($total) $trList[] = '<tr><td colspan="' . count($cols) . '" class="' . zget($total, 'class', '') . '">' . $total['content'] . '</td></tr>';
+    $tbody = h::tbody(html(implode($trList)));
 
     return div
     (
@@ -152,7 +152,7 @@ foreach($postponed as $task)
         array('class' => 'text-left',   'value' => $task->estStarted),
         array('class' => 'text-left',   'value' => $task->deadline),
         array('class' => 'text-left',   'value' => !helper::isZeroDate($task->realStarted) ? substr($task->realStarted, 0, 11) : ''),
-        array('class' => 'text-left',   'value' => $task->progress)
+        array('class' => 'text-left',   'value' => $task->progress . '%')
     );
 }
 $buildTable($lang->weekly->postponed, $cols, $data, array('content' => sprintf($lang->weekly->totalCount, count($postponed)), 'class' => 'text-right font-bold'));
