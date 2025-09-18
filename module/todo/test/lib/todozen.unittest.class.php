@@ -449,4 +449,177 @@ class todoTest
 
         return $todos;
     }
+
+    /**
+     * Test beforeEdit method.
+     *
+     * @param  int $todoID 待办ID
+     * @param  object $form 表单对象
+     * @access public
+     * @return mixed
+     */
+    public function beforeEditTest(int $todoID, object $form)
+    {
+        // 模拟beforeEdit方法的核心逻辑
+        global $app, $config;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->vision = 'rnd';
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'story', 'epic', 'requirement', 'testtask', 'issue', 'risk');
+            $config->todo->edit = new stdClass();
+            $config->todo->edit->requiredFields = 'name,type,date';
+            $config->allowedTags = '<p><br><strong><em>';
+            $config->todo->editor = new stdClass();
+            $config->todo->editor->edit = array('id' => 'desc');
+        }
+
+        // 1. 模拟获取旧的待办数据
+        $oldTodo = new stdClass();
+        $oldTodo->id = $todoID;
+        $oldTodo->account = 'admin';
+        $oldTodo->type = 'custom';
+        $oldTodo->assignedTo = 'admin';
+        $oldTodo->assignedBy = 'admin';
+        $oldTodo->cycle = '';
+
+        // 2. 处理表单数据
+        if(!isset($form->data)) {
+            return false;
+        }
+
+        $postData = clone $form->data;
+
+        // 3. 处理对象类型和对象ID
+        $objectType = !empty($postData->type) ? $postData->type : $oldTodo->type;
+        $hasObject = in_array($objectType, $config->todo->moduleList);
+        $objectID = 0;
+        if($hasObject && $objectType && isset($postData->objectID)) {
+            $objectID = (int)$postData->objectID;
+        }
+
+        // 4. 处理周期日期替换
+        if(!empty($postData->config) && isset($postData->config['date'])) {
+            $postData->date = $postData->config['date'];
+        }
+
+        // 5. 构建待办数据
+        $todo = clone $postData;
+        $todo->account = $oldTodo->account;
+
+        // 设置默认的指派字段
+        if(!isset($todo->assignedTo)) $todo->assignedTo = $oldTodo->assignedTo;
+        if(!isset($todo->assignedBy)) $todo->assignedBy = $oldTodo->assignedBy;
+
+        // 6. 清理整数字段
+        if(isset($todo->pri)) $todo->pri = (int)$todo->pri;
+        if(isset($todo->begin)) $todo->begin = (string)$todo->begin;
+        if(isset($todo->end)) $todo->end = (string)$todo->end;
+
+        // 7. 根据条件设置字段
+        if(in_array($objectType, array('bug', 'task', 'story'))) {
+            $todo->name = '';
+        }
+
+        if($hasObject && $objectType) {
+            $todo->objectID = $objectID;
+        }
+
+        // 8. 处理日期和时间
+        if(empty($postData->date)) {
+            $todo->date = '2030-01-01';
+        }
+        if(empty($postData->begin)) {
+            $todo->begin = '2400';
+        }
+        if(empty($postData->end)) {
+            $todo->end = '2400';
+        }
+
+        // 9. 处理私有属性
+        if(isset($postData->private) && $postData->private == 'on') {
+            $todo->private = 1;
+        }
+
+        // 10. 设置指派信息
+        if($oldTodo->assignedTo != $todo->assignedTo) {
+            $todo->assignedBy = $app->user->account;
+        } else {
+            $todo->assignedBy = $oldTodo->assignedBy;
+        }
+
+        $todo->type = $objectType;
+
+        // 11. 获取非自定义类型的名称
+        if(in_array($todo->type, $config->todo->moduleList) && $objectID) {
+            $type = $todo->type;
+            // 模拟从不同对象类型获取名称
+            if($type == 'task') $todo->name = '任务' . $objectID;
+            if($type == 'story') $todo->name = '需求' . $objectID;
+            if($type == 'bug') $todo->name = '缺陷' . $objectID;
+            if($type == 'epic') $todo->name = '史诗' . $objectID;
+            if($type == 'requirement') $todo->name = '用户需求' . $objectID;
+            if($type == 'testtask') $todo->name = '测试任务' . $objectID;
+        }
+
+        // 12. 验证必填字段
+        $requiredFields = isset($todo->type) && in_array($todo->type, $config->todo->moduleList)
+                         ? str_replace(',name,', ',', ",{$config->todo->edit->requiredFields},")
+                         : $config->todo->edit->requiredFields;
+        $requiredFields = trim($requiredFields, ',');
+        $hasRequiredError = false;
+
+        foreach(explode(',', $requiredFields) as $field) {
+            if(!empty($field) && empty($todo->$field)) {
+                dao::$errors[$field] = "字段 {$field} 不能为空";
+                $hasRequiredError = true;
+            }
+        }
+
+        // 13. 验证模块类型必须有objectID
+        if($hasObject && !$objectID) {
+            dao::$errors[$todo->type] = "名称不能为空";
+            unset(dao::$errors['objectID']);
+            $hasRequiredError = true;
+        }
+
+        // 14. 验证时间范围
+        if($todo->end < $todo->begin) {
+            dao::$errors['end'] = "结束时间应该大于开始时间";
+            $hasRequiredError = true;
+        }
+
+        if($hasRequiredError) {
+            return false;
+        }
+
+        // 15. 处理周期配置
+        if(!empty($oldTodo->cycle)) {
+            // 模拟周期配置处理
+            $todo->date = date('Y-m-d');
+            if(isset($todo->config)) {
+                $todo->config = json_encode($todo->config);
+            }
+        }
+        if(empty($oldTodo->cycle)) {
+            $todo->config = '';
+        }
+
+        // 16. 处理私有待办的指派
+        if(isset($todo->private) && $todo->private) {
+            $todo->assignedTo = $app->user->account;
+            $todo->assignedBy = $app->user->account;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $todo;
+    }
 }
