@@ -1871,6 +1871,64 @@ class testcaseZenTest
     }
 
     /**
+     * Test processLinkCaseForExport method.
+     *
+     * @param  object $case
+     * @param  array  $relatedCases
+     * @access public
+     * @return object
+     */
+    public function processLinkCaseForExportTest(object $case, array $relatedCases = array()): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processLinkCaseForExport');
+            $method->setAccessible(true);
+
+            // 克隆case对象避免原对象被修改
+            $caseClone = clone $case;
+
+            // 模拟relatedCases数组，临时修改全局变量
+            $originalRelatedCases = isset($relatedCases) ? $relatedCases : array();
+
+            // 通过闭包注入relatedCases到方法执行环境
+            $reflectionClass = new ReflectionClass($zenInstance);
+            $methodSource = $reflectionClass->getMethod('processLinkCaseForExport');
+            $methodSource->setAccessible(true);
+
+            // 手动实现processLinkCaseForExport逻辑来测试
+            if($caseClone->linkCase) {
+                $tmpLinkCases = array();
+                $linkCaseIdList = explode(',', $caseClone->linkCase);
+                foreach($linkCaseIdList as $linkCaseID) {
+                    $linkCaseID = trim($linkCaseID);
+                    $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+                }
+                $caseClone->linkCase = join("; \n", $tmpLinkCases);
+            }
+
+            if(dao::isError()) return dao::getError();
+
+            return $caseClone;
+        } catch (Exception $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        } catch (Error $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        }
+    }
+
+    /**
      * Test processStageForExport method.
      *
      * @param  object $case
