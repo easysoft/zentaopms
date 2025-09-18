@@ -1821,4 +1821,52 @@ class testcaseZenTest
             return $errorCase;
         }
     }
+
+    /**
+     * Test processStepForExport method.
+     *
+     * @param  object $case
+     * @param  array  $result
+     * @param  array  $relatedSteps
+     * @param  string $fileType
+     * @access public
+     * @return object
+     */
+    public function processStepForExportTest(object $case, array $result, array $relatedSteps, string $fileType = 'csv'): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->post = new stdClass();
+            $zenInstance->post->fileType = $fileType;
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processStepForExport');
+            $method->setAccessible(true);
+
+            // 克隆case对象避免原对象被修改
+            $caseClone = clone $case;
+
+            // 调用方法
+            $method->invoke($zenInstance, $caseClone, $result, $relatedSteps);
+
+            if(dao::isError()) return dao::getError();
+
+            return $caseClone;
+        } catch (Exception $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        } catch (Error $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        }
+    }
 }
