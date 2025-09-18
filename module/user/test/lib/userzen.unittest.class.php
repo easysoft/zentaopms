@@ -96,4 +96,19 @@ class userZenTest
         if(empty($result)) return '0';
         return $result;
     }
+
+    /**
+     * Test parseLoginModuleAndMethod method.
+     *
+     * @param  string $referer
+     * @access public
+     * @return mixed
+     */
+    public function parseLoginModuleAndMethodTest($referer = '')
+    {
+        $result = callZenMethod('user', 'parseLoginModuleAndMethod', array($referer));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
