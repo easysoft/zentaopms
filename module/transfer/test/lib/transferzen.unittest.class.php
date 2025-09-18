@@ -81,4 +81,32 @@ class transferZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test formatFields method.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $sessionData
+     * @access public
+     * @return mixed
+     */
+    public function formatFieldsTest(string $module = '', array $fields = array(), array $sessionData = array())
+    {
+        global $tester;
+
+        // 设置session数据
+        if($sessionData)
+        {
+            foreach($sessionData as $key => $value)
+            {
+                $tester->session->$key = $value;
+            }
+        }
+
+        $result = callZenMethod('transfer', 'formatFields', array($module, $fields));
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
