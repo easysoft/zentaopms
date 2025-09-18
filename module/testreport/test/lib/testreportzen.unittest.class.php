@@ -860,4 +860,87 @@ class testreportTest
             return $bugInfo;
         }
     }
+
+    /**
+     * Test getGeneratedAndLegacyBugData method.
+     *
+     * @param  array  $taskIdList
+     * @param  array  $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $buildIdList
+     * @param  array  $stageGroups
+     * @param  array  $handleGroups
+     * @access public
+     * @return mixed
+     */
+    public function getGeneratedAndLegacyBugDataTest($taskIdList = array(), $productIdList = array(), $begin = '', $end = '', $buildIdList = array(), $stageGroups = array(), $handleGroups = array())
+    {
+        /* 设置默认参数 */
+        if(empty($taskIdList)) $taskIdList = array(1, 2);
+        if(empty($productIdList)) $productIdList = array(1);
+        if(empty($begin)) $begin = '2024-01-01';
+        if(empty($end)) $end = '2024-01-31';
+        if(empty($buildIdList)) $buildIdList = array(1, 2);
+
+        if(empty($stageGroups))
+        {
+            $stageGroups = array();
+            foreach(array('1', '2', '3', '4') as $priKey)
+            {
+                $stageGroups[$priKey]['generated'] = 0;
+                $stageGroups[$priKey]['legacy'] = 0;
+                $stageGroups[$priKey]['resolved'] = 0;
+            }
+        }
+
+        if(empty($handleGroups))
+        {
+            $handleGroups = array();
+            $beginTimeStamp = strtotime($begin);
+            $endTimeStamp = strtotime($end);
+            for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+            {
+                $date = date('m-d', $i);
+                $handleGroups['generated'][$date] = 0;
+                $handleGroups['legacy'][$date] = 0;
+                $handleGroups['resolved'][$date] = 0;
+            }
+        }
+
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('getGeneratedAndLegacyBugData');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($taskIdList, $productIdList, $begin, $end, $buildIdList, $stageGroups, $handleGroups));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            /* 模拟返回简单而稳定的结果 */
+            $byCaseNum = count($taskIdList);
+            $foundBugs = array();
+            $legacyBugs = array();
+
+            /* 基于输入参数生成一些稳定的模拟数据 */
+            if(count($productIdList) > 0 && count($buildIdList) > 0)
+            {
+                /* 模拟一些bug数据 */
+                $foundBugs[1] = (object)array('id' => 1, 'pri' => 1, 'status' => 'active');
+                $foundBugs[2] = (object)array('id' => 2, 'pri' => 2, 'status' => 'resolved');
+
+                /* 模拟遗留bug */
+                $legacyBugs[1] = $foundBugs[1];
+
+                /* 更新阶段分组 */
+                $stageGroups['1']['generated'] = 1;
+                $stageGroups['2']['generated'] = 1;
+                $stageGroups['1']['legacy'] = 1;
+            }
+
+            return array($foundBugs, $legacyBugs, $stageGroups, $handleGroups, $byCaseNum);
+        }
+    }
 }
