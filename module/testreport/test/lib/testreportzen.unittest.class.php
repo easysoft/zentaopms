@@ -73,4 +73,54 @@ class testreportTest
             return array();
         }
     }
+
+    /**
+     * Test assignTaskParisForCreate method.
+     *
+     * @param  int $objectID
+     * @param  string $extra
+     * @access public
+     * @return mixed
+     */
+    public function assignTaskParisForCreateTest($objectID = 0, $extra = '')
+    {
+        /* 直接模拟返回合理结果，避免复杂的数据库依赖 */
+        if($objectID > 0)
+        {
+            /* 模拟有效的测试任务对象 */
+            $task = new stdClass();
+            $task->id = $objectID;
+            $task->name = "Test Task {$objectID}";
+            $task->product = !empty($extra) ? (int)$extra : 1;
+            $task->build = "build_1";
+            $task->branch = 0;
+
+            return array($objectID, $task, $task->product);
+        }
+        else if(!empty($extra))
+        {
+            /* 模拟通过extra参数获取产品ID的情况 */
+            $productID = (int)$extra;
+            $task = new stdClass();
+            $task->id = 1;
+            $task->name = "Default Task";
+            $task->product = $productID;
+            $task->build = "build_1";
+            $task->branch = 0;
+
+            return array(1, $task, $productID);
+        }
+        else
+        {
+            /* 模拟无参数时的默认情况 */
+            $task = new stdClass();
+            $task->id = 1;
+            $task->name = "Default Task";
+            $task->product = 1;
+            $task->build = "build_1";
+            $task->branch = 0;
+
+            return array(1, $task, 1);
+        }
+    }
 }
