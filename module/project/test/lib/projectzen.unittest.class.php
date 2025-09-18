@@ -482,4 +482,48 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test checkDaysAndBudget method.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access public
+     * @return mixed
+     */
+    public function checkDaysAndBudgetTest($project = null, $rawdata = null)
+    {
+        try
+        {
+            global $tester, $lang, $config;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->project)) $lang->project = new stdClass();
+            if(!isset($lang->project->workdaysExceed)) $lang->project->workdaysExceed = '可用工作日不能超过『%s』天';
+            if(!isset($lang->project->copyProject)) $lang->project->copyProject = new stdClass();
+            if(!isset($lang->project->copyProject->endTips)) $lang->project->copyProject->endTips = '『计划完成』不能为空。';
+            if(!isset($lang->project->error)) $lang->project->error = new stdClass();
+            if(!isset($lang->project->error->budgetNumber)) $lang->project->error->budgetNumber = '『预算』金额必须为数字。';
+            if(!isset($lang->project->error->budgetGe0)) $lang->project->error->budgetGe0 = '『预算』金额必须大于等于0。';
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->post = new stdClass();
+            if(isset($rawdata->delta)) $this->objectZen->post->delta = $rawdata->delta;
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('checkDaysAndBudget');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $project, $rawdata);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
