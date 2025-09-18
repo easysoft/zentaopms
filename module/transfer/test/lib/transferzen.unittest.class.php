@@ -29,4 +29,20 @@ class transferZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processTaskTemplateFields method.
+     *
+     * @param  int    $executionID
+     * @param  string $fields
+     * @access public
+     * @return mixed
+     */
+    public function processTaskTemplateFieldsTest(int $executionID = 0, string $fields = '')
+    {
+        $result = callZenMethod('transfer', 'processTaskTemplateFields', array($executionID, $fields));
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
