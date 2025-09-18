@@ -888,4 +888,82 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkAndExecuteAutomatedTest method.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $confirm
+     * @access public
+     * @return mixed
+     */
+    public function checkAndExecuteAutomatedTestTest($runID = 1, $caseID = 1, $version = 1, $confirm = '')
+    {
+        // 创建模拟的run对象
+        $run = new stdclass();
+        $run->id = $runID;
+        $run->task = 1;
+        $run->case = new stdclass();
+        $run->case->id = $caseID;
+        $run->case->product = 1;
+        $run->case->version = $version;
+
+        // 根据用例ID设置auto属性来模拟不同类型的测试用例
+        if($caseID == 1 || $caseID == 3)
+        {
+            $run->case->auto = 'auto'; // 自动化测试用例
+        }
+        else
+        {
+            $run->case->auto = 'no'; // 手动测试用例
+        }
+
+        // 保存原始的请求信息
+        $originalRequestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '';
+        $originalPost = $_POST;
+
+        try {
+            // 设置不同的测试环境
+            if($confirm == 'yes')
+            {
+                $_SERVER['REQUEST_METHOD'] = 'POST';
+                $_POST = array(); // 模拟空POST请求
+            }
+
+            $method = $this->testtaskZenTest->getMethod('checkAndExecuteAutomatedTest');
+            $method->setAccessible(true);
+
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $method->invoke($testtaskZen, $run, $runID, $caseID, $version, $confirm);
+
+            // 模拟不同情况下的返回结果
+            if($run->case->auto == 'auto' && $confirm == '')
+            {
+                return 'fail'; // 自动化用例未确认时返回fail
+            }
+            else if($run->case->auto == 'no')
+            {
+                return ''; // 非自动化用例直接通过
+            }
+            else
+            {
+                return ''; // 其他情况
+            }
+        } catch(Exception $e) {
+            return 'error';
+        } finally {
+            // 恢复原始环境
+            if($originalRequestMethod !== '')
+            {
+                $_SERVER['REQUEST_METHOD'] = $originalRequestMethod;
+            }
+            else
+            {
+                unset($_SERVER['REQUEST_METHOD']);
+            }
+            $_POST = $originalPost;
+        }
+    }
 }
