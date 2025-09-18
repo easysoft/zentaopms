@@ -45,4 +45,40 @@ class transferZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test initTemplateFields method.
+     *
+     * @param  string $module
+     * @param  string $fields
+     * @access public
+     * @return mixed
+     */
+    public function initTemplateFieldsTest(string $module = '', string $fields = '')
+    {
+        global $tester;
+
+        // 清理$_POST数据
+        $_POST = array();
+        $tester->post = new stdClass();
+        $tester->post->num = 10;
+
+        try {
+            callZenMethod('transfer', 'initTemplateFields', array($module, $fields));
+
+            if(dao::isError()) return dao::getError();
+
+            // 检查方法是否正确设置了post属性
+            $result = array();
+            $result['module'] = $module;
+            $result['kind'] = isset($tester->post->kind) ? $tester->post->kind : 'not_set';
+            $result['fieldsSet'] = isset($tester->post->fields) ? 'yes' : 'no';
+            $result['rowsSet'] = isset($tester->post->rows) ? 'yes' : 'no';
+            $result['fileNameSet'] = isset($tester->post->fileName) ? 'yes' : 'no';
+
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
