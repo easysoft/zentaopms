@@ -1869,4 +1869,64 @@ class testcaseZenTest
             return $errorCase;
         }
     }
+
+    /**
+     * Test processStageForExport method.
+     *
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function processStageForExportTest(object $case): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性和语言配置
+            $zenInstance->lang = $tester->lang;
+
+            // 初始化lang配置
+            if(!isset($tester->lang->testcase)) {
+                $tester->lang->testcase = new stdClass();
+            }
+            if(!isset($tester->lang->testcase->stageList)) {
+                $tester->lang->testcase->stageList = array(
+                    '' => '',
+                    'unittest' => '单元测试阶段',
+                    'feature' => '功能测试阶段',
+                    'intergrate' => '集成测试阶段',
+                    'system' => '系统测试阶段',
+                    'smoke' => '冒烟测试阶段',
+                    'bvt' => '版本验证阶段'
+                );
+            }
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processStageForExport');
+            $method->setAccessible(true);
+
+            // 克隆case对象避免原对象被修改
+            $caseClone = clone $case;
+
+            // 调用方法
+            $method->invoke($zenInstance, $caseClone);
+
+            if(dao::isError()) return dao::getError();
+
+            return $caseClone;
+        } catch (Exception $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        } catch (Error $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        }
+    }
 }
