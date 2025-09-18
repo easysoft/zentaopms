@@ -841,4 +841,27 @@ class testtaskZenTest
 
         return count($mockCases);
     }
+
+    /**
+     * Test processRowspanForUnitCases method.
+     *
+     * @param  array $runs
+     * @access public
+     * @return array
+     */
+    public function processRowspanForUnitCasesTest($runs = array())
+    {
+        $method = $this->testtaskZenTest->getMethod('processRowspanForUnitCases');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $result = $method->invoke($testtaskZen, $runs);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
