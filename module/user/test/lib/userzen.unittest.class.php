@@ -165,4 +165,39 @@ class userZenTest
             'success' => true
         );
     }
+
+    /**
+     * Test responseForLogon method.
+     *
+     * @param  string $referer
+     * @param  string $viewType
+     * @param  string $loginLink
+     * @param  string $denyLink
+     * @param  string $locateReferer
+     * @param  string $locateWebRoot
+     * @access public
+     * @return mixed
+     */
+    public function responseForLogonTest($referer = '', $viewType = '', $loginLink = '', $denyLink = '', $locateReferer = '', $locateWebRoot = '')
+    {
+        $result = callZenMethod('user', 'responseForLogon', array($referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test responseForLocked method.
+     *
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function responseForLockedTest($viewType = '')
+    {
+        $result = callZenMethod('user', 'responseForLocked', array($viewType));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
