@@ -1987,4 +1987,46 @@ class testcaseZenTest
             return $errorCase;
         }
     }
+
+    /**
+     * Test processFileForExport method.
+     *
+     * @param  object $case
+     * @param  array  $relatedFiles
+     * @access public
+     * @return object
+     */
+    public function processFileForExportTest(object $case, array $relatedFiles): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processFileForExport');
+            $method->setAccessible(true);
+
+            // 克隆case对象避免原对象被修改
+            $caseClone = clone $case;
+
+            // 调用方法
+            $method->invoke($zenInstance, $caseClone, $relatedFiles);
+
+            if(dao::isError()) return dao::getError();
+
+            return $caseClone;
+        } catch (Exception $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        } catch (Error $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        }
+    }
 }
