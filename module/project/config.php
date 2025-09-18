@@ -294,10 +294,10 @@ $config->project->linkMap->cm = array();
 $config->project->linkMap->cm['report'] = array('project', 'index', 'projectID=%s', '');
 
 $config->project->linkMap->weekly = array();
-$config->project->linkMap->weekly['index'] = array('weekly', 'index', 'projectID=%s', '');
+$config->project->linkMap->weekly['index'] = array('weekly', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->milestone = array();
-$config->project->linkMap->milestone['index'] = array('milestone', 'index', 'projectID=%s', '');
+$config->project->linkMap->milestone['index'] = array('weekly', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->workestimation = array();
 $config->project->linkMap->workestimation['index'] = array('workestimation', 'index', 'projectID=%s', '');
