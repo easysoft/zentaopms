@@ -48,4 +48,29 @@ class treeTest
 
         return $result;
     }
+
+    /**
+     * Test updateBrowseLang method.
+     *
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function updateBrowseLangTest(string $viewType = '')
+    {
+        global $app, $lang;
+
+        $app->loadLang('tree');
+        $app->loadLang('host');
+
+        $originalManage = $lang->tree->manage;
+
+        $treeZen = $this->objectZen->newInstance();
+        $method = $this->objectZen->getMethod('updateBrowseLang');
+        $method->setAccessible(true);
+        $method->invoke($treeZen, $viewType);
+        if(dao::isError()) return dao::getError();
+
+        return $lang->tree;
+    }
 }
