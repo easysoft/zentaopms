@@ -14317,6 +14317,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `status` varchar(20) NOT NULL DEFAULT '',
   `approval`  mediumint(8) unsigned NOT NULL DEFAULT '0',
   `reviewResult` varchar(20) NOT NULL DEFAULT '',
+  `reviewOpinion` text NULL,
   `reviewers` text NULL,
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `range` text NULL,
