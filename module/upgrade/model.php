@@ -11231,7 +11231,7 @@ class upgradeModel extends model
             $beginTimestame = strtotime($report->realBegan);
             $day            = date('w', $beginTimestame);
             if($day == 0) $day = 7;
-            $report->projectBegin = date('Y-m-d', strtotime("- {$day} days", $beginTimestame));
+            $report->projectBegin = date('Y-m-d', $beginTimestame - (($day - 1) * 24 * 3600));
 
             /* Filter date < project begin date report. */
             if($report->weekStart < $report->projectBegin) unset($reports[$key]);
