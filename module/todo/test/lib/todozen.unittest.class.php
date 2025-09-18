@@ -1725,4 +1725,37 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test setSessionUri method.
+     *
+     * @param  string $uri URI参数
+     * @access public
+     * @return mixed
+     */
+    public function setSessionUriTest(string $uri)
+    {
+        global $config;
+
+        // 确保config->todo->sessionUri配置存在
+        if(!isset($config->todo)) {
+            $config->todo = new stdClass();
+        }
+        if(!isset($config->todo->sessionUri)) {
+            $config->todo->sessionUri = array(
+                'bugList'      => 'qa',
+                'todoList'     => 'my',
+                'taskList'     => 'execution',
+                'storyList'    => 'product',
+                'testtaskList' => 'qa'
+            );
+        }
+
+        $method = $this->objectZen->getMethod('setSessionUri');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->todoZen, $uri);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
