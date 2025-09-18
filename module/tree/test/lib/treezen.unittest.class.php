@@ -151,4 +151,28 @@ class treeTest
 
         return $output;
     }
+
+    /**
+     * Test printOptionMenuArray method.
+     *
+     * @param  array $optionMenu
+     * @access public
+     * @return mixed
+     */
+    public function printOptionMenuArrayTest(array $optionMenu = array())
+    {
+        // 开启输出缓冲
+        ob_start();
+
+        $treeZen = $this->objectZen->newInstance();
+        $method = $this->objectZen->getMethod('printOptionMenuArray');
+        $method->setAccessible(true);
+        $method->invoke($treeZen, $optionMenu);
+        if(dao::isError()) return dao::getError();
+
+        // 获取输出内容
+        $output = ob_get_clean();
+
+        return $output;
+    }
 }
