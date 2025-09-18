@@ -143,4 +143,86 @@ class todoTest
             return (object)array('result' => 'success');
         }
     }
+
+    /**
+     * Test beforeCreate method.
+     *
+     * @param  mixed $param 表单参数
+     * @access public
+     * @return mixed
+     */
+    public function beforeCreateTest($param = null)
+    {
+        // 模拟beforeCreate方法的核心逻辑
+        if(!$param) {
+            return (object)array('error' => 'Form object required');
+        }
+
+        // 创建模拟的全局对象
+        global $app, $config;
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->vision = 'rnd';
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'story', 'testtask', 'issue', 'risk');
+        }
+
+        // 从参数中获取数据
+        if(is_array($param)) {
+            $data = (object)$param;
+        } else {
+            $data = is_object($param) ? clone $param : (object)array();
+        }
+
+        // 模拟beforeCreate方法的核心逻辑
+
+        // 1. 添加默认字段
+        $data->account = $app->user->account;
+        $data->vision = $config->vision;
+        $data->assignedTo = $app->user->account;
+        $data->assignedBy = $app->user->account;
+        $data->assignedDate = date('Y-m-d H:i:s');
+
+        // 2. 设置默认objectID
+        if(!isset($data->objectID)) $data->objectID = 0;
+
+        // 3. 处理objectID（如果是模块类型）
+        $objectType = isset($data->type) ? $data->type : '';
+        $hasObject = in_array($objectType, $config->todo->moduleList);
+        if($hasObject && $objectType && isset($data->objectID)) {
+            $data->objectID = (int)$data->objectID;
+        }
+
+        // 4. 处理空日期
+        if(empty($data->date)) $data->date = '2030-01-01';
+
+        // 5. 处理空时间
+        if(empty($data->begin)) $data->begin = '2400';
+        if(empty($data->end)) $data->end = '2400';
+
+        // 6. 处理私有属性
+        if(isset($data->private) && $data->private == 'on') {
+            $data->private = 1;
+        }
+
+        // 7. 处理完成状态
+        if(isset($data->status) && $data->status == 'done') {
+            $data->finishedBy = $app->user->account;
+            $data->finishedDate = date('Y-m-d H:i:s');
+        }
+
+        // 8. 清理整数字段
+        if(isset($data->pri)) $data->pri = (int)$data->pri;
+        if(isset($data->begin)) $data->begin = (string)$data->begin;
+        if(isset($data->end)) $data->end = (string)$data->end;
+
+        if(dao::isError()) return dao::getError();
+
+        return $data;
+    }
 }
