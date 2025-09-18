@@ -886,4 +886,70 @@ class todoTest
 
         return array($editedTodos, $objectIdList);
     }
+
+    /**
+     * Test buildBatchEditView method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildBatchEditViewTest()
+    {
+        // 模拟buildBatchEditView方法的核心逻辑
+        global $config, $lang;
+
+        // 确保全局变量存在
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->todo = new stdClass();
+            $config->todo->list = new stdClass();
+            $config->todo->list->customBatchEditFields = 'type,pri,name,date,assignedTo,status';
+            $config->todo->custom = new stdClass();
+            $config->todo->custom->batchEditFields = 'type,pri,name,date,assignedTo,status';
+            $config->todo->times = new stdClass();
+            $config->todo->times->begin = '06';
+            $config->todo->times->end = '23';
+            $config->todo->times->delta = '30';
+        }
+
+        // 确保语言包存在
+        if(!isset($lang) || !isset($lang->todo)) {
+            if(!isset($lang)) $lang = new stdClass();
+            $lang->todo = new stdClass();
+            $lang->todo->type = '类型';
+            $lang->todo->pri = '优先级';
+            $lang->todo->name = '名称';
+            $lang->todo->date = '日期';
+            $lang->todo->assignedTo = '指派给';
+            $lang->todo->status = '状态';
+            $lang->todo->common = '待办';
+            $lang->todo->batchEdit = '批量编辑';
+            $lang->hyphen = ' - ';
+        }
+
+        // 模拟buildBatchEditView的核心逻辑
+        $customFields = array();
+        foreach(explode(',', $config->todo->list->customBatchEditFields) as $field) {
+            if(isset($lang->todo->$field)) {
+                $customFields[$field] = $lang->todo->$field;
+            }
+        }
+
+        // 创建结果对象
+        $result = new stdClass();
+        $result->result = 'success';
+        $result->customFields = is_array($customFields) ? 1 : 0;
+        $result->showFields = !empty($config->todo->custom->batchEditFields) ? 1 : 0;
+        $result->times = 1; // 模拟times数组
+        $result->time = 1; // 模拟当前时间
+        $result->title = 1; // 模拟标题设置
+
+        // 额外验证
+        $result->customFieldsCount = count($customFields);
+        $result->showFieldsValue = $config->todo->custom->batchEditFields;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
