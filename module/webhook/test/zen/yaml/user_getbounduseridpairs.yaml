@@ -1,0 +1,42 @@
+---
+title: 用户数据-getBoundUseridPairs测试
+desc: 为getBoundUseridPairs方法提供测试用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,testuser{6}
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户一,用户二,用户三,测试用户{6}
+  format: ""
+- field: password
+  note: 密码
+  range: 123456{10}
+  format: ""
+- field: role
+  note: 角色
+  range: admin{1},dev{4},qa{3},pm{2}
+  format: ""
+- field: dept
+  note: 部门ID
+  range: 1-5
+  format: ""
+- field: email
+  note: 邮箱
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,test{6}@test.com
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  format: ""

@@ -32,4 +32,25 @@ class webhookTest
 
         return $result;
     }
+
+    /**
+     * Test getBoundUseridPairs method.
+     *
+     * @param  object $webhook
+     * @param  array  $users
+     * @param  array  $boundUsers
+     * @param  array  $oauthUsers
+     * @access public
+     * @return mixed
+     */
+    public function getBoundUseridPairsTest(object $webhook = null, array $users = array(), array $boundUsers = array(), array $oauthUsers = array())
+    {
+        $method = $this->webhookZenTest->getMethod('getBoundUseridPairs');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->webhookZenTest->newInstance(), [$webhook, $users, $boundUsers, $oauthUsers]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
