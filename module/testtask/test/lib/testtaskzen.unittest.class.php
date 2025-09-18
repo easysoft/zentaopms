@@ -604,4 +604,66 @@ class testtaskZenTest
 
         return 'success';
     }
+
+    /**
+     * Test assignForRunCase method.
+     *
+     * @param  object $run
+     * @param  object $preAndNext
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $confirm
+     * @access public
+     * @return mixed
+     */
+    public function assignForRunCaseTest($run = null, $preAndNext = null, $runID = 0, $caseID = 0, $version = 1, $confirm = '')
+    {
+        // 创建默认run对象
+        if(!$run)
+        {
+            $run = new stdclass();
+            $run->id = 1;
+            $run->task = 1;
+            $run->case = 1;
+            $run->version = 1;
+            $run->lastRunner = 'admin';
+            $run->lastRunDate = '2024-01-01 10:00:00';
+            $run->lastRunResult = 'pass';
+            $run->status = 'normal';
+        }
+
+        // 创建默认preAndNext对象
+        if(!$preAndNext)
+        {
+            $preAndNext = new stdclass();
+
+            // 创建pre对象
+            $pre = new stdclass();
+            $pre->id = 0;
+            $pre->case = 0;
+            $pre->version = 1;
+            $preAndNext->pre = $pre;
+
+            // 创建next对象
+            $next = new stdclass();
+            $next->id = 2;
+            $next->case = 2;
+            $next->version = 1;
+            $preAndNext->next = $next;
+        }
+
+        $method = $this->testtaskZenTest->getMethod('assignForRunCase');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $method->invoke($testtaskZen, $run, $preAndNext, (int)$runID, (int)$caseID, (int)$version, $confirm);
+            if(dao::isError()) return dao::getError();
+
+            return 'success';
+        } catch(Exception $e) {
+            return 'error';
+        }
+    }
 }
