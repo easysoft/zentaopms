@@ -71,7 +71,6 @@ if($canBatchAssignTo)
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top', 'data-menu' => array('searchBox' => true));
 }
 
-jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
 jsVar('caseCommonLang', $this->lang->testcase->common);
 
@@ -108,6 +107,7 @@ dtable
     set::createTip($lang->bug->create),
     set::createLink($canCreateBug ? createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}") : ''),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::summary($summary),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::modules($modulePairs)
 );
