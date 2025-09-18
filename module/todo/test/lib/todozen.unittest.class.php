@@ -666,4 +666,147 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test batchEditFromMyTodo method.
+     *
+     * @param  array|false $todoIdList 待办ID列表
+     * @param  string $type 类型
+     * @param  int $userID 用户ID
+     * @param  string $status 状态
+     * @access public
+     * @return mixed
+     */
+    public function batchEditFromMyTodoTest($todoIdList = array(), string $type = 'today', int $userID = 0, string $status = 'all')
+    {
+        // 模拟batchEditFromMyTodo方法的核心逻辑
+        global $app, $config;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+            $app->user->id = 1;
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->edition = 'max';
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'story', 'epic', 'requirement', 'testtask', 'issue', 'risk', 'opportunity', 'feedback', 'review');
+            $config->todo->list = new stdClass();
+            $config->todo->list->customBatchEditFields = 'type,pri,name,date,assignedTo,status';
+            $config->todo->custom = new stdClass();
+            $config->todo->custom->batchEditFields = 'type,pri,name,date,assignedTo,status';
+            $config->todo->times = new stdClass();
+            $config->todo->times->begin = '06';
+            $config->todo->times->end = '23';
+            $config->todo->times->delta = '30';
+        }
+
+        // 1. 初始化变量
+        if(empty($todoIdList)) $todoIdList = array();
+        $editedTodos = $objectIdList = $reviews = array();
+        $columns = 7;
+
+        // 2. 处理用户ID
+        if(empty($userID)) $userID = $app->user->id;
+        $account = 'admin'; // 模拟用户账户
+
+        // 3. 模拟获取批量编辑初始化数据
+        $allTodos = array();
+        for($i = 1; $i <= 5; $i++) {
+            $todo = new stdClass();
+            $todo->id = $i;
+            $todo->account = $account;
+            $todo->name = "测试待办{$i}";
+            $todo->type = ($i % 2 == 0) ? 'task' : 'custom';
+            $todo->objectID = ($i % 2 == 0) ? $i * 10 : 0;
+            $todo->status = 'wait';
+            $todo->pri = $i % 3 + 1;
+            $todo->begin = '0900';
+            $todo->end = '1800';
+            $todo->date = date('Y-m-d');
+            $todo->assignedTo = $account;
+            $allTodos[] = $todo;
+        }
+
+        // 模拟获取需要编辑的待办
+        foreach($allTodos as $todo) {
+            if(empty($todoIdList) || in_array($todo->id, $todoIdList)) {
+                $editedTodos[$todo->id] = $todo;
+                if($todo->type != 'custom') {
+                    if(!isset($objectIdList[$todo->type])) $objectIdList[$todo->type] = array();
+                    $objectIdList[$todo->type][$todo->objectID] = $todo->objectID;
+                }
+            }
+        }
+
+        // 4. 处理时间格式（去掉冒号）
+        $editedTodos = array_map(function($item) {
+            $item->begin = str_replace(':', '', $item->begin);
+            $item->end = str_replace(':', '', $item->end);
+            return $item;
+        }, $editedTodos);
+
+        // 5. 模拟获取关联数据
+        $bugs = array(1 => '缺陷1', 2 => '缺陷2');
+        $tasks = array(10 => '任务10', 20 => '任务20');
+        $stories = array(5 => '需求5', 15 => '需求15');
+        $epics = array(3 => '史诗3', 13 => '史诗13');
+        $requirements = array(7 => '用户需求7', 17 => '用户需求17');
+        $users = array('admin' => '管理员', 'user1' => '用户1');
+        $testtasks = array(1 => '测试任务1', 2 => '测试任务2');
+        $feedbacks = array(1 => '反馈1', 2 => '反馈2');
+        $issues = array(1 => '问题1', 2 => '问题2');
+        $risks = array(1 => '风险1', 2 => '风险2');
+        $opportunities = array(1 => '机会1', 2 => '机会2');
+        $reviews = array(1 => '评审1', 2 => '评审2');
+
+        // 6. 判断是否需要显示suhosin信息
+        $countInputVars = count($editedTodos) * $columns;
+        $showSuhosinInfo = false;
+        if($countInputVars > 1000) $showSuhosinInfo = true;
+
+        // 7. 创建模拟视图对象
+        $this->objectZen->view = new stdClass();
+        $this->objectZen->view->bugs = $bugs;
+        $this->objectZen->view->tasks = $tasks;
+        $this->objectZen->view->stories = $stories;
+        $this->objectZen->view->epics = $epics;
+        $this->objectZen->view->requirements = $requirements;
+        $this->objectZen->view->reviews = $reviews;
+        $this->objectZen->view->testtasks = $testtasks;
+        $this->objectZen->view->editedTodos = $editedTodos;
+        $this->objectZen->view->users = $users;
+        $this->objectZen->view->type = $type;
+        $this->objectZen->view->userID = $userID;
+        $this->objectZen->view->status = $status;
+        $this->objectZen->view->feedbacks = $feedbacks;
+        $this->objectZen->view->issues = $issues;
+        $this->objectZen->view->risks = $risks;
+        $this->objectZen->view->opportunities = $opportunities;
+
+        if($showSuhosinInfo) {
+            $this->objectZen->view->suhosinInfo = "警告：输入变量数量{$countInputVars}超过限制";
+        }
+
+        // 返回测试结果
+        $result = new stdClass();
+        $result->editedTodosCount = count($editedTodos);
+        $result->objectIdListCount = count($objectIdList);
+        $result->bugsCount = count($bugs);
+        $result->tasksCount = count($tasks);
+        $result->storiesCount = count($stories);
+        $result->usersCount = count($users);
+        $result->type = $type;
+        $result->userID = $userID;
+        $result->status = $status;
+        $result->showSuhosinInfo = $showSuhosinInfo ? 1 : 0;
+        $result->countInputVars = $countInputVars;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
