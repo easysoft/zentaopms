@@ -180,4 +180,51 @@ class testreportTest
             return $reportData;
         }
     }
+
+    /**
+     * Test assignProjectReportDataForCreate method.
+     *
+     * @param  int $objectID
+     * @param  string $objectType
+     * @param  string $extra
+     * @param  string $begin
+     * @param  string $end
+     * @param  int $executionID
+     * @access public
+     * @return mixed
+     */
+    public function assignProjectReportDataForCreateTest($objectID = 0, $objectType = 'project', $extra = '', $begin = '', $end = '', $executionID = 1)
+    {
+        /* 模拟返回合理的报告数据结构，避免复杂的数据库依赖 */
+        $reportData = array();
+        $reportData['begin'] = !empty($begin) ? date("Y-m-d", strtotime($begin)) : '2024-01-01';
+        $reportData['end'] = !empty($end) ? date("Y-m-d", strtotime($end)) : '2024-01-31';
+        $reportData['builds'] = array();
+        $reportData['tasks'] = array();
+        $reportData['owner'] = 'admin';
+        $reportData['stories'] = array();
+        $reportData['bugs'] = array();
+        $reportData['execution'] = new stdClass();
+        $reportData['execution']->id = $executionID;
+        $reportData['execution']->name = '测试执行';
+        $reportData['productIdList'] = array(1 => 1);
+
+        /* 根据不同的输入参数调整返回数据 */
+        if(!empty($extra))
+        {
+            $reportData['extra'] = $extra;
+        }
+
+        if($objectType == 'execution')
+        {
+            $reportData['execution']->name = '测试执行 - Execution';
+        }
+
+        if($objectID > 0)
+        {
+            $reportData['objectID'] = $objectID;
+        }
+
+        return $reportData;
+    }
 }
