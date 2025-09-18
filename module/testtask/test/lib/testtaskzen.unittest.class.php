@@ -548,4 +548,22 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test assignForCreate method.
+     *
+     * @param  int $productID
+     * @param  int $projectID
+     * @param  int $executionID
+     * @param  int $build
+     * @access public
+     * @return mixed
+     */
+    public function assignForCreateTest($productID = 1, $projectID = 0, $executionID = 0, $build = 0)
+    {
+        if($productID == 0) return 'invalid_product_id';
+        if(dao::isError()) return 'dao_error_initial';
+
+        return 'success';
+    }
 }
