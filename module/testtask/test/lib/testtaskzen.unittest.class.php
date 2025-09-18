@@ -450,4 +450,27 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test checkTaskForEdit method.
+     *
+     * @param  object $task
+     * @access public
+     * @return bool|array
+     */
+    public function checkTaskForEditTest($task = null)
+    {
+        $method = $this->testtaskZenTest->getMethod('checkTaskForEdit');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $result = $method->invoke($testtaskZen, $task);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
