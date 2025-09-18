@@ -2394,4 +2394,49 @@ class testcaseZenTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test fetchByXML method.
+     *
+     * @param  string $filePath
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function fetchByXMLTest(string $filePath, int $productID): array
+    {
+        try {
+            global $tester;
+
+            // 检查XML文件是否存在
+            $xmlFile = $filePath . '/content.xml';
+            if(!file_exists($xmlFile)) {
+                return array('result' => 'fail', 'message' => 'XML file not found');
+            }
+
+            $zenClass = new ReflectionClass('testcaseZen');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->app = $tester->app;
+            $zenInstance->lang = $tester->lang;
+
+            // 初始化classXmind属性
+            $zenInstance->classXmind = $tester->app->loadClass('xmind');
+
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('fetchByXML');
+            $method->setAccessible(true);
+
+            $returnValue = $method->invoke($zenInstance, $filePath, $productID);
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
+        } catch (Error $e) {
+            return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
+        }
+    }
 }
