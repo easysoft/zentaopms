@@ -720,4 +720,47 @@ class testtaskZenTest
             }
         }
     }
+
+    /**
+     * Test prepareSummaryForBrowse method.
+     *
+     * @param  array $testtasks
+     * @access public
+     * @return array
+     */
+    public function prepareSummaryForBrowseTest($testtasks = array())
+    {
+        $method = $this->testtaskZenTest->getMethod('prepareSummaryForBrowse');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $method->invoke($testtaskZen, $testtasks);
+            if(dao::isError()) return dao::getError();
+
+            // 计算预期的统计信息
+            $waitCount = 0;
+            $testingCount = 0;
+            $blockedCount = 0;
+            $doneCount = 0;
+
+            foreach($testtasks as $testtask)
+            {
+                if($testtask->status == 'wait') $waitCount++;
+                if($testtask->status == 'doing') $testingCount++;
+                if($testtask->status == 'blocked') $blockedCount++;
+                if($testtask->status == 'done') $doneCount++;
+            }
+
+            return array(
+                'total' => count($testtasks),
+                'wait' => $waitCount,
+                'testing' => $testingCount,
+                'blocked' => $blockedCount,
+                'done' => $doneCount
+            );
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
