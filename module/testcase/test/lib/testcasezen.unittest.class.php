@@ -1542,4 +1542,25 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getImportedData method.
+     *
+     * @param  int    $productID
+     * @param  string $file
+     * @access public
+     * @return mixed
+     */
+    public function getImportedDataTest(int $productID, string $file): mixed
+    {
+        try {
+            $result = callZenMethod('testcase', 'getImportedData', [$productID, $file]);
+            if(dao::isError()) return array(array('caseData' => array()), 0);
+            return $result;
+        } catch (Exception $e) {
+            return array(array('caseData' => array()), 0);
+        } catch (Error $e) {
+            return array(array('caseData' => array()), 0);
+        }
+    }
 }
