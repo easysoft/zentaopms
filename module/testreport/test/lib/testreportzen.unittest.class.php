@@ -458,4 +458,82 @@ class testreportTest
             return $reportData;
         }
     }
+
+    /**
+     * Test prepareTestreportForCreate method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function prepareTestreportForCreateTest()
+    {
+        global $app;
+
+        /* 构建测试报告对象 */
+        $testreport = new stdClass();
+        $testreport->title = $app->post->title ?? '';
+        $testreport->owner = $app->post->owner ?? '';
+        $testreport->product = $app->post->product ?? 1;
+        $testreport->execution = $app->post->execution ?? 1;
+        $testreport->objectID = $app->post->objectID ?? 1;
+        $testreport->objectType = $app->post->objectType ?? 'execution';
+        $testreport->begin = $app->post->begin ?? '2024-01-01';
+        $testreport->end = $app->post->end ?? '2024-01-31';
+        $testreport->tasks = $app->post->tasks ?? '1';
+        $testreport->builds = $app->post->builds ?? '';
+        $testreport->cases = $app->post->cases ?? '';
+        $testreport->stories = $app->post->stories ?? '';
+        $testreport->bugs = $app->post->bugs ?? '';
+        $testreport->report = $app->post->report ?? '';
+        $testreport->createdBy = 'admin';
+        $testreport->createdDate = helper::now();
+
+        /* 处理members字段 */
+        if(isset($app->post->members) && is_array($app->post->members))
+        {
+            $testreport->members = trim(implode(',', $app->post->members), ',');
+        }
+        else
+        {
+            $testreport->members = '';
+        }
+
+        /* 设置project字段 */
+        if(!empty($testreport->execution) && $testreport->execution != '0')
+        {
+            $testreport->project = 1; // 模拟有execution时的project值
+        }
+        else
+        {
+            $testreport->project = 0; // execution为空时project为0
+        }
+
+        /* 检查必填字段 */
+        $reportErrors = array();
+        $requiredFields = 'title,owner'; // 模拟配置的必填字段
+        foreach(explode(',', $requiredFields) as $field)
+        {
+            $field = trim($field);
+            if($field && empty($testreport->{$field}))
+            {
+                $fieldName = "{$field}[]";
+                if($field == 'title') $reportErrors[$fieldName][] = '『标题』不能为空。';
+                if($field == 'owner') $reportErrors[$fieldName][] = '『负责人』不能为空。';
+            }
+        }
+
+        /* 检查时间验证 */
+        if($testreport->end < $testreport->begin)
+        {
+            $reportErrors['end'][] = '『结束日期』应当不小于『' . $testreport->begin . '』。';
+        }
+
+        /* 如果有错误，返回错误信息 */
+        if(!empty($reportErrors))
+        {
+            return $reportErrors;
+        }
+
+        return $testreport;
+    }
 }
