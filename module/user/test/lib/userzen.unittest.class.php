@@ -62,4 +62,38 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test login method.
+     *
+     * @param  string $referer
+     * @param  string $viewType
+     * @param  string $loginLink
+     * @param  string $denyLink
+     * @param  string $locateReferer
+     * @param  string $locateWebRoot
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return mixed
+     */
+    public function loginTest($referer = '', $viewType = '', $loginLink = '', $denyLink = '', $locateReferer = '', $locateWebRoot = '', $account = '', $password = '')
+    {
+        if($account || $password)
+        {
+            $_POST['account'] = $account;
+            $_POST['password'] = $password;
+            $_POST['passwordStrength'] = 1;
+        }
+
+        $result = callZenMethod('user', 'login', array($referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
+        if(dao::isError()) return dao::getError();
+
+        unset($_POST['account']);
+        unset($_POST['password']);
+        unset($_POST['passwordStrength']);
+
+        if(empty($result)) return '0';
+        return $result;
+    }
 }
