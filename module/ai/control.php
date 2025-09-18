@@ -765,8 +765,6 @@ class ai extends control
      */
     public function promptExecute($promptId, $objectId)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
-
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
@@ -896,8 +894,6 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
-
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
 
@@ -919,11 +915,10 @@ class ai extends control
      */
     public function promptUnpublish($id)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
         $this->ai->togglePromptStatus($id, 'draft');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => true));
     }
 
     /**
