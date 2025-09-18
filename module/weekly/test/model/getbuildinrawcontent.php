@@ -10,7 +10,7 @@ cid=1
 - 获取holder数据
  - 属性name @weekly_term
  - 属性text @报告周期
- - 属性hint @筛选条件：“date”介于本周
+ - 属性hint @筛选条件“日期范围”介于本周
 - 检查区块数量 @6
 
 */
@@ -24,6 +24,6 @@ su('admin');
 $weeklyTester = new weeklyTest();
 $content      = $weeklyTester->getBuildinRawContentTest();
 
-r($content['meta'])                                                                                      && p('title')          && e('项目周报模板');                                    // 检查模板标题
-r($content['blocks']['children'][0]['children'][0]['props']['text']['delta'][0]['attributes']['holder']) && p('name,text,hint') && e('weekly_term,报告周期,筛选条件：“date”介于本周'); // 获取holder数据
-r(count($content['blocks']))                                                                             && p()                 && e('6');                                               // 检查区块数量
+r($content['meta'])                                                                                      && p('title')          && e('项目周报模板');                                        // 检查模板标题
+r($content['blocks']['children'][0]['children'][0]['props']['text']['delta'][0]['attributes']['holder']) && p('name,text,hint') && e('weekly_term,报告周期,筛选条件：“日期范围”介于本周'); // 获取holder数据
+r(count($content['blocks']))                                                                             && p()                 && e('6');                                                   // 检查区块数量

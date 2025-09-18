@@ -21,6 +21,7 @@ $lang->weekly->finished       = 'Work finished this week (100% completed work)';
 $lang->weekly->postponed      = 'Work unfinished this week';
 $lang->weekly->nextWeek       = 'Work planned for next week';
 $lang->weekly->workloadByType = 'Workload Summary';
+$lang->weekly->milestoneTitle = '%s Milestone Report';
 
 $lang->weekly->term            = 'Reporting Cycle';
 $lang->weekly->project         = $lang->projectCommon . ' Name';
