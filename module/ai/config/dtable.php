@@ -20,3 +20,35 @@ $config->ai->dtable->assistants['status']        = array('name' => 'enabled', 't
 $config->ai->dtable->assistants['createdDate']   = array('name' => 'createdDate', 'title' => $lang->ai->assistant->createdDate, 'flex' => 'auto', 'type' => 'datetime', 'minWidth' => 120);
 $config->ai->dtable->assistants['publishedDate'] = array('name' => 'publishedDate', 'title' => $lang->ai->assistant->publishedDate, 'flex' => 'auto', 'type' => 'datetime', 'minWidth' => 120,);
 $config->ai->dtable->assistants['actions']       = array('title' => $lang->actions, 'type' => 'actions', 'width' => 100, 'fixed' => 'right', 'align' => 'center', 'menu' => $config->ai->actions->assistants, 'list' => $config->ai->actionList);
+
+$config->ai->dtable->prompts = array();
+$config->ai->dtable->prompts['id']['title']    = 'ID';
+$config->ai->dtable->prompts['id']['type']     = 'id';
+$config->ai->dtable->prompts['id']['sortType'] = true;
+$config->ai->dtable->prompts['id']['required'] = true;
+
+$config->ai->dtable->prompts['name']['title']    = $lang->ai->prompts->name;
+$config->ai->dtable->prompts['name']['sortType'] = true;
+$config->ai->dtable->prompts['name']['required'] = true;
+$config->ai->dtable->prompts['name']['link']     = array('module' => 'ai', 'method' => 'promptview', 'params' => "id={id}");
+
+$config->ai->dtable->prompts['status']['title']    = $lang->ai->prompts->stage;
+$config->ai->dtable->prompts['status']['sortType'] = true;
+$config->ai->dtable->prompts['status']['required'] = true;
+$config->ai->dtable->prompts['status']['map']      = $lang->ai->prompts->statuses;
+
+$config->ai->dtable->prompts['createdBy']['title']    = $lang->ai->prompts->createdBy;
+$config->ai->dtable->prompts['createdBy']['sortType'] = true;
+$config->ai->dtable->prompts['createdBy']['required'] = true;
+
+$config->ai->dtable->prompts['createdDate']['title']    = $lang->ai->prompts->createdDate;
+$config->ai->dtable->prompts['createdDate']['sortType'] = true;
+$config->ai->dtable->prompts['createdDate']['required'] = true;
+
+$config->ai->dtable->prompts['targetForm']['title']    = $lang->ai->prompts->targetForm;
+$config->ai->dtable->prompts['targetForm']['sortType'] = true;
+$config->ai->dtable->prompts['targetForm']['required'] = true;
+
+$config->ai->dtable->prompts['actions']['type'] = 'actions';
+$config->ai->dtable->prompts['actions']['list'] = $config->ai->actionList;
+$config->ai->dtable->prompts['actions']['menu'] = $config->ai->actions->prompts;
