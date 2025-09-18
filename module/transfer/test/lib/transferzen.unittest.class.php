@@ -145,4 +145,50 @@ class transferZenTest
             return 'TypeError: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test printRow method.
+     *
+     * @param  string $module
+     * @param  int    $row
+     * @param  array  $fields
+     * @param  object $object
+     * @param  string $trClass
+     * @param  int    $addID
+     * @access public
+     * @return mixed
+     */
+    public function printRowTest(string $module = '', int $row = 0, array $fields = array(), object $object = null, string $trClass = '', int $addID = 1)
+    {
+        global $tester;
+
+        // 设置必要的配置和语言
+        if(!isset($tester->config->transfer)) $tester->config->transfer = new stdClass();
+        if(!isset($tester->config->transfer->actionModule)) $tester->config->transfer->actionModule = array();
+
+        if(!isset($tester->lang->transfer)) $tester->lang->transfer = new stdClass();
+        $tester->lang->transfer->new = '新建';
+        if(!isset($tester->lang->task)) $tester->lang->task = new stdClass();
+        $tester->lang->task->children = '子任务';
+
+        try {
+            // 获取transfer对象并设置transferConfig
+            $transferZen = $tester->loadTarget('transfer', '', 'zen');
+            if(!property_exists($transferZen, 'transferConfig')) {
+                $transferZen->transferConfig = new stdClass();
+            }
+            $transferZen->transferConfig->textareaFields = 'desc,content,steps';
+
+            $result = callZenMethod('transfer', 'printRow', array($module, $row, $fields, $object, $trClass, $addID));
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(TypeError $e) {
+            return 'TypeError: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(Error $e) {
+            return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        }
+    }
 }
