@@ -601,7 +601,7 @@ class upgrade extends control
         $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
         if($skipUpdateWeeklyReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
         {
-            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports($fromVersion);
+            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports();
             if(!empty($upgradeWeeklyReports))
             {
                 $this->session->set('upgradeWeeklyReports', $upgradeWeeklyReports);
