@@ -473,4 +473,79 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test assignForCases method.
+     *
+     * @param  object $product
+     * @param  object $testtask
+     * @param  array  $runs
+     * @param  array  $scenes
+     * @param  int    $moduleID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function assignForCasesTest($product = null, $testtask = null, $runs = array(), $scenes = array(), $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        // 创建默认产品对象
+        if(!$product)
+        {
+            $product = new stdclass();
+            $product->id = 1;
+            $product->name = 'Test Product';
+            $product->shadow = 0;
+            $product->type = 'normal';
+        }
+
+        // 创建默认测试单对象
+        if(!$testtask)
+        {
+            $testtask = new stdclass();
+            $testtask->id = 1;
+            $testtask->name = 'Test Task';
+            $testtask->execution = 1;
+            $testtask->branch = '0';
+            $testtask->product = 1;
+        }
+
+        // 确保branch是字符串类型
+        if(isset($testtask->branch) && is_int($testtask->branch)) $testtask->branch = (string)$testtask->branch;
+
+        // 创建默认分页对象
+        if(!$pager)
+        {
+            $pager = new stdclass();
+            $pager->recTotal = 0;
+            $pager->pageTotal = 1;
+            $pager->pageID = 1;
+        }
+
+        // 创建默认用例运行记录
+        if(empty($runs))
+        {
+            $run = new stdclass();
+            $run->id = 1;
+            $run->case = 1;
+            $run->task = 1;
+            $run->lastRunner = 'admin';
+            $runs = array($run);
+        }
+
+        $method = $this->testtaskZenTest->getMethod('assignForCases');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $result = $method->invoke($testtaskZen, $product, $testtask, $runs, $scenes, (int)$moduleID, $browseType, (int)$param, $orderBy, $pager);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
