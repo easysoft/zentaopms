@@ -246,7 +246,9 @@ class {moduleName}Test
      */
     public function {methodName}Test($param = null)
     {
-        $result = $this->objectZen->{methodName}($param);
+        $method = $this->objectZen->getMethod('{methodName}');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectZen, $param);
         if(dao::isError()) return dao::getError();
 
         return $result;
