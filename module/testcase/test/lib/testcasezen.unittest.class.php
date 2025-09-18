@@ -1765,4 +1765,60 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processCaseForExport method.
+     *
+     * @param  object $case
+     * @param  array  $products
+     * @param  array  $branches
+     * @param  array  $users
+     * @param  array  $results
+     * @param  array  $relatedModules
+     * @param  array  $relatedStories
+     * @param  array  $relatedCases
+     * @param  array  $relatedSteps
+     * @param  array  $relatedFiles
+     * @param  array  $relatedScenes
+     * @access public
+     * @return object
+     */
+    public function processCaseForExportTest(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories, array $relatedCases, array $relatedSteps, array $relatedFiles, array $relatedScenes): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->app = $tester->app;
+            $zenInstance->lang = $tester->lang;
+            $zenInstance->config = $tester->config;
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processCaseForExport');
+            $method->setAccessible(true);
+
+            // 克隆case对象避免原对象被修改
+            $caseClone = clone $case;
+
+            // 调用方法
+            $method->invoke($zenInstance, $caseClone, $products, $branches, $users, $results, $relatedModules, $relatedStories, $relatedCases, $relatedSteps, $relatedFiles, $relatedScenes);
+
+            if(dao::isError()) return dao::getError();
+
+            return $caseClone;
+        } catch (Exception $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        } catch (Error $e) {
+            $errorCase = clone $case;
+            $errorCase->error = $e->getMessage();
+            return $errorCase;
+        }
+    }
 }
