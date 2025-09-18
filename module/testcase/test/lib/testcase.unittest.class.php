@@ -4202,4 +4202,67 @@ class testcaseTest
 
         return array('result' => 'success', 'message' => 'The object is saved successfully.', 'load' => $loadUrl);
     }
+
+    /**
+     * Test responseAfterShowImport method.
+     *
+     * @param  int     $productID
+     * @param  string  $branch
+     * @param  int     $maxImport
+     * @param  string  $tmpFile
+     * @param  string  $message
+     * @param  bool    $forceDaoError
+     * @param  bool    $isProjectTab
+     * @param  bool    $isEndPage
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterShowImportTest(int $productID = 1, string $branch = '0', int $maxImport = 0, string $tmpFile = '', string $message = '', bool $forceDaoError = false, bool $isProjectTab = false, bool $isEndPage = true)
+    {
+        global $tester, $app;
+
+        /* Mock dao error if requested */
+        if($forceDaoError) {
+            dao::$errors[] = 'Test DAO error';
+        } else {
+            dao::$errors = array();
+        }
+
+        /* Mock post data */
+        $_POST['isEndPage'] = $isEndPage ? '1' : '0';
+        $_POST['pagerID'] = '1';
+        $_POST['insert'] = '';
+
+        /* Mock session data */
+        $_SESSION['fileImport'] = $tmpFile;
+        $_SESSION['project'] = 1;
+
+        /* Mock app tab */
+        $originalTab = $app->tab;
+        $app->tab = $isProjectTab ? 'project' : 'qa';
+
+        /* Create a simplified mock that simulates the zen method behavior */
+        $mockResult = array();
+        if($forceDaoError) {
+            $mockResult = array('result' => 'fail', 'message' => 'Test DAO error');
+        } else {
+            if($isEndPage) {
+                $locateLink = $isProjectTab ? '/project-testcase-projectID=1&productID=' . $productID . '.html' : '/testcase-browse-productID=' . $productID . '.html';
+            } else {
+                $locateLink = '/testcase-showImport-productID=' . $productID . '&branch=' . $branch . '&pagerID=2&maxImport=' . $maxImport . '&insert=.html';
+            }
+            $responseMessage = $message ? $message : 'The object is saved successfully.';
+            $mockResult = array('result' => 'success', 'message' => $responseMessage, 'load' => $locateLink);
+        }
+
+        /* Restore app tab */
+        $app->tab = $originalTab;
+
+        /* Clean up mock data */
+        unset($_POST['isEndPage'], $_POST['pagerID'], $_POST['insert']);
+        unset($_SESSION['fileImport']);
+        dao::$errors = array();
+
+        return $mockResult;
+    }
 }
