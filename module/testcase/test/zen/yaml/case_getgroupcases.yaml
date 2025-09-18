@@ -1,0 +1,35 @@
+---
+title: getGroupCases方法测试用例数据
+desc: 为testcaseZen::getGroupCases方法提供测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1{8},2{2}
+- field: branch
+  range: 0{6},1{4}
+- field: story
+  range: 1{3},2{2},3{2},0{3}
+- field: title
+  range: 功能测试用例{3},性能测试用例{2},界面测试用例{2},接口测试用例{3}
+- field: type
+  range: feature{5},performance{2},config{1},install{1},security{1}
+- field: status
+  range: normal{7},blocked{1},investigate{2}
+- field: pri
+  range: 1{2},2{3},3{4},4{1}
+- field: openedBy
+  range: admin{5},user1{3},user2{2}
+- field: openedDate
+  range: (-7d)-(-1d)
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: lastEditedBy
+  range: admin{8},[]{2}
+- field: lastEditedDate
+  range: (-3d)-(0d)
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: version
+  range: 1{8},2{2}
+- field: deleted
+  range: '0'{8},'1'{2}
