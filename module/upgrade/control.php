@@ -598,7 +598,8 @@ class upgrade extends control
         }
 
         /* 如果有需要升级的周报，显示升级周报界面。*/
-        if($skipUpdateWeeklyReports == 'no')
+        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
+        if($skipUpdateWeeklyReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
         {
             $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports($fromVersion);
             if(!empty($upgradeWeeklyReports))
