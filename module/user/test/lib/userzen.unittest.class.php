@@ -141,4 +141,28 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test reloadLang method.
+     *
+     * @param  string $lang
+     * @access public
+     * @return mixed
+     */
+    public function reloadLangTest($lang = 'zh-cn')
+    {
+        $originalLang = $this->tester->app->getClientLang();
+
+        $result = callZenMethod('user', 'reloadLang', array($lang));
+        if(dao::isError()) return dao::getError();
+
+        $currentLang = $this->tester->app->getClientLang();
+
+        return array(
+            'originalLang' => $originalLang,
+            'currentLang' => $currentLang,
+            'langSet' => $lang,
+            'success' => true
+        );
+    }
 }
