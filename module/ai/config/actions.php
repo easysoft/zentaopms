@@ -1,11 +1,12 @@
 <?php
-global $lang, $app;
+global $lang, $app, $config;
 
 $config->ai->actions = new stdclass();
-$config->ai->actions->modelview  = array('mainActions' => array('modelenable', 'modeldisable', 'modeltestconnection'), 'suffixActions' => array('modeledit', 'modeldelete'));
-$config->ai->actions->models     = array('modelenable|modeldisable', 'modeledit');
-$config->ai->actions->assistants = array('assistantpublish|assistantwithdraw', 'assistantedit');
+$config->ai->actions->modelview     = array('mainActions' => array('modelenable', 'modeldisable', 'modeltestconnection'), 'suffixActions' => array('modeledit', 'modeldelete'));
+$config->ai->actions->models        = array('modelenable|modeldisable', 'modeledit');
+$config->ai->actions->assistants    = array('assistantpublish|assistantwithdraw', 'assistantedit');
 $config->ai->actions->assistantview = array('mainActions' => array('assistantpublish', 'assistantwithdraw'), 'suffixActions' => array('assistantedit', 'assistantdelete'));
+$config->ai->actions->prompts       = $config->edition != 'open' ? array('promptassignrole', 'promptaudit', 'promptedit', 'promptpublish', 'promptunpublish') : array('promptpublish', 'promptunpublish');
 
 $config->ai->actionList = array();
 $config->ai->actionList['modelenable']['icon']             = 'magic';
@@ -47,3 +48,30 @@ $config->ai->actionList['assistantdelete']['icon']      = 'trash';
 $config->ai->actionList['assistantdelete']['text']      = $lang->delete;
 $config->ai->actionList['assistantdelete']['hint']      = $lang->delete;
 $config->ai->actionList['assistantdelete']['url']       = 'javascript:confirmDelete("{id}")';
+
+$config->ai->actionList['promptassignrole']['icon'] = 'design';
+$config->ai->actionList['promptassignrole']['text'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['promptassignrole']['hint'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['promptassignrole']['url']  = array('module' => 'ai', 'method' => 'promptassignrole', 'params' => 'prompt={id}');
+
+$config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
+$config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
+$config->ai->actionList['promptaudit']['hint'] = $lang->ai->prompts->action->test;
+
+$config->ai->actionList['promptedit']['icon'] = 'edit';
+$config->ai->actionList['promptedit']['text'] = $lang->ai->prompts->action->edit;
+$config->ai->actionList['promptedit']['hint'] = $lang->ai->prompts->action->edit;
+$config->ai->actionList['promptedit']['url']  = array('module' => 'ai', 'method' => 'promptedit', 'params' => 'prompt={id}');
+
+$config->ai->actionList['promptpublish']['icon']      = 'publish';
+$config->ai->actionList['promptpublish']['text']      = $lang->ai->prompts->action->publish;
+$config->ai->actionList['promptpublish']['hint']      = $lang->ai->prompts->action->publish;
+$config->ai->actionList['promptpublish']['url']       = array('module' => 'ai', 'method' => 'promptpublish', 'params' => 'prompt={id}&backToTestingLocation=true');
+$config->ai->actionList['promptpublish']['className'] = 'ajax-submit';
+
+$config->ai->actionList['promptunpublish']['icon']         = 'ban';
+$config->ai->actionList['promptunpublish']['text']         = $lang->ai->prompts->action->unpublish;
+$config->ai->actionList['promptunpublish']['hint']         = $lang->ai->prompts->action->unpublish;
+$config->ai->actionList['promptunpublish']['url']          = array('module' => 'ai', 'method' => 'promptunpublish', 'params' => 'prompt={id}');
+$config->ai->actionList['promptunpublish']['className']    = 'ajax-submit';
+$config->ai->actionList['promptunpublish']['data-confirm'] = array('message' => $lang->ai->prompts->action->draftConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
