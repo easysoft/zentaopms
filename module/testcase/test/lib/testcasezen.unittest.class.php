@@ -2070,4 +2070,19 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getFieldsForExportTemplate method.
+     *
+     * @param  string $productType
+     * @access public
+     * @return array
+     */
+    public function getFieldsForExportTemplateTest(string $productType): array
+    {
+        $result = callZenMethod('testcase', 'getFieldsForExportTemplate', [$productType]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
