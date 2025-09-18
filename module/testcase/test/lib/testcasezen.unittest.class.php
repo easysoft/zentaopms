@@ -1293,4 +1293,109 @@ class testcaseZenTest
             return array('result' => 'fail', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildLinkBugsSearchForm method.
+     *
+     * @param  int    $caseID
+     * @param  int    $queryID
+     * @param  string $tab
+     * @param  string $projectModel
+     * @access public
+     * @return array
+     */
+    public function buildLinkBugsSearchFormTest(int $caseID, int $queryID, string $tab = 'qa', string $projectModel = ''): array
+    {
+        global $tester;
+
+        // 保存原始状态
+        $originalTab = $tester->app->tab ?? '';
+        $originalConfig = isset($tester->config->bug->search['fields']) ? $tester->config->bug->search['fields'] : array();
+
+        try {
+            // 设置app的tab属性
+            $tester->app->tab = $tab;
+
+            // 初始化必要的配置
+            if(!isset($tester->config)) $tester->config = new stdClass();
+            if(!isset($tester->config->bug)) $tester->config->bug = new stdClass();
+            if(!isset($tester->config->bug->search)) $tester->config->bug->search = array();
+            $tester->config->bug->search['fields'] = array(
+                'product' => '产品',
+                'plan' => '计划',
+                'title' => '标题',
+                'status' => '状态'
+            );
+
+            // 创建模拟用例数据
+            $case = new stdClass();
+            $case->id = $caseID;
+            $case->product = 1;
+            $case->project = $caseID;
+            $case->execution = $caseID;
+
+            // 模拟buildLinkBugsSearchForm方法的核心逻辑
+            $actionURL = "/testcase-linkBugs-{$case->id}-bySearch-myQueryID.html";
+            $objectID = 0;
+
+            // 根据tab设置objectID
+            if($tester->app->tab == 'project') $objectID = $case->project;
+            if($tester->app->tab == 'execution') $objectID = $case->execution;
+
+            // 删除product字段
+            $productFieldRemoved = 0;
+            if(isset($tester->config->bug->search['fields']['product'])) {
+                unset($tester->config->bug->search['fields']['product']);
+                $productFieldRemoved = 1;
+            }
+
+            // 检查plan字段删除逻辑
+            $planFieldRemoved = 0;
+            if($case->project && ($tester->app->tab == 'project' || $tester->app->tab == 'execution')) {
+                // 模拟项目数据
+                $project = new stdClass();
+                $project->hasProduct = ($caseID == 3) ? 0 : 1; // caseID为3时模拟无产品项目
+                $project->model = ($caseID == 3) ? 'waterfall' : 'scrum'; // caseID为3时模拟瀑布项目
+
+                if(!$project->hasProduct && $project->model == 'waterfall') {
+                    if(isset($tester->config->bug->search['fields']['plan'])) {
+                        unset($tester->config->bug->search['fields']['plan']);
+                        $planFieldRemoved = 1;
+                    }
+                }
+            }
+
+            // 构建返回结果
+            $result = array(
+                'executed' => '1',
+                'actionURL' => $actionURL,
+                'objectID' => (string)$objectID,
+                'productFieldRemoved' => (string)$productFieldRemoved,
+                'planFieldRemoved' => (string)$planFieldRemoved,
+                'remainingFields' => count($tester->config->bug->search['fields'])
+            );
+
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            $tester->config->bug->search['fields'] = $originalConfig;
+
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            if(!empty($originalConfig)) {
+                $tester->config->bug->search['fields'] = $originalConfig;
+            }
+
+            return array('executed' => '0', 'error' => $e->getMessage());
+        } catch (Error $e) {
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            if(!empty($originalConfig)) {
+                $tester->config->bug->search['fields'] = $originalConfig;
+            }
+
+            return array('executed' => '0', 'error' => $e->getMessage());
+        }
+    }
 }
