@@ -1758,4 +1758,23 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test exportTodoInfo method.
+     *
+     * @param  array  $todos   待办数组
+     * @param  string $fields  字段列表
+     * @param  object $todoLang 语言对象
+     * @access public
+     * @return mixed
+     */
+    public function exportTodoInfoTest(array $todos, string $fields, object $todoLang)
+    {
+        $method = $this->objectZen->getMethod('exportTodoInfo');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->todoZen, $todos, $fields, $todoLang);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
