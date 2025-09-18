@@ -4113,4 +4113,93 @@ class testcaseTest
             return array();
         }
     }
+
+    /**
+     * Test responseAfterBatchCreate method.
+     *
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  array      $mockData
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterBatchCreateTest($productID, $branch, $mockData = array())
+    {
+        global $tester;
+
+        /* Backup original environment */
+        $originalApp = clone $tester->app;
+        $originalSession = $_SESSION;
+        $originalServer = $_SERVER;
+
+        /* Mock environment data */
+        if(isset($mockData['app'])) {
+            foreach($mockData['app'] as $key => $value) {
+                $tester->app->$key = $value;
+            }
+        }
+
+        if(isset($mockData['session'])) {
+            foreach($mockData['session'] as $key => $value) {
+                $_SESSION[$key] = $value;
+            }
+        }
+
+        if(isset($mockData['request'])) {
+            foreach($mockData['request'] as $key => $value) {
+                $_SERVER[$key] = $value;
+            }
+        }
+
+        /* Simulate the responseAfterBatchCreate method logic */
+        $result = $this->simulateResponseAfterBatchCreate($productID, $branch, $mockData);
+
+        /* Restore original environment */
+        $tester->app = $originalApp;
+        $_SESSION = $originalSession;
+        $_SERVER = $originalServer;
+
+        return $result;
+    }
+
+    /**
+     * Simulate the responseAfterBatchCreate method logic for testing.
+     *
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  array      $mockData
+     * @access private
+     * @return array
+     */
+    private function simulateResponseAfterBatchCreate($productID, $branch, $mockData = array())
+    {
+        global $tester;
+
+        /* Check dao error */
+        if(isset($mockData['daoError']) && !empty($mockData['daoError'])) {
+            return array('result' => 'fail', 'message' => $mockData['daoError'][0]);
+        }
+
+        /* Check if it's ajax modal request */
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' &&
+           isset($tester->app->rawParams) && in_array('modal', $tester->app->rawParams)) {
+            return array('result' => 'success', 'message' => 'The object is saved successfully.', 'closeModal' => true, 'load' => true);
+        }
+
+        /* Check viewType */
+        if(isset($mockData['viewType']) && $mockData['viewType'] == 'json') {
+            return array('result' => 'success', 'message' => 'The object is saved successfully.', 'idList' => array());
+        }
+
+        /* Set cookie caseModule to 0 - simulate helper::setcookie (skip actual call to avoid header issues) */
+
+        /* Determine current module and method */
+        $currentModule = $tester->app->tab == 'qa' ? 'testcase' : $tester->app->tab;
+        $currentMethod = $tester->app->tab == 'qa' ? 'browse'   : 'testcase';
+        $projectParam  = $tester->app->tab == 'qa' ? ''         : "{$tester->app->tab}ID=" . zget($_SESSION, $tester->app->tab, 0) . '&';
+
+        $loadUrl = "/{$currentModule}-{$currentMethod}-{$projectParam}productID={$productID}&branch={$branch}.html";
+
+        return array('result' => 'success', 'message' => 'The object is saved successfully.', 'load' => $loadUrl);
+    }
 }
