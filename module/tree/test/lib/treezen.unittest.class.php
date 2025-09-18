@@ -95,4 +95,34 @@ class treeTest
 
         return $lang->tree;
     }
+
+    /**
+     * Test updateRawModule method.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @access public
+     * @return mixed
+     */
+    public function updateRawModuleTest(int $rootID = 0, string $viewType = '')
+    {
+        global $app;
+
+        // 保存原始的rawModule值
+        $originalRawModule = $app->rawModule ?? '';
+
+        $treeZen = $this->objectZen->newInstance();
+        $method = $this->objectZen->getMethod('updateRawModule');
+        $method->setAccessible(true);
+        $method->invoke($treeZen, $rootID, $viewType);
+        if(dao::isError()) return dao::getError();
+
+        // 返回设置后的rawModule值
+        $result = $app->rawModule ?? '';
+
+        // 恢复原始值
+        $app->rawModule = $originalRawModule;
+
+        return $result;
+    }
 }
