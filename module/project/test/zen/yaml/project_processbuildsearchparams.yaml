@@ -1,0 +1,37 @@
+---
+title: 项目版本搜索参数处理测试数据
+desc: 用于测试processBuildSearchParams方法的各种项目和产品配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 项目名称
+  range: [项目1,项目2,项目3,多迭代项目,无产品项目]
+  prefix: ""
+  postfix: ""
+- field: multiple
+  note: 是否多迭代项目
+  range: [0,1,1,1,0]
+  prefix: ""
+  postfix: ""
+- field: hasProduct
+  note: 是否关联产品
+  range: [1,1,1,1,0]
+  prefix: ""
+  postfix: ""
+- field: model
+  note: 项目模型
+  range: [scrum,waterfall,kanban,scrum,scrum]
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 项目状态
+  range: [wait,doing,closed,doing,wait]
+  prefix: ""
+  postfix: ""

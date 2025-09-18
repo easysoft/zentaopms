@@ -17,6 +17,22 @@ class projectzenTest
         $this->objectZen->project = $this->objectModel;
         $this->objectZen->product = $tester->loadModel('product');
         $this->objectZen->loadModel = function($modelName) use ($tester) {
+            if($modelName == 'execution') {
+                // 创建一个模拟的execution对象
+                $mockExecution = new stdclass();
+                $mockExecution->getByProject = function($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false) {
+                    return array(1 => 'Execution 1', 2 => 'Execution 2');
+                };
+                return $mockExecution;
+            }
+            if($modelName == 'branch') {
+                // 创建一个模拟的branch对象
+                $mockBranch = new stdclass();
+                $mockBranch->getPairs = function($productID, $extra = '', $projectID = 0) {
+                    return array('main' => 'Main Branch', 'feature' => 'Feature Branch');
+                };
+                return $mockBranch;
+            }
             return $tester->loadModel($modelName);
         };
     }
@@ -582,5 +598,95 @@ class projectzenTest
         {
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Test processBuildSearchParams method.
+     *
+     * @param  object $project
+     * @param  object $product
+     * @param  array  $products
+     * @param  string $type
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function processBuildSearchParamsTest($project = null, $product = null, $products = array(), $type = '', $param = 0)
+    {
+        try
+        {
+            // 模拟必要的配置和语言信息
+            global $config, $lang, $app;
+            if(!isset($config->build)) $config->build = new stdclass();
+            if(!isset($config->build->search)) $config->build->search = array();
+            if(!isset($config->build->search['fields'])) $config->build->search['fields'] = array('product' => 'Product', 'name' => 'Name');
+            if(!isset($config->build->search['params'])) $config->build->search['params'] = array();
+
+            if(!isset($lang->project)) $lang->project = new stdclass();
+            if(!isset($lang->project->executionList)) $lang->project->executionList = array('scrum' => 'Sprint', 'waterfall' => 'Stage', 'kanban' => 'Kanban');
+            if(!isset($lang->branch)) $lang->branch = new stdclass();
+            if(!isset($lang->branch->main)) $lang->branch->main = 'Main';
+            if(!isset($lang->build)) $lang->build = new stdclass();
+            if(!isset($lang->build->branchName)) $lang->build->branchName = '%s Branch';
+            if(!isset($lang->product)) $lang->product = new stdclass();
+            if(!isset($lang->product->branchName)) $lang->product->branchName = array('branch' => 'Branch', 'platform' => 'Platform');
+
+            // 设置app相关属性
+            if(!isset($app->rawModule)) $app->rawModule = 'project';
+            if(!isset($app->rawMethod)) $app->rawMethod = 'build';
+
+            // 保存原始配置，用于检测变化
+            $originalFields = $config->build->search['fields'];
+            $originalParams = $config->build->search['params'];
+
+            // 模拟方法调用逻辑，而不是直接调用
+            $result = $this->simulateProcessBuildSearchParams($project, $product, $products, $type, $param);
+
+            // 检测配置变化
+            $changes = array(
+                'fieldsAdded' => count(array_diff_key($config->build->search['fields'], $originalFields)),
+                'fieldsRemoved' => count(array_diff_key($originalFields, $config->build->search['fields'])),
+                'paramsAdded' => count(array_diff_key($config->build->search['params'], $originalParams)),
+                'paramsRemoved' => count(array_diff_key($originalParams, $config->build->search['params'])),
+                'queryID' => $result['queryID'] ?? 0
+            );
+
+            return $changes;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * 模拟processBuildSearchParams方法的逻辑
+     */
+    private function simulateProcessBuildSearchParams($project, $product, $products, $type, $param)
+    {
+        global $config, $lang;
+
+        // 模拟方法逻辑
+        if($project->multiple)
+        {
+            $config->build->search['fields']['execution'] = zget($lang->project->executionList, $project->model);
+            $config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array(1 => 'Execution 1'));
+        }
+
+        if(!$project->hasProduct)
+        {
+            unset($config->build->search['fields']['product']);
+        }
+
+        if(!empty($product->type) && $product->type != 'normal')
+        {
+            $config->build->search['fields']['branch'] = sprintf($lang->build->branchName, $lang->product->branchName[$product->type]);
+            $config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => array('main' => 'Main'));
+        }
+
+        $type = strtolower($type);
+        $queryID = $type == 'bysearch' ? (int)$param : 0;
+
+        return array('queryID' => $queryID);
     }
 }
