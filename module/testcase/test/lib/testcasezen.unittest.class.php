@@ -2317,4 +2317,36 @@ class testcaseZenTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getXmindExportData method.
+     *
+     * @param  int    $productID
+     * @param  string $productName
+     * @param  array  $context
+     * @access public
+     * @return mixed
+     */
+    public function getXmindExportDataTest(int $productID, string $productName, array $context)
+    {
+        try {
+            global $tester;
+            $zenClass = new ReflectionClass('testcaseZen');
+            $zenInstance = $zenClass->newInstance();
+
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getXmindExportData');
+            $method->setAccessible(true);
+
+            $returnValue = $method->invoke($zenInstance, $productID, $productName, $context);
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            return 'error: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
