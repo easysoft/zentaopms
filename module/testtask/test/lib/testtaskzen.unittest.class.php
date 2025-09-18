@@ -196,4 +196,40 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForStart method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForStartTest($taskID = 1)
+    {
+        // 根据不同的taskID使用不同的测试数据
+        $testData = array(
+            1 => array('status' => 'doing', 'comment' => '开始测试', 'realBegan' => '2024-01-01', 'uid' => 'uid123'),
+            2 => array('status' => 'doing', 'comment' => '', 'realBegan' => '2024-01-15', 'uid' => 'uid456'),
+            3 => array('status' => 'doing', 'comment' => '正式开始执行测试任务', 'realBegan' => '2024-02-01', 'uid' => ''),
+            4 => array('status' => 'doing', 'comment' => '<p>带HTML标签的注释</p>', 'realBegan' => '2024-02-15', 'uid' => 'uid789'),
+            0 => array('status' => 'doing', 'comment' => '无效ID测试', 'realBegan' => '2024-03-01', 'uid' => 'invalid'),
+            999 => array('status' => 'doing', 'comment' => '不存在的测试单', 'realBegan' => '2024-12-31', 'uid' => 'test999')
+        );
+
+        $data = isset($testData[$taskID]) ? $testData[$taskID] : $testData[1];
+
+        // 模拟表单数据
+        $_POST = $data;
+
+        $method = $this->testtaskZenTest->getMethod('buildTaskForStart');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array((int)$taskID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
