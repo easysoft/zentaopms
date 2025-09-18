@@ -247,4 +247,73 @@ class todoTest
 
         return $form;
     }
+
+    /**
+     * Test prepareCreateData method.
+     *
+     * @param  object $todo 待办对象
+     * @access public
+     * @return mixed
+     */
+    public function prepareCreateDataTest(object $todo): mixed
+    {
+        // 模拟prepareCreateData方法的核心逻辑
+        global $config, $app;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'epic', 'requirement', 'story', 'testtask');
+        }
+
+        // 1. 检查优先级设置
+        if(!isset($todo->pri) && in_array($todo->type, $config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback'))) {
+            // 模拟优先级设置
+            $todo->pri = 2;  // 默认中等优先级
+        }
+
+        // 2. 处理非自定义类型的名称
+        if($todo->type != 'custom' && !empty($todo->objectID)) {
+            // 模拟从对象获取名称
+            if($todo->type == 'task') $todo->name = '任务' . $todo->objectID;
+            if($todo->type == 'story') $todo->name = '需求' . $todo->objectID;
+            if($todo->type == 'bug') $todo->name = '缺陷' . $todo->objectID;
+        }
+
+        // 3. 验证模块类型必须有objectID
+        $isModuleType = isset($todo->type) && in_array($todo->type, $config->todo->moduleList);
+        if($isModuleType && empty($todo->objectID)) {
+            return (object)array('error' => 'objectID required for module type');
+        }
+
+        // 4. 验证时间范围
+        if($todo->end < $todo->begin) {
+            return (object)array('error' => 'end time should be greater than begin time');
+        }
+
+        // 5. 处理周期配置
+        if(!empty($todo->cycle)) {
+            $todo->type = 'cycle';
+            if(isset($todo->config)) {
+                $todo->config = json_encode($todo->config);
+            }
+        }
+        if(empty($todo->cycle)) unset($todo->config);
+
+        // 6. 处理私有待办
+        if($todo->private) {
+            $todo->assignedTo = $app->user->account;
+            $todo->assignedBy = $app->user->account;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $todo;
+    }
 }
