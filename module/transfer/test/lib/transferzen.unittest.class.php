@@ -288,4 +288,32 @@ class transferZenTest
             return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         }
     }
+
+    /**
+     * Test process4Testcase method.
+     *
+     * @param  string $field
+     * @param  array  $datas
+     * @param  int    $key
+     * @access public
+     * @return mixed
+     */
+    public function process4TestcaseTest(string $field = '', array $datas = array(), int $key = 0)
+    {
+        global $tester;
+
+        try {
+            // 使用反射调用protected方法
+            $result = callZenMethod('transfer', 'process4Testcase', array($field, $datas, $key));
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(TypeError $e) {
+            return 'TypeError: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(Error $e) {
+            return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        }
+    }
 }
