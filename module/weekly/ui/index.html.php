@@ -12,17 +12,16 @@ namespace zin;
 
 if(hasPriv('weekly', 'exportweeklyreport'))
 {
-    mainNavbar
+    div
     (
-        to('right', btn
-            (
-                setID('exportWeeklyBtn'),
-                setClass('pull-right mt-1 secondary'),
-                setData('toggle', 'modal'),
-                setData('selectedweekbegin', $date),
-                set::url($this->createLink('weekly', 'exportweeklyreport', "module=weekly&projectID={$project->id}")),
-                $lang->export
-            )
+        btn
+        (
+            setID('exportWeeklyBtn'),
+            setClass('pull-right mb-2 secondary'),
+            setData('toggle', 'modal'),
+            setData('selectedweekbegin', $date),
+            set::url($this->createLink('weekly', 'exportweeklyreport', "module=weekly&projectID={$project->id}")),
+            $lang->export
         )
     );
 }
