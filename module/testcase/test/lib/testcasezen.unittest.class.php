@@ -1474,4 +1474,24 @@ class testcaseZenTest
             return 0;
         }
     }
+
+    /**
+     * Test getMindExport method.
+     *
+     * @param  string $type
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function getMindExportTest(string $type, int $productID, int $moduleID, string $branch): int
+    {
+        $result = callZenMethod('testcase', 'getMindExport', [$type, $productID, $moduleID, $branch]);
+
+        if(dao::isError()) return 0;
+
+        // 返回数组的键数量
+        return is_array($result) ? count($result) : 0;
+    }
 }
