@@ -1,0 +1,23 @@
+---
+title: 模块测试数据
+desc: 用于测试assignEditSceneVars方法的模块数据
+
+fields:
+- field: id
+  range: 1-15
+- field: root
+  range: 1{5},2{5},3{3},4{1},5{1}
+- field: branch
+  range: 0{10},1{3},2{2}
+- field: name
+  range: /{3},模块一{3},模块二{3},模块三{3},其他模块{3}
+- field: parent
+  range: 0{5},1{3},2{3},3{2},4{2}
+- field: grade
+  range: 1{10},2{5}
+- field: path
+  range: ',1,,1,2,,1,3,,1,4,,1,5,,2,,3,,4,,5,,6,,7,,8,,9,,10,,11,,12,,13,,14,,15,'
+- field: type
+  range: case{15}
+- field: owner
+  range: admin{10},user{5}
