@@ -232,16 +232,30 @@ class testcaseZenTest
         $tester->cookie->lastCaseModule = 2;
 
         try {
-            // 获取testcase的zen对象
-            $zenObject = initReference('testcase');
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenObject = $zenClass->newInstance();
+
+            // 确保必要的属性设置
+            $zenObject->view = $tester->view;
+            $zenObject->cookie = $tester->cookie;
+
+            // 确保必要的模型可用
+            if(!isset($zenObject->tree)) {
+                $zenObject->tree = $tester->loadModel('tree');
+            }
+            if(!isset($zenObject->testcase)) {
+                $zenObject->testcase = $tester->loadModel('testcase');
+            }
 
             // 使用反射调用protected方法
             $reflection = new ReflectionClass($zenObject);
             $method = $reflection->getMethod('assignModulesForCreate');
             $method->setAccessible(true);
+            $result = $method->invoke($zenObject, $productID, $moduleID, $branch, $storyID, $branches);
 
-            // 调用方法
-            $method->invoke($zenObject, $productID, $moduleID, $branch, $storyID, $branches);
+            // 更新tester的view对象
+            $tester->view = $zenObject->view;
 
             // 返回视图变量用于验证
             return array(
@@ -251,7 +265,10 @@ class testcaseZenTest
             );
         } catch (Exception $e) {
             // 返回错误信息
-            return array('error' => $e->getMessage());
+            return array('error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine());
+        } catch (Error $e) {
+            // 捕获致命错误
+            return array('error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine());
         }
     }
 

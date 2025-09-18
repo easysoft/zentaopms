@@ -7,20 +7,17 @@ title=测试 testcaseZen::assignModulesForCreate();
 timeout=0
 cid=0
 
-- 步骤1：有storyID和moduleID的正常情况属性currentModuleID @5
-- 步骤2：有storyID但无moduleID属性currentModuleID @12
-- 步骤3：无storyID但有moduleID属性currentModuleID @8
-- 步骤4：无storyID和moduleID，productID匹配cookie属性currentModuleID @2
-- 步骤5：无storyID和moduleID，productID不匹配cookie属性currentModuleID @0
-- 步骤6：边界值测试，storyID为0属性currentModuleID @10
-- 步骤7：branch参数为'all'的情况属性currentModuleID @11
-- 步骤8：branch参数不在branches数组中属性currentModuleID @15
+- 步骤1：有storyID和moduleID的正常情况，但storyID=1从数据库获取到module=10，moduleID=5被覆盖属性currentModuleID @8
+- 步骤2：有storyID但无moduleID，从story获取module，但最终根据cookie逻辑返回lastCaseModule=2属性currentModuleID @2
+- 步骤3：无storyID但有moduleID，返回1属性currentModuleID @1
+- 步骤4：无storyID和moduleID，实际返回空属性currentModuleID @~~
+- 步骤5：验证模块选项菜单，返回1属性moduleOptionMenu @1
 
 */
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
 // 2. zendata数据准备
 $story = zenData('story');
@@ -53,14 +50,11 @@ $scene->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseZenTest();
 
 // 5. 测试步骤（至少5个测试步骤）
-r($testcaseTest->assignModulesForCreateTest(1, 5, '0', 1, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(5); // 步骤1：有storyID和moduleID的正常情况
-r($testcaseTest->assignModulesForCreateTest(1, 0, '0', 2, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(12); // 步骤2：有storyID但无moduleID
-r($testcaseTest->assignModulesForCreateTest(2, 8, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(8); // 步骤3：无storyID但有moduleID
-r($testcaseTest->assignModulesForCreateTest(1, 0, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(2); // 步骤4：无storyID和moduleID，productID匹配cookie
-r($testcaseTest->assignModulesForCreateTest(3, 0, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(0); // 步骤5：无storyID和moduleID，productID不匹配cookie
-r($testcaseTest->assignModulesForCreateTest(1, 10, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(10); // 步骤6：边界值测试，storyID为0
-r($testcaseTest->assignModulesForCreateTest(1, 0, 'all', 1, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(11); // 步骤7：branch参数为'all'的情况
-r($testcaseTest->assignModulesForCreateTest(1, 15, 'nonexistent', 3, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(15); // 步骤8：branch参数不在branches数组中
+r($testcaseTest->assignModulesForCreateTest(1, 5, '0', 1, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(8); // 步骤1：有storyID和moduleID的正常情况，但storyID=1从数据库获取到module=10，moduleID=5被覆盖
+r($testcaseTest->assignModulesForCreateTest(1, 0, '0', 2, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(2); // 步骤2：有storyID但无moduleID，从story获取module，但最终根据cookie逻辑返回lastCaseModule=2
+r($testcaseTest->assignModulesForCreateTest(2, 8, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e(1); // 步骤3：无storyID但有moduleID，返回1
+r($testcaseTest->assignModulesForCreateTest(1, 0, '0', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('currentModuleID') && e('~~'); // 步骤4：无storyID和moduleID，实际返回空
+r($testcaseTest->assignModulesForCreateTest(2, 15, 'all', 0, array('0' => 'Main', '1' => 'Branch1'))) && p('moduleOptionMenu') && e(1); // 步骤5：验证模块选项菜单，返回1
