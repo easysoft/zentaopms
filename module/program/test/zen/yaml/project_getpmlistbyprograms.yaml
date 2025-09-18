@@ -1,0 +1,56 @@
+---
+title: 测试数据：项目集和项目数据
+desc: 为getPMListByPrograms方法测试提供项目集和项目测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: program{5},project{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 项目集A,项目集B,项目集C,项目集D,项目集E,项目A1,项目A2,项目B1,项目B2,项目B3,项目C1,项目C2,项目C3,项目D1,项目D2,项目D3,项目E1,项目E2,项目E3,项目E4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: PM
+  note: 项目经理
+  range: admin{5},user1{3},user2{4},user3{3},user4{2},[]{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: doing{8},wait{5},closed{4},suspended{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父项目
+  range: 0{5},1{3},2{4},3{3},4{2},5{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
