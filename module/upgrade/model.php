@@ -11257,8 +11257,7 @@ class upgradeModel extends model
      */
     public function upgradeWeeklyReport(array $data): bool
     {
-        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7);
-        $weekNumber = empty($weekNumber) ? 1 : $weekNumber;
+        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
         $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
         $report = new stdclass();
