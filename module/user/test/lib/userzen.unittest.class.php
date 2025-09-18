@@ -216,4 +216,19 @@ class userZenTest
 
         return $result;
     }
+
+    /**
+     * Test setReferer method.
+     *
+     * @param  string $referer
+     * @access public
+     * @return mixed
+     */
+    public function setRefererTest($referer = '')
+    {
+        $result = callZenMethod('user', 'setReferer', array($referer));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
