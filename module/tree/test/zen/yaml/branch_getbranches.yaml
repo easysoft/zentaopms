@@ -1,0 +1,24 @@
+---
+title: branch table for getBranches test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    note: "分支ID"
+    range: 1-10
+  - field: product
+    note: "所属产品"
+    range: 1{2},2{3},3{2},4{2},5{1}
+  - field: name
+    note: "分支名称"
+    range: master{2},develop{3},release{2},feature{2},hotfix{1}
+  - field: status
+    note: "分支状态"
+    range: active{8},closed{2}
+  - field: order
+    note: "排序"
+    range: 1-10
+  - field: deleted
+    note: "是否删除"
+    range: 0{9},1{1}
+...

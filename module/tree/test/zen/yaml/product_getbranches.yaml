@@ -1,0 +1,24 @@
+---
+title: product table for getBranches test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    note: "产品ID"
+    range: 1-5
+  - field: name
+    note: "产品名称"
+    range: 正常产品{1},分支产品{1},平台产品{1},任务产品{1},测试产品{1}
+  - field: code
+    note: "产品代号"
+    range: normal{1},branch{1},platform{1},task{1},test{1}
+  - field: type
+    note: "产品类型"
+    range: normal{1},branch{1},platform{1},normal{1},branch{1}
+  - field: status
+    note: "产品状态"
+    range: normal{4},closed{1}
+  - field: deleted
+    note: "是否删除"
+    range: 0
+...
