@@ -43,4 +43,34 @@ class testreportTest
             return 0;
         }
     }
+
+    /**
+     * Test getReportsForBrowse method.
+     *
+     * @param  int $objectID
+     * @param  string $objectType
+     * @param  int $extra
+     * @param  string $orderBy
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return mixed
+     */
+    public function getReportsForBrowseTest($objectID = 0, $objectType = 'product', $extra = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        try
+        {
+            $method = $this->testreportZenTest->getMethod('getReportsForBrowse');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
+    }
 }
