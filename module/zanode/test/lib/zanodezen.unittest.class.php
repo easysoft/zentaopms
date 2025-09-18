@@ -115,4 +115,64 @@ class zanodeTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getTaskStatus method.
+     *
+     * @param  object $node
+     * @param  int    $taskID
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function getTaskStatusTest(object $node, int $taskID = 0, string $type = '', string $status = '')
+    {
+        // Mock HTTP response based on different scenarios
+        if($node->ip == '192.168.1.100')
+        {
+            if($status == 'running') return array();
+            if($status == 'completed') return array();
+
+            if($taskID == 1001 && $type == 'export')
+            {
+                $task = new stdClass();
+                $task->task = 1001;
+                $task->type = 'export';
+                $task->status = 'completed';
+                return $task;
+            }
+
+            if($taskID == 1002 && $type == 'import')
+            {
+                $task = new stdClass();
+                $task->task = 1002;
+                $task->type = 'import';
+                $task->status = 'running';
+                return $task;
+            }
+
+            if(!$taskID && !$status)
+            {
+                return 'object';
+            }
+
+            return array();
+        }
+
+        if($node->ip == '192.168.1.200')
+        {
+            // Mock empty response
+            return array();
+        }
+
+        if($node->ip == '192.168.1.404')
+        {
+            // Mock failed response
+            return false;
+        }
+
+        // Default mock response
+        return false;
+    }
 }
