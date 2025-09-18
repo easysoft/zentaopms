@@ -150,4 +150,50 @@ class testtaskZenTest
 
         return $result;
     }
+
+    /**
+     * Test buildTaskForEdit method.
+     *
+     * @param  int $taskID
+     * @param  int $productID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForEditTest($taskID = 1, $productID = 1)
+    {
+        // 根据不同的taskID使用不同的测试数据
+        $membersData = array(
+            1 => ',admin,',
+            2 => ',user1,',
+            3 => ',admin,',
+            4 => ',user2,',
+            5 => ',admin,user2,',
+            6 => ',member1,member2,'
+        );
+
+        $members = isset($membersData[$taskID]) ? $membersData[$taskID] : ',admin,user1,';
+
+        // 模拟表单数据
+        $_POST = array(
+            'product'   => $productID,
+            'build'     => '1',
+            'name'      => '测试单名称',
+            'begin'     => '2024-01-01',
+            'end'       => '2024-01-31',
+            'desc'      => '测试描述',
+            'members'   => $members,
+            'uid'       => 'uid123'
+        );
+
+        $method = $this->testtaskZenTest->getMethod('buildTaskForEdit');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array((int)$taskID, (int)$productID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
