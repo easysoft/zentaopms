@@ -5,6 +5,7 @@ class todoTest
     public function __construct()
     {
         $this->objectZen = initReference('todo');
+        $this->todoZen = new todoZen();
     }
 
     /**
@@ -1706,5 +1707,22 @@ class todoTest
                 return false;
             }
         }
+    }
+
+    /**
+     * Test getUserById method.
+     *
+     * @param  int $userID
+     * @access public
+     * @return mixed
+     */
+    public function getUserByIdTest(int $userID)
+    {
+        $method = $this->objectZen->getMethod('getUserById');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->todoZen, $userID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

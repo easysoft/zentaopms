@@ -1,0 +1,66 @@
+---
+title: getUserById方法测试数据
+desc: 用于测试todoZen::getUserById()方法的用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+  format: ""
+- field: password
+  note: 用户密码
+  range: 123456{10}
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9
+  format: ""
+- field: role
+  note: 用户角色
+  range: admin,dev,qa,pm,td,po,rd,ue,ui,user
+  format: ""
+- field: email
+  note: 邮箱地址
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,user5@test.com,user6@test.com,user7@test.com,user8@test.com,user9@test.com
+  format: ""
+- field: company
+  note: 所属公司
+  range: 1{10}
+  format: ""
+- field: dept
+  note: 所属部门
+  range: 1-5
+  format: ""
+- field: type
+  note: 用户类型
+  range: inside{10}
+  format: ""
+- field: gender
+  note: 性别
+  range: '[f,m]'
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{9},1
+  format: ""
+- field: visions
+  note: 产品视图
+  range: rnd,lite{9}
+  format: ""
+- field: last
+  note: 最后登录时间
+  range: 1000000000-1700000000
+  format: ""
+- field: visits
+  note: 访问次数
+  range: 0-1000
+  format: ""
