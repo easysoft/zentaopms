@@ -966,4 +966,51 @@ class testtaskZenTest
             $_POST = $originalPost;
         }
     }
+
+    /**
+     * Test responseAfterRunCase method.
+     *
+     * @param  string $caseResult
+     * @param  object $preAndNext
+     * @param  object $run
+     * @param  int $caseID
+     * @param  int $version
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterRunCaseTest($caseResult = '', $preAndNext = null, $run = null, $caseID = 0, $version = 1)
+    {
+        // 保存原始环境
+        $originalTab = $this->tester->app->tab ?? 'qa';
+
+        try {
+            $method = $this->testtaskZenTest->getMethod('responseAfterRunCase');
+            $method->setAccessible(true);
+
+            // 创建默认参数对象
+            if($preAndNext === null)
+            {
+                $preAndNext = new stdclass();
+                $preAndNext->next = null;
+                $preAndNext->pre = null;
+            }
+
+            if($run === null)
+            {
+                $run = new stdclass();
+                $run->id = 1;
+                $run->task = 1;
+            }
+
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($caseResult, $preAndNext, $run, $caseID, $version));
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch(Exception $e) {
+            return 'error: ' . $e->getMessage();
+        } finally {
+            // 恢复原始环境
+            $this->tester->app->tab = $originalTab;
+        }
+    }
 }
