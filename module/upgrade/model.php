@@ -11206,11 +11206,15 @@ class upgradeModel extends model
      * 获取需要更新的周报数据。
      * Get weekly reports that need to be updated.
      *
+     * @param  string $fromVersion
      * @access public
      * @return array
      */
-    public function getUpgradeWeeklyReports(): array
+    public function getUpgradeWeeklyReports(string $fromVersion): array
     {
+        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
+        if(version_compare($openVersion, '21.7.6', '>=')) return array();
+
         $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.status as projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.status')->ne('wait')

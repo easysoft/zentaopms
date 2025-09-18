@@ -600,7 +600,7 @@ class upgrade extends control
         /* 如果有需要升级的周报，显示升级周报界面。*/
         if($skipUpdateWeeklyReports == 'no')
         {
-            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports();
+            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports($fromVersion);
             if(!empty($upgradeWeeklyReports))
             {
                 $this->session->set('upgradeWeeklyReports', $upgradeWeeklyReports);
