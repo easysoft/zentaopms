@@ -2349,4 +2349,49 @@ class testcaseZenTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test parseUploadFile method.
+     *
+     * @param  int          $productID
+     * @param  int|string   $branch
+     * @param  array        $filesData
+     * @access public
+     * @return mixed
+     */
+    public function parseUploadFileTest(int $productID, int|string $branch, array $filesData = array())
+    {
+        try {
+            // 备份原始 $_FILES 数据
+            $originalFiles = $_FILES;
+
+            // 模拟 $_FILES 数据
+            if(!empty($filesData)) $_FILES = $filesData;
+
+            global $tester;
+            $zenClass = new ReflectionClass('testcaseZen');
+            $zenInstance = $zenClass->newInstance();
+
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('parseUploadFile');
+            $method->setAccessible(true);
+
+            $returnValue = $method->invoke($zenInstance, $productID, $branch);
+
+            // 恢复原始 $_FILES 数据
+            $_FILES = $originalFiles;
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            // 恢复原始 $_FILES 数据
+            $_FILES = $originalFiles;
+            return 'error: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始 $_FILES 数据
+            $_FILES = $originalFiles;
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
