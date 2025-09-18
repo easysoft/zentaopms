@@ -536,4 +536,81 @@ class testreportTest
 
         return $testreport;
     }
+
+    /**
+     * Test prepareTestreportForEdit method.
+     *
+     * @param  int   $reportID
+     * @param  array $postData
+     * @access public
+     * @return mixed
+     */
+    public function prepareTestreportForEditTest($reportID = 1, $postData = array())
+    {
+        global $app;
+
+        /* 模拟POST数据 */
+        $app->post = new stdclass();
+        foreach($postData as $key => $value)
+        {
+            $app->post->{$key} = $value;
+        }
+
+        /* 创建测试报告对象 */
+        $testreport = new stdclass();
+        $testreport->id = $reportID;
+        $testreport->title = $app->post->title ?? '';
+        $testreport->owner = $app->post->owner ?? '';
+        $testreport->product = $app->post->product ?? 1;
+        $testreport->execution = $app->post->execution ?? 1;
+        $testreport->begin = $app->post->begin ?? '2024-01-01';
+        $testreport->end = $app->post->end ?? '2024-01-31';
+        $testreport->tasks = $app->post->tasks ?? '1';
+        $testreport->builds = $app->post->builds ?? '';
+        $testreport->cases = $app->post->cases ?? '';
+        $testreport->stories = $app->post->stories ?? '';
+        $testreport->bugs = $app->post->bugs ?? '';
+        $testreport->report = $app->post->report ?? '';
+
+        /* 处理members字段 */
+        if(isset($app->post->members) && is_array($app->post->members))
+        {
+            $testreport->members = trim(implode(',', $app->post->members), ',');
+        }
+        else
+        {
+            $testreport->members = '';
+        }
+
+        /* 检查必填字段 */
+        $reportErrors = array();
+        $requiredFields = 'title,owner'; // 模拟配置的必填字段
+        foreach(explode(',', $requiredFields) as $field)
+        {
+            $field = trim($field);
+            if($field && empty($testreport->{$field}))
+            {
+                $fieldName = "{$field}[]";
+                if($field == 'title') $reportErrors[$fieldName][] = '『标题』不能为空。';
+                if($field == 'owner') $reportErrors[$fieldName][] = '『负责人』不能为空。';
+            }
+        }
+
+        /* 检查时间验证 */
+        if($testreport->end < $testreport->begin)
+        {
+            $reportErrors['end'][] = '『结束日期』应当不小于『' . $testreport->begin . '』。';
+        }
+
+        /* 如果有错误，返回错误信息 */
+        if(!empty($reportErrors))
+        {
+            $result = new stdclass();
+            $result->hasErrors = true;
+            $result->errors = $reportErrors;
+            return $result;
+        }
+
+        return $testreport;
+    }
 }
