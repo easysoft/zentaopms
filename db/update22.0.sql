@@ -64,3 +64,4 @@ ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) unsigned NOT NULL DEFAULT
 UPDATE `zt_review` SET `status` = 'reviewing' WHERE `status` = 'wait';
 
 ALTER TABLE `zt_object` ADD `status` varchar(20) NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_object` ADD `categoryVersion` text DEFAULT NULL AFTER `category`;
