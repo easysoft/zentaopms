@@ -1119,4 +1119,28 @@ class testcaseZenTest
         $case->steps = $steps;
         return $case;
     }
+
+    /**
+     * Test processImportColumnKey method.
+     *
+     * @param  string $fileName 文件名
+     * @param  array  $fields   字段映射数组
+     * @access public
+     * @return mixed
+     */
+    public function processImportColumnKeyTest(string $fileName, array $fields)
+    {
+        try {
+            $result = callZenMethod('testcase', 'processImportColumnKey', [$fileName, $fields]);
+            if(dao::isError()) return dao::getError();
+
+            if(is_array($result)) {
+                if(empty($result)) return count($result);
+                return implode(',', $result);
+            }
+            return $result;
+        } catch (Exception $e) {
+            return 'false';
+        }
+    }
 }
