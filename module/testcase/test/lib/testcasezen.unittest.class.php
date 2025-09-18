@@ -2072,6 +2072,49 @@ class testcaseZenTest
     }
 
     /**
+     * Test createFreeMindXmlDoc method.
+     *
+     * @param  int    $productID
+     * @param  string $productName
+     * @param  array  $context
+     * @access public
+     * @return object
+     */
+    public function createFreeMindXmlDocTest(int $productID, string $productName, array $context): object
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->app = $tester->app;
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('createFreeMindXmlDoc');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $result = $method->invoke($zenInstance, $productID, $productName, $context);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            $errorObject = new stdClass();
+            $errorObject->error = $e->getMessage();
+            return $errorObject;
+        } catch (Error $e) {
+            $errorObject = new stdClass();
+            $errorObject->error = $e->getMessage();
+            return $errorObject;
+        }
+    }
+
+    /**
      * Test getFieldsForExportTemplate method.
      *
      * @param  string $productType
