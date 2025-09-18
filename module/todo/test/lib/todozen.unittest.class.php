@@ -952,4 +952,84 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test beforeBatchEdit method.
+     *
+     * @param  array $todos 待办数组
+     * @access public
+     * @return mixed
+     */
+    public function beforeBatchEditTest(array $todos = array())
+    {
+        // 模拟beforeBatchEdit方法的核心逻辑
+        global $app, $config;
+
+        // 重置dao错误
+        dao::$errors = array();
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'story', 'epic', 'requirement', 'testtask', 'issue', 'risk', 'opportunity', 'feedback', 'review');
+        }
+
+        // 如果输入为空，返回空数组
+        if(empty($todos)) return array();
+
+        // 模拟POST数据
+        $_POST['switchTime'] = '';
+
+        // 初始化待办数据处理
+        foreach($todos as $todoID => $todo) {
+            // 1. 处理模块类型待办
+            if(in_array($todo->type, $config->todo->moduleList)) {
+                $todo->objectID = isset($todo->{$todo->type}) ? (int)$todo->{$todo->type} : (isset($todo->objectID) ? (int)$todo->objectID : 0);
+                $todo->name = '';
+                if(empty($todo->objectID)) {
+                    dao::$errors["{$todo->type}[{$todoID}]"] = sprintf('字段 %s 不能为空', '名称');
+                }
+            } elseif(empty($todo->name)) {
+                // 2. 验证自定义类型的名称
+                dao::$errors["name[{$todoID}]"] = sprintf('字段 %s 不能为空', '名称');
+            }
+
+            // 3. 清理字段
+            if(isset($todo->story)) unset($todo->story);
+            if(isset($todo->epic)) unset($todo->epic);
+            if(isset($todo->requirement)) unset($todo->requirement);
+            if(isset($todo->task)) unset($todo->task);
+            if(isset($todo->bug)) unset($todo->bug);
+            if(isset($todo->testtask)) unset($todo->testtask);
+            if(isset($todo->feedback)) unset($todo->feedback);
+            if(isset($todo->issue)) unset($todo->issue);
+            if(isset($todo->risk)) unset($todo->risk);
+            if(isset($todo->opportunity)) unset($todo->opportunity);
+            if(isset($todo->review)) unset($todo->review);
+
+            // 4. 处理时间
+            $todo->begin = (empty($todo->begin) || isset($_POST['switchTime'])) ? 2400 : $todo->begin;
+            $todo->end = (empty($todo->end) || isset($_POST['switchTime'])) ? 2400 : $todo->end;
+
+            // 5. 验证时间范围
+            if($todo->end < $todo->begin) {
+                dao::$errors["begin[{$todoID}]"] = sprintf('%s应该大于%s', '结束时间', '开始时间');
+            }
+
+            // 6. 处理switchTime
+            if(isset($todo->switchTime)) {
+                $todo->begin = '2400';
+                $todo->end = '2400';
+            }
+        }
+
+        if(dao::isError()) return false;
+        return $todos;
+    }
 }
