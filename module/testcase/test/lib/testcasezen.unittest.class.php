@@ -2029,4 +2029,45 @@ class testcaseZenTest
             return $errorCase;
         }
     }
+
+    /**
+     * Test processStepsAndExpectsForBatchEdit method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function processStepsAndExpectsForBatchEditTest(array $cases): array
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processStepsAndExpectsForBatchEdit');
+            $method->setAccessible(true);
+
+            // 克隆cases数组避免原对象被修改
+            $casesClone = array();
+            foreach($cases as $key => $case)
+            {
+                $casesClone[$key] = clone $case;
+            }
+
+            // 调用方法
+            $result = $method->invoke($zenInstance, $casesClone);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
