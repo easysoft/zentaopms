@@ -5288,6 +5288,8 @@ class executionModel extends model
             }
         }
 
+        if(empty($parentExecutions)) return $executions;
+
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
