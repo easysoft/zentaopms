@@ -48,6 +48,11 @@ $lang->weekly->builtInScopes = array();
 $lang->weekly->builtInScopes['rnd']  = array();
 $lang->weekly->builtInScopes['rnd']['project'] = 'Project';
 
+$lang->weekly->builtInCategoryList['month']     = 'Monthly Report';
+$lang->weekly->builtInCategoryList['week']      = 'Weekly Report';
+$lang->weekly->builtInCategoryList['day']       = 'Daily Report';
+$lang->weekly->builtInCategoryList['milestone'] = 'Milestone';
+
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV Planned Value</h2>
 Calculation method:
