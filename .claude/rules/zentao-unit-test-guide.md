@@ -76,21 +76,22 @@ r($userTest->getByIdTest('abc')) && p() && e(false);           // 测试步骤5�
 
 ```
 module/{moduleName}/test/
-├── lib/                                # 测试类库
-│   └── {moduleName}.unittest.class.php # 单元测试类
-├── model/                              # Model层单元测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-├── tao/                                # TAO层业务逻辑测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-├── zen/                                # ZEN层新架构测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-└── ui/                                 # UI自动化测试（独立文档）
+├── lib/                                   # 测试类库
+│   └── {moduleName}.unittest.class.php    # model层和tao层单元测试类
+│   └── {moduleName}zen.unittest.class.php # zen层单元测试类
+├── model/                                 # model层单元测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+├── tao/                                   # tao层业务逻辑测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+├── zen/                                   # zen层新架构测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+└── ui/                                    # UI自动化测试（独立文档）
 ```
 
 ## 核心文件类型详解
@@ -136,7 +137,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';  // 或 include dirname(__FILE__, 2) . '/lib/{moduleName}zen.unittest.class.php'; 根据测试需要
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('{tableName}');
@@ -491,6 +492,7 @@ test/runtime/ztf module/{moduleName}/test/{layerName}/{methodName}.php
 
    ```bash
    git add module/{moduleName}/test/lib/{moduleName}.unittest.class.php
+   git add module/{moduleName}/test/lib/{moduleName}zen.unittest.class.php
    git add module/{moduleName}/test/{layerName}/{methodName}.php
    git add module/{moduleName}/test/{layerName}/yaml/{tableName}_{methodName}.yaml
    ```
