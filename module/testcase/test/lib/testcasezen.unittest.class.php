@@ -1594,4 +1594,45 @@ class testcaseZenTest
             'debug_view' => isset($tester->view) ? 'view_exists' : 'view_not_exists'
         );
     }
+
+    /**
+     * Test assignEditSceneVars method.
+     *
+     * @param  object $oldScene
+     * @access public
+     * @return mixed
+     */
+    public function assignEditSceneVarsTest(object $oldScene)
+    {
+        global $tester;
+
+        try {
+            // 调用zen方法
+            $result = callZenMethod('testcase', 'assignEditSceneVars', [$oldScene]);
+            if(dao::isError()) return dao::getError();
+
+            // 返回视图变量以便验证
+            return array(
+                'title' => isset($tester->view->title) ? $tester->view->title : '',
+                'products' => isset($tester->view->products) ? $tester->view->products : array(),
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
+                'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
+                'scene' => isset($tester->view->scene->id) ? $tester->view->scene->id : 0,
+                'executed' => '1'
+            );
+        } catch (Error $e) {
+            // 捕获类型错误并返回错误信息
+            return array(
+                'error' => $e->getMessage(),
+                'executed' => '0'
+            );
+        } catch (Exception $e) {
+            return array(
+                'error' => $e->getMessage(),
+                'executed' => '0'
+            );
+        }
+    }
 }
