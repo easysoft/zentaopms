@@ -2101,4 +2101,67 @@ class testcaseZenTest
 
         return $result;
     }
+
+    /**
+     * Test getStatusForCreate method.
+     *
+     * @param  bool $forceNotReview
+     * @param  bool $needReview
+     * @access public
+     * @return string
+     */
+    public function getStatusForCreateTest(bool $forceNotReview = false, bool $needReview = false): string
+    {
+        global $tester;
+
+        // 保存原始POST数据
+        $originalPost = $_POST;
+
+        try {
+            // 设置POST数据模拟needReview
+            $_POST['needReview'] = $needReview;
+
+            // 模拟testcase的forceNotReview方法返回值
+            // 创建一个mock对象来替换testcase
+            $mockTestcase = new class($forceNotReview) {
+                private $forceNotReviewResult;
+
+                public function __construct($result) {
+                    $this->forceNotReviewResult = $result;
+                }
+
+                public function forceNotReview() {
+                    return $this->forceNotReviewResult;
+                }
+            };
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置POST对象
+            $zenInstance->post = new stdClass();
+            $zenInstance->post->needReview = $needReview;
+
+            // 设置testcase对象
+            $zenInstance->testcase = $mockTestcase;
+
+            // 使用反射调用public方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getStatusForCreate');
+            $method->setAccessible(true);
+            $result = $method->invoke($zenInstance);
+
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
