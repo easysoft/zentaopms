@@ -130,18 +130,19 @@ $lang->ai->prompts->summary = 'There are %s zenTao agents on this page.';
 $lang->ai->prompts->fieldSeparator = ', ';
 
 $lang->ai->prompts->action = new stdclass();
-$lang->ai->prompts->action->goDesignConfirm = 'The current zenTao agent is not complete, continue designing?';
-$lang->ai->prompts->action->goDesign        = 'Go designing';
-$lang->ai->prompts->action->draftConfirm    = 'Once unpublished, the zenTao agent cannot be used any further. Are you sure you want to proceed?';
-$lang->ai->prompts->action->design          = 'Design';
-$lang->ai->prompts->action->test            = 'Test';
-$lang->ai->prompts->action->edit            = 'Edit';
-$lang->ai->prompts->action->publish         = 'Publish';
-$lang->ai->prompts->action->unpublish       = 'Unpublish';
-$lang->ai->prompts->action->delete          = 'Delete';
-$lang->ai->prompts->action->disable         = 'Disable';
-$lang->ai->prompts->action->deleteConfirm   = 'Deleted zenTao agents will be no longer available. Are you sure you want to proceed?';
-$lang->ai->prompts->action->publishSuccess  = 'Publish Success';
+$lang->ai->prompts->action->goDesignConfirm  = 'The current zenTao agent is not complete, continue designing?';
+$lang->ai->prompts->action->goDesign         = 'Go designing';
+$lang->ai->prompts->action->draftConfirm     = 'Once unpublished, the zenTao agent cannot be used any further. Are you sure you want to proceed?';
+$lang->ai->prompts->action->design           = 'Design';
+$lang->ai->prompts->action->test             = 'Test';
+$lang->ai->prompts->action->edit             = 'Edit';
+$lang->ai->prompts->action->publish          = 'Publish';
+$lang->ai->prompts->action->unpublish        = 'Unpublish';
+$lang->ai->prompts->action->delete           = 'Delete';
+$lang->ai->prompts->action->disable          = 'Disable';
+$lang->ai->prompts->action->deleteConfirm    = 'Deleted zenTao agents will be no longer available. Are you sure you want to proceed?';
+$lang->ai->prompts->action->publishSuccess   = 'Publish Success';
+$lang->ai->prompts->action->unpublishSuccess = 'Unpublish Success';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
@@ -425,6 +426,10 @@ $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
 $lang->ai->prompts->statuses['draft']  = 'Draft';
 $lang->ai->prompts->statuses['active'] = 'Active';
+
+$lang->ai->featureBar['prompts']['']       = 'All';
+$lang->ai->featureBar['prompts']['draft']  = 'Draft';
+$lang->ai->featureBar['prompts']['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = 'All';

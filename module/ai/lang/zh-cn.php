@@ -130,18 +130,19 @@ $lang->ai->prompts->summary = '本页共 %s 个禅道智能体。';
 $lang->ai->prompts->fieldSeparator = '、';
 
 $lang->ai->prompts->action = new stdclass();
-$lang->ai->prompts->action->goDesignConfirm = '当前禅道智能体未完成，是否继续设计？';
-$lang->ai->prompts->action->goDesign        = '去设计';
-$lang->ai->prompts->action->draftConfirm    = '下架后，禅道智能体将不能继续使用，您确定要下架吗？';
-$lang->ai->prompts->action->design          = '设计';
-$lang->ai->prompts->action->test            = '调试';
-$lang->ai->prompts->action->edit            = '编辑';
-$lang->ai->prompts->action->publish         = '发布';
-$lang->ai->prompts->action->unpublish       = '下架';
-$lang->ai->prompts->action->delete          = '删除';
-$lang->ai->prompts->action->disable         = '禁用';
-$lang->ai->prompts->action->deleteConfirm   = '删除后，禅道智能体将不能继续使用，您确定要删除吗？';
-$lang->ai->prompts->action->publishSuccess  = '发布成功';
+$lang->ai->prompts->action->goDesignConfirm  = '当前禅道智能体未完成，是否继续设计？';
+$lang->ai->prompts->action->goDesign         = '去设计';
+$lang->ai->prompts->action->draftConfirm     = '下架后，禅道智能体将不能继续使用，您确定要下架吗？';
+$lang->ai->prompts->action->design           = '设计';
+$lang->ai->prompts->action->test             = '调试';
+$lang->ai->prompts->action->edit             = '编辑';
+$lang->ai->prompts->action->publish          = '发布';
+$lang->ai->prompts->action->unpublish        = '下架';
+$lang->ai->prompts->action->delete           = '删除';
+$lang->ai->prompts->action->disable          = '禁用';
+$lang->ai->prompts->action->deleteConfirm    = '删除后，禅道智能体将不能继续使用，您确定要删除吗？';
+$lang->ai->prompts->action->publishSuccess   = '发布成功';
+$lang->ai->prompts->action->unpublishSuccess = '下架成功';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
@@ -425,6 +426,10 @@ $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = '全部';
 $lang->ai->prompts->statuses['draft']  = '未发布';
 $lang->ai->prompts->statuses['active'] = '已发布';
+
+$lang->ai->featureBar['prompts']['']       = '全部';
+$lang->ai->featureBar['prompts']['draft']  = '未发布';
+$lang->ai->featureBar['prompts']['active'] = '已发布';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = '所有分组';
