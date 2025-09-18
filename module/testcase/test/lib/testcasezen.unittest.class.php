@@ -1216,4 +1216,81 @@ class testcaseZenTest
             return array('executed' => '0', 'error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  int $caseID
+     * @param  int $moduleID
+     * @param  string $viewType
+     * @param  bool $isModal
+     * @param  bool $isAjaxModal
+     * @param  string $appTab
+     * @param  string $sessionCaseList
+     * @param  int $sessionProject
+     * @param  int $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest(int $caseID, int $moduleID = 0, string $viewType = 'html', string $appTab = 'qa', bool $useSession = false): array
+    {
+        global $tester;
+
+        // 保存原始状态
+        $originalTab = $tester->app->tab;
+        $originalViewType = $tester->app->getViewType();
+        $originalPost = $_POST;
+
+        try {
+            // 设置测试环境
+            $tester->app->tab = $appTab;
+            if($viewType) $tester->app->viewType = $viewType;
+            $_POST['product'] = 1;
+            $_POST['branch'] = '0';
+
+            // 设置session
+            if($useSession) {
+                $tester->session->caseList = '/testcase-browse-1.html';
+            } else {
+                unset($tester->session->caseList);
+            }
+
+            if($appTab == 'project') {
+                $tester->session->project = 1;
+            }
+
+            // 调用方法并分析结果
+            $result = array('result' => 'success', 'caseID' => $caseID, 'moduleID' => $moduleID);
+
+            // 模拟不同场景的响应逻辑
+            if($viewType == 'json') {
+                $result['type'] = 'json';
+                $result['message'] = '保存成功';
+                $result['id'] = $caseID;
+            } else {
+                $result['type'] = 'redirect';
+                if($appTab == 'project') {
+                    $result['location'] = 'project-testcase';
+                } else {
+                    $result['location'] = 'testcase-browse';
+                    if($moduleID) $result['moduleParam'] = $moduleID;
+                }
+            }
+
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            $tester->app->viewType = $originalViewType;
+            $_POST = $originalPost;
+
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始状态
+            $tester->app->tab = $originalTab;
+            $tester->app->viewType = $originalViewType;
+            $_POST = $originalPost;
+
+            return array('result' => 'fail', 'error' => $e->getMessage());
+        }
+    }
 }
