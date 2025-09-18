@@ -1013,4 +1013,61 @@ class testtaskZenTest
             $this->tester->app->tab = $originalTab;
         }
     }
+
+    /**
+     * Test setDropMenu method.
+     *
+     * @param  int $productID
+     * @param  object $task
+     * @param  string $tab
+     * @access public
+     * @return mixed
+     */
+    public function setDropMenuTest($productID = 1, $task = null, $tab = 'qa')
+    {
+        global $app;
+        $originalTab = $app->tab;
+        $originalRawMethod = isset($app->rawMethod) ? $app->rawMethod : '';
+        $app->tab = $tab;
+        $app->rawMethod = 'browse';
+
+        try {
+            // 创建默认任务对象
+            if($task === null)
+            {
+                $task = new stdclass();
+                $task->id = 1;
+                $task->name = 'Test Task';
+                $task->project = 1;
+                $task->execution = 1;
+            }
+
+            $method = $this->testtaskZenTest->getMethod('setDropMenu');
+            $method->setAccessible(true);
+
+            $testtaskZenInstance = $this->testtaskZenTest->newInstance();
+            $result = $method->invokeArgs($testtaskZenInstance, array((int)$productID, $task));
+            if(dao::isError()) return dao::getError();
+
+            // 验证视图变量是否设置
+            $view = $testtaskZenInstance->view;
+            $switcherParams = isset($view->switcherParams) ? $view->switcherParams : '';
+            $switcherText = isset($view->switcherText) ? $view->switcherText : '';
+            $switcherObjectID = isset($view->switcherObjectID) ? $view->switcherObjectID : '';
+
+            // 调试输出
+            // echo "Debug: tab={$app->tab}, switcherParams={$switcherParams}\n";
+
+            return array(
+                'switcherParams' => $switcherParams,
+                'switcherText' => $switcherText,
+                'switcherObjectID' => $switcherObjectID
+            );
+        } catch(Exception $e) {
+            return 'error: ' . $e->getMessage();
+        } finally {
+            $app->tab = $originalTab;
+            $app->rawMethod = $originalRawMethod;
+        }
+    }
 }
