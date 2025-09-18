@@ -864,4 +864,28 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processRowspanForGroupCase method.
+     *
+     * @param  array  $cases
+     * @param  string $build
+     * @access public
+     * @return array
+     */
+    public function processRowspanForGroupCaseTest($cases = array(), $build = '')
+    {
+        $method = $this->testtaskZenTest->getMethod('processRowspanForGroupCase');
+        $method->setAccessible(true);
+
+        try {
+            $testtaskZen = $this->testtaskZenTest->newInstance();
+            $result = $method->invoke($testtaskZen, $cases, $build);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
