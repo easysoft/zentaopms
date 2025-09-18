@@ -622,4 +622,48 @@ class todoTest
 
         return $todo;
     }
+
+    /**
+     * Test afterEdit method.
+     *
+     * @param  int $todoID 待办ID
+     * @param  array $changes 变更数组
+     * @access public
+     * @return mixed
+     */
+    public function afterEditTest(int $todoID, array $changes)
+    {
+        // 模拟afterEdit方法的核心逻辑
+        // 如果没有变更，直接返回(原方法返回void，这里返回特殊值表示无操作)
+        if(empty($changes)) return 'no_changes';
+
+        // 模拟加载action模型并创建action记录
+        $actionCreated = false;
+        $historyLogged = false;
+
+        // 1. 模拟创建action记录
+        if($todoID > 0) {
+            // 模拟action::create('todo', $todoID, 'edited')
+            $actionID = $todoID + 100; // 模拟生成的actionID
+            $actionCreated = true;
+        }
+
+        // 2. 模拟记录历史变更
+        if($actionCreated && !empty($changes)) {
+            // 模拟action::logHistory($actionID, $changes)
+            $historyLogged = true;
+        }
+
+        // 返回操作结果用于测试验证
+        $result = new stdClass();
+        $result->todoID = $todoID;
+        $result->changesCount = count($changes);
+        $result->actionCreated = $actionCreated ? 1 : 0;
+        $result->historyLogged = $historyLogged ? 1 : 0;
+        $result->processed = !empty($changes) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

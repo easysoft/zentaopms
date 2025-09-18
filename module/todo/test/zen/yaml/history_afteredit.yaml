@@ -1,0 +1,30 @@
+title: ZenTao测试数据
+desc:
+author:
+version:
+
+fields:
+- field: id
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: action
+  range: 1,2,3,4,5
+  prefix: ""
+  postfix: ""
+- field: field
+  range: name,status,pri,desc
+  prefix: ""
+  postfix: ""
+- field: old
+  range: 旧值1,旧值2,旧值3
+  prefix: ""
+  postfix: ""
+- field: new
+  range: 新值1,新值2,新值3
+  prefix: ""
+  postfix: ""
+- field: diff
+  range: ""
+  prefix: ""
+  postfix: ""
