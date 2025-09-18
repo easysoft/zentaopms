@@ -1,0 +1,39 @@
+# 顶级 EditorConfig 文件
+root = true
+
+[*]
+# 缩进风格：空格或制表符
+indent_style = space
+
+# 缩进大小
+indent_size = 4
+
+# 行结束符：lf, cr, crlf
+end_of_line = lf
+
+# 字符编码
+charset = utf-8
+
+# 是否删除行尾空白字符
+trim_trailing_whitespace = true
+
+# 是否在文件末尾插入空行
+insert_final_newline = true
+
+# 最大行长度（关闭此规则）
+max_line_length = off
+
+# 制表符宽度（当 indent_style = tab 时）
+tab_width = 4
+
+# 为 Markdown 文件保留尾部空格（用于换行）
+[*.md]
+trim_trailing_whitespace = false
+
+# 为 YAML 文件使用 2 空格缩进
+[*.{yml,yaml}]
+indent_size = 2
+
+# 为 Makefile 使用制表符（必须）
+[Makefile]
+indent_style = tab
