@@ -1,0 +1,26 @@
+---
+title: 分支导出模板数据
+desc: 用于测试getRowsForExportTemplate方法的分支数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: 分支1,分支2,分支3,分支4,分支5
+  format: ""
+- field: product
+  note: 所属产品
+  range: 2,3,4,5
+  format: ""
+- field: status
+  note: 分支状态
+  range: active
+  format: ""

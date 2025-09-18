@@ -2085,4 +2085,20 @@ class testcaseZenTest
 
         return $result;
     }
+
+    /**
+     * Test getRowsForExportTemplate method.
+     *
+     * @param  object $product
+     * @param  int    $num
+     * @access public
+     * @return array
+     */
+    public function getRowsForExportTemplateTest(object $product, int $num): array
+    {
+        $result = callZenMethod('testcase', 'getRowsForExportTemplate', [$product, $num]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
