@@ -96,7 +96,7 @@ claude_generate_test() {
     local retry_count="${3:-0}"  # 添加重试计数参数，默认为0
 
     # 设置最大重试次数
-    local max_retries=12
+    local max_retries=24
 
     # 检查是否超过最大重试次数
     if [ "$retry_count" -ge "$max_retries" ]; then

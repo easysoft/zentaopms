@@ -1,0 +1,77 @@
+---
+title: 测试 repoZen::getBrowseInfo() 方法的测试数据
+desc: 用于测试 getBrowseInfo 方法的 repo 数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 代码库ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: SCM
+  note: 代码库类型
+  range: 'Gitlab{1},Git{1},Subversion{1},Gitea{1},Gogs{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 代码库名称
+  range: 'gitlab-test-repo,git-test-repo,svn-test-repo,gitea-test-repo,gogs-test-repo'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: gitService
+  note: Git服务ID
+  range: '1-5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: serviceProject
+  note: 服务项目ID
+  range: '10,20,30,40,50'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 代码库路径
+  range: '/var/git/gitlab-repo,/var/git/git-repo,/var/svn/svn-repo,/var/git/gitea-repo,/var/git/gogs-repo'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: encoding
+  note: 编码格式
+  range: 'UTF-8{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: client
+  note: 客户端
+  range: 'git{3},svn{1},git{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账号
+  range: 'admin{3},user{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: '123456{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

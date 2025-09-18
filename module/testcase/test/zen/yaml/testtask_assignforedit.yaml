@@ -1,0 +1,62 @@
+---
+title: assignForEdit方法测试任务数据
+desc: 用于测试testcaseZen::assignForEdit方法的测试任务数据
+
+fields:
+- field: id
+  note: 测试任务ID
+  range: 1-20
+
+- field: name
+  note: 测试任务名称
+  range: 测试任务{1-10}, 版本测试{11-15}, 回归测试{16-20}
+
+- field: product
+  note: 产品ID
+  range: 1{8}, 2{6}, 3{4}, 0{2}
+
+- field: project
+  note: 项目ID
+  range: 1-10, 0{5}
+
+- field: execution
+  note: 执行ID
+  range: 1-15, 0{5}
+
+- field: build
+  note: 版本ID
+  range: 1-8, 0{5}
+
+- field: owner
+  note: 负责人
+  range: admin{5}, user1{5}, user2{4}, user3{3}, test{3}
+
+- field: pri
+  note: 优先级
+  range: 1{2}, 2{6}, 3{8}, 4{4}
+
+- field: begin
+  note: 开始时间
+  range: (-10d)-(+5d)
+  format: YYYY-MM-DD
+
+- field: end
+  note: 结束时间
+  range: (+1d)-(+15d)
+  format: YYYY-MM-DD
+
+- field: status
+  note: 状态
+  range: wait{6}, doing{8}, done{4}, blocked{2}
+
+- field: desc
+  note: 描述
+  range: 测试任务描述{1-10}, 功能测试{11-15}, 接口测试{16-20}
+
+- field: report
+  note: 报告
+  range: []{15}, 测试报告内容{5}
+
+- field: deleted
+  note: 是否删除
+  range: 0{18}, 1{2}

@@ -1,0 +1,38 @@
+---
+title: 测试产品数据定义
+desc: 为assignProductAndBranchForBrowse方法提供测试数据
+author: AI Generated
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 普通产品{2},分支产品A,分支产品B,多分支产品,测试产品{5}
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{6},branch{3},platform{1}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{7},private{2},custom{1}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  format: ""

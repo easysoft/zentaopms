@@ -1,0 +1,103 @@
+---
+title: 任务批量编辑响应测试数据
+desc: 用于测试taskZen::responseAfterBatchEdit方法的任务数据
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1{3}, 2{3}, 3{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: "任务{1-10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 任务类型
+  range: "devel{5}, test{3}, design{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 任务状态
+  range: "wait{3}, doing{3}, done{2}, closed{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: "admin{3}, user1{3}, user2{2}, []{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fromBug
+  note: 来源Bug
+  range: "0{6}, 1{2}, 2{1}, 3{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 相关需求
+  range: "0{3}, 1{3}, 2{2}, 3{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: estimate
+  note: 预计工时
+  range: "0{2}, 1{2}, 2{2}, 4{2}, 8{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: consumed
+  note: 已消耗工时
+  range: "0{4}, 1{2}, 2{2}, 4{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: left
+  note: 剩余工时
+  range: "0{3}, 1{3}, 2{2}, 4{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: "admin{5}, user1{3}, user2{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: "(-10D)-(-1D):1D"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 是否删除
+  range: "0{9}, 1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

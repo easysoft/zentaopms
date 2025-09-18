@@ -1,0 +1,46 @@
+---
+title: 批量编辑用例的分支测试数据
+desc: 提供分支产品的分支数据，包括活跃和关闭的分支
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-8
+
+- field: product
+  note: 产品ID
+  range: 2{3}, 3{3}, 4{2}
+
+- field: name
+  note: 分支名称
+  range: [主分支,开发分支,测试分支,发布分支,修复分支,功能分支A,功能分支B,历史分支]
+
+- field: default
+  note: 默认分支
+  range: 1{2}, 0{6}
+
+- field: status
+  note: 分支状态
+  range: active{6}, closed{2}
+
+- field: desc
+  note: 分支描述
+  range: [主要开发分支,日常开发使用,测试环境分支,生产发布分支,缺陷修复分支,新功能开发A,新功能开发B,已关闭的历史分支]
+
+- field: createdDate
+  note: 创建日期
+  range: (-45D)-(-15D):1D
+  format: YYYY-MM-DD
+
+- field: closedDate
+  note: 关闭日期
+  range: []{6}, (-10D)-(-5D):1D{2}
+  format: YYYY-MM-DD
+
+- field: order
+  note: 排序
+  range: 1-8
+
+- field: deleted
+  note: 删除状态
+  range: 0{8}

@@ -1,0 +1,36 @@
+---
+title: 任务数据 for getReportTaskList
+desc: 用于测试 taskZen::getReportTaskList() 方法的任务数据
+
+fields:
+- field: id
+  range: 1-20
+- field: name
+  range: '任务{$},测试任务{$},开发任务{$}'
+- field: execution
+  range: '1{5},2{5},3{5},4{3},5{2}'
+- field: project
+  range: '1{10},2{6},3{4}'
+- field: module
+  range: '0{10},1{5},2{3},3{2}'
+- field: story
+  range: '0{8},1{4},2{4},3{2},4{2}'
+- field: type
+  range: 'devel{8},test{6},design{4},study{2}'
+- field: status
+  range: 'wait{5},doing{6},done{5},pause{2},cancel{1},closed{1}'
+- field: pri
+  range: '1{5},2{6},3{5},4{4}'
+- field: estimate
+  range: '0{5},1-8{10},10-20{5}'
+- field: consumed
+  range: '0{8},1-5{8},6-15{4}'
+- field: left
+  range: '0{6},1-5{10},6-10{4}'
+- field: assignedTo
+  range: 'admin{5},user1{6},user2{4},user3{3},[]{2}'
+- field: openedBy
+  range: 'admin{10},user1{6},user2{4}'
+- field: openedDate
+  range: '20240101 000000:20240131 235959'
+  format: 'YYYY-MM-DD hh:mm:ss'

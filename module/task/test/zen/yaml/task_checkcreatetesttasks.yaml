@@ -1,0 +1,54 @@
+---
+title: checkCreateTestTasks方法测试数据
+desc: 用于测试checkCreateTestTasks方法的各种场景的任务数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 所属执行
+  range: 1-5
+  format: ""
+- field: name
+  note: 任务名称
+  range: "测试任务{100}, 功能测试{50}, 性能测试{30}, 接口测试{20}"
+  format: ""
+- field: type
+  note: 任务类型
+  range: "test{150}, devel{30}, design{20}"
+  format: ""
+- field: estimate
+  note: 预估工时
+  range: 1-40
+  format: ""
+- field: estStarted
+  note: 预计开始时间
+  range: "2024-06-01,2024-06-02,2024-06-03,2024-06-04,2024-06-05"
+  format: ""
+- field: deadline
+  note: 截止日期
+  range: "2024-06-10,2024-06-12,2024-06-15,2024-06-20,2024-06-25"
+  format: ""
+- field: desc
+  note: 任务描述
+  range: "测试描述{80}, []{20}"
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: "admin,user1,user2,user3,user4"
+  format: ""
+- field: status
+  note: 任务状态
+  range: "wait{180}, doing{20}"
+  format: ""

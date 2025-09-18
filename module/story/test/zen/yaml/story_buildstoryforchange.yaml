@@ -1,0 +1,95 @@
+---
+title: 测试 storyZen::buildStoryForChange() 方法的需求数据
+desc: 为buildStoryForChange方法提供测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1{5}, 2{3}, 3{2}
+- field: branch
+  range: 0{8}, 1{2}
+- field: module
+  range: 0{6}, 1801{2}, 1802{2}
+- field: plan
+  range: 0{5}, 1{3}, 2{2}
+- field: source
+  range: ''
+- field: sourceNote
+  range: ''
+- field: fromBug
+  range: 0
+- field: feedback
+  range: 0
+- field: title
+  range: '需求标题{1-10}'
+- field: keywords
+  range: ''
+- field: type
+  range: story{8}, requirement{2}
+- field: pri
+  range: 1{2}, 2{3}, 3{3}, 4{2}
+- field: estimate
+  range: 0{3}, 1{2}, 2{2}, 3{1}, 4{1}, 8{1}
+- field: status
+  range: active{5}, changing{3}, developing{2}
+- field: stage
+  range: wait{3}, planned{2}, projected{2}, developing{1}, developed{1}, testing{1}
+- field: mailto
+  range: ''
+- field: openedBy
+  range: admin{5}, user1{3}, user2{2}
+- field: openedDate
+  range: '2023-01-01 00:00:00'
+- field: assignedTo
+  range: admin{3}, user1{2}, user2{2}, ''{3}
+- field: assignedDate
+  range: '2023-01-01 00:00:00'
+- field: lastEditedBy
+  range: admin{5}, user1{3}, user2{2}
+- field: lastEditedDate
+  range: '2023-01-01 00:00:00'
+- field: reviewedBy
+  range: admin{3}, user1{2}, user2{2}, ''{3}
+- field: reviewedDate
+  range: '2023-01-01 00:00:00'
+- field: changedBy
+  range: admin{3}, user1{3}, ''{4}
+- field: changedDate
+  range: '2023-01-01 00:00:00'
+- field: closedBy
+  range: ''
+- field: closedDate
+  range: '0000-00-00 00:00:00'
+- field: closedReason
+  range: ''
+- field: toBug
+  range: 0
+- field: childStories
+  range: ''
+- field: linkStories
+  range: ''
+- field: duplicateStory
+  range: 0
+- field: version
+  range: 1{6}, 2{3}, 3{1}
+- field: parent
+  range: 0{8}, 1{1}, 2{1}
+- field: isParent
+  range: '0'{8}, '1'{2}
+- field: twins
+  range: ''
+- field: color
+  range: ''{5}, '#3c4353'{2}, '#ff5d5b'{2}, '#006af1'{1}
+- field: grade
+  range: 1{4}, 2{3}, 3{2}, 4{1}
+- field: feedbackBy
+  range: ''
+- field: notifyEmail
+  range: ''
+- field: URChanged
+  range: 0
+- field: deleted
+  range: '0'
+- field: vision
+  range: rnd

@@ -1,0 +1,84 @@
+---
+title: 产品测试数据 - getLinkBugs方法
+desc: 为repoZen::getLinkBugs()方法提供测试用的产品数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: ZenTao项目管理系统,禅道测试管理平台,企业级协作平台,代码管理系统,质量管理平台
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 产品代码
+  range: zentao,zttest,collab,scm,qms
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{3},branch{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{4},closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 产品描述
+  range: 专业的项目管理软件,全面的测试管理工具,高效的团队协作平台,完整的代码管理方案,全面的质量管理系统
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: admin,po1,po2,manager1,manager2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: QD
+  note: 测试负责人
+  range: admin,qa1,qa2,tester1,tester2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: RD
+  note: 发布负责人
+  range: admin,dev1,dev2,release1,release2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-365d)-(-30d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"

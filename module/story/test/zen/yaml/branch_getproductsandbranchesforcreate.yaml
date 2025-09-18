@@ -1,0 +1,42 @@
+---
+title: branch数据定义用于getProductsAndBranchesForCreate方法测试
+desc: 为测试getProductsAndBranchesForCreate方法准备的branch测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1-5
+  format: ""
+- field: name
+  note: 分支名称
+  range: '主分支,开发分支,测试分支,发布分支,特性分支1,特性分支2,修复分支1,修复分支2,实验分支,预发布分支'
+  format: ""
+- field: default
+  note: 是否默认分支
+  range: '1{1},0{9}'
+  format: ""
+- field: status
+  note: 分支状态
+  range: 'active{8},closed{2}'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{9},1{1}'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (d-90)-(d-1):10D
+  format: "YYYY-MM-DD"
+- field: `order`
+  note: 排序
+  range: 1-10
+  format: ""

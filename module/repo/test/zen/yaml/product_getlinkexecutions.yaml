@@ -1,0 +1,42 @@
+---
+title: Product execution test data for repoZen::getLinkExecutions()
+desc: Test data for product execution retrieval
+author: ZenTao Team
+version: 1.0
+
+fields:
+- field: id
+  note: Product ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: Product name
+  range: Product{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Product type
+  range: normal{5},branch{3},platform{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Product status
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: Is deleted
+  range: 0{9},1{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,38 @@
+---
+title: 测试分支数据定义
+desc: 为assignProductAndBranchForBrowse方法提供分支测试数据
+author: AI Generated
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 7{3},8{3},9{2},10{2}
+  format: ""
+- field: name
+  note: 分支名称
+  range: 主分支,开发分支,发布分支,测试分支,预发布分支,feature-001,feature-002,hotfix-001,v1.0,v2.0
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{7},closed{3}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  format: ""
+- field: default
+  note: 是否默认分支
+  range: 1{1},0{9}
+  format: ""
+- field: desc
+  note: 分支描述
+  range: 主要开发分支,功能开发分支,发布分支,测试分支,热修复分支{5}
+  format: ""

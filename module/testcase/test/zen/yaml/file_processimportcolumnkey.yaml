@@ -1,0 +1,39 @@
+---
+title: 测试用例导入列映射的文件数据
+desc: 为processImportColumnKey方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-10
+
+- field: pathname
+  note: 文件路径
+  range: '/tmp/test1.csv,/tmp/test2.csv,/tmp/test3.csv,/tmp/empty.csv,/tmp/invalid.csv'
+
+- field: title
+  note: 文件标题
+  range: 'normal_test.csv,partial_test.csv,empty_header_test.csv,empty_mapping_test.csv,invalid_test.csv'
+
+- field: size
+  note: 文件大小
+  range: 100-1000
+
+- field: extension
+  note: 文件扩展名
+  range: csv{5}
+
+- field: extra
+  note: 额外信息
+  range: 'normal{2},partial{1},empty{1},invalid{1}'
+
+- field: addedBy
+  note: 添加者
+  range: admin,user1,user2
+
+- field: addedDate
+  note: 添加时间
+  range: (now)-(1d)
+  format: YYYY-MM-DD hh:mm:ss

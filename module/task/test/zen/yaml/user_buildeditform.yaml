@@ -1,0 +1,24 @@
+---
+title: buildEditForm方法用户数据
+desc: 用于测试taskZen::buildEditForm()方法的用户数据
+
+fields:
+- field: id
+  range: 1-10
+- field: dept
+  range: 1-5
+- field: account
+  range: admin,user1,user2,user3,user4,user5,tester1,tester2,dev1,dev2
+- field: password
+  range: 123456{10}
+  format: md5
+- field: realname
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,测试员1,测试员2,开发员1,开发员2
+- field: role
+  range: admin{1},qa{3},dev{4},pm{2}
+- field: email
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,user5@test.com,tester1@test.com,tester2@test.com,dev1@test.com,dev2@test.com
+- field: deleted
+  range: 0{9},1{1}
+- field: type
+  range: inside{10}

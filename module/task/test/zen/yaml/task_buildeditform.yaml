@@ -1,0 +1,45 @@
+---
+title: buildEditForm方法测试数据
+desc: 用于测试taskZen::buildEditForm()方法的测试数据
+
+fields:
+- field: id
+  range: 1-50
+- field: project
+  range: 1-5
+- field: parent
+  range: 0{30},1-10{20}
+- field: execution
+  range: 1-5
+- field: module
+  range: 0{10},1-20{40}
+- field: story
+  range: 0{20},1-15{30}
+- field: name
+  range: 开发功能A{10},测试任务B{10},修复BUG{10},代码重构{10},文档编写{10}
+- field: type
+  range: devel{20},test{15},study{10},design{5}
+- field: pri
+  range: 1-4
+- field: estimate
+  range: 1-40
+- field: consumed
+  range: 0-20
+- field: left
+  range: 0-30
+- field: status
+  range: wait{15},doing{15},done{10},pause{5},cancel{5}
+- field: openedBy
+  range: admin{10},user1{10},user2{10},user3{10},user4{10}
+- field: assignedTo
+  range: admin{5},user1{10},user2{10},user3{10},user4{10},closed{5}
+- field: openedDate
+  range: (-30D)-(0D):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: deadline
+  range: (1D)-(30D):1D
+  format: YYYY-MM-DD
+- field: desc
+  range: 这是一个测试任务{20},需要完成的功能开发{15},BUG修复详情{15}
+- field: team
+  range: '[]{35},team1,team2,team3,team4{15}'

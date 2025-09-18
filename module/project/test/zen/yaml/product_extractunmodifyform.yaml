@@ -1,0 +1,48 @@
+---
+title: 产品extractUnModifyForm方法测试数据
+desc: 用于测试项目产品关联的产品测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-15
+
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E,核心产品,移动产品,Web产品,API产品,数据产品,平台产品,服务产品,工具产品,组件产品,基础产品
+
+- field: code
+  note: 产品代码
+  range: PROD001-PROD015
+  format: PROD%03d
+
+- field: type
+  note: 产品类型
+  range: normal{10},branch{3},platform{2}
+
+- field: status
+  note: 产品状态
+  range: normal{12},closed{2},developing{1}
+
+- field: program
+  note: 所属项目集
+  range: 1-5,0{10}
+
+- field: line
+  note: 产品线
+  range: 1-3,0{12}
+
+- field: createdBy
+  note: 创建人
+  range: admin,user1,user2,pm1
+
+- field: createdDate
+  note: 创建时间
+  range: (2024-01-01)-(2024-12-31)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 是否删除
+  range: 0{14},1{1}

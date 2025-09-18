@@ -1,0 +1,41 @@
+---
+title: 批量编辑用例的产品测试数据
+desc: 提供不同类型产品的测试数据，包括正常产品和分支产品
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+
+- field: name
+  note: 产品名称
+  range: [正常产品,分支产品A,分支产品B,多分支产品,测试产品]
+
+- field: code
+  note: 产品代号
+  range: [normal_prod,branch_prod_a,branch_prod_b,multi_branch,test_prod]
+
+- field: type
+  note: 产品类型
+  range: normal{2}, branch{3}
+
+- field: status
+  note: 产品状态
+  range: normal{4}, closed{1}
+
+- field: acl
+  note: 访问控制
+  range: open{3}, private{1}, custom{1}
+
+- field: createdBy
+  note: 创建者
+  range: admin{3}, user1{1}, user2{1}
+
+- field: createdDate
+  note: 创建日期
+  range: (-60D)-(-30D):1D
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 删除状态
+  range: 0{5}

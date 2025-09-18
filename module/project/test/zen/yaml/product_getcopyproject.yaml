@@ -1,0 +1,45 @@
+---
+title: 产品数据用于项目复制测试
+desc: 用于测试getCopyProject方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: name
+  note: 产品名称
+  range: 核心产品{2}, 基础产品{2}, 扩展产品{1}
+  format: ""
+- field: code
+  note: 产品代码
+  range: CORE{2}, BASE{2}, EXTEND{1}
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{4}, branch{1}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{4}, closed{1}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'{5}
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{3}, private{2}
+  format: ""
+- field: program
+  note: 所属项目集
+  range: 0{2}, 1{2}, 2{1}
+  format: ""
+- field: shadow
+  note: 是否影子产品
+  range: '0'{5}
+  format: ""
+- field: desc
+  note: 产品描述
+  range: 这是产品描述信息{5}
+  format: ""

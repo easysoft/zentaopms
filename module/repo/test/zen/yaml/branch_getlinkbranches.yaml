@@ -1,0 +1,49 @@
+---
+title: 分支测试数据
+desc: 用于测试getLinkBranches方法的分支数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-6
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 2{2},3{2},5{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: 分支1,分支2,分支1,分支2,分支1,分支2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: active
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-6
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

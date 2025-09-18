@@ -1,0 +1,59 @@
+---
+title: getReminder方法测试数据
+desc: 包含bug、task、todo、testtask的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-100
+
+- field: account
+  note: 用户账号
+  range: user1{10}, user2{10}, user3{10}, admin{10}
+
+- field: title
+  note: 标题
+  range: "测试Bug {1-50}", "测试任务 {1-50}", "测试待办 {1-50}", "测试用例 {1-50}"
+
+- field: status
+  note: 状态
+  range: active{30}, wait{20}, doing{15}, done{10}, closed{25}
+
+- field: type
+  note: 类型
+  range: bug{25}, task{25}, todo{25}, testtask{25}
+
+- field: assignedTo
+  note: 指派给
+  range: user1{25}, user2{25}, user3{25}, admin{25}
+
+- field: openedBy
+  note: 创建者
+  range: user1{25}, user2{25}, user3{25}, admin{25}
+
+- field: openedDate
+  note: 创建时间
+  range: "2024-01-01 00:00:00" - "2024-12-31 23:59:59"
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deadline
+  note: 截止日期
+  range: "2024-01-01" - "2024-12-31"
+  format: YYYY-MM-DD
+
+- field: date
+  note: 日期
+  range: "2024-01-01" - "2024-12-31"
+  format: YYYY-MM-DD
+
+- field: begin
+  note: 开始时间
+  range: "2024-01-01" - "2024-06-30"
+  format: YYYY-MM-DD
+
+- field: end
+  note: 结束时间
+  range: "2024-07-01" - "2024-12-31"
+  format: YYYY-MM-DD

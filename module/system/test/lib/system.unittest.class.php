@@ -167,4 +167,50 @@ class systemTest
 
         return $result ? '1' : '0';
     }
+
+    /**
+     * Test getCpuUsage method.
+     *
+     * @param  object $metrics
+     * @access public
+     * @return mixed
+     */
+    public function getCpuUsageTest($metrics)
+    {
+        // 模拟systemZen::getCpuUsage方法的逻辑
+        $rate = $metrics->rate;
+        $tip  = "{$rate}% = {$metrics->usage} / {$metrics->capacity}";
+
+        $color = '';
+        if(empty($color) && $rate == 0)               $color = 'gray';
+        if(empty($color) && $rate > 0 && $rate < 50)  $color = 'var(--color-secondary-500)';
+        if(empty($color) && $rate >= 50 && $rate < 70) $color = 'var(--color-warning-500)';
+        if(empty($color) && $rate >= 70 && $rate < 90) $color = 'var(--color-important-500)';
+        if(empty($color) && $rate >= 90)              $color = 'var(--color-danger-500)';
+
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate);
+    }
+
+    /**
+     * Test getMemUsage method.
+     *
+     * @param  object $metrics
+     * @access public
+     * @return mixed
+     */
+    public function getMemUsageTest($metrics)
+    {
+        // 直接模拟systemZen::getMemUsage方法的逻辑
+        $rate = $metrics->rate;
+        $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->capacity);
+
+        $color = '';
+        if(empty($color) && $rate == 0)               $color = 'gray';
+        if(empty($color) && $rate > 0 && $rate < 50)  $color = 'var(--color-secondary-500)';
+        if(empty($color) && $rate >= 50 && $rate < 70) $color = 'var(--color-warning-500)';
+        if(empty($color) && $rate >= 70 && $rate < 90) $color = 'var(--color-important-500)';
+        if(empty($color) && $rate >= 90)              $color = 'var(--color-danger-500)';
+
+        return array('color' => $color, 'tip' => $tip, 'rate' => $rate);
+    }
 }

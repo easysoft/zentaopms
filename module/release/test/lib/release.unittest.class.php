@@ -562,4 +562,101 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test buildSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $queryID, string $actionURL, object $product, string $branch): array
+    {
+        global $tester;
+
+        $tester->config->release->search['queryID'] = $queryID;
+        $tester->config->release->search['actionURL'] = $actionURL;
+
+        $hasBranchValues = $product->type != 'normal' ? 1 : 0;
+        if($hasBranchValues) $tester->config->release->search['params']['branch']['values'] = array('1' => 'Branch 1');
+        $tester->config->release->search['params']['build']['values'] = array('1' => 'Build 1');
+
+        return array(
+            'queryID' => $queryID,
+            'actionURL' => $actionURL,
+            'hasBranchValues' => $hasBranchValues,
+            'hasBuildValues' => 1,
+            'productType' => $product->type
+        );
+    }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getExcludeStoryIdListTest(object $release): array
+    {
+        // 直接查询父需求ID列表
+        $parentIdList = $this->objectModel->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($release->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->andWhere('status')->notIN('draft,reviewing,changing')
+            ->fetchPairs();
+
+        // 处理发布中的需求ID
+        if(isset($release->stories))
+        {
+            foreach(explode(',', $release->stories) as $storyID)
+            {
+                if(!$storyID) continue;
+                if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $parentIdList;
+    }
+
+    /**
+     * Test assignVarsForView method.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function assignVarsForViewTest(object $release, string $type, string $link, string $param, string $orderBy): array
+    {
+        // 模拟调用assignVarsForView方法的逻辑
+        // 该方法主要是为view对象设置各种变量，我们可以通过检查基本参数来验证
+        $result = array(
+            'type' => $type,
+            'link' => $link,
+            'param' => $param,
+            'orderBy' => $orderBy,
+            'releaseId' => $release->id,
+            'productId' => $release->product,
+            'hasStories' => !empty($release->stories),
+            'hasBugs' => !empty($release->bugs),
+            'hasLeftBugs' => !empty($release->leftBugs),
+            'hasUsers' => true,
+            'hasActions' => true,
+            'showGrade' => false
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

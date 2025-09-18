@@ -1,0 +1,24 @@
+---
+title: 项目测试数据
+desc: 用于测试getLinkedExtra方法的项目数据
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-20
+- field: name
+  note: 项目名称
+  range: 项目1,项目2,项目3,执行1,执行2,看板1,看板2,waterfall项目,scrum项目,产品项目,多阶段项目,单阶段项目,看板项目,研发项目,外部项目,测试执行16,测试执行17,测试执行18,测试执行19,测试执行20
+- field: type
+  note: 项目类型
+  range: project{5},sprint{5},kanban{5},sprint{5}
+- field: model
+  note: 项目模型
+  range: scrum{5},waterfall{3},kanban{7},scrum{5}
+- field: multiple
+  note: 是否多阶段
+  range: 1{10},0{10}
+- field: deleted
+  note: 是否删除
+  range: 0{20}

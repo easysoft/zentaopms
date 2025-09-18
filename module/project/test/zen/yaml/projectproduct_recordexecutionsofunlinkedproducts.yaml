@@ -1,0 +1,22 @@
+---
+title: projectproduct data for recordExecutionsOfUnlinkedProducts method testing
+desc: 测试取消关联产品的执行记录功能的项目产品关联数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID（执行ID）
+  range: 11-20
+- field: product
+  note: 产品ID
+  range: 1-5
+- field: branch
+  note: 分支ID
+  range: 0
+- field: plan
+  note: 计划
+  range: ''
+- field: roadmap
+  note: 路线图
+  range: ''

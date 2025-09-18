@@ -1,0 +1,63 @@
+---
+title: setProjectMenu 方法测试数据
+desc: 为 projectZen::setProjectMenu() 方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: '项目1,项目2,项目3,项目4,项目5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: 'project'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: 'wait,doing,closed'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 项目模型
+  range: 'scrum,waterfall,kanban'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: hasProduct
+  note: 是否关联产品
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: multiple
+  note: 是否多执行
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

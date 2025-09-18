@@ -1,0 +1,31 @@
+---
+title: searchindex数据定义用于getTypeList测试
+desc: 为getTypeList方法提供测试数据
+
+fields:
+- field: id
+  note: 索引ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: task{10},bug{8},story{7},product{5},project{4},case{3},doc{3},build{2},release{2},testtask{2},todo{2},effort{2}
+- field: objectID
+  note: 对象ID
+  range: 1-100
+- field: title
+  note: 标题
+  range: test title{30},测试标题{20}
+- field: content
+  note: 内容
+  range: test content{30},测试内容{20}
+- field: addedDate
+  note: 添加时间
+  range: '2023-01-01 00:00:00'
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-01 00:00:00'
+- field: vision
+  note: 视图
+  range: rnd{50}

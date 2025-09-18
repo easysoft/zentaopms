@@ -1,0 +1,124 @@
+---
+title: Case data for setMenuForCaseEdit test
+desc: Test data for testcase zen setMenuForCaseEdit method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Case ID
+  range: 1-10
+- field: project
+  note: Project ID
+  range: 1-5
+- field: product
+  note: Product ID
+  range: 1-3
+- field: execution
+  note: Execution ID
+  range: 1-5
+- field: branch
+  note: Branch ID
+  range: 0,1,2
+- field: lib
+  note: Library ID
+  range: 0
+- field: module
+  note: Module ID
+  range: 1-10
+- field: path
+  note: Module path
+  range: 1-10
+- field: story
+  note: Story ID
+  range: 0,1-5
+- field: storyVersion
+  note: Story version
+  range: 1-3
+- field: title
+  note: Case title
+  range: 'Test case {1-10}'
+- field: precondition
+  note: Precondition
+  range: 'Precondition for test {1-10}'
+- field: keywords
+  note: Keywords
+  range: 'keyword{1-5}'
+- field: pri
+  note: Priority
+  range: 1-4
+- field: type
+  note: Case type
+  range: 'feature,performance,config,install,security,interface'
+- field: auto
+  note: Auto flag
+  range: 'no,yes'
+- field: frame
+  note: Frame
+  range: '',selenium,cypress
+- field: stage
+  note: Stage
+  range: 'unittest,feature,intergrate,system,smoke,bvt'
+- field: howRun
+  note: How to run
+  range: 'manual,auto'
+- field: script
+  note: Script content
+  range: ''
+- field: scriptedBy
+  note: Scripted by
+  range: 'admin,user1,user2'
+- field: scriptedDate
+  note: Scripted date
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59'
+- field: scriptStatus
+  note: Script status
+  range: 'normal,reviewing'
+- field: scriptLocation
+  note: Script location
+  range: ''
+- field: status
+  note: Case status
+  range: 'normal,blocked,investigate'
+- field: lastRunner
+  note: Last runner
+  range: 'admin,user1,user2'
+- field: lastRunDate
+  note: Last run date
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59'
+- field: lastRunResult
+  note: Last run result
+  range: 'pass,fail,skip'
+- field: openedBy
+  note: Opened by
+  range: 'admin,user1,user2'
+- field: openedDate
+  note: Opened date
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59'
+- field: lastEditedBy
+  note: Last edited by
+  range: 'admin,user1,user2'
+- field: lastEditedDate
+  note: Last edited date
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59'
+- field: version
+  note: Case version
+  range: 1-3
+- field: order
+  note: Case order
+  range: 1-100
+- field: linkCase
+  note: Link case
+  range: 0,1-5
+- field: fromBug
+  note: From bug
+  range: 0,1-3
+- field: fromCaseID
+  note: From case ID
+  range: 0,1-5
+- field: fromCaseVersion
+  note: From case version
+  range: 1-3
+- field: deleted
+  note: Deleted flag
+  range: 0

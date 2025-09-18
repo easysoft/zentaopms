@@ -55,7 +55,7 @@ class screenTest
      * @access public
      * @return object|bool
      */
-    public function getByIDTest(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = ''): object|bool
+    public function getByIDTest(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         $this->objectModel->dao->update(TABLE_SCREEN)->set('scheme')->eq('')->where('id')->eq($screenID)->exec();
         return $this->objectModel->getByID($screenID, $year, $month, $dept, $account);
@@ -273,7 +273,7 @@ class screenTest
      * @access public
      * @return array
      */
-    public function buildComponentListTest(array|object $componentList): array
+    public function buildComponentListTest($componentList)
     {
         return $this->objectModel->buildComponentList($componentList);
     }
@@ -477,7 +477,7 @@ class screenTest
      * @access public
      * @return void
      */
-    public function setValueByPathTest(object &$option, string $path, mixed $value): void
+    public function setValueByPathTest(&$option, $path, $value)
     {
         $this->objectModel->setValueByPath($option, $path, $value);
     }
@@ -1469,6 +1469,95 @@ class screenTest
             'seriesData' => $seriesData,
             'seriesDataCount' => count($seriesData)
         );
+    }
+
+    /**
+     * Test commonAction method.
+     *
+     * @param  int  $dimensionID
+     * @param  bool $setMenu
+     * @access public
+     * @return mixed
+     */
+    public function commonActionTest($dimensionID, $setMenu = true)
+    {
+        global $tester;
+
+        // 包含model.php和zen.php文件
+        include_once dirname(__FILE__, 3) . '/model.php';
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建zen对象并调用方法
+        $screenZen = new screenZen();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($screenZen);
+        $method = $reflection->getMethod('commonAction');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($screenZen, array($dimensionID, $setMenu));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test prepareCardList method.
+     *
+     * @param  array $screens
+     * @access public
+     * @return array
+     */
+    public function prepareCardListTest(array $screens)
+    {
+        global $tester;
+
+        // 包含model.php和zen.php文件
+        include_once dirname(__FILE__, 3) . '/model.php';
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建zen对象并调用方法
+        $screenZen = new screenZen();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($screenZen);
+        $method = $reflection->getMethod('prepareCardList');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($screenZen, array($screens));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setSelectFilter method.
+     *
+     * @param  string $sourceID
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function setSelectFilterTest($sourceID, $filters)
+    {
+        global $tester;
+
+        // 包含model.php和zen.php文件
+        include_once dirname(__FILE__, 3) . '/model.php';
+        include_once dirname(__FILE__, 3) . '/zen.php';
+
+        // 创建zen对象并调用方法
+        $screenZen = new screenZen();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($screenZen);
+        $method = $reflection->getMethod('setSelectFilter');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($screenZen, array($sourceID, $filters));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
 }

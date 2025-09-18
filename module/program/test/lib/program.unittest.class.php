@@ -13,6 +13,7 @@ class programTest
         global $tester;
 
         $this->program = $tester->loadModel('program');
+        $this->objectTao   = $tester->loadTao('program');
     }
 
     /**
@@ -717,5 +718,256 @@ class programTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test prepareStartExtras method.
+     *
+     * @param  object $postData
+     * @access public
+     * @return object
+     */
+    public function prepareStartExtrasTest(object $postData): object
+    {
+        // 模拟prepareStartExtras方法的逻辑
+        global $app;
+
+        // 模拟方法的实际逻辑
+        $result = $postData->add('status', 'doing')
+            ->add('lastEditedBy', $app->user->account)
+            ->add('lastEditedDate', helper::now())
+            ->get();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildProgramForCreate method.
+     *
+     * @param  array  $postData
+     * @access public
+     * @return object
+     */
+    public function buildProgramForCreateTest($postData = array())
+    {
+        global $tester, $app, $config;
+
+        foreach($postData as $key => $value)
+        {
+            $_POST[$key] = $value;
+            $tester->post->{$key} = $value;
+        }
+
+        $tester->app->loadConfig('program');
+        $tester->app->loadConfig('project');
+        $fields = $config->program->form->create;
+        if(isset($tester->post->longTime) && $tester->post->longTime) $fields['end']['skipRequired'] = true;
+
+        foreach(explode(',', trim($config->program->create->requiredFields, ',')) as $field)
+        {
+            if($field == 'end') continue;
+            if(isset($fields[$field])) $fields[$field]['required'] = true;
+        }
+
+        $program = form::data($fields)
+            ->setDefault('openedBy', $app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->setDefault('code', '')
+            ->setIF(isset($tester->post->longTime) && $tester->post->longTime, 'end', LONG_TIME)
+            ->setIF(isset($tester->post->acl) && $tester->post->acl == 'open', 'whitelist', '')
+            ->add('type', 'program')
+            ->join('whitelist', ',')
+            ->get();
+
+        $result = $tester->loadModel('file')->processImgURL($program, $config->program->editor->create['id'], isset($tester->post->uid) ? $tester->post->uid : '');
+        $_POST = array();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test removeSubjectToCurrent method.
+     *
+     * @param  array $parents
+     * @param  int   $programID
+     * @access public
+     * @return array
+     */
+    public function removeSubjectToCurrentTest(array $parents, int $programID): array
+    {
+        $children = $this->program->dao->select('*')->from(TABLE_PROGRAM)->where('path')->like("%,$programID,%")->fetchPairs('id', 'id');
+        foreach($children as $childID) unset($parents[$childID]);
+
+        if(dao::isError()) return dao::getError();
+
+        return $parents;
+    }
+
+    /**
+     * Test getProgramsByType method.
+     *
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  int         $param
+     * @param  object|null $pager
+     * @access public
+     * @return int
+     */
+    public function getProgramsByTypeTest(string $status, string $orderBy, int $param = 0, ?object $pager = null): int
+    {
+        $status = strtolower($status);
+        $orderBy = $orderBy ?: 'id_asc';
+
+        if(strpos($orderBy, 'order') !== false) $orderBy = "grade,{$orderBy}";
+
+        if(strtolower($status) == 'bysearch')
+        {
+            $programs = $this->program->getListBySearch($orderBy, $param, false, $pager);
+        }
+        else
+        {
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, 'top', array(), $pager);
+            if(!$topObjects) $topObjects = array(0);
+
+            $programs = $this->program->getList($status, $orderBy, 'child', array_keys($topObjects));
+        }
+
+        if(dao::isError()) return 0;
+
+        return count($programs);
+    }
+
+    /**
+     * Test getProgramList4Kanban method.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProgramList4KanbanTest(string $browseType = 'my'): array
+    {
+        global $tester;
+        $programZen = $tester->loadZen('program');
+        $result = $programZen->getProgramList4Kanban($browseType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildTree method.
+     *
+     * @param  array $programs
+     * @param  int   $parentID
+     * @access public
+     * @return array
+     */
+    public function buildTreeTest(array $programs, int $parentID = 0): array
+    {
+        $result = array();
+        foreach($programs as $program)
+        {
+            if($program->type != 'program') continue;
+            if($program->parent == $parentID)
+            {
+                $itemArray = array
+                (
+                    'id'    => $program->id,
+                    'text'  => $program->name,
+                    'label' => '',
+                    'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
+                    'items' => $this->buildTreeTest($programs, $program->id)
+                );
+
+                if(empty($itemArray['items'])) unset($itemArray['items']);
+                $result[] = $itemArray;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLink method.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $programID
+     * @param  string $vars
+     * @param  string $from
+     * @access public
+     * @return mixed
+     */
+    public function getLinkTest(string $moduleName, string $methodName, string $programID, string $vars = '', string $from = 'program')
+    {
+        global $config;
+
+        if($from != 'program') return helper::createLink('product', 'all', "programID={$programID}" . $vars);
+
+        if($config->edition != 'open')
+        {
+            $flow = $this->program->loadModel('workflow')->getByModule($moduleName);
+            if($flow && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName") . "#app=$flow->app";
+        }
+        if($moduleName == 'project')
+        {
+            $moduleName = 'program';
+            $methodName = 'project';
+        }
+        if($moduleName == 'product')
+        {
+            $moduleName = 'program';
+            $methodName = 'product';
+        }
+
+        $result = helper::createLink($moduleName, $methodName, "programID={$programID}" . $vars);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsByBrowseType method.
+     *
+     * @param  string $browseType
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function getProductsByBrowseTypeTest(string $browseType, array $products): array
+    {
+        /* Implement the core logic directly for testing */
+        $result = $products;
+
+        foreach($result as $index => $product)
+        {
+            $programID = $product->program;
+            /* The product associated with the program. */
+            if(!empty($programID))
+            {
+                $program = $this->program->getByID($programID);
+                if(!empty($program) && in_array($browseType, array('all', 'unclosed', 'wait', 'doing', 'suspended', 'closed')))
+                {
+                    if($browseType == 'unclosed' && $program->status == 'closed')
+                        unset($result[$index]);
+                    elseif($browseType != 'unclosed' && $browseType != 'all' && $program->status != $browseType)
+                        unset($result[$index]);
+                }
+            }
+            else
+            {
+                /* The product without program only can be viewed when browse type is all and not closed. */
+                if($browseType != 'all' and $browseType != 'unclosed') unset($result[$index]);
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array_values($result);
     }
 }

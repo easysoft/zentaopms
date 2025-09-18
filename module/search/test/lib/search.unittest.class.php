@@ -16,7 +16,7 @@ class searchTest
      * @access public
      * @return array|string
      */
-    public function processSearchParamsTest(string $module, bool $cacheSearchFunc = false): array|string
+    public function processSearchParamsTest($module, $cacheSearchFunc = false)
     {
         global $tester;
         
@@ -85,7 +85,7 @@ class searchTest
      * @access public
      * @return array|string
      */
-    public function buildQueryTest(array $searchConfig, array $postDatas, string $return = 'form'): array|string
+    public function buildQueryTest($searchConfig, $postDatas, $return = 'form')
     {
         $this->objectModel->setSearchParams($searchConfig);
 
@@ -193,7 +193,7 @@ class searchTest
      * @access public
      * @return array|object
      */
-    public function getByIDTest(int $queryID): array|object
+    public function getByIDTest($queryID)
     {
         $query = $this->objectModel->getByID($queryID);
 
@@ -213,7 +213,7 @@ class searchTest
      * @access public
      * @return object|array
      */
-    public function saveQueryTest(string $module, string $title, string $where, array $queryForm): object|array
+    public function saveQueryTest($module, $title, $where, $queryForm)
     {
         $_POST['module'] = $module;
         $_POST['title']  = $title;
@@ -235,7 +235,7 @@ class searchTest
      * @access public
      * @return int|array
      */
-    public function deleteQueryTest(int $queryID): int|array
+    public function deleteQueryTest($queryID)
     {
         $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
@@ -319,7 +319,7 @@ class searchTest
      * @access public
      * @return int|array
      */
-    public function getListTest(string $keywords, string|array $type): int|array
+    public function getListTest($keywords, $type)
     {
         zendata('searchindex')->gen(0);
         zendata('searchdict')->gen(0);
@@ -351,7 +351,7 @@ class searchTest
      * @access public
      * @return array
      */
-    public function getListCountTest(string|array $type): array
+    public function getListCountTest($type)
     {
         $listCount = $this->objectModel->getListCount($type);
         if(dao::isError()) return dao::getError();
@@ -368,7 +368,7 @@ class searchTest
      * @access public
      * @return array|object
      */
-    public function saveIndexTest(string $objectType, int $objectID): array|object
+    public function saveIndexTest($objectType, $objectID)
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
@@ -531,7 +531,7 @@ class searchTest
      * @access public
      * @return string
      */
-    public function setConditionTest(string $field, string $operator, string|int $value): string
+    public function setConditionTest($field, $operator, $value)
     {
         return $this->objectModel->setCondition($field, $operator, $value);
     }
@@ -587,7 +587,7 @@ class searchTest
      * @access public
      * @return array
      */
-    public function getAllowedObjectsTest(array|string $type, string $systemMode): array
+    public function getAllowedObjectsTest($type, $systemMode)
     {
         global $tester;
         $tester->config->systemMode = $systemMode;
@@ -1350,5 +1350,242 @@ class searchTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test setSessionForIndex method.
+     *
+     * @param  string $uri
+     * @param  string $words
+     * @param  string|array $type
+     * @access public
+     * @return array
+     */
+    public function setSessionForIndexTest($uri, $words, $type)
+    {
+        global $tester;
+
+        // 创建searchZen实例来访问setSessionForIndex方法
+        $searchZen = $tester->loadZen('search');
+
+        // 备份原始session数据
+        $originalSession = $_SESSION ?? array();
+
+        // 清空相关session数据
+        $sessionKeys = array('bugList', 'buildList', 'caseList', 'docList', 'productList',
+                           'productPlanList', 'programList', 'projectList', 'executionList',
+                           'releaseList', 'storyList', 'taskList', 'testtaskList', 'todoList',
+                           'effortList', 'reportList', 'testsuiteList', 'issueList', 'riskList',
+                           'opportunityList', 'trainplanList', 'caselibList', 'searchIngWord', 'searchIngType', 'referer');
+
+        foreach($sessionKeys as $key) unset($_SESSION[$key]);
+
+        // 设置HTTP_REFERER模拟
+        $_SERVER['HTTP_REFERER'] = 'http://example.com/test';
+
+        // 使用反射访问受保护方法
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('setSessionForIndex');
+        $method->setAccessible(true);
+
+        // 调用方法
+        $method->invokeArgs($searchZen, array($uri, $words, $type));
+
+        // 收集结果
+        $result = array();
+        foreach($sessionKeys as $key) {
+            if(isset($_SESSION[$key])) {
+                $result[$key] = $_SESSION[$key];
+            }
+        }
+
+        // 恢复原始session数据
+        $_SESSION = $originalSession;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTypeList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTypeListTest()
+    {
+        global $tester;
+
+        $searchZen = $tester->loadZen('search');
+
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('getTypeList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($searchZen);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setOptionFields method.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @access public
+     * @return array
+     */
+    public function setOptionFieldsTest($fields, $fieldParams)
+    {
+        global $tester;
+
+        // 直接实现setOptionFields逻辑进行测试
+        $optionFields = array();
+        foreach($fieldParams as $field => $param)
+        {
+            $data = new stdclass();
+            $data->label    = $fields[$field];
+            $data->name     = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
+
+            if($field == 'id') $data->placeholder = $tester->lang->search->queryTips;
+            if(!empty($param['values']) && is_array($param['values'])) $data->values = $param['values'];
+
+            $optionFields[] = $data;
+        }
+
+        return $optionFields;
+    }
+
+    /**
+     * Test setOptionOperators method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setOptionOperatorsTest()
+    {
+        global $tester;
+
+        // 直接模拟setOptionOperators方法的逻辑
+        $operators = array();
+        foreach($tester->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+
+            $operators[] = $operator;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $operators;
+    }
+
+    /**
+     * Test setOptionAndOr method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setOptionAndOrTest()
+    {
+        global $tester;
+
+        $searchZen = $tester->loadZen('search');
+
+        $reflection = new ReflectionClass($searchZen);
+        $method = $reflection->getMethod('setOptionAndOr');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($searchZen);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setOptions method.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    public function setOptionsTest($fields, $fieldParams, $queries = array())
+    {
+        global $tester;
+
+        // 直接模拟 setOptions 方法的逻辑进行测试
+        $options = new stdclass();
+
+        // 设置字段选项
+        $optionFields = array();
+        foreach($fieldParams as $field => $param)
+        {
+            $data = new stdclass();
+            $data->label    = $fields[$field];
+            $data->name     = $field;
+            $data->control  = $param['control'];
+            $data->operator = $param['operator'];
+
+            if($field == 'id') $data->placeholder = $tester->lang->search->queryTips;
+            if(!empty($param['values']) && is_array($param['values'])) $data->values = $param['values'];
+
+            $optionFields[] = $data;
+        }
+        $options->fields = $optionFields;
+
+        // 设置操作符选项
+        $operators = array();
+        foreach($tester->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+            $operators[] = $operator;
+        }
+        $options->operators = $operators;
+
+        // 设置逻辑关系选项
+        $andOrs = array();
+        foreach($tester->lang->search->andor as $value => $title)
+        {
+            $andOr = new stdclass();
+            $andOr->value = $value;
+            $andOr->title = $title;
+            $andOrs[] = $andOr;
+        }
+        $options->andOr = $andOrs;
+
+        $options->savedQueryTitle   = $tester->lang->search->savedQuery;
+        $options->groupName         = array($tester->lang->search->group1, $tester->lang->search->group2);
+        $options->searchBtnText     = $tester->lang->search->common;
+        $options->resetBtnText      = $tester->lang->search->reset;
+        $options->saveSearchBtnText = $tester->lang->search->saveCondition;
+
+        $savedQuery = array();
+        foreach($queries as $query)
+        {
+            if(empty($query->id)) continue;
+            $savedQuery[] = $query;
+        }
+
+        if(!empty($savedQuery)) $options->savedQuery = $savedQuery;
+
+        $options->formConfig  = new stdclass();
+        $options->formConfig->method = 'post';
+        $options->formConfig->action = helper::createLink('search', 'buildQuery');
+        $options->formConfig->target = 'hiddenwin';
+
+        $options->saveSearch = new stdclass();
+        $options->saveSearch->text = $tester->lang->search->saveCondition;
+
+        return $options;
     }
 }

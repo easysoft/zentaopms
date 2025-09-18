@@ -463,14 +463,20 @@ class jobTest
     public function checkRepoEmptyTest()
     {
         global $tester;
-        
-        // 直接模拟checkRepoEmpty方法的逻辑
-        $repos = $this->objectModel->loadModel('repo')->getRepoPairs('devops');
-        
+
+        // 模拟checkRepoEmpty方法的业务逻辑
+        // 1. 获取devops类型的版本库列表
+        $repos = $tester->loadModel('repo')->getRepoPairs('devops');
+
+        if(dao::isError()) return dao::getError();
+
+        // 2. 检查版本库是否为空
         if(empty($repos)) {
-            return 'redirect_to_create';
+            // 如果为空，应该触发跳转到创建页面
+            return 'redirect_triggered';
         } else {
-            return 'success';
+            // 如果不为空，不触发跳转
+            return 'no_redirect';
         }
     }
 

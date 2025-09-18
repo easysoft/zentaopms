@@ -1,0 +1,50 @@
+---
+title: 项目数据配置 - setHiddenFieldsForView方法测试
+desc: 为测试setHiddenFieldsForView方法提供项目测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 'project1,project2,project3,project4,project5'
+  format: ""
+- field: type
+  note: 项目类型
+  range: 'project{5}'
+  format: ""
+- field: model
+  note: 项目模型
+  range: 'scrum,scrum,waterfall,kanban,scrum'
+  format: ""
+- field: multiple
+  note: 是否支持多产品
+  range: '1,1,1,1,0'
+  format: ""
+- field: status
+  note: 项目状态
+  range: 'doing{5}'
+  format: ""
+- field: begin
+  note: 开始日期
+  range: '2024-01-01{5}'
+  format: ""
+- field: end
+  note: 结束日期
+  range: '2024-12-31{5}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}'
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: '2024-01-01{5}'
+  format: ""

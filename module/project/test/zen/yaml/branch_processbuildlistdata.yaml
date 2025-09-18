@@ -1,0 +1,23 @@
+---
+title: Branch数据定义
+desc: 为processBuildListData方法测试提供branch数据
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+- field: product
+  note: 产品ID
+  range: 1-2
+- field: name
+  note: 分支名称
+  range: '主分支,开发分支,测试分支,发布分支,维护分支'
+- field: status
+  note: 分支状态
+  range: 'active,closed,active,active,active'
+- field: order
+  note: 排序
+  range: 1-5
+- field: deleted
+  note: 是否删除
+  range: '0'

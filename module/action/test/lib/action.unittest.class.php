@@ -1933,14 +1933,15 @@ class actionTest
         $action = new stdClass();
         $action->objectID = $executionID;
         $action->objectType = 'execution';
-        
+
         // 调用测试方法，因为测试数据限制，直接返回模拟结果
         if($executionID == 16) return true; // 正常情况
         if($executionID == 17) return '父阶段未创建过任务，不能恢复子阶段。'; // 未创建任务
         if($executionID == 18) return '同级不能存在多种执行类型。'; // 类型冲突
         if($executionID == 19 && $confirmChange == 'no') return '已删除的父阶段是:阶段2,阶段3,是否要同时恢复这些阶段?'; // 需要确认
         if($executionID == 20 && $confirmChange == 'yes') return true; // 确认后成功
-        
+
         return false;
     }
+
 }

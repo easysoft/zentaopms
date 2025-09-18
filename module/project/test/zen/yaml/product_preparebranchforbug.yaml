@@ -1,0 +1,32 @@
+---
+title: 产品测试数据
+desc: 用于prepareBranchForBug方法的产品测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 产品类型
+  range: normal{2},branch{3}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 产品状态
+  range: normal
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

@@ -1,0 +1,74 @@
+---
+title: 测试 storyZen::getFormFieldsForEdit() 方法的用户数据
+
+fields:
+- field: id
+  range: 1-5
+- field: dept
+  range: 1{3}, 2{2}
+- field: account
+  range: admin,user1,user2,user3,user4
+- field: password
+  range: '123456{5}'
+- field: role
+  range: admin{1}, dev{2}, qa{1}, pm{1}
+- field: realname
+  range: '管理员,用户一,用户二,用户三,用户四'
+- field: nickname
+  range: 'Admin,User1,User2,User3,User4'
+- field: commiter
+  range: ''
+- field: avatar
+  range: ''
+- field: birthday
+  range: '0000-00-00'
+- field: gender
+  range: m{3}, f{2}
+- field: email
+  range: 'admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com'
+- field: skype
+  range: ''
+- field: qq
+  range: ''
+- field: yahoo
+  range: ''
+- field: gtalk
+  range: ''
+- field: wangwang
+  range: ''
+- field: mobile
+  range: ''
+- field: phone
+  range: ''
+- field: address
+  range: ''
+- field: zipcode
+  range: ''
+- field: join
+  range: '2023-01-01'
+- field: visits
+  range: 1-100:R
+- field: visions
+  range: rnd
+- field: ip
+  range: ''
+- field: last
+  range: 1672531200-1672617600:R
+- field: fails
+  range: 0
+- field: locked
+  range: '0000-00-00 00:00:00'
+- field: feedback
+  range: 0
+- field: ranzhi
+  range: ''
+- field: score
+  range: 0
+- field: scoreLevel
+  range: 0
+- field: deleted
+  range: '0'
+- field: clientStatus
+  range: online{3}, away{2}
+- field: clientLang
+  range: zh-cn{4}, en{1}
