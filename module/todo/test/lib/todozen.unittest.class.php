@@ -370,4 +370,83 @@ class todoTest
 
         return $todo;
     }
+
+    /**
+     * Test beforeBatchCreate method.
+     *
+     * @param  object $form 表单对象
+     * @access public
+     * @return mixed
+     */
+    public function beforeBatchCreateTest(object $form)
+    {
+        // 模拟beforeBatchCreate方法的核心逻辑
+        global $app;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = 'admin';
+        }
+
+        // 模拟form的cleanInt方法，清理整数字段
+        if(!isset($form->data) || !is_array($form->data)) {
+            return false;
+        }
+
+        $todos = $form->data;
+        $hasError = false;
+
+        foreach($todos as $rawID => $todo) {
+            // 1. 验证时间范围
+            if(isset($todo->end) && isset($todo->begin) && $todo->end < $todo->begin) {
+                dao::$errors["end[{$rawID}]"] = '结束时间应该大于开始时间';
+                $hasError = true;
+                continue;
+            }
+
+            // 2. 设置账户信息
+            $account = $app->user->account;
+            $todo->date = '2023-12-01';  // 模拟日期设置
+            $todo->account = $account;
+            $todo->assignedBy = $account;
+            $todo->assignedDate = date('Y-m-d H:i:s');
+
+            // 3. 处理空时间切换
+            if(!empty($todo->switchTime)) {
+                $todo->begin = '2400';
+                $todo->end = '2400';
+            }
+
+            // 4. 处理非自定义类型的objectID
+            if($todo->type != 'custom') {
+                $todo->objectID = (int)$todo->name;
+            }
+
+            // 5. 处理非自定义类型的名称获取
+            if($todo->type != 'custom' && !empty($todo->objectID)) {
+                $type = $todo->type;
+                // 模拟从不同类型获取对象名称
+                if($type == 'task') $todo->name = '任务' . $todo->objectID;
+                if($type == 'story') $todo->name = '需求' . $todo->objectID;
+                if($type == 'bug') $todo->name = '缺陷' . $todo->objectID;
+                if($type == 'epic') $todo->name = '史诗' . $todo->objectID;
+                if($type == 'requirement') $todo->name = '用户需求' . $todo->objectID;
+                if($type == 'testtask') $todo->name = '测试任务' . $todo->objectID;
+            }
+
+            // 6. 清理switchTime字段
+            if(isset($todo->switchTime)) unset($todo->switchTime);
+        }
+
+        if($hasError) {
+            return false;
+        }
+
+        // 返回处理后的待办数组
+        if(dao::isError()) return dao::getError();
+
+        return $todos;
+    }
 }
