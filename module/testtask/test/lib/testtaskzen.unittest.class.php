@@ -268,4 +268,40 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForActivate method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForActivateTest($taskID = 1)
+    {
+        // 根据不同的taskID使用不同的测试数据
+        $testData = array(
+            1 => array('status' => 'doing', 'comment' => '重新激活测试单', 'assignedTo' => 'admin', 'uid' => 'uid123'),
+            2 => array('status' => 'doing', 'comment' => '', 'assignedTo' => 'user1', 'uid' => 'uid456'),
+            3 => array('status' => 'doing', 'comment' => '测试单已激活，可以继续执行测试', 'assignedTo' => 'qa', 'uid' => ''),
+            4 => array('status' => 'doing', 'comment' => '<p>带HTML标签的激活注释</p>', 'assignedTo' => 'tester', 'uid' => 'uid789'),
+            0 => array('status' => 'doing', 'comment' => '无效ID测试', 'assignedTo' => 'admin', 'uid' => 'invalid'),
+            999 => array('status' => 'doing', 'comment' => '不存在的测试单', 'assignedTo' => 'user999', 'uid' => 'test999')
+        );
+
+        $data = isset($testData[$taskID]) ? $testData[$taskID] : $testData[1];
+
+        // 模拟表单数据
+        $_POST = $data;
+
+        $method = $this->testtaskZenTest->getMethod('buildTaskForActivate');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array((int)$taskID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
