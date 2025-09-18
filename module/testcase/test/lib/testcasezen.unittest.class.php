@@ -2164,4 +2164,53 @@ class testcaseZenTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getStatusForReview method.
+     *
+     * @param  object $case
+     * @param  string $result
+     * @access public
+     * @return string
+     */
+    public function getStatusForReviewTest(object $case, string $result = ''): string
+    {
+        global $tester;
+
+        // 保存原始POST数据
+        $originalPost = $_POST;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置POST对象
+            $zenInstance->post = new stdClass();
+            $zenInstance->post->result = $result;
+
+            // 使用反射调用private方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getStatusForReview');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $returnValue = $method->invoke($zenInstance, $case);
+
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 'error: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
