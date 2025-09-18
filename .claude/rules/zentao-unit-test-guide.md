@@ -168,7 +168,12 @@ r(${moduleName}Test->{methodName}Test({param5})) && p('{checkProperty}') && e('{
 - `p('{property}')`: 指定检查的属性
 - `e('{expected}')`: 期望值断言
 
-### 2. 单元测试类 ({moduleName}.unittest.class.php)
+### 2. 单元测试类
+
+#### 2.1 业务分层为 model 或 tao
+
+**类文件：**
+{moduleName}.unittest.class.php
 
 **类结构模板：**
 ```php
@@ -200,6 +205,47 @@ class {moduleName}Test
     public function {methodName}Test($param = null)
     {
         $result = $this->objectModel->{methodName}($param);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+}
+```
+
+#### 2.2 业务分层为 zen
+
+**类文件：**
+{moduleName}zen.unittest.class.php
+
+**类结构模板：**
+
+```php
+<?php
+declare(strict_types = 1);
+class {moduleName}Test
+{
+    public function __construct()
+    {
+        $this->objectZen = initReference('{moduleName}');
+    }
+
+    /**
+     * Test {methodName} method.
+     *
+     * @param  {paramType} ${paramName}
+     * @access public
+     * @return mixed
+     */
+    /**
+     * Test {methodName} method.
+     *
+     * @param  mixed $param 参数描述
+     * @access public
+     * @return mixed
+     */
+    public function {methodName}Test($param = null)
+    {
+        $result = $this->objectZen->{methodName}($param);
         if(dao::isError()) return dao::getError();
 
         return $result;
