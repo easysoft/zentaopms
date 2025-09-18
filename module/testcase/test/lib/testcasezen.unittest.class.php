@@ -1677,4 +1677,41 @@ class testcaseZenTest
 
         return array('result' => $expectedActionCount);
     }
+
+    /**
+     * Test getImportSteps method.
+     *
+     * @param  string $field
+     * @param  array  $steps
+     * @param  array  $stepData
+     * @param  int    $row
+     * @access public
+     * @return array
+     */
+    public function getImportStepsTest(string $field, array $steps, array $stepData, int $row): array
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getImportSteps');
+            $method->setAccessible(true);
+
+            // 调用方法并获取结果
+            $result = $method->invoke($zenInstance, $field, $steps, $stepData, $row);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
