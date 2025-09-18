@@ -1268,6 +1268,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         if($story->result != 'reject') $this->setStage($storyID);
+        if($story->result == 'reject' && $this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
 
         $changes = common::createChanges($oldStory, $story);
         if($changes)

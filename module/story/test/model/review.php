@@ -34,6 +34,7 @@ $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');
 $storyReview->gen(20);
+zenData('product')->gen(5);
 
 $story = new storyTest();
 
