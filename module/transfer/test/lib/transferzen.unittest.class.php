@@ -191,4 +191,69 @@ class transferZenTest
             return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         }
     }
+
+    /**
+     * Test printCell method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $control
+     * @param  string $name
+     * @param  string $selected
+     * @param  array  $values
+     * @param  int    $row
+     * @access public
+     * @return mixed
+     */
+    public function printCellTest(string $module = '', string $field = '', string $control = '', string $name = '', string $selected = '', array $values = array(), int $row = 0)
+    {
+        global $tester;
+
+        // 设置必要的配置和session数据
+        if(!isset($tester->config->transfer)) $tester->config->transfer = new stdClass();
+        if(!isset($tester->config->transfer->requiredFields)) $tester->config->transfer->requiredFields = array('name', 'title');
+
+        // 设置session数据用于测试hidden控件
+        if($module && $field) {
+            $sessionKey = $module . 'TransferParams';
+            if(!isset($tester->session->$sessionKey)) {
+                $tester->session->$sessionKey = array();
+            }
+            $tester->session->{$sessionKey}[$field . 'ID'] = 'sessionValue';
+        }
+
+        try {
+            // 获取transfer对象并设置transferConfig
+            $transferZen = $tester->loadTarget('transfer', '', 'zen');
+            if(!property_exists($transferZen, 'transferConfig')) {
+                $transferZen->transferConfig = new stdClass();
+            }
+            $transferZen->transferConfig->textareaFields = 'desc,content,steps';
+
+            // 为避免特殊字段的复杂逻辑，我们直接调用zen方法但提供必要的上下文
+            $zenObject = initReference('transfer');
+
+            // 设置必要的属性
+            if(!property_exists($zenObject, 'transferConfig')) {
+                $zenObject->transferConfig = new stdClass();
+            }
+            $zenObject->transferConfig->textareaFields = 'desc,content,steps';
+
+            // 使用反射调用private方法
+            $reflection = new ReflectionClass($zenObject);
+            $method = $reflection->getMethod('printCell');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($zenObject, $module, $field, $control, $name, $selected, $values, $row);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(TypeError $e) {
+            return 'TypeError: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        } catch(Error $e) {
+            return 'Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        }
+    }
 }
