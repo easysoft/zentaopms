@@ -11228,8 +11228,12 @@ class upgradeModel extends model
                 continue;
             }
 
+            $beginTimestame = strtotime($report->realBegan);
+            $day            = date('w', $beginTimestame);
+            if($day == 0) $day = 7;
+            $report->projectBegin = date('Y-m-d', $beginTimestame - (($day - 1) * 24 * 3600));
+
             /* Filter date < project begin date report. */
-            $report->projectBegin = date('Y-m-d', strtotime($report->realBegan));
             if($report->weekStart < $report->projectBegin) unset($reports[$key]);
 
             if($report->projectStatus == 'doing')     $report->projectEnd = $thisSunday;
@@ -11253,8 +11257,7 @@ class upgradeModel extends model
      */
     public function upgradeWeeklyReport(array $data): bool
     {
-        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7);
-        $weekNumber = empty($weekNumber) ? 1 : $weekNumber;
+        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
         $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
         $report = new stdclass();
