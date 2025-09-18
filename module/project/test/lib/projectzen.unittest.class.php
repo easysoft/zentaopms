@@ -526,4 +526,61 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test prepareModuleForBug method.
+     *
+     * @param  mixed $productID
+     * @param  mixed $projectID
+     * @param  mixed $type
+     * @param  mixed $param
+     * @param  mixed $orderBy
+     * @param  mixed $build
+     * @param  mixed $branchID
+     * @param  mixed $products
+     * @access public
+     * @return mixed
+     */
+    public function prepareModuleForBugTest($productID = null, $projectID = null, $type = null, $param = null, $orderBy = null, $build = null, $branchID = null, $products = null)
+    {
+        try
+        {
+            global $tester, $lang, $config;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->tree)) $lang->tree = new stdClass();
+            if(!isset($lang->tree->all)) $lang->tree->all = '所有模块';
+            if(!isset($config->project)) $config->project = new stdClass();
+            if(!isset($config->project->bug)) $config->project->bug = new stdClass();
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->config = $config;
+            $this->objectZen->view = new stdClass();
+
+            // 加载必要的模型
+            if(!isset($this->objectZen->tree)) $this->objectZen->tree = $tester->loadModel('tree');
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('prepareModuleForBug');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $productID, $projectID, $type, $param, $orderBy, $build, $branchID, $products);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回view对象中设置的属性
+            return (object)array(
+                'moduleTree' => isset($this->objectZen->view->moduleTree) ? count($this->objectZen->view->moduleTree) : 0,
+                'modules' => isset($this->objectZen->view->modules) ? count($this->objectZen->view->modules) : 0,
+                'moduleID' => isset($this->objectZen->view->moduleID) ? $this->objectZen->view->moduleID : 0,
+                'moduleName' => isset($this->objectZen->view->moduleName) ? $this->objectZen->view->moduleName : '',
+                'modulePairs' => isset($this->objectZen->view->modulePairs) ? count($this->objectZen->view->modulePairs) : 0
+            );
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
