@@ -1,0 +1,29 @@
+---
+title: 测试步骤数据 - getStatusForUpdate方法
+desc: 为testcaseZen::getStatusForUpdate()方法提供测试步骤数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 步骤ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: case
+  note: 所属用例ID
+  range: 1{5}, 2{5}, 3{5}, 4{3}, 5{2}
+- field: version
+  note: 版本号
+  range: 1{15}, 2{5}
+- field: type
+  note: 步骤类型
+  range: 'step{15}, group{3}, item{2}'
+- field: desc
+  note: 步骤描述
+  range: '步骤描述1{4}, 步骤描述2{4}, 步骤描述3{4}, 修改后的步骤描述{4}, 新增步骤描述{4}'
+- field: expect
+  note: 期望结果
+  range: '期望结果1{4}, 期望结果2{4}, 期望结果3{4}, 修改后的期望结果{4}, 新增期望结果{4}'

@@ -2213,4 +2213,65 @@ class testcaseZenTest
             return 'error: ' . $e->getMessage();
         }
     }
+
+    /**
+     * Test getStatusForUpdate method.
+     *
+     * @param  object $case
+     * @param  array  $postData
+     * @access public
+     * @return bool|array
+     */
+    public function getStatusForUpdateTest(object $case, array $postData = array()): bool|array
+    {
+        global $tester;
+
+        try {
+            // 保存原始POST数据
+            $originalPost = $_POST;
+            $originalFiles = $_FILES;
+
+            // 设置POST数据
+            $_POST = array();
+            $_FILES = array();
+            foreach($postData as $key => $value)
+            {
+                if($key === 'files') {
+                    $_FILES['files'] = $value;
+                } else {
+                    $_POST[$key] = $value;
+                }
+            }
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用public方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('getStatusForUpdate');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $returnValue = $method->invoke($zenInstance, $case);
+
+            // 恢复原始POST和FILES数据
+            $_POST = $originalPost;
+            $_FILES = $originalFiles;
+
+            if(dao::isError()) return dao::getError();
+
+            return $returnValue;
+        } catch (Exception $e) {
+            // 恢复原始POST和FILES数据
+            $_POST = $originalPost;
+            $_FILES = $originalFiles;
+            return 'error: ' . $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始POST和FILES数据
+            $_POST = $originalPost;
+            $_FILES = $originalFiles;
+            return 'error: ' . $e->getMessage();
+        }
+    }
 }
