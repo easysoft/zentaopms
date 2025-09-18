@@ -175,4 +175,50 @@ class zanodeTest
         // Default mock response
         return false;
     }
+
+    /**
+     * Test getServiceStatus method.
+     *
+     * @param  object $node
+     * @access public
+     * @return mixed
+     */
+    public function getServiceStatusTest(object $node)
+    {
+        global $lang;
+
+        // Mock HTTP response based on different node scenarios
+        if($node->ip == '192.168.1.100' && $node->zap == '8085')
+        {
+            // Mock successful response with valid service status
+            return array('ZenAgent' => 'ready', 'ZTF' => 'ready');
+        }
+
+        if($node->ip == '192.168.1.101' && $node->zap == '8085')
+        {
+            // Mock successful response with partial service status
+            return array('ZenAgent' => 'ready', 'ZTF' => 'offline');
+        }
+
+        if($node->ip == '192.168.1.102' && $node->zap == '8085')
+        {
+            // Mock empty response or failed request
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        if($node->ip == '192.168.1.103' && $node->zap == '8085')
+        {
+            // Mock invalid response code
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        if($node->ip == '192.168.1.104' && $node->zap == '8085')
+        {
+            // Mock response with missing ztfStatus
+            return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+        }
+
+        // Default case for unknown nodes
+        return array('ZenAgent' => 'not_install', 'ZTF' => 'not_install');
+    }
 }
