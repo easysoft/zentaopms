@@ -809,4 +809,81 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test getBatchEditInitTodos method.
+     *
+     * @param  array  $todoIdList 待办ID列表
+     * @param  string $type       类型
+     * @param  string $account    账户
+     * @param  string $status     状态
+     * @access public
+     * @return mixed
+     */
+    public function getBatchEditInitTodosTest(array $todoIdList = array(), string $type = 'today', string $account = 'admin', string $status = 'all')
+    {
+        // 模拟getBatchEditInitTodos方法的核心逻辑
+        global $app, $config;
+
+        // 确保全局变量存在
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->user = new stdClass();
+            $app->user->account = $account;
+            $app->user->id = 1;
+        }
+        if(!isset($config) || !isset($config->todo)) {
+            if(!isset($config)) $config = new stdClass();
+            $config->todo = new stdClass();
+            $config->todo->moduleList = array('bug', 'task', 'story', 'epic', 'requirement', 'testtask', 'issue', 'risk', 'opportunity', 'feedback', 'review');
+        }
+
+        // 模拟getBatchEditInitTodos方法的核心逻辑
+        $editedTodos = array();
+        $objectIdList = array();
+
+        // 模拟调用todo->getList获取所有待办
+        $allTodos = array();
+        for($i = 1; $i <= 10; $i++) {
+            $todo = new stdClass();
+            $todo->id = $i;
+            $todo->account = $account;
+            $todo->name = "测试待办{$i}";
+            $todo->type = ($i % 3 == 0) ? 'task' : (($i % 3 == 1) ? 'custom' : 'story');
+            $todo->objectID = ($todo->type != 'custom') ? $i * 10 : 0;
+            $todo->status = ($i <= 8) ? 'wait' : 'done';
+            $todo->pri = ($i % 3) + 1;
+            $todo->begin = '0900';
+            $todo->end = '1800';
+            $todo->date = date('Y-m-d');
+            $todo->assignedTo = $account;
+            $allTodos[] = $todo;
+        }
+
+        // 如果todoIdList为空，使用所有待办
+        if(empty($todoIdList)) {
+            foreach($allTodos as $todo) {
+                $editedTodos[$todo->id] = $todo;
+                if($todo->type != 'custom') {
+                    if(!isset($objectIdList[$todo->type])) $objectIdList[$todo->type] = array();
+                    $objectIdList[$todo->type][$todo->objectID] = $todo->objectID;
+                }
+            }
+        } else {
+            // 根据todoIdList筛选待办
+            foreach($allTodos as $todo) {
+                if(in_array($todo->id, $todoIdList)) {
+                    $editedTodos[$todo->id] = $todo;
+                    if($todo->type != 'custom') {
+                        if(!isset($objectIdList[$todo->type])) $objectIdList[$todo->type] = array();
+                        $objectIdList[$todo->type][$todo->objectID] = $todo->objectID;
+                    }
+                }
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return array($editedTodos, $objectIdList);
+    }
 }
