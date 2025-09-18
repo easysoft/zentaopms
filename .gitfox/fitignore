@@ -9,6 +9,9 @@
 CHANGELOG
 www/static/
 
+# third-party libraries
+lib/vendor/
+
 # ai test
 .claude/
 .qwen/
