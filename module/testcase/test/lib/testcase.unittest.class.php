@@ -6,6 +6,7 @@ class testcaseTest
          global $tester;
          $this->objectModel = $tester->loadModel('testcase');
          $this->objectTao   = $tester->loadTao('testcase');
+         $this->objectZen   = initReference('testcase');
     }
 
     /**
@@ -4378,6 +4379,31 @@ class testcaseTest
             $tester->config->testcase->search['fields'] = $originalConfig;
         }
         $tester->app->tab = $originalTab;
+
+        return $result;
+    }
+
+    /**
+     * Test getImportField method.
+     *
+     * @param  string $field
+     * @param  string $cellValue
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function getImportFieldTest($field, $cellValue, $case)
+    {
+        global $app;
+
+        // 使用和其他测试一致的方法获取zen实例
+        $zenTest = $app->loadTarget('testcase', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('getImportField');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($zenTest, $field, $cellValue, $case);
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
