@@ -121,7 +121,7 @@ foreach($finished as $task)
     $data[] = array
     (
         array('class' => 'text-center', 'value' => sprintf('%03d', $task->id)),
-        array('class' => 'text-left',   'value' => h::a(set::href($this->createLink('task', 'view', "id={$task->id}")), set::title($task->name), $task->name)),
+        array('class' => 'text-left',   'value' => html::a($this->createLink('task', 'view', "id={$task->id}"), $task->name, '', "title='{$task->name}'")),
         array('class' => 'text-left',   'value' => $task->estStarted),
         array('class' => 'text-left',   'value' => $task->deadline),
         array('class' => 'text-left',   'value' => !helper::isZeroDate($task->realStarted) ? substr($task->realStarted, 0, 11) : ''),
@@ -146,7 +146,7 @@ foreach($postponed as $task)
     $data[] = array
     (
         array('class' => 'text-center', 'value' => sprintf('%03d', $task->id)),
-        array('class' => 'text-left',   'value' => h::a(set::href($this->createLink('task', 'view', "id={$task->id}")), set::title($task->name), $task->name)),
+        array('class' => 'text-left',   'value' => html::a($this->createLink('task', 'view', "id={$task->id}"), $task->name, '', "title='{$task->name}'")),
         array('class' => 'text-left',   'value' => zget($users, $task->assignedTo)),
         array('class' => 'text-left',   'value' => $task->estStarted),
         array('class' => 'text-left',   'value' => $task->deadline),
@@ -170,7 +170,7 @@ foreach($nextWeek as $task)
     $data[] = array
     (
         array('class' => 'text-center', 'value' => sprintf('%03d', $task->id)),
-        array('class' => 'text-left',   'value' => h::a(set::href($this->createLink('task', 'view', "id={$task->id}")), set::title($task->name), $task->name)),
+        array('class' => 'text-left',   'value' => html::a($this->createLink('task', 'view', "id={$task->id}"), $task->name, '', "title='{$task->name}'")),
         array('class' => 'text-left',   'value' => zget($users, $task->assignedTo)),
         array('class' => 'text-left',   'value' => $task->estStarted),
         array('class' => 'text-left',   'value' => $task->deadline)
