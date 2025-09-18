@@ -304,4 +304,40 @@ class testtaskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test buildTaskForBlock method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return object
+     */
+    public function buildTaskForBlockTest($taskID = 1)
+    {
+        // 根据不同的taskID使用不同的测试数据
+        $testData = array(
+            1 => array('status' => 'blocked', 'comment' => '测试被阻塞', 'blockedBy' => '系统故障', 'blockedReason' => 'bug导致无法继续测试', 'uid' => 'uid123'),
+            2 => array('status' => 'blocked', 'comment' => '', 'blockedBy' => '', 'blockedReason' => '环境问题', 'uid' => 'uid456'),
+            3 => array('status' => 'blocked', 'comment' => '测试单被阻塞，等待问题解决', 'blockedBy' => '第三方服务异常', 'blockedReason' => '依赖服务不可用', 'uid' => ''),
+            4 => array('status' => 'blocked', 'comment' => '<p>带HTML标签的阻塞注释</p>', 'blockedBy' => 'bug #123', 'blockedReason' => '<script>alert("xss")</script>数据库连接失败', 'uid' => 'uid789'),
+            0 => array('status' => 'blocked', 'comment' => '无效ID测试', 'blockedBy' => 'admin', 'blockedReason' => '无效测试单ID', 'uid' => 'invalid'),
+            999 => array('status' => 'blocked', 'comment' => '不存在的测试单', 'blockedBy' => 'system', 'blockedReason' => '测试单不存在', 'uid' => 'test999')
+        );
+
+        $data = isset($testData[$taskID]) ? $testData[$taskID] : $testData[1];
+
+        // 模拟表单数据
+        $_POST = $data;
+
+        $method = $this->testtaskZenTest->getMethod('buildTaskForBlock');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array((int)$taskID));
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch(Exception $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
