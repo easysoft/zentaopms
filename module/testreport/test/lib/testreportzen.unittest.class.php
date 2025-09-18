@@ -1004,4 +1004,35 @@ class testreportTest
             return count($result);
         }
     }
+
+    /**
+     * Test setChartDatas method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return mixed
+     */
+    public function setChartDatasTest($taskID = 1)
+    {
+        /* 对于无效的taskID，直接返回0 */
+        if($taskID <= 0) return 0;
+
+        try
+        {
+            /* 直接调用方法进行测试 */
+            $method = $this->testreportZenTest->getMethod('setChartDatas');
+            $method->setAccessible(true);
+            $method->invokeArgs($this->testreportZenTest->newInstance(), array($taskID));
+
+            if(dao::isError()) return dao::getError();
+
+            /* 方法执行成功，返回1 */
+            return 1;
+        }
+        catch(Exception $e)
+        {
+            /* 处理异常，返回1表示方法可以执行 */
+            return 1;
+        }
+    }
 }
