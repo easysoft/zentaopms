@@ -1714,4 +1714,55 @@ class testcaseZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test processCasesForExport method.
+     *
+     * @param  array $cases
+     * @param  int   $productID
+     * @param  int   $taskID
+     * @access public
+     * @return array
+     */
+    public function processCasesForExportTest(array $cases, int $productID, int $taskID): array
+    {
+        global $tester;
+
+        try {
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 设置必要的属性
+            $zenInstance->app = $tester->app;
+            $zenInstance->lang = $tester->lang;
+            $zenInstance->config = $tester->config;
+            $zenInstance->session = $tester->session;
+            $zenInstance->post = isset($tester->post) ? $tester->post : new stdClass();
+            if(!isset($zenInstance->post->fileType)) $zenInstance->post->fileType = 'csv';
+
+            // 初始化各种model对象
+            $zenInstance->product = $tester->loadModel('product');
+            $zenInstance->testcase = $tester->loadModel('testcase');
+            $zenInstance->tree = $tester->loadModel('tree');
+            $zenInstance->branch = $tester->loadModel('branch');
+            $zenInstance->user = $tester->loadModel('user');
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('processCasesForExport');
+            $method->setAccessible(true);
+
+            // 调用方法并获取结果
+            $result = $method->invoke($zenInstance, $cases, $productID, $taskID);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
