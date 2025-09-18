@@ -675,6 +675,17 @@ class weeklyModel extends model
     public function addBuiltinCategory(int $scopeID): int
     {
         /* Set category data. */
+        foreach($this->lang->weekly->builtInCategoryList as $key => $value)
+        {
+            $langData = new stdClass();
+            $langData->lang    = 'all';
+            $langData->module  = 'weekly';
+            $langData->section = 'categoryList';
+            $langData->key     = $key;
+            $langData->value   = $value;
+            $this->dao->replace(TABLE_LANG)->data($langData)->get();
+        }
+
         $category = new stdClass();
         $category->root  = $scopeID;
         $category->name  = $this->lang->projectCommon;
