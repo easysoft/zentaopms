@@ -39,6 +39,21 @@ class executionTest
     }
 
     /**
+     * Test getFullNameList method.
+     *
+     * @param  array $executions
+     * @access public
+     * @return array
+     */
+    public function getFullNameListTest($executions = array())
+    {
+        $result = $this->executionModel->getFullNameList($executions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 检查执行开始、结束日期是否正确。
      * Check begin and end date.
      *
@@ -638,9 +653,9 @@ class executionTest
      * @access public
      * @return string|object|false
      */
-    public function getByIDTest(int $executionID): string|object|false
+    public function getByIDTest(int $executionID, bool $setImgSize = false): string|object|false
     {
-        $object = $this->executionModel->getByID($executionID);
+        $object = $this->executionModel->getByID($executionID, $setImgSize);
 
         if(dao::isError())
         {
@@ -1625,23 +1640,19 @@ class executionTest
      * @access public
      * @return array
      */
-    public function computeBurnTest($count)
+    /**
+     * Test computeBurn method.
+     *
+     * @param  mixed $executionID
+     * @access public
+     * @return mixed
+     */
+    public function computeBurnTest($executionID = '')
     {
-        $object = $this->executionModel->computeBurn();
+        $result = $this->executionModel->computeBurn($executionID);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+        return $result;
     }
 
     /**
@@ -2372,11 +2383,11 @@ class executionTest
     }
 
     /**
-     * Create default sprint.
+     * Test createDefaultSprint method.
      *
-     * @param  int    $projectID
+     * @param  int $projectID
      * @access public
-     * @return int
+     * @return mixed
      */
     public function createDefaultSprintTest($projectID)
     {
@@ -2384,7 +2395,7 @@ class executionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $result > 0;
+        return $result;
     }
 
     /**
@@ -3335,5 +3346,51 @@ class executionTest
             ->fetch();
 
         return $execution ? $execution : false;
+    }
+
+    /**
+     * Test fetchExecutionsByProjectIdList method.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionsByProjectIdListTest($projectIdList = array())
+    {
+        $result = $this->objectModel->fetchExecutionsByProjectIdList($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getDefaultManagers method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return object
+     */
+    public function getDefaultManagersTest(int $executionID): object
+    {
+        $result = $this->objectModel->getDefaultManagers($executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExecutionCounts method.
+     *
+     * @param  int    $projectID
+     * @param  string $browseType
+     * @access public
+     * @return mixed
+     */
+    public function getExecutionCountsTest($projectID = 0, $browseType = 'all')
+    {
+        $result = $this->objectModel->getExecutionCounts($projectID, $browseType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
