@@ -1,0 +1,10 @@
+---
+title: zt_bug
+author: Claude Code
+version: "1.0"
+fields:
+- field: openedDate
+  range: "2023-01-01 09:00:00{5}, 2023-01-02 10:00:00{3}, 2023-01-03 11:00:00{2}"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+...
