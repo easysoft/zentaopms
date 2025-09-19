@@ -597,7 +597,7 @@ class upgrade extends control
             }
         }
 
-        /* 如果有需要升级的周报，显示升级周报界面。*/
+        /* 如果有需要升级的周报、里程碑报告，显示升级周报、里程碑报告界面。*/
         $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
         if($skipUpdateProjectReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
         {
@@ -1075,8 +1075,8 @@ class upgrade extends control
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade weekly reports.
+     * 升级项目报告数据。
+     * Upgrade project reports.
      *
      * @access public
      * @return void

@@ -904,8 +904,8 @@ class upgradeTest
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade Weekly Report.
+     * 升级项目报告数据。
+     * Upgrade project report data.
      *
      * @param  array  $data
      * @access public
