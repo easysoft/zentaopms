@@ -117,4 +117,21 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test genTreeOptions method.
+     *
+     * @param  object $moduleTree
+     * @param  array  $values
+     * @param  array  $paths
+     * @access public
+     * @return mixed
+     */
+    public function genTreeOptionsTest(&$moduleTree, $values, $paths)
+    {
+        $this->objectModel->genTreeOptions($moduleTree, $values, $paths);
+        if(dao::isError()) return dao::getError();
+
+        return $moduleTree;
+    }
 }
