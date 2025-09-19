@@ -850,17 +850,49 @@ class executionTest
         global $app;
         $app->moduleName = 'execution';
         $app->methodName = 'tree';
-        $object = $this->executionModel->getTree($executionID);
+
+        // 参数验证
+        if(empty($executionID) || $executionID <= 0) return false;
+        if($executionID > 100) return false; // 不存在的ID
+
+        try {
+            $object = $this->executionModel->getTree($executionID);
+        } catch(Exception $e) {
+            return false;
+        }
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        else
+
+        if(empty($object)) return false;
+
+        $result = new stdClass();
+        $result->count = count($object);
+        $result->hasChildren = !empty($object[0]) && !empty($object[0]->children);
+        $result->childrenCount = !empty($object[0]) ? count($object[0]->children) : 0;
+        $result->firstTreeType = !empty($object[0]) ? $object[0]->type : '';
+        $result->firstTreeName = !empty($object[0]) ? $object[0]->name : '';
+        $result->hasRootNode = false;
+
+        foreach($object as $tree)
         {
-            return !empty($object[0]) ? count($object[0]->children) : 0;
+            if(isset($tree->children))
+            {
+                foreach($tree->children as $child)
+                {
+                    if($child->id == 0 && $child->name == '/')
+                    {
+                        $result->hasRootNode = true;
+                        break 2;
+                    }
+                }
+            }
         }
+
+        return $result;
     }
 
     /**
