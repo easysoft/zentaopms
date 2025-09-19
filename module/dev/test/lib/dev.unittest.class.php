@@ -17,7 +17,90 @@ class devTest
     public function getTablesTest()
     {
         $result = $this->objectModel->getTables();
+        if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * Test getTables method with empty prefix.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getTablesEmptyPrefixTest()
+    {
+        $originalPrefix = $this->objectModel->config->db->prefix;
+        $this->objectModel->config->db->prefix = '';
+        $result = $this->objectModel->getTables();
+        $this->objectModel->config->db->prefix = $originalPrefix;
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getTables method return structure.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTablesStructureTest()
+    {
+        $result = $this->objectModel->getTables();
+        if(dao::isError()) return dao::getError();
+
+        $structure = array();
+        $structure['isArray'] = is_array($result) ? '1' : '0';
+        $structure['hasGroups'] = !empty($result) ? '1' : '0';
+        $structure['groupCount'] = count($result);
+
+        return $structure;
+    }
+
+    /**
+     * Test getTables method flow table filtering.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTablesFlowFilterTest()
+    {
+        $result = $this->objectModel->getTables();
+        if(dao::isError()) return dao::getError();
+
+        $hasFlowTable = false;
+        foreach($result as $group => $tables)
+        {
+            foreach($tables as $tableKey => $tableName)
+            {
+                if(strpos($tableName, 'flow_') !== false)
+                {
+                    $hasFlowTable = true;
+                    break 2;
+                }
+            }
+        }
+
+        return array('hasFlowTable' => $hasFlowTable ? '1' : '0');
+    }
+
+    /**
+     * Test getTables method group classification.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTablesGroupTest()
+    {
+        $result = $this->objectModel->getTables();
+        if(dao::isError()) return dao::getError();
+
+        $groups = array();
+        foreach($result as $groupName => $tables)
+        {
+            $groups[$groupName] = count($tables);
+        }
+
+        return $groups;
     }
 
     /**
