@@ -246,6 +246,22 @@ class compileTest
     }
 
     /**
+     * Test syncGitlabBuildList method.
+     *
+     * @param  object $gitlab
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function syncGitlabBuildListTest($gitlab, $job)
+    {
+        $result = $this->objectModel->syncGitlabBuildList($gitlab, $job);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel一些比较简单的方法。
      * Magic method, call some simple methods of objectModel.
      *
