@@ -48,6 +48,21 @@ class chartTest
     }
 
     /**
+     * Test getFirstGroup method.
+     *
+     * @param  int $dimensionID
+     * @access public
+     * @return int|string
+     */
+    public function getFirstGroupTest(int $dimensionID): int|string
+    {
+        $result = $this->objectModel->getFirstGroup($dimensionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试处理图表数据。
      * Test process the data of the chart.
      *
