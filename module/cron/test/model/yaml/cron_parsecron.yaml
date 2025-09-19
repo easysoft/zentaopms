@@ -1,0 +1,43 @@
+---
+title: 定时任务parseCron方法测试数据
+desc: 用于测试parseCron方法的各种cron表达式场景
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+- field: m
+  note: 分钟字段
+  range: '0,30,*/5,*,invalid'
+- field: h
+  note: 小时字段
+  range: '0,8,23,*,invalid'
+- field: dom
+  note: 日期字段
+  range: '*,1,15'
+- field: mon
+  note: 月份字段
+  range: '*,1,12'
+- field: dow
+  note: 星期字段
+  range: '*,0,1-5'
+- field: command
+  note: 执行命令
+  range: 'moduleName=test&methodName=valid,moduleName=backup&methodName=backup,moduleName=invalid&methodName=test,{}'
+- field: status
+  note: 任务状态
+  range: 'normal,stop'
+- field: datetime
+  note: 执行时间
+  range: '2024-01-01 00:00:00,2024-06-15 12:30:00,{}'
+- field: remark
+  note: 备注信息
+  range: '正常任务,异常任务,边界测试'
+- field: type
+  note: 任务类型
+  range: 'zentao'
+- field: buildin
+  note: 内置任务
+  range: 1
