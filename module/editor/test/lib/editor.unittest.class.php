@@ -407,15 +407,125 @@ class editorTest
     /**
      * Test for get two grade files.
      *
+     * @param  string $extensionFullDir
      * @access public
-     * @return 1|0
+     * @return array
      */
-    public function getTwoGradeFilesTest()
+    public function getTwoGradeFilesTest($extensionFullDir = '')
     {
-        $extensionFullDir = $this->objectModel->app->getModulePath('', 'todo');
-        $files = $this->objectModel->getTwoGradeFiles($extensionFullDir);
+        try {
+            if(empty($extensionFullDir))
+            {
+                $extensionFullDir = $this->objectModel->app->getModulePath('', 'todo');
+            }
+
+            $files = $this->objectModel->getTwoGradeFiles($extensionFullDir);
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'isArray'         => is_array($files) ? 1 : 0,
+                'isEmpty'         => empty($files) ? 1 : 0,
+                'hasLangDir'      => isset($files[$extensionFullDir . 'lang']) ? 1 : 0,
+                'hasValidLangFiles' => $this->hasValidLanguageFiles($files, $extensionFullDir),
+                'directoryCount'  => count($files),
+                'totalFileCount'  => $this->countTotalFiles($files),
+                'hasSystemFiles'  => $this->hasSystemFiles($files),
+                'hasValidStructure' => $this->validateTwoGradeStructure($files)
+            );
+        } catch (Exception $e) {
+            return array(
+                'error' => $e->getMessage(),
+                'isArray' => 0,
+                'isEmpty' => 1,
+                'hasLangDir' => 0,
+                'hasValidLangFiles' => 0,
+                'directoryCount' => 0,
+                'totalFileCount' => 0,
+                'hasSystemFiles' => 0,
+                'hasValidStructure' => 0
+            );
+        }
+    }
+
+    /**
+     * Helper method to check if language files exist in the structure.
+     *
+     * @param  array  $files
+     * @param  string $extensionFullDir
+     * @access private
+     * @return int
+     */
+    private function hasValidLanguageFiles($files, $extensionFullDir)
+    {
         if(!isset($files[$extensionFullDir . 'lang'])) return 0;
-        if(!isset($files[$extensionFullDir . 'lang'][$extensionFullDir . 'lang' . DS . 'zh-cn.php'])) return 0;
+        $langFiles = $files[$extensionFullDir . 'lang'];
+        return isset($langFiles[$extensionFullDir . 'lang' . DS . 'zh-cn.php']) ? 1 : 0;
+    }
+
+    /**
+     * Helper method to count total files in the structure.
+     *
+     * @param  array $files
+     * @access private
+     * @return int
+     */
+    private function countTotalFiles($files)
+    {
+        $count = 0;
+        foreach($files as $dir => $fileList)
+        {
+            if(is_array($fileList)) $count += count($fileList);
+        }
+        return $count;
+    }
+
+    /**
+     * Helper method to check if system files are properly filtered.
+     *
+     * @param  array $files
+     * @access private
+     * @return int
+     */
+    private function hasSystemFiles($files)
+    {
+        foreach($files as $dir => $fileList)
+        {
+            if(is_array($fileList))
+            {
+                foreach($fileList as $filePath => $fileName)
+                {
+                    if(in_array($fileName, array('.', '..', '.svn', 'index.html')))
+                    {
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Helper method to validate two-grade directory structure.
+     *
+     * @param  array $files
+     * @access private
+     * @return int
+     */
+    private function validateTwoGradeStructure($files)
+    {
+        if(!is_array($files)) return 0;
+
+        foreach($files as $dir => $fileList)
+        {
+            if(!is_array($fileList)) return 0;
+            if(!is_dir($dir)) return 0;
+
+            foreach($fileList as $filePath => $fileName)
+            {
+                if(!is_string($fileName)) return 0;
+                if(empty($fileName)) return 0;
+            }
+        }
         return 1;
     }
 
