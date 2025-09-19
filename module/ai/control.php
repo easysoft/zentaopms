@@ -555,7 +555,7 @@ class ai extends control
         $result = $this->ai->deletePrompt($prompt);
 
         if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->deleteSuccess, 'locate' => $this->inlink('prompts')));
     }
 
     /**
