@@ -904,16 +904,16 @@ class upgradeTest
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade Weekly Report.
+     * 升级项目报告数据。
+     * Upgrade project report data.
      *
      * @param  array  $data
      * @access public
      * @return object
      */
-    public function upgradeWeeklyReportTest(array $data): object
+    public function upgradeProjectReportTest(array $data): object
     {
-        $this->objectModel->upgradeWeeklyReport($data);
+        $this->objectModel->upgradeProjectReport($data);
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->orderBy('id_desc')->limit(1)->fetch();
     }
 }

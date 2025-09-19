@@ -545,11 +545,11 @@ class upgrade extends control
      * @param  string $skipMoveFile
      * @param  string $skipUpdateDocs
      * @param  string $skipUpdateDocTemplates
-     * @param  string $skipUpdateWeeklyReports
+     * @param  string $skipUpdateProjectReports
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateWeeklyReports = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -597,15 +597,15 @@ class upgrade extends control
             }
         }
 
-        /* 如果有需要升级的周报，显示升级周报界面。*/
+        /* 如果有需要升级的周报、里程碑报告，显示升级周报、里程碑报告界面。*/
         $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
-        if($skipUpdateWeeklyReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
+        if($skipUpdateProjectReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
         {
-            $upgradeWeeklyReports = $this->upgrade->getUpgradeWeeklyReports();
-            if(!empty($upgradeWeeklyReports))
+            $upgradeProjectReports = $this->upgrade->getUpgradeProjectReports();
+            if(!empty($upgradeProjectReports))
             {
-                $this->session->set('upgradeWeeklyReports', $upgradeWeeklyReports);
-                $this->locate(inlink('upgradeWeeklyReports', "fromVersion={$fromVersion}"));
+                $this->session->set('upgradeProjectReports', $upgradeProjectReports);
+                $this->locate(inlink('upgradeProjectReports', "fromVersion={$fromVersion}"));
             }
         }
 
@@ -1051,42 +1051,42 @@ class upgrade extends control
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade weekly reports.
+     * 升级项目报告数据。
+     * Upgrade project reports.
      *
      * @param  string $fromVersion
      * @param  string $processed
      * @access public
      * @return void
      */
-    public function upgradeWeeklyReports(string $fromVersion = '', string $processed = 'no')
+    public function upgradeProjectReports(string $fromVersion = '', string $processed = 'no')
     {
-        $upgradeReports = $this->session->upgradeWeeklyReports;
+        $upgradeReports = $this->session->upgradeProjectReports;
         if($processed === 'yes' || empty($upgradeReports))
         {
-            if(!empty($upgradeReports)) $this->session->set('upgradeWeeklyReports', true);
-            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateWeeklyReports=yes"));
+            if(!empty($upgradeReports)) $this->session->set('upgradeProjectReports', true);
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateProjectReports=yes"));
         }
 
-        $this->view->title          = $this->lang->upgrade->upgradeWeeklyReports;
+        $this->view->title          = $this->lang->upgrade->upgradeProjectReports;
         $this->view->upgradeReports = $upgradeReports;
         $this->view->fromVersion    = $fromVersion;
         $this->display();
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade weekly reports.
+     * 升级项目报告数据。
+     * Upgrade project reports.
      *
      * @access public
      * @return void
      */
-    public function ajaxUpgradeWeeklyReport()
+    public function ajaxUpgradeProjectReport()
     {
         if($_POST)
         {
             $data = isset($_POST['data']) ? $_POST['data'] : array();
-            if($data) $this->upgrade->upgradeWeeklyReport($data);
+            if($data) $this->upgrade->upgradeProjectReport($data);
             $this->send(array('result' => 'success'));
         }
     }

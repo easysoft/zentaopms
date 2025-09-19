@@ -1,4 +1,4 @@
-/* 开始升级周报。*/
+/* 开始升级项目报告。*/
 window.startUpgradeReports = function(event, reportList, upgradingReportsText, nextText)
 {
     const $btn = $('#upgradeReportsBtn');
@@ -21,7 +21,7 @@ window.startUpgradeReports = function(event, reportList, upgradingReportsText, n
     });
 };
 
-/* 更新升级周报进度。*/
+/* 更新升级项目报告进度。*/
 async function upgradeReports(reportList, options)
 {
     let current      = 0;
@@ -38,11 +38,11 @@ async function upgradeReports(reportList, options)
     return reportList;
 }
 
-/* 升级周报。*/
+/* 升级项目报告。*/
 async function upgradeReport(report)
 {
     let result;
-    await $.post($.createLink('upgrade', 'ajaxUpgradeWeeklyReport'), {data: report}, (res) =>
+    await $.post($.createLink('upgrade', 'ajaxUpgradeProjectReport'), {data: report}, (res) =>
     {
         result = res.result === 'success' ? true : res.message;
     }, 'json');
