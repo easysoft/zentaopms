@@ -583,6 +583,26 @@ class backupTest
     }
 
     /**
+     * Test processSummary method.
+     *
+     * @param  string $file
+     * @param  int    $count
+     * @param  int    $size
+     * @param  array  $errorFiles
+     * @param  int    $allCount
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function processSummaryTest($file = null, $count = 0, $size = 0, $errorFiles = array(), $allCount = 0, $action = 'add')
+    {
+        $result = $this->objectModel->processSummary($file, $count, $size, $errorFiles, $allCount, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
