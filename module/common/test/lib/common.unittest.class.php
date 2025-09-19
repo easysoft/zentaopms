@@ -2714,4 +2714,20 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test isOpenMethod method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isOpenMethodTest($module, $method)
+    {
+        $result = $this->objectModel->isOpenMethod($module, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
