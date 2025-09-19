@@ -54,11 +54,13 @@ class devTest
      *
      * @param string $module
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getAPIsTest($module)
     {
         $result = $this->objectModel->getAPIs($module);
+        if(dao::isError()) return dao::getError();
+
         return $result;
     }
 
@@ -210,6 +212,21 @@ class devTest
     public function getAPIDataTest($apiID = 0, $version = '16.0')
     {
         $result = $this->objectModel->getAPIData($apiID, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test get link params method.
+     *
+     * @param  mixed $link
+     * @access public
+     * @return mixed
+     */
+    public function getLinkParamsTest($link)
+    {
+        $result = $this->objectModel->getLinkParams($link);
         if(dao::isError()) return dao::getError();
 
         return $result;

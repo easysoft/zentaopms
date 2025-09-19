@@ -1,27 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
 
 /**
 
 title=测试 devModel::getLinkParams();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-获取空数据         >> 0
-获取字符串类型信息 >> index
-获取数组类型信息   >> my
+- 步骤1：空字符串输入 @alse
+- 步骤2：标准字符串链接
+ -  @仪表盘
+ - 属性1 @index
+- 步骤3：数组格式链接
+ -  @地盘
+ - 属性1 @my
+ - 属性2 @index
+- 步骤4：无分隔符字符串 @alse
+- 步骤5：数组无link键 @alse
+- 步骤6：多参数链接
+ -  @用户管理
+ - 属性1 @user
+ - 属性2 @browse
+ - 属性3 @type=active
+- 步骤7：特殊字符参数
+ -  @测试&特殊
+ - 属性1 @test
 
 */
 
-global $tester;
-$tester->loadModel('dev');
-$links = array(
-    'empty'  => '',
-    'string' => '仪表盘|index|',
-    'array'  => array('link' => '地盘|my|index|')
-);
-r($tester->dev->getLinkParams($links['empty']))  && p()    && e('0');      //获取空数据
-r($tester->dev->getLinkParams($links['string'])) && p('1') && e('index'); //获取字符串类型信息
-r($tester->dev->getLinkParams($links['array']))  && p('1') && e('my');    //获取数组类型信息
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+
+su('admin');
+
+$dev = new devTest();
+
+r($dev->getLinkParamsTest('')) && p() && e(false);                                                         // 步骤1：空字符串输入
+r($dev->getLinkParamsTest('仪表盘|index|')) && p('0,1') && e('仪表盘,index');                             // 步骤2：标准字符串链接
+r($dev->getLinkParamsTest(array('link' => '地盘|my|index|'))) && p('0,1,2') && e('地盘,my,index');          // 步骤3：数组格式链接
+r($dev->getLinkParamsTest('no_separator_string')) && p() && e(false);                                     // 步骤4：无分隔符字符串
+r($dev->getLinkParamsTest(array('other' => 'value'))) && p() && e(false);                                 // 步骤5：数组无link键
+r($dev->getLinkParamsTest('用户管理|user|browse|type=active')) && p('0,1,2,3') && e('用户管理,user,browse,type=active'); // 步骤6：多参数链接
+r($dev->getLinkParamsTest('测试&特殊|test|method|param=value&test=1')) && p('0,1') && e('测试&特殊,test');    // 步骤7：特殊字符参数
