@@ -2270,7 +2270,7 @@ $config->group->package->projectMilestone = new stdclass();
 $config->group->package->projectMilestone->order  = 25;
 $config->group->package->projectMilestone->subset = 'projectreport';
 $config->group->package->projectMilestone->privs  = array();
-$config->group->package->projectMilestone->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index', 'weekly-index'), 'recommend' => array('milestone-saveOtherProblem'));
+$config->group->package->projectMilestone->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index', 'weekly-view'), 'recommend' => array('milestone-saveOtherProblem'));
 $config->group->package->projectMilestone->privs['milestone-saveOtherProblem'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('milestone-index', 'weekly-index'), 'recommend' => array());
 
 $config->group->package->researchPlan = new stdclass();
