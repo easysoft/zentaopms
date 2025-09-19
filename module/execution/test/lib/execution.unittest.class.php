@@ -2449,6 +2449,23 @@ class executionTest
     }
 
     /**
+     * Test buildTree method directly with custom tree data.
+     *
+     * @param  array $trees
+     * @param  bool  $hasProduct
+     * @param  array $gradeGroup
+     * @access public
+     * @return array
+     */
+    public function buildTreeTestDirect(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
+    {
+        $result = $this->executionModel->buildTree($trees, $hasProduct, $gradeGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test format tasks for tree.
      *
      * @param  int    $executionID
@@ -3272,5 +3289,51 @@ class executionTest
             // 返回最终的团队成员数量
             return $afterCount;
         }
+    }
+
+    /**
+     * Test changeStatus2Doing method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return string
+     */
+    public function changeStatus2DoingTest($executionID)
+    {
+        global $tester;
+
+        if($executionID <= 0) return '';
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+
+        if(empty($selfAndChildrenList[$executionID])) return '';
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+
+        $result = $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test get execution status.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return object|false
+     */
+    public function getExecutionStatusTest($executionID)
+    {
+        if($executionID <= 0) return false;
+
+        $execution = $this->executionModel->dao->select('id,status,realBegan,lastEditedBy,lastEditedDate')
+            ->from(TABLE_EXECUTION)
+            ->where('id')->eq($executionID)
+            ->fetch();
+
+        return $execution ? $execution : false;
     }
 }
