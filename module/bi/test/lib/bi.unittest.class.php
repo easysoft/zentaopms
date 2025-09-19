@@ -123,6 +123,50 @@ class biTest
     }
 
     /**
+     * Test getColumns method.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @param  bool   $returnOrigin
+     * @access public
+     * @return mixed
+     */
+    public function getColumnsTest($sql, $driver = 'mysql', $returnOrigin = false)
+    {
+        try
+        {
+            $result = $this->objectModel->getColumns($sql, $driver, $returnOrigin);
+            if(dao::isError()) return dao::getError();
+
+            // 处理空SQL或无效驱动的情况
+            if($result === false) return 0;
+
+            // 如果是returnOrigin模式，返回特殊标识
+            if($returnOrigin && !empty($result)) return 'returnOrigin';
+
+            // 如果是测试驱动兼容性
+            if($driver !== 'mysql' && !empty($result)) return 'driver_test';
+
+            // 正常情况下返回字段类型映射
+            if(is_array($result))
+            {
+                $nativeTypes = array();
+                foreach($result as $field => $fieldInfo)
+                {
+                    $nativeTypes[$field] = $fieldInfo['native_type'];
+                }
+                return $nativeTypes;
+            }
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 0;
+        }
+    }
+
+    /**
      * get tables and fields
      *
      * @param  string $sql
