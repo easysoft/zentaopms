@@ -1937,13 +1937,13 @@ class executionTest
     }
 
     /**
-     * function getKanbanSetting test by execution
+     * Test getKanbanSetting method.
      *
-     * @param  string $count
+     * @param  mixed $param
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function getKanbanSettingTest($count)
+    public function getKanbanSettingTest($param = 0)
     {
         $object = $this->executionModel->getKanbanSetting();
 
@@ -1952,13 +1952,32 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == 1)
+
+        // 兼容原有测试参数
+        if($param === 1 || $param === '1')
         {
             return count($object->colorList);
         }
-        else
+        elseif($param === 0 || $param === '0')
         {
             return $object;
+        }
+
+        // 支持新的测试参数
+        switch($param)
+        {
+            case 'allCols':
+                return $object->allCols;
+            case 'showOption':
+                return $object->showOption;
+            case 'properties':
+                $props = array();
+                if(property_exists($object, 'allCols')) $props[] = 'allCols';
+                if(property_exists($object, 'showOption')) $props[] = 'showOption';
+                if(property_exists($object, 'colorList')) $props[] = 'colorList';
+                return implode(',', $props);
+            default:
+                return $object;
         }
     }
 
