@@ -81,6 +81,109 @@ class editorTest
     }
 
     /**
+     * Test analysis method with control.php file.
+     *
+     * @access public
+     * @return array
+     */
+    public function analysisControlTest()
+    {
+        $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
+        $objects  = $this->objectModel->analysis($fileName);
+
+        return array(
+            'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
+            'methodCount'     => count($objects),
+            'isArray'         => is_array($objects) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test analysis method with model.php file.
+     *
+     * @access public
+     * @return array
+     */
+    public function analysisModelTest()
+    {
+        $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'model.php';
+        $objects  = $this->objectModel->analysis($fileName);
+
+        return array(
+            'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
+            'methodCount'     => count($objects),
+            'isArray'         => is_array($objects) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test analysis method with non-existent file.
+     *
+     * @access public
+     * @return int
+     */
+    public function analysisNonExistentFileTest()
+    {
+        $fileName = '/nonexistent/path/test.php';
+        try {
+            $objects = $this->objectModel->analysis($fileName);
+            return empty($objects) ? 0 : 1;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Test analysis method with empty file path.
+     *
+     * @access public
+     * @return int
+     */
+    public function analysisEmptyPathTest()
+    {
+        $fileName = '';
+        try {
+            $objects = $this->objectModel->analysis($fileName);
+            return empty($objects) ? 0 : 1;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Test analysis method return structure.
+     *
+     * @access public
+     * @return array
+     */
+    public function analysisStructureTest()
+    {
+        $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
+        $objects  = $this->objectModel->analysis($fileName);
+
+        $hasCorrectStructure = 1;
+        foreach($objects as $key => $methodName)
+        {
+            if(strpos($key, $fileName . '/') !== 0)
+            {
+                $hasCorrectStructure = 0;
+                break;
+            }
+            if(!is_string($methodName))
+            {
+                $hasCorrectStructure = 0;
+                break;
+            }
+        }
+
+        return array(
+            'hasCorrectStructure' => $hasCorrectStructure,
+            'keyFormat'           => !empty($objects) && strpos(key($objects), '/') !== false ? 1 : 0,
+            'valueType'           => !empty($objects) && is_string(current($objects)) ? 1 : 0
+        );
+    }
+
+    /**
      * Test for print tree.
      *
      * @access public
