@@ -262,6 +262,22 @@ class compileTest
     }
 
     /**
+     * Test syncJenkinsBuildList method.
+     *
+     * @param  object $jenkins
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function syncJenkinsBuildListTest($jenkins, $job)
+    {
+        $result = $this->objectModel->syncJenkinsBuildList($jenkins, $job);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel一些比较简单的方法。
      * Magic method, call some simple methods of objectModel.
      *
