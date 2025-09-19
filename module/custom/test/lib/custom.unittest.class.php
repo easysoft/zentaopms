@@ -320,6 +320,26 @@ class customTest
     }
 
     /**
+     * Test disableFeaturesByMode method with URAndSR setting check.
+     *
+     * @param  string $mode
+     * @access public
+     * @return string
+     */
+    public function disableFeaturesByModeTestWithURAndSR(string $mode): string
+    {
+        $this->objectModel->disableFeaturesByMode($mode);
+
+        if(dao::isError()) return dao::getError();
+
+        $disabledFeatures = $this->objectModel->loadModel('setting')->getItem('oner=system&module=common&key=disabledFeatures');
+        $URAndSR = $this->objectModel->loadModel('setting')->getItem('oner=system&module=custom&key=URAndSR');
+        $enableER = $this->objectModel->loadModel('setting')->getItem('oner=system&module=custom&key=enableER');
+
+        return "$disabledFeatures|$URAndSR|$enableER";
+    }
+
+    /**
      * 处理定时任务。
      * Process measrecord cron.
      *
@@ -644,27 +664,30 @@ class customTest
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
 
-        return customModel::buildMenuItems($allMenu, $customMenuMap, $module);
+        $result = customModel::buildMenuItems($allMenu, $customMenuMap, $module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
      * 构造菜单数据项。
      * Build menu item.
      *
+     * @param  array|string $item
+     * @param  array        $customMenuMap
+     * @param  string       $name
+     * @param  string       $label
+     * @param  string|array $itemLink
+     * @param  bool         $isTutorialMode
+     * @param  array        $subMenu
      * @static
      * @access public
      * @return object
      */
-    public static function buildMenuItemTest(): object
+    public static function buildMenuItemTest($item = '', $customMenuMap = array(), string $name = '', string $label = '', $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
-        global $config, $lang;
-
-        $flowModule = $config->global->flow . '_main';
-        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
-
-        return customModel::buildMenuItem('', $customMenuMap);
+        return customModel::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
     }
 
     /**
@@ -712,13 +735,14 @@ class customTest
      * 获取主菜单数据。
      * Get main menu data.
      *
+     * @param  bool   $isHomeMenu
      * @static
      * @access public
      * @return array
      */
-    public static function getMainMenuTest(): array
+    public static function getMainMenuTest(bool $isHomeMenu = false): array
     {
-        return customModel::getMainMenu();
+        return customModel::getMainMenu($isHomeMenu);
     }
 
     /**
