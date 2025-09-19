@@ -3457,4 +3457,19 @@ class executionTest
 
         return $result;
     }
+
+    /**
+     * Test getTotalEstimate method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return float
+     */
+    public function getTotalEstimateTest(int $executionID): float
+    {
+        $result = $this->objectModel->getTotalEstimate($executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
