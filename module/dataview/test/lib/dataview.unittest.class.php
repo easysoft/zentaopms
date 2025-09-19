@@ -195,4 +195,20 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $dataview
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest($dataview, $action)
+    {
+        $result = dataviewModel::isClickable($dataview, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
