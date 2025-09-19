@@ -519,15 +519,31 @@ class editorTest
     /**
      * Test for get api link.
      *
+     * @param  string    $filePath
+     * @param  string    $action
      * @access public
-     * @return 1|0
+     * @return mixed
      */
-    public function getAPILinkTest()
+    public function getAPILinkTest($filePath = '', $action = '')
     {
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php' . DS . 'create';
-        $link       = $this->objectModel->getAPILink($modelPath, 'extendModel');
-        return (strpos($link, 'debug') !== false && strpos($link, 'extendModel') !== false) ? 1 : 0;
+        if(empty($filePath))
+        {
+            $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+            $filePath   = $modulePath . 'model.php' . DS . 'create';
+        }
+        if(empty($action)) $action = 'extendModel';
+
+        $link = $this->objectModel->getAPILink($filePath, $action);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'link'           => $link,
+            'hasDebug'       => strpos($link, 'debug') !== false ? 1 : 0,
+            'hasAction'      => strpos($link, $action) !== false ? 1 : 0,
+            'hasFilePath'    => strpos($link, 'filePath=') !== false ? 1 : 0,
+            'isValidLink'    => filter_var($link, FILTER_VALIDATE_URL) !== false ? 1 : 0,
+            'linkLength'     => strlen($link)
+        );
     }
 
     /**
@@ -542,6 +558,94 @@ class editorTest
         $modelPath  = $modulePath . 'model.php' . DS . 'create';
         $content    = $this->objectModel->extendModel($modelPath);
         return strpos($content, 'public function create(') === false ? 0 : 1;
+    }
+
+    /**
+     * Test extendModel with todo create method.
+     *
+     * @access public
+     * @return array
+     */
+    public function extendModelCreateTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'create';
+        $content    = $this->objectModel->extendModel($modelPath);
+
+        return array(
+            'hasPhpTag'         => (strpos($content, '<?php') !== false) ? 1 : 0,
+            'hasMethodSignature' => (strpos($content, 'public function create(') !== false) ? 1 : 0,
+            'hasParentCall'     => (strpos($content, 'parent::create(') !== false) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test extendModel with todo edit method.
+     *
+     * @access public
+     * @return array
+     */
+    public function extendModelEditTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'edit';
+        $content    = $this->objectModel->extendModel($modelPath);
+
+        return array(
+            'hasPhpTag'    => (strpos($content, '<?php') !== false) ? 1 : 0,
+            'hasMethodName' => (strpos($content, 'function edit') !== false) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test extendModel parent call verification.
+     *
+     * @access public
+     * @return array
+     */
+    public function extendModelParentCallTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'delete';
+        $content    = $this->objectModel->extendModel($modelPath);
+
+        return array(
+            'hasParentCall' => (strpos($content, 'parent::delete(') !== false) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test extendModel syntax validation.
+     *
+     * @access public
+     * @return array
+     */
+    public function extendModelSyntaxTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'getById';
+        $content    = $this->objectModel->extendModel($modelPath);
+
+        return array(
+            'hasValidSyntax' => (strpos($content, '<?php') !== false && strpos($content, 'public function') !== false) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test extendModel parameter handling.
+     *
+     * @access public
+     * @return array
+     */
+    public function extendModelParameterTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'update';
+        $content    = $this->objectModel->extendModel($modelPath);
+
+        return array(
+            'hasCorrectParams' => (strpos($content, 'parent::update(') !== false) ? 1 : 0
+        );
     }
 
     /**
