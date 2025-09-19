@@ -34,12 +34,13 @@ $activeKey  = 0;
 foreach($moduleList as $moduleKey => $moduleName)
 {
     $item = new stdClass();
-    $item->id     = $index++;
+    $item->id     = $index;
     $item->parent = 0;
     $item->name   = $moduleName;
     $item->url    = inlink('prompts', "module=$moduleKey");
     if($moduleKey == $module) $activeKey = $item->id;
     $moduleTree[] = $item;
+    $index++;
 }
 
 sidebar
