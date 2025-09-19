@@ -509,6 +509,21 @@ class backupTest
     }
 
     /**
+     * Test addFileHeader method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return mixed
+     */
+    public function addFileHeaderTest($fileName = null)
+    {
+        $result = $this->objectModel->addFileHeader($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
