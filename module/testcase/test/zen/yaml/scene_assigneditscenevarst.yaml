@@ -1,0 +1,40 @@
+---
+title: 场景数据定义 - assignEditSceneVars方法测试
+desc: 为测试assignEditSceneVars方法准备的场景数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 场景ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1{4},2{3},3{3}
+
+- field: branch
+  note: 分支ID
+  range: 1{4},2{3},3{2},999{1}
+
+- field: module
+  note: 模块ID
+  range: 1{4},2{2},3{2},5{1},999{1}
+
+- field: parent
+  note: 父场景ID
+  range: 0{8},1{2}
+
+- field: title
+  note: 场景标题
+  range: 测试场景1,测试场景2,测试场景3,编辑场景测试,复杂场景,边界场景,异常场景,特殊场景,主场景,子场景
+
+- field: deleted
+  note: 删除状态
+  range: 0
+
+- field: type
+  note: 场景类型
+  range: scene
