@@ -1136,6 +1136,24 @@ class buildTest
     }
 
     /**
+     * Test getStoryList method.
+     *
+     * @param  string $storyIdList
+     * @param  int    $branch
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getStoryListTest(string $storyIdList, int $branch = 0, string $orderBy = '', ?object $pager = null): mixed
+    {
+        $result = $this->objectModel->getStoryList($storyIdList, $branch, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test buildLinkBugSearchForm method.
      *
      * @param  object $build
