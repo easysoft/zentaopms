@@ -11203,30 +11203,28 @@ class upgradeModel extends model
     }
 
     /**
-     * 获取需要更新的周报数据。
-     * Get weekly reports that need to be updated.
+     * 获取需要更新的项目报告数据。
+     * Get project reports that need to be updated.
      *
      * @access public
      * @return array
      */
-    public function getUpgradeWeeklyReports(): array
+    public function getUpgradeProjectReports(): array
     {
         $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.status as projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.status')->ne('wait')
             ->orderBy('t1.project asc, t1.weekStart asc')
             ->fetchAll();
-        if(empty($reports)) return array();
+
+        $projectReports = $this->dao->select('id,name,project')->from(TABLE_PROJECT)->where('type')->eq('stage')->andWhere('milestone')->eq('1')->fetchAll();
+        if(empty($reports) && empty($projectReports)) return array();
 
         $thisSunday = date('Y-m-d', strtotime('this Sunday'));
         foreach($reports as $key => $report)
         {
             if($report->projectStatus == 'doing') $report->realBegan = !helper::isZeroDate($report->realBegan) ? $report->realBegan : $report->weekStart;
-            if(helper::isZeroDate($report->realBegan))
-            {
-                unset($reports[$key]);
-                continue;
-            }
+            if(helper::isZeroDate($report->realBegan)) continue;
 
             $beginTimestame = strtotime($report->realBegan);
             $day            = date('w', $beginTimestame);
@@ -11234,7 +11232,7 @@ class upgradeModel extends model
             $report->projectBegin = date('Y-m-d', $beginTimestame - (($day - 1) * 24 * 3600));
 
             /* Filter date < project begin date report. */
-            if($report->weekStart < $report->projectBegin) unset($reports[$key]);
+            if($report->weekStart < $report->projectBegin) continue;
 
             if($report->projectStatus == 'doing')     $report->projectEnd = $thisSunday;
             if($report->projectStatus == 'suspended') $report->projectEnd = $report->suspendedDate;
@@ -11242,32 +11240,44 @@ class upgradeModel extends model
 
             /* Filter date > project end date report. */
             $report->projectEnd = date('Y-m-d', strtotime($report->projectEnd));
-            if($report->weekStart > $report->projectEnd) unset($reports[$key]);
+            if($report->weekStart > $report->projectEnd) continue;
+            $projectReports[] = $report;
         }
-        return array_values($reports);
+        return $projectReports;
     }
 
     /**
-     * 升级周报数据。
-     * Upgrade Weekly Report.
+     * 升级项目报告数据。
+     * Upgrade project report data.
      *
      * @param  array $data
      * @access public
      * @return bool
      */
-    public function upgradeWeeklyReport(array $data): bool
+    public function upgradeProjectReport(array $data): bool
     {
-        $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
-        $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
-
         $report = new stdclass();
-        $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+        if(!empty($data['weekStart']))
+        {
+            $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
+            $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
+
+            $report->title      = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+            $report->module     = 'week';
+            $report->addedDate  = $data['weekStart'] . ' 00:00:00';
+            $report->weeklyDate = str_replace('-', '', $data['weekStart']);
+        }
+        else
+        {
+            $report->title     = sprintf($this->lang->upgrade->milestoneTitle, $data['name']);
+            $report->module    = 'milestone';
+            $report->execution = $data['id'];
+            $report->addedDate = helper::now();
+        }
+
         $report->project      = $data['project'];
         $report->templateType = 'projectReport';
-        $report->module       = 'week';
-        $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
         $report->addedBy      = 'system';
-        $report->addedDate    = $data['weekStart'] . ' 00:00:00';
         $this->dao->insert(TABLE_DOC)->data($report)->exec();
 
         return !dao::isError();

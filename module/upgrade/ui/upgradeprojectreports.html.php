@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The upgradeWeeklyReports view file of upgrade module of ZenTaoPMS.
+ * The upgradeProjectReports view file of upgrade module of ZenTaoPMS.
  * @copyright   Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@chandao.com>
@@ -22,7 +22,7 @@ div
         panel
         (
             setStyle('width', '600px'),
-            set::title(sprintf($lang->upgrade->upgradeWeeklyReportsTip, count($upgradeReports))),
+            set::title(sprintf($lang->upgrade->upgradeProjectReportsTip, count($upgradeReports))),
             set::size('lg'),
             progressBar
             (
@@ -37,11 +37,11 @@ div
                 (
                     setID('upgradeReportsBtn'),
                     set::type('primary'),
-                    set::url('upgrade', 'upgradeWeeklyReports', "fromVersion={$fromVersion}&processed=yes"),
-                    on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingWeeklyReports, $lang->upgrade->next),
-                    span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingWeeklyReports),
+                    set::url('upgrade', 'upgradeProjectReports', "fromVersion={$fromVersion}&processed=yes"),
+                    on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingProjectReports, $lang->upgrade->next),
+                    span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingProjectReports),
                     span(setClass('hidden as-finish-text'), $lang->upgrade->next),
-                    $lang->upgrade->upgradeWeeklyReports
+                    $lang->upgrade->upgradeProjectReports
                 )
             )
         )

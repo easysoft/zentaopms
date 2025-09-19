@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 projectModel->getUpgradeWeeklyReports();
+title=测试 projectModel->getUpgradeProjectReports();
 timeout=0
 cid=1
 
@@ -11,7 +11,7 @@ cid=1
  - 属性project @2
  - 属性weekStart @2025-01-08
  - 属性projectStatus @doing
- - 属性projectBegin @2025-01-01
+ - 属性projectBegin @2024-12-30
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -28,7 +28,7 @@ su('admin');
 
 global $tester;
 $upgradeModel = $tester->loadModel('upgrade');
-$result       = $upgradeModel->getUpgradeWeeklyReports();
+$result       = $upgradeModel->getUpgradeProjectReports();
 
 r(count($result)) && p()                                               && e('8');                             // 检查周报数量
-r($result[0])     && p('project,weekStart,projectStatus,projectBegin') && e('2,2025-01-08,doing,2025-01-01'); // 检查周报信息
+r($result[0])     && p('project,weekStart,projectStatus,projectBegin') && e('2,2025-01-08,doing,2024-12-30'); // 检查周报信息
