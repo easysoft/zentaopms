@@ -5815,4 +5815,19 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test reset method.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return bool
+     */
+    public function resetTest(string $dashboard)
+    {
+        $result = $this->objectModel->reset($dashboard);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
