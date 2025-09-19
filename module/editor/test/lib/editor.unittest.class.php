@@ -816,21 +816,56 @@ class editorTest
     /**
      * Test for get class name by path.
      *
+     * @param  int $testStep
      * @access public
      * @return string
      */
-    public function getClassNameByPathTest()
+    public function getClassNameByPathTest($testStep = 0)
     {
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
         $extPath    = $this->objectModel->app->getExtensionRoot() . 'custom' . DS;
 
-        $result    = '';
-        $filePath  = $modulePath . 'model.php' . DS . 'create';
-        $className = $this->objectModel->getClassNameByPath($filePath);
-        $result   .= $className == 'todo' ? '1,' : '0,';
-        $filePath  = $extPath . 'todo' . DS . 'ext' . DS . 'control';
-        $className = $this->objectModel->getClassNameByPath($filePath);
-        $result   .= $className == 'todo' ? '1' : '0';
-        return $result;
+        switch($testStep)
+        {
+            case 1:
+                // 测试module路径
+                $filePath  = $modulePath . 'model.php';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                return $className == 'todo' ? '1' : '0';
+
+            case 2:
+                // 测试ext路径
+                $filePath  = $extPath . 'todo' . DS . 'ext' . DS . 'control';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                return $className == 'todo' ? '1' : '0';
+
+            case 3:
+                // 测试extension路径
+                $filePath  = $this->objectModel->app->getExtensionRoot() . 'extension' . DS . 'custom' . DS . 'user' . DS . 'model';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                return $className == 'user' ? '1' : '0';
+
+            case 4:
+                // 测试不包含特殊路径的情况
+                $filePath  = '/some/random/path/task/file.php';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                return $className == 'file.php' ? '1' : '0';
+
+            case 5:
+                // 测试空路径
+                $className = $this->objectModel->getClassNameByPath('');
+                return $className == '' ? '1' : '0';
+
+            default:
+                // 原始组合测试
+                $result    = '';
+                $filePath  = $modulePath . 'model.php' . DS . 'create';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                $result   .= $className == 'todo' ? '1,' : '0,';
+                $filePath  = $extPath . 'todo' . DS . 'ext' . DS . 'control';
+                $className = $this->objectModel->getClassNameByPath($filePath);
+                $result   .= $className == 'todo' ? '1' : '0';
+                return $result;
+        }
     }
 }
