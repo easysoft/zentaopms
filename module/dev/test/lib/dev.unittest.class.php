@@ -68,13 +68,105 @@ class devTest
      * Test get all modules.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getModulesTest()
     {
         $result = $this->objectModel->getModules();
         foreach($result as $module => $group) $result[$module] = current($group);
         return $result;
+    }
+
+    /**
+     * Test get modules exclude logic.
+     *
+     * @access public
+     * @return array
+     */
+    public function getModulesExcludeTest()
+    {
+        $result = $this->objectModel->getModules();
+        $excludeCheck = array();
+        $excludedModules = array('common', 'editor', 'help', 'setting');
+
+        foreach($result as $groupName => $modules)
+        {
+            foreach($modules as $module)
+            {
+                if(in_array($module, $excludedModules))
+                {
+                    $excludeCheck[$module] = '1';
+                }
+            }
+        }
+
+        foreach($excludedModules as $module)
+        {
+            if(!isset($excludeCheck[$module])) $excludeCheck[$module] = '0';
+        }
+
+        return $excludeCheck;
+    }
+
+    /**
+     * Test get modules group count.
+     *
+     * @access public
+     * @return int
+     */
+    public function getModulesGroupCountTest()
+    {
+        $result = $this->objectModel->getModules();
+        $groupCount = 0;
+        foreach($result as $groupName => $modules)
+        {
+            if(!empty($modules)) $groupCount++;
+        }
+        return $groupCount;
+    }
+
+    /**
+     * Test get modules with extension.
+     *
+     * @access public
+     * @return int
+     */
+    public function getModulesWithExtensionTest()
+    {
+        $result = $this->objectModel->getModules();
+        $totalModules = 0;
+        foreach($result as $groupName => $modules)
+        {
+            $totalModules += count($modules);
+        }
+        return $totalModules;
+    }
+
+    /**
+     * Test get modules structure.
+     *
+     * @access public
+     * @return array
+     */
+    public function getModulesStructureTest()
+    {
+        $result = $this->objectModel->getModules();
+        $structure = array();
+        $structure['hasGroups'] = !empty($result) ? '1' : '0';
+        $structure['groupCount'] = count($result);
+
+        $hasValidStructure = true;
+        foreach($result as $groupName => $modules)
+        {
+            if(!is_array($modules))
+            {
+                $hasValidStructure = false;
+                break;
+            }
+        }
+        $structure['validStructure'] = $hasValidStructure ? '1' : '0';
+
+        return $structure;
     }
 
     /**
@@ -231,6 +323,42 @@ class devTest
     public function getLinkParamsTest($link)
     {
         $result = $this->objectModel->getLinkParams($link);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getMenuObject method.
+     *
+     * @param  string $label
+     * @param  string $module
+     * @param  string $method
+     * @param  bool   $active
+     * @param  array  $titlePinYin
+     * @access public
+     * @return mixed
+     */
+    public function getMenuObjectTest($label, $module, $method, $active = false, $titlePinYin = array())
+    {
+        $result = $this->objectModel->getMenuObject($label, $module, $method, $active, $titlePinYin);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getSecondMenus method.
+     *
+     * @param  string $menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function getSecondMenusTest($menu, $module = '', $method = '')
+    {
+        $result = $this->objectModel->getSecondMenus($menu, $module, $method);
         if(dao::isError()) return dao::getError();
 
         return $result;
