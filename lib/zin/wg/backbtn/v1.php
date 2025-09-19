@@ -98,7 +98,9 @@ class backBtn extends btn
             'deploy'         => 'deploy-browse',
             'program'        => 'program-browse,program-productview',
             'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
-            'deliverable'    => 'deliverable-browse'
+            'deliverable'    => 'deliverable-browse',
+            'weekly'         => 'weekly-browse',
+            'milestone'      => 'weekly-browse'
         );
 
         $props  = parent::getProps();
