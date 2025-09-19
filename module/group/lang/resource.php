@@ -1815,7 +1815,6 @@ $lang->user->methodOrder[85] = 'setPublicTemplate';
 $lang->resource->tree = new stdclass();
 $lang->resource->tree->browse      = 'browse';
 $lang->resource->tree->browseTask  = 'browseTask';
-$lang->resource->tree->create      = 'create';
 $lang->resource->tree->updateOrder = 'updateOrder';
 $lang->resource->tree->manageChild = 'manageChild';
 $lang->resource->tree->edit        = 'edit';
@@ -1824,7 +1823,6 @@ $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
 $lang->tree->methodOrder[10] = 'browseTask';
-$lang->tree->methodOrder[15] = 'create';
 $lang->tree->methodOrder[20] = 'updateOrder';
 $lang->tree->methodOrder[25] = 'manageChild';
 $lang->tree->methodOrder[30] = 'edit';

@@ -10,9 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$exportBtn = null;
 if(hasPriv('weekly', 'exportreport'))
 {
-    div
+    $exportBtn = div
     (
         btn
         (
@@ -25,6 +26,12 @@ if(hasPriv('weekly', 'exportreport'))
         )
     );
 }
+
+detailHeader
+(
+    set::backBtn(),
+    set::suffix($exportBtn)
+);
 
 /* Build overview. */
 h::table
