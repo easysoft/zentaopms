@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if(hasPriv('weekly', 'exportweeklyreport'))
+if(hasPriv('weekly', 'exportreport'))
 {
     div
     (
