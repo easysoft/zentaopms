@@ -114,16 +114,18 @@ class compileTest
      * @param  string $data
      * @param  string $type
      * @access public
-     * @return void
+     * @return object|false
      */
     public function createByJobTest($jobID, $data = '', $type = 'tag')
     {
         global $tester;
-        $id = $this->objectModel->createByJob($jobID, $data = '', $type = 'tag');
-
-        $objects = $tester->dao->select('name')->from(TABLE_COMPILE)->where('id')->eq($id)->fetch();
+        $id = $this->objectModel->createByJob($jobID, $data, $type);
 
         if(dao::isError()) return dao::getError();
+        if($id === false) return false;
+
+        $objects = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($id)->fetch();
+        if(!$objects) return false;
 
         return $objects;
     }
