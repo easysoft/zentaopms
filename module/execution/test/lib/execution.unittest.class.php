@@ -396,7 +396,7 @@ class executionTest
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Inactive($executionID, $status, $selfAndChildren, $siblingList);
+        $result = $this->executionModel->changeStatus2Inactive($executionID, $status, $selfAndChildren);
 
         if(dao::isError())
         {
