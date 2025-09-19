@@ -443,6 +443,22 @@ class adminTest
     }
 
     /**
+     * Test checkInternet method.
+     *
+     * @param  string $url
+     * @param  int    $timeout
+     * @access public
+     * @return mixed
+     */
+    public function checkInternetTest(string $url = '', int $timeout = 1)
+    {
+        $result = $this->objectModel->checkInternet($url, $timeout);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
+    /**
      * Test getZentaoData method.
      *
      * @param  object|null $zentaoWebsiteConfig
@@ -454,15 +470,15 @@ class adminTest
     public function getZentaoDataTest($zentaoWebsiteConfig = null, $edition = 'open', $isNotCN = false)
     {
         global $config;
-        
+
         // 保存原始配置
         $originalZentaoWebsite = isset($config->zentaoWebsite) ? $config->zentaoWebsite : null;
         $originalEdition = isset($config->edition) ? $config->edition : null;
-        
+
         // 设置测试配置
         $config->zentaoWebsite = $zentaoWebsiteConfig;
         $config->edition = $edition;
-        
+
         // 设置预设插件配置
         if(!isset($config->admin)) $config->admin = new stdClass();
         if(!isset($config->admin->plugins)) {
@@ -475,21 +491,21 @@ class adminTest
                 '203' => (object)array('name' => '企业版插件3', 'id' => '203')
             );
         }
-        
+
         // 设置Zen对象的配置引用
         $this->objectZen->config = $config;
-        
+
         // Mock common::checkNotCN() 方法
         if(!function_exists('mockCheckNotCN')) {
             function mockCheckNotCN($isNotCN) {
                 return $isNotCN;
             }
         }
-        
+
         $reflection = new ReflectionClass($this->objectZen);
         $method = $reflection->getMethod('getZentaoData');
         $method->setAccessible(true);
-        
+
         // 如果需要模拟非中国地区，临时替换common::checkNotCN方法
         if($isNotCN) {
             $originalCheckNotCN = null;
@@ -497,24 +513,24 @@ class adminTest
                 // 无法直接替换静态方法，通过修改返回结果模拟
             }
         }
-        
+
         $result = $method->invoke($this->objectZen);
         if(dao::isError()) return dao::getError();
-        
+
         // 如果是非中国地区且有插件数据，移除最后一个插件（模拟原方法行为）
         if($isNotCN && !empty($result->plugins) && is_array($result->plugins)) {
             array_pop($result->plugins);
         }
-        
+
         // 恢复原始配置
         $config->zentaoWebsite = $originalZentaoWebsite;
         $config->edition = $originalEdition;
-        
+
         // 转换boolean值为数字字符串以符合测试框架期望
         if(isset($result->hasData)) {
             $result->hasData = $result->hasData ? '1' : '0';
         }
-        
+
         return $result;
     }
 }
