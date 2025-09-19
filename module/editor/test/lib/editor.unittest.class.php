@@ -247,65 +247,156 @@ class editorTest
     }
 
     /**
-     * Test for add link for file.
+     * Test addLink4File for view directory files.
      *
      * @access public
-     * @return string
+     * @return array
      */
-    public function addLink4FileTest()
+    public function addLink4FileViewTest()
     {
-        $result     = '';
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $viewPath   = $modulePath . 'view' . DS . 'create.html.php';
+        $link       = $this->objectModel->addLink4File($viewPath, 'create.html.php');
 
-        $viewPath = $modulePath . 'view' . DS . 'create.html.php';
-        $link     = $this->objectModel->addLink4File($viewPath, 'create.html.php');
-        $result  .= ((str_contains($link->actions['items'][0]['data-url'], 'override') && str_contains($link->actions['items'][1]['data-url'], 'newHook')) ? 1 : 0) . ',';
+        return array(
+            'hasOverrideLink' => str_contains($link->actions['items'][0]['data-url'], 'override') ? 1 : 0,
+            'hasNewHookLink'  => str_contains($link->actions['items'][1]['data-url'], 'newHook') ? 1 : 0,
+            'textMatch'       => ($link->text === 'create.html.php') ? 1 : 0,
+            'idLength'        => strlen($link->id)
+        );
+    }
 
+    /**
+     * Test addLink4File for control.php methods.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileControlTest()
+    {
+        $modulePath  = $this->objectModel->app->getModulePath('', 'todo');
         $controlPath = $modulePath . 'control.php' . DS . 'create';
-        $link      = $this->objectModel->addLink4File($controlPath, 'create');
-        $result   .= (str_contains($link->actions['items'][0]['data-url'], 'extendControl') ? 1 : 0) . ',';
+        $link        = $this->objectModel->addLink4File($controlPath, 'create');
 
-        $modelPath = $modulePath . 'model.php' . DS . 'create';
-        $link      = $this->objectModel->addLink4File($modelPath, 'create');
-        $result   .= (str_contains($link->actions['items'][0]['data-url'], 'extendModel') ? 1 : 0) . ',';
+        return array(
+            'hasExtendControlLink' => str_contains($link->actions['items'][0]['data-url'], 'extendControl') ? 1 : 0,
+            'hasApiLink'           => str_contains($link->actions['items'][1]['data-url'], 'api') ? 1 : 0,
+            'actionsCount'         => count($link->actions['items'])
+        );
+    }
 
-        $langPath = $modulePath . 'lang' . DS . 'zh-cn.php';
-        $link     = $this->objectModel->addLink4File($langPath, 'zh-cn.php');
-        $result  .= ((str_contains($link->actions['items'][1]['data-url'], 'newzh_cn') && str_contains($link->actions['items'][0]['data-url'], 'extendOther')) ? 1 : 0) . ',';
+    /**
+     * Test addLink4File for model.php methods.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileModelTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php' . DS . 'create';
+        $link       = $this->objectModel->addLink4File($modelPath, 'create');
 
-        $configPath = $modulePath . 'config.php';
-        $link       = $this->objectModel->addLink4File($configPath, 'config.php');
-        $result    .= ((str_contains($link->actions['items'][1]['data-url'], 'newConfig') && str_contains($link->actions['items'][0]['data-url'], 'extendOther')) ? 1 : 0) . ',';
+        return array(
+            'hasExtendModelLink' => str_contains($link->actions['items'][0]['data-url'], 'extendModel') ? 1 : 0,
+            'hasApiLink'         => str_contains($link->actions['items'][1]['data-url'], 'api') ? 1 : 0,
+            'actionsCount'       => count($link->actions['items'])
+        );
+    }
 
-        $edition = $this->objectModel->config->edition;
-        if($edition == 'open') return $result . '1,1,1,1,1,1';
-
+    /**
+     * Test addLink4File for ext directory files.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileExtTest()
+    {
         $extensionRoot  = $this->objectModel->app->getExtensionRoot();
-        $extensionPath  = $extensionRoot . $edition . DS . 'todo' . DS . 'ext' . DS;
+        $extensionPath  = $extensionRoot . 'custom' . DS . 'todo' . DS . 'ext' . DS;
         $extControlPath = $extensionPath . 'control' . DS . 'create.php';
         $link           = $this->objectModel->addLink4File($extControlPath, 'create.php');
-        $result        .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
-        $extModelPath = $extensionPath . 'model' . DS . 'zentaobiz.class.php';
-        $link         = $this->objectModel->addLink4File($extModelPath, 'zentaobiz.class.php');
-        $result      .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        return array(
+            'hasEditLink'    => str_contains($link->actions['items'][0]['data-url'], 'edit') ? 1 : 0,
+            'hasDeleteLink'  => isset($link->actions['items'][1]['url']) && str_contains($link->actions['items'][1]['url'], 'delete') ? 1 : 0,
+            'confirmExists'  => isset($link->actions['items'][1]['data-confirm']) ? 1 : 0
+        );
+    }
 
-        $extJSPath = $extensionPath . 'js' . DS . 'create' . DS . 'zentaobiz.js';
-        $link      = $this->objectModel->addLink4File($extJSPath, 'zentaobiz.js');
-        $result   .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+    /**
+     * Test addLink4File for lang directory files.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileLangTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $langPath   = $modulePath . 'lang' . DS . 'zh-cn.php';
+        $link       = $this->objectModel->addLink4File($langPath, 'zh-cn.php');
 
-        $extCSSPath = $extensionPath . 'css' . DS . 'create' . DS . 'zentaobiz.css';
-        $link       = $this->objectModel->addLink4File($extCSSPath, 'zentaobiz.css');
-        $result    .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        return array(
+            'hasExtendOtherLink' => str_contains($link->actions['items'][0]['data-url'], 'extendOther') ? 1 : 0,
+            'hasNewLangLink'     => str_contains($link->actions['items'][1]['data-url'], 'newzh_cn') ? 1 : 0,
+            'actionsCount'       => count($link->actions['items'])
+        );
+    }
 
-        $extLangPath = $extensionPath . 'lang' . DS . 'zh-cn' . DS . 'zentaobiz.php';
-        $link        = $this->objectModel->addLink4File($extLangPath, 'zentaobiz.php');
-        $result     .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+    /**
+     * Test addLink4File for config.php file.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileConfigTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $configPath = $modulePath . 'config.php';
+        $link       = $this->objectModel->addLink4File($configPath, 'config.php');
 
-        $extConfigPath = $extensionPath . 'config' . DS . 'zentaobiz.php';
-        $link          = $this->objectModel->addLink4File($extConfigPath, 'zentaobiz.php');
-        $result       .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0);
-        return $result;
+        return array(
+            'hasExtendOtherLink' => str_contains($link->actions['items'][0]['data-url'], 'extendOther') ? 1 : 0,
+            'hasNewConfigLink'   => str_contains($link->actions['items'][1]['data-url'], 'newConfig') ? 1 : 0,
+            'actionsCount'       => count($link->actions['items'])
+        );
+    }
+
+    /**
+     * Test addLink4File for empty file path edge case.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileEmptyTest()
+    {
+        $emptyPath = '';
+        $link      = $this->objectModel->addLink4File($emptyPath, '');
+
+        return array(
+            'hasBasicStructure' => (isset($link->id) && isset($link->name) && isset($link->text) && isset($link->actions)) ? 1 : 0,
+            'idExists'          => !empty($link->id) ? 1 : 0,
+            'actionsExists'     => isset($link->actions['items']) ? 1 : 0
+        );
+    }
+
+    /**
+     * Test addLink4File for special characters in path.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4FileSpecialCharsTest()
+    {
+        $specialFile = 'test@#$%^&*()_+-=[]{}|;:,.<>?file.php';
+        $specialPath = '/tmp/special/path';
+        $link        = $this->objectModel->addLink4File($specialPath, $specialFile);
+
+        return array(
+            'hasValidId'     => !empty($link->id) && strlen($link->id) === 32 ? 1 : 0,
+            'namePreserved'  => ($link->name === $specialFile) ? 1 : 0,
+            'textPreserved'  => ($link->text === $specialFile) ? 1 : 0
+        );
     }
 
     /**
