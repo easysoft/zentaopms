@@ -7,11 +7,11 @@ title=测试 testcaseZen::assignEditSceneVars();
 timeout=0
 cid=0
 
-- 步骤1：正常场景编辑变量分配属性executed @1
-- 步骤2：产品不存在场景的变量分配属性executed @0
-- 步骤3：分支不存在场景的变量分配属性executed @1
-- 步骤4：模块不存在场景的变量分配属性executed @0
-- 步骤5：无效场景对象的变量分配属性executed @0
+- 步骤1：正常场景对象编辑变量分配属性executed @1
+- 步骤2：产品不存在的场景对象变量分配属性executed @0
+- 步骤3：分支不存在的场景对象变量分配属性executed @1
+- 步骤4：模块不存在的场景对象变量分配属性executed @0
+- 步骤5：无效场景对象变量分配属性executed @0
 
 */
 
@@ -21,38 +21,38 @@ include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $product = zenData('product');
-$product->id->range('1-3');
-$product->name->range('产品{1-3}');
+$product->id->range('1-5');
+$product->name->range('产品{1-5}');
 $product->type->range('normal');
 $product->status->range('normal');
 $product->deleted->range('0');
-$product->gen(3);
+$product->gen(5);
 
 $branch = zenData('branch');
-$branch->id->range('1-5');
-$branch->product->range('1{2},2{2},3{1}');
-$branch->name->range('分支{1-5}');
-$branch->status->range('active');
+$branch->id->range('1-10');
+$branch->product->range('1{3},2{3},3{2},4{2}');
+$branch->name->range('分支{1-10}');
+$branch->status->range('active{8},closed{2}');
 $branch->deleted->range('0');
-$branch->gen(5);
+$branch->gen(10);
 
 $module = zenData('module');
-$module->id->range('1-10');
-$module->root->range('1{4},2{3},3{3}');
-$module->name->range('模块{1-10}');
+$module->id->range('1-15');
+$module->root->range('1{5},2{5},3{5}');
+$module->name->range('模块{1-15}');
 $module->type->range('case');
 $module->deleted->range('0');
-$module->gen(10);
+$module->gen(15);
 
 $scene = zenData('scene');
-$scene->id->range('1-5');
-$scene->product->range('1{2},2{2},3{1}');
-$scene->branch->range('1{2},2{2},3{1}');
-$scene->module->range('1{2},2{2},3{1}');
-$scene->title->range('场景{1-5}');
+$scene->id->range('1-10');
+$scene->product->range('1{3},2{3},3{2},4{2}');
+$scene->branch->range('1{3},2{3},3{2},4{2}');
+$scene->module->range('1{3},2{3},3{2},4{2}');
+$scene->title->range('场景{1-10}');
 $scene->parent->range('0');
 $scene->deleted->range('0');
-$scene->gen(5);
+$scene->gen(10);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -98,8 +98,8 @@ $invalidScene = new stdClass();
 $invalidScene->id = 5;
 
 // 6. 🔴 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->assignEditSceneVarsTest($normalScene)) && p('executed') && e('1'); // 步骤1：正常场景编辑变量分配
-r($testcaseTest->assignEditSceneVarsTest($invalidProductScene)) && p('executed') && e('0'); // 步骤2：产品不存在场景的变量分配
-r($testcaseTest->assignEditSceneVarsTest($invalidBranchScene)) && p('executed') && e('1'); // 步骤3：分支不存在场景的变量分配
-r($testcaseTest->assignEditSceneVarsTest($invalidModuleScene)) && p('executed') && e('0'); // 步骤4：模块不存在场景的变量分配
-r($testcaseTest->assignEditSceneVarsTest($invalidScene)) && p('executed') && e('0'); // 步骤5：无效场景对象的变量分配
+r($testcaseTest->assignEditSceneVarsTest($normalScene)) && p('executed') && e('1'); // 步骤1：正常场景对象编辑变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidProductScene)) && p('executed') && e('0'); // 步骤2：产品不存在的场景对象变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidBranchScene)) && p('executed') && e('1'); // 步骤3：分支不存在的场景对象变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidModuleScene)) && p('executed') && e('0'); // 步骤4：模块不存在的场景对象变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidScene)) && p('executed') && e('0'); // 步骤5：无效场景对象变量分配
