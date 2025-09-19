@@ -603,6 +603,21 @@ class backupTest
     }
 
     /**
+     * Test removeFileHeader method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return mixed
+     */
+    public function removeFileHeaderTest($fileName = null)
+    {
+        $result = $this->objectModel->removeFileHeader($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
