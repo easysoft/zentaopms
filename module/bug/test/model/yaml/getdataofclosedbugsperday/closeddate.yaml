@@ -4,7 +4,7 @@ author: Tingting Dai
 version: "1.0"
 fields:
 - field: closedDate
-  range: "20230525 000000" 
+  range: "20230525 000000"
   type: timestamp
   format: "YYYY-MM-DD hh:mm:ss"
 ...
