@@ -143,6 +143,7 @@ $lang->ai->prompts->action->disable          = 'Disable';
 $lang->ai->prompts->action->deleteConfirm    = 'Deleted zenTao agents will be no longer available. Are you sure you want to proceed?';
 $lang->ai->prompts->action->publishSuccess   = 'Publish Success';
 $lang->ai->prompts->action->unpublishSuccess = 'Unpublish Success';
+$lang->ai->prompts->action->deleteSuccess    = 'Delete Success';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';

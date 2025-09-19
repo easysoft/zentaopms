@@ -143,6 +143,7 @@ $lang->ai->prompts->action->disable          = '禁用';
 $lang->ai->prompts->action->deleteConfirm    = '删除后，禅道智能体将不能继续使用，您确定要删除吗？';
 $lang->ai->prompts->action->publishSuccess   = '发布成功';
 $lang->ai->prompts->action->unpublishSuccess = '下架成功';
+$lang->ai->prompts->action->deleteSuccess    = '删除成功';
 
 /* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
