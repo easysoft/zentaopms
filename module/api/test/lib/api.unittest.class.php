@@ -48,6 +48,21 @@ class apiTest
     }
 
     /**
+     * Test getApiStatusText method.
+     *
+     * @param  string $status
+     * @access public
+     * @return string
+     */
+    public function getApiStatusTextTest($status)
+    {
+        $result = $this->objectModel->getApiStatusText($status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test create a api.
      *
      * @param  array  $params
@@ -73,23 +88,15 @@ class apiTest
      * Test create a data struct.
      *
      * @param  object $data
-     * @param  bool   $confirm
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function createStructTest($data, $confirm = true)
+    public function createStructTest($data)
     {
-        global $tester;
-
-        $objectID = $this->objectModel->createStruct($data);
-
+        $result = $this->objectModel->createStruct($data);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getStructByID($objectID);
-
-        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($objects->id)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
