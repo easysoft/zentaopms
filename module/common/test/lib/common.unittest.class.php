@@ -2745,4 +2745,18 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test replaceMenuLang method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function replaceMenuLangTest()
+    {
+        $result = $this->objectModel->replaceMenuLang();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
