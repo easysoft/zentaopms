@@ -150,4 +150,34 @@ class dataviewTest
 
         return $moduleTree;
     }
+
+    /**
+     * Test getModuleNames method.
+     *
+     * @param  array $tables
+     * @access public
+     * @return mixed
+     */
+    public function getModuleNamesTest($tables)
+    {
+        $result = $this->objectModel->getModuleNames($tables);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTypeOptions method.
+     *
+     * @param  string $objectName
+     * @access public
+     * @return mixed
+     */
+    public function getTypeOptionsTest($objectName)
+    {
+        $result = $this->objectModel->getTypeOptions($objectName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
