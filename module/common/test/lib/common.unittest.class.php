@@ -2730,4 +2730,19 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test judgeSuhosinSetting method.
+     *
+     * @param  int $countInputVars
+     * @access public
+     * @return bool
+     */
+    public function judgeSuhosinSettingTest($countInputVars)
+    {
+        $result = $this->objectModel->judgeSuhosinSetting($countInputVars);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
