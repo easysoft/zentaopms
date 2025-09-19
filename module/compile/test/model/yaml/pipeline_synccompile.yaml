@@ -1,0 +1,82 @@
+---
+title: 数据定义 for pipeline table in syncCompile test
+desc: syncCompile方法测试时pipeline表数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 流水线ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 流水线类型
+  range: jenkins{3},gitlab{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 流水线名称
+  range: 1-5
+  prefix: "测试流水线"
+  postfix: ""
+  loop: 0
+  format: ""
+- field: url
+  note: 服务器地址
+  range: '[https://jenkins-test.com]{3},[https://gitlab-test.com]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账号
+  range: admin{3},jenkins{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: '[dGVzdDEyMw==]{3},[dGVzdDQ1Ng==]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: token
+  note: 访问令牌
+  range: '[token123]{3},[glpat-test]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: private
+  note: 私钥
+  range: test_private_key{3},''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{4},user{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: "(M)-(w)"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

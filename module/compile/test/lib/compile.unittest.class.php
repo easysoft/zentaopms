@@ -200,6 +200,52 @@ class compileTest
     }
 
     /**
+     * Test getLogs method.
+     *
+     * @param  object $job
+     * @param  object $compile
+     * @access public
+     * @return string
+     */
+    public function getLogsTest($job, $compile)
+    {
+        $result = $this->objectModel->getLogs($job, $compile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getUnexecutedList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUnexecutedListTest()
+    {
+        $result = $this->objectModel->getUnexecutedList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test syncCompile method.
+     *
+     * @param  int $repoID
+     * @param  int $jobID
+     * @access public
+     * @return bool
+     */
+    public function syncCompileTest($repoID = 0, $jobID = 0)
+    {
+        $result = $this->objectModel->syncCompile($repoID, $jobID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel一些比较简单的方法。
      * Magic method, call some simple methods of objectModel.
      *
