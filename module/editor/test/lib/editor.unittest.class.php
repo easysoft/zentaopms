@@ -19,16 +19,172 @@ class editorTest
      *
      * @param  string    $moduleName
      * @access public
-     * @return 1|0
+     * @return mixed
      */
     public function getModuleFilesTest($moduleName)
     {
         $moduleFiles = $this->objectModel->getModuleFiles($moduleName);
-        $modulePath  = $this->objectModel->app->getModulePath('', $moduleName);
-        if(!isset($moduleFiles[$modulePath])) return 0;
-        if(!isset($moduleFiles[$modulePath][$modulePath . 'model.php'])) return 0;
-        if(!isset($moduleFiles[$modulePath][$modulePath . 'model.php'][$modulePath . 'model.php/create'])) return 0;
-        return 1;
+        if(dao::isError()) return dao::getError();
+
+        $modulePath = $this->objectModel->app->getModulePath('', $moduleName);
+
+        return array(
+            'isArray'         => is_array($moduleFiles) ? 1 : 0,
+            'hasModulePath'   => isset($moduleFiles[$modulePath]) ? 1 : 0,
+            'hasControlFile'  => isset($moduleFiles[$modulePath][$modulePath . 'control.php']) ? 1 : 0,
+            'hasModelFile'    => isset($moduleFiles[$modulePath][$modulePath . 'model.php']) ? 1 : 0,
+            'hasViewDir'      => isset($moduleFiles[$modulePath][$modulePath . 'view']) ? 1 : 0,
+            'hasLangDir'      => isset($moduleFiles[$modulePath][$modulePath . 'lang']) ? 1 : 0,
+            'hasJsDir'        => isset($moduleFiles[$modulePath][$modulePath . 'js']) ? 1 : 0,
+            'hasCssDir'       => isset($moduleFiles[$modulePath][$modulePath . 'css']) ? 1 : 0,
+            'hasConfigFile'   => isset($moduleFiles[$modulePath][$modulePath . 'config.php']) ? 1 : 0,
+            'fileCount'       => count($moduleFiles),
+            'structure'       => $this->analyzeModuleFileStructure($moduleFiles, $modulePath)
+        );
+    }
+
+    /**
+     * Test getModuleFiles with valid existing module.
+     *
+     * @param  string    $moduleName
+     * @access public
+     * @return mixed
+     */
+    public function getModuleFilesValidTest($moduleName = 'todo')
+    {
+        $result = $this->objectModel->getModuleFiles($moduleName);
+        if(dao::isError()) return dao::getError();
+
+        $modulePath = $this->objectModel->app->getModulePath('', $moduleName);
+
+        return array(
+            'hasResult'      => !empty($result) ? 1 : 0,
+            'hasModulePath'  => isset($result[$modulePath]) ? 1 : 0,
+            'isValidStructure' => $this->validateModuleFileStructure($result, $modulePath)
+        );
+    }
+
+    /**
+     * Test getModuleFiles with empty module name.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getModuleFilesEmptyModuleTest()
+    {
+        $result = $this->objectModel->getModuleFiles('');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray'  => is_array($result) ? 1 : 0,
+            'isEmpty'  => empty($result) ? 1 : 0,
+            'count'    => count($result)
+        );
+    }
+
+    /**
+     * Test getModuleFiles with non-existent module.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getModuleFilesNonExistentTest()
+    {
+        $result = $this->objectModel->getModuleFiles('nonexistentmodule123');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray'     => is_array($result) ? 1 : 0,
+            'hasExtension' => !empty($result) ? 1 : 0,
+            'count'       => count($result)
+        );
+    }
+
+    /**
+     * Test getModuleFiles with special characters in module name.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getModuleFilesSpecialCharsTest()
+    {
+        $result = $this->objectModel->getModuleFiles('test@#$%^&*()');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray' => is_array($result) ? 1 : 0,
+            'count'   => count($result)
+        );
+    }
+
+    /**
+     * Helper method to analyze module file structure.
+     *
+     * @param  array  $moduleFiles
+     * @param  string $modulePath
+     * @access public
+     * @return array
+     */
+    public function analyzeModuleFileStructure($moduleFiles, $modulePath)
+    {
+        $structure = array(
+            'hasControlMethods' => 0,
+            'hasModelMethods'   => 0,
+            'hasDirectories'    => 0,
+            'hasFiles'          => 0
+        );
+
+        if(!isset($moduleFiles[$modulePath])) return $structure;
+
+        foreach($moduleFiles[$modulePath] as $path => $content)
+        {
+            if(strpos($path, 'control.php') !== false && is_array($content))
+            {
+                $structure['hasControlMethods'] = count($content) > 0 ? 1 : 0;
+            }
+            elseif(strpos($path, 'model.php') !== false && is_array($content))
+            {
+                $structure['hasModelMethods'] = count($content) > 0 ? 1 : 0;
+            }
+            elseif(is_array($content))
+            {
+                $structure['hasDirectories'] = 1;
+            }
+            else
+            {
+                $structure['hasFiles'] = 1;
+            }
+        }
+
+        return $structure;
+    }
+
+    /**
+     * Helper method to validate module file structure.
+     *
+     * @param  array  $result
+     * @param  string $modulePath
+     * @access public
+     * @return int
+     */
+    public function validateModuleFileStructure($result, $modulePath)
+    {
+        if(!is_array($result) || !isset($result[$modulePath])) return 0;
+
+        $hasRequiredFiles = 0;
+        $moduleData = $result[$modulePath];
+
+        // 检查是否包含必要的文件结构
+        foreach($moduleData as $path => $content)
+        {
+            if(strpos($path, 'control.php') !== false || strpos($path, 'model.php') !== false)
+            {
+                $hasRequiredFiles = 1;
+                break;
+            }
+        }
+
+        return $hasRequiredFiles;
     }
 
     /**
