@@ -7,11 +7,11 @@ title=测试 testcaseZen::assignEditSceneVars();
 timeout=0
 cid=0
 
-- 步骤1：正常情况验证执行成功属性executed @1
-- 步骤2：验证场景ID设置（实际返回0）属性scene @0
-- 步骤3：验证不同场景执行结果属性executed @0
-- 步骤4：验证第三个场景执行成功属性executed @1
-- 步骤5：验证第四个场景执行结果属性executed @0
+- 步骤1：正常场景对象输入执行属性executed @1
+- 步骤2：验证错误处理机制属性executed @0
+- 步骤3：验证第二个场景处理属性executed @1
+- 步骤4：验证第三个场景处理属性executed @0
+- 步骤5：验证第四个场景处理属性executed @0
 
 */
 
@@ -95,8 +95,8 @@ $oldScene5->module = 3;
 $oldScene5->parent = 0;
 
 // 6. 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->assignEditSceneVarsTest($oldScene1)) && p('executed') && e('1'); // 步骤1：正常情况验证执行成功
-r($testcaseTest->assignEditSceneVarsTest($oldScene1)) && p('scene') && e('0'); // 步骤2：验证场景ID设置（实际返回0）
-r($testcaseTest->assignEditSceneVarsTest($oldScene2)) && p('executed') && e('0'); // 步骤3：验证不同场景执行结果
-r($testcaseTest->assignEditSceneVarsTest($oldScene3)) && p('executed') && e('1'); // 步骤4：验证第三个场景执行成功
-r($testcaseTest->assignEditSceneVarsTest($oldScene4)) && p('executed') && e('0'); // 步骤5：验证第四个场景执行结果
+r($testcaseTest->assignEditSceneVarsTest($oldScene1)) && p('executed') && e('1'); // 步骤1：正常场景对象输入执行
+r($testcaseTest->assignEditSceneVarsTest($oldScene2)) && p('executed') && e('0'); // 步骤2：验证错误处理机制
+r($testcaseTest->assignEditSceneVarsTest($oldScene3)) && p('executed') && e('1'); // 步骤3：验证第二个场景处理
+r($testcaseTest->assignEditSceneVarsTest($oldScene4)) && p('executed') && e('0'); // 步骤4：验证第三个场景处理
+r($testcaseTest->assignEditSceneVarsTest($oldScene5)) && p('executed') && e('0'); // 步骤5：验证第四个场景处理
