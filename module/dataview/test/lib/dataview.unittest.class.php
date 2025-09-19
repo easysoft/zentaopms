@@ -99,4 +99,22 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test checkUniColumn method.
+     *
+     * @param  string $sql
+     * @param  string $driverName
+     * @param  bool   $repeat
+     * @param  array  $columns
+     * @access public
+     * @return mixed
+     */
+    public function checkUniColumnTest($sql, $driverName = 'mysql', $repeat = false, $columns = array())
+    {
+        $result = $this->objectModel->checkUniColumn($sql, $driverName, $repeat, $columns);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
