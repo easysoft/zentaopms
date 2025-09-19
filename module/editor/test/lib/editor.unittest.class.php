@@ -36,19 +36,216 @@ class editorTest
      *
      * @param  string    $moduleName
      * @access public
-     * @return 1|0
+     * @return mixed
      */
     public function getExtensionFilesTest($moduleName)
+    {
+        $files = $this->objectModel->getExtensionFiles($moduleName);
+        if(dao::isError()) return dao::getError();
+
+        // 返回扩展文件列表的结构信息
+        return array(
+            'isArray'       => is_array($files),
+            'isEmpty'       => empty($files),
+            'extensionCount' => count($files),
+            'hasExtensionTypes' => $this->hasExpectedExtensionTypes($files),
+            'structure'     => $this->analyzeExtensionStructure($files)
+        );
+    }
+
+    /**
+     * Test for get extension files with specific module.
+     *
+     * @param  string    $moduleName
+     * @access public
+     * @return mixed
+     */
+    public function getExtensionFilesSpecificTest($moduleName)
     {
         $files   = $this->objectModel->getExtensionFiles($moduleName);
         $edition = $this->objectModel->config->edition;
 
-        if($edition == 'open') return 1;
+        if($edition == 'open') return array('edition' => 'open', 'result' => 1);
 
         $extensionRoot = $this->objectModel->app->getExtensionRoot();
         $extensionPath = $extensionRoot . $edition . DS . $moduleName . DS . 'ext' . DS . 'control' . DS;
-        if(!isset($files[$edition][$extensionPath])) return 0;
-        return 1;
+        $hasExpectedPath = isset($files[$edition][$extensionPath]);
+
+        return array(
+            'edition' => $edition,
+            'hasExpectedPath' => $hasExpectedPath ? 1 : 0,
+            'result' => $hasExpectedPath ? 1 : 0
+        );
+    }
+
+    /**
+     * Test for get extension files with empty module name.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getExtensionFilesEmptyTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray' => is_array($files),
+            'isEmpty' => empty($files),
+            'count'   => count($files)
+        );
+    }
+
+    /**
+     * Test for get extension files with non-existent module.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getExtensionFilesNonExistentTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('nonexistentmodule123');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray' => is_array($files),
+            'isEmpty' => empty($files),
+            'count'   => count($files)
+        );
+    }
+
+    /**
+     * Test for get extension files with special characters in module name.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getExtensionFilesSpecialCharsTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('test@#$%^&*()');
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'isArray' => is_array($files),
+            'isEmpty' => empty($files),
+            'count'   => count($files)
+        );
+    }
+
+    /**
+     * Helper method to check if extension files contain expected types.
+     *
+     * @param  array $files
+     * @access public
+     * @return int
+     */
+    public function hasExpectedExtensionTypes($files)
+    {
+        $expectedTypes = array('model', 'control', 'view', 'lang', 'js', 'css', 'config');
+        $foundTypes = 0;
+
+        if(!is_array($files)) return 0;
+
+        foreach($files as $edition => $extensionPaths)
+        {
+            if(!is_array($extensionPaths)) continue;
+            foreach($extensionPaths as $path => $content)
+            {
+                foreach($expectedTypes as $type)
+                {
+                    if(strpos($path, DS . $type . DS) !== false)
+                    {
+                        $foundTypes++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $foundTypes > 0 ? 1 : 0;
+    }
+
+    /**
+     * Helper method to analyze extension file structure.
+     *
+     * @param  array $files
+     * @access public
+     * @return array
+     */
+    public function analyzeExtensionStructure($files)
+    {
+        $structure = array(
+            'hasEditionKeys' => 0,
+            'hasPathKeys'    => 0,
+            'hasFileContent' => 0
+        );
+
+        if(!is_array($files)) return $structure;
+
+        foreach($files as $edition => $extensionPaths)
+        {
+            $structure['hasEditionKeys'] = 1;
+            if(!is_array($extensionPaths)) continue;
+            foreach($extensionPaths as $path => $content)
+            {
+                $structure['hasPathKeys'] = 1;
+                if(!empty($content))
+                {
+                    $structure['hasFileContent'] = 1;
+                }
+            }
+        }
+
+        return $structure;
+    }
+
+    /**
+     * Test for get extension files - basic test.
+     *
+     * @param  string    $moduleName
+     * @access public
+     * @return int
+     */
+    public function getExtensionFilesBasicTest($moduleName)
+    {
+        $files = $this->objectModel->getExtensionFiles($moduleName);
+        return is_array($files) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extension files with empty module name.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtensionFilesEmptyModuleTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('');
+        return (is_array($files) && empty($files)) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extension files with non-existent module.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtensionFilesNonExistentModuleTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('nonexistentmodule123');
+        return (is_array($files) && empty($files)) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extension files with special characters in module name.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtensionFilesSpecialCharsModuleTest()
+    {
+        $files = $this->objectModel->getExtensionFiles('test@#$%^&*()');
+        return (is_array($files) && empty($files)) ? 1 : 0;
     }
 
     /**
@@ -503,7 +700,7 @@ class editorTest
     }
 
     /**
-     * Test for get extend link.
+     * Test for get extend link - test case 1: normal file path.
      *
      * @access public
      * @return 1|0
@@ -514,6 +711,62 @@ class editorTest
         $viewPath   = $modulePath . 'view' . DS . 'create.html.php';
         $link       = $this->objectModel->getExtendLink($viewPath, 'extendOther');
         return (strpos($link, 'edit') !== false && strpos($link, 'extendOther') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extend link - test case 2: with isExtends parameter.
+     *
+     * @access public
+     * @return 1|0
+     */
+    public function getExtendLinkWithExtendsTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php';
+        $link       = $this->objectModel->getExtendLink($modelPath, 'extendModel', 'yes');
+        return (strpos($link, 'edit') !== false && strpos($link, 'extendModel') !== false && strpos($link, 'isExtends=yes') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extend link - test case 3: empty action parameter.
+     *
+     * @access public
+     * @return 1|0
+     */
+    public function getExtendLinkEmptyActionTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $viewPath   = $modulePath . 'view' . DS . 'edit.html.php';
+        $link       = $this->objectModel->getExtendLink($viewPath, '');
+        return strpos($link, 'edit') !== false ? 1 : 0;
+    }
+
+    /**
+     * Test for get extend link - test case 4: control file extension.
+     *
+     * @access public
+     * @return 1|0
+     */
+    public function getExtendLinkControlTest()
+    {
+        $modulePath  = $this->objectModel->app->getModulePath('', 'todo');
+        $controlPath = $modulePath . 'control.php';
+        $link        = $this->objectModel->getExtendLink($controlPath, 'extendControl');
+        return (strpos($link, 'edit') !== false && strpos($link, 'extendControl') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test for get extend link - test case 5: override action.
+     *
+     * @access public
+     * @return 1|0
+     */
+    public function getExtendLinkOverrideTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $viewPath   = $modulePath . 'view' . DS . 'browse.html.php';
+        $link       = $this->objectModel->getExtendLink($viewPath, 'override', 'no');
+        return (strpos($link, 'edit') !== false && strpos($link, 'override') !== false && strpos($link, 'isExtends=no') !== false) ? 1 : 0;
     }
 
     /**
