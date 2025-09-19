@@ -642,7 +642,14 @@ class transferModel extends model
         /* If export spec or verify field, append. */
         if(isset($fieldList['spec']) || isset($fieldList['verify']))
         {
-            $editorDataList = $this->dao->select('story,spec,verify')->from(TABLE_STORYSPEC)->where('story')->in(array_keys($moduleDatas))->fetchAll('story');
+            if($module == 'demand')
+            {
+                $editorDataList = $this->dao->select('demand,spec,verify')->from(TABLE_DEMANDSPEC)->where('demand')->in(array_keys($moduleDatas))->fetchAll('demand');
+            }
+            else
+            {
+                $editorDataList = $this->dao->select('story,spec,verify')->from(TABLE_STORYSPEC)->where('story')->in(array_keys($moduleDatas))->fetchAll('story');
+            }
             foreach($moduleDatas as $moduleData)
             {
                 if(isset($fieldList['spec'])) $moduleData->spec = !empty($editorDataList[$moduleData->id]) ? $editorDataList[$moduleData->id]->spec : $editorDataList[$moduleData->id]->spec;
