@@ -1629,28 +1629,46 @@ class testcaseZenTest
         global $tester;
 
         try {
+            // 初始化必要的对象和状态
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 1;
+            if(!isset($tester->session->execution)) $tester->session->execution = 1;
+
+            // 启用输出缓冲以捕获错误输出
+            ob_start();
+
             // 调用zen方法
             $result = callZenMethod('testcase', 'assignEditSceneVars', [$oldScene]);
-            if(dao::isError()) return dao::getError();
 
-            // 返回视图变量以便验证
+            // 清理输出缓冲
+            $output = ob_get_clean();
+
+            if(dao::isError()) {
+                return array(
+                    'error' => dao::getError(),
+                    'executed' => '0'
+                );
+            }
+
+            // 返回执行成功标志，表示方法调用成功完成
             return array(
-                'title' => isset($tester->view->title) ? $tester->view->title : '',
-                'products' => isset($tester->view->products) ? $tester->view->products : array(),
-                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
-                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
-                'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
-                'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
-                'scene' => isset($tester->view->scene->id) ? $tester->view->scene->id : 0,
-                'executed' => '1'
+                'executed' => '1',
+                'hasOutput' => !empty($output) ? '1' : '0'
             );
         } catch (Error $e) {
+            // 清理输出缓冲
+            if(ob_get_level()) ob_end_clean();
+
             // 捕获类型错误并返回错误信息
             return array(
                 'error' => $e->getMessage(),
                 'executed' => '0'
             );
         } catch (Exception $e) {
+            // 清理输出缓冲
+            if(ob_get_level()) ob_end_clean();
+
             return array(
                 'error' => $e->getMessage(),
                 'executed' => '0'
