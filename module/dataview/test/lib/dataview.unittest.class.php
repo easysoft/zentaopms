@@ -119,6 +119,22 @@ class dataviewTest
     }
 
     /**
+     * Test getAliasNames method.
+     *
+     * @param  object $statement
+     * @param  array  $moduleNames
+     * @access public
+     * @return mixed
+     */
+    public function getAliasNamesTest($statement, $moduleNames)
+    {
+        $result = $this->objectModel->getAliasNames($statement, $moduleNames);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test genTreeOptions method.
      *
      * @param  object $moduleTree
