@@ -77,6 +77,7 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review'))) $features['plan'] = false;
                 if($execution->attribute == 'review') $features['story'] = false;
             }
+            if(empty($execution->hasProduct) && in_array($execution->attribute, array('plan', 'develop', 'qualify', 'launch'))) $features['plan'] = false;
         }
 
         /* The plan function is disabled for no-product project. */
