@@ -780,7 +780,7 @@ class apiTest
 
         // 创建apiZen实例
         $apiZen = new apiZen();
-        
+
         // 为apiZen对象注入必要的依赖
         $apiZen->config = $tester->config;
         $apiZen->session = $tester->session;
@@ -789,14 +789,14 @@ class apiTest
 
         // 备份原始 $_POST 数据
         $originalPost = $_POST;
-        
+
         // 设置测试用的 $_POST 数据
         $_POST = $postData;
 
         // 模拟 URL 构建过程，不实际调用 file_get_contents
         $host = 'http://localhost';  // 模拟系统URL
         $param = '';
-        
+
         if($action == 'extendModel')
         {
             if(!isset($_POST['noparam']))
@@ -829,5 +829,20 @@ class apiTest
         if(dao::isError()) return dao::getError();
 
         return array('url' => $url, 'content' => $content);
+    }
+
+    /**
+     * Test getPrivApis method.
+     *
+     * @param  string $mode
+     * @access public
+     * @return array
+     */
+    public function getPrivApisTest($mode = '')
+    {
+        $result = $this->objectModel->getPrivApis($mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
