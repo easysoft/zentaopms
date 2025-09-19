@@ -8,20 +8,20 @@ class buildTest
     }
 
     /**
-     * function getByID by test
+     * Test getByID method.
      *
-     * @param  string $buildID
-     * @param  bool   $setImgSize
+     * @param  int  $buildID
+     * @param  bool $setImgSize
      * @access public
-     * @return object
+     * @return mixed
      */
     public function getByIDTest(int $buildID, bool $setImgSize = false)
     {
-        $objects = $this->objectModel->getByID($buildID);
+        $result = $this->objectModel->getByID($buildID, $setImgSize);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     /**
