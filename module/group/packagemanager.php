@@ -2968,7 +2968,6 @@ $config->group->package->module->subset = 'tree';
 $config->group->package->module->privs  = array();
 $config->group->package->module->privs['tree-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('tree-delete', 'tree-manageChild'));
 $config->group->package->module->privs['tree-browseTask']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('tree-edit'), 'recommend' => array('tree-delete', 'tree-manageChild'));
-$config->group->package->module->privs['tree-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->module->privs['tree-updateOrder'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('tree-browse'), 'recommend' => array());
 $config->group->package->module->privs['tree-manageChild'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('tree-edit'), 'recommend' => array('tree-delete'));
 $config->group->package->module->privs['tree-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('tree-browse'), 'recommend' => array());
