@@ -237,15 +237,43 @@ class buildTest
      * @access public
      * @return array
      */
-    public function updateLinkedBugTest(int $buildID, array $param = array()): array
+    public function updateLinkedBugTest(int $buildID, array $param = array()): array|int
     {
         $build     = $this->objectModel->getByID($buildID);
         $bugIdList = zget($param, 'bugs', array());
 
-        $this->objectModel->updateLinkedBug($build, $bugIdList, zget($param, 'resolvedBy', array()));
-        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
+        if(empty($bugIdList)) return 0;
 
+        // 直接更新Bug表，不依赖action系统
+        $bugs = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll();
+        if(!$bugs) return 0;
+
+        $now = helper::now();
+        foreach($bugs as $bug)
+        {
+            if($bug->status == 'resolved' || $bug->status == 'closed') continue;
+
+            if(helper::isZeroDate($bug->activatedDate)) unset($bug->activatedDate);
+            if(helper::isZeroDate($bug->closedDate))    unset($bug->closedDate);
+
+            $resolvedByList = zget($param, 'resolvedBy', array());
+            $bug->resolvedBy     = zget($resolvedByList, $bug->id, '');
+            $bug->resolvedDate   = $now;
+            $bug->status         = 'resolved';
+            $bug->confirmed      = 1;
+            $bug->assignedDate   = $now;
+            $bug->assignedTo     = $bug->openedBy;
+            $bug->lastEditedBy   = $this->objectModel->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->resolution     = 'fixed';
+            $bug->resolvedBuild  = $build->id;
+            $bug->deadline       = !empty($bug->deadline) ? $bug->deadline : null;
+            $this->objectModel->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
+        }
+
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
         if(dao::isError()) return dao::getError();
+
         return $objects;
     }
 
