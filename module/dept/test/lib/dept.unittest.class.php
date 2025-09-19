@@ -8,19 +8,18 @@ class deptTest
     }
 
     /**
-     * function getByID test by dept
+     * Test getByID method.
      *
-     * @param  string $deptID
+     * @param  mixed $deptID
      * @access public
-     * @return array
+     * @return mixed
      */
     public function getByIDTest($deptID)
     {
-        $objects = $this->objectModel->getByID($deptID);
-
+        $result = $this->objectModel->getByID((int)$deptID);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     /**
