@@ -3079,17 +3079,6 @@ $config->group->package->classify->subset = 'featureconfig';
 $config->group->package->classify->privs  = array();
 $config->group->package->classify->privs['classify-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->cmcl = new stdclass();
-$config->group->package->cmcl->order  = 50;
-$config->group->package->cmcl->subset = 'featureconfig';
-$config->group->package->cmcl->privs  = array();
-$config->group->package->cmcl->privs['cmcl-batchCreate']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('cmcl-delete', 'cmcl-edit'));
-$config->group->package->cmcl->privs['cmcl-delete']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('cmcl-batchCreate', 'cmcl-edit'));
-$config->group->package->cmcl->privs['cmcl-edit']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('cmcl-batchCreate', 'cmcl-delete'));
-$config->group->package->cmcl->privs['cmcl-browse']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->cmcl->privs['cmcl-view']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
-$config->group->package->cmcl->privs['cmcl-waterfallplusBrowse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->auditcl = new stdclass();
 $config->group->package->auditcl->order  = 20;
 $config->group->package->auditcl->subset = 'featureconfig';
