@@ -539,6 +539,20 @@ class backupTest
     }
 
     /**
+     * Test getBackupPath method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBackupPathTest()
+    {
+        $result = $this->objectModel->getBackupPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
