@@ -119,16 +119,18 @@ class devTest
     /**
      * Test set field method.
      *
-     * @param  array  $type
+     * @param  array  $field
+     * @param  object $rawField
+     * @param  string $type
+     * @param  int    $firstPOS
      * @access public
      * @return array
      */
-    public function setFieldTest($type)
+    public function setFieldTest($field, $rawField, $type, $firstPOS)
     {
-        $this->objectModel->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-        $sql = "DESC zt_product";
-        $rawFields = $this->objectModel->dbh->query($sql)->fetchAll();
-        return $this->objectModel->setField((array)$rawFields[1], (object)$rawFields[1], $type, 1);
+        $result = $this->objectModel->setField($field, $rawField, $type, $firstPOS);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
 
@@ -442,6 +444,39 @@ class devTest
     public function getSecondMenusTest($menu, $module = '', $method = '')
     {
         $result = $this->objectModel->getSecondMenus($menu, $module, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTagMenus method.
+     *
+     * @param  string $module
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return mixed
+     */
+    public function getTagMenusTest($module, $moduleName = '', $methodName = '')
+    {
+        $result = $this->objectModel->getTagMenus($module, $moduleName, $methodName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test loadDefaultLang method.
+     *
+     * @param  string $language
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function loadDefaultLangTest($language = 'zh-cn', $module = 'common')
+    {
+        $result = $this->objectModel->loadDefaultLang($language, $module);
         if(dao::isError()) return dao::getError();
 
         return $result;
