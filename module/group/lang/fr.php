@@ -405,6 +405,7 @@ $lang->group->package->manageIssue           = 'Manage Issue';
 $lang->group->package->projectSetting        = 'Project Setting';
 $lang->group->package->browseProjectRelease  = 'Browse Project Release';
 $lang->group->package->browseProjectReport   = 'Browse Report';
+$lang->group->package->exportProjectReport   = 'Export Report';
 $lang->group->package->manageProjectReport   = 'Create and Manage Report';
 $lang->group->package->deleteProjectReport   = 'Delete Report';
 $lang->group->package->projectMilestone      = 'Milestone Report';

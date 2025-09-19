@@ -405,6 +405,7 @@ $lang->group->package->manageIssue           = '维护问题';
 $lang->group->package->projectSetting        = '项目配置';
 $lang->group->package->browseProjectRelease  = '浏览项目发布';
 $lang->group->package->browseProjectReport   = '浏览报告';
+$lang->group->package->exportProjectReport   = '导出报告';
 $lang->group->package->manageProjectReport   = '创建与维护报告';
 $lang->group->package->deleteProjectReport   = '删除报告';
 $lang->group->package->projectMilestone      = '里程碑报告';
