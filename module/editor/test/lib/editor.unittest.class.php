@@ -94,53 +94,156 @@ class editorTest
     }
 
     /**
-     * Test for add link for dir.
+     * Test for add link for dir - control.php directory.
      *
      * @access public
-     * @return string
+     * @return array
      */
-    public function addLink4DirTest()
+    public function addLink4DirControlTest()
     {
-        $result     = '';
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-
+        $modulePath  = $this->objectModel->app->getModulePath('', 'todo');
         $controlPath = $modulePath . 'control.php';
         $link        = $this->objectModel->addLink4Dir($controlPath);
-        $result     .= (strpos($link->actions['items'][0]['data-url'], 'newPage') === false ? 0 : 1) . ',';
 
-        $modelPath = $modulePath . 'model.php';
-        $link      = $this->objectModel->addLink4Dir($modelPath);
-        $result   .= (strpos($link->actions['items'][0]['data-url'], 'newMethod') === false ? 0 : 1) . ',';
+        return array(
+            'hasNewPageLink' => strpos($link->actions['items'][0]['data-url'], 'newPage') !== false ? 1 : 0,
+            'text'           => $link->text,
+            'id'             => $link->id
+        );
+    }
 
-        $langPath = $modulePath . 'lang';
-        $link     = $this->objectModel->addLink4Dir($langPath);
-        $result  .= (empty($link->actions['items']) ? 1 : 0) . ',';
+    /**
+     * Test for add link for dir - model.php directory.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirModelTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php';
+        $link       = $this->objectModel->addLink4Dir($modelPath);
 
-        $edition = $this->objectModel->config->edition;
-        if($edition == 'open') return $result . '1,1,1,1,1';
+        return array(
+            'hasNewMethodLink' => strpos($link->actions['items'][0]['data-url'], 'newMethod') !== false ? 1 : 0,
+            'text'             => $link->text,
+            'id'               => $link->id
+        );
+    }
 
+    /**
+     * Test for add link for dir - lang directory.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirLangTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $langPath   = $modulePath . 'lang';
+        $link       = $this->objectModel->addLink4Dir($langPath);
+
+        return array(
+            'hasEmptyActions' => empty($link->actions['items']) ? 1 : 0,
+            'text'            => $link->text,
+            'id'              => $link->id
+        );
+    }
+
+    /**
+     * Test for add link for dir - JS parent directory in extension.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirJSTest()
+    {
+        $extensionRoot = $this->objectModel->app->getExtensionRoot();
+        $extensionPath = $extensionRoot . 'custom' . DS . 'todo' . DS . 'ext' . DS;
+        $extJSPath     = $extensionPath . 'js' . DS . 'create';
+        $link          = $this->objectModel->addLink4Dir($extJSPath);
+
+        return array(
+            'hasNewJSLink' => strpos($link->actions['items'][0]['data-url'], 'newJS') !== false ? 1 : 0,
+            'text'         => $link->text,
+            'id'           => $link->id
+        );
+    }
+
+    /**
+     * Test for add link for dir - CSS parent directory in extension.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirCSSTest()
+    {
+        $extensionRoot = $this->objectModel->app->getExtensionRoot();
+        $extensionPath = $extensionRoot . 'custom' . DS . 'todo' . DS . 'ext' . DS;
+        $extCSSPath    = $extensionPath . 'css' . DS . 'create';
+        $link          = $this->objectModel->addLink4Dir($extCSSPath);
+
+        return array(
+            'hasNewCSSLink' => strpos($link->actions['items'][0]['data-url'], 'newCSS') !== false ? 1 : 0,
+            'text'          => $link->text,
+            'id'            => $link->id
+        );
+    }
+
+    /**
+     * Test for add link for dir - other extension directory.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirExtTest()
+    {
         $extensionRoot  = $this->objectModel->app->getExtensionRoot();
-        $extensionPath  = $extensionRoot . $edition . DS . 'todo' . DS . 'ext' . DS;
+        $extensionPath  = $extensionRoot . 'custom' . DS . 'todo' . DS . 'ext' . DS;
         $extControlPath = $extensionPath . 'control';
         $link           = $this->objectModel->addLink4Dir($extControlPath);
-        $result        .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
 
-        $extModelPath = $extensionPath . 'model';
-        $link         = $this->objectModel->addLink4Dir($extModelPath);
-        $result      .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
+        return array(
+            'hasNewExtendLink' => strpos($link->actions['items'][0]['data-url'], 'newExtend') !== false ? 1 : 0,
+            'text'             => $link->text,
+            'id'               => $link->id
+        );
+    }
 
-        $extJSPath = $extensionPath . 'js/create';
-        $link      = $this->objectModel->addLink4Dir($extJSPath);
-        $result   .= (strpos($link->actions['items'][0]['data-url'], 'newJS') === false ? 0 : 1) . ',';
+    /**
+     * Test for add link for dir - empty path edge case.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirEmptyTest()
+    {
+        $emptyPath = '';
+        $link      = $this->objectModel->addLink4Dir($emptyPath);
 
-        $extCSSPath = $extensionPath . 'css/create';
-        $link       = $this->objectModel->addLink4Dir($extCSSPath);
-        $result    .= (strpos($link->actions['items'][0]['data-url'], 'newCSS') === false ? 0 : 1) . ',';
+        return array(
+            'hasBasicStructure' => (isset($link->id) && isset($link->text) && isset($link->actions)) ? 1 : 0,
+            'text'              => $link->text,
+            'id'                => $link->id
+        );
+    }
 
-        $extLangPath = $extensionPath . 'lang/zh-cn';
-        $link        = $this->objectModel->addLink4Dir($extLangPath);
-        $result     .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1);
-        return $result;
+    /**
+     * Test for add link for dir - special characters in path.
+     *
+     * @access public
+     * @return array
+     */
+    public function addLink4DirSpecialCharsTest()
+    {
+        $specialPath = '/tmp/test-module_with@special#chars$/model.php';
+        $link        = $this->objectModel->addLink4Dir($specialPath);
+
+        return array(
+            'hasValidId' => !empty($link->id) && strlen($link->id) == 32 ? 1 : 0, // MD5 hash is 32 characters
+            'text'       => $link->text,
+            'id'         => $link->id
+        );
     }
 
     /**
