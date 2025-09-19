@@ -1012,6 +1012,31 @@ class bugTest
     }
 
     /**
+     * 统计每人解决的 bug 数（空数据测试）。
+     * Test get report data of resolved bugs per user with empty data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfResolvedBugsPerUserTestWithEmptyData(): array
+    {
+        global $tester;
+        $originalBugs = $tester->dao->select('*')->from(TABLE_BUG)->where('resolvedBy')->ne('')->fetchAll();
+        $tester->dao->update(TABLE_BUG)->set('resolvedBy')->eq('')->where('resolvedBy')->ne('')->exec();
+
+        $datas = $this->objectModel->getDataOfResolvedBugsPerUser();
+
+        foreach($originalBugs as $bug)
+        {
+            $tester->dao->update(TABLE_BUG)->set('resolvedBy')->eq($bug->resolvedBy)->where('id')->eq($bug->id)->exec();
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
+    }
+
+    /**
      * 统计每人关闭的 bug 数。
      * Test get report data of closed bugs per user.
      *
