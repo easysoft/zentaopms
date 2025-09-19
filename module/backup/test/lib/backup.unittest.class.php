@@ -524,6 +524,21 @@ class backupTest
     }
 
     /**
+     * Test getBackupDirProgress method.
+     *
+     * @param  string $backup
+     * @access public
+     * @return mixed
+     */
+    public function getBackupDirProgressTest($backup = null)
+    {
+        $result = $this->objectModel->getBackupDirProgress($backup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
