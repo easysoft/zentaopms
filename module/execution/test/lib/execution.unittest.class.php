@@ -1963,32 +1963,41 @@ class executionTest
     }
 
     /**
-     * function getKanbanColumns test by execution
+     * Test getKanbanColumns method.
      *
-     * @param  string $count
+     * @param  string $type
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function getKanbanColumnsTest($count)
+    public function getKanbanColumnsTest($type = 'default')
     {
-        $kanbanSetting = $this->executionModel->getKanbanSetting();
-        $kanbanSetting->allCols = false;
+        $kanbanSetting = new stdclass();
 
-        $object = $this->executionModel->getKanbanColumns($kanbanSetting);
+        switch($type)
+        {
+            case 'default':
+                $kanbanSetting->allCols = false;
+                break;
+            case 'all_cols':
+                $kanbanSetting->allCols = true;
+                break;
+            case 'count_default':
+                $kanbanSetting->allCols = false;
+                $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+                return count($result);
+            case 'count_all':
+                $kanbanSetting->allCols = true;
+                $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+                return count($result);
+            case 'empty':
+                // 空对象，不设置allCols属性
+                break;
+        }
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == 1)
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+        $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
