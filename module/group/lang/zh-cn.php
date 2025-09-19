@@ -490,7 +490,6 @@ $lang->group->package->commonSetting         = '通用配置';
 $lang->group->package->stageSetting          = '阶段设置';
 $lang->group->package->deliverable           = '交付物设置';
 $lang->group->package->classify              = '分类项设置';
-$lang->group->package->cmcl                  = '审计设置';
 $lang->group->package->auditcl               = 'QA检查项设置';
 $lang->group->package->reviewcl              = '评审设置';
 $lang->group->package->process               = '过程设置';

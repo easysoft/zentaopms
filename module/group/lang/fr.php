@@ -490,7 +490,6 @@ $lang->group->package->commonSetting         = 'Common Setting';
 $lang->group->package->stageSetting          = 'Stage Setting';
 $lang->group->package->deliverable           = 'Deliverable Setting';
 $lang->group->package->classify              = 'Classify';
-$lang->group->package->cmcl                  = 'Cmcl';
 $lang->group->package->auditcl               = 'Auditcl';
 $lang->group->package->reviewcl              = 'Reviewcl';
 $lang->group->package->process               = 'Process';
