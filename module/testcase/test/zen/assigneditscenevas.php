@@ -9,9 +9,9 @@ cid=0
 
 - 步骤1：正常场景对象，验证视图变量是否正确设置属性executed @1
 - 步骤2：不同产品的场景对象，验证产品切换属性executed @1
-- 步骤3：不同分支的场景对象，验证分支处理属性executed @0
+- 步骤3：不同分支的场景对象，验证分支处理（预期有错误）属性executed @0
 - 步骤4：不同模块的场景对象，验证模块菜单属性executed @1
-- 步骤5：有父场景的场景对象，验证父子关系属性executed @0
+- 步骤5：有父场景的场景对象，验证父子关系（预期有错误）属性executed @0
 
 */
 
@@ -51,6 +51,7 @@ $scene->branch->range('0,1,2');
 $scene->module->range('1-5');
 $scene->title->range('场景{1-5}');
 $scene->deleted->range('0');
+$scene->parent->range('0,0,0,0,1');
 $scene->gen(5);
 
 // 3. 用户登录（选择合适角色）
@@ -98,6 +99,6 @@ $scene5->parent = 1;
 // 5. 强制要求：必须包含至少5个测试步骤
 r($testcaseTest->assignEditSceneVarsTest($scene1)) && p('executed') && e('1'); // 步骤1：正常场景对象，验证视图变量是否正确设置
 r($testcaseTest->assignEditSceneVarsTest($scene2)) && p('executed') && e('1'); // 步骤2：不同产品的场景对象，验证产品切换
-r($testcaseTest->assignEditSceneVarsTest($scene3)) && p('executed') && e('0'); // 步骤3：不同分支的场景对象，验证分支处理
+r($testcaseTest->assignEditSceneVarsTest($scene3)) && p('executed') && e('0'); // 步骤3：不同分支的场景对象，验证分支处理（预期有错误）
 r($testcaseTest->assignEditSceneVarsTest($scene4)) && p('executed') && e('1'); // 步骤4：不同模块的场景对象，验证模块菜单
-r($testcaseTest->assignEditSceneVarsTest($scene5)) && p('executed') && e('0'); // 步骤5：有父场景的场景对象，验证父子关系
+r($testcaseTest->assignEditSceneVarsTest($scene5)) && p('executed') && e('0'); // 步骤5：有父场景的场景对象，验证父子关系（预期有错误）
