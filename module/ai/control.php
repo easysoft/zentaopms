@@ -940,22 +940,37 @@ class ai extends control
         {
             $data   = fixer::input('post')->get();
             $method = $data->method;
+            $result = false;
+            $message = '';
+
             switch ($method)
             {
                 case 'create':
-                    $this->ai->createRoleTemplate($data->role, $data->characterization);
+                    $result = $this->ai->createRoleTemplate($data->role, $data->characterization);
+                    $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
                     break;
                 case 'delete':
-                    $this->ai->deleteRoleTemplate($data->id);
+                    $result = $this->ai->deleteRoleTemplate($data->id);
+                    $message = $result ? $this->lang->ai->prompts->roleDelSuccess : $this->lang->ai->saveFail;
                     break;
                 case 'edit':
-                    $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
+                    $result = $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
+                    $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
                     break;
             }
-        }
 
-        $this->view->roleTemplates = $this->ai->getRoleTemplates();
-        $this->display();
+            $roleTemplates = $this->ai->getRoleTemplates();
+            $roleTemplatesArray = array_values((array)$roleTemplates);
+
+            return $this->send(array(
+                'result' => $result ? 'success' : 'fail',
+                'message' => $message,
+                'data' => array(
+                    'roleTemplates' => $roleTemplatesArray,
+                    'method' => $method
+                )
+            ));
+        }
     }
 
     /**
