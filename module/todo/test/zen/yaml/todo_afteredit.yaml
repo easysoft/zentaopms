@@ -1,0 +1,78 @@
+title: ZenTao测试数据
+desc:
+author:
+version:
+
+fields:
+- field: id
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: account
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+- field: date
+  range: 2023-12-01,2023-12-02,2023-12-03
+  prefix: ""
+  postfix: ""
+- field: type
+  range: custom,task,story,bug
+  prefix: ""
+  postfix: ""
+- field: pri
+  range: 1,2,3
+  prefix: ""
+  postfix: ""
+- field: name
+  range: 待办任务{1},重要任务{1},一般任务{1}
+  prefix: ""
+  postfix: ""
+- field: desc
+  range: 这是一个测试待办{1},这是重要任务描述{1},一般任务说明{1}
+  prefix: ""
+  postfix: ""
+- field: status
+  range: wait,doing,done
+  prefix: ""
+  postfix: ""
+- field: begin
+  range: 0900,1000,1400
+  prefix: ""
+  postfix: ""
+- field: end
+  range: 1800,1700,1600
+  prefix: ""
+  postfix: ""
+- field: assignedTo
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+- field: assignedBy
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: assignedDate
+  range: 2023-12-01 09:00:00,2023-12-01 10:00:00,2023-12-01 11:00:00
+  prefix: ""
+  postfix: ""
+- field: objectID
+  range: 0,1,2,3
+  prefix: ""
+  postfix: ""
+- field: vision
+  range: rnd
+  prefix: ""
+  postfix: ""
+- field: cycle
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: private
+  range: 0,1
+  prefix: ""
+  postfix: ""
+- field: deleted
+  range: 0
+  prefix: ""
+  postfix: ""

@@ -1,0 +1,66 @@
+---
+title: host表测试数据定义
+desc: 用于prepareCreateSnapshotExtras方法测试的主机节点数据
+
+fields:
+- field: id
+  note: 主机ID
+  range: 101-110
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 主机名称
+  range: node-01,node-02,node-03,test-node,dev-node
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: type
+  note: 类型
+  range: node{8},image{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: hostType
+  note: 主机类型
+  range: '',physics{3},virtual{7}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: status
+  note: 状态
+  range: running{5},offline{2},shutdown{3}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: osName
+  note: 操作系统名称
+  range: Ubuntu 20.04,CentOS 7,Windows 10,Debian 11,RHEL 8
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: memory
+  note: 内存
+  range: 4096,8192,16384,32768
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: diskSize
+  note: 磁盘大小
+  range: 100,200,500,1000
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-7D)-(-1D):1D
+  prefix: ""
+  postfix: ""
+  format: "YYYY-MM-DD hh:mm:ss"

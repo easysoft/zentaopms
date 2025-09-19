@@ -1,0 +1,61 @@
+---
+title: beforeCreate方法测试数据
+desc: 用于测试todoZen::beforeCreate()方法的数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 待办ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: account
+  note: 创建人账号
+  range: admin{20},user1{20},user2{20},test{20},demo{20}
+- field: name
+  note: 待办名称
+  range: 测试待办{30},开发任务{25},Bug修复{25},需求分析{20}
+- field: type
+  note: 待办类型
+  range: custom{40},task{20},bug{20},story{20}
+- field: pri
+  note: 优先级
+  range: 1-3
+- field: status
+  note: 状态
+  range: wait{60},doing{20},done{20}
+- field: date
+  note: 日期
+  range: 2023-12-01{30},2023-12-02{30},2023-12-03{30},2030-01-01{10}
+- field: begin
+  note: 开始时间
+  range: 0800{20},0830{20},0900{20},1000{20},2400{20}
+- field: end
+  note: 结束时间
+  range: 1700{20},1730{20},1800{20},2000{20},2400{20}
+- field: private
+  note: 是否私有
+  range: 0{80},1{20}
+- field: objectID
+  note: 关联对象ID
+  range: 0{40},1-50
+- field: assignedTo
+  note: 指派给
+  range: admin{30},user1{30},user2{30},demo{10}
+- field: assignedBy
+  note: 指派人
+  range: admin{50},user1{25},user2{25}
+- field: assignedDate
+  note: 指派日期
+  range: 2023-12-01 10:00:00{30},2023-12-02 14:30:00{30},2023-12-03 09:15:00{40}
+- field: finishedBy
+  note: 完成人
+  range: []{70},admin{15},user1{15}
+- field: finishedDate
+  note: 完成日期
+  range: []{70},2023-12-04 16:00:00{15},2023-12-05 11:30:00{15}
+- field: vision
+  note: 产品线
+  range: rnd{80},lite{20}

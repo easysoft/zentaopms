@@ -1,0 +1,58 @@
+---
+title: assembleExportData测试数据
+desc: assembleExportData方法的测试数据
+author: Claude
+version: 1
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+
+- field: account
+  note: 所属用户
+  range: admin,user1,user2
+
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2
+
+- field: name
+  note: 待办名称
+  range: 测试待办1,测试待办2,测试待办3,测试待办4,测试待办5
+
+- field: type
+  note: 待办类型
+  range: custom,task,bug,story,epic
+
+- field: objectID
+  note: 关联对象ID
+  range: 0,10,20,30,40
+
+- field: pri
+  note: 优先级
+  range: 1-3
+
+- field: status
+  note: 状态
+  range: wait,doing,done
+
+- field: begin
+  note: 开始时间
+  range: 0800,0900,2400
+
+- field: end
+  note: 结束时间
+  range: 1700,1800,2400
+
+- field: date
+  note: 日期
+  range: '2023-12-01','2023-12-02','2030-01-01'
+
+- field: private
+  note: 是否私有
+  range: 0,1
+
+- field: desc
+  note: 描述
+  range: 描述1,描述2,描述3,描述4,描述5

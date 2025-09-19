@@ -1,0 +1,32 @@
+---
+title: 测试执行记录数据
+desc: 用于测试prepareCasesForBatchRun方法的测试执行记录数据
+
+fields:
+- field: id
+  note: 执行记录ID
+  range: 1-5
+- field: task
+  note: 测试单ID
+  range: 1{3},2{2}
+- field: case
+  note: 用例ID
+  range: 1-5
+- field: version
+  note: 用例版本
+  range: 1{3},2{2}
+- field: assignedTo
+  note: 指派给
+  range: admin{2},user1{2},tester{1}
+- field: lastRunner
+  note: 最后执行人
+  range: admin{3},user1{1},tester{1}
+- field: lastRunDate
+  note: 最后执行日期
+  range: (-7D)-(0)
+- field: lastRunResult
+  note: 最后执行结果
+  range: pass{2},fail{2},blocked{1}
+- field: status
+  note: 状态
+  range: normal{4},blocked{1}

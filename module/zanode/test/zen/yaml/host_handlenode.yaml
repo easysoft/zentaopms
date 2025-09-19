@@ -1,0 +1,40 @@
+---
+title: zanode handleNode方法测试数据
+desc: 用于测试handleNode方法的host表数据
+
+fields:
+- field: id
+  note: 主机ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 主机名称
+  range: test_node_1,test_node_2,test_node_3,busy_node,shutdown_node
+  format: ""
+- field: type
+  note: 主机类型
+  range: node{5}
+- field: status
+  note: 主机状态
+  range: running{2},restoring,creating_img,shutoff
+- field: ip
+  note: IP地址
+  range: 192.168.1.100,192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.104
+- field: hzap
+  note: HZAP端口
+  range: 8080{5}
+- field: tokenSN
+  note: 认证令牌
+  range: valid_token_1,valid_token_2,valid_token_3,valid_token_4,valid_token_5
+- field: secret
+  note: 密钥
+  range: secret123{5}
+- field: createdBy
+  note: 创建者
+  range: admin{5}
+- field: deleted
+  note: 删除标记
+  range: 0{5}

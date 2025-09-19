@@ -1,0 +1,48 @@
+---
+title: 测试单数据定义
+desc: 为setChartDatas方法测试生成测试单数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 测试单ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 测试单名称
+  range: 'Test Task {1-10}'
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1-3
+- field: execution
+  note: 执行ID
+  range: 1-5
+- field: project
+  note: 项目ID
+  range: 1-3
+- field: build
+  note: 版本ID
+  range: 1-5
+- field: owner
+  note: 负责人
+  range: admin,user1,user2,tester1,tester2
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: begin
+  note: 开始日期
+  range: '2023-01-01'
+- field: end
+  note: 结束日期
+  range: '2023-12-31'
+- field: status
+  note: 状态
+  range: wait,doing,done
+- field: deleted
+  note: 是否删除
+  range: '0'

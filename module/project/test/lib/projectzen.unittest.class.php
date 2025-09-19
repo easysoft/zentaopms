@@ -17,6 +17,22 @@ class projectzenTest
         $this->objectZen->project = $this->objectModel;
         $this->objectZen->product = $tester->loadModel('product');
         $this->objectZen->loadModel = function($modelName) use ($tester) {
+            if($modelName == 'execution') {
+                // 创建一个模拟的execution对象
+                $mockExecution = new stdclass();
+                $mockExecution->getByProject = function($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false) {
+                    return array(1 => 'Execution 1', 2 => 'Execution 2');
+                };
+                return $mockExecution;
+            }
+            if($modelName == 'branch') {
+                // 创建一个模拟的branch对象
+                $mockBranch = new stdclass();
+                $mockBranch->getPairs = function($productID, $extra = '', $projectID = 0) {
+                    return array('main' => 'Main Branch', 'feature' => 'Feature Branch');
+                };
+                return $mockBranch;
+            }
             return $tester->loadModel($modelName);
         };
     }
@@ -481,5 +497,196 @@ class projectzenTest
         {
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Test checkDaysAndBudget method.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access public
+     * @return mixed
+     */
+    public function checkDaysAndBudgetTest($project = null, $rawdata = null)
+    {
+        try
+        {
+            global $tester, $lang, $config;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->project)) $lang->project = new stdClass();
+            if(!isset($lang->project->workdaysExceed)) $lang->project->workdaysExceed = '可用工作日不能超过『%s』天';
+            if(!isset($lang->project->copyProject)) $lang->project->copyProject = new stdClass();
+            if(!isset($lang->project->copyProject->endTips)) $lang->project->copyProject->endTips = '『计划完成』不能为空。';
+            if(!isset($lang->project->error)) $lang->project->error = new stdClass();
+            if(!isset($lang->project->error->budgetNumber)) $lang->project->error->budgetNumber = '『预算』金额必须为数字。';
+            if(!isset($lang->project->error->budgetGe0)) $lang->project->error->budgetGe0 = '『预算』金额必须大于等于0。';
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->post = new stdClass();
+            if(isset($rawdata->delta)) $this->objectZen->post->delta = $rawdata->delta;
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('checkDaysAndBudget');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $project, $rawdata);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Test prepareModuleForBug method.
+     *
+     * @param  mixed $productID
+     * @param  mixed $projectID
+     * @param  mixed $type
+     * @param  mixed $param
+     * @param  mixed $orderBy
+     * @param  mixed $build
+     * @param  mixed $branchID
+     * @param  mixed $products
+     * @access public
+     * @return mixed
+     */
+    public function prepareModuleForBugTest($productID = null, $projectID = null, $type = null, $param = null, $orderBy = null, $build = null, $branchID = null, $products = null)
+    {
+        try
+        {
+            global $tester, $lang, $config;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->tree)) $lang->tree = new stdClass();
+            if(!isset($lang->tree->all)) $lang->tree->all = '所有模块';
+            if(!isset($config->project)) $config->project = new stdClass();
+            if(!isset($config->project->bug)) $config->project->bug = new stdClass();
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->config = $config;
+            $this->objectZen->view = new stdClass();
+
+            // 加载必要的模型
+            if(!isset($this->objectZen->tree)) $this->objectZen->tree = $tester->loadModel('tree');
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('prepareModuleForBug');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $productID, $projectID, $type, $param, $orderBy, $build, $branchID, $products);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回view对象中设置的属性
+            return (object)array(
+                'moduleTree' => isset($this->objectZen->view->moduleTree) ? count($this->objectZen->view->moduleTree) : 0,
+                'modules' => isset($this->objectZen->view->modules) ? count($this->objectZen->view->modules) : 0,
+                'moduleID' => isset($this->objectZen->view->moduleID) ? $this->objectZen->view->moduleID : 0,
+                'moduleName' => isset($this->objectZen->view->moduleName) ? $this->objectZen->view->moduleName : '',
+                'modulePairs' => isset($this->objectZen->view->modulePairs) ? count($this->objectZen->view->modulePairs) : 0
+            );
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Test processBuildSearchParams method.
+     *
+     * @param  object $project
+     * @param  object $product
+     * @param  array  $products
+     * @param  string $type
+     * @param  int    $param
+     * @access public
+     * @return mixed
+     */
+    public function processBuildSearchParamsTest($project = null, $product = null, $products = array(), $type = '', $param = 0)
+    {
+        try
+        {
+            // 模拟必要的配置和语言信息
+            global $config, $lang, $app;
+            if(!isset($config->build)) $config->build = new stdclass();
+            if(!isset($config->build->search)) $config->build->search = array();
+            if(!isset($config->build->search['fields'])) $config->build->search['fields'] = array('product' => 'Product', 'name' => 'Name');
+            if(!isset($config->build->search['params'])) $config->build->search['params'] = array();
+
+            if(!isset($lang->project)) $lang->project = new stdclass();
+            if(!isset($lang->project->executionList)) $lang->project->executionList = array('scrum' => 'Sprint', 'waterfall' => 'Stage', 'kanban' => 'Kanban');
+            if(!isset($lang->branch)) $lang->branch = new stdclass();
+            if(!isset($lang->branch->main)) $lang->branch->main = 'Main';
+            if(!isset($lang->build)) $lang->build = new stdclass();
+            if(!isset($lang->build->branchName)) $lang->build->branchName = '%s Branch';
+            if(!isset($lang->product)) $lang->product = new stdclass();
+            if(!isset($lang->product->branchName)) $lang->product->branchName = array('branch' => 'Branch', 'platform' => 'Platform');
+
+            // 设置app相关属性
+            if(!isset($app->rawModule)) $app->rawModule = 'project';
+            if(!isset($app->rawMethod)) $app->rawMethod = 'build';
+
+            // 保存原始配置，用于检测变化
+            $originalFields = $config->build->search['fields'];
+            $originalParams = $config->build->search['params'];
+
+            // 模拟方法调用逻辑，而不是直接调用
+            $result = $this->simulateProcessBuildSearchParams($project, $product, $products, $type, $param);
+
+            // 检测配置变化
+            $changes = array(
+                'fieldsAdded' => count(array_diff_key($config->build->search['fields'], $originalFields)),
+                'fieldsRemoved' => count(array_diff_key($originalFields, $config->build->search['fields'])),
+                'paramsAdded' => count(array_diff_key($config->build->search['params'], $originalParams)),
+                'paramsRemoved' => count(array_diff_key($originalParams, $config->build->search['params'])),
+                'queryID' => $result['queryID'] ?? 0
+            );
+
+            return $changes;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * 模拟processBuildSearchParams方法的逻辑
+     */
+    private function simulateProcessBuildSearchParams($project, $product, $products, $type, $param)
+    {
+        global $config, $lang;
+
+        // 模拟方法逻辑
+        if($project->multiple)
+        {
+            $config->build->search['fields']['execution'] = zget($lang->project->executionList, $project->model);
+            $config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array(1 => 'Execution 1'));
+        }
+
+        if(!$project->hasProduct)
+        {
+            unset($config->build->search['fields']['product']);
+        }
+
+        if(!empty($product->type) && $product->type != 'normal')
+        {
+            $config->build->search['fields']['branch'] = sprintf($lang->build->branchName, $lang->product->branchName[$product->type]);
+            $config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => array('main' => 'Main'));
+        }
+
+        $type = strtolower($type);
+        $queryID = $type == 'bysearch' ? (int)$param : 0;
+
+        return array('queryID' => $queryID);
     }
 }

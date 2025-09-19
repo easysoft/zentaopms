@@ -1,0 +1,91 @@
+---
+title: 场景数据定义 - getXmindExportData方法测试
+desc: 用于测试getXmindExportData方法的场景数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 场景ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 所属模块ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 场景标题
+  range: '[用户登录场景,数据导出场景,权限验证场景,文件上传场景,系统配置场景]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父场景ID
+  range: '[0{3},1{1},2{1}]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 场景路径
+  range: '[,1,2,3,4]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 场景级别
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: '[admin,tester,manager]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00-2024-06-30 18:00:00:1D'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

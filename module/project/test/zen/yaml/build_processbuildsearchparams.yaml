@@ -1,0 +1,42 @@
+---
+title: 版本构建搜索参数测试数据
+desc: 用于测试版本搜索表单配置的构建数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 构建ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 所属项目
+  range: [1,1,2,2,3,3,4,4,5,5]
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: [1,2,1,2,0,0,1,2,1,2]
+  prefix: ""
+  postfix: ""
+- field: execution
+  note: 所属执行
+  range: [1,2,3,4,0,0,5,6,7,8]
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 构建名称
+  range: [Build1.0,Build1.1,Build2.0,Build2.1,Build3.0,Build3.1,Build4.0,Build4.1,Build5.0,Build5.1]
+  prefix: ""
+  postfix: ""
+- field: branch
+  note: 分支
+  range: [0,main,feature,0,0,0,main,feature,0,main]
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: [0,0,0,0,0,0,0,0,0,0]
+  prefix: ""
+  postfix: ""

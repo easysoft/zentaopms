@@ -1,0 +1,54 @@
+---
+title: 测试任务数据配置for assignTesttaskReportData
+desc: 为assignTesttaskReportData方法测试提供测试任务数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 测试任务ID
+
+- field: name
+  range: '测试任务{1-10}'
+  note: 测试任务名称
+
+- field: product
+  range: 1-3
+  note: 产品ID
+
+- field: execution
+  range: 1-3
+  note: 执行ID
+
+- field: project
+  range: 1-3
+  note: 项目ID
+
+- field: build
+  range: 1-5
+  note: 版本ID
+
+- field: owner
+  range: admin,user1,user2
+  note: 负责人
+
+- field: begin
+  range: '2024-01-01,2024-02-01,2024-03-01'
+  note: 开始日期
+
+- field: end
+  range: '2024-01-31,2024-02-28,2024-03-31'
+  note: 结束日期
+
+- field: status
+  range: wait,doing,done
+  note: 状态
+
+- field: type
+  range: integrate,system,unit
+  note: 测试类型
+
+- field: pri
+  range: 1-4
+  note: 优先级

@@ -1,0 +1,46 @@
+---
+title: system表测试数据
+desc: 用于buildReleaseForCreate方法测试的系统数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 系统ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 系统名称
+  range: 测试系统{5}
+  format: ""
+- field: product
+  note: 关联产品
+  range: 1{2},2{2},3{1}
+  format: ""
+- field: integrated
+  note: 是否集成系统
+  range: 0{3},1{2}
+  format: ""
+- field: createdBy
+  note: 创建人
+  range: admin{5}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{5}
+  format: ""
+- field: editedBy
+  note: 修改人
+  range: ""{3},admin{2}
+  format: ""
+- field: editedDate
+  note: 修改时间
+  range: ""{3},2024-06-01 00:00:00{2}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{5}
+  format: ""

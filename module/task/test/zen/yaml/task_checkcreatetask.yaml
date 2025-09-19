@@ -1,0 +1,33 @@
+---
+title: 任务创建验证测试数据
+desc: 为checkCreateTask方法提供测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: '任务1,任务2,任务3,任务4,任务5,任务6,任务7,任务8,任务9,任务10'
+- field: project
+  range: 1{10}
+- field: execution
+  range: 1{10}
+- field: parent
+  range: '0{5},1{3},2{2}'
+- field: estimate
+  range: '0,5,10,15,20,25,30'
+- field: consumed
+  range: '0{10}'
+- field: left
+  range: '0{10}'
+- field: estStarted
+  range: '2024-01-01,2024-01-05,2024-01-10,2024-01-15,2024-01-20,2024-01-25,2024-01-30'
+- field: deadline
+  range: '2024-01-10,2024-01-15,2024-01-20,2024-01-25,2024-01-30,2024-02-05,2024-02-10'
+- field: assignedTo
+  range: 'admin,user1,user2,user3'
+- field: status
+  range: 'wait{10}'
+- field: openedBy
+  range: 'admin{10}'
+- field: openedDate
+  range: '`2024-01-01 10:00:00`{10}'

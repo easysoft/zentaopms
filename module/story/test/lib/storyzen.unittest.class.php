@@ -859,4 +859,35 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test removeFormFieldsForCreate method.
+     *
+     * @param  array  $fields 表单字段
+     * @param  string $storyType 需求类型
+     * @param  int    $objectID 对象ID
+     * @param  string $tab 当前标签页
+     * @access public
+     * @return array
+     */
+    public function removeFormFieldsForCreateTest(array $fields, string $storyType = 'story', int $objectID = 0, string $tab = 'story'): array
+    {
+        // 创建新的story实例
+        $storyInstance = $this->storyZenTest->newInstance();
+
+        // 模拟view对象的objectID
+        $storyInstance->view = new stdClass();
+        $storyInstance->view->objectID = $objectID;
+
+        // 模拟app对象的tab属性
+        $storyInstance->app = new stdClass();
+        $storyInstance->app->tab = $tab;
+
+        $method = $this->storyZenTest->getMethod('removeFormFieldsForCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($storyInstance, [$fields, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

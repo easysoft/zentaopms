@@ -1,0 +1,15 @@
+---
+title: 分支数据配置
+desc: 为buildLinkStorySearchForm方法测试生成分支数据
+
+fields:
+- field: id
+  range: 1-3
+- field: product
+  range: 2{3}
+- field: name
+  range: 分支1,分支2,分支3
+- field: status
+  range: active{3}
+- field: deleted
+  range: '0'

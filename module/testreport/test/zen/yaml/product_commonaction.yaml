@@ -1,0 +1,26 @@
+---
+title: 产品表测试数据
+desc: 用于测试commonAction方法中product类型的数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: '产品1,产品2,产品3{7}'
+  format: ""
+- field: status
+  note: 产品状态
+  range: 'normal{8},closed{2}'
+  format: ""
+- field: deleted
+  note: 删除标识
+  range: '0'
+  format: ""
