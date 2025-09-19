@@ -1121,6 +1121,21 @@ class buildTest
     }
 
     /**
+     * Test getStoryBuilds method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return mixed
+     */
+    public function getStoryBuildsTest(int $storyID): mixed
+    {
+        $result = $this->objectModel->getStoryBuilds($storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test buildLinkBugSearchForm method.
      *
      * @param  object $build
