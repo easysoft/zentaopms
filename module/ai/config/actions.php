@@ -7,6 +7,7 @@ $config->ai->actions->models        = array('modelenable|modeldisable', 'modeled
 $config->ai->actions->assistants    = array('assistantpublish|assistantwithdraw', 'assistantedit');
 $config->ai->actions->assistantview = array('mainActions' => array('assistantpublish', 'assistantwithdraw'), 'suffixActions' => array('assistantedit', 'assistantdelete'));
 $config->ai->actions->prompts       = $config->edition != 'open' ? array('promptassignrole', 'promptaudit', 'promptedit', 'promptpublish', 'promptunpublish') : array('promptpublish', 'promptunpublish');
+$config->ai->actions->promptview    = array('mainActions' => array('promptassignrole', 'promptaudit', 'promptpublish', 'promptunpublish'), 'suffixActions' => array('promptedit', 'promptdelete'));
 
 $config->ai->actionList = array();
 $config->ai->actionList['modelenable']['icon']             = 'magic';
@@ -75,3 +76,10 @@ $config->ai->actionList['promptunpublish']['hint']         = $lang->ai->prompts-
 $config->ai->actionList['promptunpublish']['url']          = array('module' => 'ai', 'method' => 'promptunpublish', 'params' => 'prompt={id}');
 $config->ai->actionList['promptunpublish']['className']    = 'ajax-submit';
 $config->ai->actionList['promptunpublish']['data-confirm'] = array('message' => $lang->ai->prompts->action->draftConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
+$config->ai->actionList['promptdelete']['icon']         = 'trash';
+$config->ai->actionList['promptdelete']['text']         = $lang->ai->prompts->action->delete;
+$config->ai->actionList['promptdelete']['hint']         = $lang->ai->prompts->action->delete;
+$config->ai->actionList['promptdelete']['url']          = array('module' => 'ai', 'method' => 'promptdelete', 'params' => 'prompt={id}');
+$config->ai->actionList['promptdelete']['className']    = 'ajax-submit';
+$config->ai->actionList['promptdelete']['data-confirm'] = array('message' => $lang->ai->prompts->action->deleteConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
