@@ -234,4 +234,19 @@ class ciTest
 
         return $result;
     }
+
+    /**
+     * Test transformAnsiToHtml method.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public function transformAnsiToHtmlTest(string $text): string
+    {
+        $result = $this->objectModel->transformAnsiToHtml($text);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
