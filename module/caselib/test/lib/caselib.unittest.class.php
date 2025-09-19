@@ -1275,4 +1275,20 @@ class caselibTest
 
         return $case;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @access public
+     * @return bool|array
+     */
+    public function isClickableTest(object $object, string $action): bool|array
+    {
+        $result = $this->objectModel->isClickable($object, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
