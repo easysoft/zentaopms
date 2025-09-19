@@ -31,7 +31,6 @@ $config->index->oldPages[] = 'ai-adminindex';
 $config->index->oldPages[] = 'ai-chat';
 $config->index->oldPages[] = 'ai-editminiprogramcategory';
 $config->index->oldPages[] = 'ai-miniprograms';
-$config->index->oldPages[] = 'ai-prompts';
 $config->index->oldPages[] = 'ai-promptview';
 $config->index->oldPages[] = 'api-debug';
 $config->index->oldPages[] = 'datatable-ajaxoldcustom';
