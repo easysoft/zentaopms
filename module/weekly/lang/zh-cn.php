@@ -21,7 +21,6 @@ $lang->weekly->finished       = '本周工作完成情况（100%完成的工作�
 $lang->weekly->postponed      = '本周未完成工作';
 $lang->weekly->nextWeek       = '下周工作计划';
 $lang->weekly->workloadByType = '工作量统计';
-$lang->weekly->milestoneTitle = '%s里程碑报告';
 
 $lang->weekly->term            = '报告周期';
 $lang->weekly->project         = $lang->projectCommon . '名称';
