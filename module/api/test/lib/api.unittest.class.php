@@ -11,21 +11,15 @@ class apiTest
      * Test publish a lib.
      *
      * @param  object $data
-     * @param  bool   $confirm
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function publishLibTest($data, $confirm = true)
+    public function publishLibTest($data)
     {
-        $objectID = $this->objectModel->publishLib($data);
-
+        $result = $this->objectModel->publishLib($data);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getRelease($data->lib);
-
-        if($confirm) $this->objectModel->deleteRelease($objectID);
-
-        return $objects;
+        return $result;
     }
 
     /**
