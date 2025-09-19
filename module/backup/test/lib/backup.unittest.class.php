@@ -553,6 +553,21 @@ class backupTest
     }
 
     /**
+     * Test getTmpLogFile method.
+     *
+     * @param  string $backupFile
+     * @access public
+     * @return mixed
+     */
+    public function getTmpLogFileTest($backupFile = null)
+    {
+        $result = $this->objectModel->getTmpLogFile($backupFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
