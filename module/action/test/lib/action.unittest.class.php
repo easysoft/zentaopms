@@ -143,21 +143,105 @@ class actionTest
      * 测试将项目日志类型转换为动态类型。
      * Test process Project Actions change actionStype.
      *
-     * @param  array  $actions
+     * @param  mixed  $actions
      * @access public
-     * @return string
+     * @return object|string
      */
     public function processProjectActionsTest($actions)
     {
         global $tester;
-        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+
+        // 处理不同类型的输入
+        if(is_string($actions))
+        {
+            if(empty($actions)) return (object)array('count' => 0);
+            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+        }
+        elseif(is_array($actions) && empty($actions))
+        {
+            return (object)array('count' => 0);
+        }
+        elseif(is_array($actions) && !empty($actions) && !is_object(reset($actions)))
+        {
+            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+        }
 
         $objects = $this->objectModel->processProjectActions($actions);
 
         if(dao::isError()) return dao::getError();
 
-        $IDs = array_keys($objects);
-        return implode(',', $IDs);
+        // 返回结果统计
+        $result = new stdClass();
+        $result->count = count($objects);
+
+        // 添加详细信息以便调试
+        $actionData = array();
+        foreach($objects as $id => $action)
+        {
+            $actionData[$id] = array(
+                'objectType' => $action->objectType,
+                'action' => $action->action,
+                'objectID' => $action->objectID ?? 0
+            );
+        }
+        $result->actions = $actionData;
+
+        return $result;
+    }
+
+    /**
+     * 测试将项目日志类型转换为动态类型 - 详细版本。
+     * Test process Project Actions change actionStype - detailed version.
+     *
+     * @param  mixed  $actions
+     * @access public
+     * @return object|string
+     */
+    public function processProjectActionsDetailTest($actions)
+    {
+        global $tester;
+
+        // 处理不同类型的输入
+        if(is_string($actions))
+        {
+            if(empty($actions)) return (object)array('isEmpty' => true);
+            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+        }
+        elseif(is_array($actions) && empty($actions))
+        {
+            return (object)array('isEmpty' => true);
+        }
+        elseif(is_array($actions) && !empty($actions) && !is_object(reset($actions)))
+        {
+            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+        }
+
+        $objects = $this->objectModel->processProjectActions($actions);
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回详细信息
+        $result = new stdClass();
+        if(empty($objects))
+        {
+            $result->isEmpty = true;
+        }
+        else
+        {
+            $result->isEmpty = false;
+            $first = reset($objects);
+            $result->firstObjectType = $first->objectType;
+            $result->firstAction = $first->action;
+
+            // 如果只有一个结果，直接返回其信息
+            if(count($objects) == 1)
+            {
+                $result->singleObjectType = $first->objectType;
+                $result->singleAction = $first->action;
+            }
+        }
+
+        return $result;
     }
 
     /**
