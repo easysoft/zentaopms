@@ -159,15 +159,23 @@ class ciTest
      * @param  int    $compileID
      * @param  string $response
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function saveCompileTest(int $compileID, string $response): string
+    public function saveCompileTest(int $compileID, string $response): mixed
     {
         $compile = $this->objectModel->getCompileByID($compileID);
-        $this->objectModel->saveCompile($response, $compile, "{$compile->account}:{$compile->token}", $compile->url);
+        if(!$compile) return false;
 
-        $compile = $this->objectModel->getCompileByID($compileID);
-        return str_contains($compile->logs, 'Finished');
+        $result = $this->objectModel->saveCompile($response, $compile, "{$compile->account}:{$compile->token}", $compile->url);
+        if(dao::isError()) return dao::getError();
+
+        $updatedCompile = $this->objectModel->getCompileByID($compileID);
+        return array(
+            'result' => $result,
+            'status' => $updatedCompile->status ?? '',
+            'logs' => $updatedCompile->logs ?? '',
+            'hasLog' => !empty($updatedCompile->logs)
+        );
     }
 
     /**
