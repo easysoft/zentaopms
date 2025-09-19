@@ -70,25 +70,32 @@ class companyTest
     }
 
     /**
-     * function getByID test by company
+     * Test getByID method.
      *
-     * @param  string $companyID
+     * @param  mixed $companyID 公司ID
      * @access public
-     * @return array
+     * @return mixed
      */
     public function getByIDTest($companyID = '')
     {
+        // 类型转换处理：将字符串转为整数，非数字字符串转为0
+        if(is_string($companyID) && !is_numeric($companyID))
+        {
+            $companyID = 0;
+        }
+        else
+        {
+            $companyID = (int)$companyID;
+        }
+
         $object = $this->objectModel->getByID($companyID);
 
         if(dao::isError())
         {
-            $error = dao::getError();
-            return $error;
+            return dao::getError();
         }
-        else
-        {
-            return $object;
-        }
+
+        return $object;
     }
 
     /**

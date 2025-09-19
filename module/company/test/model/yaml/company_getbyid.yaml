@@ -1,0 +1,50 @@
+---
+title: 公司信息表数据配置 - getByID方法测试
+desc: 为测试companyModel::getByID()方法提供完整的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 公司ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 公司名称
+  range: '易软天创网络科技有限公司,禅道软件（青岛）有限公司,北京测试科技有限公司,上海创新技术公司,深圳前沿软件公司'
+  format: ""
+- field: phone
+  note: 公司电话
+  range: '0532-86893765,010-12345678,021-87654321,0755-98765432,400-888-8888'
+  format: ""
+- field: fax
+  note: 传真号码
+  range: '0532-86893766,010-12345679,021-87654322,0755-98765433,400-888-8889'
+  format: ""
+- field: address
+  note: 公司地址
+  range: '青岛市黄岛区井冈山路157号,北京市海淀区中关村,上海市浦东新区张江,深圳市南山区科技园,杭州市西湖区文三路'
+  format: ""
+- field: zipcode
+  note: 邮政编码
+  range: '266000,100080,200120,518000,310012'
+  format: ""
+- field: website
+  note: 公司网站
+  range: 'https://www.zentao.net,https://www.example1.com,https://www.example2.com,https://www.example3.com,https://www.example4.com'
+  format: ""
+- field: backyard
+  note: 后台地址
+  range: 'https://demo.zentao.net,https://admin.example1.com,https://admin.example2.com,https://admin.example3.com,https://admin.example4.com'
+  format: ""
+- field: guest
+  note: 游客访问权限
+  range: '0,1,0,1,0'
+  format: ""
+- field: admins
+  note: 系统管理员账号
+  range: 'admin,admin1,admin2,admin3,admin4'
+  format: ""
