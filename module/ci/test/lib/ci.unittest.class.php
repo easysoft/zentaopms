@@ -136,19 +136,21 @@ class ciTest
      *
      * @param  int    $compileID
      * @access public
-     * @return object|array|false
+     * @return object|array|bool
      */
-    public function checkCompileStatusTest(int $compileID): object|array|false
+    public function checkCompileStatusTest(int $compileID): object|array|bool
     {
-        $this->objectModel->checkCompileStatus($compileID);
+        $result = $this->objectModel->checkCompileStatus($compileID);
         if(dao::isError()) return dao::getError();
 
         if($compileID)
         {
-            return $this->objectModel->loadModel('compile')->getByID($compileID);
+            $compile = $this->objectModel->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($compileID)->fetch();
+            return $compile ? $compile : false;
         }
 
-        return $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
+        $compiles = $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
+        return $compiles ? $compiles : $result;
     }
 
     /**
