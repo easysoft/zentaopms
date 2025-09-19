@@ -59,10 +59,12 @@ $config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
 $config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
 $config->ai->actionList['promptaudit']['hint'] = $lang->ai->prompts->action->test;
 
-$config->ai->actionList['promptedit']['icon'] = 'edit';
-$config->ai->actionList['promptedit']['text'] = $lang->ai->prompts->action->edit;
-$config->ai->actionList['promptedit']['hint'] = $lang->ai->prompts->action->edit;
-$config->ai->actionList['promptedit']['url']  = array('module' => 'ai', 'method' => 'promptedit', 'params' => 'prompt={id}');
+$config->ai->actionList['promptedit']['icon']        = 'edit';
+$config->ai->actionList['promptedit']['text']        = $lang->ai->prompts->action->edit;
+$config->ai->actionList['promptedit']['hint']        = $lang->ai->prompts->action->edit;
+$config->ai->actionList['promptedit']['url']         = array('module' => 'ai', 'method' => 'promptedit', 'params' => 'prompt={id}');
+$config->ai->actionList['promptedit']['data-toggle'] = 'modal';
+$config->ai->actionList['promptedit']['data-size']   = 'sm';
 
 $config->ai->actionList['promptpublish']['icon']      = 'publish';
 $config->ai->actionList['promptpublish']['text']      = $lang->ai->prompts->action->publish;
