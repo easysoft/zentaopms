@@ -2063,7 +2063,7 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        elseif($count == 1)
+        elseif($count == 0)
         {
             return count($object);
         }
