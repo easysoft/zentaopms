@@ -232,7 +232,7 @@ class testcaseZenTest
         $tester->cookie->lastCaseModule = 2;
 
         try {
-            // 模拟assignModulesForCreate方法的业务逻辑
+            // 根据原方法逻辑进行模拟
             $finalModuleID = $moduleID;
 
             // 1. 如果有storyID，尝试获取story信息
@@ -250,10 +250,10 @@ class testcaseZenTest
 
             // 2. 根据原方法逻辑：currentModuleID计算逻辑
             // 原逻辑：$currentModuleID = !$moduleID && $productID == (int)$this->cookie->lastCaseProduct ? (int)$this->cookie->lastCaseModule : $moduleID;
-            // 但这里应该使用处理后的finalModuleID而不是原始的moduleID
+            // 但这里应该使用处理后的finalModuleID
             $currentModuleID = !$moduleID && $productID == (int)$tester->cookie->lastCaseProduct
                 ? (int)$tester->cookie->lastCaseModule
-                : $finalModuleID;
+                : $moduleID; // 注意：这里使用原始的moduleID，不是finalModuleID
 
             // 返回模拟的结果
             return array(
@@ -2505,4 +2505,5 @@ class testcaseZenTest
             return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
         }
     }
+
 }
