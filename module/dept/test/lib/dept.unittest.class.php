@@ -23,21 +23,23 @@ class deptTest
     }
 
     /**
-     * function getDeptPairs test by dept
+     * Test getDeptPairs method.
      *
-     * @param  string $deptID
-     * @param  string $count
+     * @param  string $type
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function getDeptPairsTest($deptID, $count)
+    public function getDeptPairsTest($type = '')
     {
-        $objects = $this->objectModel->getDeptPairs($deptID);
+        $result = $this->objectModel->getDeptPairs();
 
         if(dao::isError()) return dao::getError();
-        if($count == '1')  return count($objects);
 
-        return $objects;
+        if($type == 'count') return count($result);
+        if($type == 'empty') return empty($result);
+        if($type == 'array') return is_array($result);
+
+        return $result;
     }
 
     /**
@@ -399,7 +401,7 @@ class deptTest
      *
      * @access public
      * @return mixed
-     */  
+     */
     public function fixDeptPathCountTest()
     {
         global $tester;
@@ -409,7 +411,22 @@ class deptTest
 
         // 返回部门数量以验证方法执行成功
         $count = $tester->dao->select('count(*) as count')->from(TABLE_DEPT)->fetch('count');
-        
+
         return $count;
+    }
+
+    /**
+     * Test getChildDepts method.
+     *
+     * @param  mixed $rootDeptID
+     * @access public
+     * @return mixed
+     */
+    public function getChildDeptsTest($rootDeptID = null)
+    {
+        $result = $this->objectModel->getChildDepts((int)$rootDeptID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
