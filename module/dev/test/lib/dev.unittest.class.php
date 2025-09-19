@@ -481,4 +481,19 @@ class devTest
 
         return $result;
     }
+
+    /**
+     * Test trimSpace method.
+     *
+     * @param  string $line
+     * @access public
+     * @return string
+     */
+    public function trimSpaceTest($line)
+    {
+        $result = $this->objectModel->trimSpace($line);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
