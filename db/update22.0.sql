@@ -62,6 +62,7 @@ UPDATE `zt_lang` SET `value` = '版本验证环节' WHERE `module` = 'testcase' 
 ALTER TABLE `zt_review` ADD `version` varchar(255) NOT NULL DEFAULT '' AFTER `docVersion`;
 ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `title`;
 UPDATE `zt_review` SET `status` = 'reviewing' WHERE `status` = 'wait';
+UPDATE `zt_review` SET `status` = 'pass' WHERE `status` = 'auditing' OR `status` = 'done';
 
 ALTER TABLE `zt_object` ADD `status` varchar(20) NOT NULL DEFAULT '' AFTER `type`;
 ALTER TABLE `zt_object` ADD `approval`  mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `status`;
