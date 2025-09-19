@@ -2263,8 +2263,7 @@ $config->group->package->exportProjectReport = new stdclass();
 $config->group->package->exportProjectReport->order  = 20;
 $config->group->package->exportProjectReport->subset = 'projectreport';
 $config->group->package->exportProjectReport->privs  = array();
-$config->group->package->exportProjectReport->privs['weekly-exportReport']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array());
-$config->group->package->exportProjectReport->privs['weekly-exportWeeklyReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-index'), 'recommend' => array());
+$config->group->package->exportProjectReport->privs['weekly-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array());
 
 $config->group->package->projectMilestone = new stdclass();
 $config->group->package->projectMilestone->order  = 25;

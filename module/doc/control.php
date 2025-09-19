@@ -267,21 +267,20 @@ class doc extends control
 
         if(empty($blockData->title))
         {
-            if($blockData->extra == 'fromTemplate')
+            $blockType    = $blockData->type;
+            $blockContent = $blockData->content;
+            $templateLang = zget($this->lang, 'docTemplate', array());
+            $searchTab    = zget($blockContent, 'searchTab', '');
+
+            $blockTitle = '';
+            if(!empty($templateLang))
             {
-                $blockType    = $blockData->type;
-                $blockContent = $blockData->content;
-                $searchTab    = zget($blockContent, 'searchTab');
-                $templateLang = $this->lang->docTemplate;
-                $blockTitle   = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
+                $blockTitle = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
                 if($blockType == 'bug' && $searchTab == 'overduebugs') $blockTitle = $templateLang->overdue . $templateLang->of;
                 if(!empty($blockContent->caseStage)) $blockTitle .= $this->app->loadLang('testcase')->testcase->stageList[$blockContent->caseStage];
-                $blockData->title = $blockTitle . $templateLang->zentaoList[$blockType] . $this->lang->doc->list;
             }
-            else
-            {
-                $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
-            }
+
+            $blockData->title = $blockTitle . zget($this->lang->doc->zentaoList, $blockType, '') . $this->lang->doc->list;
         }
         $content = $this->docZen->exportZentaoList($blockData);
         echo $content;
