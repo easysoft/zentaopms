@@ -2250,8 +2250,9 @@ $config->group->package->manageProjectReport = new stdclass();
 $config->group->package->manageProjectReport->order  = 10;
 $config->group->package->manageProjectReport->subset = 'projectreport';
 $config->group->package->manageProjectReport->privs  = array();
-$config->group->package->manageProjectReport->privs['weekly-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('weekly-browse', 'weekly-edit'), 'recommend' => array());
-$config->group->package->manageProjectReport->privs['weekly-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse', 'weekly-view'), 'recommend' => array('weekly-create'));
+$config->group->package->manageProjectReport->privs['weekly-create']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('weekly-browse', 'weekly-edit'), 'recommend' => array());
+$config->group->package->manageProjectReport->privs['weekly-edit']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse', 'weekly-view'), 'recommend' => array('weekly-create'));
+$config->group->package->manageProjectReport->privs['weekly-manageCategroy'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-browse'),                'recommend' => array());
 
 $config->group->package->deleteProjectReport = new stdclass();
 $config->group->package->deleteProjectReport->order  = 15;
