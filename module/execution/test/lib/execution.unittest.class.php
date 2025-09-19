@@ -2048,28 +2048,64 @@ class executionTest
     /**
      * function getKanbanColorList test by execution
      *
-     * @param  string $count
+     * @param  mixed $testType
      * @access public
      * @return array
      */
-    public function getKanbanColorListTest($count)
+    public function getKanbanColorListTest($testType)
     {
-        $kanbanSetting = $this->executionModel->getKanbanSetting();
-        $object        = $this->executionModel->getKanbanColorList($kanbanSetting);
+        if($testType === 'default')
+        {
+            $kanbanSetting = $this->executionModel->getKanbanSetting();
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+        }
+        elseif($testType === 'empty')
+        {
+            $kanbanSetting = new stdclass();
+            $kanbanSetting->colorList = array();
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            return count($object);
+        }
+        elseif($testType === 'custom')
+        {
+            $kanbanSetting = new stdclass();
+            $kanbanSetting->colorList = array(
+                'wait'   => '#FF0000',
+                'doing'  => '#00FF00',
+                'done'   => '#0000FF'
+            );
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+        }
+        elseif($testType === 'count')
+        {
+            $kanbanSetting = $this->executionModel->getKanbanSetting();
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            return count($object);
+        }
+        elseif($testType === 'specific_color')
+        {
+            $kanbanSetting = $this->executionModel->getKanbanSetting();
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            return isset($object['wait']) ? $object['wait'] : false;
+        }
+        elseif($testType === 'all_keys')
+        {
+            $kanbanSetting = $this->executionModel->getKanbanSetting();
+            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $expectedKeys = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
+            $actualKeys = array_keys($object);
+            sort($expectedKeys);
+            sort($actualKeys);
+            return $expectedKeys === $actualKeys;
+        }
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == 1)
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+
+        return $object;
     }
 
     /**
