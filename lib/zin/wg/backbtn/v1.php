@@ -99,7 +99,7 @@ class backBtn extends btn
             'program'        => 'program-browse,program-productview',
             'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
             'cm'             => 'cm-browse,cm-view',
-            'deliverable'    => 'deliverable-browse'
+            'deliverable'    => 'deliverable-browse,project-deliverable'
         );
 
         $props  = parent::getProps();
