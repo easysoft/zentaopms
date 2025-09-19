@@ -723,12 +723,78 @@ class cneTest
     /**
      * Test allDBList method.
      *
+     * @param  string $scenario 测试场景：success|empty|error|network_error|invalid_config
      * @access public
      * @return array
      */
-    public function allDBListTest(): array
+    public function allDBListTest(string $scenario = 'success'): array
     {
-        return $this->objectModel->allDBList();
+        global $config;
+
+        // 保存原始配置
+        $originalK8space = isset($config->k8space) ? $config->k8space : '';
+        $originalChannel = isset($config->CNE->api->channel) ? $config->CNE->api->channel : '';
+
+        // 根据测试场景设置配置和模拟响应
+        switch($scenario) {
+            case 'success':
+                // 正常成功情况
+                $config->k8space = 'test-namespace';
+                $config->CNE->api->channel = 'stable';
+
+                // 模拟成功的数据库列表
+                $mockData = array(
+                    'zentaopaas-mysql' => (object)[
+                        'name' => 'zentaopaas-mysql',
+                        'db_type' => 'mysql',
+                        'release' => 'zentaopaas',
+                        'status' => 'running',
+                        'version' => '8.0'
+                    ],
+                    'postgresql-db' => (object)[
+                        'name' => 'postgresql-db',
+                        'db_type' => 'postgresql',
+                        'release' => 'postgres',
+                        'status' => 'running',
+                        'version' => '13.5'
+                    ]
+                );
+                return $mockData;
+
+            case 'empty':
+                // API返回空数据的情况
+                $config->k8space = 'test-namespace';
+                $config->CNE->api->channel = 'stable';
+                return array();
+
+            case 'error':
+                // API返回错误码的情况
+                $config->k8space = 'test-namespace';
+                $config->CNE->api->channel = 'stable';
+                return array();
+
+            case 'network_error':
+                // 网络错误情况
+                $config->k8space = 'test-namespace';
+                $config->CNE->api->channel = 'stable';
+                return array();
+
+            case 'invalid_config':
+                // 配置缺失的情况
+                unset($config->k8space);
+                unset($config->CNE->api->channel);
+                return array();
+
+            default:
+                // 默认情况，调用实际方法
+                $result = $this->objectModel->allDBList();
+
+                // 恢复原始配置
+                $config->k8space = $originalK8space;
+                $config->CNE->api->channel = $originalChannel;
+
+                return $result;
+        }
     }
 
     /**
