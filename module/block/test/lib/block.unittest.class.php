@@ -5768,4 +5768,34 @@ class blockTest
         
         return $result;
     }
+
+    /**
+     * Test getBlockInitStatus method.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return bool
+     */
+    public function getBlockInitStatusTest($dashboard)
+    {
+        $result = $this->objectModel->getBlockInitStatus($dashboard);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getMyDashboard method.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return mixed
+     */
+    public function getMyDashboardTest(string $dashboard)
+    {
+        $result = $this->objectModel->getMyDashboard($dashboard);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
