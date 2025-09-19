@@ -1104,6 +1104,23 @@ class buildTest
     }
 
     /**
+     * Test getBugList method.
+     *
+     * @param  string $bugIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getBugListTest(string $bugIdList, string $orderBy = '', ?object $pager = null): mixed
+    {
+        $result = $this->objectModel->getBugList($bugIdList, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test buildLinkBugSearchForm method.
      *
      * @param  object $build
