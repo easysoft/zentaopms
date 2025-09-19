@@ -547,20 +547,47 @@ class editorTest
     /**
      * Test for extend control.
      *
+     * @param  string    $filePath
+     * @param  string    $isExtends
      * @access public
-     * @return string
+     * @return array
      */
-    public function extendControlTest()
+    public function extendControlTest($filePath = '', $isExtends = '')
     {
-        $result     = '';
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $filePath   = $modulePath . 'control.php' . DS . 'create';
-        $content    = $this->objectModel->extendControl($filePath, 'yes');
-        $result    .= strpos($content, 'class mytodo extends todo') !== false ? '1,' : '0,';
+        if(empty($filePath))
+        {
+            $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+            $filePath   = $modulePath . 'control.php' . DS . 'create';
+        }
+        if(empty($isExtends)) $isExtends = 'yes';
 
-        $content = $this->objectModel->extendControl($filePath, 'no');
-        $result .= strpos($content, 'class todo extends control') !== false ? 1 : 0;
-        return $result;
+        try {
+            $content = $this->objectModel->extendControl($filePath, $isExtends);
+            if(dao::isError()) return dao::getError();
+
+            $result = array(
+                'content' => $content,
+                'length'  => strlen($content),
+                'hasPhpTag' => strpos($content, '<?php') !== false ? 1 : 0
+            );
+
+            if($isExtends == 'yes')
+            {
+                $className = basename(dirname(dirname($filePath)));
+                $result['hasMyClass'] = strpos($content, "class my$className extends $className") !== false ? 1 : 0;
+                $result['hasImportControl'] = strpos($content, "helper::importControl('$className')") !== false ? 1 : 0;
+            }
+            else
+            {
+                $className = basename(dirname(dirname($filePath)));
+                $result['hasDirectClass'] = strpos($content, "class $className extends control") !== false ? 1 : 0;
+                $result['hasMethodCode'] = strpos($content, 'public function') !== false ? 1 : 0;
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage(), 'hasError' => 1);
+        }
     }
 
     /**
