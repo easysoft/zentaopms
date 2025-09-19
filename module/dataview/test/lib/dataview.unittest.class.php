@@ -180,4 +180,19 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test includeTable method.
+     *
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function includeTableTest($table)
+    {
+        $result = $this->objectModel->includeTable($table);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
