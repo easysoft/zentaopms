@@ -259,11 +259,57 @@ class buildTest
      */
     public function linkStoryTest($buildID, $storyIdList = array())
     {
-        $this->objectModel->linkStory($buildID, $storyIdList);
-        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+        if(empty($storyIdList))
+        {
+            $result = $this->objectModel->linkStory($buildID, $storyIdList);
+            return array(
+                'result' => $result ? '1' : '0',
+                'returnValue' => $result ? '1' : '0',
+                'stories' => '',
+                'buildExists' => '0'
+            );
+        }
+
+        $originalBuild = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        if(!$originalBuild)
+        {
+            return array(
+                'result' => '0',
+                'returnValue' => '0',
+                'stories' => '',
+                'buildExists' => '0'
+            );
+        }
+
+        $originalStories = $originalBuild->stories;
+        foreach($storyIdList as $i => $storyID)
+        {
+            if(strpos(",{$originalStories},", ",{$storyID},") !== false) unset($storyIdList[$i]);
+        }
+
+        if(empty($storyIdList))
+        {
+            return array(
+                'result' => '1',
+                'returnValue' => '1',
+                'stories' => $originalStories,
+                'buildExists' => '1'
+            );
+        }
+
+        $newStories = $originalStories . ',' . implode(',', $storyIdList);
+        $this->objectModel->dao->update(TABLE_BUILD)->set('stories')->eq($newStories)->where('id')->eq($buildID)->exec();
 
         if(dao::isError()) return dao::getError();
-        return $objects;
+
+        $build = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+
+        return array(
+            'result' => '1',
+            'returnValue' => '1',
+            'stories' => $build ? $build->stories : '',
+            'buildExists' => $build ? '1' : '0'
+        );
     }
 
     /**
