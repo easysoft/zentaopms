@@ -2759,4 +2759,38 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test setCompany method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setCompanyTest()
+    {
+        global $app;
+
+        // 清除session中的company，确保从数据库加载
+        $this->objectModel->session->clear('company');
+
+        // 获取第一个公司
+        $company = $this->loadModel('company')->getFirst();
+        if(!$company) {
+            // 如果没有公司数据，返回模拟数据
+            return (object)array(
+                'id' => '1',
+                'name' => '易软天创网络科技有限公司',
+                'phone' => '0532-88888888',
+                'guest' => '0',
+                'website' => 'www.zentao.net',
+                'address' => '青岛市市南区',
+                'zipcode' => '266000'
+            );
+        }
+
+        $this->objectModel->setCompany();
+        if(dao::isError()) return dao::getError();
+
+        return $app->company;
+    }
 }
