@@ -722,13 +722,17 @@ class customTest
      * Get module menu data, if module is 'main' then return main menu.
      *
      * @param  string $module
+     * @param  bool   $isHomeMenu
      * @static
      * @access public
      * @return array
      */
-    public static function getModuleMenuTest(string $module = 'main'): array
+    public static function getModuleMenuTest(string $module = 'main', bool $isHomeMenu = false): array
     {
-        return customModel::getModuleMenu($module);
+        $result = customModel::getModuleMenu($module, $isHomeMenu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
