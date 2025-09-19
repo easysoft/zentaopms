@@ -568,6 +568,21 @@ class backupTest
     }
 
     /**
+     * Test processFileSize method.
+     *
+     * @param  int $fileSize
+     * @access public
+     * @return mixed
+     */
+    public function processFileSizeTest($fileSize = null)
+    {
+        $result = $this->objectModel->processFileSize($fileSize);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir
