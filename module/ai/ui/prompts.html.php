@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+namespace zin;
+
+featureBar(set::current($status), set::linkParams("module={$module}&status={key}"));
+toolbar
+(
+    $this->config->edition != 'open' && common::hasPriv('ai', 'createprompt') ? item(set(array(
+        'class'       => 'primary',
+        'icon'        => 'plus',
+        'text'        => $lang->ai->prompts->create,
+        'url'         => inlink('createprompt'),
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
+    ))) : null
+);
+
+$cols    = $config->ai->dtable->prompts;
+$prompts = initTableData($prompts, $cols, $this->ai);
+foreach($prompts as $prompt)
+{
+    if($prompt->targetForm)
+    {
+        $targetFormPath = explode('.', $prompt->targetForm);
+        if(count($targetFormPath) == 2) $prompt->targetForm = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
+    }
+}
+
+unset($lang->ai->prompts->modules['']);
+$moduleList = $this->config->edition == 'open' ? array_intersect_key($lang->ai->prompts->modules, array_flip($promptModules)) : $lang->ai->prompts->modules;
+$moduleTree = array();
+$index      = 1;
+$activeKey  = 0;
+foreach($moduleList as $moduleKey => $moduleName)
+{
+    $item = new stdClass();
+    $item->id     = $index++;
+    $item->parent = 0;
+    $item->name   = $moduleName;
+    $item->url    = inlink('prompts', "module=$moduleKey");
+    if($moduleKey == $module) $activeKey = $item->id;
+    $moduleTree[] = $item;
+}
+
+sidebar
+(
+    moduleMenu
+    (
+        set::showDisplay(false),
+        set::modules($moduleTree),
+        set::activeKey($activeKey),
+        set::closeLink(inlink('prompts'))
+    )
+);
+
+dtable
+(
+    set::cols($cols),
+    set::data($prompts),
+    set::userMap($users),
+    set::orderBy($orderBy),
+    set::sortLink(inlink('prompts', "module={$module}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager()),
+    set::emptyTip($lang->ai->prompts->emptyList),
+);
