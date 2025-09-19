@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(255) NULL,
-  `isBaseline` tinyint(1) DEFAULT '0',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
@@ -61,6 +60,7 @@ UPDATE `zt_lang` SET `value` = '版本验证环节' WHERE `module` = 'testcase' 
 
 ALTER TABLE `zt_review` ADD `version` varchar(255) NOT NULL DEFAULT '' AFTER `docVersion`;
 ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `title`;
+ALTER TABLE `zt_review` ADD `isBaseline` tinyint(1) DEFAULT '0' AFTER `status`;
 UPDATE `zt_review` SET `status` = 'reviewing' WHERE `status` = 'wait';
 
 ALTER TABLE `zt_object` ADD `status` varchar(20) NOT NULL DEFAULT '' AFTER `type`;
