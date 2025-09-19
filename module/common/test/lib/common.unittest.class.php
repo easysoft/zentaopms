@@ -2699,4 +2699,19 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test createMenuLink method.
+     *
+     * @param  object $menuItem
+     * @access public
+     * @return mixed
+     */
+    public function createMenuLinkTest($menuItem)
+    {
+        $result = $this->objectModel->createMenuLink($menuItem);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
