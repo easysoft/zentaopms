@@ -126,13 +126,17 @@ class devTest
     /**
      * Get links title.
      *
+     * @param  mixed $menus
      * @access public
      * @return array
      */
-    public function getLinkTitleTest()
+    public function getLinkTitleTest($menus = null)
     {
-        $lang = $this->objectModel->lang->mainNav;
-        return $this->objectModel->getLinkTitle($lang);
+        if($menus === null) $menus = $this->objectModel->lang->mainNav;
+        $result = $this->objectModel->getLinkTitle($menus);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
