@@ -5798,4 +5798,21 @@ class blockTest
 
         return $result;
     }
+
+    /**
+     * Test getSpecifiedBlockID method.
+     *
+     * @param  string $dashboard
+     * @param  string $module
+     * @param  string $code
+     * @access public
+     * @return int|false
+     */
+    public function getSpecifiedBlockIDTest(string $dashboard, string $module, string $code)
+    {
+        $result = $this->objectModel->getSpecifiedBlockID($dashboard, $module, $code);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
