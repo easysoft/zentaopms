@@ -7,11 +7,11 @@ title=测试 testcaseZen::assignEditSceneVars();
 timeout=0
 cid=0
 
-- 步骤1：正常场景对象输入执行属性executed @1
-- 步骤2：验证错误处理机制属性executed @0
-- 步骤3：验证第二个场景处理属性executed @1
-- 步骤4：验证第三个场景处理属性executed @0
-- 步骤5：验证第四个场景处理属性executed @0
+- 步骤1：正常场景编辑变量分配属性executed @1
+- 步骤2：产品不存在场景的变量分配属性executed @0
+- 步骤3：分支不存在场景的变量分配属性executed @1
+- 步骤4：模块不存在场景的变量分配属性executed @0
+- 步骤5：无效场景对象的变量分配属性executed @0
 
 */
 
@@ -25,6 +25,7 @@ $product->id->range('1-3');
 $product->name->range('产品{1-3}');
 $product->type->range('normal');
 $product->status->range('normal');
+$product->deleted->range('0');
 $product->gen(3);
 
 $branch = zenData('branch');
@@ -32,6 +33,7 @@ $branch->id->range('1-5');
 $branch->product->range('1{2},2{2},3{1}');
 $branch->name->range('分支{1-5}');
 $branch->status->range('active');
+$branch->deleted->range('0');
 $branch->gen(5);
 
 $module = zenData('module');
@@ -59,44 +61,45 @@ su('admin');
 $testcaseTest = new testcaseZenTest();
 
 // 5. 构造测试场景对象
-$oldScene1 = new stdClass();
-$oldScene1->id = 1;
-$oldScene1->product = 1;
-$oldScene1->branch = '1';
-$oldScene1->module = 1;
-$oldScene1->parent = 0;
+// 正常场景对象
+$normalScene = new stdClass();
+$normalScene->id = 1;
+$normalScene->product = 1;
+$normalScene->branch = '1';
+$normalScene->module = 1;
+$normalScene->parent = 0;
 
-$oldScene2 = new stdClass();
-$oldScene2->id = 2;
-$oldScene2->product = 2;
-$oldScene2->branch = '2';
-$oldScene2->module = 2;
-$oldScene2->parent = 0;
+// 产品不存在的场景对象
+$invalidProductScene = new stdClass();
+$invalidProductScene->id = 2;
+$invalidProductScene->product = 999;
+$invalidProductScene->branch = '1';
+$invalidProductScene->module = 1;
+$invalidProductScene->parent = 0;
 
-$oldScene3 = new stdClass();
-$oldScene3->id = 3;
-$oldScene3->product = 1;
-$oldScene3->branch = '1';
-$oldScene3->module = 1;
-$oldScene3->parent = 0;
+// 分支不存在的场景对象
+$invalidBranchScene = new stdClass();
+$invalidBranchScene->id = 3;
+$invalidBranchScene->product = 1;
+$invalidBranchScene->branch = '999';
+$invalidBranchScene->module = 1;
+$invalidBranchScene->parent = 0;
 
-$oldScene4 = new stdClass();
-$oldScene4->id = 4;
-$oldScene4->product = 2;
-$oldScene4->branch = '2';
-$oldScene4->module = 2;
-$oldScene4->parent = 0;
+// 模块不存在的场景对象
+$invalidModuleScene = new stdClass();
+$invalidModuleScene->id = 4;
+$invalidModuleScene->product = 1;
+$invalidModuleScene->branch = '1';
+$invalidModuleScene->module = 999;
+$invalidModuleScene->parent = 0;
 
-$oldScene5 = new stdClass();
-$oldScene5->id = 5;
-$oldScene5->product = 3;
-$oldScene5->branch = '3';
-$oldScene5->module = 3;
-$oldScene5->parent = 0;
+// 无效的场景对象（缺少必要属性）
+$invalidScene = new stdClass();
+$invalidScene->id = 5;
 
-// 6. 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->assignEditSceneVarsTest($oldScene1)) && p('executed') && e('1'); // 步骤1：正常场景对象输入执行
-r($testcaseTest->assignEditSceneVarsTest($oldScene2)) && p('executed') && e('0'); // 步骤2：验证错误处理机制
-r($testcaseTest->assignEditSceneVarsTest($oldScene3)) && p('executed') && e('1'); // 步骤3：验证第二个场景处理
-r($testcaseTest->assignEditSceneVarsTest($oldScene4)) && p('executed') && e('0'); // 步骤4：验证第三个场景处理
-r($testcaseTest->assignEditSceneVarsTest($oldScene5)) && p('executed') && e('0'); // 步骤5：验证第四个场景处理
+// 6. 🔴 强制要求：必须包含至少5个测试步骤
+r($testcaseTest->assignEditSceneVarsTest($normalScene)) && p('executed') && e('1'); // 步骤1：正常场景编辑变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidProductScene)) && p('executed') && e('0'); // 步骤2：产品不存在场景的变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidBranchScene)) && p('executed') && e('1'); // 步骤3：分支不存在场景的变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidModuleScene)) && p('executed') && e('0'); // 步骤4：模块不存在场景的变量分配
+r($testcaseTest->assignEditSceneVarsTest($invalidScene)) && p('executed') && e('0'); // 步骤5：无效场景对象的变量分配
