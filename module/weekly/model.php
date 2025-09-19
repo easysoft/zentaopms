@@ -581,7 +581,7 @@ class weeklyModel extends model
         $data->postponed = $this->getPostponed($projectID, $date);
         $data->nextWeek  = $this->getTasksOfNextWeek($projectID, $date);
         $data->workload  = $this->getWorkloadByType($projectID, $date);
-        $data->progress  = $this->getTips('progress', $data->sv);
+        $data->progress  = $this->getTips('progress', $data->sv) . '<br/>' . $this->getTips('cost', $data->cv);
 
         if($loadMaster)
         {
