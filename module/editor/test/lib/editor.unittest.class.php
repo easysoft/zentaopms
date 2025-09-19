@@ -975,17 +975,21 @@ class editorTest
     }
 
     /**
-     * Test for get method code.
+     * Test getMethodCode method.
      *
+     * @param  string    $className
+     * @param  string    $methodName
+     * @param  string    $ext
      * @access public
-     * @return 1|0
+     * @return int
      */
-    public function getMethodCodeTest()
+    public function getMethodCodeTest($className = 'todo', $methodName = 'create', $ext = '')
     {
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
-        include $modulePath;
-        $code = $this->objectModel->getMethodCode('todo', 'create');
-        return strpos($code, "public function create(") !== false ? 1 : 0;
+        $modulePath = $this->objectModel->app->getModulePath('', $className) . ($ext ? 'model.php' : 'control.php');
+        if(file_exists($modulePath)) include_once $modulePath;
+
+        $code = $this->objectModel->getMethodCode($className, $methodName, $ext);
+        return strpos($code, "public function $methodName(") !== false ? 1 : 0;
     }
 
     /**
@@ -1064,6 +1068,93 @@ class editorTest
         $_POST['fileContent'] = "<?php\n";
 
         return $this->objectModel->save($filePath);
+    }
+
+    /**
+     * Test getMethodCode with model class specifically.
+     *
+     * @param  string    $className
+     * @param  string    $methodName
+     * @access public
+     * @return mixed
+     */
+    public function getMethodCodeModelTest($className = 'todo', $methodName = 'create')
+    {
+        return $this->getMethodCodeTest($className, $methodName, 'Model');
+    }
+
+    /**
+     * Test getMethodCode with non-existent method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getMethodCodeNonExistentTest()
+    {
+        try {
+            $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
+            if(file_exists($modulePath)) include_once $modulePath;
+
+            $code = $this->objectModel->getMethodCode('todo', 'nonExistentMethod');
+            return array('hasError' => 0, 'code' => $code);
+        } catch (Exception $e) {
+            return array('hasError' => 1, 'error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getMethodCode with invalid class name.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getMethodCodeInvalidClassTest()
+    {
+        try {
+            $code = $this->objectModel->getMethodCode('nonExistentClass', 'someMethod');
+            return array('hasError' => 0, 'code' => $code);
+        } catch (Exception $e) {
+            return array('hasError' => 1, 'error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getMethodCode return format validation.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getMethodCodeFormatTest()
+    {
+        try {
+            $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
+            if(file_exists($modulePath)) include_once $modulePath;
+
+            $code = $this->objectModel->getMethodCode('todo', 'create');
+            if(dao::isError()) return dao::getError();
+
+            // 验证返回的代码格式
+            $lines = explode("\n", $code);
+            $hasMethodDeclaration = false;
+            $hasMethodEnd = false;
+            $indentationConsistent = true;
+
+            foreach($lines as $line)
+            {
+                if(strpos($line, 'public function') !== false) $hasMethodDeclaration = true;
+                if(trim($line) === '}' && $hasMethodDeclaration) $hasMethodEnd = true;
+            }
+
+            return array(
+                'hasMethodDeclaration' => $hasMethodDeclaration ? 1 : 0,
+                'hasMethodEnd'         => $hasMethodEnd ? 1 : 0,
+                'isString'             => is_string($code) ? 1 : 0,
+                'notEmpty'             => !empty($code) ? 1 : 0,
+                'lineCount'            => count($lines)
+            );
+        } catch (Exception $e) {
+            return array('hasError' => 1, 'error' => $e->getMessage());
+        }
     }
 
     /**
