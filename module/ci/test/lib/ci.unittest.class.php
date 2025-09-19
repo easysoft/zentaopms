@@ -28,7 +28,7 @@ class ciTest
     public function setMenuTest(int $repoID = 0, string $module = '')
     {
         global $app, $lang;
-        $app->moduleName = $module;
+        if($module) $app->moduleName = $module;
 
         $resetLang = clone $lang->devops->menu;
 
@@ -37,6 +37,7 @@ class ciTest
 
         $result = $lang->devops->menu;
         $lang->devops->menu = $resetLang;
+
         return $result;
     }
 
