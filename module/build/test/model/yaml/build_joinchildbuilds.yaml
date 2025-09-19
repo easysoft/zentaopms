@@ -1,0 +1,29 @@
+title: zt_build测试数据 - joinChildBuilds方法专用
+author: Claude Code
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 1-10
+    prefix: '版本'
+  - field: product
+    range: 1{10}
+  - field: project
+    range: 11{10}
+  - field: execution
+    range: 101{10}
+  - field: branch
+    range: '0{10}'
+  - field: builds
+    range: '[]{3},`7,8`,`9,10`,`7,8,9`,`8,9,10`,`7,9`,`10`'
+  - field: stories
+    range: '[]{2},`1,2,3`,`4,5,6`,`7,8`,`9,10`,`11,12,13`,`14,15`,`16`'
+  - field: bugs
+    range: '[]{2},`1,2,3`,`4,5,6`,`7,8`,`9,10`,`11,12,13`,`14,15`,`16`'
+  - field: date
+    range: '`2024-01-01`,`2024-06-01`,`2024-12-01`'
+  - field: builder
+    range: 'admin{5},user1{3},user2{2}'
+  - field: deleted
+    range: '0{10}'

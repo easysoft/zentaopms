@@ -487,21 +487,35 @@ class buildTest
     }
 
     /**
-     * Is clickable
+     * Test joinChildBuilds method.
      *
-     * @param  string     $model
-     * @param  bool       $deleted
+     * @param  object $build
      * @access public
-     * @return array|bool
+     * @return object
      */
-    public function isClickable(string $model = 'bug', bool $deleted = false): array|bool
+    public function joinChildBuildsTest(object $build): object
     {
-        $build = new stdclass();
-        $build->executionDeleted = $deleted;
-        $objectModels = $this->objectModel->isClickable($build, 'create', $model);
+        $result = $this->objectModel->joinChildBuilds($build);
         if(dao::isError()) return dao::getError();
 
-        return $objectModels;
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $build
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest(object $build, string $action, string $module = 'bug')
+    {
+        $result = $this->objectModel->isClickable($build, $action, $module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
