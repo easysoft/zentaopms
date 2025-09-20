@@ -6,6 +6,7 @@ class gitlabTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('gitlab');
+        $this->gitlab      = $tester->loadModel('gitlab');
     }
 
     /**
@@ -126,9 +127,20 @@ class gitlabTest
         return $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
     }
 
+    /**
+     * Test getRelationByObject method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return mixed
+     */
     public function getRelationByObjectTest(string $objectType, int $objectID)
     {
-        return $this->gitlab->getRelationByObject($objectType, $objectID);
+        $result = $this->objectModel->getRelationByObject($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -1500,6 +1512,22 @@ class gitlabTest
     public function apiUpdateProjectMemberTest(int $gitlabID, int $projectID, object $member): object|array|null|false
     {
         $result = $this->gitlab->apiUpdateProjectMember($gitlabID, $projectID, $member);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getVersion method.
+     *
+     * @param  string $host
+     * @param  string $token
+     * @access public
+     * @return mixed
+     */
+    public function getVersionTest(string $host, string $token)
+    {
+        $result = $this->objectModel->getVersion($host, $token);
         if(dao::isError()) return dao::getError();
 
         return $result;
