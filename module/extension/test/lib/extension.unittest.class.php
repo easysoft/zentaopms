@@ -579,6 +579,21 @@ class extensionTest
     }
 
     /**
+     * Test checkIncompatible method.
+     *
+     * @param  array $versions
+     * @access public
+     * @return array
+     */
+    public function checkIncompatibleTest(array $versions)
+    {
+        $result = $this->objectModel->checkIncompatible($versions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test version of compareForLimit method.
      *
      * @param  string       $version
