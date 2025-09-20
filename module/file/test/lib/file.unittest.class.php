@@ -1007,4 +1007,19 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test fileSize method.
+     *
+     * @param  object $file
+     * @access public
+     * @return int|false
+     */
+    public function fileSizeTest($file)
+    {
+        $result = $this->objectModel->fileSize($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
