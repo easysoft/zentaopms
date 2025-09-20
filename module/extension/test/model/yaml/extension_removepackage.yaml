@@ -1,0 +1,52 @@
+---
+title: Extension table data for removePackage testing
+desc: Test data for extension removePackage method with various scenarios
+
+fields:
+- field: id
+  note: Extension ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: Extension name
+  range: 'Extension{5}, Test Plugin{3}, Sample App{2}'
+- field: code
+  note: Extension code
+  range: 'ext001,ext002,ext003,patch001,invalid_ext,empty_files,no_dirs,normal_ext,test_code,sample_app'
+- field: version
+  note: Extension version
+  range: '1.0.0{3},2.1.0{2},0.9.5{2},3.0.0{3}'
+- field: author
+  note: Extension author
+  range: 'Author A{4},Author B{3},Test Author{3}'
+- field: desc
+  note: Extension description
+  range: 'Test extension for unit testing{5},Sample plugin description{3},Another test extension{2}'
+- field: license
+  note: Extension license
+  range: 'GPL{4},MIT{3},Apache{3}'
+- field: type
+  note: Extension type
+  range: 'extension{7},patch{2},plugin{1}'
+- field: site
+  note: Extension site
+  range: 'https://example.com{5},https://test.org{3},https://sample.net{2}'
+- field: zentaoCompatible
+  note: ZenTao compatible version
+  range: '18.0+{4},19.0+{3},20.0+{3}'
+- field: installedTime
+  note: Installation time
+  range: '2023-01-01 10:00:00,2023-02-15 14:30:00,2023-03-20 09:15:00,2023-04-10 16:45:00,2023-05-05 11:20:00,2023-06-18 13:50:00,2023-07-22 08:30:00,2023-08-30 17:10:00,2023-09-12 12:40:00,2023-10-25 15:25:00'
+- field: depends
+  note: Extension dependencies
+  range: '{4},[]{3},ext001{2},ext002{1}'
+- field: dirs
+  note: Extension directories in JSON format
+  range: '["module/test","www/test"]{3},["custom/dir1","custom/dir2"]{2},["www/assets"]{2},[]{2},["single/dir"]{1}'
+- field: files
+  note: Extension files in JSON format
+  range: '{"module/test/test.php":"abc123","www/test/test.js":"def456"}{3},{"custom/file.php":"xyz789"}{2},{"www/style.css":"uvw321"}{2},[]{2},{"single.php":"qrs654"}{1}'
+- field: status
+  note: Extension status
+  range: 'available{6},installed{2},deactivated{2}'

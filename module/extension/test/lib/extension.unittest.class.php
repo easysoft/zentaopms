@@ -742,4 +742,19 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test removePackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function removePackageTest(string $extension): array
+    {
+        $result = $this->objectModel->removePackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
