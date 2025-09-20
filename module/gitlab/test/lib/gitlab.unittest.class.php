@@ -198,7 +198,18 @@ class gitlabTest
     public function setProjectTest(int $gitlabID, int $projectID, object $project)
     {
         $this->gitlab->setProject($gitlabID, $projectID, $project);
-        return $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        // 通过反射访问protected属性验证设置是否成功
+        $reflection = new ReflectionClass($this->gitlab);
+        $projectsProperty = $reflection->getProperty('projects');
+        $projectsProperty->setAccessible(true);
+        $projects = $projectsProperty->getValue($this->gitlab);
+
+        if(isset($projects[$gitlabID][$projectID])) {
+            return $projects[$gitlabID][$projectID];
+        }
+
+        return false;
     }
 
     /**
