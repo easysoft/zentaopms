@@ -1337,9 +1337,19 @@ class executionTest
     {
         if($planID) $this->executionModel->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
 
-        $this->executionModel->linkStories($executionID);
-        $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
-        return count($objects);
+        $result = $this->executionModel->linkStories($executionID);
+        if(dao::isError()) return 0;
+
+        if($productID > 0)
+        {
+            $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
+            return count($objects);
+        }
+        else
+        {
+            $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            return count($objects);
+        }
     }
 
     /**
