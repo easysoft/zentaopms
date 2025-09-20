@@ -100,6 +100,23 @@ class gitlabTest
         return $this->gitlab->getRelationByObject($objectType, $objectID);
     }
 
+    /**
+     * Test apiGetSingleJob method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetSingleJobTest($gitlabID, $projectID, $jobID)
+    {
+        $result = $this->gitlab->apiGetSingleJob($gitlabID, $projectID, $jobID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function getIssueListByObjectsTest(string $objectType, array $objects)
     {
         return $this->gitlab->getIssueListByObjects($objectType, $objects);
@@ -1326,6 +1343,23 @@ class gitlabTest
     public function apiGetProjectMembersTest(int $gitlabID, int $projectID, int $userID = 0): object|array|null
     {
         $result = $this->gitlab->apiGetProjectMembers($gitlabID, $projectID, $userID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetSinglePipeline method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetSinglePipelineTest(int $gitlabID, int $projectID, int $pipelineID): object|array|null
+    {
+        $result = $this->gitlab->apiGetSinglePipeline($gitlabID, $projectID, $pipelineID);
         if(dao::isError()) return dao::getError();
 
         return $result;
