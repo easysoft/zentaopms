@@ -212,17 +212,20 @@ class gitlabTest
     }
 
     /**
-     * Api get signle tag.
+     * Test apiGetSingleTag method.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $tag
      * @access public
-     * @return object
+     * @return mixed
      */
     public function apiGetSingleTagTest($gitlabID, $projectID, $tag)
     {
-        return $this->gitlab->apiGetSingleTag($gitlabID, $projectID, $tag);
+        $result = $this->gitlab->apiGetSingleTag($gitlabID, $projectID, $tag);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
