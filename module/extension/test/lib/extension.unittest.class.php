@@ -757,4 +757,20 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test saveExtension method.
+     *
+     * @param  string $code
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function saveExtensionTest(string $code, string $type)
+    {
+        $result = $this->objectModel->saveExtension($code, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
