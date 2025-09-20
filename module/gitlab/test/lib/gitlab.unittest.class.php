@@ -1194,4 +1194,38 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiDeleteLabel method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $labelName
+     * @access public
+     * @return mixed
+     */
+    public function apiDeleteLabelTest(int $gitlabID, int $projectID, string $labelName)
+    {
+        $result = $this->gitlab->apiDeleteLabel($gitlabID, $projectID, $labelName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiDeleteTagPriv method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return mixed
+     */
+    public function apiDeleteTagPrivTest(int $gitlabID, int $projectID, string $tag)
+    {
+        $result = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
