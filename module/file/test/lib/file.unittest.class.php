@@ -992,4 +992,19 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test fileMTime method.
+     *
+     * @param  object $file
+     * @access public
+     * @return int|false
+     */
+    public function fileMTimeTest($file)
+    {
+        $result = $this->objectModel->fileMTime($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
