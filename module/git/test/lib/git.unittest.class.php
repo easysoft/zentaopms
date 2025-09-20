@@ -140,4 +140,18 @@ class gitTest
 
         return count($relations) > 0 ? 'success' : 'no_relation';
     }
+
+    /**
+     * Test getRepos method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getReposTest(): array
+    {
+        $result = $this->gitModel->getRepos();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
