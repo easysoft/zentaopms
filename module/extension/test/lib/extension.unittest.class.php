@@ -42,6 +42,21 @@ class extensionTest
     }
 
     /**
+     * Test getFilesFromPackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return mixed
+     */
+    public function getFilesFromPackageTest($extension = '')
+    {
+        $result = $this->objectModel->getFilesFromPackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test removeExtensionFiles method.
      *
      * @param  string $files
@@ -663,6 +678,36 @@ class extensionTest
     public function executeDBTest(string $extension, string $method = 'install'): object
     {
         $result = $this->objectModel->executeDB($extension, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExpireDate method.
+     *
+     * @param  object $extension
+     * @access public
+     * @return string
+     */
+    public function getExpireDateTest(object $extension): string
+    {
+        $result = $this->objectModel->getExpireDate($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExpiringPlugins method.
+     *
+     * @param  bool $isGroup
+     * @access public
+     * @return array
+     */
+    public function getExpiringPluginsTest(bool $isGroup = false): array
+    {
+        $result = $this->objectModel->getExpiringPlugins($isGroup);
         if(dao::isError()) return dao::getError();
 
         return $result;
