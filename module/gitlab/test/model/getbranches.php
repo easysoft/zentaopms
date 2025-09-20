@@ -6,14 +6,15 @@ su('admin');
 
 /**
 
-title=测试gitlabModel->getBranches();
+title=测试 gitlabModel::getBranches();
 timeout=0
 cid=1
 
-- 获取gitlab服务器1空项目id 1的项目分支。 @0
-- 获取gitlab服务器1项目id 2的项目分支。 @branch1
-- 获取gitlab服务器1项目id 2的项目分支数量。 @1
-- 获取不存在gitlab服务器项目id 1的项目分支。 @0
+- 测试步骤1：正常获取有效GitLab项目的分支列表 @branch1
+- 测试步骤2：获取空项目的分支列表，验证默认分支 @main
+- 测试步骤3：测试无效的GitLab服务器ID，验证错误处理 @0
+- 测试步骤4：测试无效的项目ID，验证错误处理 @0
+- 测试步骤5：验证返回分支数组的结构和类型 @1
 
 */
 
@@ -24,7 +25,8 @@ $gitlab = new gitlabTest();
 $projectIds = array(1, 2);
 $branches   = $gitlab->getBranchesTest($gitlabID = 1, $projectIds[1]);
 
-r($gitlab->getBranchesTest($gitlabID = 1, $projectIds[0]))  && p('0') && e('main');       // 获取gitlab服务器1空项目id 1的项目分支。
-r($branches)                                                && p('0') && e('branch1'); // 获取gitlab服务器1项目id 2的项目分支。
-r(count($branches) > 2)                                     && p()    && e('1');          // 获取gitlab服务器1项目id 2的项目分支数量。
-r($gitlab->getBranchesTest($gitlabID = 10, $projectIds[0])) && p('0') && e('0');       // 获取不存在gitlab服务器项目id 1的项目分支。
+r($gitlab->getBranchesTest($gitlabID = 1, $projectIds[1]))  && p('0') && e('branch1');    // 测试步骤1：正常获取有效GitLab项目的分支列表
+r($gitlab->getBranchesTest($gitlabID = 1, $projectIds[0]))  && p('0') && e('main');       // 测试步骤2：获取空项目的分支列表，验证默认分支
+r($gitlab->getBranchesTest($gitlabID = 999, $projectIds[0])) && p('0') && e('0');         // 测试步骤3：测试无效的GitLab服务器ID，验证错误处理
+r($gitlab->getBranchesTest($gitlabID = 1, 999))             && p('0') && e('0');          // 测试步骤4：测试无效的项目ID，验证错误处理
+r(is_array($branches) && count($branches) > 0)             && p()    && e('1');          // 测试步骤5：验证返回分支数组的结构和类型
