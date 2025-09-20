@@ -727,4 +727,19 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test getPathsFromPackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function getPathsFromPackageTest(string $extension): array
+    {
+        $result = $this->objectModel->getPathsFromPackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
