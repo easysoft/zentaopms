@@ -594,6 +594,21 @@ class extensionTest
     }
 
     /**
+     * Test checkVersion method.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function checkVersionTest(string $version)
+    {
+        $result = $this->objectModel->checkVersion($version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test version of compareForLimit method.
      *
      * @param  string       $version
@@ -618,6 +633,37 @@ class extensionTest
         }
 
         if($type != 'between') return !$result;
+
+        return $result;
+    }
+
+    /**
+     * Test erasePackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function erasePackageTest(string $extension): array
+    {
+        $result = $this->objectModel->erasePackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test executeDB method.
+     *
+     * @param  string $extension
+     * @param  string $method
+     * @access public
+     * @return object
+     */
+    public function executeDBTest(string $extension, string $method = 'install'): object
+    {
+        $result = $this->objectModel->executeDB($extension, $method);
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
