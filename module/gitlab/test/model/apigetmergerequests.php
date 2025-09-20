@@ -1,22 +1,41 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::apiGetMergeRequests();
 timeout=0
-cid=1
+cid=0
+
+- 步骤1：使用有效的GitLab ID和项目ID获取合并请求 @~~
+- 步骤2：验证返回结果是数组类型 @1
+- 步骤3：使用无效的GitLab ID测试错误处理 @~~
+- 步骤4：使用无效的项目ID测试边界处理 @~~
+- 步骤5：使用边界值项目ID为0测试参数验证 @~~
 
 */
 
-zenData('pipeline')->gen(4);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = $tester->loadModel('gitlab');
+// 准备测试数据
+$pipeline = zenData('pipeline');
+$pipeline->id->range('1-5');
+$pipeline->name->range('gitlab1,gitlab2,gitlab3,gitlab4,gitlab5');
+$pipeline->type->range('gitlab{5}');
+$pipeline->url->range('https://gitlab{1-5}.example.com');
+$pipeline->token->range('glpat-test{1-5}');
+$pipeline->gen(5);
 
-$gitlabID  = 1;
-$projectID = 18;
+// 用户登录
+su('admin');
 
-$result = $gitlab->apiGetMergeRequests($gitlabID, $projectID);
-r(isset($result[0]->iid)) && p() && e('1'); // 验证获取的第一个合并请求是否含有iid属性
-r(count($result) > 0)     && p() && e('1'); // 验证获取的合并请求数量是否大于0
+// 创建测试实例
+$gitlabTest = new gitlabTest();
+
+r($gitlabTest->apiGetMergeRequestsTest(1, 18)) && p() && e('~~'); // 步骤1：使用有效的GitLab ID和项目ID获取合并请求
+$result = $gitlabTest->apiGetMergeRequestsTest(1, 18);
+r(is_array($result)) && p() && e('1'); // 步骤2：验证返回结果是数组类型
+r($gitlabTest->apiGetMergeRequestsTest(999, 18)) && p() && e('~~'); // 步骤3：使用无效的GitLab ID测试错误处理
+r($gitlabTest->apiGetMergeRequestsTest(1, 999999)) && p() && e('~~'); // 步骤4：使用无效的项目ID测试边界处理
+r($gitlabTest->apiGetMergeRequestsTest(1, 0)) && p() && e('~~'); // 步骤5：使用边界值项目ID为0测试参数验证

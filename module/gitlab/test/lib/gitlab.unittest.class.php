@@ -1228,4 +1228,54 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetJobLog method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetJobLogTest(int $gitlabID, int $projectID, int $jobID)
+    {
+        $result = $this->gitlab->apiGetJobLog($gitlabID, $projectID, $jobID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetJobs method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetJobsTest(int $gitlabID, int $projectID, int $pipelineID)
+    {
+        $result = $this->gitlab->apiGetJobs($gitlabID, $projectID, $pipelineID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetMergeRequests method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetMergeRequestsTest(int $gitlabID, int $projectID)
+    {
+        $result = $this->gitlab->apiGetMergeRequests($gitlabID, $projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
