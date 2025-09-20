@@ -50,6 +50,22 @@ class gitlabTest
     }
 
     /**
+     * Test apiUpdateGroup method.
+     *
+     * @param  int    $gitlabID
+     * @param  object $group
+     * @access public
+     * @return mixed
+     */
+    public function apiUpdateGroupTest(int $gitlabID, object $group): mixed
+    {
+        $result = $this->gitlab->apiUpdateGroup($gitlabID, $group);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test apiDeleteGroup method.
      *
      * @param  int $gitlabID
