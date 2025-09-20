@@ -47,6 +47,21 @@ class fileTest
     }
 
     /**
+     * Test saveAsTempFile method.
+     *
+     * @param  object $file
+     * @access public
+     * @return mixed
+     */
+    public function saveAsTempFileTest($file)
+    {
+        $result = $this->objectModel->saveAsTempFile($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test get info of uploaded files.
      *
      * @param  array $files
