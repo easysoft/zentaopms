@@ -376,13 +376,37 @@ class fileTest
     /**
      * Test set the web path of upload files.
      *
+     * @param  int|null    $companyID
+     * @param  string|null $webRoot
      * @access public
      * @return string
      */
-    public function setWebPathTest()
+    public function setWebPathTest($companyID = null, $webRoot = null)
     {
         global $tester;
-        $tester->config->webRoot = '/';
+
+        // 设置webRoot，默认为'/'
+        if($webRoot !== null)
+        {
+            $tester->config->webRoot = $webRoot;
+        }
+        else
+        {
+            $tester->config->webRoot = '/';
+        }
+
+        // 设置公司ID
+        if($companyID !== null)
+        {
+            $tester->app->company = new stdClass();
+            $tester->app->company->id = $companyID;
+        }
+        else
+        {
+            // 测试未设置公司ID的情况，应该使用默认值1
+            if(isset($tester->app->company)) unset($tester->app->company);
+        }
+
         $this->objectModel->setWebPath();
 
         return $this->objectModel->webPath;
