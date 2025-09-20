@@ -712,4 +712,19 @@ class extensionTest
 
         return $result;
     }
+
+    /**
+     * Test getPackageFile method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return string
+     */
+    public function getPackageFileTest(string $extension): string
+    {
+        $result = $this->objectModel->getPackageFile($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
