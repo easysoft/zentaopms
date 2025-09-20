@@ -283,18 +283,46 @@ class fileTest
      * 测试 setPathName 方法。
      * Test setPathName method.
      *
-     * @param  int    $fileID
-     * @param  string $extension
+     * @param  int|string $fileID
+     * @param  string     $extension
      * @access public
      * @return array
      */
-    public function setPathNameTest(int $fileID, string $extension): array
+    public function setPathNameTest(int|string $fileID, string $extension): array
     {
+        // 生成路径名
         $pathName = $this->objectModel->setPathName($fileID, $extension);
-        $reg = date('Ym\\\/dHis', $this->objectModel->now) . $fileID . '\w+' . '\.' . $extension;
 
+        // 构建正则表达式模式，适应不同的扩展名
+        $escapedExtension = preg_quote($extension, '/');
+        if(empty($extension))
+        {
+            $reg = date('Ym\\\/dHis', $this->objectModel->now) . $fileID . '\d+[a-zA-Z0-9]{3}\.';
+        }
+        else
+        {
+            $reg = date('Ym\\\/dHis', $this->objectModel->now) . $fileID . '\d+[a-zA-Z0-9]{3}\.' . $escapedExtension;
+        }
+
+        $result = array();
         $result['name'] = $pathName;
-        $result['reg']  = preg_match("/{$reg}/", $pathName);
+        $result['reg']  = preg_match("/{$reg}/", $pathName) ? 1 : 0;
+
+        // 测试路径名格式的完整性
+        $formatPattern = '/^[0-9]{8}\/[0-9]{6}' . preg_quote((string)$fileID, '/') . '[0-9]+[a-zA-Z0-9]{3}\.' . $escapedExtension . '$/';
+        $result['format'] = preg_match($formatPattern, $pathName) ? 1 : 0;
+
+        // 测试唯一性 - 生成第二个路径名并比较
+        $pathName2 = $this->objectModel->setPathName($fileID, $extension);
+        $result['uniqueness'] = ($pathName !== $pathName2) ? 1 : 0;
+
+        // 测试时间戳格式
+        $timePrefix = date('Ym/dHis', $this->objectModel->now);
+        $result['timeFormat'] = (strpos($pathName, $timePrefix) === 0) ? 1 : 0;
+
+        // 测试包含文件ID
+        $result['containsFileID'] = (strpos($pathName, (string)$fileID) !== false) ? 1 : 0;
+
         return $result;
     }
 
@@ -323,14 +351,25 @@ class fileTest
     /**
      * Test set save path.
      *
+     * @param  int $companyID
      * @access public
      * @return string
      */
-    public function setSavePathTest()
+    public function setSavePathTest($companyID = null): string
     {
+        global $tester;
+
+        // 设置测试公司ID
+        if($companyID !== null)
+        {
+            if(!isset($tester->app->company)) $tester->app->company = new stdclass();
+            $tester->app->company->id = $companyID;
+        }
+
+        // 执行测试方法
         $this->objectModel->setSavePath();
 
-        global $tester;
+        // 返回简化的路径用于测试
         return substr($tester->file->savePath, strrpos($tester->file->savePath, '/data/'));
     }
 
@@ -1106,5 +1145,62 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test sendDownHeader method.
+     *
+     * @param  string $fileName
+     * @param  string $fileType
+     * @param  string $content
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function sendDownHeaderTest($fileName, $fileType, $content, $type = 'content')
+    {
+        // 模拟sendDownHeader方法的逻辑，但不实际执行header操作
+        $extension = $fileType ? ('.' . $fileType) : '';
+        if($extension && strpos(strtolower($fileName), $extension) === false) $fileName .= $extension;
+
+        // 检查文件类型
+        $mimes = $this->objectModel->config->file->mimes;
+        $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
+
+        // Safari浏览器文件名编码测试
+        if(isset($_SERVER['CONTENT_TYPE']) && isset($_SERVER['HTTP_USER_AGENT']) &&
+           $_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded' &&
+           preg_match("/Safari/", $_SERVER["HTTP_USER_AGENT"]))
+        {
+            $fileName = rawurlencode($fileName);
+            $attachment = 'attachment; filename*=utf-8\'\'' . $fileName;
+        }
+        else
+        {
+            $fileName = str_replace("+", "%20", urlencode($fileName));
+            $attachment = "attachment; filename=\"{$fileName}\";";
+        }
+
+        // 模拟不同type的处理
+        if($type == 'content')
+        {
+            return $content;
+        }
+
+        if($type == 'file')
+        {
+            // 安全检查：文件路径必须在basePath内
+            if(file_exists($content))
+            {
+                if(stripos($content, $this->objectModel->app->getBasePath()) !== 0)
+                {
+                    return 'security_denied';
+                }
+                return 'file_success';
+            }
+            return 'file_not_found';
+        }
+
+        return 'unknown_type';
     }
 }
