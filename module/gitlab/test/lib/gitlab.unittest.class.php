@@ -1278,4 +1278,19 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetNamespaces method.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return array
+     */
+    public function apiGetNamespacesTest(int $gitlabID): array
+    {
+        $result = $this->gitlab->apiGetNamespaces($gitlabID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
