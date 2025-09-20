@@ -1400,4 +1400,20 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiUpdateProject method.
+     *
+     * @param  int    $gitlabID
+     * @param  object $project
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiUpdateProjectTest(int $gitlabID, object $project): object|array|null|false
+    {
+        $result = $this->gitlab->apiUpdateProject($gitlabID, $project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
