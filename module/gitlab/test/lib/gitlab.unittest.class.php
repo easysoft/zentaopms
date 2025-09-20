@@ -1383,4 +1383,21 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiUpdateGroupMember method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  object $member
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiUpdateGroupMemberTest(int $gitlabID, int $groupID, object $member): object|array|null|false
+    {
+        $result = $this->gitlab->apiUpdateGroupMember($gitlabID, $groupID, $member);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
