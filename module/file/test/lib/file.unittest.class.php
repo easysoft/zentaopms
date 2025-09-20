@@ -1227,4 +1227,21 @@ class fileTest
 
         return 'unknown_type';
     }
+
+    /**
+     * Test unlinkFile method.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool|null
+     */
+    public function unlinkFileTest($file)
+    {
+        if($file === null) return false;
+
+        $result = $this->objectModel->unlinkFile($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
