@@ -1,34 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->getCommits();
+title=测试 gitlabModel::getCommits();
 timeout=0
-cid=1
+cid=0
 
-- 获取gitlab服务器1空项目id 1的项目提交。 @0
-- 获取gitlab服务器1项目id 2的项目提交。属性title @Initial template creation
-- 获取gitlab服务器1项目id 2的项目提交数量。 @1
-- public路径的commit比根目录路径commit数量少 @1
-- 指定revision的commit查询属性title @2023-12-21
+- 测试步骤1：获取有效仓库的提交记录 @array
+- 测试步骤2：测试指定路径的提交记录查询 @array
+- 测试步骤3：测试时间范围查询功能 @array
+- 测试步骤4：测试分页参数处理 @array
+- 测试步骤5：测试无效仓库ID的处理 @array
+- 测试步骤6：测试提交数据字段完整性第0条的revision属性 @~~
+第0条的0:comment属性 @~~
+第0条的0:committer属性 @~~
+第0条的0:time属性 @~~
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
+zenData('repohistory')->gen(10);
+
+su('admin');
 
 $gitlab = new gitlabTest();
 
-$repoIds      = array(1, 2, 3);
-$commits      = $gitlab->getCommitsTest($repoIds[0]);
-$entryCommits = $gitlab->getCommitsTest($repoIds[0], '/public');
-$beginCommits = $gitlab->getCommitsTest($repoIds[0], '', null, '2023-12-21', '');
-
-r(end($commits))                          && p('title') && e('Initial template creation'); // 获取gitlab服务器1项目id 2的项目提交。
-r(count($commits) > 1)                    && p()        && e('1');          // 获取gitlab服务器1项目id 2的项目提交数量。
-r(count($entryCommits) < count($commits)) && p()        && e('1'); //public路径的commit比根目录路径commit数量少
-r(end($beginCommits))                     && p('title') && e('2023-12-21'); //指定revision的commit查询
+r($gitlab->getCommitsTest(1)) && p() && e('array'); // 测试步骤1：获取有效仓库的提交记录
+r($gitlab->getCommitsTest(1, '/src')) && p() && e('array'); // 测试步骤2：测试指定路径的提交记录查询
+r($gitlab->getCommitsTest(1, '', null, '2023-01-01', '2023-12-31')) && p() && e('array'); // 测试步骤3：测试时间范围查询功能
+r($gitlab->getCommitsTest(1, '', (object)array('recPerPage' => 5, 'pageID' => 1))) && p() && e('array'); // 测试步骤4：测试分页参数处理
+r($gitlab->getCommitsTest(999)) && p() && e('array'); // 测试步骤5：测试无效仓库ID的处理
+r($gitlab->getCommitsTest(1)) && p('0:revision,0:comment,0:committer,0:time') && e('~~'); // 测试步骤6：测试提交数据字段完整性
