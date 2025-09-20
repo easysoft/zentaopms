@@ -195,6 +195,76 @@ class fileTest
     }
 
     /**
+     * Test if import path ends with 'import'.
+     *
+     * @access public
+     * @return int
+     */
+    public function getPathOfImportedFileEndsWithImportTest(): int
+    {
+        $path = $this->objectModel->getPathOfImportedFile();
+
+        if(dao::isError()) return 0;
+
+        return (substr($path, -6) === 'import') ? 1 : 0;
+    }
+
+    /**
+     * Test consistency of multiple calls to getPathOfImportedFile.
+     *
+     * @access public
+     * @return int
+     */
+    public function getPathOfImportedFileConsistencyTest(): int
+    {
+        $path1 = $this->objectModel->getPathOfImportedFile();
+        $path2 = $this->objectModel->getPathOfImportedFile();
+
+        if(dao::isError()) return 0;
+
+        return ($path1 === $path2) ? 1 : 0;
+    }
+
+    /**
+     * Test if import path contains 'tmp' prefix.
+     *
+     * @access public
+     * @return int
+     */
+    public function getPathOfImportedFileContainsTmpTest(): int
+    {
+        $path = $this->objectModel->getPathOfImportedFile();
+
+        if(dao::isError()) return 0;
+
+        return (strpos($path, 'tmp') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test if import path has valid structure.
+     *
+     * @access public
+     * @return int
+     */
+    public function getPathOfImportedFileValidStructureTest(): int
+    {
+        $path = $this->objectModel->getPathOfImportedFile();
+
+        if(dao::isError()) return 0;
+
+        // 验证路径是绝对路径且包含必要的目录结构
+        $isValidStructure = (
+            is_string($path) &&
+            !empty($path) &&
+            strpos($path, 'tmp') !== false &&
+            substr($path, -6) === 'import' &&
+            is_dir($path)
+        );
+
+        return $isValidStructure ? 1 : 0;
+    }
+
+    /**
      * 测试 setPathName 方法。
      * Test setPathName method.
      *
