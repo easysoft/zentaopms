@@ -24,28 +24,44 @@ class gitlabTest
     }
 
     /**
-     * Get gitlab list.
+     * Test getList method.
      *
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function getList($orderBy = 'id_desc')
+    public function getListTest($orderBy = 'id_desc', $pager = null)
     {
-        $gitlab = $this->objectModel->getList($orderBy);
-        if(empty($gitlab)) return 0;
-        return $gitlab;
+        $result = $this->objectModel->getList($orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return 0;
+        return $result;
     }
 
     /**
      * Get gitlab pairs
      *
-     * @return string
+     * @return array
      */
     public function getPairs()
     {
         $pairs = $this->objectModel->getPairs();
         return $pairs;
+    }
+
+    /**
+     * Test getPairs method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getPairsTest()
+    {
+        $result = $this->objectModel->getPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
