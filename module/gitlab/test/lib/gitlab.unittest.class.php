@@ -1,27 +1,26 @@
 <?php
+declare(strict_types = 1);
 class gitlabTest
 {
-    public $tester;
-
     public function __construct()
     {
         global $tester;
-        $this->tester = $tester;
-        $this->gitlab = $this->tester->loadModel('gitlab');
+        $this->objectModel = $tester->loadModel('gitlab');
     }
 
     /**
-     * Get by id.
+     * Test getByID method.
      *
-     * @param  int    $id
+     * @param  int|string $id
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function getByID($id)
+    public function getByIdTest($id)
     {
-        $gitlab = $this->gitlab->getByID($id);
-        if(empty($gitlab)) return 0;
-        return $gitlab;
+        $result = $this->objectModel->getByID($id);
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return '0';
+        return $result;
     }
 
     /**
@@ -33,7 +32,7 @@ class gitlabTest
      */
     public function getList($orderBy = 'id_desc')
     {
-        $gitlab = $this->gitlab->getList($orderBy);
+        $gitlab = $this->objectModel->getList($orderBy);
         if(empty($gitlab)) return 0;
         return $gitlab;
     }
@@ -45,7 +44,7 @@ class gitlabTest
      */
     public function getPairs()
     {
-        $pairs = $this->gitlab->getPairs();
+        $pairs = $this->objectModel->getPairs();
         return $pairs;
     }
 
@@ -133,9 +132,20 @@ class gitlabTest
         return $result;
     }
 
+    /**
+     * Test getIssueListByObjects method.
+     *
+     * @param  string $objectType
+     * @param  array  $objects
+     * @access public
+     * @return mixed
+     */
     public function getIssueListByObjectsTest(string $objectType, array $objects)
     {
-        return $this->gitlab->getIssueListByObjects($objectType, $objects);
+        $result = $this->objectModel->getIssueListByObjects($objectType, $objects);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     public function getProjectNameTest(int $gitlabID, int $projectID)
