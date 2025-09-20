@@ -49,6 +49,22 @@ class gitlabTest
         return $pairs;
     }
 
+    /**
+     * Test apiDeleteGroup method.
+     *
+     * @param  int $gitlabID
+     * @param  int $groupID
+     * @access public
+     * @return mixed
+     */
+    public function apiDeleteGroupTest($gitlabID = null, $groupID = null)
+    {
+        $result = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function getApiRootTest(int $gitlabID, bool $sudo = true)
     {
         return $this->gitlab->getApiRoot($gitlabID, $sudo);

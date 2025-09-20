@@ -1,52 +1,37 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::apiDeleteGroup();
 timeout=0
-cid=1
+cid=0
 
-- 使用空的groupID删除gitlab群组 @0
-- 使用错误gitlabID删除群组 @0
-- 通过gitlabID,projectID,分支对象正确删除GitLab群组属性message @202 Accepted
+- 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$validGitlabID, $emptyGroupID  @0
+- 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$invalidGitlabID, $validGroupID  @~~
+- 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$validGitlabID, $negativeGroupID  @0
+- 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$validGitlabID, 999999  @~~
+- 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$validGitlabID, $validGroupID  @~~
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+
 zenData('pipeline')->gen(5);
 
-$gitlab = $tester->loadModel('gitlab');
+su('admin');
 
-$gitlabID  = 1;
+$gitlabTest = new gitlabTest();
 
-/* Create group. */
-$group = new stdclass();
-$group->name                    = 'unitTestGroup17';
-$group->path                    = 'unit_test_group17';
-$group->description             = 'unit_test_group desc';
-$group->visibility              = 'public';
-$group->request_access_enabled  = '1';
-$group->lfs_enabled             = '1';
-$group->project_creation_level  = 'developer';
-$group->subgroup_creation_level = 'maintainer';
-$gitlab->apiCreateGroup($gitlabID, $group);
+$validGitlabID = 1;
+$validGroupID = 12345;
+$invalidGitlabID = 0;
+$emptyGroupID = 0;
+$negativeGroupID = -1;
 
-/* Get groupID. */
-$gitlabGroups = $gitlab->apiGetGroups($gitlabID);
-foreach($gitlabGroups as $gitlabGroup)
-{
-    if($gitlabGroup->name == 'unitTestGroup17')
-    {
-        $groupID = $gitlabGroup->id;
-        break;
-    }
-}
-
-$group = new stdclass();
-$group->description = 'apiUpdatedGroup';
-
-r($gitlab->apiDeleteGroup($gitlabID, 0)) && p() && e('0'); //使用空的groupID删除gitlab群组
-r($gitlab->apiDeleteGroup(0, $groupID))         && p() && e('0'); //使用错误gitlabID删除群组
-
-r($gitlab->apiDeleteGroup($gitlabID, $groupID)) && p('message') && e('202 Accepted');         //通过gitlabID,projectID,分支对象正确删除GitLab群组
+r($gitlabTest->apiDeleteGroupTest($validGitlabID, $emptyGroupID)) && p() && e('0');
+r($gitlabTest->apiDeleteGroupTest($invalidGitlabID, $validGroupID)) && p() && e('~~');
+r($gitlabTest->apiDeleteGroupTest($validGitlabID, $negativeGroupID)) && p() && e('0');
+r($gitlabTest->apiDeleteGroupTest($validGitlabID, 999999)) && p() && e('~~');
+r($gitlabTest->apiDeleteGroupTest($validGitlabID, $validGroupID)) && p() && e('~~');
