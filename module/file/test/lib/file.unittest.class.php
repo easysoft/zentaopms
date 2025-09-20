@@ -928,31 +928,31 @@ class fileTest
     public function updateFileNameTest(int $fileID, string $fileName = '', string $extension = ''): array
     {
         global $tester;
-        
+
         // 设置POST数据
         $_POST['fileName'] = $fileName;
         $_POST['extension'] = $extension;
-        
+
         try
         {
             // 先加载file模型
             $fileModel = $tester->loadModel('file');
-            
+
             // 检查文件是否存在
             $file = $fileModel->getByID($fileID);
             if(empty($file)) return array('result' => 'fail', 'message' => 'File not found');
-                
+
             // 验证fileName长度
-            if(empty($fileName) || strlen($fileName) > 80) 
+            if(empty($fileName) || strlen($fileName) > 80)
             {
                 return array('result' => 'fail', 'message' => 'File name length should be between 1-80 characters');
             }
 
             $newFileName = $fileName . '.' . $extension;
-            
+
             // 更新数据库
             $tester->dao->update(TABLE_FILE)->set('title')->eq($newFileName)->where('id')->eq($fileID)->exec();
-            
+
             if(dao::isError()) return array('result' => 'fail', 'message' => 'Database update failed');
 
             // 创建action记录
@@ -972,9 +972,24 @@ class fileTest
             unset($_POST['fileName']);
             unset($_POST['extension']);
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
+        return $result;
+    }
+
+    /**
+     * Test fileExists method.
+     *
+     * @param  object $file
+     * @access public
+     * @return bool
+     */
+    public function fileExistsTest($file)
+    {
+        $result = $this->objectModel->fileExists($file);
+        if(dao::isError()) return dao::getError();
+
         return $result;
     }
 }
