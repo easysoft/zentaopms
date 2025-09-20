@@ -166,7 +166,10 @@ class gitlabTest
 
     public function getProjectNameTest(int $gitlabID, int $projectID)
     {
-        return $this->gitlab->getProjectName($gitlabID, $projectID);
+        $result = $this->objectModel->getProjectName($gitlabID, $projectID);
+        if(dao::isError()) return dao::getError();
+        if($result === false) return '0';
+        return $result;
     }
 
     public function getBranchesTest(int $gitlabID, int $projectID)
