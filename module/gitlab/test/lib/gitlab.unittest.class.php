@@ -1161,4 +1161,21 @@ class gitlabTest
 
         return $object;
     }
+
+    /**
+     * Test apiDeleteBranchPriv method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function apiDeleteBranchPrivTest(int $gitlabID, int $projectID, string $branch)
+    {
+        $result = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
