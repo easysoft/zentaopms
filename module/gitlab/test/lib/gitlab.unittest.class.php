@@ -209,17 +209,20 @@ class gitlabTest
     }
 
     /**
-     * Api get signle branch.
+     * Test apiGetSingleBranch method.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object
+     * @return object|array|null
      */
     public function apiGetSingleBranchTest($gitlabID, $projectID, $branch)
     {
-        return $this->gitlab->apiGetSingleBranch($gitlabID, $projectID, $branch);
+        $result = $this->gitlab->apiGetSingleBranch($gitlabID, $projectID, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -1306,6 +1309,23 @@ class gitlabTest
     public function apiGetPipelineTest(int $gitlabID, int $projectID, string $branch): object|array|null
     {
         $result = $this->gitlab->apiGetPipeline($gitlabID, $projectID, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetProjectMembers method.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $userID
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetProjectMembersTest(int $gitlabID, int $projectID, int $userID = 0): object|array|null
+    {
+        $result = $this->gitlab->apiGetProjectMembers($gitlabID, $projectID, $userID);
         if(dao::isError()) return dao::getError();
 
         return $result;
