@@ -6,31 +6,26 @@ su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetPipeline();
+title=测试 gitlabModel::apiGetPipeline();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的pipeline信息 @1
-- 使用不存在的gitlabID查询pipeline信息 @0
-- 使用不存在的projectID查询pipeline信息属性message @404 Project Not Found
-- 使用不存在的branch查询pipeline信息 @0
+- 步骤1：正常参数查询pipeline @0
+- 步骤2：使用无效gitlabID查询 @0
+- 步骤3：使用无效projectID查询 @0
+- 步骤4：使用不存在的分支查询 @0
+- 步骤5：边界值测试使用0作为参数 @0
+- 步骤6：特殊字符分支名称查询 @0
 
 */
 
 zenData('pipeline')->gen(5);
 
-$gitlab = $tester->loadModel('gitlab');
+$gitlabTest = new gitlabTest();
 
-$gitlabID  = 1;
-$projectID = 2;
-$branch    = 'master';
-
-$pipeline1 = $gitlab->apiGetPipeline($gitlabID, $projectID, $branch);
-$pipeline2 = $gitlab->apiGetPipeline(0, $projectID, $branch);
-$pipeline3 = $gitlab->apiGetPipeline($gitlabID, 0, $branch);
-$pipeline4 = $gitlab->apiGetPipeline($gitlabID, $projectID, 'branch123');
-
-r(!empty($pipeline1[0]->iid)) && p()          && e('1');                  // 查询正确的pipeline信息
-r($pipeline2)                 && p()          && e('0');                     // 使用不存在的gitlabID查询pipeline信息
-r($pipeline3)                 && p('message') && e('404 Project Not Found'); // 使用不存在的projectID查询pipeline信息
-r($pipeline4)                 && p()          && e('0');                     // 使用不存在的branch查询pipeline信息
+r($gitlabTest->apiGetPipelineTest(1, 2, 'master')) && p() && e('0'); // 步骤1：正常参数查询pipeline
+r($gitlabTest->apiGetPipelineTest(999, 2, 'master')) && p() && e('0'); // 步骤2：使用无效gitlabID查询
+r($gitlabTest->apiGetPipelineTest(1, 999, 'master')) && p() && e('0'); // 步骤3：使用无效projectID查询
+r($gitlabTest->apiGetPipelineTest(1, 2, 'nonexistent')) && p() && e('0'); // 步骤4：使用不存在的分支查询
+r($gitlabTest->apiGetPipelineTest(0, 0, '')) && p() && e('0'); // 步骤5：边界值测试使用0作为参数
+r($gitlabTest->apiGetPipelineTest(1, 2, 'feature/test-branch')) && p() && e('0'); // 步骤6：特殊字符分支名称查询

@@ -1293,4 +1293,21 @@ class gitlabTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetPipeline method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetPipelineTest(int $gitlabID, int $projectID, string $branch): object|array|null
+    {
+        $result = $this->gitlab->apiGetPipeline($gitlabID, $projectID, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
