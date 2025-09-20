@@ -418,6 +418,23 @@ class gitlabTest
     }
 
     /**
+     * Test apiCreateHook method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $hook
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiCreateHookTest(int $gitlabID, int $projectID, object $hook): object|array|null|false
+    {
+        $result = $this->gitlab->apiCreateHook($gitlabID, $projectID, $hook);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test apiGetByGraphql method.
      *
      * @param  string $query
@@ -776,6 +793,23 @@ class gitlabTest
     }
 
     /**
+     * Test apiCreateLabel method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $label
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiCreateLabelTest(int $gitlabID, int $projectID, object $label): object|array|null|false
+    {
+        $result = $this->gitlab->apiCreateLabel($gitlabID, $projectID, $label);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkBindedUser method.
      *
      * @param  int    $gitlabID
@@ -984,6 +1018,23 @@ class gitlabTest
         }
 
         return $object;
+    }
+
+    /**
+     * Test apiCreatePipeline method.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $params
+     * @access public
+     * @return object|array|null
+     */
+    public function apiCreatePipelineTest(int $gitlabID, int $projectID, object $params): object|array|null
+    {
+        $result = $this->gitlab->apiCreatePipeline($gitlabID, $projectID, $params);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
