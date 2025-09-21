@@ -358,7 +358,7 @@ class ai extends control
     public function publishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '1');
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'load' => true));
         $this->sendError(dao::getError());
     }
 
@@ -372,7 +372,7 @@ class ai extends control
     public function unpublishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '0');
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'load' => true));
         $this->sendError(dao::getError());
     }
 
@@ -402,15 +402,9 @@ class ai extends control
         if(!is_file($fileName)) return $this->send($failResponse);
 
         $content = file_get_contents($fileName);
-        $content = str_replace(['<?php', "\r", "\n"], '', $content);
-        unlink($fileName);
         if(empty($content)) return $this->send($failResponse);
 
-        $pos = strpos($content, "\$ztApp = '");
-        if($pos != 0) return $this->send($failResponse);
-
-        $config = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
-        $ztApp  = json_decode($config);
+        $ztApp  = json_decode($content);
         if(!is_object($ztApp)) return $this->send($failResponse);
 
         $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
