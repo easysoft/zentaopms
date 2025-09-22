@@ -423,13 +423,18 @@ class deptTest
      * Test getChildDepts method.
      *
      * @param  mixed $rootDeptID
+     * @param  string $type
      * @access public
      * @return mixed
      */
-    public function getChildDeptsTest($rootDeptID = null)
+    public function getChildDeptsTest($rootDeptID = null, $type = '')
     {
         $result = $this->objectModel->getChildDepts((int)$rootDeptID);
         if(dao::isError()) return dao::getError();
+
+        if($type == 'count') return count($result);
+        if($type == 'empty') return empty($result);
+        if($type == 'array') return is_array($result);
 
         return $result;
     }
