@@ -287,7 +287,7 @@ class mailTest
     /**
      * Set subject.
      *
-     * @param  int    $subject
+     * @param  string $subject
      * @access public
      * @return object
      */
@@ -295,7 +295,14 @@ class mailTest
     {
         $this->objectModel->setSubject($subject);
 
-        return $this->setMTATest();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->Subject = $this->objectModel->mta->Subject;
+        $result->original = $subject;
+        $result->processed = stripslashes($subject);
+
+        return $result;
     }
 
     /**
