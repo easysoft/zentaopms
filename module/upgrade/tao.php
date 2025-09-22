@@ -911,7 +911,7 @@ class upgradeTao extends upgradeModel
     protected function getWorkflowGroupForProcess()
     {
         return $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)
-            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
+            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus,ipd')
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
     }

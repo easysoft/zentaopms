@@ -12046,6 +12046,7 @@ class upgradeModel extends model
             $nameFilter = array();
             $deliverable->workflowGroup = $groupID;
             $deliverable->activity      = $otherActivityID;
+
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
@@ -12218,8 +12219,47 @@ class upgradeModel extends model
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
             $this->dao->update(TABLE_APPROVAL)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
+
+            /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
+            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
+            {
+                $deliverable->doc        = 0;
+                $deliverable->docVersion = 0;
+                $deliverable->status     = 'draft';
+                $deliverable->version    = '';
+                $deliverable->review     = 0;
+                $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+            }
         }
 
         $this->dao->exec('ALTER TABLE ' . TABLE_REVIEW . ' DROP `doc`');
+    }
+
+    /**
+     * 之前IPD、融合瀑布使用的是瀑布项目流程，融合敏捷使用的是敏捷项目流程。现在统一使用自己的项目流程。
+     * Before IPD, fusion waterfall uses the waterfall project workflow, and fusion agile uses the agile project workflow. Now use the own project workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function modifyProjectWorkflowGroup()
+    {
+        $workflows = $this->dao->select('id,code,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('ipd,waterfallplus,agileplus')->andWhere('main')->eq('1')->fetchAll();
+
+        foreach($workflows as $workflow)
+        {
+            $hasProduct = strpos($workflow->code, 'product') !== false ? '1' : '0';
+            if($workflow->projectModel == 'ipd')
+            {
+                $category = $hasProduct ? str_replace('product', '', $workflow->code) : str_replace('project', '', $workflow->code);
+                $category = strtoupper($category);
+
+                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($workflow->id)->where('model')->eq($workflow->projectModel)->andWhere('category')->eq($category)->andWhere('hasProduct')->eq($hasProduct)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($workflow->id)->where('model')->eq($workflow->projectModel)->andWhere('hasProduct')->eq($hasProduct)->exec();
+            }
+        }
     }
 }
