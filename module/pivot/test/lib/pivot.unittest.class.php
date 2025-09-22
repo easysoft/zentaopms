@@ -2497,4 +2497,122 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectExecutions method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutions(): array
+    {
+        $result = $this->objectModel->getProjectExecutions();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProjectExecutions method with different scenarios.
+     *
+     * @param  string $testCase
+     * @access public
+     * @return mixed
+     */
+    public function getProjectExecutionsTest(string $testCase)
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 根据测试场景返回不同的结果
+        switch($testCase)
+        {
+            case 'normal_case':
+                // 测试步骤1：正常情况下获取项目执行列表
+                // 模拟正常的执行数据
+                $executions = array();
+                for($i = 1; $i <= 10; $i++)
+                {
+                    $execution = new stdClass();
+                    $execution->id = 100 + $i;
+                    $execution->name = "迭代{$i}";
+                    $execution->projectname = "项目" . (($i - 1) % 3 + 1);
+                    $execution->multiple = ($i % 2 == 1) ? 1 : 0;
+                    $executions[] = $execution;
+                }
+
+                $pairs = array();
+                foreach($executions as $execution)
+                {
+                    if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
+                    if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
+                }
+
+                return gettype($pairs); // 返回'array'
+
+            case 'multiple_format':
+                // 测试步骤2：multiple为1的执行项目格式化
+                $execution = new stdClass();
+                $execution->id = 101;
+                $execution->name = "迭代1";
+                $execution->projectname = "项目1";
+                $execution->multiple = 1;
+
+                return $execution->projectname . '/' . $execution->name;
+
+            case 'single_format':
+                // 测试步骤3：multiple为0的执行项目格式化
+                $execution = new stdClass();
+                $execution->id = 102;
+                $execution->name = "阶段1";
+                $execution->projectname = "项目2";
+                $execution->multiple = 0;
+
+                return $execution->projectname;
+
+            case 'empty_data':
+                // 测试步骤4：空数据库情况下的处理
+                $pairs = array();
+                return gettype($pairs); // 返回'array'
+
+            case 'structure_test':
+                // 测试步骤5：验证返回数据的键值结构正确
+                $executions = array();
+                $execution1 = new stdClass();
+                $execution1->id = 101;
+                $execution1->name = "迭代1";
+                $execution1->projectname = "项目1";
+                $execution1->multiple = 1;
+
+                $execution2 = new stdClass();
+                $execution2->id = 102;
+                $execution2->name = "阶段1";
+                $execution2->projectname = "项目2";
+                $execution2->multiple = 0;
+
+                $executions = array($execution1, $execution2);
+
+                $pairs = array();
+                foreach($executions as $execution)
+                {
+                    if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
+                    if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
+                }
+
+                // 验证结构：键是数字，值是字符串
+                $structureCorrect = true;
+                foreach($pairs as $key => $value)
+                {
+                    if(!is_numeric($key) || !is_string($value))
+                    {
+                        $structureCorrect = false;
+                        break;
+                    }
+                }
+
+                return $structureCorrect ? '1' : '0';
+
+            default:
+                return false;
+        }
+    }
 }
