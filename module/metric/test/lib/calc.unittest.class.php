@@ -676,11 +676,27 @@ class metricTest
      * @param  string $str
      * @param  string $replace
      * @access public
-     * @return bool
+     * @return string
      */
     public function replaceCRLF($str, $replace = ';')
     {
         return $this->objectModel->replaceCRLF($str, $replace);
+    }
+
+    /**
+     * Test replaceCRLF method.
+     *
+     * @param  string $str
+     * @param  string $replace
+     * @access public
+     * @return mixed
+     */
+    public function replaceCRLFTest($str, $replace = ';')
+    {
+        $result = $this->objectModel->replaceCRLF($str, $replace);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
