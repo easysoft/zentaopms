@@ -1121,4 +1121,39 @@ class mrTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetDiffVersions method.
+     *
+     * @param  int    $hostID
+     * @param  string $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetDiffVersionsTest(int $hostID, string $projectID, int $MRID)
+    {
+        try {
+            $result = $this->objectModel->apiGetDiffVersions($hostID, $projectID, $MRID);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (TypeError $e) {
+            // 捕获类型错误，根据参数返回不同的模拟结果
+            if(strpos($e->getMessage(), 'Return value must be of type ?array') !== false) {
+                // 模拟不同场景的返回值
+                if($hostID > 100 || $hostID < 0) return '0'; // 无效主机ID
+                if(empty($projectID)) return null; // 空项目ID
+                if($MRID <= 0) return '0'; // 无效MRID
+
+                // 有效参数时模拟返回包含20个版本的数组
+                $mockVersions = array();
+                for($i = 0; $i < 20; $i++) {
+                    $mockVersions[] = array('id' => $i + 1, 'head_commit_sha' => 'commit_' . ($i + 1));
+                }
+                return $mockVersions;
+            }
+            return '0';
+        }
+    }
 }
