@@ -2637,4 +2637,20 @@ class kanbanTest
 
         return $result;
     }
+
+    /**
+     * Test getPageToolBar method.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return string
+     */
+    public function getPageToolBarTest($kanban)
+    {
+        $result = $this->objectModel->getPageToolBar($kanban);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
