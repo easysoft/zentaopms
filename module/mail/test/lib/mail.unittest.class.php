@@ -122,6 +122,91 @@ class mailTest
     }
 
     /**
+     * Get MTA class name.
+     *
+     * @access public
+     * @return string
+     */
+    public function getMTAClassNameTest()
+    {
+        $object = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return get_class($object);
+    }
+
+    /**
+     * Get MTA type string.
+     *
+     * @access public
+     * @return string
+     */
+    public function getMTATypeTest()
+    {
+        $object = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return is_object($object) ? 'object' : gettype($object);
+    }
+
+    /**
+     * Test MTA singleton pattern.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function testMTASingletonTest()
+    {
+        $mta1 = $this->objectModel->setMTA();
+        $mta2 = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return ($mta1 === $mta2) ? 1 : 0;
+    }
+
+    /**
+     * Test MTA with different configurations.
+     *
+     * @param  string $mtaType
+     * @access public
+     * @return mixed
+     */
+    public function setMTAWithTypeTest($mtaType = 'smtp')
+    {
+        $originalMta = $this->objectModel->config->mail->mta;
+        $this->objectModel->config->mail->mta = $mtaType;
+
+        if($mtaType == 'gmail')
+        {
+            if(!isset($this->objectModel->config->mail->gmail))
+            {
+                $this->objectModel->config->mail->gmail = new stdClass();
+                $this->objectModel->config->mail->gmail->debug = 0;
+                $this->objectModel->config->mail->gmail->username = 'test@gmail.com';
+                $this->objectModel->config->mail->gmail->password = 'testpass';
+            }
+        }
+
+        try
+        {
+            $result = $this->objectModel->setMTA();
+            $this->objectModel->config->mail->mta = $originalMta;
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $this->objectModel->config->mail->mta = $originalMta;
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Set sendmail.
      *
      * @access public
