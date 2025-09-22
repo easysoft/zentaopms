@@ -699,4 +699,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test fullDomain method.
+     *
+     * @param  string $thirdDomain
+     * @access public
+     * @return string
+     */
+    public function fullDomainTest(string $thirdDomain): string
+    {
+        $result = $this->objectModel->fullDomain($thirdDomain);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
