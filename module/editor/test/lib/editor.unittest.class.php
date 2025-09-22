@@ -1107,12 +1107,12 @@ class editorTest
     public function extendModelEditTest()
     {
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php' . DS . 'edit';
+        $modelPath  = $modulePath . 'model.php' . DS . 'update';
         $content    = $this->objectModel->extendModel($modelPath);
 
         return array(
             'hasPhpTag'    => (strpos($content, '<?php') !== false) ? 1 : 0,
-            'hasMethodName' => (strpos($content, 'function edit') !== false) ? 1 : 0
+            'hasMethodName' => (strpos($content, 'function update') !== false) ? 1 : 0
         );
     }
 
@@ -1125,11 +1125,11 @@ class editorTest
     public function extendModelParentCallTest()
     {
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php' . DS . 'delete';
+        $modelPath  = $modulePath . 'model.php' . DS . 'close';
         $content    = $this->objectModel->extendModel($modelPath);
 
         return array(
-            'hasParentCall' => (strpos($content, 'parent::delete(') !== false) ? 1 : 0
+            'hasParentCall' => (strpos($content, 'parent::close(') !== false) ? 1 : 0
         );
     }
 
@@ -1142,7 +1142,7 @@ class editorTest
     public function extendModelSyntaxTest()
     {
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php' . DS . 'getById';
+        $modelPath  = $modulePath . 'model.php' . DS . 'getByID';
         $content    = $this->objectModel->extendModel($modelPath);
 
         return array(
@@ -1159,11 +1159,11 @@ class editorTest
     public function extendModelParameterTest()
     {
         $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php' . DS . 'update';
+        $modelPath  = $modulePath . 'model.php' . DS . 'start';
         $content    = $this->objectModel->extendModel($modelPath);
 
         return array(
-            'hasCorrectParams' => (strpos($content, 'parent::update(') !== false) ? 1 : 0
+            'hasCorrectParams' => (strpos($content, 'parent::start(') !== false) ? 1 : 0
         );
     }
 
