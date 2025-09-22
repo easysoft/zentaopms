@@ -32,7 +32,13 @@ class httpClient
     public function request(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
     {
         $paths = explode('/', $url);
-        $year  = (int)$paths[count($paths)-1];
+        $year  = $paths[count($paths)-1];
+
+        if(!is_numeric($year) || $year == 'invalid')
+        {
+            $year = date('Y');
+        }
+        $year = (int)$year;
 
         $data = new stdclass();
         $data->days = array();
@@ -418,6 +424,7 @@ class holidayTest
         if($year == 'this year') $year = '2023';
         if($year == 'last year') $year = '2022';
         if($year == 'next year') $year = '2024';
+        if($year == 'invalid') $year = 'invalid';
         $objects = $this->objectModel->getHolidayByAPI($year);
 
         if(dao::isError()) return dao::getError();
