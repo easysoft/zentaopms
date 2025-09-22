@@ -16,6 +16,7 @@ cid=0
 - 步骤7：助手撤回动作，对象已disabled状态 @0
 - 步骤8：助手编辑动作，对象已enabled状态 @0
 - 步骤9：助手编辑动作，对象disabled状态 @1
+- 步骤10：未知动作，返回默认true @1
 
 */
 
@@ -50,3 +51,4 @@ r($aiTest->isClickableTest($enabledObject, 'assistantpublish'))   && p() && e('0
 r($aiTest->isClickableTest($disabledObject, 'assistantwithdraw')) && p() && e('0'); // 步骤7：助手撤回动作，对象已disabled状态
 r($aiTest->isClickableTest($enabledObject, 'assistantedit'))      && p() && e('0'); // 步骤8：助手编辑动作，对象已enabled状态
 r($aiTest->isClickableTest($disabledObject, 'assistantedit'))     && p() && e('1'); // 步骤9：助手编辑动作，对象disabled状态
+r($aiTest->isClickableTest($enabledObject, 'unknownaction'))      && p() && e('1'); // 步骤10：未知动作，返回默认true
