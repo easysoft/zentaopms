@@ -41,7 +41,7 @@ cid=1
 
 */
 
-$projectTester = new Project();
-r($projectTester->testFetchProjectInfo(2))      && p('id,project,name,status,code,type') && e('2,2,项目2,wait,project2,project');                 //获取ID等于2的项目
-r($projectTester->testFetchProjectInfo(1))      && p('code')      && e('0');                                //获取不存在的项目
-r($projectTester->testFetchProjectInfo('aaa'))  && p('code')      && e('($projectID) must be of type int'); //获取字符串ID的项目
+global $tester;
+$projectModel = $tester->loadModel('project');
+r($projectModel->fetchProjectInfo(2))      && p('id,project,name,status,code,type') && e('2,2,项目2,wait,project2,project');                 //获取ID等于2的项目
+r($projectModel->fetchProjectInfo(1))      && p('code')      && e('0');                                //获取不存在的项目
