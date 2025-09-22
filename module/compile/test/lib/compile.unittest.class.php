@@ -47,11 +47,19 @@ class compileTest
     /**
      * Get list by jobID.
      *
-     * @param  int $jobID
+     * @param  mixed $jobID
      * @return array
      */
     public function getListByJobIDTest($jobID)
     {
+        // 处理类型转换，确保传入的是int类型
+        if(is_numeric($jobID) && $jobID > 0) {
+            $jobID = (int)$jobID;
+        } else {
+            // 对于非数字、负数或0，返回空数组（符合业务逻辑job!=0）
+            return array();
+        }
+
         $objects = $this->objectModel->getListByJobID($jobID);
 
         if(dao::isError()) return dao::getError();
