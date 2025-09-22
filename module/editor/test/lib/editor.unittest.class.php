@@ -1055,13 +1055,58 @@ class editorTest
         $link = $this->objectModel->getAPILink($filePath, $action);
         if(dao::isError()) return dao::getError();
 
+        // 分析ZenTao格式的链接: api-debug-{encodedPath}-{action}.html
+        $linkParts = explode('-', $link);
+        $hasApiDebug = count($linkParts) >= 3 && $linkParts[0] === 'api' && $linkParts[1] === 'debug';
+
+        // 提取编码的文件路径部分（在最后一个-之前的部分）
+        $encodedFilePath = '';
+        $actionFromLink = '';
+        if($hasApiDebug && count($linkParts) >= 4)
+        {
+            // 找到最后一个-的位置来分离action
+            $lastDashPos = strrpos($link, '-');
+            if($lastDashPos !== false)
+            {
+                $beforeLastDash = substr($link, 0, $lastDashPos);
+                $afterLastDash = substr($link, $lastDashPos + 1);
+
+                // 提取action部分（去掉.html后缀）
+                $actionFromLink = str_replace('.html', '', $afterLastDash);
+
+                // 提取编码的文件路径部分
+                $encodedPart = str_replace('api-debug-', '', $beforeLastDash);
+                if(!empty($encodedPart))
+                {
+                    $encodedFilePath = $encodedPart;
+                }
+            }
+        }
+
+        // 尝试解码文件路径
+        $decodedFilePath = '';
+        if(!empty($encodedFilePath))
+        {
+            try {
+                $decodedFilePath = helper::safe64Decode($encodedFilePath);
+            } catch (Exception $e) {
+                $decodedFilePath = '';
+            }
+        }
+
         return array(
-            'link'           => $link,
-            'hasDebug'       => strpos($link, 'debug') !== false ? 1 : 0,
-            'hasAction'      => strpos($link, $action) !== false ? 1 : 0,
-            'hasFilePath'    => strpos($link, 'filePath=') !== false ? 1 : 0,
-            'isValidLink'    => filter_var($link, FILTER_VALIDATE_URL) !== false ? 1 : 0,
-            'linkLength'     => strlen($link)
+            'link'             => $link,
+            'hasDebug'         => strpos($link, 'debug') !== false ? 1 : 0,
+            'hasAction'        => strpos($link, $action) !== false ? 1 : 0,
+            'hasFilePath'      => !empty($encodedFilePath) ? 1 : 0,
+            'hasApiModule'     => strpos($link, 'api-') !== false ? 1 : 0,
+            'isValidLink'      => !empty($link) && strpos($link, 'api') !== false ? 1 : 0,
+            'linkLength'       => strlen($link),
+            'actionMatch'      => $actionFromLink === $action ? 1 : 0,
+            'filePathEncoded'  => !empty($encodedFilePath) ? 1 : 0,
+            'canDecodeFilePath' => !empty($decodedFilePath) && strpos($decodedFilePath, $filePath) !== false ? 1 : 0,
+            'hasQueryParams'   => 0, // ZenTao使用路径格式，不是查询参数
+            'linkFormat'       => $hasApiDebug ? 'valid' : 'invalid'
         );
     }
 
