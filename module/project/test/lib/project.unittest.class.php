@@ -177,11 +177,7 @@ class projectTest
      */
     public function addTeamMembersTest($projectID = 0, $project = null, $members = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('addTeamMembers');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $projectID, $project, $members);
+        $result = $this->objectModel->addTeamMembers($projectID, $project, $members);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -780,5 +776,599 @@ class projectTest
         {
             return $e->getMessage();
         }
+    }
+
+    /**
+     * Test setMenuByModel.
+     *
+     * @param  string $model
+     * @access public
+     * @return string
+     */
+    public function setMenuByModelTest($model)
+    {
+        $this->objectModel->setMenuByModel($model);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
+
+    /**
+     * 关联项目所属项目集下的产品。
+     * Link products of current program of the project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $branches
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function linkProductsTest(int $projectID, array $products = array(), array $branches = array(), array $plans = array()): array
+    {
+        $members            = $this->objectModel->getTeamMembers($projectID);
+        $oldProjectProducts = $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
+        if(!empty($branches)) $_POST['branch'] = $branches;
+        if(!empty($plans)) $_POST['branch'] = $plans;
+
+        $this->objectModel->linkProducts($projectID, $products, $oldProjectProducts, $members);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+    }
+
+    /**
+     * 如果是无产品项目，更新影子产品信息。
+     * Update shadow product.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function updateShadowProductTest(int $projectID)
+    {
+        $oldProject = $this->objectModel->getByID($projectID);
+        $newProject = clone $oldProject;
+        $newProject->name = '更新' . $oldProject->name;
+        $newProject->acl  = 'open';
+
+        $this->objectModel->updateShadowProduct($newProject, $oldProject);
+        $products = $this->objectModel->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->fetchAll();
+
+        return $products;
+    }
+
+    /**
+     * Test add plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function addPlansTest(int $projectID, array $plans): array
+    {
+        $this->objectModel->addPlans($projectID, $plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_asc')->fetchAll();
+    }
+
+    /**
+     * Test update plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function updatePlansTest(int $projectID, array $plans): array
+    {
+        $this->objectModel->updatePlans($projectID, $plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
+    }
+
+    /**
+     * 关联其他项目集下的产品。
+     * Link products of other programs.
+     *
+     * @param  int    $projectID
+     * @param  array  $productIdList
+     * @access public
+     * @return bool
+     */
+    public function linkOtherProductsTest(int $projectID, array $productIdList): bool
+    {
+        $members = $this->objectModel->getTeamMembers($projectID);
+
+        $_POST['otherProducts'] = $productIdList;
+        $_POST['stageBy']       = 'product';
+
+        return $this->objectModel->linkOtherProducts($projectID, $members);
+    }
+
+    /**
+     * Batch update projects.
+     *
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function batchUpdateTest($data)
+    {
+        $this->objectModel->batchUpdate($data);
+
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->objectModel->getByIdList(array_keys($data));
+    }
+
+    /**
+     * 根据项目状态和权限生成列表中操作列按钮。
+     * Build table action menu for project browse page.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function buildActionListObjectTest(int $projectID)
+    {
+        $project = $this->objectModel->getByID($projectID);
+        $actions = $this->objectModel->buildActionList($project);
+        return current($actions);
+    }
+
+    /**
+     * 更新项目关联的产品信息。
+     * Update products of a project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $otherProducts
+     * @access public
+     * @return array
+     */
+    public function updateProductsTest(int $projectID, array $products = array(), array $otherProducts = array()): array
+    {
+        $_POST['stageBy'] = 'product';
+        if(!empty($otherProducts)) $_POST['otherProducts'] = $otherProducts;
+        if(!empty($products)) $_POST['products'] = $products;
+
+        $this->objectModel->updateProducts($projectID, $products);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+    }
+
+
+    /**
+     * Update a project.
+     *
+     * @param  object $project
+     * @param  object $oldProject
+     * @access public
+     * @return void
+     */
+    public function updateTest(object $project, object $oldProject)
+    {
+        $this->objectModel->update($project, $oldProject);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($oldProject->id);
+    }
+
+    /**
+     * 获取旧页面1.5级下拉。
+     * Get project swapper.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function getSwitcherTest(int $projectID, string $module, string $method): bool
+    {
+        $projectName = $this->objectModel->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('name');
+        $output      = $this->objectModel->getSwitcher($projectID, $module, $method);
+
+        if(!$output) return false;
+        return strpos($output, $projectName) !== false;
+    }
+
+    /**
+     * 更新项目下的所有产品的阶段。
+     * Update product stage by project.
+     *
+     * @param  int    $projectID
+     * @param  object $postProductData
+     * @access public
+     * @return bool
+     */
+    public function updateProductStageTest(int $projectID, object $postProductData): array
+    {
+        $this->objectModel->updateProductStage($projectID, $postProductData);
+        $linkInfo = $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->fetchAll();
+
+        $result = array();
+        foreach($linkInfo as $data)
+        {
+            if(!isset($result[$data->project])) $result[$data->project] = array();
+            if(!isset($result[$data->project]['product'])) $result[$data->project]['product'] = array();
+            if(!isset($result[$data->project]['branch']))  $result[$data->project]['branch']  = array();
+            if(!isset($result[$data->project]['plan']))    $result[$data->project]['plan']    = array();
+            $result[$data->project]['product'][$data->product] = $data->product;
+            $result[$data->project]['branch'][$data->branch]   = $data->branch;
+            if(!empty(trim($data->plan, ',')))
+            {
+                foreach(explode(',', $data->plan) as $planID) $result[$data->project]['plan'][$planID] = $planID;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFormTest(int $queryID)
+    {
+        $this->objectModel->buildSearchForm($queryID, 'searchUrl');
+
+        return $_SESSION['projectsearchParams']['queryID'];
+    }
+
+    /**
+     * Test getList function.
+     *
+     * @param  int    $status
+     * @param  bool   $involved
+     * @access public
+     * @return array
+     */
+    public function getListTest($status, $involved = false)
+    {
+        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+    }
+
+    /**
+     * 更新此项目下或影子产品下的白名单列表。
+     * Update whitelist by project.
+     *
+     * @param  int    $projectID
+     * @param  string $whitelist
+     * @access public
+     * @return string
+     */
+    public function updateWhitelistTest(int $projectID, string $whitelist): string
+    {
+        $project = new stdclass();
+        $project->whitelist = $whitelist;
+
+        $oldProject = $this->objectModel->getByID($projectID);
+        $this->objectModel->updateWhitelist($project, $oldProject);
+        if(dao::isError()) return '';
+        $whitelist = $this->objectModel->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('whitelist');
+        return str_replace(',', '|', $whitelist);
+    }
+
+    /**
+     * 获取瀑布/融合瀑布项目不允许解除关联的产品。
+     * Get waterfall/waterfallplus unmodifiable products.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getDisabledProductsTest(int $projectID): array
+    {
+        $project        = $this->objectModel->fetchByID($projectID);
+        $linkedProducts = $this->objectModel->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+
+        return $this->objectModel->getDisabledProducts($project, $linkedProducts);
+    }
+
+    /**
+     * Test manage members.
+     *
+     * @param  int          $projectID
+     * @param  array        $members
+     * @access public
+     * @return array|string
+     */
+    public function manageMembersTest(int $projectID, array $members): array|string
+    {
+        $this->objectModel->manageMembers($projectID, $members);
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getTeamMembers($projectID);
+    }
+
+    /**
+     * Test create project.
+     *
+     * @param  array $params
+     * @access public
+     * @return void
+     */
+    public function createTest($project, $postData)
+    {
+        $projectID = $this->objectModel->create($project, $postData);
+
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->objectModel->getById($projectID);
+    }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildProjectBuildSearchFormTest(int $projectID, int $productID, string $type)
+    {
+        global $app, $config;
+        unset($config->build->search['module']);
+        unset($config->build->search['fields']['branch']);
+        unset($config->build->search['fields']['execution']);
+
+        $app->rawModule = 'projectBuild';
+        $app->rawMethod = 'browse';
+        $result = $this->objectModel->buildProjectBuildSearchForm(array(), 0, $projectID, $productID, $type);
+        if(!$result) return false;
+
+        $result = array($config->build->search['module']);
+        if(isset($config->build->search['fields']['branch']))    $result[] = 'branch';
+        if(isset($config->build->search['fields']['execution'])) $result[] = 'execution';
+        return implode('|', $result);
+    }
+
+    /**
+     * Test setMenu.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($projectID = 0)
+    {
+        $this->objectModel->app->rawModule = 'project';
+        $this->objectModel->app->rawMethod = 'index';
+
+        $this->objectModel->setMenu($projectID);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
+
+    /**
+     * 创建产品后，创建默认的产品主库。
+     * Create doclib after create a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function createProductDocLibTest(int $productID): object
+    {
+        $this->objectModel->createProductDocLib($productID);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('product')->andWhere('product')->eq($productID)->fetch();
+    }
+
+    /**
+     * 构造批量更新项目的数据。
+     * Build bathc update project data.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function buildBatchUpdateProjectsTest(array $projectIdList): array
+    {
+        $oldProjects = $this->objectModel->getByIdList($projectIdList);
+        $newProjects = array();
+        foreach($oldProjects as $projectID => $project)
+        {
+            $newProjects[$projectID] = $project;
+            $newProjects[$projectID]->name = '更新' . $project->name;
+            $newProjects[$projectID]->PM   = 'admin';
+        }
+        return $this->objectModel->buildBatchUpdateProjects($newProjects, $oldProjects);
+    }
+
+    /**
+     * Test setMenuByProduct.
+     *
+     * @param  string $model
+     * @access public
+     * @return string
+     */
+    public function setMenuByProductTest($hasProduct, $model)
+    {
+        global $lang;
+        $this->objectModel->setMenuByModel($model);
+        $this->objectModel->setMenuByProduct(11, $hasProduct, $model);
+
+        $result = array(
+            $model,
+            isset($lang->project->menu->projectplan) ? 'projectplan' : '',
+            isset($lang->project->menu->settings['subMenu']->module) ? 'settings' : '',
+        );
+        return implode('|', $result);
+    }
+
+    /**
+     * 获取创建项目时选择的产品数量。
+     * Get products count from post.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @access public
+     * @return void
+     */
+    public function getLinkedProductsCountTest(int $projectID, array $products)
+    {
+        $project = $this->objectModel->getByID($projectID);
+
+        $rawdata = new stdclass();
+        $rawdata->products = $products;
+
+        return $this->objectModel->getLinkedProductsCount($project, $rawdata);
+    }
+
+    /**
+     * Do update a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doUpdateTest(int $projectID, object $project)
+    {
+        $this->objectModel->doUpdate($projectID, $project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getByID($projectID);
+        }
+    }
+
+    /**
+     * Do create a project.
+     *
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doCreateTest(object $project)
+    {
+        $this->objectModel->doCreate($project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $project;
+        }
+    }
+
+    /**
+     * 创建项目后，创建默认的项目主库。
+     * Create doclib after create a project.
+     *
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @access public
+     * @return object|bool
+     */
+    public function createDocLibTest(int $projectID, int $programID): object|bool
+    {
+        $program = new stdclass();
+        if($programID)
+        {
+            global $tester;
+            $program = $tester->loadModel('program')->getByID($programID);
+        }
+
+        $project = $this->objectModel->getByID($projectID);
+
+        $this->objectModel->createDocLib($projectID, $project, $program);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->fetch();
+    }
+
+    /**
+     * Create a product.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $postData
+     * @param  object $program
+     * @access public
+     * @return true|array
+     */
+    public function createProductTest($projectID, $project, $postData, $program)
+    {
+        $result = $this->objectModel->createProduct($projectID, $project, $postData, $program);
+        if(!$result) return dao::getError();
+
+        return true;
+    }
+
+    /**
+     * 更新任务的起止日期。
+     * Update start and end date of tasks.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function updateTasksStartAndEndDateTest(int $projectID, string $type = 'expand')
+    {
+        $oldProject = $this->objectModel->getByID($projectID);
+
+        $project = clone $oldProject;
+        $project->begin = $type = 'expand' ? '2020-01-01' : '2020-12-01';
+        $project->end   = $type = 'expand' ? '2022-12-01' : '2021-12-01';
+
+        $tasks = $this->objectModel->dao->select('id,status,estStarted,deadline')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->fetchAll();
+
+        if(!empty($tasks)) $oldTask = current($tasks);
+
+        $this->objectModel->updateTasksStartAndEndDate($tasks, $oldProject, $project);
+
+        $changes = array();
+        if(isset($oldTask))
+        {
+            $task = $this->objectModel->dao->select('id,status,estStarted,deadline')->from(TABLE_TASK) ->where('id')->eq($oldTask->id)->fetch();
+            $changes = common::createChanges($oldTask, $task);
+        }
+        return $changes;
+    }
+
+    /**
+     * Add user to project admins.
+     *
+     * @param  int        $budget
+     * @access public
+     * @return int|string
+     */
+    public function addProjectAdminTest($projectID)
+    {
+        $this->objectModel->addProjectAdmin($projectID);
+
+        global $app;
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($app->user->account)->fetch();
+    }
+
+    /**
+     * Test fetchProjectList function.
+     *
+     * @param  int    $status
+     * @param  bool   $involved
+     * @access public
+     * @return array
+     */
+    public function fetchProjectListTest($status, $involved = false)
+    {
+        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
     }
 }

@@ -43,7 +43,7 @@ $projectproductTable->gen(6);
 $projectIdList = range(1, 6);
 $whitelistList = array('admin,user1,user2', 'user2', '');
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 r($projectTester->updateWhitelistTest($projectIdList[0], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试敏捷项目添加白名单成员
 r($projectTester->updateWhitelistTest($projectIdList[1], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试瀑布项目添加白名单成员
 r($projectTester->updateWhitelistTest($projectIdList[2], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试看板项目添加白名单成员

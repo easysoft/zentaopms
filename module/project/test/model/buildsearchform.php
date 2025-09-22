@@ -43,7 +43,7 @@ cid=1
 
 $queryIDList = array('0', '1', '2', '3', '4');
 
-$project = new Project();
+$project = new projectTest();
 r($project->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($project->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
 r($project->buildSearchFormTest($queryIDList[2])) && p() && e('2'); // 错误的queryID

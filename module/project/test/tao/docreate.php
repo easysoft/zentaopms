@@ -16,7 +16,7 @@ cid=1
 */
 
 global $tester;
-$projectClass = new project();
+$projectClass = new projectTest();
 
 $project = new stdclass();
 $project->parent     = 0;
@@ -51,9 +51,9 @@ $beginGtEndProject = clone $project;
 $beginGtEndProject->end  = '2021-01-10';
 $beginGtEndProject->name = '测试新增项目四';
 
-r($projectClass->doCreate($normalProject))     && p('name')    && e('测试新增项目一');
-r($projectClass->doCreate($normalProject))     && p('name:0')  && e('『项目名称』已经有『测试新增项目一』这条记录了。');
-r($projectClass->doCreate($emptyNameProject))  && p('name:0')  && e('『项目名称』不能为空。');
-r($projectClass->doCreate($emptyEndProject))   && p('end:0')   && e('『计划完成』不能为空。');
-r($projectClass->doCreate($beginGtEndProject)) && p('end:0')   && e('『计划完成』应当大于『2022-02-07』。');
-r($projectClass->doCreate($emptyBeginProject)) && p('begin:0') && e('『计划开始』不能为空。');
+r($projectClass->doCreateTest($normalProject))     && p('name')    && e('测试新增项目一');
+r($projectClass->doCreateTest($normalProject))     && p('name:0')  && e('『项目名称』已经有『测试新增项目一』这条记录了。');
+r($projectClass->doCreateTest($emptyNameProject))  && p('name:0')  && e('『项目名称』不能为空。');
+r($projectClass->doCreateTest($emptyEndProject))   && p('end:0')   && e('『计划完成』不能为空。');
+r($projectClass->doCreateTest($beginGtEndProject)) && p('end:0')   && e('『计划完成』应当大于『2022-02-07』。');
+r($projectClass->doCreateTest($emptyBeginProject)) && p('begin:0') && e('『计划开始』不能为空。');

@@ -52,9 +52,9 @@ cid=1
 
 $statusList = array('', 'all', 'undone', 'unclosed', 'error');
 
-$projectTester = new Project();
-r($projectTester->testGetList($statusList[0]))        && p()          && e('0');         // 查询状态为空的项目
-r(count($projectTester->testGetList($statusList[1]))) && p()          && e('9');         // 获取所有项目数量
-r($projectTester->testGetList($statusList[2]))        && p('11:code') && e('project11'); // 查询未完成的第一个项目的code
-r($projectTester->testGetList($statusList[3], true))  && p('12:name') && e('项目12');    // 获取我参与的一个项目的项目名
-r($projectTester->testGetList($statusList[4]))        && p()          && e('0');         // 获取错误类型的项目
+$projectTester = new projectTest();
+r($projectTester->getListTest($statusList[0]))        && p()          && e('0');         // 查询状态为空的项目
+r(count($projectTester->getListTest($statusList[1]))) && p()          && e('9');         // 获取所有项目数量
+r($projectTester->getListTest($statusList[2]))        && p('11:code') && e('project11'); // 查询未完成的第一个项目的code
+r($projectTester->getListTest($statusList[3], true))  && p('12:name') && e('项目12');    // 获取我参与的一个项目的项目名
+r($projectTester->getListTest($statusList[4]))        && p()          && e('0');         // 获取错误类型的项目

@@ -25,7 +25,7 @@ $project->gen(4);
 
 /**
 
-title=测试taskModel->batchUpdate();
+title=测试taskModel->batchUpdateTest();
 timeout=0
 cid=1
 
@@ -52,7 +52,7 @@ cid=1
 
 */
 
-$project = new Project();
+$project = new projectTest();
 $projectIdList = array(1, 2, 3);
 
 $data[1] = new stdClass();
@@ -82,7 +82,7 @@ $data[3]->end    = '2022-04-13';
 $data[3]->days   = 14;
 $data[3]->acl    = 'program';
 
-$projects = $project->batchUpdate($data);
+$projects = $project->batchUpdateTest($data);
 
 r(count($projects)) && p()                             && e('3');                                          // 查看被编辑了的项目数量
 r($projects)        && p('1:name,parent,PM,begin,acl') && e('批量修改项目11,1,user10,2022-02-08,open');    // 查看被编辑了的项目11详情
@@ -99,5 +99,5 @@ $data[4]->end    = '2022-04-13';
 $data[4]->days   = 14;
 $data[4]->acl    = 'program';
 
-$projects = $project->batchUpdate($data);
+$projects = $project->batchUpdateTest($data);
 r($projects) && p('message[end]:0') && e('ID4『计划完成』应当大于『2023-02-19』。'); // 异常情况
