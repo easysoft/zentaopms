@@ -1164,4 +1164,25 @@ class projectTest
         $this->objectModel->createProductDocLib($productID);
         return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('product')->andWhere('product')->eq($productID)->fetch();
     }
+
+    /**
+     * 构造批量更新项目的数据。
+     * Build bathc update project data.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function buildBatchUpdateProjectsTest(array $projectIdList): array
+    {
+        $oldProjects = $this->objectModel->getByIdList($projectIdList);
+        $newProjects = array();
+        foreach($oldProjects as $projectID => $project)
+        {
+            $newProjects[$projectID] = $project;
+            $newProjects[$projectID]->name = '更新' . $project->name;
+            $newProjects[$projectID]->PM   = 'admin';
+        }
+        return $this->objectModel->buildBatchUpdateProjects($newProjects, $oldProjects);
+    }
 }
