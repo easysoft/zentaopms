@@ -11282,4 +11282,35 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 调整 21.7.5 版本的权限
+     * Adjust priv 21.7.5.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv21_7_5()
+    {
+        $weeklyMethods   = array('browse', 'create', 'edit', 'delete', 'view', 'exportReport');
+        $templateMethods = array('browse', 'create', 'edit', 'delete', 'view', 'pause', 'cron', 'addCategory', 'editCategory', 'deleteCategory');
+
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('weekly')->fetchPairs('group', 'group');
+        $data   = array();
+        foreach($groups as $groupID)
+        {
+            foreach($weeklyMethods as $method) $data[] = "('{$groupID}', 'weekly', '{$method}')";
+            $data[] = "('{$groupID}', 'milestone', 'index')";
+            $data[] = "('{$groupID}', 'milestone', 'saveOtherProblem')";
+        }
+
+        foreach($templateMethods as $method) $data[] = "('1', 'reporttemplate', '{$method}')";
+        foreach($weeklyMethods as $method)   $data[] = "('1', 'weekly', '{$method}')";
+        $data[] = "('1', 'milestone', 'index')";
+        $data[] = "('1', 'milestone', 'saveOtherProblem')";
+
+        $sql = 'REPLACE INTO ' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . implode(',', $data);
+        $this->dao->exec($sql);
+        return true;
+    }
 }
