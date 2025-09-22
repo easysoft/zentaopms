@@ -1900,6 +1900,105 @@ class editorTest
     }
 
     /**
+     * Test save method with custom content.
+     *
+     * @param  string $filePath
+     * @param  string $content
+     * @access public
+     * @return string|bool
+     */
+    public function saveWithContentTest(string $filePath, string $content = ''): string|bool
+    {
+        if(empty($content)) $content = "<?php\n// Test content\n";
+        $_POST['fileContent'] = $content;
+
+        $result = $this->objectModel->save($filePath);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test save method with malicious content filtering.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return array
+     */
+    public function saveMaliciousContentTest(string $filePath): array
+    {
+        $maliciousContent = "<?php\n// Test e v a l filtering\nfunction test() { e v a l('dangerous code'); }";
+        $_POST['fileContent'] = $maliciousContent;
+
+        $result = $this->objectModel->save($filePath);
+        if(dao::isError()) return array('hasError' => 1, 'errors' => dao::getError());
+
+        $savedContent = file_exists($filePath) ? file_get_contents($filePath) : '';
+
+        return array(
+            'result' => $result,
+            'hasEval' => strpos($savedContent, 'eval') !== false ? 1 : 0,
+            'contentFiltered' => strpos($savedContent, 'e v a l') === false ? 1 : 0,
+            'fileExists' => file_exists($filePath) ? 1 : 0,
+            'savedContent' => $savedContent
+        );
+    }
+
+    /**
+     * Test save method with path validation.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return array
+     */
+    public function savePathValidationTest(string $filePath): array
+    {
+        $_POST['fileContent'] = "<?php\n// Test content\n";
+
+        $result = $this->objectModel->save($filePath);
+        $errors = dao::getError();
+
+        return array(
+            'result' => $result,
+            'hasError' => dao::isError() ? 1 : 0,
+            'errors' => $errors,
+            'pathSafe' => empty($errors) ? 1 : 0,
+            'errorContainsPath' => !empty($errors) && is_array($errors) && str_contains($errors[0], '只能修改禅道文件') ? 1 : 0
+        );
+    }
+
+    /**
+     * Test save method with directory creation.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return array
+     */
+    public function saveDirectoryCreationTest(string $filePath): array
+    {
+        $_POST['fileContent'] = "<?php\n// Test directory creation\n";
+
+        $dirPath = dirname($filePath);
+        $dirExistsBefore = is_dir($dirPath);
+
+        $result = $this->objectModel->save($filePath);
+        $errors = dao::getError();
+
+        $dirExistsAfter = is_dir($dirPath);
+        $fileExists = file_exists($filePath);
+
+        return array(
+            'result' => $result,
+            'dirExistsBefore' => $dirExistsBefore ? 1 : 0,
+            'dirExistsAfter' => $dirExistsAfter ? 1 : 0,
+            'fileExists' => $fileExists ? 1 : 0,
+            'hasError' => dao::isError() ? 1 : 0,
+            'errors' => $errors,
+            'directoryCreated' => !$dirExistsBefore && $dirExistsAfter ? 1 : 0
+        );
+    }
+
+    /**
      * Test getMethodCode with model class specifically.
      *
      * @param  string    $className
