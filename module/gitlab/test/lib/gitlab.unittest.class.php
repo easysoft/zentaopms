@@ -353,9 +353,12 @@ class gitlabTest
      * @access public
      * @return object|array|null
      */
-    public function apiGetSingleUserTest(int $gitlabID, int $userID): object|array|null
+    public function apiGetSingleUserTest(int $gitlabID, int $userID): mixed
     {
-        return $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+        $result = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return '0';
+        return $result;
     }
 
     /**

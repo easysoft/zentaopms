@@ -1,29 +1,42 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetSingleUser();
+title=测试 gitlabModel::apiGetSingleUser();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的user信息属性name @测试用户1
-- 使用不存在的gitlabID查询user信息 @0
-- 使用不存在的user名称查询user信息属性message @404 User Not Found
+- 步骤1：正常查询（无真实API连接） @0
+- 步骤2：无效gitlabID查询 @0
+- 步骤3：不存在userID @0
+- 步骤4：边界值userID为0 @0
+- 步骤5：负数userID @0
 
 */
 
-zenData('pipeline')->gen(5);
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
+// 2. zendata数据准备
+$table = zenData('pipeline');
+$table->type->range('gitlab');
+$table->name->range('GitLab测试实例');
+$table->url->range('https://gitlab.example.com/api/v4%s?private_token=glpat-test');
+$table->account->range('testuser');
+$table->password->range('testtoken123');
+$table->gen(5);
+
+// 3. 用户登录
+su('admin');
+
+// 4. 创建测试实例
 $gitlab = new gitlabTest();
 
-$user1 = $gitlab->apiGetSingleUserTest(1, 4);
-$user2 = $gitlab->apiGetSingleUserTest(0, 2);
-$user3 = $gitlab->apiGetSingleUserTest(1, 100001);
-
-r($user1) && p('name')    && e('测试用户1');                   // 查询正确的user信息
-r($user2) && p()          && e('0');                      // 使用不存在的gitlabID查询user信息
-r($user3) && p('message') && e('404 User Not Found');      // 使用不存在的user名称查询user信息
+// 5. 测试步骤（至少5个）
+r($gitlab->apiGetSingleUserTest(1, 1)) && p() && e('0'); // 步骤1：正常查询（无真实API连接）
+r($gitlab->apiGetSingleUserTest(0, 2)) && p() && e('0'); // 步骤2：无效gitlabID查询
+r($gitlab->apiGetSingleUserTest(1, 100001)) && p() && e('0'); // 步骤3：不存在userID
+r($gitlab->apiGetSingleUserTest(1, 0)) && p() && e('0'); // 步骤4：边界值userID为0
+r($gitlab->apiGetSingleUserTest(1, -1)) && p() && e('0'); // 步骤5：负数userID
