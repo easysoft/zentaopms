@@ -777,4 +777,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test updateDomain method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return bool
+     */
+    public function updateDomainTest(object $instance): bool
+    {
+        $result = $this->objectModel->updateDomain($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
