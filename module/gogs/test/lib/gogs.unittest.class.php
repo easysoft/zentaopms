@@ -151,4 +151,19 @@ class gogsTest
         // 返回简单的验证结果
         return isset($result->name) ? 1 : 0;
     }
+
+    /**
+     * Test getApiRoot method.
+     *
+     * @param  int $gogsID
+     * @access public
+     * @return mixed
+     */
+    public function getApiRootTest(int $gogsID): mixed
+    {
+        $result = $this->gogs->getApiRoot($gogsID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
