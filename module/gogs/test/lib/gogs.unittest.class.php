@@ -102,6 +102,21 @@ class gogsTest
     }
 
     /**
+     * Test apiGetProjects method.
+     *
+     * @param  int $gogsID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetProjectsTest(int $gogsID): mixed
+    {
+        $result = $this->gogs->apiGetProjects($gogsID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test apiGetBranches method.
      *
      * @param  int    $gogsID
