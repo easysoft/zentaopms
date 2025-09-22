@@ -189,6 +189,20 @@ process_method() {
         mkdir -p "$test_dir"
     fi
 
+    # 在 enhance 模式下检查测试步骤数量
+    if [ "$MODE" == "enhance" ]; then
+        # 使用 grep 和正则表达式查找符合 r(...) && p(...) && e(...); 模式的行
+        local step_count=$(grep -E 'r\(.*\).*&&.*p\(.*\).*&&.*e\(.*\)' "$test_file_path" | wc -l)
+
+        if [ "$step_count" -ge 5 ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，已满足要求，跳过增强处理: $test_file_path" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            return 0
+        else
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，未达到5个，将继续进行增强处理。" | tee -a "$LOG_FILE"
+        fi
+    fi
+
     # 根据模式构建不同的Claude提示词
     local claude_prompt=""
     case "$MODE" in
