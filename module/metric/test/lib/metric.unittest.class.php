@@ -1990,4 +1990,72 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test getCalcRoot method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootTest()
+    {
+        $path = $this->objectModel->getCalcRoot();
+        return substr($path, -19);
+    }
+
+    /**
+     * Test getCalcRoot method - verify full path contains module.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootFullPathTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return strpos($result, 'module') !== false ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify path ending format.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootEndingTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return substr($result, -1) === DS ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify path accessibility.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootAccessibleTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return is_dir($result) ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify return type.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootTypeTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return gettype($result);
+    }
 }
