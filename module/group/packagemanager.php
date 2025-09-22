@@ -1064,13 +1064,24 @@ $config->group->package->projectWhitelist->privs['project-whitelist']       = ar
 $config->group->package->projectWhitelist->privs['project-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 110, 'depend' => array('project-whitelist'), 'recommend' => array('project-unbindWhitelist'));
 $config->group->package->projectWhitelist->privs['project-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 115, 'depend' => array('project-whitelist'), 'recommend' => array('project-addWhitelist'));
 
-$config->group->package->projectDeliverable = new stdclass();
-$config->group->package->projectDeliverable->order  = 5;
-$config->group->package->projectDeliverable->subset = 'projectDeliverable';
-$config->group->package->projectDeliverable->privs  = array();
-$config->group->package->projectDeliverable->privs['project-deliverable']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->projectDeliverable->privs['project-createDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
-$config->group->package->projectDeliverable->privs['project-deleteDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseDeliverable = new stdclass();
+$config->group->package->browseDeliverable->order  = 5;
+$config->group->package->browseDeliverable->subset = 'projectDeliverable';
+$config->group->package->browseDeliverable->privs  = array();
+$config->group->package->browseDeliverable->privs['project-deliverable']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseDeliverable->privs['project-viewDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageDeliverable = new stdclass();
+$config->group->package->manageDeliverable->order  = 10;
+$config->group->package->manageDeliverable->subset = 'projectDeliverable';
+$config->group->package->manageDeliverable->privs  = array();
+$config->group->package->manageDeliverable->privs['project-createDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->deleteDeliverable = new stdclass();
+$config->group->package->deleteDeliverable->order  = 10;
+$config->group->package->deleteDeliverable->subset = 'projectDeliverable';
+$config->group->package->deleteDeliverable->privs  = array();
+$config->group->package->deleteDeliverable->privs['project-deleteDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->projectTemplate = new stdclass();
 $config->group->package->projectTemplate->order  = 5;

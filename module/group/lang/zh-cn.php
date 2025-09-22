@@ -624,7 +624,9 @@ $lang->group->package->component             = '组件';
 $lang->group->package->browseRule            = '浏览规则';
 $lang->group->package->manageRule            = '创建维护规则';
 $lang->group->package->executionDeliverable  = '交付物';
-$lang->group->package->projectDeliverable    = '交付物';
+$lang->group->package->browseDeliverable     = '浏览交付物';
+$lang->group->package->manageDeliverable     = '创建维护交付物';
+$lang->group->package->deleteDeliverable     = '删除交付物';
 $lang->group->package->projectTemplate       = '项目模板';
 
 include (dirname(__FILE__) . '/resource.php');
