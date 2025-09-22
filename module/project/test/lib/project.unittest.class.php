@@ -1060,4 +1060,20 @@ class projectTest
         $whitelist = $this->objectModel->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('whitelist');
         return str_replace(',', '|', $whitelist);
     }
+
+    /**
+     * 获取瀑布/融合瀑布项目不允许解除关联的产品。
+     * Get waterfall/waterfallplus unmodifiable products.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getDisabledProductsTest(int $projectID): array
+    {
+        $project        = $this->objectModel->fetchByID($projectID);
+        $linkedProducts = $this->objectModel->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+
+        return $this->objectModel->getDisabledProducts($project, $linkedProducts);
+    }
 }
