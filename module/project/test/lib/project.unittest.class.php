@@ -873,4 +873,23 @@ class projectTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
     }
+
+    /**
+     * 关联其他项目集下的产品。
+     * Link products of other programs.
+     *
+     * @param  int    $projectID
+     * @param  array  $productIdList
+     * @access public
+     * @return bool
+     */
+    public function linkOtherProductsTest(int $projectID, array $productIdList): bool
+    {
+        $members = $this->objectModel->getTeamMembers($projectID);
+
+        $_POST['otherProducts'] = $productIdList;
+        $_POST['stageBy']       = 'product';
+
+        return $this->objectModel->linkOtherProducts($projectID, $members);
+    }
 }
