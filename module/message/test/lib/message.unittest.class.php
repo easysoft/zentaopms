@@ -324,4 +324,32 @@ class messageTest
 
         return $countAfter;
     }
+
+    /**
+     * Test getUnreadCount method.
+     *
+     * @param  string $account
+     * @access public
+     * @return int
+     */
+    public function getUnreadCountTest(string $account = ''): int
+    {
+        global $tester;
+        if(!empty($account))
+        {
+            $originalAccount = $tester->app->user->account;
+            $tester->app->user->account = $account;
+        }
+
+        $result = $this->objectModel->getUnreadCount();
+
+        if(dao::isError()) return dao::getError();
+
+        if(!empty($account))
+        {
+            $tester->app->user->account = $originalAccount;
+        }
+
+        return $result;
+    }
 }
