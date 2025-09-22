@@ -207,6 +207,31 @@ class mailTest
     }
 
     /**
+     * Set SMTP.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setSMTPTest()
+    {
+        $this->objectModel->setSMTP();
+
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->mta = $this->objectModel->mta;
+        $result->host = isset($this->objectModel->mta->Host) ? $this->objectModel->mta->Host : '';
+        $result->port = isset($this->objectModel->mta->Port) ? $this->objectModel->mta->Port : '';
+        $result->username = isset($this->objectModel->mta->Username) ? $this->objectModel->mta->Username : '';
+        $result->auth = isset($this->objectModel->mta->SMTPAuth) ? $this->objectModel->mta->SMTPAuth : '';
+        $result->debug = isset($this->objectModel->mta->SMTPDebug) ? $this->objectModel->mta->SMTPDebug : '';
+        $result->charset = isset($this->objectModel->mta->CharSet) ? $this->objectModel->mta->CharSet : '';
+        $result->secure = isset($this->objectModel->mta->SMTPSecure) ? $this->objectModel->mta->SMTPSecure : '';
+
+        return $result;
+    }
+
+    /**
      * Set sendmail.
      *
      * @access public
