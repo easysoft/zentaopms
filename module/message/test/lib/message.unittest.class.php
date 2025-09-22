@@ -188,17 +188,40 @@ class messageTest
      * Test get notice todos.
      *
      * @param  string       $account
+     * @param  string       $returnType
      * @access public
-     * @return string|array
+     * @return string|array|int
      */
-    public function getNoticeTodosTest(string $account): string|array
+    public function getNoticeTodosTest(string $account, string $returnType = 'ids'): string|array|int
     {
         su($account);
         $objects = $this->objectModel->getNoticeTodos();
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', array_keys($objects));
+        switch($returnType)
+        {
+            case 'count':
+                return count($objects);
+            case 'ids':
+                return empty($objects) ? '0' : implode(',', array_keys($objects));
+            case 'first':
+                return empty($objects) ? array() : reset($objects);
+            case 'structure':
+                if(empty($objects)) return array();
+                $first = reset($objects);
+                return array(
+                    'hasId' => isset($first->id),
+                    'hasData' => isset($first->data),
+                    'idFormat' => substr($first->id, 0, 4) === 'todo' ? 'correct' : 'incorrect'
+                );
+            case 'dataContent':
+                if(empty($objects)) return '';
+                $first = reset($objects);
+                return isset($first->data) ? 'hasContent' : 'empty';
+            default:
+                return $objects;
+        }
     }
 
     /**
