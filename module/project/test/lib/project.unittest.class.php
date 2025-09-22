@@ -1132,4 +1132,22 @@ class projectTest
         if(isset($config->build->search['fields']['execution'])) $result[] = 'execution';
         return implode('|', $result);
     }
+
+    /**
+     * Test setMenu.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function setMenuTest($projectID = 0)
+    {
+        $this->objectModel->app->rawModule = 'project';
+        $this->objectModel->app->rawMethod = 'index';
+
+        $this->objectModel->setMenu($projectID);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
 }
