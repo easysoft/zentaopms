@@ -944,4 +944,22 @@ class projectTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
     }
+
+
+    /**
+     * Update a project.
+     *
+     * @param  object $project
+     * @param  object $oldProject
+     * @access public
+     * @return void
+     */
+    public function updateTest(object $project, object $oldProject)
+    {
+        $this->objectModel->update($project, $oldProject);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($oldProject->id);
+    }
 }

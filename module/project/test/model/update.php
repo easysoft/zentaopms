@@ -47,7 +47,7 @@ cid=1
 */
 
 global $tester;
-$project = new Project();
+$project = new projectTest();
 
 $_POST['uid'] = '0';
 
@@ -86,17 +86,17 @@ $noProductProject->name       = '测试更新影子产品';
 $noProductProject->status     = 'closed';
 
 $oldProject = $tester->loadModel('project')->getById(1);
-r($project->update($normalProject,         $oldProject)) && p('name')   && e('测试更新项目十');                       // 正常更新项目的情况
-r($project->update($emptyTitleProject,     $oldProject)) && p('name')   && e('~~');                                   // 更新项目名称为空时
-r($project->update($emptyBeginProject,     $oldProject)) && p('finish') && e('~~');                                   // 当计划完成为空时更新项目信息
-r($project->update($emptyEndProject,       $oldProject)) && p('end:0')  && e('『计划完成』应当大于『2022-07-06』。'); // 当项目的完成日期小于执行的完成日期时
-r($project->update($beginGtExecutionBegin, $oldProject)) && p('begin')  && e('2022-08-07');                           // 当项目的开始日期大于执行的开始日期时
-r($project->update($noProductProject,      $oldProject)) && p('name')   && e('测试更新影子产品');                     // 无产品项目
+r($project->updateTest($normalProject,         $oldProject)) && p('name')   && e('测试更新项目十');                       // 正常更新项目的情况
+r($project->updateTest($emptyTitleProject,     $oldProject)) && p('name')   && e('~~');                                   // 更新项目名称为空时
+r($project->updateTest($emptyBeginProject,     $oldProject)) && p('finish') && e('~~');                                   // 当计划完成为空时更新项目信息
+r($project->updateTest($emptyEndProject,       $oldProject)) && p('end:0')  && e('『计划完成』应当大于『2022-07-06』。'); // 当项目的完成日期小于执行的完成日期时
+r($project->updateTest($beginGtExecutionBegin, $oldProject)) && p('begin')  && e('2022-08-07');                           // 当项目的开始日期大于执行的开始日期时
+r($project->updateTest($noProductProject,      $oldProject)) && p('name')   && e('测试更新影子产品');                     // 无产品项目
 
 $oldProject = $tester->loadModel('project')->getById(2);
-r($project->update($normalProject,         $oldProject)) && p('name')   && e('测试更新项目十');                                                                                            // 正常更新项目的情况
-r($project->update($emptyTitleProject,     $oldProject)) && p('name')   && e('~~');                                                                                                        // 更新项目名称为空时
-r($project->update($emptyBeginProject,     $oldProject)) && p('finish') && e('~~');                                                                                                        // 当计划完成为空时更新项目信息
-r($project->update($emptyEndProject,       $oldProject)) && p('end:0')  && e('『计划完成』应当大于『2022-07-06』。');                                                                      // 当项目的完成日期小于执行的完成日期时
-r($project->update($beginGtExecutionBegin, $oldProject)) && p('begin')  && e('2022-08-07');                                                                                                // 当项目的开始日期大于执行的开始日期时
-r($project->update($noProductProject,      $oldProject)) && p('name:0') && e('『项目名称』已经有『测试更新影子产品』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 无产品项目
+r($project->updateTest($normalProject,         $oldProject)) && p('name')   && e('测试更新项目十');                                                                                            // 正常更新项目的情况
+r($project->updateTest($emptyTitleProject,     $oldProject)) && p('name')   && e('~~');                                                                                                        // 更新项目名称为空时
+r($project->updateTest($emptyBeginProject,     $oldProject)) && p('finish') && e('~~');                                                                                                        // 当计划完成为空时更新项目信息
+r($project->updateTest($emptyEndProject,       $oldProject)) && p('end:0')  && e('『计划完成』应当大于『2022-07-06』。');                                                                      // 当项目的完成日期小于执行的完成日期时
+r($project->updateTest($beginGtExecutionBegin, $oldProject)) && p('begin')  && e('2022-08-07');                                                                                                // 当项目的开始日期大于执行的开始日期时
+r($project->updateTest($noProductProject,      $oldProject)) && p('name:0') && e('『项目名称』已经有『测试更新影子产品』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 无产品项目
