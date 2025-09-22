@@ -495,16 +495,17 @@ class ai extends control
      */
     public function createPrompt()
     {
-        if(strtolower($this->server->request_method) == 'post')
+        if($_POST)
         {
-            $prompt   = fixer::input('post')->get();
+            $prompt   = form::data($this->config->ai->form->createPrompt)->add('model', 0)->get();
             $promptID = $this->ai->createPrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'callback' => "gotoPrompt($promptID)"));
+            $url = commonModel::hasPriv('ai', 'promptassignrole') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $url));
         }
 
-        $this->view->title      = $this->lang->ai->prompts->create;
+        $this->view->title = $this->lang->ai->prompts->create;
         $this->display();
     }
 
@@ -519,9 +520,9 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($id);
 
-        if(strtolower($this->server->request_method) == 'post')
+        if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = form::data($this->config->ai->form->createPrompt)->get();
 
             $prompt->name = $data->name;
             $prompt->desc = $data->desc;
@@ -529,7 +530,7 @@ class ai extends control
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptView', "id={$prompt->id}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->inlink('promptView', "id={$prompt->id}")));
         }
 
         $this->view->prompt = $prompt;
@@ -549,7 +550,7 @@ class ai extends control
         $result = $this->ai->deletePrompt($prompt);
 
         if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->deleteSuccess, 'locate' => $this->inlink('prompts')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->deleteSuccess, 'load' => $this->inlink('prompts')));
     }
 
     /**
