@@ -1358,4 +1358,17 @@ class projectTest
         global $app;
         return $this->objectModel->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($app->user->account)->fetch();
     }
+
+    /**
+     * Test fetchProjectList function.
+     *
+     * @param  int    $status
+     * @param  bool   $involved
+     * @access public
+     * @return array
+     */
+    public function fetchProjectListTest($status, $involved = false)
+    {
+        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+    }
 }
