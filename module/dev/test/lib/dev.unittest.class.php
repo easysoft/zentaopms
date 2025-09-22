@@ -666,6 +666,64 @@ class devTest
     }
 
     /**
+     * Test loadDefaultLang method with defaultLang setup.
+     *
+     * @param  string $language
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function loadDefaultLangWithSetupTest($language = 'zh-cn', $module = 'common')
+    {
+        /* Setup defaultLang first. */
+        $this->objectModel->defaultLang = $this->objectModel->loadDefaultLang('zh-cn', 'common');
+
+        $result = $this->objectModel->loadDefaultLang($language, $module);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test loadDefaultLang method return type.
+     *
+     * @param  string $language
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function loadDefaultLangReturnTypeTest($language = 'zh-cn', $module = 'common')
+    {
+        $result = $this->objectModel->loadDefaultLang($language, $module);
+        if(dao::isError()) return dao::getError();
+
+        return (is_object($result) && get_class($result) === 'language') ? '1' : '0';
+    }
+
+    /**
+     * Test loadDefaultLang method object return for non-common module.
+     *
+     * @param  string $language
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function loadDefaultLangObjectReturnTest($language = 'zh-cn', $module = 'user')
+    {
+        /* Setup defaultLang first. */
+        $this->objectModel->defaultLang = $this->objectModel->loadDefaultLang('zh-cn', 'common');
+
+        /* Capture output to avoid error display. */
+        ob_start();
+        $result = $this->objectModel->loadDefaultLang($language, $module);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return is_object($result) ? '1' : '0';
+    }
+
+    /**
      * Test trimSpace method.
      *
      * @param  string $line
