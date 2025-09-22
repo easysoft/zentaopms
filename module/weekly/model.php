@@ -635,7 +635,7 @@ class weeklyModel extends model
     public function addBuiltinScope(): int|bool
     {
         $scope = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('reportTemplate')->andWhere('main')->eq(1)->andWhere('vision')->eq($this->config->vision)->fetch();
-        if($scope) return false;
+        if($scope) return $scope->id;
 
         $this->loadModel('setting');
 
@@ -788,7 +788,11 @@ class weeklyModel extends model
                             if(isset($delta->attributes->holder->data->blockID) && isset($blockIdList[$delta->attributes->holder->data->type])) $delta->attributes->holder->data->blockID = $blockIdList[$delta->attributes->holder->data->type];
                         }
                     }
-                    if(!empty($child->props->content)) $child->props->content->fetcher = str_replace($blockCodes, array_values($blockIdList), $child->props->content->fetcher);
+                    if(!empty($child->props->content))
+                    {
+                        $child->props->content->fetcher = str_replace($blockCodes, array_values($blockIdList), $child->props->content->fetcher);
+                        if(isset($child->props->content->exportUrl)) $child->props->content->exportUrl = str_replace($blockCodes, array_values($blockIdList), $child->props->content->exportUrl);
+                    }
                 }
             }
         }
