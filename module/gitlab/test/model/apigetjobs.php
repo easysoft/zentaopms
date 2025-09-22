@@ -1,36 +1,35 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetJobs();
+title=测试 gitlabModel::apiGetJobs();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的pipeline job信息第0条的stage属性 @deploy
-- 使用不存在的gitlabID查询pipeline job信息 @0
-- 使用不存在的projectID查询pipeline job信息属性message @404 Project Not Found
-- 使用不存在的pipelineID查询pipeline job信息属性message @404 Not found
+- 步骤1：正常查询pipeline jobs第0条的stage属性 @deploy
+- 步骤2：不存在的GitLab ID @0
+- 步骤3：不存在的项目ID属性message @404 Project Not Found
+- 步骤4：不存在的流水线ID属性message @404 Not found
+- 步骤5：GitLab ID为0 @0
+- 步骤6：负数项目ID属性message @404 Project Not Found
+- 步骤7：流水线ID为0属性message @404 Not found
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+
 zenData('pipeline')->gen(5);
 
-$gitlab = $tester->loadModel('gitlab');
+su('admin');
 
-$gitlabID   = 1;
-$projectID  = 2;
-$pipelineID = 8;
+$gitlabTest = new gitlabTest();
 
-$pipeline1 = $gitlab->apiGetJobs($gitlabID, $projectID, $pipelineID);
-$pipeline2 = $gitlab->apiGetJobs(0, $projectID, $pipelineID);
-$pipeline3 = $gitlab->apiGetJobs($gitlabID, 0, $pipelineID);
-$pipeline4 = $gitlab->apiGetJobs($gitlabID, $projectID, 10001);
-
-r($pipeline1) && p('0:stage') && e('deploy');                // 查询正确的pipeline job信息
-r($pipeline2) && p()          && e('0');                     // 使用不存在的gitlabID查询pipeline job信息
-r($pipeline3) && p('message') && e('404 Project Not Found'); // 使用不存在的projectID查询pipeline job信息
-r($pipeline4) && p('message') && e('404 Not found');         // 使用不存在的pipelineID查询pipeline job信息
+r($gitlabTest->apiGetJobsTest(1, 2, 8)) && p('0:stage') && e('deploy');                   // 步骤1：正常查询pipeline jobs
+r($gitlabTest->apiGetJobsTest(999, 2, 8)) && p() && e('0');                               // 步骤2：不存在的GitLab ID
+r($gitlabTest->apiGetJobsTest(1, 999999, 8)) && p('message') && e('404 Project Not Found'); // 步骤3：不存在的项目ID
+r($gitlabTest->apiGetJobsTest(1, 2, 999999)) && p('message') && e('404 Not found');       // 步骤4：不存在的流水线ID
+r($gitlabTest->apiGetJobsTest(0, 2, 8)) && p() && e('0');                                 // 步骤5：GitLab ID为0
+r($gitlabTest->apiGetJobsTest(1, -1, 8)) && p('message') && e('404 Project Not Found');  // 步骤6：负数项目ID
+r($gitlabTest->apiGetJobsTest(1, 2, 0)) && p('message') && e('404 Not found');           // 步骤7：流水线ID为0
