@@ -578,14 +578,20 @@ class buildTest
     /**
      * Test isClickable method.
      *
-     * @param  object $build
      * @param  string $action
      * @param  string $module
+     * @param  bool   $executionDeleted
      * @access public
      * @return mixed
      */
-    public function isClickableTest(object $build, string $action, string $module = 'bug')
+    public function isClickableTest(string $action, string $module = 'bug', bool $executionDeleted = false)
     {
+        $build = new stdclass();
+        $build->id = 1;
+        $build->name = 'Build001';
+        $build->execution = 101;
+        $build->executionDeleted = $executionDeleted;
+
         $result = $this->objectModel->isClickable($build, $action, $module);
         if(dao::isError()) return dao::getError();
 
