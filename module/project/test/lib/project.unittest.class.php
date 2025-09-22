@@ -177,11 +177,7 @@ class projectTest
      */
     public function addTeamMembersTest($projectID = 0, $project = null, $members = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('addTeamMembers');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $projectID, $project, $members);
+        $result = $this->objectModel->addTeamMembers($projectID, $project, $members);
         if(dao::isError()) return dao::getError();
 
         return $result;
