@@ -369,6 +369,36 @@ class groupTest
     }
 
     /**
+     * Verify remove operation completeness.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return object
+     */
+    public function verifyRemoveCompleteTest($groupID)
+    {
+        $this->objectModel->remove($groupID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 检查group表中是否还存在该记录
+        $groupExists = $this->objectModel->dao->select('count(*)')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('count(*)');
+
+        // 检查usergroup表中是否还存在该组的关联记录
+        $usergroupExists = $this->objectModel->dao->select('count(*)')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetch('count(*)');
+
+        // 检查grouppriv表中是否还存在该组的权限记录
+        $groupprivExists = $this->objectModel->dao->select('count(*)')->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetch('count(*)');
+
+        $result = new stdclass();
+        $result->groupExists = $groupExists;
+        $result->usergroupExists = $usergroupExists;
+        $result->groupprivExists = $groupprivExists;
+
+        return $result;
+    }
+
+    /**
      * Update privilege of a group.
      *
      * @param  int    $groupID
