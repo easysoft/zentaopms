@@ -1,0 +1,51 @@
+---
+title: 用于getDiffs方法测试的MR数据
+desc: 包含不同类型和状态的MR数据用于测试getDiffs方法的各种场景
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: hostID
+  range: 1{3},2{3},3{4}
+- field: sourceProject
+  range: project1,project2,project3
+- field: sourceBranch
+  range: feature-branch{3},develop{3},master{4}
+- field: targetProject
+  range: main-project{5},other-project{5}
+- field: targetBranch
+  range: master{8},main{2}
+- field: mriid
+  range: 100-110
+- field: title
+  range: "[测试MR] 功能开发,Bug修复,代码重构,性能优化,安全修复"
+- field: description
+  range: "这是一个测试用的合并请求描述"
+- field: assignee
+  range: admin,user1,user2,developer
+- field: reviewer
+  range: admin,reviewer1,reviewer2
+- field: createdBy
+  range: admin{3},user1{3},developer{4}
+- field: createdDate
+  range: "2023-12-01 10:00:00","2023-12-02 11:00:00","2023-12-03 12:00:00"
+- field: editedBy
+  range: admin{3},user1{3},developer{4}
+- field: editedDate
+  range: "2023-12-01 10:30:00","2023-12-02 11:30:00","2023-12-03 12:30:00"
+- field: deleted
+  range: '0'{9},'1'{1}
+- field: status
+  range: opened{5},closed{3},merged{2}
+- field: mergeStatus
+  range: can_be_merged{5},cannot_be_merged{3},merged{2}
+- field: repoID
+  range: 1{5},2{3},3{2}
+- field: synced
+  range: '0'{3},'1'{7}
+- field: diffs
+  range: "diff --git a/README.md b/README.md\nindex 1234567..abcdefg 100644\n--- a/README.md\n+++ b/README.md\n@@ -1,3 +1,4 @@\n # Project Title\n+Added new line\n This is a test project.\n","diff --git a/src/main.php b/src/main.php\nindex 9876543..1234567 100644\n--- a/src/main.php\n+++ b/src/main.php\n@@ -10,5 +10,6 @@\n function test() {\n+    echo 'hello';\n     return true;\n }",""
+- field: isFlow
+  range: '0'{8},'1'{2}
