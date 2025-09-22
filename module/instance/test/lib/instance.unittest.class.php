@@ -792,4 +792,18 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test updateMemorySize method.
+     *
+     * @param  object $instance
+     * @param  int    $size
+     * @access public
+     * @return mixed
+     */
+    public function updateMemorySizeTest(object $instance, int $size = 0)
+    {
+        $result = $this->objectModel->updateMemorySize($instance, $size);
+        return $result;
+    }
 }

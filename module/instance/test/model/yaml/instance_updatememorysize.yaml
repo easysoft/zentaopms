@@ -1,0 +1,39 @@
+title: table zt_instance for updateMemorySize test
+desc: "内存大小调整测试数据"
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: space
+    range: 1-3
+  - field: solution
+    range: 1-3
+  - field: name
+    range: "test-app-1,test-app-2,test-app-3,memory-test-app,high-memory-app"
+  - field: appVersion
+    range: "1.0.0,2.0.0,3.0.0"
+  - field: chart
+    range: "zentao,adminer,gitlab"
+  - field: logo
+    range: "img.qucheng.com/app/z/zentao-icon.svg"
+  - field: version
+    range: "2023.12.1201,2023.12.1202,2023.12.1203"
+  - field: desc
+    range: "Memory test application for unit testing"
+  - field: source
+    range: 'cloud'
+  - field: channel
+    range: 'stable'
+  - field: status
+    range: running{3},stopped{1},abnormal{1}
+  - field: domain
+    range: 'test1.dops.corp.cc,test2.dops.corp.cc,test3.dops.corp.cc,memory-test.dops.corp.cc,high-mem.dops.corp.cc'
+  - field: k8name
+    range: 'test-app-1,test-app-2,test-app-3,memory-test,high-memory'
+  - field: createdBy
+    range: 'admin'
+  - field: createdDate
+    range: (w)-(-1w)
+  - field: oldValue
+    range: 512,1024,2048,4096,8192
