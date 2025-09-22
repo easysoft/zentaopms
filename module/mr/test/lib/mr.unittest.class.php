@@ -1156,4 +1156,22 @@ class mrTest
             return '0';
         }
     }
+
+    /**
+     * Test apiGetSingleDiffVersion method.
+     *
+     * @param  int $hostID
+     * @param  string $projectID
+     * @param  int $MRID
+     * @param  int $versionID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetSingleDiffVersionTest(int $hostID, string $projectID, int $MRID, int $versionID)
+    {
+        $result = $this->objectModel->apiGetSingleDiffVersion($hostID, $projectID, $MRID, $versionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
