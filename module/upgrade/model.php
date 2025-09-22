@@ -11886,6 +11886,8 @@ class upgradeModel extends model
         foreach($workflows as $workflow)
         {
             $projects = $projectGroup[$workflow->id];
+            $index    = 1;
+            $name     = $workflow->name;
             foreach($projects as $project)
             {
                 $hasProduct  = $project->hasProduct ? 'product' : 'project';
@@ -11901,6 +11903,7 @@ class upgradeModel extends model
                     continue;
                 }
 
+                $workflow->name         = $name . $index;
                 $workflow->createdDate  = helper::now();
                 $workflow->projectModel = $project->model;
                 $workflow->projectType  = $projectType;
@@ -11917,6 +11920,7 @@ class upgradeModel extends model
                 }
 
                 $codeWorkflowPairs[$code] = $newWorkflowGroupID;
+                $index++;
             }
         }
     }
