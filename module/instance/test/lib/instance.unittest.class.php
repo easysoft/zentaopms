@@ -806,4 +806,20 @@ class instanceTest
         $result = $this->objectModel->updateMemorySize($instance, $size);
         return $result;
     }
+
+    /**
+     * Test updateStatus method.
+     *
+     * @param  int    $id
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function updateStatusTest(int $id, string $status)
+    {
+        $result = $this->objectModel->updateStatus($id, $status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
