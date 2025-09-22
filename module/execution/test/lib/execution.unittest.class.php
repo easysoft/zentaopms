@@ -1855,23 +1855,13 @@ class executionTest
      * @access public
      * @return string
      */
-    public function summaryTest(int $executionID): string
+    public function summaryTest($tasks): string
     {
-        $executionName = $this->executionModel->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('name');
-        $executions    = array($executionID => $executionName);
-        $tasks         = $this->executionModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc');
+        $result = $this->executionModel->summary($tasks);
 
-        $object = $this->executionModel->summary($tasks);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
+        return $result;
     }
 
     /**
