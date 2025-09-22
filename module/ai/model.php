@@ -43,30 +43,28 @@ class aiModel extends model
      * @static
      * @return boolean
      */
-    public static function isClickable($object, $action)
+    public function isClickable($object, $action)
     {
+        $action = strtolower($action);
         if(empty($object) || empty($action)) return false;
 
         /* Assumes object is a language model record. */
-        if(strtolower($action) === 'modelenable')
+        if($action === 'modelenable')       return $object->enabled != '1';
+        if($action === 'modeldisable')      return $object->enabled != '0';
+        if($action === 'assistantpublish')  return $object->enabled != '1';
+        if($action === 'assistantwithdraw') return $object->enabled != '0';
+        if($action === 'assistantedit')     return $object->enabled != '1';
+
+        if(in_array($this->app->rawMethod, array('prompts', 'promptview')))
         {
-            if($object->enabled == '1') return false;
-        }
-        elseif(strtolower($action) === 'modeldisable')
-        {
-            if($object->enabled == '0') return false;
-        }
-        elseif (strtolower($action) === 'assistantpublish')
-        {
-            if($object->enabled == '1') return false;
-        }
-        elseif (strtolower($action) === 'assistantwithdraw')
-        {
-            if($object->enabled == '0') return false;
-        }
-        elseif (strtolower($action) === 'assistantedit')
-        {
-            if($object->enabled == '1') return false;
+            $executable = $this->isExecutable($object);
+            $published  = $object->status == 'active';
+
+            if($action == 'promptassignrole') return common::hasPriv('ai', 'promptassignrole') && !$published;
+            if($action == 'promptaudit')      return common::hasPriv('ai', 'promptaudit') && $executable && !$published;
+            if($action == 'promptedit')       return common::hasPriv('ai', 'promptedit');
+            if($action == 'promptpublish')    return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
+            if($action == 'promptunpublish')  return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
         }
 
         return true;
