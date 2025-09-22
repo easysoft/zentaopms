@@ -1,26 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
-
-zenData('dept')->gen(20);
-su('admin');
 
 /**
 
-title=测试 deptModel->createManageProjectAdminLink();
-cid=1
-pid=1
+title=测试 deptModel::createManageProjectAdminLink();
+timeout=0
+cid=0
 
-权限分组2开发部链接组成 >> 1
+- 测试步骤1：正常部门和分组ID生成链接 @group-manageProjectAdmin-5-1.html
+- 测试步骤2：边界值部门ID(1)和分组ID测试 @group-manageProjectAdmin-1-1.html
+- 测试步骤3：零值分组ID生成链接测试 @group-manageProjectAdmin-0-2.html
+- 测试步骤4：大ID值的链接生成测试 @group-manageProjectAdmin-999-10.html
+- 测试步骤5：链接格式完整性验证测试 @1
 
 */
 
-$deptIDList  = array('2', '5');
-$groupIDList = array('2', '12');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
 
-$dept = new deptTest();
-$result = $dept->createManageProjectAdminLinkTest($deptIDList[0], $groupIDList[0]);
-$expect = helper::createLink('group', 'manageProjectAdmin', "groupID={$groupIDList[0]}&deptID={$deptIDList[0]}");
+zenData('dept')->loadYaml('dept_createmanageprojectadminlink', false, 2)->gen(10);
+su('admin');
 
-r(strpos($result, $expect) !== false) && p() && e('1'); //权限分组2开发部链接组成
+$deptTest = new deptTest();
+
+r($deptTest->createManageProjectAdminLinkTest(1, 5)) && p() && e('group-manageProjectAdmin-5-1.html'); // 测试步骤1：正常部门和分组ID生成链接
+r($deptTest->createManageProjectAdminLinkTest(1, 1)) && p() && e('group-manageProjectAdmin-1-1.html'); // 测试步骤2：边界值部门ID(1)和分组ID测试
+r($deptTest->createManageProjectAdminLinkTest(2, 0)) && p() && e('group-manageProjectAdmin-0-2.html'); // 测试步骤3：零值分组ID生成链接测试
+r($deptTest->createManageProjectAdminLinkTest(10, 999)) && p() && e('group-manageProjectAdmin-999-10.html'); // 测试步骤4：大ID值的链接生成测试
+r(strpos($deptTest->createManageProjectAdminLinkTest(3, 7), 'manageProjectAdmin') !== false) && p() && e('1'); // 测试步骤5：链接格式完整性验证测试
