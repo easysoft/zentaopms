@@ -2368,11 +2368,8 @@ class executionTest
             $error = dao::getError();
             return $error;
         }
-        else
-        {
-            if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
-            return count($object['nokey']->tasks);
-        }
+
+        return count($object);
     }
 
     /**
