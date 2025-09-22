@@ -526,4 +526,20 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $item
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest($item, $method)
+    {
+        $result = $this->objectModel->isClickable($item, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
