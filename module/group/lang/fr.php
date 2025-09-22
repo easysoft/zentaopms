@@ -624,7 +624,9 @@ $lang->group->package->component             = 'Component';
 $lang->group->package->browseRule            = 'Browse Rule';
 $lang->group->package->manageRule            = 'Manage Rule';
 $lang->group->package->executionDeliverable  = 'Execution Deliverable';
-$lang->group->package->projectDeliverable    = 'Project Deliverable';
+$lang->group->package->browseDeliverable     = 'Browse Deliverable';
+$lang->group->package->manageDeliverable     = 'Manage Deliverable';
+$lang->group->package->deleteDeliverable     = 'Delete Deliverable';
 $lang->group->package->projectTemplate       = 'Project Template';
 
 include (dirname(__FILE__) . '/resource.php');

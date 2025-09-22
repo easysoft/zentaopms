@@ -11859,6 +11859,73 @@ class upgradeModel extends model
     }
 
     /**
+     * 之前IPD、融合瀑布使用的是瀑布项目流程，融合敏捷使用的是敏捷项目流程。现在统一使用自己的项目流程。
+     * Before IPD, fusion waterfall uses the waterfall project workflow, and fusion agile uses the agile project workflow. Now use the own project workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function modifyProjectWorkflowGroup()
+    {
+        if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有项目流程
+
+        $projectGroup = $this->dao->select('id,workflowGroup,model,category,hasProduct')->from(TABLE_PROJECT)->where('model')->in('ipd,waterfallplus,agileplus')->andWhere('deleted')->eq('0')->fetchGroup('workflowGroup', 'id');
+        $workflows    = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->in(array_keys($projectGroup))->fetchAll('id');
+
+        $tableList = array(
+            TABLE_WORKFLOW,
+            TABLE_WORKFLOWFIELD,
+            TABLE_WORKFLOWACTION,
+            TABLE_WORKFLOWLABEL,
+            TABLE_WORKFLOWLAYOUT,
+            TABLE_WORKFLOWUI
+        );
+
+        $this->loadModel('project');
+        $codeWorkflowPairs = array();
+        foreach($workflows as $workflow)
+        {
+            $projects = $projectGroup[$workflow->id];
+            $index    = 1;
+            $name     = $workflow->name;
+            foreach($projects as $project)
+            {
+                $hasProduct  = $project->hasProduct ? 'product' : 'project';
+                $code        = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
+                $projectType = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
+
+                if($projectType == 'cpd') $projectType = 'cpd' . $hasProduct;
+
+                unset($workflow->id);
+                if(isset($codeWorkflowPairs[$code]))
+                {
+                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code])->where('id')->eq($project->id)->exec();
+                    continue;
+                }
+
+                $workflow->name         = $name . $index;
+                $workflow->createdDate  = helper::now();
+                $workflow->projectModel = $project->model;
+                $workflow->projectType  = $projectType;
+                $workflow->code         = $code;
+                $workflow->editedDate   = null;
+
+                $this->dao->insert(TABLE_WORKFLOWGROUP)->data($workflow)->exec();
+                $newWorkflowGroupID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($newWorkflowGroupID)->where('id')->eq($project->id)->exec();
+
+                foreach($tableList as $table)
+                {
+                    $this->project->copyWorkflow($project->workflowGroup, $newWorkflowGroupID, $table);
+                }
+
+                $codeWorkflowPairs[$code] = $newWorkflowGroupID;
+                $index++;
+            }
+        }
+    }
+
+    /**
      * 升级流程和活动, 将流程和活动中的数据迁移到流程中。
      * Upgrade process and activity.
      *
@@ -12233,44 +12300,5 @@ class upgradeModel extends model
         }
 
         $this->dao->exec('ALTER TABLE ' . TABLE_REVIEW . ' DROP `doc`');
-    }
-
-    /**
-     * 之前IPD、融合瀑布使用的是瀑布项目流程，融合敏捷使用的是敏捷项目流程。现在统一使用自己的项目流程。
-     * Before IPD, fusion waterfall uses the waterfall project workflow, and fusion agile uses the agile project workflow. Now use the own project workflow.
-     *
-     * @access public
-     * @return void
-     */
-    public function modifyProjectWorkflowGroup()
-    {
-        $workflows = $this->dao->select('id,code,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('ipd,waterfallplus,agileplus')->andWhere('main')->eq('1')->fetchAll('id');
-
-        foreach($workflows as $workflow)
-        {
-            $hasProduct = strpos($workflow->code, 'product') !== false ? '1' : '0';
-            if($workflow->projectModel == 'ipd')
-            {
-                $category = $hasProduct ? str_replace('product', '', $workflow->code) : str_replace('project', '', $workflow->code);
-                $category = strtoupper($category);
-
-                $this->dao->update(TABLE_PROJECT)
-                    ->set('workflowGroup')->eq($workflow->id)
-                    ->where('model')->eq($workflow->projectModel)
-                    ->andWhere('category')->eq($category)
-                    ->andWhere('hasProduct')->eq($hasProduct)
-                    ->andWhere('workflowGroup')->in(array_keys($workflows))
-                    ->exec();
-            }
-            else
-            {
-                $this->dao->update(TABLE_PROJECT)
-                    ->set('workflowGroup')->eq($workflow->id)
-                    ->where('model')->eq($workflow->projectModel)
-                    ->andWhere('hasProduct')->eq($hasProduct)
-                    ->andWhere('workflowGroup')->in(array_keys($workflows))
-                    ->exec();
-            }
-        }
     }
 }
