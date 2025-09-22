@@ -310,26 +310,57 @@ class jobTest
     }
 
     /**
-     * Test Check parameterizedBuild.
+     * Test checkParameterizedBuild method.
      *
-     * @param  string $url
-     * @param  string $userPWD
+     * @param  int $jobID
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function checkParameterizedBuildTest(int $jobID): bool
+    public function checkParameterizedBuildTest(int $jobID)
     {
         global $tester;
-        $job       = $this->objectModel->getById($jobID);
-        $jenkins   = $tester->loadModel('pipeline')->getByID($job->server);
-        $urlPrefix = $tester->loadModel('compile')->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
-        $detailUrl = $urlPrefix . 'api/json';
 
-        $checked = $this->objectModel->checkParameterizedBuild($detailUrl, $tester->loadModel('jenkins')->getApiUserPWD($jenkins));
+        // 边界值检查：处理无效或不存在的Job ID
+        if($jobID <= 0)
+        {
+            return false;
+        }
 
-        if(dao::isError()) return dao::getError();
+        $job = $this->objectModel->getById($jobID);
+        if(empty($job) || empty($job->id))
+        {
+            return false;
+        }
 
-        return $checked;
+        // 检查服务器配置
+        $jenkins = $tester->loadModel('pipeline')->getByID($job->server);
+        if(empty($jenkins) || empty($jenkins->url))
+        {
+            return false;
+        }
+
+        // 构建URL并检查
+        try
+        {
+            $urlPrefix = $tester->loadModel('compile')->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
+            if(empty($urlPrefix))
+            {
+                return false;
+            }
+
+            $detailUrl = $urlPrefix . 'api/json';
+            $userPWD = $tester->loadModel('jenkins')->getApiUserPWD($jenkins);
+
+            $result = $this->objectModel->checkParameterizedBuild($detailUrl, $userPWD);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
 
     public function updateLastTagTest(int $jobID, string $lastTag)
