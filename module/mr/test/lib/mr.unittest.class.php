@@ -1174,4 +1174,20 @@ class mrTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetSingleMR method.
+     *
+     * @param  int $repoID
+     * @param  int $MRID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetSingleMRTest(int $repoID, int $MRID)
+    {
+        $result = $this->objectModel->apiGetSingleMR($repoID, $MRID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
