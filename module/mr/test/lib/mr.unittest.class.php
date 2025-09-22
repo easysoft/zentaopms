@@ -438,9 +438,10 @@ class mrTest
     public function reopenTester(int $MRID): array
     {
         $MR = $this->objectModel->fetchByID($MRID);
+        if(!$MR) return array('result' => 'fail', 'message' => 'MR not found');
 
         $result = $this->objectModel->reopen($MR);
-        if($MR->status != 'opend') $this->objectModel->close($MR);
+        if($MR->status != 'opened') $this->objectModel->close($MR);
         return $result;
     }
 
