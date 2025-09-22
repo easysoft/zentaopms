@@ -14,6 +14,8 @@ namespace zin;
 
 include 'header.html.php';
 
+jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
+
 /* zin: Define the set::module('task') feature bar on main menu. */
 featureBar
 (
