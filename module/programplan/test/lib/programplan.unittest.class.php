@@ -845,4 +845,37 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test getStageAttribute method.
+     *
+     * @param  int $stageID
+     * @access public
+     * @return false|string
+     */
+    public function getStageAttributeTest(int $stageID): false|string
+    {
+        $result = $this->objectModel->getStageAttribute($stageID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $plan
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(object $plan, string $action): bool
+    {
+        $result = $this->objectModel::isClickable($plan, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
