@@ -246,4 +246,32 @@ class gitTest
 
         return $this->gitModel->repoRoot;
     }
+
+    /**
+     * Test setRepos method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setReposTest(): array
+    {
+        ob_start();
+        $result = $this->gitModel->setRepos();
+        $output = ob_get_clean();
+        if(dao::isError()) return array('error' => dao::getError());
+
+        $firstRepo = reset($this->gitModel->repos);
+        $firstRepoSCM = $firstRepo ? $firstRepo->SCM : '';
+        $firstRepoHasAcl = $firstRepo && property_exists($firstRepo, 'acl') ? 'exists' : 'not_exists';
+        $firstRepoHasDesc = $firstRepo && property_exists($firstRepo, 'desc') ? 'exists' : 'not_exists';
+
+        return array(
+            'result' => $result ? '1' : '0',
+            'count'  => count($this->gitModel->repos),
+            'firstSCM' => $firstRepoSCM,
+            'hasAcl' => $firstRepoHasAcl,
+            'hasDesc' => $firstRepoHasDesc,
+            'output' => trim($output)
+        );
+    }
 }
