@@ -86,16 +86,32 @@ class gogsTest
     public function getMatchedUsersTest(int $gogsID, array $gogsUsers): mixed
     {
         global $tester;
-        
+
         // 创建zen实例并设置必需的依赖
         $zen = initReference('gogs');
         $method = $zen->getMethod('getMatchedUsers');
         $method->setAccessible(true);
-        
+
         // 创建一个zen实例
         $zenInstance = $zen->newInstance();
-        
+
         $result = $method->invoke($zenInstance, $gogsID, $gogsUsers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetBranches method.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @access public
+     * @return mixed
+     */
+    public function apiGetBranchesTest(int $gogsID, string $project): mixed
+    {
+        $result = $this->gogs->apiGetBranches($gogsID, $project);
         if(dao::isError()) return dao::getError();
 
         return $result;

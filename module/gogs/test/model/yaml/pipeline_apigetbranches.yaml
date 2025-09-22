@@ -1,0 +1,24 @@
+title: 测试 apiGetBranches 方法的 pipeline 数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 'Gogs测试服务器{5},无效服务器{3},空服务器{2}'
+  - field: type
+    range: 'gogs{5},gitlab{3},gitea{2}'
+  - field: url
+    range: 'http://gogs.test.com{3},http://invalid.com{2},http://empty.com{2},,{3}'
+  - field: token
+    range: 'valid_token_123{3},invalid_token{2},empty_token{2},,{3}'
+  - field: account
+    range: 'admin{5},user{3},guest{2}'
+  - field: password
+    range: 'password123{5},pwd{3},pwd123{2}'
+  - field: private
+    range: '0{5},1{3},{2}'
+  - field: createdBy
+    range: 'admin{8},user{2}'
+  - field: createdDate
+    range: '2023-01-01 00:00:00{5},2023-06-01 12:00:00{3},2023-12-01 18:30:00{2}'
