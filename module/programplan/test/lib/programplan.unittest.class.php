@@ -823,4 +823,20 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test checkLeafStage method.
+     *
+     * @param  int $stageID
+     * @access public
+     * @return bool
+     */
+    public function checkLeafStageTest(int $stageID): bool
+    {
+        $result = $this->objectModel->checkLeafStage($stageID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
