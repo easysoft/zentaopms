@@ -660,6 +660,144 @@ class editorTest
     }
 
     /**
+     * Test printTree with various input types and scenarios.
+     *
+     * @param  mixed $files
+     * @param  bool  $isRoot
+     * @access public
+     * @return mixed
+     */
+    public function printTreeAdvancedTest($files = null, $isRoot = true)
+    {
+        if($files === null)
+        {
+            $files = $this->objectModel->getModuleFiles('todo');
+        }
+
+        try {
+            $result = $this->objectModel->printTree($files, $isRoot);
+            if(dao::isError()) return dao::getError();
+
+            if($result === false)
+            {
+                return array(
+                    'result' => false,
+                    'isArray' => 0,
+                    'isEmpty' => 1,
+                    'hasStructure' => 0,
+                    'itemCount' => 0
+                );
+            }
+
+            $analysis = array(
+                'result' => $result,
+                'isArray' => is_array($result) ? 1 : 0,
+                'isEmpty' => empty($result) ? 1 : 0,
+                'itemCount' => is_array($result) ? count($result) : 0,
+                'hasStructure' => 0,
+                'hasValidItems' => 0,
+                'hasText' => 0,
+                'hasId' => 0,
+                'hasActions' => 0
+            );
+
+            if(is_array($result) && !empty($result))
+            {
+                $firstItem = $result[0];
+                if(is_object($firstItem))
+                {
+                    $analysis['hasStructure'] = 1;
+                    $analysis['hasText'] = isset($firstItem->text) ? 1 : 0;
+                    $analysis['hasId'] = isset($firstItem->id) ? 1 : 0;
+                    $analysis['hasActions'] = isset($firstItem->actions) ? 1 : 0;
+                    $analysis['hasValidItems'] = ($analysis['hasText'] && $analysis['hasId']) ? 1 : 0;
+                }
+            }
+
+            return $analysis;
+        } catch (TypeError $e) {
+            return array(
+                'result' => false,
+                'isArray' => 0,
+                'isEmpty' => 1,
+                'hasStructure' => 0,
+                'itemCount' => 0,
+                'hasError' => 1,
+                'errorType' => 'TypeError'
+            );
+        } catch (Exception $e) {
+            return array(
+                'result' => false,
+                'isArray' => 0,
+                'isEmpty' => 1,
+                'hasStructure' => 0,
+                'itemCount' => 0,
+                'hasError' => 1,
+                'errorType' => 'Exception'
+            );
+        }
+    }
+
+    /**
+     * Test printTree with empty array.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printTreeEmptyTest()
+    {
+        return $this->printTreeAdvancedTest(array(), true);
+    }
+
+    /**
+     * Test printTree with non-array input.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printTreeInvalidInputTest()
+    {
+        return $this->printTreeAdvancedTest('invalid', true);
+    }
+
+    /**
+     * Test printTree with isRoot=false.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printTreeNonRootTest()
+    {
+        $files = $this->objectModel->getModuleFiles('todo');
+        return $this->printTreeAdvancedTest($files, false);
+    }
+
+    /**
+     * Test printTree nested structure handling.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function printTreeNestedTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $nestedFiles = array(
+            $modulePath => array(
+                $modulePath . 'control.php' => array(
+                    $modulePath . 'control.php/create' => 'create',
+                    $modulePath . 'control.php/browse' => 'browse'
+                ),
+                $modulePath . 'view' => array(
+                    $modulePath . 'view/create.html.php' => 'create.html.php',
+                    $modulePath . 'view/browse.html.php' => 'browse.html.php'
+                )
+            )
+        );
+
+        return $this->printTreeAdvancedTest($nestedFiles, true);
+    }
+
+    /**
      * Test for add link for dir - control.php directory.
      *
      * @access public
