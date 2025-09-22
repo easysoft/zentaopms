@@ -1266,4 +1266,29 @@ class projectTest
             return $project;
         }
     }
+
+    /**
+     * 创建项目后，创建默认的项目主库。
+     * Create doclib after create a project.
+     *
+     * @param  int    $projectID
+     * @param  int    $programID
+     * @access public
+     * @return object|bool
+     */
+    public function createDocLibTest(int $projectID, int $programID): object|bool
+    {
+        $program = new stdclass();
+        if($programID)
+        {
+            global $tester;
+            $program = $tester->loadModel('program')->getByID($programID);
+        }
+
+        $project = $this->objectModel->getByID($projectID);
+
+        $this->objectModel->createDocLib($projectID, $project, $program);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->fetch();
+    }
 }
