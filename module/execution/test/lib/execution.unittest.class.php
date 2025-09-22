@@ -136,6 +136,19 @@ class executionTest
     }
 
     /**
+     * Test setProjectSession method with string input.
+     *
+     * @access public
+     * @return int
+     */
+    public function setProjectSessionTestWithStringInput(): int
+    {
+        unset($_SESSION['project']);
+        $this->executionModel->setProjectSession((int)'abc');
+        return empty($_SESSION['project']) ? 0 : $_SESSION['project'];
+    }
+
+    /**
      * Test save state.
      *
      * @param  int    $executionID
