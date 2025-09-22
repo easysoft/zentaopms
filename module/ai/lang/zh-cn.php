@@ -76,6 +76,7 @@ $lang->ai->assistantPublish        = '发布AI助手';
 $lang->ai->assistantWithdraw       = '停用AI助手';
 $lang->ai->assistantDelete         = '删除AI助手';
 
+$lang->ai->name                   = '名称';
 $lang->ai->store                  = '商店';
 $lang->ai->export                 = '导出';
 $lang->ai->import                 = '导入';

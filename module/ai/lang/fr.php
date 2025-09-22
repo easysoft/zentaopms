@@ -76,6 +76,7 @@ $lang->ai->assistantPublish        = 'Publish AI Assistant';
 $lang->ai->assistantWithdraw       = 'Withdraw AI Assistant';
 $lang->ai->assistantDelete         = 'Delete AI Assistant';
 
+$lang->ai->name                   = 'Name';
 $lang->ai->store                  = 'Store';
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
