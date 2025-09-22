@@ -122,15 +122,10 @@ class jobTest
      */
     public function getTriggerGroupTest($triggerType, $repoIdList)
     {
-        $array = $this->objectModel->getTriggerGroup($triggerType, $repoIdList);
-
+        $result = $this->objectModel->getTriggerGroup($triggerType, $repoIdList);
         if(dao::isError()) return dao::getError();
 
-        $group = array();
-        if($triggerType == 'tag')    $group = isset($array[1]) ? $array[1] : array();
-        if($triggerType == 'commit') $group = isset($array[2]) ? $array[2] : array();
-
-        return $group;
+        return $result;
     }
 
     /**
