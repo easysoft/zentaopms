@@ -1,0 +1,117 @@
+---
+title: screen表测试数据
+desc: 用于测试checkIFChartInUse方法
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 大屏ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dimension
+  note: 维度ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 大屏名称
+  range: '["测试大屏1", "测试大屏2", "透视表大屏", "图表大屏", "空配置大屏"]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 大屏描述
+  range: '["用于测试的大屏1", "用于测试的大屏2", "包含透视表的大屏", "包含图表的大屏", "配置为空的大屏"]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问权限
+  range: open
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: whitelist
+  note: 白名单
+  range: '""'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: cover
+  note: 封面
+  range: '""'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: scheme
+  note: 配置方案JSON
+  range: |-
+    ["",
+    "{\"componentList\":[]}",
+    "{\"componentList\":[{\"chartConfig\":{\"sourceID\":1002,\"package\":\"Tables\"}}]}",
+    "{\"componentList\":[{\"chartConfig\":{\"sourceID\":2001,\"package\":\"Charts\"}}]}",
+    "{\"componentList\":[{\"isGroup\":true,\"groupList\":[{\"chartConfig\":{\"sourceID\":1002,\"package\":\"Tables\"}},{\"chartConfig\":{\"sourceID\":2002,\"package\":\"Charts\"}}]}]}"]
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: published
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: builtin
+  note: 是否内置
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 12:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 13:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

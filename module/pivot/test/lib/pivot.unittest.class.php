@@ -2418,6 +2418,23 @@ class pivotTest
     }
 
     /**
+     * Test checkIFChartInUse method.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @param  array  $screens
+     * @access public
+     * @return bool
+     */
+    public function checkIFChartInUseTest(int $chartID, string $type = 'chart', array $screens = array()): bool
+    {
+        $result = $this->objectModel->checkIFChartInUse($chartID, $type, $screens);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getFilterOptionUrl method.
      *
      * @param  array  $filter
@@ -2434,7 +2451,7 @@ class pivotTest
 
         // 直接实现 getFilterOptionUrl 方法的逻辑，避免复杂的依赖问题
         // 根据 pivot/zen.php 第497-526行的实现
-        
+
         $field  = $filter['field'];
         $from   = isset($filter['from']) ? $filter['from'] : 'result';
         $value  = isset($filter['default']) ? $filter['default'] : '';
@@ -2444,7 +2461,7 @@ class pivotTest
         $url = 'http://example.com/pivot/ajaxGetSysOptions';
         $data = array();
         $data['values'] = $values;
-        
+
         if($from == 'query')
         {
             $data['type'] = $filter['typeOption'];
