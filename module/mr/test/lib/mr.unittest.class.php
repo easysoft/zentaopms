@@ -245,6 +245,23 @@ class mrTest
     }
 
     /**
+     * Test apiDeleteMR method.
+     *
+     * @param  int    $hostID
+     * @param  string $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object|null
+     */
+    public function apiDeleteMRTest(int $hostID, string $projectID, int $MRID): object|null
+    {
+        $result = $this->objectModel->apiDeleteMR($hostID, $projectID, $MRID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test apiCloseMR method.
      *
      * @param  int     $hostID
