@@ -74,16 +74,32 @@ class groupTest
      */
     public function insertPrivsTest($privs)
     {
-        $this->objectModel->insertPrivs($privs);
+        $result = $this->objectModel->insertPrivs($privs);
+        if(dao::isError()) return dao::getError();
 
-        $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->fetchGroup('group');
-        foreach($privs as $group => $privList)
-        {
-            foreach($privList as $key => $priv) $privs[$group][$key] = $priv->module . '-' . $priv->method;
-        }
-
-        return $privs;
+        return $result;
     }
+
+    public function getGroupPrivsTest($groupId = 0)
+    {
+        if($groupId == 0)
+        {
+            $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->fetchGroup('group');
+            foreach($privs as $group => $privList)
+            {
+                foreach($privList as $key => $priv) $privs[$group][$key] = $priv->module . '-' . $priv->method;
+            }
+            return $privs;
+        }
+        else
+        {
+            $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->where('group')->eq($groupId)->fetchAll();
+            $result = array();
+            foreach($privs as $key => $priv) $result[$key] = $priv->module . '-' . $priv->method;
+            return $result;
+        }
+    }
+
 
     /**
      * Copy a group.
