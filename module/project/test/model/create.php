@@ -27,7 +27,7 @@ cid=1
 */
 
 global $tester;
-$projectClass = new project();
+$projectClass = new projectTest();
 $_POST['uid'] = '0';
 
 $project = new stdclass();
@@ -74,8 +74,8 @@ $beginGtEndProject = clone $project;
 $beginGtEndProject->end  = '2021-01-10';
 $beginGtEndProject->name = '测试新增项目四';
 
-r($projectClass->create($normalProject, $postData))     && p('name')             && e('测试新增项目一');
-r($projectClass->create($emptyNameProject, $postData))  && p('message[name]:0')  && e('『项目名称』不能为空。');
-r($projectClass->create($emptyEndProject, $postData))   && p('message[end]:0')   && e('『计划完成』不能为空。');
-r($projectClass->create($beginGtEndProject, $postData)) && p('message[end]:0')   && e('『计划完成』应当大于『2022-02-07』。');
-r($projectClass->create($emptyBeginProject, $postData)) && p('message[begin]:0') && e('『计划开始』不能为空。');
+r($projectClass->createTest($normalProject, $postData))     && p('name')             && e('测试新增项目一');
+r($projectClass->createTest($emptyNameProject, $postData))  && p('message[name]:0')  && e('『项目名称』不能为空。');
+r($projectClass->createTest($emptyEndProject, $postData))   && p('message[end]:0')   && e('『计划完成』不能为空。');
+r($projectClass->createTest($beginGtEndProject, $postData)) && p('message[end]:0')   && e('『计划完成』应当大于『2022-02-07』。');
+r($projectClass->createTest($emptyBeginProject, $postData)) && p('message[begin]:0') && e('『计划开始』不能为空。');
