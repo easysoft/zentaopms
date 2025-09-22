@@ -2058,4 +2058,18 @@ class metricTest
 
         return gettype($result);
     }
+
+    /**
+     * Test getDatasetPath method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatasetPathTest()
+    {
+        $result = $this->objectModel->getDatasetPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
