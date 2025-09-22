@@ -1304,14 +1304,110 @@ class editorTest
     /**
      * Test for new control.
      *
+     * @param  string $filePath
      * @access public
-     * @return 1|0
+     * @return array
      */
-    public function newControlTest()
+    public function newControlTest($filePath = '')
     {
-        $filePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php' . DS . 'create';
-        $content  = $this->objectModel->newControl($filePath);
-        return (strpos($content, 'class todo extends control') !== false && strpos($content, 'public function create(') !== false) ? 1 : 0;
+        if(empty($filePath))
+        {
+            $filePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php' . DS . 'create';
+        }
+
+        try {
+            $content = $this->objectModel->newControl($filePath);
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'content'           => $content,
+                'hasPhpTag'         => strpos($content, '<?php') !== false ? 1 : 0,
+                'hasClassDef'       => strpos($content, 'class') !== false ? 1 : 0,
+                'extendsControl'    => strpos($content, 'extends control') !== false ? 1 : 0,
+                'hasMethodDef'      => strpos($content, 'public function') !== false ? 1 : 0,
+                'methodNameCorrect' => strpos($content, 'function ' . basename($filePath, '.php') . '(') !== false ? 1 : 0,
+                'classNameCorrect'  => strpos($content, 'class ' . $this->objectModel->getClassNameByPath($filePath)) !== false ? 1 : 0,
+                'hasEmptyMethod'    => strpos($content, '    {') !== false && strpos($content, '    }') !== false ? 1 : 0,
+                'contentLength'     => strlen($content),
+                'isValidSyntax'     => $this->validatePhpSyntax($content)
+            );
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage(), 'hasError' => 1);
+        }
+    }
+
+    /**
+     * Test newControl with different module names.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return array
+     */
+    public function newControlModuleTest($moduleName = 'user', $methodName = 'profile')
+    {
+        $filePath = $this->objectModel->app->getModulePath('', $moduleName) . 'control.php' . DS . $methodName;
+        return $this->newControlTest($filePath);
+    }
+
+    /**
+     * Test newControl with special characters in method name.
+     *
+     * @access public
+     * @return array
+     */
+    public function newControlSpecialMethodTest()
+    {
+        $filePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php' . DS . 'test_method_123';
+        return $this->newControlTest($filePath);
+    }
+
+    /**
+     * Test newControl with empty method name.
+     *
+     * @access public
+     * @return array
+     */
+    public function newControlEmptyMethodTest()
+    {
+        $filePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php' . DS . '';
+        return $this->newControlTest($filePath);
+    }
+
+    /**
+     * Test newControl with complex file path.
+     *
+     * @access public
+     * @return array
+     */
+    public function newControlComplexPathTest()
+    {
+        $filePath = '/complex/path/module/test/control.php/complexMethod';
+        return $this->newControlTest($filePath);
+    }
+
+    /**
+     * Helper method to validate PHP syntax.
+     *
+     * @param  string $content
+     * @access private
+     * @return int
+     */
+    private function validatePhpSyntax($content)
+    {
+        // 基本语法检查
+        if(empty($content)) return 0;
+        if(strpos($content, '<?php') === false) return 0;
+        if(strpos($content, 'class') === false) return 0;
+        if(strpos($content, 'extends control') === false) return 0;
+        if(strpos($content, 'public function') === false) return 0;
+
+        // 检查括号匹配
+        $openBraces = substr_count($content, '{');
+        $closeBraces = substr_count($content, '}');
+        if($openBraces !== $closeBraces) return 0;
+
+        return 1;
     }
 
     /**
