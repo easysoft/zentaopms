@@ -662,6 +662,22 @@ class mailTest
     }
 
     /**
+     * Test setTO method.
+     *
+     * @param  array $toList
+     * @param  array $emails
+     * @access public
+     * @return mixed
+     */
+    public function setTOTest($toList = array(), $emails = array())
+    {
+        $this->objectModel->setTO($toList, $emails);
+        if(dao::isError()) return dao::getError();
+
+        return $emails;
+    }
+
+    /**
      * Test sendmail method.
      *
      * @param  int $objectID
