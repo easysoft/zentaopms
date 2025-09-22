@@ -131,4 +131,24 @@ class gogsTest
 
         return $result;
     }
+
+    /**
+     * Test apiGetSingleProject method.
+     *
+     * @param  int    $gogsID
+     * @param  string $projectID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetSingleProjectTest(int $gogsID, string $projectID): mixed
+    {
+        $result = $this->gogs->apiGetSingleProject($gogsID, $projectID);
+        if(dao::isError()) return dao::getError();
+
+        if(is_null($result)) return 0;
+        if(!is_object($result)) return $result;
+
+        // 返回简单的验证结果
+        return isset($result->name) ? 1 : 0;
+    }
 }
