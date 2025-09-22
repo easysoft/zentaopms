@@ -11,6 +11,8 @@ cid=0
 - 已关闭的gitlab合并请求属性message @404 Not found
 - 已关闭的gitea合并请求 @0
 - 已关闭的gogs合并请求 @0
+- 无效的MR ID @0
+- 测试不同squash和分支删除选项 @~~
 
 */
 
@@ -26,15 +28,15 @@ $mr->gen(10);
 
 $mrModel = new mrTest();
 
-$noHost = 6;
-r($mrModel->apiAcceptMrTester($noHost)) && p() && e('0'); // 不存在的主机
+r($mrModel->apiAcceptMrTester(6)) && p() && e('0'); // 不存在的主机
 
-$gitlab = 1;
-r($mrModel->apiAcceptMrTester($gitlab)) && p('message') && e('404 Not found'); // 已关闭的gitlab合并请求
+r($mrModel->apiAcceptMrTester(1)) && p('message') && e('404 Not found'); // 已关闭的gitlab合并请求
 
-$gitea = 4;
 sleep(1);
-r($mrModel->apiAcceptMrTester($gitea)) && p() && e('0'); // 已关闭的gitea合并请求
+r($mrModel->apiAcceptMrTester(4)) && p() && e('0'); // 已关闭的gitea合并请求
 
-$gogs = 5;
-r($mrModel->apiAcceptMrTester($gogs)) && p() && e('0'); // 已关闭的gogs合并请求
+r($mrModel->apiAcceptMrTester(5)) && p() && e('0'); // 已关闭的gogs合并请求
+
+r($mrModel->apiAcceptMrTester(999)) && p() && e('0'); // 无效的MR ID
+
+r($mrModel->apiAcceptMrTester(3)) && p() && e('~~'); // 测试不同squash和分支删除选项

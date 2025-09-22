@@ -426,6 +426,7 @@ class mrTest
     public function apiAcceptMrTester(int $MRID): object|null
     {
         $MR = $this->objectModel->fetchByID($MRID);
+        if(!$MR) return null;
         return $this->objectModel->apiAcceptMR($MR);
     }
 
