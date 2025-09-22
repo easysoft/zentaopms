@@ -101,9 +101,19 @@ class myTest
      * @access public
      * @return int
      */
-    public function getAssignedByMeTest(string $account, string $orderBy, string $objectType)
+    /**
+     * Test getAssignedByMe method.
+     *
+     * @param  string $account
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getAssignedByMeTest(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = '')
     {
-        $objects = $this->objectModel->getAssignedByMe($account, null, $orderBy, $objectType);
+        $objects = $this->objectModel->getAssignedByMe($account, $pager, $orderBy, $objectType);
 
         if(dao::isError()) return dao::getError();
 
