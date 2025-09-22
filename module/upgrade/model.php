@@ -11888,8 +11888,11 @@ class upgradeModel extends model
             $projects = $projectGroup[$workflow->id];
             foreach($projects as $project)
             {
-                $hasProduct = $project->hasProduct ? 'product' : 'project';
-                $code       = $project->model == 'ipd' ? $project->category . $hasProduct : $project->model . $hasProduct;
+                $hasProduct  = $project->hasProduct ? 'product' : 'project';
+                $code        = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
+                $projectType = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
+
+                if($projectType == 'cpd') $projectType = 'cpd' . $hasProduct;
 
                 unset($workflow->id);
                 if(isset($codeWorkflowPairs[$code]))
@@ -11900,6 +11903,7 @@ class upgradeModel extends model
 
                 $workflow->createdDate  = helper::now();
                 $workflow->projectModel = $project->model;
+                $workflow->projectType  = $projectType;
                 $workflow->code         = $code;
                 $workflow->editedDate   = null;
 
