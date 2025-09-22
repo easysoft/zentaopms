@@ -1,5 +1,5 @@
 <?php
-class screenZen extends screenModel
+class screenZen extends screen
 {
     /**
      * Common Action.
