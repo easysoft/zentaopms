@@ -172,4 +172,21 @@ class gitTest
             return false;
         }
     }
+
+    /**
+     * Test printLog method.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function printLogTest(string $log): string
+    {
+        ob_start();
+        $this->gitModel->printLog($log);
+        $result = trim(ob_get_clean());
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
