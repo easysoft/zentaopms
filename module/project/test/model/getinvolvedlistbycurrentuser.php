@@ -8,12 +8,12 @@ timeout=0
 cid=0
 
 - 执行projectTest模块的getInvolvedListByCurrentUserTest方法，参数是't1.*'  @5
-- 执行projectTest模块的getInvolvedListByCurrentUserTest方法，参数是't1.id, t1.name' 
+- 执行projectTest模块的getInvolvedListByCurrentUserTest方法，参数是't1.id, t1.name'
  - 第1条的id属性 @1
  - 第1条的1:name属性 @项目1
  - 第2条的id属性 @2
  - 第2条的2:name属性 @项目2
-- 执行projectTest模块的getInvolvedListByCurrentUserTest方法 
+- 执行projectTest模块的getInvolvedListByCurrentUserTest方法
  - 第1条的name属性 @项目1
  - 第1条的2:name属性 @项目2
 - 执行projectTest模块的getInvolvedListByCurrentUserTest方法  @3
@@ -30,7 +30,7 @@ zenData('stakeholder')->loadYaml('stakeholder_getinvolvedlistbycurrentuser', fal
 
 su('admin');
 
-$projectTest = new Project();
+$projectTest = new projectTest();
 
 r($projectTest->getInvolvedListByCurrentUserTest('t1.*')) && p() && e('5');
 r($projectTest->getInvolvedListByCurrentUserTest('t1.id,t1.name')) && p('1:id,1:name;2:id,2:name') && e('1,项目1;2,项目2');
