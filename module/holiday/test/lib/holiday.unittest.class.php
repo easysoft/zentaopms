@@ -113,6 +113,103 @@ class holidayTest
     }
 
     /**
+     * 测试获取特定年份的年份对。
+     * Test get year pairs with specific year.
+     *
+     * @param  string $year
+     * @access public
+     * @return string|array
+     */
+    public function getYearPairsTestWithSpecificYear(string $year): string|array
+    {
+        global $tester;
+        $objects = $tester->dao->select('year,year')->from(TABLE_HOLIDAY)->where('year')->eq($year)->groupBy('year')->orderBy('year_desc')->fetchPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects) > 0 ? $year : '0';
+    }
+
+    /**
+     * 测试空表时获取年份对。
+     * Test get year pairs with empty table.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getYearPairsTestEmptyTable(): int|array
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_HOLIDAY)->exec();
+        $objects = $this->objectModel->getYearPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * 测试包含空年份时获取年份对。
+     * Test get year pairs with empty year.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getYearPairsTestWithEmptyYear(): int|array
+    {
+        global $tester;
+        $tester->dao->update(TABLE_HOLIDAY)->set('year')->eq('')->where('id')->eq('1')->exec();
+        $objects = $this->objectModel->getYearPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * 测试多年份数据。
+     * Test multiple year data.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getYearPairsTestMultiYear(): int|array
+    {
+        global $tester;
+        $tester->dao->insert(TABLE_HOLIDAY)->data(array(
+            'name' => '测试节假日',
+            'type' => 'holiday',
+            'year' => '2024',
+            'begin' => '2024-01-01',
+            'end' => '2024-01-01',
+            'desc' => '测试'
+        ))->exec();
+
+        $objects = $this->objectModel->getYearPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * 测试年份排序验证。
+     * Test year order validation.
+     *
+     * @access public
+     * @return string|array
+     */
+    public function getYearPairsTestOrderValidation(): string|array
+    {
+        $objects = $this->objectModel->getYearPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        $years = array_keys($objects);
+        return count($years) > 0 ? (string)$years[0] : '0';
+    }
+
+    /**
      * 测试创建一个家假日。
      * Test create a holiday.
      *
