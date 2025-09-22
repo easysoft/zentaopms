@@ -1291,4 +1291,22 @@ class projectTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->fetch();
     }
+
+    /**
+     * Create a product.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  object $postData
+     * @param  object $program
+     * @access public
+     * @return true|array
+     */
+    public function createProductTest($projectID, $project, $postData, $program)
+    {
+        $result = $this->objectModel->createProduct($projectID, $project, $postData, $program);
+        if(!$result) return dao::getError();
+
+        return true;
+    }
 }

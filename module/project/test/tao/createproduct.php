@@ -21,13 +21,13 @@ title=测试 projectModel->create();
 timeout=0
 cid=1
 
-- 执行projectClass模块的testCreateProduct方法，参数是$projectID, $project, $postData, $program  @1
+- 执行projectClass模块的createProductTest方法，参数是$projectID, $project, $postData, $program  @1
 - 执行$product
  - 属性id @1
  - 属性name @测试新增项目一
-- 执行projectClass模块的testCreateProduct方法，参数是$projectID, $emptyNameProject, $postData, $program 第name条的0属性 @『产品名称』不能为空。
-- 执行projectClass模块的testCreateProduct方法，参数是$projectID, $project, $postData, $program 第name条的0属性 @『产品名称』已经有『测试新增项目一』这条记录了。
-- 执行projectClass模块的testCreateProduct方法，参数是$projectID, $hasProductProject, $postData, $program  @1
+- 执行projectClass模块的createProductTest方法，参数是$projectID, $emptyNameProject, $postData, $program 第name条的0属性 @『产品名称』不能为空。
+- 执行projectClass模块的createProductTest方法，参数是$projectID, $project, $postData, $program 第name条的0属性 @『产品名称』已经有『测试新增项目一』这条记录了。
+- 执行projectClass模块的createProductTest方法，参数是$projectID, $hasProductProject, $postData, $program  @1
 - 执行$product
  - 属性id @2
  - 属性name @测试新增产品一
@@ -38,7 +38,7 @@ global $tester;
 $_POST['uid'] = '0';
 
 $program      = $tester->loadModel('project')->getByID(1);
-$projectClass = new project();
+$projectClass = new projectTest();
 
 $project = new stdclass();
 $project->parent     = 0;
@@ -71,17 +71,17 @@ $postData->rawdata->uid      = '64dda2xc';
 $postData->rawdata->delta    = 0;
 $postData->rawdata->products = array(1);
 
-$project = $projectClass->create($project, $postData);
+$project = $projectClass->createTest($project, $postData);
 $projectID = $project->id;
 
-r($projectClass->testCreateProduct($projectID, $project,           $postData, $program)) && p()         && e('1');
+r($projectClass->createProductTest($projectID, $project,           $postData, $program)) && p()         && e('1');
 
 $product = $tester->dao->select('*')->from(TABLE_PRODUCT)->orderBy('id_desc')->limit(1)->fetch();
 r($product) && p('id,name') && e('1,测试新增项目一');
 
-r($projectClass->testCreateProduct($projectID, $emptyNameProject,  $postData, $program)) && p('name:0') && e('『产品名称』不能为空。');
-r($projectClass->testCreateProduct($projectID, $project,           $postData, $program)) && p('name:0') && e('『产品名称』已经有『测试新增项目一』这条记录了。');
-r($projectClass->testCreateProduct($projectID, $hasProductProject, $postData, $program)) && p()         && e('1');
+r($projectClass->createProductTest($projectID, $emptyNameProject,  $postData, $program)) && p('name:0') && e('『产品名称』不能为空。');
+r($projectClass->createProductTest($projectID, $project,           $postData, $program)) && p('name:0') && e('『产品名称』已经有『测试新增项目一』这条记录了。');
+r($projectClass->createProductTest($projectID, $hasProductProject, $postData, $program)) && p()         && e('1');
 
 $product = $tester->dao->select('*')->from(TABLE_PRODUCT)->orderBy('id_desc')->limit(1)->fetch();
 r($product) && p('id,name') && e('2,测试新增产品一');
