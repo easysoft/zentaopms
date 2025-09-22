@@ -93,18 +93,23 @@ class jobTest
      *
      * @param  int    $id
      * @access public
-     * @return object
+     * @return string
      */
     public function getTriggerConfigTest($id)
     {
-
         $job = $this->objectModel->getById($id);
 
-        $object = $this->objectModel->getTriggerConfig($job);
+        // 如果job不存在，返回空字符串
+        if(empty($job) || empty($job->id))
+        {
+            return '';
+        }
+
+        $result = $this->objectModel->getTriggerConfig($job);
 
         if(dao::isError()) return dao::getError();
 
-        return $object;
+        return $result;
     }
 
     /**
