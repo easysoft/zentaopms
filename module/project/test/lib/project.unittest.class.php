@@ -1343,4 +1343,19 @@ class projectTest
         }
         return $changes;
     }
+
+    /**
+     * Add user to project admins.
+     *
+     * @param  int        $budget
+     * @access public
+     * @return int|string
+     */
+    public function addProjectAdminTest($projectID)
+    {
+        $this->objectModel->addProjectAdmin($projectID);
+
+        global $app;
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($app->user->account)->fetch();
+    }
 }
