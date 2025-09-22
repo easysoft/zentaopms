@@ -459,7 +459,13 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $result = array();
+        foreach($objects as $planID => $siblings)
+        {
+            $result[$planID] = count($siblings);
+        }
+
+        return $result;
     }
 
     /**
