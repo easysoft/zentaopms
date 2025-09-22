@@ -1,33 +1,36 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetJobLog();
+title=测试 gitlabModel::apiGetJobLog();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的job信息 @0
-- 使用不存在的projectID查询job信息属性message @404 Project Not Found
-- 使用不存在的jobID查询job信息属性message @404 Not found
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, 2, 8  @0
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是999, 2, 8  @0
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, 9999, 8 属性message @404 Project Not Found
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, 2, 9999 属性message @404 Not found
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是0, 2, 8  @0
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, -1, 8 属性message @404 Project Not Found
+- 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, 2, -1 属性message @404 Not found
 
 */
 
-zenData('job')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = $tester->loadModel('gitlab');
+zenData('pipeline')->gen(3);
+zenData('job')->gen(10);
 
-$gitlabID  = 1;
-$projectID = 2;
-$jobID     = 8;
+su('admin');
 
-$jobLog1 = $gitlab->apiGetJobLog($gitlabID, $projectID, $jobID);
-$jobLog2 = $gitlab->apiGetJobLog($gitlabID, 0, $jobID);
-$jobLog3 = $gitlab->apiGetJobLog($gitlabID, $projectID, 10001);
+$gitlabTest = new gitlabTest();
 
-r($jobLog1)              && p()          && e('0');                     // 查询正确的job信息
-r(json_decode($jobLog2)) && p('message') && e('404 Project Not Found'); // 使用不存在的projectID查询job信息
-r(json_decode($jobLog3)) && p('message') && e('404 Not found');         // 使用不存在的jobID查询job信息
+r($gitlabTest->apiGetJobLogTest(1, 2, 8)) && p() && e('0');
+r($gitlabTest->apiGetJobLogTest(999, 2, 8)) && p() && e('0');
+r(json_decode($gitlabTest->apiGetJobLogTest(1, 9999, 8))) && p('message') && e('404 Project Not Found');
+r(json_decode($gitlabTest->apiGetJobLogTest(1, 2, 9999))) && p('message') && e('404 Not found');
+r($gitlabTest->apiGetJobLogTest(0, 2, 8)) && p() && e('0');
+r(json_decode($gitlabTest->apiGetJobLogTest(1, -1, 8))) && p('message') && e('404 Project Not Found');
+r(json_decode($gitlabTest->apiGetJobLogTest(1, 2, -1))) && p('message') && e('404 Not found');
