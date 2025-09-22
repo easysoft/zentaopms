@@ -498,4 +498,32 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test getError method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getErrorTest()
+    {
+        $result = $this->objectModel->getError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isError method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isErrorTest()
+    {
+        $result = $this->objectModel->isError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
