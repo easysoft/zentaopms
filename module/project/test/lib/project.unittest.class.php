@@ -1076,4 +1076,19 @@ class projectTest
 
         return $this->objectModel->getDisabledProducts($project, $linkedProducts);
     }
+
+    /**
+     * Test manage members.
+     *
+     * @param  int          $projectID
+     * @param  array        $members
+     * @access public
+     * @return array|string
+     */
+    public function manageMembersTest(int $projectID, array $members): array|string
+    {
+        $this->objectModel->manageMembers($projectID, $members);
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getTeamMembers($projectID);
+    }
 }

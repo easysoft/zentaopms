@@ -41,7 +41,7 @@ cid=1
 
 */
 
-$projectClass = new project();
+$projectClass = new projectTest();
 
 $members1[0] = new stdclass();
 $members1[0]->account  = 'user1';
@@ -92,13 +92,13 @@ $members2[3]->days     = 10;
 $members2[3]->hours    = 11.0;
 $members2[3]->limited  = 'no';
 
-$result1 = $projectClass->manageMembers(1, $members1);
-$result2 = $projectClass->manageMembers(2, $members2);
-$result3 = $projectClass->manageMembers(3, $members1);
+$result1 = $projectClass->manageMembersTest(1, $members1);
+$result2 = $projectClass->manageMembersTest(2, $members2);
+$result3 = $projectClass->manageMembersTest(3, $members1);
 
 $members2[0]->days = 10;
 $members2[1]->days = 10;
-$result4 = $projectClass->manageMembers(4, $members2);
+$result4 = $projectClass->manageMembersTest(4, $members2);
 
 r(count($result1)) && p('')  && e('3'); // 查看维护团队之后的成员数量
 
