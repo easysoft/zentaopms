@@ -211,4 +211,19 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test replace4Workflow method.
+     *
+     * @param  string $title
+     * @access public
+     * @return mixed
+     */
+    public function replace4WorkflowTest($title)
+    {
+        $result = $this->objectModel->replace4Workflow($title);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
