@@ -923,4 +923,25 @@ class projectTest
         $actions = $this->objectModel->buildActionList($project);
         return current($actions);
     }
+
+    /**
+     * 更新项目关联的产品信息。
+     * Update products of a project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @param  array  $otherProducts
+     * @access public
+     * @return array
+     */
+    public function updateProductsTest(int $projectID, array $products = array(), array $otherProducts = array()): array
+    {
+        $_POST['stageBy'] = 'product';
+        if(!empty($otherProducts)) $_POST['otherProducts'] = $otherProducts;
+        if(!empty($products)) $_POST['products'] = $products;
+
+        $this->objectModel->updateProducts($projectID, $products);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+    }
 }
