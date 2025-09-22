@@ -225,4 +225,33 @@ class messageTest
 
         return $result;
     }
+
+    /**
+     * Test deleteExpired method.
+     *
+     * @param  int $maxDays
+     * @access public
+     * @return int
+     */
+    public function deleteExpiredTest(int $maxDays = 7): int
+    {
+        global $tester;
+        $tester->config->message->browser->maxDays = $maxDays;
+
+        $countBefore = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+            ->where('toList')->like('%,' . $tester->app->user->account . ',%')
+            ->andWhere('objectType')->eq('message')
+            ->fetch('count');
+
+        $this->objectModel->deleteExpired();
+
+        if(dao::isError()) return dao::getError();
+
+        $countAfter = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+            ->where('toList')->like('%,' . $tester->app->user->account . ',%')
+            ->andWhere('objectType')->eq('message')
+            ->fetch('count');
+
+        return $countAfter;
+    }
 }
