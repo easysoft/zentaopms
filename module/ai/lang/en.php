@@ -531,6 +531,11 @@ $lang->ai->miniPrograms->statuses = array(
     'createdByMe' => 'Created by me'
 );
 
+$lang->ai->featureBar['miniprograms']['']            = 'All';
+$lang->ai->featureBar['miniprograms']['draft']       = 'Unpublished';
+$lang->ai->featureBar['miniprograms']['active']      = 'Published';
+$lang->ai->featureBar['miniprograms']['createdByMe'] = 'Created by me';
+
 $lang->ai->miniPrograms->publishedOptions   = array('unpublished', 'published');
 $lang->ai->miniPrograms->optionName         = 'Option name';
 $lang->ai->miniPrograms->promptTemplate     = 'ZenTao Agent template';

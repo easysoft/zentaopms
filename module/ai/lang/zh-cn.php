@@ -531,6 +531,11 @@ $lang->ai->miniPrograms->statuses = array(
     'createdByMe' => '由我创建'
 );
 
+$lang->ai->featureBar['miniprograms']['']            = '全部';
+$lang->ai->featureBar['miniprograms']['draft']       = '未发布';
+$lang->ai->featureBar['miniprograms']['active']      = '已发布';
+$lang->ai->featureBar['miniprograms']['createdByMe'] = '由我创建';
+
 $lang->ai->miniPrograms->publishedOptions   = array('未发布', '已发布');
 $lang->ai->miniPrograms->optionName         = '选项名称';
 $lang->ai->miniPrograms->promptTemplate     = '禅道智能体模板';
