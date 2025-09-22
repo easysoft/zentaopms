@@ -1246,4 +1246,24 @@ class projectTest
             return $this->objectModel->getByID($projectID);
         }
     }
+
+    /**
+     * Do create a project.
+     *
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doCreateTest(object $project)
+    {
+        $this->objectModel->doCreate($project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $project;
+        }
+    }
 }
