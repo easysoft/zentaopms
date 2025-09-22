@@ -12,16 +12,33 @@ class gitTest
     /**
      * Test updateCommit method.
      *
-     *  @param  int    $repoID
-     *  @access public
-     *  @return object|false
+     * @param  int    $repoID
+     * @param  array  $commentGroup
+     * @param  bool   $printLog
+     * @access public
+     * @return array
      */
-    public function updateCommitTest(int $repoID): object|false
+    public function updateCommitTest(int $repoID, array $commentGroup = array(), bool $printLog = false): array
     {
         $repo = $this->gitModel->loadModel('repo')->getByID($repoID);
-        $this->gitModel->updateCommit($repo, array(), false);
+        if(!$repo) return array('error' => 'repo_not_found', 'result' => false);
 
-        return $this->gitModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
+        ob_start();
+        $result = $this->gitModel->updateCommit($repo, $commentGroup, $printLog);
+        $output = ob_get_clean();
+
+        if(dao::isError()) return array('error' => dao::getError(), 'result' => false);
+
+        $repoHistory = $this->gitModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
+        $updatedRepo = $this->gitModel->loadModel('repo')->getByID($repoID);
+
+        return array(
+            'result' => $result,
+            'repo' => $updatedRepo,
+            'history' => $repoHistory,
+            'output' => trim($output),
+            'error' => dao::isError() ? dao::getError() : null
+        );
     }
 
     /**
