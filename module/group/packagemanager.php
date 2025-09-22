@@ -2223,16 +2223,18 @@ $config->group->package->projectSetting = new stdclass();
 $config->group->package->projectSetting->order  = 5;
 $config->group->package->projectSetting->subset = 'cm';
 $config->group->package->projectSetting->privs  = array();
-$config->group->package->projectSetting->privs['cm-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-delete', 'cm-edit', 'review-browse'));
-$config->group->package->projectSetting->privs['cm-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-edit'));
-$config->group->package->projectSetting->privs['cm-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete'));
-$config->group->package->projectSetting->privs['cm-submit']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
-$config->group->package->projectSetting->privs['cm-recall']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
-$config->group->package->projectSetting->privs['cm-review']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
-$config->group->package->projectSetting->privs['cm-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('cm-view'));
-$config->group->package->projectSetting->privs['cm-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('cm-browse'), 'recommend' => array());
-$config->group->package->projectSetting->privs['cm-report']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('cm-browse'), 'recommend' => array());
-$config->group->package->projectSetting->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('cm-browse', 'cm-report'), 'recommend' => array());
+
+$config->group->package->projectSetting->privs['cm-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('project-index'), 'recommend' => array('cm-view'));
+$config->group->package->projectSetting->privs['cm-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1,  'depend' => array('cm-browse'), 'recommend' => array());
+$config->group->package->projectSetting->privs['cm-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-delete', 'cm-edit', 'review-browse'));
+$config->group->package->projectSetting->privs['cm-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete'));
+$config->group->package->projectSetting->privs['cm-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-edit'));
+$config->group->package->projectSetting->privs['cm-submit']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
+$config->group->package->projectSetting->privs['cm-recall']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
+$config->group->package->projectSetting->privs['cm-review']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('cm-browse', 'cm-view'), 'recommend' => array('cm-create', 'cm-delete', 'cm-edit'));
+$config->group->package->projectSetting->privs['cm-diff']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('cm-browse'), 'recommend' => array());
+$config->group->package->projectSetting->privs['cm-report']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('cm-browse'), 'recommend' => array());
+$config->group->package->projectSetting->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse', 'cm-report'), 'recommend' => array());
 
 $config->group->package->browseProjectRelease = new stdclass();
 $config->group->package->browseProjectRelease->order  = 5;
