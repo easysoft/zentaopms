@@ -729,4 +729,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test printCpuUsage method.
+     *
+     * @param  object $instance
+     * @param  object $metrics
+     * @access public
+     * @return array
+     */
+    public function printCpuUsageTest(object $instance, object $metrics): array
+    {
+        $result = instanceModel::printCpuUsage($instance, $metrics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
