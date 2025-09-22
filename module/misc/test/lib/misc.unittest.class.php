@@ -50,4 +50,18 @@ class miscTest
 
         return $result;
     }
+
+    /**
+     * Test getRemind method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getRemindTest()
+    {
+        $result = $this->objectModel->getRemind();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
