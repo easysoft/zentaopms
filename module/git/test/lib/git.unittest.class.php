@@ -212,4 +212,23 @@ class gitTest
             return 'error';
         }
     }
+
+    /**
+     * Test setRepo method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array
+     */
+    public function setRepoTest(object $repo): array
+    {
+        $result = $this->gitModel->setRepo($repo);
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'result'   => $result ? '1' : '0',
+            'client'   => $this->gitModel->client,
+            'repoRoot' => $this->gitModel->repoRoot
+        );
+    }
 }
