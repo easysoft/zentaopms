@@ -483,4 +483,19 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test convertCharset method.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertCharsetTest($string)
+    {
+        $result = $this->objectModel->convertCharset($string);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
