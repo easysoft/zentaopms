@@ -1225,4 +1225,25 @@ class projectTest
 
         return $this->objectModel->getLinkedProductsCount($project, $rawdata);
     }
+
+    /**
+     * Do update a project.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function doUpdateTest(int $projectID, object $project)
+    {
+        $this->objectModel->doUpdate($projectID, $project);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getByID($projectID);
+        }
+    }
 }
