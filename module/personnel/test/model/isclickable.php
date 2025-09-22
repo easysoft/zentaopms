@@ -1,23 +1,36 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 
 /**
 
-title=测试 personnelModel->isClickable();
-cid=1
-pid=1
+title=测试 personnelModel::isClickable();
+timeout=0
+cid=0
 
-测试 unbindWhitelist 方法是否可以点击 >> 1
+- 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, 'unbindWhitelist'  @1
+- 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, ''  @1
+- 执行personnelTest模块的isClickableTest方法，参数是$emptyObject, 'addWhitelist'  @1
+- 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, 'special_chars'  @1
+- 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, '123456'  @1
 
 */
 
-$object     = new stdclass();
-$actionList = array('unbindWhitelist', 'addWhitelist');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 
-$personnel = new personnelTest('admin');
+su('admin');
 
-r($personnel->isClickableTest($object, $actionList[0])) && p() && e('1'); // 测试 unbindWhitelist 方法是否可以点击
-r($personnel->isClickableTest($object, $actionList[1])) && p() && e('1'); // 测试 addWhitelist 方法是否可以点击
+$personnelTest = new personnelTest();
+
+$whitelistObject = new stdclass();
+$whitelistObject->id = 1;
+$whitelistObject->account = 'testuser';
+$whitelistObject->objectType = 'project';
+
+$emptyObject = new stdclass();
+
+r($personnelTest->isClickableTest($whitelistObject, 'unbindWhitelist')) && p() && e('1');
+r($personnelTest->isClickableTest($whitelistObject, '')) && p() && e('1');
+r($personnelTest->isClickableTest($emptyObject, 'addWhitelist')) && p() && e('1');
+r($personnelTest->isClickableTest($whitelistObject, 'special_chars')) && p() && e('1');
+r($personnelTest->isClickableTest($whitelistObject, '123456')) && p() && e('1');
