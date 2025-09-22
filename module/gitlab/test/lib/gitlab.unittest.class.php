@@ -615,7 +615,11 @@ class gitlabTest
         $result = $this->gitlab->apiGetByGraphql($repo, $query);
         if(!$result) return $result;
         if(isset($result->errors)) return array_column($result->errors, 'message');
-        return $result->data->project->repository->tree;
+        if(isset($result->data) && isset($result->data->project) && $result->data->project && isset($result->data->project->repository))
+        {
+            return $result->data->project->repository->tree;
+        }
+        return null;
     }
 
     /**
