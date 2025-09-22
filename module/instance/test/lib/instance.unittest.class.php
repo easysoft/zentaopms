@@ -665,4 +665,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test domainExists method.
+     *
+     * @param  string $thirdDomain
+     * @access public
+     * @return bool
+     */
+    public function domainExistsTest(string $thirdDomain): bool
+    {
+        $result = $this->objectModel->domainExists($thirdDomain);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
