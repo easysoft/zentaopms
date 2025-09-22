@@ -908,4 +908,19 @@ class projectTest
 
         return $this->objectModel->getByIdList(array_keys($data));
     }
+
+    /**
+     * 根据项目状态和权限生成列表中操作列按钮。
+     * Build table action menu for project browse page.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function buildActionListObjectTest(int $projectID)
+    {
+        $project = $this->objectModel->getByID($projectID);
+        $actions = $this->objectModel->buildActionList($project);
+        return current($actions);
+    }
 }
