@@ -189,4 +189,27 @@ class gitTest
 
         return $result;
     }
+
+    /**
+     * Test setClient method.
+     *
+     * @param  mixed $repo
+     * @access public
+     * @return mixed
+     */
+    public function setClientTest($repo = null)
+    {
+        if($repo === null) return 'null_repo';
+
+        try {
+            $this->gitModel->setClient($repo);
+            if(dao::isError()) return dao::getError();
+
+            return $this->gitModel->client;
+        } catch (TypeError $e) {
+            return 'type_error';
+        } catch (Error $e) {
+            return 'error';
+        }
+    }
 }
