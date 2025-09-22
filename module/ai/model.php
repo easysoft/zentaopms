@@ -49,11 +49,14 @@ class aiModel extends model
         if(empty($object) || empty($action)) return false;
 
         /* Assumes object is a language model record. */
-        if($action === 'modelenable')       return $object->enabled != '1';
-        if($action === 'modeldisable')      return $object->enabled != '0';
-        if($action === 'assistantpublish')  return $object->enabled != '1';
-        if($action === 'assistantwithdraw') return $object->enabled != '0';
-        if($action === 'assistantedit')     return $object->enabled != '1';
+        if(in_array($this->app->rawMethod, array('models', 'modelview')))
+        {
+            if($action === 'modelenable')       return $object->enabled != '1';
+            if($action === 'modeldisable')      return $object->enabled != '0';
+            if($action === 'assistantpublish')  return $object->enabled != '1';
+            if($action === 'assistantwithdraw') return $object->enabled != '0';
+            if($action === 'assistantedit')     return $object->enabled != '1';
+        }
 
         if(in_array($this->app->rawMethod, array('prompts', 'promptview')))
         {
