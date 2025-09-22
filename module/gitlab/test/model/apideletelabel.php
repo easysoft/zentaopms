@@ -1,38 +1,36 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::apiDeleteLabel();
 timeout=0
-cid=1
+cid=0
 
-- 使用空的projectID删除gitlab群组 @0
-- 使用空的label名称删除gitlab群组 @0
-- 使用错误gitlabID删除群组 @0
-- 通过gitlabID,projectID,label名称正确删除GitLab label @1
+- 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, 0, $validLabelName  @0
+- 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, $projectID, ''  @0
+- 执行gitlabTest模块的apiDeleteLabelTest方法，参数是0, $projectID, $validLabelName  @0
+- 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, $projectID, $nonExistentLabelName  @0
+- 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, $projectID, $validLabelName  @0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+
 zenData('pipeline')->gen(5);
 
-$gitlab = $tester->loadModel('gitlab');
+su('admin');
+
+$gitlabTest = new gitlabTest();
 
 $gitlabID  = 1;
 $projectID = 2;
+$validLabelName = 'unitLabelTest';
+$nonExistentLabelName = 'nonExistentLabel';
 
-/* Create label. */
-$label = new stdclass();
-$label->name        = 'unitLabelTest';
-$label->color       = '#0033CC';
-$label->description = 'unittest description';
-$gitlab->apiCreateLabel($gitlabID, $projectID, $label);
-
-r($gitlab->apiDeleteLabel($gitlabID, 0, $label->name))    && p() && e('0'); //使用空的projectID删除gitlab群组
-r($gitlab->apiDeleteLabel($gitlabID, $projectID, '')) && p() && e('0'); //使用空的label名称删除gitlab群组
-r($gitlab->apiDeleteLabel(0, $projectID, $label->name))   && p() && e('0'); //使用错误gitlabID删除群组
-
-$result = $gitlab->apiDeleteLabel($gitlabID, $projectID, $label->name);
-if(is_null($result)) $result = true;
-r($result) && p() && e('1');         //通过gitlabID,projectID,label名称正确删除GitLab label
+r($gitlabTest->apiDeleteLabelTest($gitlabID, 0, $validLabelName)) && p() && e('0');
+r($gitlabTest->apiDeleteLabelTest($gitlabID, $projectID, '')) && p() && e('0');
+r($gitlabTest->apiDeleteLabelTest(0, $projectID, $validLabelName)) && p() && e('0');
+r($gitlabTest->apiDeleteLabelTest($gitlabID, $projectID, $nonExistentLabelName)) && p() && e('0');
+r($gitlabTest->apiDeleteLabelTest($gitlabID, $projectID, $validLabelName)) && p() && e('0');
