@@ -1012,4 +1012,18 @@ class projectTest
         }
         return $result;
     }
+
+    /**
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildSearchFormTest(int $queryID)
+    {
+        $this->objectModel->buildSearchForm($queryID, 'searchUrl');
+
+        return $_SESSION['projectsearchParams']['queryID'];
+    }
 }
