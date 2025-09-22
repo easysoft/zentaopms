@@ -3,12 +3,15 @@
 
 /**
 
-title=测试 groupModel->getPrivsAfterVersion();
+title=测试 groupModel::getPrivsAfterVersion();
 timeout=0
-cid=1
+cid=0
 
-- 获取所有带版本号的权限，判断是否包含doc-sort属性doc-sort @doc-sort
-- 获取所有18.0之后的权限，判断是否包含doc-sort属性doc-sort @~~
+- 步骤1：空版本号获取所有权限属性doc-sort @doc-sort
+- 步骤2：版本号18.0获取权限属性doc-sort @~~
+- 步骤3：下划线版本号18_0获取权限属性doc-sort @~~
+- 步骤4：较早版本号1.0获取权限属性project-computeBurn @project-computeBurn
+- 步骤5：不存在的高版本号999.0获取权限属性notexist @~~
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -18,5 +21,8 @@ su('admin');
 
 $group = new groupTest();
 
-r($group->getPrivsAfterVersionTest(''))     && p('doc-sort') && e('doc-sort'); // 获取所有带版本号的权限，判断是否包含doc-sort
-r($group->getPrivsAfterVersionTest('18.0')) && p('doc-sort') && e('~~');      // 获取所有18.0之后的权限，判断是否包含doc-sort
+r($group->getPrivsAfterVersionTest('')) && p('doc-sort') && e('doc-sort'); // 步骤1：空版本号获取所有权限
+r($group->getPrivsAfterVersionTest('18.0')) && p('doc-sort') && e('~~'); // 步骤2：版本号18.0获取权限
+r($group->getPrivsAfterVersionTest('18_0')) && p('doc-sort') && e('~~'); // 步骤3：下划线版本号18_0获取权限
+r($group->getPrivsAfterVersionTest('1.0')) && p('project-computeBurn') && e('project-computeBurn'); // 步骤4：较早版本号1.0获取权限
+r($group->getPrivsAfterVersionTest('999.0')) && p('notexist') && e('~~'); // 步骤5：不存在的高版本号999.0获取权限
