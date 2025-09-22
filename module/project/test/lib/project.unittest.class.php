@@ -892,4 +892,20 @@ class projectTest
 
         return $this->objectModel->linkOtherProducts($projectID, $members);
     }
+
+    /**
+     * Batch update projects.
+     *
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function batchUpdateTest($data)
+    {
+        $this->objectModel->batchUpdate($data);
+
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->objectModel->getByIdList(array_keys($data));
+    }
 }
