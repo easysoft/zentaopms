@@ -25,6 +25,218 @@ class jenkinsTest
     }
 
     /**
+     * Test getDepthJobs method with direct mock data.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsDirectTest(): string
+    {
+        $mockJobs = array(
+            (object)array(
+                'name' => 'Simple Job',
+                'url' => 'https://jenkins.example.com/job/simpleJob/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            ),
+            (object)array(
+                'name' => 'Param Job',
+                'url' => 'https://jenkins.example.com/job/paramJob/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            ),
+            (object)array(
+                'name' => 'Folder 1',
+                'url' => 'https://jenkins.example.com/job/folder1/',
+                '_class' => 'com.cloudbees.hudson.plugins.folder.Folder',
+                'buildable' => false,
+                'jobs' => array(
+                    (object)array(
+                        'name' => 'Sub Job 1',
+                        'url' => 'https://jenkins.example.com/job/folder1/job/subJob1/',
+                        '_class' => 'hudson.model.FreeStyleProject',
+                        'buildable' => true
+                    ),
+                    (object)array(
+                        'name' => 'Sub Job 2',
+                        'url' => 'https://jenkins.example.com/job/folder1/job/subJob2/',
+                        '_class' => 'hudson.model.FreeStyleProject',
+                        'buildable' => true
+                    )
+                )
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with empty jobs array.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsEmptyTest(): string
+    {
+        $emptyJobs = array();
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($emptyJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with maximum depth exceeded.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsMaxDepthTest(): string
+    {
+        $mockJobs = array(
+            (object)array(
+                'name' => 'Test Job',
+                'url' => 'https://jenkins.example.com/job/testJob/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 5); // depth > 4
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with invalid job data.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsInvalidDataTest(): string
+    {
+        $invalidJobs = array(
+            (object)array(
+                'name' => 'Invalid Job',
+                // Missing url field
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            ),
+            (object)array(
+                'name' => 'Another Job',
+                'url' => '', // Empty url
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($invalidJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with different job types.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsJobTypeTest(): string
+    {
+        $mockJobs = array(
+            (object)array(
+                'name' => 'Buildable Job',
+                'url' => 'https://jenkins.example.com/job/buildableJob/',
+                '_class' => 'com.cloudbees.hudson.plugins.folder.Folder',
+                'buildable' => true // Force as job even though it's a folder
+            ),
+            (object)array(
+                'name' => 'Regular Job',
+                'url' => 'https://jenkins.example.com/job/regularJob/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            ),
+            (object)array(
+                'name' => 'Multibranch Pipeline',
+                'url' => 'https://jenkins.example.com/job/multibranchPipeline/',
+                '_class' => 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject',
+                'buildable' => false
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with URL encoding.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsUrlEncodingTest(): string
+    {
+        $mockJobs = array(
+            (object)array(
+                'name' => 'Hello World',
+                'url' => 'https://jenkins.example.com/job/hello%20world/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            ),
+            (object)array(
+                'name' => 'Test Job',
+                'url' => 'https://jenkins.example.com/job/test-job/',
+                '_class' => 'hudson.model.FreeStyleProject',
+                'buildable' => true
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
+     * Test getDepthJobs method with folder structure.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsFolderTest(): string
+    {
+        // Test with simple folder that contains jobs but depth = 1 to avoid HTTP calls
+        $mockJobs = array(
+            (object)array(
+                'name' => 'Folder',
+                'url' => 'https://jenkins.example.com/job/folder/',
+                '_class' => 'com.cloudbees.hudson.plugins.folder.Folder',
+                'buildable' => false,
+                'jobs' => array() // Empty jobs array
+            )
+        );
+
+        $userPWD = 'test:test';
+        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        if(dao::isError()) return dao::getError();
+
+        return json_encode($result);
+    }
+
+    /**
      * 测试根据深度获取流水线。
      * Test get jobs by depth.
      *
