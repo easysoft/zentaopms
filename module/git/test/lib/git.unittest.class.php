@@ -154,4 +154,22 @@ class gitTest
 
         return $result;
     }
+
+    /**
+     * Test getRepoTags method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array|bool
+     */
+    public function getRepoTagsTest(object $repo): array|bool
+    {
+        try {
+            $result = $this->gitModel->getRepoTags($repo);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (TypeError $e) {
+            return false;
+        }
+    }
 }
