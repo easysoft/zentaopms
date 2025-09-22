@@ -12244,7 +12244,7 @@ class upgradeModel extends model
      */
     public function modifyProjectWorkflowGroup()
     {
-        $workflows = $this->dao->select('id,code,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('ipd,waterfallplus,agileplus')->andWhere('main')->eq('1')->fetchAll();
+        $workflows = $this->dao->select('id,code,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('ipd,waterfallplus,agileplus')->andWhere('main')->eq('1')->fetchAll('id');
 
         foreach($workflows as $workflow)
         {
@@ -12254,11 +12254,22 @@ class upgradeModel extends model
                 $category = $hasProduct ? str_replace('product', '', $workflow->code) : str_replace('project', '', $workflow->code);
                 $category = strtoupper($category);
 
-                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($workflow->id)->where('model')->eq($workflow->projectModel)->andWhere('category')->eq($category)->andWhere('hasProduct')->eq($hasProduct)->exec();
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('workflowGroup')->eq($workflow->id)
+                    ->where('model')->eq($workflow->projectModel)
+                    ->andWhere('category')->eq($category)
+                    ->andWhere('hasProduct')->eq($hasProduct)
+                    ->andWhere('workflowGroup')->in(array_keys($workflows))
+                    ->exec();
             }
             else
             {
-                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($workflow->id)->where('model')->eq($workflow->projectModel)->andWhere('hasProduct')->eq($hasProduct)->exec();
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('workflowGroup')->eq($workflow->id)
+                    ->where('model')->eq($workflow->projectModel)
+                    ->andWhere('hasProduct')->eq($hasProduct)
+                    ->andWhere('workflowGroup')->in(array_keys($workflows))
+                    ->exec();
             }
         }
     }
