@@ -745,4 +745,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test printStorageUsage method.
+     *
+     * @param  object $instance
+     * @param  object $metrics
+     * @access public
+     * @return array
+     */
+    public function printStorageUsageTest(object $instance, object $metrics): array
+    {
+        $result = instanceModel::printStorageUsage($instance, $metrics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
