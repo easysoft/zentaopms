@@ -680,4 +680,23 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test filterMemOptions method.
+     *
+     * @param  int $memorySize
+     * @access public
+     * @return array
+     */
+    public function filterMemOptionsTest(int $memorySize)
+    {
+        $resources = new stdClass();
+        $resources->min = new stdClass();
+        $resources->min->memory = $memorySize * 1024;
+
+        $result = $this->objectModel->filterMemOptions($resources);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
