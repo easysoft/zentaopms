@@ -515,6 +515,22 @@ class instanceTest
     }
 
     /**
+     * Test autoBackup method.
+     *
+     * @param  object $instance
+     * @param  object $user
+     * @access public
+     * @return mixed
+     */
+    public function autoBackupTest(object $instance, object $user)
+    {
+        $result = $this->objectModel->autoBackup($instance, $user);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test storeView method.
      *
      * @param  int $id 实例ID

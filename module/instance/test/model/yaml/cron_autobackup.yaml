@@ -1,0 +1,91 @@
+---
+title: Cron auto backup test data
+desc: Test data for cron table in auto backup functionality
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Cron ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: m
+  note: Minute
+  range: 0{3},30{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: h
+  note: Hour
+  range: 1{2},2{2},23{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dom
+  note: Day of month
+  range: "*"{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: mon
+  note: Month
+  range: "*"{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dow
+  note: Day of week
+  range: "*"{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: command
+  note: Command
+  range: moduleName=instance&methodName=cronBackup&instanceID=1{2},moduleName=instance&methodName=cronBackup&instanceID=2{1},moduleName=instance&methodName=cronBackup&instanceID=3{1},moduleName=instance&methodName=cronBackup&instanceID=999{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: remark
+  note: Remark
+  range: 自动备份任务{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Type
+  range: zentao{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: buildin
+  note: Built in
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Status
+  range: normal{4},stop{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastTime
+  note: Last time
+  range: 2023-01-01 01:00:00{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
