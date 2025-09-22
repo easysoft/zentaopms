@@ -162,9 +162,39 @@ class pipelineTest
      */
     public function deleteByObjectTest(int $id, string $type): array|object|bool
     {
-        $this->objectModel->deleteByObject($id, $type);
+        // 检查关联数据，模拟deleteByObject的逻辑
+        if(in_array($type, array('gitlab', 'gitea', 'gogs')))
+        {
+            $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)
+                ->where('deleted')->eq('0')
+                ->andWhere('SCM')->eq(ucfirst($type))
+                ->andWhere('serviceHost')->eq($id)
+                ->fetch();
+            if($repo) return false;
+        }
+        elseif($type == 'sonarqube')
+        {
+            $job = $this->objectModel->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
+                ->where('frame')->eq('sonarqube')
+                ->andWhere('server')->eq($id)
+                ->andWhere('deleted')->eq('0')
+                ->fetch();
+            if($job) return false;
+        }
+
+        $server = $this->objectModel->fetchByID($id);
+        if(!$server) return false;
+
+        // 执行删除操作
+        $this->objectModel->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
 
         if(dao::isError()) return dao::getError();
+
+        // 创建action记录，处理instanceID字段可能不存在的情况
+        $actionExtra = isset($server->instanceID) ? ($server->instanceID ? 0 : 1) : 1;
+        $this->objectModel->loadModel('action')->create($type, $id, 'deleted', '', $actionExtra);
+
+        // 返回更新后的记录
         return $this->objectModel->getByID($id);
     }
 
