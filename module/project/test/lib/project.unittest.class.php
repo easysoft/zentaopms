@@ -981,4 +981,35 @@ class projectTest
         if(!$output) return false;
         return strpos($output, $projectName) !== false;
     }
+
+    /**
+     * 更新项目下的所有产品的阶段。
+     * Update product stage by project.
+     *
+     * @param  int    $projectID
+     * @param  object $postProductData
+     * @access public
+     * @return bool
+     */
+    public function updateProductStageTest(int $projectID, object $postProductData): array
+    {
+        $this->objectModel->updateProductStage($projectID, $postProductData);
+        $linkInfo = $this->objectModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->fetchAll();
+
+        $result = array();
+        foreach($linkInfo as $data)
+        {
+            if(!isset($result[$data->project])) $result[$data->project] = array();
+            if(!isset($result[$data->project]['product'])) $result[$data->project]['product'] = array();
+            if(!isset($result[$data->project]['branch']))  $result[$data->project]['branch']  = array();
+            if(!isset($result[$data->project]['plan']))    $result[$data->project]['plan']    = array();
+            $result[$data->project]['product'][$data->product] = $data->product;
+            $result[$data->project]['branch'][$data->branch]   = $data->branch;
+            if(!empty(trim($data->plan, ',')))
+            {
+                foreach(explode(',', $data->plan) as $planID) $result[$data->project]['plan'][$planID] = $planID;
+            }
+        }
+        return $result;
+    }
 }
