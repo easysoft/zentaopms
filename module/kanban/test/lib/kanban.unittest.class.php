@@ -2686,4 +2686,22 @@ class kanbanTest
 
         return $result;
     }
+
+    /**
+     * Test getRegionActions method.
+     *
+     * @param  int $kanbanID
+     * @param  int|string $regionID
+     * @param  int $regionCount
+     * @access public
+     * @return array
+     */
+    public function getRegionActionsTest($kanbanID, $regionID, $regionCount)
+    {
+        $result = $this->objectModel->getRegionActions($kanbanID, $regionID, $regionCount);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
