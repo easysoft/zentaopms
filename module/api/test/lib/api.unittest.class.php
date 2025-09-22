@@ -96,24 +96,16 @@ class apiTest
     /**
      * Test update a data struct.
      *
-     * @param  int    $id
-     * @param  array  $params
-     * @param  bool   $confirm
+     * @param  object $formData
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function updateStructTest($id, $params, $confirm = true)
+    public function updateStructTest($formData)
     {
-        global $tester;
-
-        $_POST = $params;
-        $objects = $this->objectModel->updateStruct($id);
-
+        $result = $this->objectModel->updateStruct($formData);
         if(dao::isError()) return dao::getError();
 
-        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($id)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
