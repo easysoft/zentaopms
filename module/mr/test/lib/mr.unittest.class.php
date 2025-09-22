@@ -89,14 +89,38 @@ class mrTest
      *
      * @param  int    $hostID
      * @access public
-     * @return array|null
+     * @return mixed
      */
-    public function getGogsProjectsTester(int $hostID): array|null
+    public function getGogsProjectsTester(int $hostID)
     {
-        $projects = $this->objectModel->getGogsProjects($hostID);
-        if(empty($projects[$hostID])) return null;
+        $result = $this->objectModel->getGogsProjects($hostID);
+        if(dao::isError()) return dao::getError();
 
-        return $projects[$hostID];
+        // 如果结果为空数组或无对应hostID，返回0表示无项目
+        if(empty($result[$hostID])) return 0;
+
+        // 返回项目数量
+        return count($result[$hostID]);
+    }
+
+    /**
+     * Test getGogsProjects method for project details.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return mixed
+     */
+    public function getGogsProjectsDetailTester(int $hostID)
+    {
+        $result = $this->objectModel->getGogsProjects($hostID);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组或无对应hostID，返回null
+        if(empty($result[$hostID])) return null;
+
+        // 返回第一个项目的信息用于测试
+        $firstProject = reset($result[$hostID]);
+        return $firstProject;
     }
 
     /**
