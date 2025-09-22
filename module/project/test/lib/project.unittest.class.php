@@ -1026,4 +1026,17 @@ class projectTest
 
         return $_SESSION['projectsearchParams']['queryID'];
     }
+
+    /**
+     * Test getList function.
+     *
+     * @param  int    $status
+     * @param  bool   $involved
+     * @access public
+     * @return array
+     */
+    public function getListTest($status, $involved = false)
+    {
+        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+    }
 }
