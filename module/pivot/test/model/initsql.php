@@ -3,11 +3,16 @@
 
 /**
 
-title=测试 pivotModel->initSql().
+title=测试 pivotModel::initSql();
 timeout=0
-cid=1
+cid=0
 
-- 判断sql初始化的数据是否正确。 @1
+- 执行pivot模块的initSqlTest方法，参数是'select id, name from zt_user;;;;', array  @select id,name from zt_user
+
+- 执行pivot模块的initSqlTest方法，参数是'select * from zt_user where name = $username', array  @select * from zt_user where name = ''
+- 执行pivot模块的initSqlTest方法，参数是'select id from zt_user', array 属性1 @~~
+- 执行pivot模块的initSqlTest方法，参数是'select * from zt_task', array 属性1 @ where tt.`status` like %wait%
+- 执行pivot模块的initSqlTest方法，参数是'select count 属性2 @ group by
 
 */
 
@@ -16,28 +21,8 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivot = new pivotTest();
 
-$sql = 'select id,name, from zt_user;;;;;;;;;;;;';
-
-$filters = array(
-    'name' => array(
-        'field' => 'name',
-        'operator' => 'sum',
-        'value' => 'xxx',
-    ),
-    'score' => array(
-        'field' => 'score',
-        'operator' => 'sum',
-        'value' => 'yyy',
-    ),
-);
-
-$groupList = 'id,name';
-
-$result = $pivot->initSql($sql, $filters, $groupList);
-
-$condition1 = $result[0] == 'select id,name, from zt_user';
-$condition2 = $result[1] == ' where tt.`name` sum xxx and tt.`score` sum yyy';
-$condition3 = $result[2] == ' group by id,name';
-$condition4 = $result[3] == ' order by id,name';
-
-r($condition1 && $condition2 && $condition3 && $condition4) && p() && e('1');   //判断sql初始化的数据是否正确。
+r($pivot->initSqlTest('select id,name from zt_user;;;;', array('name' => array('field' => 'name', 'operator' => '=', 'value' => 'admin')), 'id,name')) && p('0') && e('select id,name from zt_user');
+r($pivot->initSqlTest('select * from zt_user where name = $username', array(), 'id')) && p('0') && e("select * from zt_user where name = ''");
+r($pivot->initSqlTest('select id from zt_user', array(), 'id')) && p('1') && e('~~');
+r($pivot->initSqlTest('select * from zt_task', array('status' => array('field' => 'status', 'operator' => 'like', 'value' => '%wait%')), 'status')) && p('1') && e(' where tt.`status` like %wait%');
+r($pivot->initSqlTest('select count(*) from zt_bug', array(), '')) && p('2') && e(' group by ');

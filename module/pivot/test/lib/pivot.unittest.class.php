@@ -27,6 +27,23 @@ class pivotTest
     }
 
     /**
+     * Test initSql method.
+     *
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  string $groupList
+     * @access public
+     * @return array
+     */
+    public function initSqlTest(string $sql, array $filters, string $groupList): array
+    {
+        $result = $this->objectModel->initSql($sql, $filters, $groupList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel的方法。
      * Magic method, call objectModel method.
      *
