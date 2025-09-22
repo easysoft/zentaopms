@@ -31,6 +31,7 @@ toolbar
     ))) : null,
     common::hasPriv('ai', 'importMiniProgram') ? item(set(array(
         'class' => 'primary',
+        'icon'  => 'import',
         'text'  => $lang->ai->import,
     ))) : null,
     $config->edition != 'open' && common::hasPriv('ai', 'createMiniProgram') ? item(set(array(
