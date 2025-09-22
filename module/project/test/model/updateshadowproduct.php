@@ -30,7 +30,7 @@ cid=1
 */
 
 $projectIdList = array(11, 60, 61, 100);
-$projectTester = new project();
+$projectTester = new projectTest();
 
 r($projectTester->updateShadowProductTest($projectIdList[0])) && p('0:id,name') && e('1,更新敏捷项目11'); // 测试更新项目型敏捷项目的产品信息
 r($projectTester->updateShadowProductTest($projectIdList[1])) && p('0:id,name') && e('2,产品2');         // 测试更新产品型瀑布项目的产品信息
