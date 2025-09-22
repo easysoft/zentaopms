@@ -1325,4 +1325,19 @@ class mrTest
             return '0';
         }
     }
+
+    /**
+     * Test getPairs method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getPairsTest(int $repoID)
+    {
+        $result = $this->objectModel->getPairs($repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
