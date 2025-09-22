@@ -140,6 +140,7 @@ class gitlabTest
     {
         $result = $this->objectModel->getRelationByObject($objectType, $objectID);
         if(dao::isError()) return dao::getError();
+        if(empty($result)) return '0';
 
         return $result;
     }
