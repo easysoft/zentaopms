@@ -514,6 +514,21 @@ class metricTest
     }
 
     /**
+     * Test buildOperateMenu method to get full result.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenuTest($metric)
+    {
+        $result = $this->objectModel->buildOperateMenu($metric);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkCalcExists.
      *
      * @param  object $metric
