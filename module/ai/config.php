@@ -1,4 +1,6 @@
 <?php
+$config->ai->storeUrl = 'https://www.zentao.net/extension-browse-1625.html';
+
 $config->ai->vendorList = array();
 $config->ai->vendorList['openai']['credentials']           = array('key');
 $config->ai->vendorList['azure']['credentials']            = array('key', 'resource', 'deployment');
