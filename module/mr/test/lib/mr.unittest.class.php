@@ -1050,14 +1050,14 @@ class mrTest
     public function saveMrDataTest(object $repo, array $rawMrList)
     {
         if(!is_object($repo) || !is_array($rawMrList)) return false;
-        
+
         if(empty($repo->id) || empty($repo->serviceHost)) return false;
-        
+
         try {
             // 模拟saveMrData方法的核心逻辑
             foreach($rawMrList as $rawMR) {
                 if(!is_object($rawMR)) continue;
-                
+
                 $MR = new stdclass();
                 $MR->hostID        = $repo->serviceHost;
                 $MR->mriid         = isset($rawMR->iid) ? $rawMR->iid : 0;
@@ -1068,23 +1068,40 @@ class mrTest
                 $MR->title         = isset($rawMR->title) ? $rawMR->title : '';
                 $MR->repoID        = $repo->id;
                 $MR->createdBy     = 'system';
-                $MR->createdDate   = isset($rawMR->created) ? date('Y-m-d H:i:s', intval($rawMR->created / 1000)) : 
+                $MR->createdDate   = isset($rawMR->created) ? date('Y-m-d H:i:s', intval($rawMR->created / 1000)) :
                                     (isset($rawMR->created_at) ? date('Y-m-d H:i:s', strtotime($rawMR->created_at)) : date('Y-m-d H:i:s'));
-                $MR->editedDate    = isset($rawMR->updated) ? date('Y-m-d H:i:s', intval($rawMR->updated / 1000)) : 
+                $MR->editedDate    = isset($rawMR->updated) ? date('Y-m-d H:i:s', intval($rawMR->updated / 1000)) :
                                     (isset($rawMR->updated_at) ? date('Y-m-d H:i:s', strtotime($rawMR->updated_at)) : date('Y-m-d H:i:s'));
                 $MR->mergeStatus   = isset($rawMR->merge_status) ? $rawMR->merge_status : '';
                 $MR->status        = isset($rawMR->state) ? $rawMR->state : '';
                 $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
                 if($MR->status == 'open') $MR->status = 'opened';
-                
+
                 // 验证必要字段
                 if(empty($MR->mriid) && empty($MR->title)) continue;
             }
-            
+
             return true;
-            
+
         } catch (Exception $e) {
             return 'error: ' . $e->getMessage();
         }
+    }
+
+    /**
+     * Test apiCreateMRTodo method.
+     *
+     * @param  int    $hostID
+     * @param  string $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return mixed
+     */
+    public function apiCreateMRTodoTest(int $hostID, string $projectID, int $MRID)
+    {
+        $result = $this->objectModel->apiCreateMRTodo($hostID, $projectID, $MRID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
