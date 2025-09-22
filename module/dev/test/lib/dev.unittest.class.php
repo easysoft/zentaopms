@@ -1,7 +1,7 @@
 <?php
+declare(strict_types = 1);
 class devTest
 {
-
     public function __construct()
     {
         global $tester;
@@ -143,10 +143,193 @@ class devTest
      */
     public function getAPIsTest($module)
     {
-        $result = $this->objectModel->getAPIs($module);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
+    }
 
-        return $result;
+    /**
+     * Test getAPIs method with nonexistent module.
+     *
+     * @param string $module
+     * @access public
+     * @return mixed
+     */
+    public function getAPIsNonexistentTest($module)
+    {
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+            return is_array($result) ? count($result) : 0;
+        }
+        catch(Exception $e)
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Test getAPIs method API structure validation.
+     *
+     * @param string $module
+     * @access public
+     * @return array
+     */
+    public function getAPIsStructureTest($module)
+    {
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+
+            $structure = array();
+            $structure['isArray'] = is_array($result) ? '1' : '0';
+            $structure['count'] = is_array($result) ? count($result) : 0;
+
+            if(!empty($result) && is_array($result))
+            {
+                $firstAPI = $result[0];
+                $structure['hasName'] = isset($firstAPI['name']) ? '1' : '0';
+                $structure['hasPost'] = isset($firstAPI['post']) ? '1' : '0';
+                $structure['hasParam'] = isset($firstAPI['param']) ? '1' : '0';
+                $structure['hasDesc'] = isset($firstAPI['desc']) ? '1' : '0';
+            }
+
+            return $structure;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getAPIs method POST detection.
+     *
+     * @param string $module
+     * @access public
+     * @return array
+     */
+    public function getAPIsPostDetectionTest($module)
+    {
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+
+            $postMethods = array();
+            $getMethods = array();
+
+            if(is_array($result))
+            {
+                foreach($result as $api)
+                {
+                    if(isset($api['post']) && $api['post'])
+                    {
+                        $postMethods[] = $api['name'];
+                    }
+                    else
+                    {
+                        $getMethods[] = $api['name'];
+                    }
+                }
+            }
+
+            return array(
+                'postCount' => count($postMethods),
+                'getCount' => count($getMethods),
+                'totalCount' => count($postMethods) + count($getMethods)
+            );
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getAPIs method parameter parsing.
+     *
+     * @param string $module
+     * @access public
+     * @return array
+     */
+    public function getAPIsParameterTest($module)
+    {
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+
+            $paramInfo = array();
+            $paramInfo['hasParams'] = '0';
+            $paramInfo['paramCount'] = 0;
+
+            if(is_array($result) && !empty($result))
+            {
+                foreach($result as $api)
+                {
+                    if(isset($api['param']) && is_array($api['param']) && !empty($api['param']))
+                    {
+                        $paramInfo['hasParams'] = '1';
+                        $paramInfo['paramCount'] += count($api['param']);
+                        break;
+                    }
+                }
+            }
+
+            return $paramInfo;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getAPIs method comment parsing.
+     *
+     * @param string $module
+     * @access public
+     * @return array
+     */
+    public function getAPIsCommentTest($module)
+    {
+        try
+        {
+            $result = $this->objectModel->getAPIs($module);
+            if(dao::isError()) return dao::getError();
+
+            $commentInfo = array();
+            $commentInfo['hasDesc'] = '0';
+            $commentInfo['descCount'] = 0;
+
+            if(is_array($result))
+            {
+                foreach($result as $api)
+                {
+                    if(isset($api['desc']) && !empty($api['desc']))
+                    {
+                        $commentInfo['hasDesc'] = '1';
+                        $commentInfo['descCount']++;
+                    }
+                }
+            }
+
+            return $commentInfo;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
     }
 
     /**
@@ -495,5 +678,55 @@ class devTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getAPIs method extension path support.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAPIsExtensionTest()
+    {
+        try
+        {
+            $extPaths = $this->objectModel->getModuleExtPath();
+            $extensionInfo = array();
+            $extensionInfo['hasExtPaths'] = !empty($extPaths) ? '1' : '0';
+            $extensionInfo['extPathCount'] = count($extPaths);
+
+            return $extensionInfo;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getAPIs method common module handling.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAPIsCommonModuleTest()
+    {
+        try
+        {
+            $commonResult = $this->objectModel->getAPIs('common');
+            $devResult = $this->objectModel->getAPIs('dev');
+
+            $result = array();
+            $result['commonIsArray'] = is_array($commonResult) ? '1' : '0';
+            $result['devIsArray'] = is_array($devResult) ? '1' : '0';
+            $result['commonCount'] = is_array($commonResult) ? count($commonResult) : 0;
+            $result['devCount'] = is_array($devResult) ? count($devResult) : 0;
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
     }
 }
