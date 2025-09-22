@@ -155,6 +155,22 @@ class messageTest
     }
 
     /**
+     * Test batchSaveTodoNotice method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function batchSaveTodoNoticeTest(string $account): mixed
+    {
+        su($account);
+        $result = $this->objectModel->batchSaveTodoNotice();
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
+    /**
      * 测试获取浏览器通知的相关配置信息。
      * Test get browser message config.
      *

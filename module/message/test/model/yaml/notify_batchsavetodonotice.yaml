@@ -1,0 +1,69 @@
+title: table zt_notify for batchSaveTodoNotice test
+desc: "批量保存待办消息测试数据"
+author: claude
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectType
+    note: "对象类型"
+    range: message
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作ID"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: toList
+    note: "接收人列表"
+    range: ",admin,;,user1,;,user2,"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: data
+    note: "消息数据"
+    range: "待办 <a href='/todo-view-1.html'>08:00 测试待办1</a>;待办 <a href='/todo-view-2.html'>09:00 测试待办2</a>;待办 <a href='/todo-view-3.html'>10:00 测试待办3</a>"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: wait
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "创建者"
+    range: admin,user1,user2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建时间"
+    range: "2024-01-01 00:00:00"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
