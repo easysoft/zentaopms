@@ -2482,4 +2482,19 @@ class pivotTest
 
         return (object)array('url' => $url, 'method' => 'post', 'data' => $data);
     }
+
+    /**
+     * Test getConnectSQL method.
+     *
+     * @param  array $filters
+     * @access public
+     * @return string
+     */
+    public function getConnectSQLTest(array $filters): string
+    {
+        $result = $this->objectModel->getConnectSQL($filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
