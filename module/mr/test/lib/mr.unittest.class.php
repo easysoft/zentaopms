@@ -293,6 +293,26 @@ class mrTest
     }
 
     /**
+     * Test apiReopenMR method.
+     *
+     * @param  int    $hostID
+     * @param  string $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object|null
+     */
+    public function apiReopenMRTest(int $hostID, string $projectID, int $MRID): object|null
+    {
+        try {
+            $result = $this->objectModel->apiReopenMR($hostID, $projectID, $MRID);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Test approve method.
      *
      * @param  int     $MRID
