@@ -839,4 +839,21 @@ class projectTest
 
         return $products;
     }
+
+    /**
+     * Test add plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function addPlansTest(int $projectID, array $plans): array
+    {
+        $this->objectModel->addPlans($projectID, $plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_asc')->fetchAll();
+    }
 }
