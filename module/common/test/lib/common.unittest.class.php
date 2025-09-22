@@ -2793,4 +2793,30 @@ class commonTest
 
         return $app->company;
     }
+
+    /**
+     * Test setUser method.
+     *
+     * @param  string $mode 测试模式：'guest'测试访客，'session'测试已登录用户
+     * @access public
+     * @return mixed
+     */
+    public function setUserTest($mode = '')
+    {
+        global $app;
+
+        // 如果指定测试guest模式，先清除session
+        if($mode === 'guest') {
+            if(isset($_SESSION['user'])) unset($_SESSION['user']);
+            if(isset($this->objectModel->session->user)) unset($this->objectModel->session->user);
+            if(isset($app->user)) unset($app->user);
+        }
+
+        // 执行setUser方法
+        $this->objectModel->setUser();
+        if(dao::isError()) return dao::getError();
+
+        // 返回结果
+        return $app->user;
+    }
 }

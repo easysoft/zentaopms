@@ -1,28 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zenData('company')->gen(1);
 
 /**
 
 title=测试 commonModel::setUser();
 timeout=0
-cid=1
+cid=0
 
-- 没有登录的用户，账号和姓名都是guest
+- 测试步骤1：无session用户且允许访客访问时创建guest用户
  - 属性account @guest
  - 属性realname @guest
-- 登录admin账号，账号和姓名都是admin
+- 测试步骤2：验证guest用户的基本属性设置
+ - 属性id @0
+ - 属性dept @0
+- 测试步骤3：验证guest用户的权限和角色设置
+ - 属性role @guest
+ - 属性admin @~~
+- 测试步骤4：session中有用户时设置为当前用户
  - 属性account @admin
  - 属性realname @admin
+- 测试步骤5：验证admin用户权限属性admin @1
 
 */
 
-global $tester, $app;
-$tester->loadModel('common')->setUser();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-r($app->user) && p('account,realname') && e('guest,guest'); // 没有登录的用户，账号和姓名都是guest
+// 准备测试数据
+$companyTable = zenData('company');
+$companyTable->id->range('1');
+$companyTable->name->range('禅道软件');
+$companyTable->guest->range('1');
+$companyTable->gen(1);
+
+$commonTest = new commonTest();
+
+r($commonTest->setUserTest('guest')) && p('account,realname') && e('guest,guest'); // 测试步骤1：无session用户且允许访客访问时创建guest用户
+r($commonTest->setUserTest('guest')) && p('id,dept') && e('0,0'); // 测试步骤2：验证guest用户的基本属性设置
+r($commonTest->setUserTest('guest')) && p('role,admin') && e('guest,~~'); // 测试步骤3：验证guest用户的权限和角色设置
 
 su('admin');
-r($app->user) && p('account,realname') && e('admin,admin'); // 登录admin账号，账号和姓名都是admin
+r($commonTest->setUserTest()) && p('account,realname') && e('admin,admin'); // 测试步骤4：session中有用户时设置为当前用户
+r($commonTest->setUserTest()) && p('admin') && e('1'); // 测试步骤5：验证admin用户权限
