@@ -1150,4 +1150,18 @@ class projectTest
         global $lang;
         return $lang->executionCommon;
     }
+
+    /**
+     * 创建产品后，创建默认的产品主库。
+     * Create doclib after create a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function createProductDocLibTest(int $productID): object
+    {
+        $this->objectModel->createProductDocLib($productID);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('product')->andWhere('product')->eq($productID)->fetch();
+    }
 }
