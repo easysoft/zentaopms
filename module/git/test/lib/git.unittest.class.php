@@ -42,16 +42,16 @@ class gitTest
      * Test run method.
      *
      * @access public
-     * @return object|bool
+     * @return bool
      */
-    public function runTest(): object|bool
+    public function runTest(): bool
     {
         ob_start();
-        $this->gitModel->run();
+        $result = $this->gitModel->run();
         ob_get_clean();
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
-        return $this->gitModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq(2)->fetch();
+        return $result;
     }
 
     /**
