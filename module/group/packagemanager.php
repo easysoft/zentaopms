@@ -65,10 +65,6 @@ $config->group->subset->project = new stdclass();
 $config->group->subset->project->order = 170;
 $config->group->subset->project->nav   = 'project';
 
-$config->group->subset->projectDeliverable = new stdclass();
-$config->group->subset->projectDeliverable->order = 171;
-$config->group->subset->projectDeliverable->nav   = 'project';
-
 $config->group->subset->projectTemplate = new stdclass();
 $config->group->subset->projectTemplate->order = 172;
 $config->group->subset->projectTemplate->nav   = 'project';
