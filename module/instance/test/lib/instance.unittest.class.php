@@ -761,4 +761,20 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test randThirdDomain method.
+     *
+     * @param  int $length
+     * @param  int $triedTimes
+     * @access public
+     * @return string
+     */
+    public function randThirdDomainTest(int $length = 4, int $triedTimes = 0): string
+    {
+        $result = $this->objectModel->randThirdDomain($length, $triedTimes);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
