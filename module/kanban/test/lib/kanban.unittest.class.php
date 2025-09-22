@@ -1446,6 +1446,20 @@ class kanbanTest
     }
 
     /**
+     * Test get group list objects by region id.
+     *
+     * @param  int    $region
+     * @access public
+     * @return array
+     */
+    public function getGroupListObjectsTest($region)
+    {
+        $objects = $this->objectModel->getGroupList($region);
+        if(dao::isError()) return dao::getError();
+        return $objects;
+    }
+
+    /**
      * Test get column by id.
      *
      * @param  int    $columnID
@@ -2552,7 +2566,7 @@ class kanbanTest
     public function moveCardByModalTest($cardID)
     {
         global $tester;
-        
+
         // 获取卡片信息
         $card = $this->objectModel->getCardByID($cardID);
         if(!$card) return array('error' => 'Card not found');
@@ -2560,7 +2574,7 @@ class kanbanTest
         // 获取看板区域信息用于移动
         $regions = $this->objectModel->getRegionPairs($card->kanban);
         if(empty($regions)) return array('error' => 'No regions found');
-        
+
         // 返回区域和卡片信息
         return array(
             'regions' => count($regions),
@@ -2568,5 +2582,59 @@ class kanbanTest
             'cardName' => $card->name,
             'kanban' => $card->kanban
         );
+    }
+
+    /**
+     * Test addSpaceMembers method.
+     *
+     * @param  int    $spaceID
+     * @param  string $type
+     * @param  array  $kanbanMembers
+     * @access public
+     * @return mixed
+     */
+    public function addSpaceMembersTest($spaceID, $type, $kanbanMembers = array())
+    {
+        global $tester;
+
+        // 获取操作前的空间信息
+        $spaceBefore = $this->objectModel->getSpaceById($spaceID);
+
+        // 执行添加成员操作
+        $this->objectModel->addSpaceMembers($spaceID, $type, $kanbanMembers);
+
+        if(dao::isError()) return dao::getError();
+
+        // 获取操作后的空间信息
+        $spaceAfter = $this->objectModel->getSpaceById($spaceID);
+
+        // 返回结果以便验证
+        return array(
+            'spaceBefore' => $spaceBefore,
+            'spaceAfter' => $spaceAfter,
+            'fieldValue' => $spaceAfter ? $spaceAfter->{$type} : null
+        );
+    }
+
+    /**
+     * Test checkChildColumn method.
+     *
+     * @param  object $column
+     * @param  object $childColumn
+     * @param  int    $sumChildLimit
+     * @access public
+     * @return bool
+     */
+    public function checkChildColumnTest($column, $childColumn, $sumChildLimit)
+    {
+        // 清理之前的错误状态
+        dao::$errors = array();
+
+        $result = $this->objectModel->checkChildColumn($column, $childColumn, $sumChildLimit);
+
+        // 如果有错误，返回false，否则返回原始结果
+        if(dao::isError()) return false;
+
+        return $result;
     }
 }
