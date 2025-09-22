@@ -1091,4 +1091,20 @@ class projectTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->getTeamMembers($projectID);
     }
+
+    /**
+     * Test create project.
+     *
+     * @param  array $params
+     * @access public
+     * @return void
+     */
+    public function createTest($project, $postData)
+    {
+        $projectID = $this->objectModel->create($project, $postData);
+
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->objectModel->getById($projectID);
+    }
 }
