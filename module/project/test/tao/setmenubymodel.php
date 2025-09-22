@@ -22,7 +22,7 @@ cid=1
 
 */
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 
 r($projectTester->setMenuByModelTest(''))              && p() && e('迭代');     // 项目不存在的情况
 r($projectTester->setMenuByModelTest('error'))         && p() && e('迭代');     // 项目不存在的情况

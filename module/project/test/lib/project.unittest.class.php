@@ -781,4 +781,19 @@ class projectTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test setMenuByModel.
+     *
+     * @param  string $model
+     * @access public
+     * @return string
+     */
+    public function setMenuByModelTest($model)
+    {
+        $this->objectModel->setMenuByModel($model);
+
+        global $lang;
+        return $lang->executionCommon;
+    }
 }
