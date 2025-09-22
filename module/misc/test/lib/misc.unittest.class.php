@@ -6,7 +6,6 @@ class miscTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('misc');
-        $this->objectZen   = $tester->loadZen('misc');
     }
 
     /**
@@ -17,7 +16,7 @@ class miscTest
      */
     public function helloTest()
     {
-        $result = $this->objectZen->hello();
+        $result = $this->objectModel->hello();
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -32,7 +31,21 @@ class miscTest
      */
     public function encodeStatisticsTest($statistics = array())
     {
-        $result = $this->objectZen->encodeStatistics($statistics);
+        $result = $this->objectModel->encodeStatistics($statistics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkOneClickPackage method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function checkOneClickPackageTest()
+    {
+        $result = $this->objectModel->checkOneClickPackage();
         if(dao::isError()) return dao::getError();
 
         return $result;
