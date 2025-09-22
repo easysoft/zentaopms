@@ -798,8 +798,24 @@ class jobTest
         $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
 
         if(dao::isError()) return dao::getError();
-        
+
         return $jobQuery;
+    }
+
+    /**
+     * Test import method.
+     *
+     * @param  string|int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function importTest(string|int $repoID)
+    {
+        $result = $this->objectModel->import($repoID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
 }
