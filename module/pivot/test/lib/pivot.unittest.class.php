@@ -44,6 +44,22 @@ class pivotTest
     }
 
     /**
+     * Test setFilterDefault method.
+     *
+     * @param  array $filters
+     * @param  bool  $processDateVar
+     * @access public
+     * @return array
+     */
+    public function setFilterDefaultTest(array $filters, bool $processDateVar = true): array
+    {
+        $result = $this->objectModel->setFilterDefault($filters, $processDateVar);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel的方法。
      * Magic method, call objectModel method.
      *
@@ -2743,5 +2759,20 @@ class pivotTest
             default:
                 return '0';
         }
+    }
+
+    /**
+     * Test replaceTableNames method.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function replaceTableNamesTest(string $sql): string
+    {
+        $result = $this->objectModel->replaceTableNames($sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
