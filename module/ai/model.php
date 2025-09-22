@@ -70,6 +70,18 @@ class aiModel extends model
             if($action == 'promptunpublish')  return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
         }
 
+        if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
+        {
+            $isPublished = $object->published === '1';
+            $isBuiltIn   = $object->builtIn === '1';
+
+            if($action == 'editminiprogram')      return common::hasPriv('ai', 'editMiniProgram') && !$isPublished && !$isBuiltIn;
+            if($action == 'testminiprogram')      return common::hasPriv('ai', 'testMiniProgram') && !$isPublished && !$isBuiltIn;
+            if($action == 'publishminiprogram')   return common::hasPriv('ai', 'publishMiniProgram') && $object->canPublish;
+            if($action == 'unpublishminiprogram') return common::hasPriv('ai', 'unpublishMiniProgram') && $isPublished;
+            if($action == 'exportminiprogram')    return common::hasPriv('ai', 'exportMiniProgram') && $isPublished && !$isBuiltIn;
+        }
+
         return true;
     }
 
