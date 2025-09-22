@@ -24,7 +24,7 @@ zenData('project')->gen(5);
 
 su('admin');
 
-$projectTest = new Project();
+$projectTest = new projectTest();
 
 $project1 = new stdClass();
 $project1->PM = 'pm1';
@@ -41,8 +41,8 @@ $emptyProject->PM = '';
 $emptyProject->openedBy = '';
 $emptyProject->days = 0;
 
-r($projectTest->addTeamMembersTest(1, $project1, array('user1', 'user2', 'dev1'))) && p() && e('1');
-r($projectTest->addTeamMembersTest(0, $project1, array('user1'))) && p() && e('1');
-r($projectTest->addTeamMembersTest(2, $project2, array())) && p() && e('1');
-r($projectTest->addTeamMembersTest(3, $project1, array('user1', 'user1', 'user2'))) && p() && e('1');
+r($projectTest->addTeamMembersTest(1, $project1, array('user1', 'user2', 'dev1')))   && p() && e('1');
+r($projectTest->addTeamMembersTest(0, $project1, array('user1')))                    && p() && e('1');
+r($projectTest->addTeamMembersTest(2, $project2, array()))                           && p() && e('1');
+r($projectTest->addTeamMembersTest(3, $project1, array('user1', 'user1', 'user2')))  && p() && e('1');
 r($projectTest->addTeamMembersTest(4, $emptyProject, array('newuser1', 'newuser2'))) && p() && e('1');
