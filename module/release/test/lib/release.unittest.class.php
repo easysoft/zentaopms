@@ -715,4 +715,22 @@ class releaseTest
 
         return $result;
     }
+
+    /**
+     * Test getBugList method.
+     *
+     * @param  string $bugIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getBugListTest(string $bugIdList, string $orderBy = '', ?object $pager = null, string $type = 'linked'): array
+    {
+        $result = $this->objectModel->getBugList($bugIdList, $orderBy, $pager, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
