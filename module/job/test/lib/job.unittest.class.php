@@ -363,6 +363,14 @@ class jobTest
         }
     }
 
+    /**
+     * Test updateLastTag method.
+     *
+     * @param  int    $jobID
+     * @param  string $lastTag
+     * @access public
+     * @return mixed
+     */
     public function updateLastTagTest(int $jobID, string $lastTag)
     {
         $this->objectModel->updateLastTag($jobID, $lastTag);
