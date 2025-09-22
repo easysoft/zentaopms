@@ -159,18 +159,19 @@ class mailTest
     }
 
     /**
-     * Set CC.
+     * Test setCC method.
      *
-     * @param  int    $ccList
-     * @param  int    $emails
+     * @param  array $ccList
+     * @param  array $emails
      * @access public
-     * @return object
+     * @return mixed
      */
     public function setCCTest($ccList, $emails)
     {
         $this->objectModel->setCC($ccList, $emails);
+        if(dao::isError()) return dao::getError();
 
-        return $this->setMTATest();
+        return $emails;
     }
 
     /**
@@ -541,5 +542,57 @@ class mailTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test sendmail method.
+     *
+     * @param  int $objectID
+     * @param  int $actionID
+     * @access public
+     * @return mixed
+     */
+    public function sendmailTest($objectID, $actionID)
+    {
+        try
+        {
+            ob_start();
+            $this->objectModel->sendmail($objectID, $actionID);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            $result = new stdClass();
+            $result->processed = 1;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->hasErrors = $this->objectModel->isError() ? 1 : 0;
+            $result->errors = $this->objectModel->errors;
+            $result->output = $output;
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $result = new stdClass();
+            $result->processed = 0;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->error = $e->getMessage();
+            $result->hasErrors = 1;
+
+            return $result;
+        }
+        catch(TypeError $e)
+        {
+            $result = new stdClass();
+            $result->processed = 0;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->error = $e->getMessage();
+            $result->hasErrors = 1;
+
+            return $result;
+        }
     }
 }
