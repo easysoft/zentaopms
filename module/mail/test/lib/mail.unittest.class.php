@@ -15,7 +15,6 @@ class mailTest
          $this->tester      = $tester;
          $this->objectModel = $tester->loadModel('mail');
          $this->objectTao   = $tester->loadTao('mail');
-         $this->objectZen   = $tester->loadZen('mail');
     }
 
     /**
