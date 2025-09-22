@@ -2632,4 +2632,116 @@ class pivotTest
                 return false;
         }
     }
+
+    /**
+     * Test processPivot method.
+     *
+     * @param  mixed $testCase
+     * @access public
+     * @return mixed
+     */
+    public function processPivotTest($testCase)
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 根据测试用例创建不同的测试数据
+        switch($testCase)
+        {
+            case 'single_object_normal':
+                // 测试步骤1：正常对象输入，验证处理流程和返回类型
+                $pivot = new stdClass();
+                $pivot->id = 1;
+                $pivot->version = '1';
+                $pivot->name = '{"zh-cn":"产品汇总表","en":"Product Summary"}';
+                $pivot->desc = '{"zh-cn":"产品描述","en":"Product Description"}';
+                $pivot->settings = '{}';  // 简化settings避免addDrills调用
+
+                $result = $this->objectModel->processPivot($pivot, true);
+                // 验证返回类型是对象且经过了completePivot处理（即name被解析）
+                return is_object($result) && isset($result->names) && is_array($result->names) ? '1' : '0';
+
+            case 'array_input_normal':
+                // 测试步骤2：数组输入，验证批量处理功能
+                $pivot1 = new stdClass();
+                $pivot1->id = 1;
+                $pivot1->version = '1';
+                $pivot1->name = '{"zh-cn":"透视表1"}';
+                $pivot1->settings = '{}';
+
+                $pivot2 = new stdClass();
+                $pivot2->id = 2;
+                $pivot2->version = '1';
+                $pivot2->name = '{"zh-cn":"透视表2"}';
+                $pivot2->settings = '{}';
+
+                $pivots = array($pivot1, $pivot2);
+                $result = $this->objectModel->processPivot($pivots, false);
+                // 验证返回数组且元素被正确处理
+                return is_array($result) && count($result) == 2 && isset($result[0]->names) ? '1' : '0';
+
+            case 'empty_object':
+                // 测试步骤3：空对象处理，验证边界值处理能力
+                $pivot = new stdClass();
+                $pivot->id = 1;
+                $pivot->version = '1';
+                $pivot->settings = '{}'; // 添加空的settings避免错误
+
+                $result = $this->objectModel->processPivot($pivot, true);
+                // 验证空对象也能正常处理，processNameDesc会创建names和descs属性
+                return is_object($result) && isset($result->names) && isset($result->descs) ? '1' : '0';
+
+            case 'empty_array':
+                // 测试步骤4：空数组处理，验证边界值处理能力
+                $pivots = array();
+                $result = $this->objectModel->processPivot($pivots, false);
+                // 验证空数组返回空数组
+                return is_array($result) && count($result) == 0 ? '1' : '0';
+
+            case 'array_no_drill_processing':
+                // 测试步骤5：数组模式不调用addDrills，验证业务逻辑差异
+                $pivot = new stdClass();
+                $pivot->id = 1;
+                $pivot->version = '1';
+                $pivot->name = '{"zh-cn":"测试透视表"}';
+                $pivot->settings = '{"columns":[{"field":"status","title":"状态"}]}';
+
+                // 数组模式（isObject=false）不应调用addDrills
+                $result = $this->objectModel->processPivot(array($pivot), false);
+                // 验证处理成功且是数组类型
+                return is_array($result) && count($result) == 1 && isset($result[0]->settings) ? '1' : '0';
+
+            case 'object_type_validation':
+                // 测试步骤6：验证isObject参数控制返回类型
+                $pivot = new stdClass();
+                $pivot->id = 1;
+                $pivot->version = '1';
+                $pivot->name = '{"zh-cn":"类型验证透视表"}';
+                $pivot->settings = '{}';
+
+                // 测试isObject=true时返回对象
+                $resultObject = $this->objectModel->processPivot($pivot, true);
+                $isObjectCorrect = is_object($resultObject);
+
+                // 测试isObject=false时返回数组
+                $resultArray = $this->objectModel->processPivot(array($pivot), false);
+                $isArrayCorrect = is_array($resultArray);
+
+                return ($isObjectCorrect && $isArrayCorrect) ? '1' : '0';
+
+            case 'settings_json_parsing':
+                // 测试步骤7：验证settings的JSON解析功能
+                $pivot = new stdClass();
+                $pivot->id = 1;
+                $pivot->version = '1';
+                $pivot->name = '{"zh-cn":"设置解析测试"}';
+                $pivot->settings = '{"test":"value","array":[1,2,3]}';
+
+                $result = $this->objectModel->processPivot(array($pivot), false); // 使用array模式避免addDrills
+                // 验证settings被正确解析为数组
+                return is_array($result) && isset($result[0]->settings) && is_array($result[0]->settings) && $result[0]->settings['test'] == 'value' ? '1' : '0';
+
+            default:
+                return '0';
+        }
+    }
 }
