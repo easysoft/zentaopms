@@ -979,33 +979,6 @@ class editorTest
         return (strpos($link, 'edit') !== false && strpos($link, 'extendOther') !== false) ? 1 : 0;
     }
 
-    /**
-     * Test for get extend link - test case 2: with isExtends parameter.
-     *
-     * @access public
-     * @return 1|0
-     */
-    public function getExtendLinkWithExtendsTest()
-    {
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $modelPath  = $modulePath . 'model.php';
-        $link       = $this->objectModel->getExtendLink($modelPath, 'extendModel', 'yes');
-        return (strpos($link, 'edit') !== false && strpos($link, 'extendModel') !== false && strpos($link, 'isExtends=yes') !== false) ? 1 : 0;
-    }
-
-    /**
-     * Test for get extend link - test case 3: empty action parameter.
-     *
-     * @access public
-     * @return 1|0
-     */
-    public function getExtendLinkEmptyActionTest()
-    {
-        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
-        $viewPath   = $modulePath . 'view' . DS . 'edit.html.php';
-        $link       = $this->objectModel->getExtendLink($viewPath, '');
-        return strpos($link, 'edit') !== false ? 1 : 0;
-    }
 
     /**
      * Test for get extend link - test case 4: control file extension.
@@ -1033,6 +1006,76 @@ class editorTest
         $viewPath   = $modulePath . 'view' . DS . 'browse.html.php';
         $link       = $this->objectModel->getExtendLink($viewPath, 'override', 'no');
         return (strpos($link, 'edit') !== false && strpos($link, 'override') !== false && strpos($link, 'isExtends=no') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test getExtendLink with normal file path and action.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtendLinkNormalTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $viewPath   = $modulePath . 'view' . DS . 'create.html.php';
+        $link       = $this->objectModel->getExtendLink($viewPath, 'override');
+        return (strpos($link, 'edit') !== false && strpos($link, 'override') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test getExtendLink with isExtends parameter.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtendLinkWithExtendsTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $modelPath  = $modulePath . 'model.php';
+        $link       = $this->objectModel->getExtendLink($modelPath, 'extendModel', 'yes');
+        return (strpos($link, 'edit') !== false && strpos($link, 'extendModel') !== false && strpos($link, '-yes.html') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test getExtendLink with special characters in file path.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtendLinkSpecialCharsTest()
+    {
+        $specialPath = '/tmp/test module/special@#$%/view/test file.html.php';
+        $link        = $this->objectModel->getExtendLink($specialPath, 'override');
+        $encodedPath = helper::safe64Encode($specialPath);
+        return (strpos($link, 'edit') !== false && strpos($link, $encodedPath) !== false && strpos($link, 'override') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test getExtendLink with empty action parameter.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtendLinkEmptyActionTest()
+    {
+        $modulePath = $this->objectModel->app->getModulePath('', 'todo');
+        $viewPath   = $modulePath . 'view' . DS . 'edit.html.php';
+        $link       = $this->objectModel->getExtendLink($viewPath, '');
+        return (strpos($link, 'edit') !== false && strpos($link, '--.html') !== false) ? 1 : 0;
+    }
+
+    /**
+     * Test getExtendLink with complex file path encoding.
+     *
+     * @access public
+     * @return int
+     */
+    public function getExtendLinkComplexPathTest()
+    {
+        $complexPath = '/home/zentao/module/todo/view/complex-file_name with spaces.html.php';
+        $link        = $this->objectModel->getExtendLink($complexPath, 'newHook', 'no');
+        $encodedPath = helper::safe64Encode($complexPath);
+        return (strpos($link, 'edit') !== false && strpos($link, $encodedPath) !== false && strpos($link, 'newHook') !== false && strpos($link, '-no.html') !== false) ? 1 : 0;
     }
 
     /**
