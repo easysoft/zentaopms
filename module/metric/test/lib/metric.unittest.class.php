@@ -2072,4 +2072,35 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test processImplementTips method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function processImplementTipsTest($code = '')
+    {
+        $this->objectModel->processImplementTips($code);
+        if(dao::isError()) return dao::getError();
+
+        $tips = $this->objectModel->lang->metric->implement->instructionTips;
+        $result = array();
+        $result['tips'] = $tips;
+        $result['hasCodePlaceholder'] = 0;
+        $result['hasTmpRootPlaceholder'] = 0;
+        $result['codeReplaced'] = 0;
+        $result['tmpRootReplaced'] = 0;
+
+        foreach($tips as $tip)
+        {
+            if(strpos($tip, '{code}') !== false) $result['hasCodePlaceholder'] = 1;
+            if(strpos($tip, '{tmpRoot}') !== false) $result['hasTmpRootPlaceholder'] = 1;
+            if(strpos($tip, $code) !== false && !empty($code)) $result['codeReplaced'] = 1;
+            if(strpos($tip, '/tmp') !== false || strpos($tip, 'tmp/metric') !== false) $result['tmpRootReplaced'] = 1;
+        }
+
+        return $result;
+    }
 }
