@@ -1206,4 +1206,23 @@ class projectTest
         );
         return implode('|', $result);
     }
+
+    /**
+     * 获取创建项目时选择的产品数量。
+     * Get products count from post.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @access public
+     * @return void
+     */
+    public function getLinkedProductsCountTest(int $projectID, array $products)
+    {
+        $project = $this->objectModel->getByID($projectID);
+
+        $rawdata = new stdclass();
+        $rawdata->products = $products;
+
+        return $this->objectModel->getLinkedProductsCount($project, $rawdata);
+    }
 }
