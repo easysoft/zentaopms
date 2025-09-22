@@ -714,4 +714,19 @@ class instanceTest
 
         return $result;
     }
+
+    /**
+     * Test getByUrl method.
+     *
+     * @param  string $url
+     * @access public
+     * @return object|false
+     */
+    public function getByUrlTest(string $url): object|false
+    {
+        $result = $this->objectModel->getByUrl($url);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
