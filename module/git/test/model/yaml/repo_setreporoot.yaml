@@ -1,0 +1,63 @@
+---
+title: setRepoRoot方法测试数据
+desc: 为gitModel::setRepoRoot()方法提供多种路径场景的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 仓库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 仓库路径
+  range: '[/home/git/normal,/path/with-special_chars,/路径/包含中文字符,,/very/long/path/that/contains/many/levels/of/directories/and/subdirectories/to/test/long/path/handling,/path with spaces]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 仓库名称
+  range: '[normal_repo,special_repo,chinese_repo,empty_repo,long_repo,space_repo]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: SCM
+  note: SCM类型
+  range: Git{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: client
+  note: 客户端路径
+  range: '/usr/bin/git{6}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账户
+  range: 'testuser{6}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: 'testpass{6}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: encoding
+  note: 编码
+  range: 'utf-8{6}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

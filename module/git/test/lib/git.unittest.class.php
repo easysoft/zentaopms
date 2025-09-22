@@ -231,4 +231,19 @@ class gitTest
             'repoRoot' => $this->gitModel->repoRoot
         );
     }
+
+    /**
+     * Test setRepoRoot method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return string
+     */
+    public function setRepoRootTest(object $repo): string
+    {
+        $this->gitModel->setRepoRoot($repo);
+        if(dao::isError()) return dao::getError();
+
+        return $this->gitModel->repoRoot;
+    }
 }
