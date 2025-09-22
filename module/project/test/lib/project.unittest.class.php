@@ -856,4 +856,21 @@ class projectTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_asc')->fetchAll();
     }
+
+    /**
+     * Test update plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function updatePlansTest(int $projectID, array $plans): array
+    {
+        $this->objectModel->updatePlans($projectID, $plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
+    }
 }

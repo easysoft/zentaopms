@@ -37,7 +37,7 @@ cid=1
 */
 
 global $tester, $app;
-$project = new Project();
+$project = new projectTest();
 $app->rawModule  = 'project';
 $app->moduleName = 'project';
 
