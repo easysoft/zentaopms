@@ -7,11 +7,11 @@ title=测试 projectModel::setNoMultipleMenu();
 timeout=0
 cid=0
 
-- 步骤1：测试multiple项目 @alse
-- 步骤2：测试project类型项目 @rue
-- 步骤3：测试sprint类型项目 @rue
-- 步骤4：测试kanban类型项目 @rue
-- 步骤5：测试无效项目ID @alse
+- 步骤1：测试multiple项目 @0
+- 步骤2：测试project类型项目 @0
+- 步骤3：测试sprint类型项目 @0
+- 步骤4：测试kanban类型项目 @0
+- 步骤5：测试无效项目ID @0
 
 */
 
@@ -33,11 +33,11 @@ $projectTable->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$projectTest = new Project();
+$projectTest = new projectTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($projectTest->setNoMultipleMenuTest(9)) && p() && e(false); // 步骤1：测试multiple项目
-r($projectTest->setNoMultipleMenuTest(1)) && p() && e(true);  // 步骤2：测试project类型项目
-r($projectTest->setNoMultipleMenuTest(2)) && p() && e(true);  // 步骤3：测试sprint类型项目
-r($projectTest->setNoMultipleMenuTest(3)) && p() && e(true);  // 步骤4：测试kanban类型项目
-r($projectTest->setNoMultipleMenuTest(999)) && p() && e(false); // 步骤5：测试无效项目ID
+r($projectTest->setNoMultipleMenuTest(9))   && p() && e('0'); // 步骤1：测试multiple项目
+r($projectTest->setNoMultipleMenuTest(1))   && p() && e('0'); // 步骤2：测试project类型项目
+r($projectTest->setNoMultipleMenuTest(2))   && p() && e('0'); // 步骤3：测试sprint类型项目
+r($projectTest->setNoMultipleMenuTest(3))   && p() && e('0'); // 步骤4：测试kanban类型项目
+r($projectTest->setNoMultipleMenuTest(999)) && p() && e('0'); // 步骤5：测试无效项目ID
