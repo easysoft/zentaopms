@@ -714,6 +714,21 @@ class kanbanTest
     }
 
     /**
+     * Test getPairs method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getPairsTest()
+    {
+        $result = $this->objectModel->getPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test get can view objects.
      *
      * @param  string $user
