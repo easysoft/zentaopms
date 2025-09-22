@@ -20,16 +20,63 @@ class messageTest
      * Test get messages.
      *
      * @param  string       $status
+     * @param  string       $orderBy
+     * @param  string       $returnType
      * @access public
-     * @return string|array
+     * @return string|array|int
      */
-    public function getMessagesTest(string $status): string|array
+    public function getMessagesTest(string $status = 'all', string $orderBy = 'createdDate', string $returnType = 'ids'): mixed
     {
-        $objects = $this->objectModel->getMessages($status);
+        global $tester;
+        $objects = $this->objectModel->getMessages($status, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', array_keys($objects));
+        switch($returnType)
+        {
+            case 'count':
+                return count($objects);
+            case 'ids':
+                return empty($objects) ? '0' : implode(',', array_keys($objects));
+            case 'first':
+                return empty($objects) ? array() : reset($objects);
+            case 'structure':
+                if(empty($objects)) return array();
+                $first = reset($objects);
+                return array(
+                    'hasId' => isset($first->id),
+                    'hasObjectType' => isset($first->objectType),
+                    'hasToList' => isset($first->toList),
+                    'hasStatus' => isset($first->status),
+                    'hasData' => isset($first->data)
+                );
+            case 'debug':
+                // 用于调试：返回实际数据结构
+                $debug = array();
+                $debug['totalCount'] = count($objects);
+                $debug['user'] = $tester->app->user->account;
+                $debug['vision'] = $tester->config->vision;
+
+                // 检查原始数据
+                $notifyCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+                $debug['notifyCount'] = $notifyCount;
+
+                $actionCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->where('vision')->eq($tester->config->vision)->fetch('count');
+                $debug['actionCount'] = $actionCount;
+
+                // 测试具体的查询条件
+                $userToList = ",{$tester->app->user->account},";
+                $matchingNotify = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+                    ->where('objectType')->eq('message')
+                    ->andWhere('toList')->eq($userToList)
+                    ->fetch('count');
+                $debug['matchingNotify'] = $matchingNotify;
+                $debug['userToList'] = $userToList;
+
+                return $debug;
+            default:
+                return $objects;
+        }
     }
 
     /**
