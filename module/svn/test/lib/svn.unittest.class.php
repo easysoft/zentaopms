@@ -282,4 +282,19 @@ class svnTest
             'repoRoot' => $this->objectModel->repoRoot
         );
     }
+
+    /**
+     * Test setRepoRoot method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function setRepoRootTest(object $repo)
+    {
+        $this->objectModel->setRepoRoot($repo);
+        if(dao::isError()) return '0';
+
+        return $this->objectModel->repoRoot ? $this->objectModel->repoRoot : '0';
+    }
 }
