@@ -743,4 +743,24 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test updateDate method.
+     *
+     * @param  array  $todoIdList
+     * @param  string $date
+     * @access public
+     * @return bool|array
+     */
+    public function updateDateTest(array $todoIdList, string $date): bool|array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateDate');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoIdList, $date);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
