@@ -29,7 +29,6 @@ $config->index->oldPages[] = 'screen-staticdataold';
 $config->index->oldPages[] = 'report-annualdata';
 $config->index->oldPages[] = 'ai-adminindex';
 $config->index->oldPages[] = 'ai-chat';
-$config->index->oldPages[] = 'ai-editminiprogramcategory';
 $config->index->oldPages[] = 'api-debug';
 $config->index->oldPages[] = 'datatable-ajaxoldcustom';
 $config->index->oldPages[] = 'kanban-importticket';

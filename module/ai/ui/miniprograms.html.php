@@ -71,7 +71,9 @@ sidebar
             (
                 setClass('secondary-pale mx-4'),
                 set::text($lang->ai->maintenanceGroup),
-                set::url(createLink('ai', 'editMiniProgramCategory'))
+                set::url(createLink('ai', 'editMiniProgramCategory')),
+                setData('toggle', 'modal'),
+                setData('size', 'sm')
             ) : null
         )
     ),
