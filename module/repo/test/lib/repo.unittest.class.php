@@ -37,6 +37,22 @@ class repoTest
     }
 
     /**
+     * Test getCommitsByObject method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getCommitsByObjectTest(int $objectID, string $objectType)
+    {
+        $result = $this->objectModel->getCommitsByObject($objectID, $objectType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Get switcher test.
      *
      * @param  int    $repoID
