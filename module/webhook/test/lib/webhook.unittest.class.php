@@ -63,13 +63,12 @@ class webhookTest
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getListTest($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getListTest($orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($orderBy, $pager, $decode);
+        $objects = $this->objectModel->getList($orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
