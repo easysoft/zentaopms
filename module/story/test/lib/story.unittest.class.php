@@ -4021,4 +4021,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getIdListWithTask method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return array
+     */
+    public function getIdListWithTaskTest(int $executionID): array
+    {
+        $result = $this->objectModel->getIdListWithTask($executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
