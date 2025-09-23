@@ -1,11 +1,16 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 6) . '/test/lib/ui.php';
+require_once dirname(__FILE__, 6) . '/test/lib/ui.php';
 class createBugTester extends tester
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->login();
+    }
+
     public function createDefaultBug($project = array(), $bug = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'create',$project, 'appIframe-qa');
         if(isset($bug['title']))       $form->dom->title->setValue($bug['title']);
         if(isset($bug['openedBuild'])) $form->dom->{'openedBuild[]'}->multipicker($bug['openedBuild']);
@@ -29,7 +34,7 @@ class createBugTester extends tester
         }
     }
 
-	/**
+    /**
      * 批量创建bug。
      * batch create bugs.
      *
@@ -40,7 +45,6 @@ class createBugTester extends tester
      */
     public function batchCreate($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'batchCreate', $product, 'appIframe-qa');
         if(isset($bugs))
         {
@@ -62,7 +66,7 @@ class createBugTester extends tester
         return $this->failed('批量创建bug失败');
     }
 
-	/**
+    /**
      * 批量编辑bug。
      * batch edit bugs.
      *
@@ -73,7 +77,6 @@ class createBugTester extends tester
      */
     public function batchEdit($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $form->wait(3);
         $form->dom->bugLabel->click();
@@ -97,7 +100,7 @@ class createBugTester extends tester
         return $this->failed('批量编辑bug失败');
     }
 
-	/**
+    /**
      * bug列表页。
      * bug browse.
      *
@@ -108,7 +111,6 @@ class createBugTester extends tester
      */
     public function browse($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $bugIDList    = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugID'])->element);
         $bugTitleList = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugTitle'])->element);
@@ -117,5 +119,34 @@ class createBugTester extends tester
             if(in_array($bug->id, $bugIDList) && in_array($bug->title, $bugTitleList)) return $this->success('bug列表页检查成功');
             return $this->failed('bug列表页检查失败');
         }
+    }
+
+    /**
+     * 查找bug在bug列表中的索引。
+     * Find the index of given bug title in the bug table
+     *
+     * @param  object $form
+     * @param  string $bugTitle
+     * @access public
+     * @return int    $index
+     */
+    private function findIndex($form = null, $bugTitle = '')
+    {
+        if(!$form) return $this->failed('form is null!');
+        $bugTitles = $form->dom->getElementList($form->dom->xpath['bugTitle'])->element;
+        $form->wait(1);
+        $index = -1;  // -1 not found
+        $found = false;
+        foreach($bugTitles as $item)
+        {
+            $index++;
+            if($item->getText() == $bugTitle)
+            {
+                $found = true;
+                break;
+            }
+        }
+        if(!$found) return -1;
+        return $index;
     }
 }
