@@ -68,14 +68,57 @@ class sonarqubeTest
         }
     }
 
+    /**
+     * Test apiDeleteProject method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
     public function apiDeleteProjectTest($sonarqubeID, $projectKey)
     {
-        $result = $this->objectModel->apiDeleteProject($sonarqubeID, $projectKey);
+        try {
+            $result = $this->objectModel->apiDeleteProject($sonarqubeID, $projectKey);
+        } catch (Exception $e) {
+            return 'return false';
+        } catch (TypeError $e) {
+            return 'return false';
+        }
 
-        if($result === false) $result = 'return false';
-        if($result === null) $result = 'return true';
-        if(isset($result->errors)) $result = $result->errors;
-        return $result;
+        if(dao::isError()) return dao::getError();
+
+        // 处理各种返回结果
+        if($result === false) return 'return false';
+        if($result === null) return 'return true';
+
+        // 处理错误情况
+        if(is_array($result))
+        {
+            // 处理包含错误信息的数组
+            if(isset($result[0]->msg))
+            {
+                return $result;
+            }
+            return 'api error array';
+        }
+
+        // 处理对象返回值
+        if(is_object($result))
+        {
+            if(isset($result->errors))
+            {
+                return $result->errors;
+            }
+            if(isset($result->msg))
+            {
+                return array((object)array('msg' => $result->msg));
+            }
+            return 'object result';
+        }
+
+        // 其他情况
+        return is_string($result) ? $result : 'unknown result';
     }
 
     public function apiGetIssuesTest($sonarqubeID, $projectKey = '')
