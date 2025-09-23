@@ -6,13 +6,15 @@ su('admin');
 
 /**
 
-title=测试 repoModel->updateCommitDate();
+title=测试 repoModel::updateCommitDate();
 timeout=0
-cid=1
+cid=0
 
-- 更新gitlab版本库属性lastCommit @2023-12-23 11:39:02
-- 更新gitea版本库属性lastCommit @~~
-- 更新空版本库 @return empty
+- 步骤1：更新Gitlab版本库属性lastCommit @2023-12-23 11:39:02
+- 步骤2：更新Gitea版本库属性lastCommit @~~
+- 步骤3：不存在的版本库ID @return empty
+- 步骤4：SVN版本库（不在同步范围）属性name @testSvn
+- 步骤5：无效的版本库ID（0） @return empty
 
 */
 
@@ -20,9 +22,8 @@ zenData('repo')->loadYaml('repo')->gen(5);
 
 $repo = new repoTest();
 
-$gitlabID = 1;
-$giteaID  = 3;
-
-r($repo->updateCommitDateTest($gitlabID)) && p('lastCommit') && e('2023-12-23 11:39:02'); //更新gitlab版本库
-r($repo->updateCommitDateTest($giteaID))  && p('lastCommit') && e('~~'); //更新gitea版本库
-r($repo->updateCommitDateTest(0))         && p()             && e('return empty'); //更新空版本库
+r($repo->updateCommitDateTest(1)) && p('lastCommit') && e('2023-12-23 11:39:02'); // 步骤1：更新Gitlab版本库
+r($repo->updateCommitDateTest(3)) && p('lastCommit') && e('~~'); // 步骤2：更新Gitea版本库
+r($repo->updateCommitDateTest(999)) && p() && e('return empty'); // 步骤3：不存在的版本库ID
+r($repo->updateCommitDateTest(4)) && p('name') && e('testSvn'); // 步骤4：SVN版本库（不在同步范围）
+r($repo->updateCommitDateTest(0)) && p() && e('return empty'); // 步骤5：无效的版本库ID（0）
