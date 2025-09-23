@@ -233,17 +233,14 @@ class searchTest
      *
      * @param  int    $queryID
      * @access public
-     * @return int|array
+     * @return bool|string
      */
     public function deleteQueryTest($queryID)
     {
-        $this->objectModel->deleteQuery($queryID);
+        $result = $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $count = $tester->dao->select('COUNT(1) AS count')->from(TABLE_USERQUERY)->fetch('count');
-        if(dao::isError()) return dao::getError();
-        return $count;
+        return $result ? 'true' : 'false';
     }
 
     /**
