@@ -213,14 +213,30 @@ class zanodeTest
      *
      * @param  int    $nodeID
      * @access public
-     * @return object
+     * @return object|array
      */
     public function createDefaultSnapshotTest(int $nodeID): object|array
     {
-        $snapshotID = $this->createDefaultSnapshot($nodeID);
+        $result = $this->createDefaultSnapshot($nodeID);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        if($result === false)
+        {
+            $errors = dao::getError();
+            if(empty($errors))
+            {
+                return array('name' => '网络请求失败或Agent服务不可用');
+            }
+            return $errors;
+        }
+
+        $snapshot = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($result)->fetch();
+        if(!$snapshot)
+        {
+            return array('name' => '快照创建失败');
+        }
+
+        return $snapshot;
     }
 
     /**
