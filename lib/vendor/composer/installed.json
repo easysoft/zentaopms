@@ -1105,6 +1105,11 @@
             },
             "time": "2014-06-05T11:42:24+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "classmap": [

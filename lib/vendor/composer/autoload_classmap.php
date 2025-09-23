@@ -8,6 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Mobile_Detect' => $vendorDir . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
-    'PclZip' => $vendorDir . '/pclzip/pclzip/pclzip.lib.php',
     'Requests' => $vendorDir . '/rmccue/requests/library/Requests.php',
+    'Vendor\\PclZip\\PclZip' => $vendorDir . '/pclzip/pclzip/pclzip.lib.php',
 );

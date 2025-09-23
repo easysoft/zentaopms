@@ -88,6 +88,7 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         ),
         'V' => 
         array (
+            'Vendor\\PclZip\\' => 14,
             'Vendor\\Parsedown\\' => 17,
         ),
         'S' => 
@@ -143,6 +144,10 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         'WpOrg\\Requests\\' => 
         array (
             0 => __DIR__ . '/..' . '/rmccue/requests/src',
+        ),
+        'Vendor\\PclZip\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pclzip/pclzip',
         ),
         'Vendor\\Parsedown\\' => 
         array (
@@ -245,8 +250,8 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
-        'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
         'Requests' => __DIR__ . '/..' . '/rmccue/requests/library/Requests.php',
+        'Vendor\\PclZip\\PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

@@ -40,12 +40,16 @@
             },
             "gorhill/php-fine-diff": {
                 "Fix class reference to work with namespaces": "patches/finediff-fix-class-reference.patch"
+            },
+            "pclzip/pclzip": {
+                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
             }
         }
     },
     "autoload": {
         "psr-4": {
-            "Vendor\\Parsedown\\": "vendor/erusev/parsedown/"
+            "Vendor\\Parsedown\\": "vendor/erusev/parsedown/",
+            "Vendor\\PclZip\\": "vendor/pclzip/pclzip/"
         }
     }
 }
