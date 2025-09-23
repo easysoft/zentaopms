@@ -39,6 +39,48 @@ class baseDelegate
     protected $instance = null;
 
     /**
+     * 代理对实例属性的读取。
+     * 当访问一个不存在的属性时，尝试从实例中获取。
+     *
+     * @param string $name 属性名
+     * @return mixed
+     * @throws Error 如果属性不存在
+     */
+    public function __get($name)
+    {
+        // 如果有实例，尝试从实例中获取属性
+        if (!is_null($this->instance) && property_exists($this->instance, $name)) {
+            return $this->instance->$name;
+        }
+
+        // 如果找不到，抛出错误
+        $calledClass = get_called_class();
+        throw new Error("Access to undeclared property: {$calledClass}::\${$name}");
+    }
+
+    /**
+     * 代理对实例属性的写入。
+     * 当写入一个不存在的属性时，尝试写入实例中。
+     *
+     * @param string $name 属性名
+     * @param mixed $value 值
+     * @return void
+     * @throws Error 如果属性不存在
+     */
+    public function __set($name, $value)
+    {
+        // 如果有实例，尝试写入实例属性
+        if (!is_null($this->instance) && property_exists($this->instance, $name)) {
+            $this->instance->$name = $value;
+            return;
+        }
+
+        // 如果找不到，抛出错误
+        $calledClass = get_called_class();
+        throw new Error("Cannot set undeclared property: {$calledClass}::\${$name}");
+    }
+
+    /**
      * 调用实例方法
      * Call instance methods
      *
@@ -55,9 +97,10 @@ class baseDelegate
 
         if (is_callable([$this->instance, $name])) {
             return call_user_func_array([$this->instance, $name], $arguments);
-        } else {
-            throw new BadMethodCallException("The method {$name} does not exist in the class " . get_class($this->instance) . '.');
         }
+
+        $calledClass = get_called_class();
+        throw new BadMethodCallException("The method {$name} does not exist in the class {$calledClass}.");
     }
 
     /**
@@ -87,8 +130,32 @@ class baseDelegate
 
         if (is_callable([$className, $name])) {
             return call_user_func_array([$className, $name], $arguments);
-        } else {
-            throw new BadMethodCallException("The method {$name} does not exist in the class {$calledClass}.");
         }
+
+        if (property_exists($className, $name) && count($arguments) === 1) {
+            // 支持静态属性的直接赋值
+            $className::$$name = $arguments[0];
+            return;
+        }
+
+        if (property_exists($className, $name) && count($arguments) === 0) {
+            // 支持静态属性的直接读取
+            return $className::$$name;
+        }
+
+        if (strpos($name, 'set') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 1) {
+            // 支持静态属性的 set 方法
+            $property = lcfirst(substr($name, 3));
+            $className::$$property = $arguments[0];
+            return;
+        }
+
+        if (strpos($name, 'get') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 0) {
+            // 支持静态属性的 get 方法
+            $property = lcfirst(substr($name, 3));
+            return $className::$$property;
+        }
+
+        throw new BadMethodCallException("The method {$name} does not exist in the class {$calledClass}.");
     }
 }
