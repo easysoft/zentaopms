@@ -679,4 +679,27 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectList method.
+     *
+     * @param  string $table
+     * @param  array  $idList
+     * @access public
+     * @return array|int
+     */
+    public function getProjectListTest(string $table, array $idList): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProjectList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $table, $idList);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
 }
