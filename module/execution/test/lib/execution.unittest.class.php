@@ -2638,12 +2638,34 @@ class executionTest
      * @access public
      * @return string
      */
-    public function formatTasksForTreeTest($executionID)
+    public function formatTasksForTreeTest($param = null)
     {
-        global $app;
-        $app->moduleName = 'task';
-        $tasks = $this->executionModel->getSearchTasks("execution = $executionID", 'id_desc');
-        return $this->executionModel->formatTasksForTree($tasks);
+        global $app, $tester;
+
+        // 使用tao层的方法
+        $executionTao = $tester->loadTao('execution');
+
+        // 如果是数组参数，直接测试formatTasksForTree方法
+        if(is_array($param))
+        {
+            return $executionTao->formatTasksForTree($param);
+        }
+
+        // 如果是executionID，获取任务数据
+        $executionID = $param;
+        if(empty($executionID)) return array();
+
+        // 直接使用DAO查询任务数据，避免复杂的processTasks逻辑
+        $tasks = $this->executionModel->dao->select('*')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        if(empty($tasks)) return array();
+
+        // 调用tao层的formatTasksForTree方法
+        return $executionTao->formatTasksForTree($tasks);
     }
 
     /**
@@ -3559,6 +3581,21 @@ class executionTest
     public function getTotalEstimateTest(int $executionID): float
     {
         $result = $this->objectModel->getTotalEstimate($executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTaskGroups method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return array
+     */
+    public function getTaskGroupsTest(int $executionID): array
+    {
+        $result = $this->objectModel->getTaskGroups($executionID);
         if(dao::isError()) return dao::getError();
 
         return $result;
