@@ -2103,4 +2103,19 @@ class metricTest
 
         return $result;
     }
+
+    /**
+     * Test fetchMetricsByCollect method.
+     *
+     * @param  string $stage
+     * @access public
+     * @return mixed
+     */
+    public function fetchMetricsByCollectTest($stage)
+    {
+        $result = $this->objectTao->fetchMetricsByCollect($stage);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
