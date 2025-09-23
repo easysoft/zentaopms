@@ -7,7 +7,7 @@ title=测试 convertTao::importJiraUser();
 timeout=0
 cid=0
 
-- 步骤4：空数据列表导入 @1
+- 执行convertTest模块的importJiraUserTest方法，参数是array  @1
 
 */
 
@@ -69,34 +69,42 @@ su('admin');
 $convertTest = new convertTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
+
+// 步骤1：导入正常Jira用户数据，验证用户创建和临时关系记录
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'newuser1', 'email' => 'newuser1@test.com', 'realname' => '新用户1', 'join' => '2023-01-01 00:00:00'),
     (object)array('account' => 'newuser2', 'email' => 'newuser2@test.com', 'realname' => '新用户2')
-))) && p() && e(1); // 步骤1：正常Jira用户数据导入
+))) && p() && e(1);
 
+// 步骤2：导入包含已存在用户的数据，验证跳过逻辑
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'existing1', 'email' => 'existing1@test.com', 'realname' => '已存在用户1'),
     (object)array('account' => 'newuser3', 'email' => 'newuser3@test.com', 'realname' => '新用户3')
-))) && p() && e(1); // 步骤2：包含已存在用户的数据导入
+))) && p() && e(1);
 
+// 步骤3：导入包含Atlassian内部账号的数据，验证过滤逻辑
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'atlassian1', 'email' => 'user@connect.atlassian.com', 'realname' => 'Atlassian用户1'),
     (object)array('account' => 'newuser4', 'email' => 'newuser4@test.com', 'realname' => '新用户4')
-))) && p() && e(1); // 步骤3：包含Atlassian内部账号的数据导入
+))) && p() && e(1);
 
-r($convertTest->importJiraUserTest(array())) && p() && e(1); // 步骤4：空数据列表导入
+// 步骤4：导入空数据列表，验证空处理
+r($convertTest->importJiraUserTest(array())) && p() && e(1);
 
+// 步骤5：导入包含无效邮箱的用户数据，验证数据处理
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'invaliduser', 'email' => '', 'realname' => '无邮箱用户'),
     (object)array('account' => 'validuser', 'email' => 'valid@test.com', 'realname' => '有效用户')
-))) && p() && e(1); // 步骤5：包含无效邮箱的用户数据导入
+))) && p() && e(1);
 
+// 步骤6：验证用户组分配功能，检查usergroup表记录
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'groupuser1', 'email' => 'groupuser1@test.com', 'realname' => '用户组测试用户1'),
     (object)array('account' => 'groupuser2', 'email' => 'groupuser2@test.com', 'realname' => '用户组测试用户2')
-))) && p() && e(1); // 步骤6：测试用户组分配功能
+))) && p() && e(1);
 
+// 步骤7：验证重复账号和临时关系记录的处理
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'duplicateuser', 'email' => 'duplicate@test.com', 'realname' => '重复用户'),
     (object)array('account' => 'relationuser', 'email' => 'relation@test.com', 'realname' => '关系测试用户')
-))) && p() && e(1); // 步骤7：测试JIRA_TMPRELATION关系记录
+))) && p() && e(1);
