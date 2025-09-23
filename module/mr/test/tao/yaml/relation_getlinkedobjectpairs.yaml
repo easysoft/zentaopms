@@ -1,0 +1,82 @@
+title: table zt_relation
+desc: "MR关联对象关系测试数据"
+author: automated test
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AType
+    note: "源对象类型"
+    range: mr
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AID
+    note: "源对象ID"
+    range: 1{9},2{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AVersion
+    note: "源对象版本"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: relation
+    note: "关联关系"
+    range: linkedto
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BType
+    note: "目标对象类型"
+    range: story{3},task{3},bug{3},task{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BID
+    note: "目标对象ID"
+    range: 1,4,7,2,5,8,3,6,9,10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BVersion
+    note: "目标对象版本"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: "额外信息"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

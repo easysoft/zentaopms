@@ -1361,4 +1361,30 @@ class mrTest
 
         return $result;
     }
+
+    /**
+     * Test getLinkedObjectPairs method.
+     *
+     * @param  int    $MRID
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedObjectPairsTest(int $MRID, string $objectType = 'story')
+    {
+        global $app;
+        $originalRawModule = $app->rawModule ?? '';
+        $app->rawModule = 'mr';
+
+        $method = new ReflectionMethod($this->objectTao, 'getLinkedObjectPairs');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $MRID, $objectType);
+        if(dao::isError()) {
+            $app->rawModule = $originalRawModule;
+            return dao::getError();
+        }
+
+        $app->rawModule = $originalRawModule;
+        return $result;
+    }
 }
