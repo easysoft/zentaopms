@@ -3,33 +3,53 @@
 
 /**
 
-title=测试 loadModel->getStageList()
+title=测试 programplanTao::getStageList();
+timeout=0
 cid=0
 
-- 获取id为3下的阶段名称属性name @阶段a子1子1
-- 获取的不存的id和项目产品id 的阶段信息 @0
-- 获取id为1下的阶段条数 @2
+- 步骤1：正常情况 - 获取指定执行下的阶段第2条的name属性 @阶段1-1
+- 步骤2：边界值 - 不存在的执行ID和产品ID @0
+- 步骤3：异常输入 - 空执行ID @0
+- 步骤4：不同browseType测试 @0
+- 步骤5：排序测试第3条的name属性 @阶段1-2
+- 步骤6：leaf类型测试第4条的name属性 @阶段2-1
+- 步骤7：权限控制测试第2条的name属性 @阶段1-1
 
 */
 
-include dirname(__FILE__, 5). '/test/lib/init.php';
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+
+// 2. zendata数据准备
+$projectTable = zenData('project');
+$projectTable->id->range('1-10');
+$projectTable->project->range('0,1,1,2,2,3,3,4,4,5');
+$projectTable->name->range('项目1,阶段1-1,阶段1-2,阶段2-1,阶段2-2,阶段3-1,阶段3-2,阶段4-1,阶段4-2,阶段5-1');
+$projectTable->type->range('project,stage,stage,stage,stage,stage,stage,stage,stage,stage');
+$projectTable->status->range('wait{3},doing{4},closed{3}');
+$projectTable->deleted->range('0{8},1{2}');
+$projectTable->enabled->range('on{8},off{2}');
+$projectTable->model->range('scrum{5},waterfallplus{3},ipd{2}');
+$projectTable->gen(10);
+
+$productTable = zenData('projectproduct');
+$productTable->project->range('1-10');
+$productTable->product->range('1{3},2{3},3{4}');
+$productTable->gen(10);
+
+// 3. 用户登录
 su('admin');
 
-zenData('project')->loadYaml('project')->gen(5);
-zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
+// 4. 创建测试实例
+$programplanTest = new programplanTest();
 
-global $tester;
-$tester->loadModel('programplan');
-$tester->programplan->app->user->admin = true;
-
-$browseType = 'parent';
-$IDList = array(1, 2, 3, 4, 5, 100);
-
-$result = $tester->programplan->getStageList($IDList[2], 2, $browseType);
-r($result[4]) && p('name') && e('阶段a子1子1'); // 获取id为3下的阶段名称
-
-$result = $tester->programplan->getStageList($IDList[5], 100, $browseType);
-r($result) && p() && e('0'); // 获取的不存的id和项目产品id 的阶段信息
-
-$result = $tester->programplan->getStageList($IDList[0], 2, $browseType);
-r(count($result)) && p() && e('2'); // 获取id为1下的阶段条数
+// 5. 测试步骤（至少5个）
+r($programplanTest->getStageListTest(1, 1, 'all', 'id_asc')) && p('2:name') && e('阶段1-1'); // 步骤1：正常情况 - 获取指定执行下的阶段
+r($programplanTest->getStageListTest(999, 999, 'all', 'id_asc')) && p() && e('0'); // 步骤2：边界值 - 不存在的执行ID和产品ID
+r($programplanTest->getStageListTest(0, 1, 'all', 'id_asc')) && p() && e('0'); // 步骤3：异常输入 - 空执行ID
+r($programplanTest->getStageListTest(1, 1, 'parent', 'id_asc')) && p() && e('0'); // 步骤4：不同browseType测试
+r($programplanTest->getStageListTest(1, 1, 'all', 'id_desc')) && p('3:name') && e('阶段1-2'); // 步骤5：排序测试
+r($programplanTest->getStageListTest(2, 2, 'leaf', 'id_asc')) && p('4:name') && e('阶段2-1'); // 步骤6：leaf类型测试
+su('user'); // 切换非管理员用户
+r($programplanTest->getStageListTest(1, 1, 'all', 'id_asc')) && p('2:name') && e('阶段1-1'); // 步骤7：权限控制测试

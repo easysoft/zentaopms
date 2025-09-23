@@ -1007,4 +1007,26 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test getStageList method.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStageListTest(int $executionID, int $productID, string $browseType, string $orderBy = 'id_asc'): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStageList');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $executionID, $productID, $browseType, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
