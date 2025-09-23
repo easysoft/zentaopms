@@ -1272,4 +1272,19 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getGitlabGroups method.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return mixed
+     */
+    public function getGitlabGroupsTest(int $gitlabID)
+    {
+        $result = $this->objectModel->getGitlabGroups($gitlabID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
