@@ -1,5 +1,5 @@
 <?php
-include dirname(__FILE__, 6) . '/test/lib/ui.php';
+require_once dirname(__FILE__, 6) . '/test/lib/ui.php';
 class createUserTester extends tester
 {
     /**
