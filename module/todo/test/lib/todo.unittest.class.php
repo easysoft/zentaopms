@@ -702,4 +702,45 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test getTodoCountByAccount method.
+     *
+     * @param  string $account
+     * @access public
+     * @return int
+     */
+    public function getTodoCountByAccountTest(string $account): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getTodoCountByAccount');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $account);
+        if(dao::isError()) return 0;
+
+        return (int)$result;
+    }
+
+    /**
+     * Test setTodoNameByType method.
+     *
+     * @param  int $todoID
+     * @access public
+     * @return object
+     */
+    public function setTodoNameByTypeTest(int $todoID): object
+    {
+        $todo = $this->objectModel->getByID($todoID);
+        if(!$todo) return new stdclass();
+
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('setTodoNameByType');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todo);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
