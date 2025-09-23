@@ -109,3 +109,37 @@ r($pivotTest->pureCrystalDataTest(array(
         'groups' => array('type' => 'comprehensive', 'status' => 'active')
     )
 ))) && p('0:type,col1:value,col2_part1:value,col2:total,col3:value') && e('comprehensive,100,50,110,200');
+
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'col1' => array(
+                'cellData' => array()
+            )
+        ),
+        'groups' => array('empty' => 'test')
+    )
+))) && p('0:empty') && e('test');
+
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'col1' => array(
+                'cellData' => array(
+                    'slice1' => array('label' => 'NoValue'),
+                    'slice2' => array('count' => 5)
+                )
+            )
+        ),
+        'groups' => array('missing' => 'value')
+    )
+))) && p('0:col1_slice1:label,col1_slice2:count') && e('NoValue,5');
+
+r($pivotTest->pureCrystalDataTest(array_fill(0, 50, array(
+    'columns' => array(
+        'metric' => array(
+            'cellData' => array('value' => 10)
+        )
+    ),
+    'groups' => array('batch' => 'data')
+)))) && p() && e('50');
