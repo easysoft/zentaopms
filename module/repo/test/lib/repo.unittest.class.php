@@ -216,10 +216,12 @@ class repoTest
         return $objects;
     }
 
-    public function getBranchesTest(int $repoID, bool $printLabel = false)
+    public function getBranchesTest(int $repoID, bool $printLabel = false, string $source = 'scm')
     {
         $repo = $this->objectModel->getByID($repoID);
-        $objects = $this->objectModel->getBranches($repo, $printLabel);
+        if(!$repo) return array();
+
+        $objects = $this->objectModel->getBranches($repo, $printLabel, $source);
 
         if(dao::isError()) return dao::getError();
 

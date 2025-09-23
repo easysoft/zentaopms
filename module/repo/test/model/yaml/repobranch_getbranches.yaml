@@ -1,0 +1,11 @@
+title: zt_repobranch测试数据 - getBranches方法
+author: Claude
+version: 1.0
+
+fields:
+  - field: repo
+    range: 1{2},2{2},3{0}
+  - field: revision
+    range: 1,2,3,4
+  - field: branch
+    range: master{2},develop{2}
