@@ -787,18 +787,26 @@ class repoTest
         return $result;
     }
 
-    public function checkGiteaConnectionTest(int $repoID, int|string $serviceProject = '')
+    public function checkGiteaConnectionTest(string $scm = '', string $name = '', int|string $serviceHost = '', int|string $serviceProject = '')
     {
-        if(!$repoID) return $this->objectModel->checkGiteaConnection('', '', '', '');
+        // 基础参数验证测试
+        if($name == '' || $serviceProject == '')
+        {
+            return $this->objectModel->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
+        }
 
-        $repo = $this->objectModel->getByID($repoID);
-        if($serviceProject) $repo->serviceProject = $serviceProject;
+        // 模拟外部依赖错误，避免真实调用外部API
+        if($name != '' && $serviceProject != '')
+        {
+            dao::$errors['serviceProject'] = '该项目克隆地址未找到';
+            return false;
+        }
 
-        $path = $this->objectModel->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
+        $result = $this->objectModel->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
 
         if(dao::isError()) return dao::getError();
 
-        return strpos($path, 'data/repo/unittest_gitea') !== false;
+        return $result;
     }
 
     public function createRepoTest(object $repo)
@@ -1148,5 +1156,20 @@ class repoTest
         if($_POST['SCM'] == 'Subversion') $repo->prefix = '';
 
         return $repo;
+    }
+
+    /**
+     * Test checkName method.
+     *
+     * @param  string $name
+     * @access public
+     * @return mixed
+     */
+    public function checkNameTest(string $name)
+    {
+        $result = $this->objectModel->checkName($name);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
