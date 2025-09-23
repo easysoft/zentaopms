@@ -174,7 +174,7 @@ class FineDiff {
      */
     public static function renderDiffToHTMLFromOpcodes($from, $opcodes) {
         ob_start();
-        FineDiff::renderFromOpcodes($from, $opcodes, array('FineDiff','renderDiffToHTMLFromOpcode'));
+        FineDiff::renderFromOpcodes($from, $opcodes, array(__NAMESPACE__ . '\FineDiff','renderDiffToHTMLFromOpcode'));
         return ob_get_clean();
     }
 

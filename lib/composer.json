@@ -24,5 +24,20 @@
         "psr/simple-cache": "1.0.1",
         "rmccue/requests": "2.0.15",
         "symfony/finder": "3.4.47"
+    },
+    "config": {
+        "allow-plugins": {
+            "cweagans/composer-patches": true
+        }
+    },
+    "require-dev": {
+        "cweagans/composer-patches": "^1.7"
+    },
+    "extra": {
+        "patches": {
+            "gorhill/php-fine-diff": {
+                "Fix class reference to work with namespaces": "patches/finediff-fix-class-reference.patch"
+            }
+        }
     }
 }

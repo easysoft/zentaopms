@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '14f290ae63a7ce26371b9598aeb5517f537e61c7',
+        'reference' => '5f83c88b4d1af794b335f1cab1e918fe88526d5f',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '14f290ae63a7ce26371b9598aeb5517f537e61c7',
+            'reference' => '5f83c88b4d1af794b335f1cab1e918fe88526d5f',
             'dev_requirement' => false,
         ),
         'box/spout' => array(
@@ -27,6 +27,15 @@
             'aliases' => array(),
             'reference' => '3681a3421a868ab9a65da156c554f756541f452b',
             'dev_requirement' => false,
+        ),
+        'cweagans/composer-patches' => array(
+            'pretty_version' => '1.7.3',
+            'version' => '1.7.3.0',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../cweagans/composer-patches',
+            'aliases' => array(),
+            'reference' => 'e190d4466fe2b103a55467dfa83fc2fecfcaf2db',
+            'dev_requirement' => true,
         ),
         'dragonmantank/cron-expression' => array(
             'pretty_version' => 'v2.3.1',
