@@ -3356,7 +3356,6 @@ $config->group->package->template->order  = 5;
 $config->group->package->template->subset = 'generaltemplate';
 $config->group->package->template->privs  = array();
 $config->group->package->template->privs['user-setPublicTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->template->privs['datatable-setGlobal']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->automation = new stdclass();
 $config->group->package->automation->order  = 5;
