@@ -129,9 +129,19 @@ class sonarqubeTest
         return $result;
     }
 
-    public function apiGetProjectsTest($sonarqubeID, $keyword = '')
+    /**
+     * Test apiGetProjects method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $keyword
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
+    public function apiGetProjectsTest($sonarqubeID, $keyword = '', $projectKey = '')
     {
-        $result = $this->objectModel->apiGetProjects($sonarqubeID, $keyword);
+        $result = $this->objectModel->apiGetProjects($sonarqubeID, $keyword, $projectKey);
+        if(dao::isError()) return dao::getError();
 
         if(empty($result)) $result = 'return empty';
         return $result;
