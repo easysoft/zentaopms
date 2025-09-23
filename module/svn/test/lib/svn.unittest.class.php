@@ -123,4 +123,20 @@ class svnTest
 
         return $this->objectModel->loadModel('repo')->getByID($repoID);
     }
+
+    /**
+     * Test cat method.
+     *
+     * @param  string $url
+     * @param  int    $revision
+     * @access public
+     * @return mixed
+     */
+    public function catTest(string $url, int $revision)
+    {
+        $result = $this->objectModel->cat($url, $revision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
