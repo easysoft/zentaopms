@@ -1,0 +1,48 @@
+---
+title: 测试svnModel::getRepos()方法的仓库数据
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-20
+- field: product
+  range: 1,2,3,0
+- field: projects
+  range: '1,2'
+- field: name
+  range: svn-repo{5}, git-repo{5}, gitlab-repo{5}, subversion-repo{5}
+- field: path
+  range: ['https://svn.example.com/svn/repo{5}', 'https://git.example.com/repo{5}', 'https://gitlab.example.com/repo{5}', '/local/svn/repo{5}']
+- field: prefix
+  range: ''
+- field: encoding
+  range: utf-8{15},gbk{3},gb2312{2}
+- field: SCM
+  range: Subversion{10},Git{5},Gitlab{5}
+- field: client
+  range: /usr/bin/svn{10},/usr/bin/git{10}
+- field: serviceHost
+  range: ''
+- field: serviceProject
+  range: ''
+- field: commits
+  range: 0-1000:R
+- field: account
+  range: admin{5},user{5},tester{5},[']{5}
+- field: password
+  range: password{10},[']{10}
+- field: encrypt
+  range: plain{15},base64{5}
+- field: acl
+  range: ['']
+- field: synced
+  range: 0{10},1{10}
+- field: lastSync
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':86400D
+- field: lastCommit
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':86400D
+- field: desc
+  range: 测试仓库{10},正式仓库{5},开发仓库{5}
+- field: deleted
+  range: 0{18},1{2}

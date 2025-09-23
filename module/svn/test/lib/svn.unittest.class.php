@@ -179,4 +179,20 @@ class svnTest
 
         return $result;
     }
+
+    /**
+     * Test getRepos method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getReposTest(): array
+    {
+        ob_start();
+        $result = $this->objectModel->getRepos();
+        $output = ob_get_clean();
+        if(dao::isError()) return dao::getError();
+
+        return array('repos' => $result, 'output' => $output);
+    }
 }
