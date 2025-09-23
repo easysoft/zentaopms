@@ -1,0 +1,49 @@
+---
+title: zt_repo测试数据 - getLinkedProducts方法
+desc: 用于测试sonarqube模块getLinkedProducts方法的repo表数据
+author: Claude Code
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-5
+- field: product
+  range: "1,2,3,,1"
+- field: projects
+  range: "1,2,3,4,1"
+- field: name
+  range: "zentaopms主仓库,产品测试仓库,项目开发仓库,空产品仓库,备用仓库"
+- field: path
+  range: "/var/repos/zentaopms,/var/repos/product,/var/repos/project,/var/repos/empty,/var/repos/backup"
+- field: prefix
+  range: ""
+- field: encoding
+  range: utf-8
+- field: SCM
+  range: git
+- field: client
+  range: "/usr/bin/git"
+- field: serviceHost
+  range: ""
+- field: serviceProject
+  range: ""
+- field: commits
+  range: 100,50,80,0,30
+- field: account
+  range: ""
+- field: password
+  range: ""
+- field: encrypt
+  range: plain
+- field: acl
+  range: ""
+- field: synced
+  range: 1,1,1,0,1
+- field: lastSync
+  range: "2023-01-01 10:00:00"
+- field: lastCommit
+  range: "2023-01-01 09:30:00"
+- field: desc
+  range: "ZenTao主代码仓库,产品相关代码,项目开发代码,测试空仓库,备份仓库"
+- field: deleted
+  range: 0

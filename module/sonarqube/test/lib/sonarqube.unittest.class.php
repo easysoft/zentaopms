@@ -458,4 +458,20 @@ class sonarqubeTest
 
         return $result;
     }
+
+    /**
+     * Test getLinkedProducts method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedProductsTest($sonarqubeID, $projectKey)
+    {
+        $result = $this->objectModel->getLinkedProducts($sonarqubeID, $projectKey);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
