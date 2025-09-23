@@ -1,17 +1,10 @@
 <?php
+declare(strict_types = 1);
 class pivotZenTest
 {
-    public $pivotZenTest;
-    public $tester;
-
-    function __construct()
+    public function __construct()
     {
-        global $tester;
-        $this->tester = $tester;
-        $tester->app->setModuleName('pivot');
-        $tester->loadModel('pivot');
-
-        $this->pivotZenTest = initReference('pivot');
+        $this->objectZen = initReference('pivot');
     }
 
     /**
@@ -19,13 +12,14 @@ class pivotZenTest
      *
      * @param  array $products
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function processProductsForProductSummaryTest(array $products): array
+    public function processProductsForProductSummaryTest($products = null)
     {
-        $method = $this->pivotZenTest->getMethod('processProductsForProductSummary');
+        $method = $this->objectZen->getMethod('processProductsForProductSummary');
         $method->setAccessible(true);
-        $result = $method->invokeArgs($this->pivotZenTest->newInstance(), [$products]);
+        $instance = $this->objectZen->newInstance();
+        $result = $method->invoke($instance, $products);
         if(dao::isError()) return dao::getError();
 
         return $result;

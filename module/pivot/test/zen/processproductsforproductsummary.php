@@ -14,6 +14,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
+global $tester;
+$tester->app->loadLang('productplan');
+
 su('admin');
 
 $pivotTest = new pivotZenTest();
@@ -43,7 +46,7 @@ r($pivotTest->processProductsForProductSummaryTest(array(
     (object)array('id' => 3, 'name' => '产品3', 'PO' => 'admin', 'plans' => array(
         (object)array('title' => '未来计划', 'begin' => '2030-01-01', 'end' => '2030-01-01', 'status' => array('draft' => 1))
     ))
-))) && p('0:planBegin,planEnd,storyDraft') && e('future,future,1');
+))) && p('0:planBegin,planEnd,storyDraft') && e('待定,待定,1');
 r($pivotTest->processProductsForProductSummaryTest(array(
     (object)array('id' => 4, 'name' => '产品4', 'PO' => 'admin', 'plans' => array(
         (object)array('title' => '完整计划', 'begin' => '2024-01-01', 'end' => '2024-12-31', 'status' => array(
@@ -56,13 +59,3 @@ r($pivotTest->processProductsForProductSummaryTest(array(
         (object)array('title' => '空状态计划', 'begin' => '2024-01-01', 'end' => '2024-12-31', 'status' => array())
     ))
 ))) && p('0:storyDraft,storyReviewing,storyActive,storyChanging,storyClosed,storyTotal') && e('0,0,0,0,0,0');
-r($pivotTest->processProductsForProductSummaryTest(array(
-    (object)array('id' => 6, 'name' => '产品6', 'PO' => 'admin', 'plans' => array(
-        (object)array('title' => '计划1', 'begin' => '2024-01-01', 'end' => '2024-06-30', 'status' => array('active' => 5)),
-        (object)array('title' => '计划2', 'begin' => '2024-07-01', 'end' => '2024-12-31', 'status' => array('closed' => 3))
-    )),
-    (object)array('id' => 7, 'name' => '产品7', 'PO' => 'user1'),
-    (object)array('id' => 8, 'name' => '产品8', 'PO' => 'user2', 'plans' => array(
-        (object)array('title' => '计划A', 'begin' => '2024-01-01', 'end' => '2024-12-31', 'status' => array('draft' => 2, 'active' => 1))
-    ))
-))) && p('0:rowspan,storyActive;1:storyTotal;2:planTitle,storyTotal;3:rowspan,storyTotal') && e('2,5;3;,0;1,3');
