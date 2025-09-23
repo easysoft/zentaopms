@@ -180,6 +180,21 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test getByID method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getByIDTest($repoID)
+    {
+        $result = $this->objectModel->getByID($repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function getRepoByIDTest($repoID)
     {
         $objects = $this->objectModel->getRepoByID($repoID);
@@ -228,9 +243,23 @@ class repoTest
         return $objects;
     }
 
-    public function getCommitsTest($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
+    /**
+     * Test getCommits method.
+     *
+     * @param  object $repo    代码库对象
+     * @param  string $entry   文件路径
+     * @param  string $revision 版本号
+     * @param  string $type    类型
+     * @param  object $pager   分页对象
+     * @param  string $begin   开始时间
+     * @param  string $end     结束时间
+     * @param  mixed  $query   查询条件
+     * @access public
+     * @return array
+     */
+    public function getCommitsTest($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = '', $end = '', $query = null)
     {
-        $objects = $this->objectModel->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
+        $objects = $this->objectModel->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end, $query);
 
         if(dao::isError()) return dao::getError();
 
