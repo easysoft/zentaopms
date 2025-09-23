@@ -286,9 +286,12 @@ class screenTest
      * @access public
      * @return void
      */
-    public function buildComponentTest(object $component): void
+    public function buildComponentTest($component)
     {
-        $this->objectModel->buildComponent($component);
+        $result = $this->objectModel->buildComponent($component);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
