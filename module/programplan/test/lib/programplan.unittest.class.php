@@ -970,4 +970,21 @@ class programplanTest
             return false;
         }
     }
+
+    /**
+     * Test getReviewDeadline method.
+     *
+     * @param  string $date
+     * @param  int    $counter
+     * @access public
+     * @return string
+     */
+    public function getReviewDeadlineTest(string $date, int $counter = 5): string
+    {
+        $result = $this->objectTao->getReviewDeadline($date, $counter);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
