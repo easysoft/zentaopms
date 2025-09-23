@@ -291,6 +291,22 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test getLatestCommit method without count.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getLatestCommitTestWithoutCount(int $repoID)
+    {
+        $objects = $this->objectModel->getLatestCommit($repoID, false);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
     public function getRevisionsFromDBTest(int $repoID, int $limit = 0, string $maxRevision = '', string $minRevision = '')
     {
         $objects = $this->objectModel->getRevisionsFromDB($repoID, $limit, $maxRevision, $minRevision);
