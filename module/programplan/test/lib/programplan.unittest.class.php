@@ -909,4 +909,35 @@ class programplanTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getNewParentAndAction method.
+     *
+     * @param  array     $statusCount
+     * @param  object    $parent
+     * @param  int       $startTasks
+     * @param  string    $action
+     * @param  object    $project
+     * @access public
+     * @return array
+     */
+    public function getNewParentAndActionTest(array $statusCount, object $parent, int $startTasks, string $action, object $project): array
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getNewParentAndAction');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $statusCount, $parent, $startTasks, $action, $project);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
