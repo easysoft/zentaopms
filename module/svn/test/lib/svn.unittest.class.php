@@ -139,4 +139,19 @@ class svnTest
 
         return $result;
     }
+
+    /**
+     * Test convertLog method.
+     *
+     * @param  array $log
+     * @access public
+     * @return object|null
+     */
+    public function convertLogTest(array $log): object|null
+    {
+        $result = $this->objectModel->convertLog($log);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
