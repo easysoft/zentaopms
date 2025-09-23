@@ -158,7 +158,7 @@ class settingTest
      *
      * @param  string $account
      * @access public
-     * @return bool
+     * @return array|object
      */
     public function getSysAndPersonalConfigTest($account = '')
     {
@@ -166,7 +166,7 @@ class settingTest
 
         if(dao::isError()) return dao::getError();
 
-        return !empty($objects) ? true : false;
+        return $objects;
     }
 
     /**
