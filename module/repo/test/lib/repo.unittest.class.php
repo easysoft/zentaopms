@@ -1226,4 +1226,19 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getCommitsByRevisions method.
+     *
+     * @param  array $revisions
+     * @access public
+     * @return mixed
+     */
+    public function getCommitsByRevisionsTest(array $revisions)
+    {
+        $result = $this->objectModel->getCommitsByRevisions($revisions);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
