@@ -256,7 +256,10 @@ class repoTest
 
     public function getRepoListByUrlTest($url = '')
     {
-        $objects = $this->objectModel->getRepoListByUrl($url = '');
+        // 确保参数是字符串类型，处理null值
+        $url = (string)$url;
+
+        $objects = $this->objectModel->getRepoListByUrl($url);
 
         if(dao::isError()) return dao::getError();
 
@@ -1340,6 +1343,23 @@ class repoTest
     public function getGitlabProjectsTest(int $gitlabID, string $projectFilter = '')
     {
         $result = $this->objectModel->getGitlabProjects($gitlabID, $projectFilter);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getRelationByCommit method.
+     *
+     * @param  int    $repoID
+     * @param  string $commit
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getRelationByCommitTest(int $repoID, string $commit, string $type = ''): array
+    {
+        $result = $this->objectModel->getRelationByCommit($repoID, $commit, $type);
         if(dao::isError()) return dao::getError();
 
         return $result;
