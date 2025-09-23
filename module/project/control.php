@@ -1532,7 +1532,7 @@ class project extends control
 
         $response['result']     = 'success';
         $response['closeModal'] = true;
-        $response['load']       = inlink('browse');
+        $response['load']       = $this->app->tab == 'my' ? true : inlink('browse');
 
         $message = $this->executeHooks($projectID);
         if($message) $response['message'] = $message;

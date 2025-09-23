@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('delayInfo', $lang->project->delayInfo);
+jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
 featurebar
 (
