@@ -267,9 +267,18 @@ class releaseTest
      * @access public
      * @return false|array
      */
-    public function getToAndCcListTest($releaseID): false|array
+    public function getToAndCcListTest($releaseData): false|array
     {
-        $release = $this->objectModel->getByID($releaseID);
+        // 支持直接传入模拟数据对象或releaseID
+        if(is_object($releaseData))
+        {
+            $release = $releaseData;
+        }
+        else
+        {
+            $release = $this->objectModel->getByID($releaseData);
+            if(!$release) return false;
+        }
         return $this->objectModel->getToAndCcList($release);
     }
 
