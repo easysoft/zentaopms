@@ -1,37 +1,47 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
-su('admin');
-
-zenData('log')->gen(10);
 
 /**
 
-title=测试 webhookModel->getLogList();
+title=测试 webhookModel::getLogList();
 timeout=0
-cid=1
+cid=0
 
-- 统计ID为1的日志数量 @0
-- 统计ID为2的日志数量 @1
-- 统计ID不存在时的数量 @0
-- 取出ID为1的其中一个匹配操作内容第4条的action属性 @0
+- 执行webhook模块的getLogListTest方法，参数是1  @9
+- 执行webhook模块的getLogListTest方法，参数是999  @1
+- 执行webhook模块的getLogListTest方法，参数是1, 'id_asc' 第1条的id属性 @1
+- 执行webhook模块的getLogListTest方法，参数是2 第10条的action属性 @10
+- 执行webhook模块的getLogListTest方法，参数是3  @2
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+
+zenData('user')->gen(10);
+
+$logTable = zenData('log');
+$logTable->id->range('1-15');
+$logTable->objectType->range('webhook{15}');
+$logTable->objectID->range('1{9},2{3},3{2},999{1}');
+$logTable->action->range('1-15');
+$logTable->date->range('`2024-01-01 10:00:00`,`2024-01-02 11:00:00`,`2024-01-03 12:00:00`');
+$logTable->url->range('http://test1.com,http://test2.com,http://test3.com');
+$logTable->contentType->range('application/json{10},text/plain{5}');
+$logTable->data->range('{"msg":"test1"},{"msg":"test2"},{"msg":"test3"}');
+$logTable->result->range('success{10},failed{5}');
+$logTable->gen(15);
+
+zenData('action')->gen(15);
+zenData('story')->gen(50);
+zenData('task')->gen(50);
+
+su('admin');
+
 $webhook = new webhookTest();
 
-$ID = array();
-$ID[0] = 1;
-$ID[1] = 3;
-$ID[2] = 1111;
-
-$result1 = $webhook->getLogListTest($ID[0]);
-$result2 = $webhook->getLogListTest($ID[1]);
-$result3 = $webhook->getLogListTest($ID[2]);
-
-//a($result1);die;
-r(count($result1)) && p()           && e('0'); //统计ID为1的日志数量
-r(count($result2)) && p()           && e('1'); //统计ID为2的日志数量
-r(count($result3)) && p()           && e('0'); //统计ID不存在时的数量
-r($result1)        && p('4:action') && e('0'); //取出ID为1的其中一个匹配操作内容
+r(count($webhook->getLogListTest(1))) && p() && e('9');
+r(count($webhook->getLogListTest(999))) && p() && e('1');
+r($webhook->getLogListTest(1, 'id_asc')) && p('1:id') && e('1');
+r($webhook->getLogListTest(2)) && p('10:action') && e('10');
+r(count($webhook->getLogListTest(3))) && p() && e('2');
