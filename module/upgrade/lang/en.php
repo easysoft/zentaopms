@@ -115,7 +115,7 @@ $lang->upgrade->upgradingDocTemplates  = 'Upgrading templates data, please wait.
 $lang->upgrade->upgradeDocTemplatesTip = 'We are upgrading the historical data of the template. After the upgrade, it can be viewed and maintained in the template square under the document.';
 
 $lang->upgrade->weeklyReportTitle        = 'Week % s (% s ~% s)';
-$lang->upgrade->milestoneTitle           = '%s Milestone Report';
+$lang->upgrade->milestoneTitle           = 'Milestone Report';
 $lang->upgrade->upgradeProjectReports    = "Upgrading {$lang->projectCommon} report data";
 $lang->upgrade->upgradingProjectReports  = "Upgrading {$lang->projectCommon} report data, please wait...";
 $lang->upgrade->upgradeProjectReportsTip = "Detected %s {$lang->projectCommon} report-related data requiring an upgrade";
