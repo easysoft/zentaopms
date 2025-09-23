@@ -53,6 +53,21 @@ class storyTest
     }
 
     /**
+     * Test getDataOfStoriesPerModule method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerModuleTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerModule($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getDataOfStoriesPerEstimate method.
      *
      * @param  string $storyType
