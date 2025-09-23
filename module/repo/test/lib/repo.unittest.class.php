@@ -978,26 +978,58 @@ class repoTest
         return $result;
     }
 
+    /**
+     * Test saveRecord method.
+     *
+     * @param  object $action
+     * @param  object $log
+     * @param  string $repoRoot
+     * @param  string $scm
+     * @param  bool   $returnHistory
+     * @access public
+     * @return mixed
+     */
     public function saveRecordTest(object $action, object $log, string $repoRoot, string $scm, bool $returnHistory = false)
     {
-        $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+        // 设置comment字段，如果没有则生成默认comment
+        if(!isset($action->comment))
+        {
+            $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+        }
 
+        // 创建changes数组
         $changes = $this->objectModel->createActionChanges($log, $repoRoot, $scm);
-        $this->objectModel->saveRecord($action, $changes);
+
+        // 调用被测试的saveRecord方法
+        $result = $this->objectModel->saveRecord($action, $changes);
 
         if(dao::isError()) return dao::getError();
 
-        $record = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+        // 查询保存的记录
+        $query = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($action->objectType)
             ->andWhere('objectID')->eq($action->objectID)
             ->andWhere('extra')->eq($action->extra)
-            ->andWhere('action')->eq($action->action)
-            ->fetch();
+            ->andWhere('action')->eq($action->action);
+
+        // 如果action有comment字段，加入查询条件
+        if(!empty($action->comment))
+        {
+            $query = $query->andWhere('comment')->eq($action->comment);
+        }
+
+        $record = $query->fetch();
+
         if($returnHistory)
         {
-            return $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($record->id)->fetch();
+            if($record)
+            {
+                return $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($record->id)->fetch();
+            }
+            return false;
         }
-        return $record;
+
+        return $record ? $record : false;
     }
 
     public function createActionChangesTest($log, $repoRoot, $scm = 'svn')
