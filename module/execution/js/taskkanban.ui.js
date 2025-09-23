@@ -300,8 +300,8 @@ window.getItem = function(info)
             label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span> ";
         }
 
-        if(label && typeof info.item.title == 'string')      info.item.title      = {html: label + info.item.title};
-        else if(label && typeof info.item.title == 'object') info.item.title.html = label + info.item.title.html;
+        if(typeof info.item.title == 'string') info.item.title = {html: info.item.title};
+        if(label && typeof info.item.title == 'object') info.item.title.html = label + info.item.title.html;
     }
 
     if(['story', 'epic', 'requirement', 'parentStory'].includes(info.laneInfo.type))

@@ -172,6 +172,7 @@ class execution extends control
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         foreach($tasks as $task)
         {
+            $task->name = htmlspecialchars_decode($task->name);
             if($task->mode == 'multi' && strpos('done,closed', $task->status) === false)
             {
                 $task->assignedTo = '';
