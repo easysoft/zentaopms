@@ -1455,13 +1455,25 @@ class repoTest
         return $result;
     }
 
+    /**
+     * Test parseBugComment method.
+     *
+     * @param  string $comment
+     * @access public
+     * @return array
+     */
     public function parseBugCommentTest(string $comment)
     {
         $rules   = $this->objectModel->processRules();
         $actions = array();
-        ob_start();
-        $result = $this->objectModel->parseBugComment($comment, $rules, $actions);
-        ob_end_clean();
+
+        // 使用反射调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('parseBugComment');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectTao, array($comment, $rules, &$actions));
+
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
