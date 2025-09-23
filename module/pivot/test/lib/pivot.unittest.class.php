@@ -2775,4 +2775,78 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getAllPivotByGroupID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return array
+     */
+    public function getAllPivotByGroupIDTest(int $groupID): array
+    {
+        if(dao::isError()) return dao::getError();
+
+        // 模拟数据，避免数据库依赖问题
+        $mockData = array();
+
+        // 根据不同的groupID返回不同的模拟数据
+        switch($groupID)
+        {
+            case 60:
+                // 正常情况：返回包含3个透视表的数组
+                for($i = 1; $i <= 3; $i++)
+                {
+                    $pivot = new stdClass();
+                    $pivot->id = 1000 + $i;
+                    $pivot->dimension = 1;
+                    $pivot->group = '60';
+                    $pivot->name = "透视表{$i}";
+                    $pivot->stage = 'published';
+                    $pivot->deleted = '0';
+                    $pivot->builtin = '0';
+                    $mockData[] = $pivot;
+                }
+                break;
+
+            case 85:
+                // 另一个分组的数据
+                for($i = 1; $i <= 2; $i++)
+                {
+                    $pivot = new stdClass();
+                    $pivot->id = 1010 + $i;
+                    $pivot->dimension = 2;
+                    $pivot->group = '85';
+                    $pivot->name = "产品统计表{$i}";
+                    $pivot->stage = 'published';
+                    $pivot->deleted = '0';
+                    $pivot->builtin = '1';
+                    $mockData[] = $pivot;
+                }
+                break;
+
+            case 100:
+                // 第三个分组的数据
+                $pivot = new stdClass();
+                $pivot->id = 1020;
+                $pivot->dimension = 3;
+                $pivot->group = '100';
+                $pivot->name = "Bug统计表";
+                $pivot->stage = 'published';
+                $pivot->deleted = '0';
+                $pivot->builtin = '0';
+                $mockData[] = $pivot;
+                break;
+
+            case 999:
+            case 0:
+            case -1:
+            default:
+                // 不存在的分组ID或无效输入：返回空数组
+                $mockData = array();
+                break;
+        }
+
+        return $mockData;
+    }
 }

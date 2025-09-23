@@ -1,0 +1,16 @@
+---
+title: pivotspec table data for getAllPivotByGroupID test
+author: test
+version: "1.0"
+
+fields:
+- field: pivot
+  range: 1001-1010
+- field: version
+  range: 1,2,3,1.1,1.2
+- field: name
+  range: 透视表1,透视表2,透视表3,产品统计表,Bug统计表
+- field: desc
+  range: 描述1,描述2,描述3
+- field: createdDate
+  range: 2024-01-01 10:00:00,2024-01-02 10:00:00,2024-01-03 10:00:00
