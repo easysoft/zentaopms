@@ -214,4 +214,21 @@ class svnTest
         if($output) return $output;
         return $result;
     }
+
+    /**
+     * Test printLog method.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function printLogTest(string $log): string
+    {
+        ob_start();
+        $this->objectModel->printLog($log);
+        $result = ob_get_clean();
+        if(dao::isError()) return dao::getError();
+
+        return trim($result);
+    }
 }
