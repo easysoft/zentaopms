@@ -2575,7 +2575,8 @@ eof;
         $rawModule = $moduleName;
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $moduleName     = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
+            if(empty($actionData['url']['current']))                                                                    $moduleName = $actionData['url']['module'];
+            if($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) $moduleName = $data->type;
             $methodName     = $actionData['url']['method'];
             $params         = $actionData['url']['params'];
             $storySubdivide = in_array($moduleName, array('epic', 'requirement', 'story')) && $action == 'subdivide';
