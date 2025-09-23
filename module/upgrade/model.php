@@ -11522,7 +11522,7 @@ class upgradeModel extends model
         $deliverable->name          = $this->lang->other;
         $deliverable->category      = 'other';
         $deliverable->module        = $moduleID;
-        $deliverable->activity      = $activityID;
+        $deliverable->activity      = $activityID ? $activityID : 0;
         $deliverable->workflowGroup = $workflowGroupID;
         $deliverable->template      = '[]';
         $deliverable->trimmable     = '1';
@@ -12155,6 +12155,7 @@ class upgradeModel extends model
                         $actionData->objectID = $reviewclID;
                         $this->dao->insert(TABLE_ACTION)->data($actionData)->exec();
 
+                        if(empty($reviewclHistory[$action->id])) continue;
                         $actionID = $this->dao->lastInsertID();
                         foreach($reviewclHistory[$action->id] as $history)
                         {
