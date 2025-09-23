@@ -238,12 +238,36 @@ class sonarqubeTest
         );
     }
 
+    /**
+     * Test getCacheFile method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
     public function getCacheFileTest($sonarqubeID, $projectKey)
     {
         $result = $this->objectModel->getCacheFile($sonarqubeID, $projectKey);
+        if(dao::isError()) return dao::getError();
 
-        if(strPos($result, '/' . $sonarqubeID . '-' ) !== false) return true;
-        if($result === false) return true;
+        // 如果返回false，说明缓存目录不可写
+        if($result === false) return 'cache directory not writable';
+
+        // 验证返回的路径格式：应该包含sonarqubeID和项目key的MD5
+        $expectedPattern = '/' . $sonarqubeID . '-' . md5($projectKey);
+        if(strpos($result, $expectedPattern) !== false)
+        {
+            // 进一步验证路径是否符合预期格式
+            $cacheRoot = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/tmp/cache';
+            $expectedPrefix = $cacheRoot . '/sonarqube/' . $sonarqubeID . '-';
+            if(strpos($result, $expectedPrefix) === 0) return 'valid cache path';
+            return 'path format correct';
+        }
+
+        // 如果是字符串但格式不符合预期
+        if(is_string($result)) return 'unexpected path format';
+
         return $result;
     }
 
