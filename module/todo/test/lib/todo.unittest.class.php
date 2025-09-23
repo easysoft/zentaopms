@@ -763,4 +763,24 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test updateRow method.
+     *
+     * @param  int    $todoID
+     * @param  object $todo
+     * @access public
+     * @return bool|array
+     */
+    public function updateRowTest(int $todoID, object $todo): bool|array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateRow');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoID, $todo);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
