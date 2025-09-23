@@ -195,4 +195,23 @@ class svnTest
 
         return array('repos' => $result, 'output' => $output);
     }
+
+    /**
+     * Test getRepoTags method.
+     *
+     * @param  object $repo
+     * @param  string $path
+     * @access public
+     * @return mixed
+     */
+    public function getRepoTagsTest(object $repo, string $path)
+    {
+        ob_start();
+        $result = $this->objectModel->getRepoTags($repo, $path);
+        $output = ob_get_clean();
+        if(dao::isError()) return dao::getError();
+
+        if($output) return $output;
+        return $result;
+    }
 }
