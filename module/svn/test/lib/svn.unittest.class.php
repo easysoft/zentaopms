@@ -26,17 +26,34 @@ class svnTest
     /**
      * Test run method.
      *
+     * @param  string $scenario 测试场景: normal|empty|error
      * @access public
-     * @return object|bool
+     * @return mixed
      */
-    public function runTest(): object|bool
+    public function runTest(string $scenario = 'normal')
     {
         ob_start();
-        $this->objectModel->run();
+        $result = $this->objectModel->run();
         ob_get_clean();
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq(2)->fetch();
+        switch($scenario)
+        {
+            case 'empty':
+                return $result;
+            case 'error':
+                return $result;
+            case 'repos':
+                $this->objectModel->setRepos();
+                return count($this->objectModel->repos);
+            case 'history':
+                $history = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->orderBy('id_desc')->limit(1)->fetch();
+                return $history ? $history : null;
+            case 'boolean':
+                return $result ? 'true' : 'false';
+            default:
+                return $result ? 'true' : 'false';
+        }
     }
 
     /**

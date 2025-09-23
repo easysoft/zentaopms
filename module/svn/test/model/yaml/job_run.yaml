@@ -1,0 +1,74 @@
+---
+title: 测试svnModel::run()方法的任务数据
+desc: 为run方法测试准备的job数据，包括commit和tag触发器
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  note: 任务ID
+  range: 201-210
+- field: name
+  note: 任务名称
+  range: ['commit-job', 'tag-job', 'test-job', 'build-job', 'deploy-job']
+- field: repo
+  note: 关联仓库ID
+  range: 101,102,103,101,102
+- field: product
+  note: 关联产品
+  range: 1,2,1,0,1
+- field: frame
+  note: 工具框架
+  range: ['junit', 'phpunit', 'pytest', 'sonarqube', 'testng']
+- field: engine
+  note: 引擎
+  range: ['jenkins', 'gitlab', 'jenkins', 'jenkins', 'gitlab']
+- field: server
+  note: 服务器ID
+  range: 1,2,3,1,2
+- field: pipeline
+  note: 流水线
+  range: ['test-pipeline', 'main-pipeline', 'dev-pipeline', 'build-pipeline', 'deploy-pipeline']
+- field: triggerType
+  note: 触发方式
+  range: ['commit', 'tag', 'commit', 'schedule', 'commit']
+- field: sonarqubeServer
+  note: Sonarqube服务器
+  range: 0,1,0,2,0
+- field: projectKey
+  note: 项目键
+  range: ['test-key', 'main-key', 'dev-key', 'build-key', 'deploy-key']
+- field: svnDir
+  note: SVN监控路径
+  range: ['/trunk', '/tags', '/branches', '/trunk/src', '/tags/v1.0']
+- field: atDay
+  note: 执行日期
+  range: 0,1,2,3,4
+- field: atTime
+  note: 执行时间
+  range: ['09:00', '12:00', '15:00', '18:00', '21:00']
+- field: customParam
+  note: 自定义参数
+  range: ['', '[]', '{"param":"value"}', '', '']
+- field: comment
+  note: 匹配关键字
+  range: ['task', 'bug', 'fix', 'feature', 'test']
+- field: createdBy
+  note: 创建者
+  range: ['admin', 'user', 'admin', 'tester', 'admin']
+- field: createdDate
+  note: 创建日期
+  range: '2023-01-01'-'2023-12-31':30D
+  format: YYYY-MM-DD
+- field: editedBy
+  note: 编辑者
+  range: ['', 'admin', '', 'user', '']
+- field: lastStatus
+  note: 最后状态
+  range: ['success', 'failed', 'running', 'pending', 'cancelled']
+- field: lastTag
+  note: 最后标签
+  range: ['v1.0', 'v2.0', '', 'v1.1', '']
+- field: deleted
+  note: 是否删除
+  range: 0{8},1{2}

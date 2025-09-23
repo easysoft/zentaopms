@@ -1,0 +1,29 @@
+---
+title: 测试svnModel::run()方法的提交历史数据
+desc: 为run方法测试准备的repohistory数据，包括提交历史记录
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  note: 历史记录ID
+  range: 301-320
+- field: repo
+  note: 仓库ID
+  range: 101,102,103,101,102,103,101,102,103,101
+- field: revision
+  note: 版本号
+  range: 1-10
+- field: commit
+  note: 提交号
+  range: 1-10
+- field: comment
+  note: 提交注释
+  range: ['+ Add initial file.', '+ Add secondary file.', '* Fix bug #123.', '+ Add new feature.', '* Update documentation.', '+ Add test cases.', '* Fix critical issue.', '+ Implement task #456.', '* Refactor code.', '+ Add configuration.']
+- field: committer
+  note: 提交者
+  range: ['admin', 'user', 'tester', 'developer', 'admin', 'user', 'admin', 'developer', 'tester', 'admin']
+- field: time
+  note: 提交时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':3600D
+  format: YYYY-MM-DD hh:mm:ss
