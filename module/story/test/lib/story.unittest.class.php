@@ -3831,4 +3831,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test extractAccountsFromList method.
+     *
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromListTest(array $stories): array
+    {
+        $result = $this->objectModel->extractAccountsFromList($stories);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
