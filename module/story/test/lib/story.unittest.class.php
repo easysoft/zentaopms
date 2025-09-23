@@ -38,6 +38,21 @@ class storyTest
     }
 
     /**
+     * Test getDataOfStoriesPerChange method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerChangeTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerChange($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test removeFormFieldsForCreate method.
      *
      * @param  array  $fields 表单字段数组
