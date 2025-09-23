@@ -1241,4 +1241,20 @@ class repoTest
 
         return count($result);
     }
+
+    /**
+     * Test getExecutionPairs method.
+     *
+     * @param  int $product
+     * @param  int $branch
+     * @access public
+     * @return mixed
+     */
+    public function getExecutionPairsTest(int $product, int $branch = 0)
+    {
+        $result = $this->objectModel->getExecutionPairs($product, $branch);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
