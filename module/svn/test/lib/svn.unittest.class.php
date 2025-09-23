@@ -297,4 +297,55 @@ class svnTest
 
         return $this->objectModel->repoRoot ? $this->objectModel->repoRoot : '0';
     }
+
+    /**
+     * Test setRepos method.
+     *
+     * @param  string $scenario 测试场景：normal|empty|duplicate|mixed|single
+     * @access public
+     * @return mixed
+     */
+    public function setReposTest(string $scenario = 'normal')
+    {
+        ob_start();
+        $this->objectModel->setRepos();
+        $output = ob_get_clean();
+        if(dao::isError()) return dao::getError();
+
+        switch($scenario)
+        {
+            case 'empty':
+                return array('output' => $output, 'count' => count($this->objectModel->repos));
+            case 'count':
+                return count($this->objectModel->repos);
+            case 'first':
+                return reset($this->objectModel->repos);
+            case 'properties':
+                $repo = reset($this->objectModel->repos);
+                if(!$repo) return array('hasAcl' => '', 'hasDesc' => '');
+                return array(
+                    'hasAcl' => isset($repo->acl) ? '1' : '0',
+                    'hasDesc' => isset($repo->desc) ? '1' : '0',
+                    'hasSCM' => isset($repo->SCM) ? '1' : '0',
+                    'hasPath' => isset($repo->path) ? '1' : '0'
+                );
+            case 'paths':
+                $paths = array();
+                foreach($this->objectModel->repos as $repo)
+                {
+                    $paths[] = $repo->path;
+                }
+                return array_unique($paths);
+            case 'scmTypes':
+                $scmTypes = array();
+                foreach($this->objectModel->repos as $repo)
+                {
+                    $scmTypes[] = $repo->SCM;
+                }
+                $uniqueTypes = array_unique($scmTypes);
+                return count($uniqueTypes) > 0 ? count($uniqueTypes) : '';
+            default:
+                return array('repos' => $this->objectModel->repos, 'output' => $output);
+        }
+    }
 }
