@@ -1270,6 +1270,8 @@ class storyModel extends model
         if($story->result != 'reject') $this->setStage($storyID);
         if($story->result == 'reject' && $this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
 
+        if($oldStory->parent) $this->computeEstimate($oldStory->parent);
+
         $changes = common::createChanges($oldStory, $story);
         if($changes)
         {
