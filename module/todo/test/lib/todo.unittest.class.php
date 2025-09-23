@@ -426,14 +426,66 @@ class todoTest
      * @access public
      * @return bool|string
      */
-    public function getCycleTodoDateTest(string $configType): bool|string
+    public function getCycleTodoDateTest(string $configType, int $todoId = 0, string $lastCycleDate = '', string $today = ''): mixed
     {
         global $tester;
-        $typeMap  = array('day' => 1, 'week' => 2, 'month' => 3);
-        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($typeMap[$configType])->fetchAll('id');
+
+        // 如果没有指定todoId，使用默认映射
+        if($todoId == 0)
+        {
+            $typeMap = array('day' => 1, 'week' => 2, 'month' => 3);
+            $todoId = $typeMap[$configType];
+        }
+
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoId)->fetchAll('id');
+        $todo = current($todoList);
+        if(!$todo) return false;
+
+        $todo->config = json_decode($todo->config);
+        if(dao::isError()) return dao::getError();
+        if(!$todo->config) return 'config_decode_error';
+
+        // 如果没有指定today，使用当前日期
+        if(empty($today)) $today = date('Y-m-d');
+
+        // 构造lastCycle对象
+        $lastCycle = '';
+        if(!empty($lastCycleDate))
+        {
+            $lastCycle = new stdClass();
+            $lastCycle->date = $lastCycleDate;
+        }
+
+        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+
+        // 对于按天类型，返回0表示false，1表示有日期
+        if($configType == 'day')
+        {
+            return $date === false ? '0' : ($date ? '1' : '0');
+        }
+
+        // 对于其他类型，直接返回日期或空字符串
+        return $date === false ? '0' : ($date ? $date : '');
+    }
+
+    /**
+     * Test getCycleTodoDate method with simple approach.
+     *
+     * @param  string $configType
+     * @param  int    $todoId
+     * @access public
+     * @return string
+     */
+    public function getCycleTodoDateTestSimple(string $configType, int $todoId): string
+    {
+        global $tester;
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoId)->fetchAll('id');
 
         $todo = current($todoList);
+        if(!$todo) return '0';
+
         $todo->config = json_decode($todo->config);
+        if(!$todo->config) return '0';
 
         $today     = date('Y-m-d');
         $cycleList = $this->objectModel->getCycleList($todoList);
@@ -441,11 +493,66 @@ class todoTest
 
         $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
 
-        if($configType == 'day')   return $date == false;
-        if($configType == 'week')  return $date == $today;
-        if($configType == 'month') return $date == $today;
+        if($configType == 'day')   return $date === false ? '0' : '1';
+        if($configType == 'week')  return $date == $today ? '1' : '0';
+        if($configType == 'month') return $date == $today ? '1' : '0';
 
-        return $date;
+        return $date ? '1' : '0';
+    }
+
+    /**
+     * Test getCycleTodoDate method with edge cases.
+     *
+     * @param  string $caseType
+     * @access public
+     * @return string
+     */
+    public function getCycleTodoDateTestEdgeCase(string $caseType): string
+    {
+        global $tester;
+
+        switch($caseType)
+        {
+            case 'valid_empty_result':
+                // 创建一个有效但会返回空结果的配置（周类型，但今天不匹配）
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'week';
+                $todo->config->week = '0,6'; // 只在周日和周六生效
+                $today = date('Y-m-d'); // 假设今天不是周日或周六
+                $date = $this->objectModel->getCycleTodoDate($todo, '', $today);
+                return empty($date) ? '0' : '1';
+
+            case 'invalid_type':
+                // 创建一个无效类型的todo对象
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'invalid';
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return empty($date) ? '0' : '1';
+
+            case 'empty_lastcycle':
+                // 使用第一个todo但空lastCycle
+                $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq(1)->fetchAll('id');
+                $todo = current($todoList);
+                $todo->config = json_decode($todo->config);
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return $date === false ? '0' : '1';
+
+            case 'past_config':
+                // 创建一个过期的配置
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'day';
+                $todo->config->day = '1';
+                $todo->config->begin = '2020-01-01';
+                $todo->config->end = '2020-12-31';
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return $date === false ? '0' : '1';
+
+            default:
+                return '0';
+        }
     }
 
     /**
