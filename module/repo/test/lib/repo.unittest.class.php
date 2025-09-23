@@ -415,6 +415,196 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test saveCommit method with mock data.
+     *
+     * @param  int    $repoID
+     * @param  string $scmType
+     * @param  int    $version
+     * @access public
+     * @return mixed
+     */
+    public function saveCommitWithMockDataTest(int $repoID, string $scmType = 'Git', int $version = 1)
+    {
+        global $dao;
+
+        // 模拟提交数据
+        $logs = array();
+        $logs['commits'] = array();
+
+        // 根据SCM类型创建不同的测试数据
+        if($scmType == 'Git')
+        {
+            for($i = 1; $i <= 3; $i++)
+            {
+                $commit = new stdclass();
+                $commit->revision = 'git-commit-' . $i . '-' . time();
+                $commit->committer = 'test-user-' . $i;
+                $commit->time = date('Y-m-d H:i:s', time() - (3600 * $i));
+                $commit->comment = 'Test commit message ' . $i;
+                $logs['commits'][] = $commit;
+            }
+        }
+        else if($scmType == 'Subversion')
+        {
+            for($i = 1; $i <= 2; $i++)
+            {
+                $commit = new stdclass();
+                $commit->revision = 'svn-r' . (1000 + $i);
+                $commit->committer = 'svn-user-' . $i;
+                $commit->time = date('Y-m-d H:i:s', time() - (3600 * $i));
+                $commit->comment = 'SVN test commit ' . $i;
+                $logs['commits'][] = $commit;
+            }
+
+            // 为SVN添加文件变更信息
+            $logs['files'] = array();
+            for($i = 0; $i < count($logs['commits']); $i++)
+            {
+                $files = array();
+                for($j = 1; $j <= 2; $j++)
+                {
+                    $file = new stdclass();
+                    $file->path = "/trunk/test/file{$i}_{$j}.php";
+                    $file->action = $j % 2 == 0 ? 'M' : 'A';
+                    $file->type = 'file';
+                    $file->oldPath = '';
+                    $files[] = $file;
+                }
+                $logs['files'][] = $files;
+            }
+        }
+
+        $count = $this->objectModel->saveCommit($repoID, $logs, $version);
+
+        if(dao::isError()) return dao::getError();
+
+        if($scmType == 'Subversion')
+        {
+            $result = array();
+            $result['count'] = $count;
+            $result['files'] = $this->objectModel->dao->select('*')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->fetchAll('id');
+            return $result;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Test saveCommit method with empty data.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return int
+     */
+    public function saveCommitWithEmptyDataTest(int $repoID)
+    {
+        $logs = array();
+        $logs['commits'] = array(); // 空提交数据
+
+        $count = $this->objectModel->saveCommit($repoID, $logs, 1);
+
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
+    /**
+     * Test saveCommit method with branch information.
+     *
+     * @param  int    $repoID
+     * @param  string $scmType
+     * @param  int    $version
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function saveCommitWithBranchTest(int $repoID, string $scmType = 'Git', int $version = 1, string $branch = '')
+    {
+        global $dao;
+
+        $logs = array();
+        $logs['commits'] = array();
+
+        // 创建2个带分支的提交
+        for($i = 1; $i <= 2; $i++)
+        {
+            $commit = new stdclass();
+            $commit->revision = 'branch-commit-' . $i . '-' . time();
+            $commit->committer = 'branch-user-' . $i;
+            $commit->time = date('Y-m-d H:i:s', time() - (1800 * $i));
+            $commit->comment = 'Branch test commit ' . $i;
+            $logs['commits'][] = $commit;
+        }
+
+        $count = $this->objectModel->saveCommit($repoID, $logs, $version, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
+    /**
+     * Test saveCommit method with large data set.
+     *
+     * @param  int    $repoID
+     * @param  string $scmType
+     * @param  int    $version
+     * @access public
+     * @return int
+     */
+    public function saveCommitWithLargeDataTest(int $repoID, string $scmType = 'Git', int $version = 1)
+    {
+        $logs = array();
+        $logs['commits'] = array();
+
+        // 创建10个提交记录测试批量处理
+        for($i = 1; $i <= 10; $i++)
+        {
+            $commit = new stdclass();
+            $commit->revision = 'large-commit-' . $i . '-' . time();
+            $commit->committer = 'large-user-' . ($i % 3 + 1);
+            $commit->time = date('Y-m-d H:i:s', time() - (600 * $i));
+            $commit->comment = 'Large test commit ' . $i . ' with longer description for testing purposes';
+            $logs['commits'][] = $commit;
+        }
+
+        $count = $this->objectModel->saveCommit($repoID, $logs, $version);
+
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
+    /**
+     * Test saveCommit method with invalid data.
+     *
+     * @param  int    $repoID
+     * @param  string $scmType
+     * @param  int    $version
+     * @access public
+     * @return int
+     */
+    public function saveCommitWithInvalidDataTest(int $repoID, string $scmType = 'Git', int $version = 1)
+    {
+        $logs = array();
+        $logs['commits'] = array();
+
+        // 创建包含一些异常字段的提交数据，测试容错能力
+        $commit = new stdclass();
+        $commit->revision = 'invalid-commit-' . time();
+        $commit->committer = 'invalid-user';
+        $commit->time = date('Y-m-d H:i:s');
+        $commit->comment = 'Test commit with <script>alert("xss")</script> & special chars';
+        $logs['commits'][] = $commit;
+
+        $count = $this->objectModel->saveCommit($repoID, $logs, $version);
+
+        if(dao::isError()) return dao::getError();
+
+        return $count;
+    }
+
     public function saveOneCommitTest(int $repoID, int $version, string $branch = '')
     {
         global $dao;
