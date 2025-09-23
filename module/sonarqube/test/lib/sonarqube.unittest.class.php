@@ -474,4 +474,20 @@ class sonarqubeTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectPairs method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
+    public function getProjectPairsTest($sonarqubeID, $projectKey = '')
+    {
+        $result = $this->objectModel->getProjectPairs($sonarqubeID, $projectKey);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
