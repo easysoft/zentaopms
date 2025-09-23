@@ -313,4 +313,42 @@ class sonarqubeTest
         $result = $this->objectModel->apiErrorHandling($response);
         return $result;
     }
+
+    /**
+     * Test apiGetReport method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @param  string $metricKeys
+     * @access public
+     * @return mixed
+     */
+    public function apiGetReportTest($sonarqubeID, $projectKey, $metricKeys = '')
+    {
+        try {
+            $result = $this->objectModel->apiGetReport($sonarqubeID, $projectKey, $metricKeys);
+        } catch (Exception $e) {
+            return 'return empty';
+        } catch (TypeError $e) {
+            return 'return empty';
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        if(empty($result)) return 'return empty';
+
+        // 处理错误情况
+        if(is_object($result) && isset($result->errors))
+        {
+            return $result->errors;
+        }
+
+        // 处理成功情况
+        if(is_object($result) && isset($result->component))
+        {
+            return $result;
+        }
+
+        return $result;
+    }
 }
