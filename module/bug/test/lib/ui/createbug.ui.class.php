@@ -149,4 +149,33 @@ class createBugTester extends tester
         if(!$found) return -1;
         return $index;
     }
+
+    /**
+     * 检查bug纸牌者是否符合预期
+     * Check if bug assignedto is expected assignee
+     *
+     * @param  object $form
+     * @param  int    $index
+     * @param  string $assignee
+     * @access public
+     * @return bool   true if match assignee, false if not
+     */
+    private function checkAssign($form = null, $index = -1, $assignee = '')
+    {
+        if(!$form) return $this->failed('form is null!');
+        $assignedTo = $form->dom->getElementList($form->dom->xpath['bugAssigned'])->element;
+        $form->wait(3);
+        // if $index=-1, then check all bugs
+        if($index == -1)
+        {
+            foreach($assignedTo as $item)
+            {
+                if($item->getText() != $assignee) return false;
+            }
+            return true;
+        }
+        // else check specific bug
+        if($assignedTo[$index]->getText() != $assignee) return false;
+        return true;
+    }
 }
