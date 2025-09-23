@@ -134,19 +134,26 @@ class repoTest
         return 'success';
     }
 
+    /**
+     * Test getListBySCM method.
+     *
+     * @param  string $scm  SCM类型
+     * @param  string $type 类型参数
+     * @access public
+     * @return mixed
+     */
     public function getListBySCMTest($scm, $type = 'all')
     {
-        $objects = $this->objectModel->getListBySCM($scm, $type = 'all');
-
+        $result = $this->objectModel->getListBySCM($scm, $type);
         if(dao::isError()) return dao::getError();
 
-        if(!empty($objects))
+        if(empty($result))
         {
-            return $objects;
+            return 'empty';
         }
         else
         {
-            return 'empty';
+            return $result;
         }
     }
 
