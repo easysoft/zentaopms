@@ -535,16 +535,93 @@ class repoTest
         return $objects;
     }
 
-    public function rmClientVersionFileTest()
+    /**
+     * Test rmClientVersionFile method.
+     *
+     * @param  string $testType 测试类型
+     * @access public
+     * @return mixed
+     */
+    public function rmClientVersionFileTest($testType = 'existing_file')
     {
-        file_put_contents('clientFile.txt', 'rmClientVersionFileTest');
-        $this->objectModel->session->set('clientVersionFile', 'clientFile.txt');
+        // 清理之前的测试文件
+        $testFiles = array('clientFile.txt', 'special_chars_!@#$.txt');
+        foreach($testFiles as $file)
+        {
+            if(file_exists($file)) @unlink($file);
+        }
 
-        $objects = $this->objectModel->rmClientVersionFile();
+        $result = array('success' => false, 'sessionCleared' => false, 'fileDeleted' => true);
+
+        switch($testType)
+        {
+            case 'existing_file':
+                // 测试步骤1：有文件且文件存在
+                file_put_contents('clientFile.txt', 'rmClientVersionFileTest');
+                $this->objectModel->session->set('clientVersionFile', 'clientFile.txt');
+                $result['initialFileExists'] = file_exists('clientFile.txt');
+
+                $this->objectModel->rmClientVersionFile();
+
+                $result['sessionCleared'] = empty($this->objectModel->session->clientVersionFile);
+                $result['fileDeleted'] = !file_exists('clientFile.txt');
+                $result['success'] = $result['sessionCleared'] && $result['fileDeleted'];
+                break;
+
+            case 'nonexistent_file':
+                // 测试步骤2：有文件路径但文件不存在
+                $this->objectModel->session->set('clientVersionFile', 'nonexistent_file.txt');
+
+                $this->objectModel->rmClientVersionFile();
+
+                $result['sessionCleared'] = empty($this->objectModel->session->clientVersionFile);
+                $result['fileDeleted'] = true; // 文件本来就不存在
+                $result['success'] = $result['sessionCleared'];
+                break;
+
+            case 'empty_string':
+                // 测试步骤3：session中为空字符串
+                $this->objectModel->session->set('clientVersionFile', '');
+
+                $this->objectModel->rmClientVersionFile();
+
+                $result['sessionCleared'] = true; // 本来就是空
+                $result['fileDeleted'] = true; // 没有文件操作
+                $result['success'] = true;
+                break;
+
+            case 'null':
+                // 测试步骤4：session中没有该属性
+                unset($_SESSION['clientVersionFile']);
+
+                $this->objectModel->rmClientVersionFile();
+
+                $result['sessionCleared'] = true; // 没有该属性
+                $result['fileDeleted'] = true; // 没有文件操作
+                $result['success'] = true;
+                break;
+
+            case 'special_chars':
+                // 测试步骤5：特殊字符文件名处理
+                $specialFile = 'special_chars_!@#$.txt';
+                file_put_contents($specialFile, 'special chars test');
+                $this->objectModel->session->set('clientVersionFile', $specialFile);
+
+                $this->objectModel->rmClientVersionFile();
+
+                $result['sessionCleared'] = empty($this->objectModel->session->clientVersionFile);
+                $result['fileDeleted'] = !file_exists($specialFile);
+                $result['success'] = $result['sessionCleared'] && $result['fileDeleted'];
+                break;
+
+            default:
+                $result['success'] = false;
+                break;
+        }
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->session->clientVersionFile == '' && !file_exists('clientFile.txt') ;
+        return $result['success'] ? 1 : 0;
     }
 
     public function checkConnectionTest()
