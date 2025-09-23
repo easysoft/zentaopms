@@ -141,6 +141,22 @@ class svnTest
     }
 
     /**
+     * Test diff method.
+     *
+     * @param  string $url
+     * @param  int    $revision
+     * @access public
+     * @return string|false
+     */
+    public function diffTest(string $url, int $revision): string|false
+    {
+        $result = $this->objectModel->diff($url, $revision);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test convertLog method.
      *
      * @param  array $log
