@@ -132,7 +132,7 @@ class createBugTester extends tester
      */
     private function findIndex($form = null, $bugTitle = '')
     {
-        if(!$form) return $this->failed('form is null!');
+        if(!$form) return $this->failed('form为空!');
         $bugTitles = $form->dom->getElementList($form->dom->xpath['bugTitle'])->element;
         $form->wait(1);
         $index = -1;  // -1 not found
@@ -162,7 +162,7 @@ class createBugTester extends tester
      */
     private function checkAssign($form = null, $index = -1, $assignee = '')
     {
-        if(!$form) return $this->failed('form is null!');
+        if(!$form) return $this->failed('form为空!');
         $assignedTo = $form->dom->getElementList($form->dom->xpath['bugAssigned'])->element;
         $form->wait(3);
         // if $index=-1, then check all bugs
@@ -189,7 +189,7 @@ class createBugTester extends tester
      */
     private function selectFromPopUp($form = null, $assignee = '')
     {
-        if(!$form) return $this->failed('form is null!');
+        if(!$form) return $this->failed('form为空!');
         $list = $form->dom->getElementList($form->dom->xpath['popupMenu'])->element;
         $form->wait(3);
         $found = false;
@@ -218,7 +218,8 @@ class createBugTester extends tester
     public function batchAssign($product = array(), $assignee = '')
     {
         $assignee = $assignee ?? 'admin';
-        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+
         $form->wait(1);
         $form->dom->bugLabel->click();
         $form->wait(1);
@@ -244,7 +245,8 @@ class createBugTester extends tester
     {
         if(!$bugTitle) return $this->failed('bug直接修改指派失败，没有指定bug');
         $assignee = $assignee ?? 'admin';
-        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+
         $form->wait(1);
         // 先找到bug title
         $index = $this->findIndex($form, $bugTitle);
