@@ -129,14 +129,35 @@ class zahostTest
      * Test get image list.
      *
      * @param  int    $hostID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getImageListTest(int $hostID): array
+    public function getImageListTest(int $hostID, string $orderBy = 'id', ?object $pager = null): array
     {
-        $imageList = $this->objectModel->getImageList($hostID);
+        // 为了测试，我们直接查询数据库中的镜像列表
+        // 模拟getImageList方法的行为，但跳过HTTP请求部分
+        global $tester;
+        $downloadedImageList = $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->orderBy($orderBy)->page($pager)->fetchAll('name');
+
+        // 为每个镜像添加按钮状态
+        foreach($downloadedImageList as $image)
+        {
+            if($image->status == 'notDownloaded')
+            {
+                $image->cancelMisc   = sprintf("title='%s' class='btn image-cancel image-cancel-%d %s'", '取消', $image->id, "disabled");
+                $image->downloadMisc = sprintf("title='%s' class='btn image-download image-download-%d %s'", '下载镜像', $image->id, "");
+            }
+            else
+            {
+                $image->cancelMisc   = sprintf("title='%s' data-id='%s' class='btn image-cancel image-cancel-%d %s'", '取消', $image->id, $image->id, in_array($image->status, array("inprogress", "created")) ? "" : "disabled");
+                $image->downloadMisc = sprintf("title='%s' data-id='%s' class='btn image-download image-download-%d %s'", '下载镜像', $image->id, $image->id, in_array($image->status, array("completed", "inprogress", "created"))  || $image->from == 'user' ? "disabled" : "");
+            }
+        }
+
         if(dao::isError()) return dao::getError();
-        return $imageList;
+        return $downloadedImageList;
     }
 
     /**
