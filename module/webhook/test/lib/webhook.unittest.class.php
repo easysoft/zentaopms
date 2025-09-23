@@ -311,25 +311,23 @@ class webhookTest
     }
 
     /**
-     * Get open id list Test
+     * Test getOpenIdList method.
      *
-     * @param  int    $actionID
+     * @param  int $webhookID
+     * @param  int $actionID
+     * @param  string|array $toList
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function getOpenIdListTest($webhookID, $actionID)
+    public function getOpenIdListTest($webhookID, $actionID, $toList = '')
     {
-        static $webhooks = array();
-        if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
-
-        foreach($webhooks as $id => $webhook)
-        {
-            $objects = $this->objectModel->getOpenIdList($webhook->id, $actionID);
+        try {
+            $result = $this->objectModel->getOpenIdList($webhookID, $actionID, $toList);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return false;
         }
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -368,15 +366,20 @@ class webhookTest
      * @param  string $data
      * @param  string $result
      * @access public
-     * @return void
+     * @return mixed
      */
     public function saveLogTest($webhook, $actionID, $data, $result)
     {
-        $this->objectModel->saveLog($webhook, $actionID, $data, $result);
+        $result = $this->objectModel->saveLog($webhook, $actionID, $data, $result);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_LOG)->where('objectID')->eq($webhook->id)->andWhere('objectType')->eq('webhook')->fetch();
+        if($result)
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_LOG)->where('objectID')->eq($webhook->id)->andWhere('objectType')->eq('webhook')->andWhere('action')->eq($actionID)->orderBy('id_desc')->limit(1)->fetch();
+        }
+
+        return false;
     }
 
     /**
