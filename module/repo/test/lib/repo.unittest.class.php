@@ -42,6 +42,23 @@ class repoTest
         return $result;
     }
 
+    /**
+     * Test getLastRevision method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getLastRevisionTest(int $repoID)
+    {
+        $method = new ReflectionMethod($this->objectTao, 'getLastRevision');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function setMenuTest(int $repoID = 0)
     {
         $repos  = $this->objectModel->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
@@ -1847,6 +1864,25 @@ class repoTest
     public function getRelationByCommitTest(int $repoID, string $commit, string $type = ''): array
     {
         $result = $this->objectModel->getRelationByCommit($repoID, $commit, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLatestCommitTime method.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function getLatestCommitTimeTest(int $repoID, string $revision = 'HEAD', string $branch = '')
+    {
+        $method = new ReflectionMethod($this->objectTao, 'getLatestCommitTime');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $repoID, $revision, $branch);
         if(dao::isError()) return dao::getError();
 
         return $result;
