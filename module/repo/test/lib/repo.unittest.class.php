@@ -371,10 +371,11 @@ class repoTest
         return $objects;
     }
 
-    public function createLinkTest($method, $params = '', $viewType = '', $onlybody = false)
+    public function createLinkTest($method, $params = '', $viewType = '')
     {
         $this->objectModel->config->webRoot = '';
-        $objects = $this->objectModel->createLink($method, $params, $viewType, $onlybody);
+        $this->objectModel->config->requestType = 'PATH_INFO';
+        $objects = $this->objectModel->createLink($method, $params, $viewType);
 
         if(dao::isError()) return dao::getError();
 
