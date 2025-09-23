@@ -53,6 +53,21 @@ class storyTest
     }
 
     /**
+     * Test getDataOfStoriesPerProduct method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerProductTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerProduct($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getDataOfStoriesPerModule method.
      *
      * @param  string $storyType
@@ -345,6 +360,21 @@ class storyTest
         $users['admin'] = '管理员';
         $story = $tester->loadModel('story')->getById($storyID);
         return $this->objectModel->getAffectedBugs($story, $users);
+    }
+
+    /**
+     * Test getDataOfStoriesPerOpenedBy method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerOpenedByTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerOpenedBy($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
