@@ -1257,4 +1257,19 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getGiteaGroups method.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return mixed
+     */
+    public function getGiteaGroupsTest(int $giteaID)
+    {
+        $result = $this->objectModel->getGiteaGroups($giteaID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
