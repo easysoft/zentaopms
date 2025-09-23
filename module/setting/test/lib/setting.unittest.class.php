@@ -174,12 +174,40 @@ class settingTest
      *
      * Since the version field not saved in db. So if empty, return 0.3 beta.
      *
+     * @param  string $version 要设置的版本号，为null时不设置（测试默认值）
      * @access public
      * @return void
      */
-    public function getVersionTest()
+    public function getVersionTest($version = null)
     {
+        // 备份原始配置
+        $originalVersion = isset($this->objectModel->config->global->version) ? $this->objectModel->config->global->version : null;
+
+        // 根据参数设置或清除配置
+        if($version === null)
+        {
+            // 测试默认情况，清除版本配置
+            if(isset($this->objectModel->config->global->version)) unset($this->objectModel->config->global->version);
+        }
+        else
+        {
+            // 设置指定版本
+            if(!isset($this->objectModel->config->global)) $this->objectModel->config->global = new stdClass();
+            $this->objectModel->config->global->version = $version;
+        }
+
         $objects = $this->objectModel->getVersion();
+
+        // 恢复原始配置
+        if($originalVersion !== null)
+        {
+            if(!isset($this->objectModel->config->global)) $this->objectModel->config->global = new stdClass();
+            $this->objectModel->config->global->version = $originalVersion;
+        }
+        elseif(isset($this->objectModel->config->global->version))
+        {
+            unset($this->objectModel->config->global->version);
+        }
 
         if(dao::isError()) return dao::getError();
 
