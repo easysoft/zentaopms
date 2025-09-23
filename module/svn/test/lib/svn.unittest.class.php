@@ -42,21 +42,30 @@ class svnTest
     /**
      * Test getRepoLogs method.
      *
-     *  @param  int    $version
-     *  @access public
-     *  @return object|bool|null
+     * @param  int $version
+     * @access public
+     * @return mixed
      */
-    public function getRepoLogsTest(int $version): object|bool|null
+    public function getRepoLogsTest(int $version)
     {
         $this->objectModel->setRepos();
         ob_start();
+
+        if(empty($this->objectModel->repos))
+        {
+            ob_get_clean();
+            return null;
+        }
+
         $repo = $this->objectModel->repos[1];
         $logs = $this->objectModel->getRepoLogs($repo, $version);
         $error = ob_get_clean();
 
         if($error) return $error;
-        return $logs[count($logs) - 1];
+        if(dao::isError()) return dao::getError();
+        if(empty($logs)) return null;
 
+        return $logs[count($logs) - 1];
     }
 
     /**
