@@ -4051,4 +4051,40 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getParentStoryPairs method.
+     *
+     * @param  int        $productID
+     * @param  string|int $appendedStories
+     * @param  string     $storyType
+     * @param  int        $storyID
+     * @access public
+     * @return array
+     */
+    public function getParentStoryPairsTest(int $productID, string|int $appendedStories = '', string $storyType = 'story', int $storyID = 0): array
+    {
+        $result = $this->objectModel->getParentStoryPairs($productID, $appendedStories, $storyType, $storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPlanStories method.
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPlanStoriesTest(int $planID, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
+    {
+        $result = $this->objectModel->getPlanStories($planID, $status, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
