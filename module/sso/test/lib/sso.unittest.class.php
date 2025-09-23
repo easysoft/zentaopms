@@ -390,4 +390,18 @@ class ssoTest
             return null;
         }
     }
+
+    /**
+     * Test checkKey method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkKeyTest()
+    {
+        $result = $this->objectModel->checkKey();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
