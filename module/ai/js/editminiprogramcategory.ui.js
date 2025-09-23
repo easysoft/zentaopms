@@ -1,6 +1,6 @@
-class AICategoryManager extends zui.Component
+class aiCategoryManager extends zui.Component
 {
-    static NAME = "AICategoryManager";
+    static NAME = "aiCategoryManager";
 
     init() {
         this.render();
@@ -75,7 +75,7 @@ class AICategoryManager extends zui.Component
     }
 }
 
-AICategoryManager.defineFn();
+aiCategoryManager.defineFn();
 
-/* Extend AICategoryManager to zui object. */
-$.extend(zui, {AICategoryManager});
+/* Extend aiCategoryManager to zui object. */
+$.extend(zui, {aiCategoryManager});

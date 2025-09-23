@@ -5,7 +5,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->ai->miniPrograms->maintenanceGroup),
-    zui::AICategoryManager
+    zui::aiCategoryManager
     (
         set::builtInList($lang->ai->miniPrograms->categoryList),
         set::customList($categoryList),
