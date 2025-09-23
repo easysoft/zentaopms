@@ -7,7 +7,7 @@ title=测试 storyModel::getDefaultShowGrades();
 timeout=0
 cid=0
 
-- 步骤3：边界值测试空数组 @
+- 步骤3：边界值测试空数组 @0
 
 */
 
@@ -24,10 +24,10 @@ $storyTest = new storyTest();
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
-        array('value' => '1'),
-        array('value' => '2')
+        array('value' => 'story'),
+        array('value' => 'requirement')
     ))
-))) && p() && e('1,2,'); // 步骤1：正常情况测试单级菜单
+))) && p() && e('story,requirement,'); // 步骤1：正常情况测试单级菜单
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
@@ -40,7 +40,11 @@ r($storyTest->getDefaultShowGradesTest(array(
     ))
 ))) && p() && e('story,requirement,epic,feature,'); // 步骤2：正常情况测试多级菜单
 
-r($storyTest->getDefaultShowGradesTest(array())) && p() && e(''); // 步骤3：边界值测试空数组
+r($storyTest->getDefaultShowGradesTest(array())) && p() && e('0'); // 步骤3：边界值测试空数组
+
+r($storyTest->getDefaultShowGradesTest(array(
+    array('items' => array())
+))) && p() && e('0'); // 步骤4：边界值测试空items数组
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
@@ -48,7 +52,15 @@ r($storyTest->getDefaultShowGradesTest(array(
         array('value' => 2),
         array('value' => 3)
     ))
-))) && p() && e('1,2,3,'); // 步骤4：测试包含数字值的菜单
+))) && p() && e('1,2,3,'); // 步骤5：测试包含数字值的菜单
+
+r($storyTest->getDefaultShowGradesTest(array(
+    array('items' => array(
+        array('value' => ''),
+        array('value' => 'valid_value'),
+        array('value' => '0')
+    ))
+))) && p() && e(',valid_value,0,'); // 步骤6：测试包含空字符串value的菜单
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
@@ -63,4 +75,4 @@ r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
         array('value' => 'level3_item1')
     ))
-))) && p() && e('level1_item1,level1_item2,level2_item1,level2_item2,level2_item3,level3_item1,'); // 步骤5：测试复杂多级嵌套菜单
+))) && p() && e('level1_item1,level1_item2,level2_item1,level2_item2,level2_item3,level3_item1,'); // 步骤7：测试复杂多级嵌套菜单
