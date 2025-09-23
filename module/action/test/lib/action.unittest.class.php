@@ -2044,4 +2044,20 @@ class actionTest
         return $result;
     }
 
+    /**
+     * Test getReviewRelated method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getReviewRelatedTest(string $objectType, int $objectID): array
+    {
+        $result = $this->objectTao->getReviewRelated($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
