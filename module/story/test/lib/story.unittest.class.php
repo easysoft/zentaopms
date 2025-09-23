@@ -3881,4 +3881,23 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getBySQL method.
+     *
+     * @param  int|string $productID
+     * @param  string     $sql
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $type
+     * @access public
+     * @return mixed
+     */
+    public function getBySQLTest(int|string $productID, string $sql, string $orderBy, ?object $pager = null, string $type = 'story')
+    {
+        $result = $this->objectModel->getBySQL($productID, $sql, $orderBy, $pager, $type);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }
