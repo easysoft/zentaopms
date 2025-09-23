@@ -501,4 +501,26 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test fetchRows method.
+     *
+     * @param  array $todoIdList
+     * @access public
+     * @return array|int
+     */
+    public function fetchRowsTest(array $todoIdList): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchRows');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoIdList);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
 }
