@@ -4134,4 +4134,20 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test submitReview method.
+     *
+     * @param  int    $storyID
+     * @param  object $storyData
+     * @access public
+     * @return array|false
+     */
+    public function submitReviewTest(int $storyID, object $storyData)
+    {
+        $result = $this->objectModel->submitReview($storyID, $storyData);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
