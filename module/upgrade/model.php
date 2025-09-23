@@ -12317,4 +12317,31 @@ class upgradeModel extends model
 
         $this->dao->exec('ALTER TABLE ' . TABLE_REVIEW . ' DROP `doc`');
     }
+
+    /**
+     * 升级历史基线。
+     * Upgrade baseline.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeBaseline()
+    {
+        $baselines = $this->dao->select('id,`from`')->from(TABLE_OBJECT)->where('type')->eq('taged')->fetchAll();
+        $reviews   = $this->dao->select('id,object,deliverable')->from(TABLE_REVIEW)->where('status')->eq('done')->fetchAll('object');
+        foreach($baselines as $baseline)
+        {
+            if(empty($reviews[$baseline->from])) continue;
+
+            $review = $reviews[$baseline->from];
+            $data   = new stdclass();
+            $data->category        = $review->deliverable;
+            $data->categoryVersion = json_encode(array($review->deliverable => $review->id));
+            $data->status          = 'pass';
+            $this->dao->update(TABLE_OBJECT)->data($data)->where('id')->eq($baseline->id)->exec();
+
+            $this->dao->update(TABLE_REVIEW)->set('isBaseline')->eq('1')->where('id')->eq($review->id)->exec();
+        }
+        return true;
+    }
 }
