@@ -35,9 +35,17 @@
     },
     "extra": {
         "patches": {
+            "erusev/parsedown": {
+                "Add namespace to Parsedown class": "patches/parsedown-add-namespace.patch"
+            },
             "gorhill/php-fine-diff": {
                 "Fix class reference to work with namespaces": "patches/finediff-fix-class-reference.patch"
             }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Parsedown\\": "vendor/erusev/parsedown/"
         }
     }
 }

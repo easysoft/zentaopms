@@ -218,6 +218,11 @@
             },
             "time": "2019-12-30T22:54:17+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add namespace to Parsedown class": "patches/parsedown-add-namespace.patch"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-0": {

@@ -86,6 +86,10 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         array (
             'WpOrg\\Requests\\' => 15,
         ),
+        'V' => 
+        array (
+            'Vendor\\Parsedown\\' => 17,
+        ),
         'S' => 
         array (
             'Symfony\\Component\\Finder\\' => 25,
@@ -139,6 +143,10 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         'WpOrg\\Requests\\' => 
         array (
             0 => __DIR__ . '/..' . '/rmccue/requests/src',
+        ),
+        'Vendor\\Parsedown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/erusev/parsedown',
         ),
         'Symfony\\Component\\Finder\\' => 
         array (
