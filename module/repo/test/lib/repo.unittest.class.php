@@ -1887,4 +1887,21 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getMatchedReposByUrl method.
+     *
+     * @param  string $url
+     * @access public
+     * @return mixed
+     */
+    public function getMatchedReposByUrlTest(string $url)
+    {
+        $method = new ReflectionMethod($this->objectTao, 'getMatchedReposByUrl');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $url);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
