@@ -286,6 +286,31 @@ class compileTest
     }
 
     /**
+     * Test updateJobLastSyncDate method.
+     *
+     * @param  int    $jobID
+     * @param  string $date
+     * @access public
+     * @return bool
+     */
+    public function updateJobLastSyncDateTest($jobID, $date)
+    {
+        global $tester;
+
+        // 先检查job是否存在
+        $job = $tester->dao->select('id')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
+        if(!$job) return false;
+
+        $this->objectModel->updateJobLastSyncDate($jobID, $date);
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回更新后的lastSyncDate值进行验证
+        $result = $tester->dao->select('lastSyncDate')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch('lastSyncDate');
+        return $result;
+    }
+
+    /**
      * 魔术方法，调用objectModel一些比较简单的方法。
      * Magic method, call some simple methods of objectModel.
      *
