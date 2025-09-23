@@ -106,13 +106,51 @@ class zanodeTest
      * 测试创建执行节点。
      * Test create an Node.
      *
+     * @param  object $data
      * @access public
-     * @return int|bool
+     * @return object|array
      */
     public function createTest(object $data): object|array
     {
         $nodeID = $this->create($data);
-        return $this->objectModel->dao->select('*')->from(TABLE_HOST)->where('id')->eq($nodeID)->fetch();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($nodeID)->fetch();
+    }
+
+    /**
+     * 测试创建执行节点并验证Action记录。
+     * Test create an Node and verify action record.
+     *
+     * @param  object $data
+     * @access public
+     * @return object
+     */
+    public function createTestWithAction(object $data): object
+    {
+        // 记录创建前的action数量
+        $beforeActionCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->fetch();
+
+        $nodeID = $this->create($data);
+        if(dao::isError()) return dao::getError();
+
+        // 检查创建后的action数量
+        $afterActionCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->fetch();
+
+        // 查找新创建的action记录
+        $actionRecord = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('zanode')
+            ->andWhere('objectID')->eq($nodeID)
+            ->andWhere('action')->eq('Created')
+            ->fetch();
+
+        $result = new stdClass();
+        $result->nodeID = $nodeID;
+        $result->hasAction = ($afterActionCount->count > $beforeActionCount->count) ? '1' : '0';
+        $result->actionExists = !empty($actionRecord) ? '1' : '0';
+        $result->actionType = $actionRecord ? $actionRecord->action : '';
+
+        return $result;
     }
 
     /**
