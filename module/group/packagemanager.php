@@ -3369,7 +3369,8 @@ $config->group->package->review = new stdclass();
 $config->group->package->review->order  = 20;
 $config->group->package->review->subset = 'projectsettings';
 $config->group->package->review->privs  = array();
-$config->group->package->review->privs['project-approval'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->review->privs['project-approval']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->review->privs['project-editApproval'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-approval'), 'recommend' => array());
 
 $config->group->package->manageProjectRelease = new stdclass();
 $config->group->package->manageProjectRelease->order  = 10;
