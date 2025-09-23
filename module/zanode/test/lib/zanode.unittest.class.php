@@ -275,7 +275,8 @@ class zanodeTest
         $this->editSnapshot($snapshotID, $data);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        $result = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        return $result ?: array('error' => 'Snapshot not found');
     }
 
     /**
