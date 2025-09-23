@@ -509,7 +509,7 @@ function initPageEntity(object $object): array
  * @access public
  * @return array
  */
-function initTableData(array $items, array &$fieldList, ?object $model = null, string $moduleName = ''): array
+function initTableData(array $items, array &$fieldList, ?object $model = null): array
 {
     if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
     if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))
@@ -737,7 +737,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
         $actionConfig = $actionList[$action];
         $notLoadModel = !empty($actionConfig['notLoadModel']) ? $actionConfig['notLoadModel'] : false;
-        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
+        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'] && empty($actionConfig['url']['current']))
         {
             $module = $actionConfig['url']['module'];
             if(!$notLoadModel)
