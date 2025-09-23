@@ -2341,11 +2341,7 @@ eof;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedown');
-
-        $parsedown = new parsedown;
-
-        $parsedown->voidElementSuffix = '>'; // HTML5
+        $parsedown = $app->loadClass('parsedown');
 
         return $parsedown->text($markdown);
     }
