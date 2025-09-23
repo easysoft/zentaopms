@@ -9,9 +9,4 @@ class diff extends baseDelegate
     {
         $this->instance = new self::$className($from_text, $to_text, $granularityStack);
     }
-
-    public static function getSentenceGranularity()
-    {
-        return self::$className::$sentenceGranularity;
-    }
 }
