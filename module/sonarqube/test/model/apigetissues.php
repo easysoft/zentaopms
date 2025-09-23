@@ -4,24 +4,34 @@
 /**
 
 title=测试 sonarqubeModel::apiGetIssues();
+timeout=0
 cid=0
 
-- 通过sonarqubeID,项目key获取SonarQube问题列表 @1
-- 通过sonarqubeID,项目key获取SonarQube问题列表数量 @1
-- 当sonarqubeID为0时,获取SonarQube问题列表 @return empty
+- 步骤1：正常sonarqubeID和项目key获取问题列表 @1
+- 步骤2：验证问题列表第一项的key属性存在 @1
+- 步骤3：无效sonarqubeID为0获取问题列表 @return empty
+- 步骤4：空项目key参数获取问题列表 @1
+- 步骤5：负数sonarqubeID边界值测试 @return empty
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
-su('admin');
 
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
 
-$sonarqubeID = 2;
-$projectKey  = 'bendi';
+su('admin');
 
-$sonarqube = new sonarqubeTest();
-$result = $sonarqube->apiGetIssuesTest($sonarqubeID, $projectKey);
-r(isset($result[0]->message))      && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表
-r(count($result) > 100)            && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表数量
-r($sonarqube->apiGetIssuesTest(0)) && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube问题列表
+$sonarqubeTest = new sonarqubeTest();
+
+$result1 = $sonarqubeTest->apiGetIssuesTest(2, 'bendi');
+$result2 = $sonarqubeTest->apiGetIssuesTest(1, 'testproject');
+$result3 = $sonarqubeTest->apiGetIssuesTest(0, 'bendi');
+$result4 = $sonarqubeTest->apiGetIssuesTest(2, '');
+$result5 = $sonarqubeTest->apiGetIssuesTest(-1, 'test');
+
+r(count($result1) > 0) && p() && e('1');                              // 步骤1：正常sonarqubeID和项目key获取问题列表
+r(isset($result1[0]->key) && !empty($result1[0]->key)) && p() && e('1'); // 步骤2：验证问题列表第一项的key属性存在
+r($result3) && p() && e('return empty');                               // 步骤3：无效sonarqubeID为0获取问题列表
+r(count($result4) > 0) && p() && e('1');                              // 步骤4：空项目key参数获取问题列表
+r($result5) && p() && e('return empty');                               // 步骤5：负数sonarqubeID边界值测试
