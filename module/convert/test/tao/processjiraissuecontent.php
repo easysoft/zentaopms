@@ -14,8 +14,6 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 注意：jiratmprelation表不存在，跳过此数据准备
-
 // 准备file测试数据
 $fileTable = zenData('file');
 $fileTable->title->range('image.png,document.pdf,attachment.txt,screenshot.jpg,readme.md,design.psd');
@@ -81,49 +79,52 @@ su('admin');
 
 $convertTest = new convertTest();
 
-// 测试步骤1：处理包含附件的story类型Jira内容
+// 测试步骤1：处理包含附件的story/requirement/epic类型内容更新
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'astory', 'BID' => 1),
-    (object)array('BType' => 'arequirement', 'BID' => 2)
+    (object)array('BType' => 'arequirement', 'BID' => 2),
+    (object)array('BType' => 'aepic', 'BID' => 3)
 ))) && p() && e('1');
 
-// 测试步骤2：处理包含附件的bug类型Jira内容
+// 测试步骤2：处理包含附件的bug类型内容更新
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'abug', 'BID' => 1),
     (object)array('BType' => 'abug', 'BID' => 2)
 ))) && p() && e('1');
 
-// 测试步骤3：处理包含附件的task类型Jira内容
+// 测试步骤3：处理包含附件的task类型内容更新
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'atask', 'BID' => 1),
     (object)array('BType' => 'atask', 'BID' => 2)
 ))) && p() && e('1');
 
-// 测试步骤4：处理包含附件的feedback类型内容
+// 测试步骤4：处理多种类型混合内容更新
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'astory', 'BID' => 1),
+    (object)array('BType' => 'abug', 'BID' => 2),
+    (object)array('BType' => 'atask', 'BID' => 3),
+    (object)array('BType' => 'afeedback', 'BID' => 4)
+))) && p() && e('1');
+
+// 测试步骤5：处理包含附件的feedback类型内容更新
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'afeedback', 'BID' => 1),
     (object)array('BType' => 'afeedback', 'BID' => 2)
 ))) && p() && e('1');
 
-// 测试步骤5：测试testcase类型被跳过的逻辑
+// 测试步骤6：测试testcase类型被跳过的逻辑
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'atestcase', 'BID' => 1),
     (object)array('BType' => 'atestcase', 'BID' => 2)
 ))) && p() && e('1');
 
-// 测试步骤6：处理空issue列表输入
+// 测试步骤7：处理空issue列表输入边界条件
 r($convertTest->processJiraIssueContentTest(array())) && p() && e('1');
 
-// 测试步骤7：处理不存在附件的对象
+// 测试步骤8：处理不存在附件的对象边界条件
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'astory', 'BID' => 6),
-    (object)array('BType' => 'abug', 'BID' => 6)
-))) && p() && e('1');
-
-// 测试步骤8：处理requirement和epic类型的内容
-r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'arequirement', 'BID' => 1),
-    (object)array('BType' => 'aepic', 'BID' => 1)
+    (object)array('BType' => 'astory', 'BID' => 999),
+    (object)array('BType' => 'abug', 'BID' => 999)
 ))) && p() && e('1');
 
 // 测试步骤9：处理包含action记录的对象内容更新
@@ -131,4 +132,11 @@ r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'astory', 'BID' => 3),
     (object)array('BType' => 'abug', 'BID' => 4),
     (object)array('BType' => 'atask', 'BID' => 5)
+))) && p() && e('1');
+
+// 测试步骤10：处理无效BType参数的异常情况
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => '', 'BID' => 1),
+    (object)array('BType' => 'ainvalid', 'BID' => 1),
+    (object)array('BType' => 'anulltype', 'BID' => 0)
 ))) && p() && e('1');
