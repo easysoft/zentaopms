@@ -189,12 +189,25 @@ class settingTest
     /**
      * Test get URSR.
      *
+     * @param  bool $clearConfig 是否清空配置中的URSR
      * @access public
-     * @return int
+     * @return mixed
      */
-    public function getURSRTest()
+    public function getURSRTest($clearConfig = false)
     {
-        $objects = $this->objectModel->getURSR();
+        // 如果需要清空配置中的URSR，模拟配置不存在的情况
+        if($clearConfig)
+        {
+            $originalURSR = isset($this->objectModel->config->URSR) ? $this->objectModel->config->URSR : null;
+            unset($this->objectModel->config->URSR);
+            $objects = $this->objectModel->getURSR();
+            // 恢复原始配置
+            if($originalURSR !== null) $this->objectModel->config->URSR = $originalURSR;
+        }
+        else
+        {
+            $objects = $this->objectModel->getURSR();
+        }
 
         if(dao::isError()) return dao::getError();
 
