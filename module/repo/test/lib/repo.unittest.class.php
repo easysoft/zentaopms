@@ -37,6 +37,24 @@ class repoTest
     }
 
     /**
+     * Test getListByCondition method.
+     *
+     * @param  string $repoQuery
+     * @param  string $SCM
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null)
+    {
+        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getCommitsByObject method.
      *
      * @param  int    $objectID

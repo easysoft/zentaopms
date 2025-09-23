@@ -1,44 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->getListByCondition();
+title=测试 repoModel::getListByCondition();
 timeout=0
-cid=1
+cid=0
 
-- 根据query查询 @0
-- query为空时查询第1条的name属性 @testHtml
-- 排序条件查询属性id @1
-- 按分页查询属性id @3
+- 执行repoTest模块的getListByConditionTest方法，参数是'', ''  @1
+- 执行repoTest模块的getListByConditionTest方法，参数是'', ''  @5
+- 执行repoTest模块的getListByConditionTest方法，参数是"name='testHtml'", ''  @2
+- 执行repoTest模块的getListByConditionTest方法，参数是'', 'Gitlab'  @3
+- 执行$results第0条的id属性 @1
+- 执行repoTest模块的getListByConditionTest方法，参数是'', '', 'id_desc', $pager  @2
+- 执行repoTest模块的getListByConditionTest方法，参数是"name like '%test%'", ''  @4
+- 执行repoTest模块的getListByConditionTest方法，参数是'id = 999', ''  @0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+
 zenData('repo')->loadYaml('repo')->gen(5);
 
-$repo = $tester->loadModel('repo');
-$repo->app->moduleName = 'repo';
-$repo->app->methodName = 'browse';
-$repo->app->rawModule  = 'repo';
-$repo->app->rawMethod  = 'browse';
+su('admin');
 
-$repoQuery = "path like '%123%'";
-$orderBy   = 'id_asc';
+$repoTest = new repoTest();
 
 $pager = new stdclass();
 $pager->recPerPage = 2;
-$pager->pageID     = 2;
-$repo->app->loadClass('pager', true);
+$pager->pageID     = 1;
+$repoTest->objectModel->app->loadClass('pager', true);
 $pager = pager::init(0, $pager->recPerPage, $pager->pageID);
 
-r($repo->getListByCondition($repoQuery, $SCM = 'Gitlab')) && p() && e('0'); //根据query查询
-r($repo->getListByCondition('', $SCM = 'Gitlab')) && p('1:name') && e('testHtml'); //query为空时查询
-
-$result = $repo->getListByCondition('', $SCM = 'Gitlab', $orderBy);
-r(array_shift($result)) && p('id') && e(1); //排序条件查询
-
-$result = $repo->getListByCondition('', $SCM = 'Gitlab,Gitea', $orderBy, $pager);
-r(array_shift($result)) && p('id') && e(3); //按分页查询
+r(is_array($repoTest->getListByConditionTest('', ''))) && p() && e('1');
+r(count($repoTest->getListByConditionTest('', ''))) && p() && e('5');
+r(count($repoTest->getListByConditionTest("name='testHtml'", ''))) && p() && e('2');
+r(count($repoTest->getListByConditionTest('', 'Gitlab'))) && p() && e('3');
+$results = $repoTest->getListByConditionTest('', '', 'id_asc');
+r(array_values($results)) && p('0:id') && e('1');
+r(count($repoTest->getListByConditionTest('', '', 'id_desc', $pager))) && p() && e('2');
+r(count($repoTest->getListByConditionTest("name like '%test%'", ''))) && p() && e('4');
+r(count($repoTest->getListByConditionTest('id = 999', ''))) && p() && e('0');
