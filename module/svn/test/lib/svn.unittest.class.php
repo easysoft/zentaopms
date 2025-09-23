@@ -263,4 +263,23 @@ class svnTest
 
         return array('result' => $result ? '1' : '', 'client' => $this->objectModel->client);
     }
+
+    /**
+     * Test setRepo method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function setRepoTest(object $repo)
+    {
+        $result = $this->objectModel->setRepo($repo);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'result' => $result ? '1' : '0',
+            'client' => $this->objectModel->client,
+            'repoRoot' => $this->objectModel->repoRoot
+        );
+    }
 }
