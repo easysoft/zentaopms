@@ -3059,6 +3059,29 @@ class executionTest
     }
 
     /**
+     * Test processStoryNode method with custom data.
+     *
+     * @param  object $node
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function processStoryNodeWithDataTest(object $node, int $executionID): object
+    {
+        global $tester;
+        $stories     = $tester->loadModel('story')->getListByProject($executionID);
+        $storyGroups = array();
+        foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
+
+        $taskGroups = $this->executionModel->getTaskGroups($executionID);
+
+        $result = $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, $executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试处理树状图任务类型数据。
      * Test processTaskNode method.
      *
