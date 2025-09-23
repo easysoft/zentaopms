@@ -53,6 +53,21 @@ class storyTest
     }
 
     /**
+     * Test getDataOfStoriesPerEstimate method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerEstimateTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerEstimate($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test removeFormFieldsForCreate method.
      *
      * @param  array  $fields 表单字段数组
