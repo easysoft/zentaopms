@@ -3801,4 +3801,19 @@ class storyTest
 
         return $options;
     }
+
+    /**
+     * Test batchGetStoryStage method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function batchGetStoryStageTest(array $storyIdList): array
+    {
+        $result = $this->objectModel->batchGetStoryStage($storyIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
