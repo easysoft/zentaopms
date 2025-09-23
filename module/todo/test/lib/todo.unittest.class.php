@@ -523,4 +523,27 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test getCycleList method in Tao layer.
+     *
+     * @param  array $todoList
+     * @param  string $orderBy
+     * @access public
+     * @return array|int
+     */
+    public function getCycleListTaoTest(array $todoList, string $orderBy = 'date_asc'): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getCycleList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoList, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
 }
