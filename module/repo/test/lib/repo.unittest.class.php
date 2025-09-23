@@ -1287,4 +1287,20 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getGitlabProjects method.
+     *
+     * @param  int    $gitlabID
+     * @param  string $projectFilter
+     * @access public
+     * @return mixed
+     */
+    public function getGitlabProjectsTest(int $gitlabID, string $projectFilter = '')
+    {
+        $result = $this->objectModel->getGitlabProjects($gitlabID, $projectFilter);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
