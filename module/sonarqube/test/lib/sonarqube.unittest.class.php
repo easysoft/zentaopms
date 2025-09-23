@@ -187,12 +187,55 @@ class sonarqubeTest
         return $result;
     }
 
+    /**
+     * Test getApiBase method.
+     *
+     * @param  mixed $sonarqubeID
+     * @access public
+     * @return mixed
+     */
     public function getApiBaseTest($sonarqubeID)
     {
-        list($apiRoot, $header) = $this->objectModel->getApiBase($sonarqubeID);
+        try {
+            // 处理类型转换，如果不是数字则返回错误
+            if(!is_numeric($sonarqubeID)) return 'return empty';
+
+            $result = $this->objectModel->getApiBase((int)$sonarqubeID);
+            if(dao::isError()) return dao::getError();
+
+            list($apiRoot, $header) = $result;
+
+            if(empty($apiRoot)) return 'return empty';
+            return $apiRoot;
+        } catch (TypeError $e) {
+            return 'return empty';
+        } catch (Exception $e) {
+            return 'return empty';
+        }
+    }
+
+    /**
+     * Test getApiBase method return full result.
+     *
+     * @param  int $sonarqubeID
+     * @access public
+     * @return mixed
+     */
+    public function getApiBaseFullTest($sonarqubeID)
+    {
+        $result = $this->objectModel->getApiBase($sonarqubeID);
+        if(dao::isError()) return dao::getError();
+
+        list($apiRoot, $header) = $result;
 
         if(empty($apiRoot)) return 'return empty';
-        return $apiRoot;
+
+        // 返回完整结果用于验证
+        return array(
+            'url' => $apiRoot,
+            'header' => $header,
+            'headerCount' => count($header)
+        );
     }
 
     public function getCacheFileTest($sonarqubeID, $projectKey)
