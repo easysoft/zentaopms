@@ -12295,7 +12295,14 @@ class upgradeModel extends model
                 $deliverable->status     = 'draft';
                 $deliverable->version    = '';
                 $deliverable->review     = 0;
-                $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+
+                $deliverableID = $this->dao->select('id')->from(TABLE_PROJECTDELIVERABLE)
+                    ->where('project')->eq($deliverable->project)
+                    ->andWhere('deliverable')->eq($deliverable->deliverable)
+                    ->andWhere('doc')->eq($deliverable->doc)
+                    ->fetch('id');
+
+                if(!$deliverableID) $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
             }
         }
 
