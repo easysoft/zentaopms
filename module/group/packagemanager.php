@@ -2243,8 +2243,10 @@ $config->group->package->browseProjectReport = new stdclass();
 $config->group->package->browseProjectReport->order  = 5;
 $config->group->package->browseProjectReport->subset = 'projectreport';
 $config->group->package->browseProjectReport->privs  = array();
-$config->group->package->browseProjectReport->privs['weekly-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
-$config->group->package->browseProjectReport->privs['weekly-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
+$config->group->package->browseProjectReport->privs['weekly-browse']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
+$config->group->package->browseProjectReport->privs['weekly-view']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
+$config->group->package->browseProjectReport->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array('milestone-saveOtherProblem'));
+$config->group->package->browseProjectReport->privs['milestone-saveOtherProblem'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('milestone-index', 'weekly-index'), 'recommend' => array());
 
 $config->group->package->manageProjectReport = new stdclass();
 $config->group->package->manageProjectReport->order  = 10;
@@ -2265,13 +2267,6 @@ $config->group->package->exportProjectReport->order  = 20;
 $config->group->package->exportProjectReport->subset = 'projectreport';
 $config->group->package->exportProjectReport->privs  = array();
 $config->group->package->exportProjectReport->privs['weekly-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('weekly-view'), 'recommend' => array());
-
-$config->group->package->projectMilestone = new stdclass();
-$config->group->package->projectMilestone->order  = 25;
-$config->group->package->projectMilestone->subset = 'projectreport';
-$config->group->package->projectMilestone->privs  = array();
-$config->group->package->projectMilestone->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index', 'weekly-view'), 'recommend' => array('milestone-saveOtherProblem'));
-$config->group->package->projectMilestone->privs['milestone-saveOtherProblem'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('milestone-index', 'weekly-index'), 'recommend' => array());
 
 $config->group->package->researchPlan = new stdclass();
 $config->group->package->researchPlan->order  = 5;

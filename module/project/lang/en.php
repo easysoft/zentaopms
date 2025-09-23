@@ -131,6 +131,7 @@ $lang->project->lifetime           = "{$lang->projectCommon} Cycle";
 $lang->project->attribute          = 'Stage Type';
 $lang->project->percent            = 'Workload %';
 $lang->project->milestone          = 'Milestone';
+$lang->project->milestoneReport    = 'Milestone Report';
 $lang->project->output             = 'Output';
 $lang->project->path               = 'Path';
 $lang->project->grade              = 'Grade';

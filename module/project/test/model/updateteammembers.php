@@ -25,7 +25,7 @@ zenData('usergroup')->loadYaml('usergroup_updateteammembers', false, 2)->gen(10)
 
 su('admin');
 
-$project = new Project();
+$project = new projectTest();
 
 $newProject = new stdclass();
 $newProject->PM = 'admin';

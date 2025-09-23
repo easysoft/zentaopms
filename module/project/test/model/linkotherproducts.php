@@ -27,7 +27,7 @@ cid=1
 $projectIdList = array(11, 60, 100);
 $productIdList = array('1', '2', '3');
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 r($projectTester->linkOtherProductsTest($projectIdList[0], array()))        && p() && e('1'); // 测试敏捷项目关联空产品
 r($projectTester->linkOtherProductsTest($projectIdList[1], array()))        && p() && e('1'); // 测试瀑布项目关联空产品
 r($projectTester->linkOtherProductsTest($projectIdList[2], array()))        && p() && e('1'); // 测试看板项目关联空产品

@@ -131,6 +131,7 @@ $lang->project->lifetime           = "{$lang->projectCommon}周期";
 $lang->project->attribute          = '阶段类型';
 $lang->project->percent            = '工作量占比';
 $lang->project->milestone          = '里程碑';
+$lang->project->milestoneReport    = '里程碑报告';
 $lang->project->output             = '输出';
 $lang->project->path               = '路径';
 $lang->project->grade              = '层级';

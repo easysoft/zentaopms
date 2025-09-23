@@ -33,7 +33,7 @@ cid=1
 
 */
 
-$project = new Project();
+$project = new projectTest();
 
 $plan = array();
 $plan[3] = array(1, 4, 7);

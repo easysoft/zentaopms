@@ -28,7 +28,7 @@ cid=1
 
 */
 
-$projectTester = new project();
+$projectTester = new projectTest();
 
 r($projectTester->buildBatchUpdateProjectsTest(array()))        && p()            && e('0');                   // 测试空数据
 r($projectTester->buildBatchUpdateProjectsTest(array(1)))       && p('1:name,PM') && e('更新敏捷项目1,admin'); // 测试构造项目ID为1、2、3的更新数据

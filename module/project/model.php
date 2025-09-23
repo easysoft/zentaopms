@@ -1232,6 +1232,7 @@ class projectModel extends model
         $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
         $this->projectTao->createDocLib($projectID, $project, $program);
         $this->addTeamMembers($projectID, $project, array($project->openedBy));
+        $this->projectTao->createMilestoneReport($projectID);
 
         if($project->hasProduct && empty($postData->rawdata->newProduct))
         {

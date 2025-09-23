@@ -1035,7 +1035,7 @@ class projectTao extends projectModel
      */
     protected function setMenuByModel(string $projectModel): bool
     {
-        global $lang, $config;
+        global $lang, $config, $app;
         $model = 'scrum';
         if(in_array($projectModel, $this->config->project->waterfallList))
         {
@@ -1051,6 +1051,8 @@ class projectTao extends projectModel
 
             if($projectModel == 'ipd') unset($lang->waterfall->menu->other['dropMenu']->deliverable);
             $lang->execution->typeList['sprint'] = $executionCommonLang;
+
+            if($app->rawModule == 'project' && $app->rawMethod == 'executionreport') $lang->waterfall->menu->execution['subModule'] .= ',project';
         }
         elseif($projectModel == 'kanban')
         {
@@ -1161,5 +1163,26 @@ class projectTao extends projectModel
         }
 
         return true;
+    }
+
+    /**
+     * 创建里程碑报告。
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return bool
+     */
+    protected function createMilestoneReport(int $projectID): bool
+    {
+        $report = new stdclass();
+        $report->title        = $this->lang->project->milestoneReport;
+        $report->project      = $projectID;
+        $report->module       = 'milestone';
+        $report->templateType = 'projectReport';
+        $report->addedBy      = 'system';
+        $report->addedDate    = helper::now();
+        $this->dao->insert(TABLE_DOC)->data($report)->exec();
+
+        return !dao::isError();
     }
 }

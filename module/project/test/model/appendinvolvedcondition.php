@@ -7,11 +7,11 @@ title=测试 projectModel::appendInvolvedCondition();
 timeout=0
 cid=0
 
-- 测试步骤1：正常查询语句添加参与条件 >> 期望返回查询语句对象
-- 测试步骤2：空查询语句添加参与条件 >> 期望处理空查询语句
-- 测试步骤3：已有条件的查询语句添加参与条件 >> 期望正确追加条件
-- 测试步骤4：测试当前用户为项目创建者的条件 >> 期望匹配openedBy字段
-- 测试步骤5：测试当前用户为项目经理的条件 >> 期望匹配PM字段
+- 测试步骤1：正常查询语句添加参与条件 @1
+- 测试步骤2：空查询语句添加参与条件 @1
+- 测试步骤3：已有条件的查询语句添加参与条件 @1
+- 测试步骤4：测试当前用户为项目创建者的条件 @1
+- 测试步骤5：测试当前用户为项目经理的条件 @1
 
 */
 
@@ -45,16 +45,16 @@ $stakeholderTable->gen(8);
 
 su('admin');
 
-$projectTest = new Project();
+$projectTest = new projectTest();
 
-r($projectTest->appendInvolvedConditionTest()) && p() && e('object'); // 测试步骤1：正常查询语句添加参与条件
-r($projectTest->appendInvolvedConditionTest(null)) && p() && e('object'); // 测试步骤2：空查询语句添加参与条件
+r(!empty($projectTest->appendInvolvedConditionTest())) && p() && e('1'); // 测试步骤1：正常查询语句添加参与条件
+r(!empty($projectTest->appendInvolvedConditionTest(null))) && p() && e('1'); // 测试步骤2：空查询语句添加参与条件
 
 global $tester;
 $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
 $stmt = $projectTest->objectModel->leftJoinInvolvedTable($stmt);
 $stmt->where('t1.deleted')->eq(0);
-r($projectTest->appendInvolvedConditionTest($stmt)) && p() && e('object'); // 测试步骤3：已有条件的查询语句添加参与条件
+r(!empty($projectTest->appendInvolvedConditionTest($stmt))) && p() && e('1'); // 测试步骤3：已有条件的查询语句添加参与条件
 
 $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
 $stmt = $projectTest->objectModel->leftJoinInvolvedTable($stmt);

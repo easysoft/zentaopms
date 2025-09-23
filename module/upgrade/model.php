@@ -11217,7 +11217,7 @@ class upgradeModel extends model
             ->orderBy('t1.project asc, t1.weekStart asc')
             ->fetchAll();
 
-        $projectReports = $this->dao->select('id,name,project')->from(TABLE_PROJECT)->where('type')->eq('stage')->andWhere('milestone')->eq('1')->fetchAll();
+        $projectReports = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('model')->in('waterfall,waterfallplus,ipd')->fetchAll();
         if(empty($reports) && empty($projectReports)) return array();
 
         $thisSunday = date('Y-m-d', strtotime('this Sunday'));
@@ -11262,6 +11262,7 @@ class upgradeModel extends model
             $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
             $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
+            $report->project    = $data['project'];
             $report->title      = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
             $report->module     = 'week';
             $report->addedDate  = $data['weekStart'] . ' 00:00:00';
@@ -11269,13 +11270,12 @@ class upgradeModel extends model
         }
         else
         {
-            $report->title     = sprintf($this->lang->upgrade->milestoneTitle, $data['name']);
+            $report->title     = $this->lang->upgrade->milestoneTitle;
             $report->module    = 'milestone';
-            $report->execution = $data['id'];
+            $report->project   = $data['id'];
             $report->addedDate = helper::now();
         }
 
-        $report->project      = $data['project'];
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
         $this->dao->insert(TABLE_DOC)->data($report)->exec();
@@ -11292,7 +11292,7 @@ class upgradeModel extends model
      */
     public function adjustPriv21_7_5()
     {
-        $weeklyMethods   = array('browse', 'create', 'edit', 'delete', 'view', 'exportReport');
+        $weeklyMethods   = array('browse', 'create', 'edit', 'delete', 'view', 'exportReport', 'manageCategroy');
         $templateMethods = array('browse', 'create', 'edit', 'delete', 'view', 'pause', 'cron', 'addCategory', 'editCategory', 'deleteCategory');
 
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('weekly')->fetchPairs('group', 'group');
