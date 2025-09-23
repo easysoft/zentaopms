@@ -5,6 +5,7 @@ class fileTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('file');
+         $this->objectTao   = $tester->loadTao('file');
     }
 
     /**
@@ -1240,6 +1241,27 @@ class fileTest
         if($file === null) return false;
 
         $result = $this->objectModel->unlinkFile($file);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test saveFile method.
+     *
+     * @param  array  $file
+     * @param  string $strSkipFields
+     * @access public
+     * @return int|false
+     */
+    public function saveFileTest(array $file, string $strSkipFields = ''): int|false
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('saveFile');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $file, $strSkipFields);
         if(dao::isError()) return dao::getError();
 
         return $result;
