@@ -1,0 +1,28 @@
+---
+title: pipeline data for sonarqube apiGetQualitygate testing
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    range: 21-30
+  - field: type
+    range: 'sonarqube{7},gitlab{2},jenkins{1}'
+  - field: name
+    range: 'SonarQube主服务器,SonarQube测试服务器,SonarQube开发服务器,SonarQube生产服务器,SonarQube备用服务器,SonarQube质量门服务器,SonarQube代码扫描服务器,GitLab主服务器,GitLab测试服务器,Jenkins构建服务器'
+  - field: url
+    range: '[https://sonar-main.test.com],[https://sonar-test.test.com],[https://sonar-dev.test.com],[https://sonar-prod.test.com],[https://sonar-backup.test.com],[https://sonar-qg.test.com],[https://sonar-scan.test.com],[https://gitlab-main.test.com],[https://gitlab-test.test.com],[https://jenkins-build.test.com]'
+  - field: account
+    range: 'admin{7},gitlab_admin{2},jenkins_admin{1}'
+  - field: password
+    range: '[YWRtaW5QYXNzd29yZA==]{7},[Z2l0bGFiUGFzc3dvcmQ=]{2},[amVua2luc1Bhc3N3b3Jk]{1}'
+  - field: token
+    range: '[squ_main1234567890abcdef1234567890abcdef12345678],[squ_test2234567890abcdef1234567890abcdef12345678],[squ_dev3234567890abcdef1234567890abcdef12345678],[squ_prod4234567890abcdef1234567890abcdef12345678],[squ_backup5234567890abcdef1234567890abcdef12345678],[squ_qg6234567890abcdef1234567890abcdef12345678],[squ_scan7234567890abcdef1234567890abcdef12345678],[gitlab_token123456789abcdef],[gitlab_test_token123456789abcdef],[jenkins_token123456789abcdef]'
+  - field: private
+    range: '08bcc98f75d7d40053dc80722bdc117b{10}'
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '[(D-60)-(D)]'
+  - field: deleted
+    range: '0{8},1{2}'

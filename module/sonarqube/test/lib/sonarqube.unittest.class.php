@@ -284,6 +284,23 @@ class sonarqubeTest
     }
 
     /**
+     * Test apiGetQualitygate method.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return mixed
+     */
+    public function apiGetQualitygateTest($sonarqubeID, $projectKey)
+    {
+        $result = $this->objectModel->apiGetQualitygate($sonarqubeID, $projectKey);
+        if(dao::isError()) return dao::getError();
+
+        if(empty($result)) return 'return empty';
+        return $result;
+    }
+
+    /**
      * Test apiErrorHandling method.
      *
      * @param  object|null $response
