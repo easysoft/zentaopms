@@ -39,6 +39,21 @@ class storyTest
     }
 
     /**
+     * Test getStoriesReviewer method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return string
+     */
+    public function getStoriesReviewerTest(int $productID = 0)
+    {
+        $result = $this->objectModel->getStoriesReviewer($productID);
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? '' : implode('|', $result);
+    }
+
+    /**
      * Test getLastReviewer method.
      *
      * @param  int $storyID
