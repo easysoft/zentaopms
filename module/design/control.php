@@ -222,12 +222,13 @@ class design extends control
      * View a design.
      *
      * @param  int    $designID
+     * @param  int    $version
      * @access public
      * @return void
      */
-    public function view(int $designID = 0)
+    public function view(int $designID = 0, int $version = 0)
     {
-        $design = $this->design->getByID($designID);
+        $design = $this->design->getByID($designID, $version);
         $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         $this->session->set('revisionList', $this->app->getURI(true));
@@ -244,6 +245,7 @@ class design extends control
         $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $this->view->project  = $project;
+        $this->view->version  = $version == 0 ? $design->version : $version;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();

@@ -12189,10 +12189,11 @@ class upgradeModel extends model
         if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有评审功能。
 
         $this->loadModel('review');
+        $reviewPointList = $this->config->edition == 'ipd' ? $this->lang->review->reviewPoint->titleList : array();
         $reviews = $this->dao->select('t1.*, t2.category, t2.version')->from(TABLE_REVIEW)->alias('t1')
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->config->edition == 'ipd')->andWhere('t2.category')->notin(array_keys($this->lang->review->reviewPoint->titleList))->fi() // IPD 模式下，只升级非评审点的评审。
+            ->beginIF($reviewPointList)->andWhere('t2.category')->notin(array_keys($reviewPointList))->fi() // IPD 模式下，只升级非评审点的评审。
             ->orderBy('t1.id_desc')
             ->fetchAll('id');
 
@@ -12255,8 +12256,17 @@ class upgradeModel extends model
             elseif($review->doc && $files)
             {
                 /* 原来有文档也有附件，将附件关联到文档。 */
-                $this->dao->update(TABLE_DOCCONTENT)->set('files')->eq($files)->where('doc')->eq($review->doc)->exec();
+                $maxVersion = $this->dao->select('max(version) as version')->from(TABLE_DOCCONTENT)->where('doc')->eq($review->doc)->fetch('version');
+                $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($review->doc)->andWhere('version')->eq($review->docVersion)->fetch();
+
+                unset($docContent->id);
+                $docContent->version = $maxVersion + 1;
+                $docContent->files   = $files;
+                $review->docVersion  = $docContent->version;
+
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
                 $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
+                $this->dao->update(TABLE_DOC)->set('version')->eq($review->docVersion)->where('id')->eq($review->doc)->exec();
             }
 
             $deliverable = new stdclass();
@@ -12285,8 +12295,6 @@ class upgradeModel extends model
             }
 
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
-            $this->dao->update(TABLE_APPROVALOBJECT)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
-            $this->dao->update(TABLE_APPROVAL)->set('objectType')->eq('deliverable')->set('objectID')->eq($deliverableID)->where('objectType')->eq('review')->andWhere('objectID')->eq($review->id)->exec();
 
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
             if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)

@@ -254,15 +254,22 @@ class designModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $designID = 0): object|bool
+    public function getByID(int $designID = 0, int $version = 0): object|bool
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesign();
 
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
+        if($version == 0) $version = $design->version;
+
         $this->app->loadLang('product');
-        $design->files       = $this->loadModel('file')->getByObject('design', $designID);
+        $this->loadModel('file');
+        $spec = $this->dao->select('name,`desc`,files')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
+        $design->name  = !empty($spec->name)   ? $spec->name  : $design->name;
+        $design->desc  = !empty($spec->desc)   ? $spec->desc  : $design->desc;
+        $design->files = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
+
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
         $design->project     = (int)$design->project;
         $design->product     = (int)$design->product;
