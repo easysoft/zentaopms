@@ -11292,7 +11292,7 @@ class upgradeModel extends model
      */
     public function adjustPriv21_7_5()
     {
-        $weeklyMethods   = array('browse', 'create', 'edit', 'delete', 'view', 'exportReport');
+        $weeklyMethods   = array('browse', 'create', 'edit', 'delete', 'view', 'exportReport', 'manageCategroy');
         $templateMethods = array('browse', 'create', 'edit', 'delete', 'view', 'pause', 'cron', 'addCategory', 'editCategory', 'deleteCategory');
 
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('weekly')->fetchPairs('group', 'group');
