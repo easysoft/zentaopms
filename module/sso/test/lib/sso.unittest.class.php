@@ -419,4 +419,18 @@ class ssoTest
 
         return $result;
     }
+
+    /**
+     * Test getBindUsers method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBindUsersTest(): array
+    {
+        $result = $this->objectModel->getBindUsers();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
