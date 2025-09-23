@@ -1643,11 +1643,6 @@ $lang->custom->methodOrder[100] = 'hours';
 $lang->custom->methodOrder[105] = 'percent';
 $lang->custom->methodOrder[110] = 'limitTaskDate';
 
-$lang->resource->datatable = new stdclass();
-$lang->resource->datatable->setGlobal = 'setGlobal';
-
-$lang->datatable->methodOrder[5]  = 'setGlobal';
-
 /* Subversion. */
 $lang->resource->svn = new stdclass();
 $lang->resource->svn->diff    = 'diff';
