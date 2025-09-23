@@ -3816,4 +3816,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test checkNeedConfirm method.
+     *
+     * @param  array|object $data
+     * @access public
+     * @return array|object
+     */
+    public function checkNeedConfirmTest($data)
+    {
+        $result = $this->objectModel->checkNeedConfirm($data);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
