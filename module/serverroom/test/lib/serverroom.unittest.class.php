@@ -37,4 +37,18 @@ class serverroomTest
 
         return dao::getError();
     }
+
+    /**
+     * Test getPairs method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(): array
+    {
+        $result = $this->objectModel->getPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
