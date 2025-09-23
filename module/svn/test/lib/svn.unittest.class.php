@@ -88,16 +88,46 @@ class svnTest
     /**
      * Test updateCommit method.
      *
-     *  @param  int    $repoID
-     *  @access public
-     *  @return object|false
+     * @param  int    $repoID
+     * @param  array  $commentGroup
+     * @param  string $scenario 测试场景：normal|unsynced|empty|withJobs|error
+     * @access public
+     * @return mixed
      */
-    public function updateCommitTest(int $repoID): object|false
+    public function updateCommitTest(int $repoID, array $commentGroup = array(), string $scenario = 'normal')
     {
         $repo = $this->objectModel->loadModel('repo')->getByID($repoID);
-        $this->objectModel->updateCommit($repo, array(), false);
+        if(!$repo) return false;
 
-        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
+        ob_start();
+        $result = $this->objectModel->updateCommit($repo, $commentGroup, false);
+        $output = ob_get_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        switch($scenario)
+        {
+            case 'boolean':
+                return $result ? 'true' : 'false';
+            case 'history':
+                $history = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
+                return $history ? $history : null;
+            case 'count':
+                $count = $this->objectModel->dao->select('count(*) as total')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetch();
+                return $count ? $count->total : 0;
+            case 'latest':
+                $latest = $this->objectModel->loadModel('repo')->getLatestCommit($repoID);
+                return $latest ? $latest : null;
+            case 'output':
+                return $output;
+            case 'error':
+                return dao::isError() ? dao::getError() : 'no error';
+            case 'repo':
+                return $repo;
+            default:
+                $history = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
+                return $history ? $history : false;
+        }
     }
 
     /**

@@ -1,0 +1,29 @@
+---
+title: 测试svnModel::updateCommit()方法的提交历史数据
+desc: 为updateCommit方法测试准备的repohistory数据，包括不同的提交历史记录
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  note: 历史记录ID
+  range: 1-20
+- field: repo
+  note: 仓库ID
+  range: 1{5},2{5},4{5},5{3},999{2}
+- field: revision
+  note: 版本号
+  range: 1-20
+- field: commit
+  note: 提交号
+  range: 1-20
+- field: comment
+  note: 提交注释
+  range: ['+ Initial commit.', '* Fix bug #123.', '+ Add new feature.', '* Update docs.', '+ Add test cases.', '* Fix critical issue.', '+ Implement task #456.', '* Refactor code.', '+ Add config file.', '* Update version.']
+- field: committer
+  note: 提交者
+  range: ['admin', 'user', 'tester', 'developer', 'pm']
+- field: time
+  note: 提交时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':86400D
+  format: YYYY-MM-DD hh:mm:ss
