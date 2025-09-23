@@ -349,9 +349,20 @@ class screenTest
      * @access public
      * @return void
      */
-    public function getLatestChartTest(object $component): void
+    public function getLatestChartTest($component)
     {
-        $this->objectModel->getLatestChart($component);
+        $result = $this->objectModel->getLatestChart($component);
+        if(dao::isError()) return dao::getError();
+
+        // 为测试方便，返回结果的简化数组格式
+        $testResult = array();
+        if(isset($result->key)) $testResult['key'] = $result->key;
+        if(isset($result->chartConfig)) $testResult['chartConfig'] = $result->chartConfig;
+
+        // 检查是否是有效的组件结果
+        $testResult['hasComponent'] = isset($result) && is_object($result) ? '1' : '0';
+
+        return $testResult;
     }
 
     /**
@@ -1558,6 +1569,22 @@ class screenTest
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($screenZen, array($sourceID, $filters));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildLineChart method.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildLineChartTest($component, $chart)
+    {
+        $result = $this->objectModel->buildLineChart($component, $chart);
         if(dao::isError()) return dao::getError();
 
         return $result;
