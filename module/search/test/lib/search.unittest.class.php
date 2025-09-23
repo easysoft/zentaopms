@@ -1588,4 +1588,20 @@ class searchTest
 
         return $options;
     }
+
+    /**
+     * Test buildIndexQuery method.
+     *
+     * @param  string $type
+     * @param  bool   $testDeleted
+     * @access public
+     * @return string
+     */
+    public function buildIndexQueryTest(string $type, bool $testDeleted = true): string
+    {
+        $result = $this->objectModel->buildIndexQuery($type, $testDeleted);
+        if(dao::isError()) return dao::getError();
+
+        return $result->get();
+    }
 }
