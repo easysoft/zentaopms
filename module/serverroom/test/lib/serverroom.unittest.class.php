@@ -12,14 +12,14 @@ class serverroomTest
      *
      * @param  object $roomData
      * @access public
-     * @return array|bool
+     * @return mixed
      */
-    public function createTest(object $roomData): array|bool
+    public function createTest(object $roomData)
     {
         $result = $this->objectModel->create($roomData);
-        if($result) return true;
+        if(dao::isError()) return dao::getError();
 
-        return dao::getError();
+        return $result;
     }
 
     /**
