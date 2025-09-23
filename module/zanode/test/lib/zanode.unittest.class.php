@@ -341,10 +341,12 @@ class zanodeTest
      * @access public
      * @return void
      */
-    public function updateImageStatusTest(int $imageID, object $data): object
+    public function updateImageStatusTest(int $imageID, object $data): object|bool
     {
         $this->updateImageStatus($imageID, $data);
-        return $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+        $result = $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+        if(dao::isError()) return dao::getError();
+        return $result ?: false;
     }
 
     /**
