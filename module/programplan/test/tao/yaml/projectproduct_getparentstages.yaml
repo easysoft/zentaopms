@@ -1,0 +1,14 @@
+title: projectproduct data for getParentStages test
+author: Claude Code
+version: 1.0
+desc: 为getParentStages方法测试准备的项目产品关联数据
+
+fields:
+  - field: project
+    range: 1-20
+  - field: product
+    range: 1{5},2{5},3{4},4{3},5{2},6{1}
+  - field: branch
+    range: 0{18},1{2}
+  - field: plan
+    range: 0{5},1-15{15}

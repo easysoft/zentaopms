@@ -940,4 +940,34 @@ class programplanTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test getParentStages method.
+     *
+     * @param  int    $executionID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @param  string $param
+     * @access public
+     * @return array|false
+     */
+    public function getParentStagesTest(int $executionID, int $planID, int $productID, string $param = ''): array|false
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getParentStages');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $executionID, $planID, $productID, $param);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+    }
 }
