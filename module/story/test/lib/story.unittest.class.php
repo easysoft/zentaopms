@@ -3846,4 +3846,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test extractAccountsFromSingle method.
+     *
+     * @param  object $story
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromSingleTest(object $story): array
+    {
+        $result = $this->objectModel->extractAccountsFromSingle($story);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
