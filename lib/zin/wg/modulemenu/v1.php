@@ -326,6 +326,7 @@ class moduleMenu extends wg
                         set::size('sm'),
                         set::caret(false),
                         set::url($this->prop('createModuleLink')),
+                        set::hint($this->prop('createModuleHint')),
                         setData(array('toggle' => 'modal', 'size' => 'sm'))
                     ) : null,
                     $hasActionDropdown ? $actions : div(),
