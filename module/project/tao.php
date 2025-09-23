@@ -1164,4 +1164,25 @@ class projectTao extends projectModel
 
         return true;
     }
+
+    /**
+     * 创建里程碑报告。
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return bool
+     */
+    protected function createMilestoneReport(int $projectID): bool
+    {
+        $report = new stdclass();
+        $report->title        = $this->lang->project->milestoneReport;
+        $report->project      = $projectID;
+        $report->module       = 'milestone';
+        $report->templateType = 'projectReport';
+        $report->addedBy      = 'system';
+        $report->addedDate    = helper::now();
+        $this->dao->insert(TABLE_DOC)->data($report)->exec();
+
+        return !dao::isError();
+    }
 }
