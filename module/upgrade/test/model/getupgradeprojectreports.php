@@ -6,7 +6,7 @@ title=测试 projectModel->getUpgradeProjectReports();
 timeout=0
 cid=1
 
-- 检查周报数量 @8
+- 检查周报数量 @13
 - 检查周报信息
  - 属性project @2
  - 属性weekStart @2025-01-08
@@ -30,5 +30,5 @@ global $tester;
 $upgradeModel = $tester->loadModel('upgrade');
 $result       = $upgradeModel->getUpgradeProjectReports();
 
-r(count($result)) && p()                                               && e('8');                             // 检查周报数量
-r($result[0])     && p('project,weekStart,projectStatus,projectBegin') && e('2,2025-01-08,doing,2024-12-30'); // 检查周报信息
+r(count($result)) && p()                                               && e('13');                             // 检查报告数量
+r($result[5])     && p('project,weekStart,projectStatus,projectBegin') && e('2,2025-01-08,doing,2024-12-30'); // 检查周报信息
