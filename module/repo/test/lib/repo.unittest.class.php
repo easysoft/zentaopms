@@ -627,12 +627,11 @@ class repoTest
 
     public function saveExistCommits4BranchTest(int $repoID, string $branch)
     {
-        $objects = $this->objectModel->saveExistCommits4Branch($repoID, $branch);
+        $result = $this->objectModel->saveExistCommits4Branch($repoID, $branch);
 
         if(dao::isError()) return dao::getError();
 
-        $result = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->fetchAll();
-        return $result;
+        return $result ? '1' : '0';
     }
 
     public function updateCommitCountTest(int $repoID, int $count)
