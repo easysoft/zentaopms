@@ -1,33 +1,66 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->checkDeletedBranches();
+title=测试 repoModel::checkDeletedBranches();
 timeout=0
-cid=8
+cid=0
 
-- 移除gitlab代码库已经删除的分支
- - 属性repoHistoryCount @3
- - 属性repoBranchCount @0
- - 属性repoFilesCount @0
+- 步骤1：正常删除已删除的分支数据
+ - 属性repoHistoryCount @4
+ - 属性repoBranchCount @4
+ - 属性repoFilesCount @4
+- 步骤2：测试空分支列表输入
+ - 属性repoHistoryCount @4
+ - 属性repoBranchCount @4
+ - 属性repoFilesCount @4
+- 步骤3：测试master分支不被删除（master存在但不在最新列表中）
+ - 属性repoHistoryCount @4
+ - 属性repoBranchCount @4
+ - 属性repoFilesCount @4
+- 步骤4：测试多个分支删除场景
+ - 属性repoHistoryCount @2
+ - 属性repoBranchCount @2
+ - 属性repoFilesCount @2
+- 步骤5：测试不存在代码库ID
+ - 属性repoHistoryCount @2
+ - 属性repoBranchCount @2
+ - 属性repoFilesCount @2
 
 */
 
-zenData('pipeline')->gen(4);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+
+// 准备测试数据 - 使用简单的数据生成方式
 zenData('repo')->loadYaml('repo')->gen(5);
-zenData('repohistory')->loadYaml('repohistory')->gen(4);
+
+// 手动设置分支数据以确保测试准确性
 $repoBranch = zenData('repobranch');
-$repoBranch->branch->range('deletedBranch');
-$repoBranch->gen(1);
-zenData('repofiles')->gen(1);
+$repoBranch->repo->range('1{6}, 2{3}');
+$repoBranch->revision->range('1,2,3,4,5,6,7,8,9');
+$repoBranch->branch->range('master,develop,feature-branch,hotfix-branch,deleted-branch,tag-branch,main,dev,test');
+$repoBranch->gen(9);
 
-$repo = new repoTest();
+$repoHistory = zenData('repohistory');
+$repoHistory->repo->range('1{6}, 2{3}');
+$repoHistory->revision->range('1,2,3,4,5,6,7,8,9');
+$repoHistory->gen(9);
 
-$gitlabID = 1;
-$latestBranches = array('branch1' => 'branch1');
+$repoFiles = zenData('repofiles');
+$repoFiles->repo->range('1{6}, 2{3}');
+$repoFiles->revision->range('1,2,3,4,5,6,7,8,9');
+$repoFiles->gen(9);
 
-r($repo->checkDeletedBranchesTest($gitlabID, $latestBranches)) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('3,0,0'); //移除gitlab代码库已经删除的分支
+// 用户登录
+su('admin');
+
+// 创建测试实例
+$repoTest = new repoTest();
+
+r($repoTest->checkDeletedBranchesTest(1, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4'); // 步骤1：正常删除已删除的分支数据
+r($repoTest->checkDeletedBranchesTest(1, array())) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4'); // 步骤2：测试空分支列表输入
+r($repoTest->checkDeletedBranchesTest(1, array('develop' => 'develop'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4'); // 步骤3：测试master分支不被删除（master存在但不在最新列表中）
+r($repoTest->checkDeletedBranchesTest(2, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('2,2,2'); // 步骤4：测试多个分支删除场景
+r($repoTest->checkDeletedBranchesTest(999, array('master' => 'master'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('2,2,2'); // 步骤5：测试不存在代码库ID

@@ -1,0 +1,26 @@
+title: table zt_repobranch for checkDeletedBranches test
+desc: "分支数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: repo
+    note: "代码库ID"
+    range: 1{8}, 2{6}, 3{4}, 4{1}, 5{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "版本ID"
+    range: 1{8}, 2{6}, 3{4}, 4{1}, 5{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: branch
+    note: "分支名"
+    range: master{6}, feature-branch{5}, hotfix-branch{4}, develop{3}, deleted-branch{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

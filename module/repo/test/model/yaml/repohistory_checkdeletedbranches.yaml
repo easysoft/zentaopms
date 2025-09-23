@@ -1,0 +1,52 @@
+title: table zt_repohistory for checkDeletedBranches test
+desc: "版本历史数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "历史ID"
+    range: 1-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: repo
+    note: "代码库ID"
+    range: 1{10}, 2{5}, 3{3}, 4{1}, 5{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "版本号"
+    range: 1-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: commit
+    note: "提交哈希"
+    range: abcd1234{5}, efgh5678{3}, ijkl9012{2}, mnop3456{10}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: comment
+    note: "提交注释"
+    range: Fix bug{5}, Add feature{3}, Update docs{2}, Delete branch{10}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: committer
+    note: "提交者"
+    range: admin{8}, developer{7}, tester{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: time
+    note: "提交时间"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
