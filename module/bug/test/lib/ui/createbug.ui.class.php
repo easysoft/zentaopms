@@ -178,4 +178,30 @@ class createBugTester extends tester
         if($assignedTo[$index]->getText() != $assignee) return false;
         return true;
     }
+
+    /**
+     * 从弹出菜单中选择指派者
+     * Select assignee from popup menu
+     *
+     * @param  object $form
+     * @param  string $assignee
+     * @access public
+     */
+    private function selectFromPopUp($form = null, $assignee = '')
+    {
+        if(!$form) return $this->failed('form is null!');
+        $list = $form->dom->getElementList($form->dom->xpath['popupMenu'])->element;
+        $form->wait(3);
+        $found = false;
+        foreach($list as $item)
+        {
+            if($item->getText() == $assignee)
+            {
+                $item->click();
+                $found = true;
+                break;
+            }
+        }
+        if(!$found) return $this->failed('bug批量指派失败，找不到指派者' . $assignee);
+    }
 }
