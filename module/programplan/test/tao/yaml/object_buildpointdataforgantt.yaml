@@ -1,0 +1,37 @@
+---
+title: buildPointDataForGantt方法测试数据
+desc: 用于测试programplanTao::buildPointDataForGantt方法的评审点数据
+
+fields:
+- field: id
+  note: 评审点ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目ID
+  range: 1-3
+- field: product
+  note: 产品ID
+  range: 1-2
+- field: category
+  note: 评审点类别
+  range: [PP,DCP,TR4,PDCP,CDCP]
+- field: title
+  note: 评审点标题
+  range: [评审点标题1,评审点标题2,基线评审点3,设计评审点4,测试评审点5]
+- field: begin
+  note: 计划开始时间
+  range: ['2023-01-01','2023-02-01','2023-03-01','','0000-00-00']
+- field: end
+  note: 计划结束时间
+  range: ['2023-12-31','2024-01-31','2024-02-28','','0000-00-00']
+- field: createdDate
+  note: 创建时间
+  range: ['2023-01-01 09:00:00','2023-02-01 10:00:00','2023-03-01 11:00:00']
+- field: deleted
+  note: 是否删除
+  range: ['0']
+- field: enabled
+  note: 是否启用
+  range: [1]

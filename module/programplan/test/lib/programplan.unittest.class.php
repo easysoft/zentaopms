@@ -878,4 +878,35 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test buildPointDataForGantt method.
+     *
+     * @param  int    $planID
+     * @param  object $point
+     * @param  array  $reviewDeadline
+     * @access public
+     * @return object|array
+     */
+    public function buildPointDataForGanttTest(int $planID, ?object $point, array $reviewDeadline): object|array
+    {
+        if($point === null) return array('error' => 'Point object is null');
+
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('buildPointDataForGantt');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $planID, $point, $reviewDeadline);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
 }
