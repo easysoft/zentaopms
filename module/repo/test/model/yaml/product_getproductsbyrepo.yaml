@@ -1,0 +1,63 @@
+title: product数据 for getProductsByRepo测试
+desc: 为getProductsByRepo方法测试提供测试数据
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-12
+- field: program
+  range: 0,0,0,0,0,1,1,1,1,1,2,2
+- field: name
+  fields:
+  - field: name1
+    range: "[]"
+  - field: name2
+    range: 正常产品1,正常产品2,正常产品3,正常产品4,正常产品5,正常产品6,正常产品7,正常产品8,已删除产品1,已删除产品2,不存在产品1,不存在产品2
+  - field: name3
+    range: "[]"
+- field: code
+  fields:
+  - field: code1
+    range: code
+  - field: code2
+    range: 1,2,3,4,5,6,7,8,9,10,11,12
+- field: shadow
+  range: 0
+- field: line
+  range: 0
+- field: type
+  range: normal,normal,normal,normal,normal,branch,branch,platform,normal,normal,normal,normal
+- field: status
+  range: normal,normal,normal,normal,normal,normal,normal,normal,closed,closed,normal,normal
+- field: subStatus
+  range: "[]"
+- field: PMT
+  range: "[]"
+- field: desc
+  range: "[]"
+- field: PO
+  range: admin
+- field: QD
+  range: admin
+- field: RD
+  range: admin
+- field: feedback
+  range: admin
+- field: acl
+  range: open
+- field: whitelist
+  range: "[]"
+- field: reviewer
+  range: "[]"
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: "`2024-01-01 00:00:00`"
+- field: createdVersion
+  range: "[]"
+- field: order
+  range: 1-12
+- field: vision
+  range: rnd
+- field: deleted
+  range: 0,0,0,0,0,0,0,0,1,1,0,0
