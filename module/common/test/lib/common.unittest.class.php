@@ -2819,4 +2819,20 @@ class commonTest
         // 返回结果
         return $app->user;
     }
+
+    /**
+     * Test queryListForPreAndNext method.
+     *
+     * @param  string $type
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function queryListForPreAndNextTest($type = '', $sql = '')
+    {
+        $result = $this->objectTao->queryListForPreAndNext($type, $sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
