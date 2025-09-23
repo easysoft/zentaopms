@@ -1,30 +1,45 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->getByID();
+title=测试 repoModel::getByID();
 timeout=0
-cid=1
+cid=0
 
-- 获取gitlab版本库codePath属性codePath @http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml
-- 获取gitea版本库项目属性serviceProject @gitea/unittest
-- 获取svn版本库密码属性password @KXdOi8zgTcUqEFX2Hx8B
-- 获取不存在版本库 @0
+- 测试步骤1：正常获取存在的repo对象
+ - 属性id @1
+ - 属性name @testHtml
+ - 属性SCM @Gitlab
+- 测试步骤2：验证repo对象的基本属性属性serviceProject @1
+- 测试步骤3：测试不存在的repoID @0
+- 测试步骤4：测试无效的repoID(0) @0
+- 测试步骤5：测试负数repoID @0
+- 测试步骤6：验证Gitea仓库信息
+ - 属性name @unittest
+ - 属性SCM @Gitea
+- 测试步骤7：验证SVN仓库加密信息
+ - 属性account @admin
+ - 属性encrypt @base64
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+
+// 使用现有的repo数据
 zenData('repo')->loadYaml('repo')->gen(4);
 
-$repo = $tester->loadModel('repo');
+// 用户登录
+su('admin');
 
-$idList = array(1, 2, 3, 4, 10001);
-$result = $repo->getByIdList($idList);
+// 创建测试实例
+$repoTest = new repoTest();
 
-r($repo->getByID(1))     && p('codePath')       && e('http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml'); //获取gitlab版本库codePath
-r($repo->getByID(3))     && p('serviceProject') && e('gitea/unittest'); //获取gitea版本库项目
-r($repo->getByID(4))     && p('password')       && e('KXdOi8zgTcUqEFX2Hx8B'); //获取svn版本库密码
-r($repo->getByID(10001)) && p()                 && e('0'); //获取不存在版本库
+r($repoTest->getByIDTest(1)) && p('id,name,SCM') && e('1,testHtml,Gitlab'); // 测试步骤1：正常获取存在的repo对象
+r($repoTest->getByIDTest(2)) && p('serviceProject') && e('1'); // 测试步骤2：验证repo对象的基本属性
+r($repoTest->getByIDTest(999)) && p() && e('0'); // 测试步骤3：测试不存在的repoID
+r($repoTest->getByIDTest(0)) && p() && e('0'); // 测试步骤4：测试无效的repoID(0)
+r($repoTest->getByIDTest(-1)) && p() && e('0'); // 测试步骤5：测试负数repoID
+r($repoTest->getByIDTest(3)) && p('name,SCM') && e('unittest,Gitea'); // 测试步骤6：验证Gitea仓库信息
+r($repoTest->getByIDTest(4)) && p('account,encrypt') && e('admin,base64'); // 测试步骤7：验证SVN仓库加密信息
