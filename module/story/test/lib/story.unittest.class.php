@@ -3990,4 +3990,20 @@ class storyTest
 
         return count($result);
     }
+
+    /**
+     * Test getEstimateInfo method.
+     *
+     * @param  int $storyID
+     * @param  int $round
+     * @access public
+     * @return mixed
+     */
+    public function getEstimateInfoTest(int $storyID, int $round = 0)
+    {
+        $result = $this->objectModel->getEstimateInfo($storyID, $round);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
