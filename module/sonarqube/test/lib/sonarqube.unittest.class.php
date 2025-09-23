@@ -52,20 +52,40 @@ class sonarqubeTest
 
     public function createProjectTest($sonarqubeID, $post)
     {
+        dao::$errors = array(); // 清空错误信息
         $result = $this->objectModel->createProject($sonarqubeID, (object)$post);
         $errors = dao::getError();
-        if($errors)
+
+        if($errors && is_array($errors))
         {
-            if(current($errors['name']) == "项目标识的格式不正确。允许的字符为字母、数字、'-'、''、'.'和“：”，至少有一个非数字。") return 'return error';
-            if(current($errors['name']) == false) return 'return false';
-            if(current($errors['name']) == 'Could not create Project with key: "' . $post['projectKey'] . '". A similar key already exists: "' . $post['projectKey'] . '"') return true;
+            // 检查项目名称长度错误
+            if(isset($errors['projectName']) && is_array($errors['projectName']))
+            {
+                $nameError = current($errors['projectName']);
+                if(strpos($nameError, '项目名称') !== false && strpos($nameError, '255') !== false) return 'return false';
+            }
+
+            // 检查项目键长度错误
+            if(isset($errors['projectKey']) && is_array($errors['projectKey']))
+            {
+                $keyError = current($errors['projectKey']);
+                if(strpos($keyError, '项目键') !== false && strpos($keyError, '400') !== false) return 'return false';
+            }
+
+            // 检查API返回的格式错误
+            if(isset($errors['name']) && is_array($errors['name']))
+            {
+                $apiError = current($errors['name']);
+                if(strpos($apiError, '项目标识的格式不正确') !== false) return 'return error';
+                if($apiError == false) return 'return false';
+                if(strpos($apiError, 'Could not create Project') !== false) return true;
+            }
+
             return $errors;
         }
-        else
-        {
-            if(empty($result)) $result = 'return false';
-            return $result;
-        }
+
+        if(empty($result)) return 'return false';
+        return $result;
     }
 
     /**
@@ -353,6 +373,21 @@ class sonarqubeTest
         {
             return $result;
         }
+
+        return $result;
+    }
+
+    /**
+     * Test convertApiError method.
+     *
+     * @param  array|string $message
+     * @access public
+     * @return string
+     */
+    public function convertApiErrorTest($message)
+    {
+        $result = $this->objectModel->convertApiError($message);
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
