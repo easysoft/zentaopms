@@ -987,4 +987,24 @@ class programplanTest
 
         return $result;
     }
+
+    /**
+     * Test getStageCount method.
+     *
+     * @param  int    $planID
+     * @param  string $mode
+     * @access public
+     * @return int
+     */
+    public function getStageCountTest(int $planID, string $mode = ''): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStageCount');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $planID, $mode);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
