@@ -4006,4 +4006,19 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test getEstimateRounds method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return array
+     */
+    public function getEstimateRoundsTest(int $storyID): array
+    {
+        $result = $this->objectModel->getEstimateRounds($storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
