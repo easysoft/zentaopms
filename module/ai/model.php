@@ -1185,14 +1185,14 @@ class aiModel extends model
      */
     public function updateCustomCategories()
     {
-        $data = array_filter($_POST);
-        if(empty($data)) return;
-
         $this->dao->delete()
             ->from(TABLE_CONFIG)
             ->where('module')->eq('ai')
             ->andWhere('section')->eq('miniProgram')
             ->exec();
+
+        $data = array_filter($_POST);
+        if(empty($data)) return;
 
         foreach($data as $key => $value)
         {
