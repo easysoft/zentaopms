@@ -147,12 +147,17 @@ class sonarqubeTest
         return $result;
     }
 
-    public function apiValidateTest($sonarqubeID, $url = '', $token = '')
+    public function apiValidateTest($url = '', $token = '', $useDefault = true)
     {
         global $tester;
-        $sonarqubeServer = $tester->loadModel('pipeline')->getByID($sonarqubeID);
-        $url   = $url ? $url : $sonarqubeServer->url;
-        $token = $token ? $token : $sonarqubeServer->token;
+
+        // 如果使用默认值且参数为空，则从数据库获取
+        if($useDefault && empty($url) && empty($token))
+        {
+            $sonarqubeServer = $tester->loadModel('pipeline')->getByID(2);
+            $url   = $url ? $url : $sonarqubeServer->url;
+            $token = $token ? $token : $sonarqubeServer->token;
+        }
 
         $result = $this->objectModel->apiValidate($url, $token);
 
