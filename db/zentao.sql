@@ -14344,6 +14344,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `template` mediumint(8) NOT NULL DEFAULT '0',
   `docVersion` varchar(255) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(30) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL DEFAULT '',
   `isBaseline` tinyint(1) DEFAULT '0',
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
