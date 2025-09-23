@@ -204,4 +204,28 @@ class createBugTester extends tester
         }
         if(!$found) return $this->failed('bug批量指派失败，找不到指派者' . $assignee);
     }
+
+    /**
+     * bug批量指派。
+     * batch assign all bugs.
+     * 在bug页面选中下面的列表下面的复选框，然后点击'指派给'按钮指派给指定用户
+     *
+     * @param  array  $product
+     * @param  string $assignee
+     * @access public
+     * @return object
+     */
+    public function batchAssign($product = array(), $assignee = '')
+    {
+        $assignee = $assignee ?? 'admin';
+        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(1);
+        $form->dom->bugLabel->click();
+        $form->wait(1);
+        $form->dom->assignTo->click();
+        $form->wait(1);
+        $this->selectFromPopUp($form, $assignee);
+        if($this->checkAssign($form, -1, $assignee)) return $this->success('bug批量指派成功');
+        return $this->failed('bug批量指派失败');
+    }
 }
