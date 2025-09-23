@@ -272,4 +272,18 @@ class sonarqubeTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test apiErrorHandling method.
+     *
+     * @param  object|null $response
+     * @access public
+     * @return mixed
+     */
+    public function apiErrorHandlingTest($response)
+    {
+        dao::$errors = array();
+        $result = $this->objectModel->apiErrorHandling($response);
+        return $result;
+    }
 }
