@@ -761,10 +761,80 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test processGitService method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
     public function processGitServiceTest(int $repoID)
     {
         $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+
         $repo->codePath = $repo->path;
+
+        $objects = $this->objectModel->processGitService($repo);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test processGitService method with getCodePath parameter.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function processGitServiceTestWithCodePath(int $repoID)
+    {
+        $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        $repo->codePath = $repo->path;
+
+        $objects = $this->objectModel->processGitService($repo, true);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test processGitService method with invalid path.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function processGitServiceTestWithInvalidPath(int $repoID)
+    {
+        $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        $repo->codePath = $repo->path;
+        $repo->path = '/invalid/path/that/does/not/exist';
+
+        $objects = $this->objectModel->processGitService($repo);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test processGitService method with empty serviceHost.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function processGitServiceTestWithEmptyHost(int $repoID)
+    {
+        $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+
+        $repo->codePath = $repo->path;
+        $repo->serviceHost = 0;
 
         $objects = $this->objectModel->processGitService($repo);
 
