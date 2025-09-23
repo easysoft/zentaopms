@@ -915,7 +915,7 @@ class transferTest
         $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
         $originalSessionTmpFile = isset($_SESSION['tmpFile']) ? $_SESSION['tmpFile'] : null;
 
-        try 
+        try
         {
             // 获取临时文件路径
             $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
@@ -944,13 +944,13 @@ class transferTest
 
             // 验证临时文件是否创建成功
             $expectedTmpFile = $tmpPath . DS . md5(basename($testFile));
-            
+
             if(file_exists($expectedTmpFile))
             {
                 // 验证文件内容
                 $fileContent = file_get_contents($expectedTmpFile);
                 $unserializedData = unserialize($fileContent);
-                
+
                 // 验证文件内容是否能正确反序列化
                 if($unserializedData !== false && is_array($unserializedData))
                 {
@@ -1002,6 +1002,29 @@ class transferTest
             // 清理测试文件
             if(isset($testFile) && file_exists($testFile)) unlink($testFile);
             if(isset($expectedTmpFile) && file_exists($expectedTmpFile)) unlink($expectedTmpFile);
+        }
+    }
+
+    /**
+     * Test getFileGroups method.
+     *
+     * @param  string $module
+     * @param  array  $idList
+     * @access public
+     * @return mixed
+     */
+    public function getFileGroupsTest(string $module = '', array $idList = array())
+    {
+        try
+        {
+            $result = $this->objectTao->getFileGroups($module, $idList);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
         }
     }
 }
