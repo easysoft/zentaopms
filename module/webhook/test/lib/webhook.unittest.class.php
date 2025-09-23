@@ -156,22 +156,20 @@ class webhookTest
     /**
      * Bind Test
      *
-     * @param  array $create
-     * @param  array $bind
+     * @param  int   $webhookID
+     * @param  array $userList
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function bindTest($create, $bind)
+    public function bindTest($webhookID, $userList)
     {
-        $objectID = $this->objectModel->create($create);
+        $_POST['userid'] = $userList;
 
-        foreach($bind as $key => $value) $_POST[$key] = $value;
-
-        $result = $this->objectModel->bind($objectID);
+        $result = $this->objectModel->bind($webhookID);
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result ? 1 : 0;
     }
 
     /**
