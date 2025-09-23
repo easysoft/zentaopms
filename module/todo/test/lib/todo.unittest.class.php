@@ -653,4 +653,30 @@ class todoTest
 
         return $result;
     }
+
+    /**
+     * Test getListBy method.
+     *
+     * @param  string       $type
+     * @param  string       $account
+     * @param  string|array $status
+     * @param  string       $begin
+     * @param  string       $end
+     * @param  int          $limit
+     * @param  string       $orderBy
+     * @param  object       $pager
+     * @access public
+     * @return array
+     */
+    public function getListByTest(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, ?object $pager = null): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getListBy');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $type, $account, $status, $begin, $end, $limit, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
