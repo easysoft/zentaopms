@@ -705,14 +705,20 @@ class repoTest
         return $result;
     }
 
-    public function filterProjectTest(int $repoID)
+    /**
+     * Test filterProject method.
+     *
+     * @param  array $productIDList
+     * @param  array $projectIDList
+     * @access public
+     * @return mixed
+     */
+    public function filterProjectTest(array $productIDList = array(), array $projectIDList = array())
     {
-        $repo     = $this->objectModel->getByID($repoID);
-        $products = !empty($repo->product) ? explode(',', $repo->product) : array();
-        $projects = !empty($repo->projects) ? explode(',', $repo->projects) : array();
+        $result = $this->objectModel->filterProject($productIDList, $projectIDList);
+        if(dao::isError()) return dao::getError();
 
-        $result = $this->objectModel->filterProject($products, $projects);
-        return $result;
+        return count($result);
     }
 
     public function getGitlabFilesByPathTest(int $repoID, string $path = '', string $branch = '')
