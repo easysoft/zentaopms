@@ -2028,4 +2028,20 @@ class actionTest
         return false;
     }
 
+    /**
+     * Test getReleaseRelated method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getReleaseRelated(string $objectType, int $objectID): array
+    {
+        $result = $this->objectTao->getReleaseRelated($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
