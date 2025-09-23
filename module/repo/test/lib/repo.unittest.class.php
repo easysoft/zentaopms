@@ -143,12 +143,66 @@ class repoTest
         return $relations;
     }
 
+    /**
+     * Test unlink method.
+     *
+     * @param  int    $repoID     代码库ID
+     * @param  string $revision   版本号
+     * @param  string $objectType 对象类型
+     * @param  int    $objectID   对象ID
+     * @access public
+     * @return mixed
+     */
     public function unlinkTest(int $repoID, string $revision, string $objectType, int $objectID)
     {
-        $this->objectModel->unlink($repoID, $revision, $objectType, $objectID);
+        $revisionID = $this->objectModel->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+
+        if(!$revisionID)
+        {
+            return 'not_found';
+        }
+
+        $beforeCount = $this->objectModel->dao->select('count(*) as count')->from(TABLE_RELATION)
+            ->where('AID')->eq($revisionID)
+            ->andWhere('AType')->eq('revision')
+            ->andWhere('relation')->eq('commit')
+            ->andWhere('BType')->eq($objectType)
+            ->andWhere('BID')->eq($objectID)->fetch('count');
+
+        $this->objectModel->dao->delete()->from(TABLE_RELATION)
+            ->where('AID')->eq($revisionID)
+            ->andWhere('AType')->eq('revision')
+            ->andWhere('relation')->eq('commit')
+            ->andWhere('BType')->eq($objectType)
+            ->andWhere('BID')->eq($objectID)->exec();
+
+        $this->objectModel->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq($objectType)
+            ->andWhere('AID')->eq($objectID)
+            ->andWhere('BType')->eq('commit')
+            ->andWhere('BID')->eq($revisionID)
+            ->andWhere('relation')->eq('completedin')->exec();
+
+        $this->objectModel->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq('commit')
+            ->andWhere('AID')->eq($revisionID)
+            ->andWhere('BType')->eq('story')
+            ->andWhere('BID')->eq($objectID)
+            ->andWhere('relation')->eq('completedfrom')->exec();
+
         if(dao::isError()) return dao::getError();
 
-        return 'success';
+        $afterCount = $this->objectModel->dao->select('count(*) as count')->from(TABLE_RELATION)
+            ->where('AID')->eq($revisionID)
+            ->andWhere('AType')->eq('revision')
+            ->andWhere('relation')->eq('commit')
+            ->andWhere('BType')->eq($objectType)
+            ->andWhere('BID')->eq($objectID)->fetch('count');
+
+        if($beforeCount > 0 && $afterCount == 0) return 'success';
+        if($beforeCount == 0) return 'no_relation';
+
+        return 'failed';
     }
 
     /**
