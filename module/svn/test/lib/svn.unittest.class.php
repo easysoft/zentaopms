@@ -248,4 +248,19 @@ class svnTest
 
         return trim($result);
     }
+
+    /**
+     * Test setClient method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return mixed
+     */
+    public function setClientTest(object $repo)
+    {
+        $result = $this->objectModel->setClient($repo);
+        if(dao::isError()) return dao::getError();
+
+        return array('result' => $result ? '1' : '', 'client' => $this->objectModel->client);
+    }
 }
