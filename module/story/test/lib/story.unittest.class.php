@@ -23,6 +23,21 @@ class storyTest
     }
 
     /**
+     * Test getDataOfStoriesPerAssignedTo method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerAssignedToTest($storyType = 'story')
+    {
+        $result = $this->objectModel->getDataOfStoriesPerAssignedTo($storyType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test removeFormFieldsForCreate method.
      *
      * @param  array  $fields 表单字段数组
