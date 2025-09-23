@@ -1,0 +1,52 @@
+---
+title: story数据
+desc: 产品需求统计测试数据
+author: zentao
+version: 1
+
+fields:
+- field: id
+  range: 1-20
+  note: 需求ID
+- field: product
+  range: 1{8},2{6},3{4},999{2}
+  note: 产品ID - 产品1有8条，产品2有6条，产品3有4条，不存在产品999有2条
+- field: type
+  range: requirement{10},story{10}
+  note: 需求类型 - requirement和story各10条
+- field: status
+  range: draft{4},active{6},closed{4},changing{3},reviewing{2},launched{1}
+  note: 需求状态 - 覆盖各种状态
+- field: deleted
+  range: 0{18},1{2}
+  note: 删除状态 - 18条正常，2条已删除
+- field: title
+  range: 需求标题{12}
+  note: 需求标题
+- field: openedBy
+  range: admin{8},user1{4},user2{4}
+  note: 创建人
+- field: openedDate
+  range: 2023-01-01 00:00:00{6},2023-06-01 00:00:00{6},2023-12-01 00:00:00{6}
+  note: 创建时间
+- field: assignedTo
+  range: admin{5},user1{5},user2{5},'{5}
+  note: 指派给
+- field: version
+  range: 1{15},2{3},3{2}
+  note: 版本号
+- field: estimate
+  range: 1{5},2{5},3{5},5{5}
+  note: 预估工时
+- field: pri
+  range: 1{3},2{5},3{7},4{5}
+  note: 优先级
+- field: stage
+  range: wait{4},planned{4},designing{4},developing{4},testing{4}
+  note: 阶段
+- field: keywords
+  range: 关键词{10},''{10}
+  note: 关键词
+- field: mailto
+  range: admin@test.com{5},''{15}
+  note: 抄送邮箱

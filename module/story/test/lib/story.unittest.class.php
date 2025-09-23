@@ -23,6 +23,22 @@ class storyTest
     }
 
     /**
+     * Test getReviewerPairs method.
+     *
+     * @param  int $storyID
+     * @param  int $version
+     * @access public
+     * @return array
+     */
+    public function getReviewerPairsTest(int $storyID, int $version)
+    {
+        $result = $this->objectModel->getReviewerPairs($storyID, $version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getLastReviewer method.
      *
      * @param  int $storyID
@@ -4083,6 +4099,22 @@ class storyTest
     public function getPlanStoriesTest(int $planID, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $result = $this->objectModel->getPlanStories($planID, $status, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getStoriesCountByProductID method.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getStoriesCountByProductIDTest(int $productID, string $storyType = 'requirement'): array
+    {
+        $result = $this->objectModel->getStoriesCountByProductID($productID, $storyType);
         if(dao::isError()) return dao::getError();
 
         return $result;
