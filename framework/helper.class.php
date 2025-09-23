@@ -737,7 +737,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
         $actionConfig = $actionList[$action];
         $notLoadModel = !empty($actionConfig['notLoadModel']) ? $actionConfig['notLoadModel'] : false;
-        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
+        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'] && empty($actionConfig['url']['current']))
         {
             $module = $actionConfig['url']['module'];
             if(!$notLoadModel)
