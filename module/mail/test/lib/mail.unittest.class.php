@@ -728,4 +728,22 @@ class mailTest
             return $result;
         }
     }
+
+    /**
+     * Test replaceImageURL method.
+     *
+     * @param  string $body
+     * @param  array  $images
+     * @access public
+     * @return string
+     */
+    public function replaceImageURLTest($body, $images = array())
+    {
+        $method = new ReflectionMethod($this->objectTao, 'replaceImageURL');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $body, $images);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
