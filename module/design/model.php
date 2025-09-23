@@ -266,8 +266,8 @@ class designModel extends model
         $this->app->loadLang('product');
         $this->loadModel('file');
         $spec = $this->dao->select('name,`desc`,files')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
-        $design->name  = !empty($spec->name)   ? $spec->name  : '';
-        $design->desc  = !empty($spec->desc)   ? $spec->desc  : '';
+        $design->name  = !empty($spec->name)   ? $spec->name  : $design->name;
+        $design->desc  = !empty($spec->desc)   ? $spec->desc  : $design->desc;
         $design->files = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
 
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;

@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 designModel->getByID();
+timeout=0
 cid=1
 
 - 获取ID=0的设计信息 @0
