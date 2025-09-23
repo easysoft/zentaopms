@@ -200,21 +200,27 @@ class webhookTest
      * @param  string $actionType
      * @param  int    $actionID
      * @access public
-     * @return bool
+     * @return mixed
      */
     public function buildDataTest($objectType, $objectID, $actionType, $actionID)
     {
         static $webhooks = array();
         if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
+        if(!$webhooks) return false;
 
+        $result = false;
         foreach($webhooks as $id => $webhook)
         {
-            $objects = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
+            $data = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
+            if($data !== false)
+            {
+                $result = $data;
+                break;
+            }
         }
-        if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
