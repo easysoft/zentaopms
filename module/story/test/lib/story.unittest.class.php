@@ -3861,4 +3861,24 @@ class storyTest
 
         return $result;
     }
+
+    /**
+     * Test get2BeClosed method.
+     *
+     * @param  int|array  $productID
+     * @param  int|string $branch
+     * @param  string|array $modules
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function get2BeClosedTest(int|array $productID, int|string $branch = 0, string|array $modules = '', string $type = 'story', string $orderBy = '', ?object $pager = null): array
+    {
+        $result = $this->objectModel->get2BeClosed($productID, $branch, $modules, $type, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
