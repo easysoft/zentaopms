@@ -23,6 +23,21 @@ class storyTest
     }
 
     /**
+     * Test getLastReviewer method.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return string
+     */
+    public function getLastReviewerTest(int $storyID)
+    {
+        $result = $this->objectModel->getLastReviewer($storyID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getDataOfStoriesPerAssignedTo method.
      *
      * @param  string $storyType
