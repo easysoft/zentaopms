@@ -2849,4 +2849,21 @@ class pivotTest
 
         return $mockData;
     }
+
+    /**
+     * Test getFirstGroup method.
+     *
+     * @param  int $dimensionID
+     * @access public
+     * @return int
+     */
+    public function getFirstGroupTest(int $dimensionID): int
+    {
+        $method = new ReflectionMethod($this->objectTao, 'getFirstGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $dimensionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
