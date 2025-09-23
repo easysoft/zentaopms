@@ -315,6 +315,21 @@ class zahostTest
     }
 
     /**
+     * 测试检查宿主机的IP/域名是否可用。
+     * Test check address.
+     *
+     * @param  string $address
+     * @access public
+     * @return bool
+     */
+    public function checkAddressTest(string $address): bool
+    {
+        $result = $this->objectModel->checkAddress($address);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * 测试判断是否隐藏宿主机。
      * Test hidden host.
      *
@@ -327,7 +342,7 @@ class zahostTest
         ob_start();
         $result = $this->objectModel->hiddenHost();
         ob_end_clean(); // 清除缓冲的输出
-        
+
         if(dao::isError()) return dao::getError();
         return $result ? '1' : '0';
     }
