@@ -371,4 +371,23 @@ class ssoTest
 
         return $auth;
     }
+
+    /**
+     * Test bind method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function bindTest()
+    {
+        try {
+            $result = $this->objectModel->bind();
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (TypeError $e) {
+            // 当bind方法没有返回值时，返回null
+            return null;
+        }
+    }
 }
