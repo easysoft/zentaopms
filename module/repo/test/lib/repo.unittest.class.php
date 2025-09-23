@@ -25,6 +25,23 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $repo
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest($repo, $action)
+    {
+        $result = $this->objectModel->isClickable($repo, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function setMenuTest(int $repoID = 0)
     {
         $repos  = $this->objectModel->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
