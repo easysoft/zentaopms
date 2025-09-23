@@ -337,10 +337,10 @@ class ai extends control
 
         if(!empty($_POST))
         {
-            $_POST = array_filter($_POST, function($value, $key)
+            $_POST = array_filter($_POST, function($key)
             {
                 return strpos($key, 'custom') === 0;
-            }, ARRAY_FILTER_USE_BOTH);
+            }, ARRAY_FILTER_USE_KEY);
             if($this->ai->checkDuplicatedCategory()) return $this->sendError($this->lang->ai->maintenanceGroupDuplicated);
             $this->ai->updateCustomCategories();
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
