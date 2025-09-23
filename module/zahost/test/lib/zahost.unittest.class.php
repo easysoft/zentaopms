@@ -313,8 +313,11 @@ class zahostTest
      */
     public function insertImageListTest(array $imageList, int $hostID, array $downloadedImageList): array
     {
-        $this->objectModel->insertImageList($imageList, $hostID, $downloadedImageList);
+        // 调用tao层的insertImageList方法
+        $result = $this->objectModel->insertImageList($imageList, $hostID, $downloadedImageList);
+        if(dao::isError()) return dao::getError();
 
+        // 返回插入的镜像数据
         global $tester;
         return $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->fetchAll();
     }
