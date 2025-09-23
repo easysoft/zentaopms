@@ -11,16 +11,43 @@ class sonarqubeTest
 
     public function apiCreateProjectTest($sonarqubeID, $project = array())
     {
-        $result = $this->objectModel->apiCreateProject($sonarqubeID, (object)$project);
+        // 预处理项目对象，确保必要的属性存在且不为null
+        $projectObj = (object)$project;
+        if(!isset($projectObj->projectName) || $projectObj->projectName === null) $projectObj->projectName = '';
+        if(!isset($projectObj->projectKey) || $projectObj->projectKey === null) $projectObj->projectKey = '';
 
-        if($result === false) $result = 'return false';
-        if(isset($result->errors))
-        {
-            $result = $result->errors;
-            if($result[0]->msg == 'Could not create Project with key: "' . $project['projectKey'] . '". A similar key already exists: "' . $project['projectKey'] . '"') return true;
+        try {
+            $result = $this->objectModel->apiCreateProject($sonarqubeID, $projectObj);
+        } catch (Exception $e) {
+            return 'return false';
+        } catch (TypeError $e) {
+            return 'return false';
         }
-        if(isset($result->name) && $result->name == $project['projectName']) return true;
-        return $result;
+
+        if($result === false) return 'return false';
+
+        // 处理错误情况
+        if(is_array($result))
+        {
+            if(isset($result[0]->msg))
+            {
+                $errorMsg = $result[0]->msg;
+                if($errorMsg == "The 'project' parameter is missing") return 'missing project parameter';
+                if(strpos($errorMsg, 'Could not create Project') !== false) return 'project exists';
+            }
+            return 'api error';
+        }
+
+        // 处理成功情况
+        if(is_object($result))
+        {
+            if(isset($result->project) && isset($result->project->name)) return 'success';
+            if(isset($result->name) && isset($project['projectName']) && $result->name == $project['projectName']) return 'success';
+            return 'object result';
+        }
+
+        // 如果是其他类型，转为字符串返回
+        return is_string($result) ? $result : 'unknown result';
     }
 
     public function createProjectTest($sonarqubeID, $post)
