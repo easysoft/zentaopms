@@ -289,17 +289,16 @@ class zahostTest
      * 测试获取按主机分组的执行节点列表。
      * Test get node group by host.
      *
-     * @param  int    $hostID
      * @access public
      * @return array
      */
-    public function getNodeGroupHostTest(int $hostID): array
+    public function getNodeGroupHostTest(): array
     {
         $nodeGroupHost = $this->objectModel->getNodeGroupHost();
 
         if(dao::isError()) return dao::getError();
 
-        return zget($nodeGroupHost, $hostID, array());
+        return $nodeGroupHost;
     }
 
     /**
