@@ -184,6 +184,11 @@ class zanodeTest
     public function createSnapshotTest(int $nodeID, string $nodeIP, int $hzap, string $token, array $data): object|string
     {
         $node = $this->getNodeByID($nodeID);
+        if(!$node)
+        {
+            return '节点不存在';
+        }
+
         $node->ip      = $nodeIP;
         $node->hzap    = $hzap;
         $node->tokenSN = $token;
@@ -193,18 +198,35 @@ class zanodeTest
         $snapshot->name        = $data['name'];
         $snapshot->desc        = $data['desc'];
         $snapshot->status      = 'creating';
-        $snapshot->osName      = $node->osName;
+        $snapshot->osName      = $node->osName ?? 'Ubuntu20.04';
         $snapshot->memory      = 0;
         $snapshot->disk        = 0;
         $snapshot->fileSize    = 0;
         $snapshot->from        = 'snapshot';
 
         $snapshotID = $this->createSnapshot($node, $snapshot);
-        if(dao::isError()) return dao::getError();
+
+        if($snapshotID === false)
+        {
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if(is_array($errors))
+                {
+                    return reset($errors);
+                }
+                return $errors;
+            }
+            return '网络请求失败或Agent服务不可用';
+        }
 
         $createdSnapshot = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
-        $this->deleteSnapshot($snapshotID);
-        return $createdSnapshot;
+        if($createdSnapshot)
+        {
+            $this->deleteSnapshot($snapshotID);
+            return $createdSnapshot;
+        }
+        return '创建失败';
     }
 
     /**
