@@ -1444,13 +1444,24 @@ class repoTest
         return $diffs;
     }
 
+    /**
+     * Test parseTaskComment method.
+     *
+     * @param  string $comment
+     * @access public
+     * @return array
+     */
     public function parseTaskCommentTest(string $comment)
     {
         $rules   = $this->objectModel->processRules();
         $actions = array();
-        ob_start();
-        $result = $this->objectModel->parseTaskComment($comment, $rules, $actions);
-        ob_end_clean();
+
+        // 使用反射调用tao层的protected方法
+        $method = new ReflectionMethod($this->objectTao, 'parseTaskComment');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectTao, array($comment, $rules, &$actions));
+
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }
