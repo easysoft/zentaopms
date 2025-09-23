@@ -2885,6 +2885,19 @@ class executionTest
     }
 
     /**
+     * 测试设置看板菜单后获取完整的lang对象。
+     * Test get full lang object after setting kanban menu.
+     *
+     * @access public
+     * @return object
+     */
+    public function setKanbanMenuWithLangTest(): object
+    {
+        $this->executionModel->setKanbanMenu();
+        return $this->executionModel->lang->execution;
+    }
+
+    /**
      * 根据条件设置执行二级导航。
      * Set secondary navigation based on the conditions.
      *
