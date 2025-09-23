@@ -382,28 +382,42 @@ class searchTest
     }
 
     /**
-     * 测试搜索搜索字典。
+     * 测试保存搜索字典。
      * Test save dict.
      *
-     * @param  string $word
+     * @param  array|string $dictData
      * @access public
-     * @return int
+     * @return mixed
      */
-    public function saveDictTest($word)
+    public function saveDictTest($dictData)
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
-        $spliter = $tester->app->loadClass('spliter');
-        $titleSplited = $spliter->utf8Split($word);
+        // 如果传入的是字符串，使用分词器分词
+        if(is_string($dictData))
+        {
+            $spliter = $tester->app->loadClass('spliter');
+            $titleSplited = $spliter->utf8Split($dictData);
+            $dict = $titleSplited['dict'];
+        }
+        else
+        {
+            // 如果传入的是数组，直接使用
+            $dict = $dictData;
+        }
 
-        $this->objectModel->saveDict($titleSplited['dict']);
+        $result = $this->objectModel->saveDict($dict);
         if(dao::isError()) return dao::getError();
 
-        $dicts = $tester->dao->select("*")->from(TABLE_SEARCHDICT)->where('`key`')->in(array_keys($titleSplited['dict']))->fetchAll();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
+        // 返回保存结果和数据库中的记录
+        $savedDicts = $tester->dao->select("*")->from(TABLE_SEARCHDICT)->fetchAll();
 
-        return $dicts;
+        return array(
+            'result' => $result,
+            'count' => count($savedDicts),
+            'dicts' => $savedDicts
+        );
     }
 
     /**
