@@ -261,4 +261,33 @@ class createBugTester extends tester
         if($this->checkAssign($form, $index, $assignee)) return $this->success('bug直接修改指派成功');
         return $this->failed('bug直接修改指派失败');
     }
+
+    /**
+     * bug指派。
+     * assign specific bug to assignee
+     * 在bug页面选中列表指定bug前面的复选框，然后点击'指派给'按钮指派给指定用户
+     *
+     * @param  array  $product
+     * @param  string $bug
+     * @param  string $assignee
+     * @access public
+     * @return object
+     */
+    public function selectAssign($product = array(), $bugTitle = '', $assignee = '')
+    {
+        if(!$bugTitle) return $this->failed('bug选择指派失败，没有指定bug');
+        $assignee = $assignee ?? 'admin';
+        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(1);
+        $index = $this->findIndex($form, $bugTitle);
+        if($index == -1) return $this->failed('bug未找到' . $bugTitle);
+        $bugID = $form->dom->getElementList($form->dom->xpath['bugID'])->element;
+        $bugID[$index]->click();
+        $form->wait(1);
+        $form->dom->assignTo->click();
+        $form->wait(1);
+        $this->selectFromPopUp($form, $assignee);
+        if($this->checkAssign($form, $index, $assignee)) return $this->success('bug选择指派成功');
+        return $this->success('bug选择指派成功');
+    }
 }
