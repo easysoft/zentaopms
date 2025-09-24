@@ -76,7 +76,7 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'In Progress'
     )
-))) && p() && e('true'); // 测试步骤2：导入正常的change item数据
+))) && p() && e('true'); // 测试步骤2：导入有效的ChangeItem数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
@@ -96,24 +96,17 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 测试步骤4：导入不存在change group的数据
+))) && p() && e('true'); // 测试步骤4：导入无效ChangeGroup数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
-        'id' => 12,
-        'groupid' => 1,
-        'field' => 'priority',
-        'oldstring' => 'High',
-        'newstring' => 'Critical'
-    ),
-    (object)array(
-        'id' => 13,
-        'groupid' => 2,
-        'field' => 'resolution',
-        'oldstring' => '',
-        'newstring' => 'Fixed'
+        'id' => 21,
+        'groupid' => 3,
+        'field' => 'status',
+        'oldstring' => 'Open',
+        'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 测试步骤5：导入批量混合状态数据
+))) && p() && e('true'); // 测试步骤5：导入不存在Issue的数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
@@ -140,4 +133,28 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => '1.0.0',
         'newstring' => null
     )
-))) && p() && e('true'); // 测试步骤7：导入边界值数据
+))) && p() && e('true'); // 测试步骤7：导入边界值数据（null值）
+
+r($convertTest->importJiraChangeItemTest(array(
+    (object)array(
+        'id' => 12,
+        'groupid' => 1,
+        'field' => 'priority',
+        'oldstring' => 'High',
+        'newstring' => 'Critical'
+    ),
+    (object)array(
+        'id' => 13,
+        'groupid' => 2,
+        'field' => 'resolution',
+        'oldstring' => '',
+        'newstring' => 'Fixed'
+    ),
+    (object)array(
+        'id' => 14,
+        'groupid' => 1,
+        'field' => 'assignee',
+        'oldstring' => 'user1',
+        'newstring' => 'user2'
+    )
+))) && p() && e('true'); // 测试步骤8：导入批量混合状态数据
