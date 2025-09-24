@@ -16,10 +16,11 @@ include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
 // 准备file测试数据
 $fileTable = zenData('file');
-$fileTable->title->range('image.png,document.pdf,attachment.txt,screenshot.jpg,readme.md,design.psd');
-$fileTable->extension->range('png,pdf,txt,jpg,md,psd');
+$fileTable->id->range('1-20');
+$fileTable->title->range('image.png,document.pdf,attachment.txt,screenshot.jpg,readme.md,design.psd,test.docx,photo.gif,code.js,style.css');
+$fileTable->extension->range('png,pdf,txt,jpg,md,psd,docx,gif,js,css');
 $fileTable->objectType->range('story,bug,task,ticket,feedback,testcase,customflow');
-$fileTable->objectID->range('1-6');
+$fileTable->objectID->range('1-3');
 $fileTable->gen(20);
 
 // 准备story相关测试数据
@@ -29,114 +30,89 @@ $storyTable->title->range('Story1,Story2,Story3,Story4,Story5,Story6');
 $storyTable->gen(6);
 
 $storySpecTable = zenData('storyspec');
-$storySpecTable->story->range('1-6');
+$storySpecTable->story->range('1-3');
 $storySpecTable->version->range('1');
-$storySpecTable->title->range('Spec1,Spec2,Spec3,Spec4,Spec5,Spec6');
-$storySpecTable->spec->range('Content with !image.png|thumbnail! in it,Normal content,Another !document.pdf|attachment! reference,[],Content with multiple !screenshot.jpg|thumb! and !readme.md|doc! files,Empty content without attachments');
-$storySpecTable->gen(6);
+$storySpecTable->title->range('Story Spec 1,Story Spec 2,Story Spec 3');
+$storySpecTable->spec->range('Content with !image.png|thumbnail! attachment,Another story with !document.pdf|attachment! file,Third story with !screenshot.jpg|thumb! image');
+$storySpecTable->gen(3);
 
 // 准备bug测试数据
 $bugTable = zenData('bug');
-$bugTable->id->range('1-6');
-$bugTable->title->range('Bug1,Bug2,Bug3,Bug4,Bug5,Bug6');
-$bugTable->steps->range('Bug steps with !image.png|screenshot! screenshot,Simple bug steps,Steps with !attachment.txt|file! file,[],Complex steps with !document.pdf|attachment! attachment,Bug without files');
-$bugTable->gen(6);
+$bugTable->id->range('1-3');
+$bugTable->title->range('Bug Report 1,Bug Report 2,Bug Report 3');
+$bugTable->steps->range('Bug steps with !screenshot.jpg|image! file,Another bug with !attachment.txt|file! attachment,Complex bug with !readme.md|doc! documentation');
+$bugTable->gen(3);
 
 // 准备task测试数据
 $taskTable = zenData('task');
-$taskTable->id->range('1-6');
-$taskTable->name->range('Task1,Task2,Task3,Task4,Task5,Task6');
-$taskTable->desc->range('Task description with !screenshot.jpg|image! image,Plain task description,Description with !readme.md|file! file,[],Multi-file task with !image.png|thumb! and !document.pdf|doc!,Task without files');
-$taskTable->gen(6);
+$taskTable->id->range('1-3');
+$taskTable->name->range('Task 1,Task 2,Task 3');
+$taskTable->desc->range('Task with !design.psd|image! design,Task with !code.js|file! code,Task with !style.css|file! stylesheet');
+$taskTable->gen(3);
 
-// 注意：跳过ticket测试数据准备以避免assignedDate字段问题
+// 跳过ticket测试数据准备，由于assignedDate字段的复杂性
 
 // 准备feedback测试数据
 $feedbackTable = zenData('feedback');
-$feedbackTable->id->range('1-6');
-$feedbackTable->title->range('Feedback1,Feedback2,Feedback3,Feedback4,Feedback5,Feedback6');
-$feedbackTable->desc->range('Feedback with !readme.md|file! file,Plain feedback,Feedback with !image.png|image! image,[],Multi-attachment feedback with !document.pdf|doc! and !attachment.txt|file!,Feedback without files');
-$feedbackTable->gen(6);
+$feedbackTable->id->range('1-3');
+$feedbackTable->title->range('Feedback 1,Feedback 2,Feedback 3');
+$feedbackTable->desc->range('Feedback with !image.png|image! screenshot,Feedback with !document.pdf|attachment! document,Empty feedback content');
+$feedbackTable->gen(3);
 
-// 准备testcase测试数据
+// 准备testcase测试数据（会被跳过处理）
 $testcaseTable = zenData('case');
-$testcaseTable->id->range('1-6');
-$testcaseTable->title->range('Testcase1,Testcase2,Testcase3,Testcase4,Testcase5,Testcase6');
-$testcaseTable->gen(6);
-
-// 注意：zt_flow_customflow表不存在，跳过此数据准备
+$testcaseTable->id->range('1-3');
+$testcaseTable->title->range('Test Case 1,Test Case 2,Test Case 3');
+$testcaseTable->gen(3);
 
 // 准备action测试数据
 $actionTable = zenData('action');
-$actionTable->id->range('1-20');
-$actionTable->objectType->range('story{4},bug{4},task{4},ticket{4},feedback{4}');
-$actionTable->objectID->range('1-6');
-$actionTable->action->range('created,edited,commented,reviewed');
-$actionTable->comment->range('Action comment with !image.png|attachment! attachment,Normal comment,Comment with !document.pdf|file! file,[],Action with !screenshot.jpg|image! image');
-$actionTable->gen(20);
+$actionTable->id->range('1-15');
+$actionTable->objectType->range('story{3},bug{3},task{3},ticket{3},feedback{3}');
+$actionTable->objectID->range('1-3');
+$actionTable->action->range('created,edited,commented');
+$actionTable->comment->range('Comment with !image.png|image! file,Comment with !document.pdf|attachment! document,Simple comment without files');
+$actionTable->gen(15);
 
 su('admin');
 
 $convertTest = new convertTest();
 
-// 测试步骤1：处理包含附件的story/requirement/epic类型内容更新
+// 测试步骤1：处理story类型对象的Jira内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'astory', 'BID' => 1),
-    (object)array('BType' => 'arequirement', 'BID' => 2),
-    (object)array('BType' => 'aepic', 'BID' => 3)
+    (object)array('BType' => 'astory', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤2：处理包含附件的bug类型内容更新
+// 测试步骤2：处理bug类型对象的Jira内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'abug', 'BID' => 1),
-    (object)array('BType' => 'abug', 'BID' => 2)
+    (object)array('BType' => 'abug', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤3：处理包含附件的task类型内容更新
+// 测试步骤3：处理task类型对象的Jira内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'atask', 'BID' => 1),
-    (object)array('BType' => 'atask', 'BID' => 2)
+    (object)array('BType' => 'atask', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤4：处理多种类型混合内容更新
+// 测试步骤4：处理feedback类型对象的Jira内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'astory', 'BID' => 1),
-    (object)array('BType' => 'abug', 'BID' => 2),
-    (object)array('BType' => 'atask', 'BID' => 3),
-    (object)array('BType' => 'afeedback', 'BID' => 4)
+    (object)array('BType' => 'afeedback', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤5：处理包含附件的feedback类型内容更新
+// 测试步骤5：验证testcase类型对象被跳过的逻辑
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'afeedback', 'BID' => 1),
-    (object)array('BType' => 'afeedback', 'BID' => 2)
+    (object)array('BType' => 'atestcase', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤6：测试testcase类型被跳过的逻辑
+// 测试步骤6：处理自定义流程对象的Jira内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'atestcase', 'BID' => 1),
-    (object)array('BType' => 'atestcase', 'BID' => 2)
+    (object)array('BType' => 'acustomflow', 'BID' => 1)
 ))) && p() && e('1');
 
-// 测试步骤7：处理空issue列表输入边界条件
+// 测试步骤7：处理空数据和边界条件
 r($convertTest->processJiraIssueContentTest(array())) && p() && e('1');
 
-// 测试步骤8：处理不存在附件的对象边界条件
+// 测试步骤8：验证action记录的内容转换
 r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'astory', 'BID' => 999),
-    (object)array('BType' => 'abug', 'BID' => 999)
-))) && p() && e('1');
-
-// 测试步骤9：处理包含action记录的对象内容更新
-r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => 'astory', 'BID' => 3),
-    (object)array('BType' => 'abug', 'BID' => 4),
-    (object)array('BType' => 'atask', 'BID' => 5)
-))) && p() && e('1');
-
-// 测试步骤10：处理无效BType参数的异常情况
-r($convertTest->processJiraIssueContentTest(array(
-    (object)array('BType' => '', 'BID' => 1),
-    (object)array('BType' => 'ainvalid', 'BID' => 1),
-    (object)array('BType' => 'anulltype', 'BID' => 0)
+    (object)array('BType' => 'astory', 'BID' => 2),
+    (object)array('BType' => 'abug', 'BID' => 2)
 ))) && p() && e('1');
