@@ -12189,23 +12189,19 @@ class upgradeModel extends model
         if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有评审功能。
 
         $this->loadModel('review');
+        $this->loadModel('baseline');
         $reviewPointList = $this->config->edition == 'ipd' ? $this->lang->review->reviewPoint->titleList : array();
         $reviews = $this->dao->select('t1.*, t2.category, t2.version')->from(TABLE_REVIEW)->alias('t1')
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($reviewPointList)->andWhere('t2.category')->notin(array_keys($reviewPointList))->fi() // IPD 模式下，只升级非评审点的评审。
-            ->orderBy('t1.id_desc')
+            ->orderBy('t1.id_asc')
             ->fetchAll('id');
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
             ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
-
-        $docIdList = array_column($reviews, 'doc');
-        $docIdList = array_unique($docIdList);
-        $docIdList = array_filter($docIdList);
-        $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
 
         $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
         $fileGroup           = $this->dao->select('id, objectID')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('objectType')->eq('review')->fetchGroup('objectID', 'id');
@@ -12270,7 +12266,7 @@ class upgradeModel extends model
             }
 
             $deliverable = new stdclass();
-            $deliverable->name        = isset($docList[$review->doc]) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
+            $deliverable->name        = $review->title; // 优先使用文档的标题i
             $deliverable->project     = $review->project;
             $deliverable->review      = $review->id;
             $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
@@ -12299,6 +12295,7 @@ class upgradeModel extends model
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
             if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
             {
+                $deliverable->name       = zget($this->lang->baseline->objectList, $review->category);
                 $deliverable->doc        = 0;
                 $deliverable->docVersion = 0;
                 $deliverable->status     = 'draft';
