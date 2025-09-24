@@ -21,7 +21,7 @@ $pivotTest = new pivotTest();
 // 测试步骤1：空数组边界值输入
 r($pivotTest->getRowSpanConfigTest(array())) && p() && e('0');
 
-// 测试步骤2：单记录标准rowSpan配置
+// 测试步骤2：单记录正常rowSpan配置
 r($pivotTest->getRowSpanConfigTest(array(
     array(
         array('value' => 'category1', 'rowSpan' => 2),
@@ -50,10 +50,27 @@ r($pivotTest->getRowSpanConfigTest(array(
     )
 ))) && p('0:0,0:1,1:0,1:1,2:0,2:1') && e('1,2,3,1,3,1');
 
-// 测试步骤5：异常值和边界条件处理
+// 测试步骤5：缺失rowSpan属性的异常情况
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => 'normal_value'),
+        array('value' => 'test_value', 'rowSpan' => 2)
+    )
+))) && p('0:0,0:1') && e('~~,2');
+
+// 测试步骤6：深度嵌套数组值测试
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => array('item1', 'item2', 'item3', 'item4'), 'rowSpan' => 2),
+        array('value' => array('subitem1', 'subitem2'), 'rowSpan' => 1)
+    )
+))) && p('0:0,0:1,1:0,1:1,2:0,2:1,3:0,3:1') && e('2,1,2,1,2,1,2,1');
+
+// 测试步骤7：特殊数据类型边界测试
 r($pivotTest->getRowSpanConfigTest(array(
     array(
         array('value' => null, 'rowSpan' => 1),
-        array('value' => 'test')
+        array('value' => 0, 'rowSpan' => 2),
+        array('value' => false, 'rowSpan' => 3)
     )
-))) && p('0:0,0:1') && e('1,~~');
+))) && p('0:0,0:1,0:2') && e('1,2,3');
