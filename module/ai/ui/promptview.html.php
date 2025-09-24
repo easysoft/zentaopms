@@ -119,7 +119,7 @@ detailBody
                 tableData
                 (
                     item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : ''),
-                    item(set::name($lang->prompt->desc),   $prompt->desc),
+                    item(set::name($lang->prompt->desc),   div(setClass('w-64 text-clip'), set::title($prompt->desc), $prompt->desc)),
                     item(set::name($lang->prompt->status), $lang->ai->prompts->statuses[$prompt->status]),
                     item(set::name($lang->prompt->model),  $modelName),
                 )
