@@ -81,6 +81,7 @@ sidebar
     ),
 );
 
+$config->ai->dtable->miniPrograms['category']['map'] = array_merge($lang->ai->miniPrograms->categoryList, $categoryList);
 $cols         = $config->ai->dtable->miniPrograms;
 $miniPrograms = initTableData($miniPrograms, $cols, $this->ai);
 dtable
