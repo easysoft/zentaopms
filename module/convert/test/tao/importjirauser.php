@@ -34,8 +34,8 @@ try {
     $tester->dbh->exec($sql);
     // 清空相关表数据确保测试环境干净
     $tester->dbh->exec('TRUNCATE TABLE jiratmprelation');
-    $tester->dbh->exec('DELETE FROM ' . TABLE_USER . ' WHERE account LIKE \'test%\' OR account LIKE \'jira%\' OR account LIKE \'new%\' OR account = \'emailuser\'');
-    $tester->dbh->exec('DELETE FROM ' . TABLE_USERGROUP . ' WHERE account LIKE \'test%\' OR account LIKE \'jira%\' OR account LIKE \'new%\' OR account = \'emailuser\'');
+    $tester->dbh->exec('DELETE FROM ' . TABLE_USER . ' WHERE account LIKE \'test%\' OR account LIKE \'jira%\' OR account LIKE \'new%\' OR account = \'emailuser\' OR account LIKE \'minimal%\' OR account LIKE \'special%\' OR account LIKE \'verylong%\'');
+    $tester->dbh->exec('DELETE FROM ' . TABLE_USERGROUP . ' WHERE account LIKE \'test%\' OR account LIKE \'jira%\' OR account LIKE \'new%\' OR account = \'emailuser\' OR account LIKE \'minimal%\' OR account LIKE \'special%\' OR account LIKE \'verylong%\'');
 } catch (Exception $e) {
     // 表可能已存在，忽略错误
 }
@@ -83,7 +83,7 @@ su('admin');
 // 4. 创建测试实例（变量名与模块名一致）
 $convertTest = new convertTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
+// 5. 🔴 强制要求：必须包含至少8个测试步骤
 
 // 步骤1：导入新用户数据，验证用户创建成功和关系记录生成
 r($convertTest->importJiraUserTest(array(
@@ -102,11 +102,38 @@ r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'newuser3', 'email' => 'newuser3@test.com', 'realname' => '新用户3')
 ))) && p() && e('1');
 
-// 步骤4：导入已存在本地用户数据，验证跳过已存在用户创建
+// 步骤4：导入已存在本地用户数据，验证跳过已存在用户创建但记录关系
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'admin', 'email' => 'admin@newdomain.com', 'realname' => '管理员账号'),
     (object)array('account' => 'existing1', 'email' => 'existing@test.com', 'realname' => '重复本地用户')
 ))) && p() && e('1');
 
-// 步骤5：导入空数据和无效数据，验证正确处理边界情况
+// 步骤5：导入空数据和边界值数据，验证健壮性处理
 r($convertTest->importJiraUserTest(array())) && p() && e('1');
+
+// 步骤6：导入缺少必要字段的用户数据，验证默认值处理
+r($convertTest->importJiraUserTest(array(
+    (object)array('account' => 'minimaluser1'),  // 仅有account字段
+    (object)array('account' => 'minimaluser2', 'email' => 'minimal2@test.com'),  // 缺少realname和join
+    (object)array('account' => 'minimaluser3', 'realname' => '最小用户3')  // 缺少email和join
+))) && p() && e('1');
+
+// 步骤7：导入包含特殊字符和长字段的用户数据，验证数据处理
+r($convertTest->importJiraUserTest(array(
+    (object)array(
+        'account' => 'specialuser_@#$',
+        'email' => 'special.user+test@long-domain-name.com',
+        'realname' => '特殊字符用户!@#$%^&*()_+-=[]{}|;:,.<>?',
+        'join' => '2023-12-31 23:59:59'
+    ),
+    (object)array(
+        'account' => 'verylongaccountnamewithabcdefghijklmnopqrstuvwxyz1234567890',
+        'email' => 'verylonguser@verylongdomainnamewithmanysegments.example.com',
+        'realname' => '这是一个非常长的真实姓名用来测试系统对长字符串的处理能力和边界情况验证'
+    )
+))) && p() && e('1');
+
+// 步骤8：测试email模式下的用户导入，验证processJiraUser不同处理模式
+r($convertTest->importJiraUserTest(array(
+    (object)array('account' => 'emailuser', 'email' => 'emailmode@test.com', 'realname' => 'Email模式用户')
+), 'email')) && p() && e('1');
