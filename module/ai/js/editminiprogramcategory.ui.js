@@ -26,10 +26,10 @@ class aiCategoryManager extends zui.Component
                     <input type="text" name="${key}" value="${value}" class="form-control" ${isBuiltIn ? "disabled" : ""}>
                 </div>
                 <div class="category-actions">
-                    <button type="button" class="btn ghost btn-icon btn-add">
+                    ${(isBuiltIn && key != 'others') ? '' : `<button type="button" class="btn ghost btn-add">
                         <i class="icon icon-plus"></i>
-                    </button>
-                    ${!isBuiltIn ? `<button type="button" class="btn ghost btn-icon btn-delete" ${isUsed ? "disabled" : ""}>
+                    </button>`}
+                    ${!isBuiltIn ? `<button type="button" class="btn ghost btn-delete" ${isUsed ? "disabled" : ""}>
                         <i class="icon icon-close"></i>
                     </button>` : ""}
                 </div>
@@ -46,10 +46,10 @@ class aiCategoryManager extends zui.Component
                     <input type="text" name="custom[]" value="" class="form-control">
                 </div>
                 <div class="category-actions">
-                    <button type="button" class="btn ghost btn-icon btn-add">
+                    <button type="button" class="btn ghost btn-add">
                         <i class="icon icon-plus"></i>
                     </button>
-                    <button type="button" class="btn ghost btn-icon btn-delete">
+                    <button type="button" class="btn ghost btn-delete">
                         <i class="icon icon-close"></i>
                     </button>
                 </div>
