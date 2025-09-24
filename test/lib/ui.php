@@ -507,4 +507,46 @@ class tester extends result
     {
         $this->page->closeBrowser();
     }
+
+    /**
+     * Get elements list at the given xpath
+     *
+     * @param  object $form
+     * @param  string $xpath
+     * @param  bool   $text  true return element getText() list, false return element dom list
+     * @access public
+     * @return array or [] if not found
+     */
+    public function getElementList($form, $xpath, $text = false)
+    {
+        $list = [];
+        try
+        {
+            $elements = $form->dom->getElementList($form->dom->xpath[$xpath])->element;
+            $form->wait(1);
+            if(!$text) return $elements;
+            foreach($elements as $element)
+            {
+                array_push($list, $element->getText());
+            }
+            return $list;
+        }
+        catch(Exception)
+        {
+        }
+    }
+
+    /**
+     * Pick item in dropdown menu and click.
+     *
+     * @param  object $form
+     * @param  string $value
+     * @access public
+     * @return array or [] if not found
+     */
+    public function dropdownPicker($form, $value)
+    {
+        $xpath  = "//div[contains(@class,'dropdown')]//div[@class='item-title' and text()='{$value}']";
+        $form->dom->getElement($xpath)->element->click();
+    }
 }

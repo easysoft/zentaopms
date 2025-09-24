@@ -160,22 +160,20 @@ class createBugTester extends tester
      * @access public
      * @return bool   true if match assignee, false if not
      */
-    private function checkAssign($form = null, $index = -1, $assignee = '')
+    private function checkAssign($form, $index = -1, $assignee = '')
     {
-        if(!$form) return $this->failed('form为空!');
-        $assignedTo = $form->dom->getElementList($form->dom->xpath['bugAssigned'])->element;
-        $form->wait(3);
+        $assignedTo = $this->getElementList($form, 'bugAssigned', true);
         // if $index=-1, then check all bugs
         if($index == -1)
         {
             foreach($assignedTo as $item)
             {
-                if($item->getText() != $assignee) return false;
+                if($item != $assignee) return false;
             }
             return true;
         }
         // else check specific bug
-        if($assignedTo[$index]->getText() != $assignee) return false;
+        if($assignedTo[$index] != $assignee) return false;
         return true;
     }
 
@@ -199,9 +197,7 @@ class createBugTester extends tester
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        // 等待弹出菜单容器出现
-        $form->dom->waitElement($form->dom->xpath['popupMenu'], 3);
-        $form->addUserXpath($assignee)->dom->targetUser->click();
+        $this->dropdownPicker($form, $assignee);
         $form->wait(1);
         if($this->checkAssign($form, -1, $assignee)) return $this->success('bug批量指派成功');
         return $this->failed('bug批量指派失败');
@@ -226,11 +222,9 @@ class createBugTester extends tester
 
         $form->wait(1);
         // 先找到bug title
-        $index = $this->findIndex($form, $bugTitle);
-        if($index == -1) return $this->failed('bug未找到' . $bugTitle);
-        $bugAssigned = $form->dom->getElementList($form->dom->xpath['bugAssigned'])->element;
-        $form->wait(1);
-        $bugAssigned[$index]->click();
+        $index = array_search($bugTitle, $this->getElementList($form, 'bugTitle', true));
+        if($index === false ) return $this->failed('bug未找到' . $bugTitle);
+        $this->getElementList($form, 'bugAssigned')[$index]->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($assignee);
         $form->wait(1);
@@ -256,19 +250,15 @@ class createBugTester extends tester
     {
         if(!$bugTitle) return $this->failed('bug选择指派失败，没有指定bug');
         $assignee = $assignee ?? 'admin';
-        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
-
+        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $form->wait(1);
-        $index = $this->findIndex($form, $bugTitle);
-        if($index == -1) return $this->failed('bug未找到' . $bugTitle);
-        $bugID = $form->dom->getElementList($form->dom->xpath['bugID'])->element;
-        $bugID[$index]->click();
+        $index = array_search($bugTitle, $this->getElementList($form, 'bugTitle', true));
+        if($index === false ) return $this->failed('bug未找到' . $bugTitle);
+        $this->getElementList($form, 'bugID')[$index]->click();
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        // 等待弹出菜单容器出现
-        $form->dom->waitElement($form->dom->xpath['popupMenu'], 3);
-        $form->addUserXpath($assignee)->dom->targetUser->click();
+        $this->dropdownPicker($form, $assignee);
         $form->wait(1);
         if($this->checkAssign($form, $index, $assignee)) return $this->success('bug选择指派成功');
         return $this->success('bug选择指派成功');

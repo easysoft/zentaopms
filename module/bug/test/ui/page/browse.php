@@ -33,22 +33,4 @@ class browsePage extends page
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
-
-    /**
-     * 为指定用户构建xpath并添加到dom中
-     * Build xpath for specific user and add to dom
-     * 此方法可以将指定用户的xpath添加到dom中，用于后续的操作,适用于没有picker的情况
-     *
-     * @param  string $username 用户名
-     * @param  string $key      xpath键名，默认为'targetUser'
-     * @access public
-     * @return object $this
-     */
-    public function addUserXpath($username, $key = 'targetUser')
-    {
-        $userXpath = "{$this->dom->xpath['popupMenu']}//div[@class='item-title' and text()='$username']";
-        $this->dom->xpath[$key] = $userXpath;
-        // 返回当前对象，支持链式调用
-        return $this;
-    }
 }
