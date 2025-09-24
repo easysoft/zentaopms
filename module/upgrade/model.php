@@ -11203,8 +11203,26 @@ class upgradeModel extends model
     }
 
     /**
-     * 为指定模型的项目流程内置默认设计类。
-     * Add default deliverable module.
+     *
+     * 为项目流程内置其他活动。
+     * Add other activity.
+     *
+     * @access public
+     * @return void
+     */
+    public function addWorkflowGroupOtherActivity()
+    {
+        $projectModules  = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
+        $groupList       = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        foreach($groupList as $group)
+        {
+            if(!empty($projectModules[$group->id])) $this->createOtherActivity($projectModules[$group->id], $group->id);
+        }
+    }
+
+    /**
+     * 为项目流程内置默认分类。
+     * Add deliverable default modules.
      *
      * @access public
      * @return void
@@ -11254,6 +11272,11 @@ class upgradeModel extends model
             ->andWhere('t2.projectModel')->in($modelList)
             ->fetchAll();
 
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
         $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
 
         $deliverable = new stdClass();
@@ -11268,9 +11291,14 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
         foreach($moduleList as $module)
         {
+            if(empty($activityList[$module->workflowGroup])) continue;
+            $otherActivity   = reset($activityList[$module->workflowGroup]);
+            $otherActivityID = $otherActivity->id;
+
             $nameFilter = array();
             $deliverable->workflowGroup = $module->workflowGroup;
             $deliverable->module        = $module->id;
+            $deliverable->activity      = $otherActivityID;
             foreach(array_filter($this->lang->design->typeList) as $key => $value)
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
@@ -11355,12 +11383,15 @@ class upgradeModel extends model
 
         $deliverableList   = array();
         $nameFilter        = array(); // 过滤重名交付物。
-        $otherActivity     = array();
         $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         $otherModules      = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
-        $projectModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
+        $activityList      = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
         /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
         foreach($deliverables as $oldDeliverable)
         {
@@ -11371,13 +11402,16 @@ class upgradeModel extends model
                     if($workflowGroup->projectModel == 'kanban') $workflowGroup->projectModel = 'scrum_kanban';
                     if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
                     if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
-                    if(empty($otherActivity[$workflowGroup->id]) && isset($projectModules[$workflowGroup->id])) $otherActivity[$workflowGroup->id] = $this->createOtherActivity($projectModules[$workflowGroup->id], $workflowGroup->id);
+
+                    if(empty($activityList[$workflowGroup->id])) continue;
+                    $otherActivity   = reset($activityList[$workflowGroup->id]);
+                    $otherActivityID = $otherActivity->id;
 
                     $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
                     $deliverable->workflowGroup = $workflowGroup->id;
                     $deliverable->desc          = $oldDeliverable->desc;
                     $deliverable->module        = isset($otherModules[$workflowGroup->id]) ? $otherModules[$workflowGroup->id] : '0';
-                    $deliverable->activity      = isset($otherActivity[$workflowGroup->id]) ? $otherActivity[$workflowGroup->id] : '0';
+                    $deliverable->activity      = $otherActivityID;
                     $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
                     $deliverable->createdBy     = $oldDeliverable->createdBy;
                     $deliverable->createdDate   = !empty($oldDeliverable->createdDate) ? $oldDeliverable->createdDate : null;
@@ -11648,8 +11682,6 @@ class upgradeModel extends model
             ->andWhere('t2.name')->eq($this->lang->other)
             ->fetchGroup('workflowGroup');
 
-        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
-
         if(empty($modules)) return true;
 
         $deliverable = new stdClass();
@@ -11668,16 +11700,10 @@ class upgradeModel extends model
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
-            if(!empty($activityList[$groupID]))
-            {
-                $otherActivity = reset($activityList[$groupID]);
-                $otherActivityID = $otherActivity->id;
-            }
-            else
-            {
-                if(empty($projectModules[$groupID])) continue;
-                $otherActivityID = $this->createOtherActivity($projectModules[$groupID], $groupID);
-            }
+
+            if(empty($activityList[$groupID])) continue;
+            $otherActivity   = reset($activityList[$groupID]);
+            $otherActivityID = $otherActivity->id;
 
             $deliverable->module        = zget($testModules, $workflow->id, 0);
             $deliverable->workflowGroup = $workflow->id;
@@ -12075,8 +12101,6 @@ class upgradeModel extends model
         foreach($reviewclActions as $actions) $actionIdList = arrayUnion($actionIdList, $actions);
         $reviewclHistory = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in(array_keys($actionIdList))->fetchGroup('action', 'id');
 
-        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
-
         $deliverable = new stdClass();
         $deliverable->status      = 'enabled';
         $deliverable->createdBy   = 'system';
@@ -12099,16 +12123,9 @@ class upgradeModel extends model
         $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
         foreach($workflowGroupPairs as $groupID => $projectModel)
         {
-            if(!empty($activityList[$groupID]))
-            {
-                $otherActivity = reset($activityList[$groupID]);
-                $otherActivityID = $otherActivity->id;
-            }
-            else
-            {
-                if(empty($projectModules[$groupID])) continue;
-                $otherActivityID = $this->createOtherActivity($projectModules[$groupID], $groupID);
-            }
+            if(empty($activityList[$groupID])) continue;
+            $otherActivity   = reset($activityList[$groupID]);
+            $otherActivityID = $otherActivity->id;
 
             $nameFilter = array();
             $deliverable->workflowGroup = $groupID;
