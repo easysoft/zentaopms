@@ -143,3 +143,75 @@ r($pivotTest->pureCrystalDataTest(array_fill(0, 50, array(
     ),
     'groups' => array('batch' => 'data')
 )))) && p() && e('50');
+
+// 测试步骤11：测试包含null值的数据结构
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'col1' => array(
+                'cellData' => array('value' => null)
+            )
+        ),
+        'groups' => array('null_test' => null)
+    )
+))) && p('0:null_test,col1:value') && e(',');
+
+// 测试步骤12：测试特殊字符和编码
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'special_col' => array(
+                'cellData' => array('value' => '特殊字符@#$%')
+            )
+        ),
+        'groups' => array('unicode' => '测试中文')
+    )
+))) && p('0:unicode,special_col:value') && e('测试中文,特殊字符@#$%');
+
+// 测试步骤13：测试数据类型混合
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'mixed_col' => array(
+                'cellData' => array(
+                    'int_val' => array('value' => 123),
+                    'float_val' => array('value' => 45.67),
+                    'string_val' => array('value' => 'text'),
+                    'bool_val' => array('value' => true)
+                )
+            )
+        ),
+        'groups' => array('mixed' => 'types')
+    )
+))) && p('0:mixed_col_int_val:value,mixed_col_float_val:value,mixed_col_string_val:value,mixed_col_bool_val:value') && e('123,45.67,text,1');
+
+// 测试步骤14：测试嵌套层级深度
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'deep_col' => array(
+                'cellData' => array(
+                    'level1' => array(
+                        'level2' => array(
+                            'level3' => array('value' => 'deep_value')
+                        )
+                    )
+                ),
+                'rowTotal' => 999
+            )
+        ),
+        'groups' => array('depth' => 'test')
+    )
+))) && p('0:deep_col:total') && e('999');
+
+// 测试步骤15：测试极端情况 - 超大数值
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'big_col' => array(
+                'cellData' => array('value' => 9999999999)
+            )
+        ),
+        'groups' => array('big' => 'number')
+    )
+))) && p('0:big,big_col:value') && e('number,9999999999');
