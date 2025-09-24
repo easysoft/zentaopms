@@ -714,7 +714,7 @@ class fileModel extends model
 
         if(!extension_loaded('gd')) return false;
 
-        $croper = phpThumbFactory::create($rawImage);
+        $croper = new phpthumb($rawImage);
         if($resizeWidth > 0) $croper->resize($resizeWidth, $resizeHeight);
         $croper->crop($x, $y, $width, $height);
         $croper->save($target);
