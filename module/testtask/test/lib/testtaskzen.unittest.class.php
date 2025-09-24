@@ -734,6 +734,7 @@ class testtaskZenTest
         $method->setAccessible(true);
 
         try {
+            foreach($testtasks as $testtask) $testtask->rawStatus = $testtask->status;
             $testtaskZen = $this->testtaskZenTest->newInstance();
             $method->invoke($testtaskZen, $testtasks);
             if(dao::isError()) return dao::getError();
