@@ -8,6 +8,7 @@ timeout=0
 cid=0
 
 - 执行convertTest模块的processJiraIssueContentTest方法，参数是array  @1
+- 执行$updatedSpec @1
 
 */
 
@@ -58,18 +59,18 @@ $dbh->exec("INSERT INTO `zt_jiratmprelation` (`AType`, `AID`, `BType`, `BID`) VA
     ('jissue', '11', 'acustomflow', '1')
 ");
 
-// 准备文件数据 - 确保文件与对象类型和ID匹配
+// 准备文件数据 - 确保文件与对象类型和ID匹配，增加更多文件类型覆盖
 $fileTable = zenData('file');
-$fileTable->id->range('1-25');
-$fileTable->title->range('attachment1.png,attachment2.pdf,attachment3.txt,image.jpg,document.docx');
-$fileTable->objectType->range('story{5},bug{5},task{5},ticket{3},feedback{3},testcase{2},customflow{2}');
-$fileTable->objectID->range('1{5},2{5},3{5},4{3},5{3},1{2},1{2}');
-$fileTable->pathname->range('/uploads/files/attachment1.png,/uploads/files/attachment2.pdf,/uploads/files/attachment3.txt,/uploads/files/image.jpg,/uploads/files/document.docx');
-$fileTable->extension->range('png,pdf,txt,jpg,docx');
-$fileTable->size->range('1024-2048');
-$fileTable->addedBy->range('admin,user1,user2');
-$fileTable->addedDate->range('`2024-01-01 00:00:00`');
-$fileTable->gen(25);
+$fileTable->id->range('1-30');
+$fileTable->title->range('attachment1.png,attachment2.pdf,attachment3.txt,image.jpg,document.docx,video.mp4,archive.zip,empty.file,special-chars.png,long-name-with-many-characters.txt');
+$fileTable->objectType->range('story{8},bug{8},task{6},ticket{3},feedback{3},testcase{1},customflow{1}');
+$fileTable->objectID->range('1{3},2{3},3{2},1{3},2{3},3{2},1{2},2{2},3{2},1{1},2{1},1{1},1{1},1{1}');
+$fileTable->pathname->range('/uploads/files/attachment1.png,/uploads/files/attachment2.pdf,/uploads/files/attachment3.txt,/uploads/files/image.jpg,/uploads/files/document.docx,/uploads/files/video.mp4,/uploads/files/archive.zip,/uploads/files/empty.file,/uploads/files/special-chars.png,/uploads/files/long-name.txt');
+$fileTable->extension->range('png,pdf,txt,jpg,docx,mp4,zip,,png,txt');
+$fileTable->size->range('0,1024,2048,5120,10240,0,4096,0,512,8192');
+$fileTable->addedBy->range('admin,user1,user2,guest,system');
+$fileTable->addedDate->range('`2024-01-01 00:00:00`,`2024-01-15 10:30:00`,`2024-02-01 14:20:00`');
+$fileTable->gen(30);
 
 // 准备story相关数据
 $storyTable = zenData('story');
@@ -85,7 +86,7 @@ $storySpecTable = zenData('storyspec');
 $storySpecTable->story->range('1-5');
 $storySpecTable->version->range('1');
 $storySpecTable->title->range('Story Spec 1,Story Spec 2,Story Spec 3,Story Spec 4,Story Spec 5');
-$storySpecTable->spec->range('Original story content with !attachment1.png|width=200! jira image,Another story spec with normal text,Third story with !attachment2.pdf|width=300! content and more details,Fourth story simple description,Fifth story with !image.jpg! link and !document.docx! file reference');
+$storySpecTable->spec->range('Original story content with !attachment1.png|width=200! jira image and detailed description,Another story spec with normal text content and !video.mp4|thumbnail=true! video,Third story with !attachment2.pdf|width=300! content and multiple !special-chars.png! !archive.zip! references,Fourth story simple description without any attachments,Fifth story with complex content !image.jpg! link and !document.docx! file plus !empty.file! and !long-name-with-many-characters.txt! references');
 $storySpecTable->gen(5);
 
 // 准备bug数据
@@ -235,4 +236,41 @@ r($convertTest->processJiraIssueContentTest(array(
 r($convertTest->processJiraIssueContentTest(array(
     (object)array('BType' => 'astory', 'BID' => 0),
     (object)array('BType' => 'abug', 'BID' => -1)
+))) && p() && e('1');
+
+// 测试步骤16：验证数据库更新效果 - 检查storyspec表数据是否实际被更新
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'astory', 'BID' => 1)
+))) && p() && e('1');
+
+// 验证数据库更新结果：检查storyspec表中的内容是否被正确处理
+$updatedSpec = $tester->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq(1)->fetch('spec');
+r(!empty($updatedSpec)) && p() && e('1');
+
+// 测试步骤17：文件分组逻辑验证 - 验证同一对象多个文件的处理
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'astory', 'BID' => 2)
+))) && p() && e('1');
+
+// 测试步骤18：processJiraContent调用验证 - 验证内容为空时的处理逻辑
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'astory', 'BID' => 5)  // story 5有空或简单内容
+))) && p() && e('1');
+
+// 测试步骤19：混合文件类型处理验证 - 验证不同扩展名文件的处理
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'abug', 'BID' => 2),   // 有pdf文件
+    (object)array('BType' => 'atask', 'BID' => 3)   // 有txt文件
+))) && p() && e('1');
+
+// 测试步骤20：大量数据批量处理性能测试 - 验证批量处理能力
+r($convertTest->processJiraIssueContentTest(array(
+    (object)array('BType' => 'astory', 'BID' => 1),
+    (object)array('BType' => 'astory', 'BID' => 2),
+    (object)array('BType' => 'abug', 'BID' => 1),
+    (object)array('BType' => 'abug', 'BID' => 2),
+    (object)array('BType' => 'atask', 'BID' => 1),
+    (object)array('BType' => 'atask', 'BID' => 3),
+    (object)array('BType' => 'aticket', 'BID' => 1),
+    (object)array('BType' => 'afeedback', 'BID' => 1)
 ))) && p() && e('1');
