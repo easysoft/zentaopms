@@ -48,3 +48,22 @@ $lang->aiapp->pageSummary        = 'Total %s items.';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
+
+$lang->aiapp->langData                     = new stdClass();
+$lang->aiapp->langData->name               = 'ZenTao';
+$lang->aiapp->langData->storyReview        = 'Story-Bewertung';
+$lang->aiapp->langData->storyReviewHint    = 'Story auf der aktuellen Seite bewerten';
+$lang->aiapp->langData->storyReviewMessage = "Hier ist die zu bewertende Story:\n\n### Story-Titel\n\n{title}\n\n### Story-Beschreibung\n\n{spec}\n\n### Akzeptanzkriterien\n\n{verify}";
+$lang->aiapp->langData->aiReview           = 'KI-Bewertung';
+$lang->aiapp->langData->currentPage        = 'Aktuelle Seite';
+$lang->aiapp->langData->story              = 'Story';
+$lang->aiapp->langData->demand             = 'Anforderungspool-Story';
+$lang->aiapp->langData->bug                = 'Fehler';
+$lang->aiapp->langData->doc                = 'Dokument';
+$lang->aiapp->langData->design             = 'Design';
+$lang->aiapp->langData->feedback           = 'Rückmeldung';
+$lang->aiapp->langData->currentDocContent  = 'Aktuelles Dokument';
+$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->zaiConfigNotValid  = 'ZAI-Konfiguration wurde noch nicht eingerichtet. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
+$lang->aiapp->langData->unauthorizedError  = 'Autorisierung fehlgeschlagen, ungültiger API-Schlüssel. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
+$lang->aiapp->langData->applyFormFormat    = 'Auf %s-Formular anwenden';

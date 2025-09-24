@@ -48,3 +48,22 @@ $lang->aiapp->pageSummary        = 'Total %s items.';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
+
+$lang->aiapp->langData                     = new stdClass();
+$lang->aiapp->langData->name               = 'ZenTao';
+$lang->aiapp->langData->storyReview        = 'Revue d\'exigence';
+$lang->aiapp->langData->storyReviewHint    = 'Réviser les exigences de la page actuelle';
+$lang->aiapp->langData->storyReviewMessage = "Voici l'exigence à réviser :\n\n### Titre de l'exigence\n\n{title}\n\n### Description de l'exigence\n\n{spec}\n\n### Critères d'acceptation de l'exigence\n\n{verify}";
+$lang->aiapp->langData->aiReview           = 'Revue IA';
+$lang->aiapp->langData->currentPage        = 'Page actuelle';
+$lang->aiapp->langData->story              = 'Exigence';
+$lang->aiapp->langData->demand             = 'Exigence du pool de demandes';
+$lang->aiapp->langData->bug                = 'BUG';
+$lang->aiapp->langData->doc                = 'Document';
+$lang->aiapp->langData->design             = 'Conception';
+$lang->aiapp->langData->feedback           = 'Retour';
+$lang->aiapp->langData->currentDocContent  = 'Document actuel';
+$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->zaiConfigNotValid  = 'La configuration ZAI n\'a pas encore été effectuée. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
+$lang->aiapp->langData->unauthorizedError  = 'Échec d\'autorisation, clé API invalide. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
+$lang->aiapp->langData->applyFormFormat    = 'Appliquer au formulaire %s';

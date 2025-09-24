@@ -66,3 +66,4 @@ $lang->aiapp->langData->currentDocContent  = '当前文档';
 $lang->aiapp->langData->globalMemoryTitle  = '禅道';
 $lang->aiapp->langData->zaiConfigNotValid  = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->unauthorizedError  = '授权失败，无效的 API 密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
+$lang->aiapp->langData->applyFormFormat    = '应用到%s表单';
