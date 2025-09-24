@@ -15,6 +15,54 @@ window.checkZAIPanel = async function(showMessage)
     }
     return zaiPanel;
 };
+
+window.openPageForm = function(url, data)
+{
+    const openedApp = $.apps.openApp(url);
+    const handlePageLoad = () =>
+    {
+        try {
+            const iframe = openedApp.iframe;
+            iframe.contentWindow.applyFormData(data);
+        } catch (error) {}
+    };
+    openedApp.$app.one('updateapp.apps', handlePageLoad);
+    setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+}
+
+window.executeZentaoPrompt = async function(info)
+{
+    const zaiPanel = await checkZAIPanel(true);
+    if(!zaiPanel) return;
+
+    const tools = [{
+        name       : `zentao_prompt_${info.promptID}`,
+        displayName: info.name,
+        description: info.name,
+        parameters : info.schema,
+        fn: (result) => {
+            const targetForm = info.targetForm;
+            if(!targetForm) return {result: result};
+
+            const applyFormFormat = (zaiPanel.options.langData || {}).applyFormFormat;
+            return {
+                actions: [{
+                    text: (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
+                    onClick: () => openPageForm(info.formLocation, result), type: 'primary-pale',
+                    trailingIcon: 'icon-arrow-right'
+                }]
+            };
+        },
+    }];
+    const postMessage = {
+        content: info.name,
+        prompt : info.prompt,
+        tools  : tools,
+        model  : info.model,
+    };
+    zaiPanel.openPopup({viewType: 'chat', postMessage: postMessage});
+};
+
 function registerZentaoAIPlugin(lang)
 {
     const plugin = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
@@ -221,6 +269,7 @@ $(() => {
         {
             store:    aiStore,
             position: {left: 24, top: 24, bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
+            langData: langData,
             getAvatar: (info, props) =>
             {
                 if(info.role === 'user')
