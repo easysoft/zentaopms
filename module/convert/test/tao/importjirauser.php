@@ -82,40 +82,33 @@ $convertTest = new convertTest();
 
 // 5. 🔴 强制要求：必须包含至少8个测试步骤
 
-// 步骤1：导入新用户数据，验证用户创建成功和关系记录生成
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'newuser1', 'email' => 'newuser1@test.com', 'realname' => '新用户1', 'join' => '2023-01-01 00:00:00')
 ))) && p() && e('1'); // 步骤1：正常情况
 
-// 步骤2：导入已存在关系的重复用户，验证跳过重复用户功能
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'duplicateuser', 'email' => 'duplicate@test.com', 'realname' => '重复用户'),
     (object)array('account' => 'newuser2', 'email' => 'newuser2@test.com', 'realname' => '新用户2')
 ))) && p() && e('1'); // 步骤2：边界值
 
-// 步骤3：导入Atlassian内部账号数据，验证过滤内部账号不导入
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'atlassian1', 'email' => 'user@connect.atlassian.com', 'realname' => 'Atlassian用户1'),
     (object)array('account' => 'newuser3', 'email' => 'newuser3@test.com', 'realname' => '新用户3')
 ))) && p() && e('1'); // 步骤3：异常输入
 
-// 步骤4：导入已存在本地用户数据，验证跳过已存在用户创建但记录关系
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'admin', 'email' => 'admin@newdomain.com', 'realname' => '管理员账号'),
     (object)array('account' => 'existing2', 'email' => 'existing@test.com', 'realname' => '重复本地用户')
 ))) && p() && e('1'); // 步骤4：权限验证
 
-// 步骤5：导入空数据和边界值数据，验证健壮性处理
 r($convertTest->importJiraUserTest(array())) && p() && e('1'); // 步骤5：业务规则
 
-// 步骤6：导入缺少必要字段的用户数据，验证默认值处理
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'minimaluser1'),
     (object)array('account' => 'minimaluser2', 'email' => 'minimal2@test.com'),
     (object)array('account' => 'minimaluser3', 'realname' => '最小用户3')
 ))) && p() && e('1'); // 步骤6：数据完整性
 
-// 步骤7：导入包含特殊字符和长字段的用户数据，验证数据处理
 r($convertTest->importJiraUserTest(array(
     (object)array(
         'account' => 'specialuser_@#$',
@@ -130,7 +123,6 @@ r($convertTest->importJiraUserTest(array(
     )
 ))) && p() && e('1'); // 步骤7：边界条件
 
-// 步骤8：测试email模式下的用户导入，验证processJiraUser不同处理模式
 r($convertTest->importJiraUserTest(array(
     (object)array('account' => 'emailuser', 'email' => 'emailmode@test.com', 'realname' => 'Email模式用户')
 ), 'email')) && p() && e('1'); // 步骤8：模式切换
