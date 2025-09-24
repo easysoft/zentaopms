@@ -42,50 +42,20 @@ if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', '`jiratmprelation`')
 try {
     $tester->dbh->exec('DELETE FROM zt_project WHERE name LIKE "Test%" OR name LIKE "测试%"');
     $tester->dbh->exec('DELETE FROM zt_product WHERE name LIKE "Test%" OR name LIKE "测试%"');
+    $tester->dbh->exec('TRUNCATE TABLE jiratmprelation');
 } catch (Exception $e) {
     // 忽略清理错误
 }
 
-// 准备用户数据，用于项目角色分配
+// 使用最简单的zendata准备
 $user = zenData('user');
-$user->account->range('admin,test1,test2,existing1,existing2,projectlead,developer,qa1,dev1,pm1');
-$user->password->range('123456{10}');
-$user->realname->range('管理员,测试用户1,测试用户2,已存在用户1,已存在用户2,项目负责人,开发者,测试员1,开发员1,项目经理1');
-$user->email->range('admin@test.com,test1@test.com,test2@test.com,existing1@test.com,existing2@test.com,lead@test.com,dev@test.com,qa1@test.com,dev1@test.com,pm1@test.com');
-$user->role->range('admin,qa{3},dev{3},pm{3}');
-$user->deleted->range('0{10}');
 $user->gen(10);
 
-// 准备已存在的项目数据，用于测试项目导入去重
 $project = zenData('project');
-$project->name->range('已存在项目,测试项目2,测试项目3,Normal Project,Archived Project');
-$project->code->range('EXIST,TEST2,TEST3,NORMAL,ARCHIVED');
-$project->type->range('project{5}');
-$project->status->range('wait,doing,closed,doing,closed');
-$project->deleted->range('0{5}');
-$project->gen(5);
+$project->gen(3);
 
-// 准备产品数据
 $product = zenData('product');
-$product->name->range('产品{5}');
-$product->code->range('PROD{5}');
-$product->status->range('normal{5}');
-$product->type->range('normal{5}');
-$product->deleted->range('0{5}');
-$product->gen(5);
-
-// 设置必要的session数据和全局变量
-global $app;
-$app->session->set('jiraMethod', 'file');
-$app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
-$app->session->set('jiraRelation', json_encode(array()));
-
-// 清理可能存在的测试数据，避免干扰
-try {
-    $tester->dbh->exec('DELETE FROM ' . JIRA_TMPRELATION . ' WHERE AType = "jproject" AND AID IN ("1001", "2001", "3001", "3002", "3003", "3004", "3005", "3006")');
-} catch (Exception $e) {
-    // 忽略清理错误
-}
+$product->gen(3);
 
 // 准备临时关系表的数据，模拟已存在的项目关系（用于测试去重）
 try {
@@ -94,14 +64,20 @@ try {
     // 如果数据已存在则忽略错误
 }
 
+// 设置必要的session数据
+global $app;
+$app->session->set('jiraMethod', 'file');
+$app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
+$app->session->set('jiraRelation', json_encode(array()));
+
 su('admin');
 
 $convertTest = new convertTest();
 
-// 步骤1：空数组边界值输入处理 - 测试空输入的边界情况
+// 步骤1：空数组边界值输入测试
 r($convertTest->importJiraProjectTest(array())) && p() && e('true');
 
-// 步骤2：已删除状态项目跳过处理逻辑 - 验证deleted状态项目被正确跳过
+// 步骤2：已删除项目状态处理测试
 r($convertTest->importJiraProjectTest(array(
     '2001' => (object)array(
         'id' => '2001',
@@ -114,7 +90,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤3：重复项目ID导入去重机制 - 测试已存在项目ID的去重逻辑
+// 步骤3：重复项目ID去重机制测试
 r($convertTest->importJiraProjectTest(array(
     '1001' => (object)array(
         'id' => '1001',
@@ -127,7 +103,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤4：正常活跃项目完整导入流程 - 测试标准的项目创建流程
+// 步骤4：正常项目完整导入流程测试
 r($convertTest->importJiraProjectTest(array(
     '3001' => (object)array(
         'id' => '3001',
@@ -140,7 +116,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤5：归档状态项目状态映射处理 - 验证archived项目状态映射为closed
+// 步骤5：归档项目状态映射测试
 r($convertTest->importJiraProjectTest(array(
     '3002' => (object)array(
         'id' => '3002',
@@ -153,7 +129,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤6：批量多项目同时导入处理 - 测试多个项目的批量导入功能
+// 步骤6：批量项目导入处理测试
 r($convertTest->importJiraProjectTest(array(
     '3003' => (object)array(
         'id' => '3003',
@@ -175,7 +151,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤7：项目关键字段完整性验证 - 测试所有必填字段的处理
+// 步骤7：必填字段完整性验证测试
 r($convertTest->importJiraProjectTest(array(
     '3005' => (object)array(
         'id' => '3005',
@@ -188,7 +164,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤8：异常数据容错性处理机制 - 测试异常状态和类型的容错处理
+// 步骤8：异常数据容错性测试
 r($convertTest->importJiraProjectTest(array(
     '3006' => (object)array(
         'id' => '3006',
