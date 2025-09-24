@@ -11387,7 +11387,6 @@ class upgradeModel extends model
         $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         $otherModules      = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
-        $projectModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
         $activityList      = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
             ->where('t1.name')->eq($this->lang->other)
             ->andWhere('t2.name')->eq($this->lang->other)
@@ -11682,8 +11681,6 @@ class upgradeModel extends model
             ->where('t1.name')->eq($this->lang->other)
             ->andWhere('t2.name')->eq($this->lang->other)
             ->fetchGroup('workflowGroup');
-
-        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
 
         if(empty($modules)) return true;
 
@@ -12103,8 +12100,6 @@ class upgradeModel extends model
         $reviewclActions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('reviewcl')->fetchGroup('objectID', 'id');
         foreach($reviewclActions as $actions) $actionIdList = arrayUnion($actionIdList, $actions);
         $reviewclHistory = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in(array_keys($actionIdList))->fetchGroup('action', 'id');
-
-        $projectModules = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
 
         $deliverable = new stdClass();
         $deliverable->status      = 'enabled';
