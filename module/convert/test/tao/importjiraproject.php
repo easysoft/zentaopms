@@ -87,7 +87,7 @@ $product->gen(5);
 global $app;
 $app->session->set('jiraMethod', 'file');
 $app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
-$app->session->set('jiraRelation', '{}');
+$app->session->set('jiraRelation', json_encode(array()));
 
 // 清理可能存在的测试数据，避免干扰
 try {
@@ -200,4 +200,16 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'closed'
     )
-))) && p() && e('true'); // 步骤8：项目关闭状态处理测试
+))) && p() && e('true'); // 步骤7：项目关闭状态处理测试
+
+r($convertTest->importJiraProjectTest(array(
+    '3007' => (object)array(
+        'id' => '3007',
+        'pkey' => 'TESTEXCEPTION',
+        'originalkey' => 'TESTEXCEPTION_OLD',
+        'pname' => 'Test Exception Handling Project',
+        'description' => 'Testing exception data handling and fault tolerance',
+        'ptype' => 'unknown_type',
+        'pstatus' => 'unknown_status'
+    )
+))) && p() && e('true'); // 步骤8：异常数据容错性测试

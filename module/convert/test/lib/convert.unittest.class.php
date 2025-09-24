@@ -2414,7 +2414,7 @@ class convertTest
                 $app->session->set('jiraMethod', 'file');
             }
             if(empty($app->session->jiraUser)) {
-                $app->session->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => 'account'));
+                $app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
             }
 
             // 设置dbh属性，确保数据库连接可用
@@ -2435,7 +2435,7 @@ class convertTest
             }
 
             // 恢复原始session数据
-            $this->restoreSessionData($originalJiraMethod, $originalJiraUser);
+            $this->restoreImportJiraProjectSession($originalJiraMethod, $originalJiraUser);
             return $result ? 'true' : 'false';
         } catch (Exception $e) {
             if(isset($originalJiraMethod) && isset($originalJiraUser)) {
