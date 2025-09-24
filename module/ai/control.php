@@ -294,7 +294,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
 
@@ -426,7 +426,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('user');
         $users = $this->user->getPairs('noletter');
