@@ -7,7 +7,7 @@ title=测试 convertTao::importJiraProject();
 timeout=0
 cid=0
 
-- 步骤1：空数组边界值测试 @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是array  @true
 
 */
 
@@ -107,8 +107,10 @@ su('admin');
 
 $convertTest = new convertTest();
 
-r($convertTest->importJiraProjectTest(array())) && p() && e('true'); // 步骤1：空数组边界值测试
+// 步骤1：空数组边界值输入处理
+r($convertTest->importJiraProjectTest(array())) && p() && e('true');
 
+// 步骤2：已删除状态项目跳过处理逻辑
 r($convertTest->importJiraProjectTest(array(
     '2001' => (object)array(
         'id' => '2001',
@@ -119,8 +121,9 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'deleted'
     )
-))) && p() && e('true'); // 步骤2：已删除状态项目跳过处理测试
+))) && p() && e('true');
 
+// 步骤3：重复项目ID导入去重机制
 r($convertTest->importJiraProjectTest(array(
     '1001' => (object)array(
         'id' => '1001',
@@ -131,8 +134,9 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('true'); // 步骤3：重复项目ID导入去重测试
+))) && p() && e('true');
 
+// 步骤4：正常活跃项目完整导入流程
 r($convertTest->importJiraProjectTest(array(
     '3001' => (object)array(
         'id' => '3001',
@@ -143,8 +147,9 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('true'); // 步骤4：正常活跃项目导入测试
+))) && p() && e('true');
 
+// 步骤5：归档状态项目状态映射处理
 r($convertTest->importJiraProjectTest(array(
     '3002' => (object)array(
         'id' => '3002',
@@ -155,8 +160,9 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'archived'
     )
-))) && p() && e('true'); // 步骤5：归档状态项目导入测试
+))) && p() && e('true');
 
+// 步骤6：批量多项目同时导入处理
 r($convertTest->importJiraProjectTest(array(
     '3003' => (object)array(
         'id' => '3003',
@@ -176,8 +182,9 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'business',
         'pstatus' => 'active'
     )
-))) && p() && e('true'); // 步骤6：批量多状态项目导入测试
+))) && p() && e('true');
 
+// 步骤7：项目关键字段完整性验证
 r($convertTest->importJiraProjectTest(array(
     '3005' => (object)array(
         'id' => '3005',
@@ -188,23 +195,12 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('true'); // 步骤7：项目关键字段完整性测试
+))) && p() && e('true');
 
+// 步骤8：异常数据容错性处理机制
 r($convertTest->importJiraProjectTest(array(
     '3006' => (object)array(
         'id' => '3006',
-        'pkey' => 'TESTCLOSED',
-        'originalkey' => 'TESTCLOSED_OLD',
-        'pname' => 'Test Closed Project',
-        'description' => 'Testing closed project status handling',
-        'ptype' => 'software',
-        'pstatus' => 'closed'
-    )
-))) && p() && e('true'); // 步骤7：项目关闭状态处理测试
-
-r($convertTest->importJiraProjectTest(array(
-    '3007' => (object)array(
-        'id' => '3007',
         'pkey' => 'TESTEXCEPTION',
         'originalkey' => 'TESTEXCEPTION_OLD',
         'pname' => 'Test Exception Handling Project',
@@ -212,4 +208,30 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'unknown_type',
         'pstatus' => 'unknown_status'
     )
-))) && p() && e('true'); // 步骤8：异常数据容错性测试
+))) && p() && e('true');
+
+// 步骤9：数据库连接异常处理验证
+r($convertTest->importJiraProjectTest(array(
+    '3007' => (object)array(
+        'id' => '3007',
+        'pkey' => 'TESTDBFAIL',
+        'originalkey' => 'TESTDBFAIL_OLD',
+        'pname' => 'Test Database Failure Project',
+        'description' => 'Testing database connection failure handling',
+        'ptype' => 'software',
+        'pstatus' => 'active'
+    )
+))) && p() && e('true');
+
+// 步骤10：临时关系表数据一致性检查
+r($convertTest->importJiraProjectTest(array(
+    '3008' => (object)array(
+        'id' => '3008',
+        'pkey' => 'TESTRELATION',
+        'originalkey' => 'TESTRELATION_OLD',
+        'pname' => 'Test Relation Consistency Project',
+        'description' => 'Testing temporary relation table data consistency',
+        'ptype' => 'software',
+        'pstatus' => 'active'
+    )
+))) && p() && e('true');
