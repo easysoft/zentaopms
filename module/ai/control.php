@@ -492,7 +492,7 @@ class ai extends control
             $promptID = $this->ai->createPrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $url = commonModel::hasPriv('ai', 'promptassignrole') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
+            $url = commonModel::hasPriv('ai', 'designPrompt') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $url));
         }
 
@@ -553,6 +553,7 @@ class ai extends control
      */
     public function promptAssignRole($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -597,6 +598,7 @@ class ai extends control
      */
     public function promptSelectDataSource($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -635,6 +637,7 @@ class ai extends control
      */
     public function promptSetPurpose($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -671,6 +674,7 @@ class ai extends control
      */
     public function promptSetTargetForm($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -712,6 +716,7 @@ class ai extends control
      */
     public function promptFinalize($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -823,6 +828,8 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId, $exit = false)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+
         if(!empty($exit))
         {
             unset($_SESSION['auditPrompt']);

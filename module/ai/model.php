@@ -63,8 +63,8 @@ class aiModel extends model
             $executable = $this->isExecutable($object);
             $published  = $object->status == 'active';
 
-            if($action == 'promptassignrole') return common::hasPriv('ai', 'promptassignrole') && !$published;
-            if($action == 'promptaudit')      return common::hasPriv('ai', 'promptaudit') && $executable && !$published;
+            if($action == 'promptassignrole') return common::hasPriv('ai', 'designPrompt') && !$published;
+            if($action == 'promptaudit')      return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
             if($action == 'promptedit')       return common::hasPriv('ai', 'promptedit');
             if($action == 'promptpublish')    return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
             if($action == 'promptunpublish')  return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
@@ -2607,7 +2607,7 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
-            ->beginIF(!commonModel::hasPriv('ai', 'promptaudit') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
+            ->beginIF(!commonModel::hasPriv('ai', 'designPrompt') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
             ->orderBy('id_desc')
             ->fetchAll('id', false);
     }
