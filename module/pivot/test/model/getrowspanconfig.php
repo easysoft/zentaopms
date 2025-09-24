@@ -50,7 +50,7 @@ r($pivotTest->getRowSpanConfigTest(array(
     )
 ))) && p('0:0,0:1,1:0,1:1,2:0,2:1') && e('1,2,3,1,3,1');
 
-// 测试步骤5：复杂场景：多数组值与边界情况
+// 测试步骤5：复杂场景包含空数组的处理
 r($pivotTest->getRowSpanConfigTest(array(
     array(
         array('value' => array(), 'rowSpan' => 1),
@@ -61,3 +61,19 @@ r($pivotTest->getRowSpanConfigTest(array(
         array('value' => array('x'), 'rowSpan' => 1)
     )
 ))) && p('0:0,0:1,1:0,1:1,2:0,2:1,3:0,3:1,4:0,4:1') && e('1,2,3,1,3,1,3,1,3,1');
+
+// 测试步骤6：极端场景缺少rowSpan属性
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => 'test1'),
+        array('value' => 'test2', 'rowSpan' => 2)
+    )
+))) && p('0:0,0:1') && e(',2');
+
+// 测试步骤7：数值型rowSpan值验证
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => array('num1', 'num2'), 'rowSpan' => 5),
+        array('value' => 'base', 'rowSpan' => 0)
+    )
+))) && p('0:0,0:1,1:0,1:1') && e('5,0,5,0');
