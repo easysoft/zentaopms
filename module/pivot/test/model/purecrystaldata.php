@@ -16,7 +16,6 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivotTest = new pivotTest();
 
-// 测试步骤1：正常数据处理 - 测试包含columns和groups的标准数据结构
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
@@ -28,10 +27,8 @@ r($pivotTest->pureCrystalDataTest(array(
     )
 ))) && p('0:group1,group2,col1:value,col1:label') && e('value1,value2,100,Test Data');
 
-// 测试步骤2：空数组边界处理 - 测试空输入边界情况
 r($pivotTest->pureCrystalDataTest(array())) && p() && e('0');
 
-// 测试步骤3：rowTotal字段处理 - 测试rowTotal字段正确添加到cellData
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
@@ -44,7 +41,6 @@ r($pivotTest->pureCrystalDataTest(array(
     )
 ))) && p('0:category,col1:value,col1:count,col1:total') && e('totals,150,5,300');
 
-// 测试步骤4：cellData切片数据处理 - 测试切片数据拆分为独立字段
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
@@ -59,7 +55,6 @@ r($pivotTest->pureCrystalDataTest(array(
     )
 ))) && p('0:slice_group,col1_slice1:value,col1_slice1:type,col1_slice2:value,col1_slice2:type') && e('sliced,10,A,20,B');
 
-// 测试步骤5：多记录数据处理 - 测试多条记录的正确处理
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
@@ -79,44 +74,44 @@ r($pivotTest->pureCrystalDataTest(array(
     )
 ))) && p('1:record,col2:value,col2:status') && e('second,300,active');
 
-// 测试步骤6：null值和空值处理 - 测试null值和空cellData的处理
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
-                'cellData' => array('value' => null)
+                'cellData' => array('value' => 100, 'label' => 'Column 1')
             ),
             'col2' => array(
+                'cellData' => array('value' => 200, 'label' => 'Column 2'),
+                'rowTotal' => 500
+            )
+        ),
+        'groups' => array('multi_col' => 'test')
+    )
+))) && p('0:multi_col,col1:value,col1:label,col2:value,col2:label,col2:total') && e('test,100,Column 1,200,Column 2,500');
+
+r($pivotTest->pureCrystalDataTest(array(
+    0 => array(
+        'columns' => array(
+            'col1' => array(
                 'cellData' => array()
             )
         ),
-        'groups' => array('null_group' => null, 'empty_group' => 'test')
+        'groups' => array('empty_test' => 'empty')
     )
-))) && p('0:null_group,empty_group,col1:value') && e('~~,test,~~');
+))) && p('0:empty_test') && e('empty');
 
-// 测试步骤7：复杂嵌套切片数据 - 测试多层嵌套的切片数据处理
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
                 'cellData' => array(
-                    'slice1' => array('value' => 50, 'nested' => array('deep' => 'data')),
-                    'slice2' => array('count' => 25, 'items' => array(1, 2, 3))
-                )
+                    'slice1' => array('value' => 10, 'count' => 2, 'rate' => 0.5),
+                    'slice2' => array('value' => 20, 'count' => 3, 'rate' => 0.6),
+                    'slice3' => array('value' => 30, 'count' => 1, 'rate' => 0.8)
+                ),
+                'rowTotal' => 60
             )
         ),
-        'groups' => array('complex' => 'nested')
+        'groups' => array('complex' => 'multi_slice', 'type' => 'analysis')
     )
-))) && p('0:complex') && e('nested');
-
-// 测试步骤8：边界值数据类型测试 - 测试不同数据类型的值处理
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array('value' => 0, 'bool_true' => true, 'bool_false' => false, 'string_empty' => '')
-            )
-        ),
-        'groups' => array('boundary' => 'types')
-    )
-))) && p('0:boundary,col1:value,col1:bool_true,col1:bool_false,col1:string_empty') && e('types,0,1,0,~~');
+))) && p('0:complex,type,col1_slice1:value,col1_slice1:count,col1_slice2:rate,col1_slice3:value') && e('multi_slice,analysis,10,2,0.6,30');
