@@ -788,16 +788,18 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        $this->ai->setInjectData($prompt->targetForm, $response);
+        if(!empty($prompt->targetForm))
+        {
+            $targetFormPaths            = explode('.', $prompt->targetForm);
+            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
+        }
 
-        $_SESSION['aiPrompt']['prompt']   = $prompt;
-        $_SESSION['aiPrompt']['objectId'] = $objectId;
+        $response['objectId']     = $objectId;
+        $response['object']       = $objectData;
+        $response['formLocation'] = $location;
+        $response['promptConfig'] = $prompt;
 
-        if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
-
-        $this->view->formLocation   = $location;
-        $this->view->promptViewLink = $this->inlink('promptview', "promptID=$promptId");
-        $this->display();
+        return $this->send(array('result' => 'success', 'data' => $response, 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response))));
     }
 
     /**
