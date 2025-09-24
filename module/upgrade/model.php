@@ -12189,6 +12189,7 @@ class upgradeModel extends model
         if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有评审功能。
 
         $this->loadModel('review');
+        $this->loadModel('baseline');
         $reviewPointList = $this->config->edition == 'ipd' ? $this->lang->review->reviewPoint->titleList : array();
         $reviews = $this->dao->select('t1.*, t2.category, t2.version')->from(TABLE_REVIEW)->alias('t1')
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
@@ -12270,7 +12271,7 @@ class upgradeModel extends model
             }
 
             $deliverable = new stdclass();
-            $deliverable->name        = isset($docList[$review->doc]) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
+            $deliverable->name        = $review->title; // 优先使用文档的标题i
             $deliverable->project     = $review->project;
             $deliverable->review      = $review->id;
             $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
@@ -12299,6 +12300,7 @@ class upgradeModel extends model
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
             if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
             {
+                $deliverable->name       = zget($this->lang->baseline->objectList, $review->category);
                 $deliverable->doc        = 0;
                 $deliverable->docVersion = 0;
                 $deliverable->status     = 'draft';
