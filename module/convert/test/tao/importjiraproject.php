@@ -74,16 +74,7 @@ $product->type->range('normal{5}');
 $product->deleted->range('0{5}');
 $product->gen(5);
 
-// 跳过execution表的数据准备，避免表不存在的问题
-// $execution = zenData('execution');
-// $execution->name->range('执行阶段{5}');
-// $execution->code->range('EXEC{5}');
-// $execution->type->range('sprint{5}');
-// $execution->status->range('wait,doing,closed,wait,doing');
-// $execution->deleted->range('0{5}');
-// $execution->gen(5);
-
-// 设置必要的session数据
+// 设置必要的session数据和全局变量
 global $app;
 $app->session->set('jiraMethod', 'file');
 $app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
@@ -91,12 +82,12 @@ $app->session->set('jiraRelation', json_encode(array()));
 
 // 清理可能存在的测试数据，避免干扰
 try {
-    $tester->dbh->exec('DELETE FROM ' . JIRA_TMPRELATION . ' WHERE AType = "jproject" AND AID IN ("3001", "3002", "3003", "3004", "3005", "3006")');
+    $tester->dbh->exec('DELETE FROM ' . JIRA_TMPRELATION . ' WHERE AType = "jproject" AND AID IN ("1001", "2001", "3001", "3002", "3003", "3004", "3005", "3006")');
 } catch (Exception $e) {
     // 忽略清理错误
 }
 
-// 准备临时关系表的数据，模拟已存在的项目关系
+// 准备临时关系表的数据，模拟已存在的项目关系（用于测试去重）
 try {
     $tester->dbh->exec("INSERT INTO jiratmprelation (AType, AID, BType, BID) VALUES ('jproject', '1001', 'zproject', '1')");
 } catch (Exception $e) {
@@ -107,10 +98,10 @@ su('admin');
 
 $convertTest = new convertTest();
 
-// 步骤1：空数组边界值输入处理
+// 步骤1：空数组边界值输入处理 - 测试空输入的边界情况
 r($convertTest->importJiraProjectTest(array())) && p() && e('true');
 
-// 步骤2：已删除状态项目跳过处理逻辑
+// 步骤2：已删除状态项目跳过处理逻辑 - 验证deleted状态项目被正确跳过
 r($convertTest->importJiraProjectTest(array(
     '2001' => (object)array(
         'id' => '2001',
@@ -123,7 +114,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤3：重复项目ID导入去重机制
+// 步骤3：重复项目ID导入去重机制 - 测试已存在项目ID的去重逻辑
 r($convertTest->importJiraProjectTest(array(
     '1001' => (object)array(
         'id' => '1001',
@@ -136,7 +127,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤4：正常活跃项目完整导入流程
+// 步骤4：正常活跃项目完整导入流程 - 测试标准的项目创建流程
 r($convertTest->importJiraProjectTest(array(
     '3001' => (object)array(
         'id' => '3001',
@@ -149,7 +140,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤5：归档状态项目状态映射处理
+// 步骤5：归档状态项目状态映射处理 - 验证archived项目状态映射为closed
 r($convertTest->importJiraProjectTest(array(
     '3002' => (object)array(
         'id' => '3002',
@@ -162,7 +153,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤6：批量多项目同时导入处理
+// 步骤6：批量多项目同时导入处理 - 测试多个项目的批量导入功能
 r($convertTest->importJiraProjectTest(array(
     '3003' => (object)array(
         'id' => '3003',
@@ -184,7 +175,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤7：项目关键字段完整性验证
+// 步骤7：项目关键字段完整性验证 - 测试所有必填字段的处理
 r($convertTest->importJiraProjectTest(array(
     '3005' => (object)array(
         'id' => '3005',
@@ -197,7 +188,7 @@ r($convertTest->importJiraProjectTest(array(
     )
 ))) && p() && e('true');
 
-// 步骤8：异常数据容错性处理机制
+// 步骤8：异常数据容错性处理机制 - 测试异常状态和类型的容错处理
 r($convertTest->importJiraProjectTest(array(
     '3006' => (object)array(
         'id' => '3006',
