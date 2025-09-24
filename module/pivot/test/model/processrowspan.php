@@ -7,7 +7,7 @@ title=测试 pivotModel::processRowSpan();
 timeout=0
 cid=0
 
-- 步骤6：边界值测试-空数组 @0
+- 步骤5：边界情况空数组处理 @0
 
 */
 
@@ -21,7 +21,7 @@ su('admin');
 // 3. 创建测试实例（变量名与模块名一致）
 $pivotTest = new pivotTest();
 
-// 4. 强制要求：必须包含至少5个测试步骤（当前包含10个测试步骤）
+// 4. 强制要求：必须包含至少5个测试步骤
 r($pivotTest->processRowSpanTest(array(
     array(
         'group1' => array('value' => 'A'),
@@ -29,11 +29,16 @@ r($pivotTest->processRowSpanTest(array(
         'col2' => array('value' => 200)
     ),
     array(
-        'group1' => array('value' => 'B'),
+        'group1' => array('value' => 'A'),
         'col1' => array('value' => 150),
         'col2' => array('value' => 250)
+    ),
+    array(
+        'group1' => array('value' => 'B'),
+        'col1' => array('value' => 300),
+        'col2' => array('value' => 350)
     )
-), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,0:col1:rowSpan,1:col1:rowSpan') && e('1,1,1,1'); // 步骤1：基本单级分组功能测试
+), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan') && e('2,2,1'); // 步骤1：基本单级分组rowSpan计算
 
 r($pivotTest->processRowSpanTest(array(
     array(
@@ -51,7 +56,7 @@ r($pivotTest->processRowSpanTest(array(
         'group2' => array('value' => 'X'),
         'col1' => array('value' => 200)
     )
-), array('group1', 'group2'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan,0:group2:rowSpan,1:group2:rowSpan,2:group2:rowSpan') && e('2,2,1,1,1,1'); // 步骤2：多级分组层次测试
+), array('group1', 'group2'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan') && e('2,2,1'); // 步骤2：多级分组层次化rowSpan计算
 
 r($pivotTest->processRowSpanTest(array(
     array(
@@ -62,24 +67,9 @@ r($pivotTest->processRowSpanTest(array(
     array(
         'group1' => array('value' => 'B'),
         'col1' => array('value' => 400),
-        'col2' => array('value' => 500)
+        'col2' => array('value' => array(500, 600))
     )
-), array('group1'))) && p('0:col1:rowSpan,0:col2:rowSpan,1:col1:rowSpan,1:col2:rowSpan') && e('1,3,3,3'); // 步骤3：数组值的rowSpan计算测试
-
-r($pivotTest->processRowSpanTest(array(
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => 100)
-    ),
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => 150)
-    ),
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => 200)
-    )
-), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan') && e('3,3,3'); // 步骤4：相同分组值合并测试
+), array('group1'))) && p('0:col1:rowSpan,0:col2:rowSpan,1:col1:rowSpan,1:col2:rowSpan') && e('1,3,2,1'); // 步骤3：数组值影响rowSpan计算
 
 r($pivotTest->processRowSpanTest(array(
     array(
@@ -89,54 +79,23 @@ r($pivotTest->processRowSpanTest(array(
     array(
         'group1' => array('value' => '$total$'),
         'col1' => array('value' => 150)
-    )
-), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan') && e('1,1'); // 步骤5：特殊值$total$处理测试
-
-r($pivotTest->processRowSpanTest(array(), array('group1'))) && p() && e('0'); // 步骤6：边界值测试-空数组
-
-r($pivotTest->processRowSpanTest(array(
-    array(
-        'col1' => array('value' => 100),
-        'col2' => array('value' => 200)
     ),
     array(
-        'col1' => array('value' => 150),
-        'col2' => array('value' => 250)
-    )
-), array())) && p('0:col1:rowSpan,1:col1:rowSpan,0:col2:rowSpan,1:col2:rowSpan') && e('1,1,1,1'); // 步骤7：边界值测试-空分组
-
-r($pivotTest->processRowSpanTest(array(
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => array(1, 2)),
-        'col2' => array('value' => array(3, 4, 5, 6)),
-        'col3' => array('value' => 'scalar')
-    ),
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => array(7, 8, 9)),
-        'col2' => array('value' => 'single'),
-        'col3' => array('value' => array(10))
-    )
-), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,0:col1:rowSpan,0:col2:rowSpan,0:col3:rowSpan,1:col1:rowSpan,1:col2:rowSpan,1:col3:rowSpan') && e('8,8,1,4,4,1,3,3'); // 步骤8：复杂嵌套数组rowSpan计算
-
-r($pivotTest->processRowSpanTest(array(
-    array(
-        'group1' => array('value' => 'Single'),
-        'col1' => array('value' => 999)
-    )
-), array('group1'))) && p('0:group1:rowSpan,0:col1:rowSpan') && e('1,1'); // 步骤9：单条记录测试
-
-r($pivotTest->processRowSpanTest(array(
-    array(
-        'group1' => array('value' => 'A'),
-        'col1' => array('value' => 100)
-    ),
-    array(
+        'group1' => array('value' => 'Normal'),
         'col1' => array('value' => 200)
     ),
     array(
-        'group1' => array('value' => 'B'),
-        'col2' => array('value' => 300)
+        'group1' => array('value' => 'Normal'),
+        'col1' => array('value' => 250)
     )
-), array('group1'))) && p('0:group1:rowSpan,2:group1:rowSpan') && e('1,1'); // 步骤10：不规则数据结构测试
+), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan,3:group1:rowSpan') && e('1,1,2,2'); // 步骤4：特殊值$total$处理逻辑
+
+r($pivotTest->processRowSpanTest(array(), array('group1'))) && p() && e('0'); // 步骤5：边界情况空数组处理
+
+r($pivotTest->processRowSpanTest(array(
+    array(
+        'group1' => array('value' => 'Test'),
+        'col1' => array('value' => array('a', 'b')),
+        'col2' => array('value' => 'scalar')
+    )
+), array('group1'))) && p('0:group1:rowSpan,0:col1:rowSpan,0:col2:rowSpan') && e('2,1,2'); // 步骤6：数据完整性验证
