@@ -102,11 +102,12 @@ modal
     (
         set::url(createLink('ai', 'importMiniProgram')),
         set::actions(array('submit')),
+        set::ajax(array('cleanEmptyFiles' => 'delete')),
         formGroup
         (
             set::label($lang->ai->installPackage),
             set::required(true),
-            h::create('input', set::type('file'), set::accept('.zip'), set::name('file'))
+            h::create('input', set::type('file'), set::accept('.zip'), set::name('file'), setClass('form-control'))
         ),
         formGroup
         (
