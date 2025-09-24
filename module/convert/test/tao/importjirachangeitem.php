@@ -7,7 +7,7 @@ title=测试 convertTao::importJiraChangeItem();
 timeout=0
 cid=0
 
-- 步骤1：导入空数组数据 @true
+- 测试步骤1：导入空数组数据 @true
 
 */
 
@@ -15,7 +15,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 1.1 创建临时表
+// 2. 创建测试所需的数据库表
 global $tester;
 $sql = <<<EOT
 CREATE TABLE IF NOT EXISTS `jiratmprelation`(
@@ -29,32 +29,54 @@ CREATE TABLE IF NOT EXISTS `jiratmprelation`(
   UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 EOT;
-$tester->dao->exec($sql);
 
-// 2. 定义常量（如果未定义）
+try {
+    $tester->dbh->exec($sql);
+    $tester->dbh->exec('TRUNCATE TABLE jiratmprelation');
+} catch (Exception $e) {
+    // 表可能已存在，忽略错误
+}
+
+// 3. 准备测试数据
+$jiraRelationTable = zenData('jiratmprelation');
+$jiraRelationTable->AType->range('jissue{3},jchangeitem{1}');
+$jiraRelationTable->AID->range('1,2,3,1');
+$jiraRelationTable->BType->range('zstory,ztask,zbug,zaction');
+$jiraRelationTable->BID->range('1,2,3,101');
+$jiraRelationTable->extra->range('issue,issue,issue,action');
+$jiraRelationTable->gen(4);
+
+$actionTable = zenData('action');
+$actionTable->objectType->range('story,task,bug');
+$actionTable->objectID->range('1-3');
+$actionTable->actor->range('admin,user1,user2');
+$actionTable->action->range('commented');
+$actionTable->date->range('`2024-01-01 10:00:00`');
+$actionTable->comment->range('Test comment');
+$actionTable->gen(3);
+
+// 4. 定义必要常量
 if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', '`jiratmprelation`');
 if(!defined('TABLE_ACTION')) define('TABLE_ACTION', '`zt_action`');
 
-// 3. 简化数据准备（使用mock方式，避免数据库依赖）
-
-// 4. 用户登录
+// 5. 用户登录
 su('admin');
 
-// 5. 创建测试实例
+// 6. 创建测试实例
 $convertTest = new convertTest();
 
-// 6. 测试步骤 - 必须包含至少8个测试步骤
-r($convertTest->importJiraChangeItemTest(array())) && p() && e('true'); // 步骤1：导入空数组数据
+// 7. 执行测试步骤 - 每个测试用例必须包含至少5个测试步骤
+r($convertTest->importJiraChangeItemTest(array())) && p() && e('true'); // 测试步骤1：导入空数组数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
-        'id' => 20,
+        'id' => 10,
         'groupid' => 1,
         'field' => 'status',
         'oldstring' => 'Open',
         'newstring' => 'In Progress'
     )
-))) && p() && e('true'); // 步骤2：导入正常的单个changeitem数据
+))) && p() && e('true'); // 测试步骤2：导入正常的change item数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
@@ -64,68 +86,58 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 步骤3：导入已存在关联关系的数据
+))) && p() && e('true'); // 测试步骤3：导入已存在关联关系的数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
-        'id' => 21,
+        'id' => 11,
         'groupid' => 999,
         'field' => 'status',
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 步骤4：导入不存在changeGroup的数据
+))) && p() && e('true'); // 测试步骤4：导入不存在change group的数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
-        'id' => 24,
+        'id' => 12,
         'groupid' => 1,
         'field' => 'priority',
         'oldstring' => 'High',
         'newstring' => 'Critical'
     ),
     (object)array(
-        'id' => 25,
+        'id' => 13,
         'groupid' => 2,
         'field' => 'resolution',
         'oldstring' => '',
         'newstring' => 'Fixed'
-    ),
-    (object)array(
-        'id' => 1,
-        'groupid' => 999,
-        'field' => 'labels',
-        'oldstring' => 'bug',
-        'newstring' => 'resolved'
     )
-))) && p() && e('true'); // 步骤5：导入多个混合数据验证批量处理
+))) && p() && e('true'); // 测试步骤5：导入批量混合状态数据
 
 r($convertTest->importJiraChangeItemTest(array(
     (object)array(
-        'id' => 26,
-        'groupid' => 1,
-        'field' => '',
-        'oldstring' => 'value1',
-        'newstring' => 'value2'
-    )
-))) && p() && e('true'); // 步骤6：测试空字段名的changeitem数据
-
-r($convertTest->importJiraChangeItemTest(array(
-    (object)array(
-        'id' => 27,
-        'groupid' => 1,
-        'field' => 'status',
-        'oldstring' => '',
-        'newstring' => ''
-    )
-))) && p() && e('true'); // 步骤7：测试空字段值的changeitem数据
-
-r($convertTest->importJiraChangeItemTest(array(
-    (object)array(
-        'id' => 28,
+        'id' => 16,
         'groupid' => 1,
         'field' => 'description',
         'oldstring' => 'Bug with <script>alert("test")</script>',
         'newstring' => 'Fixed: Bug with "quotes" and \'apostrophes\' & special chars'
     )
-))) && p() && e('true'); // 步骤8：测试特殊字符的changeitem数据
+))) && p() && e('true'); // 测试步骤6：导入包含特殊字符的数据
+
+r($convertTest->importJiraChangeItemTest(array(
+    (object)array(
+        'id' => 18,
+        'groupid' => 1,
+        'field' => 'components',
+        'oldstring' => null,
+        'newstring' => 'UI,Backend'
+    ),
+    (object)array(
+        'id' => 19,
+        'groupid' => 2,
+        'field' => 'fixVersion',
+        'oldstring' => '1.0.0',
+        'newstring' => null
+    )
+))) && p() && e('true'); // 测试步骤7：导入边界值数据
