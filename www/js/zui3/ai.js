@@ -1,3 +1,20 @@
+window.checkZAIPanel = async function(showMessage)
+{
+    const zaiPanel = zui.AIPanel.shared;
+    const store = zaiPanel ? zaiPanel.store : null;
+    if(!store || !store.isConfigOK)
+    {
+        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.zaiConfigNotValid);
+        return;
+    }
+    const isOK = await store.isOK();
+    if(!isOK)
+    {
+        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.unauthorizedError);
+        return;
+    }
+    return zaiPanel;
+};
 function registerZentaoAIPlugin(lang)
 {
     const plugin = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
