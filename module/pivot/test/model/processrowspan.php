@@ -21,7 +21,7 @@ su('admin');
 // 3. 创建测试实例（变量名与模块名一致）
 $pivotTest = new pivotTest();
 
-// 4. 强制要求：必须包含至少5个测试步骤
+// 4. 强制要求：必须包含至少5个测试步骤（当前包含10个测试步骤）
 r($pivotTest->processRowSpanTest(array(
     array(
         'group1' => array('value' => 'A'),
@@ -119,3 +119,24 @@ r($pivotTest->processRowSpanTest(array(
         'col3' => array('value' => array(10))
     )
 ), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,0:col1:rowSpan,0:col2:rowSpan,0:col3:rowSpan,1:col1:rowSpan,1:col2:rowSpan,1:col3:rowSpan') && e('8,8,1,4,4,1,3,3'); // 步骤8：复杂嵌套数组rowSpan计算
+
+r($pivotTest->processRowSpanTest(array(
+    array(
+        'group1' => array('value' => 'Single'),
+        'col1' => array('value' => 999)
+    )
+), array('group1'))) && p('0:group1:rowSpan,0:col1:rowSpan') && e('1,1'); // 步骤9：单条记录测试
+
+r($pivotTest->processRowSpanTest(array(
+    array(
+        'group1' => array('value' => 'A'),
+        'col1' => array('value' => 100)
+    ),
+    array(
+        'col1' => array('value' => 200)
+    ),
+    array(
+        'group1' => array('value' => 'B'),
+        'col2' => array('value' => 300)
+    )
+), array('group1'))) && p('0:group1:rowSpan,2:group1:rowSpan') && e('1,1'); // 步骤10：不规则数据结构测试
