@@ -65,6 +65,7 @@ ALTER TABLE `zt_review` ADD `isBaseline` tinyint(1) DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_review` ADD `type` varchar(30) NOT NULL DEFAULT '' AFTER `version`;
 UPDATE `zt_review` SET `status` = 'reviewing' WHERE `status` = 'wait';
 UPDATE `zt_review` SET `status` = 'pass' WHERE `status` = 'auditing' OR `status` = 'done';
+UPDATE `zt_review` SET `type` = 'deliverable';
 
 UPDATE `zt_review` AS t1
 JOIN `zt_object` AS t2 ON t1.object = t2.id
