@@ -754,6 +754,11 @@
             },
             "time": "2015-09-08T22:55:44+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Fix options array initialization in GD class": "patches/phpthumb-fix-options-array-initialization.patch"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-0": {

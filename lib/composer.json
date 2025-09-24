@@ -41,6 +41,9 @@
             "gorhill/php-fine-diff": {
                 "Fix class reference to work with namespaces": "patches/finediff-fix-class-reference.patch"
             },
+            "masterexploder/phpthumb": {
+                "Fix options array initialization in GD class": "patches/phpthumb-fix-options-array-initialization.patch"
+            },
             "pclzip/pclzip": {
                 "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
             }
