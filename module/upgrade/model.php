@@ -12203,6 +12203,10 @@ class upgradeModel extends model
             ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
 
+        $docIdList = array_column($reviews, 'doc');
+        $docIdList = array_filter($docIdList);
+        $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
+
         $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
         $fileGroup           = $this->dao->select('id, objectID')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('objectType')->eq('review')->fetchGroup('objectID', 'id');
 
@@ -12266,7 +12270,7 @@ class upgradeModel extends model
             }
 
             $deliverable = new stdclass();
-            $deliverable->name        = $review->title; // 优先使用文档的标题i
+            $deliverable->name        = (!empty($docList[$review->doc]) && $docList[$review->doc] != $review->title) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
             $deliverable->project     = $review->project;
             $deliverable->review      = $review->id;
             $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
