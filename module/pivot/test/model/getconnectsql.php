@@ -51,3 +51,11 @@ r($pivotTest->getConnectSQLTest(array(
     'nullable_field' => array('field' => 'nullable_field', 'operator' => 'IS NULL', 'value' => ''),
     'empty_field' => array('field' => 'empty_field', 'operator' => '=', 'value' => "''")
 ))) && p() && e(' where tt.`nullable_field` IS NULL  and tt.`empty_field` = \'\'');                             // 步骤9：NULL值和空字符串测试
+r($pivotTest->getConnectSQLTest(array(
+    'field_name' => array('field' => 'field\'name', 'operator' => '=', 'value' => "'value'")
+))) && p() && e(' where tt.`field\'name` = \'value\'');                                                         // 步骤10：单引号字段名测试
+r($pivotTest->getConnectSQLTest(array(
+    'int_field' => array('field' => 'int_field', 'operator' => '=', 'value' => '123'),
+    'float_field' => array('field' => 'float_field', 'operator' => '>', 'value' => '12.5'),
+    'string_field' => array('field' => 'string_field', 'operator' => '!=', 'value' => "'text'")
+))) && p() && e(' where tt.`int_field` = 123 and tt.`float_field` > 12.5 and tt.`string_field` != \'text\'');  // 步骤11：不同数据类型值的测试
