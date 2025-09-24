@@ -21,8 +21,7 @@ su('admin');
 // 3. 创建测试实例（变量名与模块名一致）
 $repoTest = new repoZenTest();
 
-// 4. 精确的7个测试步骤，提升测试覆盖率和代码质量
-
+// 4. 强制要求：必须包含至少8个测试步骤
 r($repoTest->checkConnectionTest()) && p() && e('0'); // 步骤1：空POST数据边界验证，测试方法对无参数调用的处理
 
 r($repoTest->checkConnectionTest(array(
@@ -33,12 +32,19 @@ r($repoTest->checkConnectionTest(array(
 
 r($repoTest->checkConnectionTest(array(
     'SCM' => 'Subversion',
+    'client' => '',
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'path' => 'https://svn.example.com/repo'
+))) && p() && e('0'); // 步骤3：Subversion客户端为空验证，测试SVN客户端必填验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Subversion',
     'client' => 'svn',
     'account' => 'testuser',
     'password' => 'testpass',
-    'encoding' => 'UTF-8',
-    'path' => 'https://invalid-svn.example.com/repo'
-))) && p() && e('0'); // 步骤3：Subversion连接失败测试，验证SVN仓库连接验证逻辑
+    'path' => ''
+))) && p() && e('0'); // 步骤4：Subversion路径为空验证，测试SVN路径必填验证
 
 r($repoTest->checkConnectionTest(array(
     'SCM' => 'Git',
@@ -47,7 +53,7 @@ r($repoTest->checkConnectionTest(array(
     'password' => '',
     'encoding' => 'UTF-8',
     'path' => '/nonexistent/git/repo'
-))) && p() && e('0'); // 步骤4：Git不存在目录验证，测试本地Git仓库路径有效性检查
+))) && p() && e('0'); // 步骤5：Git不存在目录验证，测试本地Git仓库路径有效性检查
 
 r($repoTest->checkConnectionTest(array(
     'SCM' => 'Gitlab',
@@ -56,18 +62,18 @@ r($repoTest->checkConnectionTest(array(
     'password' => 'token123',
     'encoding' => 'UTF-8',
     'path' => 'https://gitlab.example.com/group/project.git'
-))) && p() && e('1'); // 步骤5：Gitlab绕过检查测试，验证Gitlab类型的特殊处理逻辑
+))) && p() && e('1'); // 步骤6：Gitlab绕过检查测试，验证Gitlab类型的特殊处理逻辑
 
 r($repoTest->checkConnectionTest(array(
     'SCM' => 'Gitea',
-    'name' => 'test-repo',
-    'serviceProject' => '',
+    'name' => '',
+    'serviceProject' => '123',
     'serviceHost' => '1'
-))) && p() && e('0'); // 步骤6：Gitea参数验证测试，检查serviceProject必要参数
+))) && p() && e('0'); // 步骤7：Gitea缺少name参数验证，检查name必要参数
 
 r($repoTest->checkConnectionTest(array(
     'SCM' => 'Gogs',
-    'name' => '',
-    'serviceProject' => '456',
+    'name' => 'test-repo',
+    'serviceProject' => '',
     'serviceHost' => '2'
-))) && p() && e('0'); // 步骤7：Gogs参数验证测试，检查name必要参数的完整性
+))) && p() && e('0'); // 步骤8：Gogs缺少serviceProject参数验证，检查serviceProject必要参数
