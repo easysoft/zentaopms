@@ -1770,7 +1770,7 @@ class aiModel extends model
             $obj = $data[$objectName];
             if(static::isAssoc($obj))
             {
-                $dataObject[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
+                $dataObject[$semanticName][$semanticKey] = isset($data[$objectName][$objectKey]) ? $data[$objectName][$objectKey] : '';
             }
             else
             {
