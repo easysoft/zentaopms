@@ -19,7 +19,6 @@ su('admin');
 $pivotTest = new pivotTest();
 
 r($pivotTest->isFiltersAllEmptyTest(array())) && p() && e('0');
-
 r($pivotTest->isFiltersAllEmptyTest(array(
     array('name' => 'filter1', 'default' => ''),
     array('name' => 'filter2', 'default' => null),
@@ -27,19 +26,30 @@ r($pivotTest->isFiltersAllEmptyTest(array(
     array('name' => 'filter4', 'default' => 0),
     array('name' => 'filter5', 'default' => array())
 ))) && p() && e('1');
-
 r($pivotTest->isFiltersAllEmptyTest(array(
     array('name' => 'filter1', 'default' => ''),
     array('name' => 'filter2', 'default' => 'non-empty-value'),
     array('name' => 'filter3', 'default' => null)
 ))) && p() && e('0');
-
 r($pivotTest->isFiltersAllEmptyTest(array(
     array('name' => 'filter1', 'default' => '')
 ))) && p() && e('1');
-
 r($pivotTest->isFiltersAllEmptyTest(array(
     array('name' => 'filter1'),
     array('name' => 'filter2'),
     array('name' => 'filter3')
+))) && p() && e('1');
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'filter1', 'default' => 'value1'),
+    array('name' => 'filter2', 'default' => 'value2'),
+    array('name' => 'filter3', 'default' => 'value3')
+))) && p() && e('0');
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'filter1', 'default' => array('key' => 'value')),
+    array('name' => 'filter2', 'default' => '')
+))) && p() && e('0');
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'filter1', 'default' => 0),
+    array('name' => 'filter2', 'default' => '0'),
+    array('name' => 'filter3', 'default' => false)
 ))) && p() && e('1');
