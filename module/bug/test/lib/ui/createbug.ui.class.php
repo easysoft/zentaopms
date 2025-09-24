@@ -256,7 +256,8 @@ class createBugTester extends tester
     {
         if(!$bugTitle) return $this->failed('bug选择指派失败，没有指定bug');
         $assignee = $assignee ?? 'admin';
-        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+
         $form->wait(1);
         $index = $this->findIndex($form, $bugTitle);
         if($index == -1) return $this->failed('bug未找到' . $bugTitle);
