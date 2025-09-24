@@ -2069,10 +2069,7 @@ class aiModel extends model
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($prompt->model, array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
-        if(empty($response)) return -6;
-
-        return current($response);
+        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'model' => $this->modelConfig->type, 'promptID' => $prompt->id);
     }
 
     /**
