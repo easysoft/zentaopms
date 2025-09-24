@@ -30,9 +30,9 @@ toolbar
         'url'   => createLink('aiapp', 'square'),
     ))) : null,
     common::hasPriv('ai', 'importMiniProgram') ? item(set(array(
-        'class' => 'primary',
-        'icon'  => 'import',
-        'text'  => $lang->ai->import,
+        'class'       => 'primary',
+        'icon'        => 'import',
+        'text'        => $lang->ai->import,
         'data-toggle' => 'modal',
         'data-target' => '#importMiniProgramModal',
     ))) : null,
