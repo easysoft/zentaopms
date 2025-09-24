@@ -40,6 +40,7 @@ $config->ai->dtable->prompts['status']['map']      = $lang->ai->prompts->statuse
 $config->ai->dtable->prompts['createdBy']['title']    = $lang->ai->prompts->createdBy;
 $config->ai->dtable->prompts['createdBy']['sortType'] = true;
 $config->ai->dtable->prompts['createdBy']['required'] = true;
+$config->ai->dtable->prompts['createdBy']['type']     = 'user';
 
 $config->ai->dtable->prompts['createdDate']['title']    = $lang->ai->prompts->createdDate;
 $config->ai->dtable->prompts['createdDate']['sortType'] = true;
