@@ -16,7 +16,7 @@ class executionTaskList extends wg
 
     protected function getItems()
     {
-        global $lang;
+        global $lang, $config;
 
         $tasks        = $this->prop('tasks', array());
         $executions   = $this->prop('executions', array());
@@ -40,7 +40,7 @@ class executionTaskList extends wg
                     'icon'  => 'run',
                     'title' => $execution->name,
                     'hint'  => $execution->name,
-                    'url'   => $executionLink,
+                    'url'   => !in_array($config->vision, array('lite', 'or')) ? $executionLink : null,
                     'items' => array()
                 );
             }
@@ -51,9 +51,9 @@ class executionTaskList extends wg
                 'hint'        => $task->name,
                 'leading'     => array('html' => wg(idLabel::create($task->id))->render()),
                 'content'     => array('html' => wg(statusLabel::create($task->status, $lang->task->statusList[$task->status]))->render(), 'className' => 'flex-none'),
-                'url'         => $canViewTask ? createLink('task', 'view', "taskID=$task->id") : null,
-                'data-toggle' => $canViewTask ? 'modal' : null,
-                'data-size'   => $canViewTask ? 'lg' : null,
+                'url'         => !in_array($config->vision, array('lite', 'or')) && $canViewTask ? createLink('task', 'view', "taskID=$task->id") : null,
+                'data-toggle' => !in_array($config->vision, array('lite', 'or')) && $canViewTask ? 'modal' : null,
+                'data-size'   => !in_array($config->vision, array('lite', 'or')) && $canViewTask ? 'lg' : null,
             );
 
             if(is_callable($onRenderItem)) $item = $onRenderItem($item, $task);
@@ -74,7 +74,7 @@ class executionTaskList extends wg
                 'icon'    => 'run',
                 'title'   => $execution->name,
                 'hint'    => $execution->name,
-                'url'     => $executionLink,
+                'url'     => !in_array($config->vision, array('lite', 'or')) ? $executionLink : null,
                 'content' => array('html' => '<span class="label gray-pale rounded-full size-sm">0</span>'),
                 'items'   => array()
             );
