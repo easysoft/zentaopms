@@ -7,7 +7,7 @@ title=测试 storyModel::getDefaultShowGrades();
 timeout=0
 cid=0
 
-- 步骤3：边界值测试空数组 @0
+- 步骤3：边界值测试空数组 @
 
 */
 
@@ -15,13 +15,13 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-// 3. 用户登录（选择合适角色）
+// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
+// 3. 创建测试实例（变量名与模块名一致）
 $storyTest = new storyTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
+// 4. 强制要求：必须包含至少5个测试步骤
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
         array('value' => 'story'),
@@ -40,11 +40,11 @@ r($storyTest->getDefaultShowGradesTest(array(
     ))
 ))) && p() && e('story,requirement,epic,feature,'); // 步骤2：正常情况测试多级菜单
 
-r($storyTest->getDefaultShowGradesTest(array())) && p() && e('0'); // 步骤3：边界值测试空数组
+r($storyTest->getDefaultShowGradesTest(array())) && p() && e(''); // 步骤3：边界值测试空数组
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array())
-))) && p() && e('0'); // 步骤4：边界值测试空items数组
+))) && p() && e(''); // 步骤4：边界值测试空items数组
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
