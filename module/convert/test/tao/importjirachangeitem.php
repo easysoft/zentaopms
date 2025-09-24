@@ -43,7 +43,7 @@ su('admin');
 // 5. 创建测试实例
 $convertTest = new convertTest();
 
-// 6. 测试步骤 - 必须包含至少5个测试步骤
+// 6. 测试步骤 - 必须包含至少8个测试步骤
 r($convertTest->importJiraChangeItemTest(array())) && p() && e('true'); // 步骤1：导入空数组数据
 
 r($convertTest->importJiraChangeItemTest(array(
@@ -99,3 +99,33 @@ r($convertTest->importJiraChangeItemTest(array(
         'newstring' => 'resolved'
     )
 ))) && p() && e('true'); // 步骤5：导入多个混合数据验证批量处理
+
+r($convertTest->importJiraChangeItemTest(array(
+    (object)array(
+        'id' => 26,
+        'groupid' => 1,
+        'field' => '',
+        'oldstring' => 'value1',
+        'newstring' => 'value2'
+    )
+))) && p() && e('true'); // 步骤6：测试空字段名的changeitem数据
+
+r($convertTest->importJiraChangeItemTest(array(
+    (object)array(
+        'id' => 27,
+        'groupid' => 1,
+        'field' => 'status',
+        'oldstring' => '',
+        'newstring' => ''
+    )
+))) && p() && e('true'); // 步骤7：测试空字段值的changeitem数据
+
+r($convertTest->importJiraChangeItemTest(array(
+    (object)array(
+        'id' => 28,
+        'groupid' => 1,
+        'field' => 'description',
+        'oldstring' => 'Bug with <script>alert("test")</script>',
+        'newstring' => 'Fixed: Bug with "quotes" and \'apostrophes\' & special chars'
+    )
+))) && p() && e('true'); // 步骤8：测试特殊字符的changeitem数据
