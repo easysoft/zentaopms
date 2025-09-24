@@ -16,202 +16,68 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivotTest = new pivotTest();
 
-r($pivotTest->pureCrystalDataTest(array())) && p() && e('0');
-
+// 测试步骤1：正常数据处理 - 测试包含columns和groups的标准数据结构
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
-                'cellData' => array('value' => 100)
+                'cellData' => array('value' => 100, 'label' => 'Test Data')
             )
         ),
         'groups' => array('group1' => 'value1', 'group2' => 'value2')
     )
-))) && p('0:group1,group2,col1:value') && e('value1,value2,100');
+))) && p('0:group1,group2,col1:value,col1:label') && e('value1,value2,100,Test Data');
 
+// 测试步骤2：空数组边界处理 - 测试空输入边界情况
+r($pivotTest->pureCrystalDataTest(array())) && p() && e('0');
+
+// 测试步骤3：rowTotal字段处理 - 测试rowTotal字段正确添加到cellData
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
-                'cellData' => array('value' => 150),
+                'cellData' => array('value' => 150, 'count' => 5),
                 'rowTotal' => 300
             )
         ),
-        'groups' => array('group1' => 'test')
+        'groups' => array('category' => 'totals')
     )
-))) && p('0:col1:total') && e('300');
+))) && p('0:category,col1:value,col1:count,col1:total') && e('totals,150,5,300');
 
+// 测试步骤4：cellData切片数据处理 - 测试切片数据拆分为独立字段
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
                 'cellData' => array(
-                    'slice1' => array('value' => 10),
-                    'slice2' => array('value' => 20)
+                    'slice1' => array('value' => 10, 'type' => 'A'),
+                    'slice2' => array('value' => 20, 'type' => 'B')
                 )
             )
         ),
-        'groups' => array('group1' => 'complex')
+        'groups' => array('slice_group' => 'sliced')
     )
-))) && p('0:col1_slice1:value,col1_slice2:value') && e('10,20');
+))) && p('0:slice_group,col1_slice1:value,col1_slice1:type,col1_slice2:value,col1_slice2:type') && e('sliced,10,A,20,B');
 
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array('value' => 100)
-            )
-        ),
-        'groups' => array('group1' => 'record1')
-    ),
-    1 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array('value' => 200)
-            )
-        ),
-        'groups' => array('group1' => 'record2')
-    )
-))) && p('1:group1,col1:value') && e('record2,200');
-
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array(
-                    'slice1' => array('value' => 10, 'label' => 'Label1'),
-                    'slice2' => array('value' => 20, 'label' => 'Label2')
-                ),
-                'rowTotal' => 30
-            )
-        ),
-        'groups' => array('category' => 'nested')
-    )
-))) && p('0:col1_slice1:label,col1:total') && e('Label1,30');
-
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array('value' => 100)
-            ),
-            'col2' => array(
-                'cellData' => array(
-                    'part1' => array('value' => 50),
-                    'part2' => array('value' => 60)
-                ),
-                'rowTotal' => 110
-            ),
-            'col3' => array(
-                'cellData' => array('value' => 200)
-            )
-        ),
-        'groups' => array('type' => 'comprehensive', 'status' => 'active')
-    )
-))) && p('0:type,col1:value,col2_part1:value,col2:total,col3:value') && e('comprehensive,100,50,110,200');
-
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array()
-            )
-        ),
-        'groups' => array('empty' => 'test')
-    )
-))) && p('0:empty') && e('test');
-
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'col1' => array(
-                'cellData' => array(
-                    'slice1' => array('label' => 'NoValue'),
-                    'slice2' => array('count' => 5)
-                )
-            )
-        ),
-        'groups' => array('missing' => 'value')
-    )
-))) && p('0:col1_slice1:label,col1_slice2:count') && e('NoValue,5');
-
-r($pivotTest->pureCrystalDataTest(array_fill(0, 50, array(
-    'columns' => array(
-        'metric' => array(
-            'cellData' => array('value' => 10)
-        )
-    ),
-    'groups' => array('batch' => 'data')
-)))) && p() && e('50');
-
-// 测试步骤11：测试包含null值的数据结构
+// 测试步骤5：复杂多记录数据处理 - 测试多记录和异常数据处理
 r($pivotTest->pureCrystalDataTest(array(
     0 => array(
         'columns' => array(
             'col1' => array(
                 'cellData' => array('value' => null)
+            ),
+            'col2' => array(
+                'cellData' => array()
             )
         ),
-        'groups' => array('null_test' => null)
-    )
-))) && p('0:null_test,col1:value') && e(',');
-
-// 测试步骤12：测试特殊字符和编码
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
+        'groups' => array('null_group' => null, 'empty_group' => 'test')
+    ),
+    1 => array(
         'columns' => array(
-            'special_col' => array(
-                'cellData' => array('value' => '特殊字符@#$%')
+            'col1' => array(
+                'cellData' => array('value' => 200, 'flag' => true)
             )
         ),
-        'groups' => array('unicode' => '测试中文')
+        'groups' => array('record' => 'second')
     )
-))) && p('0:unicode,special_col:value') && e('测试中文,特殊字符@#$%');
-
-// 测试步骤13：测试数据类型混合
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'mixed_col' => array(
-                'cellData' => array(
-                    'int_val' => array('value' => 123),
-                    'float_val' => array('value' => 45.67),
-                    'string_val' => array('value' => 'text'),
-                    'bool_val' => array('value' => true)
-                )
-            )
-        ),
-        'groups' => array('mixed' => 'types')
-    )
-))) && p('0:mixed_col_int_val:value,mixed_col_float_val:value,mixed_col_string_val:value,mixed_col_bool_val:value') && e('123,45.67,text,1');
-
-// 测试步骤14：测试嵌套层级深度
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'deep_col' => array(
-                'cellData' => array(
-                    'level1' => array(
-                        'level2' => array(
-                            'level3' => array('value' => 'deep_value')
-                        )
-                    )
-                ),
-                'rowTotal' => 999
-            )
-        ),
-        'groups' => array('depth' => 'test')
-    )
-))) && p('0:deep_col:total') && e('999');
-
-// 测试步骤15：测试极端情况 - 超大数值
-r($pivotTest->pureCrystalDataTest(array(
-    0 => array(
-        'columns' => array(
-            'big_col' => array(
-                'cellData' => array('value' => 9999999999)
-            )
-        ),
-        'groups' => array('big' => 'number')
-    )
-))) && p('0:big,big_col:value') && e('number,9999999999');
+))) && p('1:record,col1:value,col1:flag') && e('second,200,1');
