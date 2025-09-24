@@ -131,3 +131,45 @@ r($pivotTest->processRowSpanTest(array(
         'data' => array('value' => 'single')
     )
 ), array('level1', 'level2'))) && p('0:level1:rowSpan,1:level1:rowSpan,2:level1:rowSpan,0:data:rowSpan,1:data:rowSpan,2:data:rowSpan') && e('7,7,1,1,1,1'); // 步骤8：复杂数组场景测试
+
+r($pivotTest->processRowSpanTest(array(
+    array(
+        'group1' => array('value' => ''),
+        'col1' => array('value' => 10)
+    ),
+    array(
+        'group1' => array('value' => ''),
+        'col1' => array('value' => 20)
+    ),
+    array(
+        'group1' => array('value' => 'Different'),
+        'col1' => array('value' => 30)
+    )
+), array('group1'))) && p('0:group1:rowSpan,1:group1:rowSpan,2:group1:rowSpan,0:col1:rowSpan,1:col1:rowSpan,2:col1:rowSpan') && e('2,2,1,1,1,1'); // 步骤9：空字符串分组值测试
+
+r($pivotTest->processRowSpanTest(array(
+    array(
+        'category' => array('value' => 'A'),
+        'type' => array('value' => 'T1'),
+        'subtype' => array('value' => 'S1'),
+        'data' => array('value' => 10)
+    ),
+    array(
+        'category' => array('value' => 'A'),
+        'type' => array('value' => 'T1'),
+        'subtype' => array('value' => 'S2'),
+        'data' => array('value' => 20)
+    ),
+    array(
+        'category' => array('value' => 'A'),
+        'type' => array('value' => 'T2'),
+        'subtype' => array('value' => 'S1'),
+        'data' => array('value' => 30)
+    ),
+    array(
+        'category' => array('value' => 'B'),
+        'type' => array('value' => 'T1'),
+        'subtype' => array('value' => 'S1'),
+        'data' => array('value' => 40)
+    )
+), array('category', 'type', 'subtype'))) && p('0:category:rowSpan,1:category:rowSpan,2:category:rowSpan,3:category:rowSpan,0:type:rowSpan,1:type:rowSpan,2:type:rowSpan,3:type:rowSpan') && e('3,3,3,1,2,2,1,1'); // 步骤10：三级嵌套分组复杂场景测试
