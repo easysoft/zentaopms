@@ -12195,18 +12195,13 @@ class upgradeModel extends model
             ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($reviewPointList)->andWhere('t2.category')->notin(array_keys($reviewPointList))->fi() // IPD 模式下，只升级非评审点的评审。
-            ->orderBy('t1.id_desc')
+            ->orderBy('t1.id_asc')
             ->fetchAll('id');
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
             ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
-
-        $docIdList = array_column($reviews, 'doc');
-        $docIdList = array_unique($docIdList);
-        $docIdList = array_filter($docIdList);
-        $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
 
         $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
         $fileGroup           = $this->dao->select('id, objectID')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('objectType')->eq('review')->fetchGroup('objectID', 'id');
