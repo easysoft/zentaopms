@@ -194,6 +194,8 @@ $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
 $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = '交付物类型';
+$lang->action->objectTypes['cm']               = '基线';
+$lang->action->objectTypes['baseline']         = '基线';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
