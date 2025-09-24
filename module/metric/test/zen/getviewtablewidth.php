@@ -47,3 +47,17 @@ r($metricTest->getViewTableWidthZenTest(array(
     array('name' => 'col2'),
     array('name' => 'col3')
 ))) && p() && e(481); // 步骤5：全部headers无width属性
+
+r($metricTest->getViewTableWidthZenTest(array(
+    array('name' => 'single', 'width' => 250)
+))) && p() && e(251); // 步骤6：单个header测试
+
+r($metricTest->getViewTableWidthZenTest(array(
+    array('name' => 'big1', 'width' => 5000),
+    array('name' => 'big2', 'width' => 3000)
+))) && p() && e(8001); // 步骤7：大数值width测试
+
+r($metricTest->getViewTableWidthZenTest(array(
+    array('name' => 'float1', 'width' => 150.5),
+    array('name' => 'float2', 'width' => 200.8)
+))) && p() && e(352.3); // 步骤8：浮点数width测试
