@@ -2323,16 +2323,17 @@ class convertTest
     /**
      * Test importJiraUser method.
      *
-     * @param  array $dataList
+     * @param  array  $dataList
+     * @param  string $mode
      * @access public
      * @return mixed
      */
-    public function importJiraUserTest($dataList = array())
+    public function importJiraUserTest($dataList = array(), $mode = 'account')
     {
         try {
             global $app;
             $originalJiraUser = $app->session->jiraUser ?? null;
-            $app->session->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => 'account'));
+            $app->session->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => $mode));
 
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('importJiraUser');
