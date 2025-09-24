@@ -33,6 +33,8 @@ toolbar
         'class' => 'primary',
         'icon'  => 'import',
         'text'  => $lang->ai->import,
+        'data-toggle' => 'modal',
+        'data-target' => '#importMiniProgramModal',
     ))) : null,
     $config->edition != 'open' && common::hasPriv('ai', 'createMiniProgram') ? item(set(array(
         'class' => 'primary',
@@ -89,4 +91,44 @@ dtable
     set::sortLink(inlink('miniprograms', "category=$category&status=$status&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::emptyTip($lang->ai->miniPrograms->emptyList),
+);
+
+modal
+(
+    setID('importMiniProgramModal'),
+    set::title($lang->ai->import),
+    set::size('sm'),
+    form
+    (
+        set::url(createLink('ai', 'importMiniProgram')),
+        set::actions(array('submit')),
+        formGroup
+        (
+            set::label($lang->ai->installPackage),
+            set::required(true),
+            h::create('input', set::type('file'), set::accept('.zip'), set::name('file'))
+        ),
+        formGroup
+        (
+            set::label($lang->ai->miniPrograms->category),
+            picker
+            (
+                set::name('category'),
+                set::required(true),
+                set::items($categoryList),
+                set::value($category)
+            )
+        ),
+        formGroup
+        (
+            set::label($lang->ai->toPublish),
+            radioList
+            (
+                set::name('published'),
+                set::items($lang->ai->miniPrograms->field->requiredOptions),
+                set::inline(true),
+                set::value(0)
+            )
+        )
+    )
 );

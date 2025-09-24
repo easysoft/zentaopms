@@ -415,7 +415,7 @@ class ai extends control
         $ztApp->published = $_POST['published'];
         $ztApp->category  = $_POST['category'];
         $this->ai->createMiniProgram($ztApp);
-        return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
