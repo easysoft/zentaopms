@@ -120,7 +120,7 @@ function registerZentaoAIPlugin(lang)
             let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
             if(!$injectActions.length)
             {
-                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${this.getLang('aiReview')}</button></div>`).appendTo($firstSectionTitle);
+                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${lang.aiReview}</button></div>`).appendTo($firstSectionTitle);
                 $firstSectionTitle.find('span').first().addClass('flex-auto');
             }
         }
