@@ -18,7 +18,7 @@ su('admin');
 
 $pivotTest = new pivotTest();
 
-// 测试步骤1：空数组输入边界值处理
+// 测试步骤1：空数组边界值输入
 r($pivotTest->getRowSpanConfigTest(array())) && p() && e('0');
 
 // 测试步骤2：单记录基础字符串值配置
@@ -30,7 +30,7 @@ r($pivotTest->getRowSpanConfigTest(array(
     )
 ))) && p('0:0,0:1,0:2') && e('2,1,3');
 
-// 测试步骤3：单记录包含数组值扩展配置
+// 测试步骤3：包含数组值的扩展配置
 r($pivotTest->getRowSpanConfigTest(array(
     array(
         array('value' => array('tag1', 'tag2', 'tag3'), 'rowSpan' => 1),
@@ -85,3 +85,19 @@ r($pivotTest->getRowSpanConfigTest(array(
         array('value' => 'performance_test', 'rowSpan' => 5)
     )
 ))) && p('0:0,0:1,1:0,1:1,2:0,2:1,3:0,3:1,4:0,4:1,5:0,5:1,6:0,6:1,7:0,7:1,8:0,8:1,9:0,9:1') && e('1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5');
+
+// 测试步骤9：null值输入边界条件
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => null, 'rowSpan' => 1),
+        array('value' => 'null_test', 'rowSpan' => 3)
+    )
+))) && p('0:0,0:1') && e('1,3');
+
+// 测试步骤10：包含特殊字符的值处理
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => array('<script>', '&nbsp;', '"test"'), 'rowSpan' => 2),
+        array('value' => 'special_chars', 'rowSpan' => 1)
+    )
+))) && p('0:0,0:1,1:0,1:1,2:0,2:1') && e('2,1,2,1,2,1');
