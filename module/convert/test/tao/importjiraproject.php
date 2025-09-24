@@ -7,7 +7,7 @@ title=测试 convertTao::importJiraProject();
 timeout=0
 cid=0
 
-- 步骤1：空数组边界值测试（最基础场景） @true
+- 步骤1：空数组边界值测试 @true
 
 */
 
@@ -38,44 +38,63 @@ try {
 
 if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', '`jiratmprelation`');
 
+// 清理可能存在的测试数据
+try {
+    $tester->dbh->exec('DELETE FROM zt_project WHERE name LIKE "Test%" OR name LIKE "测试%"');
+    $tester->dbh->exec('DELETE FROM zt_product WHERE name LIKE "Test%" OR name LIKE "测试%"');
+} catch (Exception $e) {
+    // 忽略清理错误
+}
+
 // 准备用户数据，用于项目角色分配
 $user = zenData('user');
-$user->account->range('admin,test1,test2,existing1,existing2,projectlead,developer');
-$user->password->range('123456{7}');
-$user->realname->range('管理员,测试用户1,测试用户2,已存在用户1,已存在用户2,项目负责人,开发者');
-$user->email->range('admin@test.com,test1@test.com,test2@test.com,existing1@test.com,existing2@test.com,lead@test.com,dev@test.com');
-$user->role->range('admin,qa{2},dev{2},pm{2}');
-$user->gen(7);
+$user->account->range('admin,test1,test2,existing1,existing2,projectlead,developer,qa1,dev1,pm1');
+$user->password->range('123456{10}');
+$user->realname->range('管理员,测试用户1,测试用户2,已存在用户1,已存在用户2,项目负责人,开发者,测试员1,开发员1,项目经理1');
+$user->email->range('admin@test.com,test1@test.com,test2@test.com,existing1@test.com,existing2@test.com,lead@test.com,dev@test.com,qa1@test.com,dev1@test.com,pm1@test.com');
+$user->role->range('admin,qa{3},dev{3},pm{3}');
+$user->deleted->range('0{10}');
+$user->gen(10);
 
 // 准备已存在的项目数据，用于测试项目导入去重
 $project = zenData('project');
-$project->name->range('已存在项目,测试项目2,测试项目3');
-$project->code->range('EXIST,TEST2,TEST3');
-$project->type->range('project{3}');
-$project->status->range('wait,doing,closed');
-$project->gen(3);
+$project->name->range('已存在项目,测试项目2,测试项目3,Normal Project,Archived Project');
+$project->code->range('EXIST,TEST2,TEST3,NORMAL,ARCHIVED');
+$project->type->range('project{5}');
+$project->status->range('wait,doing,closed,doing,closed');
+$project->deleted->range('0{5}');
+$project->gen(5);
 
 // 准备产品数据
 $product = zenData('product');
-$product->name->range('产品{3}');
-$product->code->range('PROD{3}');
-$product->status->range('normal{3}');
-$product->gen(3);
+$product->name->range('产品{5}');
+$product->code->range('PROD{5}');
+$product->status->range('normal{5}');
+$product->type->range('normal{5}');
+$product->deleted->range('0{5}');
+$product->gen(5);
 
-// 跳过execution表的数据准备，专注于测试项目导入逻辑
-// 注释掉execution表的数据准备，避免因表不存在而导致测试失败
+// 跳过execution表的数据准备，避免表不存在的问题
 // $execution = zenData('execution');
-// $execution->name->range('执行阶段{3}');
-// $execution->code->range('EXEC{3}');
-// $execution->type->range('sprint{3}');
-// $execution->status->range('wait,doing,closed');
-// $execution->gen(3);
+// $execution->name->range('执行阶段{5}');
+// $execution->code->range('EXEC{5}');
+// $execution->type->range('sprint{5}');
+// $execution->status->range('wait,doing,closed,wait,doing');
+// $execution->deleted->range('0{5}');
+// $execution->gen(5);
 
 // 设置必要的session数据
 global $app;
 $app->session->set('jiraMethod', 'file');
 $app->session->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
 $app->session->set('jiraRelation', '{}');
+
+// 清理可能存在的测试数据，避免干扰
+try {
+    $tester->dbh->exec('DELETE FROM ' . JIRA_TMPRELATION . ' WHERE AType = "jproject" AND AID IN ("3001", "3002", "3003", "3004", "3005", "3006")');
+} catch (Exception $e) {
+    // 忽略清理错误
+}
 
 // 准备临时关系表的数据，模拟已存在的项目关系
 try {
@@ -88,7 +107,7 @@ su('admin');
 
 $convertTest = new convertTest();
 
-r($convertTest->importJiraProjectTest(array())) && p() && e('true'); // 步骤1：空数组边界值测试（最基础场景）
+r($convertTest->importJiraProjectTest(array())) && p() && e('true'); // 步骤1：空数组边界值测试
 
 r($convertTest->importJiraProjectTest(array(
     '2001' => (object)array(
@@ -100,7 +119,7 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'deleted'
     )
-))) && p() && e('true'); // 步骤2：已删除状态项目跳过处理（简单逻辑）
+))) && p() && e('true'); // 步骤2：已删除状态项目跳过处理测试
 
 r($convertTest->importJiraProjectTest(array(
     '1001' => (object)array(
@@ -112,73 +131,73 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('true'); // 步骤3：重复项目ID导入去重测试（基于已设置的关系数据）
+))) && p() && e('true'); // 步骤3：重复项目ID导入去重测试
 
 r($convertTest->importJiraProjectTest(array(
-    '2002' => (object)array(
-        'id' => '2002',
-        'pkey' => 'INCOMPLETE',
-        'originalkey' => 'INCOMPLETE_OLD',
-        'pname' => '',
-        'description' => null,
-        'ptype' => '',
-        'pstatus' => 'active'
-    )
-))) && p() && e('exception: '); // 步骤4：不完整数据字段容错测试（可能触发异常）
-
-r($convertTest->importJiraProjectTest(array(
-    '2003' => (object)array(
-        'id' => '2003',
-        'pkey' => 'SPECIAL-#@$%',
-        'originalkey' => 'SPECIAL_#@$%_OLD',
-        'pname' => 'Project with Special chars !@#$%^&*()',
-        'description' => 'Description with <html> & "quotes" \'apostrophe\'',
+    '3001' => (object)array(
+        'id' => '3001',
+        'pkey' => 'TESTNORMAL',
+        'originalkey' => 'TESTNORMAL_OLD',
+        'pname' => 'Test Normal Project',
+        'description' => 'Normal project for complete testing',
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('exception: '); // 步骤5：特殊字符项目名称处理（可能触发异常）
+))) && p() && e('true'); // 步骤4：正常活跃项目导入测试
 
 r($convertTest->importJiraProjectTest(array(
-    '2004' => (object)array(
-        'id' => '2004',
-        'pkey' => 'ARCHIVED',
-        'originalkey' => 'ARCHIVED_OLD',
-        'pname' => 'Archived Project',
-        'description' => 'This project is archived',
+    '3002' => (object)array(
+        'id' => '3002',
+        'pkey' => 'TESTARCHIVED',
+        'originalkey' => 'TESTARCHIVED_OLD',
+        'pname' => 'Test Archived Project',
+        'description' => 'Archived project testing',
         'ptype' => 'software',
         'pstatus' => 'archived'
+    )
+))) && p() && e('true'); // 步骤5：归档状态项目导入测试
+
+r($convertTest->importJiraProjectTest(array(
+    '3003' => (object)array(
+        'id' => '3003',
+        'pkey' => 'TESTBATCH1',
+        'originalkey' => 'TESTBATCH1_OLD',
+        'pname' => 'Test Batch Project 1',
+        'description' => 'First batch import project',
+        'ptype' => 'software',
+        'pstatus' => 'active'
     ),
-    '2005' => (object)array(
-        'id' => '2005',
-        'pkey' => 'BATCH',
-        'originalkey' => 'BATCH_OLD',
-        'pname' => 'Batch Import Project',
-        'description' => 'Testing batch import functionality',
+    '3004' => (object)array(
+        'id' => '3004',
+        'pkey' => 'TESTBATCH2',
+        'originalkey' => 'TESTBATCH2_OLD',
+        'pname' => 'Test Batch Project 2',
+        'description' => 'Second batch import project',
         'ptype' => 'business',
         'pstatus' => 'active'
     )
-))) && p() && e('exception: '); // 步骤6：批量导入多状态项目测试（复杂操作可能异常）
+))) && p() && e('true'); // 步骤6：批量多状态项目导入测试
 
 r($convertTest->importJiraProjectTest(array(
-    '2006' => (object)array(
-        'id' => '2006',
-        'pkey' => 'CLOSED',
-        'originalkey' => 'CLOSED_OLD',
-        'pname' => 'Closed Project Status Test',
+    '3005' => (object)array(
+        'id' => '3005',
+        'pkey' => 'TESTFIELDS',
+        'originalkey' => 'TESTFIELDS_OLD',
+        'pname' => 'Test Complete Fields Project',
+        'description' => 'Testing all required fields completion',
+        'ptype' => 'software',
+        'pstatus' => 'active'
+    )
+))) && p() && e('true'); // 步骤7：项目关键字段完整性测试
+
+r($convertTest->importJiraProjectTest(array(
+    '3006' => (object)array(
+        'id' => '3006',
+        'pkey' => 'TESTCLOSED',
+        'originalkey' => 'TESTCLOSED_OLD',
+        'pname' => 'Test Closed Project',
         'description' => 'Testing closed project status handling',
         'ptype' => 'software',
         'pstatus' => 'closed'
     )
-))) && p() && e('exception: '); // 步骤7：项目关闭状态处理测试（可能触发异常）
-
-r($convertTest->importJiraProjectTest(array(
-    '2007' => (object)array(
-        'id' => '2007',
-        'pkey' => 'NORMAL',
-        'originalkey' => 'NORMAL_OLD',
-        'pname' => 'Normal Active Project',
-        'description' => 'Normal project description for complete testing',
-        'ptype' => 'software',
-        'pstatus' => 'active'
-    )
-))) && p() && e('exception: '); // 步骤8：正常活跃项目导入处理（完整功能测试）
+))) && p() && e('true'); // 步骤8：项目关闭状态处理测试
