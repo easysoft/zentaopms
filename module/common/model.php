@@ -1709,8 +1709,8 @@ eof;
 
         if($notConvertedItems)
         {
-            $convertedPinYin = $pinyin->romanize(implode($sign, $notConvertedItems));
-            $itemsPinYin     = explode(trim($sign), $convertedPinYin);
+            $convertedPinYin = $pinyin->convert(implode($sign, $notConvertedItems), PINYIN_KEEP_NUMBER | PINYIN_KEEP_ENGLISH);
+            $itemsPinYin     = explode(trim($sign), implode("\t", $convertedPinYin));
             foreach($notConvertedItems as $item)
             {
                 $key        = key($itemsPinYin);
