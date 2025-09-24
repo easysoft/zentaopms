@@ -58,9 +58,10 @@ r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
         array('value' => ''),
         array('value' => 'valid_value'),
-        array('value' => '0')
+        array('value' => '0'),
+        array('value' => null)
     ))
-))) && p() && e(',valid_value,0,'); // 步骤6：测试包含空字符串value的菜单
+))) && p() && e(',valid_value,0,,'); // 步骤6：测试包含空字符串和null value的菜单
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
