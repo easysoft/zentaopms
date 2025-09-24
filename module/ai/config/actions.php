@@ -104,18 +104,17 @@ $config->ai->actionList['publishminiprogram']['text']         = $lang->ai->promp
 $config->ai->actionList['publishminiprogram']['hint']         = $lang->ai->prompts->action->publish;
 $config->ai->actionList['publishminiprogram']['url']          = array('module' => 'ai', 'method' => 'publishminiprogram', 'params' => 'prompt={id}');
 $config->ai->actionList['publishminiprogram']['className']    = 'ajax-submit';
-$config->ai->actionList['publishminiprogram']['data-confirm'] = array('message' => $lang->ai->prompts->action->draftConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->ai->actionList['publishminiprogram']['data-confirm'] = array('message' => $lang->ai->miniPrograms->publishTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->ai->actionList['unpublishminiprogram']['icon']         = 'ban-circle';
 $config->ai->actionList['unpublishminiprogram']['text']         = $lang->ai->prompts->action->unpublish;
 $config->ai->actionList['unpublishminiprogram']['hint']         = $lang->ai->prompts->action->unpublish;
 $config->ai->actionList['unpublishminiprogram']['url']          = array('module' => 'ai', 'method' => 'unpublishminiprogram', 'params' => 'prompt={id}');
 $config->ai->actionList['unpublishminiprogram']['className']    = 'ajax-submit';
-$config->ai->actionList['unpublishminiprogram']['data-confirm'] = array('message' => $lang->ai->prompts->action->draftConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->ai->actionList['unpublishminiprogram']['data-confirm'] = array('message' => $lang->ai->miniPrograms->disableTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
-$config->ai->actionList['exportminiprogram']['icon']         = 'export';
-$config->ai->actionList['exportminiprogram']['text']         = $lang->ai->export;
-$config->ai->actionList['exportminiprogram']['hint']         = $lang->ai->export;
-$config->ai->actionList['exportminiprogram']['url']          = array('module' => 'ai', 'method' => 'exportminiprogram', 'params' => 'prompt={id}');
-$config->ai->actionList['exportminiprogram']['className']    = 'ajax-submit';
-$config->ai->actionList['exportminiprogram']['data-confirm'] = array('message' => $lang->ai->prompts->action->draftConfirm, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->ai->actionList['exportminiprogram']['icon']      = 'export';
+$config->ai->actionList['exportminiprogram']['text']      = $lang->ai->export;
+$config->ai->actionList['exportminiprogram']['hint']      = $lang->ai->export;
+$config->ai->actionList['exportminiprogram']['url']       = array('module' => 'ai', 'method' => 'exportminiprogram', 'params' => 'prompt={id}');
+$config->ai->actionList['exportminiprogram']['className'] = 'ajax-submit';

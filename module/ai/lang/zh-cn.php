@@ -478,7 +478,7 @@ $lang->ai->miniPrograms->maintenanceGroup  = '维护通用智能体分组';
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
 $lang->ai->miniPrograms->deleteTip           = '确定删除该通用智能体？';
 $lang->ai->miniPrograms->disableTip          = '下架通用智能体用户将无法使用，是否确认下架？';
-$lang->ai->miniPrograms->publishTip          = '发布后将在一级导航AI模块中显示，客户端将会同步更新。';
+$lang->ai->miniPrograms->publishTip          = '发布后将在通用智能体模型广场中显示，客户端将会同步更新。';
 $lang->ai->miniPrograms->unpublishedTip      = '您使用的通用智能体没有发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();

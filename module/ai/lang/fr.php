@@ -478,7 +478,7 @@ $lang->ai->miniPrograms->maintenanceGroup  = 'Maintenance general agent group';
 $lang->ai->miniPrograms->latestPublishedDate = 'Latest Published Date';
 $lang->ai->miniPrograms->deleteTip           = 'Are you sure you want to delete this general agent?';
 $lang->ai->miniPrograms->disableTip          = 'Disabling the general agent will prevent users from accessing it. Are you sure you want to disable it?';
-$lang->ai->miniPrograms->publishTip          = 'After release, it will be displayed in the first-level navigation AI module, and the client will be updated simultaneously.';
+$lang->ai->miniPrograms->publishTip          = 'After release, it will be displayed in the General Agent Model Square and the client will update synchronously.';
 $lang->ai->miniPrograms->unpublishedTip      = 'The general agent you are using is not published.';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
