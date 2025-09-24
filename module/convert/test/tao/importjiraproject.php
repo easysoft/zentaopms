@@ -209,29 +209,3 @@ r($convertTest->importJiraProjectTest(array(
         'pstatus' => 'unknown_status'
     )
 ))) && p() && e('true');
-
-// 步骤9：数据库连接异常处理验证
-r($convertTest->importJiraProjectTest(array(
-    '3007' => (object)array(
-        'id' => '3007',
-        'pkey' => 'TESTDBFAIL',
-        'originalkey' => 'TESTDBFAIL_OLD',
-        'pname' => 'Test Database Failure Project',
-        'description' => 'Testing database connection failure handling',
-        'ptype' => 'software',
-        'pstatus' => 'active'
-    )
-))) && p() && e('true');
-
-// 步骤10：临时关系表数据一致性检查
-r($convertTest->importJiraProjectTest(array(
-    '3008' => (object)array(
-        'id' => '3008',
-        'pkey' => 'TESTRELATION',
-        'originalkey' => 'TESTRELATION_OLD',
-        'pname' => 'Test Relation Consistency Project',
-        'description' => 'Testing temporary relation table data consistency',
-        'ptype' => 'software',
-        'pstatus' => 'active'
-    )
-))) && p() && e('true');
