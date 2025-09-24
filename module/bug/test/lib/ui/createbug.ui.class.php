@@ -180,32 +180,6 @@ class createBugTester extends tester
     }
 
     /**
-     * 从弹出菜单中选择指派者
-     * Select assignee from popup menu
-     *
-     * @param  object $form
-     * @param  string $assignee
-     * @access public
-     */
-    private function selectFromPopUp($form = null, $assignee = '')
-    {
-        if(!$form) return $this->failed('form为空!');
-        $list = $form->dom->getElementList($form->dom->xpath['popupMenu'])->element;
-        $form->wait(3);
-        $found = false;
-        foreach($list as $item)
-        {
-            if($item->getText() == $assignee)
-            {
-                $item->click();
-                $found = true;
-                break;
-            }
-        }
-        if(!$found) return $this->failed('bug批量指派失败，找不到指派者' . $assignee);
-    }
-
-    /**
      * bug批量指派。
      * batch assign all bugs.
      * 在bug页面选中下面的列表下面的复选框，然后点击'指派给'按钮指派给指定用户
@@ -225,7 +199,10 @@ class createBugTester extends tester
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        $this->selectFromPopUp($form, $assignee);
+        // 等待弹出菜单容器出现
+        $form->dom->waitElement($form->dom->xpath['popupMenu'], 3);
+        $form->addUserXpath($assignee)->dom->targetUser->click();
+        $form->wait(1);
         if($this->checkAssign($form, -1, $assignee)) return $this->success('bug批量指派成功');
         return $this->failed('bug批量指派失败');
     }
@@ -288,7 +265,10 @@ class createBugTester extends tester
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        $this->selectFromPopUp($form, $assignee);
+        // 等待弹出菜单容器出现
+        $form->dom->waitElement($form->dom->xpath['popupMenu'], 3);
+        $form->addUserXpath($assignee)->dom->targetUser->click();
+        $form->wait(1);
         if($this->checkAssign($form, $index, $assignee)) return $this->success('bug选择指派成功');
         return $this->success('bug选择指派成功');
     }
