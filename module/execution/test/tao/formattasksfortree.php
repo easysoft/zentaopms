@@ -50,18 +50,26 @@ zenData('projectproduct')->gen(0);
 
 /**
 
-title=测试executionModel->formatTasksForTree();
-cid=1
-pid=1
+title=测试 executionTao::formatTasksForTree();
+cid=0
 
-查询不存在的执行 >> 0
-查询存在的执行   >> 任务10
+- 测试步骤1：空执行ID输入 >> 返回空数组
+- 测试步骤2：不存在的执行ID >> 返回空数组
+- 测试步骤3：存在任务的执行ID >> 验证返回任务数量
+- 测试步骤4：验证任务基本属性 >> 验证title和type属性
+- 测试步骤5：验证任务状态属性 >> 验证status和id属性
+- 测试步骤6：验证任务工时属性 >> 验证estimate和consumed属性
+- 测试步骤7：验证任务优先级属性 >> 验证pri和left属性
 
 */
 
-$executionIDList = array(0, 4);
+$executionIDList = array(0, 999, 4, 4, 4, 4, 4);
 
 $execution = new executionTest();
-r($execution->formatTasksForTreeTest($executionIDList[0])) && p()          && e('0');      // 查询不存在的执行
-r($execution->formatTasksForTreeTest($executionIDList[1])) && p('0:title') && e('任务10'); // 查询存在的执行
-
+r($execution->formatTasksForTreeTest($executionIDList[0])) && p() && e('0'); // 测试步骤1：空执行ID输入
+r($execution->formatTasksForTreeTest($executionIDList[1])) && p() && e('0'); // 测试步骤2：不存在的执行ID
+r($execution->formatTasksForTreeTest($executionIDList[2])) && p() && e('10'); // 测试步骤3：存在任务的执行ID
+r($execution->formatTasksForTreeTest($executionIDList[3])) && p('0:title,0:type') && e('任务10,task'); // 测试步骤4：验证任务基本属性
+r($execution->formatTasksForTreeTest($executionIDList[4])) && p('0:status,0:id') && e('wait,10'); // 测试步骤5：验证任务状态属性
+r($execution->formatTasksForTreeTest($executionIDList[5])) && p('0:estimate,0:consumed') && e('10,10'); // 测试步骤6：验证任务工时属性
+r($execution->formatTasksForTreeTest($executionIDList[6])) && p('0:pri,0:left') && e('3,10'); // 测试步骤7：验证任务优先级属性
