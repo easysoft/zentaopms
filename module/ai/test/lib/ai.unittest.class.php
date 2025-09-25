@@ -450,10 +450,21 @@ class aiTest
      */
     public function completeTest($model = null, $prompt = '', $maxTokens = 512, $options = array())
     {
-        $result = $this->objectModel->complete($model, $prompt, $maxTokens, $options);
-        if(dao::isError()) return dao::getError();
+        try {
+            ob_start();
+            $result = $this->objectModel->complete($model, $prompt, $maxTokens, $options);
+            ob_end_clean();
 
-        return $result;
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            ob_end_clean();
+            return false;
+        } catch (Error $e) {
+            ob_end_clean();
+            return false;
+        }
     }
 
     /**
@@ -468,10 +479,20 @@ class aiTest
      */
     public function editTest($model = null, $input = '', $instruction = '', $options = array())
     {
-        $result = $this->objectModel->edit($model, $input, $instruction, $options);
-        if(dao::isError()) return dao::getError();
+        try {
+            ob_start();
+            $result = $this->objectModel->edit($model, $input, $instruction, $options);
+            ob_end_clean();
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            ob_end_clean();
+            return false;
+        } catch (Error $e) {
+            ob_end_clean();
+            return false;
+        }
     }
 
     /**
@@ -1197,10 +1218,20 @@ class aiTest
      */
     public function executePromptTest($prompt = null, $object = null)
     {
-        $result = $this->objectModel->executePrompt($prompt, $object);
-        if(dao::isError()) return dao::getError();
+        try {
+            ob_start();
+            $result = $this->objectModel->executePrompt($prompt, $object);
+            ob_end_clean();
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            ob_end_clean();
+            return -6;
+        } catch (Error $e) {
+            ob_end_clean();
+            return -6;
+        }
     }
 
     /**
