@@ -12311,7 +12311,8 @@ class upgradeModel extends model
                 $deliverableID = $this->dao->lastInsertID();
             }
 
-            $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->where('id')->eq($review->id)->exec();
+            $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->set('title')->eq($deliverable->name)->where('id')->eq($review->id)->exec();
+            $this->dao->update(TABLE_OBJECT)->set('category')->eq($deliverable->deliverable)->where('id')->eq($review->object)->exec(); // 将评审对象改成交付物ID
 
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
             if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
