@@ -60,7 +60,7 @@ $config->compile->actionList = array();
 $config->compile->actionList['logs']['icon'] = 'file-log';
 $config->compile->actionList['logs']['text'] = $lang->compile->logs;
 $config->compile->actionList['logs']['hint'] = $lang->compile->logs;
-$config->compile->actionList['logs']['url']  = 'javascript:openPipelineLog({id})';
+$config->compile->actionList['logs']['url']  = array('module' => 'compile', 'method' => 'logs', 'params' => 'compileID={id}');
 
 $config->compile->actionList['result']['icon']         = 'list-alt';
 $config->compile->actionList['result']['text']         = $lang->compile->result;

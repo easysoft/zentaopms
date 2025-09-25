@@ -1096,7 +1096,8 @@ class repo extends control
         $server      = $this->pipeline->getByID($serverID);
         $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
 
-        $repoList = $server ? $this->repoZen->getNotExistRepos($server) : array();
+        $linkUser = $server ? $this->pipeline->getOpenIdByAccount($server->id, $server->type, $this->app->user->account) : array();
+        $repoList = $server && $linkUser ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
