@@ -8,6 +8,14 @@ timeout=0
 cid=0
 
 - 步骤1：导入空数组数据 @true
+- 步骤2：导入有效的ChangeItem数据 @true
+- 步骤3：导入已存在关联关系的数据 @true
+- 步骤4：导入无效ChangeGroup数据 @true
+- 步骤5：导入不存在Issue的数据 @true
+- 步骤6：导入包含HTML和特殊字符的数据 @true
+- 步骤7：导入边界值数据（null值处理） @true
+- 步骤8：导入批量混合状态数据（包含邮箱格式） @true
+- 步骤9：导入多语言数据测试 @true
 
 */
 
@@ -68,7 +76,7 @@ $convertTest = new convertTest();
 // 7. 执行测试步骤 - 每个测试用例必须包含至少5个测试步骤
 r($convertTest->importJiraChangeItemTest(array())) && p() && e('true'); // 步骤1：导入空数组数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData1 = array(
     (object)array(
         'id' => 100,
         'groupid' => 1,
@@ -76,9 +84,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'In Progress'
     )
-))) && p() && e('true'); // 步骤2：导入有效的ChangeItem数据
+);
+r($convertTest->importJiraChangeItemTest($testData1)) && p() && e('true'); // 步骤2：导入有效的ChangeItem数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData2 = array(
     (object)array(
         'id' => 1,
         'groupid' => 1,
@@ -86,9 +95,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 步骤3：导入已存在关联关系的数据
+);
+r($convertTest->importJiraChangeItemTest($testData2)) && p() && e('true'); // 步骤3：导入已存在关联关系的数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData3 = array(
     (object)array(
         'id' => 101,
         'groupid' => 999,
@@ -96,9 +106,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 步骤4：导入无效ChangeGroup数据
+);
+r($convertTest->importJiraChangeItemTest($testData3)) && p() && e('true'); // 步骤4：导入无效ChangeGroup数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData4 = array(
     (object)array(
         'id' => 102,
         'groupid' => 3,
@@ -106,9 +117,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Open',
         'newstring' => 'Closed'
     )
-))) && p() && e('true'); // 步骤5：导入不存在Issue的数据
+);
+r($convertTest->importJiraChangeItemTest($testData4)) && p() && e('true'); // 步骤5：导入不存在Issue的数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData5 = array(
     (object)array(
         'id' => 103,
         'groupid' => 1,
@@ -116,9 +128,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'Bug with <script>alert("XSS")</script>',
         'newstring' => 'Fixed: Bug with "quotes" and \'apostrophes\' & special chars < >'
     )
-))) && p() && e('true'); // 步骤6：导入包含HTML和特殊字符的数据
+);
+r($convertTest->importJiraChangeItemTest($testData5)) && p() && e('true'); // 步骤6：导入包含HTML和特殊字符的数据
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData6 = array(
     (object)array(
         'id' => 104,
         'groupid' => 1,
@@ -133,9 +146,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => '1.0.0',
         'newstring' => null
     )
-))) && p() && e('true'); // 步骤7：导入边界值数据（null值处理）
+);
+r($convertTest->importJiraChangeItemTest($testData6)) && p() && e('true'); // 步骤7：导入边界值数据（null值处理）
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData7 = array(
     (object)array(
         'id' => 106,
         'groupid' => 1,
@@ -157,9 +171,10 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => 'user1@company.com',
         'newstring' => 'user2@company.com'
     )
-))) && p() && e('true'); // 步骤8：导入批量混合状态数据（包含邮箱格式）
+);
+r($convertTest->importJiraChangeItemTest($testData7)) && p() && e('true'); // 步骤8：导入批量混合状态数据（包含邮箱格式）
 
-r($convertTest->importJiraChangeItemTest(array(
+$testData8 = array(
     (object)array(
         'id' => 109,
         'groupid' => 1,
@@ -167,4 +182,5 @@ r($convertTest->importJiraChangeItemTest(array(
         'oldstring' => '这是一个中文标题',
         'newstring' => 'This is an English title'
     )
-))) && p() && e('true'); // 步骤9：导入多语言数据测试
+);
+r($convertTest->importJiraChangeItemTest($testData8)) && p() && e('true'); // 步骤9：导入多语言数据测试

@@ -7,7 +7,13 @@ title=测试 storyModel::getDefaultShowGrades();
 timeout=0
 cid=0
 
+- 测试步骤1：正常单级菜单结构输入 @story,requirement,
+
+- 测试步骤2：多级菜单结构输入 @story,requirement,epic,feature,
+
 - 测试步骤3：空数组输入测试 @
+- 测试步骤4：单级空items测试 @
+- 测试步骤5：数值类型value测试 @1,2,3,
 
 */
 
@@ -18,14 +24,15 @@ su('admin');
 
 $storyTest = new storyTest();
 
-r($storyTest->getDefaultShowGradesTest(array(
+$testData1 = array(
     array('items' => array(
         array('value' => 'story'),
         array('value' => 'requirement')
     ))
-))) && p() && e('story,requirement,'); // 测试步骤1：正常单级菜单结构输入
+);
+r($storyTest->getDefaultShowGradesTest($testData1)) && p() && e('story,requirement,'); // 测试步骤1：正常单级菜单结构输入
 
-r($storyTest->getDefaultShowGradesTest(array(
+$testData2 = array(
     array('items' => array(
         array('value' => 'story'),
         array('value' => 'requirement')
@@ -34,18 +41,22 @@ r($storyTest->getDefaultShowGradesTest(array(
         array('value' => 'epic'),
         array('value' => 'feature')
     ))
-))) && p() && e('story,requirement,epic,feature,'); // 测试步骤2：多级菜单结构输入
+);
+r($storyTest->getDefaultShowGradesTest($testData2)) && p() && e('story,requirement,epic,feature,'); // 测试步骤2：多级菜单结构输入
 
-r($storyTest->getDefaultShowGradesTest(array())) && p() && e(''); // 测试步骤3：空数组输入测试
+$testData3 = array();
+r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e(''); // 测试步骤3：空数组输入测试
 
-r($storyTest->getDefaultShowGradesTest(array(
+$testData3 = array(
     array('items' => array())
-))) && p() && e(''); // 测试步骤4：单级空items测试
+);
+r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e(''); // 测试步骤4：单级空items测试
 
-r($storyTest->getDefaultShowGradesTest(array(
+$testData5 = array(
     array('items' => array(
         array('value' => 1),
         array('value' => 2),
         array('value' => 3)
     ))
-))) && p() && e('1,2,3,'); // 测试步骤5：数值类型value测试
+);
+r($storyTest->getDefaultShowGradesTest($testData5)) && p() && e('1,2,3,'); // 测试步骤5：数值类型value测试

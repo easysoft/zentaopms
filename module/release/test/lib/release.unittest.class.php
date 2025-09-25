@@ -229,12 +229,12 @@ class releaseTest
      */
     public function changeStatusTest(int $releaseID, string $status)
     {
-        $oldRelease = $this->objectModel->fetchByID($releaseID);
+        $oldRelease = $this->objectModel->getByID($releaseID);
         $this->objectModel->changeStatus($releaseID, $status);
 
         if(dao::isError()) return dao::getError();
 
-        $release = $this->objectModel->fetchByID($releaseID);
+        $release = $this->objectModel->getByID($releaseID);
         return common::createChanges($oldRelease, $release);
     }
 
@@ -250,12 +250,12 @@ class releaseTest
      */
     public function changeStatusTestWithDate(int $releaseID, string $status, string $releasedDate)
     {
-        $oldRelease = $this->objectModel->fetchByID($releaseID);
+        $oldRelease = $this->objectModel->getByID($releaseID);
         $this->objectModel->changeStatus($releaseID, $status, $releasedDate);
 
         if(dao::isError()) return dao::getError();
 
-        $release = $this->objectModel->fetchByID($releaseID);
+        $release = $this->objectModel->getByID($releaseID);
         return common::createChanges($oldRelease, $release);
     }
 
