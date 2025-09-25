@@ -7,11 +7,11 @@ title=测试 aiModel::getPromptsForUser();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 - story模块无数据 @0
+- 步骤1：正常情况 - story模块有数据 @3
 - 步骤2：边界值 - 不存在的模块 @0
-- 步骤3：异常输入 - 空字符串，无数据返回空数组 @0
-- 步骤4：权限验证 - task模块无数据 @0
-- 步骤5：业务规则 - bug模块无数据 @0
+- 步骤3：异常输入 - 空字符串 @0
+- 步骤4：权限验证 - task模块有数据 @3
+- 步骤5：业务规则 - bug模块有数据 @2
 
 */
 
@@ -19,9 +19,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
 
-// 2. zendata数据准备（不使用数据库数据，测试方法本身）
-// $table = zenData('ai_prompt');
-// $table->gen(0);  // 不生成数据，测试空结果
+// 2. zendata数据准备
+$table = zenData('ai_prompt');
+$table->id->range('1-10');
+$table->name->range('prompt1{3},prompt2{3},prompt3{2},prompt4{1},prompt5{1}');
+$table->module->range('story{3},task{3},bug{2},project{1},user{1}');
+$table->status->range('active{8},draft{2}');
+$table->deleted->range('0{9},1{1}');
+$table->createdBy->range('admin{10}');
+$table->createdDate->range('`2024-01-01 00:00:00`');
+$table->gen(10);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -30,8 +37,8 @@ su('admin');
 $aiTest = new aiTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($aiTest->getPromptsForUserTest('story')) && p() && e(0); // 步骤1：正常情况 - story模块无数据
-r($aiTest->getPromptsForUserTest('nonexistent')) && p() && e(0); // 步骤2：边界值 - 不存在的模块
-r($aiTest->getPromptsForUserTest('')) && p() && e(0); // 步骤3：异常输入 - 空字符串，无数据返回空数组
-r($aiTest->getPromptsForUserTest('task')) && p() && e(0); // 步骤4：权限验证 - task模块无数据
-r($aiTest->getPromptsForUserTest('bug')) && p() && e(0); // 步骤5：业务规则 - bug模块无数据
+r($aiTest->getPromptsForUserTest('story')) && p() && e('3'); // 步骤1：正常情况 - story模块有数据
+r($aiTest->getPromptsForUserTest('nonexistent')) && p() && e('0'); // 步骤2：边界值 - 不存在的模块
+r($aiTest->getPromptsForUserTest('')) && p() && e('0'); // 步骤3：异常输入 - 空字符串
+r($aiTest->getPromptsForUserTest('task')) && p() && e('3'); // 步骤4：权限验证 - task模块有数据
+r($aiTest->getPromptsForUserTest('bug')) && p() && e('2'); // 步骤5：业务规则 - bug模块有数据
