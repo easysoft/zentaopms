@@ -108,7 +108,8 @@ function clearErrorTip()
  */
 function sendMessagesToAI(message, renew)
 {
-    aiChatView.$.postMessage(message, renew ? 'NEW' : undefined);
+    const chatID = (renew || aiChatView.$.chat.$local.id) ? 'NEW' : undefined;
+    aiChatView.$.postMessage({content: message, chatType: 'miniprogram'}, chatID);
 }
 
 window.aiBrowseMiniProgram.initAIChatView = function(options)

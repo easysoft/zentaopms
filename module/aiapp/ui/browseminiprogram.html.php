@@ -218,7 +218,7 @@ div(
         setID('aiChatView'),
         setClass('shadow rounded flex-1 ring'),
         on::init()->call('window.aiBrowseMiniProgram.initAIChatView', array(
-            'creatingChat' => array('title' => $miniProgram->name),
+            'creatingChat' => array('title' => $miniProgram->name, 'chatType' => 'miniprogram'),
             'noContexts' => true,
             'hideHeader' => true,
             'sendbox' => array('placeholder' => $lang->aiapp->continueasking),
