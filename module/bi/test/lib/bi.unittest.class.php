@@ -353,10 +353,17 @@ class biTest
      */
     public function getColumnsTypeTest($sql, $driverName = 'mysql', $columns = array())
     {
-        $result = $this->objectModel->getColumnsType($sql, $driverName, $columns);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->objectModel->getColumnsType($sql, $driverName, $columns);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
 
     /**
