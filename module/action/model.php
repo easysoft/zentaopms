@@ -1373,6 +1373,10 @@ class actionModel extends model
                 $action->objectLabel = $this->lang->project->template;
                 $action->objectLink  = helper::createLink('project', 'execution', "status=undone&projectID={$action->objectID}");
             }
+            elseif($action->objectType == 'project' && $action->action == 'managedeliverable')
+            {
+                $action->objectLink  = helper::createLink('project', 'deliverable', "projectID={$action->objectID}"); // 交付物链接
+            }
         }
         return $actions;
     }
