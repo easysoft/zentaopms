@@ -23,7 +23,7 @@ class aiCategoryManager extends zui.Component
         const $item = $(`
             <div class="category-item flex mt-4" data-key="${key}">
                 <div class="category-input w-2/3">
-                    <input type="text" name="${key}" value="${value}" class="form-control" ${isBuiltIn ? "disabled" : ""}>
+                    <input type="text" name="${key}" value="${value}" class="form-control" ${isBuiltIn || isUsed ? "disabled" : ""}>
                 </div>
                 <div class="category-actions">
                     ${(isBuiltIn && key != 'others') ? '' : `<button type="button" class="btn ghost btn-add">
