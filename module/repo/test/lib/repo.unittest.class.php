@@ -1063,11 +1063,16 @@ class repoTest
     public function setBugStatusByCommitTest($bugs, $actions, $action, $changes)
     {
         try {
+            // 捕获输出以避免HTML错误信息影响测试结果
+            ob_start();
             $result = $this->objectModel->setBugStatusByCommit($bugs, $actions, $action, $changes);
+            $output = ob_get_clean();
+
             if(dao::isError()) return dao::getError();
 
             return $result;
         } catch (Exception $e) {
+            ob_end_clean();
             if(strpos($e->getMessage(), 'zt_actionproduct') !== false) {
                 return $bugs;
             }
