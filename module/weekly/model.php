@@ -762,6 +762,9 @@ class weeklyModel extends model
      */
     public function getBuildinRawContent(array $blockIdList): string
     {
+        global $oldRequestType;
+        if(!empty($oldRequestType) && $oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+
         $blockCodes = array();
         foreach($blockIdList as $blockKey => $blockID) $blockCodes[] = '{' . $blockKey . '}';
 
@@ -790,13 +793,22 @@ class weeklyModel extends model
                     }
                     if(!empty($child->props->content))
                     {
-                        $child->props->content->fetcher = str_replace($blockCodes, array_values($blockIdList), $child->props->content->fetcher);
+                        if(!empty($child->props->content->fetcher[0]))
+                        {
+                            $fetcher = $child->props->content->fetcher[0];
+                            $fetcher->params = str_replace($blockCodes, array_values($blockIdList), $fetcher->params);
+
+                            $fetcherLink = helper::createLink($fetcher->module, $fetcher->method, $fetcher->params);
+                            $fetcherLink = str_replace(array('install.php', 'upgrade.php'), 'index.php', $fetcherLink);
+                            $child->props->content->fetcher = "{$fetcherLink}";
+                        }
                         if(isset($child->props->content->exportUrl)) $child->props->content->exportUrl = str_replace($blockCodes, array_values($blockIdList), $child->props->content->exportUrl);
                     }
                 }
             }
         }
 
+        if(!empty($oldRequestType) && $oldRequestType == 'PATH_INFO') $this->config->requestType = 'GET';
         return json_encode($rawContent);
     }
 }
