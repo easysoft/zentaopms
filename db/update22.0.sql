@@ -77,3 +77,8 @@ ALTER TABLE `zt_object` ADD `reviewResult` varchar(20) NOT NULL DEFAULT '' AFTER
 ALTER TABLE `zt_object` ADD `reviewOpinion` text NULL AFTER `reviewResult`;
 ALTER TABLE `zt_object` ADD `reviewers` text NULL AFTER `reviewResult`;
 ALTER TABLE `zt_object` ADD `categoryVersion` text DEFAULT NULL AFTER `category`;
+
+ALTER TABLE `zt_designspec` ADD `docs` varchar(255) NOT NULL DEFAULT '' AFTER `files`;
+UPDATE `zt_designspec` AS t1
+JOIN `zt_design` AS t2 ON t1.design = t2.id AND t2.version = t1.version
+SET t1.docs = t2.docs;

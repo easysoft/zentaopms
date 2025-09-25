@@ -811,7 +811,8 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `version` smallint(6) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
-  `files` varchar(255) NOT NULL DEFAULT ''
+  `files` varchar(255) NOT NULL DEFAULT '',
+  `docs` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `design` ON `zt_designspec`(`design`,`version`);
 
