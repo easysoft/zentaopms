@@ -40,7 +40,7 @@ toolbar
         'class' => 'primary',
         'icon'  => 'plus',
         'text'  => $lang->ai->miniPrograms->create,
-        'url'   => createLink('ai', 'createMiniProgram'),
+        'url'   => createLink('ai', 'createMiniProgram', "category=$category"),
     ))) : null,
 );
 
