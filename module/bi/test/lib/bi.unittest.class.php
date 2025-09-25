@@ -289,10 +289,17 @@ class biTest
      */
     public function getFieldsWithTableTest($sql)
     {
-        $result = $this->objectModel->getFieldsWithTable($sql);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->objectModel->getFieldsWithTable($sql);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
     }
 
     /**
@@ -914,13 +921,13 @@ class biTest
             if(dao::isError()) return dao::getError();
 
             // 确保结果是一个数组，包含两个元素
-            if(!is_array($result) || count($result) != 2) return array('error', 'invalid result format');
-            
-            return $result;
+            if(!is_array($result) || count($result) != 2) return 0;
+
+            return count($result);
         }
         catch(Exception $e)
         {
-            return array('exception', $e->getMessage());
+            return 0;
         }
     }
 
