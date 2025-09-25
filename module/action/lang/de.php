@@ -194,6 +194,8 @@ $lang->action->objectTypes['boardspace']       = 'Board Space';
 $lang->action->objectTypes['productline']      = 'Product Line';
 $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = 'Deliverable Category';
+$lang->action->objectTypes['cm']               = 'Baseline';
+$lang->action->objectTypes['baseline']         = 'Baseline';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
