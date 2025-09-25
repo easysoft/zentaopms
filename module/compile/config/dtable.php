@@ -62,10 +62,11 @@ $config->compile->actionList['logs']['text'] = $lang->compile->logs;
 $config->compile->actionList['logs']['hint'] = $lang->compile->logs;
 $config->compile->actionList['logs']['url']  = 'javascript:openPipelineLog({id})';
 
-$config->compile->actionList['result']['icon'] = 'list-alt';
-$config->compile->actionList['result']['text'] = $lang->compile->result;
-$config->compile->actionList['result']['hint'] = $lang->compile->result;
-$config->compile->actionList['result']['url']  = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={testtask}');
+$config->compile->actionList['result']['icon']         = 'list-alt';
+$config->compile->actionList['result']['text']         = $lang->compile->result;
+$config->compile->actionList['result']['hint']         = $lang->compile->result;
+$config->compile->actionList['result']['url']          = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={testtask}');
+$config->compile->actionList['result']['notLoadModel'] = true;
 
 $config->compile->dtable->fieldList['actions']['name']     = 'actions';
 $config->compile->dtable->fieldList['actions']['title']    = $lang->actions;
