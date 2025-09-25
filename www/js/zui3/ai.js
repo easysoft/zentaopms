@@ -49,7 +49,38 @@ window.executeZentaoPrompt = async function(info)
 
             const langData        = zaiPanel.options.langData || {};
             const applyFormFormat = langData.applyFormFormat;
+            const originObject    = info.object && info.object[info.objectType];
+            const propNames       = info.dataPropNames ? (info.dataPropNames[info.objectType] || {}) : {};
+            let   diffView        = null;
+            if(originObject)
+            {
+                const h = zui.html;
+                const renderProp = (prop, value) => {
+                    let oldValue = originObject[prop];
+                    if(typeof oldValue === 'string' && oldValue.length) oldValue = $('<div/>').html(oldValue).text();
+                    const isSame = oldValue === value;
+                    return h`<tr class="whitespace-pre-wrap">
+    <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
+    <td class=${isSame ? '' : 'success-pale'}>${value}</td>
+    <td class=${isSame ? '' : 'danger-pale'}>${oldValue}</td>
+</tr>`;
+                };
+                diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID})}</h6>
+<table class="table bordered" style="min-width: 600px">
+    <thead>
+        <tr>
+            <th style="width: 100px;">${langData.changeProp}</th>
+            <th>${langData.afterChange}</th>
+            <th>${langData.beforeChange}</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}
+    </tbody>
+</table>`;
+            }
             return {
+                view: diffView,
                 actions: [{
                     text        : (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
