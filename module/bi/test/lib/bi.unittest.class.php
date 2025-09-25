@@ -575,10 +575,19 @@ class biTest
      */
     public function checkDuckDBFileTest($path, $bin)
     {
-        $result = $this->objectModel->checkDuckDBFile($path, $bin);
-        if(dao::isError()) return dao::getError();
+        try {
+            // 验证输入参数
+            if(empty($bin) || !isset($bin['file']) || !isset($bin['extension'])) {
+                return false;
+            }
 
-        return $result;
+            $result = $this->objectModel->checkDuckDBFile($path, $bin);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
