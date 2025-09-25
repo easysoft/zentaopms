@@ -267,11 +267,12 @@ class designModel extends model
 
         $this->app->loadLang('product');
         $this->loadModel('file');
-        $spec = $this->dao->select('name,`desc`,files,docs')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
-        $design->name  = !empty($spec->name)   ? $spec->name  : $design->name;
-        $design->desc  = !empty($spec->desc)   ? $spec->desc  : $design->desc;
-        $design->files = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
-        $design->docs  = !empty($spec->docs)   ? $spec->docs  : '';
+        $spec = $this->dao->select('name,`desc`,files,docs,docVersions')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
+        $design->name        = !empty($spec->name)   ? $spec->name  : $design->name;
+        $design->desc        = !empty($spec->desc)   ? $spec->desc  : $design->desc;
+        $design->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
+        $design->docs        = !empty($spec->docs)   ? $spec->docs  : '';
+        $design->docVersions = !empty($spec->docVersions) ? json_decode($spec->docVersions, true) : array();
 
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
         $design->project     = (int)$design->project;
