@@ -428,15 +428,22 @@ class apiTest
     {
         global $tester;
 
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('createDemoApiSpec');
-        $method->setAccessible(true);
+        try
+        {
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('createDemoApiSpec');
+            $method->setAccessible(true);
 
-        $result = $method->invoke($this->objectModel, $version, $apiMap, $moduleMap, $currentAccount);
+            $result = $method->invoke($this->objectModel, $version, $apiMap, $moduleMap, $currentAccount);
 
-        if(dao::isError()) return dao::getError();
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
 
     /**
