@@ -122,62 +122,6 @@ class createBugTester extends tester
     }
 
     /**
-     * 查找bug在bug列表中的索引。
-     * Find the index of given bug title in the bug table
-     *
-     * @param  object $form
-     * @param  string $bugTitle
-     * @access public
-     * @return int    $index
-     */
-    private function findIndex($form = null, $bugTitle = '')
-    {
-        if(!$form) return $this->failed('form为空!');
-        $bugTitles = $form->dom->getElementList($form->dom->xpath['bugTitle'])->element;
-        $form->wait(1);
-        $index = -1;  // -1 not found
-        $found = false;
-        foreach($bugTitles as $item)
-        {
-            $index++;
-            if($item->getText() == $bugTitle)
-            {
-                $found = true;
-                break;
-            }
-        }
-        if(!$found) return -1;
-        return $index;
-    }
-
-    /**
-     * 检查bug纸牌者是否符合预期
-     * Check if bug assignedto is expected assignee
-     *
-     * @param  object $form
-     * @param  int    $index
-     * @param  string $assignee
-     * @access public
-     * @return bool   true if match assignee, false if not
-     */
-    private function checkAssign($form, $index = -1, $assignee = '')
-    {
-        $assignedTo = $this->getElementList($form, 'bugAssigned', true);
-        // if $index=-1, then check all bugs
-        if($index == -1)
-        {
-            foreach($assignedTo as $item)
-            {
-                if($item != $assignee) return false;
-            }
-            return true;
-        }
-        // else check specific bug
-        if($assignedTo[$index] != $assignee) return false;
-        return true;
-    }
-
-    /**
      * bug批量指派。
      * batch assign all bugs.
      * 在bug页面选中下面的列表下面的复选框，然后点击'指派给'按钮指派给指定用户
@@ -192,15 +136,19 @@ class createBugTester extends tester
         $assignee = $assignee ?? 'admin';
         $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
 
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->bugLabel->click();
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        $this->dropdownPicker($form, $assignee);
-        $form->wait(1);
-        if($this->checkAssign($form, -1, $assignee)) return $this->success('bug批量指派成功');
-        return $this->failed('bug批量指派失败');
+        $form->dom->dropdownPicker($assignee);
+        $form->wait(2);
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        foreach($bugAssigned as $assigned)
+        {
+            if($assigned != $assignee) return $this->failed('bug批量指派失败');
+        }
+        return $this->success('bug批量指派成功');
     }
 
     /**
@@ -220,18 +168,17 @@ class createBugTester extends tester
         $assignee = $assignee ?? 'admin';
         $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
 
-        $form->wait(1);
-        // 先找到bug title
-        $index = array_search($bugTitle, $this->getElementList($form, 'bugTitle', true));
+        $form->wait(3);
+        $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
-        $this->getElementList($form, 'bugAssigned')[$index]->click();
+        $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($assignee);
         $form->wait(1);
         $form->dom->assign->click();
         $form->wait(1);
-        // check
-        if($this->checkAssign($form, $index, $assignee)) return $this->success('bug直接修改指派成功');
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
         return $this->failed('bug直接修改指派失败');
     }
 
@@ -250,17 +197,18 @@ class createBugTester extends tester
     {
         if(!$bugTitle) return $this->failed('bug选择指派失败，没有指定bug');
         $assignee = $assignee ?? 'admin';
-        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
-        $form->wait(1);
-        $index = array_search($bugTitle, $this->getElementList($form, 'bugTitle', true));
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(3);
+        $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
-        $this->getElementList($form, 'bugID')[$index]->click();
+        $form->dom->getElementListByXpathKey('bugID')[$index]->click();
         $form->wait(1);
         $form->dom->assignTo->click();
         $form->wait(1);
-        $this->dropdownPicker($form, $assignee);
+        $form->dom->dropdownPicker($assignee);
         $form->wait(1);
-        if($this->checkAssign($form, $index, $assignee)) return $this->success('bug选择指派成功');
-        return $this->success('bug选择指派成功');
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        if($bugAssigned[$index] == $assignee) return $this->success('bug选择指派成功');
+        return $this->failed('bug选择指派失败');
     }
 }

@@ -1258,4 +1258,43 @@ JS
         }
         return $result;
     }
+
+    /**
+     * Get elements list by xpath key
+     *
+     * @param  string $key
+     * @param  bool   $text  true return element getText() list, false return element dom list
+     * @access public
+     * @return array  [] if not found
+     */
+    public function getElementListByXpathKey($key = '', $text = false)
+    {
+        if(!$key or !isset($this->xpath[$key])) return [];
+
+        $getList = $this->waitElement($this->xpath[$key], 3)->getElementList($this->xpath[$key]);
+        if(!$getList) return [];
+        $elements = $getList->element;
+        if(!$text) return $elements;
+
+        $list = [];
+        foreach($elements as $element)
+        {
+            array_push($list, $element->getText());
+        }
+        return $list;
+    }
+
+    /**
+     * Pick item in dropdown menu and click.
+     *
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function dropdownPicker($value)
+    {
+        $xpath = "//div[contains(@class,'dropdown')]//div[@class='item-title' and text()='{$value}']";
+        $this->getElement($xpath)->element->click();
+        sleep(3);
+    }
 }
