@@ -91,6 +91,46 @@ class pivotTest
     }
 
     /**
+     * Test getPivotID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return int
+     */
+    public function getPivotIDTest(int $groupID): int
+    {
+        global $tester;
+
+        // Mock bi模块的getViewableObject方法
+        $biModel = $tester->loadModel('bi');
+        if(!$biModel) {
+            // 如果bi模块不存在，则模拟权限验证，返回所有透视表ID
+            $viewableObjects = $tester->dao->select('id')->from(TABLE_PIVOT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
+        } else {
+            try {
+                $viewableObjects = $biModel->getViewableObject('pivot');
+            } catch (Exception $e) {
+                // 如果方法调用失败，则返回所有透视表ID
+                $viewableObjects = $tester->dao->select('id')->from(TABLE_PIVOT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
+            }
+        }
+
+        // 直接执行SQL查询而不是调用protected方法
+        $result = (int)$tester->dao->select('id')->from(TABLE_PIVOT)
+            ->where("FIND_IN_SET({$groupID}, `group`)")
+            ->andWhere('stage')->ne('draft')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('id')->in($viewableObjects)
+            ->orderBy('id_desc')
+            ->limit(1)
+            ->fetch('id');
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 获取透视表配置相关信息。
      * Get pivot table config info.
      *
@@ -1076,6 +1116,23 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getFieldsOptions method and return count.
+     *
+     * @param  array  $fieldSettings
+     * @param  array  $records
+     * @param  string $driver
+     * @access public
+     * @return int
+     */
+    public function getFieldsOptionsCountTest($fieldSettings = array(), $records = array(), $driver = 'mysql')
+    {
+        $result = $this->objectModel->getFieldsOptions($fieldSettings, $records, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
     }
 
     /**

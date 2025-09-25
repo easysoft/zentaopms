@@ -3,20 +3,35 @@
 
 /**
 
-title=测试 mailModel->isError();
+title=测试 mailModel::isError();
 timeout=0
 cid=0
 
-- 没有错误信息，检查结果 @0
-- 有错误信息，检查结果 @1
+- 步骤1：初始状态无错误信息 @0
+- 步骤2：添加单个错误信息 @1
+- 步骤3：添加多个错误信息 @1
+- 步骤4：清空错误信息后检查 @0
+- 步骤5：添加空字符串错误信息 @1
+- 步骤6：重置errors数组为空 @0
+- 步骤7：添加数字错误信息 @1
 
 */
+
+// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+
+// 2. 用户登录
 su('admin');
 
-global $tester;
-$mailModel = $tester->loadModel('mail');
-r($mailModel->isError()) && p() && e('0'); //没有错误信息，检查结果
+// 3. 创建测试实例
+$mailTest = new mailTest();
 
-$mailModel->errors[] = 'file_open';
-r($mailModel->isError()) && p() && e('1'); //有错误信息，检查结果
+// 4. 执行测试步骤
+r($mailTest->isErrorTest()) && p() && e('0'); // 步骤1：初始状态无错误信息
+r($mailTest->objectModel->errors[] = 'SMTP connection failed') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤2：添加单个错误信息
+r($mailTest->objectModel->errors[] = 'Authentication failed') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤3：添加多个错误信息
+r($mailTest->objectModel->getError()) && r($mailTest->isErrorTest()) && p() && e('0'); // 步骤4：清空错误信息后检查
+r($mailTest->objectModel->errors[] = '') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤5：添加空字符串错误信息
+r($mailTest->objectModel->errors = array()) && r($mailTest->isErrorTest()) && p() && e('0'); // 步骤6：重置errors数组为空
+r($mailTest->objectModel->errors[] = 500) && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤7：添加数字错误信息

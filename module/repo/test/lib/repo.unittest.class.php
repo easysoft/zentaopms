@@ -893,6 +893,29 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Test checkConnection method in zen layer.
+     *
+     * @param  array $postData POST数据
+     * @access public
+     * @return mixed
+     */
+    public function checkConnectionZenTest($postData = array())
+    {
+        $objectZen = initReference('repo');
+
+        // 模拟POST数据
+        $_POST = $postData;
+
+        $method = new ReflectionMethod(get_class($objectZen), 'checkConnection');
+        $method->setAccessible(true);
+        $result = $method->invoke($objectZen);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
     public function replaceCommentLinkTest($comment)
     {
         $this->objectModel->config->webRoot     = '';
@@ -1923,6 +1946,23 @@ class repoTest
         $method = new ReflectionMethod($this->objectTao, 'getMatchedReposByUrl');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $url);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processSearchQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function processSearchQueryTest(int $queryID)
+    {
+        $method = new ReflectionMethod($this->objectTao, 'processSearchQuery');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $queryID);
         if(dao::isError()) return dao::getError();
 
         return $result;
