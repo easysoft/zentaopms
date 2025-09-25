@@ -38,27 +38,38 @@ window.executeZentaoPrompt = async function(info)
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
 
+    const langData = zaiPanel.options.langData || {};
     const tools = [{
         name       : `zentao_prompt_${info.promptID}`,
         displayName: info.name,
         description: info.name,
-        parameters : info.schema,
-        fn: (result) => {
+        parameters : {
+            type: 'object',
+            properties: {
+                data: info.schema,
+                explain: {
+                    type: 'string',
+                    description: langData.changeExplainDesc
+                }
+            }
+        },
+        fn: (response) => {
+            const result = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
 
-            const langData        = zaiPanel.options.langData || {};
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
             const propNames       = info.dataPropNames ? (info.dataPropNames[info.objectType] || {}) : {};
+            const h               = zui.html;
             let   diffView        = null;
+            const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
             if(originObject)
             {
-                const h = zui.html;
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
                     if(typeof oldValue === 'string' && oldValue.length) oldValue = $('<div/>').html(oldValue).text();
-                    const isSame = oldValue === value;
+                    const isSame = String(oldValue) === String(value);
                     return h`<tr class="whitespace-pre-wrap">
     <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
     <td class=${isSame ? '' : 'success-pale'}>${value}</td>
@@ -80,7 +91,7 @@ window.executeZentaoPrompt = async function(info)
 </table>`;
             }
             return {
-                view: diffView,
+                view: [diffView, explainView],
                 actions: [{
                     text        : (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
