@@ -8,6 +8,15 @@ timeout=0
 cid=0
 
 - 执行convertTest模块的importJiraProjectTest方法，参数是array  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData2  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData3  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData4  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData5  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData6  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData7  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData8  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData9  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData10  @true
 
 */
 
@@ -101,7 +110,7 @@ $convertTest = new convertTest();
 r($convertTest->importJiraProjectTest(array())) && p() && e('true');
 
 // 步骤2：已删除项目状态过滤测试
-r($convertTest->importJiraProjectTest(array(
+$testData2 = array(
     '2001' => (object)array(
         'id' => '2001',
         'pkey' => 'DELETED',
@@ -111,10 +120,11 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'deleted'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData2)) && p() && e('true');
 
 // 步骤3：重复项目ID去重机制验证
-r($convertTest->importJiraProjectTest(array(
+$testData3 = array(
     '1001' => (object)array(
         'id' => '1001',
         'pkey' => 'DUPLICATE',
@@ -124,10 +134,11 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'active'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData3)) && p() && e('true');
 
 // 步骤4：正常项目完整导入流程测试
-r($convertTest->importJiraProjectTest(array(
+$testData4 = array(
     '3001' => (object)array(
         'id' => '3001',
         'pkey' => 'TESTNORMAL',
@@ -138,10 +149,11 @@ r($convertTest->importJiraProjectTest(array(
         'pstatus' => 'active',
         'lead' => 'admin'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData4)) && p() && e('true');
 
 // 步骤5：项目状态映射转换验证
-r($convertTest->importJiraProjectTest(array(
+$testData5 = array(
     '3002' => (object)array(
         'id' => '3002',
         'pkey' => 'TESTARCHIVED',
@@ -151,10 +163,11 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'software',
         'pstatus' => 'archived'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData5)) && p() && e('true');
 
 // 步骤6：批量项目导入并发处理测试
-r($convertTest->importJiraProjectTest(array(
+$testData6 = array(
     '3003' => (object)array(
         'id' => '3003',
         'pkey' => 'TESTBATCH1',
@@ -175,10 +188,11 @@ r($convertTest->importJiraProjectTest(array(
         'pstatus' => 'active',
         'lead' => 'user2'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData6)) && p() && e('true');
 
 // 步骤7：必填字段数据完整性验证
-r($convertTest->importJiraProjectTest(array(
+$testData7 = array(
     '3005' => (object)array(
         'id' => '3005',
         'pkey' => 'TESTFIELDS',
@@ -190,10 +204,11 @@ r($convertTest->importJiraProjectTest(array(
         'lead' => 'admin',
         'created' => '2023-01-01 10:00:00'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData7)) && p() && e('true');
 
 // 步骤8：异常数据容错性处理测试
-r($convertTest->importJiraProjectTest(array(
+$testData8 = array(
     '3006' => (object)array(
         'id' => '3006',
         'pkey' => 'TESTEXCEPTION',
@@ -203,10 +218,11 @@ r($convertTest->importJiraProjectTest(array(
         'ptype' => 'unknown_type',
         'pstatus' => 'unknown_status'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData8)) && p() && e('true');
 
 // 步骤9：项目关联关系建立验证
-r($convertTest->importJiraProjectTest(array(
+$testData9 = array(
     '3007' => (object)array(
         'id' => '3007',
         'pkey' => 'TESTRELATION',
@@ -217,10 +233,11 @@ r($convertTest->importJiraProjectTest(array(
         'pstatus' => 'active',
         'lead' => 'admin'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData9)) && p() && e('true');
 
 // 步骤10：数据库事务一致性测试
-r($convertTest->importJiraProjectTest(array(
+$testData10 = array(
     '3008' => (object)array(
         'id' => '3008',
         'pkey' => 'TESTTRANSACTION',
@@ -231,4 +248,5 @@ r($convertTest->importJiraProjectTest(array(
         'pstatus' => 'active',
         'lead' => 'user1'
     )
-))) && p() && e('true');
+);
+r($convertTest->importJiraProjectTest($testData10)) && p() && e('true');

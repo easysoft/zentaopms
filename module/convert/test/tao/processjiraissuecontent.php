@@ -7,7 +7,21 @@ title=测试 convertTao::processJiraIssueContent();
 timeout=0
 cid=0
 
-- 执行convertTest模块的processJiraIssueContentTest方法，参数是array  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData1  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData2  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData3  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData4  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData5  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData6  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData7  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData8  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData9  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData10  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData11  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData12  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData13  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData14  @1
+- 执行convertTest模块的processJiraIssueContentTest方法，参数是$testData15  @1
 
 */
 
@@ -86,88 +100,103 @@ su('admin');
 $convertTest = new convertTest();
 
 // 测试步骤1：处理包含Jira附件引用的story对象内容转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData1 = array(
     (object)array('BType' => 'astory', 'BID' => 1)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData1)) && p() && e('1');
 
 // 测试步骤2：处理包含Jira附件引用的bug对象步骤描述转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData2 = array(
     (object)array('BType' => 'abug', 'BID' => 1)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData2)) && p() && e('1');
 
 // 测试步骤3：处理包含Jira附件引用的task对象描述转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData3 = array(
     (object)array('BType' => 'atask', 'BID' => 1)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData3)) && p() && e('1');
 
 // 测试步骤4：处理包含Jira附件引用的feedback对象描述转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData4 = array(
     (object)array('BType' => 'afeedback', 'BID' => 1)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData4)) && p() && e('1');
 
 // 测试步骤5：处理多个不同类型对象的批量转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData5 = array(
     (object)array('BType' => 'astory', 'BID' => 7),
     (object)array('BType' => 'abug', 'BID' => 7),
     (object)array('BType' => 'atask', 'BID' => 5)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData5)) && p() && e('1');
 
 // 测试步骤6：处理不存在对象ID的异常情况
-r($convertTest->processJiraIssueContentTest(array(
+$testData6 = array(
     (object)array('BType' => 'astory', 'BID' => 999),
     (object)array('BType' => 'abug', 'BID' => 888)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData6)) && p() && e('1');
 
 // 测试步骤7：处理testcase类型对象的跳过逻辑验证
-r($convertTest->processJiraIssueContentTest(array(
+$testData7 = array(
     (object)array('BType' => 'atestcase', 'BID' => 1),
     (object)array('BType' => 'atestcase', 'BID' => 2)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData7)) && p() && e('1');
 
 // 测试步骤8：处理自定义流程对象的Jira内容转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData8 = array(
     (object)array('BType' => 'acustomflow', 'BID' => 1),
     (object)array('BType' => 'acustomflow', 'BID' => 2)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData8)) && p() && e('1');
 
 // 测试步骤9：处理空输入数组的边界情况测试
-r($convertTest->processJiraIssueContentTest(array())) && p() && e('1');
+$testData9 = array();
+r($convertTest->processJiraIssueContentTest($testData9)) && p() && e('1');
 
 // 测试步骤10：处理包含action评论的Jira内容转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData10 = array(
     (object)array('BType' => 'astory', 'BID' => 1),
     (object)array('BType' => 'abug', 'BID' => 2),
     (object)array('BType' => 'atask', 'BID' => 3)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData10)) && p() && e('1');
 
 // 测试步骤11：处理包含特殊字符文件名的转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData11 = array(
     (object)array('BType' => 'astory', 'BID' => 9),
     (object)array('BType' => 'atask', 'BID' => 7)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData11)) && p() && e('1');
 
 // 测试步骤12：处理包含Unicode文件名的转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData12 = array(
     (object)array('BType' => 'astory', 'BID' => 10),
     (object)array('BType' => 'atask', 'BID' => 8)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData12)) && p() && e('1');
 
 // 测试步骤13：处理包含无效附件引用的内容转换
-r($convertTest->processJiraIssueContentTest(array(
+$testData13 = array(
     (object)array('BType' => 'abug', 'BID' => 9)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData13)) && p() && e('1');
 
 // 测试步骤14：处理无关联文件的对象
-r($convertTest->processJiraIssueContentTest(array(
+$testData14 = array(
     (object)array('BType' => 'astory', 'BID' => 2),
     (object)array('BType' => 'abug', 'BID' => 3),
     (object)array('BType' => 'abug', 'BID' => 10)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData14)) && p() && e('1');
 
 // 测试步骤15：处理混合有效和无效对象ID的情况
-r($convertTest->processJiraIssueContentTest(array(
+$testData15 = array(
     (object)array('BType' => 'astory', 'BID' => 1),
     (object)array('BType' => 'astory', 'BID' => 999),
     (object)array('BType' => 'abug', 'BID' => 1),
     (object)array('BType' => 'atask', 'BID' => 888)
-))) && p() && e('1');
+);
+r($convertTest->processJiraIssueContentTest($testData15)) && p() && e('1');
