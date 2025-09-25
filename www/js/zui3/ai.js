@@ -60,7 +60,7 @@ window.executeZentaoPrompt = async function(info)
         tools  : tools,
         model  : info.model,
     };
-    zaiPanel.openPopup({viewType: 'chat', postMessage: postMessage});
+    zaiPanel.openPopup({viewType: 'chat', width: 600, postMessage: postMessage});
 };
 
 function registerZentaoAIPlugin(lang)
