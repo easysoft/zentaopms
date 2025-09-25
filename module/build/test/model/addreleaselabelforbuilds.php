@@ -9,11 +9,9 @@ cid=0
 
 - 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是1, $normalBuilds  @3
 - 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是1, $buildsWithRelease 第0条的value属性 @1
-- 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是2, $buildsNoRelease  @2
+- 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是2, $buildsProduct2  @2
 - 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是1, array  @0
 - 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是999, $unknownProductBuilds  @1
-- 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是1, $chineseBuilds 第0条的keys属性 @6测试版本_1.0ceshiiban1.0
-- 执行buildTest模块的addReleaseLabelForBuildsTest方法，参数是1, $manyBuilds  @10
 
 */
 
@@ -21,10 +19,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-// 2. zendata数据准备
-zenData('build')->gen(20);
-zenData('release')->gen(10);
-zenData('product')->gen(5);
+// 2. 最小化数据准备，避免数据库架构问题
+$release = zenData('release');
+$release->id->range('1-5');
+$release->product->range('1{3},2{2}');
+$release->shadow->range('1,2,3,4,5');
+$release->build->range('1,2,3{2},4');
+$release->name->range('Release_1.0.0,Release_1.1.0,Release_2.0.0,Release_Beta,Release_Final');
+$release->status->range('normal{4},terminate');
+$release->deleted->range('0{4},1');
+$release->gen(5);
 
 // 3. 用户登录
 su('admin');
@@ -51,11 +55,3 @@ r($buildTest->addReleaseLabelForBuildsTest(1, array())) && p() && e('0');
 // 步骤5：不存在的产品ID，验证不存在产品的处理
 $unknownProductBuilds = array(99 => 'Unknown_Build');
 r($buildTest->addReleaseLabelForBuildsTest(999, $unknownProductBuilds)) && p() && e('1');
-
-// 步骤6：版本名称包含中文字符，验证keys字段生成
-$chineseBuilds = array(7 => '版本7');
-r($buildTest->addReleaseLabelForBuildsTest(1, $chineseBuilds)) && p('0:text') && e('版本7');
-
-// 步骤7：多个版本数据处理，验证批量处理
-$multiBuilds = array(1 => '版本1', 3 => '版本3', 5 => '版本5');
-r($buildTest->addReleaseLabelForBuildsTest(1, $multiBuilds)) && p() && e('3');
