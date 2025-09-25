@@ -67,3 +67,8 @@ $lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
 $lang->aiapp->langData->zaiConfigNotValid  = 'La configuration ZAI n\'a pas encore été effectuée. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->unauthorizedError  = 'Échec d\'autorisation, clé API invalide. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->applyFormFormat    = 'Appliquer au formulaire %s';
+$lang->aiapp->langData->beforeChange       = 'Avant le changement';
+$lang->aiapp->langData->afterChange        = 'Après le changement';
+$lang->aiapp->langData->changeProp         = 'Propriété';
+$lang->aiapp->langData->changeTitleFormat  = 'Changement {type} #{id}';
+$lang->aiapp->langData->applyFormSuccess   = 'Successfully applied to %s form';

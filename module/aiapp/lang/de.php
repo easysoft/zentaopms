@@ -67,3 +67,8 @@ $lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
 $lang->aiapp->langData->zaiConfigNotValid  = 'ZAI-Konfiguration wurde noch nicht eingerichtet. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->unauthorizedError  = 'Autorisierung fehlgeschlagen, ungültiger API-Schlüssel. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->applyFormFormat    = 'Auf %s-Formular anwenden';
+$lang->aiapp->langData->beforeChange       = 'Vor dem Ändern';
+$lang->aiapp->langData->afterChange        = 'Nach dem Ändern';
+$lang->aiapp->langData->changeProp         = 'Eigenschaft';
+$lang->aiapp->langData->changeTitleFormat  = 'Änderung {type} #{id}';
+$lang->aiapp->langData->applyFormSuccess   = 'Erfolgreich auf %s-Formular angewendet';
