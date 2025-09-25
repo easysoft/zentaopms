@@ -2835,4 +2835,20 @@ class commonTest
 
         return $result;
     }
+
+    /**
+     * Test buildMoreButton method.
+     *
+     * @param  int $executionID
+     * @param  bool $printHtml
+     * @access public
+     * @return mixed
+     */
+    public function buildMoreButtonTest(int $executionID, bool $printHtml = false)
+    {
+        $result = commonModel::buildMoreButton($executionID, $printHtml);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
