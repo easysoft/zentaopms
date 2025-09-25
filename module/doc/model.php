@@ -1783,6 +1783,16 @@ class docModel extends model
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
 
+        /* 文档标题变了要同步修改交付物名称. */
+        if(in_array($this->config->edition, array('ipd', 'max')) && $oldDoc->title != $doc->title)
+        {
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                 ->set('name')->eq($doc->title)
+                 ->where('doc')->eq($docID)
+                 ->andWhere('review')->eq(0)
+                 ->exec();
+        }
+
         /* 如果修改了父模板，子模板也同步更新相关信息。*/
         /* If the parent template is modified, the child template will also update the relevant information synchronously. */
         if(!empty($oldDoc->templateType) && empty($doc->parent) && $basicInfoChanged)

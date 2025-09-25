@@ -797,8 +797,6 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
-  `docs` text NULL,
-  `docVersions` text NULL,
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
@@ -811,7 +809,9 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `version` smallint(6) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
-  `files` varchar(255) NOT NULL DEFAULT ''
+  `files` varchar(255) NOT NULL DEFAULT '',
+  `docs` text NULL,
+  `docVersions` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `design` ON `zt_designspec`(`design`,`version`);
 
