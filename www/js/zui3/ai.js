@@ -16,17 +16,20 @@ window.checkZAIPanel = async function(showMessage)
     return zaiPanel;
 };
 
-window.openPageForm = function(url, data)
+window.openPageForm = function(url, data, callback)
 {
     const openedApp = $.apps.openApp(url);
     const handlePageLoad = () =>
     {
-        try {
-            const iframe = openedApp.iframe;
-            iframe.contentWindow.applyFormData(data);
-        } catch (error) {}
+        setTimeout(() => {
+            try {
+                const iframe = openedApp.iframe;
+                iframe.contentWindow.applyFormData(data);
+                callback && callback();
+            } catch (error) {}
+        }, 2000);
     };
-    openedApp.$app.one('updateapp.apps', handlePageLoad);
+    openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
     setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
 }
 
@@ -44,11 +47,13 @@ window.executeZentaoPrompt = async function(info)
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
 
-            const applyFormFormat = (zaiPanel.options.langData || {}).applyFormFormat;
+            const langData        = zaiPanel.options.langData || {};
+            const applyFormFormat = langData.applyFormFormat;
             return {
                 actions: [{
-                    text: (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
-                    onClick: () => openPageForm(info.formLocation, result), type: 'primary-pale',
+                    text        : (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
+                    onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
+                    type        : 'primary-pale',
                     trailingIcon: 'icon-arrow-right'
                 }]
             };
