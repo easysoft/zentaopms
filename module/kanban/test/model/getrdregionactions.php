@@ -1,35 +1,38 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 kanbanModel::getRDRegionActions();
+timeout=0
+cid=0
+
+- 测试步骤1：admin用户在单个区域时获取操作数量 @3
+- 测试步骤2：admin用户在多个区域时获取操作数量 @4
+- 测试步骤3：admin用户获取操作项的基本结构 @dropdown
+- 测试步骤4：普通用户无权限时获取操作数量 @0
+- 测试步骤5：测试边界值regionCount=0时的删除权限 @3
+- 测试步骤6：测试无效参数时的处理 @3
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
 zenData('user')->gen(5);
-zenData('kanban')->gen(2);
-zenData('kanbanregion')->gen(2);
+zenData('kanban')->gen(3);
+zenData('kanbanregion')->gen(3);
 
-/**
-
-title=测试 kanbanModel->getRDRegionActions();
-timeout=0
-cid=1
-
-- 查看admin可以获取到几个操作按钮 @3
-- 查看admin可以获取到几个操作按钮 @3
-- 查看user1可以获取到几个操作按钮 @0
-- 查看user1可以获取到几个操作按钮 @0
-
-*/
-global $tester;
-$tester->loadModel('kanban');
+$kanbanTest = new kanbanTest();
 
 su('admin');
-$actions1 = $tester->kanban->getRDRegionActions(1, 1);
-$actions2 = $tester->kanban->getRDRegionActions(2, 2);
-r(count($actions1[0]['items'])) && p() && e('3'); // 查看admin可以获取到几个操作按钮
-r(count($actions2[0]['items'])) && p() && e('3'); // 查看admin可以获取到几个操作按钮
+r(count($kanbanTest->getRDRegionActionsTest(1, 1, 1)[0]['items'])) && p() && e('3'); // 测试步骤1：admin用户在单个区域时获取操作数量
+r(count($kanbanTest->getRDRegionActionsTest(1, 1, 2)[0]['items'])) && p() && e('4'); // 测试步骤2：admin用户在多个区域时获取操作数量
+r($kanbanTest->getRDRegionActionsTest(1, 1, 1)[0]['type']) && p() && e('dropdown'); // 测试步骤3：admin用户获取操作项的基本结构
 
 su('user1');
-$actions3 = $tester->kanban->getRDRegionActions(1, 1);
-$actions4 = $tester->kanban->getRDRegionActions(2, 2);
-r(count($actions3[0]['items'])) && p() && e('0'); // 查看user1可以获取到几个操作按钮
-r(count($actions4[0]['items'])) && p() && e('0'); // 查看user1可以获取到几个操作按钮
+r(count($kanbanTest->getRDRegionActionsTest(1, 1, 1)[0]['items'])) && p() && e('0'); // 测试步骤4：普通用户无权限时获取操作数量
+
+su('admin');
+r(count($kanbanTest->getRDRegionActionsTest(1, 1, 0)[0]['items'])) && p() && e('3'); // 测试步骤5：测试边界值regionCount=0时的删除权限
+r(count($kanbanTest->getRDRegionActionsTest(0, 0, 1)[0]['items'])) && p() && e('3'); // 测试步骤6：测试无效参数时的处理

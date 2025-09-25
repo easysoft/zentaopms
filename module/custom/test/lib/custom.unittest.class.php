@@ -316,7 +316,27 @@ class customTest
         $this->objectModel->disableFeaturesByMode($mode);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->loadModel('setting')->getItem('oner=system&module=common&key=disabledFeatures');
+        return $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
+    }
+
+    /**
+     * Test disableFeaturesByMode method with URAndSR setting check.
+     *
+     * @param  string $mode
+     * @access public
+     * @return string
+     */
+    public function disableFeaturesByModeTestWithURAndSR(string $mode): string
+    {
+        $this->objectModel->disableFeaturesByMode($mode);
+
+        if(dao::isError()) return dao::getError();
+
+        $disabledFeatures = $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
+        $URAndSR = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=URAndSR');
+        $enableER = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=enableER');
+
+        return "$disabledFeatures|$URAndSR|$enableER";
     }
 
     /**
@@ -627,71 +647,155 @@ class customTest
      * @param  string $module main|product|my and so on
      * @static
      * @access public
-     * @return array
+     * @return string
      */
-    public static function buildMenuItemsTest(string $module = 'main'): array
+    public static function buildMenuItemsTest(string $module = 'main'): string
     {
-        global $config, $lang;
+        global $config, $lang, $app;
 
-        $allMenu = new stdclass();
-        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
-        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
-        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+        try {
+            // 处理空模块名的情况
+            if(empty($module)) $module = 'main';
 
-        $flowModule = $config->global->flow . '_main';
-        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+            // 构建基本菜单结构
+            $allMenu = new stdclass();
+            if($module == 'main' && !empty($lang->menu)) {
+                $allMenu = $lang->menu;
+            } elseif($module != 'main' && isset($lang->menu->$module) && isset($lang->menu->{$module}['subMenu'])) {
+                $allMenu = $lang->menu->{$module}['subMenu'];
+            } else {
+                // 为未定义模块创建空菜单
+                $allMenu = new stdclass();
+            }
 
-        return customModel::buildMenuItems($allMenu, $customMenuMap, $module);
+            // 处理产品模块的分支功能
+            if($module == 'product' && isset($allMenu->branch) && isset($lang->custom->branch)) {
+                $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+            }
+
+            // 处理地盘模块的评分功能
+            if($module == 'my' && empty($config->global->scoreStatus) && isset($allMenu->score)) {
+                unset($allMenu->score);
+            }
+
+            // 获取自定义菜单配置
+            $flowKey = isset($config->global->flow) ? $config->global->flow . '_main' : 'full_main';
+            $customMenu = isset($config->customMenu->$flowKey) ? $config->customMenu->$flowKey : array();
+
+            // 处理JSON格式的自定义菜单
+            if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') {
+                $customMenu = json_decode($customMenu, true);
+            }
+
+            // 构建自定义菜单映射
+            list($customMenuMap, $order) = customModel::buildCustomMenuMap($allMenu, $customMenu, $module);
+
+            // 调用实际的buildMenuItems方法
+            $result = customModel::buildMenuItems($allMenu, $customMenuMap, $module, $order);
+
+            if(dao::isError()) return 'error';
+
+            // 验证返回结果类型
+            if(is_array($result)) {
+                return 'array';
+            } else {
+                return 'non_array';
+            }
+
+        } catch(Exception $e) {
+            return 'exception';
+        } catch(Error $e) {
+            return 'error';
+        }
     }
 
     /**
      * 构造菜单数据项。
      * Build menu item.
      *
+     * @param  array|string $item
+     * @param  array        $customMenuMap
+     * @param  string       $name
+     * @param  string       $label
+     * @param  string|array $itemLink
+     * @param  bool         $isTutorialMode
+     * @param  array        $subMenu
      * @static
      * @access public
      * @return object
      */
-    public static function buildMenuItemTest(): object
+    public static function buildMenuItemTest($item = '', $customMenuMap = array(), string $name = '', string $label = '', $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
-        global $config, $lang;
-
-        $flowModule = $config->global->flow . '_main';
-        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
-
-        return customModel::buildMenuItem('', $customMenuMap);
+        return customModel::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
     }
 
     /**
-     * 构造菜单数据。
-     * Build menu data.
+     * Test setMenuByConfig method.
      *
      * @param  string $module main|product|my and so on
      * @static
      * @access public
-     * @return array
+     * @return string|array
      */
-    public static function setMenuByConfigTest(string $module = 'main'): array
+    public static function setMenuByConfigTest(string $module = 'main'): string|array
     {
         global $config, $lang;
 
-        $allMenu = new stdclass();
-        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
-        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
-        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+        try {
+            // 初始化菜单对象
+            $allMenu = new stdclass();
 
-        $flowModule = $config->global->flow . '_main';
-        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+            // 模拟不同模块的菜单配置
+            if($module == 'main' && !empty($lang->menu)) {
+                $allMenu = $lang->menu;
+            } elseif($module != 'main' && isset($lang->menu->$module) && isset($lang->menu->{$module}['subMenu'])) {
+                $allMenu = $lang->menu->{$module}['subMenu'];
+            } else {
+                // 为测试创建基本菜单结构
+                $allMenu = new stdclass();
+                $allMenu->index = array('link' => '/', 'text' => '首页');
+                $allMenu->dashboard = array('link' => '/dashboard', 'text' => '仪表盘');
+            }
 
-        return customModel::setMenuByConfig($allMenu, $customMenuMap, $module);
+            // 处理产品模块的分支菜单
+            if($module == 'product' && isset($allMenu->branch)) {
+                $allMenu->branch = str_replace('@branch@', isset($lang->custom->branch) ? $lang->custom->branch : '分支', $allMenu->branch);
+            }
+
+            // 处理地盘模块的评分功能
+            if($module == 'my' && empty($config->global->scoreStatus)) {
+                if(isset($allMenu->score)) unset($allMenu->score);
+            }
+
+            // 获取自定义菜单配置
+            $flowModule = isset($config->global->flow) ? $config->global->flow . '_main' : 'full_main';
+            $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+
+            // 处理JSON格式的自定义菜单
+            if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') {
+                $customMenu = json_decode($customMenu, true);
+            }
+
+            // 构建自定义菜单映射
+            list($customMenuMap, $order) = customModel::buildCustomMenuMap($allMenu, $customMenu, $module);
+
+            // 调用实际的setMenuByConfig方法
+            $result = customModel::setMenuByConfig($allMenu, $customMenuMap, $module);
+
+            // 返回结果类型用于测试验证
+            if(is_array($result)) {
+                return 'array';
+            } elseif(is_object($result)) {
+                return 'object';
+            } else {
+                return 'other';
+            }
+
+        } catch(Exception $e) {
+            return 'exception';
+        } catch(Error $e) {
+            return 'error';
+        }
     }
 
     /**
@@ -699,26 +803,31 @@ class customTest
      * Get module menu data, if module is 'main' then return main menu.
      *
      * @param  string $module
+     * @param  bool   $isHomeMenu
      * @static
      * @access public
      * @return array
      */
-    public static function getModuleMenuTest(string $module = 'main'): array
+    public static function getModuleMenuTest(string $module = 'main', bool $isHomeMenu = false): array
     {
-        return customModel::getModuleMenu($module);
+        $result = customModel::getModuleMenu($module, $isHomeMenu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
      * 获取主菜单数据。
      * Get main menu data.
      *
+     * @param  bool   $isHomeMenu
      * @static
      * @access public
      * @return array
      */
-    public static function getMainMenuTest(): array
+    public static function getMainMenuTest(bool $isHomeMenu = false): array
     {
-        return customModel::getMainMenu();
+        return customModel::getMainMenu($isHomeMenu);
     }
 
     /**

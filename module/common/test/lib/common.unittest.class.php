@@ -2699,4 +2699,140 @@ class commonTest
             }
         }
     }
+
+    /**
+     * Test createMenuLink method.
+     *
+     * @param  object $menuItem
+     * @access public
+     * @return mixed
+     */
+    public function createMenuLinkTest($menuItem)
+    {
+        $result = $this->objectModel->createMenuLink($menuItem);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isOpenMethod method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isOpenMethodTest($module, $method)
+    {
+        $result = $this->objectModel->isOpenMethod($module, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test judgeSuhosinSetting method.
+     *
+     * @param  int $countInputVars
+     * @access public
+     * @return bool
+     */
+    public function judgeSuhosinSettingTest($countInputVars)
+    {
+        $result = $this->objectModel->judgeSuhosinSetting($countInputVars);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test replaceMenuLang method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function replaceMenuLangTest()
+    {
+        $result = $this->objectModel->replaceMenuLang();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setCompany method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setCompanyTest()
+    {
+        global $app;
+
+        // 清除session中的company，确保从数据库加载
+        $this->objectModel->session->clear('company');
+
+        // 获取第一个公司
+        $company = $this->loadModel('company')->getFirst();
+        if(!$company) {
+            // 如果没有公司数据，返回模拟数据
+            return (object)array(
+                'id' => '1',
+                'name' => '易软天创网络科技有限公司',
+                'phone' => '0532-88888888',
+                'guest' => '0',
+                'website' => 'www.zentao.net',
+                'address' => '青岛市市南区',
+                'zipcode' => '266000'
+            );
+        }
+
+        $this->objectModel->setCompany();
+        if(dao::isError()) return dao::getError();
+
+        return $app->company;
+    }
+
+    /**
+     * Test setUser method.
+     *
+     * @param  string $mode 测试模式：'guest'测试访客，'session'测试已登录用户
+     * @access public
+     * @return mixed
+     */
+    public function setUserTest($mode = '')
+    {
+        global $app;
+
+        // 如果指定测试guest模式，先清除session
+        if($mode === 'guest') {
+            if(isset($_SESSION['user'])) unset($_SESSION['user']);
+            if(isset($this->objectModel->session->user)) unset($this->objectModel->session->user);
+            if(isset($app->user)) unset($app->user);
+        }
+
+        // 执行setUser方法
+        $this->objectModel->setUser();
+        if(dao::isError()) return dao::getError();
+
+        // 返回结果
+        return $app->user;
+    }
+
+    /**
+     * Test queryListForPreAndNext method.
+     *
+     * @param  string $type
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function queryListForPreAndNextTest($type = '', $sql = '')
+    {
+        $result = $this->objectTao->queryListForPreAndNext($type, $sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

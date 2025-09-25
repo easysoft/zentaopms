@@ -1,0 +1,70 @@
+---
+title: 部门数据-getDeptPairs方法测试
+desc: 包含多种部门数据场景的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 部门ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 部门名称
+  range: 总经理办公室,人力资源部,财务部,研发部,测试部,销售部,市场部,客服部,运维部,产品部,设计部,法务部,行政部,IT部,培训部
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父部门ID
+  range: 0{5},1{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 部门路径
+  range: ',1,',',1,2,',',1,3,',',1,4,',',1,5,',',6,',',7,',',8,',',9,',',10,',',11,',',12,',',13,',',14,',',15,'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 部门层级
+  range: 1{5},2{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-15:1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: position
+  note: 职位
+  range: '总经理,人事经理,财务经理,研发经理,测试经理,销售经理,市场经理,客服经理,运维经理,产品经理,设计经理,法务经理,行政经理,IT经理,培训经理'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: function
+  note: 部门职能
+  range: '公司管理,人员管理,财务管理,产品研发,质量保证,销售业务,市场推广,客户服务,系统运维,产品规划,UI设计,法律事务,行政管理,技术支持,员工培训'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: manager
+  note: 部门经理
+  range: 'admin,manager1,manager2,manager3,manager4,manager5,manager6,manager7,manager8,manager9,manager10,manager11,manager12,manager13,manager14'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

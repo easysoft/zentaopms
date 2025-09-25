@@ -93,18 +93,23 @@ class jobTest
      *
      * @param  int    $id
      * @access public
-     * @return object
+     * @return string
      */
     public function getTriggerConfigTest($id)
     {
-
         $job = $this->objectModel->getById($id);
 
-        $object = $this->objectModel->getTriggerConfig($job);
+        // 如果job不存在，返回空字符串
+        if(empty($job) || empty($job->id))
+        {
+            return '';
+        }
+
+        $result = $this->objectModel->getTriggerConfig($job);
 
         if(dao::isError()) return dao::getError();
 
-        return $object;
+        return $result;
     }
 
     /**
@@ -117,15 +122,10 @@ class jobTest
      */
     public function getTriggerGroupTest($triggerType, $repoIdList)
     {
-        $array = $this->objectModel->getTriggerGroup($triggerType, $repoIdList);
-
+        $result = $this->objectModel->getTriggerGroup($triggerType, $repoIdList);
         if(dao::isError()) return dao::getError();
 
-        $group = array();
-        if($triggerType == 'tag')    $group = isset($array[1]) ? $array[1] : array();
-        if($triggerType == 'commit') $group = isset($array[2]) ? $array[2] : array();
-
-        return $group;
+        return $result;
     }
 
     /**
@@ -310,28 +310,67 @@ class jobTest
     }
 
     /**
-     * Test Check parameterizedBuild.
+     * Test checkParameterizedBuild method.
      *
-     * @param  string $url
-     * @param  string $userPWD
+     * @param  int $jobID
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function checkParameterizedBuildTest(int $jobID): bool
+    public function checkParameterizedBuildTest(int $jobID)
     {
         global $tester;
-        $job       = $this->objectModel->getById($jobID);
-        $jenkins   = $tester->loadModel('pipeline')->getByID($job->server);
-        $urlPrefix = $tester->loadModel('compile')->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
-        $detailUrl = $urlPrefix . 'api/json';
 
-        $checked = $this->objectModel->checkParameterizedBuild($detailUrl, $tester->loadModel('jenkins')->getApiUserPWD($jenkins));
+        // 边界值检查：处理无效或不存在的Job ID
+        if($jobID <= 0)
+        {
+            return false;
+        }
 
-        if(dao::isError()) return dao::getError();
+        $job = $this->objectModel->getById($jobID);
+        if(empty($job) || empty($job->id))
+        {
+            return false;
+        }
 
-        return $checked;
+        // 检查服务器配置
+        $jenkins = $tester->loadModel('pipeline')->getByID($job->server);
+        if(empty($jenkins) || empty($jenkins->url))
+        {
+            return false;
+        }
+
+        // 构建URL并检查
+        try
+        {
+            $urlPrefix = $tester->loadModel('compile')->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
+            if(empty($urlPrefix))
+            {
+                return false;
+            }
+
+            $detailUrl = $urlPrefix . 'api/json';
+            $userPWD = $tester->loadModel('jenkins')->getApiUserPWD($jenkins);
+
+            $result = $this->objectModel->checkParameterizedBuild($detailUrl, $userPWD);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
 
+    /**
+     * Test updateLastTag method.
+     *
+     * @param  int    $jobID
+     * @param  string $lastTag
+     * @access public
+     * @return mixed
+     */
     public function updateLastTagTest(int $jobID, string $lastTag)
     {
         $this->objectModel->updateLastTag($jobID, $lastTag);
@@ -767,8 +806,24 @@ class jobTest
         $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
 
         if(dao::isError()) return dao::getError();
-        
+
         return $jobQuery;
+    }
+
+    /**
+     * Test import method.
+     *
+     * @param  string|int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function importTest(string|int $repoID)
+    {
+        $result = $this->objectModel->import($repoID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
 }

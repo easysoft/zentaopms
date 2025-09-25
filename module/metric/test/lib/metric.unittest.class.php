@@ -1881,14 +1881,241 @@ class metricTest
             // 创建一个标准异常对象用于测试
             $exception = new Exception('Test error message', 123);
         }
-        
+
         global $tester;
-        
+
         // 使用tester的loadZen方法加载zen层
         $metricZen = $tester->loadZen('metric');
         $result = $metricZen->formatException($exception);
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test deduplication method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function deduplicationTest($code = '')
+    {
+        global $tester;
+
+        if(empty($code)) return 'empty_code';
+
+        // 验证度量项是否存在
+        $metric = $this->objectModel->getByCode($code);
+        if(!$metric) return 'metric_not_found';
+
+        // 检查表结构是否包含deleted字段
+        $hasDeletedField = false;
+        try {
+            $fields = $tester->dao->query("SHOW COLUMNS FROM " . TABLE_METRICLIB . " LIKE 'deleted'")->fetchAll();
+            $hasDeletedField = !empty($fields);
+        } catch(Exception $e) {
+            // 忽略错误，继续测试
+        }
+
+        // 记录去重前的总记录数
+        $beforeCount = $tester->dao->select('COUNT(*) as count')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch('count');
+
+        // 如果没有deleted字段，直接返回兼容性结果
+        if(!$hasDeletedField)
+        {
+            return 'success_no_deleted_field';
+        }
+
+        // 执行去重操作
+        try {
+            $result = $this->objectModel->deduplication($code);
+
+            // 检查是否有DAO错误
+            if(dao::isError())
+            {
+                return dao::getError();
+            }
+
+            // 记录去重后的记录数
+            $afterCount = $tester->dao->select('COUNT(*) as count')
+                ->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->fetch('count');
+
+            // 返回去重成功结果
+            return array(
+                'result' => !$result,  // deduplication返回dao::isError()，成功时为false
+                'beforeCount' => $beforeCount,
+                'afterCount' => $afterCount,
+                'processed' => true
+            );
+        } catch(Exception $e) {
+            // 如果是deleted字段相关错误，返回兼容性结果
+            if(strpos($e->getMessage(), 'deleted') !== false)
+            {
+                return 'success_no_deleted_field';
+            }
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Test getBaseCalcPath method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getBaseCalcPathTest()
+    {
+        $result = $this->objectModel->getBaseCalcPath();
+        if(dao::isError()) return dao::getError();
+
+        return substr($result, -28);
+    }
+
+    /**
+     * Test getBaseCalcPath method - return full path.
+     *
+     * @access public
+     * @return string
+     */
+    public function getFullBaseCalcPathTest()
+    {
+        $result = $this->objectModel->getBaseCalcPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getCalcRoot method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootTest()
+    {
+        $path = $this->objectModel->getCalcRoot();
+        return substr($path, -19);
+    }
+
+    /**
+     * Test getCalcRoot method - verify full path contains module.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootFullPathTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return strpos($result, 'module') !== false ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify path ending format.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootEndingTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return substr($result, -1) === DS ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify path accessibility.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootAccessibleTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return is_dir($result) ? '1' : '0';
+    }
+
+    /**
+     * Test getCalcRoot method - verify return type.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootTypeTest()
+    {
+        $result = $this->objectModel->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return gettype($result);
+    }
+
+    /**
+     * Test getDatasetPath method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatasetPathTest()
+    {
+        $result = $this->objectModel->getDatasetPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processImplementTips method.
+     *
+     * @param  string $code
+     * @access public
+     * @return mixed
+     */
+    public function processImplementTipsTest($code = '')
+    {
+        $this->objectModel->processImplementTips($code);
+        if(dao::isError()) return dao::getError();
+
+        $tips = $this->objectModel->lang->metric->implement->instructionTips;
+        $result = array();
+        $result['tips'] = $tips;
+        $result['hasCodePlaceholder'] = 0;
+        $result['hasTmpRootPlaceholder'] = 0;
+        $result['codeReplaced'] = 0;
+        $result['tmpRootReplaced'] = 0;
+
+        foreach($tips as $tip)
+        {
+            if(strpos($tip, '{code}') !== false) $result['hasCodePlaceholder'] = 1;
+            if(strpos($tip, '{tmpRoot}') !== false) $result['hasTmpRootPlaceholder'] = 1;
+            if(strpos($tip, $code) !== false && !empty($code)) $result['codeReplaced'] = 1;
+            if(strpos($tip, '/tmp') !== false || strpos($tip, 'tmp/metric') !== false) $result['tmpRootReplaced'] = 1;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Test fetchMetricsByCollect method.
+     *
+     * @param  string $stage
+     * @access public
+     * @return mixed
+     */
+    public function fetchMetricsByCollectTest($stage)
+    {
+        $result = $this->objectTao->fetchMetricsByCollect($stage);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
     }
 }

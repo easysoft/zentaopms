@@ -1,21 +1,52 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
-title=测试 block 模块 model下的 create 方法
+title=测试 qaModel::setMenu();
 timeout=0
-cid=39
+cid=0
 
-- 测试产品为0时的设置菜单 @1
-- 测试产品为1时的设置菜单 @1
+- 执行qaTest模块的setMenuTest方法  @1
+- 执行qaTest模块的setMenuTest方法，参数是1  @1
+- 执行qaTest模块的setMenuTest方法，参数是2, 'branch1'  @1
+- 执行qaTest模块的setMenuTest方法，参数是999  @1
+- 执行qaTest模块的setMenuTest方法，参数是-1  @1
 
 */
 
-global $tester;
-$tester->loadModel('qa');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/qa.unittest.class.php';
 
-r($tester->qa->setMenu(0)) && p() && e('1'); // 测试产品为0时的设置菜单
-r($tester->qa->setMenu(1)) && p() && e('1'); // 测试产品为1时的设置菜单
+$product = zenData('product');
+$product->id->range('1-10');
+$product->name->range('产品1,产品2,产品3{5},产品4{3}');
+$product->type->range('normal{8},branch{2}');
+$product->status->range('normal{9},closed{1}');
+$product->acl->range('open{5},private{3},custom{2}');
+$product->gen(10);
+
+$user = zenData('user');
+$user->id->range('1-5');
+$user->account->range('admin,user1,user2,user3,user4');
+$user->password->range('123456{5}');
+$user->role->range('admin,limited{4}');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4');
+$user->gen(5);
+
+$userview = zenData('userview');
+$userview->account->range('admin,user1,user2,user3,user4');
+$userview->products->range('1,2,3,4,5,6,7,8,9,10;1,2,3;4,5,6;1,2,3;7,8,9');
+$userview->gen(5);
+
+unset($_SESSION['tutorialMode']);
+
+su('admin');
+
+$qaTest = new qaTest();
+
+r($qaTest->setMenuTest(0)) && p() && e('1');
+r($qaTest->setMenuTest(1)) && p() && e('1');
+r($qaTest->setMenuTest(2, 'branch1')) && p() && e('1');
+r($qaTest->setMenuTest(999)) && p() && e('1');
+r($qaTest->setMenuTest(-1)) && p() && e('1');

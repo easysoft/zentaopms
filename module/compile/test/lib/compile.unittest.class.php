@@ -47,11 +47,19 @@ class compileTest
     /**
      * Get list by jobID.
      *
-     * @param  int $jobID
+     * @param  mixed $jobID
      * @return array
      */
     public function getListByJobIDTest($jobID)
     {
+        // 处理类型转换，确保传入的是int类型
+        if(is_numeric($jobID) && $jobID > 0) {
+            $jobID = (int)$jobID;
+        } else {
+            // 对于非数字、负数或0，返回空数组（符合业务逻辑job!=0）
+            return array();
+        }
+
         $objects = $this->objectModel->getListByJobID($jobID);
 
         if(dao::isError()) return dao::getError();
@@ -114,16 +122,18 @@ class compileTest
      * @param  string $data
      * @param  string $type
      * @access public
-     * @return void
+     * @return object|false
      */
     public function createByJobTest($jobID, $data = '', $type = 'tag')
     {
         global $tester;
-        $id = $this->objectModel->createByJob($jobID, $data = '', $type = 'tag');
-
-        $objects = $tester->dao->select('name')->from(TABLE_COMPILE)->where('id')->eq($id)->fetch();
+        $id = $this->objectModel->createByJob($jobID, $data, $type);
 
         if(dao::isError()) return dao::getError();
+        if($id === false) return false;
+
+        $objects = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($id)->fetch();
+        if(!$objects) return false;
 
         return $objects;
     }
@@ -194,6 +204,109 @@ class compileTest
         $result['queryID'] = $tester->config->compile->search['queryID'];
         $result['hasRepoField'] = isset($tester->config->compile->search['fields']['repo']) ? '1' : '0';
         
+        return $result;
+    }
+
+    /**
+     * Test getLogs method.
+     *
+     * @param  object $job
+     * @param  object $compile
+     * @access public
+     * @return string
+     */
+    public function getLogsTest($job, $compile)
+    {
+        $result = $this->objectModel->getLogs($job, $compile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getUnexecutedList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUnexecutedListTest()
+    {
+        $result = $this->objectModel->getUnexecutedList();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test syncCompile method.
+     *
+     * @param  int $repoID
+     * @param  int $jobID
+     * @access public
+     * @return bool
+     */
+    public function syncCompileTest($repoID = 0, $jobID = 0)
+    {
+        $result = $this->objectModel->syncCompile($repoID, $jobID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test syncGitlabBuildList method.
+     *
+     * @param  object $gitlab
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function syncGitlabBuildListTest($gitlab, $job)
+    {
+        $result = $this->objectModel->syncGitlabBuildList($gitlab, $job);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test syncJenkinsBuildList method.
+     *
+     * @param  object $jenkins
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function syncJenkinsBuildListTest($jenkins, $job)
+    {
+        $result = $this->objectModel->syncJenkinsBuildList($jenkins, $job);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateJobLastSyncDate method.
+     *
+     * @param  int    $jobID
+     * @param  string $date
+     * @access public
+     * @return bool
+     */
+    public function updateJobLastSyncDateTest($jobID, $date)
+    {
+        global $tester;
+
+        // 先检查job是否存在
+        $job = $tester->dao->select('id')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
+        if(!$job) return false;
+
+        $this->objectModel->updateJobLastSyncDate($jobID, $date);
+
+        if(dao::isError()) return dao::getError();
+
+        // 返回更新后的lastSyncDate值进行验证
+        $result = $tester->dao->select('lastSyncDate')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch('lastSyncDate');
         return $result;
     }
 

@@ -1,0 +1,46 @@
+---
+title: 文件分组测试数据
+desc: 用于测试transferTao::getFileGroups方法的文件数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-20
+- field: pathname
+  note: 文件路径
+  range: '/uploads/file1.doc,/uploads/file2.pdf,/uploads/file3.jpg,/uploads/file4.txt,/uploads/file5.xlsx,/uploads/file6.doc,/uploads/file7.pdf,/uploads/file8.jpg,/uploads/file9.txt,/uploads/file10.xlsx,/uploads/file11.doc,/uploads/file12.pdf,/uploads/file13.jpg,/uploads/file14.txt,/uploads/file15.xlsx,/uploads/file16.doc,/uploads/file17.pdf,/uploads/file18.jpg,/uploads/file19.txt,/uploads/file20.xlsx'
+- field: title
+  note: 文件标题
+  range: '文件标题1,文件标题2,文件标题3,文件标题4,文件标题5,文件标题6,文件标题7,文件标题8,文件标题9,文件标题10,文件标题11,文件标题12,文件标题13,文件标题14,文件标题15,文件标题16,文件标题17,文件标题18,文件标题19,文件标题20'
+- field: extension
+  note: 文件扩展名
+  range: 'doc,pdf,jpg,txt,xlsx,doc,pdf,jpg,txt,xlsx,doc,pdf,jpg,txt,xlsx,doc,pdf,jpg,txt,xlsx'
+- field: size
+  note: 文件大小
+  range: 1024-102400
+- field: objectType
+  note: 对象类型
+  range: 'bug,bug,bug,bug,bug,bug,bug,bug,story,story,story,story,story,story,task,task,task,task,testcase,testcase'
+- field: objectID
+  note: 对象ID
+  range: '1,2,3,4,5,6,7,8,1,2,3,4,5,6,1,2,3,4,1,2'
+- field: gid
+  note: 文件组ID
+  range: 'group1,group2,group3,group4,group5,group1,group2,group3,group4,group5,group1,group2,group3,group4,group5,group1,group2,group3,group4,group5'
+- field: addedBy
+  note: 添加者
+  range: 'admin,user1,user2,dev1,tester1,admin,user1,user2,dev1,tester1,admin,user1,user2,dev1,tester1,admin,user1,user2,dev1,tester1'
+- field: addedDate
+  note: 添加时间
+  range: '2024-01-01 00:00:00'
+- field: downloads
+  note: 下载次数
+  range: 0-100
+- field: extra
+  note: 额外信息
+  range: ',editor,,,,,,,,,,,,,,,,,,,'
+- field: deleted
+  note: 是否删除
+  range: '0'

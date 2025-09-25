@@ -1,26 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
-title=测试 gitlabModel::getGitlabGroups();
+title=测试 repoModel::getGitlabGroups();
 timeout=0
-cid=1
+cid=0
 
-- 使用正确的gitlabID查询群组第0条的text属性 @GitLab Instance
-- 使用正确的gitlabID查询群组数量 @1
-- 使用错误的gitlabID查询 @0
+- 步骤1：正常gitlabID查询群组第0条的text属性 @GitLab Instance
+- 步骤2：验证群组数据结构第0条的value属性 @2
+- 步骤3：无效gitlabID查询 @0
+- 步骤4：边界值gitlabID查询 @0
+- 步骤5：验证群组数量统计 @3
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+
 zenData('pipeline')->gen(5);
 
-$repo = $tester->loadModel('repo');
+su('admin');
 
-$gitlabID = 1;
+$repoTest = new repoTest();
 
-$result = $repo->getGitlabGroups($gitlabID);
-r($result)                   && p('0:text') && e('GitLab Instance'); //使用正确的gitlabID查询群组
-r(count($result) > 1)        && p()         && e('1'); //使用正确的gitlabID查询群组数量
-r($repo->getGitlabGroups(0)) && p()         && e('0'); //使用错误的gitlabID查询
+r($repoTest->getGitlabGroupsTest(1))                  && p('0:text') && e('GitLab Instance');      // 步骤1：正常gitlabID查询群组
+r($repoTest->getGitlabGroupsTest(1))                  && p('0:value') && e('2');                     // 步骤2：验证群组数据结构
+r(count($repoTest->getGitlabGroupsTest(0)))            && p('') && e('0');                            // 步骤3：无效gitlabID查询
+r(count($repoTest->getGitlabGroupsTest(-1)))          && p('') && e('0');                            // 步骤4：边界值gitlabID查询
+r(count($repoTest->getGitlabGroupsTest(1)))           && p('') && e('3');                            // 步骤5：验证群组数量统计

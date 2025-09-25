@@ -233,17 +233,14 @@ class searchTest
      *
      * @param  int    $queryID
      * @access public
-     * @return int|array
+     * @return bool|string
      */
     public function deleteQueryTest($queryID)
     {
-        $this->objectModel->deleteQuery($queryID);
+        $result = $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $count = $tester->dao->select('COUNT(1) AS count')->from(TABLE_USERQUERY)->fetch('count');
-        if(dao::isError()) return dao::getError();
-        return $count;
+        return $result ? 'true' : 'false';
     }
 
     /**
@@ -366,47 +363,137 @@ class searchTest
      * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return array|object
+     * @return array|object|bool
      */
     public function saveIndexTest($objectType, $objectID)
     {
         global $tester;
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
-        $table  = $tester->config->objectTables[$objectType];
+        // 测试自定义有效的对象类型
+        if($objectType == 'validtype')
+        {
+            // 临时添加配置
+            global $tester;
+            $tester->config->search->fields->validtype = new stdClass();
+            $tester->config->search->fields->validtype->id = 'id';
+            $tester->config->search->fields->validtype->title = 'title';
+            $tester->config->search->fields->validtype->content = 'content';
+            $tester->config->search->fields->validtype->addedDate = 'created';
+            $tester->config->search->fields->validtype->editedDate = 'updated';
+
+            $object = new stdClass();
+            $object->id = $objectID;
+            $object->title = 'Valid Type Test Title';
+            $object->content = 'Valid Type Test Content';
+            $object->created = date('Y-m-d H:i:s');
+            $object->updated = date('Y-m-d H:i:s');
+            $object->comment = '';
+
+            $result = $this->objectModel->saveIndex($objectType, $object);
+            if(dao::isError()) return dao::getError();
+
+            return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch();
+        }
+
+        // 检查对象表是否存在
+        if(!isset($tester->config->objectTables[$objectType]))
+        {
+            return false;
+        }
+
+        $table = $tester->config->objectTables[$objectType];
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+
+        if(!$object) return false;
+
+        // 确保对象有必要的属性并添加特殊的测试数据
+        $fields = $tester->config->search->fields->$objectType ?? null;
+        if($fields)
+        {
+            // 确保content字段存在
+            $contentFields = explode(',', $fields->content);
+            foreach($contentFields as $field)
+            {
+                if(empty($field)) continue;
+                if(!isset($object->$field)) $object->$field = '';
+            }
+        }
+
+        if($objectType == 'story')
+        {
+            $object->title = '测试需求：包含中文内容的标题';
+            if(!isset($object->keywords)) $object->keywords = '';
+            if(!isset($object->spec)) $object->spec = '';
+            if(!isset($object->verify)) $object->verify = '';
+            $object->keywords = '中文,关键词,测试';
+        }
+        elseif($objectType == 'project')
+        {
+            $object->name = '<script>alert("xss")</script>项目名称';
+            if(!isset($object->desc)) $object->desc = '';
+            if(!isset($object->code)) $object->code = '';
+            $object->desc = '<p>包含<strong>HTML标签</strong>的描述</p>';
+        }
+        elseif($objectType == 'product')
+        {
+            $object->name = '空内容测试产品';
+            if(!isset($object->desc)) $object->desc = '';
+            if(!isset($object->code)) $object->code = '';
+            $object->desc = '';
+            $object->code = '';
+        }
+        elseif($objectType == 'doc')
+        {
+            if(!isset($object->digest)) $object->digest = '';
+            if(!isset($object->content)) $object->content = '';
+            if(!isset($object->keywords)) $object->keywords = '';
+        }
+
         $object->comment = '';
 
-        $this->objectModel->saveIndex($objectType, $object);
+        $result = $this->objectModel->saveIndex($objectType, $object);
         if(dao::isError()) return dao::getError();
 
         return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch();
     }
 
     /**
-     * 测试搜索搜索字典。
+     * 测试保存搜索字典。
      * Test save dict.
      *
-     * @param  string $word
+     * @param  array|string $dictData
      * @access public
-     * @return int
+     * @return mixed
      */
-    public function saveDictTest($word)
+    public function saveDictTest($dictData)
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
-        $spliter = $tester->app->loadClass('spliter');
-        $titleSplited = $spliter->utf8Split($word);
+        // 如果传入的是字符串，使用分词器分词
+        if(is_string($dictData))
+        {
+            $spliter = $tester->app->loadClass('spliter');
+            $titleSplited = $spliter->utf8Split($dictData);
+            $dict = $titleSplited['dict'];
+        }
+        else
+        {
+            // 如果传入的是数组，直接使用
+            $dict = $dictData;
+        }
 
-        $this->objectModel->saveDict($titleSplited['dict']);
+        $result = $this->objectModel->saveDict($dict);
         if(dao::isError()) return dao::getError();
 
-        $dicts = $tester->dao->select("*")->from(TABLE_SEARCHDICT)->where('`key`')->in(array_keys($titleSplited['dict']))->fetchAll();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
+        // 返回保存结果和数据库中的记录
+        $savedDicts = $tester->dao->select("*")->from(TABLE_SEARCHDICT)->fetchAll();
 
-        return $dicts;
+        return array(
+            'result' => $result,
+            'count' => count($savedDicts),
+            'dicts' => $savedDicts
+        );
     }
 
     /**
@@ -1587,5 +1674,21 @@ class searchTest
         $options->saveSearch->text = $tester->lang->search->saveCondition;
 
         return $options;
+    }
+
+    /**
+     * Test buildIndexQuery method.
+     *
+     * @param  string $type
+     * @param  bool   $testDeleted
+     * @access public
+     * @return string
+     */
+    public function buildIndexQueryTest(string $type, bool $testDeleted = true): string
+    {
+        $result = $this->objectModel->buildIndexQuery($type, $testDeleted);
+        if(dao::isError()) return dao::getError();
+
+        return $result->get();
     }
 }

@@ -1,25 +1,25 @@
 ---
 title: ChangeItem测试的临时关联数据
-desc: 为importJiraChangeItem方法测试提供临时关联数据
+desc: 为importJiraChangeItem方法测试提供临时关联数据，模拟Jira到ZenTao的数据关联关系
 author: claude
 version: 1.0
 
 fields:
 - field: id
   note: 主键ID
-  range: 1-10
+  range: 1-15
 - field: AType
-  note: A类型
-  range: 'jissue{3}, jchangeitem{2}'
+  note: A类型，表示Jira侧的对象类型
+  range: 'jissue{8}, jchangeitem{4}, jchangegroup{3}'
 - field: AID
-  note: A对象ID
-  range: 1-5
+  note: A对象ID，对应Jira侧的对象ID
+  range: 1-10
 - field: BType
-  note: B类型
-  range: 'zstory{2}, ztask{1}, zaction{2}'
+  note: B类型，表示ZenTao侧的对象类型
+  range: 'zstory{4}, ztask{3}, zbug{2}, zaction{6}'
 - field: BID
-  note: B对象ID
-  range: 1-5
+  note: B对象ID，对应ZenTao侧的对象ID
+  range: 1-10
 - field: extra
-  note: 额外信息
-  range: 'issue{3}, {2}'
+  note: 额外信息，用于存储关联的补充数据
+  range: 'issue{8}, action{4}, group{3}'

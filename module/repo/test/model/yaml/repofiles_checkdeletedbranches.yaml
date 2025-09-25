@@ -1,0 +1,54 @@
+title: table zt_repofiles for checkDeletedBranches test
+desc: "代码文件数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "文件ID"
+    range: 1-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: repo
+    note: "代码库ID"
+    range: 1{10}, 2{5}, 3{3}, 4{1}, 5{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "版本ID"
+    range: 1-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: path
+    note: "文件路径"
+    range: src/main.php{5}, test/unit.php{3}, config/app.php{2}, deleted/file.php{10}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: parent
+    note: "父级ID"
+    range: 0-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "文件类型"
+    range: file{15}, dir{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "操作类型"
+    range: added{10}, modified{8}, deleted{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

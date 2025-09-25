@@ -1,0 +1,41 @@
+title: repo数据 for getListByCondition测试
+desc: 为getListByCondition方法测试提供测试数据
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1-5
+- field: projects
+  range: 11-15
+- field: name
+  range: testRepo1,testRepo2,prodRepo1,prodRepo2,devRepo1,devRepo2,specialRepo,emptyRepo,gitlabRepo,giteaRepo
+- field: path
+  range: "http://gitlab.test.com/test1,http://gitlab.test.com/test2,/var/repo/prod1,/var/repo/prod2,http://gitea.test.com/dev1,http://gitea.test.com/dev2,/home/special,[],,/path/gitea"
+- field: SCM
+  range: Gitlab,Gitlab,Gitlab,Gitlab,Gitea,Gitea,Gitea,Git,Git,Subversion
+- field: client
+  range: git,git,git,git,git,git,git,git,git,svn
+- field: serviceHost
+  range: 1,1,2,2,1,1,0,0,0,0
+- field: serviceProject
+  range: "test1,test2,prod1,prod2,dev1,dev2,[],[],[],[]"
+- field: commits
+  range: 0,5,10,15,20,25,30,0,0,5
+- field: account
+  range: "admin,admin,user,user,tester,tester,[],[],[],[]"
+- field: password
+  range: "123456,123456,pass123,pass123,test123,test123,[],[],[],[]"
+- field: encrypt
+  range: plain,plain,plain,plain,base64,base64,plain,plain,plain,plain
+- field: synced
+  range: 1,1,1,1,1,1,0,0,1,1
+- field: extra
+  range: 1,2,3,4,5,6,7,8,9,10
+- field: preMerge
+  range: 0,0,1,1,0,0,0,0,0,0
+- field: job
+  range: 0,0,0,0,0,0,0,0,0,1
+- field: deleted
+  range: 0,0,0,0,0,0,0,0,0,1

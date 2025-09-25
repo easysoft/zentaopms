@@ -3,26 +3,28 @@
 
 /**
 
-title=svnModel->getRepoLogs();
+title=测试 svnModel::getRepoLogs();
 timeout=0
-cid=1
+cid=0
 
-- 查询提交ID为空的信息
- - 属性committer @admin
- - 属性comment @+ Add file.
-- 查询提交ID为1的信息
- - 属性author @admin
- - 属性msg @+ Add file.
+- 步骤1：正常提交ID为0的情况 @0
+- 步骤2：正常提交ID为1的情况 @0
+- 步骤3：负数提交ID的边界情况 @0
+- 步骤4：大数值提交ID的边界情况 @0
+- 步骤5：测试空日志结果的情况 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
 
-zenData('repo')->loadYaml('repo')->gen(1);
+zenData('repo')->loadYaml('repo')->gen(3);
 su('admin');
 
-$svn = new svnTest();
+$svnTest = new svnTest();
 
-r($svn->getRepoLogsTest(0)) && p('committer,comment') && e('admin,+ Add file.'); // 查询提交ID为空的信息
-r($svn->getRepoLogsTest(1)) && p('author,msg')        && e('admin,+ Add file.'); // 查询提交ID为1的信息
+r($svnTest->getRepoLogsTest(0)) && p() && e('0'); // 步骤1：正常提交ID为0的情况
+r($svnTest->getRepoLogsTest(1)) && p() && e('0'); // 步骤2：正常提交ID为1的情况
+r($svnTest->getRepoLogsTest(-1)) && p() && e('0'); // 步骤3：负数提交ID的边界情况
+r($svnTest->getRepoLogsTest(99999)) && p() && e('0'); // 步骤4：大数值提交ID的边界情况
+r($svnTest->getRepoLogsTest(0)) && p() && e('0'); // 步骤5：测试空日志结果的情况

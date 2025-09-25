@@ -1,0 +1,43 @@
+---
+title: 测试 compileModel::getLogs() 方法的测试数据
+desc: 为getLogs方法提供包含不同引擎类型和状态的编译记录数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 编译ID
+
+- field: name
+  range: 'build_{1-10}'
+  note: 编译名称
+
+- field: job
+  range: 1-6
+  note: 关联的作业ID
+
+- field: queue
+  range: 100-1000:R
+  note: 队列ID，用于获取构建日志
+
+- field: status
+  range: success{3},failed{2},running{2},pending{3}
+  note: 编译状态
+
+- field: logs
+  range: '{""}'
+  note: 日志内容，初始为空
+
+- field: createdBy
+  range: admin{5},user{3},system{2}
+  note: 创建者
+
+- field: createdDate
+  range: '2024-01-01 00:00:00'-'2024-12-31 23:59:59':86400
+  format: YYYY-MM-DD hh:mm:ss
+  note: 创建时间
+
+- field: deleted
+  range: '0'
+  note: 删除标记

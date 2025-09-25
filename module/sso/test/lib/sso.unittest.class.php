@@ -371,4 +371,66 @@ class ssoTest
 
         return $auth;
     }
+
+    /**
+     * Test bind method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function bindTest()
+    {
+        try {
+            $result = $this->objectModel->bind();
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (TypeError $e) {
+            // 当bind方法没有返回值时，返回null
+            return null;
+        }
+    }
+
+    /**
+     * Test checkKey method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkKeyTest()
+    {
+        $result = $this->objectModel->checkKey();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBindUser method.
+     *
+     * @param  string $account
+     * @access public
+     * @return object|false
+     */
+    public function getBindUserTest(string $account): object|false
+    {
+        $result = $this->objectModel->getBindUser($account);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBindUsers method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBindUsersTest(): array
+    {
+        $result = $this->objectModel->getBindUsers();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

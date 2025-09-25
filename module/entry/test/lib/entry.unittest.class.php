@@ -107,6 +107,53 @@ class entryTest
     }
 
     /**
+     * Test getById method.
+     *
+     * @param  int $entryID
+     * @access public
+     * @return object|false|array
+     */
+    public function getByIdTest(int $entryID): object|false|array
+    {
+        $result = $this->objectModel->getById($entryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getByKey method.
+     *
+     * @param  string $key
+     * @access public
+     * @return object|false|array
+     */
+    public function getByKeyTest(string $key): object|false|array
+    {
+        $result = $this->objectModel->getByKey($key);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLogs method.
+     *
+     * @param  int    $id
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getLogsTest(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
+    {
+        $result = $this->objectModel->getLogs($id, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试判断操作是否可以点击。
      * Test judge an action is clickable or not.
      *

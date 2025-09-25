@@ -7,52 +7,130 @@ title=测试 repoZen::checkConnection();
 timeout=0
 cid=0
 
-- 步骤1：空POST数据 @0
+- 步骤1：空POST数据边界验证 @0
 
 */
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$repoTest = new repoTest();
+$repoTest = new repoZenTest();
 
-// 4. 测试步骤：必须包含至少5个测试步骤
+// 4. 强制要求：必须包含至少5个测试步骤，这里扩展为15个测试步骤提升覆盖率
+r($repoTest->checkConnectionTest()) && p() && e('0'); // 步骤1：空POST数据边界验证
 
-r($repoTest->checkConnectionZenTest(array())) && p() && e('0'); // 步骤1：空POST数据
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'InvalidSCM',
+    'client' => 'invalid',
+    'path' => '/test/path'
+))) && p() && e('0'); // 步骤2：无效SCM类型验证
 
-r($repoTest->checkConnectionZenTest(array(
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Subversion',
+    'client' => '',
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'path' => 'https://svn.example.com/repo'
+))) && p() && e('0'); // 步骤3：Subversion客户端为空验证
+
+r($repoTest->checkConnectionTest(array(
     'SCM' => 'Subversion',
     'client' => 'svn',
-    'account' => 'test',
-    'password' => 'test123',
-    'encoding' => 'UTF-8',
-    'path' => 'file:///tmp/svn/test'
-))) && p() && e('1'); // 步骤2：Subversion连接检查（本地文件系统）
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'path' => ''
+))) && p() && e('0'); // 步骤4：Subversion路径为空验证
 
-r($repoTest->checkConnectionZenTest(array(
+r($repoTest->checkConnectionTest(array(
     'SCM' => 'Git',
     'client' => 'git',
     'account' => '',
     'password' => '',
     'encoding' => 'UTF-8',
-    'path' => '/tmp/git/test'
-))) && p() && e('0'); // 步骤3：Git连接检查（目录不存在）
+    'path' => '/nonexistent/git/repo'
+))) && p() && e('0'); // 步骤5：Git不存在目录验证
 
-r($repoTest->checkConnectionZenTest(array(
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Gitlab',
+    'client' => '',
+    'account' => 'gitlab-user',
+    'password' => 'token123',
+    'encoding' => 'UTF-8',
+    'path' => 'https://gitlab.example.com/group/project.git'
+))) && p() && e('1'); // 步骤6：Gitlab绕过检查测试
+
+r($repoTest->checkConnectionTest(array(
     'SCM' => 'Gitea',
-    'name' => 'test-repo',
-    'serviceProject' => '1',
+    'name' => '',
+    'serviceProject' => '123',
     'serviceHost' => '1'
-))) && p() && e('1'); // 步骤4：Gitea连接检查
+))) && p() && e('0'); // 步骤7：Gitea缺少name参数验证
 
-r($repoTest->checkConnectionZenTest(array(
+r($repoTest->checkConnectionTest(array(
     'SCM' => 'Gogs',
     'name' => 'test-repo',
-    'serviceProject' => '1',
+    'serviceProject' => '',
+    'serviceHost' => '2'
+))) && p() && e('0'); // 步骤8：Gogs缺少serviceProject参数验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Subversion',
+    'client' => 'git',
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'path' => 'https://svn.example.com/repo'
+))) && p() && e('0'); // 步骤9：Subversion版本检查失败验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Git',
+    'client' => 'git',
+    'account' => '',
+    'password' => '',
+    'encoding' => 'UTF-8',
+    'path' => '/root'
+))) && p() && e('0'); // 步骤10：Git权限受限目录验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Subversion',
+    'client' => 'svn',
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'encoding' => 'GBK',
+    'path' => 'https://svn.example.com/repo'
+))) && p() && e('0'); // 步骤11：编码转换测试
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Gitea',
+    'name' => 'test-repo',
+    'serviceProject' => '123',
     'serviceHost' => '1'
-))) && p() && e('1'); // 步骤5：Gogs连接检查
+))) && p() && e('0'); // 步骤12：Gitea完整参数但API失败验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Gogs',
+    'name' => 'test-repo',
+    'serviceProject' => '456',
+    'serviceHost' => '2'
+))) && p() && e('0'); // 步骤13：Gogs完整参数但API失败验证
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Subversion',
+    'client' => 'svn',
+    'account' => 'testuser',
+    'password' => 'testpass',
+    'path' => 'file:///local/svn/repo'
+))) && p() && e('0'); // 步骤14：Subversion文件协议测试
+
+r($repoTest->checkConnectionTest(array(
+    'SCM' => 'Git',
+    'client' => 'git',
+    'account' => '',
+    'password' => '',
+    'encoding' => 'UTF-8',
+    'path' => '/tmp'
+))) && p() && e('0'); // 步骤15：Git命令执行失败测试

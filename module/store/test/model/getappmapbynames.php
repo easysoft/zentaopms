@@ -1,17 +1,16 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
 
 /**
 
-title=测试 storeModel->getAppMapByNames().
-timeout=0
-cid=1
+title=测试 storeModel::getAppMapByNames();
+cid=0
 
-- 测试传入查询名称为空 @0
-- 测试查询名称为adminer和zentao
- - 第adminer条的name属性 @adminer
- - 第zentao条的name属性 @zentao
+- 测试步骤1：传入空数组参数 >> 期望返回0（无数据）
+- 测试步骤2：传入单个应用名称adminer >> 期望返回adminer应用信息
+- 测试步骤3：传入多个应用名称 >> 期望返回多个应用信息
+- 测试步骤4：使用stable渠道参数 >> 期望返回应用信息
+- 测试步骤5：使用dev渠道参数 >> 期望返回0（模拟未找到）
 
 */
 
@@ -21,8 +20,10 @@ include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
 zenData('user')->gen(5);
 su('admin');
 
-$nameList = array(array(), array('adminer', 'zentao'));
-
 $store = new storeTest();
-r($store->getAppMapByNamesTest($nameList[0])) && p()                           && e('0');              //测试传入查询名称为空
-r($store->getAppMapByNamesTest($nameList[1])) && p('adminer:name;zentao:name') && e('adminer;zentao'); //测试查询名称为adminer和zentao
+
+r($store->getAppMapByNamesTest(array())) && p() && e('0');
+r($store->getAppMapByNamesTest(array('adminer'))) && p('adminer:name') && e('adminer');
+r($store->getAppMapByNamesTest(array('adminer', 'zentao'))) && p('adminer:name;zentao:name') && e('adminer;zentao');
+r($store->getAppMapByNamesTest(array('adminer'), 'stable')) && p('adminer:name') && e('adminer');
+r($store->getAppMapByNamesTest(array('nonexistent'), 'dev')) && p() && e('0');

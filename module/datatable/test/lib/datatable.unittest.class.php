@@ -156,4 +156,20 @@ class datatableTest
 
         return $result;
     }
+
+    /**
+     * Test sortCols method.
+     *
+     * @param array $a
+     * @param array $b
+     * @access public
+     * @return int
+     */
+    public function sortColsTest($a, $b)
+    {
+        $result = datatableModel::sortCols($a, $b);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

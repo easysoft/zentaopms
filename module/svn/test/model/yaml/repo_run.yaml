@@ -1,0 +1,70 @@
+---
+title: 测试svnModel::run()方法的仓库数据
+desc: 为run方法测试准备的仓库数据，包括SVN仓库配置
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  note: 仓库ID
+  range: 101-105
+- field: product
+  note: 关联产品
+  range: 1,2,0
+- field: projects
+  note: 关联项目
+  range: '1,2'
+- field: name
+  note: 仓库名称
+  range: ['svn-test-repo', 'svn-main-repo', 'svn-dev-repo', 'git-repo', 'gitlab-repo']
+- field: path
+  note: 仓库路径
+  range: ['https://svn.example.com/test', 'https://svn.example.com/main', 'https://svn.example.com/dev', 'https://git.example.com/repo', 'https://gitlab.example.com/repo']
+- field: prefix
+  note: 前缀
+  range: ''
+- field: encoding
+  note: 编码
+  range: utf-8{3},gbk{1},gb2312{1}
+- field: SCM
+  note: 源码管理系统
+  range: Subversion
+- field: client
+  note: 客户端路径
+  range: /usr/bin/svn
+- field: serviceHost
+  note: 服务主机
+  range: ''
+- field: serviceProject
+  note: 服务项目
+  range: ''
+- field: commits
+  note: 提交数量
+  range: 10,20,30,5,15
+- field: account
+  note: 账户
+  range: ['admin', 'user', 'tester', '', '']
+- field: password
+  note: 密码
+  range: ['password', 'pass123', 'test123', '', '']
+- field: encrypt
+  note: 加密方式
+  range: plain{3},base64{2}
+- field: acl
+  note: 访问控制
+  range: ['']
+- field: synced
+  note: 是否已同步
+  range: 1{3},0{2}
+- field: lastSync
+  note: 最后同步时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':86400D
+- field: lastCommit
+  note: 最后提交时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':86400D
+- field: desc
+  note: 描述
+  range: ['测试仓库', '主仓库', '开发仓库', 'Git仓库', 'GitLab仓库']
+- field: deleted
+  note: 是否删除
+  range: 0{4},1{1}

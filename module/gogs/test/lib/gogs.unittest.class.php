@@ -86,16 +86,82 @@ class gogsTest
     public function getMatchedUsersTest(int $gogsID, array $gogsUsers): mixed
     {
         global $tester;
-        
+
         // 创建zen实例并设置必需的依赖
         $zen = initReference('gogs');
         $method = $zen->getMethod('getMatchedUsers');
         $method->setAccessible(true);
-        
+
         // 创建一个zen实例
         $zenInstance = $zen->newInstance();
-        
+
         $result = $method->invoke($zenInstance, $gogsID, $gogsUsers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetProjects method.
+     *
+     * @param  int $gogsID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetProjectsTest(int $gogsID): mixed
+    {
+        $result = $this->gogs->apiGetProjects($gogsID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetBranches method.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @access public
+     * @return mixed
+     */
+    public function apiGetBranchesTest(int $gogsID, string $project): mixed
+    {
+        $result = $this->gogs->apiGetBranches($gogsID, $project);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test apiGetSingleProject method.
+     *
+     * @param  int    $gogsID
+     * @param  string $projectID
+     * @access public
+     * @return mixed
+     */
+    public function apiGetSingleProjectTest(int $gogsID, string $projectID): mixed
+    {
+        $result = $this->gogs->apiGetSingleProject($gogsID, $projectID);
+        if(dao::isError()) return dao::getError();
+
+        if(is_null($result)) return 0;
+        if(!is_object($result)) return $result;
+
+        // 返回简单的验证结果
+        return isset($result->name) ? 1 : 0;
+    }
+
+    /**
+     * Test getApiRoot method.
+     *
+     * @param  int $gogsID
+     * @access public
+     * @return mixed
+     */
+    public function getApiRootTest(int $gogsID): mixed
+    {
+        $result = $this->gogs->getApiRoot($gogsID);
         if(dao::isError()) return dao::getError();
 
         return $result;

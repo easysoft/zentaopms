@@ -1,0 +1,53 @@
+title: repo数据 for getProductsByRepo测试
+desc: 为getProductsByRepo方法测试提供测试数据
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-12
+- field: product
+  range: "1,2,3,1,2,2,3,4,5,[],10,99"
+- field: projects
+  range: 1-12
+- field: name
+  range: singleProductRepo,multiProductRepo1,multiProductRepo2,testRepo1,testRepo2,mixedRepo1,mixedRepo2,withDeletedProductRepo,validRepo,emptyProductRepo,invalidProductRepo1,invalidProductRepo2
+- field: path
+  range: "/repo/single,/repo/multi1,/repo/multi2,/repo/test1,/repo/test2,/repo/mixed1,/repo/mixed2,/repo/deleted,/repo/valid,/repo/empty,/repo/invalid1,/repo/invalid2"
+- field: SCM
+  range: Git,Git,Git,Gitlab,Gitlab,Gitea,Gitea,Git,Git,Git,Subversion,Subversion
+- field: prefix
+  range: "[]"
+- field: encoding
+  range: utf-8
+- field: client
+  range: git,git,git,git,git,git,git,git,git,git,svn,svn
+- field: serviceHost
+  range: 0
+- field: serviceProject
+  range: "[]"
+- field: commits
+  range: 0
+- field: account
+  range: "[]"
+- field: password
+  range: "[]"
+- field: encrypt
+  range: plain
+- field: acl
+  range: "[]"
+- field: synced
+  range: 1
+- field: lastSync
+  range: "`2024-01-01 00:00:00`"
+- field: lastCommit
+  range: "`2024-01-01 00:00:00`"
+- field: desc
+  range: "[]"
+- field: extra
+  range: 0
+- field: preMerge
+  range: 0
+- field: job
+  range: 0
+- field: deleted
+  range: 0,0,0,0,0,0,0,0,0,0,0,0

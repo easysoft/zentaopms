@@ -675,10 +675,10 @@ class convertTao extends convertModel
             if(!empty($jiraUserRelation[$data->account])) continue;
 
             /* 如果是atlassian内部帐号，则不导入。 */
-            if(strpos($data->email, '@connect.atlassian.com') !== false) continue;
+            if(isset($data->email) && strpos($data->email, '@connect.atlassian.com') !== false) continue;
 
             $user = new stdclass();
-            $user->account = $this->processJiraUser($data->account, $data->email);
+            $user->account = $this->processJiraUser($data->account, isset($data->email) ? $data->email : '');
             if(!isset($localUsers[$user->account]))
             {
                 $user->realname = isset($data->realname) ? $data->realname : '';

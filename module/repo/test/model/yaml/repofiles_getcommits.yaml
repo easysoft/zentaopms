@@ -1,0 +1,39 @@
+---
+title: repofiles测试数据
+desc: 为getCommits方法提供文件路径测试数据
+
+fields:
+- field: id
+  note: 文件记录ID
+  range: 1-100
+  type: int
+
+- field: repo
+  note: 代码库ID
+  range: 1{40},2{30},3{20},999{10}
+  type: int
+
+- field: revision
+  note: 提交版本号
+  range: commit1,commit2,commit3,commit4,commit5,commit6,commit7,commit8,commit9,commit10
+  type: varchar
+
+- field: path
+  note: 文件路径
+  range: /src/main.php,/src/model.php,/src/view.php,/test/unit.php,/docs/readme.md,/config/config.php,/lib/common.php,/module/user.php,/css/style.css,/js/script.js
+  type: varchar
+
+- field: parent
+  note: 父级目录
+  range: /src,/test,/docs,/config,/lib,/module,/css,/js,/,/assets
+  type: varchar
+
+- field: type
+  note: 文件类型
+  range: file{80},dir{20}
+  type: varchar
+
+- field: action
+  note: 操作类型
+  range: A{30},M{50},D{20}
+  type: varchar

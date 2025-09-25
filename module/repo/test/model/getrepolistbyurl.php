@@ -1,39 +1,45 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->getRepoListByUrl();
+title=测试 repoModel::getRepoListByUrl();
 timeout=0
-cid=1
+cid=0
 
-- 使用空的url属性message @Url is empty.
-- 使用错误的url属性message @No matched gitlab.
-- 使用正确的url @return normal
+- 执行repoTest模块的getRepoListByUrlTest方法，参数是'' 属性message @Url is empty.
+- 执行repoTest模块的getRepoListByUrlTest方法，参数是'http://invalid-server.example.com/repo.git' 属性message @No matched gitlab.
+- 执行repoTest模块的getRepoListByUrlTest方法，参数是'http://unknown-server.com/project/repo.git' 属性message @No matched gitlab.
+- 执行repoTest模块的getRepoListByUrlTest方法，参数是$nullUrl 属性message @Url is empty.
+- 执行repoTest模块的getRepoListByUrlTest方法，参数是'http://test.com/项目/仓库.git' 属性message @No matched gitlab.
 
 */
 
-zenData('pipeline')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(4);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
-$repoModel = $tester->loadModel('repo');
+// 准备测试数据
+zenData('pipeline')->loadYaml('pipeline_getrepolistbyurl')->gen(3);
+zenData('repo')->loadYaml('repo_getrepolistbyurl')->gen(8);
 
-$url    = '';
-$result = $repoModel->getRepoListByUrl($url);
-r($result) && p('message') && e('Url is empty.'); //使用空的url
+// 登录管理员用户
+su('admin');
 
-$url    = 'http://192.168.1.161:51080/gitlab-instance-f9325ed1/azalea723test.git';
-$result = $repoModel->getRepoListByUrl($url);
-r($result) && p('message') && e('No matched gitlab.'); //使用错误的url
+// 创建测试实例
+$repoTest = new repoTest();
 
-$url    = 'https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git';
-$result = $repoModel->getRepoListByUrl($url);
-if(!empty($result))
-{
-    if($result['status'] == 'fail' and $result['message'] != 'No matched gitlab.') $result = 'return normal';
-    if(is_array($result) and $result['status'] == 'success') $result = 'return normal';
-}
-r($result) && p() && e('return normal'); //使用正确的url
+// 测试步骤1：空URL输入测试
+r($repoTest->getRepoListByUrlTest('')) && p('message') && e('Url is empty.');
+
+// 测试步骤2：格式正确但不匹配的URL测试
+r($repoTest->getRepoListByUrlTest('http://invalid-server.example.com/repo.git')) && p('message') && e('No matched gitlab.');
+
+// 测试步骤3：有效URL但无匹配gitlab服务器测试
+r($repoTest->getRepoListByUrlTest('http://unknown-server.com/project/repo.git')) && p('message') && e('No matched gitlab.');
+
+// 测试步骤4：NULL类型URL处理（转换为空字符串）
+$nullUrl = null;
+r($repoTest->getRepoListByUrlTest($nullUrl)) && p('message') && e('Url is empty.');
+
+// 测试步骤5：特殊字符URL处理测试
+r($repoTest->getRepoListByUrlTest('http://test.com/项目/仓库.git')) && p('message') && e('No matched gitlab.');

@@ -7,7 +7,7 @@ title=测试 pivotModel::isFiltersAllEmpty();
 timeout=0
 cid=0
 
-- 执行pivotTest模块的isFiltersAllEmptyTest方法，参数是array  @0
+- 步骤1：空数组输入测试，应返回false @0
 
 */
 
@@ -22,38 +22,38 @@ su('admin');
 $pivotTest = new pivotTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
-
-// 步骤1：正常情况 - 所有默认值都为空
+r($pivotTest->isFiltersAllEmptyTest(array())) && p() && e('0'); // 步骤1：空数组输入测试，应返回false
 r($pivotTest->isFiltersAllEmptyTest(array(
-    array('name' => 'filter1', 'default' => ''),
-    array('name' => 'filter2', 'default' => null),
-    array('name' => 'filter3', 'default' => 0)
-))) && p() && e('1');
-
-// 步骤2：边界值 - 包含非空值的过滤器
+    array('name' => 'status', 'default' => ''),
+    array('name' => 'type', 'default' => null),
+    array('name' => 'priority', 'default' => false),
+    array('name' => 'assignee', 'default' => 0),
+    array('name' => 'keywords', 'default' => array())
+))) && p() && e('1'); // 步骤2：所有default值为empty的过滤器数组，应返回true
 r($pivotTest->isFiltersAllEmptyTest(array(
-    array('name' => 'filter1', 'default' => ''),
-    array('name' => 'filter2', 'default' => 'value'),
-    array('name' => 'filter3', 'default' => null)
-))) && p() && e('0');
-
-// 步骤3：异常输入 - 空数组
-r($pivotTest->isFiltersAllEmptyTest(array())) && p() && e('0');
-
-// 步骤4：权限验证 - 不同类型的空值
+    array('name' => 'status', 'default' => ''),
+    array('name' => 'type', 'default' => 'bug'),
+    array('name' => 'priority', 'default' => null)
+))) && p() && e('0'); // 步骤3：包含非空default值的混合过滤器，应返回false
 r($pivotTest->isFiltersAllEmptyTest(array(
-    array('name' => 'filter1', 'default' => ''),
-    array('name' => 'filter2', 'default' => null),
-    array('name' => 'filter3', 'default' => false),
-    array('name' => 'filter4', 'default' => 0),
-    array('name' => 'filter5', 'default' => array())
-))) && p() && e('1');
-
-// 步骤5：业务规则 - 混合空值和非空值
+    array('name' => 'single_filter', 'default' => '')
+))) && p() && e('1'); // 步骤4：单个空default值的过滤器，应返回true
 r($pivotTest->isFiltersAllEmptyTest(array(
-    array('name' => 'filter1', 'default' => ''),
-    array('name' => 'filter2', 'default' => null),
-    array('name' => 'filter3', 'default' => 'test'),
-    array('name' => 'filter4', 'default' => 0),
-    array('name' => 'filter5', 'default' => false)
-))) && p() && e('0');
+    array('name' => 'missing_default1'),
+    array('name' => 'missing_default2'),
+    array('name' => 'missing_default3')
+))) && p() && e('1'); // 步骤5：缺少default键的过滤器结构，应返回true
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'product', 'default' => 'zentao'),
+    array('name' => 'module', 'default' => 'bug'),
+    array('name' => 'version', 'default' => '1.0')
+))) && p() && e('0'); // 步骤6：所有default值都非空的过滤器，应返回false
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'string_filter', 'default' => ''),
+    array('name' => 'numeric_filter', 'default' => 0),
+    array('name' => 'string_zero', 'default' => '0')
+))) && p() && e('0'); // 步骤7：空字符串与数值0和'0'混合测试，'0'不为empty所以应返回false
+r($pivotTest->isFiltersAllEmptyTest(array(
+    array('name' => 'array_filter', 'default' => array('key' => 'value')),
+    array('name' => 'empty_filter', 'default' => '')
+))) && p() && e('0'); // 步骤8：非空数组与空值混合测试，非空数组存在时应返回false

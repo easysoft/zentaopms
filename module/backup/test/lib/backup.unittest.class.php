@@ -509,6 +509,115 @@ class backupTest
     }
 
     /**
+     * Test addFileHeader method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return mixed
+     */
+    public function addFileHeaderTest($fileName = null)
+    {
+        $result = $this->objectModel->addFileHeader($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBackupDirProgress method.
+     *
+     * @param  string $backup
+     * @access public
+     * @return mixed
+     */
+    public function getBackupDirProgressTest($backup = null)
+    {
+        $result = $this->objectModel->getBackupDirProgress($backup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBackupPath method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getBackupPathTest()
+    {
+        $result = $this->objectModel->getBackupPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTmpLogFile method.
+     *
+     * @param  string $backupFile
+     * @access public
+     * @return mixed
+     */
+    public function getTmpLogFileTest($backupFile = null)
+    {
+        $result = $this->objectModel->getTmpLogFile($backupFile);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processFileSize method.
+     *
+     * @param  int $fileSize
+     * @access public
+     * @return mixed
+     */
+    public function processFileSizeTest($fileSize = null)
+    {
+        $result = $this->objectModel->processFileSize($fileSize);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processSummary method.
+     *
+     * @param  string $file
+     * @param  int    $count
+     * @param  int    $size
+     * @param  array  $errorFiles
+     * @param  int    $allCount
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function processSummaryTest($file = null, $count = 0, $size = 0, $errorFiles = array(), $allCount = 0, $action = 'add')
+    {
+        $result = $this->objectModel->processSummary($file, $count, $size, $errorFiles, $allCount, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test removeFileHeader method.
+     *
+     * @param  string $fileName
+     * @access public
+     * @return mixed
+     */
+    public function removeFileHeaderTest($fileName = null)
+    {
+        $result = $this->objectModel->removeFileHeader($fileName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Clean up test directory.
      *
      * @param  string $dir

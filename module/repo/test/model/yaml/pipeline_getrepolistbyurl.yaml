@@ -1,0 +1,42 @@
+---
+title: 测试pipeline数据，用于模拟gitlab服务器
+desc: 为getRepoListByUrl方法测试提供gitlab服务器数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: pipeline服务器ID
+  range: 1-3
+
+- field: name
+  note: 服务器名称
+  range: Gitlab Test Server 1,Gitlab Test Server 2,Gitlab Test Server 3
+
+- field: type
+  note: 服务器类型
+  range: gitlab{3}
+
+- field: url
+  note: 服务器URL
+  range: http://gitlabdev.qc.oop.cc,http://gitlab.test.com,http://localhost:8080
+
+- field: account
+  note: 账号
+  range: admin{3}
+
+- field: password
+  note: 密码
+  range: 123456{3}
+
+- field: token
+  note: 访问令牌
+  range: test-token-1,test-token-2,test-token-3
+
+- field: private
+  note: 私有标识
+  range: 0{2},1{1}
+
+- field: deleted
+  note: 删除状态
+  range: 0

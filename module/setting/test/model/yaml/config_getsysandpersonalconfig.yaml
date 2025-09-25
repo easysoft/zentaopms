@@ -1,0 +1,32 @@
+---
+title: 配置数据定义 - 系统和个人配置测试
+desc: 为getSysAndPersonalConfig方法提供测试数据
+
+fields:
+- field: id
+  note: 配置ID
+  range: 1-20
+
+- field: vision
+  note: 视图类型
+  range: '""'
+
+- field: owner
+  note: 配置拥有者
+  range: 'system{10}, admin{5}, dev{3}, user{2}'
+
+- field: module
+  note: 模块名称
+  range: 'common{8}, mail{4}, custom{3}, security{2}, theme{2}, api{1}'
+
+- field: section
+  note: 配置分段
+  range: 'global{8}, smtp{3}, ldap{2}, basic{3}, advanced{2}, ""{2}'
+
+- field: key
+  note: 配置键名
+  range: 'version{2}, sn{2}, timezone{2}, lang{2}, theme{2}, requiredFields{2}, turnon{2}, smtphost{1}, smtpport{1}, smtpauth{1}, smtpuser{1}, smtppass{1}, smtpsecure{1}'
+
+- field: value
+  note: 配置值
+  range: '18.12{2}, zh-cn{3}, default{3}, rnd_sn_12345{1}, Asia/Shanghai{1}, smtp.163.com{1}, 587{1}, true{2}, false{2}, test@example.com{1}, testpassword{1}, tls{1}'

@@ -1,0 +1,58 @@
+---
+title: 应用实例updateDomain方法测试数据
+desc: 用于测试instanceModel::updateDomain方法的各种场景
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-5
+
+- field: space
+  note: 空间ID
+  range: 1-3
+
+- field: name
+  note: 实例名称
+  range: 'test-app{5}'
+
+- field: appName
+  note: 应用名称
+  range: 'TestApp,DemoApp,SampleApp'
+
+- field: domain
+  note: 应用域名
+  range: 'test.old.domain.com,demo.expired.com,sample.current.com,valid.new.com,simple.com'
+
+- field: k8name
+  note: K8S名称
+  range: 'test-app-1{5}'
+
+- field: status
+  note: 实例状态
+  range: 'running,stopped'
+
+- field: source
+  note: 实例来源
+  range: 'cloud,system'
+
+- field: chart
+  note: 应用图表
+  range: 'zentao,jenkins,gitlab'
+
+- field: version
+  note: 版本号
+  range: '1.0.0,2.0.0,3.0.0'
+
+- field: deleted
+  note: 是否删除
+  range: 0
+
+- field: createdBy
+  note: 创建者
+  range: 'admin,user'
+
+- field: createdAt
+  note: 创建时间
+  range: '2024-01-01 10:00:00'

@@ -459,7 +459,13 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $result = array();
+        foreach($objects as $planID => $siblings)
+        {
+            $result[$planID] = count($siblings);
+        }
+
+        return $result;
     }
 
     /**
@@ -818,6 +824,206 @@ class programplanTest
     public function sortPlansTest(array $plans): array
     {
         $result = $this->zenInstance->sortPlans($plans);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkLeafStage method.
+     *
+     * @param  int $stageID
+     * @access public
+     * @return bool
+     */
+    public function checkLeafStageTest(int $stageID): bool
+    {
+        $result = $this->objectModel->checkLeafStage($stageID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getStageAttribute method.
+     *
+     * @param  int $stageID
+     * @access public
+     * @return false|string
+     */
+    public function getStageAttributeTest(int $stageID): false|string
+    {
+        $result = $this->objectModel->getStageAttribute($stageID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $plan
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(object $plan, string $action): bool
+    {
+        $result = $this->objectModel::isClickable($plan, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildPointDataForGantt method.
+     *
+     * @param  int    $planID
+     * @param  object $point
+     * @param  array  $reviewDeadline
+     * @access public
+     * @return object|array
+     */
+    public function buildPointDataForGanttTest(int $planID, ?object $point, array $reviewDeadline): object|array
+    {
+        if($point === null) return array('error' => 'Point object is null');
+
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('buildPointDataForGantt');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $planID, $point, $reviewDeadline);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getNewParentAndAction method.
+     *
+     * @param  array     $statusCount
+     * @param  object    $parent
+     * @param  int       $startTasks
+     * @param  string    $action
+     * @param  object    $project
+     * @access public
+     * @return array
+     */
+    public function getNewParentAndActionTest(array $statusCount, object $parent, int $startTasks, string $action, object $project): array
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getNewParentAndAction');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $statusCount, $parent, $startTasks, $action, $project);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test getParentStages method.
+     *
+     * @param  int    $executionID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @param  string $param
+     * @access public
+     * @return array|false
+     */
+    public function getParentStagesTest(int $executionID, int $planID, int $productID, string $param = ''): array|false
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('getParentStages');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectTao, $executionID, $planID, $productID, $param);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Test getReviewDeadline method.
+     *
+     * @param  string $date
+     * @param  int    $counter
+     * @access public
+     * @return string
+     */
+    public function getReviewDeadlineTest(string $date, int $counter = 5): string
+    {
+        $result = $this->objectTao->getReviewDeadline($date, $counter);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getStageCount method.
+     *
+     * @param  int    $planID
+     * @param  string $mode
+     * @access public
+     * @return int
+     */
+    public function getStageCountTest(int $planID, string $mode = ''): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStageCount');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $planID, $mode);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getStageList method.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStageListTest(int $executionID, int $productID, string $browseType, string $orderBy = 'id_asc'): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStageList');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $executionID, $productID, $browseType, $orderBy);
 
         if(dao::isError()) return dao::getError();
 

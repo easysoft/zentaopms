@@ -192,18 +192,32 @@ class reportTest
      * 测试获取用户的测试单。
      * Test get user test tasks.
      *
+     * @param  string $mode 返回模式：'count'返回统计字符串，'array'返回数组，'object'返回原始对象
      * @access public
      * @return string|array
      */
-    public function getUserTestTasksTest(): string|array
+    public function getUserTestTasksTest(string $mode = 'count'): string|array
     {
         $objects = $this->objectModel->getUserTestTasks();
 
         if(dao::isError()) return dao::getError();
 
-        $counts = '';
-        foreach($objects as $user => $testtasks) $counts .= "$user:" . count($testtasks) . ';';
-        return $counts;
+        if($mode === 'array')
+        {
+            $result = array();
+            foreach($objects as $user => $testtasks) $result[$user] = count($testtasks);
+            return $result;
+        }
+        elseif($mode === 'object')
+        {
+            return $objects;
+        }
+        else
+        {
+            $counts = '';
+            foreach($objects as $user => $testtasks) $counts .= "$user:" . count($testtasks) . ';';
+            return $counts;
+        }
     }
 
     /**

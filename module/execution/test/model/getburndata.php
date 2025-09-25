@@ -1,55 +1,53 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 executionModel::getBurnData();
+timeout=0
+cid=0
+
+- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:value属性 @75
+- 执行executionTest模块的getBurnDataTest方法，参数是4 第4条的01-12:value属性 @75
+- 执行executionTest模块的getBurnDataTest方法  @0
+- 执行executionTest模块的getBurnDataTest方法，参数是999  @0
+- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:name属性 @01-12
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+
 zenData('user')->gen(5);
 su('admin');
 
 $execution = zenData('project');
-$execution->id->range('1-5');
-$execution->name->range('项目集1,项目1,迭代1,阶段1,看板1');
-$execution->type->range('program,project,sprint,stage,kanban');
-$execution->code->range('1-5')->prefix('code');
-$execution->parent->range('0,1,2{3}');
-$execution->status->range('wait{3},suspended,closed,doing');
-$execution->openedBy->range('admin,user1');
+$execution->id->range('1-6');
+$execution->name->range('项目集1,项目1,迭代1,阶段1,看板1,测试执行1');
+$execution->type->range('program,project,sprint,stage,kanban,sprint');
+$execution->code->range('1-6')->prefix('code');
+$execution->parent->range('0,1,2{4}');
+$execution->status->range('wait{2},doing{2},suspended,closed');
+$execution->openedBy->range('admin,user1{2}');
+$execution->openedDate->range('20220105 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->begin->range('20220110 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220220 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->gen(5);
+$execution->gen(6);
 
 $burn = zenData('burn');
-$burn->execution->range('3{5},4{5},5{5}');
+$burn->execution->range('3{6},4{6},5{3}');
 $burn->date->range('20220111 000000:1D')->type('timestamp')->format('YY/MM/DD');
-$burn->estimate->range('94.3,56.3,55.3,37.8,33.8');
-$burn->left->range('95.3,68.5,73.9,40.2,36,3');
-$burn->consumed->range('20.1,33.4,41,56.55,59.55');
-$burn->storyPoint->range('0,16.5,16,11.5,9');
+$burn->estimate->range('100,90,80,70,60,50,45,40,35,30,25,20,15,10,5');
+$burn->left->range('95,85,75,65,55,45,40,35,30,25,20,15,10,5,3');
+$burn->consumed->range('5,15,25,35,45,55,60,65,70,75,80,85,90,95,97');
+$burn->storyPoint->range('20,18,16,14,12,10,8,6,4,2,0');
+$burn->task->range('0');
 $burn->gen(15);
 
-$task = zenData('task');
-$task->id->range('1-10');
-$task->execution->range('3');
-$task->status->range('wait,doing');
-$task->estimate->range('1-10');
-$task->left->range('1-10');
-$task->consumed->range('1-10');
-$task->gen(10);
+$executionTest = new executionTest();
 
-/**
-
-title=测试executionModel->getBurnDataTest();
-timeout=0
-cid=1
-
-- 敏捷执行查询统计第2022-01-22条的value属性 @36
-- 瀑布执行查询统计第2022-01-22条的value属性 @40.2
-- 看板执行查询统计第2022-01-22条的value属性 @3
-
-*/
-
-$executionIDList = array(3, 4, 5);
-
-$execution = new executionTest();
-r(current($execution->getBurnDataTest($executionIDList[0]))) && p('2022-01-22:value') && e('36');   // 敏捷执行查询统计
-r(current($execution->getBurnDataTest($executionIDList[1]))) && p('2022-01-22:value') && e('40.2'); // 瀑布执行查询统计
-r(current($execution->getBurnDataTest($executionIDList[2]))) && p('2022-01-22:value') && e('3');    // 看板执行查询统计
+r($executionTest->getBurnDataTest(3)) && p('3:01-12:value') && e('75');
+r($executionTest->getBurnDataTest(4)) && p('4:01-12:value') && e('75');
+r($executionTest->getBurnDataTest(0)) && p() && e('0');
+r($executionTest->getBurnDataTest(999)) && p() && e('0');
+r($executionTest->getBurnDataTest(3)) && p('3:01-12:name') && e('01-12');

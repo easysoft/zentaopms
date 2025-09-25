@@ -3,23 +3,27 @@
 
 /**
 
-title=svnModel->printLog();
+title=测试 svnModel::printLog();
 timeout=0
-cid=1
+cid=0
 
-- 输出日志信息 @abc
+- 步骤1：正常日志输出 @1
+- 步骤2：空字符串输入 @1
+- 步骤3：包含特殊字符的日志 @1
+- 步骤4：长字符串输入 @1
+- 步骤5：包含换行符的日志 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
 
-zenData('repo')->loadYaml('repo')->gen(1);
 su('admin');
 
-global $tester;
-$svn = $tester->loadModel('svn');
+$svnTest = new svnTest();
 
-ob_start();
-$svn->printLog('Log: abc');
-$result = trim(ob_get_clean());
-r(substr($result, -3)) && p() && e('abc'); // 输出日志信息
+r(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Processing commit 12345/', $svnTest->printLogTest('Processing commit 12345'))) && p() && e(1); // 步骤1：正常日志输出
+r(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $svnTest->printLogTest(''))) && p() && e(1); // 步骤2：空字符串输入
+r(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Special chars: <>|&\$#@!/', $svnTest->printLogTest('Special chars: <>|&$#@!'))) && p() && e(1); // 步骤3：包含特殊字符的日志
+r(strlen($svnTest->printLogTest(str_repeat('Long content test ', 20))) > 350) && p() && e(1); // 步骤4：长字符串输入
+r(strpos($svnTest->printLogTest("Multi\nline\ncontent"), "Multi\nline\ncontent") !== false) && p() && e(1); // 步骤5：包含换行符的日志

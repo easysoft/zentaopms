@@ -1,0 +1,14 @@
+---
+title: 分组权限数据定义 - getPrivsByGroup方法测试
+desc: 为getPrivsByGroup方法测试生成分组权限数据
+
+fields:
+- field: group
+  note: 分组ID
+  range: 1{3},2{2},3{1}
+- field: module
+  note: 模块名
+  range: user,task,project,admin,bug,story
+- field: method
+  note: 方法名
+  range: browse,create,edit,delete,view,manage

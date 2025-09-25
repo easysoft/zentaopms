@@ -3,38 +3,57 @@
 
 /**
 
-title=测试 storyModel->getBySQL();
+title=测试 storyModel::getBySQL();
+timeout=0
 cid=0
 
-- 获取产品ID=2的需求数量 @1
-- 根据关联执行获取需求数量 @0
-- 根据第二个query获取需求数量 @1
+- 执行storyTest模块的getBySQLTest方法，参数是1, "1 = 1 AND `status` = 'active'", 'id_desc'  @2
+- 执行storyTest模块的getBySQLTest方法，参数是'all', "1 = 1 AND `type` = 'story'", 'id_asc'  @15
+- 执行storyTest模块的getBySQLTest方法，参数是2, "1 = 1", 'id'  @3
+- 执行storyTest模块的getBySQLTest方法，参数是'all', "1 = 1", 'id', null, 'requirement'  @5
+- 执行storyTest模块的getBySQLTest方法，参数是'all', "1 = 1 AND `status` = 'draft'", 'id'  @4
+- 执行storyTest模块的getBySQLTest方法，参数是3, "1 = 1", 'id'  @3
+- 执行storyTest模块的getBySQLTest方法，参数是999, "1 = 1", 'id'  @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+// 准备测试数据
+zenData('product')->gen(5);
+zenData('productplan')->gen(10);
+
+$story = zenData('story');
+$story->id->range('1-20');
+$story->product->range('1-5');
+$story->type->range('story{15},requirement{5}');
+$story->status->range('active{8},draft{4},reviewing{3},changing{2},closed{3}');
+$story->vision->range('rnd');
+$story->version->range('1');
+$story->gen(20);
+
 su('admin');
 
-zenData('product')->gen(10);
-zenData('projectstory')->gen(100);
-$userquery = zenData('userquery');
-$userquery->sql->range("`(( 1   AND `title`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'`");
-$userquery->gen(10);
-$story = zenData('story');
-$story->version->range(1);
-$story->gen(100);
-$storyreview = zenData('storyreview');
-$storyreview->story->range('1-100');
-$storyreview->gen(100);
+$storyTest = new storyTest();
 
-$sql = " 1 = 1 AND `product` = '2' AND `status` NOT IN ('draft', 'reviewing', 'changing', 'closed')";
+// 测试步骤1：正常查询指定产品的活跃需求
+r($storyTest->getBySQLTest(1, "1 = 1 AND `status` = 'active'", 'id_desc')) && p() && e('2');
 
-global $tester;
-$tester->loadModel('story');
-$stories1 = $tester->story->getBySQL(2, $sql, 'id');
-$stories2 = $tester->story->getBySQL(1, $sql, 'id');
-$stories3 = $tester->story->getBySQL('all', $sql, 'id');
+// 测试步骤2：查询所有产品的需求
+r($storyTest->getBySQLTest('all', "1 = 1 AND `type` = 'story'", 'id_asc')) && p() && e('15');
 
-r(count($stories1)) && p() && e('1'); // 获取产品ID=2的需求数量
-r(count($stories2)) && p() && e('0'); // 根据关联执行获取需求数量
-r(count($stories3)) && p() && e('1'); // 根据第二个query获取需求数量
+// 测试步骤3：测试空SQL条件查询
+r($storyTest->getBySQLTest(2, "1 = 1", 'id')) && p() && e('3');
+
+// 测试步骤4：测试不同类型过滤(requirement类型)
+r($storyTest->getBySQLTest('all', "1 = 1", 'id', null, 'requirement')) && p() && e('5');
+
+// 测试步骤5：测试特定状态过滤
+r($storyTest->getBySQLTest('all', "1 = 1 AND `status` = 'draft'", 'id')) && p() && e('4');
+
+// 测试步骤6：测试单个产品的需求数量
+r($storyTest->getBySQLTest(3, "1 = 1", 'id')) && p() && e('3');
+
+// 测试步骤7：测试无效产品ID
+r($storyTest->getBySQLTest(999, "1 = 1", 'id')) && p() && e('0');

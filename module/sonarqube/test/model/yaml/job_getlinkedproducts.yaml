@@ -1,0 +1,55 @@
+---
+title: zt_job测试数据 - getLinkedProducts方法
+desc: 用于测试sonarqube模块getLinkedProducts方法的job表数据
+author: Claude Code
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: "sonarqube任务1,sonarqube任务2,jenkins任务1,其他任务1,sonarqube任务3,jenkins任务2,sonarqube任务4,普通任务1,sonarqube任务5,测试任务1"
+- field: repo
+  range: 1,2,0,0,3,0,1,0,2,0
+- field: product
+  range: 0,1,0,0,2,0,3,0,1,0
+- field: frame
+  range: "sonarqube,sonarqube,jenkins,custom,sonarqube,jenkins,sonarqube,manual,sonarqube,other"
+- field: engine
+  range: "sonarqube,sonarqube,jenkins,shell,sonarqube,jenkins,sonarqube,shell,sonarqube,shell"
+- field: autoRun
+  range: 1
+- field: server
+  range: 1,2,3,1,2,3,1,1,2,1
+- field: pipeline
+  range: "pipeline1,pipeline2,pipeline3,pipeline4,pipeline5,pipeline6,pipeline7,pipeline8,pipeline9,pipeline10"
+- field: triggerType
+  range: "tag,commit,manual,schedule,tag,manual,commit,schedule,tag,manual"
+- field: sonarqubeServer
+  range: 0,2,0,0,1,0,3,0,2,0
+- field: projectKey
+  range: ",,zentaopms,,testproject,,myproject,,zentaopms,"
+- field: svnDir
+  range: ""
+- field: atDay
+  range: ""
+- field: atTime
+  range: ""
+- field: customParam
+  range: ""
+- field: comment
+  range: "SonarQube代码扫描任务,产品质量检查,Jenkins构建任务,自定义脚本,项目代码分析,自动化构建,质量门检查,手动任务,代码质量扫描,测试任务"
+- field: triggerActions
+  range: ""
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: "2023-01-01 10:00:00"
+- field: editedBy
+  range: ""
+- field: editedDate
+  range: ""
+- field: lastExec
+  range: ""
+- field: deleted
+  range: 0

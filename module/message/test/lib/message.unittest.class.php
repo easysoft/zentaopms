@@ -20,16 +20,63 @@ class messageTest
      * Test get messages.
      *
      * @param  string       $status
+     * @param  string       $orderBy
+     * @param  string       $returnType
      * @access public
-     * @return string|array
+     * @return string|array|int
      */
-    public function getMessagesTest(string $status): string|array
+    public function getMessagesTest(string $status = 'all', string $orderBy = 'createdDate', string $returnType = 'ids'): mixed
     {
-        $objects = $this->objectModel->getMessages($status);
+        global $tester;
+        $objects = $this->objectModel->getMessages($status, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', array_keys($objects));
+        switch($returnType)
+        {
+            case 'count':
+                return count($objects);
+            case 'ids':
+                return empty($objects) ? '0' : implode(',', array_keys($objects));
+            case 'first':
+                return empty($objects) ? array() : reset($objects);
+            case 'structure':
+                if(empty($objects)) return array();
+                $first = reset($objects);
+                return array(
+                    'hasId' => isset($first->id),
+                    'hasObjectType' => isset($first->objectType),
+                    'hasToList' => isset($first->toList),
+                    'hasStatus' => isset($first->status),
+                    'hasData' => isset($first->data)
+                );
+            case 'debug':
+                // 用于调试：返回实际数据结构
+                $debug = array();
+                $debug['totalCount'] = count($objects);
+                $debug['user'] = $tester->app->user->account;
+                $debug['vision'] = $tester->config->vision;
+
+                // 检查原始数据
+                $notifyCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+                $debug['notifyCount'] = $notifyCount;
+
+                $actionCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->where('vision')->eq($tester->config->vision)->fetch('count');
+                $debug['actionCount'] = $actionCount;
+
+                // 测试具体的查询条件
+                $userToList = ",{$tester->app->user->account},";
+                $matchingNotify = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+                    ->where('objectType')->eq('message')
+                    ->andWhere('toList')->eq($userToList)
+                    ->fetch('count');
+                $debug['matchingNotify'] = $matchingNotify;
+                $debug['userToList'] = $userToList;
+
+                return $debug;
+            default:
+                return $objects;
+        }
     }
 
     /**
@@ -141,17 +188,56 @@ class messageTest
      * Test get notice todos.
      *
      * @param  string       $account
+     * @param  string       $returnType
      * @access public
-     * @return string|array
+     * @return string|array|int
      */
-    public function getNoticeTodosTest(string $account): string|array
+    public function getNoticeTodosTest(string $account, string $returnType = 'ids'): string|array|int
     {
         su($account);
         $objects = $this->objectModel->getNoticeTodos();
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', array_keys($objects));
+        switch($returnType)
+        {
+            case 'count':
+                return count($objects);
+            case 'ids':
+                return empty($objects) ? '0' : implode(',', array_keys($objects));
+            case 'first':
+                return empty($objects) ? array() : reset($objects);
+            case 'structure':
+                if(empty($objects)) return array();
+                $first = reset($objects);
+                return array(
+                    'hasId' => isset($first->id),
+                    'hasData' => isset($first->data),
+                    'idFormat' => substr($first->id, 0, 4) === 'todo' ? 'correct' : 'incorrect'
+                );
+            case 'dataContent':
+                if(empty($objects)) return '';
+                $first = reset($objects);
+                return isset($first->data) ? 'hasContent' : 'empty';
+            default:
+                return $objects;
+        }
+    }
+
+    /**
+     * Test batchSaveTodoNotice method.
+     *
+     * @param  string $account
+     * @access public
+     * @return mixed
+     */
+    public function batchSaveTodoNoticeTest(string $account): mixed
+    {
+        su($account);
+        $result = $this->objectModel->batchSaveTodoNotice();
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
     }
 
     /**
@@ -206,6 +292,63 @@ class messageTest
         if(isset($messageZen->view->unreadCount)) $result['unreadCount'] = $messageZen->view->unreadCount;
         if(isset($messageZen->view->unreadMessages)) $result['unreadMessages'] = $messageZen->view->unreadMessages;
         if(isset($messageZen->view->active)) $result['active'] = $messageZen->view->active;
+
+        return $result;
+    }
+
+    /**
+     * Test deleteExpired method.
+     *
+     * @param  int $maxDays
+     * @access public
+     * @return int
+     */
+    public function deleteExpiredTest(int $maxDays = 7): int
+    {
+        global $tester;
+        $tester->config->message->browser->maxDays = $maxDays;
+
+        $countBefore = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+            ->where('toList')->like('%,' . $tester->app->user->account . ',%')
+            ->andWhere('objectType')->eq('message')
+            ->fetch('count');
+
+        $this->objectModel->deleteExpired();
+
+        if(dao::isError()) return dao::getError();
+
+        $countAfter = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)
+            ->where('toList')->like('%,' . $tester->app->user->account . ',%')
+            ->andWhere('objectType')->eq('message')
+            ->fetch('count');
+
+        return $countAfter;
+    }
+
+    /**
+     * Test getUnreadCount method.
+     *
+     * @param  string $account
+     * @access public
+     * @return int
+     */
+    public function getUnreadCountTest(string $account = ''): int
+    {
+        global $tester;
+        if(!empty($account))
+        {
+            $originalAccount = $tester->app->user->account;
+            $tester->app->user->account = $account;
+        }
+
+        $result = $this->objectModel->getUnreadCount();
+
+        if(dao::isError()) return dao::getError();
+
+        if(!empty($account))
+        {
+            $tester->app->user->account = $originalAccount;
+        }
 
         return $result;
     }

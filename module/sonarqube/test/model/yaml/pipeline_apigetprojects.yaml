@@ -1,0 +1,28 @@
+---
+title: pipeline data for sonarqube apiGetProjects testing
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    range: 11-20
+  - field: type
+    range: 'sonarqube{8},gitlab{1},jenkins{1}'
+  - field: name
+    range: 'SonarQube服务器1,SonarQube服务器2,SonarQube服务器3,SonarQube服务器4,SonarQube服务器5,SonarQube测试服务器,SonarQube开发服务器,SonarQube生产服务器,GitLab服务器,Jenkins服务器'
+  - field: url
+    range: '[https://sonar1.test.com],[https://sonar2.test.com],[https://sonar3.test.com],[https://sonar4.test.com],[https://sonar5.test.com],[https://sonartest.test.com],[https://sonardev.test.com],[https://sonarprod.test.com],[https://gitlab.test.com],[https://jenkins.test.com]'
+  - field: account
+    range: 'sonar,admin{7},gitlab,jenkins'
+  - field: password
+    range: '[dGVzdFBhc3N3b3Jk],[YWRtaW5QYXNzd29yZA==]{7},[Z2l0bGFiUGFzc3dvcmQ=],[amVua2luc1Bhc3N3b3Jk]'
+  - field: token
+    range: '[squ_test1234567890abcdef1234567890abcdef12345678],[squ_test2234567890abcdef1234567890abcdef12345678],[squ_test3234567890abcdef1234567890abcdef12345678],[squ_test4234567890abcdef1234567890abcdef12345678],[squ_test5234567890abcdef1234567890abcdef12345678],[squ_test6234567890abcdef1234567890abcdef12345678],[squ_test7234567890abcdef1234567890abcdef12345678],[squ_test8234567890abcdef1234567890abcdef12345678],[gitlab_token123456789abcdef],[jenkins_token123456789abcdef]'
+  - field: private
+    range: '08bcc98f75d7d40053dc80722bdc117b{10}'
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '[(D-30)-(D)]'
+  - field: deleted
+    range: '0{9},1{1}'

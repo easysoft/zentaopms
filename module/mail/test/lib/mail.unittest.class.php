@@ -15,7 +15,6 @@ class mailTest
          $this->tester      = $tester;
          $this->objectModel = $tester->loadModel('mail');
          $this->objectTao   = $tester->loadTao('mail');
-         $this->objectZen   = $tester->loadZen('mail');
     }
 
     /**
@@ -123,6 +122,116 @@ class mailTest
     }
 
     /**
+     * Get MTA class name.
+     *
+     * @access public
+     * @return string
+     */
+    public function getMTAClassNameTest()
+    {
+        $object = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return get_class($object);
+    }
+
+    /**
+     * Get MTA type string.
+     *
+     * @access public
+     * @return string
+     */
+    public function getMTATypeTest()
+    {
+        $object = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return is_object($object) ? 'object' : gettype($object);
+    }
+
+    /**
+     * Test MTA singleton pattern.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function testMTASingletonTest()
+    {
+        $mta1 = $this->objectModel->setMTA();
+        $mta2 = $this->objectModel->setMTA();
+
+        if(dao::isError()) return dao::getError();
+
+        return ($mta1 === $mta2) ? 1 : 0;
+    }
+
+    /**
+     * Test MTA with different configurations.
+     *
+     * @param  string $mtaType
+     * @access public
+     * @return mixed
+     */
+    public function setMTAWithTypeTest($mtaType = 'smtp')
+    {
+        $originalMta = $this->objectModel->config->mail->mta;
+        $this->objectModel->config->mail->mta = $mtaType;
+
+        if($mtaType == 'gmail')
+        {
+            if(!isset($this->objectModel->config->mail->gmail))
+            {
+                $this->objectModel->config->mail->gmail = new stdClass();
+                $this->objectModel->config->mail->gmail->debug = 0;
+                $this->objectModel->config->mail->gmail->username = 'test@gmail.com';
+                $this->objectModel->config->mail->gmail->password = 'testpass';
+            }
+        }
+
+        try
+        {
+            $result = $this->objectModel->setMTA();
+            $this->objectModel->config->mail->mta = $originalMta;
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $this->objectModel->config->mail->mta = $originalMta;
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Set SMTP.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setSMTPTest()
+    {
+        $this->objectModel->setSMTP();
+
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->mta = $this->objectModel->mta;
+        $result->host = isset($this->objectModel->mta->Host) ? $this->objectModel->mta->Host : '';
+        $result->port = isset($this->objectModel->mta->Port) ? $this->objectModel->mta->Port : '';
+        $result->username = isset($this->objectModel->mta->Username) ? $this->objectModel->mta->Username : '';
+        $result->auth = isset($this->objectModel->mta->SMTPAuth) ? $this->objectModel->mta->SMTPAuth : '';
+        $result->debug = isset($this->objectModel->mta->SMTPDebug) ? $this->objectModel->mta->SMTPDebug : '';
+        $result->charset = isset($this->objectModel->mta->CharSet) ? $this->objectModel->mta->CharSet : '';
+        $result->secure = isset($this->objectModel->mta->SMTPSecure) ? $this->objectModel->mta->SMTPSecure : '';
+
+        return $result;
+    }
+
+    /**
      * Set sendmail.
      *
      * @access public
@@ -160,24 +269,25 @@ class mailTest
     }
 
     /**
-     * Set CC.
+     * Test setCC method.
      *
-     * @param  int    $ccList
-     * @param  int    $emails
+     * @param  array $ccList
+     * @param  array $emails
      * @access public
-     * @return object
+     * @return mixed
      */
     public function setCCTest($ccList, $emails)
     {
         $this->objectModel->setCC($ccList, $emails);
+        if(dao::isError()) return dao::getError();
 
-        return $this->setMTATest();
+        return $emails;
     }
 
     /**
      * Set subject.
      *
-     * @param  int    $subject
+     * @param  string $subject
      * @access public
      * @return object
      */
@@ -185,7 +295,14 @@ class mailTest
     {
         $this->objectModel->setSubject($subject);
 
-        return $this->setMTATest();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->Subject = $this->objectModel->mta->Subject;
+        $result->original = $subject;
+        $result->processed = stripslashes($subject);
+
+        return $result;
     }
 
     /**
@@ -480,6 +597,151 @@ class mailTest
     public function getConfigForEditTest()
     {
         $result = $this->objectZen->getConfigForEdit();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test convertCharset method.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertCharsetTest($string)
+    {
+        $result = $this->objectModel->convertCharset($string);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getError method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getErrorTest()
+    {
+        $result = $this->objectModel->getError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isError method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isErrorTest()
+    {
+        $result = $this->objectModel->isError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $item
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest($item, $method)
+    {
+        $result = $this->objectModel->isClickable($item, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test setTO method.
+     *
+     * @param  array $toList
+     * @param  array $emails
+     * @access public
+     * @return mixed
+     */
+    public function setTOTest($toList = array(), $emails = array())
+    {
+        $this->objectModel->setTO($toList, $emails);
+        if(dao::isError()) return dao::getError();
+
+        return $emails;
+    }
+
+    /**
+     * Test sendmail method.
+     *
+     * @param  int $objectID
+     * @param  int $actionID
+     * @access public
+     * @return mixed
+     */
+    public function sendmailTest($objectID, $actionID)
+    {
+        try
+        {
+            ob_start();
+            $this->objectModel->sendmail($objectID, $actionID);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            $result = new stdClass();
+            $result->processed = 1;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->hasErrors = $this->objectModel->isError() ? 1 : 0;
+            $result->errors = $this->objectModel->errors;
+            $result->output = $output;
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            $result = new stdClass();
+            $result->processed = 0;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->error = $e->getMessage();
+            $result->hasErrors = 1;
+
+            return $result;
+        }
+        catch(TypeError $e)
+        {
+            $result = new stdClass();
+            $result->processed = 0;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->error = $e->getMessage();
+            $result->hasErrors = 1;
+
+            return $result;
+        }
+    }
+
+    /**
+     * Test replaceImageURL method.
+     *
+     * @param  string $body
+     * @param  array  $images
+     * @access public
+     * @return string
+     */
+    public function replaceImageURLTest($body, $images = array())
+    {
+        $method = new ReflectionMethod($this->objectTao, 'replaceImageURL');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $body, $images);
         if(dao::isError()) return dao::getError();
 
         return $result;

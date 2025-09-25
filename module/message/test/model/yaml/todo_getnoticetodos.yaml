@@ -1,0 +1,129 @@
+title: todo table for getNoticeTodos testing
+desc: "专用于getNoticeTodos方法测试的待办数据"
+author: claude
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-15
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户名"
+    range: admin{5},user1{5},user2{3},test{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "日期"
+    range: "(0D)"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: begin
+    note: "开始时间"
+    range: "[],[0905],[0920],[0950],[0959],[1000],[1010],[1030],[1040],[1100],[1200],[1300],[1400],[1500],[]"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: end
+    note: "结束时间"
+    range: "[],[0915],[0930],[1000],[1009],[1010],[1020],[1040],[1050],[1110],[1210],[1310],[1410],[1510],[]"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: custom
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "关联编号"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 1-3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "待办名称"
+    range: 提醒测试待办1,提醒测试待办2,提醒测试待办3,提醒测试待办4,提醒测试待办5,无提醒待办1,无提醒待办2,无提醒待办3,无提醒待办4,无提醒待办5,无提醒待办6,无提醒待办7,无提醒待办8,无提醒待办9,空时间待办
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: "测试getNoticeTodos方法的待办描述"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: wait
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: private
+    note: "私人事务"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: config
+    note: "配置"
+    range: ""
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    range: admin{5},user1{5},user2{3},test{2}
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedBy
+    note: "由谁指派"
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    range: "(0D)"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    format: "YY-MM-DD hh:mm:ss"
+  - field: finishedBy
+    note: "由谁完成"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: closedBy
+    note: "由谁关闭"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

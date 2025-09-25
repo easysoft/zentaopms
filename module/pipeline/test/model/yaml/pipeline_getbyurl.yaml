@@ -1,0 +1,29 @@
+---
+title: pipeline_getbyurl测试数据
+desc: 为getByUrl方法设计的测试数据，包含不同URL、createdBy字段的组合
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  range: 201-210
+- field: type
+  range: gitlab{3},jenkins{3},gitea{2},gogs{2}
+- field: name
+  range: "[测试GitLab服务器1],[测试GitLab服务器2],[测试GitLab服务器3],[测试Jenkins服务器1],[测试Jenkins服务器2],[测试Jenkins服务器3],[测试Gitea服务器1],[测试Gitea服务器2],[测试Gogs服务器1],[测试Gogs服务器2]"
+- field: url
+  range: "[https://gitlabdev.qc.oop.cc/],[https://test.example.com/],[https://demo.gitlab.com],[https://jenkins.test.com/],[https://ci.example.org],[https://build.demo.com/],[https://gitea.local.com],[https://git.example.net/],[https://gogs.test.org/],[https://source.demo.net]"
+- field: account
+  range: "root,admin,test,user,developer,manager,guest,system,[]"
+- field: password
+  range: "[cGFzc3dvcmQxMjM=],[YWRtaW4xMjM=],[dGVzdDEyMw==],[dXNlcjEyMw==],[ZGV2MTIz],[bWFuYWdlcjEyMw==],[Z3Vlc3QxMjM=],[c3lzdGVtMTIz],[]"
+- field: token
+  range: "[token123],[admin_token],[test_token],[user_token],[dev_token],[mgr_token],[guest_token],[sys_token],[]"
+- field: private
+  range: "key1,key2,key3,key4,key5,key6,key7,key8,[]"
+- field: createdBy
+  range: "system{5},admin{3},user{2}"
+- field: createdDate
+  range: "2024-01-01 10:00:00,2024-01-02 11:00:00,2024-01-03 12:00:00,2024-01-04 13:00:00,2024-01-05 14:00:00,2024-01-06 15:00:00,2024-01-07 16:00:00,2024-01-08 17:00:00,2024-01-09 18:00:00,2024-01-10 19:00:00"
+- field: deleted
+  range: 0{8},1{2}

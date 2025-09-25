@@ -84,6 +84,22 @@ class branchTest
     }
 
     /**
+     * Test get status list.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getStatusListTest($productID)
+    {
+        $result = $this->objectModel->getStatusList($productID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test create a branch.
      *
      * @param  int    $productID
@@ -387,12 +403,13 @@ class branchTest
         $app::$loadedLangs = array();
         $app->loadLang('branch');
 
-        $this->objectModel->changeBranchLanguage($productID);
-
-        $createLang = $tester->lang->branch->create;
+        $result = $this->objectModel->changeBranchLanguage($productID);
 
         if(dao::isError()) return dao::getError();
 
+        if($result === false) return '0';
+
+        $createLang = $tester->lang->branch->create;
         return $createLang;
     }
 

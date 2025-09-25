@@ -1041,6 +1041,29 @@ class testcaseTest
     }
 
     /**
+     * 测试插入带版本号的步骤。
+     * Test insert steps with version.
+     *
+     * @param  int    $caseID
+     * @param  array  $steps
+     * @param  array  $expects
+     * @param  array  $stepTypes
+     * @param  int    $version
+     * @access public
+     * @return string
+     */
+    public function insertStepsTestWithVersion(int $caseID, array $steps, array $expects, array $stepTypes, int $version): string
+    {
+        $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes, $version);
+        if(dao::isError()) return dao::getError()[0];
+
+        global $tester;
+        $steps = $tester->dao->select('id')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->andWhere('version')->eq($version)->fetchAll('id');
+
+        return implode(',', array_keys($steps));
+    }
+
+    /**
      * 测试更新步骤。
      * Test update steps.
      *

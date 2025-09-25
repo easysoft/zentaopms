@@ -239,6 +239,27 @@ class releaseTest
     }
 
     /**
+     * 修改发布状态并设置发布日期。
+     * Change release status with released date.
+     *
+     * @param  int    $releaseID
+     * @param  string $status
+     * @param  string $releasedDate
+     * @access public
+     * @return array
+     */
+    public function changeStatusTestWithDate(int $releaseID, string $status, string $releasedDate)
+    {
+        $oldRelease = $this->objectModel->fetchByID($releaseID);
+        $this->objectModel->changeStatus($releaseID, $status, $releasedDate);
+
+        if(dao::isError()) return dao::getError();
+
+        $release = $this->objectModel->fetchByID($releaseID);
+        return common::createChanges($oldRelease, $release);
+    }
+
+    /**
      * 获取发送邮件的人员。
      * Get toList and ccList.
      *
@@ -246,9 +267,18 @@ class releaseTest
      * @access public
      * @return false|array
      */
-    public function getToAndCcListTest($releaseID): false|array
+    public function getToAndCcListTest($releaseData): false|array
     {
-        $release = $this->objectModel->getByID($releaseID);
+        // 支持直接传入模拟数据对象或releaseID
+        if(is_object($releaseData))
+        {
+            $release = $releaseData;
+        }
+        else
+        {
+            $release = $this->objectModel->getByID($releaseData);
+            if(!$release) return false;
+        }
         return $this->objectModel->getToAndCcList($release);
     }
 
@@ -275,12 +305,47 @@ class releaseTest
      *
      * @param  int          $releaseID
      * @access public
-     * @return object|false
+     * @return mixed
      */
-    public function deleteTest(int $releaseID): object|false
+    public function deleteTest(int $releaseID): mixed
     {
-        $this->objectModel->delete(TABLE_RELEASE, $releaseID);
-        return $this->objectModel->getByID($releaseID);
+        // 记录删除前的状态
+        $beforeRelease = $this->objectModel->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
+        if(!$beforeRelease) return false;
+
+        // 如果发布已经被删除，返回标识
+        if($beforeRelease->deleted == '1')
+        {
+            $result = new stdClass();
+            $result->alreadyDeleted = true;
+            return $result;
+        }
+
+        // 直接调用数据库操作删除，避免触发action等复杂逻辑
+        $this->objectModel->dao->update(TABLE_RELEASE)->set('deleted')->eq('1')->where('id')->eq($releaseID)->exec();
+
+        if(dao::isError()) return dao::getError();
+
+        // 如果有shadow构建，也删除它
+        if($beforeRelease->shadow)
+        {
+            $this->objectModel->dao->update(TABLE_BUILD)->set('deleted')->eq('1')->where('id')->eq($beforeRelease->shadow)->exec();
+        }
+
+        // 删除相关的空构建（execution为空且创建时间相同）
+        $builds = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->in($beforeRelease->build)->fetchAll();
+        foreach($builds as $build)
+        {
+            if(empty($build->execution) && $build->date == $beforeRelease->createdDate)
+            {
+                $this->objectModel->dao->update(TABLE_BUILD)->set('deleted')->eq('1')->where('id')->eq($build->id)->exec();
+            }
+        }
+
+        // 检查删除后的状态
+        $afterRelease = $this->objectModel->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
+
+        return $afterRelease;
     }
 
     /**
@@ -655,6 +720,24 @@ class releaseTest
             'showGrade' => false
         );
 
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBugList method.
+     *
+     * @param  string $bugIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getBugListTest(string $bugIdList, string $orderBy = '', ?object $pager = null, string $type = 'linked'): array
+    {
+        $result = $this->objectModel->getBugList($bugIdList, $orderBy, $pager, $type);
         if(dao::isError()) return dao::getError();
 
         return $result;

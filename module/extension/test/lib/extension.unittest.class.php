@@ -42,6 +42,21 @@ class extensionTest
     }
 
     /**
+     * Test getFilesFromPackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return mixed
+     */
+    public function getFilesFromPackageTest($extension = '')
+    {
+        $result = $this->objectModel->getFilesFromPackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test removeExtensionFiles method.
      *
      * @param  string $files
@@ -579,6 +594,36 @@ class extensionTest
     }
 
     /**
+     * Test checkIncompatible method.
+     *
+     * @param  array $versions
+     * @access public
+     * @return array
+     */
+    public function checkIncompatibleTest(array $versions)
+    {
+        $result = $this->objectModel->checkIncompatible($versions);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkVersion method.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function checkVersionTest(string $version)
+    {
+        $result = $this->objectModel->checkVersion($version);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test version of compareForLimit method.
      *
      * @param  string       $version
@@ -603,6 +648,128 @@ class extensionTest
         }
 
         if($type != 'between') return !$result;
+
+        return $result;
+    }
+
+    /**
+     * Test erasePackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function erasePackageTest(string $extension): array
+    {
+        $result = $this->objectModel->erasePackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test executeDB method.
+     *
+     * @param  string $extension
+     * @param  string $method
+     * @access public
+     * @return object
+     */
+    public function executeDBTest(string $extension, string $method = 'install'): object
+    {
+        $result = $this->objectModel->executeDB($extension, $method);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExpireDate method.
+     *
+     * @param  object $extension
+     * @access public
+     * @return string
+     */
+    public function getExpireDateTest(object $extension): string
+    {
+        $result = $this->objectModel->getExpireDate($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExpiringPlugins method.
+     *
+     * @param  bool $isGroup
+     * @access public
+     * @return array
+     */
+    public function getExpiringPluginsTest(bool $isGroup = false): array
+    {
+        $result = $this->objectModel->getExpiringPlugins($isGroup);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPackageFile method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return string
+     */
+    public function getPackageFileTest(string $extension): string
+    {
+        $result = $this->objectModel->getPackageFile($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPathsFromPackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function getPathsFromPackageTest(string $extension): array
+    {
+        $result = $this->objectModel->getPathsFromPackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test removePackage method.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function removePackageTest(string $extension): array
+    {
+        $result = $this->objectModel->removePackage($extension);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test saveExtension method.
+     *
+     * @param  string $code
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function saveExtensionTest(string $code, string $type)
+    {
+        $result = $this->objectModel->saveExtension($code, $type);
+        if(dao::isError()) return dao::getError();
 
         return $result;
     }

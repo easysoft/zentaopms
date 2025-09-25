@@ -1,0 +1,30 @@
+---
+title: 配置数据
+desc: 用于updateDomain测试的配置数据，包含过期域名设置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 配置ID
+  range: 1-3
+
+- field: owner
+  note: 配置所有者
+  range: 'system'
+
+- field: module
+  note: 模块名称
+  range: 'common'
+
+- field: section
+  note: 配置分区
+  range: 'domain'
+
+- field: key
+  note: 配置键名
+  range: 'expiredDomain,customDomain,sysDomain'
+
+- field: value
+  note: 配置值
+  range: '`["old.domain.com","expired.com"]`,current.com,new.zentao.com'

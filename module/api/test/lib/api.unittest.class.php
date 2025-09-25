@@ -11,21 +11,15 @@ class apiTest
      * Test publish a lib.
      *
      * @param  object $data
-     * @param  bool   $confirm
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function publishLibTest($data, $confirm = true)
+    public function publishLibTest($data)
     {
-        $objectID = $this->objectModel->publishLib($data);
-
+        $result = $this->objectModel->publishLib($data);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getRelease($data->lib);
-
-        if($confirm) $this->objectModel->deleteRelease($objectID);
-
-        return $objects;
+        return $result;
     }
 
     /**
@@ -45,6 +39,21 @@ class apiTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Test getApiStatusText method.
+     *
+     * @param  string $status
+     * @access public
+     * @return string
+     */
+    public function getApiStatusTextTest($status)
+    {
+        $result = $this->objectModel->getApiStatusText($status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -73,46 +82,30 @@ class apiTest
      * Test create a data struct.
      *
      * @param  object $data
-     * @param  bool   $confirm
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function createStructTest($data, $confirm = true)
+    public function createStructTest($data)
     {
-        global $tester;
-
-        $objectID = $this->objectModel->createStruct($data);
-
+        $result = $this->objectModel->createStruct($data);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getStructByID($objectID);
-
-        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($objects->id)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
      * Test update a data struct.
      *
-     * @param  int    $id
-     * @param  array  $params
-     * @param  bool   $confirm
+     * @param  object $formData
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function updateStructTest($id, $params, $confirm = true)
+    public function updateStructTest($formData)
     {
-        global $tester;
-
-        $_POST = $params;
-        $objects = $this->objectModel->updateStruct($id);
-
+        $result = $this->objectModel->updateStruct($formData);
         if(dao::isError()) return dao::getError();
 
-        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($id)->exec();
-
-        return $objects;
+        return $result;
     }
 
     /**
@@ -773,7 +766,7 @@ class apiTest
 
         // 创建apiZen实例
         $apiZen = new apiZen();
-        
+
         // 为apiZen对象注入必要的依赖
         $apiZen->config = $tester->config;
         $apiZen->session = $tester->session;
@@ -782,14 +775,14 @@ class apiTest
 
         // 备份原始 $_POST 数据
         $originalPost = $_POST;
-        
+
         // 设置测试用的 $_POST 数据
         $_POST = $postData;
 
         // 模拟 URL 构建过程，不实际调用 file_get_contents
         $host = 'http://localhost';  // 模拟系统URL
         $param = '';
-        
+
         if($action == 'extendModel')
         {
             if(!isset($_POST['noparam']))
@@ -822,5 +815,20 @@ class apiTest
         if(dao::isError()) return dao::getError();
 
         return array('url' => $url, 'content' => $content);
+    }
+
+    /**
+     * Test getPrivApis method.
+     *
+     * @param  string $mode
+     * @access public
+     * @return array
+     */
+    public function getPrivApisTest($mode = '')
+    {
+        $result = $this->objectModel->getPrivApis($mode);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

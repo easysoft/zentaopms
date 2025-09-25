@@ -5,9 +5,10 @@
 # 日期: $(date +%Y-%m-%d)
 
 echo_usage() {
-    echo "Usage: $0 [-c] [-s START_LINE] <csv_file_name>"
+    echo "Usage: $0 [-c] [-m MODE] [-s START_LINE] <csv_file_name>"
     echo "This script generates unit test scripts based on the provided CSV file."
     echo "  -c              Continue processing on error (default is to break)."
+    echo "  -m MODE         Run mode: generate, enhance, or fix. Default is 'generate'."
     echo "  -s START_LINE   Start processing from line START_LINE. Default is 2 (the first line is header)."
     exit 1
 }
@@ -28,8 +29,11 @@ ON_ERROR_STRATEGY="break" # 默认为 break
 # 默认从第2行开始（跳过标题行）
 START_LINE=2
 
+# 默认模式为 generate
+MODE="generate"
+
 # 解析命令行选项
-while getopts ":cs:" opt; do # 注意 's:' 表示 s 选项需要一个参数
+while getopts ":cs:m:" opt; do # 注意 's:' 和 'm:' 表示 s 和 m 选项需要参数
     case ${opt} in
         c )
             ON_ERROR_STRATEGY="continue"
@@ -41,6 +45,14 @@ while getopts ":cs:" opt; do # 注意 's:' 表示 s 选项需要一个参数
                 exit 1
             fi
             START_LINE="$OPTARG"
+            ;;
+        m )
+            # 验证 MODE 是否为有效值
+            if [[ "$OPTARG" != "generate" && "$OPTARG" != "enhance" && "$OPTARG" != "fix" ]]; then
+                echo "Invalid mode: '$OPTARG'. Must be 'generate', 'enhance', or 'fix'."
+                exit 1
+            fi
+            MODE="$OPTARG"
             ;;
         \? )
             echo "Invalid Option: -$OPTARG" 1>&2
@@ -153,12 +165,22 @@ process_method() {
 
     # 检查测试文件是否存在
     if [ -f "$test_file_path" ]; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，跳过: $test_file_path" | tee -a "$LOG_FILE"
-        ((TOTAL_SKIPPED++))
-        return 0
+        if [ "$MODE" == "generate" ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，跳过: $test_file_path" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            return 0
+        else
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，将在 $MODE 模式下处理: $test_file_path" | tee -a "$LOG_FILE"
+        fi
+    else
+        if [ "$MODE" == "generate" ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件不存在，开始生成: $test_file_path" | tee -a "$LOG_FILE"
+        else
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 测试文件不存在，无法进行 $MODE 操作，跳过: $test_file_path" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            return 0
+        fi
     fi
-
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件不存在，开始生成: $test_file_path" | tee -a "$LOG_FILE"
 
     # 创建测试目录（如果不存在）
     local test_dir="$BASE_PATH/module/$module/test/$class"
@@ -167,8 +189,39 @@ process_method() {
         mkdir -p "$test_dir"
     fi
 
-    # 构建Claude命令
-    local claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
+    # 在 enhance 模式下检查测试步骤数量
+    if [ "$MODE" == "enhance" ]; then
+        # 使用 grep 和正则表达式查找符合 r(...) && p(...) && e(...); 模式的行
+        local step_count=$(grep -E 'r\(.*\).*&&.*p\(.*\).*&&.*e\(.*\)' "$test_file_path" | wc -l)
+
+        if [ "$step_count" -ge 5 ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，已满足要求，跳过增强处理: $test_file_path" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            return 0
+        else
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，未达到5个，将继续进行增强处理。" | tee -a "$LOG_FILE"
+        fi
+    fi
+
+    # 根据模式构建不同的Claude提示词
+    local claude_prompt=""
+    case "$MODE" in
+        "generate")
+            claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
+            ;;
+        "enhance")
+            claude_prompt="根据$GUIDE_FILE文档的内容，对$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file_path)进行改进和优化，提升测试覆盖率和代码质量并确保测试步骤不少于5个。"
+            ;;
+        "fix")
+            claude_prompt="根据$GUIDE_FILE文档的内容，检查并修复$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file_path)中的错误和问题，确保测试能够稳定通过。"
+            ;;
+        *)
+            # This should never happen due to validation in getopts
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] 未知的运行模式: $MODE" | tee -a "$LOG_FILE"
+            return 1
+            ;;
+    esac
+
     local claude_command="claude -p \"$claude_prompt\" --dangerously-skip-permissions < /dev/null 2>&1"
 
     # 调用Claude生成测试脚本
@@ -181,6 +234,7 @@ process_method() {
 # 主处理函数
 main() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] ========== 开始执行单元测试生成脚本 ==========" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 运行模式: $MODE" | tee -a "$LOG_FILE"
 
     # 检查前置条件
     check_prerequisites
@@ -204,6 +258,27 @@ main() {
         if [ $CURRENT_LINE -lt $START_LINE ]; then
              echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 跳过第 $CURRENT_LINE 行 (在起始行 $START_LINE 之前)." | tee -a "$LOG_FILE"
              continue
+        fi
+
+        # module只能包含小写字母
+        if ! [[ "$module" =~ ^[a-z]+$ ]]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 第 $CURRENT_LINE 行模块名格式不正确，跳过: $module" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            continue
+        fi
+
+        # class只能是model、tao、zen其中之一
+        if ! [[ "$class" =~ ^(model|tao|zen)$ ]]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 第 $CURRENT_LINE 行类名格式不正确，跳过: $class" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            continue
+        fi
+
+        # method只能包含字母和数字且必须以小写字母开头
+        if ! [[ "$method" =~ ^[a-z][a-zA-Z0-9_]*$ ]]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 第 $CURRENT_LINE 行方法名格式不正确，跳过: $method" | tee -a "$LOG_FILE"
+            ((TOTAL_SKIPPED++))
+            continue
         fi
 
         # 清理字段中的回车符和空白字符
@@ -244,7 +319,7 @@ main() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] ========== 执行完成 ==========" | tee -a "$LOG_FILE"
     echo "$(date '+%Y-%m-%d %H:%M:%S') [STATS] 总处理数量: $TOTAL_PROCESSED" | tee -a "$LOG_FILE"
     echo "$(date '+%Y-%m-%d %H:%M:%S') [STATS] 跳过数量: $TOTAL_SKIPPED" | tee -a "$LOG_FILE"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [STATS] 生成数量: $TOTAL_GENERATED" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [STATS] 生成/更新数量: $TOTAL_GENERATED" | tee -a "$LOG_FILE"
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 日志文件: $LOG_FILE" | tee -a "$LOG_FILE"
 }
 

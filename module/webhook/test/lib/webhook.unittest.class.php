@@ -63,13 +63,12 @@ class webhookTest
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getListTest($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getListTest($orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($orderBy, $pager, $decode);
+        $objects = $this->objectModel->getList($orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -156,22 +155,20 @@ class webhookTest
     /**
      * Bind Test
      *
-     * @param  array $create
-     * @param  array $bind
+     * @param  int   $webhookID
+     * @param  array $userList
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function bindTest($create, $bind)
+    public function bindTest($webhookID, $userList)
     {
-        $objectID = $this->objectModel->create($create);
+        $_POST['userid'] = $userList;
 
-        foreach($bind as $key => $value) $_POST[$key] = $value;
-
-        $result = $this->objectModel->bind($objectID);
+        $result = $this->objectModel->bind($webhookID);
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result ? 1 : 0;
     }
 
     /**
@@ -202,21 +199,27 @@ class webhookTest
      * @param  string $actionType
      * @param  int    $actionID
      * @access public
-     * @return bool
+     * @return mixed
      */
     public function buildDataTest($objectType, $objectID, $actionType, $actionID)
     {
         static $webhooks = array();
         if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
+        if(!$webhooks) return false;
 
+        $result = false;
         foreach($webhooks as $id => $webhook)
         {
-            $objects = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
+            $data = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
+            if($data !== false)
+            {
+                $result = $data;
+                break;
+            }
         }
-        if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -308,25 +311,23 @@ class webhookTest
     }
 
     /**
-     * Get open id list Test
+     * Test getOpenIdList method.
      *
-     * @param  int    $actionID
+     * @param  int $webhookID
+     * @param  int $actionID
+     * @param  string|array $toList
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function getOpenIdListTest($webhookID, $actionID)
+    public function getOpenIdListTest($webhookID, $actionID, $toList = '')
     {
-        static $webhooks = array();
-        if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
-
-        foreach($webhooks as $id => $webhook)
-        {
-            $objects = $this->objectModel->getOpenIdList($webhook->id, $actionID);
+        try {
+            $result = $this->objectModel->getOpenIdList($webhookID, $actionID, $toList);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            return false;
         }
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -365,15 +366,20 @@ class webhookTest
      * @param  string $data
      * @param  string $result
      * @access public
-     * @return void
+     * @return mixed
      */
     public function saveLogTest($webhook, $actionID, $data, $result)
     {
-        $this->objectModel->saveLog($webhook, $actionID, $data, $result);
+        $result = $this->objectModel->saveLog($webhook, $actionID, $data, $result);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_LOG)->where('objectID')->eq($webhook->id)->andWhere('objectType')->eq('webhook')->fetch();
+        if($result)
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_LOG)->where('objectID')->eq($webhook->id)->andWhere('objectType')->eq('webhook')->andWhere('action')->eq($actionID)->orderBy('id_desc')->limit(1)->fetch();
+        }
+
+        return false;
     }
 
     /**

@@ -213,4 +213,18 @@ class systemTest
 
         return array('color' => $color, 'tip' => $tip, 'rate' => $rate);
     }
+
+    /**
+     * Test getDomainSettings method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getDomainSettingsTest()
+    {
+        $result = $this->objectModel->getDomainSettings();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

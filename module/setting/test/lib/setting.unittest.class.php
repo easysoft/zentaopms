@@ -158,7 +158,7 @@ class settingTest
      *
      * @param  string $account
      * @access public
-     * @return bool
+     * @return array|object
      */
     public function getSysAndPersonalConfigTest($account = '')
     {
@@ -166,7 +166,7 @@ class settingTest
 
         if(dao::isError()) return dao::getError();
 
-        return !empty($objects) ? true : false;
+        return $objects;
     }
 
     /**
@@ -174,12 +174,40 @@ class settingTest
      *
      * Since the version field not saved in db. So if empty, return 0.3 beta.
      *
+     * @param  string $version 要设置的版本号，为null时不设置（测试默认值）
      * @access public
      * @return void
      */
-    public function getVersionTest()
+    public function getVersionTest($version = null)
     {
+        // 备份原始配置
+        $originalVersion = isset($this->objectModel->config->global->version) ? $this->objectModel->config->global->version : null;
+
+        // 根据参数设置或清除配置
+        if($version === null)
+        {
+            // 测试默认情况，清除版本配置
+            if(isset($this->objectModel->config->global->version)) unset($this->objectModel->config->global->version);
+        }
+        else
+        {
+            // 设置指定版本
+            if(!isset($this->objectModel->config->global)) $this->objectModel->config->global = new stdClass();
+            $this->objectModel->config->global->version = $version;
+        }
+
         $objects = $this->objectModel->getVersion();
+
+        // 恢复原始配置
+        if($originalVersion !== null)
+        {
+            if(!isset($this->objectModel->config->global)) $this->objectModel->config->global = new stdClass();
+            $this->objectModel->config->global->version = $originalVersion;
+        }
+        elseif(isset($this->objectModel->config->global->version))
+        {
+            unset($this->objectModel->config->global->version);
+        }
 
         if(dao::isError()) return dao::getError();
 
@@ -189,12 +217,25 @@ class settingTest
     /**
      * Test get URSR.
      *
+     * @param  bool $clearConfig 是否清空配置中的URSR
      * @access public
-     * @return int
+     * @return mixed
      */
-    public function getURSRTest()
+    public function getURSRTest($clearConfig = false)
     {
-        $objects = $this->objectModel->getURSR();
+        // 如果需要清空配置中的URSR，模拟配置不存在的情况
+        if($clearConfig)
+        {
+            $originalURSR = isset($this->objectModel->config->URSR) ? $this->objectModel->config->URSR : null;
+            unset($this->objectModel->config->URSR);
+            $objects = $this->objectModel->getURSR();
+            // 恢复原始配置
+            if($originalURSR !== null) $this->objectModel->config->URSR = $originalURSR;
+        }
+        else
+        {
+            $objects = $this->objectModel->getURSR();
+        }
 
         if(dao::isError()) return dao::getError();
 
@@ -244,6 +285,218 @@ class settingTest
         $objects = $this->objectModel->createDAO($params)->fetchAll();
 
         return !empty($objects) ? true : false;
+    }
+
+    /**
+     * Test setSN for installed system without cookie.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestForInstalled()
+    {
+        // 备份原始状态
+        $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+        $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+        // 模拟已安装状态且无cookie
+        $this->objectModel->config->installed = true;
+        if(isset($this->objectModel->cookie->sn)) unset($this->objectModel->cookie->sn);
+
+        $sn = $this->objectModel->setSN();
+
+        // 恢复原始状态
+        if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+        if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+        if(dao::isError()) return dao::getError();
+
+        return array('length' => strlen($sn), 'sn' => $sn);
+    }
+
+    /**
+     * Test setSN with valid cookie.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestWithValidCookie()
+    {
+        // 备份原始状态
+        $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+        $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+        // 模拟已安装状态且有有效cookie
+        $this->objectModel->config->installed = true;
+        $validSN = 'abcdef1234567890abcdef1234567890';
+        $this->objectModel->cookie->sn = $validSN;
+
+        $sn = $this->objectModel->setSN();
+
+        // 恢复原始状态
+        if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+        if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+        if(dao::isError()) return dao::getError();
+
+        return array('length' => strlen($sn), 'sn' => $sn);
+    }
+
+    /**
+     * Test setSN with invalid cookie that needs update.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestWithInvalidCookie()
+    {
+        // 备份原始状态
+        $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+        $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+        // 模拟已安装状态且有需要更新的cookie
+        $this->objectModel->config->installed = true;
+        $this->objectModel->cookie->sn = '281602d8ff5ee7533eeafd26eda4e776'; // 需要更新的SN
+
+        $sn = $this->objectModel->setSN();
+
+        // 恢复原始状态
+        if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+        if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+        if(dao::isError()) return dao::getError();
+
+        return array('length' => strlen($sn), 'sn' => $sn);
+    }
+
+    /**
+     * Test setSN for not installed system.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestForNotInstalled()
+    {
+        // 备份原始状态
+        $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+        $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+        // 模拟未安装状态
+        $this->objectModel->config->installed = false;
+        if(isset($this->objectModel->cookie->sn)) unset($this->objectModel->cookie->sn);
+
+        $sn = $this->objectModel->setSN();
+
+        // 恢复原始状态
+        if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+        if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+        if(dao::isError()) return dao::getError();
+
+        return array('length' => strlen($sn), 'sn' => $sn);
+    }
+
+    /**
+     * Test setSN return value format validation.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestFormatValidation()
+    {
+        $sn = $this->objectModel->setSN();
+
+        if(dao::isError()) return dao::getError();
+
+        $isValidMD5 = (strlen($sn) == 32 && ctype_xdigit($sn)) ? 1 : 0;
+
+        return array('isValidMD5' => $isValidMD5, 'sn' => $sn, 'length' => strlen($sn));
+    }
+
+    /**
+     * Test setSN with multiple invalid SN values.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestWithMultipleInvalidSNs()
+    {
+        $invalidSNs = array(
+            '',
+            '281602d8ff5ee7533eeafd26eda4e776',
+            '9bed3108092c94a0db2b934a46268b4a',
+            '8522dd4d76762a49d02261ddbe4ad432',
+            '13593e340ee2bdffed640d0c4eed8bec'
+        );
+
+        $results = array();
+        foreach($invalidSNs as $invalidSN)
+        {
+            // 备份原始状态
+            $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+            $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+            // 设置无效SN并测试
+            $this->objectModel->config->installed = true;
+            $this->objectModel->cookie->sn = $invalidSN;
+
+            $newSN = $this->objectModel->setSN();
+
+            // 恢复原始状态
+            if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+            if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+            $results[] = array(
+                'original' => $invalidSN,
+                'new' => $newSN,
+                'changed' => ($invalidSN !== $newSN) ? 1 : 0
+            );
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $results;
+    }
+
+    /**
+     * Test setSN configuration persistence.
+     *
+     * @access public
+     * @return array
+     */
+    public function setSNTestConfigPersistence()
+    {
+        // 备份原始状态
+        $originalInstalled = isset($this->objectModel->config->installed) ? $this->objectModel->config->installed : null;
+        $originalCookie = isset($this->objectModel->cookie->sn) ? $this->objectModel->cookie->sn : null;
+
+        // 模拟已安装状态
+        $this->objectModel->config->installed = true;
+        if(isset($this->objectModel->cookie->sn)) unset($this->objectModel->cookie->sn);
+
+        $sn = $this->objectModel->setSN();
+
+        // 检查配置是否正确保存
+        $params = array(
+            'owner' => 'system',
+            'module' => 'common',
+            'section' => 'global',
+            'key' => 'sn'
+        );
+        $savedConfig = $this->objectModel->createDAO($params)->fetch();
+
+        // 恢复原始状态
+        if($originalInstalled !== null) $this->objectModel->config->installed = $originalInstalled;
+        if($originalCookie !== null) $this->objectModel->cookie->sn = $originalCookie;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'generatedSN' => $sn,
+            'savedSN' => $savedConfig ? $savedConfig->value : '',
+            'configExists' => $savedConfig ? 1 : 0,
+            'snMatch' => ($savedConfig && $savedConfig->value === $sn) ? 1 : 0
+        );
     }
 
     /**

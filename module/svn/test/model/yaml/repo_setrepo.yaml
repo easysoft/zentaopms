@@ -1,0 +1,26 @@
+title: zt_repo for setRepo test
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: product
+    range: 1
+  - field: name
+    range: 'svnrepo{1},testsvn{2},emptyrepo{3},httpsrepo{4},invalidrepo{5}'
+  - field: path
+    range: 'https://svn.qc.oop.cc/svn/unittest,file:///home/test/svn,https://invalid.svn.url,svn://test.server/repo,/local/path'
+  - field: SCM
+    range: Subversion
+  - field: client
+    range: svn
+  - field: account
+    range: 'admin,testuser,guest,[],invaliduser'
+  - field: password
+    range: 'KXdOi8zgTcUqEFX2Hx8B,testpass,emptypass,[],wrongpass'
+  - field: encoding
+    range: 'utf-8,gbk,utf-8,[],ascii'
+  - field: extra
+    range: '{}'
+  - field: deleted
+    range: 0

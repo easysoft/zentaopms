@@ -351,10 +351,17 @@ class stakeholderTest
      */
     public function deleteExpectTest(int $expectID): object|array|bool
     {
-        $this->objectModel->deleteExpect($expectID);
+        if($expectID <= 0) return false;
+
+        $oldExpected = $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
+        if(!$oldExpected) return false;
+
+        $result = $this->objectModel->deleteExpect($expectID);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
+
+        $newExpected = $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
+        return $newExpected ? $newExpected : false;
     }
 
     /**

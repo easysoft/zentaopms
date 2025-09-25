@@ -7,51 +7,70 @@ title=测试 pivotModel::getRowSpanConfig();
 timeout=0
 cid=0
 
-- 空数组 @0
+- 执行pivotTest模块的getRowSpanConfigTest方法，参数是array  @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
 $pivotTest = new pivotTest();
 
-// 步骤1：测试正常记录数据处理
+// 测试步骤1：空数组边界值输入
+r($pivotTest->getRowSpanConfigTest(array())) && p() && e('0');
+
+// 测试步骤2：单记录正常rowSpan配置
 r($pivotTest->getRowSpanConfigTest(array(
     array(
-        array('value' => 'test1', 'rowSpan' => 2),
-        array('value' => 'test2', 'rowSpan' => 1)
+        array('value' => 'category1', 'rowSpan' => 2),
+        array('value' => 'subcategory1', 'rowSpan' => 1),
+        array('value' => 'item1', 'rowSpan' => 3)
     )
-))) && p('0:0,0:1') && e('2,1'); // 正常情况
+))) && p('0:0,0:1,0:2') && e('2,1,3');
 
-// 步骤2：测试包含数组值的记录处理
+// 测试步骤3：数组值扩展rowSpan配置
 r($pivotTest->getRowSpanConfigTest(array(
     array(
-        array('value' => array('item1', 'item2', 'item3'), 'rowSpan' => 2),
-        array('value' => 'normal', 'rowSpan' => 1)
+        array('value' => array('tag1', 'tag2', 'tag3'), 'rowSpan' => 1),
+        array('value' => 'fixed_value', 'rowSpan' => 2)
     )
-))) && p() && e('3'); // 根据数组长度生成配置
+))) && p('0:0,0:1,1:0,1:1,2:0,2:1') && e('1,2,1,2,1,2');
 
-// 步骤3：测试空记录数组处理
-r($pivotTest->getRowSpanConfigTest(array())) && p() && e('0'); // 空数组
-
-// 步骤4：测试记录中无数组值的情况
+// 测试步骤4：多记录混合类型处理
 r($pivotTest->getRowSpanConfigTest(array(
     array(
-        array('value' => 'string1', 'rowSpan' => 3),
-        array('value' => 'string2', 'rowSpan' => 2)
+        array('value' => 'normal', 'rowSpan' => 1),
+        array('value' => 'data', 'rowSpan' => 2)
+    ),
+    array(
+        array('value' => array('multi1', 'multi2'), 'rowSpan' => 3),
+        array('value' => 'single', 'rowSpan' => 1)
     )
-))) && p('0:0,0:1') && e('3,2'); // 默认配置
+))) && p('0:0,0:1,1:0,1:1,2:0,2:1') && e('1,2,3,1,3,1');
 
-// 步骤5：测试多个记录与数组值混合处理
+// 测试步骤5：缺失rowSpan属性的异常情况
 r($pivotTest->getRowSpanConfigTest(array(
     array(
-        array('value' => array('a', 'b'), 'rowSpan' => 1),
-        array('value' => 'text', 'rowSpan' => 2)
+        array('value' => 'normal_value'),
+        array('value' => 'test_value', 'rowSpan' => 2)
     )
-))) && p() && e('2'); // 数组长度为2
+))) && p('0:0,0:1') && e('~~,2');
+
+// 测试步骤6：深度嵌套数组值测试
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => array('item1', 'item2', 'item3', 'item4'), 'rowSpan' => 2),
+        array('value' => array('subitem1', 'subitem2'), 'rowSpan' => 1)
+    )
+))) && p('0:0,0:1,1:0,1:1,2:0,2:1,3:0,3:1') && e('2,1,2,1,2,1,2,1');
+
+// 测试步骤7：特殊数据类型边界测试
+r($pivotTest->getRowSpanConfigTest(array(
+    array(
+        array('value' => null, 'rowSpan' => 1),
+        array('value' => 0, 'rowSpan' => 2),
+        array('value' => false, 'rowSpan' => 3)
+    )
+))) && p('0:0,0:1,0:2') && e('1,2,3');

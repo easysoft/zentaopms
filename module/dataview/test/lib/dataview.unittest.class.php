@@ -99,4 +99,131 @@ class dataviewTest
 
         return $result;
     }
+
+    /**
+     * Test checkUniColumn method.
+     *
+     * @param  string $sql
+     * @param  string $driverName
+     * @param  bool   $repeat
+     * @param  array  $columns
+     * @access public
+     * @return mixed
+     */
+    public function checkUniColumnTest($sql, $driverName = 'mysql', $repeat = false, $columns = array())
+    {
+        $result = $this->objectModel->checkUniColumn($sql, $driverName, $repeat, $columns);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAliasNames method.
+     *
+     * @param  object $statement
+     * @param  array  $moduleNames
+     * @access public
+     * @return mixed
+     */
+    public function getAliasNamesTest($statement, $moduleNames)
+    {
+        $result = $this->objectModel->getAliasNames($statement, $moduleNames);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test genTreeOptions method.
+     *
+     * @param  object $moduleTree
+     * @param  array  $values
+     * @param  array  $paths
+     * @access public
+     * @return mixed
+     */
+    public function genTreeOptionsTest(&$moduleTree, $values, $paths)
+    {
+        $this->objectModel->genTreeOptions($moduleTree, $values, $paths);
+        if(dao::isError()) return dao::getError();
+
+        return $moduleTree;
+    }
+
+    /**
+     * Test getModuleNames method.
+     *
+     * @param  array $tables
+     * @access public
+     * @return mixed
+     */
+    public function getModuleNamesTest($tables)
+    {
+        $result = $this->objectModel->getModuleNames($tables);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTypeOptions method.
+     *
+     * @param  string $objectName
+     * @access public
+     * @return mixed
+     */
+    public function getTypeOptionsTest($objectName)
+    {
+        $result = $this->objectModel->getTypeOptions($objectName);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test includeTable method.
+     *
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function includeTableTest($table)
+    {
+        $result = $this->objectModel->includeTable($table);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $dataview
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest($dataview, $action)
+    {
+        $result = dataviewModel::isClickable($dataview, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test replace4Workflow method.
+     *
+     * @param  string $title
+     * @access public
+     * @return mixed
+     */
+    public function replace4WorkflowTest($title)
+    {
+        $result = $this->objectModel->replace4Workflow($title);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

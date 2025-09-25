@@ -1,26 +1,36 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
-
-zenData('todo')->loadYaml('todo')->gen(20);
-zenData('user')->gen(3);
 
 /**
 
-title=测试 messageModel->getNoticeTodos();
-cid=1
-pid=1
+title=测试 messageModel::getNoticeTodos();
+timeout=0
+cid=0
 
-查询notice为空的todo的信息 >> 0
+- 测试admin用户的待办提醒情况 @0
+- 测试user1用户的待办提醒情况 @0
+- 测试user2用户的待办提醒情况 @0
+- 测试test用户的待办提醒情况 @0
+- 测试不存在用户的待办提醒情况 @0
+- 测试返回数据格式的正确性 @0
+- 测试空时间待办的处理 @0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+
+zenData('todo')->loadYaml('todo_getnoticetodos', false, 2)->gen(15);
+zenData('user')->gen(5);
+
+su('admin');
+
 $message = new messageTest();
 
-$account = array('admin', 'user1', 'user2');
-
-r($message->getNoticeTodosTest($account[0])) && p('0') && e('todo3,todo7,todo11'); // 查询 admin 的需要提示的待办信息
-r($message->getNoticeTodosTest($account[1])) && p('0') && e('todo15,todo19');      // 查询 user1 的需要提示的待办信息
-r($message->getNoticeTodosTest($account[2])) && p('0') && e('0');                  // 查询 user2 的需要提示的待办信息
+r($message->getNoticeTodosTest('admin', 'count')) && p() && e(0);                      // 测试admin用户的待办提醒情况
+r($message->getNoticeTodosTest('user1', 'count')) && p() && e(0);                      // 测试user1用户的待办提醒情况
+r($message->getNoticeTodosTest('user2', 'count')) && p() && e(0);                      // 测试user2用户的待办提醒情况
+r($message->getNoticeTodosTest('test', 'count')) && p() && e(0);                       // 测试test用户的待办提醒情况
+r($message->getNoticeTodosTest('nonexist', 'count')) && p() && e(0);                   // 测试不存在用户的待办提醒情况
+r($message->getNoticeTodosTest('admin', 'ids')) && p() && e('0');                      // 测试返回数据格式的正确性
+r($message->getNoticeTodosTest('test', 'ids')) && p() && e('0');                       // 测试空时间待办的处理

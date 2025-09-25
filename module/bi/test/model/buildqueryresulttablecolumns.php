@@ -1,7 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 /**
 
@@ -9,31 +7,46 @@ title=测试 biModel::buildQueryResultTableColumns();
 timeout=0
 cid=0
 
-- 测试步骤3：空数组 @array()
+- 执行biTest模块的buildQueryResultTableColumnsTest方法，参数是array  @0
 
 */
 
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+
+// 2. 用户登录
+su('admin');
+
+// 3. 创建测试实例
 $biTest = new biTest();
 
-r($biTest->buildQueryResultTableColumnsTest(array(
-    'id' => array('zh-cn' => '编号', 'en' => 'ID', 'type' => 'int'),
-    'name' => array('zh-cn' => '名称', 'en' => 'Name', 'type' => 'string')
-))) && p('0:name,0:title;1:name,1:title') && e('id,编号;name,名称'); // 测试步骤1：正常情况
+// 测试步骤1：空字段设置数组边界测试
+r(count($biTest->buildQueryResultTableColumnsTest(array()))) && p() && e('0');
 
+// 测试步骤2：单个字段正常构建测试
+r($biTest->buildQueryResultTableColumnsTest(array(
+    'id' => array('zh-cn' => '编号', 'en' => 'ID', 'type' => 'int')
+))) && p('0:name,0:title,0:sortType') && e('id,编号,~~');
+
+// 测试步骤3：多语言环境字段标题获取测试
+global $app;
+$originalLang = $app->getClientLang();
+$app->setClientLang('en');
+r($biTest->buildQueryResultTableColumnsTest(array(
+    'user_id' => array('zh-cn' => '用户编号', 'en' => 'User ID', 'type' => 'int')
+))) && p('0:title') && e('User ID');
+$app->setClientLang($originalLang);
+
+// 测试步骤4：缺少语言标识字段回退测试
 r($biTest->buildQueryResultTableColumnsTest(array(
     'code' => array('type' => 'string'),
-    'status' => array('type' => 'int')
-))) && p('0:name,0:title;1:name,1:title') && e('code,code;status,status'); // 测试步骤2：无语言设置
+    'score' => array('type' => 'decimal')
+))) && p('0:name,0:title,1:name,1:title') && e('code,code,score,score');
 
-r($biTest->buildQueryResultTableColumnsTest(array())) && p() && e('0'); // 测试步骤3：空数组
-
+// 测试步骤5：列属性配置验证测试
 r($biTest->buildQueryResultTableColumnsTest(array(
-    'created_time' => array('zh-cn' => '创建时间', 'en' => 'Created Time', 'type' => 'datetime'),
-    'user_count' => array('zh-cn' => '用户数量', 'en' => 'User Count', 'type' => 'int'),
-    'description' => array('zh-cn' => '描述', 'en' => 'Description', 'type' => 'text')
-))) && p() && e('3'); // 测试步骤4：多种类型
-
-r($biTest->buildQueryResultTableColumnsTest(array(
-    'field_name' => array('zh-cn' => '字段名@#$', 'en' => 'Field Name!', 'type' => 'string'),
-    'test123' => array('zh-cn' => '测试字段', 'en' => 'Test Field', 'type' => 'string')
-))) && p('0:title;1:title') && e('字段名@#$;测试字段'); // 测试步骤5：特殊字符
+    'name' => array('zh-cn' => '名称', 'type' => 'string'),
+    'status' => array('zh-cn' => '状态', 'type' => 'int'),
+    'date' => array('zh-cn' => '日期', 'type' => 'datetime')
+))) && p('0:sortType,1:sortType,2:sortType') && e('~~,~~,~~');

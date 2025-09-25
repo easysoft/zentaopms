@@ -3,13 +3,18 @@
 
 /**
 
-title=测试 ciModel->saveCompile();
+title=测试 ciModel::saveCompile();
 timeout=0
-cid=1
+cid=0
 
-- 错误的接口信息 @0
-- 没有有效信息 @0
-- 返回请求URL信息 @1
+- 测试404响应处理属性result @1
+- 测试XML响应解析属性status @created
+- 测试JSON executable响应属性result @1
+- 测试notFound响应处理属性result @1
+- 测试building状态响应属性result @1
+- 测试SUCCESS状态响应属性result @1
+- 测试FAILURE状态响应属性result @1
+- 测试无效JSON响应属性result @1
 
 */
 
@@ -18,16 +23,26 @@ include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('job')->loadYaml('job')->gen(5);
-zenData('compile')->loadYaml('compile')->gen(5);
-zenData('mr')->gen(0);
+zenData('compile')->loadYaml('compile')->gen(8);
+
 su('admin');
 
-$response = '{"_class":"hudson.model.Queue$LeftItem","actions":[{"_class":"hudson.model.ParametersAction","parameters":[{"_class":"hudson.model.StringParameterValue","name":"PARAM_TAG","value":"zentaopms_18.3"}]},{"_class":"hudson.model.CauseAction","causes":[{"_class":"hudson.model.Cause$UserIdCause","shortDescription":"Started by user admin","userId":"admin","userName":"admin"}]}],"blocked":false,"buildable":false,"id":9687,"inQueueSince":1703571695675,"params":"\u000aPARAM_TAG=zentaopms_18.3","stuck":false,"task":{"_class":"hudson.model.FreeStyleProject","name":"sonarqube_job","url":"http://10.0.7.242:9580/job/sonarqube_job/","color":"blue"},"url":"queue/item/9687/","why":null,"cancelled":false,"executable":{"_class":"hudson.model.FreeStyleBuild","number":95,"url":"http://10.0.7.242:9580/job/sonarqube_job/95/"}}';
-$hasUrl   = '{"executable":{"url":"https://jenkinsdev.qc.oop.cc/job/paramsJob/lastBuild/"}}';
-$notFound = '404';
+$response404 = '404 Not Found';
+$responseXml = 'status 404<xml><build><number>95</number><result>SUCCESS</result><queueId>1001</queueId></build></xml>';
+$responseJson = '{"executable":{"url":"http://test.jenkins.com/job/test/95/"}}';
+$responseNotFound = 'Build not found';
+$responseBuilding = '{"building":true,"result":null,"url":"http://test.jenkins.com/job/test/95/"}';
+$responseSuccess = '{"building":false,"result":"SUCCESS","url":"http://test.jenkins.com/job/test/95/"}';
+$responseFailure = '{"building":false,"result":"FAILURE","url":"http://test.jenkins.com/job/test/95/"}';
+$responseInvalid = 'invalid json content';
 
 libxml_use_internal_errors(true);
 $ci = new ciTest();
-r($ci->saveCompileTest(1, $notFound)) && p() && e('0'); // 错误的接口信息
-r($ci->saveCompileTest(3, $response)) && p() && e('0'); // 没有有效信息
-r($ci->saveCompileTest(5, $hasUrl))   && p() && e('1'); // 返回请求URL信息
+r($ci->saveCompileTest(1, $response404)) && p('result') && e(1); // 测试404响应处理
+r($ci->saveCompileTest(2, $responseXml)) && p('status') && e('created'); // 测试XML响应解析
+r($ci->saveCompileTest(3, $responseJson)) && p('result') && e(1); // 测试JSON executable响应
+r($ci->saveCompileTest(4, $responseNotFound)) && p('result') && e(1); // 测试notFound响应处理
+r($ci->saveCompileTest(5, $responseBuilding)) && p('result') && e(1); // 测试building状态响应
+r($ci->saveCompileTest(1, $responseSuccess)) && p('result') && e(1); // 测试SUCCESS状态响应
+r($ci->saveCompileTest(2, $responseFailure)) && p('result') && e(1); // 测试FAILURE状态响应
+r($ci->saveCompileTest(3, $responseInvalid)) && p('result') && e(1); // 测试无效JSON响应

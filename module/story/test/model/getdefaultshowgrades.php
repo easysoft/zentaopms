@@ -7,27 +7,23 @@ title=测试 storyModel::getDefaultShowGrades();
 timeout=0
 cid=0
 
-- 步骤3：边界值测试空数组 @
+- 测试步骤3：空数组输入测试 @
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $storyTest = new storyTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
-        array('value' => '1'),
-        array('value' => '2')
+        array('value' => 'story'),
+        array('value' => 'requirement')
     ))
-))) && p() && e('1,2,'); // 步骤1：正常情况测试单级菜单
+))) && p() && e('story,requirement,'); // 测试步骤1：正常单级菜单结构输入
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
@@ -38,9 +34,13 @@ r($storyTest->getDefaultShowGradesTest(array(
         array('value' => 'epic'),
         array('value' => 'feature')
     ))
-))) && p() && e('story,requirement,epic,feature,'); // 步骤2：正常情况测试多级菜单
+))) && p() && e('story,requirement,epic,feature,'); // 测试步骤2：多级菜单结构输入
 
-r($storyTest->getDefaultShowGradesTest(array())) && p() && e(''); // 步骤3：边界值测试空数组
+r($storyTest->getDefaultShowGradesTest(array())) && p() && e(''); // 测试步骤3：空数组输入测试
+
+r($storyTest->getDefaultShowGradesTest(array(
+    array('items' => array())
+))) && p() && e(''); // 测试步骤4：单级空items测试
 
 r($storyTest->getDefaultShowGradesTest(array(
     array('items' => array(
@@ -48,19 +48,4 @@ r($storyTest->getDefaultShowGradesTest(array(
         array('value' => 2),
         array('value' => 3)
     ))
-))) && p() && e('1,2,3,'); // 步骤4：测试包含数字值的菜单
-
-r($storyTest->getDefaultShowGradesTest(array(
-    array('items' => array(
-        array('value' => 'level1_item1'),
-        array('value' => 'level1_item2')
-    )),
-    array('items' => array(
-        array('value' => 'level2_item1'),
-        array('value' => 'level2_item2'),
-        array('value' => 'level2_item3')
-    )),
-    array('items' => array(
-        array('value' => 'level3_item1')
-    ))
-))) && p() && e('level1_item1,level1_item2,level2_item1,level2_item2,level2_item3,level3_item1,'); // 步骤5：测试复杂多级嵌套菜单
+))) && p() && e('1,2,3,'); // 测试步骤5：数值类型value测试

@@ -106,13 +106,51 @@ class zanodeTest
      * 测试创建执行节点。
      * Test create an Node.
      *
+     * @param  object $data
      * @access public
-     * @return int|bool
+     * @return object|array
      */
     public function createTest(object $data): object|array
     {
         $nodeID = $this->create($data);
-        return $this->objectModel->dao->select('*')->from(TABLE_HOST)->where('id')->eq($nodeID)->fetch();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($nodeID)->fetch();
+    }
+
+    /**
+     * 测试创建执行节点并验证Action记录。
+     * Test create an Node and verify action record.
+     *
+     * @param  object $data
+     * @access public
+     * @return object
+     */
+    public function createTestWithAction(object $data): object
+    {
+        // 记录创建前的action数量
+        $beforeActionCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->fetch();
+
+        $nodeID = $this->create($data);
+        if(dao::isError()) return dao::getError();
+
+        // 检查创建后的action数量
+        $afterActionCount = $this->objectModel->dao->select('COUNT(*) as count')->from(TABLE_ACTION)->fetch();
+
+        // 查找新创建的action记录
+        $actionRecord = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('zanode')
+            ->andWhere('objectID')->eq($nodeID)
+            ->andWhere('action')->eq('Created')
+            ->fetch();
+
+        $result = new stdClass();
+        $result->nodeID = $nodeID;
+        $result->hasAction = ($afterActionCount->count > $beforeActionCount->count) ? '1' : '0';
+        $result->actionExists = !empty($actionRecord) ? '1' : '0';
+        $result->actionType = $actionRecord ? $actionRecord->action : '';
+
+        return $result;
     }
 
     /**
@@ -146,6 +184,11 @@ class zanodeTest
     public function createSnapshotTest(int $nodeID, string $nodeIP, int $hzap, string $token, array $data): object|string
     {
         $node = $this->getNodeByID($nodeID);
+        if(!$node)
+        {
+            return '节点不存在';
+        }
+
         $node->ip      = $nodeIP;
         $node->hzap    = $hzap;
         $node->tokenSN = $token;
@@ -155,18 +198,35 @@ class zanodeTest
         $snapshot->name        = $data['name'];
         $snapshot->desc        = $data['desc'];
         $snapshot->status      = 'creating';
-        $snapshot->osName      = $node->osName;
+        $snapshot->osName      = $node->osName ?? 'Ubuntu20.04';
         $snapshot->memory      = 0;
         $snapshot->disk        = 0;
         $snapshot->fileSize    = 0;
         $snapshot->from        = 'snapshot';
 
         $snapshotID = $this->createSnapshot($node, $snapshot);
-        if(dao::isError()) return dao::getError();
+
+        if($snapshotID === false)
+        {
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if(is_array($errors))
+                {
+                    return reset($errors);
+                }
+                return $errors;
+            }
+            return '网络请求失败或Agent服务不可用';
+        }
 
         $createdSnapshot = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
-        $this->deleteSnapshot($snapshotID);
-        return $createdSnapshot;
+        if($createdSnapshot)
+        {
+            $this->deleteSnapshot($snapshotID);
+            return $createdSnapshot;
+        }
+        return '创建失败';
     }
 
     /**
@@ -175,14 +235,30 @@ class zanodeTest
      *
      * @param  int    $nodeID
      * @access public
-     * @return object
+     * @return object|array
      */
     public function createDefaultSnapshotTest(int $nodeID): object|array
     {
-        $snapshotID = $this->createDefaultSnapshot($nodeID);
+        $result = $this->createDefaultSnapshot($nodeID);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        if($result === false)
+        {
+            $errors = dao::getError();
+            if(empty($errors))
+            {
+                return array('name' => '网络请求失败或Agent服务不可用');
+            }
+            return $errors;
+        }
+
+        $snapshot = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($result)->fetch();
+        if(!$snapshot)
+        {
+            return array('name' => '快照创建失败');
+        }
+
+        return $snapshot;
     }
 
     /**
@@ -199,7 +275,8 @@ class zanodeTest
         $this->editSnapshot($snapshotID, $data);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        $result = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        return $result ?: array('error' => 'Snapshot not found');
     }
 
     /**
@@ -264,10 +341,12 @@ class zanodeTest
      * @access public
      * @return void
      */
-    public function updateImageStatusTest(int $imageID, object $data): object
+    public function updateImageStatusTest(int $imageID, object $data): object|bool
     {
         $this->updateImageStatus($imageID, $data);
-        return $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+        $result = $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+        if(dao::isError()) return dao::getError();
+        return $result ?: false;
     }
 
     /**

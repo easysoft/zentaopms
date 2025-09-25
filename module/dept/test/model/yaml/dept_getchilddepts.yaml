@@ -1,0 +1,21 @@
+---
+title: 部门表测试数据 - getChildDepts方法
+desc: 包含多层级部门结构的完整测试数据
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-15
+- field: name
+  range: 总部,研发中心,产品部,开发部,测试部,开发一组,开发二组,测试一组,测试二组,前端组,后端组,移动端组,数据分析组,市场部,销售部
+- field: parent
+  range: 0,0,0,1,1,4,4,5,5,4,4,4,1,2,2
+- field: path
+  range: ',1,',',2,',',3,',',1,4,',',1,5,',',1,4,6,',',1,4,7,',',1,5,8,',',1,5,9,',',1,4,10,',',1,4,11,',',1,4,12,',',1,13,',',2,14,',',2,15,'
+- field: grade
+  range: 1,1,1,2,2,3,3,3,3,3,3,3,2,2,2
+- field: order
+  range: 10,20,30,10,20,10,20,10,20,30,40,50,30,10,20
+- field: manager
+  range: admin,user1,user2,user3,user4,dev1,dev2,test1,test2,fe1,be1,mobile1,data1,market1,sale1

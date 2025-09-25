@@ -515,6 +515,22 @@ class instanceTest
     }
 
     /**
+     * Test autoBackup method.
+     *
+     * @param  object $instance
+     * @param  object $user
+     * @access public
+     * @return mixed
+     */
+    public function autoBackupTest(object $instance, object $user)
+    {
+        $result = $this->objectModel->autoBackup($instance, $user);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test storeView method.
      *
      * @param  int $id 实例ID
@@ -573,6 +589,20 @@ class instanceTest
     }
 
     /**
+     * Test countOldDomain method.
+     *
+     * @access public
+     * @return int
+     */
+    public function countOldDomainTest(): int
+    {
+        $result = $this->objectModel->countOldDomain();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkForInstall method.
      *
      * @param  object $customData
@@ -586,38 +616,210 @@ class instanceTest
         {
             return array('result' => 'fail', 'message' => 'Domain exists in keep list');
         }
-        
+
         // 测试2: 模拟域名存在检查
         if(in_array($customData->customDomain, array('console', 'demo', 's3', 's3-api', 'existingapp')))
         {
             return array('result' => 'fail', 'message' => 'Domain already exists');
         }
-        
+
         // 测试3: 应用名称为空检查
         if(!$customData->customName)
         {
             return array('result' => 'fail', 'message' => 'Name cannot be empty');
         }
-        
+
         // 测试4: 模拟应用名称唯一性检查
         if(in_array($customData->customName, array('existing-app', 'duplicate-name')))
         {
             return array('result' => 'fail', 'message' => 'Name already exists');
         }
-        
+
         // 测试5: 域名长度检查
         if(strlen($customData->customDomain) < 2 || strlen($customData->customDomain) > 20)
         {
             return array('result' => 'fail', 'message' => 'Domain length error');
         }
-        
+
         // 测试6: 域名字符格式检查
         if(!preg_match('/^[a-z\d]+$/', $customData->customDomain))
         {
             return array('result' => 'fail', 'message' => 'Invalid domain characters');
         }
-        
+
         // 所有验证通过
         return array('result' => 'success', 'message' => 'Validation passed');
+    }
+
+    /**
+     * Test dbListToOptions method.
+     *
+     * @param  array $databases
+     * @access public
+     * @return array
+     */
+    public function dbListToOptionsTest(array $databases): array
+    {
+        $result = $this->objectModel->dbListToOptions($databases);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test domainExists method.
+     *
+     * @param  string $thirdDomain
+     * @access public
+     * @return bool
+     */
+    public function domainExistsTest(string $thirdDomain): bool
+    {
+        $result = $this->objectModel->domainExists($thirdDomain);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test filterMemOptions method.
+     *
+     * @param  int $memorySize
+     * @access public
+     * @return array
+     */
+    public function filterMemOptionsTest(int $memorySize)
+    {
+        $resources = new stdClass();
+        $resources->min = new stdClass();
+        $resources->min->memory = $memorySize * 1024;
+
+        $result = $this->objectModel->filterMemOptions($resources);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test fullDomain method.
+     *
+     * @param  string $thirdDomain
+     * @access public
+     * @return string
+     */
+    public function fullDomainTest(string $thirdDomain): string
+    {
+        $result = $this->objectModel->fullDomain($thirdDomain);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getByUrl method.
+     *
+     * @param  string $url
+     * @access public
+     * @return object|false
+     */
+    public function getByUrlTest(string $url): object|false
+    {
+        $result = $this->objectModel->getByUrl($url);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test printCpuUsage method.
+     *
+     * @param  object $instance
+     * @param  object $metrics
+     * @access public
+     * @return array
+     */
+    public function printCpuUsageTest(object $instance, object $metrics): array
+    {
+        $result = instanceModel::printCpuUsage($instance, $metrics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test printStorageUsage method.
+     *
+     * @param  object $instance
+     * @param  object $metrics
+     * @access public
+     * @return array
+     */
+    public function printStorageUsageTest(object $instance, object $metrics): array
+    {
+        $result = instanceModel::printStorageUsage($instance, $metrics);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test randThirdDomain method.
+     *
+     * @param  int $length
+     * @param  int $triedTimes
+     * @access public
+     * @return string
+     */
+    public function randThirdDomainTest(int $length = 4, int $triedTimes = 0): string
+    {
+        $result = $this->objectModel->randThirdDomain($length, $triedTimes);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateDomain method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return bool
+     */
+    public function updateDomainTest(object $instance): bool
+    {
+        $result = $this->objectModel->updateDomain($instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateMemorySize method.
+     *
+     * @param  object $instance
+     * @param  int    $size
+     * @access public
+     * @return mixed
+     */
+    public function updateMemorySizeTest(object $instance, int $size = 0)
+    {
+        $result = $this->objectModel->updateMemorySize($instance, $size);
+        return $result;
+    }
+
+    /**
+     * Test updateStatus method.
+     *
+     * @param  int    $id
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function updateStatusTest(int $id, string $status)
+    {
+        $result = $this->objectModel->updateStatus($id, $status);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

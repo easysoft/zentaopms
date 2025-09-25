@@ -48,6 +48,27 @@ class userTest
     }
 
     /**
+     * Test su method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function suTest()
+    {
+        global $app;
+        $originalUser = $app->user;
+
+        $result = $this->objectModel->su();
+        if(dao::isError()) return dao::getError();
+
+        $responseData = new stdClass();
+        $responseData->result = $result;
+        $responseData->currentUser = $app->user;
+
+        return $responseData;
+    }
+
+    /**
      * Test user get pairs.
      *
      * @param  string $params

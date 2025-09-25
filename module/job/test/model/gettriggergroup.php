@@ -1,23 +1,37 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
-su('admin');
 
 /**
 
-title=jobModel::getTriggerGroup();
+title=测试 jobModel::getTriggerGroup();
 timeout=0
-cid=1
+cid=0
 
-- 获取trigger type为tag且repo id为1的name第1条的name属性 @这是一个Job1
-- 获取trigger type为commit且repo id为2的name第2条的name属性 @这是一个Job2
+- 执行jobTest模块的getTriggerGroupTest方法，参数是'tag', array  @2
+- 执行jobTest模块的getTriggerGroupTest方法，参数是'commit', array  @2
+- 执行jobTest模块的getTriggerGroupTest方法，参数是'nonexistent', array  @0
+- 执行jobTest模块的getTriggerGroupTest方法，参数是'schedule', array  @2
+- 执行jobTest模块的getTriggerGroupTest方法，参数是'tag', array  @0
 
 */
-$job = new jobTest();
 
-$triggerTypeList = array('tag', 'commit');
-$repoIdList      = array('1', '2');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 
-r($job->getTriggerGroupTest($triggerTypeList['0'], $repoIdList)) && p('1:name') && e('这是一个Job1'); // 获取trigger type为tag且repo id为1的name
-r($job->getTriggerGroupTest($triggerTypeList['1'], $repoIdList)) && p('2:name') && e('这是一个Job2'); // 获取trigger type为commit且repo id为2的name
+$table = zenData('job');
+$table->id->range('1-10');
+$table->name->range('Job1,Job2,Job3,Job4,Job5,Job6,Job7,Job8,Job9,Job10');
+$table->repo->range('1,1,1,2,2,2,3,3,4,4');
+$table->triggerType->range('tag,tag,tag,tag,commit,commit,commit,schedule,schedule,manual');
+$table->deleted->range('0');
+$table->gen(10);
+
+su('admin');
+
+$jobTest = new jobTest();
+
+r(count($jobTest->getTriggerGroupTest('tag', array(1, 2)))) && p() && e('2');
+r(count($jobTest->getTriggerGroupTest('commit', array(1, 2, 3)))) && p() && e('2');
+r(count($jobTest->getTriggerGroupTest('nonexistent', array(1, 2)))) && p() && e('0');
+r(count($jobTest->getTriggerGroupTest('schedule', array()))) && p() && e('2');
+r(count($jobTest->getTriggerGroupTest('tag', array(999)))) && p() && e('0');

@@ -1,0 +1,20 @@
+---
+title: buildPointDataForGantt方法评审测试数据
+desc: 用于测试programplanTao::buildPointDataForGantt方法的评审状态数据
+
+fields:
+- field: id
+  note: 评审ID
+  range: 1-10
+- field: object
+  note: 评审对象ID
+  range: 1-5
+- field: status
+  note: 评审状态
+  range: [pass,fail,reviewing,wait,'']
+- field: lastReviewedDate
+  note: 最后评审时间
+  range: ['2023-06-01 14:00:00','2023-07-01 15:00:00','','0000-00-00 00:00:00']
+- field: createdDate
+  note: 创建时间
+  range: ['2023-01-01 09:00:00','2023-02-01 10:00:00','2023-03-01 11:00:00']

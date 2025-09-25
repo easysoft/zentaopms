@@ -1,0 +1,46 @@
+title: 发布删除测试数据
+desc: 用于测试delete方法的发布数据
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: "131{5},132{2},0,11-12"
+  - field: product
+    range: "1{5},2{5}"
+  - field: branch
+    range: "0{7},1{2},2{1}"
+  - field: shadow
+    range: "0,2,0,4,0,0,0,0,0,0"
+  - field: build
+    range: "1,2,3,4,5,6,7,8,9,10"
+  - field: name
+    range: "发布1,发布2,发布3,发布4,发布5,发布6,发布7,发布8,发布9,发布10"
+  - field: marker
+    range: "0{8},1{2}"
+  - field: date
+    range: "2023-01-01{10}"
+  - field: stories
+    range: ""
+  - field: bugs
+    range: ""
+  - field: leftBugs
+    range: ""
+  - field: desc
+    range: "测试发布描述1,测试发布描述2,测试发布描述3,测试发布描述4,测试发布描述5,测试发布描述6,测试发布描述7,测试发布描述8,测试发布描述9,测试发布描述10"
+  - field: mailto
+    range: ""
+  - field: notify
+    range: ""
+  - field: status
+    range: "normal{5},terminate{5}"
+  - field: subStatus
+    range: ""
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "2023-01-01 10:00:00,2023-01-01 10:00:00,2023-01-02 10:00:00,2023-01-01 10:00:00,2023-01-03 10:00:00,2023-01-04 10:00:00,2023-01-05 10:00:00,2023-01-06 10:00:00,2023-01-07 10:00:00,2023-01-08 10:00:00"
+  - field: deleted
+    range: "0{10}"

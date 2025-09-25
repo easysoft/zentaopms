@@ -1,41 +1,43 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
 title=测试 todoTao::updateDate();
 timeout=0
-cid=1
+cid=0
 
-- 判断是否更新为当前的时间 @1
-
-- 判断是否更新为当前的时间 @1
-
-- 判断是否更新为当前的时间 @1
+- 执行todoTest模块的updateDateTest方法，参数是$singleTodoList, $validDate1  @1
+- 执行todoTest模块的updateDateTest方法，参数是$multipleTodoList, $validDate2  @1
+- 执行todoTest模块的updateDateTest方法，参数是$emptyTodoList, $validDateTime  @1
+- 执行todoTest模块的updateDateTest方法，参数是$nonExistentList, $validDate1  @1
+- 执行todoTest模块的updateDateTest方法，参数是$validTodoList, $edgeDate  @1
 
 */
 
-function initData ()
-{
-    zenData('todo')->loadYaml('updatedate')->gen(5);
-}
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
-initData();
+zenData('todo')->loadYaml('updatedate')->gen(10);
 
-global $tester;
-$tester->loadModel('todo')->todoTao;
+su('admin');
 
-$todoDate1   = date('Y-m-d');
-$todoDate2   = date('Y-m-d H:i');
+$todoTest = new todoTest();
 
-$todoIDList1 = array(1);
-$todoIDList2 = array(2, 3);
-$todoIDList3 = array('id' => 4);
-$todoIDList4 = array('id' => 5, 'account' => 'admin');
+$validDate1    = '2024-01-15';
+$validDate2    = '2024-02-20';
+$validDateTime = '2024-03-25 14:30:00';
+$edgeDate      = '2024-12-31';
+$shortDate     = '2024-01-01';
 
-r($tester->todo->updateDate($todoIDList1, $todoDate1)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList2, $todoDate1)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList3, $todoDate2)) && p() && e('1'); // 判断是否更新为当前的时间
-r($tester->todo->updateDate($todoIDList4, $todoDate2)) && p() && e('1'); // 判断是否更新为当前的时间
+$singleTodoList   = array(1);
+$multipleTodoList = array(2, 3, 4);
+$emptyTodoList    = array();
+$nonExistentList  = array(999, 998);
+$validTodoList    = array(5, 6);
+
+r($todoTest->updateDateTest($singleTodoList, $validDate1)) && p() && e('1');
+r($todoTest->updateDateTest($multipleTodoList, $validDate2)) && p() && e('1');
+r($todoTest->updateDateTest($emptyTodoList, $validDateTime)) && p() && e('1');
+r($todoTest->updateDateTest($nonExistentList, $validDate1)) && p() && e('1');
+r($todoTest->updateDateTest($validTodoList, $edgeDate)) && p() && e('1');

@@ -1,0 +1,52 @@
+title: table zt_compile for getLastResult test
+desc: "getLastResult方法测试数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "编译记录ID"
+    range: 1-10
+  - field: name
+    note: "编译名称"
+    range: 'Compile-Job1,Compile-Job2,Compile-Job3,Build-Test,Deploy-Prod'
+  - field: job
+    note: "关联任务ID"
+    range: 1-5
+  - field: queue
+    note: "队列ID"
+    range: 100-999
+  - field: status
+    note: "编译状态"
+    range: 'success,failure,running,pending,cancelled,error'
+  - field: branch
+    note: "分支名称"
+    range: 'master,develop,feature/test,release/v1.0,hotfix/bug123'
+  - field: logs
+    note: "编译日志"
+    range: 'Build completed successfully,Build failed with errors,Running tests...,Deploying to production,Build cancelled by user'
+  - field: atTime
+    note: "执行时间"
+    range: '09:00,12:00,15:00,18:00,21:00'
+  - field: testtask
+    note: "测试任务ID"
+    range: 0-3
+  - field: tag
+    note: "标签"
+    range: 'v1.0.0,v1.1.0,v2.0.0,release-001,build-123'
+  - field: times
+    note: "执行次数"
+    range: 1-5
+  - field: createdBy
+    note: "创建者"
+    range: 'admin,user1,user2,tester,developer'
+  - field: createdDate
+    note: "创建时间"
+    range: '(-5d)-(-1d):1h'
+    format: 'YYYY-MM-DD hh:mm:ss'
+  - field: updateDate
+    note: "更新时间"
+    range: '(-4d)-now:30m'
+    format: 'YYYY-MM-DD hh:mm:ss'
+  - field: deleted
+    note: "删除标记"
+    range: '0'

@@ -1,0 +1,95 @@
+title: project data for getParentStages test
+author: Claude Code
+version: 1.0
+desc: 为getParentStages方法测试准备的项目数据
+
+fields:
+  - field: id
+    range: 1-20
+  - field: project
+    range: 1{8},2{6},3{6}
+  - field: model
+    range: scrum{15},waterfall{5}
+  - field: name
+    fields:
+      - field: name1
+        range: 执行{15},阶段{5}
+      - field: name2
+        range: 1-20
+  - field: type
+    range: stage{15},project{3},sprint{2}
+  - field: status
+    range: wait{3},doing{8},suspended{2},closed{4},finished{3}
+  - field: lifetime
+    range: ""
+  - field: budget
+    range: 100000-500000:10000
+  - field: budgetUnit
+    range: CNY{18},USD{2}
+  - field: attribute
+    range: request{8},design{4},develop{3},test{3},release{2}
+  - field: percent
+    range: 0-100:10
+  - field: milestone
+    range: 0{18},1{2}
+  - field: output
+    range: ""
+  - field: auth
+    range: extend
+  - field: parent
+    range: 0{3},1{5},2{4},3{3},4{2},5{2},6{1}
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 1-10
+      - field: path2
+        prefix: ","
+        range: 11-20
+        postfix: ","
+  - field: grade
+    range: 1{3},2{8},3{6},4{3}
+  - field: code
+    fields:
+      - field: code1
+        range: stage{15},project{5}
+      - field: code2
+        range: 1-20
+  - field: begin
+    range: "(-1M)-(+1M):1D"
+    type: timestamp
+    format: "YY-MM-DD hh:mm:ss"
+  - field: end
+    range: "(+1M)-(+3M):1D"
+    type: timestamp
+    format: "YY-MM-DD hh:mm:ss"
+  - field: PO
+    range: ""
+  - field: PM
+    range: admin{10},user1{5},user2{3},user3{2}
+  - field: QD
+    range: ""
+  - field: RD
+    range: ""
+  - field: team
+    range: ""
+  - field: acl
+    range: open{10},private{6},program{4}
+  - field: order
+    range: 5-200:5
+  - field: openedVersion
+    range: "16.5"
+  - field: openedDate
+    range: "(-1M)-(+1M):1D"
+    type: timestamp
+    format: "YY-MM-DD hh:mm:ss"
+  - field: multiple
+    range: 1
+  - field: category
+    range: ""
+  - field: hasProduct
+    range: 1{18},0{2}
+  - field: progress
+    range: "0.00"
+  - field: deleted
+    range: 0{18},1{2}
