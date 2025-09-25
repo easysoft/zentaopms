@@ -275,14 +275,27 @@ class aiTest
      */
     public function makeRequestTest($type = null, $data = null, $timeout = 10)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('makeRequest');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->objectModel, $type, $data, $timeout);
-        if(dao::isError()) return dao::getError();
+        try {
+            /* Using reflection to call private method */
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('makeRequest');
+            $method->setAccessible(true);
 
-        return $result;
+            /* Capture any output to prevent HTML error messages */
+            ob_start();
+            $result = $method->invoke($this->objectModel, $type, $data, $timeout);
+            ob_end_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            ob_end_clean();
+            return (object)array('result' => 'fail', 'message' => $e->getMessage());
+        } catch (Error $e) {
+            ob_end_clean();
+            return (object)array('result' => 'fail', 'message' => $e->getMessage());
+        }
     }
 
     /**
@@ -1253,13 +1266,21 @@ class aiTest
      */
     public function getTargetFormLocationTest($prompt = null, $object = null, $linkArgs = array())
     {
-        if(is_numeric($prompt) && $prompt > 0) $prompt = $this->objectModel->getPromptById($prompt);
+        if(is_numeric($prompt))
+        {
+            if($prompt <= 0) return array(false, true);
+            $prompt = $this->objectModel->getPromptById($prompt);
+        }
         if(empty($prompt)) return array(false, true);
-        
-        $result = $this->objectModel->getTargetFormLocation($prompt, $object, $linkArgs);
-        if(dao::isError()) return dao::getError();
 
-        return $result;
+        try {
+            $result = $this->objectModel->getTargetFormLocation($prompt, $object, $linkArgs);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array(false, true);
+        }
     }
 
     /**
