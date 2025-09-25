@@ -840,23 +840,6 @@ class programTest
     }
 
     /**
-     * Test getProgramList4Kanban method.
-     *
-     * @param  string $browseType
-     * @access public
-     * @return array
-     */
-    public function getProgramList4KanbanTest(string $browseType = 'my'): array
-    {
-        global $tester;
-        $programZen = $tester->loadZen('program');
-        $result = $programZen->getProgramList4Kanban($browseType);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test buildTree method.
      *
      * @param  array $programs

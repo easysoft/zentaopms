@@ -8,9 +8,6 @@ class reportTest
          $this->objectModel = $tester->loadModel('report');
          $this->objectTao   = $tester->loadTao('report');
 
-         // 临时使用model层代替zen层
-         $this->objectZen = $this->objectModel;
-
          $tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
     }
 
@@ -32,7 +29,7 @@ class reportTest
         $result['hasDao'] = isset($report->dao) ? '1' : '0';
         $result['hasConfig'] = isset($report->config) ? '1' : '0';
         $result['hasLang'] = isset($report->lang) ? '1' : '0';
-        
+
         return $result;
     }
 

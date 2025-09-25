@@ -34,7 +34,7 @@ class extensionTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('fetchAPI');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, array($url));
         if(dao::isError()) return dao::getError();
 
@@ -68,7 +68,7 @@ class extensionTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('removeExtensionFiles');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, array($files));
         if(dao::isError()) return dao::getError();
 
@@ -87,7 +87,7 @@ class extensionTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('removeExtensionDirs');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, array($dirs));
         if(dao::isError()) return dao::getError();
 
@@ -105,29 +105,8 @@ class extensionTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('cleanModelCache');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getHookFile method.
-     *
-     * @param  string $extension
-     * @param  string $hook
-     * @access public
-     * @return string|false
-     */
-    public function getHookFileTest(string $extension, string $hook)
-    {
-        $extensionZen = $this->objectModel->loadZen('extension');
-        $reflection = new ReflectionClass($extensionZen);
-        $method = $reflection->getMethod('getHookFile');
-        $method->setAccessible(true);
-        
-        $result = $method->invokeArgs($extensionZen, array($extension, $hook));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -148,7 +127,7 @@ class extensionTest
             $func = $zen->getMethod('getDependsByDB');
             $zenInstance = $zen->newInstance();
             $zenInstance->extension = $this->objectModel;
-            
+
             $result = $func->invokeArgs($zenInstance, array($extension));
             if(dao::isError()) return dao::getError();
 
@@ -157,68 +136,6 @@ class extensionTest
         catch(Exception $e)
         {
             return array();
-        }
-    }
-
-    /**
-     * Test checkExtension method.
-     *
-     * @param  string $extension
-     * @param  string $ignoreCompatible
-     * @param  string $ignoreLink
-     * @param  string $overrideFile
-     * @param  string $overrideLink
-     * @param  string $installType
-     * @access public
-     * @return bool
-     */
-    public function checkExtensionTest(string $extension, string $ignoreCompatible, string $ignoreLink, string $overrideFile, string $overrideLink, string $installType)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkExtension');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $ignoreCompatible, $ignoreLink, $overrideFile, $overrideLink, $installType));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Test checkFileConflict method.
-     *
-     * @param  string $extension
-     * @access public
-     * @return object
-     */
-    public function checkFileConflictTest(string $extension)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkFileConflict');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            $errorResult = new stdClass();
-            $errorResult->result = 'fail';
-            $errorResult->error = 'Exception: ' . $e->getMessage();
-            return $errorResult;
         }
     }
 
@@ -237,7 +154,7 @@ class extensionTest
             $func = $zen->getMethod('copyHookFiles');
             $zenInstance = $zen->newInstance();
             $zenInstance->extension = $this->objectModel;
-            
+
             $result = $func->invokeArgs($zenInstance, array($extension));
             if(dao::isError()) return dao::getError();
 
@@ -246,247 +163,6 @@ class extensionTest
         catch(Exception $e)
         {
             return 'Exception: ' . $e->getMessage();
-        }
-    }
-
-    /**
-     * Test installExtension method.
-     *
-     * @param  string $extension
-     * @param  string $type
-     * @param  string $upgrade
-     * @access public
-     * @return bool
-     */
-    public function installExtensionTest(string $extension, string $type, string $upgrade)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('installExtension');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $type, $upgrade));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Test extractPackage method.
-     *
-     * @param  string $extension
-     * @access public
-     * @return object
-     */
-    public function extractPackageTest(string $extension)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('extractPackage');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            $errorResult = new stdClass();
-            $errorResult->result = 'fail';
-            $errorResult->error = 'Exception: ' . $e->getMessage();
-            return $errorResult;
-        }
-    }
-
-    /**
-     * Test copyPackageFiles method.
-     *
-     * @param  string $extension
-     * @access public
-     * @return array
-     */
-    public function copyPackageFilesTest(string $extension)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('copyPackageFiles');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension));
-            if(dao::isError()) return dao::getError();
-
-            return is_array($result) ? $result : array();
-        }
-        catch(Exception $e)
-        {
-            return array();
-        }
-    }
-
-    /**
-     * Test backupDB method.
-     *
-     * @param  string $extension
-     * @access public
-     * @return string|false
-     */
-    public function backupDBTest(string $extension)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('backupDB');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Test togglePackageDisable method.
-     *
-     * @param  string $extension
-     * @param  string $action
-     * @access public
-     * @return bool
-     */
-    public function togglePackageDisableTest(string $extension, string $action = 'disabled')
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('togglePackageDisable');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $action));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Test checkExtensionPaths method.
-     *
-     * @param  string $extension
-     * @access public
-     * @return mixed
-     */
-    public function checkExtensionPathsTest(string $extension)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkExtensionPaths');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            $errorResult = new stdClass();
-            $errorResult->result = 'fail';
-            $errorResult->error = 'Exception: ' . $e->getMessage();
-            $errorResult->errors = '';
-            $errorResult->mkdirCommands = '';
-            $errorResult->chmodCommands = '';
-            $errorResult->dirs2Created = array();
-            return $errorResult;
-        }
-    }
-
-    /**
-     * Test checkExtractPath method.
-     *
-     * @param  string $extension
-     * @param  object $checkResult
-     * @access public
-     * @return object
-     */
-    public function checkExtractPathTest(string $extension, object $checkResult)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkExtractPath');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $checkResult));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            $errorResult = new stdClass();
-            $errorResult->result = 'fail';
-            $errorResult->error = 'Exception: ' . $e->getMessage();
-            $errorResult->errors = '';
-            $errorResult->mkdirCommands = '';
-            $errorResult->chmodCommands = '';
-            $errorResult->dirs2Created = array();
-            return $errorResult;
-        }
-    }
-
-    /**
-     * Test checkCompatible method.
-     *
-     * @param  string $extension
-     * @param  object $condition
-     * @param  string $ignoreCompatible
-     * @param  string $ignoreLink
-     * @param  string $installType
-     * @access public
-     * @return bool
-     */
-    public function checkCompatibleTest(string $extension, object $condition, string $ignoreCompatible, string $ignoreLink, string $installType)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkCompatible');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $condition, $ignoreCompatible, $ignoreLink, $installType));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
         }
     }
 
@@ -549,7 +225,7 @@ class extensionTest
                     $noDepends = true;
                 }
 
-                if($noDepends) 
+                if($noDepends)
                 {
                     $dependsExt .= $code;
                     $hasFailedDepends = true;
@@ -562,35 +238,6 @@ class extensionTest
             }
         }
         return true;
-    }
-
-    /**
-     * Test checkFile method.
-     *
-     * @param  string $extension
-     * @param  string $overrideFile
-     * @param  string $overrideLink
-     * @access public
-     * @return bool
-     */
-    public function checkFileTest(string $extension, string $overrideFile, string $overrideLink)
-    {
-        try
-        {
-            $extensionZen = $this->objectModel->loadZen('extension');
-            $reflection = new ReflectionClass($extensionZen);
-            $method = $reflection->getMethod('checkFile');
-            $method->setAccessible(true);
-            
-            $result = $method->invokeArgs($extensionZen, array($extension, $overrideFile, $overrideLink));
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
     }
 
     /**

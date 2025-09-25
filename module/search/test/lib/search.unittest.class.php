@@ -19,10 +19,10 @@ class searchTest
     public function processSearchParamsTest($module, $cacheSearchFunc = false)
     {
         global $tester;
-        
+
         // Mock the session object to avoid the type error
         $originalSession = $tester->loadModel('search')->session;
-        
+
         // Create a mock session that always returns array
         $mockSession = new stdClass();
         $mockSession->storySearchFunc = array(
@@ -30,7 +30,7 @@ class searchTest
             'funcName' => 'buildSearchConfig',
             'funcArgs' => array('queryID' => 0, 'actionURL' => 'test')
         );
-        
+
         // For the searchParams properties, return empty array or test data
         if($module == 'story') {
             $mockSession->{$module . 'searchParams'} = array(
@@ -41,14 +41,14 @@ class searchTest
         } else {
             $mockSession->{$module . 'searchParams'} = array();
         }
-        
-        // Set mock session 
+
+        // Set mock session
         $tester->loadModel('search')->session = $mockSession;
-        
+
         try {
             $result = $this->objectModel->processSearchParams($module, $cacheSearchFunc);
             if(dao::isError()) return dao::getError();
-            
+
             $tester->loadModel('search')->session = $originalSession;
             return is_array($result) ? $result : array();
         } catch(Exception $e) {
@@ -1440,83 +1440,6 @@ class searchTest
     }
 
     /**
-     * Test setSessionForIndex method.
-     *
-     * @param  string $uri
-     * @param  string $words
-     * @param  string|array $type
-     * @access public
-     * @return array
-     */
-    public function setSessionForIndexTest($uri, $words, $type)
-    {
-        global $tester;
-
-        // 创建searchZen实例来访问setSessionForIndex方法
-        $searchZen = $tester->loadZen('search');
-
-        // 备份原始session数据
-        $originalSession = $_SESSION ?? array();
-
-        // 清空相关session数据
-        $sessionKeys = array('bugList', 'buildList', 'caseList', 'docList', 'productList',
-                           'productPlanList', 'programList', 'projectList', 'executionList',
-                           'releaseList', 'storyList', 'taskList', 'testtaskList', 'todoList',
-                           'effortList', 'reportList', 'testsuiteList', 'issueList', 'riskList',
-                           'opportunityList', 'trainplanList', 'caselibList', 'searchIngWord', 'searchIngType', 'referer');
-
-        foreach($sessionKeys as $key) unset($_SESSION[$key]);
-
-        // 设置HTTP_REFERER模拟
-        $_SERVER['HTTP_REFERER'] = 'http://example.com/test';
-
-        // 使用反射访问受保护方法
-        $reflection = new ReflectionClass($searchZen);
-        $method = $reflection->getMethod('setSessionForIndex');
-        $method->setAccessible(true);
-
-        // 调用方法
-        $method->invokeArgs($searchZen, array($uri, $words, $type));
-
-        // 收集结果
-        $result = array();
-        foreach($sessionKeys as $key) {
-            if(isset($_SESSION[$key])) {
-                $result[$key] = $_SESSION[$key];
-            }
-        }
-
-        // 恢复原始session数据
-        $_SESSION = $originalSession;
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getTypeList method.
-     *
-     * @access public
-     * @return array
-     */
-    public function getTypeListTest()
-    {
-        global $tester;
-
-        $searchZen = $tester->loadZen('search');
-
-        $reflection = new ReflectionClass($searchZen);
-        $method = $reflection->getMethod('getTypeList');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($searchZen);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test setOptionFields method.
      *
      * @param  array $fields
@@ -1571,28 +1494,6 @@ class searchTest
         if(dao::isError()) return dao::getError();
 
         return $operators;
-    }
-
-    /**
-     * Test setOptionAndOr method.
-     *
-     * @access public
-     * @return array
-     */
-    public function setOptionAndOrTest()
-    {
-        global $tester;
-
-        $searchZen = $tester->loadZen('search');
-
-        $reflection = new ReflectionClass($searchZen);
-        $method = $reflection->getMethod('setOptionAndOr');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($searchZen);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
     }
 
     /**

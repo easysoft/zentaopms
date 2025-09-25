@@ -31,7 +31,7 @@ class mailTest
         $result->hasErrors = isset($this->objectModel->errors);
         $result->hasConfig = isset($this->objectModel->config);
         $result->mtaType = $this->objectModel->mta ? get_class($this->objectModel->mta) : '';
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -502,7 +502,7 @@ class mailTest
         $result->processed = true;
         $result->imageCount = count($images);
         $result->uniqueImageCount = count(array_filter(array_unique($images)));
-        
+
         return $result;
     }
 
@@ -521,7 +521,7 @@ class mailTest
         $result->processed = true;
         $result->mta = $this->objectModel->mta;
         $result->currentLang = $this->objectModel->app->getClientLang();
-        
+
         return $result;
     }
 
@@ -539,7 +539,7 @@ class mailTest
         $result = new stdClass();
         $result->processed = true;
         $result->mta = $this->objectModel->mta;
-        
+
         return $result;
     }
 
@@ -583,20 +583,6 @@ class mailTest
     public function getImagesByPathTest($matches = array())
     {
         $result = $this->objectModel->getImagesByPath($matches);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getConfigForEdit method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getConfigForEditTest()
-    {
-        $result = $this->objectZen->getConfigForEdit();
         if(dao::isError()) return dao::getError();
 
         return $result;

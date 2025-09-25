@@ -6,9 +6,7 @@ class docTest
         global $tester, $app;
         $this->objectModel = $tester->loadModel('doc');
         $this->objectTao   = $tester->loadTao('doc');
-        
-        // 使用model对象，因为zen方法可能通过__call魔术方法调用
-        $this->objectZen = $this->objectModel;
+
         $this->objectModel->config->global->syncProduct = '';
 
         su($account);
@@ -2095,7 +2093,7 @@ class docTest
     {
         // 模拟doctemplate配置和语言
         global $config, $lang;
-        
+
         $config->doctemplate = new stdclass();
         $config->doctemplate->defaultSpaces = array(
             'plan' => array('requirement', 'design'),
@@ -2193,7 +2191,7 @@ class docTest
 
         if($paramType == 'type') return $params[0];
         if($paramType == 'id')   return isset($params[1]) ? $params[1] : null;
-        
+
         return null;
     }
 
@@ -2382,7 +2380,7 @@ class docTest
         $method = $reflection->getMethod('getSpacePairs');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $type);
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2403,7 +2401,7 @@ class docTest
         $method = $reflection->getMethod('doInsertLib');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $lib, $requiredFields);
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2423,7 +2421,7 @@ class docTest
         $method = $reflection->getMethod('filterDeletedDocs');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $docs);
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2442,7 +2440,7 @@ class docTest
     public function processFilesTest(array $files, array $fileIcon = array(), array $sourcePairs = array(), bool $skipImageWidth = false): array
     {
         global $tester;
-        
+
         // 模拟processFiles方法的核心逻辑
         if(!$skipImageWidth) {
             $fileModel = $tester->loadModel('file');
@@ -2459,13 +2457,13 @@ class docTest
 
             // 设置fileIcon
             $file->fileIcon = isset($fileIcon[$file->id]) ? $fileIcon[$file->id] : '';
-            
+
             // 去除扩展名生成fileName
             $file->fileName = str_replace('.' . $file->extension, '', $file->title);
-            
+
             // 设置sourceName
             $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
-            
+
             // 格式化文件大小
             $file->sizeText = number_format($file->size / 1024, 1) . 'K';
 
@@ -2498,7 +2496,7 @@ class docTest
                 $file->objectName = $objectTypeName . ' : ';
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $files;
@@ -2521,7 +2519,7 @@ class docTest
         $parentID     = 0;
         $currentLevel = 0;
         $outlineList  = array();
-        
+
         foreach($content as $index => $element)
         {
             preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
@@ -2560,9 +2558,9 @@ class docTest
                 $outlineList[$index] = $item;
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $outlineList;
     }
 
@@ -2610,7 +2608,7 @@ class docTest
                 break;
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $parentID;
@@ -2666,7 +2664,7 @@ class docTest
     {
         // 模拟assignVarsForMySpace方法的核心逻辑
         $result = new stdClass();
-        
+
         // 设置基本属性
         $result->title = $this->objectModel->lang->doc->common;
         $result->type = $type;
@@ -2683,7 +2681,7 @@ class docTest
         $result->libType = 'lib';
         $result->spaceType = 'mine';
         $result->users = array();
-        
+
         // 模拟获取文档库信息
         if($libID > 0)
         {
@@ -2694,18 +2692,18 @@ class docTest
         {
             $result->lib = new stdClass();
         }
-        
+
         // 设置导出权限
         $result->canExport = 0; // 简化处理，设为0
-        
+
         // 设置链接参数
         $result->linkParams = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        
+
         // 模拟获取库树
         $result->libTree = array();
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -2719,35 +2717,35 @@ class docTest
     public function setAclForCreateLibTest($type = null)
     {
         global $tester, $lang, $app;
-        
+
         // 初始化语言配置模拟数据
         if(!isset($lang->doclib)) $lang->doclib = new stdClass();
         if(!isset($lang->api)) $lang->api = new stdClass();
-        
+
         $lang->doclib->aclList = array(
             'default' => '默认 %s 成员',
             'private' => '私有',
             'open'    => '公开'
         );
-        
+
         $lang->doclib->mySpaceAclList = array(
             'private' => '私有',
             'open'    => '公开'
         );
-        
+
         $lang->doclib->privateACL = '私有（仅 %s 相关人员可访问）';
-        
+
         $lang->api->aclList = array(
             'default' => '默认 %s 成员'
         );
-        
+
         // 模拟不同对象类型的语言配置
         if(!isset($lang->product)) $lang->product = new stdClass();
         if(!isset($lang->project)) $lang->project = new stdClass();
         if(!isset($lang->execution)) $lang->execution = new stdClass();
         if(!isset($lang->custom)) $lang->custom = new stdClass();
         if(!isset($lang->api)) $lang->api = new stdClass();
-        
+
         $lang->product->common = '产品';
         $lang->project->common = '项目';
         $lang->execution->common = '执行';
@@ -2778,12 +2776,12 @@ class docTest
                 $lang->api->aclList['default'] = sprintf($lang->api->aclList['default'], $type);
             }
         }
-        
+
         // 返回处理后的语言配置状态
         $response = new stdClass();
         $response->doclibAclList = isset($lang->doclib->aclList) ? $lang->doclib->aclList : array();
         $response->apiAclList = isset($lang->api->aclList) ? $lang->api->aclList : array();
-        
+
         return $response;
     }
 
@@ -2796,18 +2794,18 @@ class docTest
     public function buildLibForCreateLibTest(): object
     {
         global $app, $tester, $lang;
-        
+
         // 模拟buildLibForCreateLib方法的核心逻辑
         if(!isset($lang->doc)) $lang->doc = new stdClass();
         if(!isset($lang->doclib)) $lang->doclib = new stdClass();
         if(!isset($lang->doclib->name)) $lang->doclib->name = '文档库名称';
-        
+
         $lang->doc->name = $lang->doclib->name;
-        
+
         // 模拟form::data()的返回结果
         $lib = new stdClass();
         $lib->addedBy = $app->user->account;
-        
+
         // 处理条件设置
         if(isset($_POST['type'])) {
             if($_POST['type'] == 'product' && !empty($_POST['product'])) {
@@ -2823,7 +2821,7 @@ class docTest
                 }
             }
         }
-        
+
         return $lib;
     }
 
@@ -2844,7 +2842,7 @@ class docTest
         $_POST['project']   = $type == 'project' ? $objectID : 0;
         $_POST['product']   = $type == 'product' ? $objectID : 0;
         $_POST['execution'] = $type == 'execution' ? $objectID : 0;
-        
+
         // 模拟方法的核心逻辑：
         // 1. 根据不同类型设置objectID
         if($type == 'project' && isset($_POST['project']) && $_POST['project']) {
@@ -2856,36 +2854,36 @@ class docTest
         if($type == 'execution' && isset($_POST['execution']) && $_POST['execution']) {
             $objectID = $_POST['execution'];
         }
-        
+
         // 2. 如果是execution但当前tab不是execution，则修改type为project
         if($type == 'execution' && !isset($_SESSION['tab'])) {
             $type = 'project';
         }
-        
+
         // 3. 模拟返回成功响应结构
         $lib = array(
-            'id' => $libID, 
-            'name' => $libName, 
-            'space' => (int)$objectID, 
-            'orderBy' => $orderBy, 
+            'id' => $libID,
+            'name' => $libName,
+            'space' => (int)$objectID,
+            'orderBy' => $orderBy,
             'order' => $libID
         );
-        
+
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
         $docAppActions[] = array('selectSpace', $objectID, $libID);
-        
+
         $result = array(
             'result' => 'success',
             'message' => 'saveSuccess',
             'closeModal' => true,
             'callback' => array(
-                'name' => 'locateNewLib', 
+                'name' => 'locateNewLib',
                 'params' => array($type, $objectID, $libID, $libName)
             ),
             'docApp' => $docAppActions
         );
-        
+
         return $result;
     }
 
@@ -2925,7 +2923,7 @@ class docTest
         $lang->project->common = 'Project';
 
         $libType = $lib->type;
-        
+
         // 模拟 setAclForEditLib 方法的逻辑
         if($libType == 'custom')
         {
@@ -2959,7 +2957,7 @@ class docTest
         $result->result = true;
         $result->aclList = $lang->doclib->aclList;
         $result->lib = $lib;
-        
+
         return $result;
     }
 
@@ -2974,21 +2972,21 @@ class docTest
     public function checkPrivForCreateTest(object $doclib, string $objectType): bool
     {
         global $tester, $app;
-        
+
         $canVisit = true;
         if(!empty($doclib->groups)) {
             $groupAccounts = $this->objectModel->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
         }
-        
+
         switch($objectType)
         {
             case 'custom':
                 $account = (string)$app->user->account;
                 // 直接按照源码逻辑实现
-                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && 
-                   strpos($doclib->users, $account) === false && 
-                   $doclib->addedBy !== $account && 
-                   !(isset($groupAccounts) && in_array($account, $groupAccounts, true)) && 
+                if(($doclib->acl == 'custom' || $doclib->acl == 'private') &&
+                   strpos($doclib->users, $account) === false &&
+                   $doclib->addedBy !== $account &&
+                   !(isset($groupAccounts) && in_array($account, $groupAccounts, true)) &&
                    !$app->user->admin) {
                     $canVisit = false;
                 }
@@ -3008,7 +3006,7 @@ class docTest
             default:
                 break;
         }
-        
+
         if(dao::isError()) return dao::getError();
         return $canVisit;
     }
@@ -3024,10 +3022,10 @@ class docTest
     public function responseAfterCreateTest(array $docResult, string $objectType = 'doc')
     {
         global $lang;
-        
+
         // 模拟responseAfterCreate方法的核心逻辑
         if(empty($docResult) || !isset($docResult['id'])) return 0;
-        
+
         $docID = $docResult['id'];
         $files = isset($docResult['files']) ? $docResult['files'] : array();
 
@@ -3045,7 +3043,7 @@ class docTest
             'id'      => $docID,
             'doc'     => $docResult
         );
-        
+
         if(dao::isError()) return dao::getError();
         return $response;
     }
@@ -3064,14 +3062,14 @@ class docTest
     {
         // 模拟 responseAfterMove 方法的业务逻辑
         list($spaceType, $spaceID) = explode('.', $space);
-        
+
         // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
         if($docID) {
             // 文档移动的响应
             $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
-        
+
         if($spaceTypeChanged) {
             // 空间类型改变，跳转到对应页面
             $method = 'mySpace';
@@ -3120,7 +3118,7 @@ class docTest
 
             $executionModel = $tester->loadModel('execution');
             $result['executions'] = $executionModel->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-            
+
             if(!empty($lib) && $lib->type == 'execution')
             {
                 $execution = $executionModel->getByID($lib->execution);
@@ -3165,27 +3163,27 @@ class docTest
     public function responseAfterUploadDocsTest($docResult, string $uploadFormat = '', string $viewType = '')
     {
         global $tester;
-        
+
         // 模拟处理逻辑而不调用实际的responseAfterUploadDocs方法
         if(!$docResult || dao::isError()) return array('result' => 'fail', 'message' => 'Error occurred');
-        
+
         $tester->loadModel('action');
-        
+
         if($uploadFormat == 'combinedDocs')
         {
             if(!is_array($docResult) || !isset($docResult['id'])) return array('result' => 'fail', 'message' => 'Invalid document result');
-            
+
             $docID = $docResult['id'];
             $files = isset($docResult['files']) ? $docResult['files'] : array();
-            
+
             // 模拟创建action记录
             if(!empty($files))
             {
                 $fileAction = 'addFiles: ' . implode(',', $files) . "\n";
             }
-            
+
             if($viewType == 'json') return array('result' => 'success', 'message' => 'saveSuccess', 'id' => $docID);
-            
+
             $params = "docID=" . $docID;
             $link = '/doc-view-' . $docID . '.html';
             return array('result' => 'success', 'message' => 'saveSuccess', 'load' => $link, 'closeModal' => true);
@@ -3200,7 +3198,7 @@ class docTest
                     // 模拟创建action记录
                 }
             }
-            
+
             if($viewType == 'json') return array('result' => 'success', 'message' => 'saveSuccess');
             return array('result' => 'success', 'message' => 'saveSuccess', 'load' => true, 'closeModal' => true);
         }
@@ -3223,7 +3221,7 @@ class docTest
 
         // 重新实现assignVarsForCreate方法的核心逻辑，用于测试
         $result = new stdClass();
-        
+
         $lib = $libID ? $this->objectModel->getLibByID($libID) : '';
         if(empty($objectID) && $lib) $objectID = isset($lib->{$lib->type}) ? $lib->{$lib->type} : 0;
         if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = isset($lib->parent) ? $lib->parent : 0;
@@ -3284,16 +3282,16 @@ class docTest
 
         // 首先调用assignVarsForCreate获取基础变量
         $result = $this->assignVarsForCreateTest($objectType, $objectID, $libID, $moduleID, $docType);
-        
+
         // 获取文档和章节数据
         $chapterAndDocs = $this->objectModel->getDocsOfLibs(array($libID), $objectType);
         $modulePairs = empty($libID) ? array() : $tester->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-        
+
         // 检查父文档
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) {
             $chapterAndDocs[$doc->parent] = $this->objectModel->fetchByID($doc->parent);
         }
-        
+
         // 构建嵌套文档结构
         $chapterAndDocs = $this->objectModel->buildNestedDocs($chapterAndDocs, $modulePairs);
 
@@ -3322,7 +3320,7 @@ class docTest
         global $tester;
 
         $objects = array();
-        
+
         // 模拟setObjectsForEdit方法的逻辑
         if($objectType == 'project')
         {
@@ -3334,7 +3332,7 @@ class docTest
             if($execution)
             {
                 $objects = $tester->loadModel('execution')->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
-                
+
                 $parentExecutions = $childExecutions = array();
                 $executions = $tester->loadModel('execution')->fetchExecutionList($execution->project, 'all', 0, 0, 'order_asc');
                 foreach($executions as $exec)
@@ -3342,7 +3340,7 @@ class docTest
                     if($exec->grade == 1) $parentExecutions[$exec->id] = $exec;
                     if($exec->grade > 1 && $exec->parent) $childExecutions[$exec->parent][$exec->id] = $exec;
                 }
-                
+
                 $objects = $tester->loadModel('execution')->resetExecutionSorts($objects, $parentExecutions, $childExecutions);
             }
         }
@@ -3354,7 +3352,7 @@ class docTest
         {
             return 0; // mine类型设置的是语言配置，返回0表示正常处理
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         // 返回对象数组的数量
@@ -3373,14 +3371,14 @@ class docTest
     public function responseAfterEditTest(object $doc, array $changes = array(), array $files = array())
     {
         global $app, $tester, $lang;
-        
+
         // 模拟POST数据
         $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
         $status = isset($_POST['status']) ? $_POST['status'] : $doc->status;
-        
+
         // 模拟responseAfterEdit方法的核心逻辑
         $result = array();
-        
+
         // 检查是否需要创建action记录
         if($comment != '' || !empty($changes) || !empty($files))
         {
@@ -3391,19 +3389,19 @@ class docTest
                 if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
                 if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
-            
+
             $fileAction = '';
             if(!empty($files)) $fileAction = 'addFiles' . join(',', $files) . "\n";
-            
+
             // 模拟创建action记录
             $actionID = rand(1, 1000);  // 模拟生成的actionID
-            
+
             $result['action'] = $action;
             $result['actionID'] = $actionID;
             $result['fileAction'] = $fileAction;
             $result['comment'] = $comment;
         }
-        
+
         // 模拟检查文档权限
         $canAccess = true;
         if(!$canAccess)
@@ -3414,15 +3412,15 @@ class docTest
         {
             $result['viewLink'] = '/doc-view-' . $doc->id . '.html';
         }
-        
+
         // 模拟返回结果
         $result['result'] = 'success';
         $result['message'] = 'saveSuccess';
         $result['load'] = isset($result['viewLink']) ? $result['viewLink'] : (isset($result['redirectLink']) ? $result['redirectLink'] : true);
         $result['doc'] = $doc;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -3441,14 +3439,14 @@ class docTest
     public function responseAfterEditTemplateTest(object $doc, array $changes = array(), array $files = array(), string $comment = '', string $status = '', bool $isInModal = false)
     {
         global $app;
-        
+
         // 模拟$_POST数据
         $_POST['comment'] = $comment;
         if($status) $_POST['status'] = $status;
-        
+
         // 模拟responseAfterEditTemplate方法的核心逻辑
         $result = array();
-        
+
         // 检查是否需要创建action记录
         if($comment != '' || !empty($changes) || !empty($files))
         {
@@ -3460,24 +3458,24 @@ class docTest
                 if($doc->status == 'normal' && $newType == 'draft') $action = 'savedDraft';
                 if($doc->status == $newType) $action = 'Edited';
             }
-            
+
             $fileAction = '';
             if(!empty($files)) $fileAction = 'addFiles' . implode(',', $files) . "\n";
-            
+
             // 模拟创建action记录
             $actionID = rand(1, 1000);  // 模拟生成的actionID
-            
+
             $result['action'] = $action;
             $result['actionID'] = $actionID;
             $result['fileAction'] = $fileAction;
             $result['comment'] = $comment;
             $result['objectType'] = 'docTemplate';
         }
-        
+
         // 模拟创建链接和获取文档
         $result['link'] = '/doc-view-' . $doc->id . '.html';
         $result['updatedDoc'] = $doc;  // 在真实场景中，这里会重新获取文档
-        
+
         // 模拟isInModal检查
         if($isInModal)
         {
@@ -3492,9 +3490,9 @@ class docTest
             $result['load'] = $result['link'];
             $result['doc'] = $result['updatedDoc'];
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -3508,7 +3506,7 @@ class docTest
     public function processOutlineTest($doc)
     {
         // 模拟processOutline方法的核心逻辑
-        
+
         /* Split content into an array. */
         $content = preg_replace('/(<(h[1-6])[\S\s]*?\>[\S\s]*?<\/\2>)/', "$1\n", $doc->content);
         $content = explode("\n", $content);
@@ -3530,7 +3528,7 @@ class docTest
             $topLevel    = (int)ltrim($includeHeadElement[0], 'h');
             $outlineList = $this->buildOutlineList($topLevel, $content, $includeHeadElement);
             $outlineTree = $this->buildOutlineTree($outlineList);
-            
+
             // 模拟设置view变量
             global $tester;
             if(!isset($tester->view)) $tester->view = new stdClass();
@@ -3569,7 +3567,7 @@ class docTest
         $parentID     = 0;
         $currentLevel = 0;
         $outlineList  = array();
-        
+
         foreach($content as $index => $element)
         {
             preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
@@ -3653,14 +3651,14 @@ class docTest
     public function assignVarsForViewTest(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown)
     {
         global $tester;
-        
+
         // 模拟assignVarsForView方法的核心逻辑
         if($type == 'execution' && $tester->app->tab == 'project')
         {
             $objectType = 'project';
             $objectID   = $object->project;
         }
-        
+
         // 创建一个模拟的view对象来收集设置的变量
         $result = new stdClass();
         $result->title          = $tester->lang->doc->common . $tester->lang->hyphen . $doc->title;
@@ -3675,7 +3673,7 @@ class docTest
         $result->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
         $result->libs           = $libs;
         $result->objectDropdown = $objectDropdown;
-        
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -3721,7 +3719,7 @@ class docTest
     public function setSpacePageStorageTest(string $type, string $browseType, int $objectID, int $libID, int $moduleID, int $param)
     {
         $result = new stdClass();
-        
+
         // 验证参数类型
         if(is_string($type) && is_string($browseType) && is_int($objectID) && is_int($libID) && is_int($moduleID) && is_int($param))
         {
@@ -3731,14 +3729,14 @@ class docTest
         {
             $result->paramTypes = 'invalid';
         }
-        
+
         // 测试不同的type参数值
         $validTypes = array('product', 'project', 'execution', 'custom', 'mine');
         $result->typeValid = in_array($type, $validTypes) ? 'yes' : 'no';
-        
+
         // 模拟方法存在检查 - 方法确实存在于zen.php中
         $result->methodExists = 'yes';
-        
+
         return $result;
     }
 
@@ -3765,14 +3763,14 @@ class docTest
     {
         // 创建一个简单的结果对象，模拟视图变量设置
         $result = new stdClass();
-        
+
         // 根据libType设置相应的视图变量
         if($libType == 'api')
         {
             $result->libs = $libs;
             $result->apiID = 0;
             $result->release = 0;
-            
+
             // 模拟API列表数据
             if($browseType == 'bySearch')
             {
@@ -3795,23 +3793,23 @@ class docTest
                 $result->docs = array('normalBrowse' => 'docsByModule');
             }
         }
-        
+
         // 设置API相关变量
         $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
         $apiObjectID = $apiObjectType ? $objectID : 0;
-        
+
         // 模拟权限检查
         $canExport = 0; // 统一设为0表示无导出权限
-        
+
         $result->canExport = $canExport;
         $result->apiLibID = count($libs) > 0 ? key($libs) : null;
-        
+
         // 模拟分页器
         $result->pager = new stdClass();
         $result->pager->recTotal = $recTotal;
         $result->pager->recPerPage = $recPerPage;
         $result->pager->pageID = $pageID;
-        
+
         // 返回所有视图变量以便测试验证
         return $result;
     }
@@ -3829,10 +3827,10 @@ class docTest
     public function buildSearchFormForShowFilesTest(string $type, int $objectID, string $viewType = '', int $param = 0): object
     {
         $result = new stdClass();
-        
+
         // 验证方法是否存在 - 方法确实存在于zen.php中
         $result->methodExists = 'yes';
-        
+
         // 验证参数类型
         if(is_string($type) && is_int($objectID) && is_string($viewType) && is_int($param))
         {
@@ -3842,7 +3840,7 @@ class docTest
         {
             $result->paramTypes = 'invalid';
         }
-        
+
         // 验证type参数值
         if(in_array($type, array('product', 'project', 'execution')))
         {
@@ -3852,23 +3850,23 @@ class docTest
         {
             $result->typeValid = 'no';
         }
-        
+
         // 模拟验证buildSearchFormForShowFiles方法的功能
         // 该方法主要功能是根据type设置不同的objectType列表
-        
+
         // 模拟配置设置
         $result->configSet = 'yes';
         $result->objectTypeSet = 'yes';
         $result->moduleName = $type . 'DocFile';
-        
+
         // 模拟对象类型设置
         $objectTypes = array();
-        
+
         // 根据type设置特定对象类型
         if($type == 'product')
         {
             $objectTypes['product'] = '产品';
-            $objectTypes['story'] = '需求';  
+            $objectTypes['story'] = '需求';
             $objectTypes['productplan'] = '计划';
             $objectTypes['release'] = '发布';
         }
@@ -3878,7 +3876,7 @@ class docTest
             $objectTypes['design'] = '设计';
             $objectTypes['review'] = '评审';
         }
-        
+
         if($type == 'project' || $type == 'execution')
         {
             $objectTypes['execution'] = '执行';
@@ -3887,15 +3885,15 @@ class docTest
             $objectTypes['build'] = '版本';
             $objectTypes['testtask'] = '测试单';
         }
-        
+
         // 公共对象类型（所有type都包含）
         $objectTypes['bug'] = 'Bug';
         $objectTypes['testcase'] = '用例';
         $objectTypes['testreport'] = '测试报告';
         $objectTypes['doc'] = '文档';
-        
+
         $result->objectTypeCount = count($objectTypes);
-        
+
         // 检查必须包含的对象类型
         $requiredTypes = array('bug', 'testcase', 'testreport', 'doc');
         $hasRequired = true;
@@ -3908,7 +3906,7 @@ class docTest
             }
         }
         $result->hasRequiredTypes = $hasRequired ? 'yes' : 'no';
-        
+
         // 根据type检查特定类型
         if($type == 'product')
         {
@@ -3956,7 +3954,7 @@ class docTest
         {
             $result->hasSpecificTypes = 'no';
         }
-        
+
         return $result;
     }
 
@@ -3971,16 +3969,16 @@ class docTest
     public function initLibForMySpaceTest($account = '', $vision = '')
     {
         global $app, $tester;
-        
+
         // 保存原始用户和配置
         $originalUser = $app->user->account ?? 'admin';
         $originalVision = $app->config->vision ?? 'rnd';
-        
+
         // 设置测试用户和视图
         if($account) $app->user->account = $account;
         if($vision) $app->config->vision = $vision;
         else $app->config->vision = 'rnd';
-        
+
         // 检查用户是否已有默认个人空间文档库
         $existingLibCount = $this->objectModel->dao->select('count(1) as count')->from(TABLE_DOCLIB)
             ->where('type')->eq('mine')
@@ -3988,10 +3986,10 @@ class docTest
             ->andWhere('addedBy')->eq($app->user->account)
             ->andWhere('vision')->eq($app->config->vision)
             ->fetch('count');
-        
+
         $result = new stdclass();
         $result->existingCount = $existingLibCount;
-        
+
         // 模拟initLibForMySpace方法的核心逻辑
         if(empty($existingLibCount))
         {
@@ -4004,9 +4002,9 @@ class docTest
             $mineLib->acl = 'private';
             $mineLib->addedBy = $app->user->account;
             $mineLib->addedDate = helper::now();
-            
+
             $this->objectModel->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
-            
+
             if(dao::isError())
             {
                 $result->result = 'error';
@@ -4027,11 +4025,11 @@ class docTest
         {
             $result->result = 'exists';
         }
-        
+
         // 恢复原始用户和配置
         $app->user->account = $originalUser;
         $app->config->vision = $originalVision;
-        
+
         return $result;
     }
 
@@ -4046,16 +4044,16 @@ class docTest
     public function initLibForTeamSpaceTest($account = '', $vision = '')
     {
         global $app, $tester;
-        
+
         // 保存原始用户和配置
         $originalUser = $app->user->account ?? 'admin';
         $originalVision = $app->config->vision ?? 'rnd';
-        
+
         // 设置测试用户和视图
         if($account) $app->user->account = $account;
         if($vision) $app->config->vision = $vision;
         else $app->config->vision = 'rnd';
-        
+
         // 首次调用时清理现有的custom类型文档库
         static $firstCall = true;
         if($firstCall)
@@ -4063,16 +4061,16 @@ class docTest
             $this->objectModel->dao->delete()->from(TABLE_DOCLIB)->where('type')->eq('custom')->exec();
             $firstCall = false;
         }
-        
+
         // 检查是否已存在custom类型的文档库
         $existingLibCount = $this->objectModel->dao->select('count(1) as count')->from(TABLE_DOCLIB)
             ->where('type')->eq('custom')
             ->andWhere('vision')->eq($app->config->vision)
             ->fetch('count');
-        
+
         $result = new stdclass();
         $result->existingCount = $existingLibCount;
-        
+
         // 模拟initLibForTeamSpace方法的核心逻辑
         if(empty($existingLibCount))
         {
@@ -4084,9 +4082,9 @@ class docTest
             $teamLib->acl = 'open';
             $teamLib->addedBy = $app->user->account;
             $teamLib->addedDate = helper::now();
-            
+
             $this->objectModel->dao->insert(TABLE_DOCLIB)->data($teamLib)->exec();
-            
+
             if(dao::isError())
             {
                 $result->result = 'error';
@@ -4106,11 +4104,11 @@ class docTest
         {
             $result->result = 'exists';
         }
-        
+
         // 恢复原始用户和配置
         $app->user->account = $originalUser;
         $app->config->vision = $originalVision;
-        
+
         return $result;
     }
 
@@ -4123,7 +4121,7 @@ class docTest
     public function getTeamLibAttributesTest()
     {
         global $app;
-        
+
         // 获取最新创建的团队空间库
         $teamLib = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)
             ->where('type')->eq('custom')
@@ -4131,21 +4129,21 @@ class docTest
             ->orderBy('id_desc')
             ->limit(1)
             ->fetch();
-        
+
         if(empty($teamLib))
         {
             $result = new stdclass();
             $result->result = 'not_found';
             return $result;
         }
-        
+
         $result = new stdclass();
         $result->type = $teamLib->type;
         $result->acl = $teamLib->acl;
         $result->vision = $teamLib->vision;
         $result->addedBy = $teamLib->addedBy;
         $result->name = $teamLib->name;
-        
+
         return $result;
     }
 
@@ -4159,26 +4157,26 @@ class docTest
     public function getAllSpacesTest(string $extra = ''): array
     {
         // 模拟getAllSpaces方法的核心逻辑
-        if(strpos($extra, 'doctemplate') !== false) 
+        if(strpos($extra, 'doctemplate') !== false)
         {
             // 直接返回模拟的文档模板空间数据，避免调用有问题的方法
             return array();
         }
-        
-        if(strpos($extra, 'nomine') !== false)   
+
+        if(strpos($extra, 'nomine') !== false)
         {
             return $this->objectModel->getTeamSpaces();
         }
-        
-        if(strpos($extra, 'onlymine') !== false) 
+
+        if(strpos($extra, 'onlymine') !== false)
         {
             return array('mine' => $this->objectModel->lang->doc->spaceList['mine'] ?? '我的空间');
         }
-        
+
         // 默认情况：返回个人空间+团队空间
         $mineSpace = array('mine' => $this->objectModel->lang->doc->spaceList['mine'] ?? '我的空间');
         $teamSpaces = $this->objectModel->getTeamSpaces();
-        
+
         return $mineSpace + $teamSpaces;
     }
 
@@ -4197,7 +4195,7 @@ class docTest
         {
             return 0; // 空列表返回0
         }
-        
+
         // 模拟recordBatchMoveActions方法的基本验证逻辑
         $processedCount = 0;
         foreach($oldDocList as $oldDoc)
@@ -4208,7 +4206,7 @@ class docTest
                 $processedCount++;
             }
         }
-        
+
         return $processedCount;
     }
 
@@ -4223,26 +4221,26 @@ class docTest
     {
         // 模拟responseAfterAddTemplateType方法的核心逻辑
         global $tester;
-        
+
         // 验证参数类型
         if(!is_int($scope))
         {
             return array('result' => 'error', 'message' => 'Invalid parameter type');
         }
-        
+
         // 模拟成功响应结果（基于真实方法的实现）
         $response = array(
-            'result' => 'success', 
-            'message' => $tester->lang->saveSuccess ?? 'Save success', 
+            'result' => 'success',
+            'message' => $tester->lang->saveSuccess ?? 'Save success',
             'load' => true
         );
-        
+
         // 如果dao有错误，返回错误信息
-        if(dao::isError()) 
+        if(dao::isError())
         {
             return dao::getError();
         }
-        
+
         return $response;
     }
 
@@ -4285,7 +4283,7 @@ class docTest
     {
         // 直接实现prepareCols方法的逻辑进行测试，避免加载问题
         if(isset($cols['actions'])) unset($cols['actions']);
-        
+
         foreach($cols as $key => $col)
         {
             $cols[$key]['name']     = $key;
@@ -4293,7 +4291,7 @@ class docTest
             if(isset($col['link']))         unset($cols[$key]['link']);
             if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $cols;
@@ -4312,7 +4310,7 @@ class docTest
     {
         // 直接测试previewFeedback方法的基本逻辑
         $result = array('cols' => array(), 'data' => array());
-        
+
         // 模拟不同的测试场景
         if($view == 'setting' && isset($settings['action']) && $settings['action'] == 'preview')
         {
@@ -4334,9 +4332,9 @@ class docTest
             // 其他情况返回空数组
             $result['data'] = array();
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4353,7 +4351,7 @@ class docTest
     {
         // 模拟previeweicket方法的行为，简单返回成功状态
         $action = zget($settings, 'action', '');
-        
+
         if($action === 'preview' && $view === 'setting')
         {
             // 正常情况：有action和view
@@ -4374,7 +4372,7 @@ class docTest
             // 空设置
             return 0;
         }
-        
+
         return 1;
     }
 
@@ -4392,7 +4390,7 @@ class docTest
         // 模拟previewProductplan方法的核心逻辑
         $result = array('cols' => array(), 'data' => array());
         $action = zget($settings, 'action', '');
-        
+
         if($action === 'preview' && $view === 'setting')
         {
             $productID = (int)zget($settings, 'product', 0);
@@ -4449,7 +4447,7 @@ class docTest
         {
             $result['data'] = array();
         }
-        
+
         // 模拟datatable列配置
         $result['cols'] = array(
             'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
@@ -4458,9 +4456,9 @@ class docTest
             'end' => array('title' => '结束时间', 'name' => 'end', 'sortType' => false),
             'status' => array('title' => '状态', 'name' => 'status', 'sortType' => false)
         );
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4476,7 +4474,7 @@ class docTest
     public function previewPlanStoryTest(string $view, array $settings, string $idList): array
     {
         $result = array('cols' => array(), 'data' => array());
-        
+
         // 模拟previewPlanStory方法的行为
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -4543,7 +4541,7 @@ class docTest
         {
             $result['data'] = array();
         }
-        
+
         // 模拟datatable列配置（使用bug模块的配置）
         $result['cols'] = array(
             'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
@@ -4554,9 +4552,9 @@ class docTest
             'estimate' => array('title' => '预计', 'name' => 'estimate', 'sortType' => false),
             'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
         );
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4572,7 +4570,7 @@ class docTest
     public function previewProductStoryTest(string $view, array $settings, string $idList): array
     {
         $result = array('cols' => array(), 'data' => array());
-        
+
         // 模拟previewProductStory方法的行为
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -4580,7 +4578,7 @@ class docTest
             {
                 $productId = (int)$settings['product'];
                 $condition = isset($settings['condition']) ? $settings['condition'] : '';
-                
+
                 if($condition === 'customSearch')
                 {
                     // 模拟自定义搜索
@@ -4661,7 +4659,7 @@ class docTest
         {
             $result['data'] = array();
         }
-        
+
         // 模拟datatable列配置（使用product模块的browse配置）
         $result['cols'] = array(
             'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
@@ -4673,9 +4671,9 @@ class docTest
             'estimate' => array('title' => '预计', 'name' => 'estimate', 'sortType' => false),
             'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
         );
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4691,7 +4689,7 @@ class docTest
     public function previewProductBugTest(string $view = 'setting', array $settings = array(), string $idList = ''): array
     {
         $result = array();
-        
+
         // 模拟datatable列配置（使用bug模块的配置）
         $result['cols'] = array(
             'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
@@ -4701,13 +4699,13 @@ class docTest
             'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
             'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
         );
-        
+
         // 根据不同的视图和设置返回模拟数据
         if($view == 'setting' && isset($settings['action']) && $settings['action'] == 'preview')
         {
             $product = isset($settings['product']) ? (int)$settings['product'] : 1;
             $condition = isset($settings['condition']) ? $settings['condition'] : 'active';
-            
+
             if($condition == 'customSearch')
             {
                 // 自定义搜索的情况
@@ -4730,7 +4728,7 @@ class docTest
                 // 根据产品ID和条件生成模拟数据
                 $count = ($product <= 5 && $product > 0) ? 5 : 0; // 有效产品有数据，无效产品无数据
                 $mockData = array();
-                
+
                 for($i = 1; $i <= $count; $i++)
                 {
                     $bug = new stdClass();
@@ -4742,7 +4740,7 @@ class docTest
                     $bug->assignedTo = 'user' . ($i % 3 + 1);
                     $mockData[] = $bug;
                 }
-                
+
                 $result['data'] = $mockData;
             }
         }
@@ -4751,7 +4749,7 @@ class docTest
             // list视图模式，根据ID列表返回数据
             $ids = explode(',', $idList);
             $mockData = array();
-            
+
             foreach($ids as $id)
             {
                 $bug = new stdClass();
@@ -4763,16 +4761,16 @@ class docTest
                 $bug->assignedTo = 'admin';
                 $mockData[] = $bug;
             }
-            
+
             $result['data'] = $mockData;
         }
         else
         {
             $result['data'] = array();
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4780,7 +4778,7 @@ class docTest
      * Test previewPlanBug method.
      *
      * @param  string $view
-     * @param  array  $settings  
+     * @param  array  $settings
      * @param  string $idList
      * @access public
      * @return array
@@ -4788,7 +4786,7 @@ class docTest
     public function previewPlanBugTest(string $view = 'setting', array $settings = array(), string $idList = ''): array
     {
         $result = array();
-        
+
         // 模拟datatable列配置（使用bug模块的配置）
         $result['cols'] = array(
             'id' => array('title' => 'ID', 'name' => 'id', 'sortType' => false),
@@ -4798,9 +4796,9 @@ class docTest
             'stage' => array('title' => '阶段', 'name' => 'stage', 'sortType' => false),
             'assignedTo' => array('title' => '指派给', 'name' => 'assignedTo', 'sortType' => false)
         );
-        
+
         $action = zget($settings, 'action', '');
-        
+
         if($action === 'preview' && $view === 'setting')
         {
             $planID = (int)zget($settings, 'plan', 0);
@@ -4834,7 +4832,7 @@ class docTest
             {
                 $id = trim($id);
                 if(empty($id)) continue;
-                
+
                 $bug = new stdclass();
                 $bug->id = (int)$id;
                 $bug->title = "Bug{$id}列表项";
@@ -4844,16 +4842,16 @@ class docTest
                 $bug->assignedTo = 'admin';
                 $mockData[] = $bug;
             }
-            
+
             $result['data'] = $mockData;
         }
         else
         {
             $result['data'] = array();
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -4873,7 +4871,7 @@ class docTest
         {
             $product = (int)$settings['product'];
             $condition = $settings['condition'] ?? '';
-            
+
             if($product > 0 && !empty($condition)) {
                 if($condition === 'customSearch') {
                     return 2; // 返回2个模拟用例
@@ -4887,10 +4885,10 @@ class docTest
             $idArray = array_filter(explode(',', $idList));
             return count($idArray); // 返回ID数量
         }
-        
+
         return 0; // 默认返回0
     }
-    
+
     /**
      * Mock preview product case data for testing.
      *
@@ -4903,12 +4901,12 @@ class docTest
     private function mockPreviewProductCaseData(string $view, array $settings, string $idList): object
     {
         $result = new stdclass();
-        
+
         if(!empty($settings) && isset($settings['action']) && $settings['action'] === 'preview' && $view === 'setting')
         {
             $product = (int)$settings['product'];
             $condition = $settings['condition'] ?? '';
-            
+
             if($condition === 'customSearch')
             {
                 // 自定义搜索模拟数据
@@ -4953,7 +4951,7 @@ class docTest
             {
                 $id = trim($id);
                 if(empty($id)) continue;
-                
+
                 $testcase = new stdclass();
                 $testcase->id = (int)$id;
                 $testcase->title = "测试用例{$id}";
@@ -4969,7 +4967,7 @@ class docTest
         {
             $result->data = array();
         }
-        
+
         return $result;
     }
 
@@ -4985,7 +4983,7 @@ class docTest
     public function previewERTest(string $view, array $settings = array(), string $idList = ''): array
     {
         $result = array('cols' => array(), 'data' => array());
-        
+
         // 模拟previewStory方法的行为，因为previewER调用了previewStory('epic', $view, $settings, $idList)
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -4993,7 +4991,7 @@ class docTest
             {
                 $product = (int)$settings['product'];
                 $condition = $settings['condition'] ?? 'all';
-                
+
                 if($condition === 'customSearch' && isset($settings['field']))
                 {
                     // 自定义搜索模拟数据
@@ -5039,7 +5037,7 @@ class docTest
             {
                 $id = trim($id);
                 if(empty($id)) continue;
-                
+
                 $epic = new stdclass();
                 $epic->id = (int)$id;
                 $epic->title = "业务需求{$id}";
@@ -5051,7 +5049,7 @@ class docTest
             }
             $result['data'] = $mockData;
         }
-        
+
         // 模拟datatable列配置
         $result['cols'] = array(
             'id' => array('name' => 'id', 'title' => 'ID', 'type' => 'id'),
@@ -5060,57 +5058,8 @@ class docTest
             'status' => array('name' => 'status', 'title' => '状态', 'type' => 'status'),
             'pri' => array('name' => 'pri', 'title' => '优先级', 'type' => 'text')
         );
-        
-        return $result;
-    }
 
-    /**
-     * Test previewUR method.
-     *
-     * @param  string $view
-     * @param  array  $settings
-     * @param  string $idList
-     * @access public
-     * @return int
-     */
-    public function previewURTest(string $view, array $settings = array(), string $idList = ''): int
-    {
-        // 检查method_exists并调用previewUR方法
-        if(method_exists($this->objectModel, 'previewUR') || method_exists($this->objectZen, 'previewUR'))
-        {
-            try 
-            {
-                // 尝试直接调用previewUR方法
-                if(method_exists($this->objectModel, 'previewUR')) 
-                {
-                    $this->objectModel->previewUR($view, $settings, $idList);
-                } 
-                else 
-                {
-                    $this->objectZen->previewUR($view, $settings, $idList);
-                }
-                
-                if(dao::isError()) return 0;
-                return 1;
-            }
-            catch(Exception $e)
-            {
-                // 出错返回0
-                return 0;
-            }
-        }
-        
-        // 模拟previewUR的行为：它调用previewStory('requirement', $view, $settings, $idList)
-        // 但这里我们只是验证方法能正常运行
-        
-        // 验证参数是否合理
-        if(is_string($view) && is_array($settings) && is_string($idList))
-        {
-            // 模拟方法执行成功
-            return 1;
-        }
-        
-        return 0;
+        return $result;
     }
 
     /**
@@ -5126,13 +5075,13 @@ class docTest
     {
         // 模拟previewProjectStory方法的基本行为验证
         // 由于该方法依赖于多个模块和复杂的数据处理，我们只验证参数合理性和基本流程
-        
+
         // 验证参数类型和基本合理性
         if(!is_string($view) || !is_array($settings) || !is_string($idList))
         {
             return 0;
         }
-        
+
         // 模拟不同视图和设置的处理
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -5141,13 +5090,13 @@ class docTest
             {
                 return 0;
             }
-            
+
             // 验证条件参数
             if(!isset($settings['condition']))
             {
                 return 0;
             }
-            
+
             return 1; // 正常的设置预览
         }
         elseif($view === 'list')
@@ -5166,7 +5115,7 @@ class docTest
      * Test previewExecutionStory method.
      *
      * @param  string $view
-     * @param  array  $settings  
+     * @param  array  $settings
      * @param  string $idList
      * @access public
      * @return array
@@ -5175,15 +5124,15 @@ class docTest
     {
         // 模拟previewExecutionStory方法的基本行为验证
         // 由于该方法依赖于多个模块和复杂的数据处理，我们只验证参数合理性和基本流程
-        
+
         $result = array('hasData' => 0, 'cols' => array(), 'data' => array());
-        
+
         // 验证参数类型和基本合理性
         if(!is_string($view) || !is_array($settings) || !is_string($idList))
         {
             return $result;
         }
-        
+
         // 模拟不同视图和设置的处理
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -5192,13 +5141,13 @@ class docTest
             {
                 return $result;
             }
-            
+
             // 验证条件参数
             if(!isset($settings['condition']))
             {
                 return $result;
             }
-            
+
             // 只有当执行ID有效时才返回数据
             if($settings['execution'] > 0 && $settings['execution'] <= 100)
             {
@@ -5215,7 +5164,7 @@ class docTest
                 $result['data'] = explode(',', $idList);
             }
         }
-        
+
         return $result;
     }
 
@@ -5233,22 +5182,22 @@ class docTest
     {
         // 模拟previewStory方法的行为验证
         // 由于该方法依赖于多个模块和复杂的数据处理，我们验证参数合理性和基本流程
-        
+
         $result = 0;
-        
+
         // 验证参数类型和基本合理性
         if(!is_string($storyType) || !is_string($view) || !is_array($settings) || !is_string($idList))
         {
             return $result;
         }
-        
+
         // 验证storyType参数
         $validStoryTypes = array('story', 'epic', 'requirement');
         if(!in_array($storyType, $validStoryTypes))
         {
             return $result;
         }
-        
+
         // 模拟不同视图和设置的处理
         if($view === 'setting' && isset($settings['action']) && $settings['action'] === 'preview')
         {
@@ -5257,13 +5206,13 @@ class docTest
             {
                 return $result;
             }
-            
+
             // 验证条件参数
             if(!isset($settings['condition']))
             {
                 return $result;
             }
-            
+
             // 模拟根据条件获取数据
             if($settings['condition'] === 'customSearch')
             {
@@ -5291,9 +5240,9 @@ class docTest
                 $result = count($ids); // 返回ID数量
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -5310,15 +5259,15 @@ class docTest
     {
         // 模拟previewTask方法的逻辑，返回处理的任务数量
         $result = 0;
-        
+
         // 验证参数合理性
         if(!is_string($view) || !is_array($settings) || !is_string($idList))
         {
             return $result;
         }
-        
+
         $action = isset($settings['action']) ? $settings['action'] : '';
-        
+
         if($action === 'preview' && $view === 'setting')
         {
             $execution = isset($settings['execution']) ? (int)$settings['execution'] : 0;
@@ -5343,9 +5292,9 @@ class docTest
                 }
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -5365,7 +5314,7 @@ class docTest
         {
             $caselib = (int)$settings['caselib'];
             $condition = $settings['condition'] ?? '';
-            
+
             if($caselib > 0 && $caselib < 999 && !empty($condition)) {
                 if($condition === 'customSearch') {
                     return 2; // 返回2个模拟用例
@@ -5379,7 +5328,7 @@ class docTest
             $idArray = array_filter(explode(',', $idList));
             return count($idArray); // 返回ID数量
         }
-        
+
         return 0; // 其他情况返回0
     }
 
@@ -5438,7 +5387,7 @@ class docTest
     public function assignStoryGradeDataTest(string $type): array
     {
         global $app;
-        
+
         // 手动实现assignStoryGradeData方法的逻辑
         $gradeGroup = array();
         $gradeList  = $this->objectModel->loadModel('story')->getGradeList('');
@@ -5471,21 +5420,21 @@ class docTest
         // 确保doc模型类已加载
         global $tester;
         $docModel = $tester->loadModel('doc');
-        
+
         // 先包含model.php，再包含zen.php
         $modulePath = $tester->app->getModulePath('', 'doc');
         helper::import($modulePath . 'model.php');
         helper::import($modulePath . 'zen.php');
-        
+
         $docZen = new docZen();
-        
+
         // 使用reflection来调用protected方法
         $reflection = new ReflectionClass($docZen);
         $method = $reflection->getMethod('processReleaseListData');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($docZen, array($releaseList, $childReleases));
-        
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -5501,10 +5450,10 @@ class docTest
     public function getDocChildrenByRecursionTest(int $docID, int $level): array
     {
         global $tester;
-        
+
         // 加载doc模型
         $docModel = $tester->loadModel('doc');
-        
+
         // 检查zen方法是否在model中可用
         if(method_exists($docModel, 'getDocChildrenByRecursion'))
         {
@@ -5519,7 +5468,7 @@ class docTest
             // 如果model中没有该方法，表明可能需要特殊的加载方式
             // 创建一个临时的zen实例来测试
             $modulePath = $tester->app->getModulePath('', 'doc');
-            
+
             // 确保先加载model类
             if(!class_exists('doc') && file_exists($modulePath . 'model.php'))
             {
@@ -5527,16 +5476,16 @@ class docTest
                 // 动态创建doc类别名
                 if(!class_exists('doc')) class_alias('docModel', 'doc');
             }
-            
+
             // 再加载zen类
             if(file_exists($modulePath . 'zen.php'))
             {
                 helper::import($modulePath . 'zen.php');
                 $docZen = new docZen();
-                
+
                 // 初始化$doc属性指向自己，因为zen类中的方法会调用$this->doc
                 $docZen->doc = $docModel;
-                
+
                 $reflection = new ReflectionClass($docZen);
                 $method = $reflection->getMethod('getDocChildrenByRecursion');
                 $method->setAccessible(true);
@@ -5547,7 +5496,7 @@ class docTest
                 return array();
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
         return $result;
     }

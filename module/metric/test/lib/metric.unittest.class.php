@@ -234,7 +234,7 @@ class metricTest
     public function calculateSingleMetricTest($calculator = null, $vision = 'rnd')
     {
         if($calculator === null) return false;
-        
+
         $result = $this->objectModel->calculateSingleMetric($calculator, $vision);
         if(dao::isError()) return dao::getError();
 
@@ -252,7 +252,7 @@ class metricTest
     public function calculateDefaultMetricTest($calculator = null, $vision = 'rnd')
     {
         if($calculator === null) return false;
-        
+
         $this->objectModel->calculateDefaultMetric($calculator, $vision);
         if(dao::isError()) return dao::getError();
 
@@ -274,7 +274,7 @@ class metricTest
         // Suppress errors and capture output to handle various error conditions
         ob_start();
         $error = error_get_last();
-        
+
         try {
             $result = $this->objectModel->getLatestResultByCode($code, $options, $pager, $vision);
             if(dao::isError()) return dao::getError();
@@ -291,12 +291,12 @@ class metricTest
             ob_end_clean();
             return 'Error: ' . $e->getMessage();
         }
-        
+
         $output = ob_get_clean();
         if(!empty($output)) {
             return 'Error captured: ' . strip_tags($output);
         }
-        
+
         return false;
     }
 
@@ -343,19 +343,19 @@ class metricTest
         $logFile = $this->objectModel->getLogFile();
         $originalExists = file_exists($logFile);
         $originalContent = $originalExists ? file_get_contents($logFile) : '';
-        
+
         $this->objectModel->saveLogs($log);
         if(dao::isError()) return dao::getError();
-        
+
         $result = array();
         $result['fileExists'] = file_exists($logFile);
-        
+
         if($result['fileExists']) {
             $content = file_get_contents($logFile);
             $result['hasPhpHeader'] = !$originalExists && strpos($content, "<?php\ndie();\n?>") === 0;
             $result['hasTimestamp'] = preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $content);
             $result['hasLogContent'] = strpos($content, trim($log)) !== false;
-            
+
             // Clean up: restore original content or remove file
             if($originalExists) {
                 file_put_contents($logFile, $originalContent);
@@ -363,7 +363,7 @@ class metricTest
                 unlink($logFile);
             }
         }
-        
+
         return $result;
     }
 
@@ -392,7 +392,7 @@ class metricTest
     public function rebuildPrimaryKeyTest($testType = '')
     {
         global $tester;
-        
+
         if(empty($testType))
         {
             // 测试空表情况
@@ -532,12 +532,12 @@ class metricTest
     public function rebuildIdColumnTest($testType = '')
     {
         global $tester;
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('rebuildIdColumn');
         $method->setAccessible(true);
-        
+
         if(empty($testType))
         {
             // 测试空表情况
@@ -694,17 +694,17 @@ class metricTest
     public function clearOutDatedRecordsTest($code = '', $cycle = '')
     {
         global $tester;
-        
+
         if(empty($code) || empty($cycle)) return 0;
-        
+
         // 记录删除前的数据量
         $beforeCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
-        
+
         $this->objectModel->clearOutDatedRecords($code, $cycle);
-        
+
         // 记录删除后的数据量
         $afterCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
-        
+
         return $beforeCount - $afterCount;
     }
 
@@ -721,7 +721,7 @@ class metricTest
             global $tester;
             $dao = $tester->dao;
         }
-        
+
         $result = $this->objectModel->getDataset($dao);
         if(dao::isError()) return dao::getError();
 
@@ -733,7 +733,7 @@ class metricTest
             $info->vision = isset($result->vision) ? gettype($result->vision) : 'null';
             return $info;
         }
-        
+
         return $result;
     }
 
@@ -840,14 +840,14 @@ class metricTest
     public function processUnitListTest()
     {
         // 备份原始unitList配置
-        $originalUnitList = isset($this->objectModel->lang->metric->unitList['measure']) 
+        $originalUnitList = isset($this->objectModel->lang->metric->unitList['measure'])
                            ? $this->objectModel->lang->metric->unitList['measure'] : null;
 
         $this->objectModel->processUnitList();
         if(dao::isError()) return dao::getError();
 
         // 获取处理后的measure单位
-        $processedMeasure = isset($this->objectModel->lang->metric->unitList['measure']) 
+        $processedMeasure = isset($this->objectModel->lang->metric->unitList['measure'])
                            ? $this->objectModel->lang->metric->unitList['measure'] : null;
 
         return $processedMeasure;
@@ -863,9 +863,9 @@ class metricTest
     public function processObjectListTest($urAndSR = null)
     {
         // 备份原始配置
-        $originalUrAndSR = isset($this->objectModel->config->custom->URAndSR) 
+        $originalUrAndSR = isset($this->objectModel->config->custom->URAndSR)
                           ? $this->objectModel->config->custom->URAndSR : null;
-        $originalObjectList = isset($this->objectModel->lang->metric->objectList['requirement']) 
+        $originalObjectList = isset($this->objectModel->lang->metric->objectList['requirement'])
                              ? $this->objectModel->lang->metric->objectList['requirement'] : null;
 
         // 设置测试配置
@@ -923,7 +923,7 @@ class metricTest
         ob_start();
         $result = $this->objectModel->createSqlFunction($sql, $measurement);
         ob_end_clean();
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -942,7 +942,7 @@ class metricTest
         ob_start();
         $result = $this->objectModel->execSqlMeasurement($measurement, $vars);
         $output = ob_get_clean();
-        
+
         if(dao::isError()) return dao::getError();
 
         // 如果有HTML输出，从输出中提取实际结果
@@ -951,7 +951,7 @@ class metricTest
             // 清理HTML标签，只保留实际内容
             $cleanOutput = preg_replace('/<[^>]*>/', '', $output);
             $cleanOutput = trim($cleanOutput);
-            
+
             // 尝试提取最后的数字或值
             if(preg_match('/(\d+)$/', $cleanOutput, $matches))
             {
@@ -974,7 +974,7 @@ class metricTest
     public function updateMetricFieldsTest($metricID = '', $metric = null)
     {
         if(empty($metricID) || $metric === null) return 'invalid_params';
-        
+
         try {
             $this->objectModel->updateMetricFields($metricID, $metric);
             if(dao::isError()) return dao::getError();
@@ -1019,7 +1019,7 @@ class metricTest
             $metric1->fromID = 1;
             $metric1->unit = '';
             $metrics[] = $metric1;
-            
+
             $metric2 = new stdClass();
             $metric2->id = 2;
             $metric2->type = 'php';
@@ -1027,10 +1027,10 @@ class metricTest
             $metric2->unit = '';
             $metrics[] = $metric2;
         }
-        
+
         $result = $this->objectModel->processOldMetrics($metrics);
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1045,7 +1045,7 @@ class metricTest
         global $config;
         $originalEdition = $config->edition;
         $config->edition = 'open';
-        
+
         try {
             $metrics = array();
             $metric1 = new stdClass();
@@ -1054,10 +1054,10 @@ class metricTest
             $metric1->fromID = 1;
             $metric1->unit = '';
             $metrics[] = $metric1;
-            
+
             $result = $this->objectModel->processOldMetrics($metrics);
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         }
         finally
@@ -1077,7 +1077,7 @@ class metricTest
         global $config;
         $originalEdition = $config->edition;
         $config->edition = 'max';
-        
+
         try {
             $metrics = array();
             $metric1 = new stdClass();
@@ -1086,10 +1086,10 @@ class metricTest
             $metric1->fromID = 1;
             $metric1->unit = '';
             $metrics[] = $metric1;
-            
+
             $result = $this->objectModel->processOldMetrics($metrics);
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         }
         finally
@@ -1109,7 +1109,7 @@ class metricTest
         $metrics = array();
         $result = $this->objectModel->processOldMetrics($metrics);
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1124,7 +1124,7 @@ class metricTest
         global $config;
         $originalEdition = $config->edition;
         $config->edition = 'max';
-        
+
         try {
             $metrics = array();
             $metric = new stdClass();
@@ -1133,10 +1133,10 @@ class metricTest
             $metric->fromID = 1;
             $metric->unit = '';
             $metrics[] = $metric;
-            
+
             $result = $this->objectModel->processOldMetrics($metrics);
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         }
         finally
@@ -1238,16 +1238,16 @@ class metricTest
     public function updateMetricDateTest()
     {
         global $tester;
-        
+
         // 记录更新前有多少条 createdDate 为 null 的记录
         $beforeCount = $tester->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
-        
+
         $this->objectModel->updateMetricDate();
         if(dao::isError()) return dao::getError();
-        
+
         // 记录更新后有多少条 createdDate 为 null 的记录
         $afterCount = $tester->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
-        
+
         return array('before' => $beforeCount, 'after' => $afterCount, 'updated' => $beforeCount - $afterCount);
     }
 
@@ -1391,7 +1391,7 @@ class metricTest
             // 默认测试数据
             $calcInstances = array();
         }
-        
+
         $result = $this->objectModel->filterCalcByEdition($calcInstances);
         if(dao::isError()) return dao::getError();
 
@@ -1415,7 +1415,7 @@ class metricTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getObjectsWithPager');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $metric, $query, $pager, $extra);
         if(dao::isError()) return dao::getError();
 
@@ -1434,17 +1434,17 @@ class metricTest
     public function processDAOWithDateTest($stmt = null, $query = array(), $dateType = 'day')
     {
         global $tester;
-        
+
         if($stmt === null)
         {
             $stmt = $tester->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
         }
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('processDAOWithDate');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $stmt, $query, $dateType);
         if(dao::isError()) return dao::getError();
 
@@ -1466,12 +1466,12 @@ class metricTest
         // 检查度量项是否存在，如果不存在则返回空数组
         $metric = $this->objectModel->getByCode($code);
         if(!$metric) return array();
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchMetricRecords');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $code, $fieldList, $query, $pager);
         if(dao::isError()) return dao::getError();
 
@@ -1493,12 +1493,12 @@ class metricTest
         // 检查度量项是否存在，如果不存在则返回空数组
         $metric = $this->objectModel->getByCode($code);
         if(!$metric) return array();
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchMetricRecordsWithOption');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $code, $fieldList, $options, $pager);
         if(dao::isError()) return dao::getError();
 
@@ -1518,12 +1518,12 @@ class metricTest
     public function fetchLatestMetricRecordsTest($code = null, $fieldList = array(), $query = array(), $pager = null)
     {
         if(!$code) return array();
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchLatestMetricRecords');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $code, $fieldList, $query, $pager);
         if(dao::isError()) return dao::getError();
 
@@ -1545,7 +1545,7 @@ class metricTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchMetricRecordByDate');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $code, $date, $limit);
         if(dao::isError()) return dao::getError();
 
@@ -1563,21 +1563,21 @@ class metricTest
     public function setDeletedTest($code = '', $value = '0')
     {
         global $tester;
-        
+
         if(empty($code)) return 'invalid_code';
-        
+
         // 记录更新前的状态
         $beforeCount = $tester->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq($value)
             ->fetch('count');
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('setDeleted');
         $method->setAccessible(true);
-        
+
         $method->invoke($this->objectTao, $code, $value);
         if(dao::isError()) return dao::getError();
 
@@ -1587,7 +1587,7 @@ class metricTest
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq($value)
             ->fetch('count');
-        
+
         return $afterCount - $beforeCount;
     }
 
@@ -1602,21 +1602,21 @@ class metricTest
     public function keepLatestRecordsTest($code = '', $fields = array())
     {
         global $tester;
-        
+
         if(empty($code)) return 'invalid_code';
-        
+
         // 记录操作前未删除的记录数
         $beforeUndeleted = $tester->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq('0')
             ->fetch('count');
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('keepLatestRecords');
         $method->setAccessible(true);
-        
+
         $method->invoke($this->objectTao, $code, $fields);
         if(dao::isError()) return dao::getError();
 
@@ -1626,7 +1626,7 @@ class metricTest
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq('0')
             ->fetch('count');
-        
+
         return $afterUndeleted - $beforeUndeleted;
     }
 
@@ -1640,20 +1640,20 @@ class metricTest
     public function executeDeleteTest($code = '')
     {
         global $tester;
-        
+
         if(empty($code)) return 'invalid_code';
-        
+
         // 记录删除前的记录数
         $beforeCount = $tester->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->fetch('count');
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('executeDelete');
         $method->setAccessible(true);
-        
+
         $method->invoke($this->objectTao, $code);
         if(dao::isError()) return dao::getError();
 
@@ -1662,7 +1662,7 @@ class metricTest
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->fetch('count');
-        
+
         return $beforeCount - $afterCount;
     }
 
@@ -1683,42 +1683,6 @@ class metricTest
     }
 
     /**
-     * Test initMetricRecords method.
-     *
-     * @param  object $recordCommon
-     * @param  string $scope
-     * @param  string $date
-     * @access public
-     * @return mixed
-     */
-    public function initMetricRecordsTest($recordCommon = null, $scope = 'system', $date = 'now')
-    {
-        if($recordCommon === null)
-        {
-            $recordCommon = new stdClass();
-            $recordCommon->value = 0;
-            $recordCommon->metricID = 1;
-            $recordCommon->metricCode = 'test_metric';
-            $recordCommon->date = helper::now();
-            $recordCommon->calcType = 'cron';
-            $recordCommon->calculatedBy = 'system';
-        }
-
-        global $tester;
-        $metricZen = $tester->loadZen('metric');
-
-        // 使用反射来调用protected方法
-        $reflection = new ReflectionClass($metricZen);
-        $method = $reflection->getMethod('initMetricRecords');
-        $method->setAccessible(true);
-        
-        $result = $method->invoke($metricZen, $recordCommon, $scope, $date);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test getUniqueKeyByRecord method from zen layer.
      *
      * @param  array  $record
@@ -1731,7 +1695,7 @@ class metricTest
         if($record === null) return '';
 
         global $tester;
-        
+
         // 使用tao对象，它包含zen层的方法
         $metricTao = $this->objectTao;
 
@@ -1739,7 +1703,7 @@ class metricTest
         $reflection = new ReflectionClass($metricTao);
         $method = $reflection->getMethod('getUniqueKeyByRecord');
         $method->setAccessible(true);
-        
+
         $recordObj = (object)$record;
         $result = $method->invoke($metricTao, $recordObj, $scope);
         if(dao::isError()) return dao::getError();
@@ -1756,16 +1720,16 @@ class metricTest
      * @return mixed
      */
     public function calcMetricTest($statement = null, $calcList = array())
-    {        
+    {
         try {
             // 使用反射来调用protected方法
             $reflection = new ReflectionClass($this->objectModel);
             $method = $reflection->getMethod('calcMetric');
             $method->setAccessible(true);
-            
+
             $method->invoke($this->objectModel, $statement, $calcList);
             if(dao::isError()) return dao::getError();
-            
+
             return true;
         } catch(Exception $e) {
             return 'Exception: ' . $e->getMessage();
@@ -1785,15 +1749,15 @@ class metricTest
     public function getCalcFieldsTest($calc = null, $row = null)
     {
         global $tester;
-        
+
         // 直接实例化metricZen类来测试
         $metricZen = new metricZen();
-        
+
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($metricZen);
         $method = $reflection->getMethod('getCalcFields');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($metricZen, $calc, $row);
         if(dao::isError()) return dao::getError();
 
@@ -1811,29 +1775,29 @@ class metricTest
     public function getBasicInfoTest($metricID = null, $fields = 'scope,object,purpose,dateType,name,alias,code,unit,stage')
     {
         if($metricID === null) return false;
-        
+
         global $tester;
-        
+
         // 获取度量信息
         $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
         if(!$metric) return false;
-        
+
         // 检查实际的数据库数据
         //a($metric); // 调试输出
-        
+
         // 构建view对象
         $view = new stdClass();
         $view->metric = $metric;
-        
+
         // 简化测试，返回简单的结构以便测试框架正确断言
         if(empty($fields)) return count(array());
-        
+
         // 模拟getBasicInfo方法的核心逻辑，返回简单的对象
         $isOldMetric = isset($metric->type) && $metric->type == 'sql';
         $unit = $isOldMetric ? $metric->unit ?? '' : $metric->unit ?? '';
-        
+
         $result = new stdClass();
-        
+
         if(strpos($fields, 'scope') !== false)      $result->scope = $metric->scope ?? '';
         if(strpos($fields, 'object') !== false)     $result->object = $metric->object ?? '';
         if(strpos($fields, 'purpose') !== false)    $result->purpose = $metric->purpose ?? '';
@@ -1845,49 +1809,6 @@ class metricTest
         if(strpos($fields, 'stage') !== false)      $result->stage = $metric->stage ?? '';
         if(strpos($fields, 'desc') !== false)       $result->desc = $metric->desc ?? '';
         if(strpos($fields, 'definition') !== false) $result->definition = $metric->definition ?? '';
-
-        return $result;
-    }
-
-    /**
-     * Test getPagerExtra method.
-     *
-     * @param  int $tableWidth
-     * @access public
-     * @return mixed
-     */
-    public function getPagerExtraTest($tableWidth = 300)
-    {
-        global $tester;
-        $metricZen = $tester->loadZen('metric');
-        
-        $result = $metricZen->getPagerExtra($tableWidth);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test formatException method.
-     *
-     * @param  mixed $exception
-     * @access public
-     * @return mixed
-     */
-    public function formatExceptionTest($exception = null)
-    {
-        if($exception === null)
-        {
-            // 创建一个标准异常对象用于测试
-            $exception = new Exception('Test error message', 123);
-        }
-
-        global $tester;
-
-        // 使用tester的loadZen方法加载zen层
-        $metricZen = $tester->loadZen('metric');
-        $result = $metricZen->formatException($exception);
-        if(dao::isError()) return dao::getError();
 
         return $result;
     }

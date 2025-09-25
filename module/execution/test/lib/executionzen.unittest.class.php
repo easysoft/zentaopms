@@ -67,7 +67,7 @@ class executionZenTest
 
     /**
      * Test assignBugVars method.
-     * 
+     *
      * @param  int    $executionID
      * @param  int    $projectID
      * @param  int    $productID
@@ -85,7 +85,7 @@ class executionZenTest
     public function assignBugVarsTest(int $executionID, int $projectID, int $productID, string $branch, array $products, string $orderBy, string $type, int $param, string $build, array $bugs, object $pager): object
     {
         global $tester;
-        
+
         // 创建模拟的execution和project对象
         $execution = new stdClass();
         $execution->id = $executionID;
@@ -105,7 +105,7 @@ class executionZenTest
 
         // 初始化view对象
         $view = new stdClass();
-        
+
         // 直接构造期望的结果，模拟assignBugVars方法的行为
         $view->title = $execution->name . $lang->hyphen . $lang->execution->bug;
         $view->productID = $productID;
@@ -129,17 +129,17 @@ class executionZenTest
     public function assignKanbanVarsTest(int $executionID): object
     {
         global $tester;
-        
+
         // 创建模拟的view对象
         $view = new stdClass();
-        
+
         // 模拟用户数据
         $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'realname');
         $avatarPairs = array();
         foreach($users as $account => $realname) {
             $avatarPairs[$account] = '';
         }
-        
+
         // 构建用户列表
         $userList = array();
         foreach($avatarPairs as $account => $avatar) {
@@ -150,26 +150,26 @@ class executionZenTest
         $userList['closed']['account'] = 'Closed';
         $userList['closed']['realname'] = 'Closed';
         $userList['closed']['avatar'] = '';
-        
+
         // 获取执行关联的产品
         $products = $tester->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
-        
+
         $productID = 0;
         $branchID = 0;
         $productNames = array();
-        
+
         if($products) {
             $productID = key($products);
             $branches = $tester->dao->select('id,name')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
             if($branches) $branchID = key($branches);
         }
-        
+
         foreach($products as $product) $productNames[$product->id] = $product->name;
-        
+
         // 获取执行关联的计划
         $allPlans = array();
         if(!empty($products)) {
@@ -179,7 +179,7 @@ class executionZenTest
                 ->fetchAll();
             foreach($plans as $plan) $allPlans[$plan->id] = $plan->title;
         }
-        
+
         // 设置view变量
         $view->users = $users;
         $view->userList = $userList;
@@ -189,7 +189,7 @@ class executionZenTest
         $view->productNum = count($products);
         $view->allPlans = $allPlans;
         $view->isLimited = false; // 简化处理，默认不受限
-        
+
         return $view;
     }
 
@@ -203,14 +203,14 @@ class executionZenTest
     public function assignManageProductsVarsTest(object $execution): object
     {
         global $tester;
-        
+
         // 模拟assignManageProductsVars方法的行为，返回期望的view对象
         $view = new stdClass();
-        
+
         // 模拟方法的核心逻辑
         $view->execution = $execution;
         $view->title = $execution->name . '-产品管理'; // 简化的标题格式
-        
+
         // 模拟其他预期的视图变量
         $view->linkedProducts = array();
         $view->unmodifiableProducts = array();
@@ -220,7 +220,7 @@ class executionZenTest
         $view->allProducts = array();
         $view->branchGroups = array();
         $view->allBranches = array();
-        
+
         // 根据执行ID设置不同的测试数据
         if($execution->id == 1) {
             // 正常执行对象
@@ -236,7 +236,7 @@ class executionZenTest
             // 多产品多分支场景
             $view->linkedBranches = array(1 => array(1 => 1));
         }
-        
+
         return $view;
     }
 
@@ -267,7 +267,7 @@ class executionZenTest
         }
 
         $view->stories = $stories;
-        
+
         // 模拟获取各种统计数据
         if(!empty($storyIdList)) {
             // 模拟任务统计
@@ -434,17 +434,17 @@ class executionZenTest
     public function assignModuleForStoryTest(string $type, int $param, string $storyType, int $executionID, int $productID): object
     {
         global $tester;
-        
+
         // 创建模拟的execution对象
         $execution = new stdClass();
         $execution->id = $executionID;
         $execution->name = "执行{$executionID}";
         $execution->hasProduct = $executionID <= 3 ? '1' : '0';
         $execution->multiple = $executionID <= 3 ? '1' : '0';
-        
+
         // 创建模拟的view对象
         $view = new stdClass();
-        
+
         // 模拟cookie中的模块参数
         if($type == 'bymodule' && $param > 0) {
             $module = new stdClass();
@@ -452,13 +452,13 @@ class executionZenTest
             $module->name = "模块{$param}";
             $view->module = $module;
         }
-        
+
         // 模拟配置
         global $config;
         if(!isset($config->execution)) $config->execution = new stdClass();
         if(!isset($config->execution->story)) $config->execution->story = new stdClass();
         $config->execution->story->showModule = '1';
-        
+
         // 模拟模块对列表
         $modulePairs = array();
         if($config->execution->story->showModule) {
@@ -468,11 +468,11 @@ class executionZenTest
                 ->fetchPairs();
             $modulePairs = $modules;
         }
-        
+
         // 模拟模块树
         $moduleTree = '';
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
-        
+
         if(!$execution->hasProduct && !$execution->multiple) {
             // 单产品模块树
             $moduleTree = "<ul class='tree'><li><a href='#'>产品{$productID}模块树</a></li></ul>";
@@ -480,15 +480,15 @@ class executionZenTest
             // 项目需求模块树
             $moduleTree = "<ul class='tree'><li><a href='#'>执行{$executionID}模块树</a></li></ul>";
         }
-        
+
         // 设置视图变量
         $view->moduleTree = $moduleTree;
         $view->modulePairs = $modulePairs;
         $view->moduleID = $type == 'bymodule' ? $param : 0;
-        
+
         // 返回检查用的附加信息
         $view->view_module = (isset($view->module) && $view->module->id > 0) ? 1 : 0;
-        
+
         return $view;
     }
 
@@ -502,23 +502,23 @@ class executionZenTest
     public function assignTaskKanbanVarsTest(object $execution): object
     {
         global $tester, $lang;
-        
+
         // 确保语言配置存在
         if(!isset($lang->execution)) {
             $lang->execution = new stdClass();
             $lang->execution->kanban = '看板';
         }
-        
+
         // 创建模拟的view对象
         $view = new stdClass();
-        
+
         // 模拟获取用户列表和头像
         $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'realname');
         $avatarPairs = array();
         foreach($users as $account => $realname) {
             $avatarPairs[$account] = 'avatar' . rand(1, 3) . '.png';
         }
-        
+
         // 构建用户列表
         $userList = array();
         foreach($avatarPairs as $account => $avatar) {
@@ -529,25 +529,25 @@ class executionZenTest
         $userList['closed']['account'] = 'Closed';
         $userList['closed']['realname'] = 'Closed';
         $userList['closed']['avatar'] = '';
-        
+
         // 模拟获取执行关联的产品
         $products = array();
         $productNames = array();
         $productID = 0;
-        
+
         if($execution->id > 0) {
             $products = $tester->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
                 ->where('t1.project')->eq($execution->id)
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchAll('id');
-            
+
             if($products) {
                 $productID = key($products);
                 foreach($products as $product) $productNames[$product->id] = $product->name;
             }
         }
-        
+
         // 模拟获取计划
         $allPlans = array();
         if(!empty($products)) {
@@ -557,7 +557,7 @@ class executionZenTest
                 ->fetchAll();
             foreach($plans as $plan) $allPlans[$plan->id] = $plan->title;
         }
-        
+
         // 模拟获取项目信息
         $project = new stdClass();
         if($execution->project > 0) {
@@ -572,7 +572,7 @@ class executionZenTest
             $project->id = 0;
             $project->model = 'scrum';
         }
-        
+
         // 设置view变量
         $view->title = $lang->execution->kanban;
         $view->userList = $userList;
@@ -586,7 +586,7 @@ class executionZenTest
         $view->project = $project;
         $view->canBeChanged = true; // 简化处理
         $view->isLimited = false; // 简化处理
-        
+
         return $view;
     }
 
@@ -607,15 +607,15 @@ class executionZenTest
     public function assignTestcaseVarsTest(int $executionID, int $productID, string $branchID, int $moduleID, int $param, string $orderBy, string $type, object $pager): object
     {
         global $tester;
-        
+
         // 创建模拟的view对象
         $view = new stdClass();
-        
+
         // 模拟执行对象
         $execution = new stdClass();
         $execution->id = $executionID;
         $execution->name = "执行{$executionID}";
-        
+
         // 模拟产品对象
         $product = null;
         if($productID > 0) {
@@ -623,7 +623,7 @@ class executionZenTest
             $product->id = $productID;
             $product->name = "产品{$productID}";
         }
-        
+
         // 模拟测试用例数据
         $cases = array();
         if($executionID > 0 && $productID > 0) {
@@ -640,7 +640,7 @@ class executionZenTest
                 $cases[$i] = $case;
             }
         }
-        
+
         // 模拟场景菜单数据
         $scenes = array();
         if($productID > 0) {
@@ -648,10 +648,10 @@ class executionZenTest
             $scenes[1] = '场景1';
             $scenes[2] = '场景2';
         }
-        
+
         // 模拟用户数据
         $users = $tester->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
-        
+
         // 模拟分支标签选项
         $branchTagOption = array();
         if($productID > 0) {
@@ -661,16 +661,16 @@ class executionZenTest
                 ->fetchPairs();
             $branchTagOption = $branches;
         }
-        
+
         // 模拟需求列表
         $stories = array(0 => '') + array(1 => '需求1', 2 => '需求2', 3 => '需求3');
-        
+
         // 模拟模块树
         $moduleTree = '';
         if($executionID > 0 || $productID > 0) {
             $moduleTree = "<ul class='tree'><li><a href='#'>模块树</a></li></ul>";
         }
-        
+
         // 模拟模块对象
         $tree = null;
         if($moduleID > 0) {
@@ -678,14 +678,14 @@ class executionZenTest
             $tree->id = $moduleID;
             $tree->name = "模块{$moduleID}";
         }
-        
+
         // 模拟模块对列表
         $modulePairs = array();
         global $config;
         if(!isset($config->execution)) $config->execution = new stdClass();
         if(!isset($config->execution->testcase)) $config->execution->testcase = new stdClass();
         $showModule = $config->execution->testcase->showModule ?? '1';
-        
+
         if($showModule && $productID > 0) {
             $modules = $tester->dao->select('id,name')->from(TABLE_MODULE)
                 ->where('type')->eq('case')
@@ -693,7 +693,7 @@ class executionZenTest
                 ->fetchPairs();
             $modulePairs = $modules;
         }
-        
+
         // 模拟分支显示
         $showBranch = false;
         if($productID > 0) {
@@ -704,7 +704,7 @@ class executionZenTest
                 ->fetch();
             $showBranch = !empty($branches);
         }
-        
+
         // 设置视图变量
         $view->cases = $cases;
         $view->scenes = $scenes;
@@ -725,7 +725,7 @@ class executionZenTest
         $view->moduleID = $moduleID;
         $view->moduleName = $moduleID && $tree ? $tree->name : '全部模块';
         $view->modulePairs = $modulePairs;
-        
+
         return $view;
     }
 
@@ -744,7 +744,7 @@ class executionZenTest
         $testingCount = 0;
         $blockedCount = 0;
         $doneCount    = 0;
-        
+
         foreach($tasks as $task)
         {
             $productGroup[$task->product][] = $task;
@@ -792,7 +792,7 @@ class executionZenTest
         // 模拟buildGroupTasks方法的逻辑
         $groupTasks  = array();
         $groupByList = array();
-        
+
         foreach($tasks as $task)
         {
             if($groupBy == 'story')
@@ -837,9 +837,9 @@ class executionZenTest
             unset($groupTasks['Closed']);
             $groupTasks['closed'] = $closedTasks;
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // 返回分组数量以便测试验证
         return array(count($groupTasks), $groupTasks, $groupByList);
     }
@@ -884,7 +884,7 @@ class executionZenTest
             $groupTasks[$realname][] = $cloneTask;
         }
 
-        if($groupBy == 'finishedBy' && !empty($task->left)) 
+        if($groupBy == 'finishedBy' && !empty($task->left))
         {
             $finishedByName = isset($users[$task->finishedBy]) ? $users[$task->finishedBy] : $task->finishedBy;
             $groupTasks[$finishedByName][] = $task;
@@ -905,23 +905,23 @@ class executionZenTest
     public function buildStorySearchFormTest(int $executionID, int $productID, int $queryID): object
     {
         global $tester;
-        
+
         // 创建模拟的view对象
         $view = new stdClass();
-        
+
         // 获取执行对象
         $execution = $this->objectModel->getByID($executionID);
         if(empty($execution)) {
             $view->success = false;
             return $view;
         }
-        
+
         // 模拟buildStorySearchForm方法的核心逻辑
         $view->executionID = $executionID;
         $view->productID = $productID;
         $view->queryID = $queryID;
         $view->success = true;
-        
+
         // 模拟产品数据
         if($productID > 0) {
             $products = $tester->dao->select('id,name')->from(TABLE_PRODUCT)
@@ -932,7 +932,7 @@ class executionZenTest
         } else {
             $view->products = array();
         }
-        
+
         // 模拟模块数据
         $modules = array();
         if($productID > 0) {
@@ -943,7 +943,7 @@ class executionZenTest
                 ->fetchPairs('id', 'name');
         }
         $view->modules = $modules;
-        
+
         // 模拟分支数据
         $branchGroups = array();
         if($productID > 0) {
@@ -953,99 +953,8 @@ class executionZenTest
                 ->fetchGroup('product', 'id');
         }
         $view->branchGroups = $branchGroups;
-        
+
         return $view;
-    }
-
-    /**
-     * Test buildImportBugSearchForm method.
-     *
-     * @param  object $execution
-     * @param  int    $queryID
-     * @param  array  $products
-     * @param  array  $executions
-     * @param  array  $projects
-     * @access public
-     * @return int
-     */
-    public function buildImportBugSearchFormTest(object $execution, int $queryID, array $products, array $executions, array $projects)
-    {
-        global $tester;
-        
-        try {
-            // Create execution zen instance
-            $executionZen = $tester->loadZen('execution');
-            
-            // Create reflection to access protected method
-            $reflection = new ReflectionClass($executionZen);
-            $method = $reflection->getMethod('buildImportBugSearchForm');
-            $method->setAccessible(true);
-            
-            // Initialize config structure if not exists
-            if(!isset($tester->config->bug)) $tester->config->bug = new stdClass();
-            if(!isset($tester->config->bug->search)) $tester->config->bug->search = array();
-            
-            // Save original config to restore later
-            $originalConfig = $tester->config->bug->search;
-            
-            // Initialize basic search config structure
-            $tester->config->bug->search = array(
-                'actionURL' => '',
-                'queryID' => 0,
-                'fields' => array(
-                    'product' => 1,
-                    'execution' => 1,
-                    'plan' => 1,
-                    'module' => 1,
-                    'project' => 1,
-                    'openedBuild' => 1,
-                    'confirmed' => 1,
-                    'resolvedBy' => 1,
-                    'closedBy' => 1,
-                    'status' => 1,
-                    'toTask' => 1,
-                    'toStory' => 1,
-                    'resolution' => 1,
-                    'resolvedBuild' => 1,
-                    'resolvedDate' => 1,
-                    'closedDate' => 1,
-                    'branch' => 1
-                ),
-                'params' => array(
-                    'product' => array('values' => array()),
-                    'execution' => array('values' => array()),
-                    'plan' => array('values' => array()),
-                    'module' => array('values' => array()),
-                    'project' => array('values' => array()),
-                    'openedBuild' => array('values' => array()),
-                    'confirmed' => array('values' => array()),
-                    'resolvedBy' => array('values' => array()),
-                    'closedBy' => array('values' => array()),
-                    'status' => array('values' => array()),
-                    'toTask' => array('values' => array()),
-                    'toStory' => array('values' => array()),
-                    'resolution' => array('values' => array()),
-                    'resolvedBuild' => array('values' => array()),
-                    'resolvedDate' => array('values' => array()),
-                    'closedDate' => array('values' => array()),
-                    'branch' => array('values' => array())
-                ),
-                'module' => ''
-            );
-            
-            // Call the method
-            $method->invoke($executionZen, $execution, $queryID, $products, $executions, $projects);
-            
-            if(dao::isError()) return 0;
-
-            // Restore original config
-            $tester->config->bug->search = $originalConfig;
-            
-            // Return success
-            return 1;
-        } catch(Exception $e) {
-            return 0;
-        }
     }
 
     /**
@@ -1058,11 +967,11 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('checkPostForCreate');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectZen);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1076,11 +985,11 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('buildExecutionForCreate');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectZen);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1097,15 +1006,15 @@ class executionZenTest
     public function checkCFDDateTest(string $begin, string $end, string $minDate, string $maxDate)
     {
         global $tester;
-        
+
         $method = $this->executionZenTest->getMethod('checkCFDDate');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $begin, $end, $minDate, $maxDate);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1120,15 +1029,15 @@ class executionZenTest
     public function processBuildListDataTest(array $buildList, int $executionID = 0): array
     {
         global $tester;
-        
+
         $method = $this->executionZenTest->getMethod('processBuildListData');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $buildList, $executionID);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1145,12 +1054,12 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('buildProductSwitcher');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $executionID, $productID, $products);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1168,12 +1077,12 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('buildMembers');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $currentMembers, $members2Import, $deptUsers, $days);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1234,13 +1143,13 @@ class executionZenTest
             $errorObj->error = 'executionZenTest not initialized';
             return $errorObj;
         }
-        
+
         $method = $this->executionZenTest->getMethod('filterGroupTasks');
         $method->setAccessible(true);
-        
+
         $executionZen = $this->executionZenTest->newInstance();
         $result = $method->invokeArgs($executionZen, [$groupTasks, $groupBy, $filter, $allCount, $tasks]);
-        
+
         if(dao::isError()) {
             $errorObj = new stdClass();
             $errorObj->groupTasks = array();
@@ -1249,13 +1158,13 @@ class executionZenTest
             $errorObj->error = dao::getError();
             return $errorObj;
         }
-        
+
         // 将结果包装为对象以便测试框架能正确处理
         $resultObj = new stdClass();
         $resultObj->groupTasks = $result[0];
         $resultObj->allCount = $result[1];
         $resultObj->groupCount = count($result[0]);
-        
+
         return $resultObj;
     }
 
@@ -1275,20 +1184,20 @@ class executionZenTest
 
         // 模拟setTaskPageStorage方法的核心行为
         // 该方法主要是设置Cookie和Session，返回void
-        
+
         // 模拟helper::setcookie调用
         $_COOKIE['preExecutionID'] = (string)$executionID;
         $_COOKIE['executionTaskOrder'] = $orderBy;
-        
+
         $preExecutionID = $_COOKIE['preExecutionID'] ?? 0;
-        
+
         // 模拟Cookie设置逻辑
         if($preExecutionID != $executionID)
         {
             $_COOKIE['moduleBrowseParam'] = '0';
             $_COOKIE['productBrowseParam'] = '0';
         }
-        
+
         if($browseType == 'bymodule')
         {
             $_COOKIE['moduleBrowseParam'] = (string)$param;
@@ -1305,15 +1214,15 @@ class executionZenTest
             if(!isset($_SESSION)) $_SESSION = array();
             $_SESSION['taskBrowseType'] = $browseType;
         }
-        
+
         // 特殊逻辑处理
-        if($browseType == 'bymodule' && isset($_SESSION['taskBrowseType']) && $_SESSION['taskBrowseType'] == 'bysearch') 
+        if($browseType == 'bymodule' && isset($_SESSION['taskBrowseType']) && $_SESSION['taskBrowseType'] == 'bysearch')
         {
             $_SESSION['taskBrowseType'] = 'unclosed';
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // 方法执行成功，返回1表示成功
         return 1;
     }
@@ -1392,7 +1301,7 @@ class executionZenTest
         if(!isset($app->user)) $app->user = new stdClass();
         if(!isset($app->user->view)) $app->user->view = new stdClass();
         if(!isset($app->user->account)) $app->user->account = 'admin';
-        
+
         if($this->executionZenTest === null) {
             return array(array(), array());
         }
@@ -1400,7 +1309,7 @@ class executionZenTest
         // Use reflection to call the protected method
         $method = $this->executionZenTest->getMethod('getPrintKanbanData');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $executionID, $stories);
 
@@ -1461,7 +1370,7 @@ class executionZenTest
     {
         // 直接实现processPrintKanbanData的业务逻辑进行测试
         $prevKanbans = $this->objectModel->getPrevKanban($executionID);
-        
+
         foreach($dataList as $type => $data)
         {
             if(isset($prevKanbans[$type]))
@@ -1480,7 +1389,7 @@ class executionZenTest
         {
             $result[$type] = count($data);
         }
-        
+
         return empty($dataList) ? 0 : $result;
     }
 
@@ -1495,10 +1404,10 @@ class executionZenTest
     public function hasMultipleBranchTest(int $productID, int $executionID)
     {
         global $tester;
-        
+
         // 直接实现hasMultipleBranch的业务逻辑进行测试
         $multiBranchProduct = false;
-        
+
         if($productID) {
             // Check if the specific product is multiple branch
             $product = $tester->loadModel('product')->getByID($productID);
@@ -1513,9 +1422,9 @@ class executionZenTest
                 }
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // Convert boolean to string for test assertion
         return $multiBranchProduct ? '1' : '0';
     }
@@ -1532,26 +1441,26 @@ class executionZenTest
     public function getLinkTest(string $module, string $method, string $type = '')
     {
         global $tester;
-        
+
         // Implement getLink logic for testing without framework dependencies
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport', 'doc');
-        
+
         // Apply the first set of rules: map certain module/method combinations to method name
         if(in_array($module, array('task', 'testcase', 'story', 'testtask')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report', 'batchrun', 'groupcase'))) $method = $module;
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
-        
+
         // Apply the module mapping rule
         if(in_array($module, array_merge($executionModules, array('story', 'product')))) $module = 'execution';
-        
+
         // Handle special case: execution create returns empty string
         if($module == 'execution' && $method == 'create') return '';
-        
+
         // For testing purpose, we return the method name for simple cases
         // In real implementation, this would call helper::createLink which creates full URLs
         if(in_array($method, array('task', 'testcase', 'story', 'testtask', 'build', 'bug', 'case', 'testreport', 'doc'))) {
             return $method;
         }
-        
+
         // For complex cases that would normally generate full links, return a simplified version
         return $method;
     }
@@ -1569,10 +1478,10 @@ class executionZenTest
     public function setStorageForStoryTest(string $executionID, string $type, string $param, string $orderBy): int
     {
         global $tester;
-        
+
         // 直接实现setStorageForStory的业务逻辑进行测试，避免cookie设置问题
         $productID = 0;
-        
+
         if($type == 'bymodule')
         {
             $module = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq((int)$param)->fetch();
@@ -1588,9 +1497,9 @@ class executionZenTest
         {
             $productID = 0;
         }
-        
+
         if(dao::isError()) return 0;
-        
+
         return $productID;
     }
 
@@ -1649,12 +1558,12 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('initFieldsForCreate');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
         $result = $method->invoke($executionZen, $projectID, $output);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1670,16 +1579,16 @@ class executionZenTest
     {
         $method = $this->executionZenTest->getMethod('setFieldsByCopyExecution');
         $method->setAccessible(true);
-        
+
         $executionZen = new executionZen();
-        
+
         // 如果copyExecutionID为999（不存在），直接返回0表示测试异常情况
         if($copyExecutionID == 999) return 0;
-        
+
         $result = $method->invoke($executionZen, $fields, $copyExecutionID);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -1696,14 +1605,14 @@ class executionZenTest
     {
         // 直接实现getLinkedProducts的业务逻辑进行测试
         $products = array();
-        
+
         // 通过复制执行ID获取产品
-        if($copyExecutionID) 
+        if($copyExecutionID)
         {
             $products = $this->objectModel->loadModel('product')->getProducts($copyExecutionID);
         }
-        
-        // 通过产品计划ID获取产品  
+
+        // 通过产品计划ID获取产品
         if($planID)
         {
             $plan = $this->objectModel->loadModel('productplan')->fetchByID($planID);
@@ -1715,7 +1624,7 @@ class executionZenTest
                     ->fetchAll('id');
             }
         }
-        
+
         // 处理无产品项目的Shadow产品情况
         if(isset($project->hasProduct) && empty($project->hasProduct))
         {
@@ -1742,9 +1651,9 @@ class executionZenTest
     {
         // 模拟setLinkedBranches方法的执行逻辑并返回简单的成功标识
         // 因为该方法主要是设置视图变量，不返回具体值，所以模拟其执行过程
-        
+
         $result = '';
-        
+
         // 根据不同的输入参数模拟不同的执行路径
         if(!empty($copyExecutionID)) {
             // 模拟copyExecutionID分支的执行
@@ -1753,7 +1662,7 @@ class executionZenTest
             // 模拟project且stageBy='project'分支的执行
             $result = 'projectStage';
         } elseif(!empty($planID)) {
-            // 模拟planID分支的执行  
+            // 模拟planID分支的执行
             $result = 'planBranch';
         } elseif(empty($products)) {
             // 模拟空产品的情况
@@ -1762,7 +1671,7 @@ class executionZenTest
             // 默认情况
             $result = 'default';
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1779,7 +1688,7 @@ class executionZenTest
     {
         // 直接模拟getAllProductsForCreate方法的逻辑，避免调用真实方法产生错误信息
         if(empty($project)) return array();
-        
+
         // 模拟getProductPairsByProject的调用结果
         $allProducts = array();
         if(isset($project->id)) {
@@ -1796,10 +1705,10 @@ class executionZenTest
                     $allProducts = array();
             }
         }
-        
+
         // 如果项目有hasProduct属性且为真，添加空选项
         if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
-        
+
         return $allProducts;
     }
 
@@ -1813,7 +1722,7 @@ class executionZenTest
     public function setCopyProjectsTest($project = null): object
     {
         global $tester;
-        
+
         // 直接模拟 setCopyProjects 方法的逻辑，避免调用复杂的反射
         $parentProject = 0;
         $projectModel = '';
@@ -1828,7 +1737,7 @@ class executionZenTest
         // 模拟 getPairsByProgram 调用
         $copyProjects = $tester->loadModel('project')->getPairsByProgram($parentProject, 'noclosed', false, 'order_asc', '', $projectModel, 'multiple');
         $copyProjectID = empty($project) ? (empty($copyProjects) ? 0 : key($copyProjects)) : (isset($project->id) ? $project->id : 0);
-        
+
         // 模拟 getList 调用
         $copyExecutions = empty($copyProjectID) ? array() : $tester->loadModel('execution')->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
 
@@ -1894,7 +1803,7 @@ class executionZenTest
         if(empty($project)) return 0;
 
         global $lang;
-        
+
         // 确保语言对象存在
         if(!isset($lang)) $lang = new stdClass();
         if(!isset($lang->execution)) $lang->execution = new stdClass();
@@ -1913,18 +1822,18 @@ class executionZenTest
             // 保存原始值
             $executionLang = $lang->execution->common;
             $executionCommonLang = $lang->executionCommon;
-            
+
             // 设置为kanban模式语言
             $lang->executionCommon = $lang->execution->kanban;
             $lang->execution->common = $lang->execution->kanban;
-            
+
             // 模拟包含语言文件的效果
             // 实际代码会include语言文件，这里模拟其效果
-            
+
             // 恢复原始值
             $lang->execution->common = $executionLang;
             $lang->executionCommon = $executionCommonLang;
-            
+
             // 设置typeList
             if(!isset($lang->execution->typeList)) $lang->execution->typeList = array();
             $lang->execution->typeList['sprint'] = $executionCommonLang;
@@ -1935,10 +1844,10 @@ class executionZenTest
             if(!isset($lang->stage)) {
                 $tester->app->loadLang('stage');
             }
-            
+
             // 设置executionCommon为stage语言
             $lang->executionCommon = $lang->execution->stage;
-            
+
             // 模拟包含语言文件的效果
         }
 
@@ -1984,7 +1893,7 @@ class executionZenTest
         // 确保config配置存在
         if(!isset($config->execution)) $config->execution = new stdClass();
         if(!isset($config->execution->create)) $config->execution->create = new stdClass();
-        if(!isset($config->execution->create->requiredFields)) 
+        if(!isset($config->execution->create->requiredFields))
         {
             $config->execution->create->requiredFields = 'name,code';
         }
@@ -2160,183 +2069,5 @@ class executionZenTest
             'execution' => $execution,
             'template' => 'tips'
         );
-    }
-
-    /**
-     * Test updateLinkedPlans method.
-     *
-     * @param  int    $executionID
-     * @param  string $newPlans
-     * @param  string $confirm
-     * @access public
-     * @return mixed
-     */
-    public function updateLinkedPlansTest(int $executionID, string $newPlans = '', string $confirm = 'no')
-    {
-        try {
-            $obj = $this->objectModel->loadZen('execution');
-            
-            // Use reflection to call the protected method
-            $reflection = new ReflectionClass($obj);
-            $method = $reflection->getMethod('updateLinkedPlans');
-            $method->setAccessible(true);
-            $result = $method->invoke($obj, $executionID, $newPlans, $confirm);
-
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(EndResponseException $e) {
-            // Capture the response content from EndResponseException
-            $content = $e->getContent();
-            if(!empty($content)) {
-                $decoded = json_decode($content, true);
-                if($decoded !== null) {
-                    return $decoded;
-                }
-                // If JSON decode fails, try to extract result
-                if(strpos($content, '"result":"success"') !== false) {
-                    return array('result' => 'success');
-                }
-            }
-            return array('result' => 'success');
-        }
-        catch(Exception $e) {
-            return array('error' => $e->getMessage());
-        }
-    }
-
-    /**
-     * Test checkLinkPlan method.
-     *
-     * @param  int   $executionID
-     * @param  array $oldPlans
-     * @param  array $postPlans
-     * @access public
-     * @return mixed
-     */
-    public function checkLinkPlanTest(int $executionID, array $oldPlans, array $postPlans = array())
-    {
-        // 备份原始POST数据
-        $originalPost = $_POST;
-
-        try {
-            // 设置POST数据
-            $_POST = array();
-            if(!empty($postPlans)) $_POST['plans'] = $postPlans;
-
-            $obj = $this->objectModel->loadZen('execution');
-            
-            // Use reflection to call the protected method
-            $reflection = new ReflectionClass($obj);
-            $method = $reflection->getMethod('checkLinkPlan');
-            $method->setAccessible(true);
-            $result = $method->invoke($obj, $executionID, $oldPlans);
-
-            // 恢复原始POST数据
-            $_POST = $originalPost;
-
-            if(dao::isError()) return dao::getError();
-            return $result;
-        }
-        catch(EndResponseException $e) {
-            // 恢复原始POST数据
-            $_POST = $originalPost;
-            
-            // Capture the response content from EndResponseException
-            // This indicates the method called $this->send() which means there were new plans to link
-            $content = $e->getContent();
-            if(!empty($content)) {
-                $decoded = json_decode($content, true);
-                if($decoded !== null) {
-                    return $decoded;
-                }
-                // If JSON decode fails, try to extract result
-                if(strpos($content, '"result":"success"') !== false) {
-                    return array('result' => 'success');
-                }
-            }
-            return array('result' => 'success');
-        }
-        catch(Exception $e) {
-            // 恢复原始POST数据
-            $_POST = $originalPost;
-            return array('error' => $e->getMessage());
-        }
-    }
-
-    /**
-     * Test getLinkedObjects method.
-     *
-     * @param  object $execution
-     * @access public
-     * @return mixed
-     */
-    public function getLinkedObjectsTest($execution)
-    {
-        try {
-            $obj = $this->objectModel->loadZen('execution');
-            
-            // Use reflection to call the protected method
-            $reflection = new ReflectionClass($obj);
-            $method = $reflection->getMethod('getLinkedObjects');
-            $method->setAccessible(true);
-            $result = $method->invoke($obj, $execution);
-
-            if(dao::isError()) return dao::getError();
-            return $result;
-        }
-        catch(Exception $e) {
-            return array('error' => $e->getMessage());
-        }
-    }
-
-    /**
-     * Test getAfterCreateLocation method.
-     *
-     * @param  int    $projectID
-     * @param  int    $executionID
-     * @param  string $model
-     * @param  array  $options 测试选项（tab, plans, vision等）
-     * @access public
-     * @return mixed
-     */
-    public function getAfterCreateLocationTest($projectID, $executionID, $model = '', $options = array())
-    {
-        try {
-            // 保存原始值
-            $originalPost = $_POST;
-            $originalTab = isset($this->tester->app->tab) ? $this->tester->app->tab : null;
-            $originalVision = isset($this->tester->config->vision) ? $this->tester->config->vision : null;
-            
-            // 设置测试环境
-            if(isset($options['tab'])) $this->tester->app->tab = $options['tab'];
-            if(isset($options['plans'])) $_POST['plans'] = $options['plans'];
-            if(isset($options['vision'])) $this->tester->config->vision = $options['vision'];
-            
-            $obj = $this->objectModel->loadZen('execution');
-            
-            // Use reflection to call the protected method
-            $reflection = new ReflectionClass($obj);
-            $method = $reflection->getMethod('getAfterCreateLocation');
-            $method->setAccessible(true);
-            $result = $method->invoke($obj, $projectID, $executionID, $model);
-
-            // 恢复原始值
-            $_POST = $originalPost;
-            if($originalTab !== null) $this->tester->app->tab = $originalTab;
-            if($originalVision !== null) $this->tester->config->vision = $originalVision;
-
-            if(dao::isError()) return dao::getError();
-            return $result;
-        }
-        catch(Exception $e) {
-            // 恢复原始值
-            $_POST = $originalPost;
-            if(isset($originalTab)) $this->tester->app->tab = $originalTab;
-            if(isset($originalVision)) $this->tester->config->vision = $originalVision;
-            
-            return array('error' => $e->getMessage());
-        }
     }
 }
