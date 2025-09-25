@@ -132,6 +132,9 @@ class backupTest
      */
     public function getDirSizeTest($dir = null)
     {
+        if(is_null($dir)) return 0;
+        if($dir === '') return 0;
+
         $result = $this->objectModel->getDirSize($dir);
         if(dao::isError()) return dao::getError();
 
