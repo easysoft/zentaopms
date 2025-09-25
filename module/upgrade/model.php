@@ -12234,8 +12234,6 @@ class upgradeModel extends model
         $doc->addedBy   = 'system';
         $doc->addedDate = helper::now();
 
-        $docContent = new stdclass();
-        $docContent->type = 'doc';
         foreach($reviews as $review)
         {
             if(!isset($projectDeliverables[$review->project][$review->category])) continue;
@@ -12261,8 +12259,9 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc        = $this->dao->lastInsertID();
                 $review->docVersion = 1;
-                $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
 
+                $docContent = new stdclass();
+                $docContent->type    = 'doc';
                 $docContent->doc     = $review->doc;
                 $docContent->title   = $review->title;
                 $docContent->files   = $files;
