@@ -1743,14 +1743,19 @@ class aiModel extends model
         if(is_object($data)) $data = (array)$data;
 
         /* Handle raw (non-exploded) sources. */
-        if(is_string($sources) && strpos($sources, ',') !== false)
+        if(is_string($sources))
         {
-            $sources = array_filter(explode(',', $sources));
+            if(empty($sources)) return '';
+            if(strpos($sources, ',') !== false) $sources = array_filter(explode(',', $sources));
+            else                                $sources = array($sources);
             $sources = array_map(function ($source)
             {
                 return explode('.', $source);
             }, $sources);
         }
+
+        /* Handle empty sources array. */
+        if(empty($sources)) return '';
 
         $dataObject = array();
 
@@ -1761,6 +1766,9 @@ class aiModel extends model
         {
             $objectName = $source[0];
             $objectKey  = $source[1];
+
+            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
+            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
 
             $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
             $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
@@ -1791,7 +1799,7 @@ class aiModel extends model
         return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match)
         {
             return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
-        }, json_encode($dataObject)) . "\n" . $supplement;
+        }, json_encode($dataObject)) . (empty($supplement) ? '' : ("\n" . $supplement));
     }
 
     /**
