@@ -304,10 +304,17 @@ class biTest
      */
     public function getFieldsWithAliasTest($sql)
     {
-        $result = $this->objectModel->getFieldsWithAlias($sql);
-        if(dao::isError()) return dao::getError();
+        try
+        {
+            $result = $this->objectModel->getFieldsWithAlias($sql);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array();
+        }
     }
 
     /**

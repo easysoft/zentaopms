@@ -77,6 +77,9 @@ class biModel extends model
     {
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser($sql);
+
+        if(empty($parser->statements) || !isset($parser->statements[0])) return false;
+
         $statement = $parser->statements[0];
 
         return !empty($statement) ? $statement : false;
@@ -274,6 +277,8 @@ class biModel extends model
     public function getFieldsWithAlias($sql)
     {
         $statement = $this->parseToStatement($sql);
+
+        if(empty($statement)) return array();
 
         $fieldList = array();
         foreach($statement->expr as $expr)
@@ -596,7 +601,7 @@ class biModel extends model
     {
         $this->loadModel('chart');
         $operate = "{$settings['calc']}({$settings['goal']})";
-        $sql = "select $operate count from ($sql) tt ";
+        $sql = "select $operate as count from ($sql) tt ";
 
         $moleculeSQL    = $sql;
         $denominatorSQL = $sql;
@@ -605,7 +610,7 @@ class biModel extends model
         $denominatorWheres = array();
         foreach($settings['conditions'] as $condition)
         {
-            $where = "{$condition['field']} {$this->lang->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
+            $where = "{$condition['field']} {$this->config->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
             $moleculeWheres[]    = $where;
         }
 
