@@ -102,10 +102,11 @@ window.executeZentaoPrompt = async function(info)
         },
     }];
     const postMessage = {
-        content: info.name,
-        prompt : info.prompt,
-        tools  : tools,
-        model  : info.model,
+        content : info.name,
+        prompt  : info.prompt,
+        tools   : tools,
+        model   : info.model,
+        chatType: 'agent',
     };
     zaiPanel.openPopup({viewType: 'chat', width: 600, postMessage: postMessage});
 };
