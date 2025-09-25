@@ -1197,14 +1197,16 @@ class biTest
      * @param  string $savePath
      * @param  string $finalFile
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function downloadFileTest(string $url, string $savePath, string $finalFile): bool
+    public function downloadFileTest(string $url, string $savePath, string $finalFile)
     {
+        ob_start();
         $result = $this->objectModel->downloadFile($url, $savePath, $finalFile);
+        $output = ob_get_clean();
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $result ? '1' : '0';
     }
 
     /**
