@@ -269,7 +269,7 @@ class designModel extends model
         $this->loadModel('file');
         $spec = $this->dao->select('name,`desc`,files,docs,docVersions')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
         $design->name        = !empty($spec->name)   ? $spec->name  : $design->name;
-        $design->desc        = !empty($spec->desc)   ? $spec->desc  : $design->desc;
+        $design->desc        = !empty($spec->desc)   ? $spec->desc  : '';
         $design->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
         $design->docs        = !empty($spec->docs)   ? $spec->docs  : '';
         $design->docVersions = !empty($spec->docVersions) ? json_decode($spec->docVersions, true) : array();
