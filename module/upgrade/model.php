@@ -12347,7 +12347,7 @@ class upgradeModel extends model
     public function upgradeBaseline()
     {
         $baselines = $this->dao->select('id,`from`')->from(TABLE_OBJECT)->where('type')->eq('taged')->fetchAll();
-        $reviews   = $this->dao->select('id,object,deliverable')->from(TABLE_REVIEW)->where('status')->eq('done')->fetchAll('object');
+        $reviews   = $this->dao->select('id,object,deliverable')->from(TABLE_REVIEW)->where('status')->eq('pass')->fetchAll('object');
         foreach($baselines as $baseline)
         {
             if(empty($reviews[$baseline->from])) continue;
