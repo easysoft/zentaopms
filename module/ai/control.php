@@ -792,9 +792,11 @@ class ai extends control
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
         }
 
-        $response['objectId']     = $objectId;
+        $response['objectID']     = $objectId;
+        $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['promptConfig'] = $prompt;
