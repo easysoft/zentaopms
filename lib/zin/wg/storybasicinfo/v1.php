@@ -193,7 +193,7 @@ class storyBasicInfo extends wg
                     $planTitleItems[] = hasPriv('productplan', 'view') ? array
                     (
                         'control' => 'link',
-                        'url'     => createLink('productplan', 'view', "planID=$planID"),
+                        'url'     => !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null,
                         'text'    => $planTitle . ' '
                     ) : $planTitle;
                 }
