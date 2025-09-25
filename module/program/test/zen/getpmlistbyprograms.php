@@ -7,7 +7,11 @@ title=测试 programZen::getPMListByPrograms();
 timeout=0
 cid=0
 
-- 执行programTest模块的getPMListByProgramsTest方法，参数是array  @0
+- 执行programTest模块的getPMListByProgramsTest方法，参数是$testData1  @0
+- 执行programTest模块的getPMListByProgramsTest方法，参数是$testData2  @2
+- 执行programTest模块的getPMListByProgramsTest方法，参数是$testData3  @2
+- 执行programTest模块的getPMListByProgramsTest方法，参数是$testData4  @2
+- 执行programTest模块的getPMListByProgramsTest方法，参数是$testData5  @2
 
 */
 
@@ -21,22 +25,31 @@ su('admin');
 
 $programTest = new programTest();
 
-r($programTest->getPMListByProgramsTest(array())) && p() && e('0');
-r($programTest->getPMListByProgramsTest(array(
+$testData1 = array();
+r($programTest->getPMListByProgramsTest($testData1)) && p() && e('0');
+
+$testData2 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => 'user1')
-))) && p() && e('2');
-r($programTest->getPMListByProgramsTest(array(
+);
+r($programTest->getPMListByProgramsTest($testData2)) && p() && e('2');
+
+$testData3 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => ''),
     (object)array('id' => 3, 'type' => 'program', 'PM' => 'user2')
-))) && p() && e('2');
-r($programTest->getPMListByProgramsTest(array(
+);
+r($programTest->getPMListByProgramsTest($testData3)) && p() && e('2');
+
+$testData4 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 3, 'type' => 'program', 'PM' => 'user1')
-))) && p() && e('2');
-r($programTest->getPMListByProgramsTest(array(
+);
+r($programTest->getPMListByProgramsTest($testData4)) && p() && e('2');
+
+$testData5 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'project', 'PM' => 'user1')
-))) && p() && e('2');
+);
+r($programTest->getPMListByProgramsTest($testData5)) && p() && e('2');
