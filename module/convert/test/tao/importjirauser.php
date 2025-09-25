@@ -7,6 +7,8 @@ title=测试 convertTao::importJiraUser();
 timeout=0
 cid=0
 
+- 步骤1：正常情况 @1
+- 步骤2：边界值 @1
 - 步骤5：业务规则 @1
 
 */
@@ -82,47 +84,43 @@ $convertTest = new convertTest();
 
 // 5. 🔴 强制要求：必须包含至少8个测试步骤
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'newuser1', 'email' => 'newuser1@test.com', 'realname' => '新用户1', 'join' => '2023-01-01 00:00:00')
-))) && p() && e('1'); // 步骤1：正常情况
+$dataList = [(object)['account' => 'newuser1', 'email'   => 'newuser1@test.com', 'realname' => '新用户1', 'join' => '2023-01-01 00:00:00']];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤1：正常情况
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'duplicateuser', 'email' => 'duplicate@test.com', 'realname' => '重复用户'),
-    (object)array('account' => 'newuser2', 'email' => 'newuser2@test.com', 'realname' => '新用户2')
-))) && p() && e('1'); // 步骤2：边界值
+$dataList = [
+    (object)['account' => 'duplicateuser', 'email'   => 'duplicate@test.com', 'realname' => '重复用户'],
+    (object)['account' => 'newuser2', 'email'   => 'newuser2@test.com', 'realname' => '新用户2']
+];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤2：边界值
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'atlassian1', 'email' => 'user@connect.atlassian.com', 'realname' => 'Atlassian用户1'),
-    (object)array('account' => 'newuser3', 'email' => 'newuser3@test.com', 'realname' => '新用户3')
-))) && p() && e('1'); // 步骤3：异常输入
+$dataList = [
+    (object)['account' => 'atlassian1', 'email' => 'user@connect.atlassian.com', 'realname' => 'Atlassian用户1'],
+    (object)['account' => 'newuser3', 'email' => 'newuser3@test.com', 'realname' => '新用户3']
+];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤3：异常输入
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'admin', 'email' => 'admin@newdomain.com', 'realname' => '管理员账号'),
-    (object)array('account' => 'existing2', 'email' => 'existing@test.com', 'realname' => '重复本地用户')
-))) && p() && e('1'); // 步骤4：权限验证
+$dataList = [
+    (object)['account' => 'admin', 'email' => 'admin@newdomain.com', 'realname' => '管理员账号'],
+    (object)['account' => 'existing2', 'email' => 'existing@test.com', 'realname' => '重复本地用户']
+];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤4：权限验证
 
-r($convertTest->importJiraUserTest(array())) && p() && e('1'); // 步骤5：业务规则
+r($convertTest->importJiraUserTest([])) && p() && e('1'); // 步骤5：业务规则
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'minimaluser1'),
-    (object)array('account' => 'minimaluser2', 'email' => 'minimal2@test.com'),
-    (object)array('account' => 'minimaluser3', 'realname' => '最小用户3')
-))) && p() && e('1'); // 步骤6：数据完整性
+$dataList = [
+    (object)['account' => 'minimaluser1'],
+    (object)['account' => 'minimaluser2', 'email' => 'minimal2@test.com'],
+    (object)['account' => 'minimaluser3', 'realname' => '最小用户3']
+];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤6：数据完整性
 
-r($convertTest->importJiraUserTest(array(
-    (object)array(
-        'account' => 'specialuser_@#$',
-        'email' => 'special.user+test@long-domain-name.com',
-        'realname' => '特殊字符用户!@#$%^&*()_+-=[]{}|;:,.<>?',
-        'join' => '2023-12-31 23:59:59'
-    ),
-    (object)array(
-        'account' => 'verylongaccountnamewithabcdefghijklmnopqrstuvwxyz1234567890',
-        'email' => 'verylonguser@verylongdomainnamewithmanysegments.example.com',
-        'realname' => '这是一个非常长的真实姓名用来测试系统对长字符串的处理能力和边界情况验证'
-    )
-))) && p() && e('1'); // 步骤7：边界条件
+ $dataList = [
+    (object)['account' => 'specialuser_@#$', 'email' => 'special.user+test@long-domain-name.com', 'realname' => '特殊字符用户!@#$%^&*()_+-=[]{}|;:,.<>?', 'join' => '2023-12-31 23:59:59'],
+    (object)['account' => 'verylongaccountnamewithabcdefghijklmnopqrstuvwxyz1234567890', 'email' => 'verylonguser@verylongdomainnamewithmanysegments.example.com', 'realname' => '这是一个非常长的真实姓名用来测试系统对长字符串的处理能力和边界情况验证']
+];
+r($convertTest->importJiraUserTest($dataList)) && p() && e('1'); // 步骤7：边界条件
 
-r($convertTest->importJiraUserTest(array(
-    (object)array('account' => 'emailuser', 'email' => 'emailmode@test.com', 'realname' => 'Email模式用户')
-), 'email')) && p() && e('1'); // 步骤8：模式切换
+$dataList = [
+    (object)['account' => 'emailuser', 'email' => 'emailmode@test.com', 'realname' => 'Email模式用户']
+];
+r($convertTest->importJiraUserTest($dataList, 'email')) && p() && e('1'); // 步骤8：模式切换
