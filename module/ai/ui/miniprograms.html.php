@@ -117,7 +117,7 @@ modal
             (
                 set::name('category'),
                 set::required(true),
-                set::items(array_merge($lang->ai->miniPrograms->categoryList, $categoryList)),
+                set::items($categoryList),
                 set::value($category)
             )
         ),
