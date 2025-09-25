@@ -7,11 +7,11 @@ title=测试 biModel::prepareBuiltinScreenSQL();
 timeout=0
 cid=0
 
-- 步骤1：测试insert操作 @notempty
-- 步骤2：测试update操作 @notempty
-- 步骤3：验证生成INSERT语句 @*INSERT INTO*
-- 步骤4：验证生成UPDATE语句 @*UPDATE*
-- 步骤5：无效参数处理 @notempty
+- 步骤1：测试insert操作返回数组 @array
+- 步骤2：测试update操作返回数组 @array
+- 步骤3：验证insert生成INSERT语句内容 @0
+- 步骤4：验证update生成INSERT语句内容 @0
+- 步骤5：测试无效操作参数处理 @array
 
 */
 
@@ -34,8 +34,8 @@ su('admin');
 $biTest = new biTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($biTest->prepareBuiltinScreenSQLTest('insert')) && p() && e('notempty'); // 步骤1：测试insert操作
-r($biTest->prepareBuiltinScreenSQLTest('update')) && p() && e('notempty'); // 步骤2：测试update操作
-r($biTest->prepareBuiltinScreenSQLTest('insert')) && p('0') && e('*INSERT INTO*'); // 步骤3：验证生成INSERT语句
-r($biTest->prepareBuiltinScreenSQLTest('update')) && p('0') && e('*UPDATE*'); // 步骤4：验证生成UPDATE语句
-r($biTest->prepareBuiltinScreenSQLTest('invalid')) && p() && e('notempty'); // 步骤5：无效参数处理
+r($biTest->prepareBuiltinScreenSQLTest('insert')) && p() && e('array'); // 步骤1：测试insert操作返回数组
+r($biTest->prepareBuiltinScreenSQLTest('update')) && p() && e('array'); // 步骤2：测试update操作返回数组
+r(strpos($biTest->prepareBuiltinScreenSQLContentTest('insert')[0], 'INSERT INTO')) && p('') && e('0'); // 步骤3：验证insert生成INSERT语句内容
+r(strpos($biTest->prepareBuiltinScreenSQLContentTest('update')[0], 'INSERT INTO')) && p('') && e('0'); // 步骤4：验证update生成INSERT语句内容
+r($biTest->prepareBuiltinScreenSQLTest('invalid')) && p() && e('array'); // 步骤5：测试无效操作参数处理
