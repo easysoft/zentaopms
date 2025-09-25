@@ -86,7 +86,7 @@ SET t1.docs = t2.docs, t1.docVersions = t2.docVersions;
 ALTER TABLE `zt_design` DROP COLUMN `docs`;
 ALTER TABLE `zt_design` DROP COLUMN `docVersions`;
 
-ALTER TABLE `zt_reviewissue` ADD `assignedTo` char(30) COLLATE 'utf8mb4_general_ci' NOT NULL AFTER `createdDate`;
+ALTER TABLE `zt_reviewissue` ADD `assignedTo` char(30) COLLATE 'utf8mb4_general_ci' NOT NULL DEFAULT '' AFTER `createdDate`;
 ALTER TABLE `zt_reviewissue` ADD `assignedDate` datetime NULL AFTER `assignedTo`;
 
 REPLACE INTO `zt_grouppriv`(`group`, `module`, `method`) SELECT `group`, `module`, 'active' as `method` FROM `zt_grouppriv` WHERE `module` = 'reviewissue' AND `method` = 'updateStatus';
