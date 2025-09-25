@@ -110,17 +110,10 @@ class backupTest
      */
     public function getDiskSpaceTest($backupPath = null)
     {
-        // Mock test for getDiskSpace method to avoid database dependency issues
-        if(empty($backupPath) || !is_dir($backupPath))
-        {
-            return '0,0';
-        }
+        $result = $this->objectModel->getDiskSpace($backupPath);
+        if(dao::isError()) return dao::getError();
 
-        // Mock disk space calculation
-        $diskFreeSpace = disk_free_space($backupPath);
-        $mockBackupSize = 1048576; // 1MB mock size
-
-        return $diskFreeSpace . ',' . $mockBackupSize;
+        return $result;
     }
 
     /**
