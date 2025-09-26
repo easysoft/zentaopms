@@ -17,6 +17,7 @@ $lang->zahost->deleted        = "已删除";
 $lang->zahost->copy           = '复制';
 $lang->zahost->copied         = '复制成功';
 $lang->zahost->baseInfo       = '基础信息';
+$lang->zahost->hostType       = '主机类型';
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP/域名';
