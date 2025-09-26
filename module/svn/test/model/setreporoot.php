@@ -7,10 +7,11 @@ title=测试 svnModel::setRepoRoot();
 timeout=0
 cid=0
 
-- 执行svnTest模块的setRepoRootTest方法，参数是$repo2  @0
-- 执行svnTest模块的setRepoRootTest方法，参数是$repo3  @0
-- 执行svnTest模块的setRepoRootTest方法，参数是$repo4  @0
-- 执行repoRoot ? $svn2模块的repoRoot : '0方法  @0
+- 步骤1：正常SVN仓库设置根路径 @https://svn.qc.oop.cc/svn/unittest
+- 步骤2：测试不同类型的仓库路径格式 @0
+- 步骤3：测试包含所有必需属性的仓库对象 @0
+- 步骤4：测试svn协议的仓库路径 @0
+- 步骤5：验证仓库根路径属性更新 @0
 
 */
 
@@ -38,21 +39,12 @@ su('admin');
 
 $svnTest = new svnTest();
 
-// 步骤1：正常SVN仓库设置根路径
 global $tester;
 $svn = $tester->loadModel('svn');
 $svn->setRepos();
-if(!empty($svn->repos))
-{
-    $repo = $svn->repos[1];
-    r($svnTest->setRepoRootTest($repo)) && p() && e('https://svn.qc.oop.cc/svn/unittest');
-}
-else
-{
-    r('') && p() && e('');
-}
+$repo = $svn->repos[1];
+r($svnTest->setRepoRootTest($repo)) && p() && e('https://svn.qc.oop.cc/svn/unittest'); // 步骤1：正常SVN仓库设置根路径
 
-// 步骤2：测试不同类型的仓库路径格式
 $repo2 = new stdClass();
 $repo2->id = 2;
 $repo2->path = 'https://svn.example.com/repo';
@@ -62,9 +54,8 @@ $repo2->client = 'svn';
 $repo2->account = 'admin';
 $repo2->password = 'S1hkT2k4emdUY1VxRUZYMkh4OEI=';
 $repo2->encrypt = 'base64';
-r($svnTest->setRepoRootTest($repo2)) && p() && e('0');
+r($svnTest->setRepoRootTest($repo2)) && p() && e('0'); // 步骤2：测试不同类型的仓库路径格式
 
-// 步骤3：测试包含所有必需属性的仓库对象
 $repo3 = new stdClass();
 $repo3->id = 3;
 $repo3->path = 'file:///var/svn/repo';
@@ -74,9 +65,8 @@ $repo3->client = 'svn';
 $repo3->account = 'admin';
 $repo3->password = 'S1hkT2k4emdUY1VxRUZYMkh4OEI=';
 $repo3->encrypt = 'base64';
-r($svnTest->setRepoRootTest($repo3)) && p() && e('0');
+r($svnTest->setRepoRootTest($repo3)) && p() && e('0'); // 步骤3：测试包含所有必需属性的仓库对象
 
-// 步骤4：测试svn协议的仓库路径
 $repo4 = new stdClass();
 $repo4->id = 4;
 $repo4->path = 'svn://localhost/repo';
@@ -86,9 +76,8 @@ $repo4->client = 'svn';
 $repo4->account = 'admin';
 $repo4->password = 'S1hkT2k4emdUY1VxRUZYMkh4OEI=';
 $repo4->encrypt = 'base64';
-r($svnTest->setRepoRootTest($repo4)) && p() && e('0');
+r($svnTest->setRepoRootTest($repo4)) && p() && e('0'); // 步骤4：测试svn协议的仓库路径
 
-// 步骤5：验证仓库根路径属性更新
 $svn2 = $tester->loadModel('svn');
 $testRepo = new stdClass();
 $testRepo->id = 1;
@@ -100,4 +89,4 @@ $testRepo->account = 'admin';
 $testRepo->password = 'S1hkT2k4emdUY1VxRUZYMkh4OEI=';
 $testRepo->encrypt = 'base64';
 $svn2->setRepoRoot($testRepo);
-r($svn2->repoRoot ? $svn2->repoRoot : '0') && p() && e('0');
+r($svn2->repoRoot ? $svn2->repoRoot : '0') && p() && e('0'); // 步骤5：验证仓库根路径属性更新

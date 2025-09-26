@@ -10,6 +10,7 @@ cid=0
 - 步骤1：正常情况属性success @1
 - 步骤2：参与项目类型属性type @involved
 - 步骤3：所有项目类型属性type @all
+- 步骤4：限制数量属性success @1
 - 步骤5：空参数默认情况属性type @involved
 
 */
@@ -55,8 +56,13 @@ su('admin');
 $blockTest = new blockTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printProjectDocBlockTest()) && p('success') && e('1'); // 步骤1：正常情况
-r($blockTest->printProjectDocBlockTest(null, array('type' => 'involved'))) && p('type') && e('involved'); // 步骤2：参与项目类型
-r($blockTest->printProjectDocBlockTest(null, array('type' => 'all'))) && p('type') && e('all'); // 步骤3：所有项目类型
-$block = new stdclass(); $block->params = new stdclass(); $block->params->count = 5; r($blockTest->printProjectDocBlockTest($block)) && p('success') && e('1'); // 步骤4：限制数量
+r($blockTest->printProjectDocBlockTest())                                  && p('success') && e('1');        // 步骤1：正常情况
+r($blockTest->printProjectDocBlockTest(null, array('type' => 'involved'))) && p('type')    && e('involved'); // 步骤2：参与项目类型
+r($blockTest->printProjectDocBlockTest(null, array('type' => 'all')))      && p('type')    && e('all');      // 步骤3：所有项目类型
+
+$block = new stdclass();
+$block->params = new stdclass();
+$block->params->count = 5;
+r($blockTest->printProjectDocBlockTest($block)) && p('success') && e('1'); // 步骤4：限制数量
+
 r($blockTest->printProjectDocBlockTest(null, array())) && p('type') && e('involved'); // 步骤5：空参数默认情况

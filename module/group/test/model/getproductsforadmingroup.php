@@ -10,6 +10,8 @@ cid=0
 - 步骤1：无参数时返回有效产品数量 @8
 - 步骤2：空数组参数时返回有效产品数量 @8
 - 步骤3：验证第一个产品名称属性1 @正常产品1
+- 步骤4：普通模式产品名称属性1 @正常产品1
+- 步骤5：ALM模式产品名称格式属性1 @项目集1/正常产品1
 
 */
 
@@ -40,8 +42,12 @@ global $config;
 $originalSystemMode = $config->systemMode;
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($groupTest->getProductsForAdminGroupCountTest()) && p() && e('8'); // 步骤1：无参数时返回有效产品数量
-r($groupTest->getProductsForAdminGroupCountTest(array())) && p() && e('8'); // 步骤2：空数组参数时返回有效产品数量
-r($groupTest->getProductsForAdminGroupTest(array())) && p('1') && e('正常产品1'); // 步骤3：验证第一个产品名称
-$config->systemMode = 'normal'; r($groupTest->getProductsForAdminGroupTest(array('1' => '项目集1'))) && p('1') && e('正常产品1'); // 步骤4：普通模式产品名称
-$config->systemMode = 'ALM'; r($groupTest->getProductsForAdminGroupTest(array('1' => '项目集1'))) && p('1') && e('项目集1/正常产品1'); // 步骤5：ALM模式产品名称格式
+r($groupTest->getProductsForAdminGroupCountTest())        && p()    && e('8');         // 步骤1：无参数时返回有效产品数量
+r($groupTest->getProductsForAdminGroupCountTest(array())) && p()    && e('8');         // 步骤2：空数组参数时返回有效产品数量
+r($groupTest->getProductsForAdminGroupTest(array()))      && p('1') && e('正常产品1'); // 步骤3：验证第一个产品名称
+
+$config->systemMode = 'normal';
+r($groupTest->getProductsForAdminGroupTest(array('1' => '项目集1'))) && p('1') && e('正常产品1'); // 步骤4：普通模式产品名称
+
+$config->systemMode = 'ALM';
+r($groupTest->getProductsForAdminGroupTest(array('1' => '项目集1'))) && p('1') && e('项目集1/正常产品1'); // 步骤5：ALM模式产品名称格式
