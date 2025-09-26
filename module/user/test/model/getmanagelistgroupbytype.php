@@ -4,13 +4,16 @@
 /**
 
 title=测试 userModel::getManageListGroupByType();
+timeout=0
 cid=0
 
-- 测试步骤1：管理员programs权限测试 >> 期望programs类型isAdmin=1
-- 测试步骤2：管理员projects权限测试 >> 期望projects类型isAdmin=1
-- 测试步骤3：user1 products具体ID权限 >> 期望products类型list包含ID列表
-- 测试步骤4：无权限用户返回结果 >> 期望返回0或空数组
-- 测试步骤5：user2 executions权限 >> 期望executions类型list包含ID列表
+- 步骤1：管理员programs权限测试第programs条的isAdmin属性 @1
+- 步骤2：管理员projects权限测试第projects条的isAdmin属性 @1
+- 步骤3：user1 products具体ID权限
+ - 第products条的list属性 @1
+- 步骤4：无权限用户返回空数组 @0
+- 步骤5：user2 executions权限
+ - 第executions条的list属性 @17
 
 */
 
@@ -19,7 +22,14 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-zendata('projectadmin')->loadYaml('projectadmin_getmanagelistgroupbytype', false, 2)->gen(10);
+$table = zenData('projectadmin');
+$table->group->range('1,2,3,4');
+$table->account->range('admin,user1,user2,noauth');
+$table->programs->range('all,1,2,');
+$table->projects->range('all,,1,2');
+$table->products->range('1,,1,2');
+$table->executions->range('17,,1,2');
+$table->gen(4);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
