@@ -1,11 +1,16 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 6) . '/test/lib/ui.php';
+require_once dirname(__FILE__, 6) . '/test/lib/ui.php';
 class createBugTester extends tester
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->login();
+    }
+
     public function createDefaultBug($project = array(), $bug = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'create',$project, 'appIframe-qa');
         if(isset($bug['title']))       $form->dom->title->setValue($bug['title']);
         if(isset($bug['openedBuild'])) $form->dom->{'openedBuild[]'}->multipicker($bug['openedBuild']);
@@ -29,7 +34,7 @@ class createBugTester extends tester
         }
     }
 
-	/**
+    /**
      * 批量创建bug。
      * batch create bugs.
      *
@@ -40,7 +45,6 @@ class createBugTester extends tester
      */
     public function batchCreate($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'batchCreate', $product, 'appIframe-qa');
         if(isset($bugs))
         {
@@ -62,7 +66,7 @@ class createBugTester extends tester
         return $this->failed('批量创建bug失败');
     }
 
-	/**
+    /**
      * 批量编辑bug。
      * batch edit bugs.
      *
@@ -73,7 +77,6 @@ class createBugTester extends tester
      */
     public function batchEdit($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $form->wait(3);
         $form->dom->bugLabel->click();
@@ -97,7 +100,7 @@ class createBugTester extends tester
         return $this->failed('批量编辑bug失败');
     }
 
-	/**
+    /**
      * bug列表页。
      * bug browse.
      *
@@ -108,7 +111,6 @@ class createBugTester extends tester
      */
     public function browse($product = array(), $bugs = array())
     {
-        $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $bugIDList    = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugID'])->element);
         $bugTitleList = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugTitle'])->element);
@@ -117,5 +119,96 @@ class createBugTester extends tester
             if(in_array($bug->id, $bugIDList) && in_array($bug->title, $bugTitleList)) return $this->success('bug列表页检查成功');
             return $this->failed('bug列表页检查失败');
         }
+    }
+
+    /**
+     * bug批量指派。
+     * batch assign all bugs.
+     * 在bug页面选中下面的列表下面的复选框，然后点击'指派给'按钮指派给指定用户
+     *
+     * @param  array  $product
+     * @param  string $assignee
+     * @access public
+     * @return object
+     */
+    public function batchAssign($product = array(), $assignee = '')
+    {
+        $assignee = $assignee ?? 'admin';
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+
+        $form->wait(3);
+        $form->dom->bugLabel->click();
+        $form->wait(1);
+        $form->dom->assignTo->click();
+        $form->wait(1);
+        $form->dom->dropdownPicker($assignee);
+        $form->wait(2);
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        foreach($bugAssigned as $assigned)
+        {
+            if($assigned != $assignee) return $this->failed('bug批量指派失败');
+        }
+        return $this->success('bug批量指派成功');
+    }
+
+    /**
+     * bug直接修改指派。
+     * assign specific bug to assignee
+     * 在bug页面通过指派者列直接修改
+     *
+     * @param  array  $product
+     * @param  string $bug
+     * @param  string $assignee
+     * @access public
+     * @return object
+     */
+    public function directAssign($product = array(), $bugTitle = '', $assignee = '')
+    {
+        if(!$bugTitle) return $this->failed('bug直接修改指派失败，没有指定bug');
+        $assignee = $assignee ?? 'admin';
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+
+        $form->wait(3);
+        $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
+        if($index === false ) return $this->failed('bug未找到' . $bugTitle);
+        $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
+        $form->wait(1);
+        $form->dom->assignedTo->picker($assignee);
+        $form->wait(1);
+        $form->dom->assign->click();
+        $form->wait(1);
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
+        return $this->failed('bug直接修改指派失败');
+    }
+
+    /**
+     * bug指派。
+     * assign specific bug to assignee
+     * 在bug页面选中列表指定bug前面的复选框，然后点击'指派给'按钮指派给指定用户
+     *
+     * @param  array  $product
+     * @param  string $bug
+     * @param  string $assignee
+     * @access public
+     * @return object
+     */
+    public function selectAssign($product = array(), $bugTitle = '', $assignee = '')
+    {
+        if(!$bugTitle) return $this->failed('bug选择指派失败，没有指定bug');
+        $assignee = $assignee ?? 'admin';
+        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(3);
+        $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
+        if($index === false ) return $this->failed('bug未找到' . $bugTitle);
+        $form->dom->getElementListByXpathKey('bugID')[$index]->click();
+        $form->wait(1);
+        $form->dom->assignTo->click();
+        $form->wait(1);
+        $form->dom->dropdownPicker($assignee);
+        $form->wait(1);
+        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        if($bugAssigned[$index] == $assignee) return $this->success('bug选择指派成功');
+        return $this->failed('bug选择指派失败');
     }
 }

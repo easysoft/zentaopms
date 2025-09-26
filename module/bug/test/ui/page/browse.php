@@ -24,7 +24,11 @@ class browsePage extends page
             'closeComment'  => "//zen-editor[@id='comment']",
             'resolve'       => "//span[text()='解决']",
             'batchEdit'     => "//span[text()='编辑']",
-            'saveButton'    => "//span[text()='保存']"
+            'saveButton'    => "//span[text()='保存']",
+            'assignTo'      => "//span[text()='指派给']",
+            'assign'        => "//span[text()='指派']",
+            'bugAssigned'   => "//div[@data-col='assignedTo' and @data-type='assign']/div/a/span[text()]",
+            'popupMenu'     => '//div[contains(@class,"popover show fade dropdown in")]'
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
