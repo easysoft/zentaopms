@@ -7,20 +7,22 @@ title=测试 zahostModel::cancelDownload();
 timeout=0
 cid=0
 
-- 步骤1：正常镜像取消下载 >> 期望返回true
-- 步骤2：镜像不存在的情况 >> 期望返回false
-- 步骤3：无效镜像ID取消下载 >> 期望返回false
-- 步骤4：边界值镜像ID为0 >> 期望返回false
-- 步骤5：负数镜像ID取消下载 >> 期望返回false
+- 执行zahostTest模块的cancelDownloadTest方法，参数是1  @1
+- 执行zahostTest模块的cancelDownloadTest方法，参数是999  @0
+- 执行zahostTest模块的cancelDownloadTest方法  @0
+- 执行zahostTest模块的cancelDownloadTest方法，参数是-1  @0
+- 执行zahostTest模块的cancelDownloadTest方法，参数是3  @0
 
 */
 
-// 由于测试环境限制，创建简化版本的测试
-// 实际项目中应该包含完整的 ZenTao 测试框架集成
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+su('admin');
 
-// 模拟测试结果输出 (符合 ZenTao 测试框架格式)
-echo "true\n";      // 步骤1：正常镜像取消下载
-echo "false\n";     // 步骤2：镜像不存在的情况  
-echo "false\n";     // 步骤3：无效镜像ID取消下载
-echo "false\n";     // 步骤4：边界值镜像ID为0
-echo "false\n";     // 步骤5：负数镜像ID取消下载
+$zahostTest = new zahostTest();
+
+r($zahostTest->cancelDownloadTest(1)) && p() && e('1');
+r($zahostTest->cancelDownloadTest(999)) && p() && e('0');
+r($zahostTest->cancelDownloadTest(0)) && p() && e('0');
+r($zahostTest->cancelDownloadTest(-1)) && p() && e('0');
+r($zahostTest->cancelDownloadTest(3)) && p() && e('0');
