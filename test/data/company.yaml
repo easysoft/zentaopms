@@ -3,9 +3,6 @@ desc: "公司信息"
 author: sgm,har,zx
 version: "1.0"
 fields:
-  - field: id
-    note: "id"
-    range: 1-2
   - field: name
     note: "公司名"
     range: 易软天创网络科技有限公司,外部公司
