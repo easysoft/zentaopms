@@ -259,9 +259,9 @@ class mailTest
      * @access public
      * @return object
      */
-    public function sendTest($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
+    public function sendTest($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false, $processUser = true)
     {
-        $object = $this->objectModel->send($toList, $subject, $body, $ccList, $includeMe, $emails);
+        $object = $this->objectModel->send($toList, $subject, $body, $ccList, $includeMe, $emails, $forceSync, $processUser);
 
         if(dao::isError()) return dao::getError();
 
@@ -405,18 +405,12 @@ class mailTest
     /**
      * Merge mails.
      *
-     * @param  int    $user
+     * @param  mixed  $mails
      * @access public
      * @return object
      */
-    public function mergeMailsTest($user)
+    public function mergeMailsTest($mails)
     {
-        $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
-            ->where('objectType')->eq('mail')
-            ->andWhere('toList')->eq($user)
-            ->orderBy('id')
-            ->fetchAll('', false);
-
         $object = $this->objectModel->mergeMails($mails);
 
         if(dao::isError()) return dao::getError();
