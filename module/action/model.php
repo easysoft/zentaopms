@@ -1377,6 +1377,10 @@ class actionModel extends model
             {
                 $action->objectLink  = helper::createLink('project', 'deliverable', "projectID={$action->objectID}"); // 交付物链接
             }
+            elseif($action->objectType == 'execution' && $action->action == 'managedeliverable')
+            {
+                $action->objectLink  = helper::createLink('execution', 'view', "executionID={$action->objectID}"); // 交付物链接
+            }
         }
         return $actions;
     }

@@ -12234,8 +12234,6 @@ class upgradeModel extends model
         $doc->addedBy   = 'system';
         $doc->addedDate = helper::now();
 
-        $docContent = new stdclass();
-        $docContent->type = 'doc';
         foreach($reviews as $review)
         {
             if(!isset($projectDeliverables[$review->project][$review->category])) continue;
@@ -12261,8 +12259,9 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_DOC)->data($doc)->exec();
                 $review->doc        = $this->dao->lastInsertID();
                 $review->docVersion = 1;
-                $this->dao->update(TABLE_REVIEW)->set('doc')->eq($review->doc)->where('id')->eq($review->id)->exec();
 
+                $docContent = new stdclass();
+                $docContent->type    = 'doc';
                 $docContent->doc     = $review->doc;
                 $docContent->title   = $review->title;
                 $docContent->files   = $files;
@@ -12284,6 +12283,7 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
                 $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
                 $this->dao->update(TABLE_DOC)->set('version')->eq($review->docVersion)->where('id')->eq($review->doc)->exec();
+                $this->dao->update(TABLE_REVIEW)->set('docVersion')->eq($review->docVersion)->where('id')->eq($review->id)->exec();
             }
 
             $deliverable = new stdclass();
@@ -12309,6 +12309,10 @@ class upgradeModel extends model
             {
                 $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
                 $deliverableID = $this->dao->lastInsertID();
+            }
+            else
+            {
+                $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('docVersion')->eq($deliverable->docVersion)->set('review')->eq($deliverable->review)->where('id')->eq($deliverableID)->exec();
             }
 
             $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->set('title')->eq($deliverable->name)->where('id')->eq($review->id)->exec();
