@@ -27,8 +27,12 @@ class browsePage extends page
             'saveButton'    => "//span[text()='保存']",
             'assignTo'      => "//span[text()='指派给']",
             'assign'        => "//span[text()='指派']",
+            'activate'      => "//span[text()='激活']",
+            'all'           => "//span[text()='全部']",
+            'solvedByMe'    => "//span[text()='由我解决']",
             'bugAssigned'   => "//div[@data-col='assignedTo' and @data-type='assign']/div/a/span[text()]",
-            'popupMenu'     => '//div[contains(@class,"popover show fade dropdown in")]'
+            'popupMenu'     => '//div[contains(@class,"popover show fade dropdown in")]',
+            'selectActBtn'  => '//div[contains(@class,"is-checked") and @data-col="actions"]//a[@title="激活"]',
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
