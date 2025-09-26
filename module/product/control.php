@@ -717,7 +717,7 @@ class product extends control
         }
 
         $this->view->title    = $this->lang->product->manageLine;
-        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs('withDeleted');
+        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs();
         $this->view->lines    = $this->product->getLines();
         $this->view->fields   = $this->config->product->form->manageLine;
         $this->display();
