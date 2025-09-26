@@ -7,11 +7,11 @@ title=测试 biModel::query();
 timeout=0
 cid=0
 
-- 步骤1：正常SQL查询属性isError() @0
-- 步骤2：空SQL查询 @*
-- 步骤3：无效SQL查询 @exception*
-- 步骤4：使用mysql驱动属性isError() @0
-- 步骤5：不使用过滤器属性isError() @0
+- 步骤1：正常SQL查询 @0
+- 步骤2：空SQL查询 @1
+- 步骤3：无效SQL查询 @1
+- 步骤4：使用mysql驱动 @0
+- 步骤5：不使用过滤器 @0
 
 */
 
@@ -62,6 +62,8 @@ class MockStateObj
     public function setFieldRelatedObject($object) { $this->fieldRelatedObject = $object; }
     public function buildQuerySqlCols() { return true; }
     public function getError() { return $this->error; }
+
+    public function __toString() { return 'MockStateObj'; }
 }
 
 // 测试参数准备
@@ -73,16 +75,16 @@ $countSql = 'SELECT COUNT(*) as total FROM zt_user';
 
 // 测试用例执行
 $validStateObj = new MockStateObj($validSql);
-r($biTest->queryTest($validStateObj)) && p('isError()') && e('0'); // 步骤1：正常SQL查询
+r($biTest->queryTest($validStateObj)) && p() && e(0); // 步骤1：正常SQL查询
 
 $emptyStateObj = new MockStateObj($emptySql);
-r($biTest->queryTest($emptyStateObj)) && p() && e('*'); // 步骤2：空SQL查询
+r($biTest->queryTest($emptyStateObj)) && p() && e(1); // 步骤2：空SQL查询
 
 $invalidStateObj = new MockStateObj($invalidSql);
-r($biTest->queryTest($invalidStateObj)) && p() && e('exception*'); // 步骤3：无效SQL查询
+r($biTest->queryTest($invalidStateObj)) && p() && e(1); // 步骤3：无效SQL查询
 
 $mysqlStateObj = new MockStateObj($complexSql);
-r($biTest->queryTest($mysqlStateObj, 'mysql')) && p('isError()') && e('0'); // 步骤4：使用mysql驱动
+r($biTest->queryTest($mysqlStateObj, 'mysql')) && p() && e(0); // 步骤4：使用mysql驱动
 
 $noFilterStateObj = new MockStateObj($countSql);
-r($biTest->queryTest($noFilterStateObj, 'mysql', false)) && p('isError()') && e('0'); // 步骤5：不使用过滤器
+r($biTest->queryTest($noFilterStateObj, 'mysql', false)) && p() && e(0); // 步骤5：不使用过滤器

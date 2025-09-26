@@ -7,10 +7,10 @@ title=测试 aiModel::getTestingLocation();
 timeout=0
 cid=0
 
-- 执行aiTest模块的getTestingLocationTest方法，参数是$myPrompt  @/home/z/rzto/module/ai/test/model/my-effort-all.html
-- 执行aiTest模块的getTestingLocationTest方法，参数是$productPrompt  @/home/z/rzto/module/ai/test/model/ai-promptexecute-2-5.html
-- 执行aiTest模块的getTestingLocationTest方法，参数是$projectPrompt  @/home/z/rzto/module/ai/test/model/ai-promptexecute-3-5.html
-- 执行aiTest模块的getTestingLocationTest方法，参数是$waterfallPrompt  @/home/z/rzto/module/ai/test/model/ai-promptexecute-4-5.html
+- 执行aiTest模块的getTestingLocationTest方法，参数是$myPrompt  @my-effort-all.html
+- 执行aiTest模块的getTestingLocationTest方法，参数是$productPrompt  @ai-promptexecute-2-5.html
+- 执行aiTest模块的getTestingLocationTest方法，参数是$projectPrompt  @ai-promptexecute-3-5.html
+- 执行aiTest模块的getTestingLocationTest方法，参数是$waterfallPrompt  @ai-promptexecute-4-5.html
 - 执行aiTest模块的getTestingLocationTest方法，参数是$unknownPrompt  @0
 
 */
@@ -58,8 +58,8 @@ $unknownPrompt = new stdClass();
 $unknownPrompt->id = 5;
 $unknownPrompt->module = 'unknown';
 
-r($aiTest->getTestingLocationTest($myPrompt)) && p() && e('/home/z/rzto/module/ai/test/model/my-effort-all.html');
-r($aiTest->getTestingLocationTest($productPrompt)) && p() && e('/home/z/rzto/module/ai/test/model/ai-promptexecute-2-5.html');
-r($aiTest->getTestingLocationTest($projectPrompt)) && p() && e('/home/z/rzto/module/ai/test/model/ai-promptexecute-3-5.html');
-r($aiTest->getTestingLocationTest($waterfallPrompt)) && p() && e('/home/z/rzto/module/ai/test/model/ai-promptexecute-4-5.html');
+r($aiTest->getTestingLocationTest($myPrompt)) && p() && e('my-effort-all.html');
+r($aiTest->getTestingLocationTest($productPrompt)) && p() && e('ai-promptexecute-2-5.html');
+r($aiTest->getTestingLocationTest($projectPrompt)) && p() && e('ai-promptexecute-3-5.html');
+r($aiTest->getTestingLocationTest($waterfallPrompt)) && p() && e('ai-promptexecute-4-5.html');
 r($aiTest->getTestingLocationTest($unknownPrompt)) && p() && e('0');

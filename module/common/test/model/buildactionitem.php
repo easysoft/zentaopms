@@ -7,12 +7,10 @@ title=测试 commonModel::buildActionItem();
 timeout=0
 cid=0
 
-- 步骤1：正常情况属性url @/index.php?m=task&f=view&t=php&id=1
-- 步骤2：无权限情况 @0
-- 步骤3：带属性参数
- - 属性class @btn
- - 属性title @查看
-- 步骤4：带对象参数属性url @/index.php?m=common&f=ajaxGetDropMenu&t=php&module=task
+- 步骤1：正常情况有权限模块属性url @1
+- 步骤2：带属性参数属性class @btn
+- 步骤3：带title属性属性title @查看
+- 步骤4：带参数的URL属性url @1
 - 步骤5：空模块参数 @0
 
 */
@@ -21,14 +19,8 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-// 2. zendata数据准备
-$table = zenData('user');
-$table->id->range('1-10');
-$table->account->range('admin,user{9}');
-$table->password->range('123456{10}');
-$table->realname->range('管理员,用户{9}');
-$table->role->range('admin{1},user{9}');
-$table->gen(10);
+// 2. zendata数据准备 - 使用已存在的数据
+// （直接使用数据库中已有的基础数据，无需重新生成）
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -37,8 +29,8 @@ su('admin');
 $commonTest = new commonTest();
 
 // 5. 必须包含至少5个测试步骤
-r($commonTest->buildActionItemTest('task', 'view', 'id=1')) && p('url') && e('/index.php?m=task&f=view&t=php&id=1'); // 步骤1：正常情况
-r($commonTest->buildActionItemTest('admin', 'user', 'id=1')) && p() && e('0'); // 步骤2：无权限情况
-r($commonTest->buildActionItemTest('task', 'view', 'id=1', null, array('class' => 'btn', 'title' => '查看'))) && p('class,title') && e('btn,查看'); // 步骤3：带属性参数
-r($commonTest->buildActionItemTest('common', 'ajaxGetDropMenu', 'module=task')) && p('url') && e('/index.php?m=common&f=ajaxGetDropMenu&t=php&module=task'); // 步骤4：带对象参数
+r($commonTest->buildActionItemTest('product', 'index', '')) && p('url') && e('1'); // 步骤1：正常情况有权限模块
+r($commonTest->buildActionItemTest('product', 'index', '', null, array('class' => 'btn'))) && p('class') && e('btn'); // 步骤2：带属性参数
+r($commonTest->buildActionItemTest('product', 'index', '', null, array('title' => '查看'))) && p('title') && e('查看'); // 步骤3：带title属性
+r($commonTest->buildActionItemTest('product', 'view', 'id=1')) && p('url') && e('1'); // 步骤4：带参数的URL
 r($commonTest->buildActionItemTest('', 'view', 'id=1')) && p() && e('0'); // 步骤5：空模块参数

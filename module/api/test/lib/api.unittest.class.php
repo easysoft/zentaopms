@@ -430,6 +430,12 @@ class apiTest
 
         try
         {
+            // 先检查版本文件是否存在，避免后续的file_get_contents错误
+            $demoDataFile = $this->objectModel->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . 'apispec';
+            if (!file_exists($demoDataFile)) {
+                return 0;
+            }
+
             $reflection = new ReflectionClass($this->objectModel);
             $method = $reflection->getMethod('createDemoApiSpec');
             $method->setAccessible(true);
@@ -438,11 +444,15 @@ class apiTest
 
             if(dao::isError()) return dao::getError();
 
-            return $result;
+            return $result ? 1 : 0;
         }
         catch(Exception $e)
         {
-            return false;
+            return 0;
+        }
+        catch(TypeError $e)
+        {
+            return 0;
         }
     }
 

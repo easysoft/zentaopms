@@ -7,11 +7,11 @@ title=测试 aiModel::edit();
 timeout=0
 cid=0
 
-- 步骤1：正常情况（模拟无模型配置返回错误信息） @0
-- 步骤2：不存在的模型ID @0
-- 步骤3：空输入文本 @0
-- 步骤4：空编辑指令 @0
-- 步骤5：带选项参数 @0
+- 步骤1：有效模型ID但无模型配置时返回false @0
+- 步骤2：不存在的模型ID返回false @0
+- 步骤3：空输入文本但有其他参数返回false @0
+- 步骤4：空编辑指令但有其他参数返回false @0
+- 步骤5：带选项参数但无模型配置返回false @0
 
 */
 
@@ -37,8 +37,8 @@ su('admin');
 $aiTest = new aiTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
-r($aiTest->editTest(1, 'Hello world', 'Fix grammar mistakes')) && p() && e('0'); // 步骤1：正常情况（模拟无模型配置返回错误信息）
-r($aiTest->editTest(999, 'Hello world', 'Fix grammar mistakes')) && p() && e('0'); // 步骤2：不存在的模型ID
-r($aiTest->editTest(1, '', 'Fix grammar mistakes')) && p() && e('0'); // 步骤3：空输入文本
-r($aiTest->editTest(1, 'Hello world', '')) && p() && e('0'); // 步骤4：空编辑指令
-r($aiTest->editTest(1, 'Hello world', 'Fix grammar mistakes', array('temperature' => 0.7))) && p() && e('0'); // 步骤5：带选项参数
+r($aiTest->editTest(1, 'Hello world', 'Fix grammar mistakes')) && p() && e('0'); // 步骤1：有效模型ID但无模型配置时返回false
+r($aiTest->editTest(999, 'Hello world', 'Fix grammar mistakes')) && p() && e('0'); // 步骤2：不存在的模型ID返回false
+r($aiTest->editTest(1, '', 'Fix grammar mistakes')) && p() && e('0'); // 步骤3：空输入文本但有其他参数返回false
+r($aiTest->editTest(1, 'Hello world', '')) && p() && e('0'); // 步骤4：空编辑指令但有其他参数返回false
+r($aiTest->editTest(1, 'Hello world', 'Fix grammar mistakes', array('temperature' => 0.7))) && p() && e('0'); // 步骤5：带选项参数但无模型配置返回false

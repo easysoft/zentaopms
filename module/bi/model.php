@@ -192,6 +192,8 @@ class biModel extends model
     {
         $statement = $this->parseToStatement($sql);
 
+        if(!$statement) return array();
+
         $tableList = array();
         if($statement->from)
         {
@@ -245,6 +247,8 @@ class biModel extends model
     {
         $this->loadModel('dev');
         $statement = $this->parseToStatement($sql);
+
+        if(empty($statement) || !isset($statement->expr)) return array();
 
         $fieldList = array();
         foreach($statement->expr as $expr)

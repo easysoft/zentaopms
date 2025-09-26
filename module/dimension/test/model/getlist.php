@@ -1,20 +1,5 @@
 #!/usr/bin/env php
 <?php
-
-/**
-
-title=测试 dimensionModel::getList();
-timeout=0
-cid=0
-
-- 执行dimensionTest模块的getListTest方法，参数是'1, 2, 3, 4, 5', 'count'  @5
-- 执行dimensionTest模块的getListTest方法，参数是'1, 3, 5' 第1条的name属性 @宏观管理维度
-- 执行dimensionTest模块的getListTest方法，参数是'1, 3, 5' 第3条的code属性 @quality
-- 执行dimensionTest模块的getListTest方法，参数是'', 'count'  @0
-- 执行dimensionTest模块的getListTest方法，参数是'1, 2, 3', 'count'  @3
-
-*/
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/dimension.unittest.class.php';
 
@@ -28,12 +13,25 @@ $table->createdDate->range('`2023-01-01 10:00:00`,`2023-01-02 10:00:00`,`2023-01
 $table->deleted->range('0{8},1{2}');
 $table->gen(10);
 
-su('admin');
+/**
 
-$dimensionTest = new dimensionTest();
+title=测试dimensionModel->getList();
+timeout=0
+cid=1
 
-r($dimensionTest->getListTest('1,2,3,4,5', 'count')) && p() && e('5');
-r($dimensionTest->getListTest('1,3,5')) && p('1:name') && e('宏观管理维度');
-r($dimensionTest->getListTest('1,3,5')) && p('3:code') && e('quality');
-r($dimensionTest->getListTest('', 'count')) && p() && e('0');
-r($dimensionTest->getListTest('1,2,3', 'count')) && p() && e('3');
+- 正常获取维度列表
+ - 第1条的name属性 @宏观管理维度
+ - 第1条的code属性 @macro
+- 验证第二条数据第2条的name属性 @效能管理维度
+- 验证第三条数据第3条的code属性 @quality
+- 验证id键值第1条的id属性 @1
+- 验证返回数组数量 @8
+
+*/
+
+$dimensionTester = new dimensionTest();
+r($dimensionTester->getListTest()) && p('1:name,code')   && e('宏观管理维度,macro');  // 正常获取维度列表
+r($dimensionTester->getListTest()) && p('2:name')        && e('效能管理维度');        // 验证第二条数据
+r($dimensionTester->getListTest()) && p('3:code')        && e('quality');           // 验证第三条数据
+r($dimensionTester->getListTest()) && p('1:id')          && e('1');                // 验证id键值
+r($dimensionTester->getListTestWithCount()) && p()       && e('8');                // 验证返回数组数量

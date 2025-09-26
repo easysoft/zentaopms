@@ -1035,12 +1035,6 @@ class convertTest
     public function getVersionGroupTest()
     {
         try {
-            global $app;
-
-            // 创建临时测试文件目录
-            $tmpRoot = $app->getTmpRoot() . 'jirafile/';
-            if(!is_dir($tmpRoot)) mkdir($tmpRoot, 0755, true);
-
             // 关闭错误输出以避免XML解析错误干扰测试
             $oldErrorReporting = error_reporting(0);
 

@@ -30,7 +30,6 @@ $table->greetings->range('Hello! How can I help you?');
 $table->icon->range('coding-1');
 $table->enabled->range('1{6},0{4}');
 $table->createdDate->range('`2023-01-01 10:00:00`');
-$table->publishedDate->range('[]{10}');
 $table->deleted->range('0{9},1{1}');
 $table->gen(10);
 

@@ -5,14 +5,14 @@
 
 title=测试 biModel::preparePivotObject();
 timeout=0
-cid=1
+cid=0
 
-- 检查返回数组长度 @3
-- 检查pivotSpec的name字段 @{"zh-cn":"完整用户","en":"Full User"}
+- 执行bi模块的preparePivotObjectTest方法，参数是$basicPivot  @3
+- 执行preparePivotObjectTest($fullPivot)[1]模块的name方法  @{"zh-cn":"\u5b8c\u6574\u7528\u6237","en":"Full User"}
 
-- 检查转换后pivot对象的id @3
-- 检查默认settings为null @~~
-- 检查drills数组长度 @2
+- 执行preparePivotObjectTest($arrayPivot)[0]模块的id方法  @3
+- 执行preparePivotObjectTest($minimalPivot)[1]模块的settings方法  @0
+- 执行bi模块的preparePivotObjectTest方法，参数是$pivotWithDrills)[2]  @2
 
 */
 
@@ -28,7 +28,7 @@ $basicPivot = array(
     'sql' => 'SELECT * FROM zt_user',
     'name' => array('zh-cn' => '用户统计', 'en' => 'User Statistics')
 );
-r(count($bi->preparePivotObjectTest($basicPivot))) && p('') && e('3'); //检查返回数组长度
+r(count($bi->preparePivotObjectTest($basicPivot))) && p('') && e('3');
 
 // 步骤2：包含所有可选字段的pivot对象处理
 $fullPivot = array(
@@ -44,7 +44,7 @@ $fullPivot = array(
     'vars' => array('limit' => 100),
     'driver' => 'mysql'
 );
-r($bi->preparePivotObjectTest($fullPivot)[1]->name) && p('') && e('{"zh-cn":"完整用户","en":"Full User"}'); //检查pivotSpec的name字段
+r($bi->preparePivotObjectTest($fullPivot)[1]->name) && p('') && e('{"zh-cn":"\u5b8c\u6574\u7528\u6237","en":"Full User"}');
 
 // 步骤3：数组输入转换为对象
 $arrayPivot = array(
@@ -53,7 +53,7 @@ $arrayPivot = array(
     'sql' => 'SELECT id FROM zt_task',
     'name' => array('zh-cn' => '任务列表')
 );
-r($bi->preparePivotObjectTest($arrayPivot)[0]->id) && p('') && e('3'); //检查转换后pivot对象的id
+r($bi->preparePivotObjectTest($arrayPivot)[0]->id) && p('') && e('3');
 
 // 步骤4：不包含可选字段的最小pivot对象
 $minimalPivot = array(
@@ -62,7 +62,7 @@ $minimalPivot = array(
     'sql' => 'SELECT * FROM zt_bug',
     'name' => array('zh-cn' => '缺陷统计')
 );
-r($bi->preparePivotObjectTest($minimalPivot)[1]->settings) && p('') && e('~~'); //检查默认settings为null
+r($bi->preparePivotObjectTest($minimalPivot)[1]->settings) && p('') && e('0');
 
 // 步骤5：包含drills字段的pivot对象处理
 $pivotWithDrills = array(
@@ -75,4 +75,4 @@ $pivotWithDrills = array(
         array('field' => 'stage', 'type' => 'filter')
     )
 );
-r(count($bi->preparePivotObjectTest($pivotWithDrills)[2])) && p('') && e('2'); //检查drills数组长度
+r(count($bi->preparePivotObjectTest($pivotWithDrills)[2])) && p('') && e('2');

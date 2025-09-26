@@ -38,11 +38,11 @@ $table->desc->range('测试描述');
 $table->model->range('1');
 $table->icon->range('writinghand-7');
 $table->createdBy->range('admin');
-$table->createdDate->range('`2025-08-20 10:00:00`'); // 最近日期
+$table->createdDate->range('`' . date('Y-m-d H:i:s') . '`'); // 最近日期
 $table->editedBy->range('admin');
-$table->editedDate->range('`2025-08-20 10:00:00`');
+$table->editedDate->range('`' . date('Y-m-d H:i:s') . '`');
 $table->published->range('1'); // 已发布
-$table->publishedDate->range('`2025-08-20 10:00:00`');
+$table->publishedDate->range('`' . date('Y-m-d H:i:s') . '`');
 $table->deleted->range('0'); // 未删除
 $table->prompt->range('测试提示词');
 $table->builtIn->range('0');
@@ -64,9 +64,9 @@ r($aiTest->countLatestMiniProgramsTest()) && p() && e('0'); // 步骤4：未发�
 
 // 步骤5：修改为过期日期
 $table->gen(0);
-$table->createdDate->range('`2025-06-01 10:00:00`'); // 过期日期
+$table->createdDate->range('`' . date('Y-m-d H:i:s', strtotime('-2 months')) . '`'); // 过期日期
 $table->published->range('1'); // 已发布
-$table->publishedDate->range('`2025-06-01 10:00:00`');
+$table->publishedDate->range('`' . date('Y-m-d H:i:s', strtotime('-2 months')) . '`');
 $table->deleted->range('0'); // 未删除
 $table->gen(1);
 r($aiTest->countLatestMiniProgramsTest()) && p() && e('0'); // 步骤5：过期不统计

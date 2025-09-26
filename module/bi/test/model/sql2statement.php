@@ -3,6 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
+global $app;
+$app->loadLang('dataview');
+
 /**
 
 title=测试 biModel::sql2Statement();

@@ -12,6 +12,8 @@ cid=0
 - 步骤3：带roomName的对象第0条的text属性 @主机名称
 - 步骤4：带hostID的对象第0条的hostid属性 @123
 - 步骤5：HTML特殊字符转义第0条的text属性 @&lt;script&gt;alert(&quot;test&quot;)&lt;/script&gt;
+- 步骤6：数组类型数据处理第0条的collapsed属性 @~~
+- 步骤7：带children属性的对象第0条的collapsed属性 @~~
 
 */
 
@@ -35,3 +37,5 @@ r($hostTest->processTreemapTest(array((object)array('name' => '简单主机'))))
 r($hostTest->processTreemapTest(array((object)array('roomName' => '主机房名称', 'name' => '主机名称')))) && p('0:text') && e('主机名称'); // 步骤3：带roomName的对象
 r($hostTest->processTreemapTest(array((object)array('name' => '带ID主机', 'hostID' => 123)))) && p('0:hostid') && e('123'); // 步骤4：带hostID的对象
 r($hostTest->processTreemapTest(array((object)array('name' => '<script>alert("test")</script>')))) && p('0:text') && e('&lt;script&gt;alert(&quot;test&quot;)&lt;/script&gt;'); // 步骤5：HTML特殊字符转义
+r($hostTest->processTreemapTest(array('cityKey' => array((object)array('roomName' => '房间名', 'name' => '子主机'))))) && p('0:collapsed') && e('~~'); // 步骤6：数组类型数据处理
+r($hostTest->processTreemapTest(array((object)array('name' => '父主机', 'children' => array((object)array('name' => '子主机')))))) && p('0:collapsed') && e('~~'); // 步骤7：带children属性的对象

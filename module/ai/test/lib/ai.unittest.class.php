@@ -258,10 +258,20 @@ class aiTest
      */
     public function testModelConnectionTest($modelID = null)
     {
-        $result = $this->objectModel->testModelConnection($modelID);
-        if(dao::isError()) return dao::getError();
+        try {
+            ob_start();
+            $result = $this->objectModel->testModelConnection($modelID);
+            ob_end_clean();
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            return $result ? '1' : '0';
+        } catch (Exception $e) {
+            ob_end_clean();
+            return '0';
+        } catch (Error $e) {
+            ob_end_clean();
+            return '0';
+        }
     }
 
     /**

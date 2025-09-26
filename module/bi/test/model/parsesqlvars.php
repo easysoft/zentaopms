@@ -12,9 +12,9 @@ cid=1
 - 测试正常过滤器替换变量 @SELECT * FROM zt_user WHERE account = 'admin' AND status = 'active'
 - 测试空过滤器数组处理 @SELECT * FROM zt_task WHERE '' AND ''
 - 测试条件变量处理 @SELECT * FROM zt_project WHERE id='1'
-- 测试多选类型变量处理 @SELECT * FROM zt_story WHERE type IN ('story','requirement')
+- 测试多选类型变量处理 @SELECT * FROM zt_story WHERE type IN (''story','requirement'')
 
-- 测试复杂变量占位符清理 @SELECT * FROM zt_bug WHERE '' AND status = '' AND ''
+- 测试复杂变量占位符清理 @SELECT * FROM zt_bug WHERE ''Condition AND status = '' AND ''Condition
 
 */
 
@@ -66,9 +66,9 @@ $filters4 = array(
         'default' => array('story', 'requirement')
     )
 );
-r($bi->parseSqlVarsTest($sql4, $filters4)) && p() && e("SELECT * FROM zt_story WHERE type IN ('story','requirement')"); // 测试多选类型变量处理
+r($bi->parseSqlVarsTest($sql4, $filters4)) && p() && e("SELECT * FROM zt_story WHERE type IN (''story','requirement'')"); // 测试多选类型变量处理
 
 // 测试步骤5：测试复杂变量占位符清理
-$sql5 = "SELECT * FROM zt_bug WHERE \$Variable_1Condition AND status = \$status_2 AND \$Variale_3Condition";
+$sql5 = "SELECT * FROM zt_bug WHERE \$Variable_1Condition AND status = \$status_2 AND \$Variable_3Condition";
 $filters5 = array();
-r($bi->parseSqlVarsTest($sql5, $filters5)) && p() && e("SELECT * FROM zt_bug WHERE '' AND status = '' AND ''"); // 测试复杂变量占位符清理
+r($bi->parseSqlVarsTest($sql5, $filters5)) && p() && e("SELECT * FROM zt_bug WHERE ''Condition AND status = '' AND ''Condition"); // 测试复杂变量占位符清理

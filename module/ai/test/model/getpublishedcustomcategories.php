@@ -82,7 +82,6 @@ $table->createdDate->range('`2024-01-01 00:00:00`');
 $table->editedBy->range('admin{3}');
 $table->editedDate->range('`2024-01-01 00:00:00`');
 $table->published->range('0{3}');
-$table->publishedDate->range('NULL{3}');
 $table->deleted->range('0{3}');
 $table->prompt->range('This is test prompt{3}');
 $table->builtIn->range('0{3}');

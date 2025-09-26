@@ -1545,9 +1545,14 @@ class bugTest
      */
     public function getRelatedObjectsTest(string $object, string $pairs = ''): int
     {
+        global $tester;
+
+        /* 确保没有已有的session数据影响测试 */
+        unset($_SESSION['bugQueryCondition'], $_SESSION['bugOnlyCondition']);
+
         $result = $this->objectModel->getRelatedObjects($object, $pairs);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return count(array('' => '', 0 => ''));
 
         return count($result);
     }
@@ -1596,6 +1601,9 @@ class bugTest
      */
     public function getLinkedCommitsTest(int $repoID, array $revisions): array
     {
+        // 处理空数组情况，避免SQL语法错误
+        if(empty($revisions)) return array();
+
         $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
 
         if(dao::isError()) return dao::getError();

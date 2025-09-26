@@ -7,54 +7,18 @@ title=测试 commonModel::checkEntryToken();
 timeout=0
 cid=0
 
-- 执行$entry @1
-- 执行$entry @~~
-- 执行$entry @1
-- 执行$entry @CALLED_TIME
-- 执行$entry @ERROR_TIMESTAMP
+- 执行commonTest模块的checkEntryTokenTest方法，参数是$entry  @1
+- 执行commonTest模块的checkEntryTokenTest方法，参数是$entry  @0
+- 执行commonTest模块的checkEntryTokenTest方法，参数是$entry  @1
+- 执行commonTest模块的checkEntryTokenTest方法，参数是$entry  @CALLED_TIME
+- 执行commonTest模块的checkEntryTokenTest方法，参数是$entry  @ERROR_TIMESTAMP
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-su('admin');
-
-// 定义测试函数，实现checkEntryToken的核心逻辑
-function testCheckEntryToken($entry) 
-{
-    global $app;
-    
-    $queryString = array();
-    if(isset($app->server->query_String)) {
-        parse_str($app->server->query_String, $queryString);
-    }
-    unset($queryString['token']);
-
-    if(isset($queryString['time'])) {
-        $timestamp = $queryString['time'];
-        if(strlen($timestamp) > 10) $timestamp = substr($timestamp, 0, 10);
-        if(strlen($timestamp) != 10 or $timestamp[0] >= '4') {
-            return 'ERROR_TIMESTAMP';
-        }
-
-        $expectedToken = md5($entry->code . $entry->key . $queryString['time']);
-        $actualToken = isset($_GET['token']) ? $_GET['token'] : '';
-        
-        if($actualToken == $expectedToken) {
-            if($timestamp <= $entry->calledTime) {
-                return 'CALLED_TIME';
-            }
-            return true;
-        }
-        return false;
-    }
-
-    $queryString = http_build_query($queryString);
-    $expectedToken = md5(md5($queryString) . $entry->key);
-    $actualToken = isset($_GET['token']) ? $_GET['token'] : '';
-    
-    return $actualToken == $expectedToken;
-}
+$commonTest = new commonTest();
 
 // 准备测试entry对象
 $entry = new stdClass();
@@ -73,13 +37,13 @@ $queryString = 'm=api&f=getModel';
 $_GET['token'] = md5(md5($queryString) . $entry->key);
 $app->server->query_String = $queryString . '&token=' . $_GET['token'];
 
-r(testCheckEntryToken($entry)) && p() && e('1');
+r($commonTest->checkEntryTokenTest($entry)) && p() && e('1');
 
-// 测试步骤2：错误的token验证（无时间戳）  
+// 测试步骤2：错误的token验证（无时间戳）
 $_GET['token'] = 'wrong_token_12345';
 $app->server->query_String = $queryString . '&token=' . $_GET['token'];
 
-r(testCheckEntryToken($entry)) && p() && e('~~');
+r($commonTest->checkEntryTokenTest($entry)) && p() && e('0');
 
 // 测试步骤3：正确的时间戳token验证
 $currentTime = time() + 100;
@@ -87,7 +51,7 @@ $_GET['token'] = md5($entry->code . $entry->key . $currentTime);
 $_GET['time'] = $currentTime;
 $app->server->query_String = $queryString . '&time=' . $currentTime . '&token=' . $_GET['token'];
 
-r(testCheckEntryToken($entry)) && p() && e('1');
+r($commonTest->checkEntryTokenTest($entry)) && p() && e('1');
 
 // 测试步骤4：过期时间戳token验证（时间戳小于等于calledTime）
 $oldTime = $entry->calledTime - 100;
@@ -95,11 +59,12 @@ $_GET['token'] = md5($entry->code . $entry->key . $oldTime);
 $_GET['time'] = $oldTime;
 $app->server->query_String = $queryString . '&time=' . $oldTime . '&token=' . $_GET['token'];
 
-r(testCheckEntryToken($entry)) && p() && e('CALLED_TIME');
+r($commonTest->checkEntryTokenTest($entry)) && p() && e('CALLED_TIME');
 
-// 测试步骤5：无效时间戳格式token验证
+// 测试步骤5：无效时间戳格式token验证（时间戳以4开头）
+$invalidTime = '4000000000';
 $_GET['token'] = 'invalid_token';
-$_GET['time'] = '12345678901'; // 超过10位的时间戳
-$app->server->query_String = $queryString . '&time=' . $_GET['time'] . '&token=' . $_GET['token'];
+$_GET['time'] = $invalidTime;
+$app->server->query_String = $queryString . '&time=' . $invalidTime . '&token=' . $_GET['token'];
 
-r(testCheckEntryToken($entry)) && p() && e('ERROR_TIMESTAMP');
+r($commonTest->checkEntryTokenTest($entry)) && p() && e('ERROR_TIMESTAMP');

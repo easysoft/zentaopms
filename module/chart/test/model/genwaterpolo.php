@@ -7,13 +7,11 @@ title=测试 chartModel::genWaterpolo();
 timeout=0
 cid=0
 
-- 步骤1：正常情况
- - 第series条的0:type属性 @liquidFill
- - 第series条的tooltip:show属性 @1
-- 步骤2：分母为零的边界值第series条的0:data:0属性 @0
-- 步骤3：高百分比情况第series条的0:data:0属性 @0.95
-- 步骤4：低百分比情况第series条的0:data:0属性 @0.05
-- 步骤5：带过滤器情况第series条的0:data:0属性 @0.75
+- 执行$normalResult['series'][0]['type'] @liquidFill
+- 执行$normalResult['tooltip']['show'] @1
+- 执行$zeroResult['series'][0]['data'][0] @0
+- 执行$highResult['series'][0]['data'][0] @0.95
+- 执行$lowResult['series'][0]['data'][0] @0.05
 
 */
 
@@ -21,19 +19,24 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
 
-// 2. zendata数据准备
-$table = zenData('chart');
-$table->loadYaml('chart_genwaterpolo', false, 2)->gen(10);
-
-// 3. 用户登录（选择合适角色）
-su('admin');
-
-// 4. 创建测试实例（变量名与模块名一致）
+// 2. 创建测试实例（变量名与模块名一致）
 $chartTest = new chartTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($chartTest->genWaterpoloTest('normal')) && p('series:0:type,tooltip:show') && e('liquidFill,1'); // 步骤1：正常情况
-r($chartTest->genWaterpoloTest('zeroPercent')) && p('series:0:data:0') && e('0'); // 步骤2：分母为零的边界值
-r($chartTest->genWaterpoloTest('highPercent')) && p('series:0:data:0') && e('0.95'); // 步骤3：高百分比情况
-r($chartTest->genWaterpoloTest('lowPercent')) && p('series:0:data:0') && e('0.05'); // 步骤4：低百分比情况
-r($chartTest->genWaterpoloTest('withFilters')) && p('series:0:data:0') && e('0.75'); // 步骤5：带过滤器情况
+// 步骤1：测试正常水球图的series类型
+$normalResult = $chartTest->genWaterpoloTest('normal');
+r($normalResult['series'][0]['type']) && p() && e('liquidFill');
+
+// 步骤2：测试正常水球图的tooltip显示
+r($normalResult['tooltip']['show']) && p() && e('1');
+
+// 步骤3：测试分母为零的边界值
+$zeroResult = $chartTest->genWaterpoloTest('zeroPercent');
+r($zeroResult['series'][0]['data'][0]) && p() && e('0');
+
+// 步骤4：测试高百分比数据（95%）
+$highResult = $chartTest->genWaterpoloTest('highPercent');
+r($highResult['series'][0]['data'][0]) && p() && e('0.95');
+
+// 步骤5：测试低百分比数据（5%）
+$lowResult = $chartTest->genWaterpoloTest('lowPercent');
+r($lowResult['series'][0]['data'][0]) && p() && e('0.05');

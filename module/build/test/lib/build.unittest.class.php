@@ -608,14 +608,14 @@ class buildTest
      * @param  int        $objectID
      * @param  string     $params
      * @access public
-     * @return array
+     * @return int
      */
-    public function getRelatedReleasesTest($productIdList, string $buildIdList = '', $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
+    public function getRelatedReleasesTest($productIdList, string $buildIdList = '', $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): int
     {
         $result = $this->objectModel->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID, $params);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return count($result);
     }
 
     /**
