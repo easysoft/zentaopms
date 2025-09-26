@@ -27,7 +27,11 @@ $bug->gen(3);
 $product = array();
 $product['productID'] = 1;
 
-$bugs = zenData('bug')->dao->select('id, title')->from(TABLE_BUG)->fetchAll();
+$bugs = array(
+    (object)array('id' => '1', 'title' => 'BUG1'),
+    (object)array('id' => '2', 'title' => 'BUG2'),
+    (object)array('id' => '3', 'title' => 'BUG3'),
+);
 
 $tester = new linkBugsTester();
 r($tester->linkBugs($product, $bugs[0], array_slice($bugs,1))) && p('status,message') && e('SUCCESS,关联bug成功'); //关联bug测试
