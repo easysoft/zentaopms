@@ -517,7 +517,7 @@ class commonTest
         {
             case 1: // 基本功能测试 - 测试模式下返回空字符串
                 $result = commonModel::getSysURL();
-                return $result;
+                return $result === '' ? '1' : '0';
             case 2: // 方法存在性验证
                 return method_exists('commonModel', 'getSysURL') ? '1' : '0';
             case 3: // 静态方法验证

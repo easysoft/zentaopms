@@ -7,7 +7,7 @@ title=测试 commonModel::getSysURL();
 timeout=0
 cid=0
 
-- 执行commonTest模块的getSysURLTest方法，参数是1  @
+- 执行commonTest模块的getSysURLTest方法，参数是1  @1
 - 执行commonTest模块的getSysURLTest方法，参数是2  @1
 - 执行commonTest模块的getSysURLTest方法，参数是3  @1
 - 执行commonTest模块的getSysURLTest方法，参数是4  @1
@@ -18,12 +18,11 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-su('admin');
-
+// getSysURL是静态方法，在测试模式下不需要用户登录和数据库
 $commonTest = new commonTest();
 
 // 测试步骤1：基本功能测试 - 测试模式下返回空字符串
-r($commonTest->getSysURLTest(1)) && p() && e('');
+r($commonTest->getSysURLTest(1)) && p() && e('1');
 
 // 测试步骤2：方法存在性验证
 r($commonTest->getSysURLTest(2)) && p() && e('1');
