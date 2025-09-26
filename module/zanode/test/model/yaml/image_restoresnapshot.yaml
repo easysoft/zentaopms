@@ -1,0 +1,24 @@
+title: zt_image for restoreSnapshot test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: host
+    range: 1-5
+  - field: name
+    range: snapshot_1,snapshot_2,snapshot_3,snapshot_4,snapshot_5
+  - field: from
+    range: snapshot
+  - field: status
+    range: completed,restoring,creating,running,failed
+  - field: createdDate
+    range: "(-10D)-(+10D):-70S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: restoreDate
+    range: "(-1h)-(-10m):10m"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: createdBy
+    range: admin
