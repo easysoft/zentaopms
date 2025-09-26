@@ -90,7 +90,7 @@ class backBtn extends btn
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
             'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view,my-contribute',
-            'review'         => 'review-browse,project-deliverable,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution,my-contribute',
+            'review'         => 'review-browse,project-deliverable,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution,my-contribute,my-audit',
             'charter'        => 'my-index,charter-browse,charter-view,my-audit,program-browse,project-view',
             'roadmap'        => 'charter-view',
             'approvalflow'   => 'approvalflow-browse',

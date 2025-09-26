@@ -12367,4 +12367,27 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 新增交付物权限。
+     * Add deliverable privs for all groups.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDeliverablePrivs()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('deliverable')->fetchPairs();
+        $group  = new stdclass();
+        $group->module = 'project';
+        foreach($groups as $groupID)
+        {
+            foreach(array('createDeliverable', 'deleteDeliverable', 'viewDeliverable') as $method)
+            {
+                $group->method = $method;
+                $group->group  = $groupID;
+                $this->dao->insert(TABLE_GROUPPRIV)->data($group)->exec();
+            }
+        }
+    }
 }
