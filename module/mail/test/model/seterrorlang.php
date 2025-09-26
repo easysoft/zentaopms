@@ -7,13 +7,13 @@ title=测试 mailModel::setErrorLang();
 timeout=0
 cid=0
 
-- 步骤1：测试默认语言环境下设置错误语言属性processed @1
-- 步骤2：测试获取当前语言属性currentLang @zh-cn
-- 步骤3：测试方法正常执行属性processed @1
+- 步骤1：测试方法正常执行属性processed @1
+- 步骤2：测试MTA对象存在性属性mtaExists @1
+- 步骤3：测试当前语言获取属性currentLang @zh-cn
 - 步骤4：测试多次调用稳定性属性processed @1
 - 步骤5：测试综合验证
  - 属性processed @1
- - 属性currentLang @zh-cn
+ - 属性mtaExists @1
 
 */
 
@@ -28,8 +28,8 @@ su('admin');
 $mailTest = new mailTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($mailTest->setErrorLangTest()) && p('processed') && e('1'); // 步骤1：测试默认语言环境下设置错误语言
-r($mailTest->setErrorLangTest()) && p('currentLang') && e('zh-cn'); // 步骤2：测试获取当前语言
-r($mailTest->setErrorLangTest()) && p('processed') && e('1'); // 步骤3：测试方法正常执行
+r($mailTest->setErrorLangTest()) && p('processed') && e('1'); // 步骤1：测试方法正常执行
+r($mailTest->setErrorLangTest()) && p('mtaExists') && e('1'); // 步骤2：测试MTA对象存在性
+r($mailTest->setErrorLangTest()) && p('currentLang') && e('zh-cn'); // 步骤3：测试当前语言获取
 r($mailTest->setErrorLangTest()) && p('processed') && e('1'); // 步骤4：测试多次调用稳定性
-r($mailTest->setErrorLangTest()) && p('processed,currentLang') && e('1,zh-cn'); // 步骤5：测试综合验证
+r($mailTest->setErrorLangTest()) && p('processed,mtaExists') && e('1,1'); // 步骤5：测试综合验证

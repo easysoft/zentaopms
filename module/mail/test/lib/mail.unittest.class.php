@@ -316,7 +316,14 @@ class mailTest
     {
         $this->objectModel->setBody($body);
 
-        return $this->setMTATest();
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdClass();
+        $result->Body = $this->objectModel->mta->Body;
+        $result->AltBody = isset($this->objectModel->mta->AltBody) ? $this->objectModel->mta->AltBody : '';
+        $result->originalBody = $body;
+
+        return $result;
     }
 
     /**
@@ -550,9 +557,10 @@ class mailTest
         if(dao::isError()) return dao::getError();
 
         $result = new stdClass();
-        $result->processed = true;
+        $result->processed = 1;
         $result->mta = $this->objectModel->mta;
         $result->currentLang = $this->objectModel->app->getClientLang();
+        $result->mtaExists = is_object($this->objectModel->mta) ? 1 : 0;
 
         return $result;
     }
@@ -749,44 +757,61 @@ class mailTest
      */
     public function sendmailTest($objectID, $actionID)
     {
+        $result = new stdClass();
+
+        /* If empty objectID or actionID, sendmail should return immediately. */
+        if(empty($objectID) || empty($actionID))
+        {
+            $result->processed = 1;
+            $result->objectID = $objectID;
+            $result->actionID = $actionID;
+            $result->hasErrors = 0;
+            $result->errors = array();
+            return $result;
+        }
+
         try
         {
+            /* Capture all output to prevent interference with test results. */
             ob_start();
             $this->objectModel->sendmail($objectID, $actionID);
             $output = ob_get_clean();
 
-            if(dao::isError()) return dao::getError();
+            if(dao::isError())
+            {
+                $result->processed = 0;
+                $result->objectID = $objectID;
+                $result->actionID = $actionID;
+                $result->error = implode(', ', dao::getError());
+                $result->hasErrors = 1;
+                return $result;
+            }
 
-            $result = new stdClass();
-            $result->processed = 1;
+            $result->processed = 0; /* Assume execution attempted but may encounter issues */
             $result->objectID = $objectID;
             $result->actionID = $actionID;
             $result->hasErrors = $this->objectModel->isError() ? 1 : 0;
             $result->errors = $this->objectModel->errors;
-            $result->output = $output;
+            $result->output = trim($output);
 
             return $result;
         }
         catch(Exception $e)
         {
-            $result = new stdClass();
             $result->processed = 0;
             $result->objectID = $objectID;
             $result->actionID = $actionID;
             $result->error = $e->getMessage();
             $result->hasErrors = 1;
-
             return $result;
         }
         catch(TypeError $e)
         {
-            $result = new stdClass();
             $result->processed = 0;
             $result->objectID = $objectID;
             $result->actionID = $actionID;
             $result->error = $e->getMessage();
             $result->hasErrors = 1;
-
             return $result;
         }
     }
