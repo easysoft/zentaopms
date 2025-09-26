@@ -1892,7 +1892,7 @@ eof;
         {
             if(!isset($projectsStatus[$object->project]))
             {
-                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project, 'project');
                 $projectsStatus[$object->project] = $project ? $project->status : '';
             }
             if($projectsStatus[$object->project] == 'closed') return false;
