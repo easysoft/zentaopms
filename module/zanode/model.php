@@ -815,7 +815,7 @@ class zanodemodel extends model
 
         /* 检查网络状态。*/
         /* Check the status of network. */
-        if($data->hostType == 'physics')
+        if(!empty($data->hostType) && $data->hostType == 'physics')
         {
             $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
             if(!$ping)
