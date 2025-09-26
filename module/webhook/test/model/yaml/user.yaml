@@ -1,0 +1,19 @@
+---
+title: Basic user data for webhook tests
+desc: Minimal user configuration for webhook testing
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin,user1,user2,user3,user4
+- field: password
+  range: 'e10adc3949ba59abbe56e057f20f883e{5}'
+- field: realname
+  range: '管理员,用户一,用户二,用户三,用户四'
+- field: role
+  range: 'admin{1},user{4}'
+- field: email
+  range: 'admin@zentao.net,user1@zentao.net,user2@zentao.net,user3@zentao.net,user4@zentao.net'
+- field: deleted
+  range: '0{5}'
