@@ -241,6 +241,12 @@ class bug extends control
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
+        if(isset($_POST['stepIdList']))
+        {
+            $extras .= "&stepIdList={$this->post->stepIdList}";
+            unset($_POST['stepIdList']);
+        }
+
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extras);
         parse_str($extras, $params);
 
