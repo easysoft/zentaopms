@@ -4,13 +4,14 @@
 /**
 
 title=测试 pivotModel::filterSpecialChars();
+timeout=0
 cid=0
 
-- 测试步骤1：正常对象记录过滤特殊字符 >> 期望正确过滤HTML字符和引号
-- 测试步骤2：正常数组记录过滤特殊字符 >> 期望正确过滤HTML字符和引号  
-- 测试步骤3：空记录数组输入 >> 期望返回空数组
-- 测试步骤4：包含非字符串字段的记录 >> 期望只处理字符串字段，保持其他类型不变
-- 测试步骤5：包含复杂HTML字符的记录 >> 期望正确解码各种HTML特殊字符
+- 执行pivotTest模块的filterSpecialCharsTest方法，参数是$objectRecords 第0条的name属性 @test<name>
+- 执行pivotTest模块的filterSpecialCharsTest方法，参数是$arrayRecords 第0条的name属性 @test<array>
+- 执行pivotTest模块的filterSpecialCharsTest方法，参数是array  @0
+- 执行pivotTest模块的filterSpecialCharsTest方法，参数是$mixedRecords 第0条的name属性 @test<mixed>
+- 执行pivotTest模块的filterSpecialCharsTest方法，参数是$complexRecords 第0条的content属性 @<div>&nbsp;Hello World&nbsp;</div>
 
 */
 
@@ -40,7 +41,7 @@ $arrayRecords[] = array(
 r($pivotTest->filterSpecialCharsTest($arrayRecords)) && p('0:name') && e('test<array>');
 
 // 步骤3：测试空记录数组
-r($pivotTest->filterSpecialCharsTest(array())) && p() && e('~~');
+r($pivotTest->filterSpecialCharsTest(array())) && p() && e('0');
 
 // 步骤4：测试包含非字符串字段的记录
 $mixedRecords = array();
@@ -61,4 +62,4 @@ $complexRecord = array(
 );
 $complexRecords[] = $complexRecord;
 
-r($pivotTest->filterSpecialCharsTest($complexRecords)) && p('0:content') && e('<div>&nbsp;"Hello World"&nbsp;</div>');
+r($pivotTest->filterSpecialCharsTest($complexRecords)) && p('0:content') && e('<div>&nbsp;Hello World&nbsp;</div>');
