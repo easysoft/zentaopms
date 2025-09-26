@@ -25,10 +25,14 @@ class weeklyTest
 
         if(dao::isError()) return dao::getError();
 
-        $start_str = mb_strpos($pageNav,"ass='btn' >") + mb_strlen("class='btn' >");
-        $end_str   = mb_strpos($pageNav,"</a>") - $start_str;
-        $objects   = mb_substr($pageNav, $start_str, $end_str);
-        return $objects;
+        // 解析HTML中的项目名称
+        // HTML格式: <a href='###' class='btn'>周报-项目名称</a>
+        preg_match("/class='btn'>([^<]+)<\/a>/", $pageNav, $matches);
+        if(isset($matches[1])) {
+            return trim($matches[1]);
+        }
+
+        return '';
     }
 
     /**
@@ -442,10 +446,18 @@ class weeklyTest
      */
     public function addBuiltinWeeklyTemplateTest():bool|object
     {
-        $result = $this->objectModel->addBuiltinWeeklyTemplate();
-        if(!$result) return false;
+        try
+        {
+            $result = $this->objectModel->addBuiltinWeeklyTemplate();
+            if(!$result) return false;
 
-        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetch();
+            $doc = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('templateType')->eq('reportTemplate')->orderBy('id desc')->fetch();
+            return $doc ? $doc : false;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
 
     /**
