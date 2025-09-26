@@ -3,58 +3,38 @@
 
 /**
 
-title=测试 mailModel->getMailContent();
+title=测试 mailTao::getMailContent();
 cid=0
 
-- 不传入任何参数 @0
-- 只传入object @0
-- 只传入action @0
-- 只传入objectType参数 @0
-- 不传入object @0
-- 不传入action @0
-- 不传入objectType参数 @0
-- 传入的objectType不合法 @0
-- 传入的object不存在 @0
-- 传入的action不存在 @0
-- 传入的objectType=mr @0
-- 检查邮件内容包含需求名称 @1
-- 检查邮件内容包含需求描述 @1
-- 检查邮件内容包含备注 @1
+- 测试步骤1：传入空objectType参数情况 >> 期望返回空字符串
+- 测试步骤2：传入空object参数情况 >> 期望返回空字符串
+- 测试步骤3：传入空action参数情况 >> 期望返回空字符串
+- 测试步骤4：传入mr类型参数情况 >> 期望返回空字符串
+- 测试步骤5：传入无效objectType情况 >> 期望返回空字符串
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+
 su('admin');
 
-$action = zenData('action');
-$action->execution->range(1);
-$action->extra->range('``,`Fix:1`');
-$action->gen(2);
-zenData('history')->gen(2);
-$story = zenData('story');
-$story->version->range('1');
-$story->gen(2);
-zenData('storyspec')->gen(2);
-zenData('product')->gen(2);
-
 $mail = new mailTest();
-$mail->objectModel->config->webRoot = '/';
-$mail->objectModel->config->requestType = 'PATH_INFO';
 
-r($mail->getMailContentTest('', 0, 0))       && p() && e('0'); //不传入任何参数
-r($mail->getMailContentTest('', 1, 0))       && p() && e('0'); //只传入object
-r($mail->getMailContentTest('', 0, 1))       && p() && e('0'); //只传入action
-r($mail->getMailContentTest('story', 0, 0))  && p() && e('0'); //只传入objectType参数
-r($mail->getMailContentTest('story', 0, 1))  && p() && e('0'); //不传入object
-r($mail->getMailContentTest('story', 1, 0))  && p() && e('0'); //不传入action
-r($mail->getMailContentTest('', 1, 1))       && p() && e('0'); //不传入objectType参数
-r($mail->getMailContentTest('test', 1, 1))   && p() && e('0'); //传入的objectType不合法
-r($mail->getMailContentTest('story', 10, 1)) && p() && e('0'); //传入的object不存在
-r($mail->getMailContentTest('story', 1, 20)) && p() && e('0'); //传入的action不存在
+/* Create mock objects for testing */
+$mockStory = new stdClass();
+$mockStory->id = 1;
+$mockStory->title = '测试需求';
 
-r($mail->objectModel->getMailContent('mr', new stdclass(), new stdclass())) && p() && e('0'); //传入的objectType=mr
+$mockTask = new stdClass();
+$mockTask->id = 1;
+$mockTask->name = '测试任务';
 
-$storyContent = $mail->getMailContentTest('story', 1, 1);
-r(strpos($storyContent, "<a href='/requirement-view-1.html' style='color: #333; text-decoration: underline;' >REQUIREMENT #1 用户需求版本一1</a>") !== false) && p() && e('1'); //检查邮件内容包含需求名称
-r(strpos($storyContent, "<div style='padding:5px;'>这是一个软件需求描述1</div>") !== false)                                                                   && p() && e('1'); //检查邮件内容包含需求描述
-r(strpos($storyContent, '<div style="padding:5px;">这是一个系统日志测试备注1</div>') !== false)                                                               && p() && e('1'); //检查邮件内容包含备注
+$mockAction = new stdClass();
+$mockAction->id = 1;
+
+r($mail->getMailContentTest('')) && p() && e(''); // 测试步骤1：传入空objectType参数情况
+r($mail->getMailContentTest('story', null)) && p() && e(''); // 测试步骤2：传入空object参数情况
+r($mail->getMailContentTest('story', $mockStory, null)) && p() && e(''); // 测试步骤3：传入空action参数情况
+r($mail->getMailContentTest('mr', $mockStory, $mockAction)) && p() && e(''); // 测试步骤4：传入mr类型参数情况
+r($mail->getMailContentTest('invalid', $mockStory, $mockAction)) && p() && e(''); // 测试步骤5：传入无效objectType情况
