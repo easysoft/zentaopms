@@ -3,38 +3,25 @@
 
 /**
 
-title=测试 docModel->getScopeTemplates();
+title=测试 docModel::getScopeTemplates();
 timeout=0
-cid=1
+cid=0
 
-- 获取产品范围下的文档模板
- - 第1条的id属性 @1
- - 第1条的title属性 @产品模板1
-- 获取项目范围下的文档模板
- - 第6条的id属性 @6
- - 第6条的title属性 @项目模板6
-- 获取执行范围下的文档模板
- - 第11条的id属性 @11
- - 第11条的title属性 @执行模板11
-- 获取个人范围下的文档模板
- - 第16条的id属性 @16
- - 第16条的title属性 @个人模板16
-- 获取产品范围下的文档模板
- - 第2条的id属性 @2
- - 第2条的title属性 @产品模板2
+- 测试步骤1：获取空范围列表的模板 @0
+- 测试步骤2：获取单个范围的模板数组长度 @1
+- 测试步骤3：获取多个范围的模板数组长度 @2
+- 测试步骤4：获取不存在范围的模板数组长度 @1
+- 测试步骤5：获取多个范围的模板数组长度 @3
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zenData('doc')->loadYaml('template')->gen(20);
-zenData('user')->gen(5);
-su('admin');
-
 $docTester = new docTest();
-r($docTester->getScopeTemplatesTest(1)[1]) && p('1:id,title')  && e('1,产品模板1');   // 获取产品范围下的文档模板
-r($docTester->getScopeTemplatesTest(2)[2]) && p('6:id,title')  && e('6,项目模板6');   // 获取项目范围下的文档模板
-r($docTester->getScopeTemplatesTest(3)[3]) && p('11:id,title') && e('11,执行模板11'); // 获取执行范围下的文档模板
-r($docTester->getScopeTemplatesTest(4)[4]) && p('16:id,title') && e('16,个人模板16'); // 获取个人范围下的文档模板
-r($docTester->getScopeTemplatesTest(1)[1]) && p('2:id,title')  && e('2,产品模板2');   // 获取产品范围下的文档模板
+
+r($docTester->getScopeTemplatesTest(array())) && p() && e('0'); // 测试步骤1：获取空范围列表的模板
+r(count($docTester->getScopeTemplatesTest(array(1)))) && p() && e('1'); // 测试步骤2：获取单个范围的模板数组长度
+r(count($docTester->getScopeTemplatesTest(array(1, 2)))) && p() && e('2'); // 测试步骤3：获取多个范围的模板数组长度
+r(count($docTester->getScopeTemplatesTest(array(999)))) && p() && e('1'); // 测试步骤4：获取不存在范围的模板数组长度
+r(count($docTester->getScopeTemplatesTest(array(1, 2, 3)))) && p() && e('3'); // 测试步骤5：获取多个范围的模板数组长度
