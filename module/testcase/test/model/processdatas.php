@@ -4,28 +4,24 @@
 /**
 
 title=测试 testcaseModel::processDatas();
-timeout=0
 cid=0
 
-- 执行testcaseTest模块的processDatasTest方法，参数是$data1 第0条的desc:1:content属性 @打开登录页面
-- 执行testcaseTest模块的processDatasTest方法，参数是$data2 第0条的desc:2:content属性 @第二个步骤
-- 执行testcaseTest模块的processDatasTest方法，参数是$data3 第0条的desc:1:content属性 @登录系统
-- 执行testcaseTest模块的processDatasTest方法，参数是$data4 第0条的expect:1:content属性 @显示登录界面
-- 执行testcaseTest模块的processDatasTest方法，参数是$data5  @rray()
+- 测试处理基本编号步骤格式（1. 格式） >> 返回正确的步骤内容
+- 测试处理多行步骤描述（换行分隔） >> 正确解析第二个步骤
+- 测试处理带中文分隔符的步骤（1、格式） >> 返回正确的步骤内容
+- 测试处理带期望字段的完整数据 >> 正确处理expect字段
+- 测试处理空数据输入 >> 返回空数组
+- 测试处理复杂嵌套编号格式（1.1.1.格式） >> 正确解析嵌套编号
+- 测试处理无编号的纯文本 >> 自动添加编号为1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
 $testcaseTest = new testcaseTest();
-
-// 4. 测试步骤：必须包含至少5个测试步骤
 
 // 步骤1：测试处理基本编号步骤格式
 $data1 = array(
@@ -33,7 +29,7 @@ $data1 = array(
         'stepDesc' => '1. 打开登录页面'
     )
 );
-r($testcaseTest->processDatasTest($data1)) && p('0:desc:1:content') && e('打开登录页面'); 
+r($testcaseTest->processDatasTest($data1)) && p('0:desc:1:content') && e('打开登录页面');
 
 // 步骤2：测试处理多行步骤描述
 $data2 = array(
@@ -63,3 +59,19 @@ r($testcaseTest->processDatasTest($data4)) && p('0:expect:1:content') && e('显�
 // 步骤5：测试处理空数据输入
 $data5 = array();
 r($testcaseTest->processDatasTest($data5)) && p() && e(array());
+
+// 步骤6：测试处理复杂嵌套编号格式
+$data6 = array(
+    0 => array(
+        'stepDesc' => '1.1.1. 输入用户名'
+    )
+);
+r($testcaseTest->processDatasTest($data6)) && p('0:desc:1.1.1:content') && e('输入用户名');
+
+// 步骤7：测试处理无编号的纯文本
+$data7 = array(
+    0 => array(
+        'stepDesc' => '测试内容'
+    )
+);
+r($testcaseTest->processDatasTest($data7)) && p('0:desc:1:content') && e('测试内容');
