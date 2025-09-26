@@ -115,7 +115,41 @@ class instanceTest
      */
     public function installationSettingsMapTest(object $customData, object $dbInfo, object $instance)
     {
+        // Mock CNE validateDB method to return successful validation
+        $mockResult = new stdclass;
+        $mockResult->user = true;
+        $mockResult->database = true;
+
+        // Create a mock CNE model if needed
+        if(!property_exists($this->objectModel, 'cne') || !$this->objectModel->cne)
+        {
+            $this->objectModel->cne = new stdclass;
+            $this->objectModel->cne->validateDB = function() use ($mockResult) {
+                return $mockResult;
+            };
+        }
+
+        // Override the validateDB method with mock
+        $originalCne = $this->objectModel->cne;
+        $mockCne = new class($mockResult) {
+            private $mockResult;
+            public function __construct($mockResult) {
+                $this->mockResult = $mockResult;
+            }
+            public function validateDB(string $dbService, string $dbUser, string $dbName, string $namespace): object {
+                return $this->mockResult;
+            }
+            public function sysDomain(): string {
+                return 'test.example.com';
+            }
+        };
+        $this->objectModel->cne = $mockCne;
+
         $result = $this->objectModel->installationSettingsMap($customData, $dbInfo, $instance);
+
+        // Restore original CNE model
+        $this->objectModel->cne = $originalCne;
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -264,7 +298,50 @@ class instanceTest
      */
     public function stopTest(object $instance)
     {
+        // Mock CNE stopApp method to simulate different scenarios
+        $mockResult = new stdclass;
+
+        // 根据不同的实例ID返回不同的结果来模拟各种场景
+        switch($instance->id) {
+            case 1: // 成功停止
+                $mockResult->code = 200;
+                $mockResult->message = 'Success';
+                break;
+            case 2: // API调用失败
+                $mockResult->code = 400;
+                $mockResult->message = 'Bad Request';
+                break;
+            case 3: // 服务器错误
+                $mockResult->code = 500;
+                $mockResult->message = 'Internal Server Error';
+                break;
+            case 4: // 资源不存在
+                $mockResult->code = 404;
+                $mockResult->message = 'Not Found';
+                break;
+            default: // 其他情况
+                $mockResult->code = 200;
+                $mockResult->message = 'Success';
+        }
+
+        // Mock CNE model
+        $originalCne = $this->objectModel->cne;
+        $mockCne = new class($mockResult) {
+            private $mockResult;
+            public function __construct($mockResult) {
+                $this->mockResult = $mockResult;
+            }
+            public function stopApp($apiParams): object {
+                return $this->mockResult;
+            }
+        };
+        $this->objectModel->cne = $mockCne;
+
         $result = $this->objectModel->stop($instance);
+
+        // Restore original CNE model
+        $this->objectModel->cne = $originalCne;
+
         if(dao::isError()) return dao::getError();
 
         return $result;
