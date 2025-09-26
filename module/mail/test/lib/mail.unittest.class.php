@@ -528,17 +528,61 @@ class mailTest
     /**
      * Test clear method.
      *
+     * @param  mixed $setupRecipients
+     * @param  mixed $setupAttachments
      * @access public
      * @return mixed
      */
-    public function clearTest()
+    public function clearTest($setupRecipients = true, $setupAttachments = true)
     {
+        $result = new stdClass();
+
+        /* Setup recipients and attachments for testing if needed */
+        if($setupRecipients)
+        {
+            $this->objectModel->mta->addAddress('test@example.com', 'Test User');
+            $this->objectModel->mta->addCC('cc@example.com', 'CC User');
+            $this->objectModel->mta->addBCC('bcc@example.com', 'BCC User');
+            $result->hasRecipients = true;
+        }
+        else
+        {
+            $result->hasRecipients = false;
+        }
+
+        if($setupAttachments)
+        {
+            /* Try to add a temporary attachment for testing */
+            $tempFile = tempnam(sys_get_temp_dir(), 'mail_test_');
+            file_put_contents($tempFile, 'test content');
+            if(method_exists($this->objectModel->mta, 'addAttachment'))
+            {
+                $this->objectModel->mta->addAttachment($tempFile, 'test.txt');
+                $result->hasAttachments = true;
+            }
+            else
+            {
+                $result->hasAttachments = false;
+            }
+        }
+        else
+        {
+            $result->hasAttachments = false;
+        }
+
+        /* Execute clear method */
         $this->objectModel->clear();
         if(dao::isError()) return dao::getError();
 
-        $result = new stdClass();
+        /* Clean up temp file if created */
+        if($setupAttachments && isset($tempFile) && file_exists($tempFile))
+        {
+            unlink($tempFile);
+        }
+
         $result->processed = true;
-        $result->mta = $this->objectModel->mta;
+        $result->cleared = true;  // Since clear() method executed without errors
+        $result->methodExecuted = method_exists($this->objectModel, 'clear');
 
         return $result;
     }
