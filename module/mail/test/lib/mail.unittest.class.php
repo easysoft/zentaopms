@@ -673,7 +673,8 @@ class mailTest
      */
     public function getImagesByFileIDTest($matches = array())
     {
-        $result = $this->objectModel->getImagesByFileID($matches);
+        /* Simple test with direct method call, using actual zendata if available */
+        $result = $this->objectTao->getImagesByFileID($matches);
         if(dao::isError()) return dao::getError();
 
         return $result;
