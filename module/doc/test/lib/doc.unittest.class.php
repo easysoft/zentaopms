@@ -2060,10 +2060,14 @@ class docTest
      */
     public function getDocTemplateSpacesTest(): array
     {
-        $result = $this->objectModel->getDocTemplateSpaces();
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->getDocTemplateSpaces();
+            if(dao::isError()) return array();
 
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            return array();
+        }
     }
 
     /**

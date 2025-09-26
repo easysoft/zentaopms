@@ -26,6 +26,9 @@ fields:
 - field: execution
   note: 执行ID
   range: 0{10}
+- field: parent
+  note: 父级ID
+  range: 0{10}
 - field: baseUrl
   note: 基础URL
   range: ''{10}
