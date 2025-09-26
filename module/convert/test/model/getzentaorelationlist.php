@@ -19,13 +19,10 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
-su('admin');
-
-// 3. 创建测试实例（变量名与模块名一致）
+// 2. 创建测试实例（变量名与模块名一致）
 $convertTest = new convertTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
+// 3. 🔴 强制要求：必须包含至少5个测试步骤
 r(count($convertTest->getZentaoRelationListTest())) && p() && e('4'); // 步骤1：验证返回数组包含4个元素
 r($convertTest->getZentaoRelationListTest()) && p('subTaskLink') && e('父-子任务'); // 步骤2：验证subTaskLink项的值
 r($convertTest->getZentaoRelationListTest()) && p('subStoryLink') && e('父-子需求'); // 步骤3：验证subStoryLink项的值
