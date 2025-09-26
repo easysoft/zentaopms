@@ -33,6 +33,7 @@ class browsePage extends page
             'bugAssigned'   => "//div[@data-col='assignedTo' and @data-type='assign']/div/a/span[text()]",
             'popupMenu'     => '//div[contains(@class,"popover show fade dropdown in")]',
             'selectActBtn'  => '//div[contains(@class,"is-checked") and @data-col="actions"]//a[@title="激活"]',
+            'editDropdown'  => '(//button[contains(@class, "btn-group-dropdown")]/span[@class="caret-up"])',
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
