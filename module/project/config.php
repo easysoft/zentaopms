@@ -41,7 +41,7 @@ $config->project->labelClass['kanban']        = 'secondary-outline';
 $config->project->labelClass['agileplus']     = 'secondary-outline';
 $config->project->labelClass['waterfallplus'] = 'secondary-outline';
 
-$config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
+$config->project->multiple['project']   = ',qa,devops,review,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
 $config->project->checkList = new stdclass();
