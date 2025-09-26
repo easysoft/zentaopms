@@ -19,8 +19,12 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
-su('admin');
+// 2. 设置测试环境（不需要用户登录，直接设置必要配置）
+global $config, $app;
+
+// 设置session数据以避免getJiraData方法出错
+if(!isset($app->session)) $app->session = new stdClass();
+$app->session->jiraMethod = 'file';
 
 // 3. 创建测试实例（变量名与模块名一致）
 $convertTest = new convertTest();
