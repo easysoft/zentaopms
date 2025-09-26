@@ -468,22 +468,77 @@ class commonTest
      * @access public
      * @return mixed
      */
-    public function getUserPrivTest($module = 'user', $method = 'browse', $object = null, $vars = '')
+    public function getUserPrivTest($module = 'user', $method = 'browse', $object = null, $vars = '', $userType = 'normal')
     {
         global $app;
-        
+
         // 备份原始状态
         $originalUser = isset($app->user) ? clone $app->user : null;
-        
+        $originalOpenMethods = isset($app->config->openMethods) ? $app->config->openMethods : array();
+        $originalVision = isset($app->config->vision) ? $app->config->vision : '';
+
+        // 确保不在教程模式
+        global $config;
+        $originalTutorialMode = isset($config->features->tutorial) ? $config->features->tutorial : '';
+        if(!isset($config->features)) $config->features = new stdClass();
+        $config->features->tutorial = 'off';
+
+        // 根据userType设置不同的用户状态
+        switch($userType) {
+            case 'nouser':
+                unset($app->user);
+                break;
+            case 'admin':
+                $app->user = new stdClass();
+                $app->user->account = 'admin';
+                $app->user->admin = 'super';
+                $app->user->rights = array('rights' => array(), 'acls' => array());
+                break;
+            case 'openmethod':
+                $app->user = new stdClass();
+                $app->user->account = 'test';
+                $app->user->admin = 'no';
+                $app->user->rights = array('rights' => array(), 'acls' => array());
+                $app->config->openMethods[] = "$module.$method";
+                break;
+            case 'hasrights':
+                $app->user = new stdClass();
+                $app->user->account = 'user1';
+                $app->user->admin = 'no';
+                $app->user->rights = array(
+                    'rights' => array($module => array($method => 1)),
+                    'acls' => array()
+                );
+                break;
+            case 'norights':
+                $app->user = new stdClass();
+                $app->user->account = 'user2';
+                $app->user->admin = 'no';
+                $app->user->rights = array(
+                    'rights' => array('my' => array('limited' => 1)),  // 设置为受限用户
+                    'acls' => array('views' => array('qa' => 'qa'))     // user模块的navGroup是admin，这里故意不包含admin
+                );
+                break;
+            default:
+                // 保持原始用户状态
+                break;
+        }
+
         // 执行测试方法
         $result = commonModel::getUserPriv($module, $method, $object, $vars);
-        
-        // 恢复原始状态
-        if($originalUser) $app->user = $originalUser;
-        
-        if(dao::isError()) return dao::getError();
 
-        return $result;
+        // 恢复原始状态
+        if($originalUser) {
+            $app->user = $originalUser;
+        } elseif(isset($app->user)) {
+            unset($app->user);
+        }
+        $app->config->openMethods = $originalOpenMethods;
+        if($originalVision) $app->config->vision = $originalVision;
+        $config->features->tutorial = $originalTutorialMode;
+
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
     }
 
     /**
