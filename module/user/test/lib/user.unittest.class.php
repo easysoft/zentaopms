@@ -103,7 +103,7 @@ class userTest
      * @access public
      * @return array
      */
-    public function getProjectsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getProjectsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->objectModel->getProjects($account, $status, $orderBy, $pager);
     }
@@ -119,7 +119,7 @@ class userTest
      * @access public
      * @return array
      */
-    public function getExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->objectModel->getExecutions($account, $status, $orderBy, $pager);
     }
@@ -135,7 +135,7 @@ class userTest
      * @access public
      * @return array
      */
-    public function fetchProjectsTest(string $account, string $status = 'all', string $orderBy = 'id', object $pager = null): array
+    public function fetchProjectsTest(string $account, string $status = 'all', string $orderBy = 'id', ?object $pager = null): array
     {
         return $this->objectTao->fetchProjects($account, $status, $orderBy, $pager);
     }
@@ -177,7 +177,7 @@ class userTest
      * @access public
      * @return array
      */
-    public function fetchExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function fetchExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->objectTao->fetchExecutions($account, $status, $orderBy, $pager);
     }
