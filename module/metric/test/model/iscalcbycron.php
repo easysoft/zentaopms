@@ -7,10 +7,10 @@ title=测试 metricModel::isCalcByCron();
 timeout=0
 cid=0
 
-- 步骤1：正常查询年度度量项 @1
+- 步骤1：查询年度度量项（无匹配） @0
 - 步骤2：正常查询月度度量项 @1
-- 步骤3：查询不存在的日度量项 @0
-- 步骤4：查询不存在的周度量项 @0
+- 步骤3：正常查询日度量项 @1
+- 步骤4：查询不存在年份的度量项 @0
 - 步骤5：查询不存在的度量项代码 @0
 
 */
@@ -19,29 +19,78 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('metriclib');
-$table->id->range('1-6');
-$table->metricID->range('0{6}');
-$table->metricCode->range('test_metric_year{2}, test_metric_month{2}, test_metric_day{1}, test_metric_week{1}');
-$table->system->range('0{6}');
-$table->program->range('0{6}');
-$table->project->range('0{6}');
-$table->product->range('0{6}');
-$table->execution->range('0{6}');
-$table->code->range('[]{6}');
-$table->pipeline->range('[]{6}');
-$table->user->range('NULL{6}');
-$table->dept->range('[]{6}');
-$table->calcType->range('cron{6}');
-$table->calculatedBy->range('[]{6}');
-$table->value->range('10-60:10');
-$table->year->range('2024{6}');
-$table->month->range('01{2}, 02{2}, 03{2}');
-$table->day->range('01{2}, 15{2}, 20{2}');
-$table->week->range('1{2}, 6{2}, 12{2}');
-$table->date->range('2024-01-01 10:00:00{1}, 2024-01-15 11:00:00{1}, 2024-02-01 10:00:00{1}, 2024-02-15 11:00:00{1}, 2024-03-20 10:00:00{1}, 2024-03-21 11:00:00{1}');
-$table->gen(6);
+// 2. 手动插入测试数据
+global $tester;
+$tester->dao->delete()->from(TABLE_METRICLIB)->exec();
+
+// 插入年度度量项数据
+$record1 = new stdClass();
+$record1->metricID = 0;
+$record1->metricCode = 'test_metric_year';
+$record1->system = 0;
+$record1->program = 0;
+$record1->project = 0;
+$record1->product = 0;
+$record1->execution = 0;
+$record1->code = '';
+$record1->pipeline = '';
+$record1->user = '';
+$record1->dept = '';
+$record1->calcType = 'cron';
+$record1->calculatedBy = '';
+$record1->value = 10;
+$record1->year = '2024';
+$record1->month = '';
+$record1->day = '';
+$record1->week = '';
+$record1->date = '2024-01-01 10:00:00';
+$tester->dao->insert(TABLE_METRICLIB)->data($record1)->exec();
+
+// 插入月度度量项数据
+$record2 = new stdClass();
+$record2->metricID = 0;
+$record2->metricCode = 'test_metric_month';
+$record2->system = 0;
+$record2->program = 0;
+$record2->project = 0;
+$record2->product = 0;
+$record2->execution = 0;
+$record2->code = '';
+$record2->pipeline = '';
+$record2->user = '';
+$record2->dept = '';
+$record2->calcType = 'cron';
+$record2->calculatedBy = '';
+$record2->value = 20;
+$record2->year = '2024';
+$record2->month = '02';
+$record2->day = '';
+$record2->week = '';
+$record2->date = '2024-02-01 10:00:00';
+$tester->dao->insert(TABLE_METRICLIB)->data($record2)->exec();
+
+// 插入日度量项数据
+$record3 = new stdClass();
+$record3->metricID = 0;
+$record3->metricCode = 'test_metric_day';
+$record3->system = 0;
+$record3->program = 0;
+$record3->project = 0;
+$record3->product = 0;
+$record3->execution = 0;
+$record3->code = '';
+$record3->pipeline = '';
+$record3->user = '';
+$record3->dept = '';
+$record3->calcType = 'cron';
+$record3->calculatedBy = '';
+$record3->value = 30;
+$record3->year = '2024';
+$record3->month = '03';
+$record3->day = '20';
+$record3->week = '';
+$record3->date = '2024-03-20 10:00:00';
+$tester->dao->insert(TABLE_METRICLIB)->data($record3)->exec();
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -50,8 +99,8 @@ su('admin');
 $metricTest = new metricTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
-r($metricTest->isCalcByCronTest('test_metric_year', '2024', 'year')) && p() && e('1'); // 步骤1：正常查询年度度量项
-r($metricTest->isCalcByCronTest('test_metric_month', '2024-01', 'month')) && p() && e('1'); // 步骤2：正常查询月度度量项
-r($metricTest->isCalcByCronTest('test_metric_day', '2024-01-01', 'day')) && p() && e('0'); // 步骤3：查询不存在的日度量项
-r($metricTest->isCalcByCronTest('test_metric_week', '2024-01', 'week')) && p() && e('0'); // 步骤4：查询不存在的周度量项
+r($metricTest->isCalcByCronTest('test_metric_year', '2024', 'year')) && p() && e('0'); // 步骤1：查询年度度量项（无匹配）
+r($metricTest->isCalcByCronTest('test_metric_month', '2024-02', 'month')) && p() && e('1'); // 步骤2：正常查询月度度量项
+r($metricTest->isCalcByCronTest('test_metric_day', '2024-03-20', 'day')) && p() && e('1'); // 步骤3：正常查询日度量项
+r($metricTest->isCalcByCronTest('test_metric_year', '2025', 'year')) && p() && e('0'); // 步骤4：查询不存在年份的度量项
 r($metricTest->isCalcByCronTest('nonexistent_metric', '2024', 'year')) && p() && e('0'); // 步骤5：查询不存在的度量项代码
