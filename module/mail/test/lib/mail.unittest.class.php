@@ -534,13 +534,15 @@ class mailTest
      */
     public function setImagesTest($images = array())
     {
+        $originalImages = $images;
         $this->objectModel->setImages($images);
         if(dao::isError()) return dao::getError();
 
         $result = new stdClass();
-        $result->processed = true;
-        $result->imageCount = count($images);
-        $result->uniqueImageCount = count(array_filter(array_unique($images)));
+        $result->processed = 1;
+        $result->imageCount = count($originalImages);
+        $result->uniqueImageCount = count(array_filter(array_unique($originalImages)));
+        $result->filteredImageCount = count(array_filter(array_unique($originalImages)));
 
         return $result;
     }
