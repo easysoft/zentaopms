@@ -1102,15 +1102,25 @@ class metricTest
      */
     public function processOldMetricsMaxTest()
     {
-        global $config;
+        global $config, $tester;
         $originalEdition = $config->edition;
         $config->edition = 'max';
 
         try {
+            // 准备基础度量数据
+            $tester->dao->delete()->from(TABLE_BASICMEAS)->exec();
+            $basicMeas = new stdClass();
+            $basicMeas->id = 1;
+            $basicMeas->name = '测试基础度量';
+            $basicMeas->code = 'test_metric';
+            $basicMeas->unit = '个';
+            $basicMeas->deleted = 0;
+            $tester->dao->insert(TABLE_BASICMEAS)->data($basicMeas)->exec();
+
             $metrics = array();
             $metric1 = new stdClass();
             $metric1->id = 1;
-            $metric1->type = 'sql';
+            $metric1->type = 'sql';  // 旧度量项类型为sql
             $metric1->fromID = 1;
             $metric1->unit = '';
             $metrics[] = $metric1;
@@ -1157,7 +1167,7 @@ class metricTest
             $metrics = array();
             $metric = new stdClass();
             $metric->id = 1;
-            $metric->type = 'php';
+            $metric->type = 'php';  // 新度量项类型为php，不是sql
             $metric->fromID = 1;
             $metric->unit = '';
             $metrics[] = $metric;
@@ -1219,6 +1229,8 @@ class metricTest
         $result = $this->objectModel->getEchartsOptions($header, $data, $chartType);
         if(dao::isError()) return dao::getError();
 
+        if($result === false) return '0';
+        if(is_array($result)) return '1';
         return $result;
     }
 
