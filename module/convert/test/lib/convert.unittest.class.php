@@ -366,7 +366,6 @@ class convertTest
     {
         $result = $this->objectModel->getZentaoObjectList();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -461,6 +460,8 @@ class convertTest
         }
 
         $result = $this->objectModel->getZentaoObjectList();
+        // 移除空字符串元素，只计算有效的对象类型
+        if(isset($result[''])) unset($result['']);
         $count = count($result);
 
         $config->enableER = $originalER;
