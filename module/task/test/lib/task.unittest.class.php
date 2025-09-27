@@ -2487,19 +2487,29 @@ class taskTest
      */
     public function createChangesForTeamTest(object $oldTask, object $task, array $teamData = array()): array
     {
-        /* Manual implementation of createChangesForTeam for testing */
-        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty');
+        // Mock user pairs to avoid database call
+        $users = array(
+            'admin' => '管理员',
+            'user1' => '用户1',
+            'user2' => '用户2',
+            'user3' => '用户3',
+            'user4' => '用户4'
+        );
 
         // Create copies to avoid modifying the original objects
         $oldTaskCopy = clone $oldTask;
         $taskCopy = clone $task;
 
+        // Process old team information
         $oldTeams = $oldTaskCopy->team;
         $oldTaskCopy->team = '';
-        foreach($oldTeams as $team) $oldTaskCopy->team .= "团队成员: " . zget($users, $team->account) . ", 预计: " . (float)$team->estimate . ", 消耗: " . (float)$team->consumed . ", 剩余: " . (float)$team->left . "\n";
+        foreach($oldTeams as $team) {
+            $oldTaskCopy->team .= "团队成员: " . zget($users, $team->account) . ", 预计: " . (float)$team->estimate . ", 消耗: " . (float)$team->consumed . ", 剩余: " . (float)$team->left . "\n";
+        }
 
+        // Process new team information
         $taskCopy->team = '';
-        if(!empty($teamData))
+        if(!empty($teamData['team']))
         {
             foreach($teamData['team'] as $i => $account)
             {
@@ -2546,6 +2556,14 @@ class taskTest
         if($task === null)
         {
             $task = new stdclass();
+        }
+
+        // 确保配置已经初始化
+        global $config;
+        if(!isset($config->task)) $config->task = new stdclass();
+        if(!isset($config->task->dateFields))
+        {
+            $config->task->dateFields = array('assignedDate', 'finishedDate', 'canceledDate', 'closedDate', 'lastEditedDate', 'activatedDate', 'deadline', 'openedDate', 'realStarted', 'estStarted', 'estimateStartDate', 'actualStartDate', 'replacetypeDate');
         }
 
         // 使用反射调用受保护的方法
