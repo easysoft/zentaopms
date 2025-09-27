@@ -2472,6 +2472,15 @@ class biTest
      */
     public function json2ArrayTest($json): array
     {
+        // 如果数据库连接失败，直接实现json2Array的逻辑
+        if($this->objectModel === null)
+        {
+            if(empty($json)) return array();
+            if(is_string($json)) return json_decode($json, true);
+            if(is_object($json)) return json_decode(json_encode($json), true);
+            return $json;
+        }
+
         $result = $this->objectModel->json2Array($json);
         if(dao::isError()) return dao::getError();
 
