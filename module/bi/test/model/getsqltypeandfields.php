@@ -5,13 +5,13 @@
 
 title=测试 biModel::getSqlTypeAndFields();
 timeout=0
-cid=1
+cid=0
 
-- 测试第一个元素为stdClass对象的id字段类型第0条的id属性 @number
-- 测试第一个元素为stdClass对象的account字段类型第0条的account属性 @string
-- 测试第二个元素为数组的id字段映射第1条的id属性 @id
-- 测试第二个元素为数组的account字段映射第1条的account属性 @account
-- 测试方法返回结果包含两个元素 @2
+- 步骤1：正常SQL语句解析，测试第一个元素id字段类型第0条的id属性 @number
+- 步骤2：正常SQL语句解析，测试第一个元素account字段类型第0条的account属性 @string
+- 步骤3：正常SQL语句解析，测试第二个元素id字段映射第1条的id属性 @id
+- 步骤4：正常SQL语句解析，测试第二个元素account字段映射第1条的account属性 @account
+- 步骤5：测试方法返回结果包含两个元素 @2
 
 */
 
@@ -29,8 +29,8 @@ $table->gen(10);
 su('admin');
 $biTest = new biTest();
 
-r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:id') && e('number');    // 测试第一个元素为stdClass对象的id字段类型
-r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:account') && e('string'); // 测试第一个元素为stdClass对象的account字段类型
-r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('1:id') && e('id');        // 测试第二个元素为数组的id字段映射
-r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('1:account') && e('account'); // 测试第二个元素为数组的account字段映射
-r(count($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql'))) && p() && e('2');         // 测试方法返回结果包含两个元素
+r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:id') && e('number');    // 步骤1：正常SQL语句解析，测试第一个元素id字段类型
+r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:account') && e('string'); // 步骤2：正常SQL语句解析，测试第一个元素account字段类型
+r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('1:id') && e('id');        // 步骤3：正常SQL语句解析，测试第二个元素id字段映射
+r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('1:account') && e('account'); // 步骤4：正常SQL语句解析，测试第二个元素account字段映射
+r(count($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql'))) && p() && e('2');         // 步骤5：测试方法返回结果包含两个元素
