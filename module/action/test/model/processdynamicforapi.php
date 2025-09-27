@@ -11,30 +11,24 @@ cid=0
 - 步骤2：测试过滤用户动态 @0
 - 步骤3：测试存在用户的动态数据 @1
 - 步骤4：测试不存在用户的动态数据 @1
-- 步骤5：测试混合动态数据过滤用户类型 @1
+- 步骤5：测试混合动态数据过滤用户类型 @2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-// 准备用户数据
+// 简化的用户数据准备，避免复杂查询
 $userTable = zenData('user');
-$userTable->account->range('admin,user1,user2,user3,test1,test2,test3,test4,test5,test6');
-$userTable->realname->range('管理员,用户1,用户2,用户3,测试1,测试2,测试3,测试4,测试5,测试6');
-$userTable->password->range('123456');
-$userTable->role->range('admin{1},dev{9}');
-$userTable->gen(10);
-
-// 准备动态数据
-zenData('action')->gen(10);
+$userTable->id->range('1-3');
+$userTable->account->range('admin,user1,user2');
+$userTable->realname->range('管理员,用户1,用户2');
+$userTable->avatar->range('');
+$userTable->gen(3);
 
 su('admin');
 
 $actionTest = new actionTest();
-
-// 获取测试数据
-$allDynamics = $tester->dao->select('*')->from(TABLE_ACTION)->fetchAll();
 
 // 创建包含用户动态的测试数据
 $userDynamic = new stdClass();
@@ -60,8 +54,24 @@ $existUserDynamic->objectID = 2;
 $existUserDynamic->actor = 'admin';
 $existUserDynamic->action = 'created';
 
+// 创建另一个存在用户的动态数据
+$anotherUserDynamic = new stdClass();
+$anotherUserDynamic->id = 400;
+$anotherUserDynamic->objectType = 'story';
+$anotherUserDynamic->objectID = 1;
+$anotherUserDynamic->actor = 'user1';
+$anotherUserDynamic->action = 'opened';
+
+// 创建第5个测试：检查actor对象结构
+$extraUserDynamic = new stdClass();
+$extraUserDynamic->id = 500;
+$extraUserDynamic->objectType = 'bug';
+$extraUserDynamic->objectID = 1;
+$extraUserDynamic->actor = 'user2';
+$extraUserDynamic->action = 'resolved';
+
 r(count($actionTest->processDynamicForAPITest(array()))) && p() && e('0'); // 步骤1：测试处理空动态数组
 r(count($actionTest->processDynamicForAPITest(array($userDynamic)))) && p() && e('0'); // 步骤2：测试过滤用户动态
 r(count($actionTest->processDynamicForAPITest(array($existUserDynamic)))) && p() && e('1'); // 步骤3：测试存在用户的动态数据
 r(count($actionTest->processDynamicForAPITest(array($nonExistUserDynamic)))) && p() && e('1'); // 步骤4：测试不存在用户的动态数据
-r(count($actionTest->processDynamicForAPITest(array($userDynamic, $existUserDynamic)))) && p() && e('1'); // 步骤5：测试混合动态数据过滤用户类型
+r(count($actionTest->processDynamicForAPITest(array($userDynamic, $existUserDynamic, $anotherUserDynamic)))) && p() && e('2'); // 步骤5：测试混合动态数据过滤用户类型

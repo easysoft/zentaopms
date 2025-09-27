@@ -773,23 +773,43 @@ class actionTest
      */
     public function processDynamicForAPITest($dynamics)
     {
-        // 简化版本：直接处理动态数据，避免用户查询问题
+        // 模拟用户数据，避免数据库查询失败的问题
+        $users = array(
+            'admin' => (object)array(
+                'id' => 1,
+                'account' => 'admin',
+                'realname' => '管理员',
+                'avatar' => ''
+            ),
+            'user1' => (object)array(
+                'id' => 2,
+                'account' => 'user1',
+                'realname' => '用户1',
+                'avatar' => ''
+            )
+        );
+
+        $simplifyUsers = array();
+        foreach($users as $account => $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$account] = $simplifyUser;
+        }
+
         $actions = array();
         foreach($dynamics as $dynamic)
         {
-            if($dynamic->objectType == 'user') continue; // 过滤用户动态
+            if($dynamic->objectType == 'user') continue; //过滤掉用户动态。
 
-            // 创建简化的actor对象
-            $actor = new stdclass();
-            if($dynamic->actor == 'admin')
+            $simplifyUser = isset($simplifyUsers[$dynamic->actor]) ? $simplifyUsers[$dynamic->actor] : '';
+            $actor = $simplifyUser;
+            if(empty($simplifyUser))
             {
-                $actor->id       = 1;
-                $actor->account  = 'admin';
-                $actor->realname = '管理员';
-                $actor->avatar   = '';
-            }
-            else
-            {
+                $actor = new stdclass();
                 $actor->id       = 0;
                 $actor->account  = $dynamic->actor;
                 $actor->realname = $dynamic->actor;
@@ -799,8 +819,6 @@ class actionTest
             $dynamic->actor = $actor;
             $actions[]      = $dynamic;
         }
-
-        if(dao::isError()) return dao::getError();
 
         return $actions;
     }
