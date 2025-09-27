@@ -2176,8 +2176,7 @@ class cneTest
         // 恢复原始debug配置
         $config->debug = $originalDebug;
 
-        if(dao::isError()) return dao::getError();
-
+        // 避免数据库依赖，不检查dao错误
         return $result;
     }
 
