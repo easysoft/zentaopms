@@ -1,7 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 /**
 
@@ -9,24 +7,27 @@ title=测试 biModel::getFields();
 timeout=0
 cid=0
 
-- 执行bi模块的getFieldsTest方法，参数是$statement1 
+- 执行biTest模块的getFieldsTest方法，参数是$statement1
  - 属性id @id
  - 属性name @name
-- 执行bi模块的getFieldsTest方法，参数是$statement2  @0
-- 执行bi模块的getFieldsTest方法，参数是$statement3 
+- 执行biTest模块的getFieldsTest方法，参数是$statement2  @0
+- 执行biTest模块的getFieldsTest方法，参数是$statement3
  - 属性id @u.id
  - 属性account @u.account
-- 执行bi模块的getFieldsTest方法，参数是$statement4 
+- 执行biTest模块的getFieldsTest方法，参数是$statement4
  - 属性user_id @id
  - 属性username @account
-- 执行bi模块的getFieldsTest方法，参数是$statement5 属性* @*
-- 执行bi模块的getFieldsTest方法，参数是$statement6  @0
+- 执行biTest模块的getFieldsTest方法，参数是$statement5 属性* @*
+- 执行biTest模块的getFieldsTest方法，参数是$statement6  @0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+
 su('admin');
 
-$bi = new biTest();
+$biTest = new biTest();
 
 // 测试1：正常字段解析 - 模拟一个简单的statement对象
 $statement1 = new stdclass();
@@ -42,12 +43,12 @@ $expr2->expr = 'name';
 $expr2->alias = '';
 $statement1->expr[] = $expr2;
 
-r($bi->getFieldsTest($statement1)) && p('id,name') && e('id,name');
+r($biTest->getFieldsTest($statement1)) && p('id,name') && e('id,name');
 
-// 测试2：空statement对象处理 - expr为null时返回空数组，断言检查数组长度
+// 测试2：空statement对象处理 - expr为null时返回空数组
 $statement2 = new stdclass();
 $statement2->expr = null;
-r($bi->getFieldsTest($statement2)) && p() && e('0');
+r($biTest->getFieldsTest($statement2)) && p() && e('0');
 
 // 测试3：带表前缀字段解析 - 有点前缀的字段，别名为点后面的部分
 $statement3 = new stdclass();
@@ -63,7 +64,7 @@ $expr4->expr = 'u.account';
 $expr4->alias = '';
 $statement3->expr[] = $expr4;
 
-r($bi->getFieldsTest($statement3)) && p('id,account') && e('u.id,u.account');
+r($biTest->getFieldsTest($statement3)) && p('id,account') && e('u.id,u.account');
 
 // 测试4：带别名字段解析 - 使用alias作为key，原字段名作为value
 $statement4 = new stdclass();
@@ -79,7 +80,7 @@ $expr6->expr = 'account';
 $expr6->alias = 'username';
 $statement4->expr[] = $expr6;
 
-r($bi->getFieldsTest($statement4)) && p('user_id,username') && e('id,account');
+r($biTest->getFieldsTest($statement4)) && p('user_id,username') && e('id,account');
 
 // 测试5：SELECT *字段解析 - *字段原样处理
 $statement5 = new stdclass();
@@ -90,9 +91,9 @@ $expr7->expr = '*';
 $expr7->alias = '';
 $statement5->expr[] = $expr7;
 
-r($bi->getFieldsTest($statement5)) && p('*') && e('*');
+r($biTest->getFieldsTest($statement5)) && p('*') && e('*');
 
 // 测试6：空expr数组处理 - expr为空数组时返回空数组
 $statement6 = new stdclass();
 $statement6->expr = array();
-r($bi->getFieldsTest($statement6)) && p() && e('0');
+r($biTest->getFieldsTest($statement6)) && p() && e('0');
