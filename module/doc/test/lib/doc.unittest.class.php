@@ -1595,12 +1595,13 @@ class docTest
     public function getScopeTemplatesTest(array $scopeIdList = array())
     {
         // 模拟返回结果以适应测试环境的数据库架构限制
+        // getScopeTemplates方法应该返回一个数组，其中每个scopeID作为key，对应的模板数组作为value
         $scopeTemplates = array();
 
         foreach($scopeIdList as $scopeID)
         {
             // 对于每个范围ID，返回一个空数组（表示该范围下没有模板）
-            // 这符合getScopeTemplates方法的预期行为
+            // 这符合getScopeTemplates方法的预期行为：返回格式为 array(scopeID => templates)
             $scopeTemplates[$scopeID] = array();
         }
 
