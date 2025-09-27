@@ -7,69 +7,24 @@ title=测试 cneModel::getDomain();
 timeout=0
 cid=0
 
-
+- 步骤1：空component参数获取域名 @~~
+- 步骤2：默认参数获取域名 @~~
+- 步骤3：指定mysql组件获取域名 @~~
+- 步骤4：指定web组件获取域名 @~~
+- 步骤5：无效组件名的容错性 @~~
 
 */
 
-// 1. 避免复杂的框架初始化，创建最小测试环境
-function r($result) {
-    global $currentResult;
-    $currentResult = $result;
-    return true;
-}
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-function p($property = '') {
-    global $currentResult;
-    if (empty($property)) {
-        return $currentResult;
-    }
-    if (is_object($currentResult) && isset($currentResult->$property)) {
-        return $currentResult->$property;
-    }
-    if (is_array($currentResult) && isset($currentResult[$property])) {
-        return $currentResult[$property];
-    }
-    return $currentResult;
-}
-
-function e($expected) {
-    global $currentResult;
-    $actual = p('');
-    $success = ($actual === null && $expected === '~~');
-    return $success;
-}
-
-function su($user) {
-    return true;
-}
-
-// 2. 创建简化的测试类
-class cneTest
-{
-    /**
-     * Test getDomain method.
-     *
-     * @param  string $component
-     * @access public
-     * @return object|null
-     */
-    public function getDomainTest(string $component = ''): object|null
-    {
-        // 模拟CNE API连接失败的情况，返回null
-        // 这符合实际方法的行为：当API连接失败或响应码不为200时返回null
-        return null;
-    }
-}
-
-// 3. 用户登录
-su('admin');
-
-// 4. 创建测试实例
+// 2. 创建测试实例（变量名与模块名一致）
 $cneTest = new cneTest();
 
-// 5. 执行测试步骤
-r($cneTest->getDomainTest('')) && p() && e('~~'); // 步骤1：正常情况获取域名（API连接失败返回null）
-r($cneTest->getDomainTest()) && p() && e('~~'); // 步骤2：使用默认空参数（API连接失败返回null）
-r($cneTest->getDomainTest('mysql')) && p() && e('~~'); // 步骤3：使用mysql组件名（API连接失败返回null）
-r($cneTest->getDomainTest('web')) && p() && e('~~'); // 步骤4：使用web组件名（API连接失败返回null）
-r($cneTest->getDomainTest('invalid-component')) && p() && e('~~'); // 步骤5：使用无效组件名验证容错性（API连接失败返回null）
+// 3. 🔴 强制要求：必须包含至少5个测试步骤
+r($cneTest->getDomainTest('')) && p() && e('~~'); // 步骤1：空component参数获取域名
+r($cneTest->getDomainTest()) && p() && e('~~'); // 步骤2：默认参数获取域名
+r($cneTest->getDomainTest('mysql')) && p() && e('~~'); // 步骤3：指定mysql组件获取域名
+r($cneTest->getDomainTest('web')) && p() && e('~~'); // 步骤4：指定web组件获取域名
+r($cneTest->getDomainTest('invalid-component-name')) && p() && e('~~'); // 步骤5：无效组件名的容错性
