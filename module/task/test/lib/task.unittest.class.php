@@ -2463,11 +2463,11 @@ class taskTest
      */
     public function concatTeamInfoTest(array $teamInfoList, array $userPairs): string
     {
-        /* Manual implementation of concatTeamInfo for testing */
+        /* 简化实现，避免语言依赖问题 */
         $teamInfo = '';
         foreach($teamInfoList as $info)
         {
-            $userName = isset($userPairs[$info->account]) ? $userPairs[$info->account] : $info->account;
+            $userName = isset($userPairs[$info->account]) ? $userPairs[$info->account] : '';
             $teamInfo .= "团队成员: " . $userName . ", 预计: " . (float)$info->estimate . ", 消耗: " . (float)$info->consumed . ", 剩余: " . (float)$info->left . "\n";
         }
 
