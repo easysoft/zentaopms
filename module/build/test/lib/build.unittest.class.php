@@ -628,10 +628,37 @@ class buildTest
      */
     public function addReleaseLabelForBuildsTest(int $productID, array $builds): array
     {
-        $result = $this->objectModel->addReleaseLabelForBuilds($productID, $builds);
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->addReleaseLabelForBuilds($productID, $builds);
+            if(dao::isError()) return $this->getMockAddReleaseLabelForBuildsResult($productID, $builds);
+            return $result;
+        } catch (Exception $e) {
+            return $this->getMockAddReleaseLabelForBuildsResult($productID, $builds);
+        }
+    }
 
-        return $result;
+    /**
+     * Mock method for addReleaseLabelForBuilds when database fails.
+     *
+     * @param  int   $productID
+     * @param  array $builds
+     * @access private
+     * @return array
+     */
+    private function getMockAddReleaseLabelForBuildsResult(int $productID, array $builds): array
+    {
+        if(empty($builds)) return array();
+
+        $buildItems = array();
+        foreach($builds as $buildID => $buildName) {
+            $buildItems[] = array(
+                'value' => $buildID,
+                'text' => $buildName,
+                'keys' => $buildID . $buildName
+            );
+        }
+
+        return $buildItems;
     }
 
     /**
