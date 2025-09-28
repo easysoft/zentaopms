@@ -3239,32 +3239,28 @@ class convertTest
      */
     public function createProjectTest($data, $projectRoleActor = array())
     {
-        try {
-            // Create a simplified mock project object to test data transformation logic
-            $project = new stdclass();
-            $project->name          = substr(isset($data->pname) ? $data->pname : '', 0, 90);
-            $project->code          = isset($data->pkey) ? $data->pkey : '';
-            $project->desc          = isset($data->description) ? $data->description : '';
-            $project->status        = isset($data->status) ? $data->status : 'wait';
-            $project->type          = 'project';
-            $project->model         = 'scrum';
-            $project->grade         = 1;
-            $project->acl           = 'open';
-            $project->auth          = 'extend';
-            $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : date('Y-m-d');
-            $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
-            $project->days          = 31; // Approximate for testing
-            $project->PM            = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
-            $project->openedBy      = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
-            $project->openedDate    = date('Y-m-d H:i:s');
-            $project->openedVersion = '18.0';
-            $project->storyType     = 'story,epic,requirement';
-            $project->id            = isset($data->id) ? $data->id : 1;
+        // 直接模拟createProject方法的核心逻辑，不依赖数据库
+        $project = new stdclass();
+        $project->name          = substr($data->pname, 0, 90);
+        $project->code          = $data->pkey;
+        $project->desc          = isset($data->description) ? $data->description : '';
+        $project->status        = $data->status;
+        $project->type          = 'project';
+        $project->model         = 'scrum';
+        $project->grade         = 1;
+        $project->acl           = 'open';
+        $project->auth          = 'extend';
+        $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : date('Y-m-d');
+        $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
+        $project->days          = abs(strtotime($project->end) - strtotime($project->begin)) / (24 * 3600) + 1;
+        $project->PM            = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->openedBy      = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->openedDate    = date('Y-m-d H:i:s');
+        $project->openedVersion = '18.0';
+        $project->storyType     = 'story,epic,requirement';
+        $project->id            = isset($data->id) ? $data->id : 1;
 
-            return $project;
-        } catch (Exception $e) {
-            return array('error' => $e->getMessage());
-        }
+        return $project;
     }
 
     /**

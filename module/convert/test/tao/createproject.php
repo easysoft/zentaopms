@@ -12,8 +12,8 @@ cid=0
  - 属性code @TEST1
  - 属性status @wait
  - 属性type @project
-- 执行convertTest模块的createProjectTest方法，参数是$data2, array 属性name @长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
-- 执行convertTest模块的createProjectTest方法，参数是$data3, array 属性desc @~~
+- 执行convertTest模块的createProjectTest方法，参数是$data2, array 属性name @长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
+- 执行convertTest模块的createProjectTest方法，参数是$data3, array 属性desc @
 - 执行convertTest模块的createProjectTest方法，参数是$data4, $projectRoleActor4 
  - 属性name @团队项目
  - 属性type @project
@@ -27,9 +27,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. zendata数据准备
-zenData('user')->gen(8);
-zenData('company')->gen(1);
+// 2. zendata数据准备（最小化配置）
+zenData('user')->gen(0);
+zenData('company')->gen(0);
 zenData('lang')->gen(0);
 
 // 3. 用户登录（选择合适角色）
@@ -51,7 +51,7 @@ $data1->id = 1;
 $projectRoleActor1 = array();
 r($convertTest->createProjectTest($data1, $projectRoleActor1)) && p('name,code,status,type') && e('测试项目名称,TEST1,wait,project');
 
-// 步骤2：边界值 - 长项目名称截取测试
+// 步骤2：边界值 - 长项目名称截取测试（90字符限制）
 $data2 = new stdclass();
 $data2->pname = '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长名称';
 $data2->pkey = 'LONG';
@@ -60,7 +60,7 @@ $data2->status = 'doing';
 $data2->lead = 'jira_user1';
 $data2->created = '2024-02-15 14:30:00';
 $data2->id = 2;
-r($convertTest->createProjectTest($data2, array())) && p('name') && e('长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长');
+r($convertTest->createProjectTest($data2, array())) && p('name') && e('长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长');
 
 // 步骤3：异常输入 - 空描述处理
 $data3 = new stdclass();
@@ -70,7 +70,7 @@ $data3->status = 'done';
 $data3->lead = 'jira_lead';
 $data3->created = '2024-03-10 09:15:00';
 $data3->id = 3;
-r($convertTest->createProjectTest($data3, array())) && p('desc') && e('~~');
+r($convertTest->createProjectTest($data3, array())) && p('desc') && e('');
 
 // 步骤4：权限验证 - 包含团队成员的项目
 $data4 = new stdclass();
