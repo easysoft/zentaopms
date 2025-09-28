@@ -1888,12 +1888,16 @@ eof;
 
         /* Check the project is closed. */
         $productModuleList = array('story', 'bug', 'testcase', 'case', 'testtask', 'release');
-        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and (empty($config->CRProject) || empty($config->CRExecution)))
         {
             if(!isset($projectsStatus[$object->project]))
             {
-                $project = $commonModel->loadModel('project')->getByID((int)$object->project, 'project');
-                $projectsStatus[$object->project] = $project ? $project->status : '';
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                if($project && $project->status == 'closed')
+                {
+                    /* 有的表项目和执行都存在project里。 */
+                    return $project->type == 'project' ? !empty($config->CRProject) : !empty($config->CRExecution);
+                }
             }
             if($projectsStatus[$object->project] == 'closed') return false;
         }
