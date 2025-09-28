@@ -3437,60 +3437,57 @@ class convertTest
      */
     public function createStoryTest($productID = 0, $projectID = 0, $executionID = 0, $type = 'story', $data = null, $relations = array())
     {
+        // 参数验证测试
         if($data === null) return 0;
+        if(empty($data) || !is_object($data)) return 0;
+        if(!isset($data->summary) || empty($data->summary)) return 0;
+        if(!in_array($type, array('story', 'requirement', 'epic'))) return 0;
+        if($productID <= 0 || $projectID <= 0 || $executionID <= 0) return 0;
 
-        // 创建Mock对象来模拟createStory方法
-        $mockTao = new class {
-            public function createStory($productID, $projectID, $executionID, $type, $data, $relations)
-            {
-                // 模拟基本的业务逻辑验证
-                if(empty($data) || !isset($data->summary)) return false;
+        // 模拟创建需求的业务逻辑验证
+        $story = new stdclass();
+        $story->title = $data->summary;
+        $story->type = $type;
+        $story->product = $productID;
+        $story->pri = isset($data->priority) ? $data->priority : 3;
+        $story->version = 1;
+        $story->grade = 1;
 
-                // 模拟转换逻辑
-                $story = new stdclass();
-                $story->title = $data->summary;
-                $story->type = $type;
-                $story->product = $productID;
-                $story->pri = $data->priority ? $data->priority : 3;
-                $story->version = 1;
-                $story->grade = 1;
+        // 模拟状态和阶段设置
+        $story->stage = $this->mockConvertStage($data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
+        $story->status = $this->mockConvertStatus($type, $data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
 
-                // 模拟stage和status转换
-                $story->stage = $this->mockConvertStage($data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
-                $story->status = $this->mockConvertStatus($type, $data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
+        // 模拟用户账号转换
+        $story->openedBy = $this->mockGetJiraAccount($data->creator ?? '');
+        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $story->assignedTo = $this->mockGetJiraAccount($data->assignee ?? '');
 
-                // 模拟用户转换
-                $story->openedBy = $this->mockGetJiraAccount($data->creator ?? '');
-                $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
-                $story->assignedTo = $this->mockGetJiraAccount($data->assignee ?? '');
+        if($story->assignedTo) $story->assignedDate = date('Y-m-d H:i:s');
 
-                return true;
-            }
+        // 模拟关闭原因设置
+        if(isset($data->resolution) && $data->resolution)
+        {
+            $story->closedReason = isset($relations["zentaoReason{$data->issuetype}"][$data->resolution]) ?
+                                  $relations["zentaoReason{$data->issuetype}"][$data->resolution] : 'done';
+        }
 
-            private function mockConvertStage($jiraStatus, $issueType, $relations)
-            {
-                $stageKey = "zentaoStage{$issueType}";
-                return isset($relations[$stageKey][$jiraStatus]) ? $relations[$stageKey][$jiraStatus] : 'wait';
-            }
+        // 验证必要字段都已设置
+        if(empty($story->title) || empty($story->type) || empty($story->product)) return 0;
 
-            private function mockConvertStatus($objectType, $jiraStatus, $issueType, $relations)
-            {
-                $statusKey = "zentaoStatus{$issueType}";
-                if(isset($relations[$statusKey][$jiraStatus])) return $relations[$statusKey][$jiraStatus];
-                return in_array($objectType, array('task', 'testcase', 'feedback', 'ticket', 'flow')) ? 'wait' : 'active';
-            }
+        return 1;  // 模拟成功创建
+    }
 
-            private function mockGetJiraAccount($userKey)
-            {
-                if(empty($userKey)) return '';
-                // 简单的用户映射
-                $userMap = array('admin' => 'admin', 'user1' => 'user1', 'user2' => 'user2');
-                return isset($userMap[$userKey]) ? $userMap[$userKey] : $userKey;
-            }
-        };
+    private function mockConvertStage($jiraStatus, $issueType, $relations)
+    {
+        $stageKey = "zentaoStage{$issueType}";
+        return isset($relations[$stageKey][$jiraStatus]) ? $relations[$stageKey][$jiraStatus] : 'wait';
+    }
 
-        $result = $mockTao->createStory($productID, $projectID, $executionID, $type, $data, $relations);
-        return $result ? 1 : 0;
+    private function mockConvertStatus($objectType, $jiraStatus, $issueType, $relations)
+    {
+        $statusKey = "zentaoStatus{$issueType}";
+        if(isset($relations[$statusKey][$jiraStatus])) return $relations[$statusKey][$jiraStatus];
+        return in_array($objectType, array('task', 'testcase', 'feedback', 'ticket', 'flow')) ? 'wait' : 'active';
     }
 
     /**
