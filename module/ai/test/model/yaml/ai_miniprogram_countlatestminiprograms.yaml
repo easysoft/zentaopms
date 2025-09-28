@@ -1,0 +1,52 @@
+---
+title: ai_miniprogram data for countLatestMiniPrograms test
+desc: Test data for counting latest mini programs within one month
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: ID
+- field: name
+  range: 最近小程序{3},过期小程序{3},未发布小程序{2},已删除小程序{2}
+  note: 小程序名称
+- field: category
+  range: work{5},personal{3},life{2}
+  note: 分类
+- field: desc
+  range: 测试描述{10}
+  note: 描述
+- field: model
+  range: 1{7},2{3}
+  note: 模型ID
+- field: icon
+  range: writinghand-7{10}
+  note: 图标
+- field: createdBy
+  range: admin{10}
+  note: 创建者
+- field: createdDate
+  range: (-15D){3},(-2M){3},(-3M){2},(-6M){2}
+  note: 创建时间
+- field: editedBy
+  range: admin{10}
+  note: 编辑者
+- field: editedDate
+  range: (-15D){3},(-2M){3},(-3M){2},(-6M){2}
+  note: 编辑时间
+- field: published
+  range: 1{8},0{2}
+  note: 是否发布
+- field: publishedDate
+  range: (-15D){3},(-2M){3},(-3M){2},null{2}
+  note: 发布时间
+- field: deleted
+  range: 0{8},1{2}
+  note: 是否删除
+- field: prompt
+  range: 测试提示词{10}
+  note: 提示词
+- field: builtIn
+  range: 0{8},1{2}
+  note: 是否内置
