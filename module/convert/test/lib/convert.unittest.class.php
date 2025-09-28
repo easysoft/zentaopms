@@ -3273,14 +3273,24 @@ class convertTest
      */
     public function createDefaultExecutionTest($jiraProjectID = 1001, $projectID = 1, $projectRoleActor = array())
     {
-        global $tester;
-        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-        if(!$project) return false;
+        try {
+            global $tester;
+            $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            if(!$project) return 0;
 
-        $result = $this->objectTao->createDefaultExecution($jiraProjectID, $project, $projectRoleActor);
-        if(dao::isError()) return dao::getError();
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createDefaultExecution');
+            $method->setAccessible(true);
 
-        return is_numeric($result) ? 1 : 0;
+            $result = $method->invoke($this->objectTao, $jiraProjectID, $project, $projectRoleActor);
+            if(dao::isError()) return dao::getError();
+
+            return is_numeric($result) && $result > 0 ? 1 : 0;
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
     }
 
     /**
