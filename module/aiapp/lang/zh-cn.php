@@ -73,3 +73,4 @@ $lang->aiapp->langData->changeProp         = '属性';
 $lang->aiapp->langData->changeTitleFormat  = '变更{type} #{id}';
 $lang->aiapp->langData->applyFormSuccess   = '已成功应用到%s表单';
 $lang->aiapp->langData->changeExplainDesc  = '对数据的变化进行解释，尽量对变化的属性分别进行说明。';
+$lang->aiapp->langData->goTesting          = '去调试';

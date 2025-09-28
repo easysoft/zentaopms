@@ -751,10 +751,11 @@ class ai extends control
      *
      * @param  int    $promptId
      * @param  int    $objectId
+     * @param  bool   $auto  Auto open target form and apply changes.
      * @access public
      * @return void
      */
-    public function promptExecute($promptId, $objectId)
+    public function promptExecute($promptId, $objectId, $auto = true)
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
@@ -800,8 +801,9 @@ class ai extends control
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['promptConfig'] = $prompt;
+        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
 
-        return $this->send(array('result' => 'success', 'data' => $response, 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response))));
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $auto))));
     }
 
     /**
@@ -837,7 +839,7 @@ class ai extends control
         if(!empty($exit))
         {
             unset($_SESSION['auditPrompt']);
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId")));
+            return $this->send(array('result' => 'success', 'load' => $this->inlink('promptview', "promptID=$promptId")));
         }
 
         $prompt = $this->ai->getPromptByID($promptId);
@@ -863,7 +865,7 @@ class ai extends control
             }
             else
             {
-                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadPrompt($promptId, $objectId)");
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'promptexecute', "promptId=$promptId&objectId=$objectId"));
             }
 
             $this->sendSuccess($response);

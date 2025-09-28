@@ -49,7 +49,7 @@ $promptMenuInject = function()
             $html .= '<li class="menu-item">';
             $html .= html::a
             (
-                helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"),
+                helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId&auto=0"),
                 $prompt->name . ($prompt->status != 'active' ? '<span class="label size-sm gray-500-pale ring-gray-500" style="margin-left: 4px; white-space: nowrap;">' . $this->lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''),
                 '',
                 "class='prompt ajax-submit' style='width: 100%;'" . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"),
@@ -65,7 +65,7 @@ $promptMenuInject = function()
         $btnClass = 'prompt btn ghost size-sm font-medium ajax-submit' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : ''));
         $html .= html::a
         (
-            helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId"),
+            helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId&auto=0"),
             $prompt->name . ($prompt->status != 'active' ? '<span class="label size-sm gray-500-pale ring-gray-500" style="margin-left: 4px; white-space: nowrap;">' . $this->lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''),
             '',
             "class='$btnClass' " . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='bottom'")

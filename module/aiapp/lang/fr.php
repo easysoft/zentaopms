@@ -73,3 +73,4 @@ $lang->aiapp->langData->changeProp         = 'Propriété';
 $lang->aiapp->langData->changeTitleFormat  = 'Changement {type} #{id}';
 $lang->aiapp->langData->applyFormSuccess   = 'Successfully applied to %s form';
 $lang->aiapp->langData->changeExplainDesc  = 'Expliquez les changements apportés aux données, essayez d\'expliquer chaque attribut modifié.';
+$lang->aiapp->langData->goTesting          = 'Aller au test';
