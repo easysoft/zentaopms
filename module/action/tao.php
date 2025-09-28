@@ -88,7 +88,8 @@ class actionTao extends actionModel
         switch($objectType)
         {
             case 'story':
-                list($product, $project, $execution) = $this->getStoryActionRelated($objectType, $objectID, (int)$extra);
+                list($product, $project, $execution) = $this->getStoryActionRelated($actionType, $objectID, (int)$extra);
+                break;
             case 'productplan':
             case 'branch':
                 $product = $objectID == 0 ? $extra : $this->dao->select('product')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('product');
