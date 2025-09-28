@@ -216,6 +216,16 @@ div(
     (
         setID('aiChatView'),
         setClass('shadow rounded flex-1 ring'),
+        div
+        (
+            setClass('center h-full'),
+            div
+            (
+                setClass('row items-center gap-2'),
+                icon('lightbulb text-warning'),
+                div(html(str_replace('{zaiConfigUrl}', createLink('zai', 'setting'), $lang->aiapp->langData->zaiConfigNotValid)))
+            )
+        ),
         on::init()->call('window.aiBrowseMiniProgram.initAIChatView', array(
             'creatingChat' => array('title' => $miniProgram->name, 'chatType' => 'miniprogram'),
             'noContexts' => true,
