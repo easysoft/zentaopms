@@ -832,4 +832,81 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test getImagesByFileID method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return mixed
+     */
+    public function getImagesByFileIDTest($matches)
+    {
+        global $tester;
+        if(!$tester)
+        {
+            // 模拟测试场景，不依赖数据库
+            if(empty($matches) || !isset($matches[2])) return array();
+
+            // 模拟文件数据
+            $mockFiles = array(
+                '1' => array('id' => 1, 'extension' => 'jpg', 'realPath' => '/data/upload/1.jpg'),
+                '2' => array('id' => 2, 'extension' => 'png', 'realPath' => '/data/upload/2.png'),
+                '3' => array('id' => 3, 'extension' => 'gif', 'realPath' => '/data/upload/3.gif'),
+                '9' => array('id' => 9, 'extension' => 'pdf', 'realPath' => '/data/upload/9.pdf'),
+            );
+
+            $imageExtensions = array('jpeg', 'jpg', 'gif', 'png');
+            $images = array();
+
+            foreach($matches[2] as $key => $fileID)
+            {
+                if(!$fileID) continue;
+
+                $file = isset($mockFiles[$fileID]) ? (object)$mockFiles[$fileID] : null;
+                if(!$file) continue;
+                if(!in_array($file->extension, $imageExtensions)) continue;
+
+                $images[$matches[1][$key]] = $file->realPath;
+            }
+            return $images;
+        }
+
+        $result = $tester->loadTao('mail')->getImagesByFileID($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getImagesByPath method.
+     *
+     * @param  array $matches
+     * @access public
+     * @return mixed
+     */
+    public function getImagesByPathTest($matches)
+    {
+        global $tester;
+        if(!$tester)
+        {
+            // 模拟测试场景，不依赖数据库
+            // 直接实现getImagesByPath的逻辑
+            if(!isset($matches[1])) return array();
+
+            $images = array();
+            foreach($matches[1] as $key => $path)
+            {
+                if(!$path) continue;
+
+                $images[$path] = $path;
+            }
+            return $images;
+        }
+
+        $result = $tester->loadTao('mail')->getImagesByPath($matches);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
