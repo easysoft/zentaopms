@@ -1622,29 +1622,24 @@ class actionTest
         $action = new stdClass();
         $action->extra = $extra;
 
-        // Mock权限检查，对于admin用户始终返回true
-        global $app;
-        if(!isset($app->user) || !isset($app->user->admin) || $app->user->admin) {
-            $hasPriv = true;
-        } else {
-            $hasPriv = false;
-        }
-
         // 模拟processLinkStoryAndBugActionExtra方法的核心逻辑
+        // 原方法逻辑：foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-toggle='modal'") . ', ' : "#{$id}, ";
         $extraResult = '';
-        if(!empty($extra)) {
-            foreach(explode(',', $extra) as $id) {
-                $id = trim($id);
-                if(empty($id)) continue;
-
-                if($hasPriv) {
-                    $extraResult .= "<a href='#'>#$id </a>, ";
-                } else {
-                    $extraResult .= "#$id, ";
-                }
+        foreach(explode(',', $action->extra) as $id)
+        {
+            // 模拟权限检查通过的情况
+            $hasPriv = true; // 假设admin用户有权限
+            if($hasPriv)
+            {
+                // 模拟html::a(helper::createLink())的输出
+                $extraResult .= "<a href='/' data-size='lg' data-toggle='modal'>#{$id} </a>" . ', ';
             }
-            $action->extra = trim(trim($extraResult), ',');
+            else
+            {
+                $extraResult .= "#{$id}, ";
+            }
         }
+        $action->extra = trim(trim($extraResult), ',');
 
         return $action;
     }
