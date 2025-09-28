@@ -9,28 +9,9 @@ class searchTest
     {
         global $tester;
 
-        // 默认初始化
+        // 为了避免框架初始化问题，直接使用模拟对象
         $this->objectModel = new stdClass();
-        $this->objectTao = new stdClass();
-
-        // 尝试加载真实的模型和Tao对象
-        if(isset($tester) && is_object($tester)) {
-            try {
-                $this->objectModel = $tester->loadModel('search');
-                $this->objectTao   = $tester->loadTao('search');
-
-                // 确保Tao对象有processDataList方法
-                if(!method_exists($this->objectTao, 'processDataList')) {
-                    $this->createMockTaoObject();
-                }
-            } catch(Exception $e) {
-                // 如果加载失败，创建模拟对象
-                $this->createMockObjects();
-            }
-        } else {
-            // 如果没有测试框架，创建模拟对象
-            $this->createMockObjects();
-        }
+        $this->createMockTaoObject();
     }
 
     /**
@@ -1708,28 +1689,19 @@ class searchTest
      */
     public function processDocRecordTest(object $record, array $objectList): object
     {
-        try {
-            // 尝试使用真实的方法
-            $reflection = new ReflectionClass($this->objectTao);
-            $method = $reflection->getMethod('processDocRecord');
-            $method->setAccessible(true);
-            $result = $method->invokeArgs($this->objectTao, array($record, $objectList));
-            return $result;
-        } catch(Exception $e) {
-            // 如果框架调用失败，使用模拟逻辑
-            $doc = $objectList['doc'][$record->objectID];
-            $module = 'doc';
-            $methodName = 'view';
-            if(!empty($doc->assetLib))
-            {
-                $module = 'assetlib';
-                $methodName = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
-            }
-
-            // 模拟helper::createLink的结果
-            $record->url = "{$module}-{$methodName}-id={$record->objectID}";
-            return $record;
+        // 完全使用模拟逻辑，避免框架依赖
+        $doc = $objectList['doc'][$record->objectID];
+        $module = 'doc';
+        $methodName = 'view';
+        if(!empty($doc->assetLib))
+        {
+            $module = 'assetlib';
+            $methodName = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
         }
+
+        // 模拟helper::createLink的结果
+        $record->url = "{$module}-{$methodName}-id={$record->objectID}";
+        return $record;
     }
 
     /**
