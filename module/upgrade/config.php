@@ -1499,6 +1499,9 @@ $config->delete['21_6_beta'][] = 'extension/biz/project/ext/model/zentaoipd.php'
 
 $config->delete['21_7_2'][] = 'module/solution';
 
+$config->delete['21_7_3'][] = 'extension/max/execution/ext/tao/zentaomax.php';
+$config->delete['21_7_3'][] = 'extension/ipd/execution/ext/tao/zentaomax.php';
+
 $config->delete['21_7_5'][] = 'extension/biz/doc/ext/js/app/zentaobiz.ui.js';
 $config->delete['21_7_5'][] = 'extension/max/doc/ext/js/app/zentaobiz.ui.js';
 $config->delete['21_7_5'][] = 'extension/ipd/doc/ext/js/app/zentaobiz.ui.js';
