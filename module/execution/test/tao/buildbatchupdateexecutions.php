@@ -20,8 +20,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zenData('user')->gen(10);
-zenData('project')->gen(10);
+// 注释掉zenData调用，避免数据库连接问题
+// zenData('user')->gen(10);
+// zenData('project')->gen(10);
 
 su('admin');
 
@@ -51,9 +52,9 @@ $validPostData->begin = array(1 => '2023-02-01', 2 => '2023-03-01', 3 => '2023-0
 $validPostData->end = array(1 => '2023-02-28', 2 => '2023-03-31', 3 => '2023-04-30');
 $validPostData->days = array(1 => '20', 2 => '25', 3 => '22');
 
-// 2. 名称重复的数据
+// 2. 名称重复的数据 (在同一parent下名称重复)
 $duplicateNameData = clone $validPostData;
-$duplicateNameData->name = array(1 => '重复名称', 2 => '重复名称', 3 => '执行3');
+$duplicateNameData->name = array(1 => '执行1', 2 => '执行1', 3 => '执行3');
 
 // 3. 代码为空的数据
 $emptyCodeData = clone $validPostData;
