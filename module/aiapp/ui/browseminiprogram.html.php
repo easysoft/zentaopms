@@ -227,10 +227,10 @@ div(
             )
         ),
         on::init()->call('window.aiBrowseMiniProgram.initAIChatView', array(
-            'creatingChat' => array('title' => $miniProgram->name, 'chatType' => 'miniprogram'),
-            'noContexts' => true,
-            'hideHeader' => true,
-            'sendbox' => array('placeholder' => $lang->aiapp->continueasking),
+            'creatingChat'  => array('title' => $miniProgram->name, 'chatType' => 'miniprogram'),
+            'noContexts'    => true,
+            'hideHeader'    => true,
+            'sendbox'       => array('placeholder' => $lang->aiapp->continueasking),
             'noMessagesTip' => array('html' => "<div class='row items-center gap-2'><i class='icon icon-lightbulb text-warning'></i><div>{$lang->aiapp->chatTip}</div></div>")
         ))
     ) : null
