@@ -98,7 +98,7 @@ $config->ai->actionList['testminiprogram']['text']        = $lang->ai->prompts->
 $config->ai->actionList['testminiprogram']['hint']        = $lang->ai->prompts->action->test;
 $config->ai->actionList['testminiprogram']['url']         = array('module' => 'ai', 'method' => 'testminiprogram', 'params' => 'appID={id}');
 $config->ai->actionList['testminiprogram']['data-toggle'] = 'modal';
-$config->ai->actionList['testminiprogram']['data-size']   = 'sm';
+$config->ai->actionList['testminiprogram']['data-size']   = 'full';
 
 $config->ai->actionList['publishminiprogram']['icon']         = 'publish';
 $config->ai->actionList['publishminiprogram']['text']         = $lang->ai->prompts->action->publish;
