@@ -762,6 +762,23 @@
                             }
                         }
                     }
+                    if(data.callback)
+                    {
+                        const callback = data.callback;
+                        if(typeof callback === 'string')
+                        {
+                            const func = $.runJS(callback);
+                            if (typeof func === 'function' && !callback.endsWith(';')) func();
+                        }
+                        else if(typeof callback === 'object')
+                        {
+                            const func = $.runJS(callback.name);
+                            if (typeof func === 'function')
+                            {
+                                func.apply(null, Array.isArray(callback.params) ? callback.params : [callback.params]);
+                            }
+                        }
+                    }
                 }
             },
             error: (error, type) =>
