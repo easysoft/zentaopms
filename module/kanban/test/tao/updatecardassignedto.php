@@ -4,7 +4,6 @@
 /**
 
 title=测试 kanbanTao::updateCardAssignedTo();
-timeout=0
 cid=0
 
 - 测试步骤1：正常情况下更新指派人，包含有效用户admin和user1 >> 期望过滤后保留有效用户
@@ -15,27 +14,17 @@ cid=0
 
 */
 
-// 测试函数，模拟updateCardAssignedTo方法的核心逻辑
-function testUpdateCardAssignedTo($cardID, $oldAssignedToList, $users)
-{
-    $assignedToList = explode(',', $oldAssignedToList);
+// 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
-    foreach($assignedToList as $index => $account)
-    {
-        $account = trim($account);
-        if(empty($account) || !isset($users[$account])) {
-            unset($assignedToList[$index]);
-        } else {
-            $assignedToList[$index] = $account;
-        }
-    }
+// 管理员登录
+su('admin');
 
-    $assignedToList = implode(',', $assignedToList);
-    $assignedToList = trim($assignedToList, ',');
+// 创建测试实例
+$kanbanTest = new kanbanTest();
 
-    return $assignedToList;
-}
-
+// 准备用户数组
 $users = array(
     'admin' => 'Administrator',
     'user1' => 'User One',
@@ -43,33 +32,8 @@ $users = array(
     'user3' => 'User Three'
 );
 
-$results = array();
-
-// 测试1
-$result1 = testUpdateCardAssignedTo(1, 'admin,user1', $users);
-$results[] = $result1 === 'admin,user1';
-echo "测试1: " . ($result1 === 'admin,user1' ? 'PASS' : 'FAIL') . " (期望: admin,user1, 实际: $result1)\n";
-
-// 测试2
-$result2 = testUpdateCardAssignedTo(2, 'user2,invalid,user3', $users);
-$results[] = $result2 === 'user2,user3';
-echo "测试2: " . ($result2 === 'user2,user3' ? 'PASS' : 'FAIL') . " (期望: user2,user3, 实际: $result2)\n";
-
-// 测试3
-$result3 = testUpdateCardAssignedTo(3, 'admin', $users);
-$results[] = $result3 === 'admin';
-echo "测试3: " . ($result3 === 'admin' ? 'PASS' : 'FAIL') . " (期望: admin, 实际: $result3)\n";
-
-// 测试4
-$result4 = testUpdateCardAssignedTo(4, 'invalid1,invalid2', $users);
-$results[] = $result4 === '';
-echo "测试4: " . ($result4 === '' ? 'PASS' : 'FAIL') . " (期望: (空), 实际: '$result4')\n";
-
-// 测试5
-$result5 = testUpdateCardAssignedTo(5, 'user1,,admin,', $users);
-$results[] = $result5 === 'user1,admin';
-echo "测试5: " . ($result5 === 'user1,admin' ? 'PASS' : 'FAIL') . " (期望: user1,admin, 实际: $result5)\n";
-
-$passed = array_sum($results);
-$total = count($results);
-echo "\n最终结果: PASS=$passed, FAIL=" . ($total - $passed) . ", SKIP=0\n";
+r($kanbanTest->updateCardAssignedToTest(1, 'admin,user1', $users)) && p('filteredList') && e('admin,user1');
+r($kanbanTest->updateCardAssignedToTest(2, 'user2,invalid,user3', $users)) && p('filteredList') && e('user2,user3');
+r($kanbanTest->updateCardAssignedToTest(3, 'admin', $users)) && p('filteredList') && e('admin');
+r($kanbanTest->updateCardAssignedToTest(4, 'invalid1,invalid2', $users)) && p('filteredList') && e('');
+r($kanbanTest->updateCardAssignedToTest(5, 'user1,,admin,', $users)) && p('filteredList') && e('user1,admin');

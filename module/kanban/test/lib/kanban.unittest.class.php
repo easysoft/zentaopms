@@ -1943,15 +1943,11 @@ class kanbanTest
      */
     public function updateCardAssignedToTest($cardID, $oldAssignedToList, $users)
     {
-        // 测试方法的逻辑，模拟 updateCardAssignedTo 方法的行为
+        // 测试方法的逻辑，模拟真实的 updateCardAssignedTo 方法的行为
         $assignedToList = explode(',', $oldAssignedToList);
-
         foreach($assignedToList as $index => $account)
         {
-            $account = trim($account); // 处理空格
-            if(empty($account) || !isset($users[$account])) {
-                unset($assignedToList[$index]);
-            }
+            if(!isset($users[$account])) unset($assignedToList[$index]);
         }
 
         $assignedToList = implode(',', $assignedToList);
@@ -2291,22 +2287,42 @@ class kanbanTest
             );
         }
 
+        // 模拟storyColumnStageList配置
+        $storyColumnStageList = array(
+            'backlog'    => 'projected',
+            'ready'      => 'projected',
+            'designing'  => 'designing',
+            'designed'   => 'designed',
+            'developing' => 'developing',
+            'developed'  => 'developed',
+            'testing'    => 'testing',
+            'tested'     => 'tested',
+            'verified'   => 'verified',
+            'rejected'   => 'rejected',
+            'pending'    => 'pending',
+            'released'   => 'released',
+            'closed'     => 'closed'
+        );
+
         // 模拟refreshStoryCards方法的核心逻辑
         foreach($mockStories as $storyID => $story)
         {
-            foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
+            foreach($storyColumnStageList as $colType => $stage)
             {
                 if(!isset($cardPairs[$colType])) continue;
                 if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
                 {
                     $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                 }
+
                 if(strpos(',ready,backlog,design,develop,test,', $colType) !== false) continue;
+
                 if($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                 {
                     $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                 }
             }
+
             if(strpos('wait,projected', $story->stage) !== false and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
             {
                 $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
