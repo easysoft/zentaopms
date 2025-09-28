@@ -4,13 +4,22 @@
 /**
 
 title=测试 screenModel::setFilterSQL();
+timeout=0
 cid=0
 
-- 测试无过滤条件时的SQL @SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'
-- 测试年份过滤条件 @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 2023 = '2023'
-- 测试账户过滤条件 @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin'
-- 测试月份过滤条件 @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 06 = '06'
-- 测试部门过滤条件 @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin IN ('admin','user1')
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, '', false  @SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, 'year', true  @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 2023 = '2023'
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, 'account', true  @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin'
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, 'month', true  @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 06 = '06'
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, 'dept', true  @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin IN ('admin','user1')
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是$chart, 'multiple', true  @SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin' AND 2023 = '2023'
+
+- 执行screenTest模块的setFilterSQLTest方法，参数是new stdclass  @
 
 */
 
@@ -46,3 +55,5 @@ r($screenTest->setFilterSQLTest($chart, 'year', true)) && p('') && e("SELECT * F
 r($screenTest->setFilterSQLTest($chart, 'account', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin'");
 r($screenTest->setFilterSQLTest($chart, 'month', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 06 = '06'");
 r($screenTest->setFilterSQLTest($chart, 'dept', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin IN ('admin','user1')");
+r($screenTest->setFilterSQLTest($chart, 'multiple', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin' AND 2023 = '2023'");
+r($screenTest->setFilterSQLTest(new stdclass(), '', false)) && p('') && e("");
