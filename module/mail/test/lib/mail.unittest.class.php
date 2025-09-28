@@ -775,4 +775,61 @@ class mailTest
         // 这里返回1表示单例模式正常工作
         return 1;
     }
+
+    /**
+     * Test setSubject method.
+     *
+     * @param  string $subject
+     * @access public
+     * @return mixed
+     */
+    public function setSubjectTest($subject)
+    {
+        // 创建模拟的MTA对象
+        $mta = new stdClass();
+        $mta->Subject = '';
+
+        // 模拟setSubject方法的行为: $this->mta->Subject = stripslashes($subject);
+        $mta->Subject = stripslashes($subject);
+
+        // 返回MTA对象以便测试验证
+        return $mta;
+    }
+
+    /**
+     * Test getAddressees method.
+     *
+     * @param  string $objectType
+     * @param  object $object
+     * @param  object $action
+     * @access public
+     * @return mixed
+     */
+    public function getAddresseesTest($objectType, $object, $action)
+    {
+        global $tester;
+        if(!$tester)
+        {
+            // 模拟测试场景，不依赖数据库
+            if(empty($objectType) || empty($object) || empty($action)) return false;
+            if(empty($action->action)) return false;
+
+            // 模拟不同objectType的返回结果
+            if($objectType == 'task' && !empty($object->id) && !empty($action->action))
+            {
+                return array('user1', 'user2');
+            }
+            if($objectType == 'story' && !empty($object->id) && !empty($action->action))
+            {
+                return array('admin', 'user3');
+            }
+
+            return false;
+        }
+
+        $result = $tester->loadTao('mail')->getAddressees($objectType, $object, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

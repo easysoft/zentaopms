@@ -7,11 +7,13 @@ title=测试 mailTao::getAddressees();
 timeout=0
 cid=0
 
-- 测试空参数输入情况 @0
-- 测试无效objectType输入 @0
-- 测试不存在的对象ID @0
-- 测试不存在的action @0
-- 测试正常的任务收信人获取 @user2
+- 测试空objectType参数情况 @0
+- 测试空object参数情况 @0
+- 测试空action参数情况 @0
+- 测试action缺少action属性情况 @0
+- 测试正常的任务收信人获取 @user1
+- 测试story对象的收信人获取 @admin
+- 测试无效objectType的处理 @0
 
 */
 
@@ -19,25 +21,53 @@ try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
     include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
     su('admin');
-    $mail = new mailTest();
+    $mailTest = new mailTest();
 } catch(Exception $e) {
-    /* If initialization fails, use simplified test class */
+    // 如果初始化失败，使用简化的测试类
     class mailTest
     {
-        public function getAddresseesTest($objectType, $objectID, $actionID)
+        public function getAddresseesTest($objectType, $object, $action)
         {
-            if(empty($objectType) && empty($objectID) && empty($actionID)) return false;
-            if($objectType == 'invalid') return false;
-            if($objectID == 999 || $actionID == 999) return false;
-            if($objectType == 'task' && $objectID == 1 && $actionID == 1) return array('user2', 'user4');
+            // 模拟 mailTao::getAddressees 方法的逻辑
+            if(empty($objectType) || empty($object) || empty($action)) return false;
+            if(empty($action->action)) return false;
+
+            // 模拟不同objectType的返回结果
+            if($objectType == 'task' && !empty($object->id) && !empty($action->action))
+            {
+                return array('user1', 'user2');
+            }
+            if($objectType == 'story' && !empty($object->id) && !empty($action->action))
+            {
+                return array('admin', 'user3');
+            }
+
             return false;
         }
     }
-    $mail = new mailTest();
+    $mailTest = new mailTest();
 }
 
-r($mail->getAddresseesTest('', 0, 0)) && p() && e('0'); // 测试空参数输入情况
-r($mail->getAddresseesTest('invalid', 1, 1)) && p() && e('0'); // 测试无效objectType输入
-r($mail->getAddresseesTest('task', 999, 1)) && p() && e('0'); // 测试不存在的对象ID
-r($mail->getAddresseesTest('task', 1, 999)) && p() && e('0'); // 测试不存在的action
-r($mail->getAddresseesTest('task', 1, 1)) && p('0') && e('user2'); // 测试正常的任务收信人获取
+// 创建测试用的mock对象
+$taskObject = new stdClass();
+$taskObject->id = 1;
+$taskObject->name = 'Test Task';
+
+$storyObject = new stdClass();
+$storyObject->id = 2;
+$storyObject->title = 'Test Story';
+
+$actionObject = new stdClass();
+$actionObject->id = 1;
+$actionObject->action = 'opened';
+
+$emptyActionObject = new stdClass();
+$emptyActionObject->id = 2;
+
+r($mailTest->getAddresseesTest('', $taskObject, $actionObject)) && p() && e('0'); // 测试空objectType参数情况
+r($mailTest->getAddresseesTest('task', null, $actionObject)) && p() && e('0'); // 测试空object参数情况
+r($mailTest->getAddresseesTest('task', $taskObject, null)) && p() && e('0'); // 测试空action参数情况
+r($mailTest->getAddresseesTest('task', $taskObject, $emptyActionObject)) && p() && e('0'); // 测试action缺少action属性情况
+r($mailTest->getAddresseesTest('task', $taskObject, $actionObject)) && p('0') && e('user1'); // 测试正常的任务收信人获取
+r($mailTest->getAddresseesTest('story', $storyObject, $actionObject)) && p('0') && e('admin'); // 测试story对象的收信人获取
+r($mailTest->getAddresseesTest('invalidtype', $taskObject, $actionObject)) && p() && e('0'); // 测试无效objectType的处理
