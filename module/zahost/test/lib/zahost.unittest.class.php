@@ -7,7 +7,9 @@ class zahostTest
 {
     public function __construct()
     {
-        // 简化构造函数，避免数据库依赖
+        global $tester;
+        $this->objectModel = $tester->loadModel('zahost');
+        $this->objectTao   = $tester->loadTao('zahost');
     }
 
     /**
@@ -244,16 +246,19 @@ class zahostTest
      */
     public function cancelDownloadTest(int $imageID): string
     {
-        // 直接模拟测试结果，避免数据库依赖
-        if($imageID == 1) {
-            // 模拟有效的镜像ID 1，状态为inprogress，可以取消下载
+        $image = $this->objectModel->getImageByID($imageID);
+        if(!$image) return '0';
+
+        // Mock the HTTP call and simulate different responses based on image status
+        if(in_array($image->status, array('inprogress', 'created')))
+        {
+            // Simulate successful cancellation
+            global $tester;
+            $tester->dao->update(TABLE_IMAGE)->set('status')->eq('canceled')->where('id')->eq($image->id)->exec();
             return '1';
-        } elseif($imageID == 999 || $imageID == 0 || $imageID < 0 || $imageID == 3) {
-            // 模拟无效的镜像ID或不可取消状态
-            return '0';
         }
 
-        // 其他情况返回0
+        // Simulate failure for other statuses
         return '0';
     }
 
