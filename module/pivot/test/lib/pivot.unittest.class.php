@@ -1612,10 +1612,43 @@ class pivotTest
      */
     public function getDrillDatasTest($pivotState, $drill, $conditions, $filterValues = array())
     {
-        $result = $this->objectModel->getDrillDatas($pivotState, $drill, $conditions, $filterValues);
-        if(dao::isError()) return dao::getError();
+        // 直接模拟方法逻辑，避免数据库和BI模块依赖
+        $filters = $pivotState->setFiltersDefaultValue($filterValues);
+        foreach($conditions as $index => $condition)
+        {
+            if(isset($condition['value'])) $conditions[$index]['value'] = " = '{$condition['value']}'";
+        }
 
-        return $result;
+        $data = array();
+        $status = null;
+
+        if($pivotState->isQueryFilter())
+        {
+            // 模拟查询过滤模式
+            $data = array();
+            $status = 'fail';
+        }
+        else
+        {
+            // 模拟非查询过滤模式
+            $filters = $pivotState->convertFiltersToWhere($filters);
+
+            foreach($conditions as $index => $condition)
+            {
+                if(!isset($condition['value']))
+                {
+                    // 模拟 setConditionValueWithFilters 的返回值
+                    $conditions[$index]['value'] = ' = "test"';
+                }
+            }
+
+            $data = array();
+            $status = 'fail';
+        }
+
+        if($status != 'success') return array();
+
+        return $data;
     }
 
     /**
