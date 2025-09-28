@@ -425,35 +425,120 @@ class testtaskTest
      * Test importUnitResult method.
      *
      * @param  object $task
+     * @param  string $scenario
      * @access public
      * @return mixed
      */
-    public function importUnitResultTest(object $task)
+    public function importUnitResultTest(object $task, string $scenario = 'default')
     {
-        if(isset($task->mockNoFile) && $task->mockNoFile)
+        global $tester;
+
+        // 清理之前的session数据
+        unset($_SESSION['resultFile']);
+
+        if($scenario == 'nofile')
         {
             // 模拟无文件上传的情况
             $_SESSION['resultFile'] = array();
+            $result = $this->objectModel->importUnitResult($task);
+            return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
         }
-        elseif(isset($task->resultFile))
+        elseif($scenario == 'valid')
         {
-            // 模拟有文件上传的情况
+            // 模拟有效的XML文件上传
+            $validXml = '<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ExampleTest" tests="2" failures="0" errors="0" time="0.042">
+  <testcase classname="ExampleTest" name="testExample1" time="0.021"/>
+  <testcase classname="ExampleTest" name="testExample2" time="0.021"/>
+</testsuite>';
+
+            // 创建临时文件
+            $tempFile = sys_get_temp_dir() . '/valid_junit_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $validXml);
+
+            // 模拟上传文件结构
             $_SESSION['resultFile'] = array(
                 array(
-                    'pathname'  => basename($task->resultFile),
-                    'title'     => basename($task->resultFile),
-                    'size'      => 1024,
+                    'pathname'  => 'valid_junit.xml',
+                    'title'     => 'valid_junit.xml',
+                    'size'      => strlen($validXml),
                     'extension' => 'xml',
-                    'tmpname'   => $task->resultFile
+                    'tmpname'   => $tempFile
                 )
             );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                if(dao::isError()) return 'false';
+                return is_numeric($result) && $result > 0 ? (string)$result : 'false';
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
+        }
+        elseif($scenario == 'invalid')
+        {
+            // 模拟无效XML文件
+            $invalidXml = '<invalid>xml</content>';
+            $tempFile = sys_get_temp_dir() . '/invalid_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $invalidXml);
+
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => 'invalid.xml',
+                    'title'     => 'invalid.xml',
+                    'size'      => strlen($invalidXml),
+                    'extension' => 'xml',
+                    'tmpname'   => $tempFile
+                )
+            );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
+        }
+        elseif($scenario == 'empty')
+        {
+            // 模拟空XML文件（无测试用例）
+            $emptyXml = '<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EmptyTest" tests="0" failures="0" errors="0" time="0">
+</testsuite>';
+            $tempFile = sys_get_temp_dir() . '/empty_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $emptyXml);
+
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => 'empty.xml',
+                    'title'     => 'empty.xml',
+                    'size'      => strlen($emptyXml),
+                    'extension' => 'xml',
+                    'tmpname'   => $tempFile
+                )
+            );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
         }
 
-        $result = $this->objectModel->importUnitResult($task);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
+        // 默认情况（无文件）
+        try {
+            $result = $this->objectModel->importUnitResult($task);
+            return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+        } catch(Throwable $e) {
+            return 'false';
+        }
     }
 
     public function parseCppXMLResultTest($fileName, $productID, $frame)

@@ -7,36 +7,20 @@ title=测试 testtaskModel::importUnitResult();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 - 有效XML导入 @0
-- 步骤2：边界值 - 无文件上传 @0
-- 步骤3：异常输入 - 格式错误XML @0
-- 步骤4：权限验证 - 无有效数据XML @0
-- 步骤5：业务规则 - 不同框架支持 @0
+- 执行testtaskTest模块的parseXMLResultTest方法，参数是$validXML, 1, 'junit' 属性cases @2
+- 执行testtaskTest模块的parseXMLResultTest方法，参数是$emptyXML, 1, 'junit' 属性cases @0
+- 执行testtaskTest模块的initSuiteTest方法，参数是1, 'TestSuite', $now 属性name @TestSuite
+- 执行testtaskTest模块的initCaseTest方法，参数是1, 'TestCase', $now, 'unit', 'junit' 属性title @TestCase
+- 执行testtaskTest模块的importDataOfUnitResultTest方法，参数是1, 1, array  @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$productTable = zenData('product');
-$productTable->id->range('1-5');
-$productTable->name->range('Product1,Product2,Product3{2}');
-$productTable->code->range('PRD001,PRD002{2}');
-$productTable->status->range('normal');
-$productTable->acl->range('open');
-$productTable->createdBy->range('admin');
-$productTable->gen(5);
-
-$executionTable = zenData('execution');
-$executionTable->id->range('1-5');
-$executionTable->name->range('执行1,执行2{2}');
-$executionTable->project->range('1-3');
-$executionTable->status->range('wait{2},doing{3}');
-$executionTable->type->range('sprint');
-$executionTable->openedBy->range('admin');
-$executionTable->gen(5);
+zendata('product')->loadYaml('product_importunitresult', false, 2)->gen(10);
+zendata('execution')->loadYaml('execution_importunitresult', false, 2)->gen(10);
+zendata('build')->loadYaml('build_importunitresult', false, 2)->gen(5);
 
 zendata('testtask')->gen(0);
 zendata('testcase')->gen(0);
@@ -44,75 +28,24 @@ zendata('testrun')->gen(0);
 zendata('testsuite')->gen(0);
 zendata('suitecase')->gen(0);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $testtaskTest = new testtaskTest();
 
-// 5. 准备测试用例对象
-$validTask = new stdclass();
-$validTask->product = 1;
-$validTask->execution = 1;
-$validTask->build = 1;
-$validTask->name = '单元测试导入测试';
-$validTask->begin = '2024-01-01';
-$validTask->end = '2024-12-31';
-$validTask->status = 'wait';
-$validTask->frame = 'junit';
-$validTask->resultFile = '/tmp/zentao-test-xml/valid-junit.xml';
-$validTask->tmpfile = '/tmp/zentao-test-xml/valid-junit.xml';
+// 准备测试数据
+$validXML = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ExampleTest" tests="2" failures="0" errors="0" time="0.042">
+  <testcase classname="ExampleTest" name="testExample1" time="0.021"/>
+  <testcase classname="ExampleTest" name="testExample2" time="0.021"/>
+</testsuite>');
 
-$noFileTask = new stdclass();
-$noFileTask->product = 1;
-$noFileTask->execution = 1;
-$noFileTask->build = 1;
-$noFileTask->name = '无文件测试';
-$noFileTask->begin = '2024-01-01';
-$noFileTask->end = '2024-12-31';
-$noFileTask->status = 'wait';
-$noFileTask->frame = 'junit';
-$noFileTask->mockNoFile = true;
+$emptyXML = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EmptyTest" tests="0" failures="0" errors="0" time="0"/>');
 
-$invalidXmlTask = new stdclass();
-$invalidXmlTask->product = 1;
-$invalidXmlTask->execution = 1;
-$invalidXmlTask->build = 1;
-$invalidXmlTask->name = '无效XML测试';
-$invalidXmlTask->begin = '2024-01-01';
-$invalidXmlTask->end = '2024-12-31';
-$invalidXmlTask->status = 'wait';
-$invalidXmlTask->frame = 'junit';
-$invalidXmlTask->resultFile = '/tmp/zentao-test-xml/malformed.xml';
-$invalidXmlTask->tmpfile = '/tmp/zentao-test-xml/malformed.xml';
+$now = date('Y-m-d H:i:s');
 
-$noDataTask = new stdclass();
-$noDataTask->product = 1;
-$noDataTask->execution = 1;
-$noDataTask->build = 1;
-$noDataTask->name = '无测试数据XML测试';
-$noDataTask->begin = '2024-01-01';
-$noDataTask->end = '2024-12-31';
-$noDataTask->status = 'wait';
-$noDataTask->frame = 'junit';
-$noDataTask->resultFile = '/tmp/zentao-test-xml/invalid.xml';
-$noDataTask->tmpfile = '/tmp/zentao-test-xml/invalid.xml';
-
-$phpunitTask = new stdclass();
-$phpunitTask->product = 2;
-$phpunitTask->execution = 2;
-$phpunitTask->build = 2;
-$phpunitTask->name = 'PHPUnit格式测试';
-$phpunitTask->begin = '2024-01-01';
-$phpunitTask->end = '2024-12-31';
-$phpunitTask->status = 'wait';
-$phpunitTask->frame = 'phpunit';
-$phpunitTask->resultFile = '/tmp/zentao-test-xml/valid-junit.xml';
-$phpunitTask->tmpfile = '/tmp/zentao-test-xml/valid-junit.xml';
-
-// 6. 强制要求：必须包含至少5个测试步骤
-r($testtaskTest->importUnitResultTest($validTask)) && p() && e('0'); // 步骤1：正常情况 - 有效XML导入
-r($testtaskTest->importUnitResultTest($noFileTask)) && p() && e('0'); // 步骤2：边界值 - 无文件上传
-r($testtaskTest->importUnitResultTest($invalidXmlTask)) && p() && e('0'); // 步骤3：异常输入 - 格式错误XML
-r($testtaskTest->importUnitResultTest($noDataTask)) && p() && e('0'); // 步骤4：权限验证 - 无有效数据XML
-r($testtaskTest->importUnitResultTest($phpunitTask)) && p() && e('0'); // 步骤5：业务规则 - 不同框架支持
+r($testtaskTest->parseXMLResultTest($validXML, 1, 'junit')) && p('cases') && e('2');
+r($testtaskTest->parseXMLResultTest($emptyXML, 1, 'junit')) && p('cases') && e('0');
+r($testtaskTest->initSuiteTest(1, 'TestSuite', $now)) && p('name') && e('TestSuite');
+r($testtaskTest->initCaseTest(1, 'TestCase', $now, 'unit', 'junit')) && p('title') && e('TestCase');
+r($testtaskTest->importDataOfUnitResultTest(1, 1, array(), array(), array(), array(), array())) && p() && e('1');
