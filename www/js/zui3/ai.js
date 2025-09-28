@@ -412,5 +412,7 @@ $(() => {
                 }
             }
         );
+
+        aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
     }
 });
