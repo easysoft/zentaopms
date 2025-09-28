@@ -4,16 +4,13 @@
 /**
 
 title=测试 storyModel::getDefaultShowGrades();
-timeout=0
 cid=0
 
-- 测试步骤1：正常单级菜单结构输入 @story,requirement,
-
-- 测试步骤2：多级菜单结构输入 @story,requirement,epic,feature,
-
-- 测试步骤3：空数组输入测试 @
-- 测试步骤4：单级空items测试 @
-- 测试步骤5：数值类型value测试 @1,2,3,
+- 测试步骤1：正常单级菜单结构输入 >> 期望正常拼接结果
+- 测试步骤2：多级菜单结构输入 >> 期望所有级别拼接结果
+- 测试步骤3：空数组输入测试 >> 期望空字符串结果
+- 测试步骤4：单级空items测试 >> 期望空字符串结果
+- 测试步骤5：数值类型value测试 >> 期望数值拼接结果
 
 */
 
@@ -30,7 +27,7 @@ $testData1 = array(
         array('value' => 'requirement')
     ))
 );
-r($storyTest->getDefaultShowGradesTest($testData1)) && p() && e('story,requirement,'); // 测试步骤1：正常单级菜单结构输入
+r($storyTest->getDefaultShowGradesTest($testData1)) && p() && e('story,requirement,');
 
 $testData2 = array(
     array('items' => array(
@@ -42,15 +39,15 @@ $testData2 = array(
         array('value' => 'feature')
     ))
 );
-r($storyTest->getDefaultShowGradesTest($testData2)) && p() && e('story,requirement,epic,feature,'); // 测试步骤2：多级菜单结构输入
+r($storyTest->getDefaultShowGradesTest($testData2)) && p() && e('story,requirement,epic,feature,');
 
 $testData3 = array();
-r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e(''); // 测试步骤3：空数组输入测试
+r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e('');
 
-$testData3 = array(
+$testData4 = array(
     array('items' => array())
 );
-r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e(''); // 测试步骤4：单级空items测试
+r($storyTest->getDefaultShowGradesTest($testData4)) && p() && e('');
 
 $testData5 = array(
     array('items' => array(
@@ -59,4 +56,4 @@ $testData5 = array(
         array('value' => 3)
     ))
 );
-r($storyTest->getDefaultShowGradesTest($testData5)) && p() && e('1,2,3,'); // 测试步骤5：数值类型value测试
+r($storyTest->getDefaultShowGradesTest($testData5)) && p() && e('1,2,3,');
