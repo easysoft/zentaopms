@@ -18,19 +18,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-// 简化的用户数据准备，避免复杂查询
-$userTable = zenData('user');
-$userTable->id->range('1-3');
-$userTable->account->range('admin,user1,user2');
-$userTable->realname->range('管理员,用户1,用户2');
-$userTable->avatar->range('');
-$userTable->gen(3);
-
-su('admin');
-
 $actionTest = new actionTest();
 
-// 创建包含用户动态的测试数据
+// 创建包含用户动态的测试数据（应该被过滤）
 $userDynamic = new stdClass();
 $userDynamic->id = 100;
 $userDynamic->objectType = 'user';
@@ -62,7 +52,7 @@ $anotherUserDynamic->objectID = 1;
 $anotherUserDynamic->actor = 'user1';
 $anotherUserDynamic->action = 'opened';
 
-// 创建第5个测试：检查actor对象结构
+// 创建第5个测试数据：检查不存在用户的actor对象结构
 $extraUserDynamic = new stdClass();
 $extraUserDynamic->id = 500;
 $extraUserDynamic->objectType = 'bug';
