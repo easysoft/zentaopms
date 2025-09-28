@@ -1898,6 +1898,7 @@ eof;
                     /* 有的表项目和执行都存在project里。 */
                     return $project->type == 'project' ? !empty($config->CRProject) : !empty($config->CRExecution);
                 }
+                $projectsStatus[$object->project] = $project ? $project->status : '';
             }
             if($projectsStatus[$object->project] == 'closed') return false;
         }
