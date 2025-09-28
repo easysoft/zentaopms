@@ -73,6 +73,8 @@ $config->action->objectNameFields['miniprogram']  = 'name';
 $config->action->objectNameFields['holiday']      = 'name';
 $config->action->objectNameFields['system']       = 'name';
 $config->action->objectNameFields['deliverable']  = 'name';
+$config->action->objectNameFields['cm']           = 'title';
+$config->action->objectNameFields['baseline']     = 'title';
 
 $config->action->commonImgSize = 870;
 
