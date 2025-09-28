@@ -15,10 +15,8 @@ class mailTest
     public function __construct()
     {
         global $tester;
-        // 只有在需要数据库操作的方法中才使用tester
-        $this->tester = null; // 禁用数据库依赖以避免连接错误
-        $this->objectModel = $this->createMockMailModel();
-        $this->objectTao = null;
+        $this->objectModel = $tester->loadModel('mail');
+        $this->objectTao   = $tester->loadTao('mail');
     }
 
     /**
@@ -957,6 +955,23 @@ class mailTest
         }
 
         $result = $tester->loadTao('mail')->getMailContent($objectType, $object, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getObjectTitle method.
+     *
+     * @param  object $object
+     * @param  string $objectType
+     * @access public
+     * @return mixed
+     */
+    public function getObjectTitleTest($object, $objectType)
+    {
+        // 调用真实的getObjectTitle方法
+        $result = $this->objectTao->getObjectTitle($object, $objectType);
         if(dao::isError()) return dao::getError();
 
         return $result;
