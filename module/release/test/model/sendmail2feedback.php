@@ -18,13 +18,17 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-// 创建基础用户数据
+// 准备基础数据
+zenData('product')->gen(3);
+zenData('user')->gen(5);
+zenData('story')->loadYaml('story_sendmail2feedback', false, 1)->gen(10);
+zenData('bug')->loadYaml('bug_sendmail2feedback', false, 1)->gen(10);
 
 su('admin');
 
 $releaseTest = new releaseTest();
 
-// 模拟创建不同场景的release对象
+// 创建不同场景的release对象测试sendMail2Feedback方法
 $release1 = new stdClass();
 $release1->id = 1;
 $release1->name = '版本1.0';
@@ -40,14 +44,14 @@ $release2->bugs = '1,2,3';
 $release3 = new stdClass();
 $release3->id = 3;
 $release3->name = '版本3.0';
-$release3->stories = '1,4,5';
+$release3->stories = '1,4';
 $release3->bugs = '';
 
 $release4 = new stdClass();
 $release4->id = 4;
 $release4->name = '版本4.0';
 $release4->stories = '';
-$release4->bugs = '1,2,3';
+$release4->bugs = '1,2';
 
 $release5 = new stdClass();
 $release5->id = 5;
