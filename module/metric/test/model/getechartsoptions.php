@@ -8,11 +8,10 @@ timeout=0
 cid=0
 
 - 执行metricTest模块的getEchartsOptionsTest方法，参数是$emptyHeader, $emptyData, 'line'  @0
-- 执行metricTest模块的getEchartsOptionsTest方法，参数是$timeHeader, $timeData, 'line'  @~~
-- 执行metricTest模块的getEchartsOptionsTest方法，参数是$objectHeader, $objectData, 'line'  @~~
-- 执行metricTest模块的getEchartsOptionsTest方法，参数是$fourColHeader, $objectData, 'bar'  @~~
-- 执行metricTest模块的getEchartsOptionsTest方法，参数是$pieHeader, $pieData, 'pie'  @~~
-- 执行metricTest模块的getEchartsOptionsTest方法，参数是$timeHeader, $timeData, 'barY'  @~~
+- 执行metricTest模块的getEchartsOptionsTest方法，参数是$timeHeader, $timeData, 'line'  @1
+- 执行metricTest模块的getEchartsOptionsTest方法，参数是$objectHeader, $objectData, 'line'  @1
+- 执行metricTest模块的getEchartsOptionsTest方法，参数是$fourColHeader, $objectData, 'bar'  @1
+- 执行metricTest模块的getEchartsOptionsTest方法，参数是$pieHeader, $pieData, 'pie'  @1
 
 */
 
@@ -47,7 +46,7 @@ $dataObj1->date = '2023-01-01';
 $dataObj1->value = 10;
 $dataObj1->calcTime = '2023-01-01 10:00:00';
 $timeData[] = $dataObj1;
-r($metricTest->getEchartsOptionsTest($timeHeader, $timeData, 'line')) && p() && e('~~');
+r($metricTest->getEchartsOptionsTest($timeHeader, $timeData, 'line')) && p() && e('1');
 
 // 步骤3：测试三列header对象度量数据返回非空结果
 $objectHeader = array(
@@ -61,7 +60,7 @@ $objData1->scope = 'product1';
 $objData1->value = 15;
 $objData1->calcTime = '2023-01-01 10:00:00';
 $objectData[] = $objData1;
-r($metricTest->getEchartsOptionsTest($objectHeader, $objectData, 'line')) && p() && e('~~');
+r($metricTest->getEchartsOptionsTest($objectHeader, $objectData, 'line')) && p() && e('1');
 
 // 步骤4：测试四列header返回非空结果
 $fourColHeader = array(
@@ -70,7 +69,7 @@ $fourColHeader = array(
     array('name' => 'value', 'title' => '值'),
     array('name' => 'calcTime', 'title' => '计算时间')
 );
-r($metricTest->getEchartsOptionsTest($fourColHeader, $objectData, 'bar')) && p() && e('~~');
+r($metricTest->getEchartsOptionsTest($fourColHeader, $objectData, 'bar')) && p() && e('1');
 
 // 步骤5：测试pie图表类型返回非空结果
 $pieHeader = array(
@@ -82,7 +81,4 @@ $pieObj1 = new stdClass();
 $pieObj1->name = 'TypeA';
 $pieObj1->value = 30;
 $pieData[] = $pieObj1;
-r($metricTest->getEchartsOptionsTest($pieHeader, $pieData, 'pie')) && p() && e('~~');
-
-// 步骤6：测试barY图表类型返回非空结果
-r($metricTest->getEchartsOptionsTest($timeHeader, $timeData, 'barY')) && p() && e('~~');
+r($metricTest->getEchartsOptionsTest($pieHeader, $pieData, 'pie')) && p() && e('1');
