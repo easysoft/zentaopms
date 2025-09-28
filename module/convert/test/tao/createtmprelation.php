@@ -40,43 +40,39 @@ cid=0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. 创建临时表
+// 定义常量
+if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', 'jiratmprelation');
+
 global $tester;
-$sql = <<<EOT
-CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+
+// 创建临时表
+$sql = "CREATE TABLE IF NOT EXISTS `jiratmprelation`(
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `AType` char(30) NOT NULL,
-  `AID` char(100) NOT NULL,
-  `BType` char(30) NOT NULL,
-  `BID` char(100) NOT NULL,
-  `extra` char(100) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-EOT;
+  `AType` char(30) NOT NULL DEFAULT '',
+  `AID` char(100) NOT NULL DEFAULT '',
+  `BType` char(30) NOT NULL DEFAULT '',
+  `BID` char(100) NOT NULL DEFAULT '',
+  `extra` char(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 try {
     $tester->dbh->exec($sql);
-    // 清空表数据确保测试环境干净
     $tester->dbh->exec('TRUNCATE TABLE jiratmprelation');
 } catch (Exception $e) {
-    // 表可能已存在，忽略错误
+    // 忽略表创建错误
 }
 
-// 3. 定义常量（如果没有定义的话）
-if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', '`jiratmprelation`');
+zenData('user')->gen(0);
+zenData('product')->gen(0);
 
-// 4. 用户登录（选择合适角色）
 su('admin');
 
-// 5. 创建测试实例（变量名与模块名一致）
 $convertTest = new convertTest();
 
-// 6. 执行测试步骤
 r($convertTest->createTmpRelationTest('juser', 'admin', 'zuser', 'admin001', '')) && p('AType,BType,AID,BID,extra') && e('juser,zuser,admin,admin001,');
 r($convertTest->createTmpRelationTest('jproject', '1001', 'zproject', '2001', 'issue')) && p('AType,BType,AID,BID,extra') && e('jproject,zproject,1001,2001,issue');
 r($convertTest->createTmpRelationTest('jtask', 123, 'ztask', 456, '')) && p('AType,BType,AID,BID,extra') && e('jtask,ztask,123,456,');

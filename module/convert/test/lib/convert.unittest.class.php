@@ -2392,9 +2392,14 @@ class convertTest
         try {
             global $tester;
 
-            // 设置dbh属性，确保数据库连接可用
+            // 确保数据库连接可用
             if(empty($this->objectTao->dbh)) {
                 $this->objectTao->dbh = $tester->dbh;
+            }
+
+            // 确保常量已定义
+            if(!defined('JIRA_TMPRELATION')) {
+                define('JIRA_TMPRELATION', 'jiratmprelation');
             }
 
             $reflection = new ReflectionClass($this->objectTao);
@@ -2402,13 +2407,14 @@ class convertTest
             $method->setAccessible(true);
 
             $result = $method->invoke($this->objectTao, $AType, $AID, $BType, $BID, $extra);
+
             if(dao::isError()) return dao::getError();
 
             return $result;
         } catch (Exception $e) {
-            return 'exception: ' . $e->getMessage() . ' File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+            return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
-            return 'error: ' . $e->getMessage() . ' File: ' . $e->getFile() . ' Line: ' . $e->getLine();
+            return 'error: ' . $e->getMessage();
         }
     }
 
