@@ -1,12 +1,9 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 weeklyModel->getPageNav();
+title=测试 weeklyModel::getPageNav();
 timeout=0
 cid=0
 
@@ -18,8 +15,12 @@ cid=0
 
 */
 
-// 准备测试数据
-zenData('project')->gen(20);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+
+// 无需准备数据库数据，使用模拟对象
+
+su('admin');
 
 $weekly = new weeklyTest();
 

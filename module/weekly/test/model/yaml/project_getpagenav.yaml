@@ -1,0 +1,32 @@
+title: project data for getPageNav test
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+  - field: project
+    range: 0
+  - field: name
+    range: "项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10,项目11,项目12,项目13,项目14,项目15,项目16,项目17,项目18,项目19,项目20"
+  - field: code
+    range: "project1,project2,project3,project4,project5,project6,project7,project8,project9,project10,project11,project12,project13,project14,project15,project16,project17,project18,project19,project20"
+  - field: type
+    range: "project"
+  - field: status
+    range: "doing{10},wait{5},suspended{3},closed{2}"
+  - field: realBegan
+    range: "2022-04-01,2022-04-15,2022-05-01,2022-05-15"
+  - field: realEnd
+    range: "2022-06-01,2022-06-15,2022-07-01,2022-07-15"
+  - field: suspendedDate
+    range: "2022-05-20,2022-05-25,2022-06-01"
+  - field: begin
+    range: "2022-04-01,2022-04-15,2022-05-01,2022-05-15"
+  - field: end
+    range: "2022-06-01,2022-06-15,2022-07-01,2022-07-15"
+  - field: hasProduct
+    range: 1
+  - field: grade
+    range: 1
+  - field: path
+    range: ",1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,"
