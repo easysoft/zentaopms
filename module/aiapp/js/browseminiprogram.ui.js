@@ -116,6 +116,7 @@ window.aiBrowseMiniProgram.initAIChatView = function(options)
 {
     const $aiChatView = $('#aiChatView');
     aiChatView = parent.zui.create('AIChatView', $aiChatView, $.extend({$notDestroyOnDetach: true}, options, {isEmbed: true}));
+    if(!parent.isZaiOK) $('.generate-btn').addClass('disabled');
 };
 
 window.aiBrowseMiniProgram.startAIChat = function()
