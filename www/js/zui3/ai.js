@@ -18,37 +18,56 @@ window.checkZAIPanel = async function(showMessage)
 
 window.openPageForm = function(url, data, callback)
 {
-    const openedApp = $.apps.openApp(url);
-    const handlePageLoad = () =>
-    {
-        setTimeout(() => {
-            try {
-                const iframe = openedApp.iframe;
-                iframe.contentWindow.applyFormData(data);
-                callback && callback();
-            } catch (error) {}
-        }, 2000);
-    };
-    openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
-    setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+    return new Promise((resolve, reject) => {
+        const openedApp = $.apps.openApp(url);
+        const handlePageLoad = () =>
+        {
+            setTimeout(() =>
+            {
+                try
+                {
+                    if(data)
+                    {
+                        const iframe = openedApp.iframe;
+                        iframe.contentWindow.applyFormData(data);
+                    }
+                    callback && callback(openedApp);
+                    resolve(openedApp);
+                } catch (error) {reject(error)}
+            }, 2000);
+        };
+        openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
+        setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+    });
 }
 
-window.executeZentaoPrompt = async function(info)
+window.executeZentaoPrompt = async function(info, auto)
 {
+    auto = auto && auto !== '0';
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
+
+    let openedFormApp;
+    if(auto && info.formLocation)
+    {
+        zaiPanel.closePopup('zentao-prompt-popoup');
+        openedFormApp = await openPageForm(info.formLocation);
+    }
 
     const langData = zaiPanel.options.langData || {};
     const tools = [{
         name       : `zentao_prompt_${info.promptID}`,
         displayName: info.name,
         description: info.name,
-        parameters : {
+        parameters :
+        {
             type: 'object',
-            properties: {
+            properties:
+            {
                 data: info.schema,
-                explain: {
-                    type: 'string',
+                explain:
+                {
+                    type:        'string',
                     description: langData.changeExplainDesc
                 }
             }
@@ -90,6 +109,16 @@ window.executeZentaoPrompt = async function(info)
     </tbody>
 </table>`;
             }
+
+            if(auto && openedFormApp)
+            {
+                try
+                {
+                    const iframe = openedFormApp.iframe;
+                    iframe.contentWindow.applyFormData(result);
+                    zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm));
+                } catch (error) {}
+            }
             return {
                 view: [diffView, explainView],
                 actions: [{
@@ -97,7 +126,12 @@ window.executeZentaoPrompt = async function(info)
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
                     type        : 'primary-pale',
                     trailingIcon: 'icon-arrow-right'
-                }]
+                }, info.promptConfig.promptAudit ? {
+                    text: langData.goTesting,
+                    url:  $.createLink('ai', 'promptAudit', `promptId=${info.promptConfig.id}&objectId=${info.objectID}`),
+                    type: 'primary-pale',
+                    'data-toggle': 'modal',
+                } : null]
             };
         },
     }];
@@ -108,7 +142,7 @@ window.executeZentaoPrompt = async function(info)
         model   : info.model,
         chatType: 'agent',
     };
-    zaiPanel.openPopup({viewType: 'chat', width: 600, postMessage: postMessage});
+    zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: 600, postMessage: postMessage});
 };
 
 function registerZentaoAIPlugin(lang)
