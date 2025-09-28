@@ -126,7 +126,7 @@ window.executeZentaoPrompt = async function(info, auto)
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
                     type        : 'primary-pale',
                     trailingIcon: 'icon-arrow-right'
-                }, info.promptConfig.promptAudit ? {
+                }, info.promptAudit ? {
                     text: langData.goTesting,
                     url:  $.createLink('ai', 'promptAudit', `promptId=${info.promptConfig.id}&objectId=${info.objectID}`),
                     type: 'primary-pale',
