@@ -2058,9 +2058,9 @@ class blockZen extends block
      *
      * @param  object    $block
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function printAssignToMeBlock(object $block): void
+    protected function printAssignToMeBlock(object $block): array
     {
         $hasIssue    = helper::hasFeature('issue');
         $hasRisk     = helper::hasFeature('risk');
@@ -2249,6 +2249,7 @@ class blockZen extends block
         $this->view->products       = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->projects       = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->count          = $count;
+        return $count;
     }
 
     /**
