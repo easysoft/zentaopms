@@ -14,7 +14,7 @@ class editProjectBuildTester extends tester
         $form = $this->initForm('projectbuild', 'edit', array('projectID' => 1), 'appIframe-project');
         if(isset($build['name'])) $form->dom->name->setValue($build['name']);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(2);
+        $form->wait(5);
 
         /* 断言检查提示信息 */
         if($this->response('method') != 'view')
