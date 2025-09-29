@@ -878,6 +878,19 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * 评审意见列表。
+     * My reviewissues.
+     *
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function reviewissue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('reviewissue');
