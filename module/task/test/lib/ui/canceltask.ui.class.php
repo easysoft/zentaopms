@@ -23,7 +23,7 @@ class cancelTaskTester extends tester
         $form->dom->cancelBtn->click();
         $form->wait(1);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->cancel) return $this->failed('取消任务后状态错误');
         return $this->success('取消任务成功');
     }
