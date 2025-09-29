@@ -4147,6 +4147,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按人员统计的被指派的评审意见数',
+    'alias'      => '被指派的评审意见数',
+    'code'       => 'count_of_assigned_reviewissue_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'reviewissue',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的评审意见数表示每个人被指派的评审意见数量之和，反映了每个人员需要处理的评审意见数量的规模。该数值越大，说明需要投入越多的时间处理评审意见',
+    'definition' => "所有评审意见个数求和\n指派给为某人\n过滤已删除的评审意见\n过滤已关闭的评审意见\n过滤已删除项目的评审意见"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按人员统计的被指派的问题数',
     'alias'      => '被指派的问题数',
     'code'       => 'count_of_assigned_issue_in_user',
