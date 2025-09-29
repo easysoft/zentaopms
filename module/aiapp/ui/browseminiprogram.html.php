@@ -183,7 +183,7 @@ div(
                         setStyle(array('color' => 'var(--color-slate-700)')),
                         $lang->aiapp->modelCurrent
                     ),
-                    span($models[$miniProgram->model]),
+                    zui::aiModelName($miniProgram->model)
                 ),
                 empty($formGroups)
                     ? null

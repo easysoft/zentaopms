@@ -50,10 +50,7 @@ class aiapp extends control
         $miniProgram = $this->ai->getMiniProgramByID($id);
         if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
 
-        if(empty($miniProgram->model)) $miniProgram->model = 'default';
-
         $this->view->miniProgram  = $miniProgram;
-        $this->view->models       = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->messages     = $this->aiapp->getHistoryMessages($id);
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->aiapp->getCollectedMiniProgramIDs($this->app->user->id);
