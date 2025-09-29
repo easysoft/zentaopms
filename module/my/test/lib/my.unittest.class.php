@@ -317,6 +317,15 @@ class myTest
         return $tester->config->risk->search;
     }
 
+    public function buildReviewissueSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildReviewissueSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        return $tester->config->reviewissue->search;
+    }
+
     /**
      * 通过搜索获取风险。
      * Get risks by search.
