@@ -11211,7 +11211,7 @@ class upgradeModel extends model
      */
     public function getUpgradeProjectReports(): array
     {
-        $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.model as projectModel,t2.status as projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
+        $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.model AS projectModel,t2.status AS projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.status')->ne('wait')
             ->orderBy('t1.project asc, t1.weekStart asc')
