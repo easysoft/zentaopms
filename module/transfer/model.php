@@ -682,7 +682,7 @@ class transferModel extends model
 
         /* 插入用例场景数据。*/
         /* Fetch the scene's cases. */
-        if($module == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
+        if($module == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.\"?scene\"?\s+=\s+'0'/i", '', $queryCondition);
 
         /* 根据SESSION中的条件查询数据。*/
         /* Fetch datas by session condition. */
