@@ -1,0 +1,16 @@
+title: group表数据，用于测试printAction方法
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: admin,dev,qa,pm,guest
+- field: role
+  range: admin,dev,qa,pm,guest
+- field: desc
+  range: 管理员组,开发组,测试组,项目经理组,访客组
+- field: acl
+  range: ['']
+- field: developer
+  range: 0,1
+- field: vision
+  range: rnd

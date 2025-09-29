@@ -1,0 +1,46 @@
+---
+title: Job data for getProjectPairs test
+desc: Test data for job table with sonarqube projects for getProjectPairs method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Job ID
+  range: 1-10
+- field: name
+  note: Job name
+  range: "SonarQube Job 1,SonarQube Job 2,SonarQube Job 3,SonarQube Job 4,SonarQube Job 5,SonarQube Job 6,SonarQube Job 7,SonarQube Job 8,SonarQube Job 9,SonarQube Job 10"
+- field: repo
+  note: Repository ID
+  range: 1-5
+- field: product
+  note: Product ID
+  range: 1-3
+- field: frame
+  note: Framework type
+  range: "sonarqube{10}"
+- field: engine
+  note: Engine type
+  range: "sonarqube{10}"
+- field: server
+  note: Server ID
+  range: 1-3
+- field: pipeline
+  note: Pipeline config
+  range: "pipeline1,pipeline2,pipeline3"
+- field: sonarqubeServer
+  note: SonarQube server ID
+  range: "2{6},3{2},0{2}"
+- field: projectKey
+  note: SonarQube project key
+  range: "test1{2},[]{8}"
+- field: deleted
+  note: Deletion status
+  range: "0{10}"
+- field: createdBy
+  note: Creator
+  range: "admin{6},user1{2},user2{2}"
+- field: createdDate
+  note: Creation date
+  range: "2023-01-01 00:00:00,2023-06-01 00:00:00,2023-12-01 00:00:00"

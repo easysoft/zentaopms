@@ -1,0 +1,83 @@
+---
+title: 透视表genSheet方法测试数据
+desc: 用于测试genSheet方法的透视表数据
+
+fields:
+- field: id
+  note: 透视表ID
+  range: 1000,1001,1002,1025
+- field: dimension
+  note: 维度ID
+  range: 1{4}
+- field: group
+  note: 分组
+  range: product{2},project{2}
+- field: code
+  note: 代码标识
+  range: project_progress,project_delivery,bug_analysis,task_report
+- field: driver
+  note: 数据驱动
+  range: mysql{4}
+- field: mode
+  note: 模式
+  range: builder{4}
+- field: name
+  note: 透视表名称
+  range: 项目进度统计,项目交付统计,Bug分析报表,任务报表
+- field: desc
+  note: 描述
+  range: 项目进度的统计分析,项目交付能力统计,Bug修复率分析,任务完成情况统计
+- field: acl
+  note: 访问控制
+  range: open{4}
+- field: whitelist
+  note: 白名单
+  range: []{4}
+- field: sql
+  note: SQL语句
+  range: SELECT 1,SELECT 2,SELECT 3,SELECT 4
+- field: fields
+  note: 字段设置
+  range: '{}','{}',"{}","{}"
+- field: langs
+  note: 语言设置
+  range: '{}','{}',"{}","{}"
+- field: vars
+  note: 变量设置
+  range: []{4}
+- field: objects
+  note: 对象设置
+  range: []{4}
+- field: settings
+  note: 配置设置
+  range: '{"columns":[]}','{}',"{}","{}"
+- field: filters
+  note: 过滤设置
+  range: []{2},false{2}
+- field: step
+  note: 步骤
+  range: 3{4}
+- field: stage
+  note: 阶段
+  range: published{4}
+- field: builtin
+  note: 内置标识
+  range: '0'{4}
+- field: version
+  note: 版本
+  range: '1'{4}
+- field: createdBy
+  note: 创建者
+  range: admin{4}
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00{4}
+- field: editedBy
+  note: 编辑者
+  range: []{4}
+- field: editedDate
+  note: 编辑时间
+  range: []{4}
+- field: deleted
+  note: 删除标识
+  range: '0'{4}

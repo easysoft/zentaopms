@@ -1,0 +1,96 @@
+---
+title: Screen数据定义
+desc: 用于测试screenModel::getList()方法的测试数据
+
+fields:
+- field: id
+  note: 大屏ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: dimension
+  note: 维度ID
+  range: 1{3},2{2},3{2},4{1},0{2}
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 大屏名称
+  range: 'Screen1,Screen2,Screen3,Screen4,Screen5,Screen6,Screen7,Screen8,Screen9,Screen10'
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 大屏描述
+  range: 'Description for screen'
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: 'open{8},private{2}'
+  prefix: ""
+  postfix: ""
+
+- field: whitelist
+  note: 白名单
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: cover
+  note: 封面
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: scheme
+  note: 配置方案
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 状态
+  range: 'draft{3},published{7}'
+  prefix: ""
+  postfix: ""
+
+- field: builtin
+  note: 是否内置
+  range: '0{8},1{2}'
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: 'admin{5},user1{3},user2{2}'
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '(-1Y)-(NOW):1D'
+  prefix: ""
+  postfix: ""
+  format: "YYYY-MM-DD hh:mm:ss"
+
+- field: editedBy
+  note: 编辑者
+  range: 'admin{6},user1{2},user2{2}'
+  prefix: ""
+  postfix: ""
+
+- field: editedDate
+  note: 编辑时间
+  range: '(-6M)-(NOW):1D'
+  prefix: ""
+  postfix: ""
+  format: "YYYY-MM-DD hh:mm:ss"
+
+- field: deleted
+  note: 是否删除
+  range: '0{9},1{1}'
+  prefix: ""
+  postfix: ""

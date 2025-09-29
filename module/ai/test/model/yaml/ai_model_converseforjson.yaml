@@ -1,0 +1,56 @@
+---
+title: AI模型测试数据
+desc: 为converseForJSON方法提供测试数据
+
+fields:
+- field: id
+  note: AI模型ID
+  range: 1-10
+
+- field: type
+  note: 模型类型
+  range: 'chat'
+
+- field: vendor
+  note: 模型厂商
+  range: 'openai{5}, anthropic{3}, local{2}'
+
+- field: name
+  note: 模型名称
+  range: 'gpt-3.5-turbo{3}, gpt-4{2}, claude-3{2}, llama{3}'
+
+- field: credentials
+  note: 模型凭证
+  range: '{"api_key":"test-key-123","model":"gpt-3.5-turbo"}'
+
+- field: proxy
+  note: 代理配置
+  range: '[]{7}, {"host":"proxy.test.com","port":8080}{3}'
+
+- field: desc
+  note: 模型描述
+  range: 'Test AI model for unit testing{5}, Mock model for testing{3}, Demo model{2}'
+
+- field: enabled
+  note: 是否启用
+  range: '1{8}, 0{2}'
+
+- field: createdBy
+  note: 创建者
+  range: 'admin{8}, test{2}'
+
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00{3}, 2023-06-01 00:00:00{4}, 2023-12-01 00:00:00{3}'
+
+- field: editedBy
+  note: 编辑者
+  range: 'admin{6}, test{2}, []{2}'
+
+- field: editedDate
+  note: 编辑时间
+  range: '2023-02-01 00:00:00{3}, 2023-07-01 00:00:00{4}, []{3}'
+
+- field: deleted
+  note: 是否删除
+  range: '0{9}, 1{1}'

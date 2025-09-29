@@ -1,0 +1,44 @@
+title: user表数据，用于测试printAction方法
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin,user1,user2,test1,test2
+- field: password
+  range: ['$2y$10$example']
+- field: realname
+  range: 管理员,用户1,用户2,测试1,测试2
+- field: role
+  range: admin,dev,qa,pm,td
+- field: dept
+  range: 1-5
+- field: email
+  range: admin@test.com,user1@test.com,user2@test.com
+- field: join
+  range: 2023-01-01-2023-12-31
+- field: visits
+  range: 0-100
+- field: ip
+  range: 127.0.0.1
+- field: last
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+- field: fails
+  range: 0-3
+- field: locked
+  range: 0000-00-00 00:00:00
+- field: feedback
+  range: 0,1
+- field: ranzhi
+  range: ['']
+- field: score
+  range: 0-100
+- field: scoreLevel
+  range: 1-10
+- field: deleted
+  range: 0
+- field: clientStatus
+  range: online,offline
+- field: clientLang
+  range: zh-cn,en
+- field: type
+  range: inside,outside
