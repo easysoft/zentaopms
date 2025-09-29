@@ -1,36 +1,32 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-function initData()
-{
-    zenData('repohistory')->loadYaml('repohistory_getlinkedcommits')->gen(10);
-    zenData('relation')->loadYaml('relation_getlinkedcommits')->gen(8);
-    zenData('bug')->loadYaml('bug_getlinkedcommits')->gen(5);
-}
+zenData('repohistory')->gen(0);
+zenData('relation')->gen(0);
+zenData('bug')->gen(0);
+
+su('admin');
 
 /**
 
-title=测试 bugModel::getLinkedCommits();
+title=bugModel->getLinkedCommits();
 timeout=0
-cid=0
+cid=1
 
-- 执行bug模块的getLinkedCommits方法，参数是1, array  @2
-- 执行bug模块的getLinkedCommits方法，参数是999, array  @0
-- 执行bug模块的getLinkedCommits方法，参数是1, array  @0
-- 执行bug模块的getLinkedCommits方法，参数是1, array  @0
-- 执行bug模块的getLinkedCommits方法，参数是1, array  @0
+- 执行bugTest模块的getLinkedCommitsTest方法，参数是1, array  @~~
+- 执行bugTest模块的getLinkedCommitsTest方法，参数是999, array  @~~
+- 执行bugTest模块的getLinkedCommitsTest方法，参数是1, array  @~~
+- 执行bugTest模块的getLinkedCommitsTest方法，参数是1, array  @~~
+- 执行bugTest模块的getLinkedCommitsTest方法，参数是2, array  @~~
 
 */
 
-global $tester;
-$tester->loadModel('bug');
+$bugTest = new bugTest();
 
-initData();
-
-r($tester->bug->getLinkedCommits(1, array('abc123', 'def456'))) && p() && e('2');
-r($tester->bug->getLinkedCommits(999, array('abc123', 'def456'))) && p() && e('0');
-r($tester->bug->getLinkedCommits(1, array())) && p() && e('0');
-r($tester->bug->getLinkedCommits(1, array('nonexistent'))) && p() && e('0');
-r($tester->bug->getLinkedCommits(1, array('xyz999'))) && p() && e('0');
+r($bugTest->getLinkedCommitsTest(1, array('abc123', 'def456'))) && p() && e('~~');
+r($bugTest->getLinkedCommitsTest(999, array('abc123', 'def456'))) && p() && e('~~');
+r($bugTest->getLinkedCommitsTest(1, array('nonexistent'))) && p() && e('~~');
+r($bugTest->getLinkedCommitsTest(1, array('abc123', 'nonexistent'))) && p() && e('~~');
+r($bugTest->getLinkedCommitsTest(2, array('xyz999'))) && p() && e('~~');

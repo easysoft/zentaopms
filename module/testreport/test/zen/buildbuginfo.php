@@ -8,6 +8,10 @@ timeout=0
 cid=0
 
 - 步骤1：正常情况返回数组 @Array
+- 步骤2：指定参数测试 @Array
+- 步骤3：部分参数为空 @Array
+- 步骤4：类型参数测试 @Array
+- 步骤5：空数组参数测试 @Array
 
 */
 
@@ -47,32 +51,10 @@ $testreportTest = new testreportTest();
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($testreportTest->buildBugInfoTest()) && p() && e('Array'); // 步骤1：正常情况返回数组
 
-r($testreportTest->buildBugInfoTest(
-    array('1' => array('generated' => 2))
-)) && p() && e('Array'); // 步骤2：指定参数测试
+r($testreportTest->buildBugInfoTest(['1' => ['generated' => 2]])) && p() && e('Array'); // 步骤2：指定参数测试
 
-r($testreportTest->buildBugInfoTest(
-    array(),
-    array(),
-    array('2' => 5)
-)) && p() && e('Array'); // 步骤3：部分参数为空
+r($testreportTest->buildBugInfoTest([], [], ['2' => 5])) && p() && e('Array'); // 步骤3：部分参数为空
 
-r($testreportTest->buildBugInfoTest(
-    array(),
-    array(),
-    array(),
-    array('config' => 1)
-)) && p() && e('Array'); // 步骤4：类型参数测试
+r($testreportTest->buildBugInfoTest([], [], [], ['config' => 1])) && p() && e('Array'); // 步骤4：类型参数测试
 
-r($testreportTest->buildBugInfoTest(
-    array(),
-    array(),
-    array(),
-    array(),
-    array(),
-    array(),
-    array(),
-    array(),
-    array(),
-    array()
-)) && p() && e('Array'); // 步骤5：空数组参数测试
+r($testreportTest->buildBugInfoTest([], [], [], [], [], [], [], [], [], [])) && p() && e('Array'); // 步骤5：空数组参数测试

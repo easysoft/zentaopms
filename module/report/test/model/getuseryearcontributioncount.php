@@ -1,65 +1,35 @@
 #!/usr/bin/env php
 <?php
-
-/**
-
-title=测试 reportModel::getUserYearContributionCount();
-timeout=0
-cid=0
-
-- 步骤1：正常情况 @3
-- 步骤2：空用户账号数组 @3
-- 步骤3：不存在用户 @0
-- 步骤4：无效年份 @0
-- 步骤5：指定用户2024年 @2
-
-*/
-
-// 1. 导入依赖（路径固定，不可修改）
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
 
-// 2. zendata数据准备（手动插入测试数据）
-global $tester;
-$tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
+zenData('action')->loadYaml('action')->gen('100');
+zenData('user')->gen(1);
 
-// 插入一些测试数据
-$tester->dao->insert(TABLE_ACTION)->data(array(
-    'objectType' => 'task',
-    'objectID' => '1',
-    'action' => 'opened',
-    'actor' => 'admin',
-    'date' => '2024-01-15 10:00:00',
-    'comment' => 'test'
-))->exec();
-
-$tester->dao->insert(TABLE_ACTION)->data(array(
-    'objectType' => 'story',
-    'objectID' => '2', 
-    'action' => 'opened',
-    'actor' => 'user1',
-    'date' => '2024-06-15 10:00:00',
-    'comment' => 'test'
-))->exec();
-
-$tester->dao->insert(TABLE_ACTION)->data(array(
-    'objectType' => 'bug',
-    'objectID' => '3',
-    'action' => 'opened',
-    'actor' => 'admin',
-    'date' => '2024-12-15 10:00:00',
-    'comment' => 'test'
-))->exec();
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$reportTest = new reportTest();
+/**
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($reportTest->getUserYearContributionCountTest(array('admin', 'user1'), '2024')) && p() && e('3'); // 步骤1：正常情况
-r($reportTest->getUserYearContributionCountTest(array(), '2024')) && p() && e('3'); // 步骤2：空用户账号数组
-r($reportTest->getUserYearContributionCountTest(array('nonexistent'), '2024')) && p() && e('0'); // 步骤3：不存在用户
-r($reportTest->getUserYearContributionCountTest(array('admin'), '2000')) && p() && e('0'); // 步骤4：无效年份  
-r($reportTest->getUserYearContributionCountTest(array('admin'), '2024')) && p() && e('2'); // 步骤5：指定用户2024年
+title=测试 reportModel->getUserYearContributionCount();
+cid=1
+pid=1
+
+测试获取本年度 admin 的贡献数 >> 25
+测试获取本年度 dev17 的贡献数 >> 25
+测试获取本年度 test18 的贡献数 >> 25
+测试获取本年度 admin dev17 的贡献数 >> 50
+测试获取本年度 admin test18 的贡献数 >> 50
+测试获取本年度 所有用户 的贡献数 >> 75
+
+*/
+$accounts = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
+
+$report = new reportTest();
+
+r($report->getUserYearContributionCountTest($accounts[0], date('Y'))) && p() && e('25');  // 测试获取本年度 admin 的贡献数
+r($report->getUserYearContributionCountTest($accounts[1], date('Y'))) && p() && e('25');  // 测试获取本年度 dev17 的贡献数
+r($report->getUserYearContributionCountTest($accounts[2], date('Y'))) && p() && e('25');  // 测试获取本年度 test18 的贡献数
+r($report->getUserYearContributionCountTest($accounts[3], date('Y'))) && p() && e('50');  // 测试获取本年度 admin dev17 的贡献数
+r($report->getUserYearContributionCountTest($accounts[4], date('Y'))) && p() && e('50');  // 测试获取本年度 admin test18 的贡献数
+r($report->getUserYearContributionCountTest($accounts[5], date('Y'))) && p() && e('75'); // 测试获取本年度 所有用户 的贡献数

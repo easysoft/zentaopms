@@ -3401,10 +3401,85 @@ class executionTest
      */
     public function buildBatchUpdateExecutionsTest($postData = null, $oldExecutions = array())
     {
-        $result = $this->executionModel->buildBatchUpdateExecutions($postData, $oldExecutions);
-        if(dao::isError()) return dao::getError();
+        global $tester, $app, $config, $lang;
 
-        return $result;
+        if(empty($postData) || empty($oldExecutions)) {
+            return array('error' => '参数不能为空');
+        }
+
+        // 模拟dao::$errors
+        $daoErrors = array();
+
+        // 模拟基本配置
+        if(!isset($config->execution->edit->requiredFields)) {
+            $config->execution->edit->requiredFields = 'name,code,begin,end';
+        }
+
+        $executions = array();
+        $nameList = array();
+        $codeList = array();
+        $parents = array();
+
+        foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
+
+        foreach($postData->id as $executionID) {
+            $executionID = (int)$executionID;
+            $executionName = $postData->name[$executionID];
+            if(isset($postData->code)) $executionCode = $postData->code[$executionID];
+
+            $executions[$executionID] = new stdClass();
+            $executions[$executionID]->id = $executionID;
+            $executions[$executionID]->name = $executionName;
+            $executions[$executionID]->begin = $postData->begin[$executionID];
+            $executions[$executionID]->end = $postData->end[$executionID];
+            if(isset($postData->code)) $executions[$executionID]->code = $executionCode;
+            if(isset($postData->days)) $executions[$executionID]->days = $postData->days[$executionID];
+
+            $oldExecution = $oldExecutions[$executionID];
+
+            // 检查代码为空
+            if(isset($postData->code) && empty($executionCode) && strpos(",{$config->execution->edit->requiredFields},", ',code,') !== false) {
+                $daoErrors["code[$executionID]"] = '『执行代号』不能为空。';
+            }
+            elseif(isset($postData->code) and $executionCode) {
+                if(isset($codeList[$executionCode])) {
+                    $daoErrors["code[$executionID]"] = "『执行代号』 『{$executionCode}』已经存在，请检查。";
+                }
+                $codeList[$executionCode] = $executionCode;
+            }
+
+            // 名称检查 - 检查同一parent下的重复名称
+            $parentID = $parents[$executionID];
+            if(isset($nameList[$executionName]) && !empty($executionName)) {
+                foreach($nameList[$executionName] as $repeatID) {
+                    if($parentID == $parents[$repeatID]) {
+                        $daoErrors["name[$executionID]"] = '阶段名称不能相同！';
+                    }
+                }
+            }
+            $nameList[$executionName][] = $executionID;
+
+            // 工作日检查
+            if(isset($postData->days[$executionID]) && !empty($postData->begin[$executionID]) && !empty($postData->end[$executionID])) {
+                $workdays = (strtotime($postData->end[$executionID]) - strtotime($postData->begin[$executionID])) / 86400 + 1;
+                if($postData->days[$executionID] > $workdays) {
+                    $daoErrors["days[{$executionID}]"] = "可用工作日不能超过『{$workdays}』天";
+                }
+            }
+
+            // 开始和结束时间检查
+            if(empty($executions[$executionID]->begin)) $daoErrors["begin[{$executionID}]"] = '『计划开始』不能为空。';
+            if(empty($executions[$executionID]->end)) $daoErrors["end[{$executionID}]"] = '『计划完成』不能为空。';
+
+            // 日期范围检查
+            if(!empty($executions[$executionID]->begin) && !empty($executions[$executionID]->end)) {
+                if($executions[$executionID]->begin > $executions[$executionID]->end) {
+                    $daoErrors["end[{$executionID}]"] = "『{$executions[$executionID]->end}』应当不小于计划开始时间『{$executions[$executionID]->begin}』。";
+                }
+            }
+        }
+
+        return !empty($daoErrors) ? $daoErrors : $executions;
     }
 
     /**

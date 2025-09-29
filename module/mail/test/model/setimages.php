@@ -8,10 +8,10 @@ timeout=0
 cid=0
 
 - 步骤1：正常图片数组属性processed @1
-- 步骤2：空数组属性processed @1
-- 步骤3：单个图片属性processed @1
-- 步骤4：多个图片属性processed @1
-- 步骤5：重复图片去重属性processed @1
+- 步骤2：空数组属性imageCount @0
+- 步骤3：单个图片属性imageCount @1
+- 步骤4：多个图片属性imageCount @3
+- 步骤5：重复图片去重属性uniqueImageCount @2
 
 */
 
@@ -27,7 +27,7 @@ $mailTest = new mailTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
 r($mailTest->setImagesTest(array('/tmp/test1.jpg', '/tmp/test2.png'))) && p('processed') && e('1'); // 步骤1：正常图片数组
-r($mailTest->setImagesTest(array())) && p('processed') && e('1'); // 步骤2：空数组
-r($mailTest->setImagesTest(array('/tmp/single.gif'))) && p('processed') && e('1'); // 步骤3：单个图片
-r($mailTest->setImagesTest(array('/tmp/img1.jpg', '/tmp/img2.png', '/tmp/img3.bmp'))) && p('processed') && e('1'); // 步骤4：多个图片
-r($mailTest->setImagesTest(array('/tmp/duplicate.jpg', '/tmp/duplicate.jpg', '/tmp/unique.png'))) && p('processed') && e('1'); // 步骤5：重复图片去重
+r($mailTest->setImagesTest(array())) && p('imageCount') && e('0'); // 步骤2：空数组
+r($mailTest->setImagesTest(array('/tmp/single.gif'))) && p('imageCount') && e('1'); // 步骤3：单个图片
+r($mailTest->setImagesTest(array('/tmp/img1.jpg', '/tmp/img2.png', '/tmp/img3.bmp'))) && p('imageCount') && e('3'); // 步骤4：多个图片
+r($mailTest->setImagesTest(array('/tmp/duplicate.jpg', '/tmp/duplicate.jpg', '/tmp/unique.png'))) && p('uniqueImageCount') && e('2'); // 步骤5：重复图片去重

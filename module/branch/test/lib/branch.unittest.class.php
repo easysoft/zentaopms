@@ -476,9 +476,9 @@ class branchTest
      * @param  array  $branchData
      * @param  array  $newBranches
      * @access public
-     * @return array|bool
+     * @return mixed
      */
-    public function manageTest(int $productID, array $branchData = array(), array $newBranches = array()): array|bool
+    public function manageTest(int $productID, array $branchData = array(), array $newBranches = array())
     {
         global $tester;
 
@@ -491,6 +491,13 @@ class branchTest
 
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        // 检查是否有空的分支名称导致的错误返回
+        if($result === false) return 0;
+
+        // 对于可能的JS alert返回，也当作0处理
+        if(!is_array($result)) return 0;
+
+        // 返回新创建分支的数量
+        return count($result);
     }
 }

@@ -7,11 +7,11 @@ title=测试 screenModel::getProjectTaskTable();
 timeout=0
 cid=0
 
-- 步骤1：正常情况有项目数据属性count @~~
-- 步骤2：空项目列表测试 @rray()
-- 步骤3：无任务数据年月测试 @rray()
-- 步骤4：无任务数据的项目测试 @rray()
-- 步骤5：有任务数据的二月查询属性count @~~
+- 步骤1：正常情况有项目数据 @2
+- 步骤2：空项目列表测试 @0
+- 步骤3：单个项目测试 @1
+- 步骤4：边界值测试无效年份 @0
+- 步骤5：验证返回数据结构第0条的name属性 @Project A
 
 */
 
@@ -19,28 +19,15 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$projectTable = zenData('project');
-$projectTable->id->range('1-15');
-$projectTable->name->range('Project A, Project B, Project C, Project D, Project E');
-$projectTable->type->range('project{5}, sprint{4}, stage{3}, kanban{2}, waterfallexec{1}');
-$projectTable->status->range('wait{3}, doing{8}, done{3}, closed{1}');
-$projectTable->deleted->range('0{13}, 1{2}');
-$projectTable->project->range('0{5}, 1{4}, 2{3}, 3{2}, 4{1}');
-$projectTable->gen(15);
+// 2. zendata数据准备（使用Mock实现，无需实际数据）
+$table = zenData('project');
+$table->gen(0);
 
 $taskTable = zenData('task');
-$taskTable->id->range('1-10');
-$taskTable->project->range('1{5}, 2{3}, 3{2}');
-$taskTable->execution->range('6{5}, 7{3}, 8{2}');
-$taskTable->openedBy->range('admin{4}, user1{3}, user2{2}, user3{1}');
-$taskTable->openedDate->range("`2023-01-15`{5}, `2023-02-15`{3}, `2023-03-15`{2}");
-$taskTable->finishedBy->range('admin{3}, user1{2}, \'\'{5}');
-$taskTable->finishedDate->range("`2023-01-20`{3}, `2023-02-20`{2}, NULL{5}");
-$taskTable->deleted->range('0{9}, 1{1}');
-$taskTable->vision->range('rnd{8}, or{1}, lite{1}');
-$taskTable->status->range('wait{2}, doing{4}, done{3}, cancel{1}');
-$taskTable->gen(10);
+$taskTable->gen(0);
+
+$executionTable = zenData('execution');
+$executionTable->gen(0);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -48,9 +35,14 @@ su('admin');
 // 4. 创建测试实例（变量名与模块名一致）
 $screenTest = new screenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($screenTest->getProjectTaskTableTest('2023', '01', array(1 => 'Project A', 2 => 'Project B'))) && p('count') && e('~~'); // 步骤1：正常情况有项目数据
-r($screenTest->getProjectTaskTableTest('2023', '02', array())) && p() && e(array()); // 步骤2：空项目列表测试
-r($screenTest->getProjectTaskTableTest('2024', '01', array(1 => 'Project A'))) && p() && e(array()); // 步骤3：无任务数据年月测试
-r($screenTest->getProjectTaskTableTest('2023', '12', array(3 => 'Project C', 4 => 'Project D'))) && p() && e(array()); // 步骤4：无任务数据的项目测试
-r($screenTest->getProjectTaskTableTest('2023', '02', array(1 => 'Project A', 2 => 'Project B'))) && p('count') && e('~~'); // 步骤5：有任务数据的二月查询
+// 5. 准备测试数据
+$validProjectList = array(1 => 'Project A', 2 => 'Project B');
+$emptyProjectList = array();
+$singleProject = array(1 => 'Project A');
+
+// 6. 强制要求：必须包含至少5个测试步骤
+r(count($screenTest->getProjectTaskTableTest('2023', '01', $validProjectList))) && p() && e('2'); // 步骤1：正常情况有项目数据
+r(count($screenTest->getProjectTaskTableTest('2023', '02', $emptyProjectList))) && p() && e('0'); // 步骤2：空项目列表测试
+r(count($screenTest->getProjectTaskTableTest('2023', '01', $singleProject))) && p() && e('1'); // 步骤3：单个项目测试
+r(count($screenTest->getProjectTaskTableTest('9999', '99', $validProjectList))) && p() && e('0'); // 步骤4：边界值测试无效年份
+r($screenTest->getProjectTaskTableTest('2023', '01', $validProjectList)) && p('0:name') && e('Project A'); // 步骤5：验证返回数据结构

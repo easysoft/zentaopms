@@ -24,8 +24,8 @@ cid=0
 - 步骤5：无效SQL处理 @0
 - 步骤6：通配符查询
  - 属性account @zt_user
- - 属性admin @zt_user
  - 属性avatar @zt_user
+ - 属性birthday @zt_user
 - 步骤7：复杂JOIN查询
  - 属性account @zt_user
  - 属性name @zt_product
@@ -48,5 +48,5 @@ r($biTest->getFieldsWithTableTest('SELECT u.id, u.account, u.realname FROM zt_us
 r($biTest->getFieldsWithTableTest('SELECT u.account, p.name FROM zt_user u LEFT JOIN zt_product p ON u.id = p.id')) && p('account,name') && e('zt_user,zt_product'); // 步骤3：多表连接查询
 r($biTest->getFieldsWithTableTest('SELECT u.account AS user_account, u.realname AS user_name FROM zt_user u')) && p('user_account,user_name') && e('zt_user,zt_user'); // 步骤4：带列别名查询
 r($biTest->getFieldsWithTableTest('INVALID SQL STATEMENT')) && p() && e('0'); // 步骤5：无效SQL处理
-r($biTest->getFieldsWithTableTest('SELECT * FROM zt_user')) && p('account,admin,avatar') && e('zt_user,zt_user,zt_user'); // 步骤6：通配符查询
+r($biTest->getFieldsWithTableTest('SELECT * FROM zt_user')) && p('account,avatar,birthday') && e('zt_user,zt_user,zt_user'); // 步骤6：通配符查询
 r($biTest->getFieldsWithTableTest('SELECT u.*, p.name FROM zt_user u INNER JOIN zt_product p ON u.id = p.createdBy')) && p('account,name') && e('zt_user,zt_product'); // 步骤7：复杂JOIN查询

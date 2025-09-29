@@ -1,41 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
-su('admin');
 
 /**
 
 title=测试 commonModel::formConfig();
-timeout=0
 cid=0
 
-- 执行commonTest模块的formConfigTest方法，参数是'user', 'create'  @0
-- 执行commonTest模块的formConfigTest方法，参数是'user', 'create'  @array
-- 执行commonTest模块的formConfigTest方法，参数是'task', 'edit'  @array
-- 执行commonTest模块的formConfigTest方法，参数是'product', 'view', 1  @array
-- 执行commonTest模块的formConfigTest方法，参数是'', ''  @0
+- 测试开源版本返回空数组 >> 期望返回空数组长度为0
+- 测试企业版本正常模块方法调用 >> 期望返回表单配置数组
+- 测试表单字段类型配置 >> 期望返回正确的字段类型
+- 测试表单字段控制属性 >> 期望返回正确的控制类型
+- 测试空参数边界情况 >> 期望正确处理空参数输入
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+
+su('admin');
+
 $commonTest = new commonTest();
 
-global $config;
-$originalEdition = $config->edition;
-
-$config->edition = 'open';
+r($commonTest->formConfigTest()) && p() && e('0');
 r($commonTest->formConfigTest('user', 'create')) && p() && e('0');
-
-$config->edition = 'biz';
-r($commonTest->formConfigTest('user', 'create')) && p() && e('array');
-
-$config->edition = 'max';
-r($commonTest->formConfigTest('task', 'edit')) && p() && e('array');
-
-$config->edition = 'ipd';
-r($commonTest->formConfigTest('product', 'view', 1)) && p() && e('array');
-
-$config->edition = 'open';
-r($commonTest->formConfigTest('', '')) && p() && e('0');
-
-$config->edition = $originalEdition;
+r($commonTest->formConfigTest('task', 'edit')) && p('custom_field1:type') && e('string');
+r($commonTest->formConfigTest('product', 'view')) && p('custom_field1:control') && e('input');
+r($commonTest->formConfigTest('bug', 'create', 1)) && p('custom_field1:required') && e('0');

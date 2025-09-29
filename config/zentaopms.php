@@ -723,6 +723,7 @@ $config->objectTables['privlang']       = TABLE_PRIVLANG;
 $config->objectTables['privmanager']    = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation']   = TABLE_PRIVRELATION;
 $config->objectTables['scene']          = TABLE_SCENE;
+$config->objectTables['chart']          = TABLE_CHART;
 $config->objectTables['pivot']          = TABLE_PIVOT;
 $config->objectTables['serverroom']     = TABLE_SERVERROOM;
 $config->objectTables['host']           = TABLE_ZAHOST;

@@ -24,7 +24,7 @@ $table = zenData('ai_model');
 $table->id->range('1-3');
 $table->type->range('openai-gpt4, ernie, claude');
 $table->vendor->range('openai, baidu, anthropic');
-$table->credentials->range('{"key":"test-key-1","endpoint":"https://api.openai.com"}, {"key":"test-key-2","endpoint":"https://api.baidu.com"}, {"key":"test-key-3","endpoint":"https://api.anthropic.com"}');
+$table->credentials->range('{"key":"test-key-1","secret":"test-secret-1","endpoint":"https://api.openai.com","base":"https://api.openai.com","resource":"test-resource","deployment":"test-deployment"}, {"key":"test-key-2","secret":"test-secret-2","endpoint":"https://api.baidu.com","base":"https://api.baidu.com"}, {"key":"test-key-3","secret":"test-secret-3","endpoint":"https://api.anthropic.com","base":"https://api.anthropic.com"}');
 $table->name->range('TestModel1, TestModel2, TestModel3');
 $table->desc->range('Test Model Description');
 $table->createdBy->range('admin');
@@ -41,8 +41,19 @@ su('admin');
 // 4. 创建测试实例（变量名与模块名一致）
 $aiTest = new aiTest();
 
-// 设置模型配置
-$aiTest->useLanguageModelTest(1);
+// 设置模型配置 - 为了避免数据库查询问题，直接设置模型配置
+$modelConfig = new stdClass();
+$modelConfig->id = 1;
+$modelConfig->type = 'openai-gpt4';
+$modelConfig->vendor = 'openai';
+$modelConfig->key = 'test-key-1';
+$modelConfig->secret = 'test-secret-1';
+$modelConfig->endpoint = 'https://api.openai.com';
+$modelConfig->base = 'https://api.openai.com';
+$modelConfig->resource = 'test-resource';
+$modelConfig->deployment = 'test-deployment';
+$modelConfig->name = 'TestModel1';
+$aiTest->setModelConfigTest($modelConfig);
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 // 注意：由于makeRequest会尝试调用外部API，在测试环境中会失败，但这是正常的行为

@@ -7,62 +7,60 @@ title=测试 releaseModel::sendMail2Feedback();
 timeout=0
 cid=0
 
-- 步骤1：正常情况包含stories和bugs @~~
-- 步骤2：只包含stories @~~
-- 步骤3：只包含bugs @~~
-- 步骤4：不包含stories和bugs @~~
-- 步骤5：没有notifyEmail @~~
+- 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release2, '版本发布通知'  @success
+- 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release3, '版本发布通知'  @success
+- 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release4, '版本发布通知'  @success
+- 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release1, '版本发布通知'  @no_data
+- 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release5, '版本发布通知'  @no_email
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-// 创建测试数据 
-zenData('story')->loadYaml('story_sendmail2feedback')->gen(10);
-zenData('bug')->loadYaml('bug_sendmail2feedback')->gen(10);  
-zenData('release')->loadYaml('release_sendmail2feedback')->gen(5);
+// 准备基础数据
+zenData('product')->gen(3);
 zenData('user')->gen(5);
+zenData('story')->loadYaml('story_sendmail2feedback', false, 1)->gen(10);
+zenData('bug')->loadYaml('bug_sendmail2feedback', false, 1)->gen(10);
 
 su('admin');
 
-global $tester;
-$tester->loadModel('release');
+$releaseTest = new releaseTest();
 
-// 模拟创建不同场景的release对象
-$releases = array();
-$releases[1] = new stdClass();
-$releases[1]->id = 1;
-$releases[1]->name = '版本1.0';
-$releases[1]->stories = '';
-$releases[1]->bugs = '';
+// 创建不同场景的release对象测试sendMail2Feedback方法
+$release1 = new stdClass();
+$release1->id = 1;
+$release1->name = '版本1.0';
+$release1->stories = '';
+$release1->bugs = '';
 
-$releases[2] = new stdClass();  
-$releases[2]->id = 2;
-$releases[2]->name = '版本2.0';
-$releases[2]->stories = '1,2,3';
-$releases[2]->bugs = '1,2,3';
+$release2 = new stdClass();
+$release2->id = 2;
+$release2->name = '版本2.0';
+$release2->stories = '1,2,3';
+$release2->bugs = '1,2,3';
 
-$releases[3] = new stdClass();
-$releases[3]->id = 3; 
-$releases[3]->name = '版本3.0';
-$releases[3]->stories = '1,4,5';
-$releases[3]->bugs = '';
+$release3 = new stdClass();
+$release3->id = 3;
+$release3->name = '版本3.0';
+$release3->stories = '1,4';
+$release3->bugs = '';
 
-$releases[4] = new stdClass();
-$releases[4]->id = 4;
-$releases[4]->name = '版本4.0'; 
-$releases[4]->stories = '';
-$releases[4]->bugs = '6,7,8';
+$release4 = new stdClass();
+$release4->id = 4;
+$release4->name = '版本4.0';
+$release4->stories = '';
+$release4->bugs = '1,2';
 
-$releases[5] = new stdClass();
-$releases[5]->id = 5;
-$releases[5]->name = '版本5.0';
-$releases[5]->stories = '6,7,8';  // 这些story没有notifyEmail
-$releases[5]->bugs = '6,7,8';    // 这些bug没有notifyEmail
+$release5 = new stdClass();
+$release5->id = 5;
+$release5->name = '版本5.0';
+$release5->stories = '6,7,8';
+$release5->bugs = '6,7,8';
 
-// 测试sendMail2Feedback方法  
-r($tester->release->sendMail2Feedback($releases[2], '版本发布通知')) && p() && e('~~'); // 步骤1：正常情况包含stories和bugs
-r($tester->release->sendMail2Feedback($releases[3], '版本发布通知')) && p() && e('~~'); // 步骤2：只包含stories  
-r($tester->release->sendMail2Feedback($releases[4], '版本发布通知')) && p() && e('~~'); // 步骤3：只包含bugs
-r($tester->release->sendMail2Feedback($releases[1], '版本发布通知')) && p() && e('~~'); // 步骤4：不包含stories和bugs
-r($tester->release->sendMail2Feedback($releases[5], '版本发布通知')) && p() && e('~~'); // 步骤5：没有notifyEmail
+r($releaseTest->sendMail2FeedbackTest($release2, '版本发布通知')) && p() && e('success');
+r($releaseTest->sendMail2FeedbackTest($release3, '版本发布通知')) && p() && e('success');
+r($releaseTest->sendMail2FeedbackTest($release4, '版本发布通知')) && p() && e('success');
+r($releaseTest->sendMail2FeedbackTest($release1, '版本发布通知')) && p() && e('no_data');
+r($releaseTest->sendMail2FeedbackTest($release5, '版本发布通知')) && p() && e('no_email');

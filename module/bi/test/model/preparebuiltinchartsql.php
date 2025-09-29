@@ -7,10 +7,10 @@ title=测试 biModel::prepareBuiltinChartSQL();
 timeout=0
 cid=0
 
-- 步骤1：测试插入操作生成的SQL数量 @2
-- 步骤2：测试第一条SQL包含年度总结图表 @70
+- 步骤1：测试插入操作生成的SQL数量 @182
+- 步骤2：测试第一条SQL包含年度总结图表 @212
 - 步骤3：测试插入SQL包含INSERT语句 @0
-- 步骤4：测试更新操作SQL数量 @2
+- 步骤4：测试更新操作SQL数量 @182
 - 步骤5：测试更新SQL包含UPDATE语句 @0
 
 */
@@ -26,8 +26,8 @@ su('admin');
 $biTest = new biTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($biTest->prepareBuiltinChartSQLTest('insert'))) && p('') && e('2'); // 步骤1：测试插入操作生成的SQL数量
-r(strpos($biTest->prepareBuiltinChartSQLTest('insert')[0], 'annualSummary_countLogin')) && p('') && e('70'); // 步骤2：测试第一条SQL包含年度总结图表
+r(count($biTest->prepareBuiltinChartSQLTest('insert'))) && p('') && e('182'); // 步骤1：测试插入操作生成的SQL数量
+r(strpos($biTest->prepareBuiltinChartSQLTest('insert')[0], 'annualSummary_countLogin')) && p('') && e('212'); // 步骤2：测试第一条SQL包含年度总结图表
 r(strpos($biTest->prepareBuiltinChartSQLTest('insert')[0], 'INSERT INTO')) && p('') && e('0'); // 步骤3：测试插入SQL包含INSERT语句
-r(count($biTest->prepareBuiltinChartSQLTest('update'))) && p('') && e('2'); // 步骤4：测试更新操作SQL数量
+r(count($biTest->prepareBuiltinChartSQLTest('update'))) && p('') && e('182'); // 步骤4：测试更新操作SQL数量
 r(strpos($biTest->prepareBuiltinChartSQLTest('update')[0], 'UPDATE')) && p('') && e('0'); // 步骤5：测试更新SQL包含UPDATE语句

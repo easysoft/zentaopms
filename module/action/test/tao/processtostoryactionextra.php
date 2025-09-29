@@ -7,56 +7,74 @@ title=测试 actionTao::processToStoryActionExtra();
 timeout=0
 cid=0
 
-- 检查有内容第extra条的strlen属性 @>0
-- 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action2 属性extra @
-- 检查有内容第extra条的strlen属性 @>0
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action1 属性extra @#1 登录功能
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action2 属性extra @#2 用户管理
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action3 属性extra @999
 - 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action4 属性extra @
-- 检查有内容第extra条的strlen属性 @>0
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是$action5 属性extra @#5
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-// 2. zendata数据准备
-zendata('product')->loadYaml('zt_product_processtostoryactionextra', false, 2)->gen(5);
-zendata('story')->loadYaml('zt_story_processtostoryactionextra', false, 2)->gen(5);
-zendata('projectstory')->loadYaml('zt_projectstory_processtostoryactionextra', false, 2)->gen(3);
+// 准备产品数据
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('产品1,产品2,产品3,影子产品4,影子产品5');
+$product->shadow->range('0{3},1{2}');
+$product->status->range('normal{5}');
+$product->type->range('normal{5}');
+$product->gen(5);
 
-// 3. 用户登录
+// 准备故事数据
+$story = zenData('story');
+$story->id->range('1-5');
+$story->title->range('登录功能,用户管理,代码查看,测试故事,');
+$story->product->range('1-5');
+$story->status->range('active{5}');
+$story->type->range('story{5}');
+$story->version->range('1{5}');
+$story->gen(5);
+
+// 准备项目故事关联数据
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1-3');
+$projectStory->story->range('1-3');
+$projectStory->product->range('1-3');
+$projectStory->version->range('1{3}');
+$projectStory->gen(3);
+
 su('admin');
 
-// 4. 创建测试实例
 $actionTest = new actionTest();
 
-// 5. 测试步骤
-// 步骤1：非影子产品，有故事标题的情况
+// 步骤1：测试普通产品（shadow=0）的故事链接处理
 $action1 = new stdClass();
 $action1->product = '1';
 $action1->extra = '1';
-r($actionTest->processToStoryActionExtraTest($action1)) && p('extra:strlen') && e('>0'); // 检查有内容
+r($actionTest->processToStoryActionExtraTest($action1)) && p('extra') && e('#1 登录功能');
 
-// 步骤2：影子产品，有项目故事关联的情况
+// 步骤2：测试影子产品（shadow=1）的故事链接处理
 $action2 = new stdClass();
 $action2->product = '4';
-$action2->extra = '1';
-r($actionTest->processToStoryActionExtraTest($action2)) && p('extra') && e('');
+$action2->extra = '2';
+r($actionTest->processToStoryActionExtraTest($action2)) && p('extra') && e('#2 用户管理');
 
-// 步骤3：影子产品，无项目故事关联的情况
+// 步骤3：测试不存在故事ID的处理
 $action3 = new stdClass();
-$action3->product = '5';
-$action3->extra = '1';
-r($actionTest->processToStoryActionExtraTest($action3)) && p('extra:strlen') && e('>0'); // 检查有内容
+$action3->product = '1';
+$action3->extra = '999';
+r($actionTest->processToStoryActionExtraTest($action3)) && p('extra') && e('999');
 
-// 步骤4：故事不存在的情况
+// 步骤4：测试空extra值的处理
 $action4 = new stdClass();
 $action4->product = '1';
-$action4->extra = '999';
+$action4->extra = '';
 r($actionTest->processToStoryActionExtraTest($action4)) && p('extra') && e('');
 
-// 步骤5：产品不存在的情况
+// 步骤5：测试故事标题为空的处理
 $action5 = new stdClass();
-$action5->product = '999';
-$action5->extra = '4';
-r($actionTest->processToStoryActionExtraTest($action5)) && p('extra:strlen') && e('>0'); // 检查有内容
+$action5->product = '1';
+$action5->extra = '5';
+r($actionTest->processToStoryActionExtraTest($action5)) && p('extra') && e('#5 ');

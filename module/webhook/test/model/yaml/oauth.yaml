@@ -1,0 +1,15 @@
+---
+title: OAuth data for webhook user binding tests
+desc: Empty oauth table for webhook testing
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: '[]'
+- field: openID
+  range: '[]'
+- field: providerType
+  range: '[]'
+- field: providerID
+  range: '[]'

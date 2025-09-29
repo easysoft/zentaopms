@@ -6,7 +6,6 @@ class testcaseTest
          global $tester;
          $this->objectModel = $tester->loadModel('testcase');
          $this->objectTao   = $tester->loadTao('testcase');
-         $this->objectZen   = initReference('testcase');
     }
 
     /**
@@ -2032,7 +2031,7 @@ class testcaseTest
     {
         $this->objectModel->setMenu($productID, $branch);
         if(dao::isError()) return dao::getError();
-        
+
         return true;
     }
 
@@ -2077,7 +2076,7 @@ class testcaseTest
     {
         // 创建测试用例对象
         $case = new stdclass();
-        
+
         // 创建旧步骤数据
         $oldStep = array();
         $oldStep1 = new stdclass();
@@ -2085,7 +2084,7 @@ class testcaseTest
         $oldStep1->expect = '期望结果1';
         $oldStep1->type = 'step';
         $oldStep[] = $oldStep1;
-        
+
         $oldStep2 = new stdclass();
         $oldStep2->desc = '步骤描述2';
         $oldStep2->expect = '期望结果2';
@@ -2101,28 +2100,28 @@ class testcaseTest
                 $case->expects = array('期望结果1', '期望结果2');
                 $case->stepType = array('step', 'group');
                 break;
-                
+
             case 'different_count':
                 // 不同数量
                 $case->steps = array('步骤描述1');
                 $case->expects = array('期望结果1');
                 $case->stepType = array('step');
                 break;
-                
+
             case 'different_desc':
                 // 不同描述
                 $case->steps = array('步骤描述1修改', '步骤描述2');
                 $case->expects = array('期望结果1', '期望结果2');
                 $case->stepType = array('step', 'group');
                 break;
-                
+
             case 'different_expect':
                 // 不同期望
                 $case->steps = array('步骤描述1', '步骤描述2');
                 $case->expects = array('期望结果1修改', '期望结果2');
                 $case->stepType = array('step', 'group');
                 break;
-                
+
             case 'different_type':
                 // 不同类型
                 $case->steps = array('步骤描述1', '步骤描述2');
@@ -2135,7 +2134,7 @@ class testcaseTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('processStepsChanged');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $case, $oldStep);
         if(dao::isError()) return dao::getError();
 
@@ -2152,13 +2151,13 @@ class testcaseTest
     public function getXmindImportTest(string $fileName): string|false
     {
         if(!file_exists($fileName)) return false;
-        
+
         // Check if file can be loaded as XML (suppress XML errors)
         libxml_use_internal_errors(true);
         $xmlNode = simplexml_load_file($fileName);
         libxml_clear_errors();
         if($xmlNode === false) return false;
-        
+
         $result = $this->objectModel->getXmindImport($fileName);
         if(dao::isError()) return dao::getError();
 
@@ -2211,7 +2210,7 @@ class testcaseTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('processCaseSteps');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $case, $testcase);
         if(dao::isError()) return dao::getError();
 
@@ -2231,12 +2230,12 @@ class testcaseTest
         // 创建SimpleXMLElement对象
         $xml = simplexml_load_string($xmlString);
         if($xml === false) return false;
-        
+
         // 使用反射来调用私有方法
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('xmlToArray');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $xml, $options);
         if(dao::isError()) return dao::getError();
 
@@ -2245,7 +2244,7 @@ class testcaseTest
         {
             return json_encode($result, JSON_UNESCAPED_UNICODE);
         }
-        
+
         return $result;
     }
 
@@ -2263,7 +2262,7 @@ class testcaseTest
         // 创建SimpleXMLElement对象
         $xml = simplexml_load_string($xmlString);
         if($xml === false) return false;
-        
+
         $result = $this->objectModel->getXmlTagsArray($xml, $namespaces, $options);
         if(dao::isError()) return dao::getError();
 
@@ -3624,89 +3623,6 @@ class testcaseTest
     }
 
     /**
-     * Test buildCasesForBathcEdit method.
-     *
-     * @param  array $oldCases 旧用例数据
-     * @param  array $oldSteps 旧步骤数据
-     * @access public
-     * @return mixed
-     */
-    public function buildCasesForBathcEditTest($oldCases = array(), $oldSteps = array())
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 使用反射访问protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('buildCasesForBathcEdit');
-        $method->setAccessible(true);
-
-        try {
-            $result = $method->invokeArgs($zen, array($oldCases, $oldSteps));
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * Test buildCasesByXmind method.
-     *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  array  $caseList
-     * @param  bool   $isInsert
-     * @access public
-     * @return mixed
-     */
-    public function buildCasesByXmindTest($productID = 1, $branch = '0', $caseList = array(), $isInsert = false)
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 使用反射访问protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('buildCasesByXmind');
-        $method->setAccessible(true);
-
-        try {
-            $result = $method->invokeArgs($zen, array($productID, $branch, $caseList, $isInsert));
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * Test buildDataForImportToLib method.
-     *
-     * @param  int    $caseID
-     * @param  int    $libID
-     * @access public
-     * @return mixed
-     */
-    public function buildDataForImportToLibTest($caseID = 0, $libID = 1)
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 使用反射访问protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('buildDataForImportToLib');
-        $method->setAccessible(true);
-
-        try {
-            $result = $method->invokeArgs($zen, array($caseID, $libID));
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
      * Test buildUpdateCaseForShowImport method.
      *
      * @param  object $case
@@ -3741,144 +3657,6 @@ class testcaseTest
         if($stepChanged && !$forceNotReview) $case->status = 'wait';
 
         return $stepChanged;
-    }
-
-    /**
-     * Test checkCreateFormData method.
-     *
-     * @param  object $case
-     * @access public
-     * @return bool|array
-     */
-    public function checkCreateFormDataTest(object $case): bool|array
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 清除之前的错误
-        dao::$errors = array();
-
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('checkCreateFormData');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($zen, $case);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test checkCasesForBatchEdit method.
-     *
-     * @param  array $cases
-     * @access public
-     * @return array
-     */
-    public function checkCasesForBatchEditTest(array $cases): array
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 清除之前的错误
-        dao::$errors = array();
-
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('checkCasesForBatchEdit');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($zen, $cases);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test checkCasesForShowImport method.
-     *
-     * @param  array $cases
-     * @access public
-     * @return mixed
-     */
-    public function checkCasesForShowImportTest(array $cases)
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 清除之前的错误
-        dao::$errors = array();
-
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('checkCasesForShowImport');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($zen, $cases);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * 测试构建 mind 配置。
-     * Test buildMindConfig method.
-     *
-     * @param  string $type
-     * @access public
-     * @return mixed
-     */
-    public function buildMindConfigTest(string $type)
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 清除之前的错误
-        dao::$errors = array();
-
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('buildMindConfig');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($zen, $type);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test initTestcase method.
-     *
-     * @param  int $storyID
-     * @param  int $testcaseID
-     * @param  int $bugID
-     * @access public
-     * @return object
-     */
-    public function initTestcaseTest(int $storyID = 0, int $testcaseID = 0, int $bugID = 0): object
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-
-        // 清除之前的错误
-        dao::$errors = array();
-
-        // 使用反射调用protected方法
-        $reflection = new ReflectionClass($zen);
-        $method = $reflection->getMethod('initTestcase');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($zen, $storyID, $testcaseID, $bugID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
     }
 
     /**
@@ -3931,85 +3709,6 @@ class testcaseTest
         }
 
         return $libCase;
-    }
-
-    /**
-     * Test importCases method.
-     *
-     * @param  array $cases
-     * @access public
-     * @return array
-     */
-    public function importCasesTest(array $cases): array
-    {
-        global $tester;
-        $zen = $tester->loadZen('testcase');
-        $result = $zen->importCases($cases);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test processScene method.
-     *
-     * @param  array $result
-     * @access public
-     * @return array
-     */
-    public function processSceneTest(array $result): array
-    {
-        // 通过反射访问 protected 方法
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('processScene');
-        $method->setAccessible(true);
-
-        $processedResult = $method->invoke($this->objectZen, $result);
-        if(dao::isError()) return dao::getError();
-
-        return $processedResult;
-    }
-
-    /**
-     * Test processChildScene method.
-     *
-     * @param  array  $results
-     * @param  string $parent
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function processChildSceneTest(array $results, string $parent, string $type): array
-    {
-        // 通过反射访问 protected 方法
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('processChildScene');
-        $method->setAccessible(true);
-
-        $processedResult = $method->invoke($this->objectZen, $results, $parent, $type);
-        if(dao::isError()) return dao::getError();
-
-        return $processedResult;
-    }
-
-    /**
-     * Test processStepsForMindMap method.
-     *
-     * @param  object $case
-     * @access public
-     * @return object
-     */
-    public function processStepsForMindMapTest(object $case): object
-    {
-        // 通过反射访问 protected 方法
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('processStepsForMindMap');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectZen, $case);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
     }
 
     /**
@@ -4103,34 +3802,6 @@ class testcaseTest
 
         $case->steps = $steps;
         return $case;
-    }
-
-    /**
-     * Test processImportColumnKey method.
-     *
-     * @param  string $fileName 文件名
-     * @param  array  $fields   字段映射数组
-     * @access public
-     * @return mixed
-     */
-    public function processImportColumnKeyTest(string $fileName, array $fields)
-    {
-        try {
-            // 使用反射调用protected方法
-            $reflection = new ReflectionClass($this->objectZen);
-            $method = $reflection->getMethod('processImportColumnKey');
-            $method->setAccessible(true);
-
-            $result = $method->invoke($this->objectZen, $fileName, $fields);
-            if(dao::isError()) return dao::getError();
-
-            if(is_array($result)) {
-                return implode(',', $result);
-            }
-            return $result;
-        } catch (Exception $e) {
-            return 'false';
-        }
     }
 
     /**

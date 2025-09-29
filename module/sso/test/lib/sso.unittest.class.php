@@ -22,59 +22,6 @@ class ssoTest
     }
 
     /**
-     * Test getFeishuAccessToken method.
-     *
-     * @param  object $appConfig
-     * @access public
-     * @return array
-     */
-    public function getFeishuAccessTokenTest($appConfig)
-    {
-        global $tester;
-        $ssoZen = $tester->loadZen('sso');
-        $result = $ssoZen->getFeishuAccessToken($appConfig);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getFeishuUserToken method.
-     *
-     * @param  string $code
-     * @param  string $accessToken
-     * @access public
-     * @return array
-     */
-    public function getFeishuUserTokenTest($code, $accessToken)
-    {
-        global $tester;
-        $ssoZen = $tester->loadZen('sso');
-        $result = $ssoZen->getFeishuUserToken($code, $accessToken);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test getBindFeishuUser method.
-     *
-     * @param  string $userToken
-     * @param  object $feishuConfig
-     * @access public
-     * @return array
-     */
-    public function getBindFeishuUserTest($userToken, $feishuConfig)
-    {
-        global $tester;
-        $ssoZen = $tester->loadZen('sso');
-        $result = $ssoZen->getBindFeishuUser($userToken, $feishuConfig);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test buildUserForCreate method.
      *
      * @access public

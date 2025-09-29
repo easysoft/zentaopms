@@ -1,0 +1,34 @@
+---
+title: Pipeline数据，用于测试Gitea API获取Merge Requests功能
+desc: 为apiGetMergeRequests方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 管道ID
+  range: 1-10
+
+- field: type
+  note: 管道类型
+  range: gitea{5}, gitlab{3}, jenkins{2}
+
+- field: name
+  note: 管道名称
+  range: gitea-server-1, gitea-server-2, gitea-server-3, test-gitea, main-gitea, other-server-1, other-server-2, other-server-3, other-server-4, other-server-5
+
+- field: url
+  note: 服务器地址
+  range: http://gitea.test.com, https://gitea.example.com, http://localhost:3000, https://git.company.com, http://dev.gitea.local{6}
+
+- field: account
+  note: 账户名
+  range: admin{3}, user{3}, testuser{2}, manager{2}
+
+- field: token
+  note: 访问令牌
+  range: token123, token456, abc123def, xyz789qwe, test-token{6}
+
+- field: deleted
+  note: 删除状态
+  range: 0{8}, 1{2}

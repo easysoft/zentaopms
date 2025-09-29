@@ -1,0 +1,48 @@
+---
+title: Space data for backup test
+desc: Test data for space table used in backup testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Space ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  format: ""
+
+- field: name
+  note: Space name
+  range: backup-test-space{1}, default-space{1}, dev-space{1}
+  format: ""
+
+- field: k8space
+  note: Kubernetes namespace
+  range: quickon{1}, default{1}, test-namespace{1}
+  format: ""
+
+- field: owner
+  note: Space owner
+  range: admin{2}, user1{1}
+  format: ""
+
+- field: status
+  note: Space status
+  range: active{3}
+  format: ""
+
+- field: deleted
+  note: Delete status
+  range: 0{3}
+  format: ""
+
+- field: createdBy
+  note: Creator
+  range: admin{2}, user1{1}
+  format: ""
+
+- field: createdAt
+  note: Creation time
+  range: (now)-(30d)-(now)-(1d)
+  format: YYYY-MM-DD hh:mm:ss

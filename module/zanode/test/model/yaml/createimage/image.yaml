@@ -1,0 +1,28 @@
+title: zt_image
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: base_image_{10}
+  - field: status
+    range: completed{5},failed{3},creating{2}
+  - field: osName
+    range: Ubuntu20.04{5},CentOS7{5}
+  - field: host
+    range: 1{5},2{5}
+  - field: from
+    range: 1{5},2{3},snapshot{2}
+  - field: createdDate
+    range: "(-1M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: memory
+    range: 2048{5},4096{5}
+  - field: disk
+    range: 20{5},40{5}
+  - field: fileSize
+    range: 1024{5},2048{5}
+  - field: path
+    range: /var/lib/images/image_{10}.qcow2

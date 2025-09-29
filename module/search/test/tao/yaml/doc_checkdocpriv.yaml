@@ -31,7 +31,7 @@ fields:
 - field: editedDate
   range: '`2024-01-01`'
 - field: acl
-  range: 'open{5},private{3},custom{2}'
+  range: 'open{5},private{5}'
 - field: whitelist
   range: ''
 - field: groups

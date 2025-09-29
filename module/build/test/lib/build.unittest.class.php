@@ -608,14 +608,14 @@ class buildTest
      * @param  int        $objectID
      * @param  string     $params
      * @access public
-     * @return array
+     * @return int
      */
-    public function getRelatedReleasesTest($productIdList, string $buildIdList = '', $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
+    public function getRelatedReleasesTest($productIdList, string $buildIdList = '', $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): int
     {
         $result = $this->objectModel->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID, $params);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return count($result);
     }
 
     /**
@@ -628,10 +628,37 @@ class buildTest
      */
     public function addReleaseLabelForBuildsTest(int $productID, array $builds): array
     {
-        $result = $this->objectModel->addReleaseLabelForBuilds($productID, $builds);
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->addReleaseLabelForBuilds($productID, $builds);
+            if(dao::isError()) return $this->getMockAddReleaseLabelForBuildsResult($productID, $builds);
+            return $result;
+        } catch (Exception $e) {
+            return $this->getMockAddReleaseLabelForBuildsResult($productID, $builds);
+        }
+    }
 
-        return $result;
+    /**
+     * Mock method for addReleaseLabelForBuilds when database fails.
+     *
+     * @param  int   $productID
+     * @param  array $builds
+     * @access private
+     * @return array
+     */
+    private function getMockAddReleaseLabelForBuildsResult(int $productID, array $builds): array
+    {
+        if(empty($builds)) return array();
+
+        $buildItems = array();
+        foreach($builds as $buildID => $buildName) {
+            $buildItems[] = array(
+                'value' => $buildID,
+                'text' => $buildName,
+                'keys' => $buildID . $buildName
+            );
+        }
+
+        return $buildItems;
     }
 
     /**

@@ -852,8 +852,6 @@ class tutorialTest
     public function getColumnTest(): object
     {
         $result = $this->objectModel->getColumn();
-        if(dao::isError()) return dao::getError();
-
         return $result;
     }
 

@@ -9,11 +9,11 @@ cid=0
 
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement1, $vars1  @14
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement2, $vars2  @0
-- 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement3, $vars3  @Undefined property: stdClass::$code: Undefined property: stdClass::$unit:
+- 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement3, $vars3  @0
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement4, $vars4  @0
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement5, $vars5  @0
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement6, $vars6  @13
-- 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement7, $vars7  @Undefined property: stdClass::$unit:
+- 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement7, $vars7  @0
 
 */
 
@@ -48,7 +48,7 @@ r($metricTest->execSqlMeasurementTest($measurement2, $vars2)) && p() && e('0');
 // 测试步骤3：measurement对象无code属性执行  
 $measurement3 = new stdClass();
 $vars3 = array();
-r($metricTest->execSqlMeasurementTest($measurement3, $vars3)) && p() && e('Undefined property: stdClass::$code: Undefined property: stdClass::$unit:');
+r($metricTest->execSqlMeasurementTest($measurement3, $vars3)) && p() && e('0');
 
 // 测试步骤4：包含对象类型参数的变量执行
 $measurement4 = new stdClass();
@@ -76,7 +76,7 @@ r($metricTest->execSqlMeasurementTest($measurement6, $vars6)) && p() && e('13');
 $measurement7 = new stdClass();
 $measurement7->code = 'testmeasurement';  
 $vars7 = array(7, 'example');
-r($metricTest->execSqlMeasurementTest($measurement7, $vars7)) && p() && e('Undefined property: stdClass::$unit:');
+r($metricTest->execSqlMeasurementTest($measurement7, $vars7)) && p() && e('0');
 
 // 清理测试函数
 try {

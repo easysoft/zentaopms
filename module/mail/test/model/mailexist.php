@@ -4,14 +4,13 @@
 /**
 
 title=测试 mailModel::mailExist();
-timeout=0
 cid=0
 
-- 执行mail模块的mailExistTest方法 属性email @admin@test.com
-- 执行mail模块的mailExistTest方法 属性email @admin@zentao.com
-- 执行mail模块的mailExistTest方法  @0
-- 执行mail模块的mailExistTest方法  @0
-- 执行mail模块的mailExistTest方法 属性email @user2@valid.com
+- 测试有邮箱用户存在的情况 >> 返回用户对象
+- 测试返回用户的账号字段 >> 返回用户账号
+- 测试返回用户的邮箱字段 >> 返回用户邮箱
+- 测试所有用户邮箱为空的情况 >> 返回false
+- 测试没有用户记录的情况 >> 返回false
 
 */
 
@@ -19,31 +18,34 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 
 $user = zenData('user');
-$user->id->range('1-10');
-$user->account->range('admin,user1,user2,user3,user4');
-$user->email->range('admin@test.com,user1@test.com,user2@test.com,,');
-$user->realname->range('管理员,用户1,用户2,用户3,用户4');
-$user->deleted->range('0{5}');
-$user->gen(5);
+$user->account->range('admin');
+$user->email->range('admin@test.com');
+$user->realname->range('管理员');
+$user->password->range('123456');
+$user->role->range('admin');
+$user->deleted->range('0');
+$user->gen(1);
 
 su('admin');
 
-$mail = new mailTest();
+$mailTest = new mailTest();
 
-r($mail->mailExistTest()) && p('email') && e('admin@test.com');
+r($mailTest->mailExistTest()) && p() && e('~~');
+r($mailTest->mailExistTest()) && p('account') && e('admin');
+r($mailTest->mailExistTest()) && p('email') && e('admin@test.com');
 
-$user->account->range('admin,user1,user2');
-$user->email->range('admin@zentao.com,user1@zentao.com,user2@zentao.com');
-$user->gen(3);
-r($mail->mailExistTest()) && p('email') && e('admin@zentao.com');
+$user = zenData('user');
+$user->account->range('user1');
+$user->email->range('');
+$user->realname->range('用户1');
+$user->password->range('123456');
+$user->role->range('dev');
+$user->deleted->range('0');
+$user->gen(1);
 
-$mail->objectModel->dao->update(TABLE_USER)->set('email')->eq('')->exec();
-r($mail->mailExistTest()) && p() && e('0');
+r($mailTest->mailExistTest()) && p() && e('0');
 
-$mail->objectModel->dao->delete()->from(TABLE_USER)->exec();
-r($mail->mailExistTest()) && p() && e('0');
+$user = zenData('user');
+$user->gen(0);
 
-$user->account->range('user1,user2,user3');
-$user->email->range(',user2@valid.com,');
-$user->gen(3);
-r($mail->mailExistTest()) && p('email') && e('user2@valid.com');
+r($mailTest->mailExistTest()) && p() && e('0');

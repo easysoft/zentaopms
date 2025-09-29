@@ -1,38 +1,53 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types = 1);
 
 /**
 
-title=测试 screenModel->buildBarChart();
+title=测试 screenModel::buildBarChart();
 timeout=0
-cid=1
+cid=0
 
-- 判断生成的柱状图表数据是否正确。 @1
+- 执行$result属性key @BarCrossrange
+- 执行$result属性chartConfig->chartKey @VBarCrossrange
+- 执行$result属性option->xAxis->type @category
+- 执行$result属性request->requestHttpType @get
+- 执行$result属性option->yAxis->type @value
+- 执行$result2属性key @BarCrossrange
+- 执行$result
+ - 属性option->backgroundColor @rgba(0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-zenData('product')->gen(5);
-zenData('project')->loadYaml('program')->gen(5);
-zenData('story')->loadYaml('story')->gen(20);
-zenData('bug')->loadYaml('bug')->gen(15);
+su('admin');
 
-$screen = new screenTest();
+$screenTest = new screenTest();
 
-global $tester;
-$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq(1015)->fetch();
+// 测试步骤1：无设置的图表配置
+$chartWithoutSettings = new stdClass();
+$chartWithoutSettings->settings = '';
+$chartWithoutSettings->sql = '';
 
-$component = json_decode($tester->config->screen->chartConfig['cluBarY']);
+$component = new stdClass();
 $component->option = new stdClass();
-$component->option->dataset = new stdClass();
 
-$component = $screen->buildBarChart($component, $chart);
+$result = $screenTest->buildBarChartTest($component, $chartWithoutSettings);
 
-r($component->chartKey)                              && p('') && e('VBarCrossrange'); // 测试组件类型
-r(isset($component->option->dataset->dimensions))    && p('') && e('1');              // 判断dimensions存在
-r(isset($component->option->dataset->source))        && p('') && e('1');              // 判断source存在
-r(is_array($component->option->dataset->dimensions)) && p('') && e('1');              // 判断dimensions是数组
-r(is_array($component->option->dataset->source))     && p('') && e('1');              // 判断source是数组
+r($result) && p('key') && e('BarCrossrange');
+r($result) && p('chartConfig->chartKey') && e('VBarCrossrange');
+r($result) && p('option->xAxis->type') && e('category');
+r($result) && p('request->requestHttpType') && e('get');
+r($result) && p('option->yAxis->type') && e('value');
+
+// 测试步骤6：有SQL但无设置的图表
+$chartWithSqlNoSettings = new stdClass();
+$chartWithSqlNoSettings->settings = '';
+$chartWithSqlNoSettings->sql = 'SELECT name, count FROM test_table';
+
+$result2 = $screenTest->buildBarChartTest($component, $chartWithSqlNoSettings);
+r($result2) && p('key') && e('BarCrossrange');
+
+// 测试步骤7：检查背景色设置
+r($result) && p('option->backgroundColor') && e('rgba(0,0,0,0)');

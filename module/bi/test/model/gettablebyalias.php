@@ -11,9 +11,9 @@ cid=0
 
 - 执行bi模块的getTableByAliasTest方法，参数是$statement1, 'u'  @zt_user
 - 执行bi模块的getTableByAliasTest方法，参数是$statement2, 't'  @zt_task
-- 执行bi模块的getTableByAliasTest方法，参数是$statement1, 'nonexistent'  @alse
+- 执行bi模块的getTableByAliasTest方法，参数是$statement1, 'nonexistent'  @0
 - 执行bi模块的getTableByAliasTest方法，参数是$statement3, 'p'  @zt_project
-- 执行bi模块的getTableByAliasTest方法，参数是$emptyStatement, 'u'  @alse
+- 执行bi模块的getTableByAliasTest方法，参数是$emptyStatement, 'u'  @0
 
 */
 
@@ -44,7 +44,7 @@ $statement2->join = array($joinInfo);
 r($bi->getTableByAliasTest($statement2, 't')) && p() && e('zt_task');
 
 // 测试3：查找不存在的别名
-r($bi->getTableByAliasTest($statement1, 'nonexistent')) && p() && e(false);
+r($bi->getTableByAliasTest($statement1, 'nonexistent')) && p() && e('0');
 
 // 测试4：复合查询中的别名查找（from中）
 $statement3 = new stdclass();
@@ -66,4 +66,4 @@ $emptyStatement = new stdclass();
 $emptyStatement->from = null;
 $emptyStatement->join = null;
 
-r($bi->getTableByAliasTest($emptyStatement, 'u')) && p() && e(false);
+r($bi->getTableByAliasTest($emptyStatement, 'u')) && p() && e('0');

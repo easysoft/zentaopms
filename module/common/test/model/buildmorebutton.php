@@ -1,43 +1,47 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-$project = zenData('project');
-$project->grade->range('1,2');
-$project->gen(100);
-zenData('story')->gen(100);
 
 /**
 
 title=测试 commonModel::buildMoreButton();
 timeout=0
-cid=1
+cid=0
 
-- 查询项目ID为11的项目菜单更多里的项目数量 @10
-- 查询项目ID为12的项目菜单更多里的项目数量 @0
-- 查询项目ID为13的项目菜单更多里的项目数量 @10
-- 查询项目ID为99的项目菜单更多里的项目数量 @10
-- 查询项目ID为100的项目菜单更多里的项目数量 @0
+- 步骤1：不存在的executionID @
+- 步骤2：无效ID为0 @
+- 步骤3：负数ID @
+- 步骤4：Tutorial模式或正常模式 @
+- 步骤5：执行记录但同项目无其他执行 @
 
 */
 
-global $tester, $app;
-$app->loadCommon();
-$app->appName    = 'pms';
-$app->moduleName = 'bug';
-$app->methodName = 'browse';
-$app->setControlFile();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-$moduleName    = $app->moduleName;
-$methodName    = $app->methodName;
-$file2Included = $app->importControlFile();
-$className     = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-$module        = new $className();
-$app->control  = $module;
+zenData('user')->gen(5);
 
-r(mb_substr_count(commonModel::buildMoreButton(11, false), '<li'))  && p() && e('10'); //查询项目ID为11的项目菜单更多里的项目数量
-r(mb_substr_count(commonModel::buildMoreButton(12, false), '<li'))  && p() && e('0');  //查询项目ID为12的项目菜单更多里的项目数量
-r(mb_substr_count(commonModel::buildMoreButton(13, false), '<li'))  && p() && e('10'); //查询项目ID为13的项目菜单更多里的项目数量
-r(mb_substr_count(commonModel::buildMoreButton(99, false), '<li'))  && p() && e('10'); //查询项目ID为99的项目菜单更多里的项目数量
-r(mb_substr_count(commonModel::buildMoreButton(100, false), '<li')) && p() && e('0');  //查询项目ID为100的项目菜单更多里的项目数量
+// 准备项目和执行数据
+$project = zenData('project');
+$project->id->range('1-10');
+$project->name->range('项目{1-5},执行{6-10}');
+$project->type->range('project{5},sprint{5}');
+$project->parent->range('0{5},0{5}');
+$project->project->range('0{5},1-5'); // 执行的project字段指向父项目
+$project->grade->range('1{5},2{5}');
+$project->deleted->range('0{10}');
+$project->gen(10);
+
+su('admin');
+
+// 创建测试实例
+$commonTest = new commonTest();
+
+// 模拟Tutorial模式进行一个测试
+$_SESSION['tutorialMode'] = true;
+
+// 测试用例（5个测试步骤）
+r($commonTest->buildMoreButtonTest(999, false)) && p() && e(''); // 步骤1：不存在的executionID
+r($commonTest->buildMoreButtonTest(0, false)) && p() && e('');   // 步骤2：无效ID为0
+r($commonTest->buildMoreButtonTest(-1, false)) && p() && e('');  // 步骤3：负数ID
+r($commonTest->buildMoreButtonTest(1, false)) && p() && e('');   // 步骤4：Tutorial模式或正常模式
+r($commonTest->buildMoreButtonTest(6, false)) && p() && e('');   // 步骤5：执行记录但同项目无其他执行

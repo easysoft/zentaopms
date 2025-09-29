@@ -7,11 +7,11 @@ title=测试 instanceModel::stop();
 timeout=0
 cid=0
 
-- 步骤1：正常停止运行中的实例属性code @600
-- 步骤2：停止异常状态的实例属性code @600
-- 步骤3：停止已停止的实例属性code @600
-- 步骤4：验证实例k8name属性 @test-k8-1
-- 步骤5：验证实例chart属性 @zentao
+- 步骤1：成功停止运行中的实例属性code @200
+- 步骤2：停止实例时API调用失败属性code @400
+- 步骤3：停止实例时服务器错误属性code @500
+- 步骤4：停止不存在的实例属性code @404
+- 步骤5：验证成功停止时的消息属性message @Success
 
 */
 
@@ -46,32 +46,40 @@ $instanceTest = new instanceTest();
 
 // 5. 测试步骤（至少5个）
 // 构造测试实例对象
-$runningInstance = new stdclass();
-$runningInstance->id = 1;
-$runningInstance->k8name = 'test-k8-1';
-$runningInstance->chart = 'zentao';
-$runningInstance->channel = 'stable';
-$runningInstance->spaceData = new stdclass();
-$runningInstance->spaceData->k8space = 'default';
+$successInstance = new stdclass();
+$successInstance->id = 1;
+$successInstance->k8name = 'test-k8-1';
+$successInstance->chart = 'zentao';
+$successInstance->channel = 'stable';
+$successInstance->spaceData = new stdclass();
+$successInstance->spaceData->k8space = 'default';
 
-$abnormalInstance = new stdclass();
-$abnormalInstance->id = 2;
-$abnormalInstance->k8name = 'test-k8-2';
-$abnormalInstance->chart = 'gitlab';
-$abnormalInstance->channel = 'stable';
-$abnormalInstance->spaceData = new stdclass();
-$abnormalInstance->spaceData->k8space = 'test-space';
+$failedInstance = new stdclass();
+$failedInstance->id = 2;
+$failedInstance->k8name = 'test-k8-2';
+$failedInstance->chart = 'gitlab';
+$failedInstance->channel = 'stable';
+$failedInstance->spaceData = new stdclass();
+$failedInstance->spaceData->k8space = 'test-space';
 
-$stoppedInstance = new stdclass();
-$stoppedInstance->id = 3;
-$stoppedInstance->k8name = 'test-k8-3';
-$stoppedInstance->chart = 'jenkins';
-$stoppedInstance->channel = 'stable';
-$stoppedInstance->spaceData = new stdclass();
-$stoppedInstance->spaceData->k8space = 'dev-space';
+$serverErrorInstance = new stdclass();
+$serverErrorInstance->id = 3;
+$serverErrorInstance->k8name = 'test-k8-3';
+$serverErrorInstance->chart = 'jenkins';
+$serverErrorInstance->channel = 'stable';
+$serverErrorInstance->spaceData = new stdclass();
+$serverErrorInstance->spaceData->k8space = 'dev-space';
 
-r($instanceTest->stopTest($runningInstance)) && p('code') && e('600'); // 步骤1：正常停止运行中的实例
-r($instanceTest->stopTest($abnormalInstance)) && p('code') && e('600'); // 步骤2：停止异常状态的实例  
-r($instanceTest->stopTest($stoppedInstance)) && p('code') && e('600'); // 步骤3：停止已停止的实例
-r($runningInstance->k8name) && p() && e('test-k8-1'); // 步骤4：验证实例k8name属性
-r($runningInstance->chart) && p() && e('zentao'); // 步骤5：验证实例chart属性
+$notFoundInstance = new stdclass();
+$notFoundInstance->id = 4;
+$notFoundInstance->k8name = 'test-k8-4';
+$notFoundInstance->chart = 'sonar';
+$notFoundInstance->channel = 'stable';
+$notFoundInstance->spaceData = new stdclass();
+$notFoundInstance->spaceData->k8space = 'prod-space';
+
+r($instanceTest->stopTest($successInstance)) && p('code') && e('200'); // 步骤1：成功停止运行中的实例
+r($instanceTest->stopTest($failedInstance)) && p('code') && e('400'); // 步骤2：停止实例时API调用失败
+r($instanceTest->stopTest($serverErrorInstance)) && p('code') && e('500'); // 步骤3：停止实例时服务器错误
+r($instanceTest->stopTest($notFoundInstance)) && p('code') && e('404'); // 步骤4：停止不存在的实例
+r($instanceTest->stopTest($successInstance)) && p('message') && e('Success'); // 步骤5：验证成功停止时的消息

@@ -12,6 +12,8 @@ cid=0
 - 步骤3：单个有效ID，期望返回1个记录 @1
 - 步骤4：空数组，期望返回0个记录 @0
 - 步骤5：不存在的ID，期望返回0个记录 @0
+- 步骤6：验证排序后第一个记录ID为3第0条的id属性 @3
+- 步骤7：验证排序后第二个记录ID为1第1条的id属性 @1
 
 */
 
@@ -45,8 +47,10 @@ su('admin');
 $aiTest = new aiTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($aiTest->getMiniProgramsByIDTest(array(1, 3, 5), false)) && p() && e(3); // 步骤1：多个有效ID不排序，期望返回3个记录
-r($aiTest->getMiniProgramsByIDTest(array(3, 1, 5), true)) && p() && e(3); // 步骤2：多个有效ID需要排序，期望返回3个记录
-r($aiTest->getMiniProgramsByIDTest(array(2), false)) && p() && e(1); // 步骤3：单个有效ID，期望返回1个记录
-r($aiTest->getMiniProgramsByIDTest(array(), false)) && p() && e(0); // 步骤4：空数组，期望返回0个记录
-r($aiTest->getMiniProgramsByIDTest(array(999, 1000), false)) && p() && e(0); // 步骤5：不存在的ID，期望返回0个记录
+r(count($aiTest->getMiniProgramsByIDTest(array(1, 3, 5), false))) && p() && e(3); // 步骤1：多个有效ID不排序，期望返回3个记录
+r(count($aiTest->getMiniProgramsByIDTest(array(3, 1, 5), true))) && p() && e(3); // 步骤2：多个有效ID需要排序，期望返回3个记录
+r(count($aiTest->getMiniProgramsByIDTest(array(2), false))) && p() && e(1); // 步骤3：单个有效ID，期望返回1个记录
+r(count($aiTest->getMiniProgramsByIDTest(array(), false))) && p() && e(0); // 步骤4：空数组，期望返回0个记录
+r(count($aiTest->getMiniProgramsByIDTest(array(999, 1000), false))) && p() && e(0); // 步骤5：不存在的ID，期望返回0个记录
+r($aiTest->getMiniProgramsByIDTest(array(3, 1, 5), true)) && p('0:id') && e('3'); // 步骤6：验证排序后第一个记录ID为3
+r($aiTest->getMiniProgramsByIDTest(array(3, 1, 5), true)) && p('1:id') && e('1'); // 步骤7：验证排序后第二个记录ID为1

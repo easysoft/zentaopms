@@ -1,0 +1,27 @@
+---
+title: 测试bugModel::getDatatableModules方法的分支数据
+desc: 为测试getDatatableModules方法准备的分支测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-4
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 2{4}
+  format: ""
+- field: name
+  note: 分支名称
+  range: 主干,开发分支,测试分支,发布分支
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{4}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{4}
+  format: ""

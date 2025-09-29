@@ -1,0 +1,70 @@
+---
+title: 测试用例数据定义
+desc: 为getCaseCountByProductIdList测试生成测试用例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 关联需求ID
+  range: 1{2},2{2},3{2},4{2},5{2},6{2},7{2},8{2},9{2},10{2},11{3},12{3},13{2},14{2},15{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 用例标题
+  range: '测试用例{1-30}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 用例类型
+  range: feature{20},performance{5},config{3},install{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 用例状态
+  range: normal{25},blocked{3},investigate{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1{5},2{10},3{10},4{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin{15},user1{8},user2{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{10},2024-02-01 00:00:00{10},2024-03-01 00:00:00{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: '0{28},1{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

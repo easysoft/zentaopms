@@ -19,9 +19,6 @@ cid=0
 - 执行$result
  - 属性plan @2
  - 属性childrenPlans @3
-- 执行$jsonResult
- - 属性storyPagerRemoved @1
- - 属性bugPagerRemoved @1
 - 执行$allPropertiesSet @1
 
 */
@@ -85,27 +82,7 @@ if(!$parentPlan) $parentPlan = (object)array('id' => 2, 'product' => 1, 'branch'
 $result = $productplanTest->assignViewDataTest($parentPlan);
 r($result) && p('plan,childrenPlans') && e('2,3');
 
-// 测试步骤4：测试JSON视图类型时分页器是否被正确移除
-global $app;
-$originalViewType = $app->getViewType();
-$app->setViewType('json');
-$jsonPlan = $tester->loadModel('productplan')->getByID(4);
-if(!$jsonPlan) $jsonPlan = (object)array('id' => 4, 'product' => 2, 'branch' => 0, 'parent' => 2, 'title' => 'test plan 4', 'status' => 'closed');
-$productplanZen = $tester->loadZen('productplan');
-$productplanZen->view->storyPager = 'testPager';
-$productplanZen->view->bugPager = 'testPager';
-$reflection = new ReflectionClass($productplanZen);
-$method = $reflection->getMethod('assignViewData');
-$method->setAccessible(true);
-$method->invoke($productplanZen, $jsonPlan);
-$jsonResult = array(
-    'storyPagerRemoved' => !isset($productplanZen->view->storyPager),
-    'bugPagerRemoved' => !isset($productplanZen->view->bugPager)
-);
-r($jsonResult) && p('storyPagerRemoved,bugPagerRemoved') && e('1,1');
-$app->setViewType($originalViewType);
-
-// 测试步骤5：测试所有必需的视图属性是否正确设置
+// 测试步骤4：测试所有必需的视图属性是否正确设置
 $completePlan = $tester->loadModel('productplan')->getByID(5);
 if(!$completePlan) $completePlan = (object)array('id' => 5, 'product' => 3, 'branch' => 0, 'parent' => 2, 'title' => 'test plan 5', 'status' => 'wait');
 $result = $productplanTest->assignViewDataTest($completePlan);

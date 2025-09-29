@@ -5,28 +5,25 @@
 
 title=测试 cneModel::startApp();
 timeout=0
-cid=1
+cid=0
 
-- 使用完整有效参数启动应用 @object
-- 使用空channel参数 @object
-- 使用无效参数 @object
-- 缺少必要参数 @object
-- 使用null参数 @~~
+- 执行cneTest模块的startAppTest方法 属性code @200
+- 执行cneTest模块的startAppWithEmptyChannelTest方法 第data条的channel属性 @stable
+- 执行cneTest模块的startAppWithInvalidParamsTest方法 属性code @200
+- 执行cneTest模块的startAppWithMissingParamsTest方法 属性code @200
+- 执行cneTest模块的startAppWithNullParamsTest方法  @~~
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-global $tester, $config;
-$config->CNE->api->host   = 'http://devops.corp.cc:32380';
-$config->CNE->api->token  = 'R09p3H5mU1JCg60NGPX94RVbGq31JVkF';
-$config->CNE->app->domain = 'devops.corp.cc';
+su('admin');
 
 $cneTest = new cneTest();
 
-r($cneTest->startAppTest()) && p() && e('object'); // 使用完整有效参数启动应用
-r($cneTest->startAppWithEmptyChannelTest()) && p() && e('object'); // 使用空channel参数
-r($cneTest->startAppWithInvalidParamsTest()) && p() && e('object'); // 使用无效参数
-r($cneTest->startAppWithMissingParamsTest()) && p() && e('object'); // 缺少必要参数
-r($cneTest->startAppWithNullParamsTest()) && p() && e('~~'); // 使用null参数
+r($cneTest->startAppTest()) && p('code') && e('200');
+r($cneTest->startAppWithEmptyChannelTest()) && p('data:channel') && e('stable');
+r($cneTest->startAppWithInvalidParamsTest()) && p('code') && e('200');
+r($cneTest->startAppWithMissingParamsTest()) && p('code') && e('200');
+r($cneTest->startAppWithNullParamsTest()) && p() && e('~~');

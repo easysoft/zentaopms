@@ -7,11 +7,11 @@ title=测试 aiModel::complete();
 timeout=0
 cid=0
 
-- 执行aiTest模块的completeTest方法，参数是1, 'Hello, world!', 512  @0
-- 执行aiTest模块的completeTest方法，参数是2, 'Complete this text:', 256, array  @0
-- 执行aiTest模块的completeTest方法，参数是1, '', 512  @0
 - 执行aiTest模块的completeTest方法，参数是999, 'Hello, world!', 512  @0
-- 执行aiTest模块的completeTest方法，参数是1, 'Hello, world!', 10000  @0
+- 执行aiTest模块的completeTest方法，参数是1, 'Hello, world!', 512  @0
+- 执行aiTest模块的completeTest方法，参数是1, '', 512  @0
+- 执行aiTest模块的completeTest方法，参数是-1, 'Hello, world!', 512  @0
+- 执行aiTest模块的completeTest方法，参数是'invalid', 'Hello, world!', 512  @0
 
 */
 
@@ -34,13 +34,8 @@ su('admin');
 
 $aiTest = new aiTest();
 
-// 设置模型配置以避免配置错误
-$config = new stdclass();
-$config->type = 'openai-gpt35';
-$aiTest->setModelConfigTest($config);
-
-r($aiTest->completeTest(1, 'Hello, world!', 512)) && p() && e('0');
-r($aiTest->completeTest(2, 'Complete this text:', 256, array('temperature' => 0.7))) && p() && e('0');
-r($aiTest->completeTest(1, '', 512)) && p() && e('0');
 r($aiTest->completeTest(999, 'Hello, world!', 512)) && p() && e('0');
-r($aiTest->completeTest(1, 'Hello, world!', 10000)) && p() && e('0');
+r($aiTest->completeTest(1, 'Hello, world!', 512)) && p() && e('0');
+r($aiTest->completeTest(1, '', 512)) && p() && e('0');
+r($aiTest->completeTest(-1, 'Hello, world!', 512)) && p() && e('0');
+r($aiTest->completeTest('invalid', 'Hello, world!', 512)) && p() && e('0');

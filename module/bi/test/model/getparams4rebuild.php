@@ -10,10 +10,10 @@ timeout=0
 cid=0
 
 - 测试简单SELECT语句，检查返回数组包含4个元素 @4
-- 测试带别名的SELECT语句，验证字段映射处理 @4
+- 测试带别名的SELECT语句，验证字段映射处理第2条的user_id属性 @user_id
 - 测试空字段列表参数，确保方法能正常处理 @4
-- 测试复杂SELECT语句，验证多字段处理 @4
-- 测试聚合函数SQL，验证计算字段处理 @4
+- 测试复杂SELECT语句，验证多字段处理第2条的description属性 @description
+- 测试聚合函数SQL，验证计算字段处理第2条的total属性 @total
 
 */
 
@@ -44,8 +44,8 @@ $sql5 = "SELECT COUNT(1) as total, 'admin' as role";
 $statement5 = $bi->objectModel->sql2Statement($sql5);
 $columnFields5 = array('total' => 'total', 'role' => 'role');
 
-r($bi->getParams4RebuildTest($sql1, $statement1, $columnFields1)) && p() && e(4);                        // 测试简单SELECT语句，检查返回数组包含4个元素
-r($bi->getParams4RebuildTest($sql2, $statement2, $columnFields2)) && p() && e(4);                        // 测试带别名的SELECT语句，验证字段映射处理
-r($bi->getParams4RebuildTest($sql3, $statement3, $columnFields3)) && p() && e(4);                        // 测试空字段列表参数，确保方法能正常处理
-r($bi->getParams4RebuildTest($sql4, $statement4, $columnFields4)) && p() && e(4);                        // 测试复杂SELECT语句，验证多字段处理
-r($bi->getParams4RebuildTest($sql5, $statement5, $columnFields5)) && p() && e(4);                        // 测试聚合函数SQL，验证计算字段处理
+r(count($bi->getParams4RebuildTest($sql1, $statement1, $columnFields1))) && p() && e(4);                    // 测试简单SELECT语句，检查返回数组包含4个元素
+r($bi->getParams4RebuildTest($sql2, $statement2, $columnFields2)) && p('2:user_id') && e('user_id');     // 测试带别名的SELECT语句，验证字段映射处理
+r(count($bi->getParams4RebuildTest($sql3, $statement3, $columnFields3))) && p() && e(4);                 // 测试空字段列表参数，确保方法能正常处理
+r($bi->getParams4RebuildTest($sql4, $statement4, $columnFields4)) && p('2:description') && e('description'); // 测试复杂SELECT语句，验证多字段处理
+r($bi->getParams4RebuildTest($sql5, $statement5, $columnFields5)) && p('2:total') && e('total');           // 测试聚合函数SQL，验证计算字段处理

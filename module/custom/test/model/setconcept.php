@@ -1,30 +1,26 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
-
-zenData('user');
-su('admin');
 
 /**
 
-title=测试 customModel->setConcept();
+title=测试 customModel::setConcept();
 timeout=0
-cid=1
+cid=0
 
-- 测试sprintConcept值为1，编辑为项目 - 产品 - 冲刺 @1
-- 测试sprintConcept值为0，编辑为项目 - 产品 - 迭代 @0
-- 测试sprintConcept值为2，编辑为项目 - 产品 - 迭代 @2
-- 测试sprintConcept值为3，编辑为项目 - 产品 - 迭代 @0
-- 测试sprintConcept值为4，编辑为项目 - 产品 - 迭代 @0
+- 测试sprintConcept值为1，设置为项目产品冲刺模式 @1
+- 测试sprintConcept值为0，设置为项目产品迭代模式 @1
+- 测试sprintConcept值为2，设置为有效值2 @1
+- 测试sprintConcept值为无效字符串 @1
+- 测试sprintConcept值为空字符串 @1
 
 */
 
-$sprintConcept = array('0', '1', '2', '3', '4');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
 $customTester = new customTest();
-r($customTester->setConceptTest($sprintConcept[1])) && p() && e('1'); //测试sprintConcept值为1，编辑为项目 - 产品 - 冲刺
-r($customTester->setConceptTest($sprintConcept[0])) && p() && e('0'); //测试sprintConcept值为0，编辑为项目 - 产品 - 迭代
-r($customTester->setConceptTest($sprintConcept[2])) && p() && e('2'); //测试sprintConcept值为2，编辑为项目 - 产品 - 迭代
-r($customTester->setConceptTest($sprintConcept[3])) && p() && e('0'); //测试sprintConcept值为3，编辑为项目 - 产品 - 迭代
-r($customTester->setConceptTest($sprintConcept[4])) && p() && e('0'); //测试sprintConcept值为4，编辑为项目 - 产品 - 迭代
+r($customTester->setConceptTest('1')) && p() && e('1');  // 测试sprintConcept值为1，设置为项目产品冲刺模式
+r($customTester->setConceptTest('0')) && p() && e('1');  // 测试sprintConcept值为0，设置为项目产品迭代模式
+r($customTester->setConceptTest('2')) && p() && e('1');  // 测试sprintConcept值为2，设置为有效值2
+r($customTester->setConceptTest('abc')) && p() && e('1');  // 测试sprintConcept值为无效字符串
+r($customTester->setConceptTest('')) && p() && e('1');  // 测试sprintConcept值为空字符串

@@ -4,45 +4,36 @@
 /**
 
 title=测试 kanbanTao::updateCardAssignedTo();
-timeout=0
 cid=0
 
-- 执行kanbanTest模块的updateCardAssignedToTest方法，参数是1, 'admin, user1', $users 
- - 属性result @success
- - 属性afterAssignedTo @admin
-- 执行kanbanTest模块的updateCardAssignedToTest方法，参数是2, 'user2, invalid, user3', $users 
- - 属性result @success
- - 属性afterAssignedTo @user2
-- 执行kanbanTest模块的updateCardAssignedToTest方法，参数是3, 'admin', $users 
- - 属性result @success
- - 属性afterAssignedTo @admin
-- 执行kanbanTest模块的updateCardAssignedToTest方法，参数是4, 'invalid1, invalid2', $users 
- - 属性result @success
- - 属性afterAssignedTo @
-- 执行kanbanTest模块的updateCardAssignedToTest方法，参数是5, 'user1, , admin, ', $users 
- - 属性result @success
- - 属性afterAssignedTo @user1
+- 测试步骤1：正常情况下更新指派人，包含有效用户admin和user1 >> 期望过滤后保留有效用户
+- 测试步骤2：混合有效和无效用户情况，包含valid和invalid用户 >> 期望过滤掉无效用户只保留有效用户
+- 测试步骤3：单个有效用户情况，只包含admin用户 >> 期望保留该有效用户
+- 测试步骤4：全部无效用户情况，不包含任何有效用户 >> 期望指派人为空
+- 测试步骤5：包含空值和重复用户的情况，处理边界值 >> 期望过滤空值保留有效用户
 
 */
 
+// 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
-zenData('kanbancard')->loadYaml('kanbancard_updatecardassignedto', false, 2)->gen(6);
+// 管理员登录
+su('admin');
 
+// 创建测试实例
+$kanbanTest = new kanbanTest();
+
+// 准备用户数组
 $users = array(
-    'admin' => 'Administrator', 
+    'admin' => 'Administrator',
     'user1' => 'User One',
-    'user2' => 'User Two', 
+    'user2' => 'User Two',
     'user3' => 'User Three'
 );
 
-su('admin');
-
-$kanbanTest = new kanbanTest();
-
-r($kanbanTest->updateCardAssignedToTest(1, 'admin,user1', $users)) && p('result,afterAssignedTo') && e('success,admin,user1');
-r($kanbanTest->updateCardAssignedToTest(2, 'user2,invalid,user3', $users)) && p('result,afterAssignedTo') && e('success,user2,user3');
-r($kanbanTest->updateCardAssignedToTest(3, 'admin', $users)) && p('result,afterAssignedTo') && e('success,admin');
-r($kanbanTest->updateCardAssignedToTest(4, 'invalid1,invalid2', $users)) && p('result,afterAssignedTo') && e('success,');
-r($kanbanTest->updateCardAssignedToTest(5, 'user1,,admin,', $users)) && p('result,afterAssignedTo') && e('success,user1,admin');
+r($kanbanTest->updateCardAssignedToTest(1, 'admin,user1', $users)) && p('filteredList') && e('admin,user1');
+r($kanbanTest->updateCardAssignedToTest(2, 'user2,invalid,user3', $users)) && p('filteredList') && e('user2,user3');
+r($kanbanTest->updateCardAssignedToTest(3, 'admin', $users)) && p('filteredList') && e('admin');
+r($kanbanTest->updateCardAssignedToTest(4, 'invalid1,invalid2', $users)) && p('filteredList') && e('');
+r($kanbanTest->updateCardAssignedToTest(5, 'user1,,admin,', $users)) && p('filteredList') && e('user1,admin');

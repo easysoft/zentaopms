@@ -893,29 +893,6 @@ class repoTest
         return $objects;
     }
 
-    /**
-     * Test checkConnection method in zen layer.
-     *
-     * @param  array $postData POST数据
-     * @access public
-     * @return mixed
-     */
-    public function checkConnectionZenTest($postData = array())
-    {
-        $objectZen = initReference('repo');
-
-        // 模拟POST数据
-        $_POST = $postData;
-
-        $method = new ReflectionMethod(get_class($objectZen), 'checkConnection');
-        $method->setAccessible(true);
-        $result = $method->invoke($objectZen);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result ? '1' : '0';
-    }
-
     public function replaceCommentLinkTest($comment)
     {
         $this->objectModel->config->webRoot     = '';
@@ -1603,19 +1580,19 @@ class repoTest
         // 检查方法是否存在
         $reflection = new ReflectionClass($this->objectModel);
         if(!$reflection->hasMethod('startTask')) return false;
-        
+
         $method = $reflection->getMethod('startTask');
         if(!$method->isPrivate()) return false;
-        
+
         // 模拟方法逻辑而不实际调用，避免复杂的数据库依赖
         if($taskID == 999) return false; // 无效ID测试
-        
+
         $result = (object)array(
             'status' => '1',
             'finishedBy' => ($params['left'] == 0) ? 'admin' : '',
             'effort_created' => '1'
         );
-        
+
         return $result;
     }
 
@@ -1637,13 +1614,13 @@ class repoTest
         if(empty($params) || !is_array($params)) return false;
         if(empty($action) || !is_object($action)) return false;
         if(!is_array($changes)) return false;
-        
+
         // 验证task对象必要的属性
         if(!isset($task->id) || !isset($task->consumed)) return false;
-        
+
         // 验证params数组必要的参数
         if(!isset($params['consumed'])) return false;
-        
+
         // 模拟核心业务逻辑检查
         $now = helper::now();
         $newTask = new stdclass();
@@ -1657,7 +1634,7 @@ class repoTest
         $newTask->assignedDate   = $now;
         $newTask->finishedBy     = $this->objectModel->app->user->account;
         $newTask->lastEditedBy   = $this->objectModel->app->user->account;
-        
+
         // 验证团队处理逻辑
         if(empty($task->team))
         {
@@ -1668,7 +1645,7 @@ class repoTest
             // 模拟团队工时计算
             $consumed = $params['consumed'];
         }
-        
+
         // 创建effort对象
         $effort = new stdclass();
         $effort->date     = helper::today();
@@ -1677,7 +1654,7 @@ class repoTest
         $effort->account  = $this->objectModel->app->user->account;
         $effort->consumed = $consumed > 0 ? $consumed : 0;
         $effort->work     = '完成任务：' . $task->name;
-        
+
         // 返回成功标志，表示所有检查和逻辑都通过
         return true;
     }

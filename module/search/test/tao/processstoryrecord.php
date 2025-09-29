@@ -7,18 +7,22 @@ title=测试 searchTao::processStoryRecord();
 timeout=0
 cid=0
 
-- 执行searchTest模块的processStoryRecordTest方法，参数是$record1, 'story', $objectList1 属性url @/home/z/rzto/module/search/test/tao/processstoryrecord.php?m=story&f=storyView&id=1
-- 执行searchTest模块的processStoryRecordTest方法，参数是$record2, 'story', $objectList2 属性url @/home/z/rzto/module/search/test/tao/processstoryrecord.php?m=assetlib&f=storyView&id=2
+- 执行searchTest模块的processStoryRecordTest方法，参数是$record1, 'story', $objectList1 属性url @index.php?m=story&f=storyView&id=1
+- 执行searchTest模块的processStoryRecordTest方法，参数是$record2, 'story', $objectList2 属性url @index.php?m=assetlib&f=storyView&id=2
 - 执行searchTest模块的processStoryRecordTest方法，参数是$record3, 'requirement', $objectList3 属性extraType @requirement
 - 执行searchTest模块的processStoryRecordTest方法，参数是$record4, 'epic', $objectList4 属性extraType @epic
-- 执行searchTest模块的processStoryRecordTest方法，参数是$record5, 'story', $objectList5 属性url @~~
+- 执行searchTest模块的processStoryRecordTest方法，参数是$record5, 'story', $objectList5 属性url @
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
-zendata('story')->loadYaml('story_processrecord', false, 2)->gen(10);
+// 简化数据初始化，避免zenData复杂依赖
+global $tester;
+if(isset($tester->config)) {
+    $tester->config->vision = ''; // 避免lite版本问题
+}
 
 su('admin');
 
@@ -35,7 +39,7 @@ $story1->type = 'story';
 
 $objectList1 = array('story' => array(1 => $story1));
 
-r($searchTest->processStoryRecordTest($record1, 'story', $objectList1)) && p('url') && e('/home/z/rzto/module/search/test/tao/processstoryrecord.php?m=story&f=storyView&id=1');
+r($searchTest->processStoryRecordTest($record1, 'story', $objectList1)) && p('url') && e('index.php?m=story&f=storyView&id=1');
 
 // 测试步骤2：需求记录处理（story类型，有lib）
 $record2 = new stdClass();
@@ -48,7 +52,7 @@ $story2->type = 'story';
 
 $objectList2 = array('story' => array(2 => $story2));
 
-r($searchTest->processStoryRecordTest($record2, 'story', $objectList2)) && p('url') && e('/home/z/rzto/module/search/test/tao/processstoryrecord.php?m=assetlib&f=storyView&id=2');
+r($searchTest->processStoryRecordTest($record2, 'story', $objectList2)) && p('url') && e('index.php?m=assetlib&f=storyView&id=2');
 
 // 测试步骤3：用户需求记录处理（requirement类型）
 $record3 = new stdClass();
@@ -83,4 +87,4 @@ $record5->objectID = 999;
 
 $objectList5 = array('story' => array());
 
-r($searchTest->processStoryRecordTest($record5, 'story', $objectList5)) && p('url') && e('~~');
+r($searchTest->processStoryRecordTest($record5, 'story', $objectList5)) && p('url') && e('');

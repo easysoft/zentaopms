@@ -3,10 +3,8 @@ class releaseTest
 {
     public function __construct()
     {
-         global $tester, $app;
+         global $tester;
          $this->objectModel = $tester->loadModel('release');
-
-         $app->rawModule = 'release';
     }
 
     /**
@@ -470,23 +468,42 @@ class releaseTest
      */
     public function sendmailTest(int $releaseID): string
     {
-        if(empty($releaseID)) {
-            $this->objectModel->sendmail($releaseID);
-            return 'empty'; // 空releaseID应该直接返回
+        if(empty($releaseID))
+        {
+            $this->objectModel->sendmail(0);
+            if(dao::isError()) return dao::getError();
+            return 'empty';
         }
-        
+
         $release = $this->objectModel->getByID($releaseID);
-        if(!$release) {
-            return 'no_release'; // 发布不存在
+        if(!$release)
+        {
+            return 'no_release';
         }
-        
-        // Mock mail model to avoid actual sending
-        $originalMail = $this->objectModel->app->loadModel('mail');
-        $this->objectModel->sendmail($releaseID);
-        
-        if(dao::isError()) return dao::getError();
-        
-        return 'success'; // 成功执行
+
+        // Mock mail config to prevent actual email sending
+        global $app;
+        $originalTurnon = isset($app->config->mail->turnon) ? $app->config->mail->turnon : true;
+        if(!isset($app->config->mail)) $app->config->mail = new stdClass();
+        $app->config->mail->turnon = false;
+
+        try
+        {
+            $this->objectModel->sendmail($releaseID);
+
+            // Restore original config
+            $app->config->mail->turnon = $originalTurnon;
+
+            if(dao::isError()) return dao::getError();
+
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            // Restore original config
+            $app->config->mail->turnon = $originalTurnon;
+            return 'error';
+        }
     }
 
     /**
@@ -519,39 +536,57 @@ class releaseTest
     public function sendMail2FeedbackTest(object $release, string $subject): string
     {
         if(!$release) return 'no_release';
-        
+
         if(!$release->stories && !$release->bugs) return 'no_data';
-        
-        // 模拟检查是否存在有效的notifyEmail
+
+        // 检查是否有需要通知的邮箱
         $stories = $release->stories ? explode(',', trim($release->stories, ',')) : array();
         $bugs = $release->bugs ? explode(',', trim($release->bugs, ',')) : array();
-        
+
         $hasNotifyEmail = false;
-        
+
+        // 检查story数据中是否有notifyEmail
         if($stories) {
-            $storyNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+            $storyEmails = $this->objectModel->dao->select('notifyEmail')->from(TABLE_STORY)
                 ->where('id')->in($stories)
                 ->andWhere('notifyEmail')->ne('')
-                ->fetchAll();
-            if($storyNotifyList) $hasNotifyEmail = true;
+                ->fetchPairs();
+            if($storyEmails) $hasNotifyEmail = true;
         }
-        
+
+        // 检查bug数据中是否有notifyEmail
         if($bugs) {
-            $bugNotifyList = $this->objectModel->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+            $bugEmails = $this->objectModel->dao->select('notifyEmail')->from(TABLE_BUG)
                 ->where('id')->in($bugs)
                 ->andWhere('notifyEmail')->ne('')
-                ->fetchAll();
-            if($bugNotifyList) $hasNotifyEmail = true;
+                ->fetchPairs();
+            if($bugEmails) $hasNotifyEmail = true;
         }
-        
+
         if(!$hasNotifyEmail) return 'no_email';
-        
-        // 实际调用sendMail2Feedback方法
-        $this->objectModel->sendMail2Feedback($release, $subject);
-        
-        if(dao::isError()) return dao::getError();
-        
-        return 'success';
+
+        // Mock mail config to prevent actual email sending
+        global $app;
+        $originalTurnon = isset($app->config->mail->turnon) ? $app->config->mail->turnon : true;
+        if(!isset($app->config->mail)) $app->config->mail = new stdClass();
+        $app->config->mail->turnon = false;
+
+        try {
+            // 调用实际的sendMail2Feedback方法
+            $this->objectModel->sendMail2Feedback($release, $subject);
+
+            // Restore original config
+            $app->config->mail->turnon = $originalTurnon;
+
+            if(dao::isError()) return dao::getError();
+
+            return 'success';
+        }
+        catch(Exception $e) {
+            // Restore original config
+            $app->config->mail->turnon = $originalTurnon;
+            return 'error: ' . $e->getMessage();
+        }
     }
 
     /**

@@ -1,0 +1,15 @@
+---
+title: 测试getDocIdByTitle方法的confluencetmprelation表数据
+desc: confluencetmprelation表测试数据
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-5
+- field: AID
+  range: 1001-1005
+- field: BID
+  range: 1-5
+- field: BType
+  range: zdoc

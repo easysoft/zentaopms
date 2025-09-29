@@ -1,0 +1,44 @@
+---
+title: 构建表数据定义
+desc: 用于importUnitResult方法测试的构建数据
+
+fields:
+- field: id
+  note: 构建ID
+  range: 1-5
+- field: product
+  note: 所属产品
+  range: 1-5
+- field: branch
+  note: 分支
+  range: 0
+- field: execution
+  note: 所属执行
+  range: 1-5
+- field: name
+  note: 构建名称
+  range: Build1,Build2,Build3,Build4,Build5
+- field: scmPath
+  note: 代码库路径
+  range: ""
+- field: filePath
+  note: 文件路径
+  range: ""
+- field: date
+  note: 构建日期
+  range: "2024-01-01"
+- field: stories
+  note: 需求
+  range: ""
+- field: bugs
+  note: Bug
+  range: ""
+- field: builder
+  note: 构建者
+  range: admin{5}
+- field: desc
+  note: 构建描述
+  range: [构建描述内容]{5}
+- field: deleted
+  note: 删除状态
+  range: "0"{5}

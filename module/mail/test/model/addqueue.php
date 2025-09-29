@@ -7,19 +7,16 @@ title=测试 mailModel::addQueue();
 timeout=0
 cid=0
 
-- 步骤1：异常处理-空参数 @没有数据提交
-- 步骤2：正常添加
+- 执行mailTest模块的addQueueTest方法，参数是'', ''  @没有数据提交
+- 执行mailTest模块的addQueueTest方法，参数是'user3', '测试邮件主题', '测试邮件内容' 
  - 属性subject @测试邮件主题
  - 属性objectType @mail
  - 属性createdBy @admin
-- 步骤3：includeMe=false
+- 执行mailTest模块的addQueueTest方法，参数是'user3, admin', '测试主题', '测试内容', '', false 属性toList @user3
+- 执行mailTest模块的addQueueTest方法，参数是'user3, admin', '测试主题2', '测试内容', '', true 
  - 属性toList @user3
-- 步骤4：includeMe=true
- - 属性toList @user3
-- 步骤5：抄送列表
+- 执行mailTest模块的addQueueTest方法，参数是'user1', '抄送测试', '抄送内容', 'user2, user3' 
  - 属性ccList @user2
-- 步骤6：长内容属性subject @长内容测试
-- 步骤7：简单字符属性subject @简单测试
 
 */
 
@@ -43,11 +40,12 @@ su('admin');
 $mailTest = new mailTest();
 $mailTest->objectModel->app->user->account = 'admin';
 
-// 5. 强制要求：必须包含至少7个测试步骤
-r($mailTest->addQueueTest('', '')) && p() && e('没有数据提交'); // 步骤1：异常处理-空参数
-r($mailTest->addQueueTest('user3', '测试邮件主题', '测试邮件内容')) && p('subject,objectType,createdBy') && e('测试邮件主题,mail,admin'); // 步骤2：正常添加
-r($mailTest->addQueueTest('user3,admin', '测试主题', '测试内容', '', false)) && p('toList') && e('user3,admin'); // 步骤3：includeMe=false
-r($mailTest->addQueueTest('user3,admin', '测试主题2', '测试内容', '', true)) && p('toList') && e('user3,admin'); // 步骤4：includeMe=true
-r($mailTest->addQueueTest('user1', '抄送测试', '抄送内容', 'user2,user3')) && p('ccList') && e('user2,user3'); // 步骤5：抄送列表
-r($mailTest->addQueueTest('user4', '长内容测试', str_repeat('这是一个很长的邮件内容。', 10))) && p('subject') && e('长内容测试'); // 步骤6：长内容
-r($mailTest->addQueueTest('user1', '简单测试', '简单内容')) && p('subject') && e('简单测试'); // 步骤7：简单字符
+// 确保没有blockUser配置影响测试结果
+unset($mailTest->objectModel->config->message->blockUser);
+
+// 5. 必须包含至少5个测试步骤
+r($mailTest->addQueueTest('', '')) && p() && e('没有数据提交');
+r($mailTest->addQueueTest('user3', '测试邮件主题', '测试邮件内容')) && p('subject,objectType,createdBy') && e('测试邮件主题,mail,admin');
+r($mailTest->addQueueTest('user3,admin', '测试主题', '测试内容', '', false)) && p('toList') && e('user3');
+r($mailTest->addQueueTest('user3,admin', '测试主题2', '测试内容', '', true)) && p('toList') && e('user3,admin');
+r($mailTest->addQueueTest('user1', '抄送测试', '抄送内容', 'user2,user3')) && p('ccList') && e('user2,user3');
