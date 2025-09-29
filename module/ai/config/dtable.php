@@ -46,9 +46,9 @@ $config->ai->dtable->prompts['createdDate']['title']    = $lang->ai->prompts->cr
 $config->ai->dtable->prompts['createdDate']['sortType'] = true;
 $config->ai->dtable->prompts['createdDate']['required'] = true;
 
-$config->ai->dtable->prompts['targetForm']['title']    = $lang->ai->prompts->targetForm;
-$config->ai->dtable->prompts['targetForm']['sortType'] = true;
-$config->ai->dtable->prompts['targetForm']['required'] = true;
+$config->ai->dtable->prompts['targetFormLabel']['title']    = $lang->ai->prompts->targetForm;
+$config->ai->dtable->prompts['targetFormLabel']['sortType'] = true;
+$config->ai->dtable->prompts['targetFormLabel']['required'] = true;
 
 $config->ai->dtable->prompts['actions']['type'] = 'actions';
 $config->ai->dtable->prompts['actions']['list'] = $config->ai->actionList;

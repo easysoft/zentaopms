@@ -754,7 +754,7 @@ class ai extends control
     public function promptExecute($promptId, $objectId, $auto = true)
     {
         $prompt = $this->ai->getPromptByID($promptId);
-        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
@@ -914,6 +914,24 @@ class ai extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => true));
+    }
+
+    /**
+     * Get testing location.
+     *
+     * @param  int    $promptID
+     * @param  string $module
+     * @param  string $targetForm
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestingLocation($promptID, $module, $targetForm)
+    {
+        $prompt = new stdclass();
+        $prompt->id         = $promptID;
+        $prompt->module     = $module;
+        $prompt->targetForm = $targetForm;
+        return $this->send(array('data' => $this->ai->getTestingLocation($prompt)));
     }
 
     /**

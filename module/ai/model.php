@@ -2057,19 +2057,6 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        if(!empty($prompt->model))
-        {
-            /* Check if model required by prompt is available, fallback to default (first enabled) model if not. */
-            $model = $this->getLanguageModel($prompt->model);
-            if(empty($model) || !$model->enabled)
-            {
-                $defaultModel = $this->getDefaultLanguageModel();
-                if(empty($defaultModel)) return -4;
-
-                $prompt->model = $defaultModel->id;
-            }
-        }
-
         $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;

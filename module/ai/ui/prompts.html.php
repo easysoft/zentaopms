@@ -22,7 +22,7 @@ foreach($prompts as $prompt)
     if($prompt->targetForm)
     {
         $targetFormPath = explode('.', $prompt->targetForm);
-        if(count($targetFormPath) == 2) $prompt->targetForm = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
+        if(count($targetFormPath) == 2) $prompt->targetFormLabel = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
     }
 }
 
