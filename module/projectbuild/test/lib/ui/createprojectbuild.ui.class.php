@@ -13,7 +13,7 @@ class createProjectBuildTester extends tester
     {
         $form = $this->initForm('projectbuild', 'create', array('projectID' => 1), 'appIframe-project');
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(2);
+        $form->wait(5);
 
         /*断言检查提示信息*/
         if($this->response('method') != 'view')
