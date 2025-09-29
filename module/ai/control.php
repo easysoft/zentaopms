@@ -465,8 +465,6 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
-        $model = empty($prompt->model) ? null : $this->ai->getLanguageModel($prompt->model);
-
         $this->view->prompt      = $prompt;
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
         $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
