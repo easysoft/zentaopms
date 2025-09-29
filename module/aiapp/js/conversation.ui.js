@@ -91,9 +91,14 @@ function takeOverToggles()
 window.initAIConversations = function(chat, initialParams)
 {
     aiPanel = aiPanel || zui.AIPanel.shared;
-    if(!aiPanel) return;
+    if(!aiPanel)
+    {
+        $('#noZaiConfigTip').removeClass('hidden');
+        return;
+    }
 
     aiPanel.toggleEmbed(true);
+    $('#noZaiConfigTip').remove();
 
     const currentPageID = getPageInfo().id;
     lastPageID        = currentPageID;

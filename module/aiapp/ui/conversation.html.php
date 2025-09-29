@@ -13,5 +13,17 @@ namespace zin;
 div
 (
     setClass('ai-conversations'),
+    div
+    (
+        setID('noZaiConfigTip'),
+        setClass('center hidden'),
+        setStyle('height', 'calc(100vh - 80px)'),
+        div
+        (
+            setClass('row items-center gap-2'),
+            icon('lightbulb text-warning'),
+            div(html(str_replace('{zaiConfigUrl}', createLink('zai', 'setting'), $lang->aiapp->langData->zaiConfigNotValid)))
+        )
+    ),
     on::init()->call('window.initAIConversations', $currentChatID, $params)
 );
