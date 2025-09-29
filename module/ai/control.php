@@ -468,7 +468,6 @@ class ai extends control
         $model = empty($prompt->model) ? null : $this->ai->getLanguageModel($prompt->model);
 
         $this->view->prompt      = $prompt;
-        $this->view->modelName   = empty($model) ? $this->lang->ai->models->default : (empty($model->name) ? $this->lang->ai->models->typeList[$model->type] : $model->name);
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
         $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -488,7 +487,7 @@ class ai extends control
     {
         if($_POST)
         {
-            $prompt   = form::data($this->config->ai->form->createPrompt)->add('model', 0)->get();
+            $prompt   = form::data($this->config->ai->form->createPrompt)->get();
             $promptID = $this->ai->createPrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -562,7 +561,7 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->model            = $data->model == 'default' ? 0 : $data->model;
+            $prompt->model            = $data->model;
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
 
@@ -580,7 +579,6 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID")));
         }
 
-        $this->view->models         = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
