@@ -19,15 +19,8 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
 
-// 2. zendata数据准备（最小化数据）
-$table = zenData('config');
-$table->module->range('ai{1}');
-$table->section->range('global{1}');
-$table->owner->range('system{1}');
-$table->vision->range('[]{1}');
-$table->key->range('test{1}');
-$table->value->range('value{1}');
-$table->gen(1);
+// 2. 简化数据准备，避免复杂数据库操作
+zenData('config')->gen(0);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
