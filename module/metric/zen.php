@@ -97,7 +97,7 @@ class metricZen extends metric
         foreach($calcList as $calc)
         {
             $calc->setDAO($dao);
-            if($calc->useSCM && $this->config->inQuickon)
+            if($calc->useSCM && ($this->config->inQuickon || $this->config->inCompose))
             {
                 $scm = $this->app->loadClass('scm');
                 $calc->setSCM($scm);
