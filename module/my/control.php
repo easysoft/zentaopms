@@ -111,7 +111,7 @@ class my extends control
      */
     public function contribute(string $mode = 'task', string $type = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
+        if((in_array($mode, array('issue', 'risk', 'reviewissue'))) && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
@@ -875,6 +875,48 @@ class my extends control
         $this->view->param       = $param;
         $this->view->mode        = 'risk';
         $this->view->projectList = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
+        $this->display();
+    }
+
+    public function reviewissue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->loadModel('reviewissue');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $queryID       = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=reviewissue&type=bysearch&param=myQueryID");
+        $this->my->buildReviewissueSearchForm($queryID, $actionURL, $currentMethod);
+
+        /* Get reviewissues by type*/
+        if($type == 'assignedBy')
+        {
+            $reviewissues = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'reviewissue');
+        }
+        elseif($type == 'bysearch')
+        {
+            $reviewissues = $this->my->getReviewissuesBySearch($queryID, $currentMethod, $orderBy, $pager);
+        }
+        else
+        {
+            $reviewissues = $this->reviewissue->getUserReviewissues($type, $this->app->user->account, $orderBy, $pager);
+        }
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        $this->view->title        = $this->lang->my->reviewissue;
+        $this->view->reviewissues = $reviewissues;
+        $this->view->users        = $this->user->getPairs('noclosed|noletter');
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->type         = $type;
+        $this->view->param        = $param;
+        $this->view->mode         = 'reviewissue';
+        $this->view->projectList  = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
         $this->display();
     }
 
