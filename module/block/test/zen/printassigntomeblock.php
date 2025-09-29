@@ -11,9 +11,9 @@ cid=1
 - 执行$count['todo'] @1
 - 执行$count['task'] @0
 - 执行$count['bug'] @10
-- 执行$count['story'] @2
-- 执行$count['requirement'] @2
-- 执行$count['risk'] @2
+- 执行$count['story'] @3
+- 执行$count['requirement'] @3
+- 执行$count['risk'] @1
 - 执行$count['issue'] @0
 - 执行$count['feedback'] @0
 - 执行$count['ticket'] @0
@@ -47,6 +47,7 @@ zenData('feedback')->gen(10);
 zenData('ticket')->gen(10);
 zenData('demand')->gen(10);
 zenData('todo')->gen(10);
+zenData('approval')->gen(10);
 su('admin');
 
 global $config, $tester;
@@ -70,9 +71,9 @@ r($count['review'])      && p() && e('5');
 r($count['todo'])        && p() && e('1');
 r($count['task'])        && p() && e('0');
 r($count['bug'])         && p() && e('10');
-r($count['story'])       && p() && e('2');
-r($count['requirement']) && p() && e('2');
-r($count['risk'])        && p() && e('2');
+r($count['story'])       && p() && e('3');
+r($count['requirement']) && p() && e('3');
+r($count['risk'])        && p() && e('1');
 r($count['issue'])       && p() && e('0');
 r($count['feedback'])    && p() && e('0');
 r($count['ticket'])      && p() && e('0');
