@@ -4,7 +4,6 @@
 /**
 
 title=测试 cneModel::instancesMetrics();
-timeout=0
 cid=0
 
 
