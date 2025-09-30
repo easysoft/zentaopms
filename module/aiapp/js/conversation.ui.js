@@ -124,7 +124,7 @@ window.onPageUnmount = function()
 
     if(aiPanel) aiPanel.toggleEmbed(false);
 
-    $('#toolbar > .toolbar').children('[zui-toggle-dropdown]').off('click.takeOverToggles').data(takeOverFlag, false);
+    $('#toolbar > .toolbar').data(takeOverFlag, false).children('[zui-toggle-dropdown]').off('click.takeOverToggles');
     window.parent.$('.aiapp-conversation-toggle').remove();
 };
 
