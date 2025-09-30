@@ -271,7 +271,7 @@ class chartTest
                 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)")
             );
         }
-        elseif(strpos($sql, 'for($i = 1; $i <= 55; $i++)') !== false || preg_match('/SELECT \d+ as id, 1 as count/', $sql)) {
+        elseif(preg_match('/SELECT \d+ as id, 1 as count/', $sql)) {
             // 大数据量情况，生成51个数据项，第51个为"其他"
             $data = array();
             for($i = 1; $i <= 50; $i++) {
@@ -808,5 +808,20 @@ class chartTest
         }
 
         return 'admin';
+    }
+
+    /**
+     * Test getFirstGroup method.
+     *
+     * @param  int $dimensionID
+     * @access public
+     * @return int|string
+     */
+    public function getFirstGroupTest(int $dimensionID)
+    {
+        $result = $this->objectModel->getFirstGroup($dimensionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
