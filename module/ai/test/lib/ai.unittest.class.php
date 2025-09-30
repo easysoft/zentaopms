@@ -864,51 +864,10 @@ class aiTest
      */
     public function countLatestMiniProgramsTest()
     {
-        // 如果没有可用的model对象，直接返回模拟数据
-        if(empty($this->objectModel)) {
-            return $this->getMockCountLatestMiniPrograms();
-        }
+        $result = $this->objectModel->countLatestMiniPrograms();
+        if(dao::isError()) return dao::getError();
 
-        try {
-            $result = $this->objectModel->countLatestMiniPrograms();
-            if(dao::isError()) {
-                // 在测试环境中模拟方法的行为
-                return $this->getMockCountLatestMiniPrograms();
-            }
-            return $result;
-        } catch (Exception $e) {
-            // 捕获异常，返回模拟数据以保证测试稳定性
-            return $this->getMockCountLatestMiniPrograms();
-        }
-    }
-
-    /**
-     * Get mock count of latest mini programs for testing.
-     *
-     * @access private
-     * @return int
-     */
-    private function getMockCountLatestMiniPrograms()
-    {
-        // 基于测试数据的设计模拟统计结果：
-        // 根据YAML文件配置：
-        // - 总计10条记录
-        // - createdDate: (-15D){3},(-2M){3},(-3M){2},(-6M){2}
-        // - published: 1{8},0{2}
-        // - deleted: 0{8},1{2}
-
-        // countLatestMiniPrograms方法统计条件：
-        // 1. deleted = '0'
-        // 2. published = '1'
-        // 3. createdDate >= date('Y-m-d H:i:s', strtotime('-1 months'))
-
-        // 符合条件的记录：
-        // - 最近15天且已发布且未删除的记录：3条
-        // - 2个月前、3个月前、6个月前的都不符合时间条件
-        // - 未发布的2条不符合条件
-        // - 已删除的2条不符合条件
-
-        return 3;
+        return $result;
     }
 
     /**
