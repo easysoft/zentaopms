@@ -1789,7 +1789,7 @@ class docModel extends model
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
                  ->set('name')->eq($doc->title)
                  ->where('doc')->eq($docID)
-                 ->andWhere('review')->eq(0)
+                 ->andWhere('status')->eq('draft')
                  ->exec();
         }
 
