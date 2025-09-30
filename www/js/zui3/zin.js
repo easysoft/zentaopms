@@ -1308,7 +1308,7 @@
                             const $oldMatchItems = $oldItems.filter(`[data-name="${name}"]`);
                             if($oldMatchItems.length)
                             {
-                                $oldMatchItems.replaceWith($items);
+                                try {$oldMatchItems.replaceWith($items);} catch (_) {}
                             }
                             else
                             {
