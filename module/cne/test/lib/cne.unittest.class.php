@@ -272,6 +272,9 @@ class cneTest
             return array();
         }
 
+        // 构建临时数组来模拟原方法中以k8name为键的初始结构
+        $tempMetrics = array();
+
         // 处理每个实例，生成模拟指标数据
         foreach($instances as $instance)
         {
@@ -311,7 +314,18 @@ class cneTest
                 $instanceMetric->disk->rate = 25.0;
             }
 
-            $instancesMetrics[$instance->id] = $instanceMetric;
+            $tempMetrics[] = $instanceMetric;
+        }
+
+        // 模拟原方法的最后一步：使用array_combine以id为键重新组织数组
+        if(!empty($tempMetrics))
+        {
+            $ids = array();
+            foreach($tempMetrics as $metric)
+            {
+                $ids[] = $metric->id;
+            }
+            $instancesMetrics = array_combine($ids, $tempMetrics);
         }
 
         return $instancesMetrics;
