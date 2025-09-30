@@ -317,6 +317,15 @@ class myTest
         return $tester->config->risk->search;
     }
 
+    /**
+     * 测试构建评审意见搜索表单。
+     * Test build reviewissue search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
     public function buildReviewissueSearchFormTest(int $queryID, string $actionURL): array
     {
         $this->objectModel->buildReviewissueSearchForm($queryID, $actionURL);
@@ -339,6 +348,25 @@ class myTest
     public function getRisksBySearchTest(int $queryID, string $type, string $orderBy): array
     {
         $objects = $this->objectModel->getRisksBySearch($queryID, $type, $orderBy , null);
+
+        if(dao::isError()) return dao::getError();
+
+        return array_keys($objects);
+    }
+
+    /**
+     * 通过搜索获取评审意见。
+     * Get reviewissues by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewissuesBySearchTest(int $queryID, string $type, string $orderBy): array
+    {
+        $objects = $this->objectModel->getReviewissuesBySearch($queryID, $type, $orderBy , null);
 
         if(dao::isError()) return dao::getError();
 
