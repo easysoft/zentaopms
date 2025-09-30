@@ -230,6 +230,11 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
+        if($this->config->inCompose)
+        {
+            $repoServers = $this->loadModel('pipeline')->getPairs($this->config->pipeline->checkRepoServers);
+            if(empty($repoServers)) unset($this->lang->execution->menu->devops);
+        }
 
         return true;
     }

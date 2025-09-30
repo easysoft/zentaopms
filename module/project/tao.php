@@ -1080,6 +1080,12 @@ class projectTao extends projectModel
                 if($lang->{$model}->dividerMenu) $lang->{$model}->dividerMenu = ',' . trim($lang->{$model}->dividerMenu, ',') . ',';
             }
 
+            if($this->config->inCompose)
+            {
+                $repoServers = $this->loadModel('pipeline')->getPairs($this->config->pipeline->checkRepoServers);
+                if(empty($repoServers)) unset($lang->{$model}->menu->devops);
+            }
+
             $lang->project->menu        = $lang->{$model}->menu;
             $lang->project->menuOrder   = $lang->{$model}->menuOrder;
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
