@@ -257,7 +257,7 @@ class actionTest
      */
     public function getByIdTest($actionID)
     {
-        $object = $this->objectModel->getById($actionID);
+        $object = $this->objectModel->getById((int)$actionID);
 
         if(dao::isError()) return dao::getError();
 
@@ -480,8 +480,10 @@ class actionTest
      */
     public function getDynamicByExecutionTest($executionID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
+        ob_start();
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
-        $objects = $this->objectModel->getDynamicByExecution($executionID, $account, $period, 'date_desc', 50, $date, $direction);
+        $objects = $this->objectModel->getDynamicByExecution((int)$executionID, $account, $period, 'date_desc', 50, $date, $direction);
+        ob_end_clean();
 
         if(dao::isError()) return dao::getError();
 
