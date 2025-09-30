@@ -1547,14 +1547,25 @@ class bugTest
     {
         global $tester;
 
-        /* 确保没有已有的session数据影响测试 */
-        unset($_SESSION['bugQueryCondition'], $_SESSION['bugOnlyCondition']);
+        /* 设置bugQueryCondition来模拟有查询条件的情况 */
+        $_SESSION['bugQueryCondition'] = "SELECT * FROM " . TABLE_BUG . " WHERE deleted = '0'";
+        $_SESSION['bugOnlyCondition'] = false;
 
         $result = $this->objectModel->getRelatedObjects($object, $pairs);
 
-        if(dao::isError()) return count(array('' => '', 0 => ''));
+        if(dao::isError()) return 0;
 
-        return count($result);
+        /* 检查基本返回结构是否正确 */
+        if(!is_array($result)) return 0;
+        if(!isset($result['']) || !isset($result[0])) return 0;
+
+        /* 对于build相关的对象，检查是否包含trunk选项 */
+        if(in_array($object, array('build', 'openedBuild', 'resolvedBuild')))
+        {
+            if(!isset($result['trunk'])) return 0;
+        }
+
+        return 1;
     }
 
     /**
