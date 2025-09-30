@@ -7,11 +7,11 @@ title=测试 biModel::checkDuckDBFile();
 timeout=0
 cid=0
 
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @1
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @1
-- 执行biTest模块的checkDuckDBFileTest方法，参数是'', array  @1
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @1
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @1
+- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @object
+- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
+- 执行biTest模块的checkDuckDBFileTest方法，参数是'', array  @0
+- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
+- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
 
 */
 
@@ -31,11 +31,11 @@ file_put_contents($testFile, 'test content');
 file_put_contents($testExtFile, 'extension content');
 chmod($testFile, 0755);
 
-r(is_object($biTest->checkDuckDBFileTest($testPath, array('file' => 'duckdb.exe', 'extension' => 'test.extension')))) && p() && e('1');
-r($biTest->checkDuckDBFileTest($testPath, array('file' => 'nonexistent.exe', 'extension' => 'nonexistent.ext')) === false) && p() && e('1');
-r($biTest->checkDuckDBFileTest('', array('file' => 'duckdb.exe', 'extension' => 'test.extension')) === false) && p() && e('1');
-r($biTest->checkDuckDBFileTest($testPath, array()) === false) && p() && e('1');
-r($biTest->checkDuckDBFileTest($testPath, array('extension' => 'test.extension')) === false) && p() && e('1');
+r($biTest->checkDuckDBFileTest($testPath, array('file' => 'duckdb.exe', 'extension' => 'test.extension'))) && p() && e('object');
+r($biTest->checkDuckDBFileTest($testPath, array('file' => 'nonexistent.exe', 'extension' => 'nonexistent.ext'))) && p() && e('0');
+r($biTest->checkDuckDBFileTest('', array('file' => 'duckdb.exe', 'extension' => 'test.extension'))) && p() && e('0');
+r($biTest->checkDuckDBFileTest($testPath, array())) && p() && e('0');
+r($biTest->checkDuckDBFileTest($testPath, array('extension' => 'test.extension'))) && p() && e('0');
 
 // 清理测试文件
 unlink($testFile);

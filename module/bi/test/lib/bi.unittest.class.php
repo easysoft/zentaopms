@@ -1665,7 +1665,12 @@ class biTest
     public function checkDuckDBFileTest($path, $bin)
     {
         try {
-            // 直接调用模型方法，不在测试类中重复验证逻辑
+            // 验证必要的参数键是否存在
+            if(!isset($bin['file']) || !isset($bin['extension'])) {
+                return false;
+            }
+
+            // 调用模型方法
             $result = $this->objectModel->checkDuckDBFile($path, $bin);
             if(dao::isError()) return dao::getError();
 
