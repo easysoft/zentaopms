@@ -17,6 +17,8 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 3) . '/control.php';
+include dirname(__FILE__, 3) . '/zen.php';
 include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
