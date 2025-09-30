@@ -1193,7 +1193,8 @@ class myModel extends model
     {
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
-        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
+        $this->loadModel('approval');
+        $pendingList    = $this->approval ? $this->approval->getPendingReviews('review') : array();
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         if($checkExists) return !empty($projectReviews);
