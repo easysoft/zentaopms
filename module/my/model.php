@@ -710,55 +710,6 @@ class myModel extends model
         return $risks;
     }
 
-    public function getReviewissuesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
-    {
-        $queryName = $type == 'contribute' ? 'contributeReviewissueQuery' : 'workReviewissueQuery';
-        if($queryID && $queryID != 'myQueryID')
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set($queryName, $query->sql);
-                $this->session->set($queryName . 'Form', $query->form);
-            }
-            else
-            {
-                $this->session->set($queryName, ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
-        }
-
-        $reviewissueQuery = $this->session->{$queryName};
-
-        if($type == 'contribute')
-        {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'reviewissue');
-            $reviewissues = $this->dao->select('*')->from(TABLE_REVIEWISSUE)
-                ->where($reviewissueQuery)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('createdBy',1)->eq($this->app->user->account)
-                ->orWhere('id')->in(array_keys($assignedByMe))
-                ->markRight(1)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id', false);
-        }
-        elseif($type == 'work')
-        {
-            $reviewissues = $this->dao->select('*')->from(TABLE_REVIEWISSUE)
-                ->where($reviewissueQuery)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('assignedTo')->eq($this->app->user->account)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id', false);
-        }
-        return $reviewissues;
-    }
-
     /**
      * 构建需求搜索表单。
      * Build Story search form.
@@ -1242,8 +1193,7 @@ class myModel extends model
     {
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
-        $this->loadModel('approval');
-        $pendingList    = $this->approval ? $this->approval->getPendingReviews('review') : array();
+        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         if($checkExists) return !empty($projectReviews);
