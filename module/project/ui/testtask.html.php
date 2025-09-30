@@ -14,6 +14,18 @@ jsVar('allTasks', $lang->testtask->allTasks);
 jsVar('pageSummary', sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount));
 jsVar('checkedAllSummary', $lang->testtask->checkedAllSummary);
 
+$productItems[] = array('text' => $lang->testtask->all, 'url' => createLink('project', 'testtask', array('projectID' => $project->id)));
+foreach($products as $currentProductID => $productName)
+{
+    $productItems[] = array('text' => $productName, 'url' => createLink('project', 'testtask', array('projectID' => $project->id, 'productID' => $currentProductID)));
+}
+
+$productDropdown = dropdown
+(
+    to('trigger', btn($productID ? zget($products, $productID) : $lang->testtask->all, setClass('ghost'))),
+    set::items($productItems)
+);
+
 featureBar
 (
     li
@@ -24,7 +36,8 @@ featureBar
             set('class', 'active'),
             $lang->testtask->browse
         )
-    )
+    ),
+    to::before($productDropdown),
 );
 
 $canModify = common::canModify('project', $project);
@@ -67,7 +80,7 @@ dtable
     set::taskData($tasks),
     set::userMap($users),
     set::orderBy($orderBy),
-    set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::plugins(array('cellspan')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footToolbar($footToolbar),
@@ -75,7 +88,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('project', 'testtask', "projectID={$project->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->testtask->noTesttask),
