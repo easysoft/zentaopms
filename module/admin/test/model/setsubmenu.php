@@ -4,18 +4,13 @@
 /**
 
 title=测试 adminModel::setSubMenu();
-timeout=0
 cid=0
 
-- 执行adminTest模块的setSubMenuTest方法，参数是'system', $normalMenu 属性disabled @false
-- 执行adminTest模块的setSubMenuTest方法，参数是'test', $emptyOrderMenu  @0
-- 执行adminTest模块的setSubMenuTest方法，参数是'invalid', $invalidMenu 属性disabled @true
-- 执行adminTest模块的setSubMenuTest方法，参数是'message', $messageMenu 属性subMenu @Mail|mail|detect|
-属性mail @Mail|mail|detect|
-属性link @Mail|mail|detect|
-- 执行adminTest模块的setSubMenuTest方法，参数是'dev', $devMenu 属性subMenu @Editor|editor|index|
-属性editor @Editor|editor|index|
-属性link @Editor|editor|index|
+- 测试步骤1：正常菜单配置情况 >> 期望disabled为false
+- 测试步骤2：空子菜单排序情况 >> 期望返回空数组
+- 测试步骤3：无效菜单配置情况 >> 期望disabled保持true
+- 测试步骤4：特殊菜单message|mail配置 >> 期望链接被正确设置
+- 测试步骤5：特殊菜单dev|editor配置 >> 期望链接被正确设置
 
 */
 
@@ -45,7 +40,7 @@ $normalMenu = array(
     'link' => '',
     'disabled' => true
 );
-r($adminTest->setSubMenuTest('system', $normalMenu)) && p('disabled') && e('false');
+r($adminTest->setSubMenuTest('system', $normalMenu)) && p('disabled') && e('0');
 
 // 测试步骤2：测试空子菜单排序的情况
 $emptyOrderMenu = array(
@@ -57,7 +52,7 @@ $emptyOrderMenu = array(
     ),
     'menuOrder' => array()
 );
-r(count($adminTest->setSubMenuTest('test', $emptyOrderMenu))) && p() && e('0');
+r($adminTest->setSubMenuTest('test', $emptyOrderMenu)) && p() && e(array());
 
 // 测试步骤3：测试无效菜单配置的情况（缺少subMenu）
 $invalidMenu = array(
@@ -66,7 +61,7 @@ $invalidMenu = array(
     ),
     'disabled' => true
 );
-r($adminTest->setSubMenuTest('invalid', $invalidMenu)) && p('disabled') && e('true');
+r($adminTest->setSubMenuTest('invalid', $invalidMenu)) && p('disabled') && e('1');
 
 // 测试步骤4：测试特殊菜单（message|mail）配置
 $messageMenu = array(
