@@ -4,11 +4,8 @@ class adminTest
     public function __construct()
     {
         global $tester;
-        $this->objectModel = null;
-        $this->user = null;
-
-        // 延迟初始化模型，避免构造函数中的数据库连接问题
-        // setSwitcherTest方法不需要数据库连接，完全使用模拟逻辑
+        $this->objectModel = $tester->loadModel('admin');
+        $this->user = $tester->loadModel('user');
     }
 
     /**
@@ -16,13 +13,24 @@ class adminTest
      * Test get api config in normal case.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function getApiConfigTest(): string
+    public function getApiConfigTest()
     {
-        // 在没有网络连接的情况下，getApiConfig会返回null并触发TypeError
-        // 这是预期的行为，所以测试失败是正常的
-        return 'Fail';
+        // 清空session以模拟首次请求
+        global $app;
+        $app->session->set('apiConfig', null);
+
+        // 抑制网络错误输出
+        ob_start();
+        $result = $this->objectModel->getApiConfig();
+        ob_end_clean();
+
+        // 检查是否有DAO错误
+        if(dao::isError()) return dao::getError();
+
+        // 返回null表示API配置获取失败，这在没有网络的情况下是正常的
+        return $result === null ? 'null' : 'config_obtained';
     }
 
     /**
@@ -30,9 +38,9 @@ class adminTest
      * Test get api config with valid cache.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function getApiConfigWithCacheTest(): string
+    public function getApiConfigWithCacheTest()
     {
         global $app;
 
@@ -46,11 +54,15 @@ class adminTest
         $app->session->set('apiConfig', $mockConfig);
 
         $result = $this->objectModel->getApiConfig();
+
+        // 检查是否有DAO错误
+        if(dao::isError()) return dao::getError();
+
         // 有缓存时应该直接返回缓存内容
         if(!empty($result) && isset($result->sessionID) && $result->sessionID == 'test_session_123') {
-            return 'Success';
+            return 'cached_config';
         }
-        return 'Fail';
+        return 'cache_miss';
     }
 
     /**
@@ -58,9 +70,9 @@ class adminTest
      * Test get api config with expired cache.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function getApiConfigExpiredTest(): string
+    public function getApiConfigExpiredTest()
     {
         global $app;
 
@@ -73,8 +85,16 @@ class adminTest
 
         $app->session->set('apiConfig', $expiredConfig);
 
-        // 过期配置会触发重新获取，在当前网络环境下会失败，但这是正常行为
-        return 'Success';
+        // 抑制网络错误输出
+        ob_start();
+        $result = $this->objectModel->getApiConfig();
+        ob_end_clean();
+
+        // 检查是否有DAO错误
+        if(dao::isError()) return dao::getError();
+
+        // 过期的配置应该触发重新获取，没有网络连接时应该返回null
+        return $result === null ? 'expired_refresh_failed' : 'expired_refresh_success';
     }
 
     /**
@@ -82,13 +102,36 @@ class adminTest
      * Test get api config with no response.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function getApiConfigNoResponseTest(): string
+    public function getApiConfigNoResponseTest()
     {
-        // 模拟无效域名会导致网络请求失败，getApiConfig返回null
-        // 这是预期的行为
-        return 'Fail';
+        global $app, $config;
+
+        // 清空session缓存
+        $app->session->set('apiConfig', null);
+
+        // 保存原始配置
+        $originalApiRoot = $config->admin->apiRoot ?? '';
+
+        // 设置无效的API根地址
+        $config->admin->apiRoot = 'http://invalid.domain.test.invalid';
+
+        // 抑制网络错误输出
+        ob_start();
+        $result = $this->objectModel->getApiConfig();
+        ob_end_clean();
+
+        // 恢复原始配置
+        if($originalApiRoot) {
+            $config->admin->apiRoot = $originalApiRoot;
+        }
+
+        // 检查是否有DAO错误
+        if(dao::isError()) return dao::getError();
+
+        // 无效域名会导致网络请求失败，getApiConfig返回null
+        return $result === null ? 'no_response' : 'unexpected_response';
     }
 
     /**
@@ -96,13 +139,25 @@ class adminTest
      * Test get api config with empty config.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function getApiConfigInvalidFormatTest(): string
+    public function getApiConfigInvalidFormatTest()
     {
-        // 模拟无效或空的配置格式会导致解析失败，getApiConfig返回null
-        // 这是预期的行为
-        return 'Fail';
+        global $app;
+
+        // 清空session缓存
+        $app->session->set('apiConfig', null);
+
+        // 抑制网络错误输出
+        ob_start();
+        $result = $this->objectModel->getApiConfig();
+        ob_end_clean();
+
+        // 检查是否有DAO错误
+        if(dao::isError()) return dao::getError();
+
+        // 无效或空的配置格式会导致解析失败，getApiConfig返回null
+        return $result === null ? 'invalid_format' : 'valid_format';
     }
 
     /**
@@ -115,7 +170,61 @@ class adminTest
      */
     public function checkWeakTest(string $account): bool
     {
-        $user   = $this->user->getById($account);
+        // 为了确保测试稳定，使用模拟用户对象而不是数据库查询
+        $mockUsers = array(
+            'weakuser1' => (object)array(
+                'id' => 1,
+                'account' => 'weakuser1',
+                'password' => 'e10adc3949ba59abbe56e057f20f883e', // md5('123456')
+                'mobile' => '18812341234',
+                'phone' => '88881234',
+                'birthday' => '1995-01-01'
+            ),
+            'weakuser2' => (object)array(
+                'id' => 2,
+                'account' => 'weakuser2',
+                'password' => '04b5f5c916d018ae4f097158f1c1892b', // md5('weakuser2')
+                'mobile' => '18888888888',
+                'phone' => '88889999',
+                'birthday' => '1990-05-15'
+            ),
+            'weakuser3' => (object)array(
+                'id' => 3,
+                'account' => 'weakuser3',
+                'password' => '679f352d0bf763184930cdf255068559', // md5('18812341234')
+                'mobile' => '18812341234',
+                'phone' => '12345678',
+                'birthday' => '1985-12-30'
+            ),
+            'weakuser4' => (object)array(
+                'id' => 4,
+                'account' => 'weakuser4',
+                'password' => 'f32e3b36152ebaac818f17e2ad7162ca', // md5('88881234')
+                'mobile' => '15987654321',
+                'phone' => '88881234',
+                'birthday' => '1992-08-20'
+            ),
+            'weakuser5' => (object)array(
+                'id' => 5,
+                'account' => 'weakuser5',
+                'password' => '658e93adf188f3bb869a402cea2d03b6', // md5('1995-01-01')
+                'mobile' => '18765432109',
+                'phone' => '55555555',
+                'birthday' => '1995-01-01'
+            ),
+            'stronguser' => (object)array(
+                'id' => 6,
+                'account' => 'stronguser',
+                'password' => '87e4d8b4a50416a761ebc80255226a59', // md5('ComplexP@ssw0rd!')
+                'mobile' => '13800138000',
+                'phone' => '99999999',
+                'birthday' => '1996-06-06'
+            )
+        );
+
+        if(!isset($mockUsers[$account])) return false;
+
+        $user = $mockUsers[$account];
         $result = $this->objectModel->checkWeak($user);
         if(dao::isError()) return dao::getError();
 
@@ -145,22 +254,18 @@ class adminTest
 
     /**
      * 测试获取有权限的链接。
-     * Test get the authorized link.
+     * Test get has priv link.
      *
-     * @param  string $menuKey
+     * @param  array $menu
      * @access public
      * @return array
      */
-    public function getHasPrivLinkTest(string $menuKey): array
+    public function getHasPrivLinkTest(array $menu): array
     {
-        global $lang;
-        $link = array();
-        foreach($lang->admin->menuList->$menuKey['subMenu'] as $subMenu)
-        {
-            $link = $this->objectModel->getHasPrivLink($subMenu);
-            if(!empty($link)) return $link;
-        }
-        return $link;
+        $result = $this->objectModel->getHasPrivLink($menu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -190,8 +295,8 @@ class adminTest
     {
         global $lang;
 
-        // 保存原始数据
-        $originalMenuList = isset($lang->admin->menuList) ? $lang->admin->menuList : null;
+        // 保存原始数据以便验证
+        $originalMenuList = isset($lang->admin->menuList) ? clone $lang->admin->menuList : null;
 
         // 执行checkPrivMenu方法
         $this->objectModel->checkPrivMenu();
@@ -199,23 +304,41 @@ class adminTest
         // 检查是否有错误
         if(dao::isError()) return dao::getError();
 
-        // 获取处理结果
+        // 获取处理结果并进行验证
         $result = array();
+        $result['success'] = 1; // 方法执行成功
+
         if(isset($lang->admin->menuList))
         {
-            $result['hasMenuList'] = true;
-            $result['menuCount'] = count(get_object_vars($lang->admin->menuList));
+            $result['hasMenuList'] = 1;
 
-            // 检查菜单项是否有link和disabled属性设置
-            $hasLinkedMenu = false;
-            $hasDisabledMenu = false;
+            // 检查菜单项是否都有order属性
+            $hasOrderAttribute = true;
+            $hasDisabledAttribute = true;
+            $orders = array();
+
             foreach($lang->admin->menuList as $menuKey => $menu)
             {
-                if(!empty($menu['link'])) $hasLinkedMenu = true;
-                if($menu['disabled']) $hasDisabledMenu = true;
+                if(!isset($menu['order'])) $hasOrderAttribute = false;
+                if(!isset($menu['disabled'])) $hasDisabledAttribute = false;
+                if(isset($menu['order'])) $orders[] = $menu['order'];
             }
-            $result['hasLinkedMenu'] = $hasLinkedMenu;
-            $result['hasDisabledMenu'] = $hasDisabledMenu;
+
+            $result['hasOrderAttribute'] = $hasOrderAttribute ? 1 : 0;
+            $result['hasDisabledAttribute'] = $hasDisabledAttribute ? 1 : 0;
+
+            // 检查菜单是否按order排序
+            $isSorted = ($orders === array_values($orders)) && ($orders === array_unique($orders));
+            $sortedOrders = $orders;
+            sort($sortedOrders);
+            $result['isSorted'] = ($orders === $sortedOrders) ? 1 : 0;
+        }
+        else
+        {
+            $result['hasMenuList'] = 0;
+            $result['hasOrderAttribute'] = 0;
+            $result['hasDisabledAttribute'] = 0;
+            $result['isSorted'] = 0;
         }
 
         return $result;
@@ -481,7 +604,11 @@ class adminTest
      */
     public function checkInternetTest(string $url = '', int $timeout = 1)
     {
+        // 捕获和清理任何不相关的输出
+        ob_start();
         $result = $this->objectModel->checkInternet($url, $timeout);
+        ob_end_clean();
+
         if(dao::isError()) return dao::getError();
 
         return $result ? '1' : '0';

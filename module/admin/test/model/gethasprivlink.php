@@ -1,44 +1,35 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 adminModel->getHasPrivLink();
+title=测试 adminModel::getHasPrivLink();
 timeout=0
-cid=1
+cid=0
 
-- 获取功能配置第一个有权限访问的链接
- -  @action
- - 属性1 @trash
-- 获取人员管理第一个有权限访问的链接
- -  @dept
- - 属性1 @browse
-- 获取模型配置第一个有权限访问的链接
+- 测试步骤1：正常菜单有权限链接测试
+ -  @company
+ - 属性1 @index
+- 测试步骤2：没有链接的菜单测试 @0
+- 测试步骤3：有链接但无权限的菜单备选链接测试
+ -  @company
+ - 属性1 @index
+- 测试步骤4：自定义模块索引权限测试
  -  @custom
- - 属性1 @required
-- 获取功能配置第一个有权限访问的链接
- -  @custom
- - 属性1 @set
-- 获取通知设置第一个有权限访问的链接
- -  @mail
- - 属性1 @edit
-- 获取二次开发第一个有权限访问的链接
- -  @dev
- - 属性1 @api
+ - 属性1 @index
+- 测试步骤5：空链接的菜单测试 @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
 
-zenData('user')->gen(5);
 su('admin');
 
-$adminTester = new adminTest();
-$subMenu['system'] = $lang->admin->menuList->system['subMenu'];
-$menuList = array('system', 'company', 'model', 'feature', 'message', 'dev');
+$adminTest = new adminTest();
 
-r($adminTester->getHasPrivLinkTest($menuList[0])) && p('0,1') && e('action,trash');     // 获取功能配置第一个有权限访问的链接
-r($adminTester->getHasPrivLinkTest($menuList[1])) && p('0,1') && e('dept,browse');     // 获取人员管理第一个有权限访问的链接
-r($adminTester->getHasPrivLinkTest($menuList[2])) && p('0,1') && e('custom,required'); // 获取模型配置第一个有权限访问的链接
-r($adminTester->getHasPrivLinkTest($menuList[3])) && p('0,1') && e('custom,set');      // 获取功能配置第一个有权限访问的链接
-r($adminTester->getHasPrivLinkTest($menuList[4])) && p('0,1') && e('mail,edit');       // 获取通知设置第一个有权限访问的链接
-r($adminTester->getHasPrivLinkTest($menuList[5])) && p('0,1') && e('dev,api');         // 获取二次开发第一个有权限访问的链接
+r($adminTest->getHasPrivLinkTest(array('link' => 'System|company|index|'))) && p('0,1') && e('company,index');        // 测试步骤1：正常菜单有权限链接测试
+r($adminTest->getHasPrivLinkTest(array())) && p() && e('0');                                                          // 测试步骤2：没有链接的菜单测试
+r($adminTest->getHasPrivLinkTest(array('link' => 'Invalid|invalid|method|', 'links' => array('company|index|')))) && p('0,1') && e('company,index');    // 测试步骤3：有链接但无权限的菜单备选链接测试
+r($adminTest->getHasPrivLinkTest(array('link' => 'System|custom|index|'))) && p('0,1') && e('custom,index');        // 测试步骤4：自定义模块索引权限测试
+r($adminTest->getHasPrivLinkTest(array('link' => ''))) && p() && e('0');                                             // 测试步骤5：空链接的菜单测试
