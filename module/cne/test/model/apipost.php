@@ -18,7 +18,7 @@ cid=0
  - 属性message @Bad request
 - 执行cneTest模块的apiPostTest方法，参数是'/api/cne/app/network-error', array 
  - 属性code @600
- - 属性message @CNE服务器错误
+ - 属性message @CNE服务器出错
 
 */
 
@@ -32,4 +32,4 @@ r($cneTest->apiPostTest('/api/cne/app/create', (object)array('name' => 'new-app'
 r($cneTest->apiPostTest('/api/cne/app/custom-host', array(), array(), 'http://custom-host:8080')) && p('data:host') && e('http://custom-host:8080');
 r($cneTest->apiPostTest('/api/cne/app/custom-host', array(), array(), 'http://custom-host:8080')) && p('data:method') && e('POST');
 r($cneTest->apiPostTest('/api/cne/app/error', array('invalid' => 'data'))) && p('code,message') && e('400,Bad request');
-r($cneTest->apiPostTest('/api/cne/app/network-error', array())) && p('code,message') && e('600,CNE服务器错误');
+r($cneTest->apiPostTest('/api/cne/app/network-error', array())) && p('code,message') && e('600,CNE服务器出错');
