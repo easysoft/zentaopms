@@ -486,7 +486,7 @@ $lang->ai->miniPrograms->placeholder->name    = '请输入通用智能体名称'
 $lang->ai->miniPrograms->placeholder->desc    = '请输入通用智能体简介';
 $lang->ai->miniPrograms->placeholder->default = '请输入填写提示，默认为“请输入”';
 $lang->ai->miniPrograms->placeholder->input   = '请输入';
-$lang->ai->miniPrograms->placeholder->prompt  = '请输入禅道智能体设计';
+$lang->ai->miniPrograms->placeholder->prompt  = '请输入提词设计';
 $lang->ai->miniPrograms->placeholder->asking  = '继续追问';
 
 $lang->ai->miniPrograms->deleteFieldTip = '您确定删除该字段吗？';
@@ -508,9 +508,9 @@ $lang->ai->miniPrograms->field->preview             = '预览区';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';
-$lang->ai->miniPrograms->field->prompterDesign      = '禅道智能体设计';
+$lang->ai->miniPrograms->field->prompterDesign      = '提词设计';
 $lang->ai->miniPrograms->field->prompterDesignTip   = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
-$lang->ai->miniPrograms->field->prompterPreview     = '禅道智能体预览';
+$lang->ai->miniPrograms->field->prompterPreview     = '提词预览';
 $lang->ai->miniPrograms->field->generateResult      = '生成结果';
 $lang->ai->miniPrograms->field->resultPreview       = '结果预览';
 
@@ -539,7 +539,7 @@ $lang->ai->featureBar['miniprograms']['createdByMe'] = '由我创建';
 
 $lang->ai->miniPrograms->publishedOptions   = array('未发布', '已发布');
 $lang->ai->miniPrograms->optionName         = '选项名称';
-$lang->ai->miniPrograms->promptTemplate     = '禅道智能体模板';
+$lang->ai->miniPrograms->promptTemplate     = '提词模板';
 $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
 $lang->ai->miniPrograms->summary            = '本页共 %s 个通用智能体。';
 $lang->ai->miniPrograms->generate           = '生成';

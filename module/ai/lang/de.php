@@ -484,9 +484,9 @@ $lang->ai->miniPrograms->unpublishedTip      = 'The general agent you are using 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = 'Please enter a small general agent name';
 $lang->ai->miniPrograms->placeholder->desc    = 'Please enter a brief introduction to the general agents';
-$lang->ai->miniPrograms->placeholder->default = 'Please fill in the zenTao agent, the default is "please enter"';
+$lang->ai->miniPrograms->placeholder->default = 'Please fill in the prompt, the default is "please enter"';
 $lang->ai->miniPrograms->placeholder->input   = 'Please enter';
-$lang->ai->miniPrograms->placeholder->prompt  = 'Please enter zenTao agent design';
+$lang->ai->miniPrograms->placeholder->prompt  = 'Please enter prompt design';
 $lang->ai->miniPrograms->placeholder->asking  = 'Continue asking';
 
 $lang->ai->miniPrograms->deleteFieldTip = 'Are you sure to delete this field? ';
@@ -508,9 +508,9 @@ $lang->ai->miniPrograms->field->preview           = 'Preview area';
 $lang->ai->miniPrograms->field->option            = 'Options';
 $lang->ai->miniPrograms->field->contentDebugging  = 'Content debugging';
 $lang->ai->miniPrograms->field->contentDebuggingTip = 'Please enter the field here to debug.';
-$lang->ai->miniPrograms->field->prompterDesign    = 'ZenTao agent design';
+$lang->ai->miniPrograms->field->prompterDesign    = 'Prompt design';
 $lang->ai->miniPrograms->field->prompterDesignTip = 'The <> symbol is used to reference the configured field. Space is used before and after <>.';
-$lang->ai->miniPrograms->field->prompterPreview   = 'ZenTao agent preview';
+$lang->ai->miniPrograms->field->prompterPreview   = 'Prompt preview';
 $lang->ai->miniPrograms->field->generateResult    = 'Generate result';
 $lang->ai->miniPrograms->field->resultPreview     = 'Result Preview';
 
@@ -539,7 +539,7 @@ $lang->ai->featureBar['miniprograms']['createdByMe'] = 'Created by me';
 
 $lang->ai->miniPrograms->publishedOptions   = array('unpublished', 'published');
 $lang->ai->miniPrograms->optionName         = 'Option name';
-$lang->ai->miniPrograms->promptTemplate     = 'ZenTao Agent template';
+$lang->ai->miniPrograms->promptTemplate     = 'Prompt template';
 $lang->ai->miniPrograms->fieldConfiguration = 'Field configuration';
 $lang->ai->miniPrograms->summary            = 'There are %s small general agents on this page.';
 $lang->ai->miniPrograms->generate           = 'Generate';
