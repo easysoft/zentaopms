@@ -351,6 +351,7 @@ class actionTest
      */
     public function getDynamicByExecutionTest($executionID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
+        ob_start();
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
         $objects = $this->objectModel->getDynamicByExecution((int)$executionID, $account, $period, 'date_desc', 50, $date, $direction);
         if(dao::isError()) return 0;
