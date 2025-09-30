@@ -181,7 +181,7 @@ class aiTest
      * @access public
      * @return mixed
      */
-    public function getDefaultLanguageModelTest()
+    public function getDefaultLanguageModelTest($mockData = null)
     {
         // 使用反射来测试私有方法
         $method = new ReflectionMethod($this->objectModel, 'getDefaultLanguageModel');
