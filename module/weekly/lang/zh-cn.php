@@ -51,7 +51,7 @@ $lang->weekly->builtInScopes['rnd']['project'] = '项目';
 $lang->weekly->builtInCategoryList['month']     = '月报';
 $lang->weekly->builtInCategoryList['week']      = '周报';
 $lang->weekly->builtInCategoryList['day']       = '日报';
-$lang->weekly->builtInCategoryList['milestone'] = '里程碑';
+$lang->weekly->builtInCategoryList['milestone'] = '里程碑报告';
 
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV 计划完成的工作</h2>
