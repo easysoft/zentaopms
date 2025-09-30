@@ -4145,8 +4145,7 @@ $config->bi->builtin->metrics[] = array
     'definition' => "所有风险个数求和\n指派给为某人\n过滤已删除的风险\n过滤已关闭的风险\n过滤已删除项目的风险"
 );
 
-$config->bi->builtin->metrics[] = array
-(
+$config->bi->builtin->metrics[] = array(
     'name'       => '按人员统计的被指派的评审意见数',
     'alias'      => '被指派的评审意见数',
     'code'       => 'count_of_assigned_reviewissue_in_user',
