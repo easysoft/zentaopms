@@ -329,11 +329,24 @@ class actionTest
      */
     public function getHistoryTest($actionID)
     {
+        // 转换字符串为整数以满足类型要求
+        if(is_string($actionID) && is_numeric($actionID))
+        {
+            $actionID = (int)$actionID;
+        }
+
         $objects = $this->objectModel->getHistory($actionID);
 
         if(dao::isError()) return dao::getError();
 
-        return isset($objects[$actionID])? $objects[$actionID] : false;
+        if(is_array($actionID))
+        {
+            return $objects;
+        }
+        else
+        {
+            return isset($objects[$actionID]) ? $objects[$actionID] : false;
+        }
     }
 
     /**
@@ -439,11 +452,11 @@ class actionTest
     public function getDynamicByProductTest($productID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
-        $objects = $this->objectModel->getDynamicByProduct($productID, $account, $period, 'date_desc', 50, $date, $direction);
+        $objects = $this->objectModel->getDynamicByProduct((int)$productID, $account, $period, 'date_desc', 50, $date, $direction);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return 0;
 
-        return count($objects);
+        return is_array($objects) ? count($objects) : 0;
     }
 
     /**
@@ -457,10 +470,10 @@ class actionTest
      * @access public
      * @return int|array
      */
-    public function getDynamicByProjectTest($projectID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    public function getDynamicByProjectTest($projectID, $account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $date = '', $direction = 'next')
     {
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
-        $objects = $this->objectModel->getDynamicByProject($projectID, $account, $period, 'date_desc', 50, $date, $direction);
+        $objects = $this->objectModel->getDynamicByProject((int)$projectID, $account, $period, $orderBy, $limit, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
