@@ -21,6 +21,7 @@ $lang->my->execution       = "My {$lang->execution->common}s";
 $lang->my->audit           = 'Review';
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
+$lang->my->reviewissue     = 'My Review Issue';
 $lang->my->profile         = 'My Profile';
 $lang->my->dynamic         = 'My Dynamics';
 $lang->my->team            = 'My Team';

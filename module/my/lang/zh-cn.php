@@ -21,6 +21,7 @@ $lang->my->execution       = "我的{$lang->execution->common}";
 $lang->my->audit           = '审批';
 $lang->my->issue           = '我的问题';
 $lang->my->risk            = '我的风险';
+$lang->my->reviewissue     = '我的评审意见';
 $lang->my->profile         = '我的档案';
 $lang->my->dynamic         = '我的动态';
 $lang->my->team            = '团队';
