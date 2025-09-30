@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(255) NULL,
-  `createdBy` varchar(30) NOT NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
