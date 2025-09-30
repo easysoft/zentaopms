@@ -350,10 +350,11 @@ $(() => {
         let userAvatarProps;
         const aiPanel = zui.AIPanel.init(
         {
-            store:    aiStore,
-            position: {left: 24, top: 24, bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
-            langData: langData,
-            getAvatar: (info, props) =>
+            store            : aiStore,
+            position         : {bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
+            maximizedPosition: {left: 'calc(var(--zt-menu-width) + 4px)', top: 4, bottom: 'calc(var(--zt-apps-bar-height) + 4px)', right: 16},
+            langData         : langData,
+            getAvatar        : (info, props) =>
             {
                 if(info.role === 'user')
                 {
@@ -363,12 +364,12 @@ $(() => {
                     {
                         userAvatarProps =
                         {
-                            text: $avatar.find('.avatar-text').text(),
-                            code: window.config.account,
-                            src: $avatar.find('img').attr('src'),
-                            icon: undefined,
+                            text      : $avatar.find('.avatar-text').text(),
+                            code      : window.config.account,
+                            src       : $avatar.find('img').attr('src'),
+                            icon      : undefined,
                             background: $avatar.css('backgroundColor'),
-                            foreColor: $avatar.css('color'),
+                            foreColor : $avatar.css('color'),
                         };
                         return userAvatarProps;
                     }
