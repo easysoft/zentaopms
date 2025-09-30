@@ -410,6 +410,11 @@ class yaml
     public function gen($rows, $isClear = true, $useCache = true)
     {
         list($runFileDir, $runFileName) = $this->getScriptPathAndName();
+        if($this->tableName == 'company' && $rows === 0)
+        {
+            echo 'the table company is not empty!' . PHP_EOL;
+            return false;
+        }
 
         $sqlPath    = sprintf("%s%sdata%ssql%s%s_%s_zd.sql", $runFileDir, DS, DS, DS, $this->tableName, $runFileName);
         $scriptPath = sprintf("%s%s%s.php", $runFileDir, DS, $runFileName);
