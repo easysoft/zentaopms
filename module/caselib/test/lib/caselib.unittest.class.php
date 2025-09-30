@@ -273,7 +273,11 @@ class caselibTest
      */
     public function setLibMenuTest(array $libraries = array(), int $libID = 0): bool
     {
+        // Capture any warnings/errors that might occur during cookie setting
+        ob_start();
         $result = $this->objectModel->setLibMenu($libraries, $libID);
+        $output = ob_get_clean();
+
         if(dao::isError()) return dao::getError();
 
         return $result;

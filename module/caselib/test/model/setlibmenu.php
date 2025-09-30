@@ -18,15 +18,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 
-// Skip database operations and user login for this test
+// Initialize test environment
 global $tester;
 if(!isset($tester->app->user)) $tester->app->user = new stdClass();
 $tester->app->user->account = 'admin';
+if(!isset($tester->session)) $tester->session = new stdClass();
 
 $caselibTest = new caselibTest();
 
-r($caselibTest->setLibMenuTest(array(1 => '用例库1', 2 => '用例库2'), 1)) && p() && e(1);
-r($caselibTest->setLibMenuTest(array(), 1)) && p() && e(1);
-r($caselibTest->setLibMenuTest(array(), 999)) && p() && e(1);
-r($caselibTest->setLibMenuTest(array(1 => '用例库1', 2 => '用例库2'), 999)) && p() && e(1);
-r($caselibTest->setLibMenuTest(array(), 0)) && p() && e(1);
+r($caselibTest->setLibMenuTest(array(1 => '用例库1', 2 => '用例库2'), 1)) && p() && e('1');
+r($caselibTest->setLibMenuTest(array(), 1)) && p() && e('1');
+r($caselibTest->setLibMenuTest(array(), 999)) && p() && e('1');
+r($caselibTest->setLibMenuTest(array(1 => '用例库1', 2 => '用例库2'), 999)) && p() && e('1');
+r($caselibTest->setLibMenuTest(array(), 0)) && p() && e('1');
