@@ -53,6 +53,7 @@ su('admin');
 global $config, $tester;
 $config->URAndSR  = 1;
 $config->enableER = 1;
+$config->edition  = 'ipd';
 
 $block = new stdclass();
 $block->params = json_decode('{"todoCount":"20","taskCount":"20","bugCount":"20","riskCount":"20","issueCount":"20","storyCount":"20","reviewCount":"20","meetingCount":"20","feedbackCount":"20"}');
