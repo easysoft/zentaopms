@@ -45,6 +45,7 @@ formPanel
     ),
     formGroup
     (
+        setID('typeBox'),
         set::width('1/2'),
         set::label($lang->testtask->type),
         set::name('type[]'),
