@@ -278,7 +278,7 @@ class myZen extends my
 
                 /* Get the number of reviewissues assigned to me. */
                 $pager->recTotal = 0;
-                $issues = $this->loadModel('reviewissue')->getUserReviewissues('assignedTo', $this->app->user->account, 'id_desc', $pager);
+                $this->loadModel('reviewissue')->getUserReviewissues('assignedTo', $this->app->user->account, 'id_desc', $pager);
                 $count['reviewissue'] = $pager->recTotal;
 
                 /* Get the number of nc assigned to me. */

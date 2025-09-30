@@ -14,8 +14,8 @@ class myZenTest
     }
 
     /**
-     * 获取批量创建需求的表单字段。
-     * Get form fields for batch create.
+     * 获取待处理各项数据。
+     * Get work count.
      *
      * @param  int    $recTotal
      * @param  string $recPerPage
@@ -33,6 +33,31 @@ class myZenTest
         $method->setAccessible(true);
 
         $count = $method->invokeArgs($this->myZenTest->newInstance(), [$recTotal, $recPerPage, $pageID]);
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 获取收费版待处理各项数据。
+     * Get work count not in open edition.
+     *
+     * @param  int    $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
+     * @access public
+     * @return array
+     */
+    public function showWorkCountNotInOpenTest(object $pager): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'work';
+
+        $method = $this->myZenTest->getMethod('showWorkCountNotInOpen');
+        $method->setAccessible(true);
+
+        $count = $method->invokeArgs($this->myZenTest->newInstance(), [array(), $pager]);
 
         if(dao::isError()) return dao::getError();
         return $count;
