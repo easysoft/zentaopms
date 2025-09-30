@@ -81,6 +81,7 @@ class repo extends control
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
             $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
+            if($this->config->inCompose && $method == 'create') $method = 'createRepo';
             return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
@@ -134,7 +135,7 @@ class repo extends control
         $this->view->projects      = $projects;
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
-        $this->view->repoServers   = $this->pipeline->getPairs('gitlab,gitea,gogs');
+        $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
 
         $this->display();
     }
