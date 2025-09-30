@@ -858,20 +858,25 @@ class actionTest
         {
             if($dynamic->objectType == 'user') continue; //过滤掉用户动态。
 
+            /* 获取原始actor字符串，防止对象被修改 */
+            $actorName = is_object($dynamic->actor) ? $dynamic->actor->account : $dynamic->actor;
+
             /* 模拟zget函数：如果存在则返回，否则返回空字符串 */
-            $simplifyUser = isset($simplifyUsers[$dynamic->actor]) ? $simplifyUsers[$dynamic->actor] : '';
+            $simplifyUser = isset($simplifyUsers[$actorName]) ? $simplifyUsers[$actorName] : '';
             $actor = $simplifyUser;
             if(empty($simplifyUser))
             {
                 $actor = new stdclass();
                 $actor->id       = 0;
-                $actor->account  = $dynamic->actor;
-                $actor->realname = $dynamic->actor;
+                $actor->account  = $actorName;
+                $actor->realname = $actorName;
                 $actor->avatar   = '';
             }
 
-            $dynamic->actor = $actor;
-            $actions[]      = $dynamic;
+            /* 创建动态对象的副本避免修改原对象 */
+            $newDynamic = clone $dynamic;
+            $newDynamic->actor = $actor;
+            $actions[]      = $newDynamic;
         }
 
         return $actions;
