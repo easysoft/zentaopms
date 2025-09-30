@@ -243,7 +243,35 @@ class adminTest
      */
     public function getMenuKeyTest(string $moduleName, string $methodName, array $params = array()): string
     {
-        global $app;
+        global $app, $config;
+
+        // 确保menuGroup配置存在
+        if(!isset($config->admin->menuGroup))
+        {
+            $config->admin->menuGroup = array();
+            $config->admin->menuGroup['system']        = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'cache|setting', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'admin|metriclib', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
+            $config->admin->menuGroup['company']       = array('dept', 'company', 'user', 'group', 'tutorial');
+            $config->admin->menuGroup['switch']        = array('admin|setmodule');
+            $config->admin->menuGroup['model']         = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
+            $config->admin->menuGroup['feature']       = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
+            $config->admin->menuGroup['message']       = array('mail', 'webhook', 'sms', 'message');
+            $config->admin->menuGroup['dev']           = array('dev', 'entry', 'editor');
+            $config->admin->menuGroup['extension']     = array('extension');
+            $config->admin->menuGroup['convert']       = array('convert');
+            $config->admin->menuGroup['ai']            = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|modelcreate', 'ai|modelview', 'ai|modeledit', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit', 'ai|miniprograms', 'ai|createminiprogram', 'ai|editminiprogram', 'ai|configuredminiprogram', 'ai|editminiprogramcategory', 'ai|miniprogramview', 'ai|assistants', 'ai|assistantcreate', 'ai|assistantview', 'ai|assistantedit');
+            $config->admin->menuGroup['adminregister'] = array('admin|register');
+        }
+
+        // 确保menuModuleGroup配置存在（custom|required和custom|set需要）
+        if(!isset($config->admin->menuModuleGroup))
+        {
+            $config->admin->menuModuleGroup = array();
+            $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
+            $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
+            $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'epic', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
+            $config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'epic', 'requirement', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
+        }
+
         $app->rawModule = $moduleName;
         $app->rawMethod = $methodName;
         $app->rawParams = $params;
@@ -494,6 +522,7 @@ class adminTest
         // 处理空参数情况 - 根据实际方法实现，空值应该返回null
         if(empty($currentMenuKey))
         {
+            $this->objectModel->setSwitcher($currentMenuKey);
             return null; // 对应测试中的 e('~~')
         }
 
@@ -568,11 +597,15 @@ class adminTest
                 if($config->vision == 'lite' && !in_array($menuKey, $config->admin->liteMenuList)) continue;
 
                 $class = $menuKey == $currentMenuKey ? "active" : '';
-                if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
 
-                $link = $menuGroup['disabled'] ? '###' : $menuGroup['link'];
+                // 安全检查数组键是否存在
+                $disabled = isset($menuGroup['disabled']) ? $menuGroup['disabled'] : false;
+                if($disabled) $class .= ' disabled not-clear-menu';
+
+                $link = $disabled ? '###' : (isset($menuGroup['link']) ? $menuGroup['link'] : '#');
                 $svgPath = $config->webRoot . "static/svg/admin-{$menuKey}.svg";
-                $output .= "<li class='$class'><a href='$link'><img src='$svgPath'/>{$menuGroup['name']}</a></li>";
+                $menuName = isset($menuGroup['name']) ? $menuGroup['name'] : ucfirst($menuKey);
+                $output .= "<li class='$class'><a href='$link'><img src='$svgPath'/>{$menuName}</a></li>";
             }
             $output .= "</ul></div>";
 
