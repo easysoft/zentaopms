@@ -138,7 +138,7 @@ class projectModel extends model
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
-            ->orWhere('t3.user')->eq($this->app->user->account)
+            ->orWhere('(t3.user')->eq($this->app->user->account)
             ->andWhere('t3.deleted')->eq(0)
             ->markRight(1)
             ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
