@@ -274,7 +274,7 @@ class myModel extends model
 
         if($objectType == 'task') return $this->getTaskAssignedByMe($pager, $orderBy, $objectIdList);
         if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'bug') return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
-        if($objectType == 'risk' || $objectType == 'issue' || $objectType == 'nc')
+        if(in_array($objectType, array('risk', 'issue', 'nc')))
         {
             return $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -588,7 +588,6 @@ class myModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type risk|contribute
      * @access public
      * @return void
      */
@@ -615,6 +614,39 @@ class myModel extends model
         unset($this->config->risk->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->risk->search);
+    }
+
+    /*
+     * 构建评审意见搜索表单。
+     * Build reviewissue search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildReviewissueSearchForm(int $queryID, string $actionURL): void
+    {
+        $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+        $queryName = $this->app->rawMethod . 'Reviewissue';
+
+        $this->app->loadConfig('reviewissue');
+        $this->config->reviewissue->search['module']    = $queryName;
+        $this->config->reviewissue->search['actionURL'] = $actionURL;
+        $this->config->reviewissue->search['queryID']   = $queryID;
+
+        $this->config->reviewissue->search['params']['project']['values'] = array('') + $projects;
+
+        if(!isset($this->config->reviewissue->search['fields'])) $this->config->reviewissue->search['fields'] = array();
+        unset($this->config->reviewissue->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->reviewissue->search);
     }
 
     /**
@@ -1161,7 +1193,8 @@ class myModel extends model
     {
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
-        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
+        $this->loadModel('approval');
+        $pendingList    = $this->approval ? $this->approval->getPendingReviews('review') : array();
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         if($checkExists) return !empty($projectReviews);
