@@ -842,25 +842,20 @@ class actionTest
      * 测试搭建动态的日期分组。
      * Test build date group by actions.
      *
+     * @param  array  $actions
      * @param  string $direction
-     * @param  string $type
      * @param  string $orderBy
-     * @param  string $rawModule
      * @access public
      * @return array
      */
-    public function buildDateGroupTest(string $direction = 'next', string $type = 'today', string $orderBy = 'date_desc', string $rawModule = 'my'): array
+    public function buildDateGroupTest(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
-        $actions = $this->objectModel->getDynamic('all', $type);
-
-        global $tester;
-        $tester->app->rawModule = $rawModule;
         $objects = $this->objectModel->buildDateGroup($actions, $direction, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        if(!$objects) $objects = array(array());
-        return array('dateCount' => count($objects), 'dateActions' => count($objects, true) - count($objects));
+        if(!$objects) $objects = array();
+        return array('dateCount' => count($objects), 'dateActions' => count($objects, COUNT_RECURSIVE) - count($objects));
     }
 
     /**
