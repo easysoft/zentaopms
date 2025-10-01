@@ -9,8 +9,8 @@ class pivotTest
     {
         global $tester;
 
-        // 直接使用Mock以避免数据库连接问题
-        $useMock = true;
+        // 先尝试标准初始化，如果失败再使用Mock
+        $useMock = false;
 
         if(!$useMock) {
             // 尝试标准初始化，如果失败则使用Mock
@@ -1290,6 +1290,17 @@ class pivotTest
                         return array();
                     }
                 }
+
+                public function getPivotDataByID($id)
+                {
+                    // 模拟基于测试数据的透视表查询
+                    $testData = array(
+                        1001 => (object)array('id' => 1001, 'name' => '完成项目工时透视表', 'group' => 85, 'deleted' => '0'),
+                        1003 => (object)array('id' => 1003, 'name' => '产品完成度统计表', 'group' => 59, 'deleted' => '0'),
+                    );
+
+                    return isset($testData[$id]) ? $testData[$id] : false;
+                }
             };
             $this->objectTao = null;
         }
@@ -1558,12 +1569,10 @@ class pivotTest
      */
     public function getPivotDataByIDTest($id)
     {
-        // 直接查询pivot表以避免TAO层复杂查询
-        $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
+        $result = $this->objectModel->getPivotDataByID($id);
+        if(dao::isError()) return dao::getError();
 
-        if(!$pivot) return false;
-
-        return $pivot;
+        return $result;
     }
 
     /**
@@ -1578,36 +1587,11 @@ class pivotTest
      */
     public function getPivotSpecTest($pivotID, $version, $processDateVar = false, $addDrills = true)
     {
-        // 为避免复杂的数据库依赖，我们简化测试逻辑
-        // 直接从pivot表获取基础数据
-        $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
-        if(!$pivot) return false;
+        // 直接调用实际的getPivotSpec方法进行测试
+        $result = $this->objectModel->getPivotSpec($pivotID, $version, $processDateVar, $addDrills);
+        if(dao::isError()) return dao::getError();
 
-        // 模拟getPivotSpec的基本功能
-        $pivot->fieldSettings = array();
-        if(!empty($pivot->fields) && $pivot->fields != 'null')
-        {
-            $pivot->fieldSettings = json_decode($pivot->fields);
-            if($pivot->fieldSettings) $pivot->fields = array_keys(get_object_vars($pivot->fieldSettings));
-        }
-
-        if(!empty($pivot->filters))
-        {
-            $filters = json_decode($pivot->filters, true);
-            $pivot->filters = $filters ?: array();
-        }
-        else
-        {
-            $pivot->filters = array();
-        }
-
-        // 添加version信息以便测试
-        if($version !== 'nonexistent')
-        {
-            $pivot->version = $version;
-        }
-
-        return $pivot;
+        return $result;
     }
 
     /**
@@ -4962,6 +4946,23 @@ class pivotTest
     public function getGroupsFromSettingsTest(array $settings): array
     {
         $result = $this->objectModel->getGroupsFromSettings($settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProducts method.
+     *
+     * @param  string $conditions
+     * @param  string $storyType
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function getProductsTest(string $conditions = '', string $storyType = 'story', array $filters = array()): array
+    {
+        $result = $this->objectModel->getProducts($conditions, $storyType, $filters);
         if(dao::isError()) return dao::getError();
 
         return $result;
