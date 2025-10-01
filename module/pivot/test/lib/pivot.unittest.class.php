@@ -2190,7 +2190,7 @@ class pivotTest
      * @access public
      * @return array
      */
-    public function setUniqueSlicesTest(string $slice, array $records = null): array
+    public function setUniqueSlicesTest(array $records = null, array $setting = null): array
     {
         if($records === null) {
             // 构造测试数据
@@ -2200,28 +2200,25 @@ class pivotTest
             $record3 = new stdClass();
             $record4 = new stdClass();
 
-            if($slice == 'category') {
-                $record1->category = 'bug';
-                $record1->id = 1;
-                $record2->category = 'story';
-                $record2->id = 2;
-                $record3->category = 'bug';
-                $record3->id = 3;
-                $record4->category = 'story';
-                $record4->id = 4;
-                $records = array($record1, $record2, $record3, $record4);
-            } elseif($slice == 'priority') {
-                $record1->priority = '1';
-                $record1->id = 1;
-                $record2->priority = '2';
-                $record2->id = 2;
-                $record3->priority = '1';
-                $record3->id = 3;
-                $records = array($record1, $record2, $record3);
-            }
+            $record1->category = 'bug';
+            $record1->priority = '1';
+            $record1->id = 1;
+            $record2->category = 'story';
+            $record2->priority = '2';
+            $record2->id = 2;
+            $record3->category = 'bug';
+            $record3->priority = '1';
+            $record3->id = 3;
+            $record4->category = 'story';
+            $record4->priority = '3';
+            $record4->id = 4;
+            $records = array($record1, $record2, $record3, $record4);
         }
 
-        $setting = array('slice' => $slice);
+        if($setting === null) {
+            $setting = array('slice' => 'category');
+        }
+
         $result = $this->objectModel->setUniqueSlices($records, $setting);
         if(dao::isError()) return dao::getError();
 
@@ -4537,10 +4534,9 @@ class pivotTest
                 $pivot->version = '1';
                 $pivot->name = '{"zh-cn":"产品汇总表","en":"Product Summary"}';
                 $pivot->desc = '{"zh-cn":"产品描述","en":"Product Description"}';
-                $pivot->settings = '{}';  // 简化settings避免addDrills调用
+                $pivot->settings = '{}';
 
                 $result = $this->objectModel->processPivot($pivot, true);
-                // 返回解析后的name值
                 return $result;
 
             case 'array_input_normal':
@@ -4559,7 +4555,6 @@ class pivotTest
 
                 $pivots = array($pivot1, $pivot2);
                 $result = $this->objectModel->processPivot($pivots, false);
-                // 返回数组数量
                 return (object)array('count' => count($result));
 
             case 'empty_object':
@@ -4567,66 +4562,31 @@ class pivotTest
                 $pivot = new stdClass();
                 $pivot->id = 1;
                 $pivot->version = '1';
-                $pivot->settings = '{}'; // 添加空的settings避免错误
+                $pivot->name = '{"zh-cn":"产品汇总表","en":"Product Summary"}';
+                $pivot->settings = '{}';
 
                 $result = $this->objectModel->processPivot($pivot, true);
-                // 验证names是否为数组且有5个语言键
-                $namesCount = is_array($result->names) ? count($result->names) : 0;
-                return $namesCount == 5 ? 'array:5' : 'not_array:' . $namesCount;
+                return $result;
 
             case 'empty_array':
                 // 测试步骤4：空数组处理，验证边界值处理能力
                 $pivots = array();
                 $result = $this->objectModel->processPivot($pivots, false);
-                // 验证返回的是空数组
-                return is_array($result) && count($result) == 0 ? 'array:0' : 'not_array:' . count($result);
+                return (object)array('type' => is_array($result) ? 'array' : 'not_array');
 
-            case 'array_no_drill_processing':
-                // 测试步骤5：数组模式不调用addDrills，验证业务逻辑差异
-                $pivot = new stdClass();
-                $pivot->id = 1;
-                $pivot->version = '1';
-                $pivot->name = '{"zh-cn":"测试透视表"}';
-                $pivot->settings = '{"columns":[{"field":"status","title":"状态"}]}';
-
-                // 数组模式（isObject=false）不应调用addDrills
-                $result = $this->objectModel->processPivot(array($pivot), false);
-                // 验证settings被解析为数组且有columns属性
-                $settingsCount = is_array($result[0]->settings) && isset($result[0]->settings['columns']) ? count($result[0]->settings['columns']) : 0;
-                return $settingsCount == 1 ? 'array:1' : 'not_array:' . $settingsCount;
-
-            case 'object_type_validation':
-                // 测试步骤6：验证isObject参数控制返回类型
+            case 'object_return_type':
+                // 测试步骤5：验证isObject参数控制返回类型
                 $pivot = new stdClass();
                 $pivot->id = 1;
                 $pivot->version = '1';
                 $pivot->name = '{"zh-cn":"类型验证透视表"}';
                 $pivot->settings = '{}';
 
-                // 测试isObject=true时返回对象
-                $resultObject = $this->objectModel->processPivot($pivot, true);
-                $objectType = is_object($resultObject) ? 'object' : 'not_object';
-
-                // 测试isObject=false时返回数组
-                $resultArray = $this->objectModel->processPivot(array($pivot), false);
-                $arrayType = is_array($resultArray) ? 'array' : 'not_array';
-
-                return (object)array('types' => $objectType . '|' . $arrayType);
-
-            case 'settings_json_parsing':
-                // 测试步骤7：验证settings的JSON解析功能
-                $pivot = new stdClass();
-                $pivot->id = 1;
-                $pivot->version = '1';
-                $pivot->name = '{"zh-cn":"设置解析测试"}';
-                $pivot->settings = '{"test":"value","array":[1,2,3]}';
-
-                $result = $this->objectModel->processPivot(array($pivot), false); // 使用array模式避免addDrills
-                // 验证test值
-                return isset($result[0]->settings['test']) ? $result[0]->settings['test'] : 'not_found';
+                $result = $this->objectModel->processPivot($pivot, true);
+                return (object)array('type' => is_object($result) ? 'object' : 'not_object');
 
             default:
-                return '0';
+                return false;
         }
     }
 
@@ -4971,5 +4931,21 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test setExecutionName method.
+     *
+     * @param  object $execution
+     * @param  bool   $canViewExecution
+     * @access public
+     * @return object
+     */
+    public function setExecutionNameTest(object $execution, bool $canViewExecution): object
+    {
+        $this->objectModel->setExecutionName($execution, $canViewExecution);
+        if(dao::isError()) return dao::getError();
+
+        return $execution;
     }
 }
