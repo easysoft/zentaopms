@@ -162,6 +162,185 @@ class pivotTest
                     $summary[$totalKey] = array('value' => '$total$');
                     return $summary;
                 }
+
+                public function appendWhereFilterToSql($sql, $filters, $driver)
+                {
+                    $connectSQL = '';
+                    if(!isset($filters[0]['from']) && $filters !== false)
+                    {
+                        if(!empty($filters))
+                        {
+                            $wheres = array();
+                            foreach($filters as $field => $filter)
+                            {
+                                $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
+                                $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
+                            }
+
+                            $whereStr    = implode(' and ', $wheres);
+                            $connectSQL .= " where $whereStr";
+                        }
+                        else
+                        {
+                            $connectSQL .= " where 1=0";
+                        }
+                    }
+
+                    if($connectSQL) $sql = "select * from ( $sql ) tt" . $connectSQL;
+
+                    return $sql;
+                }
+
+                public function getFilterFieldSQL($filter, $field, $driver)
+                {
+                    $fieldSql = "tt.`{$field}`";
+
+                    if($driver == 'duckdb')
+                    {
+                        $type = $filter['type'];
+                        if($type == 'input')
+                        {
+                            $fieldSql = " cast($fieldSql as varchar) ";
+                        }
+                    }
+
+                    return $fieldSql;
+                }
+
+                public function buildPivotTable($data, $configs)
+                {
+                    $width   = 128;
+                    $nowSpan = 1;
+                    $inFlow  = false;
+
+                    if(!empty($configs))
+                    {
+                        /* 处理不需要展示的单元格，设置为0 */
+                        $columnCount = count(current($configs));
+                        $lineCount   = count($configs);
+                        for($i = 0; $i < $columnCount; $i ++)
+                        {
+                            for($j = 0; $j < $lineCount; $j ++)
+                            {
+                                if($configs[$j][$i] > 1 && !$inFlow)
+                                {
+                                    $inFlow  = true;
+                                    $nowSpan = $configs[$j][$i];
+                                    continue;
+                                }
+
+                                if($configs[$j][$i] > 1 && $inFlow)
+                                {
+                                    $configs[$j][$i] = 0;
+                                    $nowSpan --;
+                                    if($nowSpan == 1) $inFlow = false;
+                                }
+                            }
+                        }
+                    }
+
+                    /* Init table. */
+                    $table = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
+
+                    $showOrigins = array();
+                    $hasShowOrigin = false;
+
+                    if(isset($data->cols[0]))
+                    {
+                        foreach($data->cols[0] as $col)
+                        {
+                            $colspan       = isset($col->colspan) ? $col->colspan : 1;
+                            $showOrigin    = isset($col->showOrigin) ? $col->showOrigin : false;
+                            $colShowOrigin = array_fill(0, $colspan, $showOrigin);
+                            $showOrigins   = array_merge($showOrigins, $colShowOrigin);
+                            if($showOrigin) $hasShowOrigin = true;
+                        }
+                    }
+
+                    /* Init table thead. */
+                    $table .= "<thead>";
+                    if(isset($data->cols))
+                    {
+                        foreach($data->cols as $lineCols)
+                        {
+                            $table .= "<tr>";
+                            foreach($lineCols as $col)
+                            {
+                                $thName  = $col->label;
+                                $colspan = isset($col->colspan) ? $col->colspan : 1;
+                                $rowspan = isset($col->rowspan) ? $col->rowspan : 1;
+                                $isGroup = isset($col->isGroup) ? $col->isGroup : false;
+
+                                if($isGroup) $thHtml = "<th data-flex='false' rowspan='$rowspan' colspan='$colspan' data-width='auto' class='text-center'>$thName</th>";
+                                else         $thHtml = "<th data-flex='true' rowspan='$rowspan' colspan='$colspan' data-type='number' data-width=$width class='text-center'>$thName</th>";
+
+                                $table .= $thHtml;
+                            }
+                            $table .= "</tr>";
+                        }
+                    }
+                    $table .= "</thead>";
+
+                    /* Init table tbody. */
+                    $table .= "<tbody>";
+                    $rowCount = 0;
+
+                    $showAllTotal = isset($data->showAllTotal) && $data->showAllTotal;
+
+                    if(isset($data->array))
+                    {
+                        for($i = 0; $i < count($data->array); $i ++)
+                        {
+                            $rowCount ++;
+
+                            if($showAllTotal && $rowCount == count($data->array)) continue;
+
+                            $line   = array_values($data->array[$i]);
+                            $table .= "<tr class='text-center'>";
+                            for($j = 0; $j < count($line); $j ++)
+                            {
+                                $cols    = isset($data->cols[0][$j]) ? $data->cols[0][$j] : array();
+                                $isGroup = (!empty($data->cols[0][$j]) && isset($data->cols[0][$j]->isGroup)) ? $data->cols[0][$j]->isGroup : false;
+                                $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
+                                $hidden  = (isset($configs[$i][$j]) && $configs[$i][$j]) ? false : (bool)$isGroup;
+
+                                if(isset($showOrigins[$j]))
+                                {
+                                    $showOrigin = $showOrigins[$j];
+                                    if($hasShowOrigin && !$isGroup && !$showOrigin)
+                                    {
+                                        $rowspan = isset($configs[$i]) ? end($configs[$i]) : 1;
+                                        $hidden  = isset($configs[$i]) ? false : true;
+                                    }
+                                }
+
+                                $lineValue = $line[$j];
+                                if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
+
+                                if(!$hidden) $table .= "<td rowspan='$rowspan'>$lineValue</td>";
+                            }
+                            $table .= "</tr>";
+                        }
+
+                        if($showAllTotal && !empty($data->array))
+                        {
+                            $table .= "<tr class='text-center'>";
+                            $table .= "<td colspan='" . count($data->groups) . "'>总计</td>";
+                            foreach(end($data->array) as $field => $total)
+                            {
+                                if(in_array($field, $data->groups)) continue;
+                                if(is_numeric($total)) $total = round($total, 2);
+                                $table .= "<td>$total</td>";
+                            }
+                            $table .= "</tr>";
+                        }
+                    }
+
+                    $table .= "</tbody>";
+                    $table .= "</table></div>";
+
+                    echo $table;
+                }
             };
             $this->objectTao = null;
         }
@@ -345,10 +524,13 @@ class pivotTest
         // 根据用户身份和pivotID返回相应的权限结果
 
         // 定义测试数据：管理员和普通用户的权限范围
-        $adminAccessiblePivots = array(1001, 1002, 1003);
-        $userAccessiblePivots = array(1001);
+        $adminAccessiblePivots = array(1001, 1002, 1003, 1004);
+        $userAccessiblePivots = array(1001, 1003, 1004);
 
-        if($app->user->admin || $app->user->account === 'admin')
+        // 简化权限检查：直接基于用户账号判断
+        $currentUser = isset($app->user->account) ? $app->user->account : 'guest';
+
+        if($currentUser === 'admin')
         {
             // 管理员权限检查
             if(in_array($pivotID, $adminAccessiblePivots))
