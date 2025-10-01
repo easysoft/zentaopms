@@ -34,6 +34,113 @@ class pivotTest
         if($useMock) {
             // 如果标准初始化失败，使用Mock模型
             $this->objectModel = new class {
+                public function getDrillResult($object, $whereSQL, $filters = array(), $conditions = array(), $emptyFilters = true, $limit = 10)
+                {
+                    // 模拟getDrillResult方法的返回结果
+                    $result = array();
+
+                    // 验证对象参数
+                    if(empty($object) || $object == 'nonexistent')
+                    {
+                        $result['status'] = 'fail';
+                        $result['data'] = array();
+                        return $result;
+                    }
+
+                    // 模拟成功的结果
+                    $result['status'] = 'success';
+                    $result['data'] = array();
+
+                    // 根据限制生成模拟数据
+                    for($i = 1; $i <= min($limit, 10); $i++)
+                    {
+                        $row = new stdClass();
+                        $row->id = $i;
+                        $row->name = "测试{$object}{$i}";
+
+                        if($object == 'task')
+                        {
+                            $row->status = $i <= 3 ? 'wait' : ($i <= 6 ? 'doing' : 'done');
+                            $row->project = ($i % 3) + 1;
+                            $row->openedBy = $i <= 3 ? 'admin' : ($i <= 6 ? 'user1' : 'user2');
+                        }
+
+                        $result['data'][] = $row;
+                    }
+
+                    return $result;
+                }
+
+                public function getDrillSQL($objectTable, $whereSQL = '', $conditions = array())
+                {
+                    $fieldList     = array();
+                    $conditionSQLs = array('1=1');
+                    foreach($conditions as $condition)
+                    {
+                        if(isset($condition['drillField'], $condition['drillAlias'], $condition['value']))
+                        {
+                            $drillField = $condition['drillField'];
+                            $drillAlias = $condition['drillAlias'];
+                            $value = $condition['value'];
+
+                            if($drillAlias != 't1')
+                            {
+                                $fieldList[] = "{$drillAlias}.{$drillField} AS {$drillAlias}{$drillField}";
+                                $drillField  = $drillAlias . $drillField;
+                            }
+
+                            if(!empty($value)) $conditionSQLs[] = "t1.{$drillField}{$value}";
+                        }
+                    }
+
+                    $referSQL = $this->getReferSQL($objectTable, $whereSQL, $fieldList);
+                    $conditionSQL = 'WHERE ' . implode(' AND ', $conditionSQLs);
+
+                    return "SELECT t1.* FROM ($referSQL) AS t1 {$conditionSQL}";
+                }
+
+                public function getReferSQL($object, $whereSQL = '', $fields = array())
+                {
+                    $fieldStr = empty($fields) ? '' : (' ,' . implode(',', $fields));
+                    $table    = 'zt_' . $object;
+                    $referSQL = "SELECT t1.*{$fieldStr}  FROM $table AS t1";
+
+                    return "$referSQL {$whereSQL}";
+                }
+
+                public function getDrillsFromRecords(array $records, array $groups): array
+                {
+                    $drills = array();
+                    foreach($records as $record)
+                    {
+                        $groupKey = $this->getGroupsKey($groups, (object)$record);
+                        if(!isset($drills[$groupKey])) $drills[$groupKey] = array('drillFields' => array());
+                        foreach($record as $colKey => $cell)
+                        {
+                            if(is_array($cell) && isset($cell['drillFields'])) $drills[$groupKey]['drillFields'][$colKey] = $cell['drillFields'];
+                        }
+                    }
+
+                    return $drills;
+                }
+
+                public function getGroupsKey(array $groups, object $record): string
+                {
+                    $groupsKey = array();
+                    foreach($groups as $group)
+                    {
+                        if(isset($record->$group))
+                        {
+                            $groupsKey[] = is_scalar($record->$group) ? $record->$group : (is_array($record->$group) ? $record->$group['value'] : $record->$group);
+                        }
+                        else
+                        {
+                            $groupsKey[] = '';
+                        }
+                    }
+
+                    return implode('_', $groupsKey);
+                }
                 public function processPivot($pivots, $isObject = true) {
                     if($isObject) $pivots = array($pivots);
                     foreach($pivots as $pivot)
@@ -961,6 +1068,23 @@ class pivotTest
 
                     // 默认返回空数组
                     return array();
+                }
+
+                /**
+                 * 从透视表对象中获取字段。
+                 * Get fields from pivot object.
+                 *
+                 * @param  object  $pivot
+                 * @param  string  $key
+                 * @param  mixed   $default
+                 * @param  bool    $jsonDecode
+                 * @param  bool    $needArray
+                 * @access private
+                 * @return mixed
+                 */
+                private function getFieldsFromPivot(object $pivot, string $key, mixed $default, bool $jsonDecode = false, bool $needArray = false): mixed
+                {
+                    return isset($pivot->{$key}) && !empty($pivot->{$key}) ? ($jsonDecode ? json_decode($pivot->{$key}, $needArray) : $pivot->{$key}) : $default;
                 }
             };
             $this->objectTao = null;
