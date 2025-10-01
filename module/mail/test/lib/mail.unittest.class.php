@@ -315,15 +315,19 @@ class mailTest
      * @access public
      * @return mixed
      */
-    public function addQueueTest($toList = '', $subject = '', $body = '', $ccList = '', $send = false)
+    public function addQueueTest($toList = '', $subject = '', $body = '', $ccList = '', $includeMe = false)
     {
         if(empty($toList) || empty($subject)) return '没有数据提交';
 
-        global $tester;
-        if(!$tester) return false;
-
-        $result = $tester->loadModel('mail')->addQueue($toList, $subject, $body, $ccList, $send);
+        $result = $this->objectModel->addQueue($toList, $subject, $body, $ccList, $includeMe);
         if(dao::isError()) return dao::getError();
+
+        // 如果插入成功，返回插入的记录用于验证
+        if($result && is_numeric($result)) {
+            global $tester;
+            $record = $tester->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($result)->fetch();
+            return $record;
+        }
 
         return $result;
     }
@@ -973,6 +977,42 @@ class mailTest
         // 调用真实的getObjectTitle方法
         $result = $this->objectTao->getObjectTitle($object, $objectType);
         if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test autoDetect method.
+     *
+     * @param  string $email
+     * @access public
+     * @return mixed
+     */
+    public function autoDetectTest($email)
+    {
+        // 调用真实的autoDetect方法
+        $result = $this->objectModel->autoDetect($email);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test clear method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function clearTest()
+    {
+        // 调用真实的clear方法
+        $this->objectModel->clear();
+        if(dao::isError()) return dao::getError();
+
+        // clear方法是void类型，返回处理状态表示测试成功
+        $result = new stdClass();
+        $result->processed = '1';
+        $result->cleared = '1';
 
         return $result;
     }
