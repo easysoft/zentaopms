@@ -70,7 +70,7 @@ class pivotTest
                     }
                 }
 
-                private function addDrills($pivot) {
+                public function addDrills($pivot) {
                     if(!is_array($pivot->settings) || !isset($pivot->settings['columns'])) return;
                     $columns = $pivot->settings['columns'];
                     foreach($columns as $index => $column) {
@@ -100,6 +100,67 @@ class pivotTest
                         }
                     }
                     return $pureData;
+                }
+
+                public function addRowSummary(array $groupTree, array $data, array $groups, int $currentGroup = 0): array {
+                    if(empty($groupTree))
+                    {
+                        $totalKey = $groups[$currentGroup] ?? 'count';
+                        return array('rows' => array(), 'summary' => array($totalKey => array('value' => '$total$')));
+                    }
+
+                    $first = reset($groupTree);
+                    if(is_scalar($first))
+                    {
+                        $groupData = array();
+                        $rows      = array();
+                        foreach($groupTree as $groupKey)
+                        {
+                            $groupData[$groupKey] = isset($data[$groupKey]) ? $data[$groupKey] : array();
+                            $rows[$groupKey]      = isset($data[$groupKey]) ? $data[$groupKey] : array();
+                        }
+                        return array('rows' => $rows, 'summary' => $this->getColumnSummary($groupData, $groups[$currentGroup] ?? 'count'));
+                    }
+
+                    $rows = array();
+                    foreach($groupTree as $key => $children)
+                    {
+                        $rows[$key] = $this->addRowSummary($children, $data, $groups, $currentGroup + 1);
+                    }
+                    $groupData = array_column($rows, 'summary');
+
+                    return array('rows' => $rows, 'summary' => $this->getColumnSummary($groupData, $groups[$currentGroup] ?? 'count'));
+                }
+
+                private function getColumnSummary(array $data, string $totalKey): array {
+                    $summary = array();
+                    foreach($data as $columns)
+                    {
+                        foreach($columns as $colKey => $colValue)
+                        {
+                            if(!isset($summary[$colKey]))
+                            {
+                                $summary[$colKey] = $colValue;
+                            }
+                            else
+                            {
+                                $value = isset($colValue['value']) ? $colValue['value'] : (is_array($colValue) ? 0 : $colValue);
+                                $isNumeric = is_numeric($value);
+
+                                if($isNumeric && isset($summary[$colKey]['value']) && is_numeric($summary[$colKey]['value']))
+                                {
+                                    $summary[$colKey]['value'] = $summary[$colKey]['value'] + $value;
+                                }
+                                else
+                                {
+                                    $summary[$colKey] = is_array($colValue) ? $colValue : array('value' => $colValue);
+                                }
+                            }
+                        }
+                    }
+
+                    $summary[$totalKey] = array('value' => '$total$');
+                    return $summary;
                 }
             };
             $this->objectTao = null;
@@ -526,15 +587,8 @@ class pivotTest
                 return false;
         }
 
-        // 确保TAO对象已加载
-        if(!isset($this->objectModel->pivotTao))
-        {
-            global $tester;
-            $this->objectModel->pivotTao = $tester->loadTao('pivot');
-        }
-
-        // 保存原始的pivotTao对象
-        $originalTao = $this->objectModel->pivotTao;
+        // 创建模拟的pivotTao对象（不依赖实际TAO加载）
+        $originalTao = isset($this->objectModel->pivotTao) ? $this->objectModel->pivotTao : null;
 
         // 创建模拟的pivotTao对象，继承原始TAO以保持其他方法可用
         $mockTao = new class($originalTao) extends stdClass {
@@ -575,12 +629,12 @@ class pivotTest
         catch(Exception $e)
         {
             // 恢复原始对象并重新抛出异常
-            $this->objectModel->pivotTao = $originalTao;
+            if($originalTao !== null) $this->objectModel->pivotTao = $originalTao;
             throw $e;
         }
 
         // 恢复原始的pivotTao对象
-        $this->objectModel->pivotTao = $originalTao;
+        if($originalTao !== null) $this->objectModel->pivotTao = $originalTao;
 
         // 返回结果用于断言验证
         if($testCase == 'normal_case' || $testCase == 'no_drill_data')
@@ -818,12 +872,6 @@ class pivotTest
      */
     public function addRowSummaryTest(array $groupTree, array $data, array $groups, int $currentGroup = 0): array
     {
-        // 如果objectModel未加载成功，创建一个简化的实现
-        if($this->objectModel === null)
-        {
-            return $this->simpleAddRowSummary($groupTree, $data, $groups, $currentGroup);
-        }
-
         $result = $this->objectModel->addRowSummary($groupTree, $data, $groups, $currentGroup);
         if(dao::isError()) return dao::getError();
 
