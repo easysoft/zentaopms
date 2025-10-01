@@ -3036,7 +3036,7 @@ class commonTest
      */
     public function judgeSuhosinSettingTest($countInputVars)
     {
-        $result = $this->objectModel->judgeSuhosinSetting($countInputVars);
+        $result = commonModel::judgeSuhosinSetting($countInputVars);
         if(dao::isError()) return dao::getError();
 
         return $result;
