@@ -20,6 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
 // 准备测试数据
+ob_start();
 zenData('project')->gen(10);
 zenData('product')->gen(10);
 zenData('story')->gen(5);
@@ -32,6 +33,7 @@ zenData('meeting')->gen(0);
 zenData('auditplan')->gen(0);
 zenData('process')->gen(0);
 zenData('measrecord')->gen(0);
+ob_end_clean();
 
 su('admin');
 

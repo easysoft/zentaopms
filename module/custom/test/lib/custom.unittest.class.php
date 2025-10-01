@@ -320,7 +320,8 @@ class customTest
         $this->objectModel->disableFeaturesByMode($mode);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
+        $result = $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
+        return is_array($result) ? '0' : (string)$result;
     }
 
     /**
@@ -339,6 +340,10 @@ class customTest
         $disabledFeatures = $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
         $URAndSR = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=URAndSR');
         $enableER = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=enableER');
+
+        $disabledFeatures = is_array($disabledFeatures) ? '0' : (string)$disabledFeatures;
+        $URAndSR = is_array($URAndSR) ? '1' : (string)$URAndSR;
+        $enableER = is_array($enableER) ? '0' : (string)$enableER;
 
         return "$disabledFeatures|$URAndSR|$enableER";
     }
