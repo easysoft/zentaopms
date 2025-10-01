@@ -5032,4 +5032,19 @@ class pivotTest
 
         return $result;
     }
+
+    /**
+     * Test getGroupsFromSettings method.
+     *
+     * @param  array $settings
+     * @access public
+     * @return array
+     */
+    public function getGroupsFromSettingsTest(array $settings): array
+    {
+        $result = $this->objectModel->getGroupsFromSettings($settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
