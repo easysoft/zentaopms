@@ -2958,7 +2958,7 @@ class pivotTest
             public function processKanbanDatas(string $object, array $datas): array
             {
                 // 模拟数据库查询结果
-                $kanbans = array('1' => '1', '2' => '2'); // 项目1和2是看板类型
+                $kanbans = array('1' => '1'); // 只有项目1是看板类型
 
                 if($object == 'story') {
                     // 模拟故事项目关联表数据
