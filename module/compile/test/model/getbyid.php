@@ -4,17 +4,13 @@
 /**
 
 title=测试 compileModel::getByID();
-timeout=0
 cid=0
 
-- 执行compileTest模块的getByIDTest方法，参数是1
- - 属性id @1
- - 属性name @构建1
- - 属性status @success
-- 执行compileTest模块的getByIDTest方法，参数是999 @alse
-- 执行compileTest模块的getByIDTest方法 @alse
-- 执行compileTest模块的getByIDTest方法，参数是-1 @alse
-- 执行compileTest模块的getByIDTest方法，参数是'abc' @alse
+- 测试步骤1：正常查询存在的构建ID >> 期望返回构建对象
+- 测试步骤2：查询不存在的构建ID >> 期望返回false
+- 测试步骤3：查询ID为0的构建 >> 期望返回false
+- 测试步骤4：查询负数ID的构建 >> 期望返回false
+- 测试步骤5：查询非数字ID的构建 >> 期望返回false
 
 */
 

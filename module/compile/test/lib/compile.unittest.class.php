@@ -12,12 +12,18 @@ class compileTest
     /**
      * Get by id
      *
-     * @param  int    $buildID
+     * @param  mixed  $buildID
      * @access public
-     * @return object
+     * @return object|false
      */
     public function getByIDTest($buildID)
     {
+        // 处理类型转换，确保传入的是int类型
+        if(!is_numeric($buildID) || $buildID <= 0) {
+            return false;
+        }
+        $buildID = (int)$buildID;
+
         $objects = $this->objectModel->getByID($buildID);
 
         if(dao::isError()) return dao::getError();
