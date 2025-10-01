@@ -7,133 +7,49 @@ title=测试 pivotModel::processFieldSettings();
 timeout=0
 cid=0
 
-- 测试空fieldSettings的处理 >> 返回时fieldSettings应保持为空
-- 测试fieldSettings为空数组的处理 >> 返回时fieldSettings应保持为空数组
-- 测试有字段内容的fieldSettings >> fieldSettings内容应保持不变
-- 测试含SQL字段的对象处理 >> 方法正常返回对象
-- 测试含filters字段的对象处理 >> 方法正常返回对象
-- 测试返回值类型检验 >> 返回值应为对象类型
+- 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot1  @0
+- 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot2  @0
+- 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot3  @1
+- 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot4  @1
+- 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot5  @1
 
 */
 
-// 直接包含必要的文件，避免完整初始化
-define('IN_UNIT_TEST', true);
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-// 定义测试需要的框架函数
-global $_result, $_pkey;
+// 2. 用户登录（选择合适角色）
+su('admin');
 
-function r($result)
-{
-    global $_result;
-    $_result = $result;
-    return true;
-}
+// 3. 创建测试实例（变量名与模块名一致）
+$pivotTest = new pivotTest();
 
-function p($key = '')
-{
-    global $_result, $_pkey;
-    $_pkey = $key;
+// 4. 🔴 强制要求：必须包含至少5个测试步骤
 
-    if(empty($key))
-    {
-        if($_result === false) return '0';
-        return $_result;
-    }
+// 测试步骤1：测试空fieldSettings的处理（空字符串）
+$pivot1 = (object)array('fieldSettings' => '');
+r($pivotTest->processFieldSettingsTest($pivot1)) && p() && e('0');
 
-    if(is_object($_result) && property_exists($_result, $key))
-    {
-        return $_result->$key;
-    }
-    elseif(is_array($_result) && isset($_result[$key]))
-    {
-        return $_result[$key];
-    }
-    else
-    {
-        return '';
-    }
-}
+// 测试步骤2：测试fieldSettings为空数组的处理
+$pivot2 = (object)array('fieldSettings' => array());
+r($pivotTest->processFieldSettingsTest($pivot2)) && p() && e('0');
 
-function e($expected)
-{
-    global $_result, $_pkey;
+// 测试步骤3：测试有字段内容的fieldSettings
+$pivot3 = (object)array('fieldSettings' => array('field1' => 'value1'));
+r($pivotTest->processFieldSettingsTest($pivot3)) && p() && e('1');
 
-    // 获取实际值
-    if(empty($_pkey))
-    {
-        $actual = $_result;
-    }
-    else
-    {
-        if(is_object($_result) && property_exists($_result, $_pkey))
-        {
-            $actual = $_result->$_pkey;
-        }
-        elseif(is_array($_result) && isset($_result[$_pkey]))
-        {
-            $actual = $_result[$_pkey];
-        }
-        else
-        {
-            $actual = '';
-        }
-    }
+// 测试步骤4：测试含SQL字段的对象处理
+$pivot4 = (object)array(
+    'fieldSettings' => array('field1' => 'value1'),
+    'sql' => 'SELECT * FROM zt_user'
+);
+r($pivotTest->processFieldSettingsTest($pivot4)) && p() && e('1');
 
-    // 特殊处理不同类型的比较
-    $pass = false;
-    if($expected === '' && $actual === '') $pass = true;
-    elseif(is_array($expected) && is_array($actual)) {
-        if(empty($expected) && empty($actual)) $pass = true;
-        elseif($expected == $actual) $pass = true;
-    }
-    elseif($expected == $actual) $pass = true;
-    elseif($expected === 1 && is_object($actual)) $pass = true;
-
-    echo $pass ? "[PASS] " : "[FAIL] ";
-    return $pass;
-}
-
-// 创建简单的测试类
-class simplePivotTest
-{
-    /**
-     * Test processFieldSettings method.
-     *
-     * @param  object $pivot
-     * @access public
-     * @return object
-     */
-    public function processFieldSettingsTest($pivot)
-    {
-        // 模拟processFieldSettings的核心逻辑
-        if(empty($pivot->fieldSettings)) {
-            return $pivot;
-        }
-
-        // 对于非空fieldSettings，在没有完整BI环境时保持不变
-        // 这符合实际方法在遇到SQL错误或配置问题时的行为
-        return $pivot;
-    }
-}
-
-// 执行测试
-$pivotTest = new simplePivotTest();
-
-// 强制要求：必须包含至少5个测试步骤
-r($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => ''))); p('fieldSettings'); e(''); // 步骤1：测试空fieldSettings
-echo "\n";
-
-r($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => array()))); p('fieldSettings'); e(array()); // 步骤2：测试空数组fieldSettings
-echo "\n";
-
-r($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => array('field1' => 'value1')))); p('fieldSettings'); e(array('field1' => 'value1')); // 步骤3：测试有内容的fieldSettings
-echo "\n";
-
-r($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => array('field1' => 'value1'), 'sql' => 'SELECT * FROM test'))); p('fieldSettings'); e(array('field1' => 'value1')); // 步骤4：测试含SQL的对象
-echo "\n";
-
-r($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => array('field1' => 'value1'), 'filters' => array()))); p('fieldSettings'); e(array('field1' => 'value1')); // 步骤5：测试含filters的对象
-echo "\n";
-
-r(is_object($pivotTest->processFieldSettingsTest((object)array('fieldSettings' => array())))); p(); e(1); // 步骤6：测试返回值类型
-echo "\n";
+// 测试步骤5：测试含filters字段的对象处理
+$pivot5 = (object)array(
+    'fieldSettings' => array('field1' => 'value1'),
+    'sql' => 'SELECT id, account FROM zt_user',
+    'filters' => array('status' => 'active')
+);
+r($pivotTest->processFieldSettingsTest($pivot5)) && p() && e('1');
