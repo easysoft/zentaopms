@@ -1172,49 +1172,12 @@ class pivotTest
 
                 public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '', $driver = 'mysql')
                 {
-                    // 模拟getSysOptions方法的返回结果
-                    $options = array();
+                    $result = $this->objectModel->getSysOptions($type, $object, $field, $source, $saveAs, $driver);
+                    if(dao::isError()) return dao::getError();
 
-                    if(!$field) return array();
-
-                    switch($type)
-                    {
-                        case 'option':
-                            // 模拟option类型字段的选项
-                            if($object == 'user' && $field == 'role')
-                            {
-                                $options = array('admin' => '管理员', 'dev' => '开发', 'qa' => 'QA', 'tester' => '测试员');
-                            }
-                            elseif($object == 'user' && $field == 'deleted')
-                            {
-                                $options = array('0' => '正常', '1' => '已删除');
-                            }
-                            else
-                            {
-                                $options = array('option1' => '选项1', 'option2' => '选项2');
-                            }
-                            break;
-                        case 'object':
-                            // 模拟object类型字段的选项
-                            if($object == 'user' && $field == 'id')
-                            {
-                                $options = array('1' => 'admin', '2' => 'user1', '3' => 'user2', '4' => 'tester');
-                            }
-                            else
-                            {
-                                $options = array('1' => '对象1', '2' => '对象2', '3' => '对象3');
-                            }
-                            break;
-                        case 'string':
-                        case 'number':
-                            $options = array();
-                            break;
-                        default:
-                            $options = array();
-                    }
-
-                    return $options;
+                    return $result;
                 }
+
 
                 public function getGroupTreeWithKey(array $data): array|string
                 {
@@ -1349,6 +1312,26 @@ class pivotTest
     public function setFilterDefaultTest(array $filters, bool $processDateVar = true): array
     {
         $result = $this->objectModel->setFilterDefault($filters, $processDateVar);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getSysOptions method.
+     *
+     * @param  string $type
+     * @param  string $object
+     * @param  string $field
+     * @param  mixed  $source
+     * @param  string $saveAs
+     * @param  string $driver
+     * @access public
+     * @return mixed
+     */
+    public function getSysOptionsTest($type = '', $object = '', $field = '', $source = '', $saveAs = '', $driver = 'mysql')
+    {
+        $result = $this->objectModel->getSysOptions($type, $object, $field, $source, $saveAs, $driver);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -4498,100 +4481,22 @@ class pivotTest
      * @access public
      * @return mixed
      */
-    public function getProjectExecutionsTest(string $testCase)
+    public function getProjectExecutionsTest()
     {
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->getProjectExecutions();
+            if(dao::isError()) return dao::getError();
 
-        // 根据测试场景返回不同的结果
-        switch($testCase)
-        {
-            case 'normal_case':
-                // 测试步骤1：正常情况下获取项目执行列表
-                // 模拟正常的执行数据
-                $executions = array();
-                for($i = 1; $i <= 10; $i++)
-                {
-                    $execution = new stdClass();
-                    $execution->id = 100 + $i;
-                    $execution->name = "迭代{$i}";
-                    $execution->projectname = "项目" . (($i - 1) % 3 + 1);
-                    $execution->multiple = ($i % 2 == 1) ? 1 : 0;
-                    $executions[] = $execution;
-                }
+            // 如果返回空数组，返回字符串'empty'以便测试
+            if(is_array($result) && empty($result)) return 'empty';
 
-                $pairs = array();
-                foreach($executions as $execution)
-                {
-                    if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
-                    if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
-                }
+            // 如果返回非空数组，返回字符串'array'以便测试
+            if(is_array($result) && !empty($result)) return 'array';
 
-                return gettype($pairs); // 返回'array'
-
-            case 'multiple_format':
-                // 测试步骤2：multiple为1的执行项目格式化
-                $execution = new stdClass();
-                $execution->id = 101;
-                $execution->name = "迭代1";
-                $execution->projectname = "项目1";
-                $execution->multiple = 1;
-
-                return $execution->projectname . '/' . $execution->name;
-
-            case 'single_format':
-                // 测试步骤3：multiple为0的执行项目格式化
-                $execution = new stdClass();
-                $execution->id = 102;
-                $execution->name = "阶段1";
-                $execution->projectname = "项目2";
-                $execution->multiple = 0;
-
-                return $execution->projectname;
-
-            case 'empty_data':
-                // 测试步骤4：空数据库情况下的处理
-                $pairs = array();
-                return gettype($pairs); // 返回'array'
-
-            case 'structure_test':
-                // 测试步骤5：验证返回数据的键值结构正确
-                $executions = array();
-                $execution1 = new stdClass();
-                $execution1->id = 101;
-                $execution1->name = "迭代1";
-                $execution1->projectname = "项目1";
-                $execution1->multiple = 1;
-
-                $execution2 = new stdClass();
-                $execution2->id = 102;
-                $execution2->name = "阶段1";
-                $execution2->projectname = "项目2";
-                $execution2->multiple = 0;
-
-                $executions = array($execution1, $execution2);
-
-                $pairs = array();
-                foreach($executions as $execution)
-                {
-                    if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
-                    if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
-                }
-
-                // 验证结构：键是数字，值是字符串
-                $structureCorrect = true;
-                foreach($pairs as $key => $value)
-                {
-                    if(!is_numeric($key) || !is_string($value))
-                    {
-                        $structureCorrect = false;
-                        break;
-                    }
-                }
-
-                return $structureCorrect ? '1' : '0';
-
-            default:
-                return false;
+            return $result;
+        } catch (Exception $e) {
+            // 如果方法调用出错，返回空数组
+            return array();
         }
     }
 
@@ -4963,6 +4868,90 @@ class pivotTest
     public function getProductsTest(string $conditions = '', string $storyType = 'story', array $filters = array()): array
     {
         $result = $this->objectModel->getProducts($conditions, $storyType, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getUserWorkLoad method.
+     *
+     * @param  array $projects
+     * @param  array $teamTasks
+     * @param  float $allHour
+     * @access public
+     * @return array
+     */
+    public function getUserWorkLoadTest(array $projects, array $teamTasks, float $allHour): array
+    {
+        $result = $this->objectModel->getUserWorkLoad($projects, $teamTasks, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getWorkload method.
+     *
+     * @param  int    $dept
+     * @param  string $assign
+     * @param  array  $users
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    public function getWorkloadTest(int $dept, string $assign, array $users, float $allHour): array
+    {
+        $result = $this->objectModel->getWorkload($dept, $assign, $users, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getWorkloadNoAssign method.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @access public
+     * @return array
+     */
+    public function getWorkloadNoAssignTest(array $deptUsers, array $users, bool $canViewExecution): array
+    {
+        $result = $this->objectModel->getWorkloadNoAssign($deptUsers, $users, $canViewExecution);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getWorkLoadAssign method.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    public function getWorkLoadAssignTest(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
+    {
+        $result = $this->objectModel->getWorkLoadAssign($deptUsers, $users, $canViewExecution, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isShowLastRow method.
+     *
+     * @param  string $showColPosition
+     * @access public
+     * @return bool
+     */
+    public function isShowLastRowTest(string $showColPosition): bool
+    {
+        $result = $this->objectModel->isShowLastRow($showColPosition);
         if(dao::isError()) return dao::getError();
 
         return $result;
