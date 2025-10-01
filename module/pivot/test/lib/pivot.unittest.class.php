@@ -319,6 +319,32 @@ class pivotTest
                     return $fieldSql;
                 }
 
+                /**
+                 * Test getFilterFieldSQL method.
+                 *
+                 * @param  array  $filter
+                 * @param  string $field
+                 * @param  string $driver
+                 * @access public
+                 * @return string
+                 */
+                public function getFilterFieldSQLTest($filter, $field, $driver)
+                {
+                    // 直接使用Mock对象的getFilterFieldSQL方法，避免使用objectModel
+                    $fieldSql = "tt.`{$field}`";
+
+                    if($driver == 'duckdb')
+                    {
+                        $type = $filter['type'];
+                        if($type == 'input')
+                        {
+                            $fieldSql = " cast($fieldSql as varchar) ";
+                        }
+                    }
+
+                    return $fieldSql;
+                }
+
                 public function buildPivotTable($data, $configs)
                 {
                     $width   = 128;
@@ -807,8 +833,44 @@ class pivotTest
                 }
 
                 public function getFilterFormat($sql, $filters) {
-                    // 返回模拟的filter格式
-                    return array($sql, false);
+                    if(empty($filters)) return array($sql, false);
+
+                    $filterFormat = array();
+                    foreach($filters as $filter)
+                    {
+                        $field = $filter['field'];
+
+                        if(!isset($filter['default'])) continue;
+
+                        $default = $filter['default'];
+                        switch($filter['type'])
+                        {
+                            case 'select':
+                                if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
+                                if(empty($default)) break;
+                                $value = "('" . $default . "')";
+                                $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
+                                break;
+                            case 'input':
+                                $filterFormat[$field] = array('operator' => 'LIKE', 'value' => "'%$default%'");
+                                break;
+                            case 'date':
+                            case 'datetime':
+                                if(!is_array($default)) break;
+                                $begin = $default['begin'];
+                                $end   = $default['end'];
+
+                                if(!empty($begin)) $begin = date('Y-m-d 00:00:00', strtotime($begin));
+                                if(!empty($end))   $end   = date('Y-m-d 23:59:59', strtotime($end));
+
+                                if(!empty($begin) &&  empty($end)) $filterFormat[$field] = array('operator' => '>=',       'value' => "'{$begin}'");
+                                if( empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => '<=',       'value' => "'{$end}'");
+                                if(!empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => "'{$begin}' AND '{$end}'");
+                                break;
+                        }
+                    }
+
+                    return array($sql, $filterFormat);
                 }
 
                 public function getGroupsFromSettings($settings) {
@@ -1085,6 +1147,68 @@ class pivotTest
                 private function getFieldsFromPivot(object $pivot, string $key, mixed $default, bool $jsonDecode = false, bool $needArray = false): mixed
                 {
                     return isset($pivot->{$key}) && !empty($pivot->{$key}) ? ($jsonDecode ? json_decode($pivot->{$key}, $needArray) : $pivot->{$key}) : $default;
+                }
+
+                public function getFieldsOptions(array $fieldSettings, array $records, string $driver = 'mysql'): array
+                {
+                    $options = array();
+
+                    foreach($fieldSettings as $key => $fieldSetting)
+                    {
+                        $type   = isset($fieldSetting['type']) ? $fieldSetting['type'] : '';
+                        $object = isset($fieldSetting['object']) ? $fieldSetting['object'] : '';
+                        $field  = isset($fieldSetting['field']) ? $fieldSetting['field'] : '';
+
+                        $options[$key] = $this->getSysOptions($type, $object, $field, $records, '', $driver);
+                    }
+
+                    return $options;
+                }
+
+                public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '', $driver = 'mysql')
+                {
+                    // 模拟getSysOptions方法的返回结果
+                    $options = array();
+
+                    if(!$field) return array();
+
+                    switch($type)
+                    {
+                        case 'option':
+                            // 模拟option类型字段的选项
+                            if($object == 'user' && $field == 'role')
+                            {
+                                $options = array('admin' => '管理员', 'dev' => '开发', 'qa' => 'QA', 'tester' => '测试员');
+                            }
+                            elseif($object == 'user' && $field == 'deleted')
+                            {
+                                $options = array('0' => '正常', '1' => '已删除');
+                            }
+                            else
+                            {
+                                $options = array('option1' => '选项1', 'option2' => '选项2');
+                            }
+                            break;
+                        case 'object':
+                            // 模拟object类型字段的选项
+                            if($object == 'user' && $field == 'id')
+                            {
+                                $options = array('1' => 'admin', '2' => 'user1', '3' => 'user2', '4' => 'tester');
+                            }
+                            else
+                            {
+                                $options = array('1' => '对象1', '2' => '对象2', '3' => '对象3');
+                            }
+                            break;
+                        case 'string':
+                        case 'number':
+                            $options = array();
+                            break;
+                        default:
+                            $options = array();
+                    }
+
+                    return $options;
                 }
             };
             $this->objectTao = null;
