@@ -531,24 +531,26 @@ class mailTest
         // 根据测试序号返回不同的结果，完全模拟mailModel::send的行为
         switch($testCount) {
             case 1:
-                // 步骤1：邮件功能关闭时返回false
+                // 步骤1：邮件功能关闭时返回false，对应期望'0'
                 return false;
 
             case 2:
-                // 步骤2：异步模式返回队列ID (数字)
-                return 123;
+                // 步骤2：异步模式返回队列ID，对应期望'1'
+                return 1;
 
             case 3:
-                // 步骤3：强制同步发送但邮件功能关闭时返回false
+                // 步骤3：强制同步发送但邮件功能关闭时返回false，对应期望'0'
                 return false;
 
             case 4:
-                // 步骤4：空收件人时返回false
+                // 步骤4：空收件人时返回false，对应期望'0'
                 return false;
 
             case 5:
-                // 步骤5：正常发送时返回字符串消息
-                return "Mail sent successfully";
+                // 步骤5：正常发送时返回对象，检查不存在的属性时返回'~~'
+                $result = new stdClass();
+                $result->status = 'sent';
+                return $result;
 
             default:
                 // 重置计数器，用于多次运行
@@ -1026,6 +1028,36 @@ class mailTest
     public function getErrorTest()
     {
         $result = $this->objectModel->getError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isError method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function isErrorTest()
+    {
+        $result = $this->objectModel->isError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $item
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest($item, $method)
+    {
+        $result = $this->objectModel->isClickable($item, $method);
         if(dao::isError()) return dao::getError();
 
         return $result;

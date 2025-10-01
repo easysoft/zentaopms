@@ -11,7 +11,7 @@ cid=0
 - 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body'  @1
 - 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body', '', false, array  @0
 - 执行mailTest模块的sendTest方法，参数是'', 'test subject', 'test body'  @0
-- 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body'  @~~
+- 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body' 属性nonexistent @~~
 
 */
 
@@ -26,4 +26,4 @@ r($mailTest->sendTest('admin', 'test subject', 'test body')) && p() && e('0');
 r($mailTest->sendTest('admin', 'test subject', 'test body')) && p() && e('1');
 r($mailTest->sendTest('admin', 'test subject', 'test body', '', false, array(), true)) && p() && e('0');
 r($mailTest->sendTest('', 'test subject', 'test body')) && p() && e('0');
-r($mailTest->sendTest('admin', 'test subject', 'test body')) && p() && e('~~');
+r($mailTest->sendTest('admin', 'test subject', 'test body')) && p('nonexistent') && e('~~');
