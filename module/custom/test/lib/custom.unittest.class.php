@@ -741,55 +741,39 @@ class customTest
     /**
      * Test setMenuByConfig method.
      *
-     * @param  string $module main|product|my and so on
+     * @param  object|array    $allMenu
+     * @param  string|array    $customMenu
+     * @param  string          $module
      * @static
      * @access public
-     * @return string|array
+     * @return string
      */
-    public static function setMenuByConfigTest(string $module = 'main'): string|array
+    public static function setMenuByConfigTest(object|array $allMenu, string|array $customMenu, string $module = 'main'): string
     {
-        global $config, $lang;
+        global $lang, $app;
 
         try {
-            // 初始化菜单对象
-            $allMenu = new stdclass();
-
-            // 模拟不同模块的菜单配置
-            if($module == 'main' && !empty($lang->menu)) {
-                $allMenu = $lang->menu;
-            } elseif($module != 'main' && isset($lang->menu->$module) && isset($lang->menu->{$module}['subMenu'])) {
-                $allMenu = $lang->menu->{$module}['subMenu'];
-            } else {
-                // 为测试创建基本菜单结构
-                $allMenu = new stdclass();
-                $allMenu->index = array('link' => '/', 'text' => '首页');
-                $allMenu->dashboard = array('link' => '/dashboard', 'text' => '仪表盘');
+            // 确保全局语言对象存在
+            if(!isset($lang)) {
+                $lang = new stdclass();
             }
 
-            // 处理产品模块的分支菜单
-            if($module == 'product' && isset($allMenu->branch)) {
-                $allMenu->branch = str_replace('@branch@', isset($lang->custom->branch) ? $lang->custom->branch : '分支', $allMenu->branch);
+            // 设置应用tab，如果不存在
+            if(!isset($app->tab)) {
+                $app = new stdclass();
+                $app->tab = $module;
             }
 
-            // 处理地盘模块的评分功能
-            if($module == 'my' && empty($config->global->scoreStatus)) {
-                if(isset($allMenu->score)) unset($allMenu->score);
+            // 初始化语言菜单顺序，避免未定义变量错误
+            if(!isset($lang->{$app->tab})) {
+                $lang->{$app->tab} = new stdclass();
+                $lang->{$app->tab}->menuOrder = array();
             }
-
-            // 获取自定义菜单配置
-            $flowModule = isset($config->global->flow) ? $config->global->flow . '_main' : 'full_main';
-            $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-
-            // 处理JSON格式的自定义菜单
-            if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') {
-                $customMenu = json_decode($customMenu, true);
-            }
-
-            // 构建自定义菜单映射
-            list($customMenuMap, $order) = customModel::buildCustomMenuMap($allMenu, $customMenu, $module);
 
             // 调用实际的setMenuByConfig方法
-            $result = customModel::setMenuByConfig($allMenu, $customMenuMap, $module);
+            $result = customModel::setMenuByConfig($allMenu, $customMenu, $module);
+
+            if(dao::isError()) return 'error';
 
             // 返回结果类型用于测试验证
             if(is_array($result)) {

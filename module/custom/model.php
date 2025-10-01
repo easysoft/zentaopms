@@ -225,7 +225,7 @@ class customModel extends model
         $group   = 0;
         foreach($menu as $item)
         {
-            if($module == 'main' && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
+            if($module == 'main' && isset($item->name) && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
             {
                 $menu[$item->order]->divider = $isFirst ? false : true;
                 $group = $dividerOrders[$item->name];
@@ -322,6 +322,7 @@ class customModel extends model
             $subMenu = array();
             $label   = $link;
             $hasPriv = true;
+            $method  = '';
             if(strpos($link, '|') !== false)
             {
                 $link = explode('|', $link);
