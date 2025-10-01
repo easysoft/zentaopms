@@ -1617,6 +1617,22 @@ class pivotTest
     }
 
     /**
+     * Test processDateVar method.
+     *
+     * @param  mixed  $var
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function processDateVarTest($var, $type = 'date')
+    {
+        $result = $this->objectModel->processDateVar($var, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test addDrills method.
      *
      * @param  string $testCase
