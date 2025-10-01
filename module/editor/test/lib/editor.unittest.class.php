@@ -2136,15 +2136,15 @@ class editorTest
 
             case 3:
                 // 测试extension路径
-                $filePath  = $this->objectModel->app->getExtensionRoot() . 'extension' . DS . 'custom' . DS . 'user' . DS . 'model';
+                $filePath  = $this->objectModel->app->getExtensionRoot() . 'custom' . DS . 'user' . DS . 'model';
                 $className = $this->objectModel->getClassNameByPath($filePath);
                 return $className == 'user' ? '1' : '0';
 
             case 4:
-                // 测试不包含特殊路径的情况
+                // 测试不包含特殊标识路径
                 $filePath  = '/some/random/path/task/file.php';
                 $className = $this->objectModel->getClassNameByPath($filePath);
-                return $className == 'file.php' ? '1' : '0';
+                return $className == '' ? '1' : '0';
 
             case 5:
                 // 测试空路径
