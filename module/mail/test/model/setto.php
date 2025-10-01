@@ -9,9 +9,6 @@ cid=0
 
 - 步骤1：空toList列表情况 @0
 - 步骤2：toList包含有效用户但emails为空 @0
-- 步骤3：正常情况添加有效邮件地址 @1
-- 步骤4：邮件地址已标记为已发送 @1
-- 步骤5：无效邮件地址情况 @0
 
 */
 
@@ -25,32 +22,9 @@ su('admin');
 // 3. 创建测试实例
 $mailTest = new mailTest();
 
-// 4. 测试步骤执行
-$result1 = $mailTest->setTOTest(array(), array());
-r(count($result1)) && p() && e('0');                                                // 步骤1：空toList列表情况
-
-$emails = array();
-$result2 = $mailTest->setTOTest(array('admin'), $emails);
-r(count($result2)) && p() && e('0');                                                // 步骤2：toList包含有效用户但emails为空
-
-$emails = array();
-$emails['admin'] = new stdclass();
-$emails['admin']->email = 'admin@cnezsoft.com';
-$emails['admin']->realname = '管理员';
-$result3 = $mailTest->setTOTest(array('admin'), $emails);
-r(isset($result3['admin']->sended)) && p() && e('1');                               // 步骤3：正常情况添加有效邮件地址
-
-$emails = array();
-$emails['admin'] = new stdclass();
-$emails['admin']->email = 'admin@cnezsoft.com';
-$emails['admin']->realname = '管理员';
-$emails['admin']->sended = true;
-$result4 = $mailTest->setTOTest(array('admin'), $emails);
-r(isset($result4['admin']->sended)) && p() && e('1');                               // 步骤4：邮件地址已标记为已发送
-
-$emails = array();
-$emails['invalid'] = new stdclass();
-$emails['invalid']->email = 'invalid-email';
-$emails['invalid']->realname = '无效用户';
-$result5 = $mailTest->setTOTest(array('invalid'), $emails);
-r(isset($result5['invalid']->sended)) && p() && e('0');                             // 步骤5：无效邮件地址情况
+// 4. 测试步骤执行（每个r()...e()语句必须在同一行）
+r(count($mailTest->setTOTest(array(), array()))) && p() && e('0'); // 步骤1：空toList列表情况
+r(count($mailTest->setTOTest(array('admin'), array()))) && p() && e('0'); // 步骤2：toList包含有效用户但emails为空
+$emails = array(); $emails['admin'] = new stdclass(); $emails['admin']->email = 'admin@cnezsoft.com'; $emails['admin']->realname = '管理员'; r($mailTest->setTOTest(array('admin'), $emails)) && p('admin:sended') && e('1'); // 步骤3：正常情况添加有效邮件地址
+$emails = array(); $emails['admin'] = new stdclass(); $emails['admin']->email = 'admin@cnezsoft.com'; $emails['admin']->realname = '管理员'; $emails['admin']->sended = true; r($mailTest->setTOTest(array('admin'), $emails)) && p('admin:sended') && e('1'); // 步骤4：邮件地址已标记为已发送
+$emails = array(); $emails['invalid'] = new stdclass(); $emails['invalid']->email = 'invalid-email'; $emails['invalid']->realname = '无效用户'; r($mailTest->setTOTest(array('invalid'), $emails)) && p('invalid:sended') && e('~~'); // 步骤5：无效邮件地址情况
