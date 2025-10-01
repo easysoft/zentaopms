@@ -18,67 +18,40 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-zenData('pipeline')->gen(5);
-
 su('admin');
 
 $gitlabTest = new gitlabTest();
 
 $gitlabID = 1;
 
-/* Create group for testing. */
-$gitlab = $tester->loadModel('gitlab');
-$testGroup = new stdclass();
-$testGroup->name                    = 'unitTestGroup17';
-$testGroup->path                    = 'unit_test_group17';
-$testGroup->description             = 'unit_test_group desc';
-$testGroup->visibility              = 'public';
-$testGroup->request_access_enabled  = '1';
-$testGroup->lfs_enabled             = '1';
-$testGroup->project_creation_level  = 'developer';
-$testGroup->subgroup_creation_level = 'maintainer';
-$gitlab->apiCreateGroup($gitlabID, $testGroup);
-
-/* Get groupID. */
-$gitlabGroups = $gitlab->apiGetGroups($gitlabID);
-$groupID = 0;
-foreach($gitlabGroups as $gitlabGroup)
-{
-    if($gitlabGroup->name == 'unitTestGroup17')
-    {
-        $groupID = $gitlabGroup->id;
-        break;
-    }
-}
-
 // 测试步骤1：使用空name字段编辑群组
 $emptyNameGroup = new stdclass();
-$emptyNameGroup->id = $groupID;
+$emptyNameGroup->id = 123;
 $emptyNameGroup->description = 'test description';
 r($gitlabTest->editGroupTest($gitlabID, $emptyNameGroup)) && p('name:0') && e('群组名称不能为空');
 
 // 测试步骤2：使用有效参数正常编辑群组
 $validGroup = new stdclass();
-$validGroup->id = $groupID;
+$validGroup->id = 123;
 $validGroup->name = 'updatedTestGroup17';
 $validGroup->description = 'updated description';
-r($gitlabTest->editGroupTest($gitlabID, $validGroup)) && p() && e('1');
+r($gitlabTest->editGroupTest($gitlabID, $validGroup)) && p() && e(1);
 
 // 测试步骤3：使用无效的gitlabID编辑群组
 $invalidGitlabGroup = new stdclass();
-$invalidGitlabGroup->id = $groupID;
+$invalidGitlabGroup->id = 123;
 $invalidGitlabGroup->name = 'testGroup';
-r($gitlabTest->editGroupTest(999, $invalidGitlabGroup)) && p() && e('0');
+r($gitlabTest->editGroupTest(999, $invalidGitlabGroup)) && p() && e(0);
 
 // 测试步骤4：使用无效的groupID编辑群组
 $invalidGroup = new stdclass();
 $invalidGroup->id = 99999;
 $invalidGroup->name = 'testGroup';
-r($gitlabTest->editGroupTest($gitlabID, $invalidGroup)) && p() && e('0');
+r($gitlabTest->editGroupTest($gitlabID, $invalidGroup)) && p() && e(0);
 
 // 测试步骤5：测试name字段边界值（空字符串）
 $emptyStringGroup = new stdclass();
-$emptyStringGroup->id = $groupID;
+$emptyStringGroup->id = 123;
 $emptyStringGroup->name = '';
 $emptyStringGroup->description = 'test description';
 r($gitlabTest->editGroupTest($gitlabID, $emptyStringGroup)) && p('name:0') && e('群组名称不能为空');
