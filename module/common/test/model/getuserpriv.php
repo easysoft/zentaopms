@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zenData('company')->gen(1);
+zenData('user')->gen(5);
+
+su('admin');
 
 /**
 
@@ -7,24 +13,20 @@ title=测试 commonModel::getUserPriv();
 timeout=0
 cid=0
 
-- 步骤1：未登录用户 @0
-- 步骤2：超级管理员 @1
-- 步骤3：开放方法 @1
-- 步骤4：有权限用户 @1
-- 步骤5：无权限用户实际返回true @1
+- 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'nouser'  @0
+- 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'admin'  @1
+- 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'openmethod'  @1
+- 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'hasrights'  @1
+- 执行commonTest模块的getUserPrivTest方法，参数是'task', 'create', null, '', 'norights'  @0
 
 */
 
-// 1. 导入依赖
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-// 2. 创建测试实例
 $commonTest = new commonTest();
 
-// 3. 测试步骤
-r($commonTest->getUserPrivTest('user', 'browse', null, '', 'nouser')) && p() && e('0'); // 步骤1：未登录用户
-r($commonTest->getUserPrivTest('user', 'browse', null, '', 'admin')) && p() && e('1');  // 步骤2：超级管理员
-r($commonTest->getUserPrivTest('user', 'browse', null, '', 'openmethod')) && p() && e('1'); // 步骤3：开放方法
-r($commonTest->getUserPrivTest('user', 'browse', null, '', 'hasrights')) && p() && e('1'); // 步骤4：有权限用户
-r($commonTest->getUserPrivTest('task', 'create', null, '', 'norights')) && p() && e('1'); // 步骤5：无权限用户实际返回true
+r($commonTest->getUserPrivTest('user', 'browse', null, '', 'nouser')) && p() && e('0');
+r($commonTest->getUserPrivTest('user', 'browse', null, '', 'admin')) && p() && e('1');
+r($commonTest->getUserPrivTest('user', 'browse', null, '', 'openmethod')) && p() && e('1');
+r($commonTest->getUserPrivTest('user', 'browse', null, '', 'hasrights')) && p() && e('1');
+r($commonTest->getUserPrivTest('task', 'create', null, '', 'norights')) && p() && e('0');
