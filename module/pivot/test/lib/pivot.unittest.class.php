@@ -1339,6 +1339,17 @@ class pivotTest
                         return array();
                     }
                 }
+
+                public function getPivotDataByID($id)
+                {
+                    // 模拟基于测试数据的透视表查询
+                    $testData = array(
+                        1001 => (object)array('id' => 1001, 'name' => '完成项目工时透视表', 'group' => 85, 'deleted' => '0'),
+                        1003 => (object)array('id' => 1003, 'name' => '产品完成度统计表', 'group' => 59, 'deleted' => '0'),
+                    );
+
+                    return isset($testData[$id]) ? $testData[$id] : false;
+                }
             };
             $this->objectTao = null;
         }
@@ -5118,6 +5129,23 @@ class pivotTest
     public function getGroupsFromSettingsTest(array $settings): array
     {
         $result = $this->objectModel->getGroupsFromSettings($settings);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProducts method.
+     *
+     * @param  string $conditions
+     * @param  string $storyType
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function getProductsTest(string $conditions = '', string $storyType = 'story', array $filters = array()): array
+    {
+        $result = $this->objectModel->getProducts($conditions, $storyType, $filters);
         if(dao::isError()) return dao::getError();
 
         return $result;
