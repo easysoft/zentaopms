@@ -64,8 +64,8 @@ $from5->alias = 'unknown_alias';
 $statement5->from = array($from5);
 $moduleNames5 = array('zt_bug' => 'bug');
 
-r($dataviewTest->getAliasNamesTest($statement1, $moduleNames1)) && p() && e('2');              // 测试步骤1：正常获取from和join表的别名
-r($dataviewTest->getAliasNamesTest($statement2, $moduleNames2)) && p() && e('1');              // 测试步骤2：测试仅有from表的情况
-r($dataviewTest->getAliasNamesTest($statement3, $moduleNames3)) && p() && e('1');              // 测试步骤3：测试仅有join表的情况
-r($dataviewTest->getAliasNamesTest($statement4, $moduleNames4)) && p() && e('0');              // 测试步骤4：测试空statement的情况
-r($dataviewTest->getAliasNamesTest($statement5, $moduleNames5)) && p() && e('0');              // 测试步骤5：测试无匹配模块名的情况
+r(count($dataviewTest->getAliasNamesTest($statement1, $moduleNames1))) && p() && e('2');              // 测试步骤1：正常获取from和join表的别名
+r(count($dataviewTest->getAliasNamesTest($statement2, $moduleNames2))) && p() && e('1');              // 测试步骤2：测试仅有from表的情况
+r(count($dataviewTest->getAliasNamesTest($statement3, $moduleNames3))) && p() && e('1');              // 测试步骤3：测试仅有join表的情况
+r(count($dataviewTest->getAliasNamesTest($statement4, $moduleNames4))) && p() && e('0');              // 测试步骤4：测试空statement的情况
+r(count($dataviewTest->getAliasNamesTest($statement5, $moduleNames5))) && p() && e('0');              // 测试步骤5：测试无匹配模块名的情况
