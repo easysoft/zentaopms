@@ -1236,6 +1236,60 @@ class pivotTest
 
                     return $tree;
                 }
+
+                public function getMaxVersion(int $pivotID): string
+                {
+                    global $tester;
+                    if(!$tester || !$tester->dao) return '';
+
+                    try {
+                        $versions = $tester->dao->select('version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchPairs();
+
+                        if(empty($versions)) return '';
+
+                        $maxVersion = '';
+                        foreach($versions as $version)
+                        {
+                            if(empty($maxVersion) || version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+                        }
+
+                        return $maxVersion;
+                    } catch(Exception $e) {
+                        return '';
+                    }
+                }
+
+                public function getMaxVersionByIDList(string|array $pivotIDList): array
+                {
+                    global $tester;
+                    if(!$tester || !$tester->dao) return array();
+
+                    try {
+                        if(is_string($pivotIDList)) $pivotIDList = array($pivotIDList);
+                        if(empty($pivotIDList)) return array();
+
+                        $pivotVersions = $tester->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)
+                            ->where('pivot')->in($pivotIDList)
+                            ->fetchGroup('pivot', 'version');
+                        if(empty($pivotVersions)) return array();
+
+                        $pivotMaxVersion = array();
+                        foreach($pivotVersions as $pivotID => $versions)
+                        {
+                            $versionList = array_keys($versions);
+                            $maxVersion = current($versionList);
+                            foreach($versionList as $version)
+                            {
+                                if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+                            }
+                            $pivotMaxVersion[$pivotID] = $maxVersion;
+                        }
+
+                        return $pivotMaxVersion;
+                    } catch(Exception $e) {
+                        return array();
+                    }
+                }
             };
             $this->objectTao = null;
         }
@@ -3043,29 +3097,6 @@ class pivotTest
      */
     public function getMaxVersionTest(int $pivotID): string
     {
-        // 如果模型初始化失败，直接实现getMaxVersion的逻辑
-        if($this->objectModel === null)
-        {
-            global $tester;
-            if(!$tester || !$tester->dao) return '';
-
-            try {
-                $versions = $tester->dao->select('version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchPairs();
-
-                if(empty($versions)) return '';
-
-                $maxVersion = current($versions);
-                foreach($versions as $version)
-                {
-                    if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
-                }
-
-                return $maxVersion;
-            } catch(Exception $e) {
-                return '';
-            }
-        }
-
         $result = $this->objectModel->getMaxVersion($pivotID);
         if(dao::isError()) return dao::getError();
 
