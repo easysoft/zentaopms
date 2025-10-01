@@ -874,7 +874,12 @@ class pivotTest
                 }
 
                 public function getGroupsFromSettings($settings) {
-                    return isset($settings['groups']) ? $settings['groups'] : array();
+                    $groups = array();
+                    foreach($settings as $key => $value)
+                    {
+                        if(strpos($key, 'group') !== false && $value) $groups[] = $value;
+                    }
+                    return array_unique($groups);
                 }
 
                 public function genSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql') {
@@ -4890,6 +4895,21 @@ class pivotTest
     public function getDrillColsTest(string $object): array
     {
         $result = $this->objectModel->getDrillCols($object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getGroupsFromSettings method.
+     *
+     * @param  array $settings
+     * @access public
+     * @return array
+     */
+    public function getGroupsFromSettingsTest(array $settings): array
+    {
+        $result = $this->objectModel->getGroupsFromSettings($settings);
         if(dao::isError()) return dao::getError();
 
         return $result;
