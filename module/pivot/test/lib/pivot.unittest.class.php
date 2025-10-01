@@ -5017,4 +5017,19 @@ class pivotTest
 
         return $bugs;
     }
+
+    /**
+     * Test getDrillCols method.
+     *
+     * @param  string $object
+     * @access public
+     * @return array
+     */
+    public function getDrillColsTest(string $object): array
+    {
+        $result = $this->objectModel->getDrillCols($object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
