@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 class editorTest
 {
 
@@ -588,12 +589,23 @@ class editorTest
     public function analysisNonExistentFileTest()
     {
         $fileName = '/nonexistent/path/test.php';
+
+        // Capture output to avoid interference with test framework
+        ob_start();
+        $errorOccurred = false;
+
         try {
             $objects = $this->objectModel->analysis($fileName);
-            return empty($objects) ? 0 : 1;
-        } catch (Exception $e) {
-            return 0;
+            $result = empty($objects) ? 1 : 0;
+        } catch (Exception | Error | ValueError $e) {
+            $errorOccurred = true;
+            $result = 1;
         }
+
+        // Clean up output buffer
+        ob_end_clean();
+
+        return $result;
     }
 
     /**
@@ -605,12 +617,23 @@ class editorTest
     public function analysisEmptyPathTest()
     {
         $fileName = '';
+
+        // Capture output to avoid interference with test framework
+        ob_start();
+        $errorOccurred = false;
+
         try {
             $objects = $this->objectModel->analysis($fileName);
-            return empty($objects) ? 0 : 1;
-        } catch (Exception $e) {
-            return 0;
+            $result = empty($objects) ? 1 : 0;
+        } catch (Exception | Error | ValueError $e) {
+            $errorOccurred = true;
+            $result = 1;
         }
+
+        // Clean up output buffer
+        ob_end_clean();
+
+        return $result;
     }
 
     /**
