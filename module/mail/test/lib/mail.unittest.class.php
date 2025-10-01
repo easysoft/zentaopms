@@ -1016,4 +1016,18 @@ class mailTest
 
         return $result;
     }
+
+    /**
+     * Test getError method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getErrorTest()
+    {
+        $result = $this->objectModel->getError();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
