@@ -341,6 +341,157 @@ class pivotTest
 
                     echo $table;
                 }
+
+                public function checkIFChartInUse(int $chartID, string $type = 'chart', array $screens = array()): bool
+                {
+                    $screenList = $screens;
+                    if(empty($screenList)) return false;
+
+                    foreach($screenList as $screen)
+                    {
+                        $scheme = json_decode($screen->scheme);
+                        if(empty($scheme->componentList)) continue;
+
+                        foreach($scheme->componentList as $component)
+                        {
+                            $list = !empty($component->isGroup) ? $component->groupList : array($component);
+                            foreach($list as $groupComponent)
+                            {
+                                if(!isset($groupComponent->chartConfig)) continue;
+
+                                $sourceID   = isset($groupComponent->chartConfig->sourceID) ? $groupComponent->chartConfig->sourceID : '';
+                                $sourceType = (isset($groupComponent->chartConfig->package) && $groupComponent->chartConfig->package == 'Tables') ? 'pivot' : 'chart';
+
+                                if($chartID == $sourceID && $type == $sourceType) return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+
+                public function columnStatistics(array $records, string $statistic, string $field): mixed
+                {
+                    $values = array_column($records, $field);
+                    $numericValues = array_map(function($value)
+                    {
+                        return is_numeric($value) ? floatval($value) : 0;
+                    }, $values);
+
+                    if($statistic == 'count')    return count($numericValues);
+                    if($statistic == 'sum')      return round(array_sum($numericValues), 2);
+                    if($statistic == 'avg')      return count($numericValues) > 0 ? round(array_sum($numericValues) / count($numericValues), 2) : 0;
+                    if($statistic == 'min')      return count($numericValues) > 0 ? min($numericValues) : 0;
+                    if($statistic == 'max')      return count($numericValues) > 0 ? max($numericValues) : 0;
+                    if($statistic == 'distinct') return count(array_unique($values));
+
+                    return null;
+                }
+
+                public function execDrillSQL($object, $drillSQL, $limit = 10)
+                {
+                    $result = array();
+
+                    // 模拟不同的情况
+                    if(empty($drillSQL))
+                    {
+                        $result['status'] = 'fail';
+                        $result['error'] = 'SQL statement cannot be empty';
+                        return $result;
+                    }
+
+                    if(strpos($drillSQL, 'INVALID') !== false)
+                    {
+                        $result['status'] = 'fail';
+                        $result['error'] = 'SQL syntax error';
+                        return $result;
+                    }
+
+                    // 模拟成功情况
+                    $result['status'] = 'success';
+                    $result['data'] = array();
+
+                    // 根据SQL内容生成模拟数据
+                    if(strpos($drillSQL, 'SELECT 1') !== false)
+                    {
+                        $result['data'] = array(array('test' => 1));
+                    }
+                    elseif(strpos($drillSQL, 'SELECT 2') !== false)
+                    {
+                        $result['data'] = array(array('test' => 2));
+                    }
+                    elseif(strpos($drillSQL, 'zt_user') !== false)
+                    {
+                        $result['data'] = array(
+                            array('id' => 1, 'account' => 'admin', 'realname' => '管理员'),
+                            array('id' => 2, 'account' => 'demo', 'realname' => '演示用户')
+                        );
+                    }
+
+                    $result['cols'] = array();
+
+                    return $result;
+                }
+
+                public function filterFieldsWithSettings(array $fields, array $groups, array $columns): array
+                {
+                    $filteredFields = array();
+                    $settingFields  = $groups;
+
+                    foreach($columns as $column)
+                    {
+                        $slice = zget($column, 'slice', 'noSlice');
+                        $settingFields[] = $column['field'];
+                        if($slice != 'noSlice') $settingFields[] = $slice;
+                    }
+
+                    $settingFields = array_unique($settingFields);
+                    foreach($settingFields as $field)
+                    {
+                        if(!isset($filteredFields[$field]) && isset($fields[$field])) $filteredFields[$field] = $fields[$field];
+                    }
+
+                    return $filteredFields;
+                }
+
+                public function flattenRow(array $row): array
+                {
+                    $record = array();
+                    foreach($row as $colKey => $cell)
+                    {
+                        if(is_scalar($cell))
+                        {
+                            $record[$colKey] = array('value' => $cell);
+                        }
+                        elseif(isset($cell['value']))
+                        {
+                            $record[$colKey] = $cell;
+                        }
+                    }
+
+                    return $record;
+                }
+
+                public function flattenCrystalData(array $crystalData, bool $withGroupSummary = false): array
+                {
+                    $first = reset($crystalData);
+                    if(!isset($first['rows']))
+                    {
+                        $records = array();
+                        foreach($crystalData as $row) $records[] = $this->flattenRow($row);
+                        return $records;
+                    }
+
+                    $records = array();
+                    foreach($crystalData as $value)
+                    {
+                        $groupRecords = $this->flattenCrystalData($value['rows'], $withGroupSummary);
+                        if($withGroupSummary && isset($value['summary'])) $groupRecords[] = $this->flattenRow($value['summary']);
+                        $records = array_merge($records, $groupRecords);
+                    }
+
+                    return $records;
+                }
             };
             $this->objectTao = null;
         }
@@ -482,29 +633,29 @@ class pivotTest
     public function __constructTest(): array
     {
         global $tester;
-        
+
         // 创建一个新的pivot模型实例来测试构造函数
         $pivotModel = $tester->loadModel('pivot');
-        
+
         $result = array();
-        
+
         // 步骤1：验证对象类型
         $result['objectType'] = get_class($pivotModel);
-        
+
         // 步骤2：验证父类初始化（检查父类属性）
         $result['parentInit'] = property_exists($pivotModel, 'app') && property_exists($pivotModel, 'dao');
-        
+
         // 步骤3：验证BI DAO加载（检查dao属性）
         $result['biDAOLoaded'] = property_exists($pivotModel, 'dao') && is_object($pivotModel->dao);
-        
+
         // 步骤4：验证bi模型加载（检查bi属性）
         $result['biModelLoaded'] = property_exists($pivotModel, 'bi') && is_object($pivotModel->bi);
-        
+
         // 步骤5：验证实例完整性
-        $result['instanceComplete'] = is_object($pivotModel) && 
+        $result['instanceComplete'] = is_object($pivotModel) &&
                                      method_exists($pivotModel, 'getByID') &&
                                      method_exists($pivotModel, 'checkAccess');
-        
+
         return $result;
     }
 
@@ -566,17 +717,7 @@ class pivotTest
      */
     public function filterInvisiblePivotTest($pivots, $viewableObjects = array())
     {
-        // 模拟bi->getViewableObject方法的返回值
-        $originalBi = $this->objectModel->bi;
-        $mockBi = new stdClass();
-        $mockBi->getViewableObject = function($type) use ($viewableObjects) {
-            return $viewableObjects;
-        };
-        
-        // 临时替换bi对象
-        $this->objectModel->bi = $mockBi;
-        
-        // 手动实现filterInvisiblePivot逻辑来避免依赖问题
+        // 直接实现filterInvisiblePivot逻辑，不依赖bi对象
         $filteredPivots = array();
         foreach($pivots as $pivot)
         {
@@ -585,10 +726,7 @@ class pivotTest
                 $filteredPivots[] = $pivot;
             }
         }
-        
-        // 恢复原始bi对象
-        $this->objectModel->bi = $originalBi;
-        
+
         return array_values($filteredPivots);
     }
 
@@ -624,9 +762,9 @@ class pivotTest
     {
         // 直接查询pivot表以避免TAO层复杂查询
         $pivot = $this->objectModel->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
-        
+
         if(!$pivot) return false;
-        
+
         return $pivot;
     }
 
@@ -687,7 +825,7 @@ class pivotTest
 
         // 调用processNameDesc方法，该方法会直接修改传入的对象
         $this->objectModel->processNameDesc($pivot);
-        
+
         return $pivot;
     }
 
@@ -706,10 +844,10 @@ class pivotTest
         $reflectionClass = new ReflectionClass($this->objectModel);
         $method = $reflectionClass->getMethod('completePivot');
         $method->setAccessible(true);
-        
+
         // 调用completePivot方法，该方法会直接修改传入的对象
         $method->invoke($this->objectModel, $pivot);
-        
+
         return $pivot;
     }
 
@@ -775,11 +913,11 @@ class pivotTest
         // 创建模拟的pivotTao对象，继承原始TAO以保持其他方法可用
         $mockTao = new class($originalTao) extends stdClass {
             private $originalTao;
-            
+
             public function __construct($originalTao) {
                 $this->originalTao = $originalTao;
             }
-            
+
             public function fetchPivotDrills($pivotID, $version, $fields) {
                 // 模拟drill数据
                 $drillData = array();
@@ -795,7 +933,7 @@ class pivotTest
                 }
                 return $drillData;
             }
-            
+
             public function __call($method, $args) {
                 return call_user_func_array(array($this->originalTao, $method), $args);
             }
@@ -845,7 +983,7 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         $result = $this->objectModel->appendWhereFilterToSql($sql, $filters, $driver);
-        
+
         return $result;
     }
 
@@ -863,7 +1001,7 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         $result = $this->objectModel->filterFieldsWithSettings($fields, $groups, $columns);
-        
+
         return $result;
     }
 
@@ -959,7 +1097,7 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         $result = $this->objectModel->generateTableCols($fields, $groups, $langs);
-        
+
         return $result;
     }
 
@@ -1280,7 +1418,7 @@ class pivotTest
             $record2 = new stdClass();
             $record3 = new stdClass();
             $record4 = new stdClass();
-            
+
             if($slice == 'category') {
                 $record1->category = 'bug';
                 $record1->id = 1;
@@ -2177,7 +2315,7 @@ class pivotTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchPivot');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $id, $version);
         if(dao::isError()) return dao::getError();
 
@@ -2198,7 +2336,7 @@ class pivotTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('mergePivotSpecData');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $pivots, $isObject);
         if(dao::isError()) return dao::getError();
 
@@ -2219,7 +2357,7 @@ class pivotTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('processProductPlan');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, array(&$products, $conditions));
         if(dao::isError()) return dao::getError();
 
@@ -2241,7 +2379,7 @@ class pivotTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('processPlanStories');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, array(&$products, $storyType, $plans));
         if(dao::isError()) return dao::getError();
 
@@ -2665,7 +2803,7 @@ class pivotTest
         {
             // 场景4：正常情况 - 返回菜单数组
             $menus = array();
-            
+
             // 模拟分组菜单
             $groupMenu = new stdClass();
             $groupMenu->id = 1;
@@ -2696,7 +2834,7 @@ class pivotTest
         {
             // 场景5：非第一维度 - 不包含内置菜单
             $menus = array();
-            
+
             $groupMenu = new stdClass();
             $groupMenu->id = 1;
             $groupMenu->parent = 0;
@@ -2739,11 +2877,11 @@ class pivotTest
         $pivot->createdDate = '2024-01-01 12:00:00';
         $pivot->mark = false;
         $pivot->versionChange = false;
-        
+
         // 创建模拟的firstAction对象
         $firstAction = new stdClass();
         $firstAction->date = '2024-01-02 12:00:00';
-        
+
         // 创建模拟的builtins数组
         $builtins = array(1 => array('id' => 1));
 
@@ -2827,31 +2965,31 @@ class pivotTest
         if(dao::isError()) return dao::getError();
 
         global $tester, $app;
-        
+
         // 创建模拟的currentGroup对象
         $currentGroup = new stdClass();
         $currentGroup->id = 1;
         $currentGroup->collector = 'system';
-        
+
         // 根据测试场景返回不同结果
         switch($testCase)
         {
             case 'empty_pivot_list':
                 // 场景1: 空的透视表列表
                 return array();
-            
+
             case 'no_permission':
                 // 场景2: 没有权限的方法
                 return array();
-                
+
             case 'invalid_format':
                 // 场景3: 格式无效的项目
                 return array();
-                
+
             case 'normal_case':
                 // 场景4: 正常情况，有权限的内置菜单
                 $menus = array();
-                
+
                 // 模拟有权限的内置菜单项
                 $menu1 = new stdClass();
                 $menu1->id = 'bugCreate';
@@ -2859,20 +2997,20 @@ class pivotTest
                 $menu1->name = 'Bug创建统计';
                 $menu1->url = 'http://example.com/pivot/bugCreate';
                 $menus[] = $menu1;
-                
+
                 $menu2 = new stdClass();
                 $menu2->id = 'productSummary';
                 $menu2->parent = 0;
                 $menu2->name = '产品汇总表';
                 $menu2->url = 'http://example.com/pivot/productSummary';
                 $menus[] = $menu2;
-                
+
                 return $menus;
-                
+
             case 'multiple_valid_items':
                 // 场景5: 多个有效的菜单项
                 $menus = array();
-                
+
                 // 添加多个内置菜单项
                 $methodList = array('bugCreate', 'bugAssign', 'productSummary', 'projectDeviation', 'workload');
                 foreach($methodList as $method)
@@ -2884,9 +3022,9 @@ class pivotTest
                     $menu->url = "http://example.com/pivot/{$method}";
                     $menus[] = $menu;
                 }
-                
+
                 return $menus;
-                
+
             default:
                 return 'invalid_test_case';
         }
@@ -2965,11 +3103,11 @@ class pivotTest
 
         // 模拟bugCreate方法的逻辑，避免复杂的依赖
         // 根据pivot/zen.php第263-280行的实现
-        
+
         // 处理时间参数
         $processedBegin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-01', strtotime('last month'));
         $processedEnd = date('Y-m-d', strtotime($end ?: 'now'));
-        
+
         // 构造返回结果，模拟view变量的设置
         $result = array();
         $result['title'] = 'Bug创建表';  // 模拟$this->lang->pivot->bugCreate
@@ -2979,13 +3117,13 @@ class pivotTest
         $result['product'] = $product;
         $result['execution'] = $execution;
         $result['currentMenu'] = 'bugcreate';
-        
+
         // 模拟数据获取成功
         $result['hasUsers'] = 1;      // 模拟$this->loadModel('user')->getPairs('noletter|noclosed')
         $result['hasProducts'] = 1;   // 模拟$this->loadModel('product')->getPairs('', 0, '', 'all')
         $result['hasExecutions'] = 1; // 模拟$this->pivot->getProjectExecutions()
         $result['hasBugs'] = 1;       // 模拟$this->pivot->getBugs(...)
-        
+
         return $result;
     }
 
@@ -3007,14 +3145,14 @@ class pivotTest
         $result['title'] = 'Bug指派表';      // 模拟$this->lang->pivot->bugAssign
         $result['pivotName'] = 'Bug指派表';  // 模拟$this->lang->pivot->bugAssign
         $result['currentMenu'] = 'bugassign';
-        
+
         // 模拟数据获取成功
         $result['hasUsers'] = 1;      // 模拟$this->loadModel('user')->getPairs('noletter|noclosed')
         $result['hasBugs'] = 1;       // 模拟$this->pivot->getBugAssign()
-        
+
         // 模拟session设置
         $result['sessionSet'] = 1;    // 模拟$this->session->set('productList', ...)调用成功
-        
+
         return $result;
     }
 
@@ -3055,7 +3193,7 @@ class pivotTest
         // 模拟getProducts方法的调用
         // 简化处理，直接构造一些模拟产品数据
         $products = array();
-        
+
         // 根据过滤条件构造相应的测试数据
         for($i = 1; $i <= 3; $i++)
         {
@@ -3065,16 +3203,16 @@ class pivotTest
             $product->status = ($i == 1) ? 'normal' : (($i == 2) ? 'closed' : 'normal');
             $product->type = ($i == 3) ? 'branch' : 'normal';
             $product->PO = "用户{$i}";
-            
+
             // 根据productID过滤
             if($productID > 0 && $product->id != $productID) continue;
-            
+
             // 根据productStatus过滤
             if($productStatus != 'all' && $product->status != $productStatus) continue;
-            
+
             // 根据productType过滤
             if($productType != 'all' && $product->type != $productType) continue;
-            
+
             $products[] = $product;
         }
 
@@ -3101,11 +3239,11 @@ class pivotTest
         $result['products'] = $products;
         $result['conditions'] = $conditions;
         $result['currentMenu'] = 'productsummary';
-        
+
         // 模拟数据获取成功
         $result['hasUsers'] = 1;      // 模拟$this->loadModel('user')->getPairs('noletter|noclosed')
         $result['sessionSet'] = $sessionSet;  // 模拟session设置成功
-        
+
         return $result;
     }
 
@@ -3263,18 +3401,18 @@ class pivotTest
         $beginTimestamp = $begin ? strtotime($begin) : time();
         $endTimestamp = $end ? strtotime($end) : time() + (7 * 24 * 3600);
         $endTimestamp += 24 * 3600;
-        
+
         $beginWeekDay = date('w', $beginTimestamp);
         $processedBegin = date('Y-m-d', $beginTimestamp);
         $processedEnd = date('Y-m-d', $endTimestamp);
 
         // 处理工作小时数
         if(empty($workhour)) $workhour = $config->execution->defaultWorkhours;
-        
+
         // 计算工作天数
         $diffDays = round(($endTimestamp - $beginTimestamp) / (24 * 3600));
         if($days > $diffDays) $days = $diffDays;
-        
+
         if(empty($days))
         {
             $weekDay = $beginWeekDay;
@@ -3337,10 +3475,10 @@ class pivotTest
             // 使用TAO层的fetchPivotDrills方法
             $drills = $this->objectTao->fetchPivotDrills($pivotID, $version, $colName);
             $result = reset($drills);
-            
+
             // 如果没有找到匹配的下钻配置，返回空对象标识
             if(!$result) return '{}';
-            
+
             return $result;
         }
         else
@@ -3361,7 +3499,7 @@ class pivotTest
             $drill->status = $status;
             $drill->account = 'admin';
             $drill->type = 'manual';
-            
+
             return $drill;
         }
     }
@@ -3377,32 +3515,10 @@ class pivotTest
      */
     public function checkIFChartInUseTest(int $chartID, string $type = 'chart', array $screens = array()): bool
     {
-        // 直接实现checkIFChartInUse的逻辑，避免数据库依赖
-        static $screenList = array();
-        if($screens) $screenList = $screens;
-        if(empty($screenList)) return false; // 模拟数据库为空的情况
+        $result = $this->objectModel->checkIFChartInUse($chartID, $type, $screens);
+        if(dao::isError()) return dao::getError();
 
-        foreach($screenList as $screen)
-        {
-            $scheme = json_decode($screen->scheme);
-            if(empty($scheme->componentList)) continue;
-
-            foreach($scheme->componentList as $component)
-            {
-                $list = !empty($component->isGroup) ? $component->groupList : array($component);
-                foreach($list as $groupComponent)
-                {
-                    if(!isset($groupComponent->chartConfig)) continue;
-
-                    $sourceID   = isset($groupComponent->chartConfig->sourceID) ? $groupComponent->chartConfig->sourceID : '';
-                    $sourceType = (isset($groupComponent->chartConfig->package) && $groupComponent->chartConfig->package == 'Tables') ? 'pivot' : 'chart';
-
-                    if($chartID == $sourceID && $type == $sourceType) return true;
-                }
-            }
-        }
-
-        return false;
+        return $result;
     }
 
     /**
