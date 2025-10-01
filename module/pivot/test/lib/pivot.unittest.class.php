@@ -1265,6 +1265,7 @@ class pivotTest
                     return isset($testData[$id]) ? $testData[$id] : false;
                 }
 
+
                 public function getGroupTreeWithKey(array $data): array|string
                 {
                     $first = reset($data);
@@ -5146,6 +5147,90 @@ class pivotTest
     public function getProductsTest(string $conditions = '', string $storyType = 'story', array $filters = array()): array
     {
         $result = $this->objectModel->getProducts($conditions, $storyType, $filters);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getUserWorkLoad method.
+     *
+     * @param  array $projects
+     * @param  array $teamTasks
+     * @param  float $allHour
+     * @access public
+     * @return array
+     */
+    public function getUserWorkLoadTest(array $projects, array $teamTasks, float $allHour): array
+    {
+        $result = $this->objectModel->getUserWorkLoad($projects, $teamTasks, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getWorkload method.
+     *
+     * @param  int    $dept
+     * @param  string $assign
+     * @param  array  $users
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    public function getWorkloadTest(int $dept, string $assign, array $users, float $allHour): array
+    {
+        $result = $this->objectModel->getWorkload($dept, $assign, $users, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getWorkloadNoAssign method.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @access public
+     * @return array
+     */
+    public function getWorkloadNoAssignTest(array $deptUsers, array $users, bool $canViewExecution): array
+    {
+        $result = $this->objectModel->getWorkloadNoAssign($deptUsers, $users, $canViewExecution);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getWorkLoadAssign method.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    public function getWorkLoadAssignTest(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
+    {
+        $result = $this->objectModel->getWorkLoadAssign($deptUsers, $users, $canViewExecution, $allHour);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isShowLastRow method.
+     *
+     * @param  string $showColPosition
+     * @access public
+     * @return bool
+     */
+    public function isShowLastRowTest(string $showColPosition): bool
+    {
+        $result = $this->objectModel->isShowLastRow($showColPosition);
         if(dao::isError()) return dao::getError();
 
         return $result;
