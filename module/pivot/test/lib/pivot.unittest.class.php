@@ -1264,6 +1264,27 @@ class pivotTest
 
                     return isset($testData[$id]) ? $testData[$id] : false;
                 }
+
+                public function getGroupTreeWithKey(array $data): array|string
+                {
+                    $first = reset($data);
+                    if(!isset($first['groups'])) return $first['groupKey'];
+
+                    $tree = array();
+                    foreach($data as $value)
+                    {
+                        $groups = $value['groups'];
+                        $parentKey = array_shift($groups);
+                        if(!isset($tree[$parentKey])) $tree[$parentKey] = array();
+                        $value['groups'] = $groups;
+                        if(count($groups) == 0) unset($value['groups']);
+                        $tree[$parentKey][] = $value;
+                    }
+
+                    foreach($tree as $key => $value) $tree[$key] = $this->getGroupTreeWithKey($value);
+
+                    return $tree;
+                }
             };
             $this->objectTao = null;
         }
