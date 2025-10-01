@@ -352,14 +352,18 @@ class executionTest
         $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
         $siblingStages       = $tester->programplan->getSiblings($executionID);
 
+        if(empty($selfAndChildrenList[$executionID])) return 'empty';
+
         $selfAndChildren = $selfAndChildrenList[$executionID];
+        if(empty($selfAndChildren[$executionID])) return 'empty';
+
         $execution       = $selfAndChildren[$executionID];
         $executionType   = $execution->type;
 
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -369,6 +373,33 @@ class executionTest
         {
             return (empty($result) or $result == "'',") ? 'empty' : $result;
         }
+    }
+
+    /**
+     * Test changeStatus2Wait method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return string
+     */
+    public function changeStatus2WaitTest($executionID)
+    {
+        global $tester;
+
+        if($executionID <= 0) return '';
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+
+        if(empty($selfAndChildrenList[$executionID])) return '';
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -385,9 +416,13 @@ class executionTest
         $tester->loadModel('programplan');
         $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
 
+        if(empty($selfAndChildrenList) || !isset($selfAndChildrenList[$executionID])) return false;
+
         $selfAndChildren = $selfAndChildrenList[$executionID];
-        $execution       = $selfAndChildren[$executionID];
-        $executionType   = $execution->type;
+        if(empty($selfAndChildren) || !isset($selfAndChildren[$executionID])) return false;
+
+        $execution = $selfAndChildren[$executionID];
+        if(empty($execution)) return false;
 
         $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
 
