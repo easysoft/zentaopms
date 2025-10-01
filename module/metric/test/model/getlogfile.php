@@ -3,26 +3,28 @@
 
 /**
 
-title=Test metricModel::getLogFile();
+title=测试 metricModel::getLogFile();
 timeout=0
 cid=0
 
-- Step 1: Normal case verify contains metriclib @*metriclib*
-- Step 2: Verify ends with .log.php @*.log.php
-- Step 3: Verify contains tmp and log directory @*/tmp/*log/*
-- Step 4: Verify contains current date @*metriclib.20250908.log.php
-- Step 5: Verify returns non-empty string @~~
+- 执行metricTest模块的getLogFileTest方法，参数是, 'metriclib') !== false  @1
+- 执行metricTest模块的getLogFileTest方法，参数是, -8) === '.log.php  @1
+- 执行metricTest模块的getLogFileTest方法，参数是, 'tmp/log') !== false  @1
+- 执行metricTest模块的getLogFileTest方法，参数是, "metriclib.$currentDate.log.php") !== false  @1
+- 执行metricTest模块的getLogFileTest方法，参数是 > 0  @1
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
 
 su('admin');
 
 $metricTest = new metricTest();
+$currentDate = date('Ymd');
 
-r($metricTest->getLogFileTest()) && p() && e('/repo/zentaopms/tmp/log/metriclib.20250908.log.php');
-r($metricTest->getLogFileTest()) && p() && e('/repo/zentaopms/tmp/log/metriclib.20250908.log.php');
-r($metricTest->getLogFileTest()) && p() && e('/repo/zentaopms/tmp/log/metriclib.20250908.log.php');
-r($metricTest->getLogFileTest()) && p() && e('/repo/zentaopms/tmp/log/metriclib.20250908.log.php');
+r(strpos($metricTest->getLogFileTest(), 'metriclib') !== false) && p() && e('1');
+r(substr($metricTest->getLogFileTest(), -8) === '.log.php') && p() && e('1');
+r(strpos($metricTest->getLogFileTest(), 'tmp/log') !== false) && p() && e('1');
+r(strpos($metricTest->getLogFileTest(), "metriclib.$currentDate.log.php") !== false) && p() && e('1');
 r(strlen($metricTest->getLogFileTest()) > 0) && p() && e('1');
