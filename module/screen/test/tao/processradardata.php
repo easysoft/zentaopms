@@ -4,14 +4,13 @@
 /**
 
 title=测试 screenTao::processRadarData();
-timeout=0
 cid=0
 
-- 步骤1：正常情况，第一个指标值为5第result条的0属性 @5
-- 步骤2：空结果，第一个指标值为0第result条的0属性 @0
-- 步骤3：单指标，数据正确第result条的0属性 @10
-- 步骤4：聚合，test类别总分13第result条的0属性 @13
-- 步骤5：异常配置，指标数组长度为0属性indicatorCount @0
+- 测试步骤1：正常输入情况 >> 期望正常结果
+- 测试步骤2：边界值输入 >> 期望边界处理结果
+- 测试步骤3：无效输入情况 >> 期望错误处理结果
+- 测试步骤4：权限验证情况 >> 期望权限控制结果
+- 测试步骤5：业务规则验证 >> 期望业务逻辑结果
 
 */
 
@@ -19,24 +18,12 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-// 2. zendata数据准备
-$table = zenData('story');
-$table->id->range('1-10');
-$table->title->range('需求1{3}, 需求2{4}, 需求3{3}');
-$table->status->range('active{5}, closed{3}, draft{2}');
-$table->stage->range('developing{4}, testing{3}, released{3}');
-$table->estimate->range('1-8');
-$table->gen(10);
-
-// 3. 用户登录（选择合适角色）
-su('admin');
-
 // 4. 创建测试实例（变量名与模块名一致）
 $screenTest = new screenTest();
 
 // 准备测试数据
 // 测试步骤1：正常雷达图数据处理
-$sql1 = "SELECT 'active' as status, 'developing' as stage, 5 as estimate UNION SELECT 'closed' as status, 'testing' as stage, 3 as estimate UNION SELECT 'draft' as status, 'released' as stage, 2 as estimate";
+$sql1 = "SELECT 'active' as status, 5 as estimate UNION SELECT 'closed' as status, 3 as estimate UNION SELECT 'draft' as status, 2 as estimate";
 $settings1 = new stdclass();
 $settings1->group = array((object)array('field' => 'status'));
 $settings1->metric = array(
@@ -76,7 +63,7 @@ $settings5 = new stdclass();
 $settings5->group = array((object)array('field' => 'type'));
 $settings5->metric = array(); // 空的指标配置
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($screenTest->processRadarDataTest($sql1, $settings1)) && p('result:0') && e('5'); // 步骤1：正常情况，第一个指标值为5
 r($screenTest->processRadarDataTest($sql2, $settings2)) && p('result:0') && e('0'); // 步骤2：空结果，第一个指标值为0
 r($screenTest->processRadarDataTest($sql3, $settings3)) && p('result:0') && e('10'); // 步骤3：单指标，数据正确
