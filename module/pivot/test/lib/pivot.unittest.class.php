@@ -4908,4 +4908,19 @@ class pivotTest
 
         return $execution;
     }
+
+    /**
+     * Test getAssignTask method.
+     *
+     * @param  array $deptUsers
+     * @access public
+     * @return array
+     */
+    public function getAssignTaskTest(array $deptUsers = array()): array
+    {
+        $result = $this->objectTao->getAssignTask($deptUsers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
