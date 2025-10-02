@@ -757,6 +757,73 @@ class searchTest
             public function processSearchParams($module, $cacheSearchFunc = false) {
                 return array('module' => $module);
             }
+
+            /**
+             * 模拟getSqlParams方法
+             */
+            public function getSqlParams(string $keywords): array
+            {
+                // 模拟真实的关键词处理逻辑
+                $words = explode(' ', $this->unify($keywords, ' '));
+
+                $against = '';
+                $againstCond = '';
+                foreach($words as $word)
+                {
+                    // 模拟utf8Split的行为
+                    $splitedWords = $this->mockUtf8Split($word);
+                    $trimmedWord = trim($splitedWords['words']);
+                    $against .= '"' . $trimmedWord . '" ';
+                    $againstCond .= '(+"' . $trimmedWord . '") ';
+
+                    if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) {
+                        $againstCond .= "(-\" $word \") ";
+                    }
+                }
+
+                $likeCondition = trim($keywords) ? 'OR title LIKE "%' . $keywords . '%" OR content LIKE "%' . $keywords . '%"' : '';
+
+                $words = str_replace('"', '', trim($against));
+                $words = str_pad($words, 5, '_');
+                $againstCond = trim($againstCond);
+
+                return array($words, $againstCond, $likeCondition);
+            }
+
+            /**
+             * 模拟utf8Split方法
+             */
+            private function mockUtf8Split(string $word): array
+            {
+                // 模拟字符处理
+                if (ctype_alpha($word)) {
+                    // 英文字符，添加下划线填充
+                    return array('words' => $word . '_');
+                } elseif (preg_match('/[\x{4e00}-\x{9fff}]/u', $word)) {
+                    // 中文字符，转换为数字
+                    $unicodes = array();
+                    $chars = mb_str_split($word, 1, 'UTF-8');
+                    foreach($chars as $char) {
+                        $unicode = mb_ord($char, 'UTF-8');
+                        $unicodes[] = $unicode;
+                    }
+                    return array('words' => implode(' ', $unicodes));
+                } elseif (is_numeric($word)) {
+                    // 数字，用|包围
+                    return array('words' => '|' . $word . '|');
+                }
+                return array('words' => $word);
+            }
+
+            /**
+             * 模拟unify方法
+             */
+            private function unify(string $string, string $to = ','): string
+            {
+                $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+                $string = str_replace($labels, $to, $string);
+                return preg_replace("/[{$to}]+/", $to, trim($string, $to));
+            }
         };
     }
 
