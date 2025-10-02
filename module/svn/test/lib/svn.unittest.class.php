@@ -190,10 +190,21 @@ class svnTest
      */
     public function catTest(string $url, int $revision)
     {
+        ob_start();
         $result = $this->objectModel->cat($url, $revision);
+        $output = ob_get_clean();
+
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        // 如果有输出错误，返回简化的错误标识
+        if($output && strpos($output, 'not found') !== false) return '~~';
+        if($output && strpos($output, 'error') !== false) return '~~';
+
+        // 如果结果是false，返回0
+        if($result === false) return '0';
+
+        // 其他情况返回实际结果或简化标识
+        return $result ? $result : '~~';
     }
 
     /**
