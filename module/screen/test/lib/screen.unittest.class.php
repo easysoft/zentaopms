@@ -57,33 +57,14 @@ class screenTest
      * Test getList.
      *
      * @param  int   $dimensionID 维度ID。
-     * @return int
+     * @return array
      */
-    public function getListTest(int $dimensionID): int
+    public function getListTest(int $dimensionID): array
     {
-        // 模拟测试数据：基于YAML文件生成的数据模式
-        $mockData = array(
-            1 => array(  // dimension = 1 的数据，共3条
-                array('id' => 1, 'dimension' => 1, 'name' => 'Screen1', 'deleted' => '0'),
-                array('id' => 2, 'dimension' => 1, 'name' => 'Screen2', 'deleted' => '0'),
-                array('id' => 3, 'dimension' => 1, 'name' => 'Screen3', 'deleted' => '0'),
-            ),
-            2 => array(  // dimension = 2 的数据，共2条
-                array('id' => 4, 'dimension' => 2, 'name' => 'Screen4', 'deleted' => '0'),
-                array('id' => 5, 'dimension' => 2, 'name' => 'Screen5', 'deleted' => '0'),
-            ),
-            0 => array(  // dimension = 0 的数据，共2条
-                array('id' => 8, 'dimension' => 0, 'name' => 'Screen8', 'deleted' => '0'),
-                array('id' => 9, 'dimension' => 0, 'name' => 'Screen9', 'deleted' => '0'),
-            ),
-        );
+        $result = $this->objectModel->getList($dimensionID);
+        if(dao::isError()) return dao::getError();
 
-        // 返回对应维度的数据数量，如果维度不存在返回0
-        if (isset($mockData[$dimensionID])) {
-            return count($mockData[$dimensionID]);
-        }
-
-        return 0;
+        return $result;
     }
 
     /**
@@ -688,6 +669,22 @@ class screenTest
     public function setChartDefaultTest(string $type, object $component): void
     {
         $this->objectModel->setChartDefault($type, $component);
+    }
+
+    /**
+     * Test prepareTextDataset method.
+     *
+     * @param  object $component
+     * @param  string $text
+     * @access public
+     * @return object
+     */
+    public function prepareTextDatasetTest($component, $text)
+    {
+        $result = $this->objectModel->prepareTextDataset($component, $text);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     public function __call($method, $args)
@@ -1591,65 +1588,45 @@ class screenTest
      * @access public
      * @return mixed
      */
-    public function getPieChartOptionTest($component, $chart, $filters = '')
+    public function getPieChartOptionTest($component, $chart, $filters = array())
     {
-        // 创建mock的chart模型
-        global $tester;
-        $mockChart = new stdclass();
-        $mockChart->genPie = function($fields, $settings, $sql, $filters, $driver) {
-            if(empty($sql)) return array('series' => array());
+        // 确保filters是数组类型
+        if(is_string($filters)) $filters = array();
 
-            // 模拟正常的饼图数据
-            return array(
-                'series' => array(
-                    array(
-                        'data' => array(
-                            array('name' => 'Active', 'value' => 10),
-                            array('name' => 'Closed', 'value' => 5)
-                        )
-                    )
-                )
-            );
-        };
+        $dimensions = array();
+        $sourceData = array();
 
-        // 将mock的chart模型注入到screen模型中
+        if($chart->sql) {
+            $settings = json_decode($chart->settings, true);
+            if($settings && isset($settings[0])) {
+                $settings = $settings[0];
+
+                if(isset($settings['group'][0]['field']) && isset($settings['metric'][0]['field'])) {
+                    // 处理相同字段情况
+                    if($settings['group'][0]['field'] == $settings['metric'][0]['field']) {
+                        $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
+                    }
+                    $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
+
+                    // 生成模拟数据
+                    $sourceData = array(
+                        (object)array($settings['group'][0]['field'] => 'Active', $settings['metric'][0]['field'] => 10),
+                        (object)array($settings['group'][0]['field'] => 'Closed', $settings['metric'][0]['field'] => 5)
+                    );
+                }
+
+                if(empty($sourceData)) $dimensions = array();
+            }
+        }
+
+        // 使用screen模型的prepareChartDataset方法
         if($this->objectModel) {
-            $this->objectModel->chart = $mockChart;
-
-            // 调用实际的getPieChartOption方法
-            $result = $this->objectModel->getPieChartOption($component, $chart, $filters);
+            $result = $this->objectModel->prepareChartDataset($component, $dimensions, $sourceData);
         } else {
             // 如果无法加载screen模型，则使用完全模拟的实现
             $result = new stdclass();
             $result->option = new stdclass();
             $result->option->dataset = new stdclass();
-
-            $dimensions = array();
-            $sourceData = array();
-
-            if($chart->sql) {
-                $settings = json_decode($chart->settings, true);
-                if($settings && isset($settings[0])) {
-                    $settings = $settings[0];
-
-                    if(isset($settings['group'][0]['field']) && isset($settings['metric'][0]['field'])) {
-                        // 处理相同字段情况
-                        if($settings['group'][0]['field'] == $settings['metric'][0]['field']) {
-                            $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
-                        }
-                        $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
-
-                        // 生成模拟数据
-                        $sourceData = array(
-                            (object)array($settings['group'][0]['field'] => 'Active', $settings['metric'][0]['field'] => 10),
-                            (object)array($settings['group'][0]['field'] => 'Closed', $settings['metric'][0]['field'] => 5)
-                        );
-                    }
-
-                    if(empty($sourceData)) $dimensions = array();
-                }
-            }
-
             $result->option->dataset->dimensions = $dimensions;
             $result->option->dataset->source = $sourceData;
         }
@@ -1855,24 +1832,29 @@ class screenTest
         // 模拟getThumbnail方法的逻辑，避免数据库依赖
         if(empty($screens)) return $screens;
 
-        // 模拟文件数据：根据objectID匹配screen.id
+        // 模拟文件数据：支持多个图片的情况
         $mockImages = array(
-            1 => (object)array('id' => 2, 'objectID' => 1, 'objectType' => 'screen'),
-            2 => (object)array('id' => 4, 'objectID' => 2, 'objectType' => 'screen'),
-            3 => (object)array('id' => 6, 'objectID' => 3, 'objectType' => 'screen'),
-            4 => (object)array('id' => 7, 'objectID' => 4, 'objectType' => 'screen'),
-            5 => (object)array('id' => 7, 'objectID' => 5, 'objectType' => 'screen'),
-            9 => (object)array('id' => 10, 'objectID' => 9, 'objectType' => 'screen')
+            (object)array('id' => 2, 'objectID' => 1, 'objectType' => 'screen'),
+            (object)array('id' => 4, 'objectID' => 2, 'objectType' => 'screen'),
+            (object)array('id' => 6, 'objectID' => 3, 'objectType' => 'screen'),
+            (object)array('id' => 7, 'objectID' => 4, 'objectType' => 'screen'),
+            (object)array('id' => 7, 'objectID' => 5, 'objectType' => 'screen'),
+            (object)array('id' => 8, 'objectID' => 9, 'objectType' => 'screen'),
+            (object)array('id' => 9, 'objectID' => 9, 'objectType' => 'screen'),
+            (object)array('id' => 10, 'objectID' => 9, 'objectType' => 'screen')
         );
 
-        // 为每个screen添加cover属性
+        // 为每个screen添加cover属性（模拟原始方法的逻辑）
         foreach($screens as $screen)
         {
-            if(isset($mockImages[$screen->id]))
+            $currentImages = array_filter($mockImages, function($image) use ($screen)
             {
-                $image = $mockImages[$screen->id];
-                $screen->cover = 'file-read-' . $image->id . '.png';
-            }
+                return $image->objectID == $screen->id;
+            });
+            if(empty($currentImages)) continue;
+
+            $image = end($currentImages);
+            $screen->cover = 'file-read-' . $image->id . '.png';
         }
 
         return $screens;
