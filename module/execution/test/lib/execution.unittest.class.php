@@ -2675,15 +2675,10 @@ class executionTest
      */
     public function formatTasksForTreeTest($param = null)
     {
-        global $app, $tester;
-
-        // 使用tao层的方法
-        $executionTao = $tester->loadTao('execution');
-
         // 如果是数组参数，直接测试formatTasksForTree方法
         if(is_array($param))
         {
-            return $executionTao->formatTasksForTree($param);
+            return $this->objectTao->formatTasksForTree($param);
         }
 
         // 如果是executionID，获取任务数据
@@ -2691,7 +2686,7 @@ class executionTest
         if(empty($executionID)) return array();
 
         // 直接使用DAO查询任务数据，避免复杂的processTasks逻辑
-        $tasks = $this->executionModel->dao->select('*')->from(TABLE_TASK)
+        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
@@ -2700,7 +2695,7 @@ class executionTest
         if(empty($tasks)) return array();
 
         // 调用tao层的formatTasksForTree方法
-        return $executionTao->formatTasksForTree($tasks);
+        return $this->objectTao->formatTasksForTree($tasks);
     }
 
     /**
