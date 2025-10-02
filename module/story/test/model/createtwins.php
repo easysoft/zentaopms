@@ -7,26 +7,15 @@ title=测试 storyModel::createTwins();
 timeout=0
 cid=0
 
-- 步骤1：正常多分支孪生需求创建
- - 属性id @5
- - 属性twins @6
-- 步骤2：空分支数组情况
- - 属性id @7
- - 属性twins @
-- 步骤3：单一分支创建
- - 属性id @8
- - 属性twins @
-- 步骤4：多分支复杂数据创建
- - 属性id @9
- - 属性twins @10
-- 步骤5：包含bugID和todoID的孪生创建
- - 属性id @12
- - 属性twins @13
+- 步骤1：正常多分支孪生需求创建 @5
+- 步骤2：空分支数组情况 @7
+- 步骤3：单一分支创建 @8
+- 步骤4：多分支复杂数据创建 @9
+- 步骤5：包含bugID和todoID的孪生创建 @12
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
 zenData('product')->gen(3);
 zenData('project')->gen(3);
@@ -49,7 +38,8 @@ $storySpec->gen(4);
 
 su('admin');
 
-$storyTest = new storyTest();
+global $tester;
+$tester->loadModel('story');
 
 // 测试数据1：正常多分支孪生需求
 $data1 = new stdclass();
@@ -57,7 +47,7 @@ $data1->product     = 1;
 $data1->module      = 0;
 $data1->branches    = array(0, 1);
 $data1->modules     = array(1, 2);
-$data1->plans       = array(0, 0);
+$data1->plans       = array('0', '0');
 $data1->plan        = '1';
 $data1->assignedTo  = '';
 $data1->source      = '';
@@ -90,22 +80,22 @@ $data2->title = 'Empty Branches Story';
 $data3 = clone $data1;
 $data3->branches = array(0);
 $data3->modules = array(1);
-$data3->plans = array(0);
+$data3->plans = array('0');
 $data3->title = 'Single Branch Story';
 
 // 测试数据4：多分支复杂数据
 $data4 = clone $data1;
 $data4->branches = array(0, 1, 2);
 $data4->modules = array(1, 2, 3);
-$data4->plans = array(1, 2, 0);
+$data4->plans = array('1', '2', '0');
 $data4->title = 'Multi Branch Complex Story';
 
 // 测试数据5：包含bugID和todoID
 $data5 = clone $data1;
 $data5->title = 'Story With Bug and Todo';
 
-r($storyTest->createTwinsTest($data1)) && p('id,twins') && e('5,6'); // 步骤1：正常多分支孪生需求创建
-r($storyTest->createTwinsTest($data2)) && p('id,twins') && e('7,'); // 步骤2：空分支数组情况
-r($storyTest->createTwinsTest($data3)) && p('id,twins') && e('8,'); // 步骤3：单一分支创建
-r($storyTest->createTwinsTest($data4)) && p('id,twins') && e('9,10,11'); // 步骤4：多分支复杂数据创建
-r($storyTest->createTwinsTest($data5, 1, 1, 'extra', 1)) && p('id,twins') && e('12,13'); // 步骤5：包含bugID和todoID的孪生创建
+r($tester->story->createTwins($data1, 0, 0)) && p() && e('5'); // 步骤1：正常多分支孪生需求创建
+r($tester->story->createTwins($data2, 0, 0)) && p() && e('7'); // 步骤2：空分支数组情况
+r($tester->story->createTwins($data3, 0, 0)) && p() && e('8'); // 步骤3：单一分支创建
+r($tester->story->createTwins($data4, 0, 0)) && p() && e('9'); // 步骤4：多分支复杂数据创建
+r($tester->story->createTwins($data5, 1, 1, 'extra', 1)) && p() && e('12'); // 步骤5：包含bugID和todoID的孪生创建

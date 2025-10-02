@@ -439,12 +439,13 @@ class storyTest
      * @param  int    $executionID
      * @param  int    $bugID
      * @param  string $extra
+     * @param  int    $todoID
      * @access public
      * @return object|array
      */
-    public function createTwinsTest(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): object|array
+    public function createTwinsTest(object $story, int $executionID = 0, int $bugID = 0, string $extra = '', int $todoID = 0): object|array
     {
-        $storyID = $this->objectModel->createTwins($story, $executionID, $bugID, $extra);
+        $storyID = $this->objectModel->createTwins($story, $executionID, $bugID, $extra, $todoID);
         if(dao::isError()) return dao::getError();
 
         $story = $this->objectModel->loadModel('story')->getByID($storyID);
