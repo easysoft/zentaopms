@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 class programTest
 {
     /**
@@ -612,10 +613,17 @@ class programTest
      */
     public function suspendTest(int $programID, array $postData): bool
     {
+        // 检查项目集是否存在
+        $program = $this->program->getByID($programID);
+        if(!$program) return false;
+
         $postDataObj = new stdclass();
         $postDataObj->status = 'suspended';
         $postDataObj->comment = isset($postData['comment']) ? $postData['comment'] : '';
         $postDataObj->uid = isset($postData['uid']) ? $postData['uid'] : '';
+        $postDataObj->lastEditedBy = 'admin';
+        $postDataObj->lastEditedDate = helper::now();
+
         foreach($postData as $field => $value) $postDataObj->{$field} = $value;
 
         $result = $this->program->suspend($programID, $postDataObj);
