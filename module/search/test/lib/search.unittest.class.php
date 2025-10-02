@@ -749,6 +749,18 @@ class searchTest
     }
 
     /**
+     * 创建模拟的Model对象
+     */
+    private function createMockModelObject()
+    {
+        $this->objectModel = new class {
+            public function processSearchParams($module, $cacheSearchFunc = false) {
+                return array('module' => $module);
+            }
+        };
+    }
+
+    /**
      * Test processSearchParams method.
      *
      * @param  string $module
