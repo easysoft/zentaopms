@@ -8,10 +8,8 @@ class searchTest
     public function __construct()
     {
         global $tester;
-
-        // 为了避免框架初始化问题，直接使用模拟对象
-        $this->objectModel = new stdClass();
-        $this->createMockTaoObject();
+        $this->objectModel = $tester->loadModel('search');
+        $this->objectTao   = $tester->loadTao('search');
     }
 
     /**
@@ -601,14 +599,32 @@ class searchTest
      * @param  string $type
      * @param  int    $lastID
      * @access public
-     * @return array
+     * @return mixed
      */
-    public function buildAllIndexTest(string $type, int $lastID = 0): array
+    public function buildAllIndexTest(string $type = '', int $lastID = 0)
     {
-        $this->objectModel->buildAllIndex($type, $lastID);
+        $result = $this->objectModel->buildAllIndex($type, $lastID);
+        if(dao::isError()) return dao::getError();
 
-        global $tester;
-        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll('id', false);
+        // 如果是空类型，表示要构建所有索引，模拟完整流程
+        if(empty($type))
+        {
+            // 循环构建所有类型的索引直到完成
+            while(!isset($result['finished']))
+            {
+                if(isset($result['type']) && isset($result['lastID']))
+                {
+                    $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return $result;
+        }
+
+        return $result;
     }
 
     /**
