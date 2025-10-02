@@ -1007,19 +1007,34 @@ class searchTest
         // 设置搜索配置
         $this->objectModel->setSearchParams($searchConfig);
 
-        // 设置POST数据
+        // 清空之前的SESSION数据
+        $module = $postData['module'];
+        $querySessionName = $module . 'Query';
+        $formSessionName = $module . 'Form';
+        unset($_SESSION[$querySessionName]);
+        unset($_SESSION[$formSessionName]);
+
+        // 设置POST数据到$_POST和$this->post
         foreach($postData as $key => $value) {
             $_POST[$key] = $value;
         }
+
+        // 为避免undefined property错误，确保所有可能的字段都存在
+        $groupItems = $this->objectModel->config->search->groupItems ?? 3;
+        for($i = 1; $i <= $groupItems * 2; $i++) {
+            if(!isset($postData["field$i"])) $postData["field$i"] = '';
+            if(!isset($postData["andOr$i"])) $postData["andOr$i"] = 'AND';
+            if(!isset($postData["operator$i"])) $postData["operator$i"] = '=';
+            if(!isset($postData["value$i"])) $postData["value$i"] = '';
+        }
+
+        // 创建一个模拟的post对象
+        $this->objectModel->post = (object)$postData;
 
         // 调用buildOldQuery方法
         $this->objectModel->buildOldQuery();
 
         // 获取结果
-        $module = $postData['module'];
-        $querySessionName = $module . 'Query';
-        $formSessionName = $module . 'Form';
-
         $result = array(
             'query' => $_SESSION[$querySessionName] ?? '',
             'form' => $_SESSION[$formSessionName] ?? array()
@@ -1938,9 +1953,21 @@ class searchTest
      */
     public function buildIndexQueryTest(string $type, bool $testDeleted = true): string
     {
-        $result = $this->objectModel->buildIndexQuery($type, $testDeleted);
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->buildIndexQuery($type, $testDeleted);
+            if(dao::isError()) return dao::getError();
 
-        return $result->get();
+            // 获取SQL查询字符串
+            $sql = $result->get();
+
+            // 如果返回的是array，可能是ZenData错误信息，直接返回错误
+            if(is_array($sql)) {
+                return 'Error: ' . implode(' ', $sql);
+            }
+
+            return $sql;
+        } catch(Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        }
     }
 }
