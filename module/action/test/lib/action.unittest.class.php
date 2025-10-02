@@ -1149,13 +1149,53 @@ class actionTest
     }
 
     /**
+     * 备用的processCreateChildrenActionExtra实现
+     *
+     * @param  object $action
+     * @access private
+     * @return void
+     */
+    private function processCreateChildrenActionExtraBackup(object $action): void
+    {
+        if(empty($action->extra))
+        {
+            $action->extra = '';
+            return;
+        }
+
+        global $tester;
+        if(!$tester || !isset($tester->dao))
+        {
+            $action->extra = '';
+            return;
+        }
+
+        try {
+            $names = $tester->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs();
+            $action->extra = '';
+            if($names)
+            {
+                foreach($names as $id => $name)
+                {
+                    // 简化版本：直接生成文本格式，不检查权限
+                    $action->extra .= "#{$id} " . $name . ', ';
+                }
+            }
+            $action->extra = trim(trim($action->extra), ',');
+        } catch (Exception $e) {
+            // 如果数据库操作失败，设置为空字符串
+            $action->extra = '';
+        }
+    }
+
+    /**
      * Test processCreateRequirementsActionExtra method.
      *
      * @param  string $storyIds
      * @access public
-     * @return object
+     * @return string
      */
-    public function processCreateRequirementsActionExtraTest(string $storyIds): object
+    public function processCreateRequirementsActionExtraTest(string $storyIds): string
     {
         // 创建模拟的action对象
         $action = new stdClass();
