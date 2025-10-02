@@ -1129,11 +1129,10 @@ class userTest
      */
     public function failPlusTest($account)
     {
-        global $tester;
-        $this->objectModel->failPlus($account);
-        $failCounts = $tester->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch('fails');
+        $result = $this->objectModel->failPlus($account);
+        if(dao::isError()) return dao::getError();
 
-        return $failCounts;
+        return $result;
     }
 
     /**
