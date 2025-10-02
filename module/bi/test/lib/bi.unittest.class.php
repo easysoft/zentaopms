@@ -2905,8 +2905,8 @@ class biTest
                 'zt_extension', 'zt_effort', 'zt_burn', 'zt_release', 'zt_branch', 'zt_productplan'
             );
 
-            // 生成足够数量的表以达到230个（排除6个后）
-            for($i = 1; $i <= 206; $i++)
+            // 生成足够数量的表以达到239个（排除6个后）
+            for($i = 1; $i <= 208; $i++)
             {
                 $allTables[] = 'zt_table' . $i;
             }
