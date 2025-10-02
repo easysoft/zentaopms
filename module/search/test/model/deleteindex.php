@@ -1,32 +1,34 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
-su('admin');
-
-zenData('searchindex')->gen(6);
 
 /**
 
-title=测试 searchModel->deleteIndex();
+title=测试 searchModel::deleteIndex();
 timeout=0
-cid=1
+cid=0
 
-- 测试删除ID为1的数据后剩余的数量 @0
-- 测试删除ID为2的数据后剩余的数量 @0
-- 测试删除ID为3的数据后剩余的数量 @0
-- 测试删除ID为4的数据后剩余的数量 @0
-- 测试删除ID为5的数据后剩余的数量 @0
+- 执行search模块的deleteIndexTest方法，参数是'project', 1  @0
+- 执行search模块的deleteIndexTest方法，参数是'story', 2  @0
+- 执行search模块的deleteIndexTest方法，参数是'bug', 999  @0
+- 执行search模块的deleteIndexTest方法，参数是'task', 0  @0
+- 执行search模块的deleteIndexTest方法，参数是'', 5  @0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+
+// 缓冲zenData输出，避免干扰测试结果
+ob_start();
+zenData('searchindex')->gen(6);
+ob_end_clean();
+
+su('admin');
+
 $search = new searchTest();
 
-$objectType   = 'project';
-$objectIDList = array(1, 2, 3, 4, 5);
-
-r($search->deleteIndexTest('project', $objectIDList[0])) && p() && e('0'); //测试删除ID为1的数据后剩余的数量
-r($search->deleteIndexTest('project', $objectIDList[1])) && p() && e('0'); //测试删除ID为2的数据后剩余的数量
-r($search->deleteIndexTest('project', $objectIDList[2])) && p() && e('0'); //测试删除ID为3的数据后剩余的数量
-r($search->deleteIndexTest('project', $objectIDList[3])) && p() && e('0'); //测试删除ID为4的数据后剩余的数量
-r($search->deleteIndexTest('project', $objectIDList[4])) && p() && e('0'); //测试删除ID为5的数据后剩余的数量
+r($search->deleteIndexTest('project', 1)) && p() && e('0');
+r($search->deleteIndexTest('story', 2)) && p() && e('0');
+r($search->deleteIndexTest('bug', 999)) && p() && e('0');
+r($search->deleteIndexTest('task', 0)) && p() && e('0');
+r($search->deleteIndexTest('', 5)) && p() && e('0');

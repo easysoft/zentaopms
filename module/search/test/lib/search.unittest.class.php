@@ -638,10 +638,17 @@ class searchTest
      */
     public function deleteIndexTest(string $objectType, int $objectID): int
     {
-        $this->objectModel->deleteIndex($objectType, $objectID);
+        // 缓冲输出，避免zenData输出干扰测试结果
+        ob_start();
+        $result = $this->objectModel->deleteIndex($objectType, $objectID);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
 
         global $tester;
-        return $tester->dao->select('COUNT(1) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
+        $count = $tester->dao->select('COUNT(1) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
+
+        return intval($count);
     }
 
     /**
