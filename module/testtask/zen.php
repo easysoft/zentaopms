@@ -97,6 +97,7 @@ class testtaskZen extends testtask
         unset($searchConfig['fields']['branch']);
         unset($searchConfig['params']['branch']);
 
+        $this->config->testcase->search = $searchConfig;
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
 
@@ -120,8 +121,8 @@ class testtaskZen extends testtask
         $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type={$type}&param={$param}");
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
-        $searchConfig['params']['product']['values'] = array($product->id => $product->name);
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        if(empty($searchConfig['params']['product'])) $searchConfig['params']['product']['values'] = array($product->id => $product->name);
 
         $build = $this->loadModel('build')->getByID((int)$task->build);
         if($build)
@@ -313,7 +314,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
+    public function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
     {
         $suites = $this->loadModel('testsuite')->getSuitePairs($product->id);
 
