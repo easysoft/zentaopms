@@ -2049,6 +2049,21 @@ class screenTest
      */
     public function buildBarChartTest($component, $chart)
     {
+        // 确保BI配置被正确初始化
+        global $tester;
+        $bi = $tester->loadModel('bi');
+
+        // 如果配置不存在，初始化默认配置
+        if(!isset($bi->config->bi->default))
+        {
+            if(!isset($bi->config->bi)) $bi->config->bi = new stdclass();
+            $bi->config->bi->default = new stdclass();
+            $bi->config->bi->default->styles  = new stdclass();
+            $bi->config->bi->default->status  = new stdclass();
+            $bi->config->bi->default->request = new stdclass();
+            $bi->config->bi->default->events  = new stdclass();
+        }
+
         try {
             $result = $this->objectModel->buildBarChart($component, $chart);
             if(dao::isError()) return dao::getError();
@@ -2125,35 +2140,37 @@ class screenTest
                 if($chart->sql)
                 {
                     $settings = json_decode($chart->settings);
-                    if($settings && isset($settings->value))
+                    if($settings && isset($settings->value) && isset($settings->value->field))
                     {
                         $field = $settings->value->field;
 
                         // 模拟数据库查询结果，避免实际查询
                         $mockResults = array();
-                        if($chart->id == 1001) {
-                            $mockResults = array((object)array($field => 5));
-                        } elseif($chart->id == 1002) {
-                            $mockResults = array((object)array($field => 10), (object)array($field => 15));
-                        } elseif($chart->id == 1003) {
-                            $mockResults = array((object)array($field => 'Test Value'));
-                        } elseif($chart->id == 1004) {
-                            $mockResults = array((object)array($field => 0));
+                        if(isset($chart->id)) {
+                            if($chart->id == 1001) {
+                                $mockResults = array((object)array($field => 5));
+                            } elseif($chart->id == 1002) {
+                                $mockResults = array((object)array($field => 10), (object)array($field => 15));
+                            } elseif($chart->id == 1003) {
+                                $mockResults = array((object)array($field => 'Test Value'));
+                            } elseif($chart->id == 1004) {
+                                $mockResults = array((object)array($field => 0));
+                            }
                         }
 
-                        if($settings->value->type === 'text')
+                        if(isset($settings->value->type) && $settings->value->type === 'text')
                         {
                             $value = empty($mockResults[0]) ? '' : $mockResults[0]->$field;
                         }
-                        if($settings->value->type === 'value')
+                        if(isset($settings->value->type) && $settings->value->type === 'value')
                         {
                             $value = empty($mockResults[0]) ? 0 : $mockResults[0]->$field;
                         }
-                        if($settings->value->agg === 'count')
+                        if(isset($settings->value->agg) && $settings->value->agg === 'count')
                         {
                             $value = count($mockResults);
                         }
-                        else if($settings->value->agg === 'sum')
+                        else if(isset($settings->value->agg) && $settings->value->agg === 'sum')
                         {
                             $value = 0;
                             foreach($mockResults as $result)
