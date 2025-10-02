@@ -451,87 +451,54 @@ class screenTest
      * @access public
      * @return object
      */
-    public function buildChartTest(object $component)
+    /**
+     * Test buildChart method.
+     *
+     * @param  object $component
+     * @access public
+     * @return mixed
+     */
+    public function buildChartTest($component)
     {
         try {
-            // 模拟buildChart方法的核心逻辑，避免数据库依赖问题
-            if(!isset($component->sourceID) || empty($component->sourceID)) {
-                return null;
-            }
+            // 准备测试用chart数据
+            global $tester;
 
-            // 模拟获取chart数据
-            $mockCharts = array(
-                1001 => (object)array('id' => 1001, 'type' => 'card', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1002 => (object)array('id' => 1002, 'type' => 'line', 'builtin' => '1', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1003 => (object)array('id' => 1003, 'type' => 'bar', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1004 => (object)array('id' => 1004, 'type' => 'pie', 'builtin' => '1', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1005 => (object)array('id' => 1005, 'type' => 'radar', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1006 => (object)array('id' => 1006, 'type' => 'org', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1007 => (object)array('id' => 1007, 'type' => 'funnel', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
-                1008 => (object)array('id' => 1008, 'type' => 'table', 'builtin' => '0', 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}')
+            // 根据sourceID创建对应的chart数据
+            $chartData = array(
+                1001 => array('id' => 1001, 'type' => 'card', 'builtin' => 0, 'sql' => 'SELECT 100 as value', 'settings' => '{"value":{"field":"value","type":"value","agg":"sum"}}'),
+                1002 => array('id' => 1002, 'type' => 'line', 'builtin' => 1, 'sql' => 'SELECT 1 as value', 'settings' => '{"series":[]}'),
+                1003 => array('id' => 1003, 'type' => 'bar', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{"value":{"field":"value"}}'),
+                1004 => array('id' => 1004, 'type' => 'pie', 'builtin' => 1, 'sql' => 'SELECT 1 as value', 'settings' => '{"series":[]}'),
+                1005 => array('id' => 1005, 'type' => 'radar', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}'),
+                1006 => array('id' => 1006, 'type' => 'org', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}'),
+                1007 => array('id' => 1007, 'type' => 'funnel', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}'),
+                1008 => array('id' => 1008, 'type' => 'table', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}'),
+                1009 => array('id' => 1009, 'type' => 'cluBarY', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}'),
+                1010 => array('id' => 1010, 'type' => 'waterpolo', 'builtin' => 0, 'sql' => 'SELECT 1 as value', 'settings' => '{}')
             );
 
-            $chart = isset($mockCharts[$component->sourceID]) ? $mockCharts[$component->sourceID] : null;
-            if(!$chart) return null;
-
-            // 模拟不同类型图表的处理逻辑
-            $result = new stdclass();
-            $result->option = new stdclass();
-
-            switch($chart->type) {
-                case 'card':
-                    $result->option->dataset = '100';
-                    break;
-                case 'line':
-                    if($chart->builtin == '0') {
-                        $result->option->dataset = new stdclass();
-                        $result->option->dataset->dimensions = array('name', 'value');
-                        $result->option->dataset->source = array();
-                    } else {
-                        $result->option->dataset = new stdclass();
-                        $result->option->dataset->series = array();
-                    }
-                    break;
-                case 'bar':
-                    $result->option->dataset = new stdclass();
-                    $result->option->dataset->dimensions = array('name', 'value');
-                    $result->option->dataset->source = array();
-                    break;
-                case 'pie':
-                    if($chart->builtin == '0') {
-                        $result->option->dataset = new stdclass();
-                        $result->option->dataset->dimensions = array('name', 'value');
-                        $result->option->dataset->source = array();
-                    } else {
-                        $result->option->dataset = new stdclass();
-                        $result->option->dataset->series = array();
-                    }
-                    break;
-                case 'radar':
-                    $result->option->dataset = new stdclass();
-                    $result->option->dataset->radarIndicator = array();
-                    $result->option->dataset->seriesData = array();
-                    break;
-                case 'org':
-                    $result->option->dataset = new stdclass();
-                    $result->option->dataset->source = array();
-                    break;
-                case 'funnel':
-                    $result->option->dataset = new stdclass();
-                    $result->option->dataset->series = array();
-                    break;
-                case 'table':
-                    $result->option->headers = array();
-                    $result->option->dataset = array();
-                    break;
-                default:
-                    $result->option->dataset = new stdclass();
+            if(!isset($component->sourceID) || !isset($chartData[$component->sourceID])) {
+                return false;
             }
+
+            // 初始化component的option属性
+            if(!isset($component->option)) {
+                $component->option = new stdclass();
+            }
+
+            // 插入chart数据到数据库以供buildChart方法使用
+            $chart = $chartData[$component->sourceID];
+            $tester->dao->replace(TABLE_CHART)->data($chart)->exec();
+
+            // 调用真实的buildChart方法
+            $result = $this->objectModel->buildChart($component);
+            if(dao::isError()) return dao::getError();
 
             return $result;
 
         } catch (Exception $e) {
-            return null;
+            return false;
         }
     }
 
