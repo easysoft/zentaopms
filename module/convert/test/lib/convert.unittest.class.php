@@ -3774,19 +3774,13 @@ class convertTest
      */
     public function createDefaultLayoutTest($fields = array(), $flow = null, $group = 0)
     {
-        global $tester;
-
         if(empty($fields))
         {
             $field1 = new stdClass();
             $field1->field = 'title';
             $field2 = new stdClass();
             $field2->field = 'description';
-            $field3 = new stdClass();
-            $field3->field = 'deleted';
-            $field4 = new stdClass();
-            $field4->field = 'id';
-            $fields = array($field1, $field2, $field3, $field4);
+            $fields = array($field1, $field2);
         }
 
         if(empty($flow))
@@ -3795,52 +3789,19 @@ class convertTest
             $flow->module = 'test';
         }
 
-        // Mock config if not available
-        if(!isset($this->objectTao->config) || !isset($this->objectTao->config->vision))
-        {
-            if(!$this->objectTao->config) $this->objectTao->config = new stdClass();
-            $this->objectTao->config->vision = 'rnd';
-        }
-
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('createDefaultLayout');
         $method->setAccessible(true);
 
         try
         {
-            // Simulate the method logic without database operations
-            $insertCount = 0;
-            $actions = array('browse', 'create', 'edit', 'view');
-
-            foreach($actions as $action)
-            {
-                // Test logic: feedback module view action becomes adminview
-                if($flow->module == 'feedback' && $action == 'view') $action = 'adminview';
-
-                foreach($fields as $field)
-                {
-                    // Test logic: deleted field is skipped
-                    if($field->field == 'deleted') continue;
-
-                    // Test logic: system fields are filtered for create/edit actions
-                    if(($action == 'create' || $action == 'edit') && in_array($field->field, array('id', 'parent', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'assignedBy', 'assignedDate', 'deleted'))) continue;
-
-                    $insertCount++;
-                }
-
-                // Test logic: actions field is added for browse action when fields exist
-                if($action == 'browse' && !empty($fields))
-                {
-                    $insertCount++; // for actions field
-                }
-            }
-
-            // Return 1 if any records would be processed, 0 otherwise
-            return $insertCount > 0 ? 1 : 0;
+            $result = $method->invoke($this->objectTao, $fields, $flow, $group);
+            if(dao::isError()) return dao::getError();
+            return $result ? '1' : '0';
         }
         catch(Exception $e)
         {
-            return 0;
+            return '0';
         }
     }
 
