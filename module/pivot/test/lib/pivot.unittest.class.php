@@ -3270,50 +3270,48 @@ class pivotTest
      */
     public function getPlanStatusStatisticsTest(array $products, array $plans, array $plannedStories, array $unplannedStories): array
     {
-        try {
-            // 模拟方法逻辑而不是使用反射，避免数据库依赖
-            foreach($plannedStories as $story)
+        // 模拟方法逻辑而不是使用反射，避免数据库依赖
+        // 统计已经计划过的产品计划的需求状态信息
+        foreach($plannedStories as $story)
+        {
+            $storyPlans = strpos($story->plan, ',') !== false ? explode(',', trim($story->plan, ',')) : array($story->plan);
+            foreach($storyPlans as $planID)
             {
-                $storyPlans = strpos($story->plan, ',') !== false ? explode(',', trim($story->plan, ',')) : array($story->plan);
-                foreach($storyPlans as $planID)
-                {
-                    if(!isset($plans[$planID])) continue;
-                    $plan = $plans[$planID];
-                    if(!isset($products[$plan->product])) continue;
-                    if(!isset($products[$plan->product]->plans[$planID])) continue;
+                if(!isset($plans[$planID])) continue;
+                $plan = $plans[$planID];
+                if(!isset($products[$plan->product])) continue;
+                if(!isset($products[$plan->product]->plans[$planID])) continue;
 
-                    if(!isset($products[$plan->product]->plans[$planID]->status))
-                        $products[$plan->product]->plans[$planID]->status = array();
+                if(!isset($products[$plan->product]->plans[$planID]->status))
+                    $products[$plan->product]->plans[$planID]->status = array();
 
-                    $products[$plan->product]->plans[$planID]->status[$story->status] =
-                        isset($products[$plan->product]->plans[$planID]->status[$story->status]) ?
-                        $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
-                }
+                $products[$plan->product]->plans[$planID]->status[$story->status] =
+                    isset($products[$plan->product]->plans[$planID]->status[$story->status]) ?
+                    $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
             }
-
-            foreach($unplannedStories as $story)
-            {
-                $product = $story->product;
-                if(isset($products[$product]))
-                {
-                    if(!isset($products[$product]->plans[0]))
-                    {
-                        $products[$product]->plans[0] = new stdClass();
-                        $products[$product]->plans[0]->title = '未计划';
-                        $products[$product]->plans[0]->begin = '';
-                        $products[$product]->plans[0]->end   = '';
-                        $products[$product]->plans[0]->status = array();
-                    }
-                    $products[$product]->plans[0]->status[$story->status] =
-                        isset($products[$product]->plans[0]->status[$story->status]) ?
-                        $products[$product]->plans[0]->status[$story->status] + 1 : 1;
-                }
-            }
-
-            return $products;
-        } catch (Exception $e) {
-            return array('error' => $e->getMessage());
         }
+
+        // 统计还未计划的产品计划的需求状态信息
+        foreach($unplannedStories as $story)
+        {
+            $product = $story->product;
+            if(isset($products[$product]))
+            {
+                if(!isset($products[$product]->plans[0]))
+                {
+                    $products[$product]->plans[0] = new stdClass();
+                    $products[$product]->plans[0]->title = '未计划';
+                    $products[$product]->plans[0]->begin = '';
+                    $products[$product]->plans[0]->end   = '';
+                    $products[$product]->plans[0]->status = array();
+                }
+                $products[$product]->plans[0]->status[$story->status] =
+                    isset($products[$product]->plans[0]->status[$story->status]) ?
+                    $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+            }
+        }
+
+        return $products;
     }
 
     /**
@@ -4919,6 +4917,24 @@ class pivotTest
     public function getAssignTaskTest(array $deptUsers = array()): array
     {
         $result = $this->objectTao->getAssignTask($deptUsers);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getGroupsByDimensionAndPath method.
+     *
+     * @param  int    $dimensionID
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getGroupsByDimensionAndPathTest(int $dimensionID, string $path): array
+    {
+        $method = new ReflectionMethod($this->objectTao, 'getGroupsByDimensionAndPath');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $dimensionID, $path);
         if(dao::isError()) return dao::getError();
 
         return $result;
