@@ -7,11 +7,11 @@ title=测试 searchTao::processIssueRecord();
 timeout=0
 cid=18336
 
-- 执行$result1->url, 'm=issue') !== false @1
-- 执行url, 'm=assetlib') !== false && strpos($result2模块的url, 'f=issueView') !== false方法  @1
-- 执行$result3->extraType @commonIssue
-- 执行$result4->extraType @stakeholderIssue
-- 执行$result5->url, 'id=3') !== false @1
+- 测试问题无lib时使用issue模块和view方法 >> URL包含m=issue
+- 测试问题有lib时使用assetlib模块和issueView方法 >> URL包含m=assetlib且f=issueView
+- 测试owner为空时的额外类型 >> extraType为commonIssue
+- 测试owner存在时的额外类型 >> extraType为stakeholderIssue
+- 测试URL包含正确的问题ID参数 >> URL包含正确的id参数
 
 */
 
