@@ -163,6 +163,102 @@ class customTest
     }
 
     /**
+     * 获取需求概念集合（清空数据版本）。
+     * Get UR and SR pairs with clean data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getURSRPairsTestWithCleanData(): array
+    {
+        // 先清理已有数据
+        $this->objectModel->dao->delete()->from(TABLE_LANG)
+            ->where('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->exec();
+
+        $URSRPairs = $this->objectModel->getURSRPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $URSRPairs;
+    }
+
+    /**
+     * 获取需求概念集合测试数据版本。
+     * Get UR and SR pairs with test data.
+     *
+     * @access public
+     * @return array
+     */
+    public function getURSRPairsTestWithData(): array
+    {
+        // 先清理已有数据
+        $this->objectModel->dao->delete()->from(TABLE_LANG)
+            ->where('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->exec();
+
+        // 插入测试数据
+        $testData = array(
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '1',
+                'value' => '{"ERName":"业务需求","SRName":"软件需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '2',
+                'value' => '{"ERName":"业务需求","SRName":"研发需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '3',
+                'value' => '{"ERName":"业务需求","SRName":"软需","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '4',
+                'value' => '{"ERName":"业务需求","SRName":"故事","URName":"史诗"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '5',
+                'value' => '{"ERName":"业务需求","SRName":"需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            )
+        );
+
+        foreach($testData as $data)
+        {
+            $this->objectModel->dao->insert(TABLE_LANG)->data($data)->exec();
+        }
+
+        $URSRPairs = $this->objectModel->getURSRPairs();
+        if(dao::isError()) return dao::getError();
+
+        return $URSRPairs;
+    }
+
+    /**
      * 获取用需求概念集合。
      * Test get UR pairs.
      *
@@ -197,10 +293,85 @@ class customTest
      * Test get UR and SR list.
      *
      * @access public
-     * @return array
+     * @return array|int
      */
-    public function getURSRListTest(): array
+    public function getURSRListTest(): array|int
     {
+        $URSRList = $this->objectModel->getURSRList();
+
+        if(dao::isError()) return dao::getError();
+        return $URSRList;
+    }
+
+    /**
+     * 测试准备数据并返回结果。
+     * Prepare test data and return result.
+     *
+     * @access public
+     * @return array|int
+     */
+    public function getURSRListWithDataTest(): array|int
+    {
+        // 先删除已有数据
+        $this->objectModel->dao->delete()->from(TABLE_LANG)
+            ->where('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->exec();
+
+        // 插入测试数据
+        $testData = array(
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '1',
+                'value' => '{"ERName":"业务需求","SRName":"软件需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '2',
+                'value' => '{"ERName":"业务需求","SRName":"研发需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '3',
+                'value' => '{"ERName":"业务需求","SRName":"软件需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '4',
+                'value' => '{"ERName":"业务需求","SRName":"故事","URName":"史诗"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            ),
+            array(
+                'lang' => 'zh-cn',
+                'module' => 'custom',
+                'section' => 'URSRList',
+                'key' => '5',
+                'value' => '{"ERName":"业务需求","SRName":"需求","URName":"用户需求"}',
+                'system' => '1',
+                'vision' => 'rnd'
+            )
+        );
+
+        foreach($testData as $data)
+        {
+            $this->objectModel->dao->insert(TABLE_LANG)->data($data)->exec();
+        }
+
         $URSRList = $this->objectModel->getURSRList();
 
         if(dao::isError()) return dao::getError();
@@ -321,7 +492,7 @@ class customTest
 
         if(dao::isError()) return dao::getError();
         $result = $this->objectModel->loadModel('setting')->getItem('owner=system&module=common&key=disabledFeatures');
-        return is_array($result) ? '0' : (string)$result;
+        return is_array($result) ? '' : (string)$result;
     }
 
     /**
@@ -341,7 +512,7 @@ class customTest
         $URAndSR = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=URAndSR');
         $enableER = $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=enableER');
 
-        $disabledFeatures = is_array($disabledFeatures) ? '0' : (string)$disabledFeatures;
+        $disabledFeatures = is_array($disabledFeatures) ? '' : (string)$disabledFeatures;
         $URAndSR = is_array($URAndSR) ? '1' : (string)$URAndSR;
         $enableER = is_array($enableER) ? '0' : (string)$enableER;
 
