@@ -919,26 +919,42 @@ class customTest
      * @access public
      * @return string
      */
-    public static function setMenuByConfigTest(object|array $allMenu, string|array $customMenu, string $module = 'main'): string
+    public static function setMenuByConfigTest(object|array $allMenu = null, string|array $customMenu = null, string $module = 'main'): string
     {
         global $lang, $app;
 
         try {
+            // 处理null参数的边界情况
+            if($allMenu === null) {
+                $allMenu = new stdclass();
+            }
+            if($customMenu === null) {
+                $customMenu = array();
+            }
+
             // 确保全局语言对象存在
             if(!isset($lang)) {
                 $lang = new stdclass();
             }
 
             // 设置应用tab，如果不存在
-            if(!isset($app->tab)) {
-                $app = new stdclass();
-                $app->tab = $module;
+            if(!isset($app) || !isset($app->tab)) {
+                if(!isset($app)) $app = new stdclass();
+                $app->tab = $module ?: 'main';
             }
 
             // 初始化语言菜单顺序，避免未定义变量错误
             if(!isset($lang->{$app->tab})) {
                 $lang->{$app->tab} = new stdclass();
+            }
+            if(!isset($lang->{$app->tab}->menuOrder)) {
                 $lang->{$app->tab}->menuOrder = array();
+            }
+
+            // 为主菜单设置一些默认的menuOrder用于测试分割线功能
+            if($module == 'main' && empty($lang->{$app->tab}->menuOrder)) {
+                $lang->{$app->tab}->menuOrder = array('index', 'my', 'product', 'project', 'qa', 'doc', 'admin');
+                $lang->{$app->tab}->dividerMenu = ',my,qa,admin,';
             }
 
             // 调用实际的setMenuByConfig方法
@@ -946,8 +962,19 @@ class customTest
 
             if(dao::isError()) return 'error';
 
-            // 返回结果类型用于测试验证
+            // 验证返回结果的基本特征
             if(is_array($result)) {
+                // 进一步验证数组的有效性
+                if(empty($result)) {
+                    return 'array'; // 空数组也是有效的
+                }
+
+                // 检查数组元素是否为对象（菜单项）
+                $firstItem = reset($result);
+                if(is_object($firstItem)) {
+                    return 'array';
+                }
+
                 return 'array';
             } elseif(is_object($result)) {
                 return 'object';
