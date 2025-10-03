@@ -1,0 +1,42 @@
+title: Create todos for todoTao::getListBy unit test case.
+desc: Create todos for todoTao::getListBy unit test case.
+author: Claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-10
+  - field: account
+    range: admin{4},user1{3},user2{3}
+  - field: date
+    range: '`2025-08-24`{6},`2025-08-25`{2},`2025-08-26`{2}'
+  - field: type
+    range: custom
+  - field: status
+    range: wait{4},doing{2},done{3},closed{1}
+  - field: name
+    range: 测试待办1,测试待办2,测试待办3,测试待办4,测试待办5,测试待办6,测试待办7,测试待办8,测试待办9,测试待办10
+  - field: assignedTo
+    range: admin{4},user1{3},user2{3}
+  - field: assignedBy
+    range: admin
+  - field: assignedDate
+    range: '`2025-08-20 09:00:00`'
+  - field: begin
+    range: 0800
+  - field: end
+    range: 1200
+  - field: pri
+    range: 1
+  - field: private
+    range: 0
+  - field: vision
+    range: rnd
+  - field: deleted
+    range: 0
+  - field: cycle
+    range: 0
+  - field: objectID
+    range: 0
+  - field: desc
+    range: 测试描述
