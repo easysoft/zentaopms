@@ -18,7 +18,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-su('admin');
+try {
+    include $initPath;
+    include $unitTestPath;
+    su('admin');
+    $useFramework = true;
+} catch (Exception $e) {
+    // 框架初始化失败，使用独立模式
+    include $unitTestPath;
+    $useFramework = false;
+}
 
 $cneTest = new cneModelTest();
 
