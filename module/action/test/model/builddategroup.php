@@ -7,11 +7,11 @@ title=测试 actionModel::buildDateGroup();
 timeout=0
 cid=14878
 
-- 执行actionTest模块的buildDateGroupTest方法，参数是$emptyActions 属性dateCount @0
-- 执行actionTest模块的buildDateGroupTest方法，参数是$singleAction 属性dateCount @1
-- 执行actionTest模块的buildDateGroupTest方法，参数是$multiDatesActions 属性dateCount @2
-- 执行actionTest模块的buildDateGroupTest方法，参数是$sameDateActions 属性dateCount @1
-- 执行actionTest模块的buildDateGroupTest方法，参数是$multiDatesActions, 'next', 'date_asc' 属性dateCount @2
+- 测试步骤1：空数组输入情况 >> 期望返回0个日期分组
+- 测试步骤2：单条记录输入情况 >> 期望返回1个日期分组
+- 测试步骤3：不同日期多条记录情况 >> 期望返回2个日期分组
+- 测试步骤4：相同日期多条记录情况 >> 期望返回1个日期分组
+- 测试步骤5：指定排序参数情况 >> 期望返回2个日期分组
 
 */
 
