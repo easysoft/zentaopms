@@ -7,21 +7,25 @@ title=测试 cneModel::dbDetail();
 timeout=0
 cid=0
 
-- 测试步骤1：空的数据库服务名称和命名空间 @0
-- 测试步骤2：错误的命名空间参数 @0
-- 测试步骤3：错误的数据库服务名称 @0
-- 测试步骤4：正确的参数获取数据库主机信息属性host @zentaopaas-mysql.quickon-system.svc
-- 测试步骤5：正确的参数获取数据库用户信息属性username @root
+- 步骤1：测试空参数边界值 @0
+- 步骤2：测试部分参数为空的情况 @0
+- 步骤3：测试错误数据库服务名的异常处理 @0
+- 步骤4：测试空数据库服务名但有效命名空间 @0
+- 步骤5：测试错误命名空间的异常处理 @0
+- 步骤6：测试正确参数获取host属性属性host @zentaopaas-mysql.quickon-system.svc
+- 步骤7：测试正确参数获取username属性属性username @root
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-$cneModel  = new cneTest();
+$cneTest = new cneTest();
 
-r($cneModel->dbDetailTest('', '')) && p() && e('0'); // 测试步骤1：空的数据库服务名称和命名空间
-r($cneModel->dbDetailTest('mysql', '')) && p() && e('0'); // 测试步骤2：错误的命名空间参数
-r($cneModel->dbDetailTest('mysql', 'quickon-system')) && p() && e('0'); // 测试步骤3：错误的数据库服务名称
-r($cneModel->dbDetailTest('zentaopaas-mysql', 'quickon-system')) && p('host') && e('zentaopaas-mysql.quickon-system.svc'); // 测试步骤4：正确的参数获取数据库主机信息
-r($cneModel->dbDetailTest('zentaopaas-mysql', 'quickon-system')) && p('username') && e('root'); // 测试步骤5：正确的参数获取数据库用户信息
+r($cneTest->dbDetailTest('', '')) && p() && e('0');                                                                      // 步骤1：测试空参数边界值
+r($cneTest->dbDetailTest('mysql', '')) && p() && e('0');                                                                 // 步骤2：测试部分参数为空的情况
+r($cneTest->dbDetailTest('mysql', 'quickon-system')) && p() && e('0');                                                  // 步骤3：测试错误数据库服务名的异常处理
+r($cneTest->dbDetailTest('', 'quickon-system')) && p() && e('0');                                                       // 步骤4：测试空数据库服务名但有效命名空间
+r($cneTest->dbDetailTest('zentaopaas-mysql', 'invalid-namespace')) && p() && e('0');                                    // 步骤5：测试错误命名空间的异常处理
+r($cneTest->dbDetailTest('zentaopaas-mysql', 'quickon-system')) && p('host') && e('zentaopaas-mysql.quickon-system.svc'); // 步骤6：测试正确参数获取host属性
+r($cneTest->dbDetailTest('zentaopaas-mysql', 'quickon-system')) && p('username') && e('root');                         // 步骤7：测试正确参数获取username属性
