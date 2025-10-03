@@ -7,11 +7,11 @@ title=测试 biModel::checkDuckDBFile();
 timeout=0
 cid=15152
 
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @object
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
-- 执行biTest模块的checkDuckDBFileTest方法，参数是'', array  @0
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
-- 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0
+- 正常情况：文件和扩展都存在且可执行 >> 期望返回object
+- 文件不存在的情况 >> 期望返回false
+- 路径为空的情况 >> 期望返回false
+- bin参数为空数组的情况 >> 期望返回false
+- bin参数缺少file键的情况 >> 期望返回false
 
 */
 
