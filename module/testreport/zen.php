@@ -351,7 +351,7 @@ class testreportZen extends testreport
      * @access protected
      * @return array
      */
-    protected function buildReportDataForView(object $report): array
+    public function buildReportDataForView(object $report): array
     {
         $reportData = array();
         $reportData['begin']         = $report->begin;
