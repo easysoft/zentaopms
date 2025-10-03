@@ -2807,7 +2807,7 @@ class biTest
             $result = $this->objectModel->downloadFile($url, $savePath, $finalFile);
             if(dao::isError()) return dao::getError();
 
-            return $result ? 1 : 0;
+            return $result;
         }
         catch(Exception $e)
         {
@@ -2822,32 +2822,38 @@ class biTest
      * @param  string $savePath
      * @param  string $finalFile
      * @access private
-     * @return int
+     * @return bool
      */
-    private function mockDownloadFile(string $url, string $savePath, string $finalFile): int
+    private function mockDownloadFile(string $url, string $savePath, string $finalFile): bool
     {
         // 空参数测试
-        if(empty($url) || empty($savePath) || empty($finalFile)) return 0;
+        if(empty($url) || empty($savePath) || empty($finalFile)) return false;
 
         // 无效URL测试
-        if(!filter_var($url, FILTER_VALIDATE_URL)) return 0;
+        if(!filter_var($url, FILTER_VALIDATE_URL)) return false;
 
         // 不可达URL测试
-        if(strpos($url, 'invalid-domain.test') !== false) return 0;
+        if(strpos($url, 'invalid-domain.test') !== false) return false;
 
         // 不存在目录测试
-        if(strpos($savePath, '/nonexistent/') !== false) return 0;
+        if(strpos($savePath, '/nonexistent/') !== false) return false;
 
         // 404错误测试
-        if(strpos($url, '/status/404') !== false) return 0;
+        if(strpos($url, '/status/404') !== false) return false;
+
+        // JSON格式错误测试
+        if(strpos($url, '/json-error') !== false) return false;
+
+        // 文件保存失败测试
+        if(strpos($savePath, '/readonly/') !== false) return false;
 
         // ZIP文件测试
-        if(strpos($url, '.zip') !== false) return 1;
+        if(strpos($url, '.zip') !== false) return true;
 
         // 正常下载测试
-        if(strpos($url, 'httpbin.org') !== false) return 1;
+        if(strpos($url, 'httpbin.org') !== false || strpos($url, 'valid-test') !== false) return true;
 
-        return 0;
+        return false;
     }
 
     /**
