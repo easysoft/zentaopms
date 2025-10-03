@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+
+// zendata数据准备
+zenData('product')->gen(10);
+zenData('branch')->gen(20);
+
+su('admin');
 
 /**
 
