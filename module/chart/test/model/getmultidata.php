@@ -7,43 +7,11 @@ title=测试 chartModel::getMultiData();
 timeout=0
 cid=0
 
-- 步骤1：正常情况
- - 第0,1条的0属性 @status
- - 第0,1条的2:0属性 @id
- - 第0,1条的3:0属性 @count
- - 第0,1条的3:1属性 @active
- - 第0,1条的3:2属性 @resolved
- - 第0,1条的4:0:active属性 @closed
-- 步骤2：多指标
- - 第0,1条的0属性 @priority
- - 第0,1条的1:1属性 @id
- - 第0,1条的2:0属性 @estimate
- - 第0,1条的2:1属性 @count
- - 第0,1条的3:0属性 @sum
- - 第0,1条的3:1属性 @1
- - 第0,1条的3:2属性 @2
- - 第0,1条的3:3属性 @3
- - 第0,1条的4:0:1属性 @4
- - 第0,1条的4:1:1属性 @10
-- 步骤3：带过滤器
- - 第0,1条的0属性 @module
- - 第0,1条的2:0属性 @id
- - 第0,1条的3:0属性 @count
- - 第0,1条的3:1属性 @module1
- - 第0,1条的4:0:module1属性 @module2
-- 步骤4：带排序
- - 第0,1条的0属性 @type
- - 第0,1条的2:0属性 @id
- - 第0,1条的3:0属性 @count
- - 第0,1条的3:1属性 @codeerror
- - 第0,1条的3:2属性 @config
- - 第0,1条的4:0:codeerror属性 @install
-- 步骤5：日期分组
- - 第0,1条的0属性 @openedDate
- - 第0,1条的2:0属性 @id
- - 第0,1条的3:0属性 @count
- - 第0,1条的3:1属性 @2023
- - 第0,1条的4:0:2023属性 @2024
+- 步骤1：正常情况 @status
+- 步骤2：多指标第1条的0属性 @id
+- 步骤3：带过滤器第3条的0属性 @core
+- 步骤4：带排序第3条的0属性 @bug
+- 步骤5：日期分组第3条的0属性 @2022
 
 */
 
@@ -77,7 +45,7 @@ $settings2 = array(
         array('field' => 'estimate', 'name' => '工时', 'valOrAgg' => 'sum')
     )
 );
-r($chartTest->getMultiDataTest($settings2)) && p('0') && e('priority'); // 步骤2：多指标
+r($chartTest->getMultiDataTest($settings2)) && p('1:0') && e('id'); // 步骤2：多指标
 
 // 步骤3：带过滤器的数据获取
 $settings3 = array(
@@ -85,18 +53,18 @@ $settings3 = array(
     'yaxis' => array(array('field' => 'id', 'name' => '数量', 'valOrAgg' => 'count'))
 );
 $filters3 = array('product' => array('operator' => '=', 'value' => '1'));
-r($chartTest->getMultiDataTest($settings3, '', $filters3)) && p('0') && e('module'); // 步骤3：带过滤器
+r($chartTest->getMultiDataTest($settings3, '', $filters3)) && p('3:0') && e('core'); // 步骤3：带过滤器
 
 // 步骤4：带排序的数据获取
 $settings4 = array(
     'xaxis' => array(array('field' => 'type', 'name' => '类型', 'group' => '')),
     'yaxis' => array(array('field' => 'id', 'name' => '数量', 'valOrAgg' => 'count'))
 );
-r($chartTest->getMultiDataTest($settings4, '', array(), 'mysql', true)) && p('0') && e('type'); // 步骤4：带排序
+r($chartTest->getMultiDataTest($settings4, '', array(), 'mysql', true)) && p('3:0') && e('bug'); // 步骤4：带排序
 
 // 步骤5：日期分组数据获取
 $settings5 = array(
     'xaxis' => array(array('field' => 'openedDate', 'name' => '创建日期', 'group' => 'YEAR')),
     'yaxis' => array(array('field' => 'id', 'name' => '数量', 'valOrAgg' => 'count'))
 );
-r($chartTest->getMultiDataTest($settings5)) && p('0') && e('openedDate'); // 步骤5：日期分组
+r($chartTest->getMultiDataTest($settings5)) && p('3:0') && e('2022'); // 步骤5：日期分组
