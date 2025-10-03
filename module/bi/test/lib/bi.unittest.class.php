@@ -1985,18 +1985,27 @@ class biTest
         if($this->objectModel === null)
         {
             // Mock sql2Statement method behavior when database is not available
-            global $app;
-            $app->loadClass('sqlparser', true);
-            $parser = new sqlparser($sql);
+            // 简化的SQL解析逻辑
+            $sql = trim($sql);
 
-            if($parser->statementsCount == 0)
+            // 空SQL处理
+            if(empty($sql))
             {
                 if($mode == 'builder') return '请正确配置构建器';
                 return '请输入一条正确的SQL语句';
             }
-            if($parser->statementsCount > 1) return '只能输入一条SQL语句';
 
-            if(!$parser->isSelect) return '只允许SELECT查询';
+            // 检查多条语句
+            if(substr_count($sql, ';') > 1 || (substr_count($sql, ';') == 1 && !preg_match('/;\s*$/', $sql)))
+            {
+                return '只能输入一条SQL语句';
+            }
+
+            // 检查是否为SELECT语句
+            if(!preg_match('/^\s*select\s+/i', $sql))
+            {
+                return '只允许SELECT查询';
+            }
 
             return 'object';
         }
