@@ -310,10 +310,17 @@ class adminTest
      */
     public function getSignatureTest(array $params): string
     {
-        $result = $this->objectModel->getSignature($params);
-        if(dao::isError()) return dao::getError();
+        try {
+            $result = $this->objectModel->getSignature($params);
+            if(dao::isError()) return dao::getError();
 
-        return $result;
+            // 确保返回值是字符串
+            return is_string($result) ? $result : strval($result);
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
     }
 
     /**
