@@ -2047,7 +2047,9 @@ class aiTest
      */
     public function getTestingLocationTest($prompt = null)
     {
-        // 模拟getTestingLocation方法的逻辑，避免数据库依赖
+        // 为了确保测试稳定性，完全模拟getTestingLocation方法的行为
+        // 避免实际的数据库调用和依赖
+
         if(empty($prompt) || !is_object($prompt) || empty($prompt->module)) {
             return false;
         }
@@ -2088,6 +2090,7 @@ class aiTest
             }
         }
 
+        // 对于未知模块，返回false
         return false;
     }
 
