@@ -1150,4 +1150,54 @@ class chartTest
 
         return $result;
     }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  int    $chartID
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest(int $chartID, string $action)
+    {
+        // 创建模拟的chart对象
+        $chart = $this->mockGetChartById($chartID);
+
+        if($chart === false) {
+            return false; // 图表不存在
+        }
+
+        $result = chartModel::isClickable($chart, $action);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Mock getChartById method.
+     *
+     * @param  int $chartID
+     * @access private
+     * @return object|false
+     */
+    private function mockGetChartById(int $chartID)
+    {
+        // 模拟图表数据，基于实际的内置图表ID范围
+        $mockCharts = array(
+            // 不存在的图表
+            32 => false,
+
+            // 内置图表（在ID范围内）
+            10020 => (object)array('id' => 10020, 'builtin' => 1),
+            1050  => (object)array('id' => 1050, 'builtin' => 1),
+            10100 => (object)array('id' => 10100, 'builtin' => 1),
+
+            // 自定义图表（不在内置范围内）
+            5000  => (object)array('id' => 5000, 'builtin' => 0),
+            8000  => (object)array('id' => 8000, 'builtin' => 0),
+        );
+
+        return isset($mockCharts[$chartID]) ? $mockCharts[$chartID] : false;
+    }
 }
