@@ -4,14 +4,13 @@
 /**
 
 title=测试 actionModel::buildDateGroup();
-timeout=0
 cid=0
 
-- 执行actionTest模块的buildDateGroupTest方法，参数是$emptyActions 属性dateCount @0
-- 执行actionTest模块的buildDateGroupTest方法，参数是$singleAction 属性dateCount @1
-- 执行actionTest模块的buildDateGroupTest方法，参数是$multiDatesActions 属性dateCount @2
-- 执行actionTest模块的buildDateGroupTest方法，参数是$sameDateActions 属性dateCount @1
-- 执行actionTest模块的buildDateGroupTest方法，参数是$multiDatesActions, 'next', 'date_asc' 属性dateCount @2
+- 测试步骤1：空数组输入情况 >> 期望返回0个日期分组
+- 测试步骤2：单条记录输入情况 >> 期望返回1个日期分组
+- 测试步骤3：不同日期多条记录情况 >> 期望返回2个日期分组
+- 测试步骤4：相同日期多条记录情况 >> 期望返回1个日期分组
+- 测试步骤5：指定排序参数情况 >> 期望返回2个日期分组
 
 */
 
@@ -22,7 +21,7 @@ su('admin');
 
 $actionTest = new actionTest();
 
-// 准备测试数据
+// 测试数据准备
 $emptyActions = array();
 
 $singleAction = array();
@@ -36,13 +35,9 @@ $action1->actor = 'admin';
 $singleAction[] = $action1;
 
 $multiDatesActions = array();
-$action2 = new stdClass();
+$action2 = clone $action1;
 $action2->id = 2;
-$action2->date = '2024-01-15 10:30:00';
-$action2->objectType = 'task';
 $action2->objectID = 2;
-$action2->action = 'created';
-$action2->actor = 'admin';
 $multiDatesActions[] = $action2;
 
 $action3 = new stdClass();
@@ -55,13 +50,9 @@ $action3->actor = 'user1';
 $multiDatesActions[] = $action3;
 
 $sameDateActions = array();
-$action4 = new stdClass();
+$action4 = clone $action1;
 $action4->id = 4;
-$action4->date = '2024-01-15 10:30:00';
-$action4->objectType = 'task';
 $action4->objectID = 3;
-$action4->action = 'created';
-$action4->actor = 'admin';
 $sameDateActions[] = $action4;
 
 $action5 = new stdClass();
