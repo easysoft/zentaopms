@@ -73,17 +73,27 @@ class compileTest
     /**
      * Get last result.
      *
-     * @param  int    $jobID
+     * @param  mixed $jobID
      * @access public
-     * @return object
+     * @return object|false
      */
     public function getLastResultTest($jobID)
     {
-        $objects = $this->objectModel->getLastResult($jobID);
+        try {
+            // 处理类型转换，确保传入的是int类型
+            if(!is_numeric($jobID) || $jobID <= 0) {
+                return false;
+            }
 
-        if(dao::isError()) return dao::getError();
+            $jobID = (int)$jobID;
+            $result = $this->objectModel->getLastResult($jobID);
 
-        return $objects;
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (TypeError $e) {
+            return false;
+        }
     }
 
     /**
