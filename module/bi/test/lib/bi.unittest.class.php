@@ -261,6 +261,27 @@ class biTest
     }
 
     /**
+     * Test getTables method.
+     *
+     * @param  string $sql
+     * @param  bool   $deep
+     * @access public
+     * @return array
+     */
+    public function getTablesTest($sql, $deep = false)
+    {
+        $statement = $this->objectModel->parseToStatement($sql);
+        if(dao::isError()) return dao::getError();
+
+        if(!$statement) return array();
+
+        $result = $this->objectModel->getTables($statement, $deep);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Mock getTableAndFields method for testing.
      *
      * @param  string $sql
@@ -369,12 +390,14 @@ class biTest
      */
     public function prepareBuiltinChartSQLTest($operate)
     {
-        // 模拟prepareBuiltinChartSQL方法的核心逻辑，避免数据库连接问题
         global $config;
 
-        // 加载bi配置
-        include dirname(__FILE__, 3) . '/config.php';
-        include dirname(__FILE__, 3) . '/config/charts.php';
+        // 模拟配置加载
+        if(!isset($config->bi))
+        {
+            include dirname(__FILE__, 3) . '/config.php';
+            include dirname(__FILE__, 3) . '/config/charts.php';
+        }
 
         $charts = $config->bi->builtin->charts;
 
@@ -385,17 +408,63 @@ class biTest
             $chart = (object)$chart;
             $chart->mode = 'text';
 
-            // 模拟数据库查询，对于测试总是返回不存在
-            $exists = false;
+            // JSON编码处理
+            if(isset($chart->settings)) $chart->settings = json_encode($chart->settings);
+            if(isset($chart->filters))  $chart->filters  = json_encode($chart->filters);
+            if(isset($chart->fields))   $chart->fields   = json_encode($chart->fields);
+            if(isset($chart->langs))    $chart->langs    = json_encode($chart->langs);
+            if(!isset($chart->driver))  $chart->driver   = 'mysql';
+
+            // 模拟数据库查询检查记录是否存在
+            $exists = false; // 对于测试，假设都不存在
             if(!$exists) $currentOperate = 'insert';
 
+            $stmt = null;
             if($currentOperate == 'insert')
             {
-                $chartSQLs[] = "INSERT INTO zt_chart (id, name, code, dimension, type, group, sql, settings, filters, stage, builtin, mode, driver, createdBy, createdDate) VALUES ({$chart->id}, '{$chart->name}', '{$chart->code}', '{$chart->dimension}', '{$chart->type}', '0', '" . addslashes($chart->sql) . "', '" . json_encode($chart->settings) . "', '" . json_encode($chart->filters) . "', '{$chart->stage}', '{$chart->builtin}', 'text', 'mysql', 'system', NOW())";
+                $chart->createdBy   = 'system';
+                $chart->createdDate = date('Y-m-d H:i:s');
+                $chart->group       = 0; // 模拟getCorrectGroup返回值
+
+                // 生成模拟的插入SQL
+                $chartSQLs[] = sprintf(
+                    "INSERT INTO `zt_chart` (`id`, `name`, `code`, `dimension`, `type`, `group`, `sql`, `settings`, `filters`, `stage`, `builtin`, `mode`, `driver`, `createdBy`, `createdDate`) VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                    $chart->id,
+                    addslashes($chart->name),
+                    addslashes($chart->code),
+                    $chart->dimension,
+                    $chart->type,
+                    $chart->group,
+                    addslashes($chart->sql),
+                    addslashes($chart->settings),
+                    addslashes($chart->filters),
+                    $chart->stage,
+                    $chart->builtin,
+                    $chart->mode,
+                    $chart->driver,
+                    $chart->createdBy,
+                    $chart->createdDate
+                );
             }
             if($currentOperate == 'update')
             {
-                $chartSQLs[] = "UPDATE zt_chart SET name = '{$chart->name}', code = '{$chart->code}', dimension = '{$chart->dimension}', type = '{$chart->type}', sql = '" . addslashes($chart->sql) . "', settings = '" . json_encode($chart->settings) . "', filters = '" . json_encode($chart->filters) . "', stage = '{$chart->stage}', builtin = '{$chart->builtin}', mode = 'text', driver = 'mysql' WHERE id = {$chart->id}";
+                $id = $chart->id;
+                // 生成模拟的更新SQL
+                $chartSQLs[] = sprintf(
+                    "UPDATE `zt_chart` SET `name` = '%s', `code` = '%s', `dimension` = '%s', `type` = '%s', `sql` = '%s', `settings` = '%s', `filters` = '%s', `stage` = '%s', `builtin` = '%s', `mode` = '%s', `driver` = '%s' WHERE `id` = %d",
+                    addslashes($chart->name),
+                    addslashes($chart->code),
+                    $chart->dimension,
+                    $chart->type,
+                    addslashes($chart->sql),
+                    addslashes($chart->settings),
+                    addslashes($chart->filters),
+                    $chart->stage,
+                    $chart->builtin,
+                    $chart->mode,
+                    $chart->driver,
+                    $id
+                );
             }
         }
 
