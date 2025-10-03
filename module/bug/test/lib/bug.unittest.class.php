@@ -1543,29 +1543,27 @@ class bugTest
      * @access public
      * @return int
      */
-    public function getRelatedObjectsTest(string $object, string $pairs = ''): int
+    public function getRelatedObjectsTest(string $object, string $pairs = ''): object
     {
         global $tester;
 
         /* 设置bugQueryCondition来模拟有查询条件的情况 */
         $_SESSION['bugQueryCondition'] = "SELECT * FROM " . TABLE_BUG . " WHERE deleted = '0'";
-        $_SESSION['bugOnlyCondition'] = false;
+        $_SESSION['bugOnlyCondition'] = true;
 
         $result = $this->objectModel->getRelatedObjects($object, $pairs);
 
-        if(dao::isError()) return 0;
+        if(dao::isError()) return (object)array('error' => dao::getError());
 
-        /* 检查基本返回结构是否正确 */
-        if(!is_array($result)) return 0;
-        if(!isset($result['']) || !isset($result[0])) return 0;
+        /* 返回详细的测试结果 */
+        $testResult = new stdClass();
+        $testResult->count = count($result);
+        $testResult->hasEmpty = isset($result['']) ? 1 : 0;
+        $testResult->hasZero = isset($result[0]) ? 1 : 0;
+        $testResult->hasTrunk = isset($result['trunk']) ? 1 : 0;
+        $testResult->data = $result;
 
-        /* 对于build相关的对象，检查是否包含trunk选项 */
-        if(in_array($object, array('build', 'openedBuild', 'resolvedBuild')))
-        {
-            if(!isset($result['trunk'])) return 0;
-        }
-
-        return 1;
+        return $testResult;
     }
 
     /**
