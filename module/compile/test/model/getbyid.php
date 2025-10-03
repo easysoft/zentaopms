@@ -4,13 +4,14 @@
 /**
 
 title=测试 compileModel::getByID();
+timeout=0
 cid=0
 
-- 测试步骤1：正常查询存在的构建ID >> 期望返回构建对象
-- 测试步骤2：查询不存在的构建ID >> 期望返回false
-- 测试步骤3：查询ID为0的构建 >> 期望返回false
-- 测试步骤4：查询负数ID的构建 >> 期望返回false
-- 测试步骤5：查询非数字ID的构建 >> 期望返回false
+- 测试步骤1：查询存在的构建记录ID=1 >> 期望返回对应的构建记录对象
+- 测试步骤2：查询不存在的构建记录ID=999 >> 期望返回false
+- 测试步骤3：查询ID为0的构建记录 >> 期望返回false
+- 测试步骤4：查询负数ID=-1的构建记录 >> 期望返回false
+- 测试步骤5：查询非数字ID='abc'的构建记录 >> 期望返回false
 
 */
 
@@ -21,9 +22,18 @@ $table = zenData('compile');
 $table->id->range('1-5');
 $table->name->range('构建1,构建2,构建3,构建4,构建5');
 $table->job->range('1-5');
-$table->status->range('success,failure,running,pending,created');
 $table->queue->range('101-105');
+$table->status->range('success,failure,running,pending,created');
+$table->branch->range('master,develop,feature,hotfix,release');
+$table->logs->range('null,null,null,null,null');
+$table->atTime->range('0800,0900,1000,1100,1200');
+$table->testtask->range('0,1,2,3,0');
+$table->tag->range('v1.0,v1.1,v1.2,v1.3,v1.4');
+$table->times->range('1,2,3,1,2');
 $table->createdBy->range('admin');
+$table->createdDate->range('`2023-10-01 10:00:00`,`2023-10-02 10:00:00`,`2023-10-03 10:00:00`,`2023-10-04 10:00:00`,`2023-10-05 10:00:00`');
+$table->updateDate->range('null,null,null,null,null');
+$table->deleted->range('0');
 $table->gen(5);
 
 su('admin');

@@ -1,34 +1,31 @@
 <?php
+declare(strict_types = 1);
 class compileTest
 {
-    private $objectModel;
-
     public function __construct()
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('compile');
+        global $tester;
+        $this->objectModel = $tester->loadModel('compile');
+        $this->objectTao   = $tester->loadTao('compile');
     }
 
     /**
-     * Get by id
+     * Test getByID method.
      *
-     * @param  mixed  $buildID
+     * @param  mixed $buildID
      * @access public
-     * @return object|false
+     * @return mixed
      */
-    public function getByIDTest($buildID)
+    public function getByIDTest($buildID = null)
     {
-        // 处理类型转换，确保传入的是int类型
-        if(!is_numeric($buildID) || $buildID <= 0) {
+        try {
+            $result = $this->objectModel->getByID($buildID);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (TypeError $e) {
             return false;
         }
-        $buildID = (int)$buildID;
-
-        $objects = $this->objectModel->getByID($buildID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
