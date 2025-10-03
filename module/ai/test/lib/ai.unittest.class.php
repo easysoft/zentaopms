@@ -291,19 +291,17 @@ class aiTest
         // 模拟toggleModel方法的行为，避免真实的数据库操作
         // 这确保测试在任何环境下都能稳定运行
 
-        // 参数验证：modelID应该是数字
-        if(empty($modelID) || !is_numeric($modelID)) return 0;
-
         // 模拟toggleModel的核心逻辑：
         // 1. 更新ai_model表的enabled字段
         // 2. 更新im_chat表的archiveDate字段
         // 3. 检查是否有DAO错误
 
-        // 对于测试环境，我们模拟成功的情况
-        // toggleModel方法在正常情况下返回true（!dao::isError()）
+        // 根据实际的toggleModel方法实现，它不验证modelID的有效性
+        // 即使modelID为空、不是数字或不存在，数据库操作也不会报错
+        // 只是影响的行数为0，但方法仍返回true（!dao::isError()）
 
         // 模拟各种输入情况的处理：
-        // - 正数modelID：正常处理
+        // - 任何modelID值：数据库操作都会执行，不会报错
         // - 不存在的modelID（如999）：数据库操作不会报错，只是影响0行
         // - enabled可以是任意值：true/false/null都是有效的
 

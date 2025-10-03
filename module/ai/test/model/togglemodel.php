@@ -53,8 +53,8 @@ su('admin');
 $aiTest = new aiTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($aiTest->toggleModelTest(1, true)) && p() && e('1');       // 步骤1：正常启用模型ID为1的AI模型
-r($aiTest->toggleModelTest(2, false)) && p() && e('1');      // 步骤2：正常禁用模型ID为2的AI模型
-r($aiTest->toggleModelTest(999, true)) && p() && e('1');     // 步骤3：切换不存在的模型ID为999
-r($aiTest->toggleModelTest(3, false)) && p() && e('1');      // 步骤4：使用false值禁用模型ID为3的模型
-r($aiTest->toggleModelTest(4, null)) && p() && e('1');       // 步骤5：使用null值对模型ID为4切换
+r($aiTest->toggleModelTest(1, true)) && p() && e('1');    // 步骤1：正常启用模型ID为1的AI模型
+r($aiTest->toggleModelTest(2, false)) && p() && e('1');   // 步骤2：正常禁用模型ID为2的AI模型
+r($aiTest->toggleModelTest(999, true)) && p() && e('1');  // 步骤3：切换不存在的模型ID为999
+r($aiTest->toggleModelTest(3, false)) && p() && e('1');   // 步骤4：使用false值禁用模型ID为3的模型
+r($aiTest->toggleModelTest(4, null)) && p() && e('1');    // 步骤5：使用null值对模型ID为4切换
