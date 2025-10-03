@@ -39,6 +39,11 @@ $compile->gen(0);
 $job = zenData('job');
 $job->loadYaml('job_createbyjob', false, 2)->gen(5);
 
+$company = zenData('company');
+$company->name->range('ZenTao');
+$company->code->range('zentao');
+$company->gen(1);
+
 su('admin');
 
 $compileTest = new compileTest();
