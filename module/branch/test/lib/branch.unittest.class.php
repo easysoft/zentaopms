@@ -482,20 +482,23 @@ class branchTest
     {
         global $tester;
 
-        // 模拟POST数据
+        // 清空之前的POST数据
         $_POST = array();
-        if(!empty($branchData)) $_POST['branch'] = $branchData;
-        if(!empty($newBranches)) $_POST['newbranch'] = $newBranches;
 
+        // 设置POST数据以模拟实际提交
+        if(!empty($branchData)) $_POST['branch'] = $branchData;
+        $_POST['newbranch'] = $newBranches; // 确保newbranch总是存在
+
+        // 调用被测方法
         $result = $this->objectModel->manage($productID);
 
         if(dao::isError()) return dao::getError();
 
-        // 检查是否有空的分支名称导致的错误返回
-        if($result === false) return 0;
+        // 如果返回false，表示DAO错误或其他问题
+        if($result === false) return false;
 
-        // 对于可能的JS alert返回，也当作0处理
-        if(!is_array($result)) return 0;
+        // 如果结果包含JavaScript代码（空分支名错误），返回错误标识
+        if(!is_array($result)) return 'error';
 
         // 返回新创建分支的数量
         return count($result);
