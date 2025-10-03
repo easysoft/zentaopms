@@ -9,16 +9,16 @@ fields:
   range: 1-10
   note: ID
 - field: name
-  range: 最近小程序{3},过期小程序{3},未发布小程序{2},已删除小程序{2}
+  range: 最近符合条件小程序{3},过期小程序{3},未发布小程序{2},已删除小程序{2}
   note: 小程序名称
 - field: category
-  range: work{5},personal{3},life{2}
+  range: work{6},personal{3},life{1}
   note: 分类
 - field: desc
   range: 测试描述{10}
   note: 描述
 - field: model
-  range: 1{7},2{3}
+  range: 1{8},2{2}
   note: 模型ID
 - field: icon
   range: writinghand-7{10}
@@ -27,26 +27,26 @@ fields:
   range: admin{10}
   note: 创建者
 - field: createdDate
-  range: (-15D){3},(-2M){3},(-3M){2},(-6M){2}
-  note: 创建时间
+  range: (-15D){3},(-2M){3},(-15D){2},(-15D){2}
+  note: 创建时间，前3个是最近15天，接下来3个是2个月前，后4个是15天前
 - field: editedBy
   range: admin{10}
   note: 编辑者
 - field: editedDate
-  range: (-15D){3},(-2M){3},(-3M){2},(-6M){2}
+  range: (-15D){3},(-2M){3},(-15D){2},(-15D){2}
   note: 编辑时间
 - field: published
-  range: 1{8},0{2}
-  note: 是否发布
+  range: 1{3},1{3},0{2},1{2}
+  note: 是否发布，前6个发布，中间2个未发布，后2个发布
 - field: publishedDate
-  range: (-15D){3},(-2M){3},(-3M){2},null{2}
+  range: (-15D){3},(-2M){3},[]{2},(-15D){2}
   note: 发布时间
 - field: deleted
-  range: 0{8},1{2}
-  note: 是否删除
+  range: 0{3},0{3},0{2},1{2}
+  note: 是否删除，前8个未删除，后2个已删除
 - field: prompt
   range: 测试提示词{10}
   note: 提示词
 - field: builtIn
-  range: 0{8},1{2}
+  range: 0{10}
   note: 是否内置
