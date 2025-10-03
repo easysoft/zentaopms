@@ -38,7 +38,7 @@ $intField = array('name' => 'count', 'null' => 'YES');
 $intRawField = (object)array('field' => 'count', 'type' => 'int(11)', 'null' => 'YES');
 r($devTest->setFieldTest($intField, $intRawField, 'int', 3)) && p('type') && e('int');
 
-// 测试步骤4：float类型字段处理，期望返回float类型
+// 测试步骤4：double类型字段处理，期望返回float类型
 $floatField = array('name' => 'price', 'null' => 'YES');
 $floatRawField = (object)array('field' => 'price', 'type' => 'double(10,2)', 'null' => 'YES');
 r($devTest->setFieldTest($floatField, $floatRawField, 'double', 6)) && p('type') && e('float');
