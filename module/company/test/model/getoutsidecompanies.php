@@ -7,11 +7,11 @@ title=测试 companyModel::getOutsideCompanies();
 timeout=0
 cid=0
 
-- 步骤1：验证第一个外部公司存在属性2 @外部公司
-- 步骤2：验证返回数组长度（5个公司-内部公司1个=4个外部公司） @4
-- 步骤3：验证返回数组计数正确属性count(*) @4
-- 步骤4：验证内部公司ID=1不在结果中属性1 @
-- 步骤5：验证返回的键是2,3,4,5
+- 步骤1：测试获取外部公司列表返回数组长度为4 @4
+- 步骤2：验证第一个外部公司名称为外部公司A属性2 @外部公司A
+- 步骤3：验证内部公司ID=1被正确排除属性1 @0
+- 步骤4：验证最后一个外部公司名称为外部公司D属性5 @外部公司D
+- 步骤5：验证返回的键值结构正确
  - 属性keys(*) @2
 
 */
@@ -19,15 +19,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
 
-// 使用基础的公司数据配置文件，生成多个公司数据进行测试
-zendata('company')->loadYaml('company', false, 2)->gen(5);
+// 确保有基本的公司数据
+zendata('company')->gen(1);
+zendata('company')->loadYaml('company_getoutsidecompanies', false, 2)->gen(5);
 
 su('admin');
 
 $company = new companyTest();
 
-r($company->getOutsideCompaniesTest()) && p('2') && e('外部公司'); // 步骤1：验证第一个外部公司存在
-r($company->getOutsideCompaniesTest()) && p() && e('4'); // 步骤2：验证返回数组长度（5个公司-内部公司1个=4个外部公司）
-r($company->getOutsideCompaniesTest()) && p('count(*)') && e('4'); // 步骤3：验证返回数组计数正确
-r($company->getOutsideCompaniesTest()) && p('1') && e(''); // 步骤4：验证内部公司ID=1不在结果中
-r($company->getOutsideCompaniesTest()) && p('keys(*)') && e('2,3,4,5'); // 步骤5：验证返回的键是2,3,4,5
+r($company->getOutsideCompaniesTest()) && p() && e('4'); // 步骤1：测试获取外部公司列表返回数组长度为4
+r($company->getOutsideCompaniesTest()) && p('2') && e('外部公司A'); // 步骤2：验证第一个外部公司名称为外部公司A
+r($company->getOutsideCompaniesTest()) && p('1') && e('0'); // 步骤3：验证内部公司ID=1被正确排除
+r($company->getOutsideCompaniesTest()) && p('5') && e('外部公司D'); // 步骤4：验证最后一个外部公司名称为外部公司D
+r($company->getOutsideCompaniesTest()) && p('keys(*)') && e('2,3,4,5'); // 步骤5：验证返回的键值结构正确
