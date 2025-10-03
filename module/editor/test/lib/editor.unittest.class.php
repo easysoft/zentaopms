@@ -553,13 +553,36 @@ class editorTest
     public function analysisControlTest()
     {
         $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
-        $objects  = $this->objectModel->analysis($fileName);
 
-        return array(
-            'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
-            'methodCount'     => count($objects),
-            'isArray'         => is_array($objects) ? 1 : 0
-        );
+        if(!file_exists($fileName))
+        {
+            return array(
+                'hasCreateMethod' => 0,
+                'methodCount'     => 0,
+                'isArray'         => 0,
+                'fileNotExists'   => 1
+            );
+        }
+
+        try {
+            $objects = $this->objectModel->analysis($fileName);
+            if(dao::isError()) return array('hasError' => 1, 'errors' => dao::getError());
+
+            return array(
+                'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
+                'methodCount'     => count($objects),
+                'isArray'         => is_array($objects) ? 1 : 0,
+                'hasPublicMethods' => count($objects) > 0 ? 1 : 0
+            );
+        } catch (Exception $e) {
+            return array(
+                'hasCreateMethod' => 0,
+                'methodCount'     => 0,
+                'isArray'         => 0,
+                'hasError'        => 1,
+                'errorMessage'    => $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -571,13 +594,36 @@ class editorTest
     public function analysisModelTest()
     {
         $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'model.php';
-        $objects  = $this->objectModel->analysis($fileName);
 
-        return array(
-            'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
-            'methodCount'     => count($objects),
-            'isArray'         => is_array($objects) ? 1 : 0
-        );
+        if(!file_exists($fileName))
+        {
+            return array(
+                'hasCreateMethod' => 0,
+                'methodCount'     => 0,
+                'isArray'         => 0,
+                'fileNotExists'   => 1
+            );
+        }
+
+        try {
+            $objects = $this->objectModel->analysis($fileName);
+            if(dao::isError()) return array('hasError' => 1, 'errors' => dao::getError());
+
+            return array(
+                'hasCreateMethod' => isset($objects[$fileName . '/create']) ? 1 : 0,
+                'methodCount'     => count($objects),
+                'isArray'         => is_array($objects) ? 1 : 0,
+                'hasPublicMethods' => count($objects) > 0 ? 1 : 0
+            );
+        } catch (Exception $e) {
+            return array(
+                'hasCreateMethod' => 0,
+                'methodCount'     => 0,
+                'isArray'         => 0,
+                'hasError'        => 1,
+                'errorMessage'    => $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -590,14 +636,18 @@ class editorTest
     {
         $fileName = '/nonexistent/path/test.php';
 
+        // Ensure file doesn't exist
+        if(file_exists($fileName)) return 0;
+
         // Capture output to avoid interference with test framework
         ob_start();
         $errorOccurred = false;
 
         try {
             $objects = $this->objectModel->analysis($fileName);
-            $result = empty($objects) ? 1 : 0;
-        } catch (Exception | Error | ValueError $e) {
+            // If no exception occurred, check if result is empty array
+            $result = (is_array($objects) && empty($objects)) ? 1 : 0;
+        } catch (Exception | Error | ValueError | ReflectionException $e) {
             $errorOccurred = true;
             $result = 1;
         }
@@ -624,8 +674,9 @@ class editorTest
 
         try {
             $objects = $this->objectModel->analysis($fileName);
-            $result = empty($objects) ? 1 : 0;
-        } catch (Exception | Error | ValueError $e) {
+            // If no exception occurred, check if result is empty array
+            $result = (is_array($objects) && empty($objects)) ? 1 : 0;
+        } catch (Exception | Error | ValueError | ReflectionException $e) {
             $errorOccurred = true;
             $result = 1;
         }
@@ -645,28 +696,51 @@ class editorTest
     public function analysisStructureTest()
     {
         $fileName = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
-        $objects  = $this->objectModel->analysis($fileName);
 
-        $hasCorrectStructure = 1;
-        foreach($objects as $key => $methodName)
+        if(!file_exists($fileName))
         {
-            if(strpos($key, $fileName . '/') !== 0)
-            {
-                $hasCorrectStructure = 0;
-                break;
-            }
-            if(!is_string($methodName))
-            {
-                $hasCorrectStructure = 0;
-                break;
-            }
+            return array(
+                'hasCorrectStructure' => 0,
+                'keyFormat'           => 0,
+                'valueType'           => 0,
+                'fileNotExists'       => 1
+            );
         }
 
-        return array(
-            'hasCorrectStructure' => $hasCorrectStructure,
-            'keyFormat'           => !empty($objects) && strpos(key($objects), '/') !== false ? 1 : 0,
-            'valueType'           => !empty($objects) && is_string(current($objects)) ? 1 : 0
-        );
+        try {
+            $objects = $this->objectModel->analysis($fileName);
+            if(dao::isError()) return array('hasError' => 1, 'errors' => dao::getError());
+
+            $hasCorrectStructure = 1;
+            foreach($objects as $key => $methodName)
+            {
+                if(strpos($key, $fileName . '/') !== 0)
+                {
+                    $hasCorrectStructure = 0;
+                    break;
+                }
+                if(!is_string($methodName))
+                {
+                    $hasCorrectStructure = 0;
+                    break;
+                }
+            }
+
+            return array(
+                'hasCorrectStructure' => $hasCorrectStructure,
+                'keyFormat'           => !empty($objects) && strpos(key($objects), '/') !== false ? 1 : 0,
+                'valueType'           => !empty($objects) && is_string(current($objects)) ? 1 : 0,
+                'arrayStructure'      => is_array($objects) ? 1 : 0
+            );
+        } catch (Exception $e) {
+            return array(
+                'hasCorrectStructure' => 0,
+                'keyFormat'           => 0,
+                'valueType'           => 0,
+                'hasError'            => 1,
+                'errorMessage'        => $e->getMessage()
+            );
+        }
     }
 
     /**
