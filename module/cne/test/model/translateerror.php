@@ -13,18 +13,28 @@ cid=0
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult2, false 
  - 属性code @999
  - 属性message @CNE服务器出错
-- 执行$result3->message, '[404]:') !== false @rue
-- 执行message, '[500]:') !== false && strpos($result4模块的message, '[Internal Server Error]') !== false方法  @rue
+- 执行$result3->message, '[404]:') !== false ? 1 : 0 @1
+- 执行message, '[500]:') !== false && strpos($result4模块的message, '[Internal Server Error]') !== false) ? 1 : 0方法  @1
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult5, false 
  - 属性code @41001
  - 属性message @证书过期
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+// 尝试包含测试框架，如果失败则使用模拟模式
+$initPath = dirname(__FILE__, 5) . '/test/lib/init.php';
+$unitTestPath = dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-su('admin');
+try {
+    include $initPath;
+    include $unitTestPath;
+    su('admin');
+    $useFramework = true;
+} catch (Exception $e) {
+    // 框架初始化失败，使用独立模式
+    include $unitTestPath;
+    $useFramework = false;
+}
 
 $cneTest = new cneTest();
 
@@ -45,14 +55,14 @@ $apiResult3 = new stdclass();
 $apiResult3->code = 404;
 $apiResult3->message = 'Not Found';
 $result3 = $cneTest->translateErrorTest($apiResult3, true);
-r(strpos($result3->message, '[404]:') !== false) && p() && e(true);
+r(strpos($result3->message, '[404]:') !== false ? 1 : 0) && p() && e('1');
 
 // 测试步骤4：调试模式下未知错误码的翻译
 $apiResult4 = new stdclass();
 $apiResult4->code = 500;
 $apiResult4->message = 'Internal Server Error';
 $result4 = $cneTest->translateErrorTest($apiResult4, true);
-r(strpos($result4->message, '[500]:') !== false && strpos($result4->message, '[Internal Server Error]') !== false) && p() && e(true);
+r((strpos($result4->message, '[500]:') !== false && strpos($result4->message, '[Internal Server Error]') !== false) ? 1 : 0) && p() && e('1');
 
 // 测试步骤5：证书相关错误码41001的翻译
 $apiResult5 = new stdclass();
