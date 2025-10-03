@@ -476,6 +476,13 @@ class adminTest
         $originalMethod = isset($app->rawMethod) ? $app->rawMethod : '';
         $originalParams = isset($app->rawParams) ? $app->rawParams : array();
 
+        // 清理之前的测试状态
+        $lang->admin->menu = new stdclass();
+        if(isset($lang->admin->menuOrder)) unset($lang->admin->menuOrder);
+        if(isset($lang->admin->dividerMenu)) unset($lang->admin->dividerMenu);
+        if(isset($lang->admin->tabMenu)) unset($lang->admin->tabMenu);
+        if(isset($lang->switcherMenu)) unset($lang->switcherMenu);
+
         // 设置测试值
         $app->rawModule = $moduleName;
         $app->rawMethod = $methodName;
@@ -487,11 +494,6 @@ class adminTest
         // 检查是否有错误
         if(dao::isError()) return dao::getError();
 
-        // 恢复原始值
-        $app->rawModule = $originalModule;
-        $app->rawMethod = $originalMethod;
-        $app->rawParams = $originalParams;
-
         // 返回设置结果的标识
         $result = array();
         if(isset($lang->admin->menu)) $result['hasMenu'] = true;
@@ -499,6 +501,11 @@ class adminTest
         if(isset($lang->admin->dividerMenu)) $result['hasDividerMenu'] = true;
         if(isset($lang->admin->tabMenu)) $result['hasTabMenu'] = true;
         if(isset($lang->switcherMenu)) $result['hasSwitcherMenu'] = true;
+
+        // 恢复原始值
+        $app->rawModule = $originalModule;
+        $app->rawMethod = $originalMethod;
+        $app->rawParams = $originalParams;
 
         return $result;
     }
