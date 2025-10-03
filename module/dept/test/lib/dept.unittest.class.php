@@ -261,6 +261,22 @@ class deptTest
      */
     public function updateOrderTest($orders)
     {
+        $result = $this->objectModel->updateOrder($orders);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateOrder method and verify results.
+     *
+     * @param  array $orders
+     * @access public
+     * @return mixed
+     */
+    public function updateOrderVerifyTest($orders)
+    {
         global $tester;
 
         $result = $this->objectModel->updateOrder($orders);
@@ -270,10 +286,26 @@ class deptTest
         // 如果orders为空，直接返回结果
         if(empty($orders)) return $result;
 
-        // 获取所有相关部门的信息
-        $deptList = $tester->dao->select('*')->from(TABLE_DEPT)->where('id')->in($orders)->fetchAll('id');
+        // 获取所有相关部门的信息，按order字段排序
+        $deptList = $tester->dao->select('*')->from(TABLE_DEPT)->where('id')->in($orders)->orderBy('`order`')->fetchAll('id');
 
         return $deptList;
+    }
+
+    /**
+     * Test updateOrder method - simple version.
+     *
+     * @param  array $orders
+     * @access public
+     * @return mixed
+     */
+    public function updateOrderSimpleTest($orders)
+    {
+        $result = $this->objectModel->updateOrder($orders);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
