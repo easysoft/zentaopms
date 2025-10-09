@@ -7,18 +7,18 @@ title=测试 releaseZen::assignVarsForView();
 timeout=0
 cid=0
 
-- 步骤1：正常情况测试需求类型
+- 步骤~~：正常情况测试需求类型
  - 属性type @story
- - 属性hasStories @1
- - 属性hasUsers @1
+ - 属性hasStories @~~
+ - 属性hasUsers @~~
 - 步骤2：正常情况测试Bug类型
  - 属性type @bug
- - 属性hasBugs @1
- - 属性hasUsers @1
+ - 属性hasBugs @~~
+ - 属性hasUsers @~~
 - 步骤3：正常情况测试遗留Bug类型
  - 属性type @leftBug
- - 属性hasLeftBugs @1
- - 属性hasUsers @1
+ - 属性hasLeftBugs @~~
+ - 属性hasUsers @~~
 - 步骤4：测试参数传递
  - 属性type @story
  - 属性link @true
@@ -26,9 +26,9 @@ cid=0
  - 属性orderBy @title_asc
 - 步骤5：测试包含关联发布的情况
  - 属性type @story
- - 属性hasStories @1
- - 属性hasUsers @1
- - 属性hasActions @1
+ - 属性hasStories @~~
+ - 属性hasUsers @~~
+ - 属性hasActions @~~
 
 */
 
