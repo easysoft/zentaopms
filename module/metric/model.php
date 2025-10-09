@@ -1928,8 +1928,7 @@ class metricModel extends model
             return false;
         }
 
-        $queryResult = isset($result[0]) && $measurement->unit ? $result[0] : null;
-        return $queryResult;
+        return isset($result[0]) && $measurement->unit ? $result[0] : null;
     }
 
     /**

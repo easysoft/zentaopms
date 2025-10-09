@@ -294,8 +294,10 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
@@ -312,7 +314,8 @@ class ai extends control
                 : $this->lang->ai->miniPrograms->statuses['draft'];
         }
 
-        $this->view->title        = $this->lang->ai->miniPrograms->common;
+        $this->app->loadLang('aiapp');
+        $this->view->title        = $this->lang->aiapp->manageGeneralAgent;
         $this->view->miniPrograms = $programs;
         $this->view->category     = $category;
         $this->view->categoryList = $categoryList;
@@ -330,11 +333,17 @@ class ai extends control
      */
     public function editMiniProgramCategory()
     {
+        $this->lang->aiapp->menu->generalAgent['subModule'] = 'ai';
+
         if(!empty($_POST))
         {
+            $_POST = array_filter($_POST, function($key)
+            {
+                return strpos($key, 'custom') === 0;
+            }, ARRAY_FILTER_USE_KEY);
             if($this->ai->checkDuplicatedCategory()) return $this->sendError($this->lang->ai->maintenanceGroupDuplicated);
             $this->ai->updateCustomCategories();
-            return $this->sendSuccess(array());
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->usedCustomCategories = $this->ai->getUsedCustomCategories();
@@ -353,7 +362,7 @@ class ai extends control
     public function publishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '1');
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'load' => true));
         $this->sendError(dao::getError());
     }
 
@@ -367,7 +376,7 @@ class ai extends control
     public function unpublishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '0');
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'load' => true));
         $this->sendError(dao::getError());
     }
 
@@ -397,22 +406,16 @@ class ai extends control
         if(!is_file($fileName)) return $this->send($failResponse);
 
         $content = file_get_contents($fileName);
-        $content = str_replace(['<?php', "\r", "\n"], '', $content);
-        unlink($fileName);
         if(empty($content)) return $this->send($failResponse);
 
-        $pos = strpos($content, "\$ztApp = '");
-        if($pos != 0) return $this->send($failResponse);
-
-        $config = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
-        $ztApp  = json_decode($config);
+        $ztApp  = json_decode($content);
         if(!is_object($ztApp)) return $this->send($failResponse);
 
         $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
         $ztApp->published = $_POST['published'];
         $ztApp->category  = $_POST['category'];
         $this->ai->createMiniProgram($ztApp);
-        return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -423,24 +426,11 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('user');
         $users = $this->user->getPairs('noletter');
 
-        if($_POST)
-        {
-            $data = fixer::input('post')->get();
-            if(isset($data->togglePromptStatus) && isset($data->promptId))
-            {
-                if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
-
-                $this->ai->togglePromptStatus($data->promptId);
-
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return $this->send(array('result' => 'success'));
-            }
-        }
         /* Set pager and order. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -451,7 +441,7 @@ class ai extends control
         $this->view->status     = $status;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->title      = $this->lang->aiapp->zentaoAgent;
         $this->view->users      = $users;
 
         if($this->config->edition == 'open')
@@ -475,15 +465,12 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
-        $model = empty($prompt->model) ? null : $this->ai->getLanguageModel($prompt->model);
-
         $this->view->prompt      = $prompt;
-        $this->view->modelName   = empty($model) ? $this->lang->ai->models->default : (empty($model->name) ? $this->lang->ai->models->typeList[$model->type] : $model->name);
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
         $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name";
+        $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} $prompt->name";
 
         $this->display();
     }
@@ -496,16 +483,17 @@ class ai extends control
      */
     public function createPrompt()
     {
-        if(strtolower($this->server->request_method) == 'post')
+        if($_POST)
         {
-            $prompt   = fixer::input('post')->get();
+            $prompt   = form::data($this->config->ai->form->createPrompt)->get();
             $promptID = $this->ai->createPrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'callback' => "gotoPrompt($promptID)"));
+            $url = commonModel::hasPriv('ai', 'designPrompt') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $url));
         }
 
-        $this->view->title      = $this->lang->ai->prompts->create;
+        $this->view->title = $this->lang->ai->prompts->create;
         $this->display();
     }
 
@@ -520,9 +508,9 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($id);
 
-        if(strtolower($this->server->request_method) == 'post')
+        if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = form::data($this->config->ai->form->createPrompt)->get();
 
             $prompt->name = $data->name;
             $prompt->desc = $data->desc;
@@ -530,7 +518,7 @@ class ai extends control
             $this->ai->updatePrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptView', "id={$prompt->id}") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->inlink('promptView', "id={$prompt->id}")));
         }
 
         $this->view->prompt = $prompt;
@@ -550,7 +538,7 @@ class ai extends control
         $result = $this->ai->deletePrompt($prompt);
 
         if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->deleteSuccess, 'load' => $this->inlink('prompts')));
     }
 
     /**
@@ -562,6 +550,7 @@ class ai extends control
      */
     public function promptAssignRole($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -570,7 +559,7 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->model            = $data->model == 'default' ? 0 : $data->model;
+            $prompt->model            = $data->model;
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
 
@@ -583,12 +572,11 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID")));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID")));
         }
 
-        $this->view->models         = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
@@ -606,6 +594,7 @@ class ai extends control
      */
     public function promptSelectDataSource($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -621,9 +610,9 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID")));
         }
 
         $this->view->activeDataSource = empty($prompt->module) ? current(array_keys($this->config->ai->dataSource)) : $prompt->module;
@@ -644,6 +633,7 @@ class ai extends control
      */
     public function promptSetPurpose($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -659,8 +649,8 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
         }
 
         $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -680,6 +670,7 @@ class ai extends control
      */
     public function promptSetTargetForm($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -700,8 +691,8 @@ class ai extends control
                 return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
-            if(!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID")));
         }
 
         $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -721,6 +712,7 @@ class ai extends control
      */
     public function promptFinalize($promptID)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_POST)
@@ -739,8 +731,8 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
         }
 
         $this->view->prompt         = $prompt;
@@ -755,15 +747,14 @@ class ai extends control
      *
      * @param  int    $promptId
      * @param  int    $objectId
+     * @param  bool   $auto  Auto open target form and apply changes.
      * @access public
      * @return void
      */
-    public function promptExecute($promptId, $objectId)
+    public function promptExecute($promptId, $objectId, $auto = true)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
-
         $prompt = $this->ai->getPromptByID($promptId);
-        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
@@ -794,16 +785,21 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        $this->ai->setInjectData($prompt->targetForm, $response);
+        if(!empty($prompt->targetForm))
+        {
+            $targetFormPaths            = explode('.', $prompt->targetForm);
+            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+        }
 
-        $_SESSION['aiPrompt']['prompt']   = $prompt;
-        $_SESSION['aiPrompt']['objectId'] = $objectId;
+        $response['objectID']     = $objectId;
+        $response['objectType']   = $prompt->module;
+        $response['object']       = $objectData;
+        $response['formLocation'] = $location;
+        $response['promptConfig'] = $prompt;
+        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
 
-        if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
-
-        $this->view->formLocation   = $location;
-        $this->view->promptViewLink = $this->inlink('promptview', "promptID=$promptId");
-        $this->display();
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $auto))));
     }
 
     /**
@@ -834,10 +830,12 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId, $exit = false)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+
         if(!empty($exit))
         {
             unset($_SESSION['auditPrompt']);
-            return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'load' => $this->inlink('promptview', "promptID=$promptId")));
         }
 
         $prompt = $this->ai->getPromptByID($promptId);
@@ -863,7 +861,7 @@ class ai extends control
             }
             else
             {
-                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadPrompt($promptId, $objectId)");
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'promptexecute', "promptId=$promptId&objectId=$objectId"));
             }
 
             $this->sendSuccess($response);
@@ -891,15 +889,13 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
-
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if($backToTestingLocation)
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id")));
         }
 
         return $this->send(array('result' => 'success'));
@@ -914,11 +910,28 @@ class ai extends control
      */
     public function promptUnpublish($id)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
         $this->ai->togglePromptStatus($id, 'draft');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => true));
+    }
+
+    /**
+     * Get testing location.
+     *
+     * @param  int    $promptID
+     * @param  string $module
+     * @param  string $targetForm
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestingLocation($promptID, $module, $targetForm)
+    {
+        $prompt = new stdclass();
+        $prompt->id         = $promptID;
+        $prompt->module     = $module;
+        $prompt->targetForm = $targetForm;
+        return $this->send(array('data' => $this->ai->getTestingLocation($prompt)));
     }
 
     /**
@@ -935,22 +948,37 @@ class ai extends control
         {
             $data   = fixer::input('post')->get();
             $method = $data->method;
+            $result = false;
+            $message = '';
+
             switch ($method)
             {
                 case 'create':
-                    $this->ai->createRoleTemplate($data->role, $data->characterization);
+                    $result = $this->ai->createRoleTemplate($data->role, $data->characterization);
+                    $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
                     break;
                 case 'delete':
-                    $this->ai->deleteRoleTemplate($data->id);
+                    $result = $this->ai->deleteRoleTemplate($data->id);
+                    $message = $result ? $this->lang->ai->prompts->roleDelSuccess : $this->lang->ai->saveFail;
                     break;
                 case 'edit':
-                    $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
+                    $result = $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
+                    $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
                     break;
             }
-        }
 
-        $this->view->roleTemplates = $this->ai->getRoleTemplates();
-        $this->display();
+            $roleTemplates = $this->ai->getRoleTemplates();
+            $roleTemplatesArray = array_values((array)$roleTemplates);
+
+            return $this->send(array(
+                'result' => $result ? 'success' : 'fail',
+                'message' => $message,
+                'data' => array(
+                    'roleTemplates' => $roleTemplatesArray,
+                    'method' => $method
+                )
+            ));
+        }
     }
 
     /**

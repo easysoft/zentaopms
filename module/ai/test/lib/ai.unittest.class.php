@@ -37,7 +37,7 @@ class aiTest
      */
     public function isClickableTest($object = null, $action = '')
     {
-        $result = aiModel::isClickable($object, $action);
+        $result = $this->objectModel->isClickable($object, $action);
         if(dao::isError()) return dao::getError();
 
         return $result;

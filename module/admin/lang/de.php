@@ -185,8 +185,6 @@ $lang->admin->menuSetting['dev']['name']           = 'Develop';
 $lang->admin->menuSetting['dev']['desc']           = 'Support for secondary development of the system.';
 $lang->admin->menuSetting['convert']['name']       = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']       = 'Data import from third-party systems.';
-$lang->admin->menuSetting['ai']['name']            = 'AI Configurations';
-$lang->admin->menuSetting['ai']['desc']            = 'Support configuration and management of AI auto-suggestions, AI mini-programs, and large language models.';
 $lang->admin->menuSetting['adminregister']['name'] = 'ZenTao community';
 $lang->admin->menuSetting['adminregister']['desc'] = 'Get the project management resources, tech support, and try out demo versions.';
 
@@ -216,13 +214,6 @@ $lang->admin->productFeature['ipd'][] = 'Built-in requirement pool management fo
 $lang->admin->productFeature['ipd'][] = 'Complete support for product roadmap planning and project initiation process';
 $lang->admin->productFeature['ipd'][] = 'Provides comprehensive market management, research management and report management';
 $lang->admin->productFeature['ipd'][] = 'Provides complete IPD R&D process with built-in TR and DCP reviews';
-
-$lang->admin->ai = new stdclass();
-$lang->admin->ai->model        = 'Language Models';
-$lang->admin->ai->conversation = 'AI Conversations';
-$lang->admin->ai->miniPrograms = 'AI Mini Programs';
-$lang->admin->ai->prompt       = 'AI Prompts';
-$lang->admin->ai->assistant    = 'AI Assistant';
 
 $lang->admin->community = new stdclass();
 $lang->admin->community->registerTitle       = 'Join Us';

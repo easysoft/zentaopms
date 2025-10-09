@@ -661,4 +661,11 @@ $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesda
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
+/* AI */
+$lang->aiapp->conversation = 'Conversation';
+$lang->aiapp->zentaoAgent  = 'ZenTao Agent';
+$lang->aiapp->generalAgent = 'General Agent';
+$lang->aiapp->models       = 'Model List';
+$lang->aiapp->config       = 'ZAI Setting';
+
 include (dirname(__FILE__) . '/menu.php');

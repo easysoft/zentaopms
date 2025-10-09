@@ -47,6 +47,7 @@ class index extends control
         $this->view->appsItems         = commonModel::getMainNavList($this->app->rawModule);
         $this->view->allAppsItems      = commonModel::getMainNavList($this->app->rawModule, true);
         $this->view->browserMessage    = $this->loadModel('message')->getBrowserMessageConfig();
+        $this->view->zaiConfig         = $this->loadModel('zai')->getSetting();
 
         $this->display();
     }

@@ -50,15 +50,11 @@ class aiapp extends control
         $miniProgram = $this->ai->getMiniProgramByID($id);
         if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
 
-        if(empty($miniProgram->model)) $miniProgram->model = 'default';
-
         $this->view->miniProgram  = $miniProgram;
-        $this->view->models       = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->messages     = $this->aiapp->getHistoryMessages($id);
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->aiapp->getCollectedMiniProgramIDs($this->app->user->id);
         $this->view->title        = "{$this->lang->aiapp->title}#{$miniProgram->id} $miniProgram->name";
-        $this->view->hasModels    = $this->ai->hasModelsAvailable();
         $this->display();
     }
 
@@ -150,7 +146,7 @@ class aiapp extends control
         $this->view->categoryList = array_merge($squareCategoryArray, $usedCategoryArray);
         $this->view->pager        = $pager;
         $this->view->miniPrograms = $miniPrograms ?: array();
-        $this->view->title        = $this->lang->aiapp->title;
+        $this->view->title        = $this->lang->aiapp->generalAgent;
         $this->display();
     }
 
@@ -166,5 +162,35 @@ class aiapp extends control
     {
         $this->ai->collectMiniProgram($this->app->user->id, $appID, $delete);
         return $this->send(array('status' => ($delete === 'true' ? '0' : '1')));
+    }
+
+    /**
+     * 模型列表。
+     * Models page.
+     *
+     * @access public
+     * @return void
+     */
+    public function models()
+    {
+        $this->view->title = $this->lang->aiapp->models;
+        $this->display();
+    }
+
+    /**
+     * 智能会话页面。
+     * Conversation page.
+     *
+     * @param string $chat   要打开的会话 ID，ID 中的 _ 会被替换为 -，如果设置为 NEW，则打开新会话。 The chat ID to open, _ will be replaced with -, if set to NEW, open a new chat. The default is an empty string.
+     * @param string $params 会话参数，JSON 字符串，使用 base64 编码。 The chat parameters, JSON string, using base64 encoding.
+     * @access public
+     * @return void
+     */
+    public function conversation($chat = '', $params = '')
+    {
+        $this->view->title         = $this->lang->aiapp->conversation;
+        $this->view->currentChatID = empty($chat) ? '' : str_replace('_', '-', $chat);
+        $this->view->params        = empty($params) ? '' : helper::safe64Decode($params);
+        $this->display();
     }
 }

@@ -93,6 +93,64 @@ class commonTest
     }
 
     /**
+     * Test sendHeader method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return mixed
+     */
+    public function sendHeaderTest($scenario = 'basic')
+    {
+        global $config;
+
+        // 根据场景设置配置
+        switch($scenario) {
+            case 'basic':
+                $config->charset = 'UTF-8';
+                $config->framework->sendXCTO = false;
+                $config->framework->sendXXP = false;
+                $config->framework->sendHSTS = false;
+                $config->framework->sendRP = false;
+                $config->framework->sendXPCDP = false;
+                $config->framework->sendXDO = false;
+                $config->CSPs = array();
+                $config->xFrameOptions = '';
+                break;
+
+            case 'security_headers':
+                $config->framework->sendXCTO = true;
+                $config->framework->sendXXP = true;
+                $config->framework->sendHSTS = true;
+                $config->framework->sendRP = true;
+                $config->framework->sendXPCDP = true;
+                $config->framework->sendXDO = true;
+                break;
+
+            case 'csp':
+                $config->CSPs = array("default-src 'self'", "script-src 'self' 'unsafe-inline'");
+                break;
+
+            case 'xframe':
+                $config->xFrameOptions = 'DENY';
+                break;
+        }
+
+        try {
+            // 使用输出缓冲来捕获可能的输出
+            ob_start();
+            $this->objectModel->sendHeader();
+            ob_end_clean();
+            return 1;
+        } catch (Exception $e) {
+            ob_end_clean();
+            return 0;
+        } catch (Error $e) {
+            ob_end_clean();
+            return 0;
+        }
+    }
+
+    /**
      * Test checkSafeFile method.
      *
      * @param string $scenario 测试场景
