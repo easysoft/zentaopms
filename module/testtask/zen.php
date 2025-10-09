@@ -302,16 +302,16 @@ class testtaskZen extends testtask
      * 分配变量给一个测试单的用例列表页。
      * Assign variables for cases page of a testtask.
      *
-     * @param  object    $produc
-     * @param  object    $testtask
-     * @param  array     $runs
-     * @param  array     $scenes
-     * @param  int       $moduleID
-     * @param  string    $browseType
-     * @param  int       $param
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @access protected
+     * @param  object $produc
+     * @param  object $testtask
+     * @param  array  $runs
+     * @param  array  $scenes
+     * @param  int    $moduleID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
      * @return void
      */
     public function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
