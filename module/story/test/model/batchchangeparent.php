@@ -4,13 +4,14 @@
 /**
 
 title=测试 storyModel::batchChangeParent();
+timeout=0
 cid=0
 
-- 测试步骤1：正常批量更改父需求 >> 期望正常结果
-- 测试步骤2：空的故事ID列表输入 >> 期望无操作结果
-- 测试步骤3：无效的父需求ID >> 期望正常处理结果
-- 测试步骤4：自身作为父需求的错误情况 >> 期望错误处理结果
-- 测试步骤5：正常的需求层级变更 >> 期望正常结果
+- 执行storyTest模块的batchChangeParentTest方法，参数是'6, 7', 1, 'story'  @
+- 执行storyTest模块的batchChangeParentTest方法，参数是'', 1, 'story'  @~~
+- 执行storyTest模块的batchChangeParentTest方法，参数是'8, 9', 999, 'story'  @
+- 执行storyTest模块的batchChangeParentTest方法，参数是'1', 1, 'story'  @#1需求的父需求不能为其本身或其子需求，本次修改已将其忽略。
+- 执行storyTest模块的batchChangeParentTest方法，参数是'3, 4', 2, 'story'  @
 
 */
 

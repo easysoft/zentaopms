@@ -7,11 +7,11 @@ title=测试 searchTao::markKeywords();
 timeout=0
 cid=0
 
-- 测试简单文本中单个关键词标记 @This is a <span class='text-danger'>test</span>  content
-- 测试文本中多个关键词标记 @This contains <span class='text-danger'>key1</span>  and <span class='text-danger'>key2</span>  words
-- 测试中文文本中关键词标记 @这是一个<span class='text-danger'>测试</span> 内容
-- 测试数字关键词标记 @Product version <span class='text-danger'>12345</span> released
-- 测试空关键词情况 @No keywords here
+- 执行searchTest模块的markKeywordsDirectTest方法，参数是'This is a test content', 'test'  @This is a <span class='text-danger'>test</span>  content
+- 执行searchTest模块的markKeywordsDirectTest方法，参数是'This contains key1 and key2 words', 'key1 key2'  @This contains <span class='text-danger'>key1</span>  and <span class='text-danger'>key2</span>  words
+- 执行searchTest模块的markKeywordsDirectTest方法，参数是'这是一个测试内容', '测试'  @这是一个<span class='text-danger'>测试</span> 内容
+- 执行searchTest模块的markKeywordsDirectTest方法，参数是'Product version 12345 released', '12345'  @Product version <span class='text-danger'>12345</span> released
+- 执行searchTest模块的markKeywordsDirectTest方法，参数是'No keywords here', ''  @No keywords here
 
 */
 

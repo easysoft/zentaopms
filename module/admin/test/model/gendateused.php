@@ -9,9 +9,9 @@ cid=0
 
 ✓ Expected: numeric, Actual: 2 (string)
 ✓ Expected: numeric, Actual: 9 (string)
-✓ Expected: numeric, Actual: 2 (string)
-✓ Expected: numeric, Actual: 13 (string)
-✓ Expected: all_numeric, Actual: 2,31
+✓ Expected: numeric, Actual: 8 (string)
+✓ Expected: numeric, Actual: 16 (string)
+✓ Expected: all_numeric, Actual: 17,2
 
 
 */

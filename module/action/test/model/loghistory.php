@@ -4,13 +4,32 @@
 /**
 
 title=测试 actionModel::logHistory();
+timeout=0
 cid=0
 
-- 测试正常情况：新增包含name和code字段的历史记录 >> 期望正确保存字段信息
-- 测试边界值：新增单个assignedTo字段的历史记录 >> 期望正确保存分配信息
-- 测试异常输入：新增name字段变更记录 >> 期望正确处理字段变更
-- 测试权限验证：新增code字段变更记录 >> 期望正确处理权限相关字段
-- 测试业务规则：新增assignedTo字段变更记录 >> 期望正确处理用户分配变更
+- 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[0], $changes1
+ - 第0条的field属性 @name
+ - 第0条的old属性 @变更前名称
+ - 第0条的new属性 @变更后名称
+ - 第1条的field属性 @code
+ - 第1条的old属性 @变更前编号
+ - 第1条的new属性 @变更后编号
+- 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[1], $changes2
+ - 第0条的field属性 @assignedTo
+ - 第0条的old属性 @admin
+ - 第0条的new属性 @test1
+- 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[2], $changes3
+ - 第0条的field属性 @name
+ - 第0条的old属性 @name1
+ - 第0条的new属性 @name2
+- 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[3], $changes4
+ - 第0条的field属性 @code
+ - 第0条的old属性 @code1
+ - 第0条的new属性 @code2
+- 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[4], $changes5
+ - 第0条的field属性 @assignedTo
+ - 第0条的old属性 @test2
+ - 第0条的new属性 @test1
 
 */
 

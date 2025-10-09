@@ -7,11 +7,21 @@ title=测试 actionTao::processMaxDocObjectLink();
 timeout=0
 cid=0
 
-- 步骤1：处理practice类型doc >> 应设置moduleName为assetlib，methodName为practiceView
-- 步骤2：处理component类型doc >> 应设置moduleName为assetlib，methodName为componentView
-- 步骤3：处理空assetLibType的doc >> 应保持原有moduleName和methodName
-- 步骤4：处理非doc类型且有配置 >> 应设置moduleName为assetlib，methodName为taskView
-- 步骤5：处理不存在的doc >> 应保持原有moduleName和methodName
+- 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是1, 'doc', 'view', 'docID=%s'
+ - 属性moduleName @assetlib
+ - 属性methodName @practiceView
+- 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是2, 'doc', 'view', 'docID=%s'
+ - 属性moduleName @assetlib
+ - 属性methodName @componentView
+- 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是5, 'doc', 'view', 'docID=%s'
+ - 属性moduleName @doc
+ - 属性methodName @view
+- 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是1, 'task', 'view', 'taskID=%s'
+ - 属性moduleName @assetlib
+ - 属性methodName @taskView
+- 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是999, 'doc', 'view', 'docID=%s'
+ - 属性moduleName @doc
+ - 属性methodName @view
 
 */
 

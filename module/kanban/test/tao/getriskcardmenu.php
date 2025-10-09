@@ -7,11 +7,11 @@ title=测试 kanbanTao::getRiskCardMenu();
 timeout=0
 cid=0
 
-- 步骤1：测试空风险列表返回空菜单 @0
-- 步骤2：测试活跃状态风险返回菜单数量 @5
-- 步骤3：测试挂起状态风险返回菜单数量 @4
-- 步骤4：测试取消状态风险返回菜单数量 @2
-- 步骤5：测试关闭状态风险返回菜单数量 @2
+- 执行kanbanTest模块的getRiskCardMenuTest方法，参数是$emptyRisks  @0
+- 执行$activeMenus[$activeRisk->id] @5
+- 执行$hangupMenus[$hangupRisk->id] @4
+- 执行$canceledMenus[$canceledRisk->id] @2
+- 执行$closedMenus[$closedRisk->id] @2
 
 */
 

@@ -9,9 +9,9 @@ cid=0
 
 - 测试步骤1：正常jobID查询最新编译结果属性job @1
 - 测试步骤2：查询有多条记录的jobID属性job @2
-- 测试步骤3：查询不存在的jobID @false
-- 测试步骤4：查询无状态记录的jobID @false
-- 测试步骤5：边界值测试（jobID为0） @false
+- 测试步骤3：查询不存在的jobID @alse
+- 测试步骤4：查询无状态记录的jobID @alse
+- 测试步骤5：边界值测试（jobID为0） @alse
 
 */
 

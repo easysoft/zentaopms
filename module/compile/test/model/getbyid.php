@@ -7,11 +7,14 @@ title=测试 compileModel::getByID();
 timeout=0
 cid=0
 
-- 测试步骤1：查询存在的构建记录ID=1 >> 期望返回对应的构建记录对象
-- 测试步骤2：查询不存在的构建记录ID=999 >> 期望返回false
-- 测试步骤3：查询ID为0的构建记录 >> 期望返回false
-- 测试步骤4：查询负数ID=-1的构建记录 >> 期望返回false
-- 测试步骤5：查询非数字ID='abc'的构建记录 >> 期望返回false
+- 执行compileTest模块的getByIDTest方法，参数是1
+ - 属性id @1
+ - 属性name @构建1
+ - 属性status @success
+- 执行compileTest模块的getByIDTest方法，参数是999  @alse
+- 执行compileTest模块的getByIDTest方法  @alse
+- 执行compileTest模块的getByIDTest方法，参数是-1  @alse
+- 执行compileTest模块的getByIDTest方法，参数是'abc'  @alse
 
 */
 

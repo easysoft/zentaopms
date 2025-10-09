@@ -7,11 +7,21 @@ title=测试 searchTao::initOldSession();
 timeout=0
 cid=0
 
-- 步骤1：测试正常情况，验证session初始化 >> field1应为title，operator1应为include
-- 步骤2：测试已存在session情况，验证不重复初始化 >> field1应为title，operator1应为include
-- 步骤3：测试单个字段情况 >> field1应为name，operator1应为include
-- 步骤4：测试不同模块名称的session >> field1应为title，operator1应为include
-- 步骤5：测试字段参数中的操作符设置 >> field1应为account，operator1应为!=
+- 步骤1：测试正常情况，验证session初始化
+ - 属性field1 @title
+ - 属性operator1 @include
+- 步骤2：测试已存在session情况，验证不重复初始化
+ - 属性field1 @title
+ - 属性operator1 @include
+- 步骤3：测试单个字段情况
+ - 属性field1 @name
+ - 属性operator1 @include
+- 步骤4：测试不同模块名称的session
+ - 属性field1 @title
+ - 属性operator1 @include
+- 步骤5：测试字段参数中的操作符设置
+ - 属性field1 @account
+ - 属性operator1 @!=
 
 */
 

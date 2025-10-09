@@ -4,13 +4,18 @@
 /**
 
 title=测试 adminModel::setSubMenu();
+timeout=0
 cid=0
 
-- 测试步骤1：正常菜单配置情况 >> 期望disabled为false
-- 测试步骤2：空子菜单排序情况 >> 期望返回空数组
-- 测试步骤3：无效菜单配置情况 >> 期望disabled保持true
-- 测试步骤4：特殊菜单message|mail配置 >> 期望链接被正确设置
-- 测试步骤5：特殊菜单dev|editor配置 >> 期望链接被正确设置
+- 执行adminTest模块的setSubMenuTest方法，参数是'system', $normalMenu 属性disabled @0
+- 执行adminTest模块的setSubMenuTest方法，参数是'test', $emptyOrderMenu  @rray()
+- 执行adminTest模块的setSubMenuTest方法，参数是'invalid', $invalidMenu 属性disabled @1
+- 执行adminTest模块的setSubMenuTest方法，参数是'message', $messageMenu 属性subMenu @Mail|mail|detect|
+属性mail @Mail|mail|detect|
+属性link @Mail|mail|detect|
+- 执行adminTest模块的setSubMenuTest方法，参数是'dev', $devMenu 属性subMenu @Editor|editor|index|
+属性editor @Editor|editor|index|
+属性link @Editor|editor|index|
 
 */
 

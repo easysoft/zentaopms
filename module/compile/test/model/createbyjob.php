@@ -5,13 +5,28 @@ declare(strict_types=1);
 /**
 
 title=测试 compileModel::createByJob();
+timeout=0
 cid=0
 
-- 测试步骤1：正常输入情况 >> 期望正常结果
-- 测试步骤2：边界值输入 >> 期望边界处理结果
-- 测试步骤3：无效输入情况 >> 期望错误处理结果
-- 测试步骤4：权限验证情况 >> 期望权限控制结果
-- 测试步骤5：业务规则验证 >> 期望业务逻辑结果
+- 执行compileTest模块的createByJobTest方法，参数是1, 'v1.0.0', 'tag'
+ - 属性name @Job1
+ - 属性job @1
+ - 属性tag @v1.0.0
+ - 属性createdBy @admin
+- 执行compileTest模块的createByJobTest方法，参数是2, 'abc123', 'commit'
+ - 属性name @Job2
+ - 属性job @2
+ - 属性commit @abc123
+ - 属性createdBy @admin
+- 执行compileTest模块的createByJobTest方法，参数是3, '', 'tag'
+ - 属性name @Job3
+ - 属性job @3
+ - 属性tag @
+- 执行compileTest模块的createByJobTest方法，参数是999, 'test', 'tag'  @alse
+- 执行compileTest模块的createByJobTest方法，参数是4, 'branch-dev', 'branch'
+ - 属性name @Job4
+ - 属性job @4
+ - 属性branch @branch-dev
 
 */
 

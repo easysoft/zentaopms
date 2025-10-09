@@ -7,11 +7,11 @@ title=测试 convertTao::createWorkflowGroup();
 timeout=0
 cid=0
 
-- 步骤1：测试开源版本直接返回原始relations >> 期望返回序列化的relations数组
-- 步骤2：测试企业版无项目关系时返回原始relations >> 期望返回序列化的relations数组
-- 步骤3：测试企业版有项目关系无产品关系 >> 期望返回序列化的relations数组
-- 步骤4：测试企业版完整关系下创建工作流组 >> 期望返回序列化的relations数组
-- 步骤5：测试已存在工作流组关系时跳过 >> 期望返回序列化的relations数组
+- 步骤1：开源版本直接返回原始relations @a:1:{s:4:"test";s:4:"data";}
+- 步骤2：企业版无项目关系时返回原始relations @a:1:{s:4:"test";s:4:"data";}
+- 步骤3：企业版有项目关系无产品关系 @a:1:{s:4:"test";s:4:"data";}
+- 步骤4：企业版完整关系下创建工作流组 @a:1:{s:4:"test";s:4:"data";}
+- 步骤5：已存在工作流组关系时跳过 @a:1:{s:4:"test";s:4:"data";}
 
 */
 

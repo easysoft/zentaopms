@@ -7,17 +7,17 @@ title=测试 searchModel::convertQueryForm();
 timeout=0
 cid=0
 
-- 执行searchTest模块的convertQueryFormTest方法，参数是array 
+- 执行searchTest模块的convertQueryFormTest方法，参数是array
  - 属性field1 @id
  - 属性andOr1 @and
-- 执行searchTest模块的convertQueryFormTest方法，参数是array 
+- 执行searchTest模块的convertQueryFormTest方法，参数是array
  - 属性field1 @id
  - 属性andOr1 @and
  - 属性operator1 @=
  - 属性value1 @1
 - 执行searchTest模块的convertQueryFormTest方法，参数是array 属性groupAndOr @or
 - 执行searchTest模块的convertQueryFormTest方法，参数是array  @0
-- 执行searchTest模块的convertQueryFormTest方法，参数是array 
+- 执行searchTest模块的convertQueryFormTest方法，参数是array
  - 属性field1 @name
  - 属性field2 @status
  - 属性andOr1 @or

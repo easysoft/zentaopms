@@ -7,11 +7,13 @@ title=测试 pivotTao::getAllPivotByGroupID();
 timeout=0
 cid=0
 
-- 步骤1：正常分组查询（应返回2个已发布的透视表） @2
-- 步骤2：不存在分组查询 @0
-- 步骤3：分组ID为0查询 @0
-- 步骤4：负数分组ID查询 @0
-- 步骤5：验证透视表属性（按id降序，应该是1002在前） @1002,透视表2详细信息
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是60  @2
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是999  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是-1  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是60
+ - 第0条的id属性 @1002
+ - 第0条的0:name属性 @透视表2详细信息
 
 */
 
