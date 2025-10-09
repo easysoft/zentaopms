@@ -4761,7 +4761,8 @@ class docModel extends model
      */
     public function addBuiltInDocTemplateByType()
     {
-        $builtInDocTemplate = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->fetchAll();
+        $builtInDocTemplateType = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
+        $builtInDocTemplate     = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->andWhere('templateType')->in($builtInDocTemplateType)->fetchAll();
         if(!empty($builtInDocTemplate)) return;
 
         $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
@@ -4784,7 +4785,7 @@ class docModel extends model
 
         $this->loadModel('upgrade');
         $this->app->loadLang('baseline');
-        foreach(array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') as $type)
+        foreach($builtInDocTemplateType as $type)
         {
             /* 创建与分类同名的内置文档模板。*/
             /* Add the doc template with the same name as the type. */
