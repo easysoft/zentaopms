@@ -657,7 +657,7 @@ $config->my->bug->actionList['edit']['data-toggle'] = 'modal';
 $config->my->bug->actionList['copy']['icon']        = 'copy';
 $config->my->bug->actionList['copy']['text']        = $lang->bug->copy;
 $config->my->bug->actionList['copy']['hint']        = $lang->bug->copy;
-$config->my->bug->actionList['copy']['url']         = helper::createLink('bug', 'create',"productID={product}&branch={branch}&extra=bugID={id}");
+$config->my->bug->actionList['copy']['url']         = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
 $config->my->bug->actionList['copy']['data-size']   = 'lg';
 $config->my->bug->actionList['copy']['data-toggle'] = 'modal';
 
