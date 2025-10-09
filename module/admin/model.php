@@ -139,6 +139,7 @@ class adminModel extends model
                     {
                         $workflowGroup = $this->fetchByID($groupID, 'workflowgroup');
                         if($subMenuKey == 'review' && $workflowGroup->projectModel == 'kanban') continue;
+                        if($subMenuKey == 'stage' && in_array($workflowGroup->projectModel, array('kanban', 'scrum', 'agileplus'))) continue;
 
                         $subMenu['link'] = sprintf($subMenu['link'], $groupID);
                         if(isset($subMenu['subMenu']))
