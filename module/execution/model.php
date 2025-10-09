@@ -805,7 +805,7 @@ class executionModel extends model
         if(!empty($postData->comment) || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Started', isset($postData->comment) ? $postData->comment : '');
+            $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -842,7 +842,7 @@ class executionModel extends model
         if($postData->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Delayed', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -873,7 +873,7 @@ class executionModel extends model
         $changes = common::createChanges($oldExecution, $execution);
         if(!empty($changes) || $this->post->comment != '')
         {
-            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', isset($postData->comment) ? $postData->comment : '');
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -971,10 +971,10 @@ class executionModel extends model
         }
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($postData->comment != '' or !empty($changes))
+        if($this->post->comment != '' or !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Activated', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
