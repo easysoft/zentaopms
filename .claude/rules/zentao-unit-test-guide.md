@@ -127,6 +127,7 @@ cid=0
 /**
 
 title=测试 {className}::{methodName}();
+timeout=0
 cid=0
 
 - 测试步骤1：正常输入情况 >> 期望正常结果
