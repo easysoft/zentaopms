@@ -11221,7 +11221,7 @@ class upgradeModel extends model
         if(empty($reports) && empty($projectReports)) return array();
 
         $thisSunday = date('Y-m-d', strtotime('this Sunday'));
-        foreach($reports as $key => $report)
+        foreach($reports as $report)
         {
             if(in_array($report->projectModel, array('scrum', 'agileplus', 'kanban'))) continue;
             if($report->projectStatus == 'doing') $report->realBegan = !helper::isZeroDate($report->realBegan) ? $report->realBegan : $report->weekStart;
