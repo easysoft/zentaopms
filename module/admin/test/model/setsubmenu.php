@@ -4,6 +4,7 @@
 /**
 
 title=测试 adminModel::setSubMenu();
+timeout=0
 cid=0
 
 - 执行adminTest模块的setSubMenuTest方法，参数是'system', $normalMenu 属性disabled @0
