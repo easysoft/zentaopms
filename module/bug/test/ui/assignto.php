@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 2) . '/lib/ui/createbug.ui.class.php';
-include dirname(__FILE__, 4) . '/user/test/lib/createuser.ui.class.php';
+include dirname(__FILE__, 4) . '/user/test/lib/ui/createuser.ui.class.php';
 
 /**
 
