@@ -931,7 +931,11 @@ class ai extends control
         $prompt->id         = $promptID;
         $prompt->module     = $module;
         $prompt->targetForm = $targetForm;
-        return $this->send(array('data' => $this->ai->getTestingLocation($prompt)));
+
+        $location = $this->ai->getTestingLocation($prompt);
+        if($location === false) return $this->send(array('error' => $this->lang->ai->prompts->goingTestingFail));
+
+        return $this->send(array('data' => $location));
     }
 
     /**
