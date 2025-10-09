@@ -1192,7 +1192,7 @@ class testtaskModel extends model
             $allProduct     = "`product` = 'all'";
             $caseQuery      = $this->session->testtaskQuery;
             $isQueryProduct = strpos($caseQuery, "`product` = '");
-            if($isQueryProduct !== false) $caseQuery = str_replace($allProduct, '1', $caseQuery) . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            if(strpos($caseQuery, $allProduct) !== false) $caseQuery = str_replace($allProduct, '1', $caseQuery) . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 

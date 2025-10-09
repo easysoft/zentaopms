@@ -347,8 +347,8 @@ class testreportZen extends testreport
      * 为创建查看测试报告数据构建报告数据。
      * Build testreport data for view.
      *
-     * @param  object    $report
-     * @access protected
+     * @param  object $report
+     * @access public
      * @return array
      */
     public function buildReportDataForView(object $report): array
