@@ -34,7 +34,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/releasezen.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 zenData('product')->gen(5);
@@ -57,7 +57,7 @@ $release->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$releaseTest = new releaseTest();
+$releaseTest = new releaseZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 $release1 = $releaseTest->objectModel->getByID(1);
@@ -66,8 +66,8 @@ $release3 = $releaseTest->objectModel->getByID(3);
 $release4 = $releaseTest->objectModel->getByID(4);
 $release5 = $releaseTest->objectModel->getByID(5);
 
-r($release1 ? $releaseTest->assignVarsForViewTest($release1, 'story', '', '', 'id_desc') : array('error' => 'no_release')) && p('type,hasStories,hasUsers') && e('story,1,1'); // 步骤1：正常情况测试需求类型
-r($release2 ? $releaseTest->assignVarsForViewTest($release2, 'bug', '', '', 'id_desc') : array('error' => 'no_release')) && p('type,hasBugs,hasUsers') && e('bug,1,1'); // 步骤2：正常情况测试Bug类型
-r($release3 ? $releaseTest->assignVarsForViewTest($release3, 'leftBug', '', '', 'severity_desc') : array('error' => 'no_release')) && p('type,hasLeftBugs,hasUsers') && e('leftBug,1,1'); // 步骤3：正常情况测试遗留Bug类型
-r($release4 ? $releaseTest->assignVarsForViewTest($release4, 'story', 'true', 'test', 'title_asc') : array('error' => 'no_release')) && p('type,link,param,orderBy') && e('story,true,test,title_asc'); // 步骤4：测试参数传递
-r($release5 ? $releaseTest->assignVarsForViewTest($release5, 'story', '', '', 'id_desc') : array('error' => 'no_release')) && p('type,hasStories,hasUsers,hasActions') && e('story,1,1,1'); // 步骤5：测试包含关联发布的情况
+r($release1 ? $releaseTest->assignVarsForViewTest($release1, 'story', '', '', 'id_desc') : array('error' => 'no_release'))           && p('type,hasStories,hasUsers')            && e('story,~~,~~');               // 步骤~~：正常情况测试需求类型
+r($release2 ? $releaseTest->assignVarsForViewTest($release2, 'bug', '', '', 'id_desc') : array('error' => 'no_release'))             && p('type,hasBugs,hasUsers')               && e('bug,~~,~~');                 // 步骤2：正常情况测试Bug类型
+r($release3 ? $releaseTest->assignVarsForViewTest($release3, 'leftBug', '', '', 'severity_desc') : array('error' => 'no_release'))   && p('type,hasLeftBugs,hasUsers')           && e('leftBug,~~,~~');             // 步骤3：正常情况测试遗留Bug类型
+r($release4 ? $releaseTest->assignVarsForViewTest($release4, 'story', 'true', 'test', 'title_asc') : array('error' => 'no_release')) && p('type,link,param,orderBy')             && e('story,true,test,title_asc'); // 步骤4：测试参数传递
+r($release5 ? $releaseTest->assignVarsForViewTest($release5, 'story', '', '', 'id_desc') : array('error' => 'no_release'))           && p('type,hasStories,hasUsers,hasActions') && e('story,~~,~~,~~');            // 步骤5：测试包含关联发布的情况

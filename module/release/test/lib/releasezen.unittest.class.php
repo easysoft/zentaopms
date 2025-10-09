@@ -175,4 +175,21 @@ class releaseZenTest
 
         return $html;
     }
+
+    /**
+     * 生成的发布详情页面的需求数据。
+     * Generate the story data for the release view page.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function assignVarsForViewTest(object $release, string $type, string $link, string $param, string $orderBy)
+    {
+        return callZenMethod('release', 'assignVarsForView', [$release, $type, $link, $param, $orderBy], 'view');
+    }
 }
