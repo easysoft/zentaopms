@@ -14,8 +14,8 @@ namespace zin;
 /* zin: Define the toolbar on main menu. */
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
-if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "type={$type}"), 'data-toggle' => 'modal');
-if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "type={$type}"));
+if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}&type={$type}"), 'data-toggle' => 'modal');
+if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}&type={$type}"));
 div
 (
     setClass('main-col main-content'),
@@ -32,39 +32,6 @@ div
             !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
             !empty($createItem) ? item(set($createItem)) : null
         )
-    )
-);
-
-if(hasPriv('stage', 'settype'))
-{
-    $menuItems[] = li
-    (
-        setClass('menu-item'),
-        a
-        (
-            set::href(createLink('stage', 'settype')),
-            $lang->stage->setType
-        )
-    );
-}
-
-$menuItems[] = li
-(
-    setClass('menu-item'),
-    a
-    (
-        setClass('active'),
-        set::href(createLink('stage', 'browse')),
-        $lang->stage->browse
-    )
-);
-
-sidebar
-(
-    div
-    (
-        setClass('cell p-2.5 bg-white'),
-        menu($menuItems)
     )
 );
 

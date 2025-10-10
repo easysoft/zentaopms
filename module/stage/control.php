@@ -16,12 +16,13 @@ class stage extends control
      * 瀑布模型阶段列表页。
      * Waterfall model stage list page.
      *
+     * @param  int    $groupID
      * @param  string $orderBy
      * @param  string $type    waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function browse(string $orderBy = "id_asc", string $type = 'waterfall')
+    public function browse(int $groupID = 0, string $orderBy = "id_asc", string $type = 'waterfall')
     {
         if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy={$orderBy}&type=waterfallplus"));
 
@@ -29,6 +30,7 @@ class stage extends control
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy = $orderBy;
         $this->view->type    = $type;
+        $this->view->groupID = $groupID;
 
         $this->display();
     }
@@ -58,11 +60,12 @@ class stage extends control
      * 创建一个阶段。
      * Create a stage.
      *
+     * @param  int    $groupID
      * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function create(string $type = 'waterfall')
+    public function create(int $groupID = 0, string $type = 'waterfall')
     {
         if($_POST)
         {
@@ -74,7 +77,8 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
+        $this->view->groupID = $groupID;
 
         $this->display();
     }
@@ -83,11 +87,12 @@ class stage extends control
      * 批量创建阶段。
      * Batch create stages.
      *
+     * @param  int    $groupID
      * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function batchCreate(string $type = 'waterfall')
+    public function batchCreate(int $groupID = 0, string $type = 'waterfall')
     {
         if($_POST)
         {
@@ -98,7 +103,8 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type")));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
+        $this->view->groupID = $groupID;
 
         $this->display();
     }
