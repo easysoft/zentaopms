@@ -1941,10 +1941,10 @@ CREATE TABLE IF NOT EXISTS `zt_session` (
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `percent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
-  `projectType` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
