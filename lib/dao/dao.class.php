@@ -233,7 +233,7 @@ class dao extends baseDAO
         $groupID = 0;
         if(in_array($module, array('project', 'product')))
         {
-            $groupID = empty($_SESSION['workflowGroup']) ? 0 : $_POST['workflowGroup'];
+            $groupID = empty($_POST['workflowGroup']) ? 0 : $_POST['workflowGroup'];
         }
         elseif(in_array($module, $linkProductModules))
         {
