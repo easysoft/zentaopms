@@ -12408,6 +12408,7 @@ class upgradeModel extends model
         $typeCodePairs['waterfallplus'] = array('waterfallplusproject', 'waterfallplusproduct');
         $typeCodePairs['ipd']           = array('ipdproduct', 'tpdproduct', 'cbbproduct', 'cpdproduct', 'cpdproject');
 
+        $this->app->loadConfig('project');
         $workflowPairs = $this->dao->select('code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchPairs();
         foreach($typeCodePairs as $projectType => $flowList)
         {
@@ -12415,6 +12416,10 @@ class upgradeModel extends model
             {
                 foreach($stageGroup[$projectType] as $stage)
                 {
+                    if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
+                    if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
+                    if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
+
                     unset($stage->id);
                     $stage->workflowGroup = $workflowPairs[$flowCode];
                     if(empty($stage->editedDate)) $stage->editedDate = null;
