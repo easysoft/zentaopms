@@ -1900,13 +1900,14 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
 CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 
+-- DROP TABLE IF EXISTS `zt_session`;
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,
     `timestamp` int(10) unsigned DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `timestamp` (`timestamp`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
 
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
@@ -2615,7 +2616,7 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
   `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
@@ -2662,7 +2663,7 @@ CREATE OR REPLACE VIEW `ztv_productstories` AS SELECT `zt_story`.`product` AS `p
 -- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
 CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS SELECT COUNT(1) AS `userlogin`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'user') AND (`zt_action`.`action` = 'login')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayeffort`;
-CREATE OR REPLACE VIEW `ztv_dayeffort` AS SELECT ROUND(SUM(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` FROM `zt_effort` GROUP BY `zt_effort`.`date`;
+CREATE OR REPLACE VIEW `ztv_dayeffort` AS SELECT ROUND(SUM(`zt_effort`.`consumed`), 1) AS `consumed`,`zt_effort`.`date` AS `date` FROM `zt_effort` GROUP BY `zt_effort`.`date`;
 -- DROP VIEW IF EXISTS `ztv_daystoryopen`;
 CREATE OR REPLACE VIEW `ztv_daystoryopen` AS SELECT COUNT(1) AS `storyopen`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'story') AND (`zt_action`.`action` = 'opened')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daystoryclose`;
@@ -15751,9 +15752,9 @@ CREATE TABLE IF NOT EXISTS `zt_space` (
   `default` tinyint(1) NOT NULL DEFAULT 0,
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `name` ON `zt_space`(`name`);
 
 -- DROP TABLE IF EXISTS `zt_instance`;
 CREATE TABLE IF NOT EXISTS `zt_instance` (
@@ -15786,10 +15787,10 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `space` (`space`),
-  KEY `k8name` (`k8name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `space` ON `zt_instance`(`space`);
+CREATE INDEX `k8name` ON `zt_instance`(`k8name`);
 
 -- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE IF NOT EXISTS `zt_demandpool` (
