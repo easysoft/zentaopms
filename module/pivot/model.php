@@ -2764,7 +2764,7 @@ class pivotModel extends model
             if(!empty($condition['value']))
             {
                 if(!empty($condition['htmlspecialed'])) $value .= " OR t1.{$drillField} = {$condition['htmlspecialed']}";
-                $conditionSQLs[] = "(t1.{$drillField} {$value})";
+                $conditionSQLs[] = "(t1.{$drillField}{$value})";
             }
         }
 
