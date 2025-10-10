@@ -227,10 +227,31 @@ class dao extends baseDAO
         if($module == 'story' && $this->app->rawModule == 'epic')        $module = 'epic';
         if($module == 'project' && $method == 'createtemplate')          $method = 'create';
 
-        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}'")->fetch(PDO::FETCH_OBJ);
+        $linkProductModules = array('product', 'productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
+        $linkProjectModules = array('project', 'execution', 'build', 'task');
+
+        $groupID = 0;
+        if(in_array($module, $linkProductModules))
+        {
+            $productID = in_array($module, array('feedback', 'ticket')) ? $_SESSION["{$module}Product"] : $_SESSION['product'];
+            $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
+            $groupID   = !$result->shadow ? $result->workflowGroup : 0;
+            if(empty($groupID))
+            {
+                $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
+                $groupID = $result->workflowGroup;
+            }
+        }
+        elseif(!empty($_SESSION['project']) && in_array($module, $linkProjectModules))
+        {
+            $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $_SESSION['project'] . "'")->fetch(PDO::FETCH_OBJ);
+            $groupID = $result->workflowGroup;
+        }
+
+        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}' AND `group` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;
 
-        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = '{$this->config->vision}'")->fetchAll();
+        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = '{$this->config->vision}' AND t1.`group` = '{$groupID}'")->fetchAll();
         if(!$flowFields) return $this;
 
         $rules    = array();
