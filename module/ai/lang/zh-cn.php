@@ -15,7 +15,7 @@ $lang->ai->common = 'AI配置';
 $lang->prompt = new stdclass();
 $lang->prompt->name             = '名称';
 $lang->prompt->desc             = '描述';
-$lang->prompt->model            = '语言模型';
+$lang->prompt->model            = '默认模型';
 $lang->prompt->module           = '所属分组';
 $lang->prompt->source           = '对象数据';
 $lang->prompt->targetForm       = '目标表单';
@@ -154,7 +154,7 @@ $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
 
 /* Role assigning. */
-$lang->ai->prompts->model               = '语言模型';
+$lang->ai->prompts->model               = '默认模型';
 $lang->ai->prompts->role                = '角色';
 $lang->ai->prompts->characterization    = '角色描述';
 $lang->ai->prompts->rolePlaceholder     = '“你来扮演 <一个什么角色>”';

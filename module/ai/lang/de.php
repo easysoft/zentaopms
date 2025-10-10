@@ -15,7 +15,7 @@ $lang->ai->common = 'AI Configuration';
 $lang->prompt  = new stdclass();
 $lang->prompt->name             = 'Name';
 $lang->prompt->desc             = 'Description';
-$lang->prompt->model            = 'Model';
+$lang->prompt->model            = 'Default Model';
 $lang->prompt->module           = 'Module';
 $lang->prompt->source           = 'Data Source';
 $lang->prompt->targetForm       = 'Target Form';
@@ -154,7 +154,7 @@ $lang->ai->prompts->setTargetForm    = 'Set Target Form';
 $lang->ai->prompts->finalize         = 'Finalize';
 
 /* Role assigning. */
-$lang->ai->prompts->model               = 'Model';
+$lang->ai->prompts->model               = 'Default Model';
 $lang->ai->prompts->role                = 'Role';
 $lang->ai->prompts->characterization    = 'Characterization';
 $lang->ai->prompts->rolePlaceholder     = '"Act as a <role>"';
