@@ -10,29 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the set::module('release') feature bar on main menu. */
-/* zin: Define the toolbar on main menu. */
+featureBar();
+
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
 if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}&type={$type}"), 'data-toggle' => 'modal');
 if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}&type={$type}"));
-div
+toolbar
 (
-    setClass('main-col main-content'),
-    div
-    (
-        setClass('main-header flex-auto'),
-        div
-        (
-            setClass('flex-auto'),
-            html('<strong>' . $lang->stage->browse . '</strong>')
-        ),
-        toolbar
-        (
-            !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
-            !empty($createItem) ? item(set($createItem)) : null
-        )
-    )
+    !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
