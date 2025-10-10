@@ -227,11 +227,15 @@ class dao extends baseDAO
         if($module == 'story' && $this->app->rawModule == 'epic')        $module = 'epic';
         if($module == 'project' && $method == 'createtemplate')          $method = 'create';
 
-        $linkProductModules = array('product', 'productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
-        $linkProjectModules = array('project', 'execution', 'build', 'task');
+        $linkProductModules = array('productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
+        $linkProjectModules = array('execution', 'build', 'task');
 
         $groupID = 0;
-        if(in_array($module, $linkProductModules))
+        if(in_array($module, array('project', 'product')))
+        {
+            $groupID = empty($_SESSION['workflowGroup']) ? 0 : $_POST['workflowGroup'];
+        }
+        elseif(in_array($module, $linkProductModules))
         {
             $productID = in_array($module, array('feedback', 'ticket')) ? $_SESSION["{$module}Product"] : $_SESSION['product'];
             $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
