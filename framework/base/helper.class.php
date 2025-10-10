@@ -317,16 +317,19 @@ class baseHelper
         if(is_array($idList))
         {
             foreach($idList as $key=>$value) $idList[$key] = addslashes((string) $value);
-            if(count($idList) <= 1) return "= '" . join("','", $idList) . "'";
+            if(count($idList) == 0) return "= NULL";
+            if(count($idList) == 1) return "= '" . current($idList) . "'";
             return "IN ('" . join("','", $idList) . "')";
         }
 
-        if(is_null($idList)) $idList = '';
+        if(is_null($idList)) return '=NULL';
+
         if(!is_string($idList)) $idList = json_encode($idList);
 
         $idList = str_replace(',', "','", str_replace(' ', '', addslashes($idList)));
         if(substr_count($idList, ',') != 0) return "IN ('" . $idList . "')";
-        return "= '$idList'";
+
+        return $idList == '' ? '= NULL' : "= '$idList'";
     }
 
     /**
@@ -1535,4 +1538,26 @@ function uncompress(string $encoded): array
     $decoded = explode(',', gzuncompress($encoded));
     for($i = 1; $i < count($decoded); $i++) $decoded[$i] += $decoded[$i-1];
     return $decoded;
+}
+
+
+/**
+ * 将字符串及数组转为Int数组
+ * Convert string array to int array.
+ *
+ * @param  array|string $strArray
+ * @access public
+ * @return array
+ */
+function toIntArray(array|string $strArray): array
+{
+    if(is_string($strArray)) $strArray = explode(',', $strArray);
+
+    $intArray = [];
+    foreach($strArray as $val)
+    {
+        if($val === '') continue;
+        $intArray[] = (int)$val;
+    }
+    return $intArray;
 }
