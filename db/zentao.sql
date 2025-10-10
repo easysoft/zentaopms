@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `prev` mediumtext NULL,
   `next` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT 'wait',
-  `result` varchar(10) NOT NULL DEFAULT '',
+  `result` varchar(20) NOT NULL DEFAULT '',
   `date` date NULL,
   `opinion` mediumtext NULL,
   `extra` mediumtext NULL,
