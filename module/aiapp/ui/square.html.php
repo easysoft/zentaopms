@@ -130,6 +130,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
             div(
                 setClass('badge'),
                 setClass(array('invisible' => !$showTag)),
+                set::title($categoryList[$miniProgram->category]),
                 $categoryList[$miniProgram->category]
             ),
             $starBtn
