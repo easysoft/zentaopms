@@ -187,6 +187,36 @@ class dbh
     }
 
     /**
+     * 初始化PDO对象。
+     * Init pdo.
+     *
+     * @param  string $driver
+     * @param  object $dbConfig
+     * @param  bool   $setSchema
+     * @access private
+     * @return object
+     */
+    private function pdoInit($driver, $dbConfig, $setSchema)
+    {
+        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        if($setSchema)
+        {
+            $dsn .= ";dbname={$dbConfig->name}";
+        }
+        elseif($driver == 'pgsql') // pgsql(postgres,highgo) need database to connect
+        {
+            $dsn .= ";dbname={$dbConfig->driver}"; // default database
+        }
+
+        $password = helper::decryptPassword($dbConfig->password);
+        $pdo = new PDO($dsn, $dbConfig->user, $password);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $pdo;
+    }
+
+    /**
      * Process PDO/SQL error.
      *
      * @param  object $exception
