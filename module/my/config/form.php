@@ -8,7 +8,7 @@ $config->my->form->changePassword['passwordLength']   = array('required' => fals
 $config->my->form->changePassword['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
 
 $config->my->form->editProfile = array();
-$config->my->form->editProfile['account']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->my->form->editProfile['account']          = array('required' => true,  'type' => 'string', 'default' => '', 'skipRequired' => true);
 $config->my->form->editProfile['password1']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->my->form->editProfile['password2']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->my->form->editProfile['visions']          = array('required' => true,  'type' => 'array',  'default' => [], 'filter' => 'join');
