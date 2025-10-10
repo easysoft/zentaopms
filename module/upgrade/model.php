@@ -11240,8 +11240,8 @@ class upgradeModel extends model
             if($report->projectStatus == 'closed')    $report->projectEnd = $report->realEnd;
 
             /* Filter date > project end date report. */
-            $report->projectEnd = date('Y-m-d', strtotime($report->projectEnd));
-            if($report->weekStart > $report->projectEnd) continue;
+            $report->projectEnd = helper::isZeroDate($report->projectEnd) ? '' : date('Y-m-d', strtotime($report->projectEnd));
+            if(!$report->projectEnd || $report->weekStart > $report->projectEnd) continue;
             $projectReports[] = $report;
         }
         return $projectReports;
