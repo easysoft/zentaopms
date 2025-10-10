@@ -757,6 +757,7 @@ $config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 $config->mysqlDriverList  = array('mysql', 'oceanbase');
+$config->pgsqlDriverList  = array('postgres', 'highgo');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
