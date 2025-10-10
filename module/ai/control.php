@@ -913,7 +913,7 @@ class ai extends control
         $this->ai->togglePromptStatus($id, 'draft');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->unpublishSuccess, 'load' => true));
     }
 
     /**
