@@ -10,62 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the set::module('release') feature bar on main menu. */
-/* zin: Define the toolbar on main menu. */
+featureBar();
+
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
-if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "type={$type}"), 'data-toggle' => 'modal');
-if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "type={$type}"));
-div
+if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}&type={$type}"), 'data-toggle' => 'modal');
+if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}&type={$type}"));
+toolbar
 (
-    setClass('main-col main-content'),
-    div
-    (
-        setClass('main-header flex-auto'),
-        div
-        (
-            setClass('flex-auto'),
-            html('<strong>' . $lang->stage->browse . '</strong>')
-        ),
-        toolbar
-        (
-            !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
-            !empty($createItem) ? item(set($createItem)) : null
-        )
-    )
-);
-
-if(hasPriv('stage', 'settype'))
-{
-    $menuItems[] = li
-    (
-        setClass('menu-item'),
-        a
-        (
-            set::href(createLink('stage', 'settype')),
-            $lang->stage->setType
-        )
-    );
-}
-
-$menuItems[] = li
-(
-    setClass('menu-item'),
-    a
-    (
-        setClass('active'),
-        set::href(createLink('stage', 'browse')),
-        $lang->stage->browse
-    )
-);
-
-sidebar
-(
-    div
-    (
-        setClass('cell p-2.5 bg-white'),
-        menu($menuItems)
-    )
+    !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
