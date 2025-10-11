@@ -513,7 +513,7 @@ class programModel extends model
             $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $stmt = $this->dao->select('DISTINCT t1.*, CAST(t1.budget AS DECIMAL) AS budget')->from(TABLE_PROJECT)->alias('t1');
+        $stmt = $this->dao->select("DISTINCT t1.*, CAST(NULLIF(t1.budget, '') AS DECIMAL) AS budget")->from(TABLE_PROJECT)->alias('t1');
         if($this->cookie->involved) $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
