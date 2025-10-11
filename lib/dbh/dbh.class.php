@@ -353,8 +353,6 @@ class dbh
      */
     public function execute($sql, $params)
     {
-        $this->trace();
-
         $this->statement = $this->prepare($sql);
 
         try
