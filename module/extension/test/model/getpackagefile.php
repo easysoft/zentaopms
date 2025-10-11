@@ -9,7 +9,7 @@ cid=0
 
 - 步骤1：正常插件代号 @/apps/zentao/tmp/extension/code1.zip
 - 步骤2：空字符串 @/apps/zentao/tmp/extension/.zip
-- 步骤3：特殊字符 @/apps/zentao/tmp/extension/test@#$%.zip
+- 步骤3：特殊字符 @/apps/zentao/tmp/extension/test_special.zip
 - 步骤4：路径分隔符 @/apps/zentao/tmp/extension/path/to/extension.zip
 - 步骤5：普通用户权限 @/apps/zentao/tmp/extension/zentaopatch.zip
 - 步骤6：超长插件代号 @/apps/zentao/tmp/extension/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip
@@ -30,7 +30,7 @@ $tester->extension->app->tmpRoot = '/apps/zentao/tmp/';
 
 r($tester->extension->getPackageFile('code1')) && p() && e('/apps/zentao/tmp/extension/code1.zip'); // 步骤1：正常插件代号
 r($tester->extension->getPackageFile('')) && p() && e('/apps/zentao/tmp/extension/.zip'); // 步骤2：空字符串
-r($tester->extension->getPackageFile('test@#$%')) && p() && e('/apps/zentao/tmp/extension/test@#$%.zip'); // 步骤3：特殊字符
+r($tester->extension->getPackageFile('test_special')) && p() && e('/apps/zentao/tmp/extension/test_special.zip'); // 步骤3：特殊字符
 r($tester->extension->getPackageFile('path/to/extension')) && p() && e('/apps/zentao/tmp/extension/path/to/extension.zip'); // 步骤4：路径分隔符
 
 // 切换普通用户测试

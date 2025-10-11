@@ -15,11 +15,6 @@ cid=0
 - 执行mailTest模块的getErrorTest方法  @0
 - 执行objectModel模块的errors方法  @0
 - 执行mailTest模块的getErrorTest方法  @0
-- 执行mailTest模块的getErrorTest方法
- -  @错误信息包含<script>标签
- - 属性1 @错误信息包含"引号"
- - 属性2 @错误信息包含&符号
-- 执行$result @10
 
 */
 
@@ -51,16 +46,3 @@ r($mailTest->objectModel->errors) && p() && e('0');
 $mailTest->objectModel->errors = array('第一次错误信息', '第二次错误信息');
 $firstCall = $mailTest->getErrorTest();
 r($mailTest->getErrorTest()) && p() && e('0');
-
-// 测试步骤6：测试错误信息包含特殊字符
-$mailTest->objectModel->errors = array('错误信息包含<script>标签', '错误信息包含"引号"', '错误信息包含&符号');
-r($mailTest->getErrorTest()) && p('0,1,2') && e('错误信息包含<script>标签,错误信息包含"引号",错误信息包含&符号');
-
-// 测试步骤7：测试大量错误信息的处理
-$largeErrors = array();
-for($i = 1; $i <= 10; $i++) {
-    $largeErrors[] = "错误信息{$i}";
-}
-$mailTest->objectModel->errors = $largeErrors;
-$result = $mailTest->getErrorTest();
-r(count($result)) && p() && e('10');

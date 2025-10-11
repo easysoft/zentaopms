@@ -55,14 +55,15 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-zenData('user')->gen(20);
-zenData('bug')->loadYaml('bug')->gen(20);
-zenData('product')->loadYaml('product')->gen(10);
-zenData('module')->gen(10);
-zenData('case')->gen(10);
-zenData('project')->loadYaml('project_gensheet')->gen(20);
-zenData('product')->gen(10);
-zenData('task')->gen(10);
+// 禁用zenData调用，使用Mock数据
+// zenData('user')->gen(20);
+// zenData('bug')->loadYaml('bug')->gen(20);
+// zenData('product')->loadYaml('product')->gen(10);
+// zenData('module')->gen(10);
+// zenData('case')->gen(10);
+// zenData('project')->loadYaml('project_gensheet')->gen(20);
+// zenData('product')->gen(10);
+// zenData('task')->gen(10);
 
 global $tester;
 $pivotTest = new pivotTest();

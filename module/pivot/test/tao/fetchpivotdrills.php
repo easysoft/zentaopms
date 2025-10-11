@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+
+// 准备测试数据
+$pivotdrill = zenData('pivotdrill');
+$pivotdrill->pivot->range('1,1,2,2,3');
+$pivotdrill->version->range('1,1,2,2,3');
+$pivotdrill->field->range('name,status,status,category,priority');
+$pivotdrill->object->range('bug,bug,story,story,task');
+$pivotdrill->whereSql->range('status = "active",deleted = "0",type = "story",,priority > 1');
+$pivotdrill->condition->range('{"field":"status","operator":"=","value":"active"},{"field":"deleted","operator":"=","value":"0"},{"field":"type","operator":"=","value":"story"},{},"{"field":"priority","operator":">","value":"1"}');
+$pivotdrill->status->range('published,published,published,design,published');
+$pivotdrill->account->range('admin,admin,user1,user1,admin');
+$pivotdrill->type->range('manual,manual,auto,auto,manual');
+$pivotdrill->gen(5);
+
+su('admin');
 
 /**
 
@@ -7,46 +25,24 @@ title=测试 pivotTao::fetchPivotDrills();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 - 获取单个字段第name条的field属性 @name
-- 步骤2：正常情况 - 获取多个字段 @2
-- 步骤3：边界值 - 不存在的透视表ID @0
-- 步骤4：边界值 - 不存在的版本号 @0
-- 步骤5：边界值 - 不存在的字段名 @0
+- 测试正常情况获取单个字段的透视表下钻配置，期望返回name字段配置第name条的field属性 @name
+- 测试正常情况获取多个字段的透视表下钻配置，期望返回2个字段配置 @2
+- 测试边界值不存在的透视表ID，期望返回空数组 @0
+- 测试边界值不存在的版本号，期望返回空数组 @0
+- 测试边界值不存在的字段名，期望返回空数组 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
-
-// 2. 直接插入测试数据，避免zendata问题
-global $tester;
-
-// 清理旧数据
-$tester->dao->delete()->from(TABLE_PIVOTDRILL)->exec();
-
-// 插入测试数据
-$testData = array(
-    array('pivot' => 1, 'version' => '1', 'field' => 'name', 'object' => 'bug', 'whereSql' => 'status = "active"', 'condition' => '{"field":"status","operator":"=","value":"active"}', 'status' => 'published', 'account' => 'admin', 'type' => 'manual'),
-    array('pivot' => 1, 'version' => '1', 'field' => 'status', 'object' => 'bug', 'whereSql' => 'deleted = "0"', 'condition' => '{"field":"deleted","operator":"=","value":"0"}', 'status' => 'published', 'account' => 'admin', 'type' => 'manual'),
-    array('pivot' => 2, 'version' => '2', 'field' => 'status', 'object' => 'story', 'whereSql' => 'type = "story"', 'condition' => '{"field":"type","operator":"=","value":"story"}', 'status' => 'published', 'account' => 'user1', 'type' => 'auto'),
-    array('pivot' => 2, 'version' => '2', 'field' => 'category', 'object' => 'story', 'whereSql' => '', 'condition' => '{}', 'status' => 'design', 'account' => 'user1', 'type' => 'auto'),
-    array('pivot' => 3, 'version' => '3', 'field' => 'priority', 'object' => 'task', 'whereSql' => 'priority > 1', 'condition' => '{"field":"priority","operator":">","value":"1"}', 'status' => 'published', 'account' => 'admin', 'type' => 'manual')
-);
-
-foreach($testData as $data) {
-    $tester->dao->insert(TABLE_PIVOTDRILL)->data($data)->exec();
-}
-
-// 4. 创建测试实例（变量名与模块名一致）
 $pivotTest = new pivotTest();
 
-// 3. 用户登录（选择合适角色）
-su('admin');
+$result1 = $pivotTest->fetchPivotDrillsTest(1, '1', 'name');
+$result2 = $pivotTest->fetchPivotDrillsTest(2, '2', array('status', 'category'));
+$result3 = $pivotTest->fetchPivotDrillsTest(999, '1', 'name');
+$result4 = $pivotTest->fetchPivotDrillsTest(1, 'nonexistent', 'name');
+$result5 = $pivotTest->fetchPivotDrillsTest(1, '1', 'nonexistent_field');
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($pivotTest->fetchPivotDrillsTest(1, '1', 'name')) && p('name:field') && e('name'); // 步骤1：正常情况 - 获取单个字段
-r(count($pivotTest->fetchPivotDrillsTest(2, '2', array('status', 'category')))) && p() && e('2'); // 步骤2：正常情况 - 获取多个字段
-r(count($pivotTest->fetchPivotDrillsTest(999, '1', 'name'))) && p() && e('0'); // 步骤3：边界值 - 不存在的透视表ID
-r(count($pivotTest->fetchPivotDrillsTest(1, 'nonexistent', 'name'))) && p() && e('0'); // 步骤4：边界值 - 不存在的版本号
-r(count($pivotTest->fetchPivotDrillsTest(1, '1', 'nonexistent_field'))) && p() && e('0'); // 步骤5：边界值 - 不存在的字段名
+r($result1) && p('name:field') && e('name');  // 测试正常情况获取单个字段的透视表下钻配置，期望返回name字段配置
+r(count($result2)) && p() && e('2');           // 测试正常情况获取多个字段的透视表下钻配置，期望返回2个字段配置
+r(count($result3)) && p() && e('0');           // 测试边界值不存在的透视表ID，期望返回空数组
+r(count($result4)) && p() && e('0');           // 测试边界值不存在的版本号，期望返回空数组
+r(count($result5)) && p() && e('0');           // 测试边界值不存在的字段名，期望返回空数组

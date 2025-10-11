@@ -15,7 +15,7 @@ cid=0
  - 属性my @地盘
  - 属性qa @测试
  - 属性doc @文档
-- 执行devTest模块的getLinkTitleTest方法，参数是$emptyMenus  @rray()
+- 执行devTest模块的getLinkTitleTest方法，参数是$emptyMenus  @0
 - 执行devTest模块的getLinkTitleTest方法，参数是$htmlMenus
  - 属性admin @后台
  - 属性help @帮助
@@ -48,7 +48,7 @@ r($devTest->getLinkTitleTest($stringMenus)) && p('my,qa,doc') && e('地盘,测�
 
 // 步骤3：测试空菜单数组
 $emptyMenus = array();
-r($devTest->getLinkTitleTest($emptyMenus)) && p() && e(array());
+r($devTest->getLinkTitleTest($emptyMenus)) && p() && e('0');
 
 // 步骤4：测试包含HTML标签的菜单链接
 $htmlMenus = array(

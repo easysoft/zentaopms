@@ -28,10 +28,10 @@ su('admin');
 $chartTest = new chartTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($chartTest->isChartHaveDataTest(array(), 'waterpolo')) && p() && e('1'); // 步骤1：waterpolo类型始终返回true
-r($chartTest->isChartHaveDataTest(array('series' => array(array('data' => array(array('name' => 'test', 'value' => 10))))), 'pie')) && p() && e('1'); // 步骤2：pie类型有数据
-r($chartTest->isChartHaveDataTest(array('xAxis' => array('data' => array('Jan', 'Feb', 'Mar'))), 'line')) && p() && e('1'); // 步骤3：line类型有数据
-r($chartTest->isChartHaveDataTest(array('series' => array(array('data' => array()))), 'pie')) && p() && e('0'); // 步骤4：pie类型无数据
-r($chartTest->isChartHaveDataTest(array('xAxis' => array('data' => array('A', 'B', 'C'))), 'cluBarX')) && p() && e('1'); // 步骤5：cluBarX类型有数据
-r($chartTest->isChartHaveDataTest(array('yAxis' => array('data' => array())), 'cluBarY')) && p() && e('0'); // 步骤6：cluBarY类型无数据
-r($chartTest->isChartHaveDataTest(array('radar' => array('indicator' => array(array('name' => 'test', 'max' => 100)))), 'radar')) && p() && e('1'); // 步骤7：radar类型有数据
+r($chartTest->isChartHaveDataTest(array(), 'waterpolo')) && p() && e(1); // 步骤1：waterpolo类型始终返回true
+r($chartTest->isChartHaveDataTest(array('series' => array(array('data' => array(array('name' => 'test', 'value' => 10))))), 'pie')) && p() && e(1); // 步骤2：pie类型有数据
+r($chartTest->isChartHaveDataTest(array('xAxis' => array('data' => array('Jan', 'Feb', 'Mar'))), 'line')) && p() && e(1); // 步骤3：line类型有数据
+r($chartTest->isChartHaveDataTest(array('series' => array(array('data' => array()))), 'pie')) && p() && e(0); // 步骤4：pie类型无数据
+r($chartTest->isChartHaveDataTest(array('xAxis' => array('data' => array('A', 'B', 'C'))), 'cluBarX')) && p() && e(1); // 步骤5：cluBarX类型有数据
+r($chartTest->isChartHaveDataTest(array('yAxis' => array('data' => array())), 'cluBarY')) && p() && e(0); // 步骤6：cluBarY类型无数据
+r($chartTest->isChartHaveDataTest(array('radar' => array('indicator' => array(array('name' => 'test', 'max' => 100)))), 'radar')) && p() && e(1); // 步骤7：radar类型有数据

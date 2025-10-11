@@ -7,59 +7,74 @@ title=测试 svnModel::getRepos();
 timeout=0
 cid=0
 
-- 步骤1：正常获取Subversion仓库数量 @5
-- 步骤2：验证返回第一个仓库路径 @1
-- 步骤3：空仓库情况输出提示信息 @You must set one svn repo.
-- 步骤4：验证返回数据数量 @3
-- 步骤5：验证getRepos方法调用正确性 @3
+- 执行$result['repos'] @5
+- 执行$result['repos'] @https://svn.example.com/repo1
+- 执行$result['output'], 'You must set one svn repo.') !== false @1
+- 执行$result['repos'] @3
+- 执行$directResult @3
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
 
-// 使用默认测试数据，但改为Subversion类型
-zenData('repo')->gen(0);
+global $tester;
+$dao = $tester->dao;
 
-$table = zenData('repo');
-$table->id->range('1-10');
-$table->name->range('svn-test{10}');
-$table->path->range('1-10', 'https://svn.qc.oop.cc/svn/unittest%s');
-$table->SCM->range('Subversion{5},Git{3},Gitlab{2}');
-$table->synced->range('1{5},0{5}');
-$table->deleted->range('0{8},1{2}');
-$table->gen(10);
+$dao->delete()->from(TABLE_REPO)->exec();
+
+for($i = 1; $i <= 10; $i++)
+{
+    $repo = new stdClass();
+    $repo->id = $i;
+    $repo->product = 1;
+    $repo->name = "svn-repo$i";
+    if($i <= 5)
+    {
+        $repo->path = "https://svn.example.com/repo$i";
+        $repo->SCM = 'Subversion';
+    }
+    else
+    {
+        $repo->path = "/path/to/other$i";
+        $repo->SCM = $i <= 8 ? 'Git' : 'Gitlab';
+    }
+    $repo->client = '/usr/bin/svn';
+    $repo->synced = $i <= 8 ? 1 : 0;
+    $repo->deleted = $i <= 8 ? 0 : 1;
+    $dao->insert(TABLE_REPO)->data($repo)->exec();
+}
 
 su('admin');
 
 $svnTest = new svnTest();
 
 $result = $svnTest->getReposTest();
-r(count($result['repos'])) && p() && e('5'); // 步骤1：正常获取Subversion仓库数量
+r(count($result['repos'])) && p() && e('5');
 
-r($result['repos']) && p('0') && e('1'); // 步骤2：验证返回第一个仓库路径
+r($result['repos']) && p('0') && e('https://svn.example.com/repo1');
 
-// 测试空仓库情况
-zenData('repo')->gen(0);
+$dao->delete()->from(TABLE_REPO)->exec();
+$result = $svnTest->getReposTest();
+r(strpos($result['output'], 'You must set one svn repo.') !== false) && p() && e('1');
+
+for($i = 1; $i <= 3; $i++)
+{
+    $repo = new stdClass();
+    $repo->id = $i;
+    $repo->product = 1;
+    $repo->name = "test-repo$i";
+    $repo->path = "https://svn.test.com/repo$i";
+    $repo->SCM = 'Subversion';
+    $repo->client = '/usr/bin/svn';
+    $repo->synced = 1;
+    $repo->deleted = 0;
+    $dao->insert(TABLE_REPO)->data($repo)->exec();
+}
 
 $result = $svnTest->getReposTest();
-r($result['output']) && p() && e('You must set one svn repo.'); // 步骤3：空仓库情况输出提示信息
+r(count($result['repos'])) && p() && e('3');
 
-// 恢复数据，测试返回类型
-$table = zenData('repo');
-$table->id->range('1-3');
-$table->name->range('test-repo{3}');
-$table->path->range('1-3', 'https://svn.example.com/test%s');
-$table->SCM->range('Subversion{3}');
-$table->synced->range('1{3}');
-$table->deleted->range('0{3}');
-$table->gen(3);
-
-$result = $svnTest->getReposTest();
-r(count($result['repos'])) && p() && e('3'); // 步骤4：验证返回数据数量
-
-// 验证方法调用正确性
-global $tester;
 $svnModel = $tester->loadModel('svn');
 $directResult = $svnModel->getRepos();
-r(count($directResult)) && p() && e('3'); // 步骤5：验证getRepos方法调用正确性
+r(count($directResult)) && p() && e('3');

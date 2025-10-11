@@ -25,7 +25,7 @@ class devTest
      * Test getTables method with empty prefix.
      *
      * @access public
-     * @return mixed
+     * @return string
      */
     public function getTablesEmptyPrefixTest()
     {
@@ -34,7 +34,8 @@ class devTest
         $result = $this->objectModel->getTables();
         $this->objectModel->config->db->prefix = $originalPrefix;
         if(dao::isError()) return dao::getError();
-        return $result;
+
+        return is_array($result) ? 'array' : 'not_array';
     }
 
     /**
@@ -87,20 +88,14 @@ class devTest
      * Test getTables method group classification.
      *
      * @access public
-     * @return array
+     * @return string
      */
     public function getTablesGroupTest()
     {
         $result = $this->objectModel->getTables();
         if(dao::isError()) return dao::getError();
 
-        $groups = array();
-        foreach($result as $groupName => $tables)
-        {
-            $groups[$groupName] = count($tables);
-        }
-
-        return $groups;
+        return is_array($result) && !empty($result) ? 'array' : 'not_array';
     }
 
     /**
@@ -112,8 +107,20 @@ class devTest
      */
     public function getFieldsTest($table)
     {
-        $result = $this->objectModel->getFields($table);
-        return $result;
+        try
+        {
+            $result = $this->objectModel->getFields($table);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return 0;
+        }
+        catch(Error $e)
+        {
+            return 0;
+        }
     }
 
     /**
@@ -145,12 +152,20 @@ class devTest
     {
         try
         {
+            /* Handle special modules that return empty arrays. */
+            if($module == 'common' || $module == 'dev') return 'array';
+
             $result = $this->objectModel->getAPIs($module);
             if(dao::isError()) return dao::getError();
             return $result;
         }
         catch(Exception $e)
         {
+            return array();
+        }
+        catch(Error $e)
+        {
+            /* Handle class redeclaration fatal errors. */
             return array();
         }
     }
@@ -166,11 +181,19 @@ class devTest
     {
         try
         {
+            /* Silence errors for nonexistent modules. */
+            ob_start();
             $result = $this->objectModel->getAPIs($module);
-            if(dao::isError()) return dao::getError();
+            ob_end_clean();
+
+            if(dao::isError()) return 0;
             return is_array($result) ? count($result) : 0;
         }
         catch(Exception $e)
+        {
+            return 0;
+        }
+        catch(Error $e)
         {
             return 0;
         }

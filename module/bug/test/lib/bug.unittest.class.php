@@ -1543,18 +1543,27 @@ class bugTest
      * @access public
      * @return int
      */
-    public function getRelatedObjectsTest(string $object, string $pairs = ''): int
+    public function getRelatedObjectsTest(string $object, string $pairs = ''): object
     {
         global $tester;
 
-        /* 确保没有已有的session数据影响测试 */
-        unset($_SESSION['bugQueryCondition'], $_SESSION['bugOnlyCondition']);
+        /* 设置bugQueryCondition来模拟有查询条件的情况 */
+        $_SESSION['bugQueryCondition'] = "SELECT * FROM " . TABLE_BUG . " WHERE deleted = '0'";
+        $_SESSION['bugOnlyCondition'] = true;
 
         $result = $this->objectModel->getRelatedObjects($object, $pairs);
 
-        if(dao::isError()) return count(array('' => '', 0 => ''));
+        if(dao::isError()) return (object)array('error' => dao::getError());
 
-        return count($result);
+        /* 返回详细的测试结果 */
+        $testResult = new stdClass();
+        $testResult->count = count($result);
+        $testResult->hasEmpty = isset($result['']) ? 1 : 0;
+        $testResult->hasZero = isset($result[0]) ? 1 : 0;
+        $testResult->hasTrunk = isset($result['trunk']) ? 1 : 0;
+        $testResult->data = $result;
+
+        return $testResult;
     }
 
     /**

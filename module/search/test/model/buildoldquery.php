@@ -19,8 +19,10 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
-// 2. zendata数据准备
+// 2. zendata数据准备（静默执行）
+ob_start();
 zenData('userquery')->gen(10);
+ob_end_clean();
 
 // 3. 用户登录
 su('admin');

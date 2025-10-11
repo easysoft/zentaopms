@@ -1,48 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::apiDeleteBranchPriv();
 timeout=0
-cid=1
+cid=0
 
-- 执行$result @return false
-- 执行$result属性message @404 Project Not Found
-- 执行$result @return null
-- 执行$result属性message @404 Not found
-- 执行$result属性message @404 Not found
+- 步骤1：gitlabID为0 @0
+- 步骤2：项目不存在属性message @404 Project Not Found
+- 步骤3：分支不存在属性message @404 Not found
+- 步骤4：特殊字符分支名属性message @404 Not found
+- 步骤5：正常删除权限 @0
 
 */
 
-zenData('pipeline')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = $tester->loadModel('gitlab');
+su('admin');
 
-$gitlabID  = 0;
-$projectID = 1;
-$branch    = 'master';
+$gitlabTest = new gitlabTest();
 
-$result = $gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-if($result === false) $result = 'return false';
-r($result) && p() && e('return false');
-
-$gitlabID = 1;
-$projectID = 999;
-$result = $gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-r($result) && p('message') && e('404 Project Not Found');
-
-$projectID = 2;
-$branch = 'branch1';
-$result = $gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-if(!$result or substr($result->message, 0, 2) == '20') $result = 'return null';
-r($result) && p() && e('return null');
-
-$branch = 'nonexistent';
-$result = $gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-r($result) && p('message') && e('404 Not found');
-
-$branch = 'feature/test-branch';
-$result = $gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-r($result) && p('message') && e('404 Not found');
+r($gitlabTest->apiDeleteBranchPrivTest(0, 1, 'master')) && p() && e('0'); // 步骤1：gitlabID为0
+r($gitlabTest->apiDeleteBranchPrivTest(1, 999, 'master')) && p('message') && e('404 Project Not Found'); // 步骤2：项目不存在
+r($gitlabTest->apiDeleteBranchPrivTest(1, 2, 'nonexistent')) && p('message') && e('404 Not found'); // 步骤3：分支不存在
+r($gitlabTest->apiDeleteBranchPrivTest(1, 2, 'feature/test-branch')) && p('message') && e('404 Not found'); // 步骤4：特殊字符分支名
+r($gitlabTest->apiDeleteBranchPrivTest(1, 2, 'master')) && p() && e('0'); // 步骤5：正常删除权限

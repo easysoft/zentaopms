@@ -26,8 +26,8 @@ su('admin');
 $pivotTest = new pivotTest();
 
 // 4. 执行5个测试步骤
-r($pivotTest->isShowLastRow('bottom')) && p() && e('1'); // 步骤1：测试'bottom'参数
-r($pivotTest->isShowLastRow('all')) && p() && e('1');    // 步骤2：测试'all'参数
-r($pivotTest->isShowLastRow('top')) && p() && e('0');    // 步骤3：测试'top'参数
-r($pivotTest->isShowLastRow('')) && p() && e('0');       // 步骤4：测试空字符串参数
-r($pivotTest->isShowLastRow('invalid')) && p() && e('0'); // 步骤5：测试无效参数
+r($pivotTest->isShowLastRowTest('bottom')) && p() && e('1'); // 步骤1：测试'bottom'参数
+r($pivotTest->isShowLastRowTest('all')) && p() && e('1');    // 步骤2：测试'all'参数
+r($pivotTest->isShowLastRowTest('top')) && p() && e('0');    // 步骤3：测试'top'参数
+r($pivotTest->isShowLastRowTest('')) && p() && e('0');       // 步骤4：测试空字符串参数
+r($pivotTest->isShowLastRowTest('invalid')) && p() && e('0'); // 步骤5：测试无效参数

@@ -7,51 +7,57 @@ title=测试 caselibModel::getPairs();
 timeout=0
 cid=0
 
-- 步骤1：获取全部用例库键值对，按ID降序
+- 执行caselibTest模块的getPairsTest方法，参数是'all', 'id_desc'
  - 属性8 @Test Lib
- - 属性7 @测试库2
- - 属性6 @测试库1
- - 属性5 @Library02
-- 步骤2：获取review类型用例库键值对（数据库无reviewers字段，返回空） @0
-- 步骤3：按名称升序获取用例库键值对
+ - 属性7 @Case Library
+ - 属性6 @测试库2
+ - 属性5 @测试库1
+- 执行caselibTest模块的getPairsTest方法，参数是'review', 'id_desc'  @0
+- 执行caselibTest模块的getPairsTest方法，参数是'all', 'name_asc'
  - 属性7 @Case Library
  - 属性3 @Library01
- - 属性2 @Library02
+ - 属性4 @Library02
  - 属性8 @Test Lib
-- 步骤4：使用无效类型参数，返回所有符合条件的
+- 执行caselibTest模块的getPairsTest方法，参数是'invalid', 'id_desc'
  - 属性8 @Test Lib
- - 属性7 @测试库2
- - 属性6 @测试库1
- - 属性5 @Library02
-- 步骤5：分页获取用例库键值对
- - 属性8 @Test Lib
- - 属性7 @测试库2
- - 属性6 @测试库1
+ - 属性7 @Case Library
+ - 属性6 @测试库2
+ - 属性5 @测试库1
+- 执行caselibTest模块的getPairsTest方法，参数是'all', 'id_desc'  @8
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 
-// 准备测试数据：创建用例库记录（type=library, product=0, deleted=0）
-$testsuite = zenData('testsuite');
-$testsuite->id->range('1-8');
-$testsuite->name->range('用例库A,用例库B,Library01,Library02,测试库1,测试库2,Case Library,Test Lib');
-$testsuite->product->range('0{8}');  // 所有都是用例库(product=0)
-$testsuite->type->range('library{8}');  // 所有都是library类型
-$testsuite->deleted->range('0{8}');  // 所有未删除
-$testsuite->order->range('1-8');
-$testsuite->addedBy->range('admin{8}');
-$testsuite->gen(8);
+global $tester;
+$dao = $tester->dao;
 
-zenData('user')->gen(1);
+// 清理现有数据
+$dao->delete()->from(TABLE_TESTSUITE)->where('type')->eq('library')->exec();
+
+// 直接插入测试数据，避免zendata工具问题
+$testLibraries = array(
+    array('id' => 1, 'name' => '用例库A', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 2, 'name' => '用例库B', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 3, 'name' => 'Library01', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 4, 'name' => 'Library02', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 5, 'name' => '测试库1', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 6, 'name' => '测试库2', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 7, 'name' => 'Case Library', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
+    array('id' => 8, 'name' => 'Test Lib', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s'))
+);
+
+foreach($testLibraries as $library) {
+    $dao->insert(TABLE_TESTSUITE)->data($library)->exec();
+}
 
 su('admin');
 
 $caselibTest = new caselibTest();
 
-r($caselibTest->getPairsTest('all', 'id_desc')) && p('8,7,6,5') && e('Test Lib,测试库2,测试库1,Library02'); // 步骤1：获取全部用例库键值对，按ID降序
-r($caselibTest->getPairsTest('review', 'id_desc')) && p() && e('0'); // 步骤2：获取review类型用例库键值对（数据库无reviewers字段，返回空）
-r($caselibTest->getPairsTest('all', 'name_asc')) && p('7,3,2,8') && e('Case Library,Library01,Library02,Test Lib'); // 步骤3：按名称升序获取用例库键值对
-r($caselibTest->getPairsTest('invalid', 'id_desc')) && p('8,7,6,5') && e('Test Lib,测试库2,测试库1,Library02'); // 步骤4：使用无效类型参数，返回所有符合条件的
-r($caselibTest->getPairsTest('all', 'id_desc', (object)array('recPerPage' => 3, 'pageID' => 1))) && p('8,7,6') && e('Test Lib,测试库2,测试库1'); // 步骤5：分页获取用例库键值对
+r($caselibTest->getPairsTest('all', 'id_desc')) && p('8,7,6,5') && e('Test Lib,Case Library,测试库2,测试库1');
+r($caselibTest->getPairsTest('review', 'id_desc')) && p() && e('0');
+r($caselibTest->getPairsTest('all', 'name_asc')) && p('7,3,4,8') && e('Case Library,Library01,Library02,Test Lib');
+r($caselibTest->getPairsTest('invalid', 'id_desc')) && p('8,7,6,5') && e('Test Lib,Case Library,测试库2,测试库1');
+r(count($caselibTest->getPairsTest('all', 'id_desc'))) && p() && e('8');

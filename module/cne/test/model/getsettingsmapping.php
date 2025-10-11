@@ -7,57 +7,27 @@ title=测试 cneModel::getSettingsMapping();
 timeout=0
 cid=0
 
-
+- 执行cneTest模块的getSettingsMappingTest方法 属性admin_username @admin
+- 执行cneTest模块的getSettingsMappingTest方法，参数是array 属性z_username @zentao_user
+- 执行cneTest模块的getSettingsMappingTest方法，参数是array 属性custom_username @test_value_for_custom_username
+- 执行cneTest模块的getSettingsMappingTest方法，参数是array 属性db_username @test_value_for_db_username
+- 执行cneTest模块的getSettingsMappingTest方法，参数是array 属性invalid_key @test_value_for_invalid_key
 
 */
 
-// 创建一个简化的测试环境类来模拟cne测试行为
-class MockCneTest {
-    public function getSettingsMappingTest(array $mappings = array()): object {
-        // 根据不同的测试参数返回不同的模拟结果
-        if(empty($mappings)) {
-            // 测试默认mappings的情况
-            $result = new stdclass();
-            $result->admin_username = 'admin';
-            $result->z_username = 'zentao_user';
-            $result->z_password = 'zentao_password';
-            $result->api_token = 'test_api_token';
-            return $result;
-        }
-        elseif(count($mappings) == 1) {
-            // 测试自定义mappings的情况
-            $mapping = $mappings[0];
-            $result = new stdclass();
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-            if(isset($mapping['key'])) {
-                $result->{$mapping['key']} = 'test_value_for_' . $mapping['key'];
-            }
+// 2. 用户登录
+su('admin');
 
-            return $result;
-        }
-        else {
-            // 测试多个mappings的情况
-            $result = new stdclass();
-            foreach($mappings as $mapping) {
-                if(isset($mapping['key'])) {
-                    $result->{$mapping['key']} = 'test_value_for_' . $mapping['key'];
-                }
-            }
-            return $result;
-        }
-    }
-}
+// 3. 创建测试实例
+$cneTest = new cneTest();
 
-// 模拟r()、p()、e()函数的行为
-function r($result) { return $result; }
-function p($property = '') { return true; }
-function e($expected) { return $expected; }
-
-// 创建模拟测试实例
-$cneTest = new MockCneTest();
-
-r($cneTest->getSettingsMappingTest()) && p() && e('object');
-r($cneTest->getSettingsMappingTest(array(array('key' => 'custom_username', 'type' => 'helm', 'path' => 'auth.custom_username')))) && p() && e('object');
-r($cneTest->getSettingsMappingTest(array())) && p() && e('object');
-r($cneTest->getSettingsMappingTest(array(array('key' => 'db_username', 'type' => 'secret', 'path' => 'database.username'), array('key' => 'db_password', 'type' => 'secret', 'path' => 'database.password')))) && p() && e('object');
-r($cneTest->getSettingsMappingTest(array(array('key' => 'invalid_key', 'type' => 'invalid_type', 'path' => 'invalid.path')))) && p() && e('object');
+// 4. 执行测试步骤
+r($cneTest->getSettingsMappingTest()) && p('admin_username') && e('admin');
+r($cneTest->getSettingsMappingTest(array())) && p('z_username') && e('zentao_user');
+r($cneTest->getSettingsMappingTest(array(array('key' => 'custom_username', 'type' => 'helm', 'path' => 'auth.custom_username')))) && p('custom_username') && e('test_value_for_custom_username');
+r($cneTest->getSettingsMappingTest(array(array('key' => 'db_username', 'type' => 'secret', 'path' => 'database.username'), array('key' => 'db_password', 'type' => 'secret', 'path' => 'database.password')))) && p('db_username') && e('test_value_for_db_username');
+r($cneTest->getSettingsMappingTest(array(array('key' => 'invalid_key', 'type' => 'invalid_type', 'path' => 'invalid.path')))) && p('invalid_key') && e('test_value_for_invalid_key');

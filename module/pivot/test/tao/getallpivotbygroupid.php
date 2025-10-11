@@ -7,34 +7,43 @@ title=测试 pivotTao::getAllPivotByGroupID();
 timeout=0
 cid=0
 
-- 步骤1：正常分组查询（应返回2个已发布的透视表） @2
-- 步骤2：不存在分组查询 @0
-- 步骤3：分组ID为0查询 @0
-- 步骤4：负数分组ID查询 @0
-- 步骤5：验证透视表属性（按id降序，应该是1002在前）
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是60  @2
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是999  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是-1  @0
+- 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是60
  - 第0条的id属性 @1002
  - 第0条的0:name属性 @透视表2详细信息
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-// 生成0条数据来避免复杂的数据依赖问题
-zenData('pivot')->gen(0);
-zenData('pivotspec')->gen(0);
+zenData('company')->loadYaml('company', false, 2)->gen(5);
+zenData('config')->loadYaml('config', false, 4)->gen(300);
 
-// 3. 用户登录（选择合适角色）
+$pivotTable = zenData('pivot');
+$pivotTable->id->range('1001-1003');
+$pivotTable->dimension->range('1');
+$pivotTable->group->range('60{2},70{1}');
+$pivotTable->name->range('透视表1详细信息,透视表2详细信息,草稿透视表');
+$pivotTable->stage->range('published{2},draft{1}');
+$pivotTable->deleted->range('0{2},1{1}');
+$pivotTable->gen(3);
+
+$specTable = zenData('pivotspec');
+$specTable->pivot->range('1001-1003');
+$specTable->version->range('1');
+$specTable->name->range('透视表1详细信息,透视表2详细信息,草稿透视表');
+$specTable->gen(3);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $pivotTest = new pivotTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($pivotTest->getAllPivotByGroupIDTest(60)) && p() && e('2');                            // 步骤1：正常分组查询（应返回2个已发布的透视表）
-r($pivotTest->getAllPivotByGroupIDTest(999)) && p() && e('0');                          // 步骤2：不存在分组查询
-r($pivotTest->getAllPivotByGroupIDTest(0)) && p() && e('0');                            // 步骤3：分组ID为0查询
-r($pivotTest->getAllPivotByGroupIDTest(-1)) && p() && e('0');                           // 步骤4：负数分组ID查询
-r($pivotTest->getAllPivotByGroupIDTest(60)) && p('0:id,0:name') && e('1002,透视表2详细信息'); // 步骤5：验证透视表属性（按id降序，应该是1002在前）
+r($pivotTest->getAllPivotByGroupIDTest(60)) && p() && e('2');
+r($pivotTest->getAllPivotByGroupIDTest(999)) && p() && e('0');
+r($pivotTest->getAllPivotByGroupIDTest(0)) && p() && e('0');
+r($pivotTest->getAllPivotByGroupIDTest(-1)) && p() && e('0');
+r($pivotTest->getAllPivotByGroupIDTest(60)) && p('0:id,0:name') && e('1002,透视表2详细信息');

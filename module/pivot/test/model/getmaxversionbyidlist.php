@@ -20,14 +20,24 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-$table = zenData('pivotspec');
-$table->pivot->range('1{4},2{2}');
-$table->version->range('1.0,1.5,2.0,2.1,2.5,2.9');
-$table->driver->range('mysql');
-$table->mode->range('builder');
-$table->name->range('Test1{4},Test2{2}');
-$table->desc->range('Test desc1{4},Test desc2{2}');
-$table->gen(6);
+// 准备测试数据
+global $tester;
+$tester->dao->delete()->from(TABLE_PIVOTSPEC)->exec();
+
+// 插入测试数据
+$testData = array(
+    array('pivot' => 1, 'version' => '1.0', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test1', 'desc' => 'Test desc1'),
+    array('pivot' => 1, 'version' => '1.5', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test1', 'desc' => 'Test desc1'),
+    array('pivot' => 1, 'version' => '2.0', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test1', 'desc' => 'Test desc1'),
+    array('pivot' => 1, 'version' => '2.1', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test1', 'desc' => 'Test desc1'),
+    array('pivot' => 2, 'version' => '2.5', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test2', 'desc' => 'Test desc2'),
+    array('pivot' => 2, 'version' => '2.9', 'driver' => 'mysql', 'mode' => 'builder', 'name' => 'Test2', 'desc' => 'Test desc2'),
+);
+
+foreach($testData as $data)
+{
+    $tester->dao->insert(TABLE_PIVOTSPEC)->data($data)->exec();
+}
 
 su('admin');
 

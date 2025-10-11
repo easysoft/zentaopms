@@ -7,11 +7,11 @@ title=测试 commonModel::getMainNavList();
 timeout=0
 cid=0
 
-- 步骤1：验证方法参数类型检查 @method_validated
-- 步骤2：验证方法返回类型检查 @method_validated
-- 步骤3：验证方法存在性检查 @method_validated
-- 步骤4：验证方法静态性检查 @method_validated
-- 步骤5：验证方法基本功能 @method_validated
+- 步骤1：测试product模块导航列表获取第0条的group属性 @my
+- 步骤2：测试使用默认菜单参数第0条的group属性 @my
+- 步骤3：测试空模块名参数第0条的group属性 @my
+- 步骤4：测试my模块导航列表获取，验证active状态第0条的active属性 @1
+- 步骤5：测试project模块导航列表获取第0条的group属性 @my
 
 */
 
@@ -19,14 +19,26 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
 
-// 2. 不需要用户登录，因为只做方法验证
+// 2. 用户登录（选择合适角色）
+su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
+// 3. 设置应用程序上下文
+global $app;
+if(empty($app->control))
+{
+    $app->control = $tester;
+}
+if(empty($app->user))
+{
+    $app->user = (object)array('account' => 'admin', 'rights' => array());
+}
+
+// 4. 创建测试实例（变量名与模块名一致）
 $commonTest = new commonTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($commonTest->getMainNavListTest('product', false, 'param_type_check')) && p() && e('method_validated'); // 步骤1：验证方法参数类型检查
-r($commonTest->getMainNavListTest('product', true, 'return_type_check')) && p() && e('method_validated'); // 步骤2：验证方法返回类型检查
-r($commonTest->getMainNavListTest('', false, 'method_exists_check')) && p() && e('method_validated'); // 步骤3：验证方法存在性检查
-r($commonTest->getMainNavListTest('nonexistent', false, 'static_check')) && p() && e('method_validated'); // 步骤4：验证方法静态性检查
-r($commonTest->getMainNavListTest('my', false, 'basic_function_check')) && p() && e('method_validated'); // 步骤5：验证方法基本功能
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
+r($commonTest->getMainNavListTest('product', false)) && p('0:group') && e('my'); // 步骤1：测试product模块导航列表获取
+r($commonTest->getMainNavListTest('product', true)) && p('0:group') && e('my'); // 步骤2：测试使用默认菜单参数
+r($commonTest->getMainNavListTest('', false)) && p('0:group') && e('my'); // 步骤3：测试空模块名参数
+r($commonTest->getMainNavListTest('my', false)) && p('0:active') && e('1'); // 步骤4：测试my模块导航列表获取，验证active状态
+r($commonTest->getMainNavListTest('project', false)) && p('0:group') && e('my'); // 步骤5：测试project模块导航列表获取

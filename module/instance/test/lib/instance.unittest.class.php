@@ -120,23 +120,16 @@ class instanceTest
         $mockResult->user = true;
         $mockResult->database = true;
 
-        // Create a mock CNE model if needed
-        if(!property_exists($this->objectModel, 'cne') || !$this->objectModel->cne)
-        {
-            $this->objectModel->cne = new stdclass;
-            $this->objectModel->cne->validateDB = function() use ($mockResult) {
-                return $mockResult;
-            };
-        }
+        // Store original CNE model
+        $originalCne = isset($this->objectModel->cne) ? $this->objectModel->cne : null;
 
-        // Override the validateDB method with mock
-        $originalCne = $this->objectModel->cne;
+        // Create mock CNE model
         $mockCne = new class($mockResult) {
             private $mockResult;
             public function __construct($mockResult) {
                 $this->mockResult = $mockResult;
             }
-            public function validateDB(string $dbService, string $dbUser, string $dbName, string $namespace): object {
+            public function validateDB(string $dbService, string $dbName, string $dbUser, string $namespace): object {
                 return $this->mockResult;
             }
             public function sysDomain(): string {
@@ -145,10 +138,20 @@ class instanceTest
         };
         $this->objectModel->cne = $mockCne;
 
+        // Ensure config is available
+        global $config;
+        if(!isset($config->instance)) {
+            $config->instance = new stdclass;
+            $config->instance->devopsApps = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');
+            $config->instance->initUserApps = array('zentao');
+        }
+
         $result = $this->objectModel->installationSettingsMap($customData, $dbInfo, $instance);
 
         // Restore original CNE model
-        $this->objectModel->cne = $originalCne;
+        if($originalCne) {
+            $this->objectModel->cne = $originalCne;
+        }
 
         if(dao::isError()) return dao::getError();
 

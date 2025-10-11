@@ -59,7 +59,7 @@ $objectListWithOwner = array('issue' => array(2 => (object)array('project' => 1,
 $result4 = $searchTest->processIssueRecordTest($issueWithOwner, $objectListWithOwner);
 r($result4->extraType) && p() && e('stakeholderIssue');
 
-// 步骤5：测试URL包含正确的project参数
+// 步骤5：测试URL包含正确的问题ID参数
 $issueForProject = (object)array('objectType' => 'issue', 'objectID' => 3, 'title' => '测试问题3', 'summary' => '摘要3');
 $objectListForProject = array('issue' => array(3 => (object)array('project' => 1, 'owner' => 'admin', 'lib' => 0)));
 $result5 = $searchTest->processIssueRecordTest($issueForProject, $objectListForProject);

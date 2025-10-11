@@ -17,6 +17,8 @@ cid=0
 
 */
 
+su('admin');
+
 $bi = new biTest();
 
 r($bi->sql2StatementTest('SELECT id, name FROM zt_user WHERE id = 1')) && p() && e('object'); // 步骤1：正常SELECT语句

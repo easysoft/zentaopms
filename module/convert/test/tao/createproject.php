@@ -23,22 +23,13 @@ cid=0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
-
-// 2. zendata数据准备（最小化配置）
-zenData('user')->gen(0);
-zenData('company')->gen(0);
-zenData('lang')->gen(0);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
+global $tester;
 $convertTest = new convertTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
 // 步骤1：正常情况 - 基本Jira项目数据
 $data1 = new stdclass();
 $data1->pname = '测试项目名称';

@@ -13,7 +13,7 @@ cid=0
 - 步骤4：单个空default值的过滤器，应返回true @1
 - 步骤5：缺少default键的过滤器结构，应返回true @1
 - 步骤6：所有default值都非空的过滤器，应返回false @0
-- 步骤7：空字符串与数值0和'0'混合测试，'0'不为empty所以应返回false @0
+- 步骤7：空字符串与数值0和'0'混合测试，这些都是falsy值会被array_filter过滤掉，应返回true @1
 - 步骤8：非空数组与空值混合测试，非空数组存在时应返回false @0
 
 */
@@ -72,7 +72,7 @@ $testData7 = array(
     array('name' => 'numeric_filter', 'default' => 0),
     array('name' => 'string_zero', 'default' => '0')
 );
-r($pivotTest->isFiltersAllEmptyTest($testData7)) && p() && e('0'); // 步骤7：空字符串与数值0和'0'混合测试，'0'不为empty所以应返回false
+r($pivotTest->isFiltersAllEmptyTest($testData7)) && p() && e('1'); // 步骤7：空字符串与数值0和'0'混合测试，这些都是falsy值会被array_filter过滤掉，应返回true
 
 $testData8 = array(
     array('name' => 'array_filter', 'default' => array('key' => 'value')),

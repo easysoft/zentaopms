@@ -352,14 +352,18 @@ class executionTest
         $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
         $siblingStages       = $tester->programplan->getSiblings($executionID);
 
+        if(empty($selfAndChildrenList[$executionID])) return 'empty';
+
         $selfAndChildren = $selfAndChildrenList[$executionID];
+        if(empty($selfAndChildren[$executionID])) return 'empty';
+
         $execution       = $selfAndChildren[$executionID];
         $executionType   = $execution->type;
 
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -369,6 +373,33 @@ class executionTest
         {
             return (empty($result) or $result == "'',") ? 'empty' : $result;
         }
+    }
+
+    /**
+     * Test changeStatus2Wait method.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return string
+     */
+    public function changeStatus2WaitTest($executionID)
+    {
+        global $tester;
+
+        if($executionID <= 0) return '';
+
+        $tester->loadModel('programplan');
+        $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
+
+        if(empty($selfAndChildrenList[$executionID])) return '';
+
+        $selfAndChildren = $selfAndChildrenList[$executionID];
+
+        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -385,9 +416,13 @@ class executionTest
         $tester->loadModel('programplan');
         $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
 
+        if(empty($selfAndChildrenList) || !isset($selfAndChildrenList[$executionID])) return false;
+
         $selfAndChildren = $selfAndChildrenList[$executionID];
-        $execution       = $selfAndChildren[$executionID];
-        $executionType   = $execution->type;
+        if(empty($selfAndChildren) || !isset($selfAndChildren[$executionID])) return false;
+
+        $execution = $selfAndChildren[$executionID];
+        if(empty($execution)) return false;
 
         $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
 
@@ -2640,15 +2675,10 @@ class executionTest
      */
     public function formatTasksForTreeTest($param = null)
     {
-        global $app, $tester;
-
-        // 使用tao层的方法
-        $executionTao = $tester->loadTao('execution');
-
         // 如果是数组参数，直接测试formatTasksForTree方法
         if(is_array($param))
         {
-            return $executionTao->formatTasksForTree($param);
+            return $this->objectTao->formatTasksForTree($param);
         }
 
         // 如果是executionID，获取任务数据
@@ -2656,7 +2686,7 @@ class executionTest
         if(empty($executionID)) return array();
 
         // 直接使用DAO查询任务数据，避免复杂的processTasks逻辑
-        $tasks = $this->executionModel->dao->select('*')->from(TABLE_TASK)
+        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
@@ -2665,7 +2695,7 @@ class executionTest
         if(empty($tasks)) return array();
 
         // 调用tao层的formatTasksForTree方法
-        return $executionTao->formatTasksForTree($tasks);
+        return $this->objectTao->formatTasksForTree($tasks);
     }
 
     /**

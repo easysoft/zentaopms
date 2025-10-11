@@ -12,8 +12,8 @@ cid=0
 - 步骤3：数组默认值处理 @SELECT * FROM zt_bug WHERE type IN ('bug', 'feature', 'improvement')
 
 - 步骤4：空过滤器时保持原SQL不变 @SELECT * FROM zt_bug WHERE status = $status AND type = $type
-- 步骤5：多过滤器组合 @SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''
-- 步骤6：from字段为空时跳过过滤器但清理未定义变量 @SELECT * FROM zt_bug WHERE status = ''
+- 步骤5：多过滤器组合及变量清理 @SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''
+- 步骤6：from字段为空时跳过该过滤器但清理变量 @SELECT * FROM zt_bug WHERE status = ''
 
 */
 
@@ -32,5 +32,5 @@ r($pivotTest->initVarFilterTest(array(), '')) && p() && e('0'); // 步骤1：空
 r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => 'active')), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active'"); // 步骤2：基本变量替换
 r($pivotTest->initVarFilterTest(array(array('field' => 'types', 'from' => 'bug', 'default' => array('bug', 'feature', 'improvement'))), 'SELECT * FROM zt_bug WHERE type IN ($types)')) && p() && e("SELECT * FROM zt_bug WHERE type IN ('bug', 'feature', 'improvement')"); // 步骤3：数组默认值处理
 r($pivotTest->initVarFilterTest(array(), 'SELECT * FROM zt_bug WHERE status = $status AND type = $type')) && p() && e('SELECT * FROM zt_bug WHERE status = $status AND type = $type'); // 步骤4：空过滤器时保持原SQL不变
-r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => 'active'), array('field' => 'product', 'from' => 'product', 'default' => '1')), 'SELECT * FROM zt_bug WHERE status = $status AND product = $product AND priority = $priority')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''"); // 步骤5：多过滤器组合
-r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => '', 'default' => 'active')), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = ''"); // 步骤6：from字段为空时跳过过滤器但清理未定义变量
+r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => 'bug', 'default' => 'active'), array('field' => 'product', 'from' => 'product', 'default' => '1')), 'SELECT * FROM zt_bug WHERE status = $status AND product = $product AND priority = $priority')) && p() && e("SELECT * FROM zt_bug WHERE status = 'active' AND product = '1' AND priority = ''"); // 步骤5：多过滤器组合及变量清理
+r($pivotTest->initVarFilterTest(array(array('field' => 'status', 'from' => '', 'default' => 'active')), 'SELECT * FROM zt_bug WHERE status = $status')) && p() && e("SELECT * FROM zt_bug WHERE status = ''"); // 步骤6：from字段为空时跳过该过滤器但清理变量

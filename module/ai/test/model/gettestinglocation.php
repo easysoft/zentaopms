@@ -11,7 +11,7 @@ cid=0
 - 执行aiTest模块的getTestingLocationTest方法，参数是$productPrompt  @ai-promptexecute-promptId=2&objectId=5.html
 - 执行aiTest模块的getTestingLocationTest方法，参数是$projectPrompt  @ai-promptexecute-promptId=3&objectId=5.html
 - 执行aiTest模块的getTestingLocationTest方法，参数是$waterfallPrompt  @ai-promptexecute-promptId=4&objectId=5.html
-- 执行aiTest模块的getTestingLocationTest方法，参数是$unknownPrompt  @alse
+- 执行aiTest模块的getTestingLocationTest方法，参数是$unknownPrompt  @0
 
 */
 
@@ -51,4 +51,4 @@ r($aiTest->getTestingLocationTest($myPrompt)) && p() && e('my-effort-type=all.ht
 r($aiTest->getTestingLocationTest($productPrompt)) && p() && e('ai-promptexecute-promptId=2&objectId=5.html');
 r($aiTest->getTestingLocationTest($projectPrompt)) && p() && e('ai-promptexecute-promptId=3&objectId=5.html');
 r($aiTest->getTestingLocationTest($waterfallPrompt)) && p() && e('ai-promptexecute-promptId=4&objectId=5.html');
-r($aiTest->getTestingLocationTest($unknownPrompt)) && p() && e(false);
+r($aiTest->getTestingLocationTest($unknownPrompt)) && p() && e('0');

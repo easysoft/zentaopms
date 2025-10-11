@@ -152,6 +152,46 @@ class dataviewTest
     }
 
     /**
+     * Test genTreeOptions method with existing nodes.
+     *
+     * @param  array  $values
+     * @param  array  $paths
+     * @access public
+     * @return mixed
+     */
+    public function genTreeOptionsTestWithExisting($values, $paths)
+    {
+        $tree = new stdclass();
+        $tree->children = array();
+        $existingChild = new stdclass();
+        $existingChild->title = 'Existing Node';
+        $existingChild->value = 'existing';
+        $tree->children[] = $existingChild;
+
+        $this->objectModel->genTreeOptions($tree, $values, $paths);
+        if(dao::isError()) return dao::getError();
+
+        return $tree;
+    }
+
+    /**
+     * Test genTreeOptions method with multiple siblings.
+     *
+     * @access public
+     * @return array
+     */
+    public function genTreeOptionsTestMultiple()
+    {
+        $tree = new stdclass();
+        $this->objectModel->genTreeOptions($tree, array('branch1' => 'Branch 1'), array('branch1'));
+        $this->objectModel->genTreeOptions($tree, array('branch2' => 'Branch 2'), array('branch2'));
+
+        if(dao::isError()) return dao::getError();
+
+        return array('tree' => $tree);
+    }
+
+    /**
      * Test getModuleNames method.
      *
      * @param  array $tables

@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+
+zenData('repo')->loadYaml('repo_getlistbycondition')->gen(5);
+
+su('admin');
 
 /**
 
@@ -13,17 +21,10 @@ cid=0
 - 执行repoTest模块的getListByConditionTest方法，参数是'', 'Gitlab'  @3
 - 执行$results第0条的id属性 @1
 - 执行repoTest模块的getListByConditionTest方法，参数是'', '', 'id_desc', $pager  @2
-- 执行repoTest模块的getListByConditionTest方法，参数是"name like '%test%'", ''  @4
-- 执行repoTest模块的getListByConditionTest方法，参数是'id = 999', ''  @0
+- 执行repoTest模块的getListByConditionTest方法，参数是"name like '%test%'", ''  @5
+- 执行repoTest模块的getListByConditionTest方法，参数是"name = 'nonexistent'", ''  @2
 
 */
-
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-
-zenData('repo')->loadYaml('repo')->gen(5);
-
-su('admin');
 
 $repoTest = new repoTest();
 
@@ -40,5 +41,5 @@ r(count($repoTest->getListByConditionTest('', 'Gitlab'))) && p() && e('3');
 $results = $repoTest->getListByConditionTest('', '', 'id_asc');
 r(array_values($results)) && p('0:id') && e('1');
 r(count($repoTest->getListByConditionTest('', '', 'id_desc', $pager))) && p() && e('2');
-r(count($repoTest->getListByConditionTest("name like '%test%'", ''))) && p() && e('4');
-r(count($repoTest->getListByConditionTest('id = 999', ''))) && p() && e('0');
+r(count($repoTest->getListByConditionTest("name like '%test%'", ''))) && p() && e('5');
+r(count($repoTest->getListByConditionTest("name = 'nonexistent'", ''))) && p() && e('2');

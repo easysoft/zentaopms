@@ -45,8 +45,9 @@ $measurement2 = null;
 $vars2 = array();
 r($metricTest->execSqlMeasurementTest($measurement2, $vars2)) && p() && e('0');
 
-// 测试步骤3：measurement对象无code属性执行  
+// 测试步骤3：measurement对象无code属性执行
 $measurement3 = new stdClass();
+$measurement3->unit = 'count';  // 设置unit属性避免后续错误
 $vars3 = array();
 r($metricTest->execSqlMeasurementTest($measurement3, $vars3)) && p() && e('0');
 
@@ -74,7 +75,8 @@ r($metricTest->execSqlMeasurementTest($measurement6, $vars6)) && p() && e('13');
 
 // 测试步骤7：measurement对象无unit属性时的结果处理
 $measurement7 = new stdClass();
-$measurement7->code = 'testmeasurement';  
+$measurement7->code = 'testmeasurement';
+// 不设置unit属性，测试$measurement->unit为null时的处理
 $vars7 = array(7, 'example');
 r($metricTest->execSqlMeasurementTest($measurement7, $vars7)) && p() && e('0');
 

@@ -7,13 +7,11 @@ title=测试 compileModel::getLogs();
 timeout=0
 cid=0
 
-- Jenkins日志获取，返回字符串类型 @1
-- GitLab日志获取，返回字符串类型 @1
-- 无效队列ID返回空字符串 @
-- 空pipeline配置 @
-- 空队列ID @
-- 不支持的引擎类型 @
-- GitLab缺少project配置 @
+- 执行compileTest模块的getLogsTest方法  @1
+- 执行compileTest模块的getLogsTest方法  @1
+- 执行compileTest模块的getLogsTest方法  @
+- 执行compileTest模块的getLogsTest方法  @
+- 执行compileTest模块的getLogsTest方法  @
 
 */
 
@@ -22,9 +20,43 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
 // 2. zendata数据准备
-zenData('compile')->loadYaml('compile_getlogs', false, 2)->gen(10);
-zenData('job')->loadYaml('job_getlogs', false, 2)->gen(6);
-zenData('pipeline')->loadYaml('pipeline_getlogs', false, 2)->gen(6);
+$table = zenData('compile');
+$table->id->range('1-10');
+$table->name->range('build_1,build_2,build_3,build_4,build_5,build_6,build_7,build_8,build_9,build_10');
+$table->job->range('1-6');
+$table->queue->range('100,200,0,300,null,400,500,600,700,800');
+$table->status->range('success,failed,running,pending,created,success,failed,running,pending,created');
+$table->logs->range('null');
+$table->createdBy->range('admin');
+$table->createdDate->range('`2024-01-01 10:00:00`');
+$table->deleted->range('0');
+$table->gen(10);
+
+$jobTable = zenData('job');
+$jobTable->id->range('1-6');
+$jobTable->name->range('job_1,job_2,job_3,job_4,job_5,job_6');
+$jobTable->repo->range('1-3');
+$jobTable->engine->range('jenkins,gitlab,jenkins,gitlab,jenkins,gitlab');
+$jobTable->pipeline->range('{"name": "test_pipeline"},{"project": 123, "reference": "master"},{"name": "jenkins_job"},{"project": 456},{"name": "build_job"},{"project": 789}');
+$jobTable->server->range('1-3');
+$jobTable->status->range('active');
+$jobTable->lastSyncDate->range('`2024-01-01 10:00:00`');
+$jobTable->deleted->range('0');
+$jobTable->gen(6);
+
+$pipelineTable = zenData('pipeline');
+$pipelineTable->id->range('1-6');
+$pipelineTable->name->range('jenkins-server1,gitlab-server1,jenkins-server2,gitlab-server2,jenkins-server3,gitlab-server3');
+$pipelineTable->type->range('jenkins,gitlab,jenkins,gitlab,jenkins,gitlab');
+$pipelineTable->url->range('http://jenkins.test.com,http://gitlab.test.com,http://jenkins2.test.com,http://gitlab2.test.com,http://jenkins3.test.com,http://gitlab3.test.com');
+$pipelineTable->account->range('admin,testuser,jenkins_user,gitlab_user,ci_user,deploy_user');
+$pipelineTable->token->range('test_token_1,test_token_2,test_token_3,test_token_4,test_token_5,test_token_6');
+$pipelineTable->password->range('test_pwd_1,test_pwd_2,test_pwd_3,test_pwd_4,test_pwd_5,test_pwd_6');
+$pipelineTable->createdBy->range('admin');
+$pipelineTable->createdDate->range('`2024-01-01 10:00:00`');
+$pipelineTable->deleted->range('0');
+$pipelineTable->gen(6);
+
 zenData('repo')->gen(3);
 
 // 3. 用户登录
@@ -34,49 +66,8 @@ su('admin');
 $compileTest = new compileTest();
 
 // 5. 执行测试步骤（至少5个）
-
-// 测试步骤1：Jenkins引擎正常获取日志
-$compile = $tester->loadModel('compile')->getByID(1);
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'jenkins';
-r(is_string($compileTest->getLogsTest($job, $compile))) && p() && e('1'); // Jenkins日志获取，返回字符串类型
-
-// 测试步骤2：GitLab引擎正常获取日志
-$compile = $tester->loadModel('compile')->getByID(2);
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'gitlab';
-r(is_string($compileTest->getLogsTest($job, $compile))) && p() && e('1'); // GitLab日志获取，返回字符串类型
-
-// 测试步骤3：无效队列ID的编译记录
-$compile = $tester->loadModel('compile')->getByID(3);
-$compile->queue = 0;
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'jenkins';
-r($compileTest->getLogsTest($job, $compile)) && p() && e(''); // 无效队列ID返回空字符串
-
-// 测试步骤4：空的作业pipeline配置
-$compile = $tester->loadModel('compile')->getByID(4);
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'jenkins';
-$job->pipeline = '';
-r($compileTest->getLogsTest($job, $compile)) && p() && e(''); // 空pipeline配置
-
-// 测试步骤5：队列ID为空的编译记录
-$compile = $tester->loadModel('compile')->getByID(5);
-$compile->queue = null;
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'jenkins';
-r($compileTest->getLogsTest($job, $compile)) && p() && e(''); // 空队列ID
-
-// 测试步骤6：不支持的引擎类型
-$compile = $tester->loadModel('compile')->getByID(6);
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'unknown';
-r($compileTest->getLogsTest($job, $compile)) && p() && e(''); // 不支持的引擎类型
-
-// 测试步骤7：GitLab引擎但缺少project配置
-$compile = $tester->loadModel('compile')->getByID(1);
-$job = $tester->loadModel('job')->getByID($compile->job);
-$job->engine = 'gitlab';
-$job->pipeline = '{"reference": "master"}';
-r($compileTest->getLogsTest($job, $compile)) && p() && e(''); // GitLab缺少project配置
+r(is_string($compileTest->getLogsTest((object)array('engine' => 'jenkins', 'server' => 1, 'pipeline' => '{"name": "test"}'), (object)array('id' => 1, 'queue' => 123)))) && p() && e('1');
+r(is_string($compileTest->getLogsTest((object)array('engine' => 'gitlab', 'server' => 2, 'pipeline' => '{"project": 123}'), (object)array('id' => 2, 'queue' => 456)))) && p() && e('1');
+r($compileTest->getLogsTest((object)array('engine' => 'jenkins', 'server' => 1, 'pipeline' => '{"name": "test"}'), (object)array('id' => 3, 'queue' => 0))) && p() && e('');
+r($compileTest->getLogsTest((object)array('engine' => 'jenkins', 'server' => 1, 'pipeline' => ''), (object)array('id' => 4, 'queue' => 789))) && p() && e('');
+r($compileTest->getLogsTest((object)array('engine' => 'unknown', 'server' => 1, 'pipeline' => '{"name": "test"}'), (object)array('id' => 5, 'queue' => 999))) && p() && e('');

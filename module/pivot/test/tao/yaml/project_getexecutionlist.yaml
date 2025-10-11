@@ -1,0 +1,59 @@
+---
+title: project表测试数据 for getExecutionList
+desc: 用于测试获取执行列表方法的project表数据
+
+fields:
+- field: id
+  note: 项目/执行ID
+  range: 1-15
+- field: project
+  note: 父项目ID
+  range: 0{5},1{2},2{2},3{2},4{2},5{2}
+- field: type
+  note: 项目类型
+  range: project{5},sprint{6},stage{4}
+- field: parent
+  note: 父级ID
+  range: 0{15}
+- field: path
+  note: 路径
+  range: ',1,',',2,',',3,',',4,',',5,',',6,',',7,',',8,',',9,',',10,',',11,',',12,',',13,',',14,',',15,'
+- field: grade
+  note: 级别
+  range: 1{15}
+- field: name
+  note: 项目/执行名称
+  range: '项目1','项目2','项目3','项目4','项目5','执行6','执行7','执行8','执行9','执行10','执行11','执行12','执行13','执行14','执行15'
+- field: code
+  note: 项目代码
+  range: PRJ001,PRJ002,PRJ003,PRJ004,PRJ005,EXE006,EXE007,EXE008,EXE009,EXE010,EXE011,EXE012,EXE013,EXE014,EXE015
+- field: begin
+  note: 开始时间
+  range: 2024-01-01{5},2024-01-01{4},2024-02-01{3},2024-03-01{3}
+- field: end
+  note: 结束时间
+  range: 2024-12-31{5},2024-06-30{4},2024-07-31{3},2024-08-31{3}
+- field: realBegan
+  note: 实际开始时间
+  range: 2024-01-01{5},2024-01-01{4},2024-02-01{3},2024-03-01{3}
+- field: realEnd
+  note: 实际结束时间
+  range: ''{5},2024-06-30{4},2024-07-31{3},2024-08-31{3}
+- field: status
+  note: 项目状态
+  range: doing{5},closed{4},wait{3},suspended{3}
+- field: multiple
+  note: 多执行模式
+  range: '1'{13},'0'{2}
+- field: openedBy
+  note: 创建者
+  range: admin{15}
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01{15}
+- field: deleted
+  note: 是否删除
+  range: '0'{15}
+- field: vision
+  note: 视野类型
+  range: rnd{15}

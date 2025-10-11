@@ -25,7 +25,9 @@ $pipeline->name->range('gitlab1,gitlab2,gitlab3,gitlab4,gitlab5');
 $pipeline->type->range('gitlab{5}');
 $pipeline->url->range('https://gitlabdev.qc.oop.cc{5}');
 $pipeline->token->range('glpat-b8Sa1pM9k9ygxMZYPN6w{5}');
+ob_start();
 $pipeline->gen(5);
+ob_end_clean();
 
 // 用户登录
 su('admin');

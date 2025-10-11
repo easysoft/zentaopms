@@ -10,8 +10,8 @@ cid=0
 - 步骤1：正常情况-获取存在的透视表ID属性id @1001
 - 步骤2：正常情况-验证透视表分组属性group @85
 - 步骤3：获取另一个透视表并验证ID属性id @1003
-- 步骤4：边界值-不存在的ID返回0 @0
-- 步骤5：异常输入-无效ID零返回0 @0
+- 步骤4：边界值-不存在的ID返回false @0
+- 步骤5：异常输入-无效ID零返回false @0
 
 */
 
@@ -36,5 +36,5 @@ $pivotTest = new pivotTest();
 r($pivotTest->getByIDTest(1001)) && p('id') && e('1001'); // 步骤1：正常情况-获取存在的透视表ID
 r($pivotTest->getByIDTest(1001)) && p('group') && e('85'); // 步骤2：正常情况-验证透视表分组
 r($pivotTest->getByIDTest(1003)) && p('id') && e('1003'); // 步骤3：获取另一个透视表并验证ID
-r($pivotTest->getByIDTest(9999)) && p() && e('0'); // 步骤4：边界值-不存在的ID返回0
-r($pivotTest->getByIDTest(0)) && p() && e('0'); // 步骤5：异常输入-无效ID零返回0
+r($pivotTest->getByIDTest(9999)) && p('') && e('0'); // 步骤4：边界值-不存在的ID返回false
+r($pivotTest->getByIDTest(0)) && p('') && e('0'); // 步骤5：异常输入-无效ID零返回false

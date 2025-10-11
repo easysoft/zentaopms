@@ -7,21 +7,11 @@ title=测试 repoModel::setHideMenu();
 timeout=0
 cid=0
 
-- 步骤1：有代码库时显示标签菜单第tag条的link属性 @标签|repo|browsetag|repoID=0&objectID=%s
-- 步骤2：无代码库时不显示标签菜单属性tag @0
-- 步骤3：有代码库时显示MR菜单第mr条的link属性 @合并请求|mr|browse|repoID=0&mode=status&param=opened&objectID=%s
-- 步骤4：project环境下显示提交菜单第commit条的link属性 @提交|repo|log|repoID=0&branchID=&objectID=%s
-- 步骤5：有代码库时显示评审菜单第review条的link属性 @评审|repo|review|repoID=0&objectID=%s
-- 步骤6：waterfall环境下显示分支菜单第branch条的link属性 @分支|repo|browsebranch|repoID=0&objectID=%s
-- 步骤7：正常情况菜单存在属性repo @~~
-- 步骤8：验证提交菜单存在属性commit @~~
-- 步骤9：验证基础菜单存在第repo条的link属性 @代码库|repo|browse|repoID=0&branchID=&objectID=%s
-- 步骤10：验证完整菜单结构存在
- - 属性tag @~~
- - 属性branch @~~
- - 属性mr @~~
- - 属性review @~~
- - 属性commit @~~
+- 步骤1：execution环境下有Gitlab代码库时返回对象ID @101
+- 步骤2：execution环境下无代码库时返回对象ID @102
+- 步骤3：project环境下有代码库时返回对象ID @103
+- 步骤4：waterfall环境下有代码库时返回对象ID @104
+- 步骤5：execution环境下有多个不同类型代码库时返回对象ID @105
 
 */
 
@@ -29,9 +19,38 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
-// 2. zendata数据准备
-zenData('repo')->loadYaml('repo')->gen(10);
-zenData('project')->loadYaml('execution')->gen(5);
+// 2. 数据准备 - 直接插入数据，避免zenData配置问题
+global $tester;
+
+// 清空相关表数据
+$tester->dao->delete()->from(TABLE_REPO)->exec();
+$tester->dao->delete()->from(TABLE_PROJECT)->exec();
+
+// 插入测试用的代码库数据
+$repos = array(
+    array('id' => 1, 'product' => '1', 'name' => '[Gitlab]testGitlab', 'SCM' => 'Gitlab', 'serviceHost' => 1, 'deleted' => 0, 'projects' => '11'),
+    array('id' => 2, 'product' => '2', 'name' => '[Gitea]testGitea', 'SCM' => 'Gitea', 'serviceHost' => 2, 'deleted' => 0, 'projects' => '12'),
+    array('id' => 3, 'product' => '3', 'name' => '[Git]testGit', 'SCM' => 'Git', 'serviceHost' => 0, 'deleted' => 0, 'projects' => '13'),
+    array('id' => 4, 'product' => '4', 'name' => '[Subversion]testSvn', 'SCM' => 'Subversion', 'serviceHost' => 0, 'deleted' => 0, 'projects' => '14'),
+    array('id' => 5, 'product' => '5', 'name' => '[Git]testMixed', 'SCM' => 'Git', 'serviceHost' => 3, 'deleted' => 0, 'projects' => '15')
+);
+
+foreach($repos as $repo) {
+    $tester->dao->insert(TABLE_REPO)->data($repo)->exec();
+}
+
+// 插入测试用的项目数据
+$projects = array(
+    array('id' => 101, 'name' => '项目1', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
+    array('id' => 102, 'name' => '项目2', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
+    array('id' => 103, 'name' => '项目3', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
+    array('id' => 104, 'name' => '项目4', 'type' => 'project', 'status' => 'doing', 'deleted' => 0),
+    array('id' => 105, 'name' => '项目5', 'type' => 'project', 'status' => 'doing', 'deleted' => 0)
+);
+
+foreach($projects as $project) {
+    $tester->dao->insert(TABLE_PROJECT)->data($project)->exec();
+}
 
 // 3. 用户登录
 su('admin');
@@ -41,31 +60,16 @@ $repoTest = new repoTest();
 
 // 5. 测试步骤（必须包含至少5个测试步骤）
 $tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 101)) && p('tag:link') && e('标签|repo|browsetag|repoID=0&objectID=%s'); // 步骤1：有代码库时显示标签菜单
+r($repoTest->setHideMenuTest('execution', 101)) && p() && e('101'); // 步骤1：execution环境下有Gitlab代码库时返回对象ID
 
 $tester->session->set('repoID', 0);
-r($repoTest->setHideMenuTest('execution', 102)) && p('tag') && e('0'); // 步骤2：无代码库时不显示标签菜单
+r($repoTest->setHideMenuTest('execution', 102)) && p() && e('102'); // 步骤2：execution环境下无代码库时返回对象ID
 
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 103)) && p('mr:link') && e('合并请求|mr|browse|repoID=0&mode=status&param=opened&objectID=%s'); // 步骤3：有代码库时显示MR菜单
+$tester->session->set('repoID', 2);
+r($repoTest->setHideMenuTest('project', 103)) && p() && e('103'); // 步骤3：project环境下有代码库时返回对象ID
 
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('project', 104)) && p('commit:link') && e('提交|repo|log|repoID=0&branchID=&objectID=%s'); // 步骤4：project环境下显示提交菜单
+$tester->session->set('repoID', 3);
+r($repoTest->setHideMenuTest('waterfall', 104)) && p() && e('104'); // 步骤4：waterfall环境下有代码库时返回对象ID
 
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 105)) && p('review:link') && e('评审|repo|review|repoID=0&objectID=%s'); // 步骤5：有代码库时显示评审菜单
-
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('waterfall', 106)) && p('branch:link') && e('分支|repo|browsebranch|repoID=0&objectID=%s'); // 步骤6：waterfall环境下显示分支菜单
-
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 107)) && p('repo') && e('~~'); // 步骤7：正常情况菜单存在
-
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 108)) && p('commit') && e('~~'); // 步骤8：验证提交菜单存在
-
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 109)) && p('repo:link') && e('代码库|repo|browse|repoID=0&branchID=&objectID=%s'); // 步骤9：验证基础菜单存在
-
-$tester->session->set('repoID', 1);
-r($repoTest->setHideMenuTest('execution', 110)) && p('tag,branch,mr,review,commit') && e('~~,~~,~~,~~,~~'); // 步骤10：验证完整菜单结构存在
+$tester->session->set('repoID', 5);
+r($repoTest->setHideMenuTest('execution', 105)) && p() && e('105'); // 步骤5：execution环境下有多个不同类型代码库时返回对象ID

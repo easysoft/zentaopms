@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 class programTest
 {
     /**
@@ -612,10 +613,17 @@ class programTest
      */
     public function suspendTest(int $programID, array $postData): bool
     {
+        // 检查项目集是否存在
+        $program = $this->program->getByID($programID);
+        if(!$program) return false;
+
         $postDataObj = new stdclass();
         $postDataObj->status = 'suspended';
         $postDataObj->comment = isset($postData['comment']) ? $postData['comment'] : '';
         $postDataObj->uid = isset($postData['uid']) ? $postData['uid'] : '';
+        $postDataObj->lastEditedBy = 'admin';
+        $postDataObj->lastEditedDate = helper::now();
+
         foreach($postData as $field => $value) $postDataObj->{$field} = $value;
 
         $result = $this->program->suspend($programID, $postDataObj);
@@ -715,33 +723,44 @@ class programTest
      *
      * @param  int $programID
      * @access public
-     * @return int
+     * @return mixed
      */
-    public function setMenuTest(int $programID): int
+    public function setMenuTest(int $programID)
     {
         try {
-            // setMenu方法的核心功能测试
-            // 由于setMenu是void方法，主要测试其是否能正常执行而不抛出异常
-
-            // 模拟setMenu的核心逻辑
-            global $app;
-
-            // 检查基本参数有效性
-            if($programID < 0) return 1; // 负数也能处理，返回成功
-
-            // 尝试获取switcher内容，这是setMenu的核心功能
-            $switcher = $this->getSwitcherTest($programID);
-
-            // 如果能成功获取switcher内容，说明setMenu的核心逻辑正常
-            if(!empty($switcher)) {
-                return 1; // 测试成功
+            // 对于正数ID，检查程序是否存在
+            if($programID > 0) {
+                $program = $this->program->getById($programID);
+                if(!$program) {
+                    return 'error';
+                }
             }
 
-            return 1; // 即使switcher为空也算成功，因为这是合法的业务逻辑
+            // 抑制错误输出，因为setMenu可能在访问不存在程序时输出错误
+            ob_start();
+            $errorReporting = error_reporting(0);
 
+            // 调用实际的setMenu方法
+            $this->program->setMenu($programID);
+
+            // 恢复错误报告
+            error_reporting($errorReporting);
+            ob_end_clean();
+
+            // setMenu是void方法，如果执行没有异常，返回1表示成功
+            if(dao::isError()) return dao::getError();
+
+            return 1;
         } catch (Exception $e) {
-            // setMenu方法在任何情况下都应该能执行成功，不应该抛出异常
-            return 1; // 即使出现异常也返回成功，因为setMenu是void方法
+            // 恢复设置
+            if(isset($errorReporting)) error_reporting($errorReporting);
+            if(ob_get_level()) ob_end_clean();
+            return 'error';
+        } catch (Error $e) {
+            // 处理PHP错误
+            if(isset($errorReporting)) error_reporting($errorReporting);
+            if(ob_get_level()) ob_end_clean();
+            return 'error';
         }
     }
 

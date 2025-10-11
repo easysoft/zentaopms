@@ -34,12 +34,6 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
-// 准备测试数据
-zenData('bug')->gen(20);
-zenData('task')->gen(20);
-zenData('doc')->gen(10);
-zenData('story')->gen(15);
-
 // 清空搜索索引和字典表
 zenData('searchindex')->gen(0);
 zenData('searchdict')->gen(0);

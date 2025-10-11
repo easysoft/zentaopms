@@ -19,15 +19,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-// 2. zendata数据准备
-$table = zenData('pivot');
-$table->id->range('1-10');
-$table->name->range('测试透视表{1-10}');
-$table->fields->range('{"field1":"value1","field2":"value2"}');
-$table->filters->range('{"filter1":"value1","filter2":"value2"}');
-$table->sql->range('SELECT * FROM table{1-10}');
-$table->desc->range('描述{1-10}');
-$table->gen(5);
+// 2. zendata数据准备（此测试不需要数据库数据）
+// $table = zenData('pivot');
+// $table->gen(0);
 
 // 3. 用户登录
 su('admin');
