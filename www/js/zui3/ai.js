@@ -473,4 +473,7 @@ $(() =>
 
         aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
     }
+
+    /* Bind AI commands in app when app is loaded. */
+    $(document).on('loadapp.apps', (_, args) => bindAICommandsInApp(args[0].iframe.contentWindow));
 });
