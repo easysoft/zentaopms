@@ -58,7 +58,7 @@ window.executeZentaoPrompt = async function(info, auto)
     const toolName  = `zentao_tool_${info.promptID}`;
     const dataPropNames = info.dataPropNames || {};
     let   propNames = dataPropNames[info.objectType] || {};
-    const isChange  = info.schema.title === dataPropNames.title;
+    const isChange  = info.schema.title === dataPropNames.common;
     if(!isChange)
     {
         const properties = info.schema.properties;
@@ -90,7 +90,7 @@ window.executeZentaoPrompt = async function(info, auto)
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
             const renderValue     = value => (typeof value === 'object') ? JSON.stringify(value, 2) : value;
-            if(!isChange && originObject)
+            if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
