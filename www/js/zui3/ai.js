@@ -323,7 +323,7 @@ function bindAICommandsInApp(win)
     const panel = win.zui.AIPanel.shared;
     if(panel)
     {
-        win.zui.bindCommands(contextWindow.document.body,
+        win.zui.bindCommands(win.document.body,
         {
             commands: {},
             scope: panel.commandScope,
