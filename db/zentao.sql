@@ -16556,7 +16556,7 @@ REPLACE INTO `zt_stage` (`workflowGroup` ,`name`, `percent`, `type`, `createdBy`
 ('16', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('16', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('16', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('16', '发布',        '10',   'launch',    'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('16', '发布',        '10',   'launch',    'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0');
 
 -- DROP TABLE IF EXISTS `zt_ai_model`;
 CREATE TABLE IF NOT EXISTS `zt_ai_model` (
