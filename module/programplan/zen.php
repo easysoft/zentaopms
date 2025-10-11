@@ -178,7 +178,7 @@ class programplanZen extends programplan
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
-        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $viewData->project->model) : array();
+        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $viewData->project->workflowGroup) : array();
         $this->view->programPlan        = $viewData->programPlan;
         $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;
@@ -194,8 +194,6 @@ class programplanZen extends programplan
         $this->view->defaultFields      = $defaultFields;
         $this->view->colspan            = count($visibleFields) + 3;
         $this->view->enableOptionalAttr = empty($viewData->programPlan) || (!empty($viewData->programPlan) && $viewData->programPlan->attribute == 'mix');
-
-        $this->display();
     }
 
     /**

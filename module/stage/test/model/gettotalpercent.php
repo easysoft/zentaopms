@@ -22,8 +22,8 @@ zenData('user')->gen(5);
 zenData('stage')->loadYaml('stage')->gen(12);
 
 $stageTester = new stageTest();
-r($stageTester->getTotalPercentTest('scrum'))         && p() && e('0');  // 测试获取敏捷模型的总百分比
-r($stageTester->getTotalPercentTest('waterfall'))     && p() && e('60'); // 测试获取瀑布模型的总百分比
-r($stageTester->getTotalPercentTest('waterfallplus')) && p() && e('60'); // 测试获取融合瀑布模型的总百分比
-r($stageTester->getTotalPercentTest('ipd'))           && p() && e('0');  // 测试获取IPD模型的总百分比
-r($stageTester->getTotalPercentTest('kanban'))        && p() && e('0');  // 测试获取看板模型的总百分比
+r($stageTester->getTotalPercentTest(2))  && p() && e('0');  // 测试获取敏捷模型的总百分比
+r($stageTester->getTotalPercentTest(4))  && p() && e('60'); // 测试获取瀑布模型的总百分比
+r($stageTester->getTotalPercentTest(8))  && p() && e('60'); // 测试获取融合瀑布模型的总百分比
+r($stageTester->getTotalPercentTest(12)) && p() && e('0');  // 测试获取IPD模型的总百分比
+r($stageTester->getTotalPercentTest(13)) && p() && e('0');  // 测试获取看板模型的总百分比

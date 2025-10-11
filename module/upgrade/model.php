@@ -11287,7 +11287,6 @@ class upgradeModel extends model
         $deliverable->template    = '[]';
 
         $deliverableStage = new stdClass();
-        $deliverableStage->stage    = 'project';
         $deliverableStage->required = '0';
         foreach($moduleList as $module)
         {
@@ -11303,6 +11302,8 @@ class upgradeModel extends model
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
                 $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
+                if($module->projectModel == 'waterfall') $deliverableStage->stage = 'design';
+                if($module->projectModel == 'ipd')       $deliverableStage->stage = 'develop';
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 /* 将历史设计的设计类型替换为交付物ID。 */
@@ -11381,13 +11382,13 @@ class upgradeModel extends model
         $deliverableStage->stage    = 'project';
         $deliverableStage->required = '0';
 
-        $deliverableList   = array();
-        $nameFilter        = array(); // 过滤重名交付物。
-        $workflowGroups    = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
-        $deliverables      = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
-        $fileList          = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
-        $otherModules      = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
-        $activityList      = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+        $deliverableList = array();
+        $nameFilter      = array(); // 过滤重名交付物。
+        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
+        $deliverables    = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
+        $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        $otherModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
+        $activityList    = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
             ->where('t1.name')->eq($this->lang->other)
             ->andWhere('t2.name')->eq($this->lang->other)
             ->fetchGroup('workflowGroup');
@@ -11916,16 +11917,17 @@ class upgradeModel extends model
             $name     = $workflow->name;
             foreach($projects as $project)
             {
-                $hasProduct  = $project->hasProduct ? 'product' : 'project';
-                $code        = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
-                $projectType = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
+                $oldWorkflowGroupID = $project->workflowGroup;
+                $hasProduct         = $project->hasProduct ? 'product' : 'project';
+                $code               = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
+                $projectType        = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
 
                 if($projectType == 'cpd') $projectType = 'cpd' . $hasProduct;
 
                 unset($workflow->id);
-                if(isset($codeWorkflowPairs[$code]))
+                if(isset($codeWorkflowPairs[$code][$oldWorkflowGroupID]))
                 {
-                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code])->where('id')->eq($project->id)->exec();
+                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code][$oldWorkflowGroupID])->where('id')->eq($project->id)->exec();
                     continue;
                 }
 
@@ -11945,7 +11947,7 @@ class upgradeModel extends model
                     $this->project->copyWorkflow($project->workflowGroup, $newWorkflowGroupID, $table);
                 }
 
-                $codeWorkflowPairs[$code] = $newWorkflowGroupID;
+                $codeWorkflowPairs[$code][$oldWorkflowGroupID] = $newWorkflowGroupID;
                 $index++;
             }
         }
@@ -12080,10 +12082,7 @@ class upgradeModel extends model
         if(empty($objectList) && !empty($this->lang->baseline->objectList)) $objectList = $this->lang->baseline->objectList;
         if(empty($objectList)) $objectList = $this->lang->upgrade->reviewObjectList;
 
-        $modelList = array('waterfall', 'waterfallplus', 'ipd');
-        $workflowGroupPairs = $this->dao->select('id, projectModel')->from(TABLE_WORKFLOWGROUP)
-            ->where('projectModel')->in($modelList)
-            ->fetchPairs();
+        $workflowGroupPairs = $this->dao->select('id, projectModel')->from(TABLE_WORKFLOWGROUP)->fetchPairs();
 
         $moduleGroup = $this->dao->select('id, root, extra')->from(TABLE_MODULE)
             ->where('type')->eq('deliverable')
@@ -12121,6 +12120,9 @@ class upgradeModel extends model
 
         $upgradeReviewcls  = array();
         $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
+        $waterfallStageMap = array('PP' => 'request', 'SRS' => 'request', 'QAP' => 'request', 'CMP' => 'request', 'ERS' => 'request', 'URS' => 'request', 'Code' => 'dev', 'ITP' => 'dev', 'STP' => 'dev', 'ITTC' => 'qa', 'STTC' => 'qa', 'UM' => 'release');
+        $ipdStageMap       = array('PP' => 'plan', 'SRS' => 'plan', 'QAP' => 'plan', 'CMP' => 'plan', 'ERS' => 'concept', 'URS' => 'concept', 'Code' => 'develop', 'ITP' => 'plan', 'STP' => 'plan', 'ITTC' => 'qualify', 'STTC' => 'qualify', 'UM' => 'launch');
+
         foreach($workflowGroupPairs as $groupID => $projectModel)
         {
             if(empty($activityList[$groupID])) continue;
@@ -12135,11 +12137,27 @@ class upgradeModel extends model
             {
                 if(empty($value)) continue;
                 if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS'))) continue; // 设计类型的上面处理过了，跳过。
+                if($key == 'PP' && in_array($projectModel, array('scrum', 'agileplus'))) continue; // 敏捷、融合敏捷没有项目计划
+                if($key == 'SRS') $value = $this->lang->upgrade->reviewObjectList['SRS']; // 将软件需求规格说明书改成项目需求规格说明书
                 $deliverable->category = $key; // 标记交付物的类型。
 
                 /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
                 $moduleKey           = isset($categoryModuleMap[$key]) ? $categoryModuleMap[$key] : 'other';
                 $deliverable->module = isset($moduleGroup[$groupID][$moduleKey]) ? $moduleGroup[$groupID][$moduleKey]->id : 0;
+
+                if(in_array($projectModel, array('waterfall', 'waterfallplus')))
+                {
+                    $deliverableStage->stage = isset($waterfallStageMap[$key]) ? $waterfallStageMap[$key] : 'project';
+                }
+                elseif(in_array($projectModel, array('scrum', 'agileplus')))
+                {
+                    $deliverableStage->stage = 'sprint';
+                }
+                elseif($projectModel == 'ipd')
+                {
+                    $deliverableStage->stage = isset($ipdStageMap[$key]) ? $ipdStageMap[$key] : 'project';
+                }
+
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 $reviewFlow->root     = $groupID;
@@ -12321,7 +12339,7 @@ class upgradeModel extends model
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
             if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
             {
-                $deliverable->name       = zget($this->lang->baseline->objectList, $review->category);
+                $deliverable->name       = zget($this->lang->upgrade->reviewObjectList, $review->category);
                 $deliverable->doc        = 0;
                 $deliverable->docVersion = 0;
                 $deliverable->status     = 'draft';
@@ -12403,25 +12421,20 @@ class upgradeModel extends model
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
 
-        $typeCodePairs = array();
-        $typeCodePairs['waterfall']     = array('waterfallproject', 'waterfallproduct');
-        $typeCodePairs['waterfallplus'] = array('waterfallplusproject', 'waterfallplusproduct');
-        $typeCodePairs['ipd']           = array('ipdproduct', 'tpdproduct', 'cbbproduct', 'cpdproduct', 'cpdproject');
-
         $this->app->loadConfig('project');
-        $workflowPairs = $this->dao->select('code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchPairs();
-        foreach($typeCodePairs as $projectType => $flowList)
+        $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
+        foreach($typeCodeGroup as $projectModel => $flowList)
         {
-            foreach($flowList as $flowCode)
+            foreach(array_keys($flowList) as $flowCode)
             {
-                foreach($stageGroup[$projectType] as $stage)
+                foreach($stageGroup[$projectModel] as $stage)
                 {
                     if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
                     if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
                     if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
 
                     unset($stage->id);
-                    $stage->workflowGroup = $workflowPairs[$flowCode];
+                    $stage->workflowGroup = $typeCodeGroup[$projectModel][$flowCode]->id;
                     if(empty($stage->editedDate)) $stage->editedDate = null;
                     $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
                 }

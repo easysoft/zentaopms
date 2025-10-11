@@ -393,7 +393,6 @@ $lang->resource->stage->batchCreate = 'batchCreate';
 $lang->resource->stage->edit        = 'edit';
 $lang->resource->stage->setType     = 'setType';
 $lang->resource->stage->delete      = 'delete';
-$lang->resource->stage->plusBrowse  = 'plusBrowse';
 
 $lang->stage->methodOrder[5]  = 'browse';
 $lang->stage->methodOrder[10] = 'create';
@@ -401,7 +400,6 @@ $lang->stage->methodOrder[15] = 'batchCreate';
 $lang->stage->methodOrder[20] = 'edit';
 $lang->stage->methodOrder[25] = 'setType';
 $lang->stage->methodOrder[30] = 'delete';
-$lang->stage->methodOrder[35] = 'plusBrowse';
 
 /* Program. */
 $lang->resource->program = new stdclass();
