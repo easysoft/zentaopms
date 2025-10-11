@@ -18,42 +18,20 @@ class stage extends control
      *
      * @param  int    $groupID
      * @param  string $orderBy
-     * @param  string $type    waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function browse(int $groupID = 0, string $orderBy = "id_asc", string $type = 'waterfall')
+    public function browse(int $groupID = 0, string $orderBy = "id_asc")
     {
-        if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy={$orderBy}&type=waterfallplus"));
+        $workflowGroup = $this->loadModel('workflowgroup')->getByID($groupID);
+        if($workflowGroup->projectModel == 'ipd') $this->config->stage->dtable->fieldList['type']['statusMap'] = $this->lang->stage->ipdTypeList;
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
-        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
+        $this->view->stages  = $this->stage->getStages($orderBy, 0, $groupID);
         $this->view->orderBy = $orderBy;
-        $this->view->type    = $type;
         $this->view->groupID = $groupID;
 
         $this->display();
-    }
-
-    /**
-     * 融合瀑布模型阶段列表页。
-     * Waterfall plus model stage list page.
-     *
-     * @param  string $orderBy
-     * @param  string $type    waterfall|waterfallplus
-     * @access public
-     * @return void
-     */
-    public function plusBrowse($orderBy = "id_asc", $type = 'waterfallplus')
-    {
-        if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy={$orderBy}&type=waterfall"));
-
-        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
-        $this->view->orderBy = $orderBy;
-        $this->view->type    = $type;
-        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
-
-        $this->display('stage', 'browse');
     }
 
     /**
@@ -61,16 +39,15 @@ class stage extends control
      * Create a stage.
      *
      * @param  int    $groupID
-     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function create(int $groupID = 0, string $type = 'waterfall')
+    public function create(int $groupID = 0)
     {
         if($_POST)
         {
-            $stageData = form::data()->setDefault('projectType', $type)->get();
-            $stageID   = $this->stage->create($stageData, $type);
+            $stageData = form::data()->setDefault('workflowGroup', $groupID)->get();
+            $stageID   = $this->stage->create($stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
@@ -79,6 +56,7 @@ class stage extends control
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
         $this->view->groupID = $groupID;
+        $this->view->flow    = $this->loadModel('workflowgroup')->getByID($groupID);
 
         $this->display();
     }

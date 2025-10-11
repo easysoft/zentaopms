@@ -18,16 +18,15 @@ class stageModel extends model
      * 创建一个阶段。
      * Create a stage.
      *
-     * @param  object   $stage
-     * @param  string   $type  waterfall|waterfallplus
+     * @param  object $stage
      * @access public
      * @return int|bool
      */
-    public function create(object $stage, string $type = 'waterfall'): int|bool
+    public function create(object $stage): int|bool
     {
         if(isset($this->config->setPercent) && $this->config->setPercent == 1)
         {
-            $totalPercent = $this->getTotalPercent($type);
+            $totalPercent = $this->getTotalPercent($stage->workflowGroup);
 
             if(!is_numeric($stage->percent))
             {
@@ -144,11 +143,11 @@ class stageModel extends model
      *
      * @param  string $orderBy
      * @param  int    $projectID
-     * @param  string $type
+     * @param  int    $groupID
      * @access public
      * @return array
      */
-    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
+    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, int $groupID = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
 
@@ -165,17 +164,9 @@ class stageModel extends model
                 ->fetchAll('id');
         }
 
-        $stageType = '';
-        if($this->config->systemMode == 'PLM' && $this->app->rawMethod == 'create' && $this->app->rawModule == 'programplan' && $type == 'ipd')
-        {
-            $project   = $this->loadModel('project')->fetchByID($this->session->project);
-            $stageType = zget($this->config->project->categoryStages, $project->category, '');
-        }
-
         return $this->dao->select('*')->from(TABLE_STAGE)
             ->where('deleted')->eq(0)
-            ->andWhere('projectType')->eq($type)
-            ->beginIF(!empty($stageType))->andWhere('type')->in($stageType)->fi()
+            ->andWhere('workflowGroup')->eq($groupID)
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
@@ -200,8 +191,8 @@ class stageModel extends model
      *  @param  string $type waterfall|waterfallplus
      *  @return float
      */
-    public function getTotalPercent(string $type): float
+    public function getTotalPercent(int $groupID): float
     {
-        return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
+        return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('workflowGroup')->eq($groupID)->fetch('total');
     }
 }

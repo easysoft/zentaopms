@@ -53,7 +53,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->stage->type),
             set::name('type'),
-            set::items($lang->stage->typeList)
+            set::items($flow->projectModel == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList)
         )
     )
 );

@@ -14,8 +14,8 @@ featureBar();
 
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
-if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}&type={$type}"), 'data-toggle' => 'modal');
-if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}&type={$type}"));
+if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}"), 'data-toggle' => 'modal');
+if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}"));
 toolbar
 (
     !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
@@ -28,5 +28,5 @@ dtable
     set::cols($config->stage->dtable->fieldList),
     set::data($tableData),
     set::orderBy($orderBy),
-    set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}"))
+    set::sortLink(createLink('stage', 'browse', "groupID={$groupID}&orderBy={name}_{sortType}"))
 );
