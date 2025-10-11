@@ -228,6 +228,7 @@ $config->openMethods[] = 'admin.register';
 $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.sendcode';
 $config->openMethods[] = 'admin.planmodal';
+$config->openMethods[] = 'stage.setpoint';
 
 /* 登录用户可以使用的方法。The methods that can be used by the logged users. */
 $config->logonMethods = array();
