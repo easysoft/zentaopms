@@ -55,8 +55,9 @@ window.executeZentaoPrompt = async function(info, auto)
     }
 
     const langData = zaiPanel.options.langData || {};
+    const toolName = `zentao_tool_${info.promptID}`;
     const tools = [{
-        name       : `zentao_prompt_${info.promptID}`,
+        name       : toolName,
         displayName: info.name,
         description: info.name,
         parameters :
@@ -64,16 +65,13 @@ window.executeZentaoPrompt = async function(info, auto)
             type: 'object',
             properties:
             {
-                data: info.schema,
-                explain:
-                {
-                    type:        'string',
-                    description: langData.changeExplainDesc
-                }
+                data:    info.schema,
+                title:   {type: 'string',description: langData.promptResultTitle},
+                explain: {type: 'string',description: langData.changeExplainDesc},
             }
         },
         fn: (response) => {
-            const result = response.data;
+            const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
 
@@ -120,7 +118,7 @@ window.executeZentaoPrompt = async function(info, auto)
                 } catch (error) {}
             }
             return {
-                view: [diffView, explainView],
+                view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
                 actions: [{
                     text        : (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
@@ -136,11 +134,11 @@ window.executeZentaoPrompt = async function(info, auto)
         },
     }];
     const postMessage = {
-        content : info.name,
-        prompt  : info.prompt,
-        tools   : tools,
-        model   : info.model,
-        chatType: 'agent',
+        content  : info.name,
+        prompt   : [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n'),
+        chatTools: tools,
+        model    : info.model,
+        chatType : 'agent',
     };
     zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: 600, postMessage: postMessage});
 };
@@ -186,7 +184,7 @@ function registerZentaoAIPlugin(lang)
         command : '.reviewStory',
         hint    : lang.storyReviewHint,
         when    : ({state}) => {
-            const page = state?.zentaoPage;
+            const page = state ? state.zentaoPage : null;
             return page && page.path === 'story-view';
         },
     });
@@ -320,18 +318,24 @@ function registerZentaoAIPlugin(lang)
     });
 }
 
+function bindAICommandsInApp(win)
+{
+    const panel = win.zui.AIPanel.shared;
+    if(panel)
+    {
+        win.zui.bindCommands(contextWindow.document.body,
+        {
+            commands: {},
+            scope: panel.commandScope,
+            onCommand: panel.executeCommand.bind(panel)
+        });
+    }
+}
+
 $(() => {
     if(getZentaoPageType() !== 'home')
     {
-        const panel = zui.AIPanel.shared;
-        if(panel)
-        {
-            zui.bindCommands(document.body, {
-                commands: {},
-                scope: panel.commandScope,
-                onCommand: panel.executeCommand.bind(panel)
-            });
-        }
+        bindAICommandsInApp(window);
         return;
     }
 
@@ -416,4 +420,7 @@ $(() => {
 
         aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
     }
+
+    /* Bind AI commands in app when app is loaded. */
+    $(document).on('loadapp.apps', (_, args) => bindAICommandsInApp(args[0].iframe.contentWindow));
 });
