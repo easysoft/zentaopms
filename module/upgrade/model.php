@@ -12403,25 +12403,20 @@ class upgradeModel extends model
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
 
-        $typeCodePairs = array();
-        $typeCodePairs['waterfall']     = array('waterfallproject', 'waterfallproduct');
-        $typeCodePairs['waterfallplus'] = array('waterfallplusproject', 'waterfallplusproduct');
-        $typeCodePairs['ipd']           = array('ipdproduct', 'tpdproduct', 'cbbproduct', 'cpdproduct', 'cpdproject');
-
         $this->app->loadConfig('project');
-        $workflowPairs = $this->dao->select('code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchPairs();
-        foreach($typeCodePairs as $projectType => $flowList)
+        $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
+        foreach($typeCodeGroup as $projectModel => $flowList)
         {
-            foreach($flowList as $flowCode)
+            foreach(array_keys($flowList) as $flowCode)
             {
-                foreach($stageGroup[$projectType] as $stage)
+                foreach($stageGroup[$projectModel] as $stage)
                 {
                     if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
                     if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
                     if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
 
                     unset($stage->id);
-                    $stage->workflowGroup = $workflowPairs[$flowCode];
+                    $stage->workflowGroup = $typeCodeGroup[$projectModel][$flowCode]->id;
                     if(empty($stage->editedDate)) $stage->editedDate = null;
                     $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
                 }
