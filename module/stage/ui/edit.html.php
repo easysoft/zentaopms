@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 $percentRow = '';
-if(isset($config->setPercent) && $config->setPercent == 1)
+if(isset($config->setPercent) && $config->setPercent == 1 && $flow->projectModel != 'ipd')
 {
     $percentRow = formRow(
         formGroup
