@@ -25,7 +25,7 @@ class testtaskTao extends testtaskModel
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
-            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = CAST(t4.id AS VARCHAR(20))')
+            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = CAST(t4.id AS CHAR)')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project = t5.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
