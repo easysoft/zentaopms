@@ -97,3 +97,6 @@ INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, 
 ('scale', 'user', 'reviewissue', 'released', 'php', '按人员统计的被指派的评审意见数	', '被指派的评审意见数', 'count_of_assigned_reviewissue_in_user', 'count', '按人员统计的被指派的评审意见数表示每个人被指派的评审意见数量之和，反映了每个人员需要处理的评审意见数量的规模。该数值越大，说明需要投入越多的时间处理评审意见。', '所有评审意见个数求和\r\n指派给为某人\r\n过滤已删除的评审意见\r\n过滤已关闭的评审意见\r\n过滤已删除项目的评审意见', '', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate');
 
 ALTER TABLE `zt_approvalnode` CHANGE `result` `result` varchar(20) NOT NULL DEFAULT '';
+
+DELETE FROM `zt_workflowgroup` WHERE `projectModel` = 'kanban';
+UPDATE `zt_project` SET `workflowGroup` = '0' WHERE `model` = 'kanban';
