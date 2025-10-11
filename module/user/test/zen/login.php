@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/userzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $user = zenData('user');
 $user->id->range('1-5');
