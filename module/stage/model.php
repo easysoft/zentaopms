@@ -55,17 +55,17 @@ class stageModel extends model
      * 批量创建阶段。
      * Batch create stages.
      *
-     * @param  string  $type   waterfall|waterfallplus
+     * @param  int     $groupID
      * @param  array   $stages
      * @access public
      * @return bool
      */
-    public function batchCreate($type = 'waterfall', array $stages = array()): bool
+    public function batchCreate(int $groupID = 0, array $stages = array()): bool
     {
         $setPercent = (isset($this->config->setPercent) && $this->config->setPercent == 1) ? true : false;
         if($setPercent)
         {
-            $oldTotalPercent = $this->getTotalPercent($type);
+            $oldTotalPercent = $this->getTotalPercent($groupID);
             $totalPercent    = 0;
             foreach($stages as $stage)
             {
@@ -83,7 +83,7 @@ class stageModel extends model
         $this->loadModel('action');
         foreach($stages as $rowID => $stage)
         {
-            $stage->projectType = $type;
+            $stage->workflowGroup = $groupID;
             if(!empty($stage->percent)) $stage->percent = (float)$stage->percent;
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')

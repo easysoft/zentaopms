@@ -66,16 +66,15 @@ class stage extends control
      * Batch create stages.
      *
      * @param  int    $groupID
-     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function batchCreate(int $groupID = 0, string $type = 'waterfall')
+    public function batchCreate(int $groupID = 0)
     {
         if($_POST)
         {
-            $stages = form::batchData()->setDefault('projectType', $type)->get();
-            $this->stage->batchCreate($type, $stages);
+            $stages = form::batchData()->get();
+            $this->stage->batchCreate($groupID, $stages);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink('browse', "groupID={$groupID}&orderBy=id_asc")));
@@ -83,6 +82,7 @@ class stage extends control
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
         $this->view->groupID = $groupID;
+        $this->view->flow    = $this->loadModel('workflowgroup')->getByID($groupID);
 
         $this->display();
     }

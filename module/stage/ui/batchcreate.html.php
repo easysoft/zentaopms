@@ -40,7 +40,7 @@ formBatchPanel
         set::label($lang->stage->type),
         set::width('150px'),
         set::control('select'),
-        set::items($lang->stage->typeList)
+        set::items($flow->projectModel == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList)
     )
 );
 /* ====== Render page ====== */
