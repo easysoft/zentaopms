@@ -101,7 +101,7 @@ class projectrelease extends control
         $this->view->orderBy       = $orderBy;
         $this->view->showBranch    = $showBranch;
         $this->view->appList       = $this->loadModel('system')->getPairs();
-        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
+        $this->view->childReleases = $this->release->getListByCondition(toIntArray($children), 0, true);
         $this->view->from          = $from;
         $this->view->blockID       = $blockID;
         $this->view->idList        = '';
