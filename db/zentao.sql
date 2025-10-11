@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `prev` mediumtext NULL,
   `next` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT 'wait',
-  `result` varchar(10) NOT NULL DEFAULT '',
+  `result` varchar(20) NOT NULL DEFAULT '',
   `date` date NULL,
   `opinion` mediumtext NULL,
   `extra` mediumtext NULL,
@@ -13738,13 +13738,11 @@ INSERT INTO `zt_workflowgroup` (`id`, `type`, `projectModel`, `projectType`, `na
 ('7',  'project', 'agileplus',     'project',    '融合敏捷式项目研发', 'agileplusproject',     'normal', 'rnd', '1'),
 ('8',  'project', 'waterfallplus', 'product',    '融合瀑布式产品研发', 'waterfallplusproduct', 'normal', 'rnd', '1'),
 ('9',  'project', 'waterfallplus', 'project',    '融合瀑布式项目研发', 'waterfallplusproject', 'normal', 'rnd', '1'),
-('10', 'project', 'kanban',        'product',    '看板式产品研发',     'kanbanproduct',        'normal', 'rnd', '1'),
-('11', 'project', 'kanban',        'project',    '看板式项目研发',     'kanbanproject',        'normal', 'rnd', '1'),
-('12', 'project', 'ipd',           'ipd',        'IPD集成产品研发',    'ipdproduct',           'normal', 'rnd', '1'),
-('13', 'project', 'ipd',           'tpd',        'IPD预研产品研发',    'tpdproduct',           'normal', 'rnd', '1'),
-('14', 'project', 'ipd',           'cbb',        'IPD平台产品研发',    'cbbproduct',           'normal', 'rnd', '1'),
-('15', 'project', 'ipd',           'cpdproduct', 'IPD定制产品研发',    'cpdproduct',           'normal', 'rnd', '1'),
-('16', 'project', 'ipd',           'cpdproject', 'IPD定制项目研发',    'cpdproject',           'normal', 'rnd', '1');
+('10', 'project', 'ipd',           'ipd',        'IPD集成产品研发',    'ipdproduct',           'normal', 'rnd', '1'),
+('11', 'project', 'ipd',           'tpd',        'IPD预研产品研发',    'tpdproduct',           'normal', 'rnd', '1'),
+('12', 'project', 'ipd',           'cbb',        'IPD平台产品研发',    'cbbproduct',           'normal', 'rnd', '1'),
+('13', 'project', 'ipd',           'cpdproduct', 'IPD定制产品研发',    'cpdproduct',           'normal', 'rnd', '1'),
+('14', 'project', 'ipd',           'cpdproject', 'IPD定制项目研发',    'cpdproject',           'normal', 'rnd', '1');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', null, '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
