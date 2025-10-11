@@ -1568,7 +1568,6 @@ LEFT JOIN (
   ) AS t3 ON t1.project = t3.project
   GROUP BY t1.topProgram
 ) AS t7 ON t1.id = t7.topProgram
--- 主表筛选条件
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
 GROUP BY t1.name
 EOT
@@ -1797,7 +1796,7 @@ FROM
   LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
   LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
   LEFT JOIN (SELECT product, COUNT(1) AS plan FROM zt_productplan WHERE deleted = '0' GROUP BY product) AS t4 ON t1.id = t4.product
-  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product  -- 列名替换
+  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product
   LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY product) AS t6 ON t1.id = t6.product
   LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product
 WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0' AND t1.vision = 'rnd'
