@@ -11917,16 +11917,17 @@ class upgradeModel extends model
             $name     = $workflow->name;
             foreach($projects as $project)
             {
-                $hasProduct  = $project->hasProduct ? 'product' : 'project';
-                $code        = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
-                $projectType = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
+                $oldWorkflowGroupID = $project->workflowGroup;
+                $hasProduct         = $project->hasProduct ? 'product' : 'project';
+                $code               = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
+                $projectType        = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
 
                 if($projectType == 'cpd') $projectType = 'cpd' . $hasProduct;
 
                 unset($workflow->id);
-                if(isset($codeWorkflowPairs[$code]))
+                if(isset($codeWorkflowPairs[$code][$oldWorkflowGroupID]))
                 {
-                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code])->where('id')->eq($project->id)->exec();
+                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code][$oldWorkflowGroupID])->where('id')->eq($project->id)->exec();
                     continue;
                 }
 
@@ -11946,7 +11947,7 @@ class upgradeModel extends model
                     $this->project->copyWorkflow($project->workflowGroup, $newWorkflowGroupID, $table);
                 }
 
-                $codeWorkflowPairs[$code] = $newWorkflowGroupID;
+                $codeWorkflowPairs[$code][$oldWorkflowGroupID] = $newWorkflowGroupID;
                 $index++;
             }
         }
