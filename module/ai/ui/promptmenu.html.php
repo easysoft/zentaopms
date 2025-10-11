@@ -29,13 +29,27 @@ $promptMenuInject = function()
 
     $this->app->loadLang('ai');
     $this->app->loadConfig('ai');
-    $module = $this->app->getModuleName();
-    $method = $this->app->getMethodName();
+    $module   = $this->app->getModuleName();
+    $method   = $this->app->getMethodName();
+    $isDocApp = $module === 'doc' && $method === 'app';
+
+    if($isDocApp) $method = 'view';
     if(!isset($this->config->ai->menuPrint->locations[$module][$method])) return;
 
     $menuOptions = $this->config->ai->menuPrint->locations[$module][$method];
     $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
+
+    if($isDocApp)
+    {
+        h::globalJS
+        (
+            'window.docAIPrompts = ' . json_encode($prompts) . ";\n",
+            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $this->lang->ai->promptMenu->dropdownTitle, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
+        );
+        return;
+    }
+
     if(empty($prompts)) return;
 
     $html = '';
