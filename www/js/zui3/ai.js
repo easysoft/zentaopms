@@ -54,8 +54,17 @@ window.executeZentaoPrompt = async function(info, auto)
         openedFormApp = await openPageForm(info.formLocation);
     }
 
-    const langData = zaiPanel.options.langData || {};
-    const toolName = `zentao_tool_${info.promptID}`;
+    const langData  = zaiPanel.options.langData || {};
+    const toolName  = `zentao_tool_${info.promptID}`;
+    const dataPropNames = info.dataPropNames || {};
+    let   propNames = dataPropNames[info.objectType] || {};
+    const isChange  = info.schema.title === dataPropNames.title;
+    if(!isChange)
+    {
+        const properties = info.schema.properties;
+        propNames = {title: info.schema.title};
+        Object.keys(properties).forEach(key => propNames[key] = properties[key].title || properties[key].description);
+    }
     const tools = [{
         name       : toolName,
         displayName: info.name,
@@ -77,11 +86,11 @@ window.executeZentaoPrompt = async function(info, auto)
 
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
-            const propNames       = info.dataPropNames ? (info.dataPropNames[info.objectType] || {}) : {};
             const h               = zui.html;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
-            if(originObject)
+            const renderValue     = value => (typeof value === 'object') ? JSON.stringify(value, 2) : value;
+            if(!isChange && originObject)
             {
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
@@ -89,8 +98,8 @@ window.executeZentaoPrompt = async function(info, auto)
                     const isSame = String(oldValue) === String(value);
                     return h`<tr class="whitespace-pre-wrap">
     <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
-    <td class=${isSame ? '' : 'success-pale'}>${value}</td>
-    <td class=${isSame ? '' : 'danger-pale'}>${oldValue}</td>
+    <td class=${isSame ? '' : 'success-pale'}>${renderValue(value)}</td>
+    <td class=${isSame ? '' : 'danger-pale'}>${renderValue(oldValue)}</td>
 </tr>`;
                 };
                 diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID})}</h6>
@@ -100,6 +109,24 @@ window.executeZentaoPrompt = async function(info, auto)
             <th style="width: 100px;">${langData.changeProp}</th>
             <th>${langData.afterChange}</th>
             <th>${langData.beforeChange}</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}
+    </tbody>
+</table>`;
+            }
+            else
+            {
+                const renderProp = (prop, value) => {
+                    return h`<tr class="whitespace-pre-wrap"><td class="font-bold">${propNames[prop] || prop}</td><td>${renderValue(value)}</td></tr>`;
+                };
+                diffView = h`<h6>${info.targetFormName}</h6>
+<table class="table bordered" style="min-width: 600px">
+    <thead>
+        <tr>
+            <th style="width: 100px;">${langData.changeProp}</th>
+            <th>${langData.afterChange}</th>
         </tr>
     </thead>
     <tbody>
