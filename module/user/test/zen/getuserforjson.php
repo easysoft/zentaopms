@@ -18,7 +18,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/userzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $table = zenData('user');
 $table->loadYaml('user_getuserforjson', false, 2)->gen(10);
