@@ -1989,7 +1989,7 @@ class projectModel extends model
         if(!empty($_POST['otherProducts'])) return $this->linkOtherProducts($projectID, $members);
 
         /* Link products of current program of the project. */
-        $products           = isset($_POST['products']) ? (array)$_POST['products'] : $products;
+        $products           = isset($_POST['products']) ? toIntArray($_POST['products']) : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
         $this->linkProducts($projectID, $products, $oldProjectProducts, $members);
 
