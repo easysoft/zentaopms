@@ -16,10 +16,12 @@ class createProjectBuildTester extends tester
         $form->wait(5);
 
         /*断言检查提示信息*/
+        $nameTip = $form->dom->nameTip->getText();
+        $form->waitUnitl($nameTip);
         if($this->response('method') != 'view')
         {
-            if($this->checkFormTips('projectbuild')) return $this->success('创建项目版本表单页提示信息正确');
-            return $this->failed('创建项目版本表单页提示信息不正确');
+            if($nameTip = sprintf($this->lang->error->notempty, $this->lang->build->nameAB)) return $this->success('创建项目版本表单页必填提示信息正确');
+            return $this->failed('创建项目版本表单页必填提示信息不正确');
         }
     }
 
