@@ -351,7 +351,6 @@ class actionTest
      */
     public function getDynamicByExecutionTest($executionID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
-        ob_start();
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
         $objects = $this->objectModel->getDynamicByExecution((int)$executionID, $account, $period, 'date_desc', 50, $date, $direction);
         if(dao::isError()) return 0;
@@ -1149,53 +1148,13 @@ class actionTest
     }
 
     /**
-     * 备用的processCreateChildrenActionExtra实现
-     *
-     * @param  object $action
-     * @access private
-     * @return void
-     */
-    private function processCreateChildrenActionExtraBackup(object $action): void
-    {
-        if(empty($action->extra))
-        {
-            $action->extra = '';
-            return;
-        }
-
-        global $tester;
-        if(!$tester || !isset($tester->dao))
-        {
-            $action->extra = '';
-            return;
-        }
-
-        try {
-            $names = $tester->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs();
-            $action->extra = '';
-            if($names)
-            {
-                foreach($names as $id => $name)
-                {
-                    // 简化版本：直接生成文本格式，不检查权限
-                    $action->extra .= "#{$id} " . $name . ', ';
-                }
-            }
-            $action->extra = trim(trim($action->extra), ',');
-        } catch (Exception $e) {
-            // 如果数据库操作失败，设置为空字符串
-            $action->extra = '';
-        }
-    }
-
-    /**
      * Test processCreateRequirementsActionExtra method.
      *
-     * @param  string $storyIds
+     * @param  object $action
      * @access public
-     * @return string
+     * @return object
      */
-    public function processCreateRequirementsActionExtraTest(string $storyIds): string
+    public function processCreateRequirementsActionExtraTest(object $action): object
     {
         // 创建模拟的action对象
         $action = new stdClass();
