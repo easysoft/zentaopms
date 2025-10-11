@@ -1941,10 +1941,10 @@ CREATE TABLE IF NOT EXISTS `zt_session` (
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `percent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
-  `projectType` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2691,19 +2691,31 @@ INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
 ('story',       1,    'SR', 'enable'),
 ('story',       2,    '子', 'enable');
 
-REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`projectType`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
-('需求','10','request','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('设计','10','design','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('开发','50','dev','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('测试','15','qa','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('发布','10','release','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('总结评审','5','review','waterfall','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0'),
-('需求','10','request','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('设计','10','design','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('开发','50','dev','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('测试','15','qa','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('发布','10','release','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('总结评审','5','review','waterfallplus','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
+REPLACE INTO `zt_stage` (`workflowGroup`, `name`, `percent`, `type`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
+('4', '需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('4', '设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('4', '开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('4', '测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('4', '发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('4', '总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('5', '总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('8', '总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('9', '总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint',   '0');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
@@ -16520,13 +16532,29 @@ CREATE TABLE IF NOT EXISTS `zt_roadmapstory` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
-REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
-('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('计划',        '10',   'plan',      'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('开发',        '50',   'develop',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('验证',        '15',   'qualify',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('发布',        '10',   'launch',    'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('生命周期',    '5',    'lifecycle', 'ipd', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0');
+REPLACE INTO `zt_stage` (`workflowGroup` ,`name`, `percent`, `type`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
+('12', '概念',        '10',   'concept',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('12', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('12', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('12', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('12', '发布',        '10',   'launch',    'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('12', '生命周期',    '5',    'lifecycle', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0'),
+('13', '概念',        '10',   'concept',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('13', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('13', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('13', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('14', '概念',        '10',   'concept',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('14', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('14', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('14', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('15', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('15', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('15', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('15', '发布',        '10',   'launch',    'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('16', '计划',        '10',   'plan',      'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('16', '开发',        '50',   'develop',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('16', '验证',        '15',   'qualify',   'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
+('16', '发布',        '10',   'launch',    'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0');
 
 -- DROP TABLE IF EXISTS `zt_ai_model`;
 CREATE TABLE IF NOT EXISTS `zt_ai_model` (
