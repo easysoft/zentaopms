@@ -12,7 +12,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT sum(t2.login) AS login, `year`, account, realname
 FROM zt_user t1
-LEFT JOIN (SELECT count(1) as login, actor, YEAR(`date`) as 'year' FROM zt_action GROUP BY actor, `year`) t2 on t1.account = t2.actor
+LEFT JOIN (SELECT count(1) as login, actor, YEAR(`date`) as `year` FROM zt_action GROUP BY actor, `year`) t2 on t1.account = t2.actor
 WHERE t1.deleted = '0'
 GROUP BY `year`, account, realname
 EOT
@@ -39,7 +39,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT sum(t2.allAction) as allAction, `year` , account, realname
 FROM zt_user t1
-LEFT JOIN (SELECT count(1) as allAction, actor, YEAR(`date`) as 'year' FROM zt_action GROUP BY actor, `year`) t2 on t1.account = t2.actor
+LEFT JOIN (SELECT count(1) as allAction, actor, YEAR(`date`) as `year` FROM zt_action GROUP BY actor, `year`) t2 on t1.account = t2.actor
 WHERE t1.deleted = '0'
 GROUP BY `year`, account, realname
 EOT
@@ -66,7 +66,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT ROUND(SUM(t2.consumed)) AS consumed, `year` , t1.account, realname
 FROM zt_user t1
-LEFT JOIN (SELECT sum(consumed) as consumed, account, YEAR(`date`) as 'year' FROM zt_effort WHERE deleted = '0' GROUP BY account, `year` ) t2 on t1.account = t2.account
+LEFT JOIN (SELECT sum(consumed) as consumed, account, YEAR(`date`) as `year` FROM zt_effort WHERE deleted = '0' GROUP BY account, `year` ) t2 on t1.account = t2.account
 WHERE t1.deleted = '0'
 GROUP BY `year`, t1.account, realname
 EOT
@@ -91,11 +91,28 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '0',
     'sql'       => <<<EOT
-SELECT sum(t2.todo) AS todo,sum(t2.undone) AS undone,sum(t2.done) AS done,t2.`year`, t1.account, realname, dept
+SELECT
+  SUM(t2.todo) AS todo,
+  SUM(t2.undone) AS undone,
+  SUM(t2.done) AS done,
+  t2.`year`,
+  t1.account,
+  realname,
+  dept
 FROM zt_user t1
-LEFT JOIN (SELECT count(1) AS 'todo', sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`, account, YEAR(`date`) AS 'year' FROM zt_todo WHERE deleted = '0' GROUP BY account, `year`) t2 on t1.account = t2.account
+LEFT JOIN (
+  SELECT
+    COUNT(1) AS todo,
+    SUM(CASE WHEN `status` != 'done' THEN 1 ELSE 0 END) AS undone,
+    SUM(CASE WHEN `status` = 'done' THEN 1 ELSE 0 END) AS done,
+    account,
+    YEAR(`date`) AS `year`
+  FROM zt_todo
+  WHERE deleted = '0'
+  GROUP BY account, `year`
+) t2 ON t1.account = t2.account
 WHERE t1.deleted = '0'
-GROUP BY t2.`year`, t1.account, realname, dept
+GROUP BY t2.`year`, t1.account, realname, dept;
 EOT
 ,
     'settings'  => array
@@ -165,7 +182,7 @@ SELECT t2.year, t1.dept, t2.account, t2.objectType, t2.create, t2.edit
 FROM zt_user AS t1
 LEFT JOIN
 (SELECT
-  YEAR(t1.date) AS `year`, t1.actor AS account, "产品" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor AS account, '产品' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -174,7 +191,7 @@ WHERE t1.objectType = 'product' AND t1.action IN ('opened', 'edited') AND t2.del
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "需求" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '需求' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -183,7 +200,7 @@ WHERE t1.objectType = 'story' AND t1.action IN ('opened', 'edited') AND t2.delet
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "计划" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '计划' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -192,7 +209,7 @@ WHERE t1.objectType = 'productplan' AND t1.action IN ('opened', 'edited') AND t2
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "发布" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '发布' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -201,7 +218,7 @@ WHERE t1.objectType = 'release' AND t1.action IN ('opened', 'edited') AND t2.del
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "执行" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '执行' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -210,7 +227,7 @@ WHERE t1.objectType = 'execution' AND t1.action IN ('opened', 'edited') AND t2.d
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "任务" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '任务' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -228,7 +245,7 @@ WHERE t1.objectType = 'bug' AND t1.action IN ('opened', 'edited') AND t2.deleted
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "版本" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '版本' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -237,7 +254,7 @@ WHERE t1.objectType = 'build' AND t1.action IN ('opened', 'edited') AND t2.delet
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "用例" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '用例' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -246,7 +263,7 @@ WHERE t1.objectType = 'case' AND t1.action IN ('opened', 'edited') AND t2.delete
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "测试单" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '测试单' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -255,7 +272,7 @@ WHERE t1.objectType = 'testtask' AND t1.action IN ('opened', 'edited') AND t2.de
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
-  YEAR(t1.date) AS `year`, t1.actor, "文档" AS objectType,
+  YEAR(t1.date) AS `year`, t1.actor, '文档' AS objectType,
   SUM(IF(t1.action = 'opened', 1, 0)) AS `create`,
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
@@ -533,11 +550,11 @@ YEAR(t1.date) AS `year`,
 t3.account,
 t3.realname,
 CASE t2.status
-WHEN 'wait' THEN "未开始"
-WHEN 'doing' THEN "进行中"
-WHEN 'done' THEN "已完成"
-WHEN 'closed' THEN "已关闭"
-ELSE "未设置" END status,
+WHEN 'wait' THEN '未开始'
+WHEN 'doing' THEN '进行中'
+WHEN 'done' THEN '已完成'
+WHEN 'closed' THEN '已关闭'
+ELSE '未设置' END status,
 t1.id
 FROM zt_action t1
 LEFT JOIN zt_task t2 on t1.objectID=t2.id RIGHT JOIN zt_user t3 on t1.actor=t3.account
@@ -628,11 +645,11 @@ YEAR(t1.date) AS `year`,
 t3.account,
 t3.realname,
 CASE t2.status
-WHEN 'wait' THEN "未开始"
-WHEN 'doing' THEN "进行中"
-WHEN 'done' THEN "已完成"
-WHEN 'colsed' THEN "已关闭"
-ELSE "未设置"
+WHEN 'wait' THEN '未开始'
+WHEN 'doing' THEN '进行中'
+WHEN 'done' THEN '已完成'
+WHEN 'colsed' THEN '已关闭'
+ELSE '未设置'
 END status,
 t1.id
 FROM zt_action t1
@@ -717,11 +734,11 @@ SELECT
 YEAR(t1.date) AS `year`, t3.account,
 t3.realname,
 CASE t2.status
-WHEN 'wait' THEN "未开始"
-WHEN 'doing' THEN "进行中"
-WHEN 'done' THEN "已完成"
-WHEN 'closed' THEN "已关闭"
-ELSE "未设置"
+WHEN 'wait' THEN '未开始'
+WHEN 'doing' THEN '进行中'
+WHEN 'done' THEN '已完成'
+WHEN 'closed' THEN '已关闭'
+ELSE '未设置'
 END status,
 t1.id
 FROM zt_action t1
@@ -807,7 +824,7 @@ $config->bi->builtin->charts[] = array
 SELECT count ,t2.caseResult as status,t2.`year`, t1.account, realname, dept
 FROM zt_user t1
 LEFT JOIN (
-    SELECT t21.lastRunner, YEAR(t21.`date`) as 'year', t21.caseResult, count(distinct t21.`id`) as count
+    SELECT t21.lastRunner, YEAR(t21.`date`) as `year`, t21.caseResult, count(distinct t21.`id`) as count
     FROM zt_testresult t21
     LEFT JOIN zt_case t22 on t21.case = t22.id
     WHERE t22.deleted = '0'
@@ -1168,10 +1185,27 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '58',
     'sql'       => <<<EOT
-	SELECT if(t2.`year` > 0, concat(t2.`year`, '年', t2.`day`, '天'), concat(t2.`day`, '天')) as period from (
-SELECT TIMESTAMPDIFF(YEAR,t1.firstDay,t1.today) AS `year`,DATEDIFF(DATE_SUB(t1.today,INTERVAL TIMESTAMPDIFF(YEAR,t1.firstDay,t1.today) YEAR), t1.firstDay) AS `day`
-FROM (SELECT `value` AS firstDay, now() AS today FROM zt_config WHERE `owner` = 'system' AND `key` = 'installedDate') AS t1
-) t2
+--365天粗略计算，为了兼容MySQL和PgSQL
+SELECT
+  CASE WHEN years > 0
+    THEN CONCAT(years, '年', days, '天')
+    ELSE CONCAT(days, '天')
+  END AS period
+from (
+  SELECT
+    firstDay,
+    CURRENT_DATE AS today,
+    CAST(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM firstDay) AS INTEGER) AS years,
+    MOD(
+        CAST(
+            (EXTRACT(MONTH FROM CURRENT_DATE) - EXTRACT(MONTH FROM firstDay)) * 30 +
+            (EXTRACT(DAY FROM CURRENT_DATE) - EXTRACT(DAY FROM firstDay)) + 365
+            AS INTEGER
+        ),
+        365
+    ) days
+  FROM (SELECT cast(`value` as DATE) AS firstDay FROM zt_config WHERE `owner` = 'system' AND `key` = 'installedDate') AS subquery
+) data
 EOT
 ,
     'settings'  => array
@@ -1460,27 +1494,88 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT
   t1.name AS topProgram,
-  IFNULL(t2.subProgram, 0) AS subProgram,
+  COALESCE(t2.subProgram, 0) AS subProgram,
   COUNT(DISTINCT t3.id) AS product,
-  SUM(IFNULL(t4.story, 0)) AS story,
-  SUM(IFNULL(t5.`release`, 0)) AS "release",
-  SUM(IFNULL(t6.bug, 0)) AS bug,
-  IFNULL(t7.project, 0) AS project,
-  IFNULL(t7.execution, 0) AS execution,
-  IFNULL(t7.task, 0) AS task
+  SUM(COALESCE(t4.story, 0)) AS story,
+  SUM(COALESCE(t5.`release`, 0)) AS `release`,
+  SUM(COALESCE(t6.bug, 0)) AS bug,
+  COALESCE(t7.project, 0) AS project,
+  COALESCE(t7.execution, 0) AS execution,
+  COALESCE(t7.task, 0) AS task
 FROM zt_project AS t1
-LEFT JOIN (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, COUNT(1) AS subProgram FROM zt_project WHERE deleted = '0' AND type = 'program' AND grade > 1 GROUP BY topProgram) AS t2 ON t1.id = t2.topProgram
-LEFT JOIN zt_product AS t3 ON t1.id = t3.program AND t3.deleted = '0' AND t3.shadow = '0' AND t3.vision = 'rnd'
-LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' AND `type` = 'story' GROUP BY product) AS t4 ON t3.id = t4.product
-LEFT JOIN (SELECT product, COUNT(1) AS "release" FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t3.id = t5.product
-LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t6 ON t3.id = t6.product
+-- 子查询：统计子项目数量
 LEFT JOIN (
-  SELECT t1.topProgram, COUNT(DISTINCT t1.project) AS project, SUM(t2.task) AS task, SUM(t3.execution) AS execution
-  FROM (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, id AS project FROM zt_project WHERE deleted = '0' AND type = 'project') AS t1
-  LEFT JOIN (SELECT COUNT(1) AS task, project FROM zt_task WHERE deleted = '0' GROUP BY project) AS t2 ON t1.project = t2.project
-  LEFT JOIN (SELECT COUNT(1) AS execution,project FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY project) AS t3 ON t1.project = t3.project
+  SELECT
+    SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1))::INTEGER AS topProgram,
+    COUNT(1) AS subProgram
+  FROM zt_project
+  WHERE deleted = '0' AND type = 'program' AND grade > 1
+  GROUP BY topProgram
+) AS t2 ON t1.id = t2.topProgram
+-- 关联产品表
+LEFT JOIN zt_product AS t3
+  ON t1.id = t3.program
+  AND t3.deleted = '0'
+  AND t3.shadow = '0'
+  AND t3.vision = 'rnd'
+-- 子查询：统计故事数及完成数
+LEFT JOIN (
+  SELECT
+    product,
+    COUNT(1) AS story,
+    COUNT(CASE WHEN status = 'done' THEN 1 END) AS finishedStory  -- 假设 done 为完成状态
+  FROM zt_story
+  WHERE deleted = '0' AND type = 'story'
+  GROUP BY product
+) AS t4 ON t3.id = t4.product
+-- 子查询：统计发布数
+LEFT JOIN (
+  SELECT product, COUNT(1) AS `release`
+  FROM zt_release
+  WHERE deleted = '0'
+  GROUP BY product
+) AS t5 ON t3.id = t5.product
+-- 子查询：统计BUG数及修复数
+LEFT JOIN (
+  SELECT
+    product,
+    COUNT(1) AS bug,
+    COUNT(CASE WHEN status = 'fixed' THEN 1 END) AS fixedBug  -- 假设 fixed 为修复状态
+  FROM zt_bug
+  WHERE deleted = '0'
+  GROUP BY product
+) AS t6 ON t3.id = t6.product
+-- 子查询：统计项目、任务、执行数
+LEFT JOIN (
+  SELECT
+    t1.topProgram,
+    COUNT(DISTINCT t1.project) AS project,
+    SUM(COALESCE(t2.task, 0)) AS task,
+    SUM(COALESCE(t3.execution, 0)) AS execution
+  FROM (
+    SELECT
+      SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1))::INTEGER AS topProgram,
+      id AS project
+    FROM zt_project
+    WHERE deleted = '0' AND type = 'project'
+  ) AS t1
+  LEFT JOIN (
+    SELECT COUNT(1) AS task, project
+    FROM zt_task
+    WHERE deleted = '0'
+    GROUP BY project
+  ) AS t2 ON t1.project = t2.project
+  LEFT JOIN (
+    SELECT COUNT(1) AS execution, project
+    FROM zt_project
+    WHERE deleted = '0'
+      AND type IN ('sprint', 'stage', 'kanban')
+      AND multiple = '1'
+    GROUP BY project
+  ) AS t3 ON t1.project = t3.project
   GROUP BY t1.topProgram
 ) AS t7 ON t1.id = t7.topProgram
+-- 主表筛选条件
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
 GROUP BY t1.name
 EOT
@@ -1518,21 +1613,47 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT
     t1.name AS topProgram,
-    SUM(IFNULL(t3.doneStory,0)) as doneStory,
-    SUM(IFNULL(t4.allStory,0)) as allStory,
-    CONVERT(IF(SUM(IFNULL(t4.allStory,0)) <= 0, 0, SUM(IFNULL(t3.doneStory,0)) / SUM(IFNULL(t4.allStory,0))*100), decimal(10,2)) as storyDoneRate,
-    SUM(IFNULL(t5.solvedBug,0)) as solvedBug,
-    SUM(IFNULL(t6.allBug,0)) as allBug,
-    CONVERT(IF(SUM(IFNULL(t6.allBug,0)) <= 0, 0, SUM(IFNULL(t5.solvedBug,0)) / SUM(IFNULL(t6.allBug,0))*100), decimal(10,2)) as bugSolvedRate
+    SUM(IFNULL(t3.doneStory, 0)) AS doneStory,
+    SUM(IFNULL(t4.allStory, 0)) AS allStory,
+    CASE
+        WHEN SUM(IFNULL(t4.allStory, 0)) <= 0 THEN 0.00::DECIMAL(10,2)
+        ELSE (SUM(IFNULL(t3.doneStory, 0))::FLOAT / SUM(IFNULL(t4.allStory, 0))::FLOAT * 100)::DECIMAL(10,2)
+    END AS storyDoneRate,
+    SUM(IFNULL(t5.solvedBug, 0)) AS solvedBug,
+    SUM(IFNULL(t6.allBug, 0)) AS allBug,
+    CASE
+        WHEN SUM(IFNULL(t6.allBug, 0)) <= 0 THEN 0.00::DECIMAL(10,2)
+        ELSE (SUM(IFNULL(t5.solvedBug, 0))::FLOAT / SUM(IFNULL(t6.allBug, 0))::FLOAT * 100)::DECIMAL(10,2)
+    END AS bugSolvedRate
 FROM zt_project AS t1
 LEFT JOIN zt_product AS t2 ON t1.id = t2.program
-LEFT JOIN (SELECT COUNT(1) as doneStory, product FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' GROUP BY product) AS t3 ON t2.id = t3.product
-LEFT JOIN (SELECT COUNT(1) as allStory, product FROM zt_story WHERE deleted = '0' AND ((closedReason = 'done' AND status = 'closed') OR status != 'closed') GROUP BY product) AS t4 ON t2.id = t4.product
-LEFT JOIN (SELECT COUNT(1) as solvedBug, product FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY product) AS t5 ON t2.id = t5.product
-LEFT JOIN (SELECT COUNT(1) as allBug, product FROM zt_bug WHERE deleted = '0' AND (resolution in ('fixed', 'postponed') OR status = 'active') GROUP BY product) AS t6 ON t2.id = t6.product
+LEFT JOIN (
+    SELECT COUNT(1) AS doneStory, product
+    FROM zt_story
+    WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed'
+    GROUP BY product
+) AS t3 ON t2.id = t3.product
+LEFT JOIN (
+    SELECT COUNT(1) AS allStory, product
+    FROM zt_story
+    WHERE deleted = '0' AND ((closedReason = 'done' AND status = 'closed') OR status != 'closed')
+    GROUP BY product
+) AS t4 ON t2.id = t4.product
+LEFT JOIN (
+    SELECT COUNT(1) AS solvedBug, product
+    FROM zt_bug
+    WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed'
+    GROUP BY product
+) AS t5 ON t2.id = t5.product
+LEFT JOIN (
+    SELECT COUNT(1) AS allBug, product
+    FROM zt_bug
+    WHERE deleted = '0' AND (resolution IN ('fixed', 'postponed') OR status = 'active')
+    GROUP BY product
+) AS t6 ON t2.id = t6.product
 WHERE t1.type = 'program' AND t1.grade = 1 AND t1.deleted = '0'
-AND t2.deleted = '0'
-GROUP BY t1.name
+  AND t2.deleted = '0'
+GROUP BY t1.name, t1.`order`
 ORDER BY t1.`order` DESC
 EOT
 ,
@@ -1672,22 +1793,22 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT
   t1.name AS product,
-  IFNULL(t2.name, '/') AS program,
-  IFNULL(t3.name, '/') AS productLine,
-  IFNULL(t4.plan, 0) AS plan,
-  IFNULL(t5.release, 0) AS `release`,
-  IFNULL(t6.story, 0) AS story,
-  IFNULL(t7.bug, 0) AS bug
+  COALESCE(t2.name, '/') AS program,
+  COALESCE(t3.name, '/') AS productLine,
+  COALESCE(t4.plan, 0) AS plan,
+  COALESCE(t5.release, 0) AS `release`,
+  COALESCE(t6.story, 0) AS story,
+  COALESCE(t7.bug, 0) AS bug
 FROM
   zt_product AS t1
   LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
   LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
   LEFT JOIN (SELECT product, COUNT(1) AS plan FROM zt_productplan WHERE deleted = '0' GROUP BY product) AS t4 ON t1.id = t4.product
-  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product
+  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product  -- 列名替换
   LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY product) AS t6 ON t1.id = t6.product
   LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product
-WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0'AND t1.vision = 'rnd'
-ORDER BY t1.order
+WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0' AND t1.vision = 'rnd'
+ORDER BY t1.`order`
 EOT
 ,
     'settings'  => array
@@ -1845,7 +1966,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT IF(t3.id IS NOT NULL, t3.`name`, "空") AS deptName,count(1) as count,
+SELECT IF(t3.id IS NOT NULL, t3.`name`, '空') AS deptName,count(1) as count,
 IF(t3.id IS NOT NULL, t3.`order`, 9999) AS deptOrder
 FROM zt_user AS t1
 LEFT JOIN zt_dept AS t2 ON t1.dept = t2.id
@@ -1901,24 +2022,24 @@ SELECT
 CASE
 		ROLE
 		WHEN 'dev' THEN
-		"研发"
+		'研发'
 		WHEN 'qa' THEN
-		"测试"
+		'测试'
 		WHEN 'pm' THEN
-		"项目经理"
+		'项目经理'
 		WHEN 'others' THEN
-		"其他"
+		'其他'
 		WHEN 'td' THEN
-		"研发主管"
+		'研发主管'
 		WHEN 'pd' THEN
-		"产品主管"
+		'产品主管'
 		WHEN 'po' THEN
-		"产品经理"
+		'产品经理'
 		WHEN 'qd' THEN
-		"测试主管"
+		'测试主管'
 		WHEN 'top' THEN
-		"高层管理" ELSE "未知"
-	END role
+		'高层管理' ELSE '未知'
+	END `role`
 FROM
 	zt_user
 WHERE
@@ -1964,17 +2085,17 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT count(1) as count, "0-1年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+SELECT count(1) as count, '0-1年' as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 union
-SELECT count(1) as count, "1-3年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 3 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 1 YEAR)
+SELECT count(1) as count, '1-3年' as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 3 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 1 YEAR)
 union
-SELECT count(1) as count, "3-5年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 5 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 3 YEAR)
+SELECT count(1) as count, '3-5年' as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 5 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 3 YEAR)
 union
-SELECT count(1) as count, "5-10年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 10 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 5 YEAR)
+SELECT count(1) as count, '5-10年' as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 10 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 5 YEAR)
 union
-SELECT count(1) as count, "10年以上" as joinDate FROM zt_user WHERE deleted = '0' AND `join` < DATE_SUB(NOW(), INTERVAL 10 YEAR) AND LEFT(`join`, 4) != '0000'
+SELECT count(1) as count, '10年以上' as joinDate FROM zt_user WHERE deleted = '0' AND `join` < DATE_SUB(NOW(), INTERVAL 10 YEAR) AND LEFT(`join`, 4) != '0000'
 union
-SELECT count(1) as count, "未知" as joinDate FROM zt_user WHERE deleted = '0' AND LEFT(`join`, 4) = '0000'
+SELECT count(1) as count, '未知' as joinDate FROM zt_user WHERE deleted = '0' AND LEFT(`join`, 4) = '0000'
 EOT
 ,
     'settings'  => array
@@ -2021,7 +2142,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, name,
@@ -2060,7 +2181,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, name,
@@ -2098,7 +2219,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, title, YEAR ( openedDate ) AS `year` FROM zt_story WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2127,7 +2248,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, title, YEAR ( openedDate ) AS `year` FROM zt_bug WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2156,7 +2277,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, title, YEAR ( createdDate ) AS `year` FROM zt_productplan WHERE deleted = '0') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2185,7 +2306,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, name,
@@ -2220,7 +2341,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '49',
     'sql'       => <<<EOT
 SELECT t1.`year`, t2.id, t2.name
-FROM (SELECT DISTINCT YEAR(`date`) AS "year" FROM zt_action) AS t1
+FROM (SELECT DISTINCT YEAR(`date`) AS `year` FROM zt_action) AS t1
 LEFT JOIN (SELECT id,name, YEAR(openedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1' AND market = 0) AS t2 ON t1.`year` = t2.`year`
 WHERE t2.id IS NOT NULL
 EOT
@@ -2249,7 +2370,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, name, YEAR ( openedDate ) AS `year` FROM zt_task WHERE deleted = '0' AND type != 'research') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2278,7 +2399,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, title, YEAR ( addedDate ) AS `year` FROM zt_doc WHERE deleted = '0') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2307,7 +2428,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, name, YEAR ( `date` ) AS `year` FROM zt_release WHERE deleted = '0') AS t2 ON t1.`year` = t2.`year`
 WHERE t2.id IS NOT NULL
 EOT
@@ -2336,11 +2457,11 @@ SELECT
 	t2.account,
 	t2.realname
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		account, realname,
-		YEAR ( t112.`date` ) AS 'year'
+		YEAR ( t112.`date` ) AS `year`
 	FROM
 		zt_user AS t111
 		LEFT JOIN zt_action t112 ON t111.id = t112.objectID
@@ -2376,7 +2497,7 @@ t1.`year`,
 t2.id,
 t2.name
 FROM
-( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 LEFT JOIN (
 SELECT
 id, name,
@@ -2411,7 +2532,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '49',
     'sql'       => <<<EOT
 SELECT t1.`year`, t2.id, t2.name
-FROM (SELECT DISTINCT YEAR(date) AS "year" FROM zt_action) AS t1
+FROM (SELECT DISTINCT YEAR(date) AS `year` FROM zt_action) AS t1
 LEFT JOIN (SELECT id, name, YEAR(closedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1' AND status = 'closed' AND isTpl = '0') AS t2 ON t1.`year` = t2.`year`
 WHERE t2.id IS NOT NULL
 EOT
@@ -2440,7 +2561,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN ( SELECT id, name, YEAR ( `date` ) AS `year` FROM zt_release WHERE deleted = '0') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2469,7 +2590,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, title,
@@ -2508,7 +2629,7 @@ SELECT
 	t2.id,
 	t2.title
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, title,
@@ -2547,7 +2668,7 @@ SELECT
 	t2.id,
 	t2.name
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
 	LEFT JOIN (
 	SELECT
 		id, name,
@@ -2586,8 +2707,8 @@ SELECT
 	t1.`year`,
 	IFNULL( t2.consumed, 0 ) AS consumed
 FROM
-	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
-	LEFT JOIN ( SELECT ROUND( SUM( consumed )) AS consumed, YEAR ( `date` ) AS "year" FROM zt_effort WHERE deleted = '0' GROUP BY `year`) AS t2 ON t1.`year` = t2.`year`
+	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
+	LEFT JOIN ( SELECT ROUND( SUM( consumed )) AS consumed, YEAR ( `date` ) AS `year` FROM zt_effort WHERE deleted = '0' GROUP BY `year`) AS t2 ON t1.`year` = t2.`year`
 EOT
 ,
     'settings'  => array
@@ -2613,7 +2734,7 @@ select tt.topProgram,tt.programID as id,tt.`year`,sum(tt.product) as product,sum
 from (
 select t2.name as topProgram,t2.id as programID,t0.`year`,count(1) as product,0 as plan,0 as story,0 as bug,0 as `release`, 0 as doc
 from zt_product t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.createdDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.createdDate) = t0.`year`
 left join zt_project t2 on t1.program = t2.id
 where t1.deleted = '0' and t1.shadow = '0'
 and t2.type = 'program' and t2.grade = 1 and t2.deleted = '0'
@@ -2621,7 +2742,7 @@ group by t2.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,count(1) as plan,0 as story,0 as bug,0 as `release`, 0 as doc
 from zt_productplan t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.createdDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.createdDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2631,7 +2752,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,0 as plan,0 as story,0 as bug,0 as `release`, count(1) as doc
 from zt_doc t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.addedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.addedDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2641,7 +2762,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,0 as plan,0 as story,0 as bug,0 as `release`, count(distinct t1.id) as doc
 from zt_doc t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.addedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.addedDate) = t0.`year`
 left join zt_projectproduct t4 on t1.project = t4.project
 left join zt_product t2 on t2.id = t4.product
 left join zt_project t3 on t2.program = t3.id
@@ -2652,7 +2773,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,0 as plan,0 as story,0 as bug,count(1) as `release`, 0 as doc
 from zt_release t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.date) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.date) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2662,7 +2783,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,0 as plan,count(1) as story,0 as bug,0 as `release`, 0 as doc
 from zt_story t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.openedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.openedDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2672,7 +2793,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as product,0 as plan,0 as story,count(1) as bug,0 as `release`, 0 as doc
 from zt_bug t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.openedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.openedDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2715,7 +2836,7 @@ select tt.topProgram,tt.programID as id,tt.`year`,sum(tt.projectA) as projectA,s
 from (
 select t2.name as topProgram,t2.id as programID,t0.`year`,count(1) as projectA,0 as executionA,0 as releaseA,0 as storyA,0 as bugA
 from zt_project t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
 left join zt_project t2 on FIND_IN_SET(t2.id, t1.path)
 where t1.type = 'project' and t1.deleted = '0'
 and t2.type = 'program' and t2.grade = 1 and t2.deleted = '0'
@@ -2724,7 +2845,7 @@ group by t2.id, t0.`year`
 union all
 select t3.name as topProgram, t3.id as programID,t0.`year`,0 as projectA,count(1) as executionA,0 as releaseA,0 as storyA,0 as bugA
 from zt_project t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
 left join zt_project t2 on t1.parent = t2.id
 left join zt_project t3 on FIND_IN_SET(t3.id, t2.path)
 where t1.type in ('sprint', 'stage', 'kanban') and t1.deleted = '0'
@@ -2735,7 +2856,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as projectA,0 as executionA,count(1) as releaseA,0 as storyA,0 as bugA
 from zt_release t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.date) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.date) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0'
@@ -2745,7 +2866,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as projectA,0 as executionA,0 as releaseA,count(1) as storyA,0 as bugA
 from zt_story t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.closedDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0' and t1.closedReason = 'done' and t1.status = 'closed'
@@ -2755,7 +2876,7 @@ group by t3.id, t0.`year`
 union all
 select t3.name as topProgram,t3.id as programID,t0.`year`,0 as projectA,0 as executionA,0 as releaseA,0 as storyA,count(1) as bugA
 from zt_bug t1
-left join (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) t0 on YEAR(t1.resolvedDate) = t0.`year`
+left join (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) t0 on YEAR(t1.resolvedDate) = t0.`year`
 left join zt_product t2 on t2.id = t1.product
 left join zt_project t3 on t2.program = t3.id
 where t1.deleted = '0' and t1.resolution = 'fixed' and t1.status = 'closed'
@@ -2797,14 +2918,14 @@ SELECT
     t1.name,t1.id,t2.`year`,IF(YEAR(t1.createdDate) = t2.`year`, 1, 0) as newProduct,
     SUM(IFNULL(t3.story, 0)) AS story,
     SUM(IFNULL(t4.bug, 0)) AS bug,
-    SUM(IFNULL(t5.`plan`, 0)) AS 'plan',
-    SUM(IFNULL(t6.`release`, 0)) AS 'release'
+    SUM(IFNULL(t5.`plan`, 0)) AS `plan`,
+    SUM(IFNULL(t6.`release`, 0)) AS `release`
 FROM zt_product AS t1
-LEFT JOIN (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) as t2 ON 1 = 1
-LEFT JOIN (SELECT COUNT(1) as 'story', product, YEAR(openedDate) as `year` FROM zt_story WHERE deleted = '0' GROUP BY product, `year`) AS t3 on t1.id = t3.product AND t3.`year` = t2.`year`
-LEFT JOIN (SELECT COUNT(1) as 'bug', product, YEAR(openedDate) as `year` FROM zt_bug WHERE deleted = '0' GROUP BY product, `year`) AS t4 on t1.id = t4.product AND t4.`year` = t2.`year`
-LEFT JOIN (SELECT COUNT(1) as 'plan', product, YEAR(createdDate) AS 'year' FROM zt_productplan WHERE deleted = '0' GROUP BY product,`year`) AS t5 on t1.id = t5.product AND t5.`year` = t2.`year`
-LEFT JOIN (SELECT COUNT(1) as 'release', product, YEAR(`date`) as `year` FROM zt_release WHERE deleted = '0' GROUP BY product, `year`) AS t6 ON t1.id = t6.product AND t6.`year` = t2.`year`
+LEFT JOIN (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) as t2 ON 1 = 1
+LEFT JOIN (SELECT COUNT(1) as `story`, product, YEAR(openedDate) as `year` FROM zt_story WHERE deleted = '0' GROUP BY product, `year`) AS t3 on t1.id = t3.product AND t3.`year` = t2.`year`
+LEFT JOIN (SELECT COUNT(1) as `bug`, product, YEAR(openedDate) as `year` FROM zt_bug WHERE deleted = '0' GROUP BY product, `year`) AS t4 on t1.id = t4.product AND t4.`year` = t2.`year`
+LEFT JOIN (SELECT COUNT(1) as `plan`, product, YEAR(createdDate) AS `year` FROM zt_productplan WHERE deleted = '0' GROUP BY product,`year`) AS t5 on t1.id = t5.product AND t5.`year` = t2.`year`
+LEFT JOIN (SELECT COUNT(1) as `release`, product, YEAR(`date`) as `year` FROM zt_release WHERE deleted = '0' GROUP BY product, `year`) AS t6 ON t1.id = t6.product AND t6.`year` = t2.`year`
 WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0'
 GROUP BY t1.name,t1.id,t2.`year`,newProduct
 EOT
@@ -2839,21 +2960,21 @@ SELECT
     t1.name,t1.id,t2.`year`,IF(YEAR(t1.createdDate) = t2.`year`, 1, 0) as newProduct,
     SUM(IFNULL(t3.story, 0)) AS story,
     SUM(IFNULL(t4.bug, 0)) AS bug,
-    SUM(IFNULL(t5.`plan`, 0)) AS 'plan',
-    SUM(IFNULL(t6.`release`, 0)) AS 'release'
+    SUM(IFNULL(t5.`plan`, 0)) AS `plan`,
+    SUM(IFNULL(t6.`release`, 0)) AS `release`
 FROM zt_product AS t1
-LEFT JOIN (SELECT DISTINCT YEAR(`date`) as "year" FROM zt_action) as t2 ON 1 = 1
-LEFT JOIN (SELECT COUNT(1) as 'story', product, YEAR(closedDate) as `year` FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' GROUP BY product, `year`) AS t3 on t1.id = t3.product AND t3.`year` = t2.`year`
-LEFT JOIN (SELECT COUNT(1) as 'bug', product, YEAR(resolvedDate) as `year` FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY product, `year`) AS t4 on t1.id = t4.product AND t4.`year` = t2.`year`
+LEFT JOIN (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) as t2 ON 1 = 1
+LEFT JOIN (SELECT COUNT(1) as `story`, product, YEAR(closedDate) as `year` FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' GROUP BY product, `year`) AS t3 on t1.id = t3.product AND t3.`year` = t2.`year`
+LEFT JOIN (SELECT COUNT(1) as `bug`, product, YEAR(resolvedDate) as `year` FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY product, `year`) AS t4 on t1.id = t4.product AND t4.`year` = t2.`year`
 LEFT JOIN (
-    SELECT COUNT(DISTINCT t51.id) as 'plan', t51.product, YEAR(t52.`date`) AS "year"
+    SELECT COUNT(DISTINCT t51.id) as `plan`, t51.product, YEAR(t52.`date`) AS `year`
     FROM zt_productplan AS t51
-    LEFT JOIN (SELECT objectID,objectType,action,MAX(`date`) as 'date' FROM zt_action GROUP BY objectID,objectType, action) AS t52 ON t51.id = t52.objectID AND t52.objectType = 'productplan'
+    LEFT JOIN (SELECT objectID,objectType,action,MAX(`date`) as `date` FROM zt_action GROUP BY objectID,objectType, action) AS t52 ON t51.id = t52.objectID AND t52.objectType = 'productplan'
     WHERE t51.deleted = '0' AND t51.closedReason = 'done' AND t51.status = 'closed'
     AND t52.action = 'closed'
     GROUP BY t51.product,`year`
 ) AS t5 on t1.id = t5.product AND t5.`year` = t2.`year`
-LEFT JOIN (SELECT COUNT(1) as 'release', product, YEAR(`date`) as `year` FROM zt_release WHERE deleted = '0' GROUP BY product, `year`) AS t6 ON t1.id = t6.product AND t6.`year` = t2.`year`
+LEFT JOIN (SELECT COUNT(1) as `release`, product, YEAR(`date`) as `year` FROM zt_release WHERE deleted = '0' GROUP BY product, `year`) AS t6 ON t1.id = t6.product AND t6.`year` = t2.`year`
 WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0'
 GROUP BY t1.name,t1.id,t2.`year`,newProduct
 EOT
@@ -2997,7 +3118,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '39',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.task, 0) AS newTask, IFNULL(t3.task, 0) AS closedTask
+SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.task, 0) AS newTask, IFNULL(t3.task, 0) AS closedTask
 FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND isTpl = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND status = 'closed' AND isTpl = '0' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
@@ -3053,7 +3174,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '38',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.project, 0) AS newProject, IFNULL(t3.project, 0) AS closedProject
+SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.project, 0) AS newProject, IFNULL(t3.project, 0) AS closedProject
 FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS project FROM zt_project WHERE deleted = '0' AND type = 'project' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS project FROM zt_project WHERE deleted = '0' AND type = 'project' AND status = 'closed' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
@@ -3109,7 +3230,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '40',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.execution, 0) AS newExecution, IFNULL(t3.execution, 0) AS closedExecution
+SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.execution, 0) AS newExecution, IFNULL(t3.execution, 0) AS closedExecution
 FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,YEAR(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND status = 'closed' AND multiple = '1' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
@@ -3165,7 +3286,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '37',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.release, 0) AS `release`
+SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.release, 0) AS `release`
 FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(createdDate) AS `year`, MONTH(createdDate) AS `month`, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 ORDER BY `year`, t1.month
@@ -3217,10 +3338,44 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '45',
     'sql'       => <<<EOT
-SELECT t1.`year`, CONCAT(t1.`month`, "月") AS `month`, IFNULL(t2.story, 0) AS story, IFNULL(t3.consumed, 0) AS consumed, ROUND(IF(IFNULL(t3.consumed, 0) = 0, 0, IFNULL(t2.story, 0) / IFNULL(t3.consumed, 0)), 2) AS ratio
-FROM (SELECT YEAR(`date`) AS 'year', MONTH(`date`) AS 'month' FROM zt_action GROUP BY `year`,`month`) AS t1
-LEFT JOIN (SELECT ROUND(SUM(estimate)) AS story, YEAR(`closedDate`) AS 'year', MONTH(`closedDate`) AS 'month' FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' AND isParent = '0' GROUP BY `year`,`month`) AS t2 ON t1.`year` = t2.`year` AND t1.`month` = t2.`month`
-LEFT JOIN (SELECT ROUND(SUM(consumed)) as consumed, YEAR(`date`) as 'year', MONTH(`date`) AS 'month' FROM zt_effort WHERE deleted = '0' GROUP BY `year`,`month`) AS t3 ON t1.`year` = t3.`year` AND t1.`month` = t3.`month`
+SELECT
+  t1.`year`,
+  CONCAT(t1.`month`, '月') AS `month`,
+  IFNULL(t2.story, 0) AS story,
+  IFNULL(t3.consumed, 0) AS consumed,
+  ROUND(
+    CASE
+      WHEN IFNULL(t3.consumed, 0) = 0 THEN 0  -- 替代 IF(consumed=0, 0, ...)
+      ELSE IFNULL(t2.story, 0) / IFNULL(t3.consumed, 0)
+    END,
+    2
+  ) AS ratio
+FROM (
+  SELECT YEAR(`date`) AS `year`, MONTH(`date`) AS `month`
+  FROM zt_action
+  GROUP BY `year`, `month`
+) AS t1
+LEFT JOIN (
+  SELECT
+    ROUND(SUM(estimate)) AS story,
+    YEAR(`closedDate`) AS `year`,
+    MONTH(`closedDate`) AS `month`
+  FROM zt_story
+  WHERE deleted = '0'
+    AND closedReason = 'done'
+    AND status = 'closed'
+    AND isParent = '0'
+  GROUP BY `year`, `month`
+) AS t2 ON t1.`year` = t2.`year` AND t1.`month` = t2.`month`
+LEFT JOIN (
+  SELECT
+    ROUND(SUM(consumed)) as consumed,
+    YEAR(`date`) as `year`,
+    MONTH(`date`) AS `month`
+  FROM zt_effort
+  WHERE deleted = '0'
+  GROUP BY `year`, `month`
+) AS t3 ON t1.`year` = t3.`year` AND t1.`month` = t3.`month`;
 EOT
 ,
     'settings'  => array
@@ -3255,7 +3410,7 @@ SELECT
   t1.name AS program,
   ROUND(
     SUM(
-      IFNULL(t2.budget, 0)
+      IFNULL(t2.budget, '0') --类型必须一致
     ) / 10000,
     2
   ) AS budget
@@ -3270,7 +3425,7 @@ WHERE
   AND t1.grade = 1
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3411,7 +3566,7 @@ WHERE
   AND t5.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3483,7 +3638,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3558,7 +3713,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3629,7 +3784,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3702,7 +3857,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3778,7 +3933,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3851,7 +4006,7 @@ WHERE
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
+  t1.id,
   program
 ORDER BY
   `year`,
@@ -3905,8 +4060,8 @@ $config->bi->builtin->charts[] = array
     'group'     => '42',
     'sql'       => <<<EOT
 SELECT `year`, id,name,status,realBegan,realEnd,IF(status = 'closed', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) as duration
-FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
-LEFT JOIN zt_project AS t2 ON 1 = 1 WHERE deleted = '0' AND type = 'project' AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000' AND (status ='doing' OR (status = 'suspended' AND YEAR(suspendedDate) >= `year`) OR (status = 'closed' AND YEAR(realEnd) >= `year`)) HAVING 1=1 ORDER BY `year`, duration desc
+FROM (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) AS t1
+LEFT JOIN zt_project AS t2 ON 1 = 1 WHERE deleted = '0' AND type = 'project' AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000' AND (status ='doing' OR (status = 'suspended' AND YEAR(suspendedDate) >= `year`) OR (status = 'closed' AND YEAR(realEnd) >= `year`)) ORDER BY `year`, duration desc
 EOT
 ,
     'settings'  => array
@@ -3963,12 +4118,11 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT `year`, id,name,status,`begin`,`end`,realBegan,realEnd,
 ROUND((IF(LEFT(realEnd,4) != '0000', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) - DATEDIFF(`end`, `begin`)) / DATEDIFF(`end`,`begin`) * 100) as duration
-FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
+FROM (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) AS t1
 LEFT JOIN zt_project AS t2 ON 1 = 1
 WHERE deleted = '0' AND type = 'project'
 AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000'
 AND (YEAR(realEnd) >= `year` OR LEFT(realEnd, 4) = '0000') AND YEAR(`end`) != '2059'
-HAVING 1=1
 ORDER BY duration ASC
 EOT
 ,
@@ -4110,8 +4264,8 @@ WHERE
   AND t4.id IS NOT NULL
 GROUP BY
   `year`,
-  id,
-  project
+  t1.id,
+  t1.name
 ORDER BY
   `year`,
   consumed DESC
@@ -4193,7 +4347,7 @@ FROM
   ) AS t1
 GROUP BY
   `year`,
-  id,
+  t1.id,
   project
 ORDER BY
   `year`,
@@ -4280,7 +4434,7 @@ FROM
   ) AS t1
 GROUP BY
   `year`,
-  id,
+  t1.id,
   project
 ORDER BY
   `year`,
@@ -4337,7 +4491,7 @@ SELECT YEAR(t2.openedDate) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS st
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, t1.id, product
 ORDER BY `year`, story DESC
 EOT
 ,
@@ -4391,7 +4545,7 @@ SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.es
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.closedReason = 'done'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, t1.id, product
 ORDER BY `year`, story DESC
 EOT
 ,
@@ -4445,7 +4599,7 @@ SELECT YEAR(t2.openedDate) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS bu
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, t1.id, product
 ORDER BY `year`, bug DESC
 EOT
 ,
@@ -4499,7 +4653,7 @@ SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, COUNT(1) AS bug
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.resolution = 'fixed' AND t2.status = 'closed'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, t1.id, product
 ORDER BY `year`, bug DESC
 EOT
 ,
@@ -4851,7 +5005,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM zt_project WHERE type='project' AND status='closed' AND deleted='0' GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM zt_project WHERE type='project' AND status='closed' AND deleted='0' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4874,7 +5028,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) as 'year' FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) as `year` FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4897,7 +5051,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4920,7 +5074,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '75',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM zt_story WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM zt_story WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4943,7 +5097,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '75',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(estimate),2) AS number,YEAR(`closedDate`) AS 'year' FROM zt_story WHERE deleted='0' AND status='closed' AND closedReason='done'  GROUP BY `year`
+SELECT ROUND(SUM(estimate),2) AS number,YEAR(`closedDate`) AS `year` FROM zt_story WHERE deleted='0' AND status='closed' AND closedReason='done'  GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4966,7 +5120,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '74',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`date`) AS 'year' FROM zt_release WHERE deleted='0' GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`date`) AS `year` FROM zt_release WHERE deleted='0' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -4989,7 +5143,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '77',
     'sql'       => <<<EOT
-SELECT SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END) AS number,YEAR(`resolvedDate`) AS 'year' FROM zt_bug WHERE deleted='0' GROUP BY `year`
+SELECT SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END) AS number,YEAR(`resolvedDate`) AS `year` FROM zt_bug WHERE deleted='0' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5012,7 +5166,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '73',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM zt_project WHERE type='sprint' AND status='closed' AND deleted='0' GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM zt_project WHERE type='sprint' AND status='closed' AND deleted='0' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5035,7 +5189,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '73',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM (SELECT id, begin, end, IF(LEFT(realEnd,4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd,4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5058,7 +5212,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '73',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5081,7 +5235,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '76',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS 'year' FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5104,7 +5258,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '78',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(estimate),2) AS number,YEAR(`closedDate`) AS 'year' FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
+SELECT ROUND(SUM(estimate),2) AS number,YEAR(`closedDate`) AS `year` FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5127,7 +5281,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '78',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(consumed),2) AS number,YEAR(`closedDate`) AS 'year' FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
+SELECT ROUND(SUM(consumed),2) AS number,YEAR(`closedDate`) AS `year` FROM zt_task WHERE deleted='0' AND status='closed' AND closedReason='done' GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5150,7 +5304,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '78',
     'sql'       => <<<EOT
-SELECT SUM(t2.people*DATEDIFF(t1.realEnd,t1.realBegan)) AS number,YEAR(`closedDate`) AS 'year' FROM (SELECT id, realBegan, IF(LEFT(realEnd, 4) = '0000', closedDate, realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND status='closed' AND type='project' AND realBegan != '0000-00-00') t1 LEFT JOIN (SELECT root, COUNT(id) people FROM zt_team WHERE type='project' GROUP BY `root`) t2 ON t1.id=t2.root GROUP BY `year`
+SELECT SUM(t2.people*DATEDIFF(t1.realEnd,t1.realBegan)) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, realBegan, IF(LEFT(realEnd, 4) = '0000', closedDate, realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND status='closed' AND type='project' AND realBegan != '0000-00-00') t1 LEFT JOIN (SELECT root, COUNT(id) people FROM zt_team WHERE type='project' GROUP BY `root`) t2 ON t1.id=t2.root GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5173,7 +5327,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS 'projectstatus', YEAR(`closedDate`) AS 'year' FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
+SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5215,7 +5369,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS 'projectstatus', YEAR(`closedDate`) AS 'year' FROM (SELECT id, begin, end, IF(LEFT(realEnd,4)='0000',LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
+SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd,4)='0000',LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5257,7 +5411,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd>t1.end ,'done','undone') AS 'projectstatus', YEAR(`closedDate`) AS 'year' FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
+SELECT t1.id,IF(t1.realEnd>t1.end ,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5299,7 +5453,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd>t1.end,'done','undone') AS 'projectstatus', YEAR(`closedDate`) AS 'year' FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
+SELECT t1.id,IF(t1.realEnd>t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5415,7 +5569,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '71',
     'sql'       => <<<EOT
 select tt.*,
-tt.`故事点` / tt.`工时` as "单位时间交付需求规模数"
+tt.`故事点` / tt.`工时` as `单位时间交付需求规模数`
 from (
 select
 t1.name as project,
@@ -5423,12 +5577,12 @@ t1.name as project,
 	select round(sum(t3.estimate), 1) from zt_projectstory t2
 	left join zt_story t3 on t3.id= t2.story and t3.status='closed' and t3.closedReason = 'done'
 	where t2.project = t1.id
-) as "故事点",
+) as `故事点`,
 (
 	select round(sum(t5.consumed), 1) from zt_project t4
 	left join zt_task t5 on t5.execution = t4.id and t5.deleted = '0' and t5.parent in (0, -1)
   where t4.project = t1.id and t4.type = 'sprint'
-) as "工时"
+) as `工时`
 from zt_project t1
 where t1.status = 'closed'
 and t1.deleted = '0'
@@ -5477,7 +5631,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 select
 t1.id,
-(case when t1.realEnd<t1.end then "提前完成项目" when t1.realEnd=t1.end then "正常完成项目" else "延期完成项目" end) "completeStatus",
+(case when t1.realEnd<t1.end then '提前完成项目' when t1.realEnd=t1.end then '正常完成项目' else '延期完成项目' end) `completeStatus`,
 t1.closedDate
 from(
 select
@@ -5544,7 +5698,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 select
 t1.id,
-(case when t1.realEnd<t1.end then "提前完成执行" when t1.realEnd=t1.end then "正常完成执行" else "延期完成执行" end) "completeStatus",
+(case when t1.realEnd<t1.end then '提前完成执行' when t1.realEnd=t1.end then '正常完成执行' else '延期完成执行' end) `completeStatus`,
 t1.closedDate
 from(
 select
@@ -6106,13 +6260,13 @@ $config->bi->builtin->charts[] = array
 SELECT t1.id, t1.name,
 IF(
     DATEDIFF(t1.`end`, NOW()) < 0,
-    "延期",
+    '延期',
     (IF(
         (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
         OR LEFT(t1.`end`, 4) = '2059' ,
-        "顺利",
-        "滞后"
-    ))) AS 'status',
+        '顺利',
+        '滞后'
+    ))) AS `status`,
 IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS planPrograss,LEFT(t1.`end`, 4) AS endYear
 FROM zt_project AS t1
 LEFT JOIN (
@@ -6191,11 +6345,11 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT id, name,IF(
     DATEDIFF(`end`, NOW()) < 0,
-    "延期",
+    '延期',
     (IF(
         prograss >= planPrograss,
-        "顺利",
-        "滞后"
+        '顺利',
+        '滞后'
     ))
 ) AS status,
 prograss, planPrograss, `end`
@@ -6257,17 +6411,17 @@ $config->bi->builtin->charts[] = array
     'type'      => 'table',
     'group'     => '84',
     'sql'       => <<<EOT
-SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', "长期", t1.`end`) AS `end`, IF(YEAR(t1.`end`) = '2059', "长期", DATEDIFF(t1.`end`, t1.`begin`) + 1) AS planDuration,
-IF(LEFT(t1.realBegan, 4) = '0000', '/', t1.realBegan) AS realBegan, IF(YEAR(t1.`end`) = '2059', "长期", IF(DATEDIFF(t1.`end`, NOW()) >= 0, DATEDIFF(t1.`end`, NOW()) + 1, 0)) AS realDuration,
+SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', t1.`end`) AS `end`, IF(YEAR(t1.`end`) = '2059', '长期', DATEDIFF(t1.`end`, t1.`begin`) + 1) AS planDuration,
+IF(LEFT(t1.realBegan, 4) = '0000', '/', t1.realBegan) AS realBegan, IF(YEAR(t1.`end`) = '2059', '长期', IF(DATEDIFF(t1.`end`, NOW()) >= 0, DATEDIFF(t1.`end`, NOW()) + 1, 0)) AS realDuration,
 IF(
     DATEDIFF(t1.`end`, NOW()) < 0,
-    "延期",
+    '延期',
     (IF(
         (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
         OR LEFT(t1.`end`, 4) = '2059' ,
-        "顺利",
-        "滞后"
-    ))) AS 'status',
+        '顺利',
+        '滞后'
+    ))) AS `status`,
 CONCAT(IFNULL(prograss, 0), '%') AS prograss
 FROM zt_project AS t1
 LEFT JOIN (
@@ -6333,11 +6487,11 @@ $config->bi->builtin->charts[] = array
 SELECT id, name,project,`begin`, `end`, planDuration, IF(LEFT(realBegan, 4) = '0000', '/', realBegan) as realBegan, realDuration, CONCAT(prograss, '%') as prograss,
 IF(
     DATEDIFF(`end`, NOW()) < 0,
-    "延期",
+    '延期',
     (IF(
         prograss >= planPrograss,
-        "顺利",
-        "滞后"
+        '顺利',
+        '滞后'
     ))
 ) AS status
 FROM (
@@ -6781,10 +6935,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '91',
     'sql'       => <<<EOT
 select
-id "Bug总数",
-(case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) "有效Bug",
-(case when  resolution='fixed' then 1 else 0 end) "已解决Bug",
-openedDate "日期"
+id `Bug总数`,
+(case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) `有效Bug`,
+(case when  resolution='fixed' then 1 else 0 end) `已解决Bug`,
+openedDate `日期`
 from zt_bug
 where left(openedDate,10) > (select DATE_sub(MAX(NOW()), INTERVAL '30' DAY))
 and left(openedDate,10) < NOW()
@@ -6966,11 +7120,11 @@ $config->bi->builtin->charts[] = array
     'group'     => '91',
     'sql'       => <<<EOT
 select
-count(id) "所有Bug数",
-sum(case when severity=1 then 1 else 0 end) "严重程度为1级的Bug",
-sum(case when severity=2 then 1 else 0 end) "严重程度为2级的Bug",
-sum(case when severity not in (1,2) then 1 else 0 end) "严重程度低于2级的Bug",
-left(openedDate,4) "年份"
+count(id) `所有Bug数`,
+sum(case when severity=1 then 1 else 0 end) `严重程度为1级的Bug`,
+sum(case when severity=2 then 1 else 0 end) `严重程度为2级的Bug`,
+sum(case when severity not in (1,2) then 1 else 0 end) `严重程度低于2级的Bug`,
+left(openedDate,4) `年份`
 from
 zt_bug
 where deleted='0'
