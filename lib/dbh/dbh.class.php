@@ -822,7 +822,9 @@ class dbh
      */
     public function formatDmIfFunction($field)
     {
-        preg_match('/if\(.+\)+/i', $field, $matches);
+        preg_match('/(?<![a-zA-Z\'"])\bif\s*\(.+\)/i', $field, $matches);
+
+        if(empty($matches)) return $field;
 
         $if = $matches[0];
         if(substr_count($if, '(') == 1)
