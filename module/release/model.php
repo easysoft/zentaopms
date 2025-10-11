@@ -113,7 +113,7 @@ class releaseModel extends model
         $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = CAST(t3.id AS VARCHAR(20))')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = CAST(t3.id AS CHAR)')
             ->fetchAll('id');
 
         $this->loadModel('branch');
