@@ -24,11 +24,9 @@ cid=1
 - 获取敏捷模型下按照id倒序排列的所有阶段 @0
 - 获取瀑布模型下按照id正序排列的所有阶段 @0
 - 获取瀑布模型下按照id倒序排列的所有阶段
- - 第1条的projectType属性 @waterfall
  - 第1条的type属性 @request
  - 第1条的name属性 @需求1
 - 获取瀑布模型下按照id正序排列的所有阶段
- - 第1条的projectType属性 @waterfall
  - 第1条的type属性 @request
  - 第1条的name属性 @需求1
 
