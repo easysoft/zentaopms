@@ -1185,7 +1185,6 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '58',
     'sql'       => <<<EOT
---365天粗略计算，为了兼容MySQL和PgSQL
 SELECT
   CASE WHEN years > 0
     THEN CONCAT(years, '年', days, '天')
@@ -1503,49 +1502,43 @@ SELECT
   COALESCE(t7.execution, 0) AS execution,
   COALESCE(t7.task, 0) AS task
 FROM zt_project AS t1
--- 子查询：统计子项目数量
 LEFT JOIN (
   SELECT
-    SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1))::INTEGER AS topProgram,
+    CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
     COUNT(1) AS subProgram
   FROM zt_project
   WHERE deleted = '0' AND type = 'program' AND grade > 1
   GROUP BY topProgram
 ) AS t2 ON t1.id = t2.topProgram
--- 关联产品表
 LEFT JOIN zt_product AS t3
   ON t1.id = t3.program
   AND t3.deleted = '0'
   AND t3.shadow = '0'
   AND t3.vision = 'rnd'
--- 子查询：统计故事数及完成数
 LEFT JOIN (
   SELECT
     product,
     COUNT(1) AS story,
-    COUNT(CASE WHEN status = 'done' THEN 1 END) AS finishedStory  -- 假设 done 为完成状态
+    COUNT(CASE WHEN status = 'done' THEN 1 END) AS finishedStory
   FROM zt_story
   WHERE deleted = '0' AND type = 'story'
   GROUP BY product
 ) AS t4 ON t3.id = t4.product
--- 子查询：统计发布数
 LEFT JOIN (
   SELECT product, COUNT(1) AS `release`
   FROM zt_release
   WHERE deleted = '0'
   GROUP BY product
 ) AS t5 ON t3.id = t5.product
--- 子查询：统计BUG数及修复数
 LEFT JOIN (
   SELECT
     product,
     COUNT(1) AS bug,
-    COUNT(CASE WHEN status = 'fixed' THEN 1 END) AS fixedBug  -- 假设 fixed 为修复状态
+    COUNT(CASE WHEN status = 'fixed' THEN 1 END) AS fixedBug
   FROM zt_bug
   WHERE deleted = '0'
   GROUP BY product
 ) AS t6 ON t3.id = t6.product
--- 子查询：统计项目、任务、执行数
 LEFT JOIN (
   SELECT
     t1.topProgram,
@@ -1554,7 +1547,7 @@ LEFT JOIN (
     SUM(COALESCE(t3.execution, 0)) AS execution
   FROM (
     SELECT
-      SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1))::INTEGER AS topProgram,
+      CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
       id AS project
     FROM zt_project
     WHERE deleted = '0' AND type = 'project'
@@ -1575,7 +1568,6 @@ LEFT JOIN (
   ) AS t3 ON t1.project = t3.project
   GROUP BY t1.topProgram
 ) AS t7 ON t1.id = t7.topProgram
--- 主表筛选条件
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
 GROUP BY t1.name
 EOT
@@ -1616,14 +1608,14 @@ SELECT
     SUM(IFNULL(t3.doneStory, 0)) AS doneStory,
     SUM(IFNULL(t4.allStory, 0)) AS allStory,
     CASE
-        WHEN SUM(IFNULL(t4.allStory, 0)) <= 0 THEN 0.00::DECIMAL(10,2)
-        ELSE (SUM(IFNULL(t3.doneStory, 0))::FLOAT / SUM(IFNULL(t4.allStory, 0))::FLOAT * 100)::DECIMAL(10,2)
+        WHEN SUM(IFNULL(t4.allStory, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t3.doneStory, 0))::FLOAT / SUM(IFNULL(t4.allStory, 0))::FLOAT * 100) AS DECIMAL(10,2))
     END AS storyDoneRate,
     SUM(IFNULL(t5.solvedBug, 0)) AS solvedBug,
     SUM(IFNULL(t6.allBug, 0)) AS allBug,
     CASE
-        WHEN SUM(IFNULL(t6.allBug, 0)) <= 0 THEN 0.00::DECIMAL(10,2)
-        ELSE (SUM(IFNULL(t5.solvedBug, 0))::FLOAT / SUM(IFNULL(t6.allBug, 0))::FLOAT * 100)::DECIMAL(10,2)
+        WHEN SUM(IFNULL(t6.allBug, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t5.solvedBug, 0))::FLOAT / SUM(IFNULL(t6.allBug, 0))::FLOAT * 100) AS DECIMAL(10,2))
     END AS bugSolvedRate
 FROM zt_project AS t1
 LEFT JOIN zt_product AS t2 ON t1.id = t2.program
@@ -1804,7 +1796,7 @@ FROM
   LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
   LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
   LEFT JOIN (SELECT product, COUNT(1) AS plan FROM zt_productplan WHERE deleted = '0' GROUP BY product) AS t4 ON t1.id = t4.product
-  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product  -- 列名替换
+  LEFT JOIN (SELECT product, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t1.id = t5.product
   LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY product) AS t6 ON t1.id = t6.product
   LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product
 WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0' AND t1.vision = 'rnd'
@@ -3345,7 +3337,7 @@ SELECT
   IFNULL(t3.consumed, 0) AS consumed,
   ROUND(
     CASE
-      WHEN IFNULL(t3.consumed, 0) = 0 THEN 0  -- 替代 IF(consumed=0, 0, ...)
+      WHEN IFNULL(t3.consumed, 0) = 0 THEN 0
       ELSE IFNULL(t2.story, 0) / IFNULL(t3.consumed, 0)
     END,
     2
@@ -3410,7 +3402,7 @@ SELECT
   t1.name AS program,
   ROUND(
     SUM(
-      IFNULL(t2.budget, '0') --类型必须一致
+      IFNULL(t2.budget, '0')
     ) / 10000,
     2
   ) AS budget
