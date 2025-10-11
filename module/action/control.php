@@ -132,9 +132,10 @@ class action extends control
      */
     public function undelete(int $actionID, string $browseType = 'all', string $confirmChange = 'no')
     {
-        $oldAction = $this->actionZen->checkActionExist($actionID);
-        $extra     = $oldAction->extra == actionModel::BE_HIDDEN ? 'hidden' : 'all';
+        $result = $this->actionZen->checkActionExist($actionID);
+        if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
 
+        $oldAction = $result;
         /* 当对象类型为program、project、execution、product时，需要检查是否有重复的对象。 */
         /* When the object type is program, project, execution, product, you need to check if there are duplicate objects. */
         if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product', 'build')))
@@ -235,6 +236,7 @@ class action extends control
         $result = $this->action->undelete($actionID);
         if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));
 
+        $extra           = $oldAction->extra == actionModel::BE_HIDDEN ? 'hidden' : 'all';
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, $extra, 'id_desc', null);
         $browseType      = ($sameTypeObjects && $browseType != 'all') ? $oldAction->objectType : 'all';
 
@@ -252,10 +254,12 @@ class action extends control
      */
     public function hideOne(int $actionID, string $browseType = 'all')
     {
-        $oldAction = $this->actionZen->checkActionExist($actionID);
+        $result = $this->actionZen->checkActionExist($actionID);
+        if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
 
         $this->action->hideOne($actionID);
 
+        $oldAction       = $result;
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
         $browseType      = ($sameTypeObjects && $browseType != 'all') ? $oldAction->objectType : 'all';
 

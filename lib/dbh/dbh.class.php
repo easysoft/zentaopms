@@ -353,8 +353,6 @@ class dbh
      */
     public function execute($sql, $params)
     {
-        $this->trace();
-
         $this->statement = $this->prepare($sql);
 
         try
@@ -447,9 +445,6 @@ class dbh
     {
         switch($this->dbConfig->driver)
         {
-            case 'oceanbase':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                return $this->rawQuery($sql);
             case 'mysql':
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
@@ -464,6 +459,7 @@ class dbh
             case 'dm':
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
                 return $this->rawQuery($createSchema);
+            case 'oceanbase':
             case 'postgres':
             case 'highgo':
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
@@ -548,16 +544,15 @@ class dbh
                 $result = $this->processReplace($sql);
                 if($result != $sql) return $result;
 
-                $sql    = str_replace('REPLACE', 'INSERT', $sql);
-                $action = 'INSERT';
+                $sql = str_replace('REPLACE', 'INSERT', $sql);
             case 'INSERT':
             case 'UPDATE':
                 $setPos = stripos($sql, ' VALUES');
                 $sql    = str_replace('0000-00-00', '1970-01-01', $sql);
                 $sql    = str_replace('00:00:00', '00:00:01', $sql);
-                if(strpos($sql, "\\'") !== FALSE) $sql = str_replace("\\'", "''''", $sql);
-                if(strpos($sql, '\"') !== FALSE) $sql = str_replace('\"', '"', $sql);
-                if(strpos($sql, '\\\\') !== FALSE) $sql = str_replace('\\\\', '\\', $sql);
+                if(strpos($sql, "\\'") !== false) $sql = str_replace("\\'", "''''", $sql);
+                if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
+                if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
                 if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
                 break;
             case 'CREATE':
