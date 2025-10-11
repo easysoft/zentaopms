@@ -156,6 +156,7 @@ class programplan extends control
         $viewData->syncData      = $syncData;
 
         $this->programplanZen->buildCreateView($viewData);
+        $this->display();
     }
 
     /**

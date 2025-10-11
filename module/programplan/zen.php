@@ -194,8 +194,6 @@ class programplanZen extends programplan
         $this->view->defaultFields      = $defaultFields;
         $this->view->colspan            = count($visibleFields) + 3;
         $this->view->enableOptionalAttr = empty($viewData->programPlan) || (!empty($viewData->programPlan) && $viewData->programPlan->attribute == 'mix');
-
-        $this->display();
     }
 
     /**
