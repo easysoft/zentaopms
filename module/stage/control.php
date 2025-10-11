@@ -112,6 +112,7 @@ class stage extends control
 
         $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->edit;
         $this->view->stage = $stage;
+        $this->view->flow  = $this->loadModel('workflowgroup')->getByID($stage->workflowGroup);
 
         $this->display();
     }
