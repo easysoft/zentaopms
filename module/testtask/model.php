@@ -157,7 +157,7 @@ class testtaskModel extends model
     {
         $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = CAST(t2.id AS VARCHAR(20))')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
@@ -190,7 +190,7 @@ class testtaskModel extends model
 
         return $this->dao->select('t1.*, t2.name AS buildName, t3.name AS productName')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = CAST(t2.id AS VARCHAR(20))')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
@@ -317,7 +317,7 @@ class testtaskModel extends model
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = CAST(t3.id AS VARCHAR(20))')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t2.project = t5.id')
             ->where('t1.deleted')->eq('0')
