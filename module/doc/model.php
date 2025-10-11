@@ -775,7 +775,7 @@ class docModel extends model
     public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=CAST(t2.id AS VARCHAR(20))')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
