@@ -5,8 +5,6 @@ namespace Box\Spout\Autoloader;
 /**
  * Class Psr4Autoloader
  * @see https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md#class-example
- *
- * @package Box\Spout\Autoloader
  */
 class Psr4Autoloader
 {
@@ -16,7 +14,7 @@ class Psr4Autoloader
      *
      * @var array
      */
-    protected $prefixes = array();
+    protected $prefixes = [];
 
     /**
      * Register loader with SPL autoloader stack.
@@ -25,7 +23,7 @@ class Psr4Autoloader
      */
     public function register()
     {
-        spl_autoload_register(array($this, 'loadClass'));
+        \spl_autoload_register([$this, 'loadClass']);
     }
 
     /**
@@ -42,21 +40,21 @@ class Psr4Autoloader
     public function addNamespace($prefix, $baseDir, $prepend = false)
     {
         // normalize namespace prefix
-        $prefix = trim($prefix, '\\') . '\\';
+        $prefix = \trim($prefix, '\\') . '\\';
 
         // normalize the base directory with a trailing separator
-        $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . '/';
+        $baseDir = \rtrim($baseDir, DIRECTORY_SEPARATOR) . '/';
 
         // initialize the namespace prefix array
         if (isset($this->prefixes[$prefix]) === false) {
-            $this->prefixes[$prefix] = array();
+            $this->prefixes[$prefix] = [];
         }
 
         // retain the base directory for the namespace prefix
         if ($prepend) {
-            array_unshift($this->prefixes[$prefix], $baseDir);
+            \array_unshift($this->prefixes[$prefix], $baseDir);
         } else {
-            array_push($this->prefixes[$prefix], $baseDir);
+            \array_push($this->prefixes[$prefix], $baseDir);
         }
     }
 
@@ -74,13 +72,12 @@ class Psr4Autoloader
 
         // work backwards through the namespace names of the fully-qualified
         // class name to find a mapped file name
-        while (false !== $pos = strrpos($prefix, '\\')) {
-
+        while (($pos = \strrpos($prefix, '\\')) !== false) {
             // retain the trailing namespace separator in the prefix
-            $prefix = substr($class, 0, $pos + 1);
+            $prefix = \substr($class, 0, $pos + 1);
 
             // the rest is the relative class name
-            $relativeClass = substr($class, $pos + 1);
+            $relativeClass = \substr($class, $pos + 1);
 
             // try to load a mapped file for the prefix and relative class
             $mappedFile = $this->loadMappedFile($prefix, $relativeClass);
@@ -90,7 +87,7 @@ class Psr4Autoloader
 
             // remove the trailing namespace separator for the next iteration
             // of strrpos()
-            $prefix = rtrim($prefix, '\\');
+            $prefix = \rtrim($prefix, '\\');
         }
 
         // never found a mapped file
@@ -114,12 +111,11 @@ class Psr4Autoloader
 
         // look through base directories for this namespace prefix
         foreach ($this->prefixes[$prefix] as $baseDir) {
-
             // replace the namespace prefix with the base directory,
             // replace namespace separators with directory separators
             // in the relative class name, append with .php
             $file = $baseDir
-                  . str_replace('\\', '/', $relativeClass)
+                  . \str_replace('\\', '/', $relativeClass)
                   . '.php';
 
             // if the mapped file exists, require it
@@ -141,10 +137,12 @@ class Psr4Autoloader
      */
     protected function requireFile($file)
     {
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             require $file;
+
             return true;
         }
+
         return false;
     }
 }

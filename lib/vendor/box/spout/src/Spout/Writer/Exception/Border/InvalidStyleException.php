@@ -2,8 +2,8 @@
 
 namespace Box\Spout\Writer\Exception\Border;
 
+use Box\Spout\Common\Entity\Style\BorderPart;
 use Box\Spout\Writer\Exception\WriterException;
-use Box\Spout\Writer\Style\BorderPart;
 
 class InvalidStyleException extends WriterException
 {
@@ -11,6 +11,6 @@ class InvalidStyleException extends WriterException
     {
         $msg = '%s is not a valid style identifier for a border. Valid identifiers are: %s.';
 
-        parent::__construct(sprintf($msg, $name, implode(',', BorderPart::getAllowedStyles())));
+        parent::__construct(\sprintf($msg, $name, \implode(',', BorderPart::getAllowedStyles())));
     }
 }

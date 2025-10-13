@@ -8,10 +8,8 @@ use Box\Spout\Common\Exception\IOException;
  * Class FileSystemHelper
  * This class provides helper functions to help with the file system operations
  * like files/folders creation & deletion
- *
- * @package Box\Spout\Common\Helper
  */
-class FileSystemHelper
+class FileSystemHelper implements FileSystemHelperInterface
 {
     /** @var string Real path of the base folder where all the I/O can occur */
     protected $baseFolderRealPath;
@@ -19,9 +17,9 @@ class FileSystemHelper
     /**
      * @param string $baseFolderPath The path of the base folder where all the I/O can occur
      */
-    public function __construct($baseFolderPath)
+    public function __construct(string $baseFolderPath)
     {
-        $this->baseFolderRealPath = realpath($baseFolderPath);
+        $this->baseFolderRealPath = \realpath($baseFolderPath);
     }
 
     /**
@@ -29,8 +27,8 @@ class FileSystemHelper
      *
      * @param string $parentFolderPath The parent folder path under which the folder is going to be created
      * @param string $folderName The name of the folder to create
-     * @return string Path of the created folder
      * @throws \Box\Spout\Common\Exception\IOException If unable to create the folder or if the folder path is not inside of the base folder
+     * @return string Path of the created folder
      */
     public function createFolder($parentFolderPath, $folderName)
     {
@@ -38,7 +36,7 @@ class FileSystemHelper
 
         $folderPath = $parentFolderPath . '/' . $folderName;
 
-        $wasCreationSuccessful = mkdir($folderPath, 0777, true);
+        $wasCreationSuccessful = \mkdir($folderPath, 0777, true);
         if (!$wasCreationSuccessful) {
             throw new IOException("Unable to create folder: $folderPath");
         }
@@ -53,8 +51,8 @@ class FileSystemHelper
      * @param string $parentFolderPath The parent folder path where the file is going to be created
      * @param string $fileName The name of the file to create
      * @param string $fileContents The contents of the file to create
-     * @return string Path of the created file
      * @throws \Box\Spout\Common\Exception\IOException If unable to create the file or if the file path is not inside of the base folder
+     * @return string Path of the created file
      */
     public function createFileWithContents($parentFolderPath, $fileName, $fileContents)
     {
@@ -62,7 +60,7 @@ class FileSystemHelper
 
         $filePath = $parentFolderPath . '/' . $fileName;
 
-        $wasCreationSuccessful = file_put_contents($filePath, $fileContents);
+        $wasCreationSuccessful = \file_put_contents($filePath, $fileContents);
         if ($wasCreationSuccessful === false) {
             throw new IOException("Unable to create file: $filePath");
         }
@@ -74,15 +72,15 @@ class FileSystemHelper
      * Delete the file at the given path
      *
      * @param string $filePath Path of the file to delete
-     * @return void
      * @throws \Box\Spout\Common\Exception\IOException If the file path is not inside of the base folder
+     * @return void
      */
     public function deleteFile($filePath)
     {
         $this->throwIfOperationNotInBaseFolder($filePath);
 
-        if (file_exists($filePath) && is_file($filePath)) {
-            unlink($filePath);
+        if (\file_exists($filePath) && \is_file($filePath)) {
+            \unlink($filePath);
         }
     }
 
@@ -90,8 +88,8 @@ class FileSystemHelper
      * Delete the folder at the given path as well as all its contents
      *
      * @param string $folderPath Path of the folder to delete
-     * @return void
      * @throws \Box\Spout\Common\Exception\IOException If the folder path is not inside of the base folder
+     * @return void
      */
     public function deleteFolderRecursively($folderPath)
     {
@@ -104,13 +102,13 @@ class FileSystemHelper
 
         foreach ($itemIterator as $item) {
             if ($item->isDir()) {
-                rmdir($item->getPathname());
+                \rmdir($item->getPathname());
             } else {
-                unlink($item->getPathname());
+                \unlink($item->getPathname());
             }
         }
 
-        rmdir($folderPath);
+        \rmdir($folderPath);
     }
 
     /**
@@ -119,13 +117,17 @@ class FileSystemHelper
      * should occur is not inside the base folder.
      *
      * @param string $operationFolderPath The path of the folder where the I/O operation should occur
+     * @throws \Box\Spout\Common\Exception\IOException If the folder where the I/O operation should occur
+     * is not inside the base folder or the base folder does not exist
      * @return void
-     * @throws \Box\Spout\Common\Exception\IOException If the folder where the I/O operation should occur is not inside the base folder
      */
-    protected function throwIfOperationNotInBaseFolder($operationFolderPath)
+    protected function throwIfOperationNotInBaseFolder(string $operationFolderPath)
     {
-        $operationFolderRealPath = realpath($operationFolderPath);
-        $isInBaseFolder = (strpos($operationFolderRealPath, $this->baseFolderRealPath) === 0);
+        $operationFolderRealPath = \realpath($operationFolderPath);
+        if (!$this->baseFolderRealPath) {
+            throw new IOException("The base folder path is invalid: {$this->baseFolderRealPath}");
+        }
+        $isInBaseFolder = (\strpos($operationFolderRealPath, $this->baseFolderRealPath) === 0);
         if (!$isInBaseFolder) {
             throw new IOException("Cannot perform I/O operation outside of the base folder: {$this->baseFolderRealPath}");
         }

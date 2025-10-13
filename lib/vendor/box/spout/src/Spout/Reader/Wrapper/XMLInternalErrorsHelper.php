@@ -6,8 +6,6 @@ use Box\Spout\Reader\Exception\XMLProcessingException;
 
 /**
  * Trait XMLInternalErrorsHelper
- *
- * @package Box\Spout\Reader\Wrapper
  */
 trait XMLInternalErrorsHelper
 {
@@ -22,16 +20,16 @@ trait XMLInternalErrorsHelper
      */
     protected function useXMLInternalErrors()
     {
-        libxml_clear_errors();
-        $this->initialUseInternalErrorsValue = libxml_use_internal_errors(true);
+        \libxml_clear_errors();
+        $this->initialUseInternalErrorsValue = \libxml_use_internal_errors(true);
     }
 
     /**
      * Throws an XMLProcessingException if an error occured.
      * It also always resets the "libxml_use_internal_errors" setting back to its initial value.
      *
-     * @return void
      * @throws \Box\Spout\Reader\Exception\XMLProcessingException
+     * @return void
      */
     protected function resetXMLInternalErrorsSettingAndThrowIfXMLErrorOccured()
     {
@@ -50,22 +48,22 @@ trait XMLInternalErrorsHelper
      */
     private function hasXMLErrorOccured()
     {
-        return (libxml_get_last_error() !== false);
+        return (\libxml_get_last_error() !== false);
     }
 
     /**
      * Returns the error message for the last XML error that occured.
      * @see libxml_get_last_error
      *
-     * @return String|null Last XML error message or null if no error
+     * @return string|null Last XML error message or null if no error
      */
     private function getLastXMLErrorMessage()
     {
         $errorMessage = null;
-        $error = libxml_get_last_error();
+        $error = \libxml_get_last_error();
 
         if ($error !== false) {
-            $errorMessage = trim($error->message);
+            $errorMessage = \trim($error->message);
         }
 
         return $errorMessage;
@@ -76,7 +74,6 @@ trait XMLInternalErrorsHelper
      */
     protected function resetXMLInternalErrorsSetting()
     {
-        libxml_use_internal_errors($this->initialUseInternalErrorsValue);
+        \libxml_use_internal_errors($this->initialUseInternalErrorsValue);
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace Box\Spout\Writer\Exception\Border;
 
+use Box\Spout\Common\Entity\Style\BorderPart;
 use Box\Spout\Writer\Exception\WriterException;
-use Box\Spout\Writer\Style\BorderPart;
 
 class InvalidWidthException extends WriterException
 {
@@ -11,6 +11,6 @@ class InvalidWidthException extends WriterException
     {
         $msg = '%s is not a valid width identifier for a border. Valid identifiers are: %s.';
 
-        parent::__construct(sprintf($msg, $name, implode(',', BorderPart::getAllowedWidths())));
+        parent::__construct(\sprintf($msg, $name, \implode(',', BorderPart::getAllowedWidths())));
     }
 }

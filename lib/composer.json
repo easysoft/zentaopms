@@ -1,6 +1,6 @@
 {
     "require": {
-        "box/spout": "2.7.3",
+        "box/spout": "3.3.0",
         "dragonmantank/cron-expression": "2.3.1",
         "erusev/parsedown": "1.7.4",
         "ezyang/htmlpurifier": "4.18.0",
@@ -17,10 +17,10 @@
         "paragonie/constant_time_encoding": "2.7.0",
         "paragonie/random_compat": "9.99.100",
         "pclzip/pclzip": "2.8.2",
-        "phpmailer/phpmailer": "6.10.0",
+        "phpmailer/phpmailer": "6.11.1",
         "phpoffice/phpspreadsheet": "1.8.2",
         "phpoffice/phpword": "0.18.3",
-        "phpseclib/phpseclib": "3.0.46",
+        "phpseclib/phpseclib": "3.0.47",
         "psr/simple-cache": "1.0.1",
         "rmccue/requests": "2.0.15",
         "symfony/finder": "3.4.47"
@@ -28,6 +28,9 @@
     "config": {
         "allow-plugins": {
             "cweagans/composer-patches": true
+        },
+        "platform": {
+            "php": "7.0.33"
         }
     },
     "require-dev": {

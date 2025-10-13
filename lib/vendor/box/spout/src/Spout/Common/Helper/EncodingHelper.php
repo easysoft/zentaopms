@@ -7,8 +7,6 @@ use Box\Spout\Common\Exception\EncodingConversionException;
 /**
  * Class EncodingHelper
  * This class provides helper functions to work with encodings.
- *
- * @package Box\Spout\Common\Helper
  */
 class EncodingHelper
 {
@@ -63,7 +61,7 @@ class EncodingHelper
             $bomUsed = $this->supportedEncodingsWithBom[$encoding];
 
             // we skip the N first bytes
-            $byteOffsetToSkipBom = strlen($bomUsed);
+            $byteOffsetToSkipBom = \strlen($bomUsed);
         }
 
         return $byteOffsetToSkipBom;
@@ -82,9 +80,9 @@ class EncodingHelper
 
         $this->globalFunctionsHelper->rewind($filePointer);
 
-        if (array_key_exists($encoding, $this->supportedEncodingsWithBom)) {
+        if (\array_key_exists($encoding, $this->supportedEncodingsWithBom)) {
             $potentialBom = $this->supportedEncodingsWithBom[$encoding];
-            $numBytesInBom = strlen($potentialBom);
+            $numBytesInBom = \strlen($potentialBom);
 
             $hasBOM = ($this->globalFunctionsHelper->fgets($filePointer, $numBytesInBom + 1) === $potentialBom);
         }
@@ -97,8 +95,8 @@ class EncodingHelper
      *
      * @param string $string Non UTF-8 string to be converted
      * @param string $sourceEncoding The encoding used to encode the source string
-     * @return string The converted, UTF-8 string
      * @throws \Box\Spout\Common\Exception\EncodingConversionException If conversion is not supported or if the conversion failed
+     * @return string The converted, UTF-8 string
      */
     public function attemptConversionToUTF8($string, $sourceEncoding)
     {
@@ -110,8 +108,8 @@ class EncodingHelper
      *
      * @param string $string UTF-8 string to be converted
      * @param string $targetEncoding The encoding the string should be re-encoded into
-     * @return string The converted string, encoded with the given encoding
      * @throws \Box\Spout\Common\Exception\EncodingConversionException If conversion is not supported or if the conversion failed
+     * @return string The converted string, encoded with the given encoding
      */
     public function attemptConversionFromUTF8($string, $targetEncoding)
     {
@@ -125,8 +123,8 @@ class EncodingHelper
      * @param string $string string to be converted
      * @param string $sourceEncoding The encoding used to encode the source string
      * @param string $targetEncoding The encoding the string should be re-encoded into
-     * @return string The converted string, encoded with the given encoding
      * @throws \Box\Spout\Common\Exception\EncodingConversionException If conversion is not supported or if the conversion failed
+     * @return string The converted string, encoded with the given encoding
      */
     protected function attemptConversion($string, $sourceEncoding, $targetEncoding)
     {
@@ -139,7 +137,7 @@ class EncodingHelper
 
         if ($this->canUseIconv()) {
             $convertedString = $this->globalFunctionsHelper->iconv($string, $sourceEncoding, $targetEncoding);
-        } else if ($this->canUseMbString()) {
+        } elseif ($this->canUseMbString()) {
             $convertedString = $this->globalFunctionsHelper->mb_convert_encoding($string, $sourceEncoding, $targetEncoding);
         } else {
             throw new EncodingConversionException("The conversion from $sourceEncoding to $targetEncoding is not supported. Please install \"iconv\" or \"PHP Intl\".");
