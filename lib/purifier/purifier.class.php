@@ -1,10 +1,18 @@
 <?php
+require_once dirname(__FILE__, 2) . '/base/delegate/delegate.class.php';
 
-/**
- * This is a stub include that automatically configures the include path.
- */
+class purifier extends baseDelegate
+{
+    protected static $className = 'HTMLPurifier';
 
-require_once dirname(__FILE__) . '/HTMLPurifier/Bootstrap.php';
-require_once dirname(__FILE__) . '/HTMLPurifier.autoload.php';
+    private $config = ['Cache.DefinitionImpl' => null];
 
-// vim: et sw=4 sts=4
+    public function __construct($config = [])
+    {
+        $purifierConfig = HTMLPurifier_Config::createDefault();
+        foreach ($config as $key => $value) {
+            $purifierConfig->set($key, $value);
+        }
+        $this->instance = new self::$className($purifierConfig);
+    }
+}
