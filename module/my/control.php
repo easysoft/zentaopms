@@ -1533,19 +1533,22 @@ class my extends control
      * Switch vision by ajax.
      *
      * @param  string $vision
+     * @param  string $devopsSpace
      * @access public
      * @return void
      */
-    public function ajaxSwitchVision(string $vision)
+    public function ajaxSwitchVision(string $vision, string $devopsSpace = '')
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
         if(empty($this->config->hideVisionTips)) $this->setting->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
+        $this->setting->setItem("{$this->app->user->account}.common.global.devopsSpace", $devopsSpace);
         $this->config->vision = $vision;
 
         $_SESSION['user']->rights = $this->user->authorize($this->app->user->account);
 
         setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('devopsSpace', $devopsSpace, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
