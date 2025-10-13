@@ -221,7 +221,7 @@
         if(window.onPageUnmount) window.onPageUnmount();
         $(document).trigger('pageunmount.app');
 
-        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender'].forEach(key =>
+        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender', 'getPageFormHelper'].forEach(key =>
         {
             if(window[key]) delete window[key];
         });
@@ -1403,8 +1403,14 @@
 
     function applyFormData(data, formSelector)
     {
-        const $form = $(formSelector || '#mainContainer form');
-        const formHelper = zui.formHelper($form);
+        let formHelper;
+        if(window.getPageFormHelper) formHelper = window.getPageFormHelper(formSelector, data);
+        if(!formHelper)
+        {
+            const $form = $(formSelector || '#mainContainer form');
+            formHelper = zui.formHelper($form);
+        }
+
         formHelper.setFormData(data);
     }
 
