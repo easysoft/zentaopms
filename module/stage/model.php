@@ -164,11 +164,29 @@ class stageModel extends model
                 ->fetchAll('id');
         }
 
-        return $this->dao->select('*')->from(TABLE_STAGE)
+        $stages = $this->dao->select('*')->from(TABLE_STAGE)
             ->where('deleted')->eq(0)
             ->andWhere('workflowGroup')->eq($groupID)
             ->orderBy($orderBy)
             ->fetchAll('id');
+
+        $stagePoints = $this->dao->select('*')->from(TABLE_DECISION)->where('stage')->in(array_keys($stages))->fetchGroup('stage');
+        $pointList   = array();
+        foreach($stagePoints as $stageID => $points)
+        {
+            if(!isset($pointList[$stageID])) $pointList[$stageID] = array();
+            foreach($points as $point)
+            {
+                if(!isset($pointList[$stageID][$point->type])) $pointList[$stageID][$point->type] = array();
+                $pointList[$stageID][$point->type][$point->id] = $point->title;
+            }
+        }
+        foreach($stages as $stage)
+        {
+            $stage->TRpoint  = isset($pointList[$stage->id]['TR']) ? implode(', ', $pointList[$stage->id]['TR']) : '';
+            $stage->DCPpoint = isset($pointList[$stage->id]['DCP']) ? implode(', ', $pointList[$stage->id]['DCP']) : '';
+        }
+        return $stages;
     }
 
     /**
