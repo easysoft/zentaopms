@@ -12505,13 +12505,13 @@ class upgradeModel extends model
     }
 
     /**
-     * 升级阶段列表。
-     * Update stage list.
+     * 升级阶段列表及评审点。
+     * Update stage and point.
      *
      * @access public
      * @return void
      */
-    public function upgradeStageList()
+    public function upgradeStageAndPoint()
     {
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
