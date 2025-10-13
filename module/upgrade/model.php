@@ -11596,7 +11596,7 @@ class upgradeModel extends model
         $process->name          = $this->lang->other;
         $process->module        = $moduleID;
         $process->createdBy     = 'system';
-        $process->createdDate   = helper::now();
+        $process->createdDate   = '2020-01-09 00:00:00';
         $process->editedDate    = null;
         $process->assignedDate  = null;
         $process->deleted       = '0';
@@ -11611,7 +11611,7 @@ class upgradeModel extends model
         $activity->name          = $this->lang->other;
         $activity->optional      = 'no';
         $activity->createdBy     = 'system';
-        $activity->createdDate   = helper::now();
+        $activity->createdDate   = '2020-01-09 00:00:00';
         $activity->editedDate    = null;
         $activity->assignedDate  = null;
         $activity->deleted       = '0';
