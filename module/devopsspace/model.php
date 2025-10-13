@@ -12,4 +12,21 @@ declare(strict_types=1);
  */
 class devopsspaceModel extends model
 {
+    /**
+     * 通过用户账号获取空间列表。
+     * Get space list by user account.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getListByAccount(string $account)
+    {
+        return $this->dao->select('t1.*, t2.account as account')->from(TABLE_DEVOPSSPACE)->alias('t1')
+            ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')
+            ->on('t1.id=t2.space')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.account')->eq($account)
+            ->fetchAll('id');
+    }
 }
