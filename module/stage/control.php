@@ -24,7 +24,38 @@ class stage extends control
     public function browse(int $groupID = 0, string $orderBy = "id_asc")
     {
         $workflowGroup = $this->loadModel('workflowgroup')->getByID($groupID);
-        if($workflowGroup->projectModel == 'ipd') $this->config->stage->dtable->fieldList['type']['statusMap'] = $this->lang->stage->ipdTypeList;
+        if($workflowGroup->projectModel == 'ipd')
+        {
+            $this->config->stage->dtable->fieldList['type']['statusMap'] = $this->lang->stage->ipdTypeList;
+
+            $this->config->stage->dtable->fieldList['TRpoint']['title'] = $this->lang->stage->TRpoint;
+            $this->config->stage->dtable->fieldList['TRpoint']['type']  = 'desc';
+            $this->config->stage->dtable->fieldList['TRpoint']['width'] = 100;
+            $this->config->stage->dtable->fieldList['TRpoint']['flex']  = false;
+            $this->config->stage->dtable->fieldList['TRpoint']['group'] = 3;
+
+            $this->config->stage->dtable->fieldList['DCPpoint']['title'] = $this->lang->stage->DCPpoint;
+            $this->config->stage->dtable->fieldList['DCPpoint']['type']  = 'desc';
+            $this->config->stage->dtable->fieldList['DCPpoint']['width'] = 100;
+            $this->config->stage->dtable->fieldList['DCPpoint']['flex']  = false;
+            $this->config->stage->dtable->fieldList['DCPpoint']['group'] = 4;
+
+            if(common::hasPriv('stage', 'edit'))
+            {
+                $this->config->stage->actionList['setTRpoint']['icon']        = 'seal';
+                $this->config->stage->actionList['setTRpoint']['hint']        = $this->lang->stage->setTRpoint;
+                $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=TR&stageID={id}');
+                $this->config->stage->actionList['setTRpoint']['data-toggle'] = 'modal';
+
+                $this->config->stage->actionList['setDCPpoint']['icon']        = 'seal';
+                $this->config->stage->actionList['setDCPpoint']['hint']        = $this->lang->stage->setDCPpoint;
+                $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=DCP&stageID={id}');
+                $this->config->stage->actionList['setDCPpoint']['data-toggle'] = 'modal';
+
+                $this->config->stage->dtable->fieldList['actions']['menu'] = array('setTRpoint', 'setDCPpoint', 'edit', 'delete');
+                $this->config->stage->dtable->fieldList['actions']['list'] = $this->config->stage->actionList;
+            }
+        }
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $groupID);
@@ -191,5 +222,19 @@ class stage extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+    }
+
+    /**
+     * 设置阶段的评审点。
+     * Set point of stage.
+     *
+     * @param  string $type TR|DCP
+     * @param  int    $stageID
+     * @access public
+     * @return void
+     */
+    public function setPoint(string $type, int $stageID)
+    {
+
     }
 }

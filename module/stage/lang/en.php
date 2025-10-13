@@ -17,13 +17,17 @@ $lang->stage->edit        = 'Edit';
 $lang->stage->delete      = 'Delete';
 $lang->stage->view        = 'Details';
 $lang->stage->plusBrowse  = 'Waterfall Plus Stage List';
+$lang->stage->setTRpoint  = 'Set TR Point';
+$lang->stage->setDCPpoint = 'Set DCP Point';
 
 /* Fields. */
-$lang->stage->id      = 'ID';
-$lang->stage->name    = 'Name';
-$lang->stage->type    = 'Type';
-$lang->stage->percent = 'Workload %';
-$lang->stage->setType = 'Set Type';
+$lang->stage->id       = 'ID';
+$lang->stage->name     = 'Name';
+$lang->stage->type     = 'Type';
+$lang->stage->percent  = 'Workload %';
+$lang->stage->setType  = 'Set Type';
+$lang->stage->TRpoint  = 'TR Point';
+$lang->stage->DCPpoint = 'DCP Point';
 
 $lang->stage->typeList['mix']     = 'Mix';
 $lang->stage->typeList['request'] = 'Story';
