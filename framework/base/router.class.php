@@ -536,6 +536,7 @@ class baseRouter
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->multiLanguage) $this->setClientLang();
         $this->setVision();
+        $this->setDevOpsSpace();
 
         $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
         $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
@@ -939,13 +940,36 @@ class baseRouter
         }
 
         [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
-        if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
+        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'devops') $defaultVision = 'rnd';
         if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
         $vision = $vision ?: $defaultVision;
         if(empty($_COOKIE['vision'])) setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         $this->config->vision = $vision;
+    }
+
+    /**
+     * 设置DevOps空间。
+     * Set DevOps space.
+     *
+     * @access public
+     * @return void
+     */
+    public function setDevOpsSpace()
+    {
+        $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
+        if(empty($account) && isset($_POST['account'])) $account = $_POST['account'];
+        if(empty($account) && isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account) && isset($_COOKIE['za']))    $account = $_COOKIE['za'];
+
+        $devopsSpace = '';
+        if($this->config->installed && validater::checkAccount($account) && !$this->upgrading)
+        {
+            $devopsSpace = $this->dao->select("value")->from(TABLE_CONFIG)->where('owner')->eq($account)->andWhere('`key`')->eq('devopsSpace')->limit(1)->fetch('value');
+        }
+
+        $this->config->devopsSpace = $devopsSpace;
     }
 
     /**
