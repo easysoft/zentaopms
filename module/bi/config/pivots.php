@@ -16,7 +16,7 @@ select
     t1.name,
     t2.program1,
     t1.begin,
-    t1.end,
+    t1.`end`,
     t1.realBegan,
     t1.realEnd,
     t1.closedDate,
@@ -26,7 +26,7 @@ select
 from
     (select
         name,
-        substr(path,2,4) as program1,
+        CAST(substr(path,2,4) AS INTEGER) as program1,
         begin,
         end,
         realBegan,
@@ -119,7 +119,7 @@ from
         select
             id,
             name,
-            substr(`path`, 2, 4) as program1,
+            CAST(substr(`path`, 2, 4) AS INTEGER) as program1,
             closedDate
         from zt_project
         where deleted = '0'
