@@ -12517,6 +12517,7 @@ class upgradeModel extends model
         if(empty($stageGroup)) return true;
 
         $this->app->loadConfig('project');
+        $this->app->loadConfig('review');
         $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
         foreach($typeCodeGroup as $projectModel => $flowList)
         {
@@ -12532,6 +12533,25 @@ class upgradeModel extends model
                     $stage->workflowGroup = $typeCodeGroup[$projectModel][$flowCode]->id;
                     if(empty($stage->editedDate)) $stage->editedDate = null;
                     $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
+                    $stageID = $this->dao->lastInsertID();
+
+                    /* 添加IPD项目流程阶段的评审点。*/
+                    if($projectModel == 'ipd')
+                    {
+                        $decision = new stdClass();
+                        $decision->builtin     = '1';
+                        $decision->createdBy   = 'system';
+                        $decision->createdDate = helper::now();
+                        foreach($this->config->review->ipdReviewPoint->{$stage->type} as $point)
+                        {
+                            $decision->workflowGroup = $stage->workflowGroup;
+                            $decision->stage         = $stageID;
+                            $decision->title         = $point;
+                            $decision->type          = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
+                            $decision->category      = $point;
+                            $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+                        }
+                    }
                 }
             }
         }
