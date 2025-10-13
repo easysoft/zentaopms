@@ -28,7 +28,7 @@ from
         name,
         CAST(substr(path,2,4) AS INTEGER) as program1,
         begin,
-        end,
+        `end`,
         realBegan,
         realEnd,
         left(closedDate, 10) as closedDate,
