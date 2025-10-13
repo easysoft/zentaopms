@@ -283,10 +283,7 @@ class fileModel extends model
             return $_FILES[$htmlTagName];
         }
 
-        $this->app->loadClass('purifier', true);
-        $config   = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.DefinitionImpl', null);
-        $purifier = new HTMLPurifier($config);
+        $purifier = $this->app->loadClass('purifier');
 
         /* If the file var name is an array. */
         if(is_array($_FILES[$htmlTagName]['name']))
@@ -333,13 +330,10 @@ class fileModel extends model
      */
     public function getChunkedFile(): array
     {
-        $this->app->loadClass('purifier', true);
-        $config   = HTMLPurifier_Config::createDefault();
-        $config->set('Cache.DefinitionImpl', null);
-        $purifier = new HTMLPurifier($config);
-
         $name = urldecode(zget($_SERVER, 'HTTP_X_FILENAME', ''));
         if(!validater::checkFileName($name) or empty($name)) return array();
+
+        $purifier = $this->app->loadClass('purifier');
 
         $file = array();
         $file['id'] = 0;
