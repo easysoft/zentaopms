@@ -501,8 +501,9 @@ $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = 'Full Feature Interface';
-$lang->visionList['lite'] = 'Operation Management Interface';
+$lang->visionList['rnd']    = 'Full Feature Interface';
+$lang->visionList['lite']   = 'Operation Management Interface';
+$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
