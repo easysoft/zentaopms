@@ -238,12 +238,15 @@ class dao extends baseDAO
         elseif(in_array($module, $linkProductModules))
         {
             $productID = in_array($module, array('feedback', 'ticket')) ? $_SESSION["{$module}Product"] : $_SESSION['product'];
-            $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
-            $groupID   = !$result->shadow ? $result->workflowGroup : 0;
-            if(empty($groupID))
+            if($productID)
             {
-                $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
-                $groupID = $result->workflowGroup;
+                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
+                $groupID   = !$result->shadow ? $result->workflowGroup : 0;
+                if(empty($groupID))
+                {
+                    $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
+                    $groupID = $result->workflowGroup;
+                }
             }
         }
         elseif(!empty($_SESSION['project']) && in_array($module, $linkProjectModules))
