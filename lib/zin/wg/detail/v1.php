@@ -275,6 +275,7 @@ CSS;
         }
 
         $titleActions = isset($item['titleActions']) ? $item['titleActions'] : null;
+        $className    = isset($item['className']) ? $item['className'] : null;
         if($titleActions) unset($item['titleActions']);
 
         return div
@@ -289,7 +290,7 @@ CSS;
             ) : null,
             div
             (
-                setClass('detail-section-content py-1'),
+                setClass("detail-section-content py-1 {$className}"),
                 $item ? new content(is_array($item) ? set($item) : $item) : null,
             )
         );
