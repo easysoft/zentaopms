@@ -937,4 +937,21 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 构建评审需求数据。
+     * Build story for review.
+     *
+     * @param  int   $storyID
+     * @param  array $data
+     * @access public
+     * @return array|object
+     */
+    public function buildStoryForReviewTest(int $storyID, array $data): array|object
+    {
+        $_POST = $data;
+        $result = callZenMethod('story', 'buildStoryForReview', [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
