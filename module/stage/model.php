@@ -170,7 +170,7 @@ class stageModel extends model
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        $stagePoints = $this->dao->select('*')->from(TABLE_DECISION)->where('stage')->in(array_keys($stages))->fetchGroup('stage');
+        $stagePoints = $this->dao->select('*')->from(TABLE_DECISION)->where('stage')->in(array_keys($stages))->orderBy('order_asc')->fetchGroup('stage');
         $pointList   = array();
         foreach($stagePoints as $stageID => $points)
         {
@@ -260,6 +260,12 @@ class stageModel extends model
         $decision->createdBy     = 'system';
         $decision->createdDate   = helper::now();
         $decision->workflowGroup = $groupID;
+
+        $decisionFlow = new stdClass();
+        $decisionFlow->flow        = 1;
+        $decisionFlow->objectType  = 'point';
+        $decisionFlow->relatedBy   = 'system';
+        $decisionFlow->relatedDate = helper::now();
         foreach($stageList as $id => $stage)
         {
             foreach($this->config->review->ipdReviewPoint->{$stage->type} as $point)
@@ -269,7 +275,116 @@ class stageModel extends model
                 $decision->type     = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
                 $decision->category = $point;
                 $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+                $decisionID = $this->dao->lastInsertID();
+
+                $decisionFlow->root     = $stage->workflowGroup;
+                $decisionFlow->objectID = $decisionID;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
             }
         }
+    }
+
+    /**
+     * 获取阶段的评审点。
+     * Get points of stage.
+     *
+     * @param  string $type TR|DCP
+     * @param  int    $stageID
+     * @access public
+     * @return bool
+     */
+    public function getStagePoints(string $type, int $stageID)
+    {
+        $stage       = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
+        $stagePoints = $this->dao->select('t1.*,t2.flow')->from(TABLE_DECISION)->alias('t1')
+            ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.objectID AND t2.objectType = 'point'")
+            ->where('t1.stage')->eq($stageID)
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t2.root')->eq($stage->workflowGroup)
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+        return $stagePoints;
+    }
+
+    /**
+     * 设置阶段的评审点。
+     * Set point of stage.
+     *
+     * @param  string $type TR|DCP
+     * @param  int    $stageID
+     * @param  array  $stageID
+     * @access public
+     * @return bool
+     */
+    public function setPoint(string $type, int $stageID, array $points): bool
+    {
+        $stage          = $this->getByID($stageID);
+        $oldStagePoints = $this->getStagePoints($type, $stageID);
+
+        foreach($points as $index => $point)
+        {
+            if(!empty($point->id) && isset($oldStagePoints[$point->id]))
+            {
+                $oldPoint = $oldStagePoints[$point->id];
+                if($oldPoint->title != $point->title || $oldPoint->order != $index)
+                {
+                    $this->dao->update(TABLE_DECISION)
+                        ->set('title')->eq($point->title)
+                        ->set('order')->eq($index)
+                        ->set('editedBy')->eq($this->app->user->account)
+                        ->set('editedDate')->eq(helper::now())
+                        ->where('id')->eq($point->id)
+                        ->exec();
+                    if(dao::isError()) return false;
+                }
+                if($oldPoint->flow != $point->flow)
+                {
+                    $this->dao->update(TABLE_APPROVALFLOWOBJECT)
+                        ->set('flow')->eq($point->flow)
+                        ->where('objectID')->eq($point->id)
+                        ->andWhere('objectType')->eq('point')
+                        ->andWhere('root')->eq($stage->workflowGroup)
+                        ->exec();
+                    if(dao::isError()) return false;
+                }
+                unset($oldStagePoints[$point->id]);
+            }
+            else
+            {
+                $newPoint = new stdClass();
+                $newPoint->workflowGroup = $stage->workflowGroup;
+                $newPoint->stage         = $stageID;
+                $newPoint->title         = $point->title;
+                $newPoint->type          = $type;
+                $newPoint->builtin       = '0';
+                $newPoint->createdBy     = $this->app->user->account;
+                $newPoint->createdDate   = helper::now();
+                $newPoint->order         = $index;
+                $this->dao->insert(TABLE_DECISION)->data($newPoint)->exec();
+                $newPointID = $this->dao->lastInsertID();
+                if(dao::isError()) return false;
+
+                $approvalFlowObject = new stdClass();
+                $approvalFlowObject->root        = $stage->workflowGroup;
+                $approvalFlowObject->flow        = $point->flow;
+                $approvalFlowObject->objectType  = 'point';
+                $approvalFlowObject->objectID    = $newPointID;
+                $approvalFlowObject->relatedBy   = $this->app->user->account;
+                $approvalFlowObject->relatedDate = helper::now();
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalFlowObject)->exec();
+                if(dao::isError()) return false;
+            }
+        }
+
+        if(!empty($oldStagePoints))
+        {
+            $this->dao->delete()->from(TABLE_DECISION)->where('id')->in(array_keys($oldStagePoints))->exec();
+            $this->dao->delete()->from(TABLE_APPROVALFLOWOBJECT)
+                ->where('objectID')->in(array_keys($oldStagePoints))
+                ->andWhere('objectType')->eq('point')
+                ->andWhere('root')->eq($stage->workflowGroup)
+                ->exec();
+        }
+        return true;
     }
 }

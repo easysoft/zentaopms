@@ -239,7 +239,8 @@ class stage extends control
 
         if(!empty($_POST))
         {
-            $this->stage->setPoint($type, $stageID);
+            $points = form::batchData()->get();
+            $this->stage->setPoint($type, $stageID, $points);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
