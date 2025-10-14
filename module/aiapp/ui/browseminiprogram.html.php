@@ -74,6 +74,7 @@ if(count($fields) !== 0)
         $formGroups[] = formGroup(
             set::label($field->name),
             set::required($field->required === '1'),
+            setData('name', $field->name),
             $control
         );
     }
