@@ -447,6 +447,7 @@ define('TABLE_DEMANDPOOL',      '`' . $config->db->prefix . 'demandpool`');
 define('TABLE_DEMAND',          '`' . $config->db->prefix . 'demand`');
 define('TABLE_DEMANDSPEC',      '`' . $config->db->prefix . 'demandspec`');
 define('TABLE_DEMANDREVIEW',    '`' . $config->db->prefix . 'demandreview`');
+define('TABLE_DECISION',        '`' . $config->db->prefix . 'decision`');
 define('TABLE_API',             '`' . $config->db->prefix . 'api`');
 define('TABLE_API_SPEC',        '`' . $config->db->prefix . 'apispec`');
 define('TABLE_APISTRUCT',       '`' . $config->db->prefix . 'apistruct`');
