@@ -12541,6 +12541,60 @@ class upgradeModel extends model
     }
 
     /**
+     * TR和DCP评审对象升级到技术与决策评审流程。
+     * Upgrade TR and DCP objects to decision flows.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDecision()
+    {
+        $ipdProjectGroups = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('ipd')->andWhere('builtin')->eq('1')->fetchPairs();
+        $ipdProjectStages = $this->dao->select('id,workflowGroup,type')->from(TABLE_STAGE)->where('projectType')->eq('ipd')->fetchGroup('workflowGroup');
+
+        $object = new stdclass();
+        $object->createdBy   = $this->app->user->account;
+        $object->createdDate = helper::now();
+
+        $decisionFlow = new stdclass();
+        $decisionFlow->flow        = 1;
+        $decisionFlow->objectType  = 'decision';
+        $decisionFlow->relatedBy   = $this->app->user->account;
+        $decisionFlow->relatedDate = helper::now();
+        $decisionFlow->extra       = 'review';
+
+        foreach($ipdProjectGroups as $ipdProjectGroupID)
+        {
+            if(empty($ipdProjectStages[$ipdProjectGroupID])) continue;
+
+            $object->workflowgroup = $ipdProjectGroupID;
+
+            $decisionFlow->root = $ipdProjectGroupID;
+
+            foreach($ipdProjectStages[$ipdProjectGroupID] as $stages)
+            {
+                foreach($stages as $stage)
+                {
+                    $object->stage = $stage->id;
+
+                    $stageType = $stage->type;
+                    foreach($this->config->review->ipdReviewPoint->$stageType as $category)
+                    {
+                        $object->title    = $this->lang->review->reviewPoint->titleList[$category];
+                        $object->type     = strpos($category, 'TR') === 0 ? 'TR' : 'DCP';
+                        $object->category = $category;
+                        $this->dao->insert(TABLE_DECISION)->data($object)->autoCheck()->exec();
+
+                        $decisionFlow->objectID = $this->dao->lastInsertID();
+                        $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->autoCheck()->exec();
+                    }
+                }
+            }
+        }
+        return !dao::isError();
+    }
+
+    /**
      * 调整 21.7.5 版本的权限
      * Adjust priv 21.7.5.
      *
