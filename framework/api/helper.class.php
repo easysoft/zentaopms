@@ -203,12 +203,11 @@ class helper extends baseHelper
     {
         global $config;
         $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
-        $pos  = strpos((string) $link, '.php');
 
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = $config->webRoot . 'index' . substr((string) $link, $pos);
+            $link = $config->webRoot . (string) substr($link, 2);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {
