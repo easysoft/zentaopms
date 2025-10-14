@@ -1,0 +1,19 @@
+---
+title: 计划需求关联表测试数据
+desc: 用于测试getPlanStories方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-100
+- field: plan
+  note: 计划ID
+  range: 1{15}, 2{8}, 3{5}, 999{2}
+- field: story
+  note: 需求ID
+  range: 1-30
+- field: order
+  note: 排序
+  range: 1-100

@@ -1,0 +1,90 @@
+---
+title: zanode模块getZaNodeListByQuery方法测试数据
+desc: 用于测试通过查询条件获取执行节点列表功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主机ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 主机名称
+  range: 'node-001, node-002, node-003, node-004, node-005, node-006, node-007, node-008, node-009, node-010, node-011, node-012, node-013, node-014, node-015, host-016, host-017, host-018, host-019, host-020'
+  format: ""
+- field: type
+  note: 主机类型
+  range: 'node{15}, normal{5}'
+  format: ""
+- field: hostType
+  note: 主机类型详细
+  range: 'vm{8}, physical{4}, container{3}, normal{5}'
+  format: ""
+- field: status
+  note: 主机状态
+  range: 'running{10}, stopped{5}, error{3}, offline{2}'
+  format: ""
+- field: parent
+  note: 父主机ID
+  range: 1-5
+  format: ""
+- field: image
+  note: 镜像ID
+  range: 1-10
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: '0{18}, 1{2}'
+  format: ""
+- field: mac
+  note: MAC地址
+  range: '00:00:00:00:00:{01-20}'
+  format: ""
+- field: memory
+  note: 内存大小
+  range: '1G{5}, 2G{8}, 4G{5}, 8G{2}'
+  format: ""
+- field: diskSize
+  note: 磁盘大小
+  range: '50G{8}, 100G{7}, 200G{5}'
+  format: ""
+- field: cpuCores
+  note: CPU核心数
+  range: '1{3}, 2{8}, 4{6}, 8{3}'
+  format: ""
+- field: intranet
+  note: 内网IP
+  range: '192.168.1.{1-20}'
+  format: ""
+- field: extranet
+  note: 外网IP
+  range: '10.0.0.{1-20}'
+  format: ""
+- field: osName
+  note: 操作系统名称
+  range: 'Ubuntu{8}, CentOS{5}, Windows{4}, Debian{3}'
+  format: ""
+- field: osVersion
+  note: 操作系统版本
+  range: '20.04{4}, 18.04{4}, 7.9{3}, 8.0{2}, 2019{2}, 2016{2}, 11{3}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{10}, user{5}, manager{5}'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-7d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: 'admin{8}, user{7}, manager{5}'
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: (-3d)-(now)
+  format: YYYY-MM-DD hh:mm:ss

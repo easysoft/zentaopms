@@ -1,0 +1,47 @@
+---
+title: Story data for processRadarData test
+desc: Test data for radar chart data processing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Story ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Story title
+  range: '需求标题{10}, 用户故事{5}, 产品功能{5}'
+  prefix: ""
+  postfix: ""
+- field: status
+  note: Story status
+  range: 'active{8}, closed{6}, draft{4}, changed{2}'
+- field: stage
+  note: Story stage
+  range: 'wait{4}, planned{4}, projected{4}, developing{4}, testing{2}, verified{2}'
+- field: estimate
+  note: Story estimate hours
+  range: 1-40:2
+- field: product
+  note: Product ID
+  range: 1-5
+- field: module
+  note: Module ID
+  range: 1-10
+- field: pri
+  note: Priority
+  range: 1-4
+- field: type
+  note: Story type
+  range: 'story{15}, epic{3}, requirement{2}'
+- field: openedBy
+  note: Opened by user
+  range: 'admin{5}, user1{5}, user2{5}, user3{5}'
+- field: openedDate
+  note: Opened date
+  range: '2024-01-01 00:00:00, 2024-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'

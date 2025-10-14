@@ -1,0 +1,75 @@
+---
+title: 产品数据定义
+desc: 为getUnauthProgramsOfProducts方法测试定义产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 关联项目集ID
+  range: 1-5, 0{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 产品代码
+  range: PRD001,PRD002,PRD003,PRD004,PRD005,PRD006,PRD007,PRD008,PRD009,PRD010
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{7},branch{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{5},private{3},custom{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2,admin,user1,admin,user2,admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 产品描述
+  range: 这是产品描述1,这是产品描述2,这是产品描述3,这是产品描述4,这是产品描述5,这是产品描述6,这是产品描述7,这是产品描述8,这是产品描述9,这是产品描述10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

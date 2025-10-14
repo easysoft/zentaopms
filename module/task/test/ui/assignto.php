@@ -38,7 +38,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/assignto.ui.class.php';
+include '../lib/ui/assignto.ui.class.php';
 
 $user = zenData('user');
 $user->id->range('1-3');

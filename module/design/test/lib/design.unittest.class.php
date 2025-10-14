@@ -333,6 +333,23 @@ class designTest
     }
 
     /**
+     * 获取设计关联的提交数据。
+     * Get the commit data for the associated designs.
+     *
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return int
+     */
+    public function getLinkedCommitsTest(int $repoID, array $revisions): int
+    {
+        $result = $this->objectModel->getLinkedCommits($repoID, $revisions);
+        if(dao::isError()) return dao::getError();
+        
+        return count($result);
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Judge if the action can be clicked.
      *
@@ -344,5 +361,142 @@ class designTest
     public function isClickableTest(object $design, string $action): bool
     {
         return $this->objectModel->isClickable($design, $action);
+    }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $type
+     * @access public
+     * @return array|bool
+     */
+    public function setMenuTest(int $projectID, int $productID = 0, string $type = ''): array|bool
+    {
+        global $lang, $config, $app;
+        
+        // 模拟setMenu方法的实现
+        $project = $this->objectModel->loadModel('project')->getByID($projectID);
+        if(empty($project)) return array('project_not_found' => true);
+
+        if(!empty($project) && in_array($project->model, array('waterfall', 'ipd'))) $typeList = 'typeList';
+        if(!empty($project) && $project->model == 'waterfallplus') $typeList = 'plusTypeList';
+        if(!isset($typeList)) return array('not_waterfall_project' => true);
+
+        // 确保语言配置存在
+        if(!isset($lang->design)) {
+            $lang->design = new stdClass();
+            $lang->design->typeList = array();
+            $lang->design->typeList['HLDS'] = '概要设计';
+            $lang->design->typeList['DDS'] = '详细设计';
+            $lang->design->typeList['DBDS'] = '数据库设计';
+            $lang->design->typeList['ADS'] = '接口设计';
+            $lang->design->plusTypeList = $lang->design->typeList;
+            $lang->design->more = '更多';
+        }
+        if(!isset($lang->all)) $lang->all = '全部';
+        if(!isset($app)) {
+            $app = new stdClass();
+            $app->rawMethod = 'browse';
+        }
+
+        // 保存原始状态
+        $originalWaterfallMenu = isset($lang->waterfall->menu->design) ? $lang->waterfall->menu->design : null;
+        $originalIpdMenu = isset($lang->ipd->menu->design) ? $lang->ipd->menu->design : null;
+        
+        // 执行setMenu逻辑
+        if(!isset($lang->waterfall)) $lang->waterfall = new stdClass();
+        if(!isset($lang->waterfall->menu)) $lang->waterfall->menu = new stdClass();
+        
+        $lang->waterfall->menu->design['subMenu'] = new stdclass();
+        $lang->waterfall->menu->design['subMenu']->all = array(
+            'link' => "{$lang->all}|design|browse|projectID=%s&productID={$productID}&browseType=all", 
+            'exclude' => $type == 'all' ? '' : 'design', 
+            'alias' => $type == 'all' ? $app->rawMethod : ''
+        );
+        
+        $count = 1;
+        foreach(array_filter($lang->design->{$typeList}) as $key => $value)
+        {
+            $key = strtolower($key);
+            $exclude = $type == $key ? '' : 'design';
+            $alias = $type == $key ? $app->rawMethod : '';
+
+            if($count <= 4) {
+                $lang->waterfall->menu->design['subMenu']->$key = array(
+                    'link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 
+                    'exclude' => $exclude, 
+                    'alias' => $alias
+                );
+            }
+            if($count == 5)
+            {
+                $lang->waterfall->menu->design['subMenu']->more = array(
+                    'link' => "{$lang->design->more}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 
+                    'class' => 'dropdown dropdown-hover', 
+                    'exclude' => $exclude, 
+                    'alias' => $alias
+                );
+                $lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
+            }
+            if($count >= 5) {
+                $lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array(
+                    'link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 
+                    'exclude' => $exclude, 
+                    'alias' => $alias
+                );
+            }
+
+            $count ++;
+        }
+
+        if($config->edition == 'ipd') {
+            if(!isset($lang->ipd)) $lang->ipd = new stdClass();
+            if(!isset($lang->ipd->menu)) $lang->ipd->menu = new stdClass();
+            $lang->ipd->menu->design = $lang->waterfall->menu->design;
+        }
+        
+        if(dao::isError()) return dao::getError();
+        
+        // 检查结果
+        $result = array();
+        if(isset($lang->waterfall->menu->design))
+        {
+            $result['waterfall_menu_exists'] = true;
+            $result['waterfall_submenu_exists'] = isset($lang->waterfall->menu->design['subMenu']);
+            if(isset($lang->waterfall->menu->design['subMenu']))
+            {
+                $result['submenu_all_exists'] = isset($lang->waterfall->menu->design['subMenu']->all);
+                $result['submenu_count'] = count((array)$lang->waterfall->menu->design['subMenu']);
+                $result['has_more_menu'] = isset($lang->waterfall->menu->design['subMenu']->more);
+            }
+        }
+        
+        if($config->edition == 'ipd' && isset($lang->ipd->menu->design))
+        {
+            $result['ipd_menu_copied'] = true;
+        }
+        
+        // 恢复原始状态
+        if($originalWaterfallMenu !== null)
+        {
+            $lang->waterfall->menu->design = $originalWaterfallMenu;
+        }
+        elseif(isset($lang->waterfall->menu->design))
+        {
+            unset($lang->waterfall->menu->design);
+        }
+        
+        if($originalIpdMenu !== null)
+        {
+            $lang->ipd->menu->design = $originalIpdMenu;
+        }
+        elseif(isset($lang->ipd->menu->design))
+        {
+            unset($lang->ipd->menu->design);
+        }
+        
+        return $result;
     }
 }

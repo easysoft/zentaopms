@@ -1,27 +1,32 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->getLastRevision();
+title=测试 repoTao::getLastRevision();
 timeout=0
-cid=8
+cid=0
 
-- 获取版本库1提交时间 @2023-12-13 19:00:25
-- 获取版本库3提交时间 @2023-12-18 19:00:25
+- 执行repoTest模块的getLastRevisionTest方法，参数是1  @2023-12-13 19:00:25
+- 执行repoTest模块的getLastRevisionTest方法，参数是3  @2023-12-18 19:00:25
+- 执行repoTest模块的getLastRevisionTest方法，参数是2  @0
+- 执行repoTest模块的getLastRevisionTest方法，参数是999  @0
+- 执行repoTest模块的getLastRevisionTest方法  @0
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(3);
 
-$repo = $tester->loadModel('repo');
+su('admin');
 
-$gitlabID = 1;
-$giteaID  = 3;
+$repoTest = new repoTest();
 
-r($repo->getLastRevision($gitlabID)) && p() && e('2023-12-13 19:00:25'); //获取版本库1提交时间
-r($repo->getLastRevision($giteaID))  && p() && e('2023-12-18 19:00:25'); //获取版本库3提交时间
+r($repoTest->getLastRevisionTest(1)) && p() && e('2023-12-13 19:00:25');
+r($repoTest->getLastRevisionTest(3)) && p() && e('2023-12-18 19:00:25');
+r($repoTest->getLastRevisionTest(2)) && p() && e('0');
+r($repoTest->getLastRevisionTest(999)) && p() && e('0');
+r($repoTest->getLastRevisionTest(0)) && p() && e('0');

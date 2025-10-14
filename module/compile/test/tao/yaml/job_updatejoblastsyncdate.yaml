@@ -1,0 +1,54 @@
+---
+title: job数据配置
+desc: 为updateJobLastSyncDate方法测试提供job表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: job ID
+  range: 1-3
+
+- field: name
+  note: job名称
+  range: job1,job2,job3
+
+- field: repo
+  note: 代码库ID
+  range: 1{3}
+
+- field: product
+  note: 产品ID
+  range: 1{3}
+
+- field: frame
+  note: 框架类型
+  range: jenkins{3}
+
+- field: engine
+  note: 引擎类型
+  range: jenkins{3}
+
+- field: autoRun
+  note: 自动运行
+  range: 1{3}
+
+- field: server
+  note: 服务器ID
+  range: 1{3}
+
+- field: pipeline
+  note: 流水线配置
+  range: pipeline1,pipeline2,pipeline3
+
+- field: triggerType
+  note: 触发类型
+  range: tag{3}
+
+- field: lastSyncDate
+  note: 最后同步时间
+  range: '~~{3}'
+
+- field: deleted
+  note: 删除状态
+  range: 0{3}

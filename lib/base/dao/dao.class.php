@@ -2828,7 +2828,7 @@ class baseSQL
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         $dbIN = helper::dbIN($ids);
-        if(strpos($dbIN, '=') === 0) $this->sql .= ' !' . helper::dbIN($ids);
+        if(strpos($dbIN, '=') === 0) $this->sql .= ' !' . $dbIN;
         else $this->sql .= ' NOT ' . helper::dbIN($ids);
 
         return $this;

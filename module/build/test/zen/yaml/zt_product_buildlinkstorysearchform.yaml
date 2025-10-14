@@ -1,0 +1,105 @@
+---
+title: 产品数据定义 - buildLinkStorySearchForm测试
+desc: 用于测试buildLinkStorySearchForm方法的产品数据
+table: zt_product
+
+fields:
+- field: id
+  range: 1-5
+  note: 产品ID
+
+- field: program
+  range: 0-2
+  note: 项目集ID
+
+- field: name
+  range: '产品A,产品B,产品C,移动端产品,Web产品'
+  note: 产品名称
+
+- field: code
+  range: 'PDA,PDB,PDC,MOBILE,WEB'
+  note: 产品代码
+
+- field: shadow
+  range: 0
+  note: 影子产品标记
+
+- field: bind
+  range: '0,1'
+  note: 绑定标记
+
+- field: line
+  range: 0-3
+  note: 产品线ID
+
+- field: type
+  range: 'normal,branch,platform'
+  note: 产品类型
+
+- field: status
+  range: 'normal,closed'
+  note: 产品状态
+
+- field: subStatus
+  range: ''
+  note: 子状态
+
+- field: desc
+  range: '这是一个测试产品,移动应用产品,企业级产品,开源产品,商业产品'
+  note: 产品描述
+
+- field: PO
+  range: 'admin,user1,user2'
+  note: 产品负责人
+
+- field: QD
+  range: 'admin,user1,user2'
+  note: 测试负责人
+
+- field: RD
+  range: 'admin,user1,user2'
+  note: 发布负责人
+
+- field: feedback
+  range: 'admin,user1,user2'
+  note: 反馈负责人
+
+- field: acl
+  range: 'open,private'
+  note: 访问控制
+
+- field: whitelist
+  range: ''
+  note: 白名单
+
+- field: groups
+  range: ''
+  note: 用户组
+
+- field: reviewers
+  range: ''
+  note: 评审者
+
+- field: createdBy
+  range: 'admin,user1'
+  note: 创建者
+
+- field: createdDate
+  range: '2024-01-01 10:00:00,2024-02-01 10:00:00'
+  note: 创建日期
+
+- field: createdVersion
+  range: '1.0,2.0,3.0'
+  note: 创建版本
+
+- field: order
+  range: 1-10
+  note: 排序
+
+- field: vision
+  range: 'rnd,lite'
+  note: 界面模式
+
+- field: deleted
+  range: '0'
+  note: 删除标记

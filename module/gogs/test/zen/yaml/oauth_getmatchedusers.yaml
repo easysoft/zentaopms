@@ -1,0 +1,27 @@
+---
+title: OAuth绑定关系数据定义  
+desc: 为getMatchedUsers方法测试提供用户绑定数据
+author: ZenTao
+
+fields:
+- field: id
+  note: 绑定ID
+  range: 1-5
+- field: account
+  note: 禅道用户账号
+  range: admin,user1,user2,[]{2}
+- field: openID
+  note: 第三方用户标识
+  range: bindeduser1,bindeduser2,bindeduser3,[]{2}
+- field: providerType
+  note: 第三方服务类型
+  range: gogs{5}
+- field: providerID
+  note: 第三方服务ID
+  range: 1{5}
+- field: bindDate
+  note: 绑定日期
+  range: 2023-01-01{5}
+- field: editedDate
+  note: 编辑日期
+  range: 2023-01-01{5}

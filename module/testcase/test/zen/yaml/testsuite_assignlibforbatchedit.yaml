@@ -1,0 +1,47 @@
+---
+title: 用例库数据
+desc: 为assignLibForBatchEdit方法测试准备的用例库数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 用例库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目ID
+  range: 0
+- field: product
+  note: 产品ID（用例库为0）
+  range: 0
+- field: name
+  note: 用例库名称
+  range: 基础功能测试库{2},性能测试库{2},安全测试库{2},回归测试库{2},接口测试库{2}
+- field: desc
+  note: 用例库描述
+  range: 基础功能测试用例集合,性能测试相关用例,安全测试用例库,回归测试用例集,API接口测试用例
+- field: type
+  note: 类型（用例库为library）
+  range: library
+- field: order
+  note: 排序
+  range: 1-10
+- field: addedBy
+  note: 创建者
+  range: admin{5},user{5}
+- field: addedDate
+  note: 创建时间
+  range: (2024-01-01)-(2024-12-31):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{3},user{3},tester{4}
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: (2024-01-01)-(2024-12-31):1D
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除（0-未删除，1-已删除）
+  range: 0{8},1{2}

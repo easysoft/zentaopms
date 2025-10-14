@@ -1,0 +1,98 @@
+---
+title: 消息通知数据配置
+desc: 用于测试assignDropmenuVars方法的通知消息数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 通知ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型，固定为message
+  range: message{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: action
+  note: 动作ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: toList
+  note: 接收者列表，包含当前用户admin
+  range: ,admin,{5},user{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: ccList
+  note: 抄送列表
+  range: []{5},dev{3},test{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: subject
+  note: 消息主题
+  range: Test Subject{5},Important Notice{3},System Update{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: data
+  note: 消息内容，包含链接
+  range: <a href='/zentao/task-view-1.html'>Task #1 created</a>{3},<a href='/zentao/bug-view-1.html'>Bug #1 reported</a>{3},<a href='/zentao/story-view-1.html'>Story #1 added</a>{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5},user{3},dev{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-09-14 10:00:00{2},2024-09-14 09:30:00{3},2024-09-14 09:00:00{3},2024-09-13 15:00:00{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sendTime
+  note: 发送时间
+  range: 2024-09-14 10:05:00{2},2024-09-14 09:35:00{3},2024-09-14 09:05:00{3},2024-09-13 15:05:00{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 消息状态，读取和未读
+  range: wait{3},read{4},sent{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: failReason
+  note: 失败原因
+  range: []{8},Network Error{1},Permission Denied{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

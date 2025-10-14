@@ -18,7 +18,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/releaselinkbug.ui.class.php';
+include '../lib/ui/releaselinkbug.ui.class.php';
 
 zendata('bug')->loadYaml('bug', false, 1)->gen(5);
 zendata('release')->loadYaml('projectrelease', false, 1)->gen(1);

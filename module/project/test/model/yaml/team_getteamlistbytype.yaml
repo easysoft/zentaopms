@@ -1,0 +1,66 @@
+---
+title: 团队数据定义
+desc: 为getTeamListByType方法测试准备团队数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 团队ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: 根对象ID
+  range: 1-5
+  format: ""
+- field: type
+  note: 团队类型
+  range: project{5},task{5},execution{5}
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4
+  format: ""
+- field: role
+  note: 角色
+  range: PM,QA,Dev,Tester,Manager
+  format: ""
+- field: position
+  note: 职位
+  range: 项目经理,测试工程师,开发工程师,产品经理,架构师
+  format: ""
+- field: limited
+  note: 是否受限
+  range: no{10},yes{5}
+  format: ""
+- field: join
+  note: 加入日期
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD
+- field: days
+  note: 工作天数
+  range: 1-30
+  format: ""
+- field: hours
+  note: 工作小时数
+  range: 1-8
+  format: ""
+- field: estimate
+  note: 预估工时
+  range: 10-100
+  format: ""
+- field: consumed
+  note: 已消耗工时
+  range: 0-50
+  format: ""
+- field: left
+  note: 剩余工时
+  range: 0-50
+  format: ""
+- field: order
+  note: 排序
+  range: 1-15
+  format: ""

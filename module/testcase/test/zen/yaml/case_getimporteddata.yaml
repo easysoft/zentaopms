@@ -1,0 +1,67 @@
+---
+title: 测试用例数据 - getImportedData方法
+desc: 为getImportedData方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: branch
+  note: 分支ID
+  range: 0,1-10
+  prefix: ""
+  postfix: ""
+- field: module
+  note: 模块ID
+  range: 0,1-50
+  prefix: ""
+  postfix: ""
+- field: story
+  note: 需求ID
+  range: 0,1-100
+  prefix: ""
+  postfix: ""
+- field: title
+  note: 用例标题
+  range: 测试用例{3}, 功能测试{5}, 性能测试{2}
+  prefix: ""
+  postfix: ""
+- field: precondition
+  note: 前置条件
+  range: 系统已启动, 用户已登录, 环境已准备
+  prefix: ""
+  postfix: ""
+- field: keywords
+  note: 关键词
+  range: test,case,function,performance
+  prefix: ""
+  postfix: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 用例类型
+  range: feature,performance,config,install,security,interface
+  prefix: ""
+  postfix: ""
+- field: stage
+  note: 适用阶段
+  range: unittest,feature,integration,system,smoke
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 用例状态
+  range: wait,normal,blocked
+  prefix: ""
+  postfix: ""

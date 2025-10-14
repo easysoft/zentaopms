@@ -1,0 +1,89 @@
+---
+title: 测试单用例列表页面变量分配测试数据
+desc: 为assignForCases方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 测试单ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 项目ID
+  range: 1-3
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1-3
+  format: ""
+
+- field: name
+  note: 测试单名称
+  range: 基础测试单,功能测试单,集成测试单,性能测试单,安全测试单
+  format: ""
+
+- field: execution
+  note: 执行ID
+  range: 1-5
+  format: ""
+
+- field: build
+  note: 版本
+  range: 1,2,3,trunk{2}
+  format: ""
+
+- field: type
+  note: 测试类型
+  range: feature{2},integration,performance,security
+  format: ""
+
+- field: owner
+  note: 负责人
+  range: admin,user1,user2,qa,tester
+  format: ""
+
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-01-15,2024-02-01,2024-02-15,2024-03-01
+  format: ""
+
+- field: end
+  note: 结束日期
+  range: 2024-01-31,2024-02-15,2024-03-01,2024-03-15,2024-03-31
+  format: ""
+
+- field: status
+  note: 状态
+  range: wait{2},doing{2},done{1}
+  format: ""
+
+- field: branch
+  note: 分支
+  range: 0{3},1{1},2{1}
+  format: ""
+
+- field: desc
+  note: 描述
+  range: 测试单描述1,测试单描述2,详细的测试描述,功能测试说明,性能测试说明
+  format: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2,qa,system
+  format: ""
+
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00,2024-01-15 09:00:00,2024-02-01 10:00:00,2024-02-15 14:00:00,2024-03-01 16:00:00
+  format: ""

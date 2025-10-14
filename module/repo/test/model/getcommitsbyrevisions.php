@@ -1,27 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->getCommitsByRevisions();
+title=测试 repoModel::getCommitsByRevisions();
 timeout=0
-cid=8
+cid=0
 
-- 获取版本库1提交信息属性1 @1
-- 获取版本库3提交信息属性3 @3
+- 测试步骤1：单个有效版本号 @1
+- 测试步骤2：多个有效版本号 @3
+- 测试步骤3：不存在的版本号 @0
+- 测试步骤4：空版本号数组 @0
+- 测试步骤5：混合版本号查询 @2
 
 */
 
-zenData('repo')->loadYaml('repo')->gen(4);
-zenData('repohistory')->loadYaml('repohistory')->gen(3);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
-$repo = $tester->loadModel('repo');
+$table = zenData('repohistory');
+$table->id->range('1-10');
+$table->repo->range('1{3},2{3},3{4}');
+$table->revision->range('commit001,commit002,commit003,commit004,commit005,commit006,commit007,commit008,commit009,commit010');
+$table->commit->range('1-10');
+$table->committer->range('admin,user1,dev1');
+$table->comment->range('提交信息1,提交信息2,提交信息3,提交信息4,提交信息5,提交信息6,提交信息7,提交信息8,提交信息9,提交信息10');
+$table->gen(10);
 
-$revisions1 = array('c808480afe22d3a55d94e91c59a8f3170212ade0');
-$revisions2 = array('d30919bdb9b4cf8e2698f4a6a30e41910427c01c', '0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb');
+su('admin');
 
-r($repo->getCommitsByRevisions($revisions1)) && p('1') && e('1'); //获取版本库1提交信息
-r($repo->getCommitsByRevisions($revisions2)) && p('3') && e('3'); //获取版本库3提交信息
+$repoTest = new repoTest();
+
+$singleRevision = array('commit001');
+$multipleRevisions = array('commit002', 'commit003', 'commit005');
+$nonExistentRevision = array('commit999', 'commit888');
+$emptyRevisions = array();
+$mixedRevisions = array('commit004', 'commit999', 'commit006');
+
+r($repoTest->getCommitsByRevisionsTest($singleRevision)) && p() && e('1'); // 测试步骤1：单个有效版本号
+r($repoTest->getCommitsByRevisionsTest($multipleRevisions)) && p() && e('3'); // 测试步骤2：多个有效版本号
+r($repoTest->getCommitsByRevisionsTest($nonExistentRevision)) && p() && e('0'); // 测试步骤3：不存在的版本号
+r($repoTest->getCommitsByRevisionsTest($emptyRevisions)) && p() && e('0'); // 测试步骤4：空版本号数组
+r($repoTest->getCommitsByRevisionsTest($mixedRevisions)) && p() && e('2'); // 测试步骤5：混合版本号查询

@@ -1,0 +1,19 @@
+---
+title: ConfigurationContext表测试数据
+desc: JIRA配置上下文数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: project
+  note: 项目ID
+  range: 1001,1002,1003,1004,1005,1001,1002,1003,1004,1005
+- field: customfield
+  note: 自定义字段
+  range: issuetype{10}
+- field: fieldconfigscheme
+  note: 字段配置方案
+  range: 2001,2002,2003,2004,2005,2001,2002,2003,2004,2005

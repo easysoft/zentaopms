@@ -22,7 +22,7 @@ cid=2
 - 创建需求子阶段最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
-include '../lib/createsubstage.ui.class.php';
+include '../lib/ui/createsubstage.ui.class.php';
 
 zendata('project')->loadYaml('execution', false, 1)->gen(10);
 zendata('projectspec')->gen(0);

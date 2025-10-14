@@ -1,0 +1,67 @@
+---
+title: buildTaskForCreate 方法测试用用户数据
+desc: 为 taskZen::buildTaskForCreate 方法提供用户测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: company
+  range: 1
+- field: type
+  range: inside,outside
+- field: dept
+  range: 1,2,3
+- field: account
+  range: admin,user1,user2,user3,tester1,dev1,pm1
+- field: password
+  range: 098f6bcd4621d373cade4e832627b4f6
+- field: role
+  range: admin,dev,qa,pm,po,td
+- field: realname
+  range: 管理员,开发1,测试1,项目经理1,产品经理1,技术总监1
+- field: nickname
+  range: Admin,Dev1,Tester1,PM1,PO1,TD1
+- field: avatar
+  range: ''
+- field: birthday
+  range: '0000-00-00'
+- field: gender
+  range: m,f
+- field: email
+  range: admin@test.com,user1@test.com,user2@test.com
+- field: skype
+  range: ''
+- field: qq
+  range: ''
+- field: mobile
+  range: ''
+- field: phone
+  range: ''
+- field: address
+  range: ''
+- field: zipcode
+  range: ''
+- field: join
+  range: '2024-01-01'
+- field: visits
+  range: 0
+- field: ip
+  range: ''
+- field: last
+  range: 0
+- field: fails
+  range: 0
+- field: locked
+  range: '0000-00-00 00:00:00'
+- field: feedback
+  range: 0
+- field: ranzhi
+  range: ''
+- field: score
+  range: 0
+- field: scoreLevel
+  range: 0
+- field: deleted
+  range: '0'

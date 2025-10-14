@@ -1,0 +1,43 @@
+---
+title: zt_image for queryDownloadImageStatus test
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: host
+  range: 1{5},2{3},3{2}
+- field: name
+  range: ubuntu18.04,centos7,debian10,mysql8.0,redis6.2
+- field: localName
+  range: ubuntu18.04.qcow2,centos7.qcow2,debian10.qcow2,mysql8.0.qcow2,redis6.2.qcow2
+- field: address
+  range: https://pkg.qucheng.com/zenagent/image/ubuntu18.04.qcow2,https://pkg.qucheng.com/zenagent/image/centos7.qcow2,https://pkg.qucheng.com/zenagent/image/debian10.qcow2,https://pkg.qucheng.com/zenagent/image/mysql8.0.qcow2,https://pkg.qucheng.com/zenagent/image/redis6.2.qcow2
+- field: path
+  range: /var/lib/zahost/images/ubuntu18.04.qcow2{2},/var/lib/zahost/images/centos7.qcow2{2},[]{6}
+- field: status
+  range: creating{3},inprogress{2},completed{2},notDownloaded{2},pending{1}
+- field: osName
+  range: Ubuntu 18.04,CentOS 7,Debian 10,MySQL 8.0,Redis 6.2
+- field: from
+  range: zentao{8},user{2}
+- field: memory
+  range: 1.0{2},2.0{3},4.0{3},8.0{2}
+- field: disk
+  range: 10.0{3},20.0{4},50.0{3}
+- field: fileSize
+  range: 1.5{2},2.8{3},4.2{3},8.7{2}
+- field: md5
+  range: a1b2c3d4e5f6{2},f6e5d4c3b2a1{3},1a2b3c4d5e6f{3},6f5e4d3c2b1a{2}
+- field: desc
+  range: Ubuntu操作系统镜像,CentOS操作系统镜像,Debian操作系统镜像,MySQL数据库镜像,Redis缓存镜像
+- field: createdBy
+  range: admin{6},user{3},system{1}
+- field: createdDate
+  range: "(-7D)-(+1D):-1H"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: restoreDate
+  range: "(-3D)-(+1D):-2H"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"

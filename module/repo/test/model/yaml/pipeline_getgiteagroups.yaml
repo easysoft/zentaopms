@@ -1,0 +1,105 @@
+---
+title: Pipeline数据用于getGiteaGroups方法测试
+desc: 为测试repoModel::getGiteaGroups()方法提供pipeline测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 管道ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 管道类型
+  range: gitea{5},gitlab{3},jenkins{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 管道名称
+  range: gitea-server1,gitea-server2,gitea-test,gitea-prod,gitea-dev,gitlab-main,gitlab-test,gitlab-dev,jenkins-ci,jenkins-cd
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: url
+  note: 服务器URL
+  range: http://gitea1.example.com,http://gitea2.example.com,http://gitea3.example.com,http://gitea4.example.com,http://gitea5.example.com,http://gitlab1.example.com,http://gitlab2.example.com,http://gitlab3.example.com,http://jenkins1.example.com,http://jenkins2.example.com
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账号
+  range: admin,user1,user2,user3,user4,git_admin,git_user1,git_user2,jenkins_admin,jenkins_user
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: pass123,pwd456,secret789,admin123,user456,git_pass,git_pwd,git_secret,jenkins_pass,jenkins_pwd
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: token
+  note: 访问令牌
+  range: token_abc123,token_def456,token_ghi789,token_jkl012,token_mno345,gitlab_token1,gitlab_token2,gitlab_token3,jenkins_token1,jenkins_token2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: private
+  note: 私有密钥
+  range: private_key1,private_key2,private_key3,private_key4,private_key5,[]{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: instanceID
+  note: 实例ID
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-7D)-(-1D):1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  note: 编辑者
+  range: admin{5},user1{3},user2{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: (-3D)-(D):1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

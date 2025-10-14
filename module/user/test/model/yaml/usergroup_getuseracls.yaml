@@ -1,0 +1,11 @@
+---
+title: 用户与权限组关联数据定义
+desc: 测试getUserAcls方法的用户组关联数据
+
+fields:
+- field: account
+  range: admin,dev1,dev2,test1,test2,guest,pm,qa,normal,empty
+- field: group
+  range: 1{1},2{2},3{2},4{1},5{1},6{1},7{1},999{1}
+- field: project
+  range: '[]{8},"1,2"{1},"3,4"{1}'

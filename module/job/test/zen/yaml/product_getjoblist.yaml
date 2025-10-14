@@ -1,0 +1,79 @@
+---
+title: product表测试数据 - getJobList方法
+desc: 为getJobList方法提供product测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-3
+  note: 产品ID
+- field: name
+  range: '测试产品1, 测试产品2, 测试产品3'
+  note: 产品名称
+- field: code
+  range: 'TEST01, TEST02, TEST03'
+  note: 产品代码
+- field: shadow
+  range: 0{3}
+  note: 影子产品标记
+- field: bind
+  range: 0{3}
+  note: 绑定标记
+- field: line
+  range: 0{3}
+  note: 产品线
+- field: type
+  range: 'normal{3}'
+  note: 产品类型
+- field: status
+  range: 'normal{3}'
+  note: 产品状态
+- field: subStatus
+  range: '"{3}'
+  note: 子状态
+- field: desc
+  range: '测试产品1描述, 测试产品2描述, 测试产品3描述'
+  note: 产品描述
+- field: PO
+  range: 'admin{3}'
+  note: 产品负责人
+- field: QD
+  range: 'admin{3}'
+  note: 质量负责人
+- field: RD
+  range: 'admin{3}'
+  note: 研发负责人
+- field: feedback
+  range: 'admin{3}'
+  note: 反馈负责人
+- field: ticket
+  range: 'admin{3}'
+  note: 工单负责人
+- field: acl
+  range: 'open{3}'
+  note: 访问控制
+- field: whitelist
+  range: '"{3}'
+  note: 白名单
+- field: reviewer
+  range: '"{3}'
+  note: 评审人
+- field: createdBy
+  range: 'admin{3}'
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 00:00:00{3}'
+  note: 创建时间
+- field: createdVersion
+  range: '1.0{3}'
+  note: 创建版本
+- field: order
+  range: 1-3
+  note: 排序
+- field: deleted
+  range: '0{3}'
+  note: 删除标记
+- field: vision
+  range: 'rnd{3}'
+  note: 视图

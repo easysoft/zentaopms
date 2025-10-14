@@ -1,0 +1,62 @@
+---
+title: 构建版本区块测试数据
+desc: 用于测试printBuildBlock方法的构建版本数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 构建版本ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 构建版本名称
+  range: v1.0.{1-10},v2.0.{1-10},hotfix_{1-10}
+- field: project
+  note: 所属项目ID
+  range: 1-10
+- field: product
+  note: 所属产品ID
+  range: 1-5
+- field: branch
+  note: 分支ID
+  range: 0{15},1-5{15}
+- field: execution
+  note: 所属执行ID
+  range: 1-15
+- field: builds
+  note: 关联构建
+  range: []{20},"1,2"{5},"3,4,5"{5}
+- field: scmPath
+  note: 源代码路径
+  range: /trunk/{10},/branches/dev{10},/tags/release{10}
+- field: filePath
+  note: 文件路径
+  range: /var/builds/{15},[]{15}
+- field: date
+  note: 构建日期
+  range: (`-30D`)-(`-1D`):1D
+  format: YYYY-MM-DD
+- field: stories
+  note: 完成需求
+  range: []{10},"1,2,3"{10},"4,5"{10}
+- field: bugs
+  note: 解决Bug
+  range: []{10},"1,2"{10},"3,4,5"{10}
+- field: builder
+  note: 构建者
+  range: admin{10},user1{8},user2{6},user3{6}
+- field: desc
+  note: 构建描述
+  range: 正式版本{8},测试版本{10},修复版本{6},开发版本{6}
+- field: deleted
+  note: 是否删除
+  range: 0{28},1{2}
+- field: createdBy
+  note: 创建者
+  range: admin{15},user1{8},user2{4},user3{3}
+- field: createdDate
+  note: 创建时间
+  range: (`-30D`)-(`-1D`):1D
+  format: YYYY-MM-DD hh:mm:ss

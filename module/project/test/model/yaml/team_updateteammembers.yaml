@@ -1,0 +1,84 @@
+---
+title: team表测试数据 - updateTeamMembers方法测试
+desc: 测试团队成员数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 团队成员ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: 项目ID
+  range: 1{5},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: project{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{3},user1{3},user2{3},user3{3},dev1{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色
+  range: admin{3},dev{6},pm{3},qa{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: position
+  note: 职位
+  range: '项目经理'{3},'开发工程师'{6},'项目经理'{3},'测试工程师'{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: limited
+  note: 是否受限
+  range: no{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: join
+  note: 加入日期
+  range: '2024-01-01'{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: days
+  note: 工作天数
+  range: 10{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: hours
+  note: 工作时长
+  range: '8.0'{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

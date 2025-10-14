@@ -308,6 +308,8 @@ class blockModel extends model
      */
     public function getModelType4Projects(array $projectIdList)
     {
+        if(empty($projectIdList)) return '';
+
         $models = $this->dao->select('DISTINCT model')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('model');
         $models = array_flip(array_keys($models));
 
@@ -317,5 +319,7 @@ class blockModel extends model
         if($haveScrum && $haveWater) return 'all';
         if($haveScrum) return 'scrum';
         if($haveWater) return 'waterfall';
+
+        return '';
     }
 }

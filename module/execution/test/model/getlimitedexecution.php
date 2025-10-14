@@ -4,29 +4,43 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
-zenData('user')->gen(5);
+zenData('user')->gen(10);
 
 $team = zenData('team');
-$team->type->range('execution');
-$team->root->range('101-103');
-$team->gen(10);
+$team->root->range('101-105');
+$team->type->range('project{2},execution{3}');
+$team->account->range('user1,user2,user3,user4,user5');
+$team->limited->range('yes{4},no{1}');
+$team->gen(5);
 
 su('admin');
+
 /**
 
-title=测试 executionModel->getLimitedExecution();
+title=测试 executionModel::getLimitedExecution();
 timeout=0
 cid=1
 
-- 判断管理员 @1
-- 判断非管理员 @103
+- 测试管理员用户权限 @1
+- 测试受限项目成员权限 @103
+- 测试受限执行成员权限 @103,104
+- 测试混合权限成员 @103
+- 测试无权限普通用户 @
 
 */
 
-global $app;
+$executionTest = new executionTest();
 
-$execution = new executionTest();
-r($execution->getLimitedExecutionTest()) && p() && e('1');  // 判断管理员
+r($executionTest->getLimitedExecutionTest()) && p() && e('1');
+
+su('user1');
+r($executionTest->getLimitedExecutionTest()) && p() && e('103');
+
+su('user3');
+r($executionTest->getLimitedExecutionTest()) && p() && e('103,104');
 
 su('user4');
-r($execution->getLimitedExecutionTest()) && p() && e('103');  // 判断非管理员
+r($executionTest->getLimitedExecutionTest()) && p() && e('103');
+
+su('user9');
+r($executionTest->getLimitedExecutionTest()) && p() && e('');

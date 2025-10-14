@@ -14,7 +14,7 @@ cid=6
 */
 
 chdir(__DIR__);
-include '../lib/browse.ui.class.php';
+include '../lib/ui/browse.ui.class.php';
 global $config;
 
 $action = zenData('action');

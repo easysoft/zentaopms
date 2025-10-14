@@ -1,0 +1,44 @@
+title: table zt_build for processBuildListData test
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-15
+  - field: project
+    range: 1-10
+  - field: product
+    range: 1-5
+  - field: branch
+    range: 0{5},1{3},2{2},1,2{2},3,4{2},5
+  - field: execution
+    range: 1-10
+  - field: builds
+    range: ""
+  - field: name
+    range: "Build 1.0{3},Build 2.0{3},Build 3.0{3},Build 4.0{3},Build 5.0{3}"
+  - field: scmPath
+    range: ""{8},/scm/path{4},/another/scm/path{3}
+  - field: filePath
+    range: /path/to/file{5},""{5},/another/file/path{5}
+  - field: date
+    range: "20241201 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: stories
+    range: "1,2,3"
+  - field: bugs
+    range: "1,2"
+  - field: builder
+    range: admin{10},user1{5}
+  - field: desc
+    range: "版本描述{10},测试版本{5}"
+  - field: createdBy
+    range: admin{10},user1{5}
+  - field: createdDate
+    range: "20241201 000000:1H"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    range: 0{14},1
+  - field: system
+    range: ""{5},1{5},2{5}

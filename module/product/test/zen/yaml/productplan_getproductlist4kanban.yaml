@@ -1,0 +1,84 @@
+---
+title: 产品计划看板测试数据
+desc: 测试getProductList4Kanban方法的产品计划数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1,1,2,2,3,3,4,4,5,5,6,7,8,9,10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 计划标题
+  range: "计划A1,计划A2,计划B1,计划B2,计划C1,计划C2,计划D1,计划D2,计划E1,计划E2,计划F1,计划G1,计划H1,计划I1,计划J1"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 计划描述
+  range: "描述A1,描述A2,描述B1,描述B2,描述C1,描述C2,描述D1,描述D2,描述E1,描述E2,描述F1,描述G1,描述H1,描述I1,描述J1"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: begin
+  note: 开始时间
+  range: "2024-01-01,2024-01-15,2024-02-01,2024-02-15,2024-03-01,2024-03-15,2024-04-01,2024-04-15,2024-05-01,2024-05-15,2024-06-01,2024-06-15,2024-07-01,2024-07-15,2024-08-01"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: end
+  note: 结束时间
+  range: "2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31,2024-12-31"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 计划状态
+  range: doing{12},wait{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10},user1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-12-01 00:00:00,2023-12-02 00:00:00,2023-12-03 00:00:00,2023-12-04 00:00:00,2023-12-05 00:00:00,2023-12-06 00:00:00,2023-12-07 00:00:00,2023-12-08 00:00:00,2023-12-09 00:00:00,2023-12-10 00:00:00,2023-12-11 00:00:00,2023-12-12 00:00:00,2023-12-13 00:00:00,2023-12-14 00:00:00,2023-12-15 00:00:00"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

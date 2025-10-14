@@ -1,0 +1,39 @@
+---
+title: processBlockForRender方法测试数据
+fields:
+- field: id
+  note: 区块ID
+  range: 1-10
+- field: account
+  note: 用户账号
+  range: admin,user,test
+- field: dashboard
+  note: 仪表板
+  range: my,product,project
+- field: module
+  note: 模块名
+  range: welcome,task,bug
+- field: title
+  note: 区块标题
+  range: 欢迎,任务,Bug
+- field: block
+  note: 区块类型
+  range: welcome,list
+- field: code
+  note: 区块代码
+  range: welcome,task,bug
+- field: width
+  note: 区块宽度
+  range: 1,2,3
+- field: height
+  note: 区块高度
+  range: 1-5
+- field: left
+  note: 距离左侧位置
+  range: 0,1,2
+- field: top
+  note: 距离顶部位置
+  range: 0,1,2
+- field: params
+  note: 区块参数
+  range: '{\"num\":5},{\"count\":10},{\"num\":3}'

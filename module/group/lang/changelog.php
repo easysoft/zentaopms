@@ -848,3 +848,5 @@ $lang->changelog['21.4'][] = 'testtask-assignCase';
 
 $lang->changelog['21.7.1'][] = 'project-template';
 $lang->changelog['21.7.1'][] = 'project-createTemplate';
+
+$lang->changelog['21.7.3'][] = 'reporttemplate-index';

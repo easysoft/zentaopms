@@ -159,10 +159,10 @@ class zanodemodel extends model
      * @access public
      * @return bool
      */
-    public function createDefaultSnapshot(int $zanodeID = 0): bool
+    public function createDefaultSnapshot(int $zanodeID = 0): false|int
     {
         $node = $this->getNodeByID($zanodeID);
-        if($node->status != 'running')
+        if(!$node || $node->status != 'running')
         {
             dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
             return false;
@@ -181,7 +181,7 @@ class zanodemodel extends model
         $defaultSnapshot->createdBy   = 'system';
         $defaultSnapshot->createdDate = helper::now();
 
-        $this->createSnapshot($node, $defaultSnapshot);
+        return $this->createSnapshot($node, $defaultSnapshot);
     }
 
     /**
@@ -612,7 +612,10 @@ class zanodemodel extends model
     {
         $oldNodeStatus = $node->status;
         $host = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : clone $node;
-        $host->status = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
+        if($host && is_object($host))
+        {
+            $host->status = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
+        }
 
         if($node->status == 'running' || $node->status == 'ready' || $node->status == 'online')
         {
@@ -812,7 +815,7 @@ class zanodemodel extends model
 
         /* 检查网络状态。*/
         /* Check the status of network. */
-        if($data->hostType == 'physics')
+        if(!empty($data->hostType) && $data->hostType == 'physics')
         {
             $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
             if(!$ping)

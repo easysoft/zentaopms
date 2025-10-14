@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/projectexport.ui.class.php';
+include '../lib/ui/projectexport.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
 zendata('projectproduct')->loadYaml('projectproduct', false, 1)->gen(1);

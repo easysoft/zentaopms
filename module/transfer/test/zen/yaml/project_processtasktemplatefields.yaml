@@ -1,0 +1,75 @@
+title: table zt_project
+desc: processTaskTemplateFields测试数据
+author: automated test data
+version: "1.0"
+fields:
+  - field: id
+    note: 执行ID
+    range: "1-10"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: 所属项目ID
+    range: "1-5"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: 执行类型
+    range: ops,sprint,kanban,waterfall,stage
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: attribute
+    note: 执行属性
+    range: request,review,design,devel,test
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: 执行名称
+    range: 运维迭代,开发冲刺,看板执行,瀑布阶段,评审阶段
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: code
+    note: 执行代号
+    range: OPS,SPT,KAN,WAT,REV
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: 执行状态
+    range: wait,doing,suspended,closed
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: begin
+    note: 开始日期
+    range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: end
+    note: 结束日期
+    range: 2024-12-01,2024-12-15,2024-12-31
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: 是否删除
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

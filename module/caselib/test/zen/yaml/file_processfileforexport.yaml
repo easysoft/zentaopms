@@ -1,0 +1,38 @@
+---
+title: Test data for processFileForExport method
+desc: 用于测试 processFileForExport 方法的数据文件
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-100
+- field: objectID
+  note: 关联对象ID（用例ID）
+  range: 1001-1010
+- field: objectType
+  note: 对象类型
+  range: testcase
+- field: title
+  note: 文件标题
+  range: document.pdf,image.png,report.docx,test.txt,spec.xlsx
+- field: extension
+  note: 文件扩展名
+  range: pdf,png,docx,txt,xlsx
+- field: size
+  note: 文件大小
+  range: 1024-1048576
+- field: addedBy
+  note: 上传者
+  range: admin,user1,user2,pm
+- field: addedDate
+  note: 上传时间
+  range: (-1M)-(0)
+  format: YYYY-MM-DD hh:mm:ss
+- field: downloads
+  note: 下载次数
+  range: 0-100
+- field: extra
+  note: 额外信息
+  range: editor,[]{1}

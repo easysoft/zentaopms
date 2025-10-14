@@ -1269,6 +1269,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
+            ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
 
@@ -1975,7 +1976,7 @@ class userModel extends model
             $this->dao->update(TABLE_USERVIEW)->data($userView)->where('account')->eq($account)->exec();
         }
 
-        $this->loadModel('setting')->setItem("$account.common.userview.updateTime", time());
+        $this->loadModel('setting')->setItem("$account|common|userview|updateTime", time(), '|');
 
         return $userView;
     }

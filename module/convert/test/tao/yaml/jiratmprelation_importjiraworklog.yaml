@@ -1,0 +1,28 @@
+---
+title: importJiraWorkLog方法Jira临时关系数据
+desc: 为importJiraWorkLog方法提供临时关系表测试数据
+
+fields:
+- field: id
+  note: 关系记录ID
+  range: 1-20
+  
+- field: AType
+  note: A端类型
+  range: jworklog{5},jissue{10},zeffort{5}
+  
+- field: AID
+  note: A端ID
+  range: 1-100
+  
+- field: BType
+  note: B端类型
+  range: zstory{5},ztask{5},zbug{5},zeffort{5}
+  
+- field: BID
+  note: B端ID
+  range: 101-200
+  
+- field: extra
+  note: 额外信息
+  range: issue{15},worklog{5}

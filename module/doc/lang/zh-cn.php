@@ -110,6 +110,7 @@ $lang->docTemplate->content                      = '模板内容';
 $lang->docTemplate->templateDesc                 = '模板描述';
 $lang->docTemplate->status                       = '模板状态';
 $lang->docTemplate->emptyTip                     = '此参数与筛选条件下，暂无符合条件系统数据。';
+$lang->docTemplate->emptyDataTip                 = '此筛选条件下，暂无符合条件系统数据。';
 $lang->docTemplate->previewTip                   = '配置参数后，此区块会根据筛选器的配置展示相应的列表数据。';
 $lang->docTemplate->confirmDeleteChapterWithSub  = "删除章节后，章节下层级内容将一并隐藏，确定要删除该章节吗？";
 $lang->docTemplate->confirmDeleteTemplateWithSub = "删除文档模板后，文档模板下层级内容将一并隐藏，确定要删除该文档模板吗？";
@@ -371,6 +372,7 @@ $lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
 $lang->doc->zentaoList['bug']        = $lang->bug->common;
+$lang->doc->zentaoList['projectBug'] = $lang->projectCommon . $lang->bug->common;
 $lang->doc->zentaoList['productBug'] = '产品Bug';
 $lang->doc->zentaoList['planBug']    = '计划Bug';
 
@@ -384,6 +386,11 @@ $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = '反馈';
 $lang->doc->zentaoList['ticket']             = '工单';
 $lang->doc->zentaoList['gantt']              = '甘特图';
+
+$lang->doc->zentaoList['HLDS'] = '概要设计';
+$lang->doc->zentaoList['DDS']  = '详细设计';
+$lang->doc->zentaoList['DBDS'] = '数据库设计';
+$lang->doc->zentaoList['ADS']  = '接口设计';
 
 $lang->doc->zentaoAction = array();
 $lang->doc->zentaoAction['set']       = '设置';
@@ -536,6 +543,7 @@ $lang->doc->previewNotAvailable         = '预览功能暂不可用，请访问�
 $lang->doc->hocuspocusConnect           = '协作编辑服务已连接。';
 $lang->doc->hocuspocusDisconnect        = '协作编辑服务已断开，编辑内容将在重新连接后同步。';
 $lang->doc->docTemplateConvertComment   = "文档模板已经转换为新编辑器格式，切换版本 %s 来查看转换前的文档模板。";
+$lang->doc->noSupportList               = "当前{$lang->projectCommon}暂不支持“ %s”";
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";

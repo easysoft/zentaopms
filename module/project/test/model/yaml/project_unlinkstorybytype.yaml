@@ -1,0 +1,49 @@
+---
+title: 项目表测试数据 - unlinkStoryByType方法
+desc: 用于测试根据类型解除需求关联功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: "项目1,项目2,项目3,项目4,项目5,子项目1,子项目2,子项目3,测试项目1,测试项目2"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: project{5}, execution{3}, stage{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父级ID
+  range: 0{5}, 1{2}, 2{2}, 3{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 所属项目ID
+  range: 0{5}, 1{2}, 2{2}, 3{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

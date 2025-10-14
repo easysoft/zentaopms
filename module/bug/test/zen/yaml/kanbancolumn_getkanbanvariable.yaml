@@ -1,0 +1,22 @@
+---
+title: getKanbanVariable方法测试用的kanbancolumn数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-20
+- field: lane
+  range: 1{4}, 2{4}, 3{4}, 4{4}, 5{4}
+- field: type
+  range: unconfirmed{5}, confirmed{5}, active{5}, resolved{3}, closed{2}
+- field: name
+  range: 未确认{4}, 已确认{4}, 处理中{4}, 已解决{4}, 已关闭{4}
+- field: color
+  range: "#f1c232"{4}, "#ff9900"{4}, "#34a853"{4}, "#ea4335"{4}, "#4285f4"{4}
+- field: order
+  range: 1-20
+- field: lastEditedTime
+  range: "2023-01-01 00:00:00"{20}
+- field: deleted
+  range: "0"{20}

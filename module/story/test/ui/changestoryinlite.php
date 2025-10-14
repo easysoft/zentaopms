@@ -9,7 +9,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/changestoryinlite.ui.class.php';
+include '../lib/ui/changestoryinlite.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

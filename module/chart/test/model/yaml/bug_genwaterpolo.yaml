@@ -1,0 +1,107 @@
+title: zt_bug genWaterpolo测试数据
+author: Claude
+version: "1.0"
+desc: 为genWaterpolo方法测试提供基础bug数据
+
+fields:
+  - field: id
+    range: 1-50
+  - field: product
+    range: 1-5
+  - field: project
+    range: 1-3
+  - field: execution
+    range: 1-10
+  - field: module
+    range: 1-20
+  - field: title
+    range: 'Bug标题1,Bug标题2,Bug标题3,Bug标题4,Bug标题5'
+  - field: keywords
+    range: 'bug,test,error,issue,fix'
+  - field: severity
+    range: 1-4
+  - field: pri
+    range: 1-4
+  - field: type
+    range: 'codeerror,config,install,security,performance'
+  - field: os
+    range: 'all,windows,linux,mac'
+  - field: browser
+    range: 'all,chrome,firefox,safari,ie'
+  - field: status
+    range: 'active,resolved,closed'
+  - field: color
+    range: ''
+  - field: confirmed
+    range: 1{40},0{10}
+  - field: activatedCount
+    range: 0-5
+  - field: activatedDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: feedbackBy
+    range: ''
+  - field: notifyEmail
+    range: ''
+  - field: openedBy
+    range: 'admin,user1,user2,pm,tester'
+  - field: openedDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: openedBuild
+    range: 'trunk,1.0,1.1,1.2,2.0'
+  - field: assignedTo
+    range: 'admin,user1,user2,pm,tester'
+  - field: assignedDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: deadline
+    range: 0000-00-00{30},(2024-01-01)-(2024-12-31){20}
+    format: YYYY-MM-DD
+  - field: resolvedBy
+    range: 'admin,user1,user2,pm,tester,[]{10}'
+  - field: resolution
+    range: 'fixed,duplicate,external,notrepro,[]{10}'
+  - field: resolvedDate
+    range: 0000-00-00 00:00:00{10},(2023-01-01)-(2024-12-31){40}
+    format: YYYY-MM-DD hh:mm:ss
+  - field: resolvedBuild
+    range: 'trunk,1.0,1.1,1.2,2.0,[]{20}'
+  - field: closedBy
+    range: 'admin,user1,user2,[]{20}'
+  - field: closedDate
+    range: 0000-00-00 00:00:00{30},(2023-01-01)-(2024-12-31){20}
+    format: YYYY-MM-DD hh:mm:ss
+  - field: duplicateBug
+    range: 0{45},1-10{5}
+  - field: linkBug
+    range: ''
+  - field: case
+    range: 0{40},1-20{10}
+  - field: caseVersion
+    range: 1{45},2-5{5}
+  - field: result
+    range: 0{40},1-10{10}
+  - field: repo
+    range: 0{45},1-5{5}
+  - field: mr
+    range: 0{45},1-10{5}
+  - field: entry
+    range: ''
+  - field: lines
+    range: ''
+  - field: v1
+    range: ''
+  - field: v2
+    range: ''
+  - field: repoType
+    range: ''
+  - field: testtask
+    range: 0{40},1-5{10}
+  - field: lastEditedBy
+    range: 'admin,user1,user2,pm,tester,[]{10}'
+  - field: lastEditedDate
+    range: 0000-00-00 00:00:00{10},(2023-01-01)-(2024-12-31){40}
+    format: YYYY-MM-DD hh:mm:ss
+  - field: deleted
+    range: 0{45},1{5}

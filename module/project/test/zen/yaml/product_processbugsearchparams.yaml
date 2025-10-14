@@ -1,0 +1,44 @@
+---
+title: 产品Bug搜索参数测试数据
+desc: 用于测试processBugSearchParams方法的产品数据
+
+fields:
+- field: id
+  range: 1-50
+  note: 产品ID
+
+- field: name
+  range: "产品A{1-3}, 产品B{1-3}, 多分支产品{1-2}, 普通产品{1-5}"
+  note: 产品名称
+
+- field: type
+  range: "normal{8}, branch{5}, platform{2}"
+  note: 产品类型
+
+- field: status
+  range: "normal{10}, closed{3}, closed{2}"
+  note: 产品状态
+
+- field: shadow
+  range: "0{12}, 1{3}"
+  note: 是否影子产品
+
+- field: program
+  range: 0-20
+  note: 所属项目集
+
+- field: line
+  range: 0-10
+  note: 产品线
+
+- field: createdBy
+  range: "admin{5}, user1{3}, user2{3}, user3{4}"
+  note: 创建者
+
+- field: createdDate
+  range: 2023-01-01 00:00:00-2024-12-31 23:59:59
+  note: 创建时间
+
+- field: deleted
+  range: "0{13}, 1{2}"
+  note: 是否删除

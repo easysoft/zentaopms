@@ -1,0 +1,60 @@
+---
+title: 文档动态区块测试-user表数据
+desc: 为printDocDynamicBlock方法提供user表测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,test,guest,dev1,dev2,qa1,qa2,pm1
+  
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户一,用户二,测试员,访客,开发一,开发二,测试一,测试二,项目经理
+  
+- field: role
+  note: 用户角色
+  range: admin{1},dev{4},qa{3},pm{2}
+  
+- field: password
+  note: 密码
+  range: e10adc3949ba59abbe56e057f20f883e{10}
+  
+- field: email
+  note: 邮箱地址
+  fields:
+  - field: prefix
+    range: admin,user1,user2,test,guest,dev1,dev2,qa1,qa2,pm1
+  - field: suffix
+    range: '@company.com'
+    
+- field: deleted
+  note: 删除状态
+  range: 0{8},1{2}
+  
+- field: gender
+  note: 性别
+  range: m{6},f{4}
+  
+- field: join
+  note: 入职时间
+  range: 2020-01-01-2024-01-01:30D
+  format: YYYY-MM-DD
+  
+- field: visits
+  note: 访问次数
+  range: 1-1000:R
+  
+- field: ip
+  note: 最后登录IP
+  range: 192.168.1.1-192.168.1.255:R
+  
+- field: last
+  note: 最后登录时间
+  range: 2024-01-01 08:00:00-2024-01-20 22:00:00:1H
+  format: YYYY-MM-DD hh:mm:ss

@@ -131,6 +131,7 @@ $lang->project->lifetime           = "{$lang->projectCommon}周期";
 $lang->project->attribute          = '阶段类型';
 $lang->project->percent            = '工作量占比';
 $lang->project->milestone          = '里程碑';
+$lang->project->milestoneReport    = '里程碑报告';
 $lang->project->output             = '输出';
 $lang->project->path               = '路径';
 $lang->project->grade              = '层级';
@@ -407,6 +408,9 @@ if($config->systemMode == 'light')
 
 $lang->project->authList['extend'] = "继承 (取系统权限与{$lang->projectCommon}权限的合集)";
 $lang->project->authList['reset']  = "重新定义 (只取{$lang->projectCommon}权限)";
+
+$lang->project->sortAuthList['extend'] = '继承';
+$lang->project->sortAuthList['reset']  = '重新定义';
 
 $lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = '未开始';

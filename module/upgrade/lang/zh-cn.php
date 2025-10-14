@@ -116,6 +116,12 @@ $lang->upgrade->upgradeDocTemplates    = '升级文档模板数据';
 $lang->upgrade->upgradingDocTemplates  = '正在升级文档模板，请稍候...';
 $lang->upgrade->upgradeDocTemplatesTip = '正在升级后台文档模板的历史数据，升级后可在文档下模板广场中查看与维护。';
 
+$lang->upgrade->weeklyReportTitle        = '第 %s 周( %s ~ %s)';
+$lang->upgrade->milestoneTitle           = '里程碑报告';
+$lang->upgrade->upgradeProjectReports    = "升级{$lang->projectCommon}报告数据";
+$lang->upgrade->upgradingProjectReports  = "正在升级{$lang->projectCommon}报告数据，请稍候...";
+$lang->upgrade->upgradeProjectReportsTip = "检测到 %s 个{$lang->projectCommon}报告相关数据需要升级";
+
 $lang->upgrade->newProgram        = '新建';
 $lang->upgrade->editedName        = '调整后名称';
 $lang->upgrade->projectEmpty      = '所属项目不能为空！';

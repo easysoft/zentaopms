@@ -1,0 +1,53 @@
+---
+title: 测试数据：convertTao::createProject()
+desc: 为createProject方法提供项目测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: '测试项目{5}, 长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长名称{1}, {2}'
+- field: code
+  note: 项目代码
+  range: 'TEST{3}, PROJ{2}, 项目{1}, {1}'
+- field: desc
+  note: 项目描述
+  range: '项目描述内容{3}, {2}, 很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的描述{1}'
+- field: status
+  note: 项目状态
+  range: 'wait, doing, done, closed'
+- field: begin
+  note: 项目开始日期
+  range: 2024-01-01, 2024-02-15, 2024-03-10
+- field: end
+  note: 项目结束日期
+  range: 2024-12-31, 2025-06-30, 2024-08-20
+- field: PM
+  note: 项目经理
+  range: 'admin, user1, user2, {1}'
+- field: openedBy
+  note: 由谁创建
+  range: 'admin, testuser, manager{2}'
+- field: lead
+  note: Jira项目负责人
+  range: 'jira_admin, jira_user1, jira_lead{2}, {1}'
+- field: created
+  note: Jira创建时间
+  range: '2024-01-01 10:00:00, 2024-02-15 14:30:00, 2024-03-10 09:15:00, {1}'
+- field: pname
+  note: Jira项目名称
+  range: 'Jira Test Project{3}, 长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长Jira名称{1}, Jira项目{2}'
+- field: pkey  
+  note: Jira项目键
+  range: 'JIRA{3}, TEST{2}, 中文键{1}, {1}'
+- field: description
+  note: Jira项目描述
+  range: 'Jira项目描述{3}, {2}, 详细的Jira项目描述内容{1}'

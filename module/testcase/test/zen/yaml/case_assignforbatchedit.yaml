@@ -1,0 +1,92 @@
+---
+title: 批量编辑测试用例的测试数据
+desc: 提供assignForBatchEdit方法的测试数据，包含不同产品类型和分支的测试用例
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 1{5}, 2{3}, 3{2}
+
+- field: product
+  note: 产品ID
+  range: 1{5}, 2{3}, 3{2}
+
+- field: execution
+  note: 执行ID
+  range: 1{4}, 2{3}, 3{3}
+
+- field: branch
+  note: 分支ID
+  range: 0{6}, 1{2}, 2{2}
+
+- field: lib
+  note: 用例库ID
+  range: 0{8}, 1{1}, 2{1}
+
+- field: module
+  note: 模块ID
+  range: 1821{3}, 1822{3}, 1823{2}, 1824{2}
+
+- field: story
+  note: 需求ID
+  range: 0{3}, 1{2}, 2{2}, 3{1}, 4{2}
+
+- field: title
+  note: 用例标题
+  range: [测试用例1,测试用例2,测试用例3,测试用例4,测试用例5,用例库测试1,用例库测试2,批量编辑测试1,批量编辑测试2,功能测试用例]
+
+- field: type
+  note: 用例类型
+  range: feature{6}, interface{2}, config{1}, install{1}
+
+- field: auto
+  note: 自动化类型
+  range: no{8}, unit{1}, func{1}
+
+- field: status
+  note: 用例状态
+  range: normal{7}, blocked{2}, investigate{1}
+
+- field: pri
+  note: 优先级
+  range: 1{2}, 2{3}, 3{4}, 4{1}
+
+- field: stage
+  note: 适用阶段
+  range: [,unittest,feature,integrate,system,smoke][{2}]
+
+- field: keywords
+  note: 关键词
+  range: [批量编辑,测试用例,功能测试,接口测试,配置测试,安装测试,自动化,手工测试,正常,阻塞]
+
+- field: openedBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+
+- field: openedDate
+  note: 创建日期
+  range: (-30D)-(-1D):1D
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{4}, user1{3}, user2{2}, []{1}
+
+- field: lastEditedDate
+  note: 最后编辑日期
+  range: (-15D)-(NOW):1D
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: version
+  note: 版本号
+  range: 1{8}, 2{2}
+
+- field: deleted
+  note: 删除状态
+  range: 0{10}

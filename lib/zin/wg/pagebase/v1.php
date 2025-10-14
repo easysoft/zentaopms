@@ -109,7 +109,6 @@ class pageBase extends wg
             $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
             if(!empty($extraJS)) $headImports[] = h::importJs($webRoot . 'js/zui3/' . $extraJS);
             array_unshift($js, 'zui.defineFn();');
-            array_unshift($headImports, h::js("window.EDITOR_IMAGE_PROXY_ENDPOINT='{$webRoot}imgproxy.php';"));
         }
 
         $currentLang = $this->props->get('lang');

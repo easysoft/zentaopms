@@ -1,0 +1,26 @@
+---
+title: 产品导出模板数据
+desc: 用于测试getRowsForExportTemplate方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{3},branch{2}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal
+  format: ""

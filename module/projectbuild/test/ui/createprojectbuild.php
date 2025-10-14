@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createprojectbuild.ui.class.php';
+include '../lib/ui/createprojectbuild.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');
@@ -86,7 +86,7 @@ $build = array(
     array('systemname' => '应用BBB', 'name' => '版本002'),
 );
 
-r($tester->checkNoNameInfo($build['0']))    && p('message,status') && e('创建项目版本表单页提示信息正确,SUCCESS'); // 版本名称置空，检查提示信息
+r($tester->checkNoNameInfo($build['0']))    && p('message,status') && e('创建项目版本表单页必填提示信息正确,SUCCESS'); // 版本名称置空，检查提示信息
 r($tester->createProjectBuild($build['1'])) && p('message,status') && e('项目版本创建成功,SUCCESS');               // 创建项目版本
 r($tester->createProjectBuild($build['2'])) && p('message,status') && e('项目版本创建成功,SUCCESS');               // 创建项目版本
 

@@ -1,0 +1,59 @@
+---
+title: metriclib_getresultbycodes测试数据
+desc: 用于getResultByCodes方法的测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-20
+- field: metricID
+  note: 度量项ID
+  range: 1-10
+- field: metricCode
+  note: 度量项编码
+  range: '["count_of_product", "count_of_project", "count_of_execution", "count_of_story", "count_of_task", "count_of_bug", "rate_of_test_execution", "rate_of_story_completion", "density_of_bug", "coverage_of_code"]'
+- field: system
+  note: 系统
+  range: '["0", "1", "2"]'
+- field: program
+  note: 项目集
+  range: '["", "1", "2", "3"]'
+- field: project
+  note: 项目
+  range: '["", "1", "2", "3", "4", "5"]'
+- field: product
+  note: 产品
+  range: '["", "1", "2", "3", "4"]'
+- field: execution
+  note: 执行
+  range: '["", "1", "2", "3", "4", "5", "6"]'
+- field: code
+  note: 代码
+  range: '["", "dev", "test", "prod"]'
+- field: pipeline
+  note: 流水线
+  range: '["", "main", "feature", "hotfix"]'
+- field: year
+  note: 年份
+  range: 2023-2024
+- field: month
+  note: 月份
+  range: 1-12
+- field: day
+  note: 日期
+  range: 1-31
+- field: value
+  note: 值
+  range: 0.00-100.00
+- field: date
+  note: 日期
+  range: '2023-01-01-2023-12-31'
+- field: createdBy
+  note: 创建者
+  range: '["admin", "system", "user1"]'
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00-2023-12-31 23:59:59'
+- field: deleted
+  note: 删除标记
+  range: '["0", "1"]'

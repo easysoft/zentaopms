@@ -10,7 +10,7 @@ timeout=0
  - 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
-include '../lib/productview.ui.class.php';
+include '../lib/ui/productview.ui.class.php';
 
 $tester = new createProgramTester();
 $tester->login();

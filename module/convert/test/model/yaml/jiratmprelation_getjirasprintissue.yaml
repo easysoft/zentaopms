@@ -1,0 +1,30 @@
+---
+title: jiratmprelation表数据定义 - getJiraSprintIssue测试
+desc: 为测试convertModel::getJiraSprintIssue()方法生成测试数据
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  
+- field: AType
+  note: A类型，主要测试jsprint类型
+  range: jsprint{10},jproject{5},juser{5}
+  
+- field: AID
+  note: A对象ID，sprint ID范围
+  range: 10001-10020
+  
+- field: BType  
+  note: B类型，主要测试zexecution类型
+  range: zexecution{10},zproject{5},zother{5}
+  
+- field: BID
+  note: B对象ID，execution ID范围  
+  range: 20001-20020
+  
+- field: extra
+  note: 额外信息
+  range: issue{10},sprint{5},other{5}

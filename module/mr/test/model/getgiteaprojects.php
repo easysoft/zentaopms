@@ -5,24 +5,25 @@
 
 title=测试 mrModel::getGiteaProjects();
 timeout=0
-cid=1
+cid=0
 
-- 服务器ID正确
- - 第gitea/unittest条的id属性 @1
- - 第gitea/unittest条的name属性 @unittest
-- 服务器ID为空 @0
-- 服务器ID不存在 @0
+- 测试步骤1：有效的服务器ID获取项目列表 @array
+- 测试步骤2：服务器ID为0的边界值测试 @0
+- 测试步骤3：负数服务器ID测试 @0
+- 测试步骤4：不存在的服务器ID测试 @0
+- 测试步骤5：验证返回数据格式为数组 @array
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zenData('pipeline')->gen(5);
 su('admin');
 
-$mrTester = new mrTest();
+$mrTest = new mrTest();
 
-r($mrTester->getGiteaProjectsTester(4))   && p('gitea/unittest:id,name') && e('1,unittest'); // 服务器ID正确
-r($mrTester->getGiteaProjectsTester(0))   && p()                         && e('0');          // 服务器ID为空
-r($mrTester->getGiteaProjectsTester(100)) && p()                         && e('0');          // 服务器ID不存在
+r($mrTest->getGiteaProjectsTester(1))   && p()  && e('array'); // 测试步骤1：有效的服务器ID获取项目列表
+r($mrTest->getGiteaProjectsTester(0))   && p()  && e('0');     // 测试步骤2：服务器ID为0的边界值测试
+r($mrTest->getGiteaProjectsTester(-1))  && p()  && e('0');     // 测试步骤3：负数服务器ID测试
+r($mrTest->getGiteaProjectsTester(999)) && p()  && e('0');     // 测试步骤4：不存在的服务器ID测试
+r($mrTest->getGiteaProjectsTester(2))   && p()  && e('array'); // 测试步骤5：验证返回数据格式为数组

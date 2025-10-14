@@ -182,7 +182,7 @@ class releaseZen extends release
      * @access protected
      * @return void
      */
-    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, object $storyPager, object $bugPager, object $leftBugPager): void
+    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, object $storyPager = null, object $bugPager = null, object $leftBugPager = null): void
     {
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
@@ -224,7 +224,7 @@ class releaseZen extends release
         $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
         $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->param        = $param;
-        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_column($stories, 'id'));
         $this->view->summary      = $this->product->summary($stories);
         $this->view->builds       = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
         $this->view->bugs         = $bugs;

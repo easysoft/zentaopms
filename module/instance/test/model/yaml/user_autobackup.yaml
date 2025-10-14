@@ -1,0 +1,77 @@
+---
+title: User auto backup test data
+desc: Test data for user table in auto backup functionality
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: User ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: User account
+  range: admin{1},user1{1},user2{1},backup_user{1},test_user{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: Password
+  range: 123456{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: Real name
+  range: 管理员{1},用户1{1},用户2{1},备份用户{1},测试用户{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: Role
+  range: admin{1},user{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: email
+  note: Email
+  range: admin@example.com{1},user1@example.com{1},user2@example.com{1},backup@example.com{1},test@example.com{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: last
+  note: Last login time
+  range: 2023-01-01 00:00:00{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: visits
+  note: Visit count
+  range: 1{1},5{1},10{1},15{1},20{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: ip
+  note: IP address
+  range: 127.0.0.1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: Deleted flag
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

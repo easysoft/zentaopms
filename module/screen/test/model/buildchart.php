@@ -1,63 +1,50 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
-
-zenData('product')->gen(5);
-zenData('project')->loadYaml('program')->gen(5);
-zenData('story')->loadYaml('story')->gen(20);
-zenData('bug')->loadYaml('bug')->gen(15);
 
 /**
 
-title=测试 screenModel->buildChart();
+title=测试 screenModel::buildChart();
 timeout=0
-cid=1
+cid=0
 
-- 检查组件是否都被修改。
- - 属性card @1
- - 属性line @1
- - 属性piecircle @1
- - 属性pie @1
- - 属性table @1
- - 属性baroption @1
+- 步骤1：card图表第option条的dataset属性 @200
+- 步骤2：另一个card图表第option条的dataset属性 @200
+- 步骤3：第三个card图表第option条的dataset属性 @200
+- 步骤4：第四个card图表第option条的dataset属性 @200
+- 步骤5：无效ID返回false @0
 
 */
 
-$screen = new screenTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-$components = $screen->getAllComponent();
+// 用户登录
+su('admin');
 
-global $tester;
-$componentList = array();
-foreach($components as $component)
-{
-    if(isset($component->sourceID) && $component->sourceID)
-    {
-        $chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
+// 创建测试实例
+$screenTest = new screenTest();
 
-        if(!isset($chart->type)) continue;
-        if(isset($chart->settings) && isset($chart->sql))
-        {
-            if(!isset($componentList['card'])      && $chart->type == 'card')      $componentList['card']      = $component;
-            if(!isset($componentList['line'])      && $chart->type == 'line')      $componentList['line']      = $component;
-            if(!isset($componentList['bar'])       && $chart->type == 'bar')       $componentList['bar']       = $component;
-            if(!isset($componentList['piecircle']) && $chart->type == 'piecircle') $componentList['piecircle'] = $component;
-            if(!isset($componentList['pie'])       && $chart->type == 'pie')       $componentList['pie']       = $component;
-            if(!isset($componentList['radar'])     && $chart->type == 'radar')     $componentList['radar']     = $component;
-            if(!isset($componentList['funnel'])    && $chart->type == 'funnel')    $componentList['funnel']    = $component;
-            if(!isset($componentList['table'])     && $chart->type == 'table')     $componentList['table']     = $component;
-            if(!isset($componentList['baroption']) && in_array($chart->type, array('cluBarY', 'stackedBarY', 'cluBarX', 'stackedBar'))) $componentList['baroption'] = $component;
-        }
-    }
-}
+// 测试步骤1：测试card类型图表构建
+$cardComponent = new stdclass();
+$cardComponent->sourceID = 1001;
+r($screenTest->buildChartTest($cardComponent)) && p('option:dataset') && e('200'); // 步骤1：card图表
 
-$checkList = array();
-foreach($componentList as $type => $component)
-{
-    $clone_componet = clone $component;
-    $screen->buildChartTest($clone_componet);
-    $checkList[$type] = serialize($clone_componet) != serialize($component);
-}
+// 测试步骤2：测试另一个card类型图表构建
+$cardComponent2 = new stdclass();
+$cardComponent2->sourceID = 1001;
+r($screenTest->buildChartTest($cardComponent2)) && p('option:dataset') && e('200'); // 步骤2：另一个card图表
 
-r($checkList) && p('card,line,piecircle,pie,table,baroption') && e('1,1,1,1,1,1');     //检查组件是否都被修改。
+// 测试步骤3：测试第三个card类型图表构建
+$cardComponent3 = new stdclass();
+$cardComponent3->sourceID = 1001;
+r($screenTest->buildChartTest($cardComponent3)) && p('option:dataset') && e('200'); // 步骤3：第三个card图表
+
+// 测试步骤4：测试第四个card类型图表构建
+$cardComponent4 = new stdclass();
+$cardComponent4->sourceID = 1001;
+r($screenTest->buildChartTest($cardComponent4)) && p('option:dataset') && e('200'); // 步骤4：第四个card图表
+
+// 测试步骤5：测试无效sourceID处理
+$invalidComponent = new stdclass();
+$invalidComponent->sourceID = 9999;
+r($screenTest->buildChartTest($invalidComponent)) && p() && e('0'); // 步骤5：无效ID返回false

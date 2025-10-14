@@ -1,0 +1,100 @@
+---
+title: printSingleDynamicBlock方法测试数据
+desc: 为blockZen::printSingleDynamicBlock()方法提供action表测试数据
+
+fields:
+- field: id
+  note: 动态ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: objectType
+  note: 对象类型
+  range: story{8}, task{8}, bug{8}, project{3}, product{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: '1{15}, 2{10}, 3{5}'
+  prefix: ","
+  postfix: ","
+  loop: 0
+  format: ""
+
+- field: project
+  note: 项目ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: execution
+  note: 执行ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: actor
+  note: 操作者账号
+  range: admin{10}, user1{8}, user2{7}, user3{3}, user4{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: action
+  note: 操作类型
+  range: opened{8}, edited{8}, closed{6}, created{6}, updated{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: date
+  note: 操作时间
+  range: '2025-09-13 10:00:00{30}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: comment
+  note: 操作备注
+  range: 这是单产品动态测试{15}, 系统自动生成{10}, 用户操作产生{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: extra
+  note: 额外信息
+  range: '1{20}, 2{5}, 3{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: read
+  note: 是否已读
+  range: 0{15}, 1{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

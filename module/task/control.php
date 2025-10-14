@@ -622,10 +622,23 @@ class task extends control
         $task        = $this->view->task;
         $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
+        $canRecordEffort = $this->task->canOperateEffort($task);
+        if(!$canRecordEffort)
+        {
+            $deniedNotice = sprintf($this->lang->task->deniedNotice, $this->lang->task->teamMember, $this->lang->task->finish);
+            if($task->assignedTo != $this->app->user->account && $task->mode == 'linear') $deniedNotice = sprintf($this->lang->task->deniedNotice, $task->assignedToRealName, $this->lang->task->finish);
+
+            $this->view->deniedNotice = $deniedNotice;
+        }
+
         if(!empty($_POST))
         {
+            if(!$canRecordEffort) return $this->send(array('result' => 'fail', 'message' => $deniedNotice));
+
             $taskData = $this->taskZen->buildTaskForFinish($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($task->mode == 'linear' && $taskData->finishedBy != $task->assignedTo) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->error->finishedBy));
 
             /* Get and record estimate for task. */
             $effort = $this->taskZen->buildEffortForFinish($task, $taskData);
@@ -661,7 +674,7 @@ class task extends control
         $this->taskZen->buildUsersAndMembersToForm($task->execution, $taskID);
 
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
-        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
+        $this->view->canRecordEffort = $canRecordEffort;
         $this->display();
     }
 
@@ -1019,6 +1032,7 @@ class task extends control
         if($from == 'view') return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
 
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+        $link = isInModal() ? true : $link;
         return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
     }
 

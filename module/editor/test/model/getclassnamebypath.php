@@ -1,18 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
-su('admin');
 
 /**
 
 title=测试 editorModel::getClassNameByPath();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-根据文件路径获取类名 >> 1,1
+- 测试步骤1：module路径 @1
+- 测试步骤2：ext扩展路径 @1
+- 测试步骤3：extension路径 @1
+- 测试步骤4：不包含特殊标识路径 @1
+- 测试步骤5：空路径测试 @1
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+
+su('admin');
+
 $editor = new editorTest();
-r($editor->getClassNameByPathTest()) && p() && e('1,1');    //根据文件路径获取类名
+
+r($editor->getClassNameByPathTest(1)) && p() && e('1');    // 测试步骤1：module路径
+r($editor->getClassNameByPathTest(2)) && p() && e('1');    // 测试步骤2：ext扩展路径
+r($editor->getClassNameByPathTest(3)) && p() && e('1');    // 测试步骤3：extension路径
+r($editor->getClassNameByPathTest(4)) && p() && e('1');    // 测试步骤4：不包含特殊标识路径
+r($editor->getClassNameByPathTest(5)) && p() && e('1');    // 测试步骤5：空路径测试

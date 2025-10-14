@@ -491,7 +491,7 @@ class design extends control
         $this->design->unlinkCommit($designID);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'load' => inlink('browse', "projectID={$design->project}")));
+        return $this->send(array('result' => 'success', 'load' => isInModal() ? true : inlink('browse', "projectID={$design->project}")));
     }
 
     /**

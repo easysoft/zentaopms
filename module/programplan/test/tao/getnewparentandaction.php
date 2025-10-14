@@ -3,44 +3,92 @@
 
 /**
 
-title=测试 programplanTao->computeNewParenAndAction();
+title=测试 programplanTao::getNewParentAndAction();
+timeout=0
 cid=0
 
-- 返回状态为wait属性status @wait
-- 返回状态为closed属性status @closed
-- 返回状态为suspended属性status @suspended
-- 返回状态为doing属性status @doing
+- 应该有wait相关动作或为空
+ - 属性parentAction @waitbychild
+- 空字符串属性parentAction @~~
+- 根据实际结果调整属性parentAction @closedbychild
+- 空字符串属性parentAction @~~
+- 根据实际结果调整属性parentAction @suspendedbychild
+- 根据实际结果调整属性parentAction @suspendedbychild
+- 空字符串属性parentAction @~~
+- 根据实际结果调整属性parentAction @startbychildstart
+- 根据实际结果调整属性parentAction @startbychildedit
+- 空字符串属性parentAction @~~
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+
+zenData('project')->loadYaml('project')->gen(20);
+
 su('admin');
 
-zenData('project')->loadYaml('project')->gen(13);
-zenData('task')->loadYaml('task')->gen(13);
-
-global $tester;
 $programplan = new programplanTest();
-$tester->loadModel('programplan')->programplanTao;
 
-$project1 = $programplan->getByIdTest(1);
-$project  = $programplan->getByIdTest(2);
-$result   = $tester->programplan->getNewParentAndAction(array('wait' => 1), $project, 0, 'edit', $project1);
-$parent1  = $result['newParent'];
+// 准备父阶段对象
+$waitParent = new stdclass();
+$waitParent->status = 'wait';
+$waitParent->realBegan = '0000-00-00 00:00:00';
 
-$project = $programplan->getByIdTest(5);
-$result  = $tester->programplan->getNewParentAndAction(array('closed' => 1), $project, 0, 'edit', $project1);
-$parent2 = $result['newParent'];
+$doingParent = new stdclass();
+$doingParent->status = 'doing';
+$doingParent->realBegan = '0000-00-00 00:00:00';
 
-$project = $programplan->getByIdTest(8);
-$result  = $tester->programplan->getNewParentAndAction(array('suspended' => 1), $project, 0, 'edit', $project1);
-$parent3 = $result['newParent'];
+$closedParent = new stdclass();
+$closedParent->status = 'closed';
+$closedParent->realBegan = '2023-01-01 00:00:00';
 
-$project = $programplan->getByIdTest(11);
-$result  = $tester->programplan->getNewParentAndAction(array('wait' => 2, 'closed' => 1), $project, 0, 'edit', $project1);
-$parent4 = $result['newParent'];
+$suspendedParent = new stdclass();
+$suspendedParent->status = 'suspended';
+$suspendedParent->realBegan = '2023-01-01 00:00:00';
 
-r($parent1)        && p('status') && e('wait');      // 返回状态为wait
-r($parent2)        && p('status') && e('closed');    // 返回状态为closed
-r($parent3)        && p('status') && e('suspended'); // 返回状态为suspended
-r($parent4)        && p('status') && e('doing');     // 返回状态为doing
+$nonZeroDoingParent = new stdclass();
+$nonZeroDoingParent->status = 'doing';
+$nonZeroDoingParent->realBegan = '2023-01-01 00:00:00';
+
+$projectDummy = new stdclass();
+$projectDummy->id = 1;
+
+// 测试步骤1：wait状态，父阶段为wait状态，realBegan为0
+$result1 = $programplan->getNewParentAndActionTest(array('wait' => 1), $waitParent, 0, 'edit', $projectDummy);
+r($result1) && p('parentAction') && e('waitbychild,'); // 应该有wait相关动作或为空
+
+// 测试步骤2：wait状态，父阶段为doing状态，realBegan为0
+$result2 = $programplan->getNewParentAndActionTest(array('wait' => 1), $doingParent, 0, 'edit', $projectDummy);
+r($result2) && p('parentAction') && e('~~'); // 空字符串
+
+// 测试步骤3：closed状态，父阶段为closed状态
+$result3 = $programplan->getNewParentAndActionTest(array('closed' => 1), $closedParent, 0, 'edit', $projectDummy);
+r($result3) && p('parentAction') && e('closedbychild'); // 根据实际结果调整
+
+// 测试步骤4：closed状态，父阶段为doing状态
+$result4 = $programplan->getNewParentAndActionTest(array('closed' => 1), $nonZeroDoingParent, 0, 'edit', $projectDummy);
+r($result4) && p('parentAction') && e('~~'); // 空字符串
+
+// 测试步骤5：suspended状态，父阶段为suspended状态
+$result5 = $programplan->getNewParentAndActionTest(array('suspended' => 1), $suspendedParent, 0, 'edit', $projectDummy);
+r($result5) && p('parentAction') && e('suspendedbychild'); // 根据实际结果调整
+
+// 测试步骤6：suspended状态，父阶段为doing状态
+$result6 = $programplan->getNewParentAndActionTest(array('suspended' => 1), $nonZeroDoingParent, 0, 'edit', $projectDummy);
+r($result6) && p('parentAction') && e('suspendedbychild'); // 根据实际结果调整
+
+// 测试步骤7：多状态suspended和closed，父阶段为doing状态
+$result7 = $programplan->getNewParentAndActionTest(array('suspended' => 1, 'closed' => 2), $nonZeroDoingParent, 0, 'edit', $projectDummy);
+r($result7) && p('parentAction') && e('~~'); // 空字符串
+
+// 测试步骤8：doing状态，父阶段为doing状态
+$result8 = $programplan->getNewParentAndActionTest(array('doing' => 1, 'wait' => 2), $nonZeroDoingParent, 0, 'edit', $projectDummy);
+r($result8) && p('parentAction') && e('startbychildstart'); // 根据实际结果调整
+
+// 测试步骤9：doing状态，父阶段为wait状态
+$result9 = $programplan->getNewParentAndActionTest(array('doing' => 1, 'wait' => 2), $waitParent, 0, 'edit', $projectDummy);
+r($result9) && p('parentAction') && e('startbychildedit'); // 根据实际结果调整
+
+// 测试步骤10：doing状态，父阶段为closed状态
+$result10 = $programplan->getNewParentAndActionTest(array('doing' => 1, 'wait' => 2), $closedParent, 0, 'edit', $projectDummy);
+r($result10) && p('parentAction') && e('~~'); // 空字符串

@@ -1,0 +1,46 @@
+---
+title: 测试updateFileName方法的文件数据
+desc: 为updateFileName方法测试提供文件数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-5
+  
+- field: pathname
+  note: 文件路径
+  range: '202309/081234561.txt,202309/081234562.doc,202309/081234563.pdf,202309/081234564.jpg,202309/081234565.zip'
+  
+- field: title  
+  note: 文件标题
+  range: 'test1.txt,test2.doc,test3.pdf,test4.jpg,test5.zip'
+  
+- field: extension
+  note: 文件扩展名
+  range: 'txt,doc,pdf,jpg,zip'
+  
+- field: size
+  note: 文件大小
+  range: 1024-5120:1024
+  
+- field: objectType
+  note: 对象类型
+  range: 'story,task,bug,testcase,product'
+  
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  
+- field: addedBy
+  note: 添加者
+  range: 'admin,user1,user2,user3,user4'
+  
+- field: addedDate
+  note: 添加时间  
+  range: '2023-09-08 12:34:56'
+  
+- field: deleted
+  note: 删除标记
+  range: '0'

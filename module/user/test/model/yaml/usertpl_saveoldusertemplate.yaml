@@ -1,0 +1,27 @@
+---
+title: 用户模板数据
+desc: 用于测试saveOldUserTemplate方法的用户模板测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 模板ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: account
+  note: 用户账号
+  range: admin{3}, user1{2}, user2{2}, user3{3}
+- field: type
+  note: 模板类型
+  range: bug{5}, story{3}, task{2}
+- field: title
+  note: 模板标题
+  range: 标准Bug模板{2}, 用户故事模板{2}, 任务模板{2}, 自定义模板1{2}, 自定义模板2{2}
+- field: content
+  note: 模板内容
+  range: 这是一个Bug报告模板内容{2}, 这是一个用户故事模板内容{2}, 这是一个任务模板内容{2}, 自定义模板内容A{2}, 自定义模板内容B{2}
+- field: public
+  note: 是否公开
+  range: '0'{7}, '1'{3}

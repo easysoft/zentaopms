@@ -23,7 +23,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/report.ui.class.php';
+include '../lib/ui/report.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

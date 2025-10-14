@@ -1,40 +1,43 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
-include dirname(__FILE__, 5). '/test/lib/init.php';
-su('admin');
-
-zenData('todo')->loadYaml('getlistby')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 /**
 
-title=测试 todoModel->getListBy();
+title=测试 todoTao::getListBy();
 timeout=0
 cid=1
 
-- 获取待办列表数量 @5
-- 获取待办列表第1条的name和status
- - 属性name @待办5
- - 属性status @doing
-- 获取待办列表第5条的name和status
- - 属性name @待办1
- - 属性status @wait
+- 正常获取指定类型和用户的待办列表 @1
+- 获取空结果的待办列表 @0
+- 按日期范围过滤待办列表 @2
+- 按状态过滤待办列表 @2
+- 限制返回数量的待办列表 @1
 
 */
 
+su('admin');
+
+// 准备最基本的测试数据
+$table = zenData('todo');
+$table->id->range('1-5');
+$table->account->range('admin,user1,user2,admin,user1');
+$table->date->range('`2025-08-24`,`2025-08-24`,`2025-08-24`,`2025-08-25`,`2025-08-25`');
+$table->type->range('custom');
+$table->status->range('wait,doing,done,wait,done');
+$table->name->range('测试待办1,测试待办2,测试待办3,测试待办4,测试待办5');
+$table->assignedTo->range('admin,user1,user2,admin,user1');
+$table->vision->range('rnd');
+$table->deleted->range('0');
+$table->cycle->range('0');
+$table->gen(5);
+
 global $tester;
-$tester->loadModel('todo')->todoTao;
+$todo = new todoTest();
 
-$type    = 'before'; // assignedtoother, cycle
-$account = 'admin';
-$status  = 'all'; // done,closed,wait,doing
-$begin   = '2021-02-03';
-$end     = '2024-04-04';
-$limit   = 5;
-$orderBy = 'date_desc';
-
-$result = $tester->todo->getListBy($type, $account, $status, $begin, $end, $limit, $orderBy);
-
-r(count($result)) && p() && e('5'); //获取待办列表数量
-r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第1条的name和status
-r($result[4]) && p('name,status') && e('待办1,wait');  //获取待办列表第5条的name和status
+r(is_array($todo->getListByTest('today', 'admin', 'all', '2025-08-24', '2025-08-24', 0, 'date_desc'))) && p() && e('1'); // 正常获取指定类型和用户的待办列表
+r(count($todo->getListByTest('assignedtoother', 'admin', 'all', '', '', 0, 'date_desc'))) && p() && e('0'); // 获取空结果的待办列表
+r(count($todo->getListByTest('today', 'admin', 'all', '2025-08-24', '2025-08-25', 0, 'date_desc'))) && p() && e('2'); // 按日期范围过滤待办列表
+r(count($todo->getListByTest('today', 'admin', 'wait', '2025-08-24', '2025-08-25', 0, 'date_desc'))) && p() && e('2'); // 按状态过滤待办列表
+r(count($todo->getListByTest('today', 'admin', 'all', '2025-08-24', '2025-08-25', 1, 'date_desc'))) && p() && e('1'); // 限制返回数量的待办列表

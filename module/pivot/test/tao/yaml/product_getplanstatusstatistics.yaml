@@ -1,0 +1,47 @@
+---
+title: 产品数据定义
+desc: 为getPlanStatusStatistics测试生成产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品A{3},产品B{3},产品C{4}
+  format: ""
+- field: code
+  note: 产品代码
+  range: PA{3},PB{3},PC{4}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{10}
+  format: ""
+- field: shadow
+  note: 影子产品标记
+  range: 0{10}
+  format: ""
+- field: line
+  note: 产品线
+  range: 1-3
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{10}
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2,user3
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0{10}
+  format: ""

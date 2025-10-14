@@ -44,6 +44,7 @@ class docApp extends wg
         'userMap'               => '?array',               // 用户映射定义。
         'currentUser'           => '?string',              // 当前用户。
         'historyFetcher'        => '?string|array|object', // 历史记录数据获取 URL 或回调函数。
+        'historyPanel'          => '?string|array|object', // 历史记录面板。
         'uploadUrl'             => '?string',              // 上传文件 URL。
         'downloadUrl'           => '?string',              // 下载文件 URL。
         'privs'                 => '?array',               // 权限定义。
@@ -111,8 +112,8 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
-                    if($subMenu['key'] == 'ER' && !$config->enableER) continue;
-                    if($subMenu['key'] == 'UR' && !$config->URAndSR) continue;
+                    if($subMenu['key'] == 'ER' && !$config->enableER)   continue;
+                    if($subMenu['key'] == 'UR' && !$config->URAndSR)    continue;
 
                     $subMenus[] = $subMenu;
                 }
@@ -317,8 +318,10 @@ class docApp extends wg
             $fileUrl = '';
         }
 
-        $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+        $historyPanelProps = $this->prop('historyPanel');
+        if(empty($historyPanelProps)) $historyPanelProps = array();
+        if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
 
         /* 对比不可用场景：文档模板、API 文档、开源版 */
         $diffEnabled = ($config->edition != 'open')

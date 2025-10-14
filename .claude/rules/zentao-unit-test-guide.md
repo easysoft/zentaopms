@@ -33,11 +33,13 @@
 **🚨🚨🚨 AI大模型必读警告 🚨🚨🚨**
 
 **第一步：每个测试用例必须包含至少5个测试步骤（r()...e()语句）！**
-**第二步：必须按照指定格式提交代码！必须使用 test/runtime/ztf 运行测试验证！**
-**第三步：必须先使用 php 命令验证脚本没有错误再使用 test/runtime/ztf 验证测试是否通过**
+**第二步：r()...e()语句必须写在同一行内，禁止换行！**
+**第三步：必须按照指定格式提交代码！必须使用 test/runtime/ztf 运行测试验证！**
+**第四步：必须先使用 php 命令验证脚本没有错误再使用 test/runtime/ztf 验证测试是否通过**
 
 **⛔ 绝对禁止的行为：**
 - 测试步骤少于5个
+- r()...e()语句换行
 - 不遵循提交信息格式
 - 代码包含行尾空格（会导致提交失败）
 - 使用 `test/spider.php` 运行测试（必须使用 `test/runtime/ztf`）
@@ -76,21 +78,22 @@ r($userTest->getByIdTest('abc')) && p() && e(false);           // 测试步骤5�
 
 ```
 module/{moduleName}/test/
-├── lib/                                # 测试类库
-│   └── {moduleName}.unittest.class.php # 单元测试类
-├── model/                              # Model层单元测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-├── tao/                                # TAO层业务逻辑测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-├── zen/                                # ZEN层新架构测试
-│   ├── {methodName}.php                # 测试执行脚本
-│   └── yaml/                           # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml   # YAML测试数据
-└── ui/                                 # UI自动化测试（独立文档）
+├── lib/                                   # 测试类库
+│   └── {moduleName}.unittest.class.php    # model层和tao层单元测试类
+│   └── {moduleName}zen.unittest.class.php # zen层单元测试类
+├── model/                                 # model层单元测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+├── tao/                                   # tao层业务逻辑测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+├── zen/                                   # zen层新架构测试
+│   ├── {methodName}.php                   # 测试执行脚本
+│   └── yaml/                              # 测试数据目录
+│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
+└── ui/                                    # UI自动化测试（独立文档）
 ```
 
 ## 核心文件类型详解
@@ -124,6 +127,7 @@ cid=0
 /**
 
 title=测试 {className}::{methodName}();
+timeout=0
 cid=0
 
 - 测试步骤1：正常输入情况 >> 期望正常结果
@@ -136,7 +140,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';  // 或 include dirname(__FILE__, 2) . '/lib/{moduleName}zen.unittest.class.php'; 根据测试需要
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('{tableName}');
@@ -168,7 +172,12 @@ r(${moduleName}Test->{methodName}Test({param5})) && p('{checkProperty}') && e('{
 - `p('{property}')`: 指定检查的属性
 - `e('{expected}')`: 期望值断言
 
-### 2. 单元测试类 ({moduleName}.unittest.class.php)
+### 2. 单元测试类
+
+#### 2.1 业务分层为 model 或 tao
+
+**类文件：**
+{moduleName}.unittest.class.php
 
 **类结构模板：**
 ```php
@@ -200,6 +209,49 @@ class {moduleName}Test
     public function {methodName}Test($param = null)
     {
         $result = $this->objectModel->{methodName}($param);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+}
+```
+
+#### 2.2 业务分层为 zen
+
+**类文件：**
+{moduleName}zen.unittest.class.php
+
+**类结构模板：**
+
+```php
+<?php
+declare(strict_types = 1);
+class {moduleName}Test
+{
+    public function __construct()
+    {
+        $this->objectZen = initReference('{moduleName}');
+    }
+
+    /**
+     * Test {methodName} method.
+     *
+     * @param  {paramType} ${paramName}
+     * @access public
+     * @return mixed
+     */
+    /**
+     * Test {methodName} method.
+     *
+     * @param  mixed $param 参数描述
+     * @access public
+     * @return mixed
+     */
+    public function {methodName}Test($param = null)
+    {
+        $method = $this->objectZen->getMethod('{methodName}');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectZen, $param);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -445,6 +497,7 @@ test/runtime/ztf module/{moduleName}/test/{layerName}/{methodName}.php
 
    ```bash
    git add module/{moduleName}/test/lib/{moduleName}.unittest.class.php
+   git add module/{moduleName}/test/lib/{moduleName}zen.unittest.class.php
    git add module/{moduleName}/test/{layerName}/{methodName}.php
    git add module/{moduleName}/test/{layerName}/yaml/{tableName}_{methodName}.yaml
    ```
@@ -581,7 +634,7 @@ r($userTest->updatePasswordTest($weakPassword)) && p('errors,password') && e('�
 ### 2. 期望值类型
 - `e('string')` - 字符串期望
 - `e(123)` - 数值期望
-- `e(true/false)` - 布尔期望
+- `e(1/0)` - 布尔期望
 - `e('0')` - 字符串0（表示false或empty）
 - `e('~~')` - 空
 
@@ -663,6 +716,7 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 - [ ] 单元测试类名格式：`{moduleName}Test`
 - [ ] 测试方法名格式：`{methodName}Test`
 - [ ] 每个测试用例包含≥5个 `r()...e()` 测试步骤
+- [ ] 每个 `r()...e()` 没有换行
 - [ ] 文件头包含完整的测试步骤描述
 - [ ] **🚨 所有代码行尾无空格**：检查每行末尾是否清洁
 

@@ -1,0 +1,63 @@
+---
+title: 准备角色和权限组测试数据
+desc: 用于测试prepareRolesAndGroups方法的group表数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 权限组ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID，0表示全局权限组
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图类型
+  range: 'rnd,lite'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 权限组名称
+  range: '管理员,开发,测试,产品经理,项目经理,其他'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色标识
+  range: 'admin,dev,qa,po,pm,{}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 权限组描述
+  range: '系统管理员,开发人员,测试人员,产品经理,项目经理,其他用户'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制列表
+  range: '{}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: developer
+  note: 是否为开发者权限组
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

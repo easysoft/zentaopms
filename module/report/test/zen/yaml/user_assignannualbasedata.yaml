@@ -1,0 +1,103 @@
+---
+title: assignAnnualBaseData方法测试用户数据
+desc: 用于测试报告模块年度基础数据分配功能的用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,test1,test2,test3,test4,test5
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4,测试1,测试2,测试3,测试4,测试5
+
+- field: role
+  note: 用户角色
+  range: admin{2},dev{4},qa{2},pm{2}
+
+- field: dept
+  note: 部门ID
+  range: 1,2,2,3,3,1,2,3,1,2
+
+- field: password
+  note: 密码
+  range: '123456{10}'
+
+- field: email
+  note: 邮箱
+  fields:
+  - field: username
+    range: admin,user1,user2,user3,user4,test1,test2,test3,test4,test5
+  - field: domain
+    range: '@test.com{10}'
+
+- field: phone
+  note: 电话号码
+  range: '138{10}'
+  format: '%s%08d'
+
+- field: address
+  note: 地址
+  range: '北京市,上海市,广州市,深圳市,杭州市'
+
+- field: zipcode
+  note: 邮编
+  range: '100000-999999:R'
+
+- field: join
+  note: 入职时间
+  range: '2020-01-01 00:00:00,2021-01-01 00:00:00,2022-01-01 00:00:00,2023-01-01 00:00:00,2024-01-01 00:00:00'
+
+- field: visits
+  note: 访问次数
+  range: 1-100:R
+
+- field: ip
+  note: IP地址
+  range: '192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4,192.168.1.5'
+
+- field: last
+  note: 最后登录时间
+  range: '2024-01-01 00:00:00,2024-06-01 00:00:00,2024-12-01 00:00:00'
+
+- field: fails
+  note: 失败次数
+  range: 0-3:R
+
+- field: locked
+  note: 锁定时间
+  range: '0000-00-00 00:00:00{10}'
+
+- field: feedback
+  note: 反馈
+  range: '0{10}'
+
+- field: ranzhi
+  note: 然之
+  range: '0{10}'
+
+- field: score
+  note: 积分
+  range: 0-1000:R
+
+- field: scoreLevel
+  note: 积分等级
+  range: 1-5:R
+
+- field: deleted
+  note: 删除状态
+  range: '0{8},1{2}'
+
+- field: clientStatus
+  note: 客户端状态
+  range: 'online{5},offline{5}'
+
+- field: clientLang
+  note: 客户端语言
+  range: 'zh-cn{8},en{2}'

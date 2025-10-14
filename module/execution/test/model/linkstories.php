@@ -1,79 +1,74 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 /**
 
 title=测试 executionModel::linkStories();
-cid=1
+timeout=0
+cid=0
 
-- 敏捷执行关联需求 @1
-- 瀑布执行关联需求 @0
-- 看板执行关联需求 @1
+- 测试步骤1：正常的敏捷执行关联需求 @1
+- 测试步骤2：瀑布执行关联需求（无计划） @0
+- 测试步骤3：看板执行关联需求 @1
+- 测试步骤4：无效执行ID测试 @0
+- 测试步骤5：执行ID为0的边界值测试 @0
+- 测试步骤6：正常执行关联需求 @1
+- 测试步骤7：正常执行关联需求 @1
 
 */
 
-$execution = zenData('project');
-$execution->id->range('1-5');
-$execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
-$execution->project->range('0,0,1,1,2');
-$execution->type->range('project{2},sprint,waterfall,kanban');
-$execution->status->range('doing{3},closed,doing');
-$execution->parent->range('0,0,1,1,2');
-$execution->grade->range('2{2},1{3}');
-$execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
-$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$projectstory = zenData('projectstory');
-$projectstory->project->range('3-5');
-$projectstory->product->range('1-3');
-$projectstory->story->range('4,324,364');
-$projectstory->gen(3);
+$project = zenData('project');
+$project->id->range('101-110');
+$project->name->range('迭代1,迭代2,看板1,看板2,项目1,项目2,阶段1,阶段2,迭代3,迭代4');
+$project->project->range('11,11,12,12,0,0,13,13,14,14');
+$project->type->range('sprint{2},kanban{2},project{2},stage{2},sprint{2}');
+$project->status->range('doing');
+$project->parent->range('11,11,12,12,0,0,13,13,14,14');
+$project->grade->range('1{8},2{2}');
+$project->path->range(',11,101,,11,102,,12,103,,12,104,,105,,106,,13,107,,13,108,,14,109,,14,110,')->prefix(',')->postfix(',');
+$project->gen(10);
 
 $product = zenData('product');
-$product->id->range('1-3');
-$product->name->range('1-3')->prefix('产品');
-$product->code->range('1-3')->prefix('product');
-$product->type->range('normal');
+$product->id->range('1-5');
+$product->name->range('产品1,产品2,产品3,产品4,产品5');
 $product->status->range('normal');
-$product->gen(3);
+$product->gen(5);
+
+$story = zenData('story');
+$story->id->range('1-20');
+$story->title->range('需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10,需求11,需求12,需求13,需求14,需求15,需求16,需求17,需求18,需求19,需求20');
+$story->type->range('story');
+$story->status->range('active');
+$story->gen(20);
+
+$productplan = zenData('productplan');
+$productplan->id->range('1-5');
+$productplan->product->range('1-5');
+$productplan->title->range('计划1,计划2,计划3,计划4,计划5');
+$productplan->gen(5);
+
+$planstory = zenData('planstory');
+$planstory->plan->range('1-5');
+$planstory->story->range('1-5');
+$planstory->gen(5);
 
 $projectproduct = zenData('projectproduct');
-$projectproduct->project->range('3-5');
-$projectproduct->product->range('1-3');
-$projectproduct->plan->range('1-3');
-$projectproduct->gen(3);
-
-$stroy = zenData('story');
-$stroy->id->range('4,324,364');
-$stroy->title->range('1-3')->prefix('需求');
-$stroy->type->range('story');
-$stroy->status->range('active');
-$stroy->gen(3);
-
-$cell = zenData('kanbancell');
-$cell->id->range('1');
-$cell->kanban->range('5');
-$cell->gen(1);
+$projectproduct->project->range('101-105');
+$projectproduct->product->range('1-5');
+$projectproduct->plan->range('1-5');
+$projectproduct->gen(5);
 
 su('admin');
 
-/**
+$executionTest = new executionTest();
 
-title=测试executionModel->linkStoryTest();
-timeout=0
-cid=1
-
-*/
-
-$executionIDList = array('3', '4', '5');
-$productIDList   = array('1', '0', '3');
-$planIDList      = array('1', '0', '3');
-
-$execution = new executionTest();
-r($execution->linkStoriesTest($executionIDList[0], $productIDList[0], $planIDList[0])) && p() && e('1'); // 敏捷执行关联需求
-r($execution->linkStoriesTest($executionIDList[1], $productIDList[1], $planIDList[1])) && p() && e('0'); // 瀑布执行关联需求
-r($execution->linkStoriesTest($executionIDList[2], $productIDList[2], $planIDList[2])) && p() && e('1'); // 看板执行关联需求
+r($executionTest->linkStoriesTest(101, 1, 1)) && p() && e('1'); // 测试步骤1：正常的敏捷执行关联需求
+r($executionTest->linkStoriesTest(102, 0, 0)) && p() && e('0'); // 测试步骤2：瀑布执行关联需求（无计划）
+r($executionTest->linkStoriesTest(103, 3, 3)) && p() && e('1'); // 测试步骤3：看板执行关联需求
+r($executionTest->linkStoriesTest(999, 1, 1)) && p() && e('0'); // 测试步骤4：无效执行ID测试
+r($executionTest->linkStoriesTest(0, 1, 1)) && p() && e('0'); // 测试步骤5：执行ID为0的边界值测试
+r($executionTest->linkStoriesTest(104, 4, 4)) && p() && e('1'); // 测试步骤6：正常执行关联需求
+r($executionTest->linkStoriesTest(105, 5, 5)) && p() && e('1'); // 测试步骤7：正常执行关联需求

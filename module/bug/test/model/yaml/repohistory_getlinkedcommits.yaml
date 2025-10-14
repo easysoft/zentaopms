@@ -1,0 +1,32 @@
+---
+title: 代码仓库历史记录测试数据
+desc: 用于测试getLinkedCommits方法的repohistory表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: repo
+  note: 代码仓库ID
+  range: 1{3}, 2{3}, 3{2}, 999{2}
+- field: revision
+  note: 版本号
+  range: abc123{2}, def456{2}, ghi789{2}, xyz999{2}, invalid{2}
+- field: commit
+  note: 提交ID
+  range: 1-10
+- field: comment
+  note: 提交备注
+  range: Fix bug, Add feature, Update code, Remove file, Refactor
+- field: committer
+  note: 提交者
+  range: admin, user1, user2, developer
+- field: time
+  note: 提交时间
+  range: 2024-01-01 10:00:00, 2024-01-02 11:00:00, 2024-01-03 12:00:00

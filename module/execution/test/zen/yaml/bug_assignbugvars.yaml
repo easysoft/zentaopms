@@ -1,0 +1,31 @@
+---
+title: bug data for assignBugVars test
+desc: Test data for bug related to assignBugVars method
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-20
+- field: title
+  range: "Bug测试标题1,Bug测试标题2,Bug测试标题3,Bug测试标题4,Bug测试标题5"
+  loop: 4
+  loopfix: "-"
+- field: product
+  range: 1-5:R
+- field: project
+  range: 1-5:R
+- field: execution
+  range: 1-5:R
+- field: module
+  range: 1-10:R
+- field: status
+  range: "active{10},resolved{5},closed{5}"
+- field: type
+  range: "codeerror{8},config{4},install{3},security{2},performance{2},standard{1}"
+- field: severity
+  range: 1-4:R
+- field: pri
+  range: 1-4:R
+- field: openedBy
+  range: "admin,user1,user2,dev1,dev2"
+  loop: 4

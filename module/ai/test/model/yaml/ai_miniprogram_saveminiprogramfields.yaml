@@ -1,0 +1,81 @@
+---
+title: AI小程序测试数据
+desc: 用于测试saveMiniProgramFields方法的AI小程序数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 小程序ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 小程序名称
+  range: 测试小程序{5}, 职业导航{2}, 代码助手{3}
+  prefix: ""
+  postfix: ""
+- field: category
+  note: 分类
+  range: personal{5}, development{3}, other{2}
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 描述
+  range: 这是一个测试用的AI小程序{5}, 用于职业规划的小程序{2}, 代码开发助手{3}
+  prefix: ""
+  postfix: ""
+- field: model
+  note: 模型ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+- field: icon
+  note: 图标
+  range: writinghand-7{5}, technologist-6{3}, coding-1{2}
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: (-1M)-(-1w):1d
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin{5}, user1{3}, user2{2}
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: (-1w)-(h):1h
+  format: YYYY-MM-DD hh:mm:ss
+- field: published
+  note: 是否发布
+  range: '0'{3}, '1'{7}
+  prefix: ""
+  postfix: ""
+- field: publishedDate
+  note: 发布时间
+  range: (-1w)-(h):1h, []{3}
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'{9}, '1'{1}
+  prefix: ""
+  postfix: ""
+- field: prompt
+  note: 提示词模板
+  range: 请帮我{5}, 根据以下信息{3}, 生成相关内容{2}
+  prefix: ""
+  postfix: ""
+- field: builtIn
+  note: 是否内置
+  range: '0'{7}, '1'{3}
+  prefix: ""
+  postfix: ""

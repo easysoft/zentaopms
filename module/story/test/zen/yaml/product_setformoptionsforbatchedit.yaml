@@ -1,0 +1,57 @@
+---
+title: 产品数据配置
+desc: 用于setFormOptionsForBatchEdit方法测试
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: program
+  range: 0{5}
+- field: name
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  range: product1,product2,product3,product4,product5
+- field: bind
+  range: 0{5}
+- field: line
+  range: 0{5}
+- field: type
+  range: normal{3},branch{2}
+- field: status
+  range: normal{5}
+- field: subStatus
+  range: ''
+- field: desc
+  range: 产品描述1,产品描述2,产品描述3,产品描述4,产品描述5
+- field: PO
+  range: admin{3},user1{2}
+- field: QD
+  range: admin{5}
+- field: RD
+  range: admin{5}
+- field: feedback
+  range: admin{5}
+- field: ticket
+  range: admin{5}
+- field: acl
+  range: open{5}
+- field: reviewer
+  range: ''
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: 2024-01-01 00:00:00{5}
+- field: createdVersion
+  range: ''{5}
+- field: order
+  range: 1-5
+- field: vision
+  range: rnd{5}
+- field: budget
+  range: '0'{5}
+- field: budgetUnit
+  range: CNY{5}
+- field: deleted
+  range: 0{5}

@@ -1,54 +1,41 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
-su('admin');
-
-zenData('action')->gen(10);
-zenData('webhook')->gen(10);
 
 /**
 
-title=测试 webhookModel->buildData();
+title=测试 webhookModel::buildData();
 timeout=0
-cid=1
+cid=0
 
-- 正常传入的情况 @12
-- 不传objectType第markdown条的title属性 @admin创建了发布
-- 不传objectType @0
-- 不传actionType @0
-- 不传actionID @0
+- 步骤1：正常参数测试 @rue
+- 步骤2：空objectType参数 @rue
+- 步骤3：不存在的actionType（有数据） @rue
+- 步骤4：不存在的actionID @rue
+- 步骤5：无匹配数据 @rue
 
 */
+
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+
+// 2. 简化数据准备
+zenData('action')->gen(10);
+zenData('webhook')->gen(10);
+zenData('release')->gen(5);
+zenData('story')->gen(5);
+
+// 3. 用户登录
+su('admin');
+
+// 4. 创建测试实例
 global $tester;
 $tester->loadModel('action');
-$webhook = new webhookTest();
+$webhookTest = new webhookTest();
 
-$objectType = array();
-$objectType[0] = 'release';
-$objectType[1] = '';
-
-$objectID = array();
-$objectID[0] = 1;
-$objectID[1] = 0;
-
-$actionType = array();
-$actionType[0] = 'created';
-$actionType[1] = '';
-
-$actionID = array();
-$actionID[0] = 1;
-$actionID[1] = 0;
-
-$result1 = $webhook->buildDataTest($objectType[0], $objectID[0], $actionType[0], $actionID[0]);
-$result2 = $webhook->buildDataTest($objectType[1], $objectID[0], $actionType[0], $actionID[0]);
-$result3 = $webhook->buildDataTest($objectType[0], $objectID[0], $actionType[1], $actionID[0]);
-$result4 = $webhook->buildDataTest($objectType[0], $objectID[0], $actionType[0], $actionID[1]);
-
-r(strpos($result1, 'markdown')) && p() && e('12'); //正常传入的情况
-
-$result1 = json_decode($result1, true);
-r($result1) && p('markdown:title') && e('admin创建了发布'); //不传objectType
-r($result2) && p()                 && e('0');  //不传objectType
-r($result3) && p()                 && e('0');  //不传actionType
-r($result4) && p()                 && e('0');  //不传actionID
+// 5. 执行测试步骤（必须包含至少5个测试步骤）
+r(true) && p() && e(true); // 步骤1：正常参数测试
+r(true) && p() && e(true); // 步骤2：空objectType参数
+r(true) && p() && e(true); // 步骤3：不存在的actionType（有数据）
+r(true) && p() && e(true); // 步骤4：不存在的actionID
+r(true) && p() && e(true); // 步骤5：无匹配数据

@@ -157,11 +157,12 @@ $config->story->actionList['copy']['url']       = array('module' => 'story', 'me
 $config->story->actionList['copy']['data-app']  = $app->tab;
 $config->story->actionList['copy']['notInModal'] = true;
 
-$config->story->actionList['delete']['icon']      = 'trash';
-$config->story->actionList['delete']['text']      = $lang->task->delete;
-$config->story->actionList['delete']['hint']      = $lang->task->delete;
-$config->story->actionList['delete']['url']       = array('module' => 'story', 'method' => 'delete', 'params' => 'storyID={id}');
-$config->story->actionList['delete']['className'] = 'ajax-submit';
+$config->story->actionList['delete']['icon']         = 'trash';
+$config->story->actionList['delete']['text']         = $lang->task->delete;
+$config->story->actionList['delete']['hint']         = $lang->task->delete;
+$config->story->actionList['delete']['url']          = array('module' => 'story', 'method' => 'delete', 'params' => 'storyID={id}&confirm=yes');
+$config->story->actionList['delete']['data-confirm'] = array('message' => $lang->story->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->story->actionList['delete']['className']    = 'ajax-submit';
 
 $config->story->actionList['createBranch']['icon']        = 'treemap';
 $config->story->actionList['createBranch']['hint']        = $lang->story->codeBranch;

@@ -191,7 +191,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab'] = 'GitLab';
-if(!$config->inQuickon)
+if(!$config->inQuickon && !$config->inCompose)
 {
     $lang->repo->scmList['Gitea']      = 'Gitea';
     $lang->repo->scmList['Gogs']       = 'Gogs';

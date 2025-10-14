@@ -1,0 +1,46 @@
+---
+title: product数据定义用于getProductsAndBranchesForCreate方法测试
+desc: 为测试getProductsAndBranchesForCreate方法准备的product测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: '产品1,产品2,产品3,产品4,产品5,分支产品1,分支产品2,普通产品1,普通产品2,普通产品3'
+  format: ""
+- field: code
+  note: 产品代码
+  range: 'prod1,prod2,prod3,prod4,prod5,branch1,branch2,normal1,normal2,normal3'
+  format: ""
+- field: type
+  note: 产品类型
+  range: 'normal{5},branch{3},platform{2}'
+  format: ""
+- field: status
+  note: 产品状态
+  range: 'normal{8},closed{2}'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{9},1{1}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin,user1,user2,admin,user1'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (d-100)-(d-1):10D
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: `order`
+  note: 排序
+  range: 1-10
+  format: ""

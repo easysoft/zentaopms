@@ -1,0 +1,38 @@
+---
+title: Webhook数据-getBoundUseridPairs测试
+desc: 为getBoundUseridPairs方法提供测试webhook数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: WebhookID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Webhook类型
+  range: dinguser{2},feishuuser{2},wechatuser{1}
+  format: ""
+- field: name
+  note: Webhook名称
+  range: 钉钉用户同步,飞书用户同步,微信用户同步,测试webhook{2}
+  format: ""
+- field: url
+  note: 回调URL
+  range: http://test.com/webhook{5}
+  format: ""
+- field: secret
+  note: 密钥配置
+  range: '{"appKey":"test_key","appSecret":"test_secret","agentId":"test_agent"}{3},{"appId":"test_appid","appSecret":"test_secret"}{2}'
+  format: ""
+- field: contentType
+  note: 内容类型
+  range: application/json{5}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{5}
+  format: ""

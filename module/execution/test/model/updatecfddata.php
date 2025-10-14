@@ -1,14 +1,30 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 executionModel::updateCFDData();
+timeout=0
+cid=0
+
+- 测试步骤1：已有日期的情况 @5
+- 测试步骤2：未来日期的情况 @0
+- 测试步骤3：不存在数据的历史日期情况 @5
+- 测试步骤4：无效execution ID @0
+- 测试步骤5：测试今日边界情况 @0
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+
 zenData('user')->gen(5);
 su('admin');
 
 $execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目集1,项目1,看板1,看板2,看板3');
-$execution->type->range('program,project,,kanban{3}');
+$execution->type->range('program,project,kanban{3}');
 $execution->parent->range('0,1,2{3}');
 $execution->status->range('wait{3},closed,doing');
 $execution->openedBy->range('admin,user1');
@@ -34,22 +50,16 @@ $kanbanColumn->gen(9);
 $CFD = zenData('cfd');
 $CFD->id->range('1-5');
 $CFD->execution->range('3');
-$CFD->count->range('1');
-$CFD->type->range('task,bug,story');
-$CFD->date->range('20220122 000000:0')->type('timestamp')->format('YY/MM/DD');
-$CFD->name->range('1-5')->prefix('看板列');
+$CFD->count->range('1-5');
+$CFD->type->range('task,bug,story,requirement,story');
+$CFD->date->range('20220120 000000:0,20220121 000000:0,20220122 000000:0{3}')->type('timestamp')->format('YY/MM/DD');
+$CFD->name->range('backlog,doing,testing,done,closed');
 $CFD->gen(5);
 
-/**
-
-title=测试executionModel->updateCFDData();
-timeout=0
-cid=1
-
-*/
-
 $executionTester = new executionTest();
-$dateList        = array('2022-01-22', '2099-01-01');
 
-r(count($executionTester->updateCFDDataTest(3, $dateList[0]))) && p() && e('5'); // 已有日期的情况
-r(count($executionTester->updateCFDDataTest(3, $dateList[1]))) && p() && e('0'); // 未来日期的情况
+r(count($executionTester->updateCFDDataTest(3, '2022-01-22'))) && p() && e('5');  // 测试步骤1：已有日期的情况
+r(count($executionTester->updateCFDDataTest(3, '2099-01-01'))) && p() && e('0');  // 测试步骤2：未来日期的情况
+r(count($executionTester->updateCFDDataTest(3, '2022-01-23'))) && p() && e('5');  // 测试步骤3：不存在数据的历史日期情况
+r(count($executionTester->updateCFDDataTest(999, '2022-01-20'))) && p() && e('0'); // 测试步骤4：无效execution ID
+r(count($executionTester->updateCFDDataTest(3, helper::today()))) && p() && e('0'); // 测试步骤5：测试今日边界情况

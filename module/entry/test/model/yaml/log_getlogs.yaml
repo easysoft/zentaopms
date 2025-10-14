@@ -1,0 +1,68 @@
+---
+title: 日志数据定义
+desc: 用于测试entryModel::getLogs()方法的日志数据
+
+fields:
+- field: id
+  note: 日志ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: entry{15}, task{3}, bug{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1{10}, 2{3}, 3{2}, 999{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: action
+  note: 动作ID
+  range: 1-100:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: date
+  note: 日期时间
+  range: (-7D)-(NOW):1H
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: url
+  note: 访问URL
+  range: /entry/view/[1-10], /entry/edit/[1-10], /entry/logs/[1-10]
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: contentType
+  note: 内容类型
+  range: html{10}, json{5}, xml{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: data
+  note: 数据内容
+  range: '{"id":[1-20],"name":"test[1-20]"}', '[]{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: result
+  note: 结果内容
+  range: success{15}, error{3}, warning{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

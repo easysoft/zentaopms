@@ -1,0 +1,48 @@
+---
+title: scene场景编辑变量分配测试数据
+desc: assignEditSceneVars方法的测试数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 场景ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1{8},2{6},3{6}
+  prefix: ""
+  postfix: ""
+
+- field: branch
+  note: 分支ID
+  range: 0{10},1{5},2{5}
+  prefix: ""
+  postfix: ""
+
+- field: module
+  note: 模块ID
+  range: 1{5},2{5},3{5},4{5}
+  prefix: ""
+  postfix: ""
+
+- field: title
+  note: 场景标题
+  range: 场景{1-20}
+  prefix: ""
+  postfix: ""
+
+- field: parent
+  note: 父场景ID
+  range: 0{10},1{5},2{3},3{2}
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除状态
+  range: 0
+  prefix: ""
+  postfix: ""

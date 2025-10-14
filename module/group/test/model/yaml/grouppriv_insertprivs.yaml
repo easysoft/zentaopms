@@ -1,0 +1,28 @@
+---
+title: 权限分组测试数据定义
+desc: 用于insertPrivs方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: group
+  note: 分组ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名
+  range: module{1-5}, project{2}, task{2}, bug, user
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: method
+  note: 方法名
+  range: method{1-5}, create{2}, view{2}, edit, delete
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

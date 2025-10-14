@@ -1,43 +1,40 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 webhookModel->getViewLink();
+title=测试 webhookModel::getViewLink();
 timeout=0
-cid=1
+cid=0
 
-- 打印出了get链接，我是通过./执行文件，所以打印的是./文件名和传入的参数，通过页面调用返回的则是url @getviewlink.php?m=product&f=view&id=1
-- 同样返回调用方法的url @getviewlink.php?m=story&f=view&id=2
-- 当不传入参数时 @getviewlink.php?m=&f=view&id=0
-- ID不传 @getviewlink.php?m=story&f=view&id=0
-- type不传 @getviewlink.php?m=&f=view&id=1
+- 执行webhookTest模块的getViewLinkTest方法，参数是'product', 1  @product-view-1.html
+- 执行webhookTest模块的getViewLinkTest方法，参数是'case', 1  @testcase-view-1.html
+- 执行webhookTest模块的getViewLinkTest方法，参数是'kanbancard', 1  @kanban-view-1.html
+- 执行webhookTest模块的getViewLinkTest方法，参数是'meeting', 1  @meeting-view-1.html#app=project
+- 执行webhookTest模块的getViewLinkTest方法，参数是'', 0  @-view-0.html
 
 */
 
-$webhook = new webhookTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
 
-$type = array();
-$type[0] = 'product';
-$type[1] = 'story';
-$type[2] = '';
+// 准备测试数据
+$kanbanTable = zenData('kanbancard');
+$kanbanTable->id->range('1-10');
+$kanbanTable->kanban->range('1-5');
+$kanbanTable->gen(5);
 
-$ID   = array();
-$ID[0]   = '1';
-$ID[1]   = '2';
-$ID[2]   = 0;
+$meetingTable = zenData('meeting');
+$meetingTable->id->range('1-10');
+$meetingTable->project->range('1-3,0{3}');
+$meetingTable->gen(5);
 
-$result1 = $webhook->getViewLinkTest($type[0], $ID[0]);
-$result2 = $webhook->getViewLinkTest($type[1], $ID[1]);
-$result3 = $webhook->getViewLinkTest($type[2], $ID[2]);
-$result4 = $webhook->getViewLinkTest($type[1], $ID[2]);
-$result5 = $webhook->getViewLinkTest($type[2], $ID[0]);
+su('admin');
 
-r($result1) && p() && e('getviewlink.php?m=product&f=view&id=1'); //打印出了get链接，我是通过./执行文件，所以打印的是./文件名和传入的参数，通过页面调用返回的则是url
-r($result2) && p() && e('getviewlink.php?m=story&f=view&id=2');   //同样返回调用方法的url
-r($result3) && p() && e('getviewlink.php?m=&f=view&id=0');        //当不传入参数时
-r($result4) && p() && e('getviewlink.php?m=story&f=view&id=0'); //ID不传
-r($result5) && p() && e('getviewlink.php?m=&f=view&id=1'); //type不传
+$webhookTest = new webhookTest();
+
+r($webhookTest->getViewLinkTest('product', 1)) && p() && e('product-view-1.html');
+r($webhookTest->getViewLinkTest('case', 1)) && p() && e('testcase-view-1.html');
+r($webhookTest->getViewLinkTest('kanbancard', 1)) && p() && e('kanban-view-1.html');
+r($webhookTest->getViewLinkTest('meeting', 1)) && p() && e('meeting-view-1.html#app=project');
+r($webhookTest->getViewLinkTest('', 0)) && p() && e('-view-0.html');

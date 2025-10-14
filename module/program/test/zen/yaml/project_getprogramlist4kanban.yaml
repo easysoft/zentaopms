@@ -1,0 +1,58 @@
+---
+title: 项目集看板数据定义
+desc: 用于getProgramList4Kanban方法测试的项目集数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-10
+- field: type
+  note: 类型
+  range: program{5}, project{5}
+- field: parent
+  note: 父级ID
+  range: 0{5}, 1{2}, 2{2}, 3{1}
+- field: name
+  note: 项目集名称
+  range: 项目集1,项目集2,项目集3,项目集4,项目集5,项目1,项目2,项目3,项目4,项目5
+- field: code
+  note: 项目集代码
+  range: prog001,prog002,prog003,prog004,prog005,proj001,proj002,proj003,proj004,proj005
+- field: status
+  note: 状态
+  range: doing{4}, wait{3}, closed{2}, suspended{1}
+- field: grade
+  note: 层级
+  range: 1{5}, 2{5}
+- field: path
+  note: 路径
+  range: ,1,{2}, ,2,{2}, ,3,{1}, ,1,{2}, ,2,{2}, ,3,{1}
+- field: begin
+  note: 开始日期
+  range: 2024-01-01{10}
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: 2024-12-31{10}
+  format: YYYY-MM-DD
+- field: openedBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}
+  format: YYYY-MM-DD hh:mm:ss
+- field: PM
+  note: 项目经理
+  range: admin{3}, user1{4}, user2{3}
+- field: deleted
+  note: 是否删除
+  range: 0{10}
+- field: acl
+  note: 访问控制
+  range: open{8}, private{2}
+- field: order
+  note: 排序
+  range: 1-10

@@ -61,6 +61,15 @@ else
 
 featureBar(set::items($navItems));
 
+toolbar
+(
+    hasPriv('ai', 'miniPrograms') ? item(set(array(
+        'type' => 'primary',
+        'text' => $lang->aiapp->manageGeneralAgent,
+        'url'  => createLink('ai', 'miniPrograms'),
+    ))) : null,
+);
+
 $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $showTag)
 {
     global $config, $lang;
@@ -121,6 +130,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
             div(
                 setClass('badge'),
                 setClass(array('invisible' => !$showTag)),
+                set::title($categoryList[$miniProgram->category]),
                 $categoryList[$miniProgram->category]
             ),
             $starBtn

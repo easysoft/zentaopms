@@ -1,26 +1,32 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+
+zenData('pipeline')->loadYaml('pipeline')->gen(5);
+zenData('job')->loadYaml('job_getprojectpairs')->gen(3);
+zenData('user')->gen(5);
 
 /**
 
 title=测试 sonarqubeModel::getProjectPairs();
+timeout=0
 cid=0
 
-- 传入空参数。 @0
-- 检查项目数。 @4
-- 检查其中某个项目。属性bendi @本地项目
+- 执行sonarqubeTest模块的getProjectPairsTest方法  @0
+- 执行sonarqubeTest模块的getProjectPairsTest方法，参数是2  @6
+- 执行sonarqubeTest模块的getProjectPairsTest方法，参数是2 属性bendi @本地项目
+- 执行sonarqubeTest模块的getProjectPairsTest方法，参数是2, 'bendi' 属性bendi @本地项目
+- 执行sonarqubeTest模块的getProjectPairsTest方法，参数是2, ''  @6
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('pipeline')->loadYaml('pipeline')->gen(5);
+su('admin');
 
-$sonarqubeID = 2;
+$sonarqubeTest = new sonarqubeTest();
 
-global $tester;
-$sonarqube = $tester->loadModel('sonarqube');
-r($sonarqube->getProjectPairs(0)) && p() && e('0'); //传入空参数。
-
-$projects = $sonarqube->getProjectPairs($sonarqubeID);
-r(count($projects))  && p()        && e('4');         //检查项目数。
-r($projects)         && p('bendi') && e('本地项目');  //检查其中某个项目。
+r(count($sonarqubeTest->getProjectPairsTest(0))) && p() && e('0');
+r(count($sonarqubeTest->getProjectPairsTest(2))) && p() && e('6');
+r($sonarqubeTest->getProjectPairsTest(2)) && p('bendi') && e('本地项目');
+r($sonarqubeTest->getProjectPairsTest(2, 'bendi')) && p('bendi') && e('本地项目');
+r(count($sonarqubeTest->getProjectPairsTest(2, ''))) && p() && e('6');

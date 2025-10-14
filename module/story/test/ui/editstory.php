@@ -10,7 +10,7 @@ cid=80
 
 */
 chdir(__DIR__);
-include '../lib/editstory.ui.class.php';
+include '../lib/ui/editstory.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

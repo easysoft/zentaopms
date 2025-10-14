@@ -1,0 +1,46 @@
+---
+title: assignAnnualBaseData方法测试部门数据
+desc: 用于测试报告模块年度基础数据分配功能的部门数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 部门ID
+  range: 1-5
+
+- field: name
+  note: 部门名称
+  range: 开发部,测试部,产品部,运营部,市场部
+
+- field: parent
+  note: 父部门ID
+  range: 0,0,0,1,1
+
+- field: path
+  note: 部门路径
+  range: ',1,,2,,3,,1,4,,1,5,'
+
+- field: grade
+  note: 部门层级
+  range: 1,1,1,2,2
+
+- field: order
+  note: 排序
+  range: 10,20,30,15,25
+
+- field: position
+  note: 职位
+  range: 'manager{5}'
+
+- field: function
+  note: 部门职能
+  range: '研发,测试,产品,运营,市场'
+
+- field: manager
+  note: 部门经理
+  range: 'admin,user1,user2,user3,user4'
+
+- field: deleted
+  note: 删除状态
+  range: '0{5}'

@@ -16,7 +16,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/view.ui.class.php';
+include '../lib/ui/view.ui.class.php';
 
 $kanbanspace = zenData('kanbanspace');
 $kanbanspace->id->range('1');

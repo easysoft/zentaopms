@@ -1,0 +1,49 @@
+---
+title: 需求数据用于assignStoryForCreate测试
+desc: 为任务创建时分配故事功能提供需求数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-15
+- field: product
+  note: 产品ID
+  range: 1-5
+- field: module
+  note: 模块ID
+  range: 0,1-10
+- field: title
+  note: 需求标题
+  range: "需求{1-15}"
+- field: type
+  note: 需求类型
+  range: "story,requirement"
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: status
+  note: 需求状态
+  range: "active,draft,closed,changing"
+- field: stage
+  note: 需求阶段
+  range: "wait,planned,projected,developing,developed,testing,tested,verified"
+- field: estimate
+  note: 预计工时
+  range: 0-40:2
+- field: openedBy
+  note: 由谁创建
+  range: "admin,user1,user2"
+- field: openedDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+- field: assignedTo
+  note: 指派给
+  range: "admin,user1,user2,user3,[]"
+- field: version
+  note: 版本号
+  range: 1-3
+- field: deleted
+  note: 是否删除
+  range: "0{13},1{2}"

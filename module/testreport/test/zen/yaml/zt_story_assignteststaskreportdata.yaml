@@ -1,0 +1,62 @@
+---
+title: 用户故事数据配置
+desc: assignTesttaskReportData方法依赖的story数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 故事ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+
+- field: title
+  note: 故事标题
+  range: 用户登录功能,用户注册功能,密码重置功能,权限管理功能{16}
+  format: ""
+
+- field: type
+  note: 故事类型
+  range: story{15},epic{3},requirement{2}
+  format: ""
+
+- field: status
+  note: 状态
+  range: draft{2},active{15},closed{3}
+  format: ""
+
+- field: stage
+  note: 阶段
+  range: wait{3},planned{10},projected{5},developing{2}
+  format: ""
+
+- field: pri
+  note: 优先级
+  range: 1{5},2{10},3{5}
+  format: ""
+
+- field: estimate
+  note: 预估工时
+  range: 1-8
+  format: ""
+
+- field: openedBy
+  note: 创建人
+  range: admin,pm,user1{17}
+  format: ""
+
+- field: openedDate
+  note: 创建时间
+  range: (2024-01-01)-(2024-03-31):30D
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 是否删除
+  range: 0
+  format: ""

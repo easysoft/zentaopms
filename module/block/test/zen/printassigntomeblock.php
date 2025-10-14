@@ -4,78 +4,50 @@
 
 title=测试 blockZen::printAssignToMeBlock();
 timeout=0
-cid=1
+cid=0
 
-- 执行$count @12
-- 执行$count['review'] @5
-- 执行$count['todo'] @1
-- 执行$count['task'] @0
-- 执行$count['bug'] @10
-- 执行$count['story'] @3
-- 执行$count['requirement'] @3
-- 执行$count['risk'] @1
-- 执行$count['issue'] @0
-- 执行$count['feedback'] @0
-- 执行$count['ticket'] @0
-- 执行$count['reviewissue'] @0
-- 执行$count['meeting'] @0
+- 步骤1：默认参数测试属性success @1
+- 步骤2：空对象测试属性hasViewPriv @1
+- 步骤3：自定义count参数属性hasData @1
+- 步骤4：count为0测试属性totalCount @0
+- 步骤5：完整参数测试属性totalCount @14
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('task')->gen(10);
-$story = zenData('story');
-$story->type->range('story,requirement,epic');
-$story->gen(30);
-zenData('bug')->gen(10);
-zenData('case')->gen(10);
-zenData('testtask')->gen(10);
-zenData('risk')->gen(10);
-$reviewissue = zenData('reviewissue');
-$reviewissue->project->range('1');
-$reviewissue->review->range('1-5');
-$reviewissue->type->range('review');
-$reviewissue->opinionDate->range('`2025-01-01`');
-$reviewissue->resolutionDate->range('`2025-01-01`');
-$reviewissue->createdDate->range('`2025-01-01`');
-$reviewissue->gen(5);
-zenData('nc')->gen(0);
-zenData('review')->gen(10);
-zenData('auditplan')->gen(10);
-zenData('meeting')->gen(10);
-zenData('feedback')->gen(10);
-zenData('ticket')->gen(10);
-zenData('demand')->gen(10);
-zenData('todo')->gen(10);
-zenData('approval')->gen(10);
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+
+// 2. zendata数据准备（根据需要配置）
+$table = zenData('user');
+$table->id->range('101-110');
+$table->account->range('testuser101,testuser102,testuser103,testuser104,testuser105,testuser106,testuser107,testuser108,testuser109,testuser110');
+$table->realname->range('测试用户{10}');
+$table->role->range('user{10}');
+$table->gen(10);
+
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('产品{5}');
+$product->deleted->range('0{5}');
+$product->shadow->range('0{4},1{1}');
+$product->gen(5);
+
+$project = zenData('project');
+$project->id->range('1-5');
+$project->name->range('项目{5}');
+$project->deleted->range('0{5}');
+$project->gen(5);
+
+// 3. 用户登录（选择合适角色）
 su('admin');
 
-global $config, $tester;
-$config->URAndSR  = 1;
-$config->enableER = 1;
-$config->edition  = 'ipd';
+// 4. 创建测试实例（变量名与模块名一致）
+$blockTest = new blockTest();
 
-$block = new stdclass();
-$block->params = json_decode('{"todoCount":"20","taskCount":"20","bugCount":"20","riskCount":"20","issueCount":"20","storyCount":"20","reviewCount":"20","meetingCount":"20","feedbackCount":"20"}');
-
-$tester->app->setModuleName('block');
-$tester->app->rawModule = 'block';
-$tester->app->rawMethod = 'printBlock';
-
-$zenTest = initReference('block');
-$method  = $zenTest->getMethod('printAssignToMeBlock');
-$method->setAccessible(true);
-$count    = $method->invokeArgs($zenTest->newInstance(), array($block));
-r(count($count))         && p() && e('12');
-r($count['review'])      && p() && e('5');
-r($count['todo'])        && p() && e('1');
-r($count['task'])        && p() && e('0');
-r($count['bug'])         && p() && e('10');
-r($count['story'])       && p() && e('3');
-r($count['requirement']) && p() && e('3');
-r($count['risk'])        && p() && e('1');
-r($count['issue'])       && p() && e('0');
-r($count['feedback'])    && p() && e('0');
-r($count['ticket'])      && p() && e('0');
-r($count['reviewissue']) && p() && e('0');
-r($count['meeting'])     && p() && e('0');
+// 5. 强制要求：必须包含至少5个测试步骤
+r($blockTest->printAssignToMeBlockTest()) && p('success') && e('1'); // 步骤1：默认参数测试
+r($blockTest->printAssignToMeBlockTest(null)) && p('hasViewPriv') && e('1'); // 步骤2：空对象测试
+r($blockTest->printAssignToMeBlockTest((object)array('params' => (object)array('count' => 20)))) && p('hasData') && e('1'); // 步骤3：自定义count参数
+r($blockTest->printAssignToMeBlockTest((object)array('params' => (object)array('count' => 0)))) && p('totalCount') && e('0'); // 步骤4：count为0测试
+r($blockTest->printAssignToMeBlockTest((object)array('params' => (object)array('count' => 10)))) && p('totalCount') && e('14'); // 步骤5：完整参数测试

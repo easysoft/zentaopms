@@ -53,12 +53,6 @@ class programplan extends control
      */
     public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0)
     {
-        if($type == 'lists')
-        {
-            echo $this->fetch('project', 'execution', "status=all&projectID={$projectID}");
-            return;
-        }
-
         if($from == 'doc')
         {
             $this->loadModel('doc');

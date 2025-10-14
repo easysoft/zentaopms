@@ -6,6 +6,7 @@ class projectreleaseTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('projectrelease');
+        $this->objectTao   = $tester->loadTao('projectrelease');
     }
 
     /**
@@ -98,5 +99,68 @@ class projectreleaseTest
         if(dao::isError()) return dao::getError();
 
         return $isClickable ? 1 : 2;
+    }
+
+    /**
+     * 测试获取分支名称。
+     * Test get branch name.
+     *
+     * @param  int     $productID
+     * @param  string  $branch
+     * @param  array   $branchGroup
+     * @access public
+     * @return string|array
+     */
+    public function getBranchNameTest(int $productID, string $branch, array $branchGroup): string|array
+    {
+        $reflectionClass = new ReflectionClass($this->objectTao);
+        $method = $reflectionClass->getMethod('getBranchName');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectTao, $productID, $branch, $branchGroup);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试通用初始化方法。
+     * Test common action method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return array|string
+     */
+    public function commonActionTest(int $projectID = 0, int $productID = 0, string $branch = ''): array|string
+    {
+        global $tester;
+
+        $productModel = $tester->loadModel('product');
+        $projectModel = $tester->loadModel('project');
+        $branchModel = $tester->loadModel('branch');
+
+        $products = $productModel->getProductPairsByProject($projectID);
+        if(empty($products)) return '0,0,0,,0,0';
+
+        if(!$productID) $productID = key($products);
+        $product = $productModel->getByID($productID);
+        if(!$product) return '0,0,0,,0,0';
+
+        $project = $projectModel->getByID($projectID);
+        $branches = (isset($product->type) and $product->type == 'normal') ? array() : $branchModel->getPairs($productID, 'active', $projectID);
+
+        if(dao::isError()) return dao::getError();
+
+        $result = array();
+        $result['productsCount'] = count($products);
+        $result['productID'] = $product ? $product->id : 0;
+        $result['branchesCount'] = count($branches);
+        $result['branch'] = $branch;
+        $result['projectID'] = $project ? $project->id : 0;
+        $result['appListCount'] = 0;
+
+        return implode(',', $result);
     }
 }

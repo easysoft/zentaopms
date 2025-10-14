@@ -1,0 +1,41 @@
+---
+title: Project数据用于assignVarsForEdit测试
+desc: 提供project表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 11-13
+- field: name
+  note: 项目名称
+  range: 'Project{1}, Project{2}, Project{3}'
+  prefix: "Test "
+- field: type
+  note: 项目类型
+  range: 'project{2}, program{1}'
+- field: status
+  note: 项目状态
+  range: 'wait{1}, doing{2}'
+- field: desc
+  note: 项目描述
+  range: '[Project description for testing]{2}, []{1}'
+- field: begin
+  note: 开始日期
+  range: '2023-01-01-2023-06-30'
+  format: 'YYYY-MM-DD'
+- field: end
+  note: 结束日期
+  range: '2023-07-01-2023-12-31'
+  format: 'YYYY-MM-DD'
+- field: openedBy
+  note: 创建者
+  range: 'admin{2}, user1{1}'
+- field: openedDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00-2023-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: deleted
+  note: 是否删除
+  range: '0{3}'

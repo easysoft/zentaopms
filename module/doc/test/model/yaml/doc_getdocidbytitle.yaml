@@ -1,0 +1,21 @@
+---
+title: 测试getDocIdByTitle方法的doc表数据
+desc: doc表测试数据
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  range: 1-5
+- field: lib
+  range: 1,1,2,2,3
+- field: title
+  range: 用户手册,用户手册,开发文档,开发文档,测试文档
+- field: status
+  range: normal
+- field: deleted
+  range: 0
+- field: addedBy
+  range: admin
+- field: addedDate
+  range: "2024-01-01 00:00:00"

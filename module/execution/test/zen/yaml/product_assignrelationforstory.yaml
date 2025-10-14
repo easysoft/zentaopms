@@ -1,0 +1,24 @@
+---
+title: 产品数据配置
+desc: 用于assignRelationForStory方法的产品测试数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+
+- field: name
+  note: 产品名称
+  range: 产品{1-10}
+
+- field: type
+  note: 产品类型
+  range: normal{5},branch{5}
+
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+
+- field: deleted
+  note: 删除状态
+  range: 0

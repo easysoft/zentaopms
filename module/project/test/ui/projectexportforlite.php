@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/projectexportforlite.ui.class.php';
+include '../lib/ui/projectexportforlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-3');

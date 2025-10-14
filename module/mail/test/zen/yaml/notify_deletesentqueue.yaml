@@ -1,0 +1,62 @@
+---
+title: deleteSentQueue方法测试数据
+desc: 用于测试mail模块zen层deleteSentQueue方法的notify表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 通知ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: mail{10}
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  format: ""
+- field: action
+  note: 动作ID
+  range: 1-10
+  format: ""
+- field: toList
+  note: 收件人列表
+  range: admin@test.com{10}
+  format: ""
+- field: ccList
+  note: 抄送列表
+  range: []{8},cc@test.com{2}
+  format: ""
+- field: subject
+  note: 邮件主题
+  range: 测试邮件主题{10}
+  format: ""
+- field: data
+  note: 邮件内容数据
+  range: 测试邮件内容{10}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (now){10}
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: sendTime
+  note: 发送时间
+  range: (-3D){4},(-1D){3},(now){3}
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: status
+  note: 状态
+  range: sended{6},wait{3},fail{1}
+  format: ""
+- field: failReason
+  note: 失败原因
+  range: []{9},发送失败{1}
+  format: ""

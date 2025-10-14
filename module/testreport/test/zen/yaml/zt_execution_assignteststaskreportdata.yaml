@@ -1,0 +1,57 @@
+---
+title: 执行数据配置
+desc: assignTesttaskReportData方法依赖的execution数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 1-5
+  format: ""
+
+- field: name
+  note: 执行名称
+  range: Sprint1,Sprint2,测试迭代1,测试迭代2{6}
+  format: ""
+
+- field: code
+  note: 执行代号
+  range: SP01,SP02,TEST01{7}
+  format: ""
+
+- field: type
+  note: 执行类型
+  range: sprint{8},stage{2}
+  format: ""
+
+- field: status
+  note: 状态
+  range: wait{2},doing{5},suspended{1},done{2}
+  format: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-01-15,2024-02-01{7}
+  format: ""
+
+- field: end
+  note: 结束日期
+  range: 2024-01-31,2024-02-28,2024-03-31{7}
+  format: ""
+
+- field: PM
+  note: 项目经理
+  range: admin,pm1,pm2{7}
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0
+  format: ""

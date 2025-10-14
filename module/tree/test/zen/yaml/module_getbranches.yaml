@@ -1,0 +1,24 @@
+---
+title: module table for getBranches test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    note: "模块ID"
+    range: 1-8
+  - field: root
+    note: "产品根ID"
+    range: 1{2},2{2},3{2},4{1},5{1}
+  - field: branch
+    note: "分支ID"
+    range: 1{2},2{2},3{2},0{2}
+  - field: name
+    note: "模块名称"
+    range: 需求模块{2},缺陷模块{2},测试模块{2},任务模块{2}
+  - field: type
+    note: "模块类型"
+    range: story{2},bug{2},case{2},task{2}
+  - field: deleted
+    note: "是否删除"
+    range: 0
+...

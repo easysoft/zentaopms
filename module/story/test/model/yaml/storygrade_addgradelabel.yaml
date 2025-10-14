@@ -1,0 +1,46 @@
+---
+title: StoryGrade data for addGradeLabel testing
+desc: Test data configuration for story grade labels
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Grade ID
+  range: 1-8
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: Grade name
+  range: 'UR1,UR2,UR3,UR4,SR1,SR2,SR3,SR4'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: Grade type
+  range: 'epic{2},requirement{3},story{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: grade
+  note: Grade level
+  range: '1{2},2{2},3{2},4{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: Grade status
+  range: 'enable'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

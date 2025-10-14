@@ -3,44 +3,51 @@
 
 /**
 
-title=测试 cronModel->runnable();
+title=测试 cronModel::runnable();
 timeout=0
-cid=1
+cid=0
 
-- cron配置为空情况 @0
-- cron配置存在,执行时间大于最大可执行时间情况 @0
-- cron状态为空情况 @1
-- cron状态是stop情况 @1
-- cron状态存在不是stop情况 @1
+- 测试步骤1：cron全局配置为空 @0
+- 测试步骤2：lastTime为零日期情况 @1
+- 测试步骤3：lastTime为空情况 @1
+- 测试步骤4：执行时间未超过maxRunTime @0
+- 测试步骤5：执行时间超过maxRunTime @1
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
-su('admin');
 
 $cron = new cronTest();
 
+// 测试步骤1：cron全局配置为空的情况
 $tester->config->global->cron = 0;
 $res1 = $cron->runnableTest();
 
+// 测试步骤2：lastTime为零日期的情况
 $tester->config->global->cron = 1;
-$tester->config->cron->scheduler['lastTime'] = date('Y-m-d H:i:s');
+$tester->config->cron = new stdclass();
+$tester->config->cron->scheduler = new stdclass();
+$tester->config->cron->scheduler->lastTime = '0000-00-00 00:00:00';
+$tester->config->cron->maxRunTime = 300;
 $res2 = $cron->runnableTest();
 
-$tester->config->cron->maxRunTime = PHP_INT_MAX;
-$tester->config->cron->scheduler['lastTime'] = null;
-unset($tester->config->cron->run->status);
+// 测试步骤3：lastTime为空的情况
+$tester->config->cron->scheduler->lastTime = '';
 $res3 = $cron->runnableTest();
 
-$tester->config->cron->run = new stdclass();
-$tester->config->cron->run->status = 'stop';
+// 测试步骤4：执行时间未超过maxRunTime的情况
+$tester->config->cron->scheduler->lastTime = date('Y-m-d H:i:s', time() - 60); // 1分钟前
+$tester->config->cron->maxRunTime = 300; // 5分钟
 $res4 = $cron->runnableTest();
 
-$tester->config->cron->run->status = 'running';
+// 测试步骤5：执行时间超过maxRunTime的情况
+$tester->config->cron->scheduler->lastTime = date('Y-m-d H:i:s', time() - 600); // 10分钟前
+$tester->config->cron->maxRunTime = 300; // 5分钟
 $res5 = $cron->runnableTest();
 
-r($res1) && p() && e('0'); //cron配置为空情况
-r($res2) && p() && e('0'); //cron配置存在,执行时间大于最大可执行时间情况
-r($res3) && p() && e('1'); //cron状态为空情况
-r($res4) && p() && e('1'); //cron状态是stop情况
-r($res5) && p() && e('1'); //cron状态存在不是stop情况
+r($res1) && p() && e('0'); // 测试步骤1：cron全局配置为空
+r($res2) && p() && e('1'); // 测试步骤2：lastTime为零日期情况
+r($res3) && p() && e('1'); // 测试步骤3：lastTime为空情况
+r($res4) && p() && e('0'); // 测试步骤4：执行时间未超过maxRunTime
+r($res5) && p() && e('1'); // 测试步骤5：执行时间超过maxRunTime

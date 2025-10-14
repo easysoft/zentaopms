@@ -1,0 +1,58 @@
+---
+title: 故事搜索配置测试数据
+desc: buildSearchConfig方法测试用例的故事数据
+
+fields:
+- field: id
+  note: 故事ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+
+- field: title
+  note: 故事标题
+  range: 用户登录,用户注册,密码重置,权限管理,数据导出,功能测试{10},性能测试{5},安全测试{5},用户体验{5}
+
+- field: type
+  note: 故事类型
+  range: epic,story,requirement
+
+- field: grade
+  note: 故事等级
+  range: 1,2,3,4
+
+- field: product
+  note: 产品ID
+  range: 1-5
+
+- field: module
+  note: 模块ID
+  range: 1-20
+
+- field: pri
+  note: 优先级
+  range: 1,2,3,4
+
+- field: status
+  note: 故事状态
+  range: draft,active,changed,reviewing,closed
+
+- field: stage
+  note: 故事阶段
+  range: wait,planned,projected,developing,testing,released,closed
+
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2,testuser
+
+- field: openedDate
+  note: 创建日期
+  range: 2023-01-01 10:00:00,2023-06-01 10:00:00,2024-01-01 10:00:00
+
+- field: version
+  note: 版本
+  range: 1,2,3
+
+- field: deleted
+  note: 删除标记
+  range: '0'

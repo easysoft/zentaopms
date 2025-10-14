@@ -1,0 +1,88 @@
+---
+title: 测试用例创建数据定义
+desc: 用于测试buildCaseForCreate方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1-5
+
+- field: shadow
+  note: 是否影子产品
+  range: 0{4},1{1}
+
+- field: branch
+  note: 分支ID
+  range: 0-2
+
+- field: module
+  note: 模块ID
+  range: 0-10
+
+- field: type
+  note: 用例类型
+  range: feature{3},performance{1},config{1}
+
+- field: stage
+  note: 适用阶段
+  range: unittest{2},feature{2},integration{1}
+
+- field: story
+  note: 关联需求ID
+  range: 0{2},1-5{3}
+
+- field: title
+  note: 用例标题
+  range: 测试用例标题{5}
+
+- field: color
+  note: 颜色
+  range: ""{3},red{1},blue{1}
+
+- field: pri
+  note: 优先级
+  range: 1-4
+
+- field: precondition
+  note: 前置条件
+  range: ""{3},前置条件内容{2}
+
+- field: keywords
+  note: 关键词
+  range: ""{3},测试,功能{2}
+
+- field: auto
+  note: 自动化标识
+  range: no{4},auto{1}
+
+- field: script
+  note: 自动化脚本
+  range: ""{4},test script content{1}
+
+- field: status
+  note: 用例状态
+  range: normal{3},wait{2}
+
+- field: openedBy
+  note: 创建者
+  range: admin{3},user1{1},user2{1}
+
+- field: project
+  note: 项目ID
+  range: 0{2},1-3{3}
+
+- field: execution
+  note: 执行ID
+  range: 0{3},1-2{2}
+
+- field: multiple
+  note: 项目是否启用多迭代
+  range: 0{2},1{3}

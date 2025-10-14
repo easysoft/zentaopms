@@ -17,7 +17,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/linkstory.ui.class.php';
+include '../lib/ui/linkstory.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

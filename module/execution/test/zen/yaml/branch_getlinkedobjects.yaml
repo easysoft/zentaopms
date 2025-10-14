@@ -1,0 +1,20 @@
+title: branch表测试数据，用于getlinkedobjects方法
+author: Claude
+version: 1
+
+fields:
+- field: id
+  range: 1-5
+  note: 分支ID
+- field: product
+  range: '2{2}, 3{2}, 5{1}'
+  note: 产品ID
+- field: name
+  range: '分支V1.0, 分支V1.1, 分支V2.0, 分支V2.1, 主分支'
+  note: 分支名称
+- field: status
+  range: 'active{4}, closed{1}'
+  note: 分支状态
+- field: deleted
+  range: '0{5}'
+  note: 删除状态

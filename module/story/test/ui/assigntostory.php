@@ -10,7 +10,7 @@ cid=89
 
 */
 chdir (__DIR__);
-include '../lib/assigntostory.ui.class.php';
+include '../lib/ui/assigntostory.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

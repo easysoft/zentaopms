@@ -1,0 +1,33 @@
+---
+title: 模块数据配置
+desc: 用于setFormOptionsForBatchEdit方法测试
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1801-1810
+- field: root
+  range: 1{5},2{3},3{2}
+- field: name
+  range: 模块1,模块2,模块3,模块4,模块5,模块6,模块7,模块8,模块9,模块10
+- field: parent
+  range: 0{10}
+- field: path
+  range: ',1801,',',1802,',',1803,',',1804,',',1805,',',1806,',',1807,',',1808,',',1809,',',1810,'
+- field: grade
+  range: 1{10}
+- field: order
+  range: 1-10
+- field: type
+  range: story{10}
+- field: owner
+  range: admin{10}
+- field: collector
+  range: ''
+- field: short
+  range: ''
+- field: branch
+  range: 0{10}
+- field: deleted
+  range: 0{10}

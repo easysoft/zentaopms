@@ -399,16 +399,36 @@ class searchTao extends searchModel
         $words   = explode(' ', $this->unify($keywords, ' '));
 
         $against     = '';
-        $againstCond = '';
+        $againstCond = array();
         foreach($words as $word)
         {
             /* 将 utf-8 字符串拆分为单词，为每个单词计算 unicode. */
             $splitedWords = $spliter->utf8Split($word);
             $trimmedWord  = trim($splitedWords['words']);
             $against     .= '"' . $trimmedWord . '" ';
-            $againstCond .= '(+"' . $trimmedWord . '") ';
+
+            if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+            {
+                $splitWords  = preg_split('/\s+/', trim($trimmedWord));
+                $quotedWords = array_map(function($word) { return "''" . $word . "''"; }, $splitWords);
+
+                $againstCond[] = implode(' <-> ', $quotedWords);
+            }
+            else
+            {
+                $againstCond[] = '(+"' . $trimmedWord . '")';
+            }
 
             if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond .= "(-\" $word \") ";
+        }
+
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $againstCond = implode(' | ', $againstCond);
+        }
+        else
+        {
+            $againstCond = implode(' ', $againstCond);
         }
 
         $likeCondition = trim($keywords) ? 'OR title LIKE ' . $this->dbh->quote("%{$keywords}%") . ' OR content LIKE ' . $this->dbh->quote("%{$keywords}%") : '';

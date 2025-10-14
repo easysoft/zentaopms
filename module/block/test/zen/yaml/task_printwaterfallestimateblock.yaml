@@ -1,0 +1,17 @@
+---
+title: 任务数据配置
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 1{5},2{3},3{2}
+  - field: execution
+    range: 1{5},2{3},3{2}
+  - field: name
+    range: '任务1,任务2,任务3,任务4,任务5,任务6,任务7,任务8,任务9,任务10'
+  - field: consumed
+    range: 8.5,16.0,24.5,0,12.0{2}
+  - field: deleted
+    range: '0'
+  - field: isParent
+    range: '0'

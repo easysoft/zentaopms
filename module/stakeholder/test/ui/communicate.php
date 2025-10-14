@@ -14,7 +14,7 @@ cid=4
 */
 
 chdir(__DIR__);
-include '../lib/communicate.ui.class.php';
+include '../lib/ui/communicate.ui.class.php';
 global $config;
 
 $action = zenData('action');

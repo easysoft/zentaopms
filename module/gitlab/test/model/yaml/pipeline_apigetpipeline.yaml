@@ -1,0 +1,42 @@
+---
+title: apiGetPipeline方法测试数据
+desc: GitLab Pipeline API测试数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: GitLab实例ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: GitLab实例名称
+  range: "gitlab-test{1},gitlab-dev{2},gitlab-prod{3}"
+  format: ""
+- field: url
+  note: GitLab服务器地址
+  range: "http://gitlab.test.com{1},https://gitlab.dev.com{2},https://gitlab.prod.com{3}"
+  format: ""
+- field: token
+  note: API访问令牌
+  range: "test_token_123{1},dev_token_456{2},prod_token_789{3}"
+  format: ""
+- field: private_token
+  note: 私有访问令牌
+  range: "private_123{1},private_456{2},private_789{3}"
+  format: ""
+- field: account
+  note: 关联账户
+  range: "admin{1},user1{2},user2{3}"
+  format: ""
+- field: password
+  note: 密码
+  range: "123456{3}"
+  format: ""
+- field: email
+  note: 邮箱地址
+  range: "admin@test.com{1},user1@test.com{2},user2@test.com{3}"
+  format: ""

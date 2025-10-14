@@ -1,0 +1,23 @@
+---
+title: 测试用例数据
+desc: 为assignModuleOptionMenuForEdit方法准备的测试用例数据
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1{5}, 2{5}
+- field: module
+  range: 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010
+- field: branch
+  range: 0{3}, 1{4}, 2{3}
+- field: lib
+  range: 0{8}, 1{2}
+- field: fromCaseID
+  range: 0{7}, 100{2}, 101{1}
+- field: title
+  range: 测试用例{10}
+- field: type
+  range: feature{7}, interface{2}, performance{1}
+- field: status
+  range: normal{8}, blocked{1}, investigate{1}

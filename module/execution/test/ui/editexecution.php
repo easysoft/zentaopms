@@ -44,7 +44,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/editexecution.ui.class.php';
+include '../lib/ui/editexecution.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-10');

@@ -1,0 +1,22 @@
+---
+title: 分支表数据定义
+desc: 用于buildProductForm方法测试的分支数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  range: 1-15
+  note: 分支ID
+- field: product
+  range: 1,1,2,2,3,3,4,4,5,5,6,6,7,7,8
+  note: 所属产品ID
+- field: name
+  range: 'main,dev,main,dev,main,dev,main,dev,main,dev,main,dev,main,dev,main'
+  note: 分支名称
+- field: status
+  range: 'active'
+  note: 分支状态
+- field: deleted
+  range: '0'
+  note: 删除状态

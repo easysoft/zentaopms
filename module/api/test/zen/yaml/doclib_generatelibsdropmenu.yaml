@@ -1,0 +1,84 @@
+---
+title: API库下拉菜单测试数据
+desc: 用于测试generateLibsDropMenu方法的库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 库ID
+  range: 1-10
+  
+- field: type
+  note: 库类型
+  range: api
+  
+- field: vision
+  note: 视野类型
+  range: rnd
+  
+- field: parent
+  note: 父级ID
+  range: 0
+  
+- field: product
+  note: 关联产品ID
+  range: '[]{2},1{2},2{2},3{2}'
+  
+- field: project
+  note: 关联项目ID
+  range: '[]{5},1{2},2{2},3{1}'
+  
+- field: execution
+  note: 执行ID
+  range: 0
+  
+- field: name
+  note: 库名称
+  range: 'API文档库{1},产品API库{1},项目API库{1},基础API库{1},测试API库{6}'
+  
+- field: baseUrl
+  note: 基础URL
+  range: 'http://api.example.com{5},https://test.api.com{3},http://localhost:8080/api{2}'
+  
+- field: acl
+  note: 访问控制
+  range: 'open{5},private{3},custom{2}'
+  
+- field: groups
+  note: 用户组
+  range: ''
+  
+- field: users
+  note: 用户列表
+  range: ''
+  
+- field: main
+  note: 是否主库
+  range: '0{8},1{2}'
+  
+- field: collector
+  note: 收集器
+  range: ''
+  
+- field: desc
+  note: 描述
+  range: '这是一个API文档库{3},用于存放API相关文档{3},测试用API库{4}'
+  
+- field: order
+  note: 排序
+  range: 1-10
+  
+- field: addedBy
+  note: 创建者
+  range: 'admin{5},user1{3},user2{2}'
+  
+- field: addedDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00-2024-12-31 23:59:59'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: deleted
+  note: 是否删除
+  range: '0{9},1{1}'

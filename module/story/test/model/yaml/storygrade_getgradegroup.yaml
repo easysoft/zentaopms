@@ -1,0 +1,19 @@
+---
+title: 需求等级分组数据定义
+desc: 用于测试 getGradeGroup 方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: type
+  note: 需求类型
+  range: story,requirement,epic
+- field: grade
+  note: 等级值
+  range: 1-5
+- field: name
+  note: 等级名称
+  range: '非常低,低,中,高,非常高'
+- field: status
+  note: 状态
+  range: enable

@@ -1,0 +1,48 @@
+---
+title: buildCreateForm方法测试数据
+desc: 为projectZen::buildCreateForm方法提供测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-100
+- field: name
+  note: 名称
+  range: 项目{1-10},产品{1-10},项目集{1-10}
+- field: type
+  note: 类型
+  range: project,program,product
+- field: status
+  note: 状态
+  range: wait,doing,closed
+- field: model
+  note: 项目模型
+  range: scrum,kanban,waterfall,waterfallplus
+- field: parent
+  note: 父级项目集
+  range: 1-5
+- field: hasProduct
+  note: 是否关联产品
+  range: 1,0
+- field: multiple
+  note: 是否多迭代
+  range: 1,0
+- field: PM
+  note: 项目经理
+  range: admin,user1,user2,user3
+- field: budget
+  note: 预算
+  range: 100000-1000000
+- field: budgetUnit
+  note: 预算单位
+  range: CNY,USD
+- field: begin
+  note: 开始时间
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD
+- field: end
+  note: 结束时间
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD

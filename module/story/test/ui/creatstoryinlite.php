@@ -9,7 +9,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/createstoryinlite.ui.class.php';
+include '../lib/ui/createstoryinlite.ui.class.php';
 include 'page/create.php';
 
 $product = zenData('product');

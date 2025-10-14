@@ -1,0 +1,31 @@
+---
+title: 测试buildComponent方法的图表数据
+desc: 用于buildComponent方法单元测试的图表数据
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: "测试图表1,测试图表2,测试图表3,测试图表4,测试图表5"
+- field: type
+  range: "bar,pie,line,card,table"
+- field: sql
+  range: "SELECT * FROM zt_product,SELECT * FROM zt_story,SELECT * FROM zt_task"
+- field: fields
+  range: "id,name,status"
+- field: settings
+  range: "{},{},{},{},{}"
+- field: filters
+  range: "{},{},{},{},{}"
+- field: langs
+  range: "{},{},{},{},{}"
+- field: stage
+  range: "published,published,published,published,published"
+- field: builtin
+  range: "0,0,0,0,0"
+- field: createdBy
+  range: "admin,user1,user2,admin,user1"
+- field: createdDate
+  range: "`2024-01-01 00:00:00`:`2024-12-31 23:59:59`"
+- field: deleted
+  range: "0,0,0,0,0"

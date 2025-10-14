@@ -1,0 +1,59 @@
+---
+title: AI模型测试数据
+desc: 用于测试getLanguageModels方法的数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+  format: ""
+- field: type
+  note: 模型类型
+  range: gpt{2},claude{2},gemini{2},llama{2},bard{2}
+  format: ""
+- field: vendor
+  note: 供应商
+  range: openai{2},anthropic{2},google{2},meta{2},google{2}
+  format: ""
+- field: credentials
+  note: 认证信息
+  range: '{"api_key": "test_key_1"}',{'{"api_key": "test_key_2"}'}{9}
+  format: ""
+- field: proxy
+  note: 代理设置
+  range: '[""],{"host":"proxy.test.com","port":8080}{3},[""]{6}'
+  format: ""
+- field: name
+  note: 模型名称
+  range: GPT-4{2},Claude-3{2},Gemini-Pro{2},LLaMA-2{2},Bard{2}
+  format: ""
+- field: desc
+  note: 模型描述
+  range: 'OpenAI GPT-4 model{2},Anthropic Claude-3 model{2},Google Gemini Pro model{2},Meta LLaMA-2 model{2},Google Bard model{2}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5},user{5}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00-2024-12-31 18:00:00:1d
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: '[admin,user,""]{10}'
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '[2024-01-01 10:00:00-2024-12-31 18:00:00:1d,""]{10}'
+  format: ""
+- field: enabled
+  note: 是否启用
+  range: '1{7},0{3}'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{8},1{2}'
+  format: ""

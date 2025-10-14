@@ -1,0 +1,50 @@
+---
+title: bug数据定义用于getInitStoryByBug方法测试
+desc: 为测试getInitStoryByBug方法准备的bug测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1
+  format: ""
+- field: title
+  note: Bug标题
+  range: 'Bug标题测试1,Bug标题测试2,Bug标题测试3,Bug标题测试4,Bug标题测试5'
+  format: ""
+- field: keywords
+  note: 关键词
+  range: '关键词1,关键词2,关键词3,关键词4,关键词5'
+  format: ""
+- field: steps
+  note: 重现步骤
+  range: '重现步骤1,重现步骤2,重现步骤3,重现步骤4,重现步骤5'
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+- field: mailto
+  note: 抄送人员
+  range: 'user1@test.com,user2@test.com,,user3@test.com,user4@test.com'
+  format: ""
+- field: openedBy
+  note: 由谁创建
+  range: 'admin,user1,user2,user3,user4'
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: (d-30)-(d):7D
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: status
+  note: Bug状态
+  range: 'active{80},resolved{15},closed{5}'
+  format: ""

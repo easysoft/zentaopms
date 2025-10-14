@@ -1,0 +1,31 @@
+---
+title: 产品测试概况表数据
+desc: 用于测试getProductTestTable方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 产品ID
+- field: name
+  range: '[产品A,产品B,产品C,测试产品,Demo产品]{2}'
+  note: 产品名称
+- field: code
+  range: '[PRODA,PRODB,PRODC,TESTPROD,DEMO]{2}'
+  note: 产品代号
+- field: type
+  range: normal{8},branch{2}
+  note: 产品类型
+- field: status
+  range: normal{8},closed{2}
+  note: 产品状态
+- field: deleted
+  range: '0'
+  note: 删除状态
+- field: openedBy
+  range: admin,user1,user2
+  note: 创建人
+- field: openedDate
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  note: 创建时间

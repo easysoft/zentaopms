@@ -55,9 +55,11 @@ function createBug(event)
         if($(this).prop('checked')) stepIdList += $(this).val() + '_';
     });
 
-    var link = $.createLink('bug', 'create', $form.data('params') + ',stepIdList=' + stepIdList);
-    window.open(link, '_blank');
-    //openPage(link, 'qa');
+    const formData = new FormData();
+    formData.append('stepIdList', stepIdList);
+
+    var link = $.createLink('bug', 'create', $form.data('params'));
+    postAndLoadPage(link, formData);
 }
 
 /**

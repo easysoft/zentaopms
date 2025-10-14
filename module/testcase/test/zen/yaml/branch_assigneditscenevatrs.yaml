@@ -1,0 +1,17 @@
+---
+title: 分支测试数据
+desc: 用于测试assignEditSceneVars方法的分支数据
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1{3},2{3},3{2},4{1},5{1}
+- field: name
+  range: 主干{5},分支一{2},分支二{2},分支三{1}
+- field: status
+  range: active{7},closed{3}
+- field: default
+  range: '1{5},0{5}'
+- field: desc
+  range: 主分支{5},开发分支{3},测试分支{2}

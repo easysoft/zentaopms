@@ -39,6 +39,8 @@ if($denyType == 'noview')
 }
 
 h::css("#header{display:none;}");
+$gobackBtn = null;
+if(!isInModal()) $gobackBtn = $referer ? array('url' => helper::safe64Decode($referer), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback, 'class' => 'go-back-btn');
 panel
 (
     setID('denyBox'),
@@ -46,7 +48,7 @@ panel
     set::footerActions
     (array(
         array('text' => $lang->close, 'class' => 'close-app-btn hidden'),
-        $referer ? array('url' => helper::safe64Decode($referer), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback, 'class' => 'go-back-btn'),
+        $gobackBtn,
         array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary re-login-btn', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)')
     )),
     set::footerClass('justify-center'),

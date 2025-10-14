@@ -1,0 +1,66 @@
+---
+title: 动作记录表数据
+desc: 为addEditAction方法提供动作记录测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: 'case'
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  format: ""
+- field: product
+  note: 产品ID列表
+  range: '1,2,3{8},1,2'
+  format: ""
+- field: project
+  note: 项目ID
+  range: 0-5
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0
+  format: ""
+- field: actor
+  note: 操作者
+  range: 'admin,user1,user2,tester1,tester2'
+  format: ""
+- field: action
+  note: 动作类型
+  range: 'Edited,Commented,submitReview,created,activated,blocked'
+  format: ""
+- field: date
+  note: 动作时间
+  range: '2023-01-01 10:00:00-2023-12-31 23:59:59:1D'
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: comment
+  note: 备注说明
+  range: '编辑用例,添加评论,提交审核,创建用例,激活用例,阻塞用例,修改标题,更新状态,修改优先级,添加步骤'
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '{8}'
+  format: ""
+- field: read
+  note: 是否已读
+  range: '0{7},1{3}'
+  format: ""
+- field: vision
+  note: 界面
+  range: 'rnd'
+  format: ""
+- field: efforted
+  note: 是否记工时
+  range: 0
+  format: ""

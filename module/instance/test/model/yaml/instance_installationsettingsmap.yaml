@@ -1,0 +1,32 @@
+---
+title: installationSettingsMap方法测试数据
+desc: 用于测试instanceModel::installationSettingsMap()方法的数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 实例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: chart
+  note: 应用图表名称
+  range: zentao{3},gitea{2},gitlab{2},jenkins{2},sonarqube{1}
+- field: source  
+  note: 应用来源
+  range: system{5},cloud{5}
+- field: deleted
+  note: 是否删除
+  range: 0{10}
+- field: name
+  note: 应用名称
+  range: ZenTao{3},Gitea{2},GitLab{2},Jenkins{2},SonarQube{1}
+- field: appName
+  note: 应用显示名称
+  range: ZenTao{3},Gitea{2},GitLab{2},Jenkins{2},SonarQube{1}
+- field: status
+  note: 状态
+  range: running{5},stopped{3},creating{2}

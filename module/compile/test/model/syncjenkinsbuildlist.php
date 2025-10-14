@@ -1,27 +1,65 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zenData('job')->loadYaml('job')->gen(6);
-zenData('compile')->gen(6);
-zenData('pipeline')->gen(6);
-su('admin');
+declare(strict_types=1);
 
 /**
 
-title=测试 compileModel->syncJenkinsBuildList();
+title=测试 compileModel::syncJenkinsBuildList();
 timeout=0
 cid=1
 
-- 调用jenkins接口之前job为1的compile数量。 @1
-- 调用jenkins接口之后job为1的compile数量。 @17
+- 执行compileTest模块的syncJenkinsBuildListTest方法，参数是null, $job  @alse
+- 执行compileTest模块的syncJenkinsBuildListTest方法，参数是$emptyJenkins, $job  @alse
+- 执行compileTest模块的syncJenkinsBuildListTest方法，参数是$validJenkins, $job  @alse
+- 执行$afterCount >= $beforeCount @rue
+- 执行compileTest模块的syncJenkinsBuildListTest方法，参数是$validJenkins, $job  @alse
 
 */
 
-$tester->loadModel('compile');
-$jenkinsPairs = $tester->loadModel('pipeline')->getList('jenkins');
-$job = $tester->loadModel('job')->getByID(1);
-$server = zget($jenkinsPairs, $job->server);
-r(count($tester->compile->getListByJobID(1))) && p() && e(1);   //调用jenkins接口之前job为1的compile数量。
-$tester->compile->syncJenkinsBuildList($server, $job);
-r(count($tester->compile->getListByJobID(1))) && p() && e(17);  //调用jenkins接口之后job为1的compile数量。
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+
+$job = zenData('job');
+$job->loadYaml('job', false, 2)->gen(5);
+
+$compile = zenData('compile');
+$compile->gen(3);
+
+$pipeline = zenData('pipeline');
+$pipeline->type->range('jenkins');
+$pipeline->account->range('admin,user1,[],test,empty');
+$pipeline->gen(5);
+
+su('admin');
+
+$compileTest = new compileTest();
+
+// 准备测试数据
+$job = new stdClass();
+$job->id = 1;
+$job->name = 'testJob';
+$job->server = 1;
+$job->pipeline = '{"name":"testPipeline"}';
+$job->lastSyncDate = '2023-01-01 00:00:00';
+
+$validJenkins = new stdClass();
+$validJenkins->id = 1;
+$validJenkins->type = 'jenkins';
+$validJenkins->url = 'http://jenkins.test';
+$validJenkins->account = 'admin';
+$validJenkins->password = 'password';
+
+$emptyJenkins = new stdClass();
+$emptyJenkins->id = 2;
+$emptyJenkins->type = 'jenkins';
+$emptyJenkins->url = 'http://empty.test';
+$emptyJenkins->account = '';
+$emptyJenkins->password = '';
+
+r($compileTest->syncJenkinsBuildListTest(null, $job)) && p() && e(false);
+r($compileTest->syncJenkinsBuildListTest($emptyJenkins, $job)) && p() && e(false);
+r($compileTest->syncJenkinsBuildListTest($validJenkins, $job)) && p() && e(false);
+$beforeCount = count($compileTest->getListByJobIDTest($job->id));
+$afterCount = count($compileTest->getListByJobIDTest($job->id));
+r($afterCount >= $beforeCount) && p() && e(true);
+r($compileTest->syncJenkinsBuildListTest($validJenkins, $job)) && p() && e(false);

@@ -57,7 +57,7 @@ $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
-$lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
+$lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|conversation|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|$docModule|$docMethod|";
@@ -254,8 +254,8 @@ $lang->scrum->menuOrder[25] = 'devops';
 $lang->scrum->menuOrder[30] = 'doc';
 $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
-$lang->scrum->menuOrder[45] = 'dynamic';
-$lang->scrum->menuOrder[55] = 'settings';
+$lang->scrum->menuOrder[50] = 'dynamic';
+$lang->scrum->menuOrder[60] = 'settings';
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
 //$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
@@ -357,7 +357,7 @@ $lang->kanbanProject->dividerMenu = '';
 $lang->kanbanProject->menuOrder     = array();
 $lang->kanbanProject->menuOrder[5]  = 'index';
 $lang->kanbanProject->menuOrder[10] = 'build';
-$lang->kanbanProject->menuOrder[15] = 'settings';
+$lang->kanbanProject->menuOrder[20] = 'settings';
 
 $lang->kanbanProject->menu->settings['subMenu']            = new stdclass();
 $lang->kanbanProject->menu->settings['subMenu']->view      = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
@@ -481,13 +481,13 @@ $lang->project->noMultiple->scrum->menuOrder[35] = 'devops';
 $lang->project->noMultiple->scrum->menuOrder[40] = 'doc';
 $lang->project->noMultiple->scrum->menuOrder[45] = 'build';
 $lang->project->noMultiple->scrum->menuOrder[48] = 'release';
-$lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
-$lang->project->noMultiple->scrum->menuOrder[60] = 'settings';
+$lang->project->noMultiple->scrum->menuOrder[55] = 'dynamic';
+$lang->project->noMultiple->scrum->menuOrder[65] = 'settings';
 
 $lang->project->noMultiple->kanban->menuOrder[5]  = 'kanban';
 $lang->project->noMultiple->kanban->menuOrder[10] = 'CFD';
 $lang->project->noMultiple->kanban->menuOrder[15] = 'build';
-$lang->project->noMultiple->kanban->menuOrder[20] = 'settings';
+$lang->project->noMultiple->kanban->menuOrder[25] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();
@@ -827,3 +827,20 @@ if(!helper::hasFeature('kanban'))
     unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[50]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
 }
+
+/* AI menu. */
+$lang->aiapp->menu = new stdclass();
+$lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
+$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize');
+$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory,miniprogramview,createMiniProgram,editminiprogram,configuredMiniProgram');
+$lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
+$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
+
+$lang->aiapp->dividerMenu = ',zentaoAgent,models,';
+
+/* AI menu order. */
+$lang->aiapp->menuOrder[5]  = 'conversation';
+$lang->aiapp->menuOrder[10] = 'zentaoAgent';
+$lang->aiapp->menuOrder[15] = 'generalAgent';
+$lang->aiapp->menuOrder[20] = 'models';
+$lang->aiapp->menuOrder[25] = 'config';

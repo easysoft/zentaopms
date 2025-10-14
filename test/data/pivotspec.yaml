@@ -1,0 +1,10 @@
+---
+title: table zt_pivotspec
+author: automated export
+version: "1.0"
+fields:
+- field: pivot
+  range: 1-1000
+- field: version
+  range: 1-10
+...

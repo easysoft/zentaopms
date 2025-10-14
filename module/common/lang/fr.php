@@ -652,6 +652,7 @@ $lang->datepicker->dpText->TEXT_THIS_WEEK   = 'Cette Semaine';
 $lang->datepicker->dpText->TEXT_TODAY       = "Aujourd'hui";
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Année Prochaine';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Mois Prochain';
+$lang->datepicker->dpText->TEXT_NEXT_WEEK   = 'Next Week';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Fermer';
 $lang->datepicker->dpText->TEXT_DATE        = '';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choisir une Date';
@@ -659,5 +660,12 @@ $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choisir une Date';
 $lang->datepicker->dayNames     = array('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi');
 $lang->datepicker->abbrDayNames = array('Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam');
 $lang->datepicker->monthNames   = array('Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc');
+
+/* AI */
+$lang->aiapp->conversation = 'Conversation';
+$lang->aiapp->zentaoAgent  = 'ZenTao Agent';
+$lang->aiapp->generalAgent = 'General Agent';
+$lang->aiapp->models       = 'Model List';
+$lang->aiapp->config       = 'ZAI Setting';
 
 include (dirname(__FILE__) . '/menu.php');

@@ -1,0 +1,28 @@
+---
+title: getTasksForTrack方法任务团队测试数据
+desc: 测试多人任务模式相关的团队数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 团队成员ID
+  range: 1-10
+- field: task
+  note: 任务ID
+  range: 16-20
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4
+- field: estimate
+  note: 预计工时
+  range: 2-8
+- field: consumed
+  note: 已消耗工时
+  range: 0-3
+- field: left
+  note: 剩余工时
+  range: 1-2
+- field: status
+  note: 状态
+  range: wait{3},doing{4},done{3}

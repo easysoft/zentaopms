@@ -1,0 +1,52 @@
+---
+title: 产品计划数据定义
+desc: 为printWaterfallGanttBlock测试生成产品计划数据
+author: zentao
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-30
+- field: product
+  note: 产品ID
+  range: 1-5
+- field: branch
+  note: 分支ID
+  range: 0
+- field: title
+  note: 计划标题
+  range: '计划{1-30}'
+- field: desc
+  note: 计划描述
+  range: '计划描述{1-30}'
+- field: begin
+  note: 开始时间
+  range: '(-180D)-(30D):10D'
+  type: timestamp
+  format: 'YYYY-MM-DD'
+- field: end
+  note: 结束时间
+  range: '(-150D)-(60D):10D'
+  type: timestamp
+  format: 'YYYY-MM-DD'
+- field: order
+  note: 排序
+  range: 1-30
+- field: future
+  note: 是否未来计划
+  range: '0{25},1{5}'
+- field: parent
+  note: 父计划ID
+  range: '-1{30}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{20},user1{5},user2{5}'
+- field: createdDate
+  note: 创建时间
+  range: '(-180D)-(0D):10D'
+  type: timestamp
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: deleted
+  note: 是否删除
+  range: '0{30}'

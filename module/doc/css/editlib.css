@@ -1,7 +1,0 @@
-form {margin-right: 30px;}
-
-#whiteListBox div.input-group {margin-bottom: 2px;}
-#whiteListBox .input-group:last-child {margin-top: 10px;}
-
-#groups_chosen.chosen-container .chosen-results, #users_chosen.chosen-container .chosen-results {max-height: 160px;}
-#aclBox > th {vertical-align: top; padding-top: 17px;}

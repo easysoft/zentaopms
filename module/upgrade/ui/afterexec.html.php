@@ -89,7 +89,7 @@ div
             setClass('message flex-wrap justify-center' . ($hideHome ? ' hidden' : '')),
             cell
             (
-                setClass('flex justify-center items-end h-48 mb-4'),
+                setClass('flex justify-center items-end h-36 mb-4'),
                 icon
                 (
                     setClass('text-success'),

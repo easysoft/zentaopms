@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-include '../lib/repo.ui.class.php';
+include '../lib/ui/repo.ui.class.php';
 
 $repo = zenData('repo')->loadYaml('repo', false, 2)->gen(5);
 $tester = new repo();

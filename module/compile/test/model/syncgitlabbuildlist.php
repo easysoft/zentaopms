@@ -1,29 +1,57 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zenData('job')->loadYaml('job')->gen(6);
-zenData('compile')->gen(6);
-zenData('pipeline')->gen(6);
-su('admin');
 
 /**
 
-title=测试 compileModel->syncGitlabBuildList();
+title=测试 compileModel::syncGitlabBuildList();
 timeout=0
-cid=1
+cid=0
 
-- 执行 @1
-- 调用gitlab接口之前的获取不到ID为50的compile。属性50 @~~
-- 调用gitlab接口之后的能获取到ID为50的compile。第50条的name属性 @这是一个Job2
+- 执行compileTest模块的syncGitlabBuildListTest方法，参数是$emptyGitlab, $validJob  @false
+- 执行compileTest模块的syncGitlabBuildListTest方法，参数是$validGitlab, $emptyPipelineJob  @false
+- 执行compileTest模块的syncGitlabBuildListTest方法，参数是$validGitlab, $validPipelineJob  @true
+- 执行 @0
+- 执行compileTest模块的syncGitlabBuildListTest方法，参数是'invalid', $validJob  @false
 
 */
 
-$tester->loadModel('compile');
-$gitlabPairs = $tester->loadModel('pipeline')->getList('gitlab');
-$job = $tester->loadModel('job')->getByID(2);
-$server = zget($gitlabPairs, $job->server);
-r(1) && p() && e('1');
-r($tester->compile->getListByJobID(2)) && p('50')      && e('~~');            //调用gitlab接口之前的获取不到ID为50的compile。
-$tester->compile->syncGitlabBuildList($server, $job);
-r($tester->compile->getListByJobID(2)) && p('50:name') && e('这是一个Job2');  //调用gitlab接口之后的能获取到ID为50的compile。
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+
+su('admin');
+
+$compileTest = new compileTest();
+
+// 创建测试对象 - 空ID测试
+$emptyGitlab = new stdClass();
+$emptyGitlab->id = '';
+
+$validJob = new stdClass();
+$validJob->id = 1;
+$validJob->name = 'TestJob';
+$validJob->pipeline = '{"project":"1","reference":"master"}';
+$validJob->lastSyncDate = null;
+
+// 创建测试对象 - 有效ID但空pipeline
+$validGitlab = new stdClass();
+$validGitlab->id = 1;
+
+$emptyPipelineJob = new stdClass();
+$emptyPipelineJob->id = 2;
+$emptyPipelineJob->name = 'EmptyJob';
+$emptyPipelineJob->pipeline = '';
+$emptyPipelineJob->lastSyncDate = null;
+
+// 创建测试对象 - 有效参数
+$validPipelineJob = new stdClass();
+$validPipelineJob->id = 3;
+$validPipelineJob->name = 'ValidJob';
+$validPipelineJob->pipeline = '{"project":"1","reference":"master"}';
+$validPipelineJob->lastSyncDate = null;
+
+// 测试步骤：至少5个
+r($compileTest->syncGitlabBuildListTest($emptyGitlab, $validJob)) && p() && e('false');
+r($compileTest->syncGitlabBuildListTest($validGitlab, $emptyPipelineJob)) && p() && e('false');
+r(is_bool($compileTest->syncGitlabBuildListTest($validGitlab, $validPipelineJob))) && p() && e('true');
+r(dao::isError() ? 1 : 0) && p() && e('0');
+r($compileTest->syncGitlabBuildListTest('invalid', $validJob)) && p() && e('false');

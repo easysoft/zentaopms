@@ -1,0 +1,60 @@
+---
+title: printSingleDynamicBlock方法用户测试数据
+desc: 为blockZen::printSingleDynamicBlock()方法提供user表测试数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: account
+  note: 用户账号
+  range: admin, user1, user2, user3, user4, user5, user6, user7, user8, user9
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: realname
+  note: 真实姓名
+  range: 管理员, 用户1, 用户2, 用户3, 用户4, 用户5, 用户6, 用户7, 用户8, 用户9
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: role
+  note: 用户角色
+  range: admin{1}, dev{4}, qa{3}, pm{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: email
+  note: 邮箱
+  range: admin@zentao.net, user1@zentao.net, user2@zentao.net, user3@zentao.net, user4@zentao.net, user5@zentao.net, user6@zentao.net, user7@zentao.net, user8@zentao.net, user9@zentao.net
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: locked
+  note: 是否锁定
+  range: '0000-00-00 00:00:00{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,68 @@
+---
+title: 瀑布项目任务测试数据
+desc: 用于测试 printWaterfallGeneralReportBlock 方法的任务数据
+
+fields:
+- field: id
+  range: 1-50
+  note: 任务ID
+
+- field: project
+  range: 1-5:R
+  note: 所属项目ID
+
+- field: execution
+  range: 1-10:R
+  note: 所属执行ID
+
+- field: name
+  range: 测试任务{1-20}
+  note: 任务名称
+
+- field: type
+  range: design{10},devel{20},test{15},study{5}
+  note: 任务类型
+
+- field: status
+  range: wait{10},doing{15},done{20},closed{5}
+  note: 任务状态
+
+- field: estimate
+  range: 1-40:2
+  note: 预估工时
+
+- field: consumed
+  range: 0-30:1
+  note: 消耗工时
+
+- field: left
+  range: 0-10:1
+  note: 剩余工时
+
+- field: assignedTo
+  range: admin,user1,user2,user3
+  note: 指派给
+
+- field: finishedBy
+  range: []{30},admin{10},user1{5},user2{5}
+  note: 完成者
+
+- field: closedBy
+  range: []{45},admin{5}
+  note: 关闭者
+
+- field: openedBy
+  range: admin{50}
+  note: 创建者
+
+- field: openedDate
+  range: 2024-01-01-2024-11-30:7D
+  note: 创建时间
+
+- field: deadline
+  range: []{20},2024-06-01-2024-12-31:15D{30}
+  note: 截止日期
+
+- field: deleted
+  range: '0'{50}
+  note: 删除标志

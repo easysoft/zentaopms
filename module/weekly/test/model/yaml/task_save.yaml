@@ -1,0 +1,39 @@
+---
+title: 任务保存测试数据
+desc: 为weekly模块save方法提供任务测试数据
+
+fields:
+- field: id
+  range: 1-50
+- field: project
+  range: 1-10:R
+- field: execution
+  range: 1-20:R
+- field: name
+  range: 任务{1-50}
+- field: type
+  range: devel{25},test{15},design{5},study{5}
+- field: status
+  range: wait{10},doing{15},done{20},closed{5}
+- field: estimate
+  range: 1-40:R
+- field: consumed
+  range: 0-30:R
+- field: left
+  range: 0-20:R
+- field: estStarted
+  range: 2023-09-01{25},2023-10-01{25}
+- field: deadline
+  range: 2023-11-30{25},2023-12-31{25}
+- field: finishedDate
+  range: []{30},2023-10-15{20}
+- field: closedReason
+  range: []{30},done{20}
+- field: progress
+  range: 0{10},25{10},50{10},75{10},100{10}
+- field: assignedTo
+  range: admin{20},user1{15},user2{15}
+- field: isParent
+  range: 0{45},1{5}
+- field: deleted
+  range: 0{50}

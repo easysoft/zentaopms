@@ -1,0 +1,70 @@
+---
+title: project表测试数据 - buildExecutionForCreate测试
+desc: 为buildExecutionForCreate方法提供项目测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 测试项目1,测试项目2,敏捷项目,瀑布项目,看板项目
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 项目模型
+  range: scrum{3},waterfall{2},kanban{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: project{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: wait{3},doing{3},suspended{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: hasProduct
+  note: 关联产品
+  range: 1{5},0{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: isTpl
+  note: 是否模板
+  range: 0{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: begin
+  note: 开始日期
+  range: 2024-01-01{3},2024-02-01{2},2024-03-01{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: end
+  note: 结束日期
+  range: 2024-12-31{3},2024-06-30{2},2024-09-30{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,17 @@
+---
+title: setLinkedBranches方法测试数据-分支表
+desc: 用于测试executionZen::setLinkedBranches方法的分支数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-12
+- field: product
+  range: 1{4},2{3},3{3},4{2}
+- field: name
+  range: main{3},develop{3},feature{2},hotfix{2},release{2}
+- field: status
+  range: active{10},closed{2}
+- field: deleted
+  range: 0{11},1{1}

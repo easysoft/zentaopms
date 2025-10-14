@@ -14,7 +14,7 @@ cid=7
 */
 
 chdir(__DIR__);
-include '../lib/view.ui.class.php';
+include '../lib/ui/view.ui.class.php';
 global $config;
 
 $stakeholder = zenData('stakeholder');

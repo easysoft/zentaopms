@@ -547,7 +547,7 @@ class cneModel extends model
         $apiParams->namespace    = $instance->spaceData->k8space;
         $apiParams->name         = $instance->k8name;
         $apiParams->restore_name = $backupName;
-        $apiParams->channel      = empty($instance->channel) ? $this->config->cne->api->channel : $instance->channel;
+        $apiParams->channel      = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
 
         $apiUrl = "/api/cne/app/restore/status";
         return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);

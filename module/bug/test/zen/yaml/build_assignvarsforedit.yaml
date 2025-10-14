@@ -1,0 +1,42 @@
+---
+title: Build数据用于assignVarsForEdit测试
+desc: 提供build表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-5
+- field: name
+  note: 版本名称
+  range: 'Build{1}, Build{2}, Build{3}, Build{4}, Build{5}'
+  prefix: "Test "
+- field: product
+  note: 所属产品
+  range: 1-5
+- field: branch
+  note: 所属分支
+  range: '0{2}, main{2}, dev{1}'
+- field: execution
+  note: 所属执行
+  range: '0{2}, 101{2}, 102{1}'
+- field: scmPath
+  note: 源码路径
+  range: '[/trunk, /branches/dev]{3}, []{2}'
+- field: filePath
+  note: 下载地址
+  range: '[/build/download.zip]{3}, []{2}'
+- field: desc
+  note: 版本描述
+  range: '[Build description for testing]{3}, []{2}'
+- field: date
+  note: 构建日期
+  range: '2023-01-01-2023-12-31'
+  format: 'YYYY-MM-DD'
+- field: builder
+  note: 构建者
+  range: 'admin{3}, user1{2}'
+- field: deleted
+  note: 是否删除
+  range: '0{5}'

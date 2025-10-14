@@ -1,0 +1,39 @@
+title: 需求故事数据定义
+desc: assignShowImportVars方法测试用的需求故事数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-15
+- field: product
+  note: 所属产品
+  range: 1-5
+- field: branch
+  note: 所属分支
+  range: 0,1,2
+- field: module
+  note: 所属模块
+  range: 1-10
+- field: title
+  note: 需求标题
+  range: 需求故事{15}
+- field: type
+  note: 需求类型
+  range: story
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: status
+  note: 需求状态
+  range: active
+- field: stage
+  note: 需求阶段
+  range: wait
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00

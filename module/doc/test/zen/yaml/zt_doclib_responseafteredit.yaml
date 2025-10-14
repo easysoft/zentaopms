@@ -1,0 +1,90 @@
+---
+title: 文档库测试数据
+desc: 为responseAfterEdit方法提供文档库测试数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 文档库ID
+
+- field: type
+  range: '[custom,product,project,execution,mine]{1,1,1,1,1}'
+  note: 文档库类型
+
+- field: vision
+  range: '[rnd]{5}'
+  note: 版本
+
+- field: parent
+  range: '0'
+  note: 父库ID
+
+- field: product
+  range: '[1,2,3,0,0]{1,1,1,1,1}'
+  note: 产品ID
+
+- field: project
+  range: '[1,2,3,0,0]{1,1,1,1,1}'
+  note: 项目ID
+
+- field: execution
+  range: '[1,2,3,0,0]{1,1,1,1,1}'
+  note: 执行ID
+
+- field: name
+  range: '["测试库1", "编辑测试库", "响应库", "文档编辑库", "我的空间"]{1,1,1,1,1}'
+  note: 文档库名称
+
+- field: baseUrl
+  range: '[]{5}'
+  note: 基础URL
+
+- field: acl
+  range: '[open,private,default]{2,2,1}'
+  note: 访问控制
+
+- field: groups
+  range: '[]{5}'
+  note: 用户组
+
+- field: users
+  range: '[]{5}'
+  note: 用户
+
+- field: main
+  range: '[0,1]{4,1}'
+  note: 主库
+
+- field: collector
+  range: '[]{5}'
+  note: 收藏者
+
+- field: desc
+  range: '["", "测试描述", "编辑测试", ""]{2,1,1,1}'
+  note: 描述
+
+- field: order
+  range: '1-5'
+  note: 排序
+
+- field: addedBy
+  range: '[admin]{5}'
+  note: 添加者
+
+- field: addedDate
+  range: '2025-01-01 08:00:00'
+  note: 添加时间
+
+- field: deleted
+  range: '[0]{5}'
+  note: 删除标记
+
+- field: archived
+  range: '[0]{5}'
+  note: 归档标记
+
+- field: orderBy
+  range: '[id_asc]{5}'
+  note: 排序方式

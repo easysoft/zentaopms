@@ -1,0 +1,60 @@
+---
+title: getTasksForTrack方法测试数据
+desc: 测试根据需求ID列表获取关联任务的数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+- field: project
+  note: 项目ID
+  range: 1-5
+- field: execution
+  note: 执行ID
+  range: 1-5
+- field: mode
+  note: 任务模式
+  range: linear{15},multi{5}
+- field: pri
+  note: 优先级
+  range: 1-3
+- field: status
+  note: 任务状态
+  range: wait{5},doing{8},done{5},cancel{2}
+- field: color
+  note: 颜色标识
+  range: ''
+- field: name
+  note: 任务名称
+  range: 任务1,任务2,任务3,任务4,任务5,任务6,任务7,任务8,任务9,任务10,任务11,任务12,任务13,任务14,任务15,任务16,任务17,任务18,任务19,任务20
+  prefix: ""
+  postfix: ""
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2,user3,user4
+- field: story
+  note: 关联需求ID
+  range: 1{5},2{5},3{5},4{3},5{2}
+- field: estimate
+  note: 预计工时
+  range: 2-8
+- field: consumed
+  note: 已消耗工时
+  range: 0-5
+- field: left
+  note: 剩余工时
+  range: 1-3
+- field: parent
+  note: 父任务ID
+  range: 0{15},1{2},2{2},3{1}
+- field: isParent
+  note: 是否为父任务
+  range: 0{18},1{2}
+- field: path
+  note: 路径
+  range: 1{5},2{5},3{5},4{3},5{2}
+- field: deleted
+  note: 是否删除
+  range: 0{18},1{2}

@@ -492,6 +492,7 @@ class tutorialModel extends model
         if($type == 'story')       return array(1 => 'SR');
         if($type == 'requirement') return array(1 => 'UR');
         if($type == 'epic')        return array(1 => 'BR');
+        return array();
     }
 
     /**
@@ -2164,6 +2165,7 @@ class tutorialModel extends model
     {
         if($type == 'custom') return array(1 => 'Test Team Space');
         if($type == 'mine')   return array(1 => 'Test My Space');
+        return array();
     }
 
     /**

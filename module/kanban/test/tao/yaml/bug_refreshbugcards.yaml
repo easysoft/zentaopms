@@ -1,0 +1,65 @@
+---
+title: Bug测试数据 - refreshBugCards方法测试
+desc: 为refreshBugCards方法生成测试用的Bug数据，包含不同状态、确认状态和激活次数的Bug
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-25
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 所属产品ID
+  range: 1{15},2{10}
+
+- field: execution  
+  note: 所属执行ID
+  range: 1{20},2{5}
+
+- field: status
+  note: Bug状态
+  range: active{10},resolved{10},closed{5}
+
+- field: confirmed
+  note: 确认状态，0未确认1已确认
+  range: 0{8},1{17}
+
+- field: activatedCount
+  note: 激活次数
+  range: 0{15},1{7},2{3}
+
+- field: title
+  note: Bug标题
+  range: 界面显示异常{3},功能无法使用{4},数据错误{5},性能问题{3},登录失败{3},权限错误{3},导出失败{4}
+
+- field: type
+  note: Bug类型
+  range: codeerror{10},interface{8},config{4},install{3}
+
+- field: severity
+  note: 严重程度
+  range: 1{3},2{7},3{10},4{5}
+
+- field: pri
+  note: 优先级
+  range: 1{2},2{5},3{13},4{5}
+
+- field: openedBy
+  note: 创建者
+  range: admin{10},user1{8},tester{7}
+
+- field: assignedTo
+  note: 指派给
+  range: admin{5},dev1{8},dev2{7},tester{5}
+
+- field: deleted
+  note: 是否删除
+  range: 0
+
+- field: openedDate
+  note: 创建日期
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss

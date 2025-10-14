@@ -1,0 +1,117 @@
+title: story data for buildStoryTree test
+desc: "buildStoryTree方法的测试数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "需求ID"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: parent
+    note: "父需求ID"
+    range: 0{3},1{2},2{2},0{3}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: branch
+    note: "分支/平台"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: module
+    note: "所属模块"
+    range: 1821
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: grade
+    note: "需求层级"
+    range: 1{6},2{4}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "需求名称"
+    range: "父需求1,子需求1-1,子需求1-2,父需求2,子需求2-1,子需求2-2,独立需求1,独立需求2,独立需求3,独立需求4"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "需求类型"
+    range: story{8},requirement{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 1-4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "当前状态"
+    range: active{8},closed{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: color
+    note: "标题颜色"
+    range: "red,blue,green,orange,{6}"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: openedBy
+    note: "由谁创建"
+    range: admin{5},user{3},dev{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    range: admin{3},user{4},dev{2},{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    note: "版本号"
+    range: 1{8},2{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: taskVersion
+    note: "任务版本"
+    range: 1{8},2{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

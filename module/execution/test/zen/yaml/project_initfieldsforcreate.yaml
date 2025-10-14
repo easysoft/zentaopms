@@ -1,0 +1,41 @@
+---
+title: project数据定义用于测试initFieldsForCreate方法
+desc: 用于测试execution zen层initFieldsForCreate方法的project测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 项目{1-5}, 敏捷项目{6-10}
+- field: code
+  note: 项目代码
+  range: project{1-5}, agile{6-10}
+  format: ""
+- field: type
+  note: 项目类型
+  range: project{5}, sprint{5}
+- field: status
+  note: 项目状态
+  range: wait{3}, doing{4}, suspended{2}, closed{1}
+- field: begin
+  note: 开始日期
+  range: 2024-01-01 00:00:00-2024-06-01 00:00:00:30D
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: 2024-07-01 00:00:00-2024-12-31 00:00:00:60D
+  format: YYYY-MM-DD
+- field: acl
+  note: 访问控制
+  range: open{3}, private{4}, custom{3}
+- field: deleted
+  note: 是否删除
+  range: '0'

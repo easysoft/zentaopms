@@ -1,72 +1,43 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 myZen::showWorkCount();
+title=测试 myZen::showWorkCountNotInOpen();
 timeout=0
-cid=1
+cid=0
 
-- 执行$count @14
-- 执行$count['task'] @0
-- 执行$count['story'] @2
-- 执行$count['bug'] @10
-- 执行$count['case'] @3
-- 执行$count['testtask'] @0
-- 执行$count['requirement'] @2
-- 执行$count['epic'] @1
-- 执行$count['issue'] @0
-- 执行$count['risk'] @2
-- 执行$count['reviewissue'] @0
-- 执行$count['qa'] @0
-- 执行$count['meeting'] @0
-- 执行$count['ticket'] @0
-- 执行$count['feedback'] @0
+- 执行myTest模块的showWorkCountNotInOpenTest方法，参数是array
+ - 属性feedback @0
+ - 属性ticket @0
+- 执行myTest模块的showWorkCountNotInOpenTest方法，参数是array
+ - 属性feedback @0
+ - 属性ticket @0
+- 执行myTest模块的showWorkCountNotInOpenTest方法，参数是array
+ - 属性issue @0
+ - 属性risk @0
+ - 属性qa @3
+ - 属性meeting @0
+- 执行myTest模块的showWorkCountNotInOpenTest方法，参数是array 属性demand @0
+- 执行myTest模块的showWorkCountNotInOpenTest方法，参数是array 属性qa @3
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/myzen.unittest.class.php';
 
-zenData('task')->gen(10);
-$story = zenData('story');
-$story->type->range('story,requirement,epic');
-$story->gen(30);
-zenData('bug')->gen(10);
-zenData('case')->gen(10);
-zenData('testtask')->gen(10);
-zenData('risk')->gen(10);
-$reviewissue = zenData('reviewissue');
-$reviewissue->project->range('1');
-$reviewissue->review->range('1-5');
-$reviewissue->type->range('review');
-$reviewissue->opinionDate->range('`2025-01-01`');
-$reviewissue->resolutionDate->range('`2025-01-01`');
-$reviewissue->createdDate->range('`2025-01-01`');
-$reviewissue->gen(5);
-zenData('nc')->gen(0);
-zenData('auditplan')->gen(10);
-zenData('meeting')->gen(10);
-zenData('feedback')->gen(10);
-zenData('ticket')->gen(10);
-zenData('demand')->gen(10);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+
+// 创建测试用的pager对象
+$pager = new stdclass();
+$pager->recTotal = 0;
+
+// 用户登录
 su('admin');
 
-global $config, $tester;
-$config->URAndSR  = 1;
-$config->enableER = 1;
-$config->edition  = 'ipd';
+// 创建测试实例
+$myTest = new myTest();
 
-$tester->app->rawModule = 'my';
-$tester->app->rawMethod = 'work';
-$tester->app->loadClass('pager', true);
-$pager = pager::init(0, 10, 1);
-
-$myTester = new myZenTest();
-$count    = $myTester->showWorkCountNotInOpenTest($pager);
-r(count($count))         && p() && e('7');
-r($count['issue'])       && p() && e('0');
-r($count['risk'])        && p() && e('1');
-r($count['reviewissue']) && p() && e('0');
-r($count['qa'])          && p() && e('0');
-r($count['meeting'])     && p() && e('0');
-r($count['ticket'])      && p() && e('0');
-r($count['feedback'])    && p() && e('0');
+r($myTest->showWorkCountNotInOpenTest(array('task' => 5, 'story' => 3, 'bug' => 2, 'feedback' => 0, 'ticket' => 0), $pager, 'open', 'rnd')) && p('feedback,ticket') && e('0,0');
+r($myTest->showWorkCountNotInOpenTest(array('task' => 5, 'story' => 3, 'bug' => 2, 'feedback' => 0, 'ticket' => 0), $pager, 'biz', 'rnd')) && p('feedback,ticket') && e('0,0');
+r($myTest->showWorkCountNotInOpenTest(array('task' => 5, 'story' => 3, 'bug' => 2, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0), $pager, 'max', 'rnd')) && p('issue,risk,qa,meeting') && e('0,0,3,0');
+r($myTest->showWorkCountNotInOpenTest(array('task' => 5, 'story' => 3, 'bug' => 2, 'demand' => 0), $pager, 'ipd', 'or')) && p('demand') && e('0');
+r($myTest->showWorkCountNotInOpenTest(array(), $pager, 'max', 'rnd')) && p('qa') && e('3');

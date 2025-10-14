@@ -26,7 +26,7 @@ $projectIdList = range(1, 3);
 $moduleList    = array('project', 'doc');
 $methodList    = array('browse', 'projectSpace', 'create');
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 r($projectTester->getSwitcherTest($projectIdList[0], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置敏捷项目列表的1.5级下拉菜单
 r($projectTester->getSwitcherTest($projectIdList[1], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置瀑布项目列表的1.5级下拉菜单
 r($projectTester->getSwitcherTest($projectIdList[2], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置看板项目列表的1.5级下拉菜单

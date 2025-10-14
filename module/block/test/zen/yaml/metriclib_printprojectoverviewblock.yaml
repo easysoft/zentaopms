@@ -1,0 +1,49 @@
+---
+title: 项目概况区块度量数据
+desc: 用于测试printProjectOverviewBlock方法的度量数据
+author: Claude
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-20
+  
+- field: metricID
+  note: 度量ID
+  range: 1-2
+
+- field: metricCode
+  note: 度量代码
+  range: count_of_project{5},count_of_annual_finished_project{15}
+
+- field: value
+  note: 度量值
+  range: 50{5},0-10:2{15}
+
+- field: year
+  note: 年份
+  range: 0{5},2022-2024{15}
+
+- field: date
+  note: 日期
+  range: 2024-01-01
+
+- field: system
+  note: 系统标识
+  range: 1
+
+- field: program
+  note: 项目集ID
+  range: 0
+
+- field: product
+  note: 产品ID  
+  range: 0
+
+- field: project
+  note: 项目ID
+  range: 0
+
+- field: execution
+  note: 执行ID
+  range: 0

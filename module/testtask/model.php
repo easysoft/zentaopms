@@ -156,7 +156,7 @@ class testtaskModel extends model
     {
         $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = CAST(t2.id AS CHAR)')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
@@ -187,7 +187,7 @@ class testtaskModel extends model
 
         return $this->dao->select('t1.*, t2.name AS buildName, t3.name AS productName')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = CAST(t2.id AS CHAR)')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
@@ -313,7 +313,7 @@ class testtaskModel extends model
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = CAST(t3.id AS CHAR)')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t2.project = t5.id')
             ->where('t1.deleted')->eq('0')
@@ -824,15 +824,17 @@ class testtaskModel extends model
         $caseIdList = array_unique(array_filter(array_map(function($run){return $run->case;}, $runs)));
         if($type == 'bybuild' && $caseIdList) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
 
-        if($this->app->tab == 'execution')
+        $testtask = $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->eq($taskID)->fetch();
+
+        if(!empty($testtask->execution))
         {
-            $execution          = $this->loadModel('execution')->fetchByID((int)$this->session->execution);
+            $execution          = $this->loadModel('execution')->fetchByID((int)$testtask->execution);
             $executionLastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->id)->fetch('order');
             $projectLastOrder   = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->project)->fetch('order');
         }
-        elseif($this->app->tab == 'project')
+        elseif(!empty($testtask->project))
         {
-            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$this->session->project)->fetch('order');
+            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$testtask->project)->fetch('order');
         }
 
         $case = new stdclass();
@@ -849,14 +851,7 @@ class testtaskModel extends model
 
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
             /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
-            if($this->app->tab == 'project')
-            {
-                $case->project = (int)$this->session->project;
-                $case->case    = $run->case;
-                $case->order   = ++$lastOrder;
-                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
-            }
-            elseif($this->app->tab == 'execution')
+            if(!empty($testtask->execution))
             {
                 $executionLastOrder++;
                 $projectLastOrder++;
@@ -868,6 +863,13 @@ class testtaskModel extends model
 
                 $case->project = (int)$execution->project;
                 $case->order   = $projectLastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+            }
+            elseif(!empty($testtask->project))
+            {
+                $case->project = (int)$testtask->project;
+                $case->case    = $run->case;
+                $case->order   = ++$lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
 

@@ -1,27 +1,35 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 holidayModel->isWorkingDay();
-cid=1
+title=测试 holidayModel::isWorkingDay();
+timeout=0
+cid=0
 
-- 测试不是工作日 @It is not a working day
-- 测试是工作日 @It is a working day
-- 测试日期格式不对 @It is not a working day
+- 测试工作日期间的日期（春节补班） @It is a working day
+- 测试工作日期间的日期（劳动节补班） @It is a working day
+- 测试工作日期间的日期（劳动节补班2） @It is a working day
+- 测试工作日期间的日期（端午节补班） @It is a working day
+- 测试非工作日期间的日期 @It is not a working day
+- 测试空字符串日期 @It is not a working day
+- 测试工作日期间的日期（国庆节补班） @It is a working day
 
 */
-declare(strict_types=1);
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
 
-zenData('holiday')->gen(10);
-zenData('user')->gen(1);
+zenData('holiday')->loadYaml('holiday')->gen(10);
 
 su('admin');
 
 $holiday = new holidayTest();
-$date    = array('-1 month', '-1 month +3 day', '');
 
-r($holiday->isWorkingDayTest($date[0])) && p() && e('It is not a working day'); // 测试不是工作日
-r($holiday->isWorkingDayTest($date[1])) && p() && e('It is a working day');     // 测试是工作日
-r($holiday->isWorkingDayTest($date[2])) && p() && e('It is not a working day'); // 测试日期格式不对
+r($holiday->isWorkingDayTest('2023-01-28')) && p() && e('It is a working day');     // 测试工作日期间的日期（春节补班）
+r($holiday->isWorkingDayTest('2023-04-23')) && p() && e('It is a working day');     // 测试工作日期间的日期（劳动节补班）
+r($holiday->isWorkingDayTest('2023-05-06')) && p() && e('It is a working day');     // 测试工作日期间的日期（劳动节补班2）
+r($holiday->isWorkingDayTest('2023-06-25')) && p() && e('It is a working day');     // 测试工作日期间的日期（端午节补班）
+r($holiday->isWorkingDayTest('2024-12-25')) && p() && e('It is not a working day'); // 测试非工作日期间的日期
+r($holiday->isWorkingDayTest('')) && p() && e('It is not a working day');           // 测试空字符串日期
+r($holiday->isWorkingDayTest('2023-10-07')) && p() && e('It is a working day');     // 测试工作日期间的日期（国庆节补班）

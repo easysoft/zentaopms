@@ -1,0 +1,58 @@
+---
+title: Instance data for getPods test
+desc: Test data for testing cneModel::getPods() method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Instance ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  format: ""
+
+- field: space
+  note: Space ID
+  range: 1-3
+  format: ""
+
+- field: name
+  note: Instance name
+  range: test-zentao{2}, prod-zentao{1}, dev-app{2}
+  format: ""
+
+- field: appName
+  note: Application name
+  range: zentao{3}, jenkins{2}
+  format: ""
+
+- field: k8name
+  note: Kubernetes name
+  range: test-zentao-app{2}, prod-zentao-main{1}, dev-jenkins{2}
+  format: ""
+
+- field: chart
+  note: Helm chart name
+  range: zentao{3}, jenkins{2}
+  format: ""
+
+- field: status
+  note: Instance status
+  range: running{3}, stopped{1}, pending{1}
+  format: ""
+
+- field: deleted
+  note: Delete status
+  range: 0{5}
+  format: ""
+
+- field: createdBy
+  note: Creator
+  range: admin{2}, user{2}, test{1}
+  format: ""
+
+- field: createdDate
+  note: Creation time
+  range: (now)-(1w)
+  format: YYYY-MM-DD hh:mm:ss

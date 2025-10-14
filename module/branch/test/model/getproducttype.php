@@ -1,22 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
-
-zenData('product')->loadYaml('product')->gen(20);
-zenData('branch')->loadYaml('branch')->gen(30);
-su('admin');
 
 /**
 
-title=测试 branchModel->getProductType();
+title=测试 branchModel::getProductType();
 timeout=0
-cid=1
+cid=0
+
+- 测试步骤1：测试获取branch类型产品的分支ID @branch
+- 测试步骤2：测试获取platform类型产品的分支ID @platform
+- 测试步骤3：测试获取normal类型产品的分支ID @normal
+- 测试步骤4：测试不存在的分支ID @0
+- 测试步骤5：测试边界值0分支ID @0
 
 */
-$branchID = array(1, 17, 26);
-$branch = new branchTest();
 
-r($branch->getProductTypeTest($branchID[0])) && p() && e('branch');   // 测试获取分支 1 的项目类型
-r($branch->getProductTypeTest($branchID[1])) && p() && e('platform'); // 测试获取分支 81 的项目类型
-r($branch->getProductTypeTest($branchID[2])) && p() && e('normal');   // 测试获取分支 161 的项目类型
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+
+zenData('product')->loadYaml('product')->gen(30);
+zenData('branch')->loadYaml('branch')->gen(30);
+su('admin');
+
+$branchTest = new branchTest();
+
+r($branchTest->getProductTypeTest(1)) && p() && e('branch');     // 测试步骤1：测试获取branch类型产品的分支ID
+r($branchTest->getProductTypeTest(17)) && p() && e('platform');  // 测试步骤2：测试获取platform类型产品的分支ID
+r($branchTest->getProductTypeTest(26)) && p() && e('normal');    // 测试步骤3：测试获取normal类型产品的分支ID
+r($branchTest->getProductTypeTest(999)) && p() && e('0');        // 测试步骤4：测试不存在的分支ID
+r($branchTest->getProductTypeTest(0)) && p() && e('0');          // 测试步骤5：测试边界值0分支ID

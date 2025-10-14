@@ -1,18 +1,32 @@
 title: table zt_action
-desc: "系统日志"
+desc: "系统日志 - processProjectActions方法测试数据"
 author: automated export
 version: "1.0"
 fields:
   - field: objectType
     note: "对象类型"
-    range: product{6},testtask{3},build,project,user,testsuite
+    range: project{5},testtask{3},build{2},product{2},user{2},story{1}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: action
     note: "动作"
-    range: common{6},opened,started,closed,opened
+    range: common{5},opened{3},started{2},closed{2},edited{3}
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 1-15
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: actor
+    note: "操作者"
+    range: admin{8},user1{4},user2{3}
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""

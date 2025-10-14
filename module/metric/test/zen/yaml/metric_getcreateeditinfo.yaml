@@ -1,0 +1,103 @@
+---
+title: getCreateEditInfo方法测试数据
+desc: 为getCreateEditInfo方法测试提供度量项数据
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 度量项名称
+  range: 测试度量1,测试度量2,测试度量3,测试度量4,测试度量5,测试度量6,测试度量7,测试度量8,测试度量9,测试度量10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 度量项编码
+  range: metric_code_1,metric_code_2,metric_code_3,metric_code_4,metric_code_5,metric_code_6,metric_code_7,metric_code_8,metric_code_9,metric_code_10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: scope
+  note: 度量范围
+  range: system,product,project,execution,system,product,project,execution,system,product
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: object
+  note: 度量对象
+  range: user,story,task,bug,user,story,task,bug,user,story
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: purpose
+  note: 度量用途
+  range: scale,quality,efficiency,scale,quality,efficiency,scale,quality,efficiency,scale
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2,admin,user1,user2,admin,user1,user2,admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: '2024-01-01 10:00:00','2024-01-02 11:00:00','2024-01-03 12:00:00','2024-01-04 13:00:00','2024-01-05 14:00:00','2024-01-06 15:00:00','2024-01-07 16:00:00','2024-01-08 17:00:00','2024-01-09 18:00:00','2024-01-10 19:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: implementedBy
+  note: 实施者
+  range: admin,user1,user2,'',admin,user1,user2,'',admin,user1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: implementedDate
+  note: 实施日期
+  range: '2024-01-11 10:00:00','2024-01-12 11:00:00','2024-01-13 12:00:00','','2024-01-15 14:00:00','2024-01-16 15:00:00','2024-01-17 16:00:00','','2024-01-19 18:00:00','2024-01-20 19:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: delistedBy
+  note: 下线者
+  range: '',user2,admin,'',user1,user2,'',admin,user1,''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: delistedDate
+  note: 下线日期
+  range: '','2024-02-12 11:00:00','2024-02-13 12:00:00','','2024-02-15 14:00:00','2024-02-16 15:00:00','','2024-02-18 17:00:00','2024-02-19 18:00:00',''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: admin,user1,user2,admin,user1,user2,admin,user1,user2,admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑日期
+  range: '2024-03-01 10:00:00','2024-03-02 11:00:00','2024-03-03 12:00:00','2024-03-04 13:00:00','2024-03-05 14:00:00','2024-03-06 15:00:00','2024-03-07 16:00:00','2024-03-08 17:00:00','2024-03-09 18:00:00','2024-03-10 19:00:00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

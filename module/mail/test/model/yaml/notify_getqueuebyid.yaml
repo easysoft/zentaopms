@@ -1,0 +1,46 @@
+---
+title: 邮件队列数据
+desc: 用于测试getQueueById方法的notify表数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 队列ID
+  range: 1-10
+- field: objectType
+  note: 对象类型
+  range: mail{10}
+- field: objectID
+  note: 对象ID
+  range: 1-10
+- field: action
+  note: 动作ID
+  range: 1-5
+- field: toList
+  note: 收件人列表
+  range: admin{3},user1{2},user2{2},test@test.com{3}
+- field: ccList
+  note: 抄送列表
+  range: []{5},cc1@test.com{3},cc2@test.com{2}
+- field: subject
+  note: 邮件主题
+  range: 主题1,主题2,主题3,主题4,主题5,主题6,主题7,主题8,主题9,主题10
+- field: data
+  note: 邮件内容
+  range: 邮件内容1,邮件内容2,邮件内容3,邮件内容4,邮件内容5,邮件内容6,邮件内容7,邮件内容8,邮件内容9,邮件内容10
+- field: createdBy
+  note: 创建者
+  range: admin{6},user1{2},user2{2}
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00{10}
+- field: sendTime
+  note: 发送时间
+  range: 2023-01-01 10:05:00{4},2023-01-01 10:10:00{3},2023-01-01 10:15:00{3}
+- field: status
+  note: 状态
+  range: wait{3},sending{2},sended{2},fail{3}
+- field: failReason
+  note: 失败原因
+  range: []{7},网络错误{2},认证失败{1}

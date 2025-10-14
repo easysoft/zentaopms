@@ -1,0 +1,42 @@
+---
+title: 用户数据 - setUserMoreLink方法测试
+desc: 为setUserMoreLink方法测试提供用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: account
+  note: 用户账号
+  range: admin{1},pm1{1},pm2{1},po1{1},po2{1},qd1{1},qd2{1},rd1{1},rd2{1},dev1{1},dev2{1},dev3{1},dev4{1},dev5{1},dev6{1},dev7{1},dev8{1},dev9{1},dev10{1},test{1}
+
+- field: password
+  note: 用户密码
+  range: 123456{20}
+
+- field: realname
+  note: 用户姓名
+  range: 管理员{1},项目经理1{1},项目经理2{1},产品经理1{1},产品经理2{1},测试主管1{1},测试主管2{1},研发主管1{1},研发主管2{1},开发1{1},开发2{1},开发3{1},开发4{1},开发5{1},开发6{1},开发7{1},开发8{1},开发9{1},开发10{1},测试人员{1}
+
+- field: role
+  note: 用户角色
+  range: admin{1},pm{2},po{2},qd{2},rd{2},dev{10},qa{1}
+
+- field: email
+  note: 邮箱
+  range: admin@test.com,pm1@test.com,pm2@test.com,po1@test.com,po2@test.com,qd1@test.com,qd2@test.com,rd1@test.com,rd2@test.com,dev1@test.com,dev2@test.com,dev3@test.com,dev4@test.com,dev5@test.com,dev6@test.com,dev7@test.com,dev8@test.com,dev9@test.com,dev10@test.com,test@test.com
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+
+- field: status
+  note: 用户状态
+  range: active{19},closed{1}

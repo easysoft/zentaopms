@@ -1,0 +1,98 @@
+---
+title: 用户表数据
+desc: printWelcomeBlock方法测试数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dept
+  note: 部门ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{1},user1{1},user2{1},user3{1},user4{1},user5{1},user6{1},user7{1},user8{1},user9{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 用户密码
+  range: "098f6bcd4621d373cade4e832627b4f6{10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: "管理员{1},用户1{1},用户2{1},用户3{1},用户4{1},用户5{1},用户6{1},用户7{1},用户8{1},用户9{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色
+  range: "admin{1},dev{3},qa{3},pm{2},others{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: email
+  note: 邮箱
+  range: "admin@test.com{1},user1@test.com{1},user2@test.com{1},user3@test.com{1},user4@test.com{1},user5@test.com{1},user6@test.com{1},user7@test.com{1},user8@test.com{1},user9@test.com{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: join
+  note: 加入日期
+  range: "2020-01-01 00:00:00{1},2021-01-01 00:00:00{3},2022-01-01 00:00:00{3},2023-01-01 00:00:00{3}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: visits
+  note: 访问次数
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: ip
+  note: IP地址
+  range: "192.168.1.1{1},192.168.1.2{1},192.168.1.3{1},192.168.1.4{1},192.168.1.5{1},192.168.1.6{1},192.168.1.7{1},192.168.1.8{1},192.168.1.9{1},192.168.1.10{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: last
+  note: 最后登录时间
+  range: "2024-01-01 00:00:00{10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "0{10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: clientStatus
+  note: 客户端状态
+  range: "online{5},offline{5}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

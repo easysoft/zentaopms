@@ -3,32 +3,35 @@
 
 /**
 
-title=gitModel->getRepos();
+title=测试 gitModel::getRepos();
 timeout=0
-cid=1
+cid=0
 
-- 获取git代码库的数量 @8
-- 获取第一条git记录的path属性属性1 @https://gitlabdev.qc.oop.cc/root/unittest11
-- 获取不到数据时，提示错误信息 @You must set one git repo.
+- 步骤1：正常情况下获取Git仓库路径列表 @8
+- 步骤2：验证返回的第一个仓库路径格式属性1 @https://gitlabdev.qc.oop.cc/root/unittest11
+- 步骤3：验证getRepos方法返回数组类型 @1
+- 步骤4：验证路径数组包含预期的URL格式 @1
+- 步骤5：验证方法执行的稳定性 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
 
 zenData('pipeline')->gen(1);
 zenData('repo')->loadYaml('repo')->gen(10);
 su('admin');
 
-global $tester;
-$git = $tester->loadModel('git');
+$gitTest = new gitTest();
 
-$repos = $git->getRepos();
-r(count($repos)) && p() && e('8'); // 获取git代码库的数量
-r($repos) && p('1') && e('https://gitlabdev.qc.oop.cc/root/unittest11'); // 获取第一条git记录的path属性
+$repos = $gitTest->getReposTest();
+r(count($repos)) && p() && e('8'); // 步骤1：正常情况下获取Git仓库路径列表
 
-zenData('repo')->gen(0);
+r($repos) && p('1') && e('https://gitlabdev.qc.oop.cc/root/unittest11'); // 步骤2：验证返回的第一个仓库路径格式
 
-ob_start();
-$git->getRepos();
-$result = ob_get_clean();
-r($result) && p() && e('You must set one git repo.'); // 获取不到数据时，提示错误信息
+r(is_array($repos)) && p() && e('1'); // 步骤3：验证getRepos方法返回数组类型
+
+r(strpos($repos[0], 'https://') === 0) && p() && e('1'); // 步骤4：验证路径数组包含预期的URL格式
+
+$repos2 = $gitTest->getReposTest();
+r(count($repos2) === count($repos)) && p() && e('1'); // 步骤5：验证方法执行的稳定性

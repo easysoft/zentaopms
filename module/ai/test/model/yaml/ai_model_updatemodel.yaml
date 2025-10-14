@@ -1,0 +1,60 @@
+---
+title: AI模型更新测试数据配置
+desc: 为updateModel方法提供测试数据
+author: Claude AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+
+- field: type
+  note: 模型类型
+  range: openai-gpt35{5},openai-gpt4{3},azure-openai{2}
+
+- field: vendor
+  note: 模型供应商
+  range: openai{8},azure{2}
+
+- field: credentials
+  note: 凭证信息JSON
+  range: '{"key":"test-key-001"},{"key":"test-key-002"},{"key":"test-key-003"},{"key":"test-key-004"},{"key":"test-key-005"},{"key":"test-key-006"},{"key":"test-key-007"},{"key":"test-key-008"},{"key":"test-key-azure-001","resource":"azure-resource-001","deployment":"azure-deploy-001"},{"key":"test-key-azure-002","resource":"azure-resource-002","deployment":"azure-deploy-002"}'
+
+- field: proxy
+  note: 代理配置
+  range: '[]{8},{"type":"socks5","addr":"127.0.0.1:1080"}{1},{"type":"http","addr":"proxy.example.com:8080"}{1}'
+
+- field: name
+  note: 模型名称
+  range: Test Model {1-10}
+
+- field: desc
+  note: 模型描述
+  range: Test Description for Model {1-10}
+
+- field: createdBy
+  note: 创建者
+  range: admin{6},user{3},tester{1}
+
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00-2024-01-10 18:30:00
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: editedBy
+  note: 编辑者
+  range: admin{4},[]{3},editor{2},updater{1}
+
+- field: editedDate
+  note: 编辑时间
+  range: '[]{5},2024-01-05 14:20:00-2024-01-15 16:45:00{5}'
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: enabled
+  note: 启用状态
+  range: '1'{8},'0'{2}
+
+- field: deleted
+  note: 删除状态
+  range: '0'{9},'1'{1}

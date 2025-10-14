@@ -826,7 +826,10 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
   `templateDesc` text NULL,
+  `objects` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
+  `cycle` char(10) NOT NULL DEFAULT '',
+  `cycleConfig` text NULL,
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
@@ -843,6 +846,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `fromVersion` smallint(6) NOT NULL DEFAULT '1',
   `draft` longtext NULL,
   `collects` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `weeklyDate` char(8) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -864,9 +868,10 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `product`   ON `zt_doc`(`product`);
-CREATE INDEX `execution` ON `zt_doc`(`execution`);
-CREATE INDEX `lib`       ON `zt_doc`(`lib`);
+CREATE INDEX `product`      ON `zt_doc`(`product`);
+CREATE INDEX `execution`    ON `zt_doc`(`execution`);
+CREATE INDEX `lib`          ON `zt_doc`(`lib`);
+CREATE INDEX `templateType` ON `zt_doc`(`templateType`);
 
 -- DROP TABLE IF EXISTS `zt_docaction`;
 CREATE TABLE IF NOT EXISTS `zt_docaction` (
@@ -1930,13 +1935,14 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
 CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 
+-- DROP TABLE IF EXISTS `zt_session`;
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,
     `timestamp` int(10) unsigned DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `timestamp` (`timestamp`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
 
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
@@ -3277,7 +3283,7 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
   `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
@@ -3324,7 +3330,7 @@ CREATE OR REPLACE VIEW `ztv_productstories` AS SELECT `zt_story`.`product` AS `p
 -- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
 CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS SELECT COUNT(1) AS `userlogin`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'user') AND (`zt_action`.`action` = 'login')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayeffort`;
-CREATE OR REPLACE VIEW `ztv_dayeffort` AS SELECT ROUND(SUM(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` FROM `zt_effort` GROUP BY `zt_effort`.`date`;
+CREATE OR REPLACE VIEW `ztv_dayeffort` AS SELECT ROUND(SUM(`zt_effort`.`consumed`), 1) AS `consumed`,`zt_effort`.`date` AS `date` FROM `zt_effort` GROUP BY `zt_effort`.`date`;
 -- DROP VIEW IF EXISTS `ztv_daystoryopen`;
 CREATE OR REPLACE VIEW `ztv_daystoryopen` AS SELECT COUNT(1) AS `storyopen`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'story') AND (`zt_action`.`action` = 'opened')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daystoryclose`;
@@ -4928,6 +4934,16 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,	'report',	'saveReport'),
 (1,	'report',	'show'),
 (1,	'report',	'useReport'),
+(1,	'reporttemplate',	'browse'),
+(1,	'reporttemplate',	'create'),
+(1,	'reporttemplate',	'edit'),
+(1,	'reporttemplate',	'view'),
+(1,	'reporttemplate',	'delete'),
+(1,	'reporttemplate',	'pause'),
+(1,	'reporttemplate',	'cron'),
+(1,	'reporttemplate',	'addCategory'),
+(1,	'reporttemplate',	'editCategory'),
+(1,	'reporttemplate',	'deleteCategory'),
 (1,	'requirement',	'activate'),
 (1,	'requirement',	'assignTo'),
 (1,	'requirement',	'batchAssignTo'),
@@ -5353,7 +5369,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,	'webhook',	'delete'),
 (1,	'webhook',	'edit'),
 (1,	'webhook',	'log'),
-(1,	'weekly',	'index'),
+(1,	'weekly',	'browse'),
+(1,	'weekly',	'view'),
+(1,	'weekly',	'create'),
+(1,	'weekly',	'edit'),
+(1,	'weekly',	'delete'),
+(1,	'weekly',	'exportReport'),
+(1,	'weekly',	'manageCategroy'),
 (1,	'workestimation',	'index'),
 (1,	'workflow',	'activate'),
 (1,	'workflow',	'backup'),
@@ -6222,7 +6244,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2,	'user',	'todo'),
 (2,	'user',	'todocalendar'),
 (2,	'user',	'view'),
-(2,	'weekly',	'index'),
+(2,	'weekly',	'browse'),
+(2,	'weekly',	'view'),
+(2,	'weekly',	'create'),
+(2,	'weekly',	'edit'),
+(2,	'weekly',	'delete'),
+(2,	'weekly',	'exportReport'),
+(2,	'weekly',	'manageCategroy'),
 (2,	'workestimation',	'index'),
 (2,	'workloadbudget',	'27'),
 (2,	'workloadbudget',	'assign'),
@@ -6847,7 +6875,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (3,	'user',	'todo'),
 (3,	'user',	'todocalendar'),
 (3,	'user',	'view'),
-(3,	'weekly',	'index'),
+(3,	'weekly',	'browse'),
+(3,	'weekly',	'view'),
+(3,	'weekly',	'create'),
+(3,	'weekly',	'edit'),
+(3,	'weekly',	'delete'),
+(3,	'weekly',	'exportReport'),
+(3,	'weekly',	'manageCategroy'),
 (3,	'workestimation',	'index'),
 (3,	'workloadbudget',	'27'),
 (3,	'workloadbudget',	'assign'),
@@ -7922,7 +7956,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4,	'user',	'todo'),
 (4,	'user',	'todocalendar'),
 (4,	'user',	'view'),
-(4,	'weekly',	'index'),
+(4,	'weekly',	'browse'),
+(4,	'weekly',	'view'),
+(4,	'weekly',	'create'),
+(4,	'weekly',	'edit'),
+(4,	'weekly',	'delete'),
+(4,	'weekly',	'exportReport'),
+(4,	'weekly',	'manageCategroy'),
 (4,	'workestimation',	'index'),
 (4,	'workloadbudget',	'27'),
 (4,	'workloadbudget',	'assign'),
@@ -8857,7 +8897,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5,	'user',	'todo'),
 (5,	'user',	'todocalendar'),
 (5,	'user',	'view'),
-(5,	'weekly',	'index'),
+(5,	'weekly',	'browse'),
+(5,	'weekly',	'view'),
+(5,	'weekly',	'create'),
+(5,	'weekly',	'edit'),
+(5,	'weekly',	'delete'),
+(5,	'weekly',	'exportReport'),
+(5,	'weekly',	'manageCategroy'),
 (5,	'workestimation',	'index'),
 (5,	'workloadbudget',	'27'),
 (5,	'workloadbudget',	'assign'),
@@ -9667,7 +9713,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6,	'user',	'todo'),
 (6,	'user',	'todocalendar'),
 (6,	'user',	'view'),
-(6,	'weekly',	'index'),
+(6,	'weekly',	'browse'),
+(6,	'weekly',	'view'),
+(6,	'weekly',	'create'),
+(6,	'weekly',	'edit'),
+(6,	'weekly',	'delete'),
+(6,	'weekly',	'exportReport'),
+(6,	'weekly',	'manageCategroy'),
 (6,	'workestimation',	'index'),
 (6,	'workloadbudget',	'27'),
 (6,	'workloadbudget',	'assign'),
@@ -10509,7 +10561,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7,	'user',	'todo'),
 (7,	'user',	'todocalendar'),
 (7,	'user',	'view'),
-(7,	'weekly',	'index'),
+(7,	'weekly',	'browse'),
+(7,	'weekly',	'view'),
+(7,	'weekly',	'create'),
+(7,	'weekly',	'edit'),
+(7,	'weekly',	'delete'),
+(7,	'weekly',	'exportReport'),
+(7,	'weekly',	'manageCategroy'),
 (7,	'workestimation',	'index'),
 (7,	'workloadbudget',	'27'),
 (7,	'workloadbudget',	'assign'),
@@ -11359,7 +11417,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8,	'user',	'todo'),
 (8,	'user',	'todocalendar'),
 (8,	'user',	'view'),
-(8,	'weekly',	'index'),
+(8,	'weekly',	'browse'),
+(8,	'weekly',	'view'),
+(8,	'weekly',	'create'),
+(8,	'weekly',	'edit'),
+(8,	'weekly',	'delete'),
+(8,	'weekly',	'exportReport'),
+(8,	'weekly',	'manageCategroy'),
 (8,	'workestimation',	'index'),
 (8,	'workloadbudget',	'27'),
 (8,	'workloadbudget',	'assign'),
@@ -12101,7 +12165,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9,	'user',	'unbind'),
 (9,	'user',	'unlock'),
 (9,	'user',	'view'),
-(9,	'weekly',	'index'),
+(9,	'weekly',	'browse'),
+(9,	'weekly',	'view'),
+(9,	'weekly',	'create'),
+(9,	'weekly',	'edit'),
+(9,	'weekly',	'delete'),
+(9,	'weekly',	'exportReport'),
+(9,	'weekly',	'manageCategroy'),
 (9,	'workestimation',	'index'),
 (9,	'workloadbudget',	'27'),
 (9,	'workloadbudget',	'assign'),
@@ -12616,7 +12686,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (10,	'user',	'todo'),
 (10,	'user',	'todocalendar'),
 (10,	'user',	'view'),
-(10,	'weekly',	'index'),
+(10,	'weekly',	'browse'),
+(10,	'weekly',	'view'),
+(10,	'weekly',	'create'),
+(10,	'weekly',	'edit'),
+(10,	'weekly',	'delete'),
+(10,	'weekly',	'exportReport'),
+(10,	'weekly',	'manageCategroy'),
 (10,	'workestimation',	'index'),
 (10,	'workloadbudget',	'27'),
 (10,	'workloadbudget',	'assign'),
@@ -13085,7 +13161,13 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11,	'user',	'todo'),
 (11,	'user',	'todocalendar'),
 (11,	'user',	'view'),
-(11,	'weekly',	'index'),
+(11,	'weekly',	'browse'),
+(11,	'weekly',	'view'),
+(11,	'weekly',	'create'),
+(11,	'weekly',	'edit'),
+(11,	'weekly',	'delete'),
+(11,	'weekly',	'exportReport'),
+(11,	'weekly',	'manageCategroy'),
 (11,	'workestimation',	'index'),
 (11,	'workloadbudget',	'27'),
 (11,	'workloadbudget',	'assign'),
@@ -16102,7 +16184,7 @@ INSERT INTO `zt_activity` (`id`, `process`, `workflowGroup`, `name`, `optional`,
 (662,	151,	16,	'其他',	'no',	'',	NULL,	'',	'',	'system',	'2020-01-09 00:00:00',	'',	NULL,	'',	NULL,	3310,	'0');
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('1','0','*','*','*','moduleName=weekly&methodName=computeWeekly','更新项目周报','zentao',0,'normal');
+('1','0','*','*','*','moduleName=weekly&methodName=createCycleReport','定时生成报告','zentao',1,'normal');
 
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (
@@ -16437,9 +16519,9 @@ CREATE TABLE IF NOT EXISTS `zt_space` (
   `default` tinyint(1) NOT NULL DEFAULT 0,
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `name` ON `zt_space`(`name`);
 
 -- DROP TABLE IF EXISTS `zt_instance`;
 CREATE TABLE IF NOT EXISTS `zt_instance` (
@@ -16472,10 +16554,10 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `space` (`space`),
-  KEY `k8name` (`k8name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `space` ON `zt_instance`(`space`);
+CREATE INDEX `k8name` ON `zt_instance`(`k8name`);
 
 -- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE IF NOT EXISTS `zt_demandpool` (
@@ -16700,7 +16782,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `desc` text DEFAULT NULL,
-  `model` mediumint(8) unsigned DEFAULT NULL,
+  `model` varchar(255) NOT NULL DEFAULT '',
   `module` varchar(30) DEFAULT NULL,
   `source` text DEFAULT NULL,
   `targetForm` varchar(30) DEFAULT NULL,
@@ -16732,7 +16814,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
   `desc` text DEFAULT NULL,
-  `model` mediumint(8) unsigned DEFAULT NULL,
+  `model` varchar(255) NOT NULL DEFAULT '',
   `role` text DEFAULT NULL,
   `characterization` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -16754,7 +16836,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `name` varchar(30) NOT NULL,
   `category` varchar(30) NOT NULL,
   `desc` text DEFAULT NULL,
-  `model` mediumint(8) unsigned DEFAULT NULL,
+  `model` varchar(255) NOT NULL DEFAULT '',
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,

@@ -79,7 +79,7 @@ class editor extends wg
         return btnGroup
         (
             setClass('absolute right-0'),
-            btn
+            isInModal() ? null : btn
             (
                 setClass('ghost border-l border-r border-light'),
                 on::click("window.showSaveModal('$editor', '$type')"),

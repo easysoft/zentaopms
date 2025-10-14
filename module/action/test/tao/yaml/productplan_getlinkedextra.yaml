@@ -1,0 +1,18 @@
+---
+title: 产品计划测试数据
+desc: 用于测试getLinkedExtra方法的产品计划数据
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1-5:R
+- field: title
+  note: 计划标题
+  range: 计划1,计划2,计划3,计划4,计划5,V1.0版本计划,V2.0版本计划,Q1计划,Q2计划,年度计划
+- field: deleted
+  note: 是否删除
+  range: 0{10}

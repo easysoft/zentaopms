@@ -14,7 +14,7 @@ cid=0
  */
 
 chdir(__DIR__);
-include '../lib/activateprogram.ui.class.php';
+include '../lib/ui/activateprogram.ui.class.php';
 
 $program = zenData('project');
 $program->id->range('1-2');

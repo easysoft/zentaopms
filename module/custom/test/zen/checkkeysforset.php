@@ -4,46 +4,39 @@
 
 title=测试 customZen::checkKeysForSet();
 timeout=0
-cid=1
+cid=0
 
-- 数据为空的返回值 @1
-- 用户角色键值为过长数字的返回结果 @0
-- 用户角色键值为过长数字的错误信息属性message @键的长度必须小于10个字符！
-- 严重程度键值为字符串的返回结果 @0
-- 严重程度键值为字符串错误信息属性message @键值应为不大于255的数字
+- 执行customTest模块的checkKeysForSetTest方法，参数是array  @success
+- 执行customTest模块的checkKeysForSetTest方法，参数是array  @duplicate_error
+- 执行customTest模块的checkKeysForSetTest方法，参数是array  @invalid_format
+- 执行customTest模块的checkKeysForSetTest方法，参数是array  @number_range_error
+- 执行customTest模块的checkKeysForSetTest方法，参数是array  @length_error_10
 
 */
+
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+
+// 2. 用户登录
 su('admin');
 
-zenData('lang')->gen(0);
+// 3. 创建测试实例
+$customTest = new customTest();
 
-global $tester;
+// 4. 测试步骤
 
-$tester->app->setModuleName('custom');
-$zen = initReference('custom');
-$method = $zen->getMethod('checkKeysForSet');
-$method->setAccessible(true);
+// 测试步骤1：正常输入情况（有效key值）
+r($customTest->checkKeysForSetTest(array('1', '2', '3'), 'story', 'priList')) && p() && e('success');
 
-$_POST['lang']    = 'zh-cn';
-$_POST['keys']    = array();
-$_POST['values']  = array();
-$_POST['systems'] = array();
-$result = $method->invokeArgs($zen->newInstance(), ['user','roleList']);
-r($result) && p() && e(1); // 数据为空的返回值
+// 测试步骤2：重复key值输入
+r($customTest->checkKeysForSetTest(array('1', '2', '1'), 'story', 'priList')) && p() && e('duplicate_error');
 
-$_POST['lang']    = 'zh-cn';
-$_POST['keys']    = array('1234567891011121314151617181920');
-$_POST['values']  = array('1234567891011121314151617181920');
-$_POST['systems'] = array('1234567891011121314151617181920');
-$result = $method->invokeArgs($zen->newInstance(), ['user','roleList']);
-r($result) && p() && e(0);                                             // 用户角色键值为过长数字的返回结果
-r(dao::getError()) && p('message') && e('键的长度必须小于10个字符！'); // 用户角色键值为过长数字的错误信息
+// 测试步骤3：无效key值输入（特殊字符）
+r($customTest->checkKeysForSetTest(array('key@#', 'valid_key', 'key-1'), 'story', 'sourceList')) && p() && e('invalid_format');
 
-$_POST['lang']    = 'zh-cn';
-$_POST['keys']    = array('asdasd');
-$_POST['values']  = array('asdasd');
-$_POST['systems'] = array('asdasd');
-$result = $method->invokeArgs($zen->newInstance(), ['bug','severityList']);
-r($result) && p() && e(0);                                          // 严重程度键值为字符串的返回结果
-r(dao::getError()) && p('message') && e('键值应为不大于255的数字'); // 严重程度键值为字符串错误信息
+// 测试步骤4：数值类型key超出范围
+r($customTest->checkKeysForSetTest(array('300', '2', '3'), 'story', 'priList')) && p() && e('number_range_error');
+
+// 测试步骤5：字符串长度超出限制
+r($customTest->checkKeysForSetTest(array('verylongkey', 'key2'), 'user', 'roleList')) && p() && e('length_error_10');

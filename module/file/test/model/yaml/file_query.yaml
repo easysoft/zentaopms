@@ -1,0 +1,30 @@
+title: 文件查询测试数据
+desc: 用于测试fileModel::query()方法的文件数据
+
+fields:
+  - field: id
+    range: 1-10
+  - field: pathname
+    range: ['202409/081234561.txt', '202409/081234562.png', '202409/081234563.doc', '202409/081234564.pdf', '202409/081234565.jpg', '202409/081234566.txt', '202409/081234567.png', '202409/081234568.doc', '202409/081234569.pdf', '202409/0812345610.jpg']
+  - field: title
+    range: ['测试文档1.txt', '测试图片1.png', '需求文档1.doc', '设计文档1.pdf', '截图1.jpg', '测试文档2.txt', '测试图片2.png', '需求文档2.doc', '设计文档2.pdf', '截图2.jpg']
+  - field: extension
+    range: ['txt', 'png', 'doc', 'pdf', 'jpg', 'txt', 'png', 'doc', 'pdf', 'jpg']
+  - field: size
+    range: [1024, 2048, 5120, 10240, 3072, 1024, 2048, 5120, 10240, 3072]
+  - field: objectType
+    range: ['task', 'story', 'bug', 'project', 'product', 'task', 'story', 'bug', 'project', 'product']
+  - field: objectID
+    range: [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+  - field: gid
+    range: ['', '', '', '', '', '', '', '', '', '']
+  - field: addedBy
+    range: ['admin', 'user1', 'user2', 'tester', 'pm', 'admin', 'user1', 'user2', 'tester', 'pm']
+  - field: addedDate
+    range: ['2024-09-08 10:00:00', '2024-09-08 11:00:00', '2024-09-08 12:00:00', '2024-09-08 13:00:00', '2024-09-08 14:00:00', '2024-09-08 15:00:00', '2024-09-08 16:00:00', '2024-09-08 17:00:00', '2024-09-08 18:00:00', '2024-09-08 19:00:00']
+  - field: downloads
+    range: [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]
+  - field: extra
+    range: ['', 'editor', 'import', 'export', '', '', 'editor', 'import', 'export', '']
+  - field: deleted
+    range: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']

@@ -15,7 +15,7 @@ pid=1
 
 */
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 
 r($projectTester->setMenuByProductTest(0, 'scrum'))         && p() && e('scrum|projectplan|settings'); // 敏捷无产品项目
 r($projectTester->setMenuByProductTest(0, 'waterfall'))     && p() && e('waterfall||settings');        // 瀑布无产品项目

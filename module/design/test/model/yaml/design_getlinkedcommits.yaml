@@ -1,0 +1,45 @@
+---
+title: 设计表测试数据
+desc: 为getLinkedCommits方法提供设计数据
+
+fields:
+- field: id
+  range: 1-5
+- field: project
+  range: 11{5}
+- field: product
+  range: 1{5}
+- field: commit
+  range: ''{5}
+- field: commitedBy
+  range: admin{5}
+- field: execution
+  range: 0{5}
+- field: name
+  range: Design1,Design2,Design3,Design4,Design5
+- field: status
+  range: active{5}
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: 2023-01-01 09:00:00{5}
+- field: editedBy
+  range: ''{5}
+- field: editedDate
+  range: ''{5}
+- field: assignedTo
+  range: admin{5}
+- field: assignedBy
+  range: ''{5}
+- field: assignedDate
+  range: ''{5}
+- field: deleted
+  range: 0{5}
+- field: story
+  range: 0{5}
+- field: storyVersion
+  range: 1{5}
+- field: docs
+  range: ''{5}
+- field: docVersions
+  range: ''{5}

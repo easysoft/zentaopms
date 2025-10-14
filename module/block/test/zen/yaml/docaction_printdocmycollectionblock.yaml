@@ -1,0 +1,25 @@
+---
+title: 文档收藏动作测试数据
+desc: 用于printDocMyCollectionBlock方法测试的docaction表数据
+
+fields:
+- field: id
+  range: 1-8
+  note: 动作ID
+
+- field: doc
+  range: 1-8
+  note: 文档ID
+
+- field: action
+  range: 'collect{8}'
+  note: 动作类型
+
+- field: actor
+  range: 'admin{5},user1{3}'
+  note: 操作者
+
+- field: date
+  range: '(-7d)-(now):1d'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  note: 操作时间

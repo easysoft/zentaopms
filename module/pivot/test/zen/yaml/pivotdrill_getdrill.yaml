@@ -1,0 +1,34 @@
+---
+title: getDrill方法测试数据
+desc: 用于测试getDrill方法的pivotdrill表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: pivot
+  note: 透视表ID
+  range: 1,1,2,2,3
+- field: version
+  note: 版本号
+  range: 1,1,1,2,1
+- field: field
+  note: 字段名称
+  range: name,status,category,name,priority
+- field: object
+  note: 对象类型
+  range: bug,bug,story,story,task
+- field: whereSql
+  note: WHERE SQL条件
+  range: 'status = "active"','deleted = "0"','type = "story"','name IS NOT NULL','priority > 0'
+- field: condition
+  note: 条件配置JSON
+  range: '{"field":"status","operator":"=","value":"active"}','{"field":"deleted","operator":"=","value":"0"}','{"field":"type","operator":"=","value":"story"}','{"field":"name","operator":"!=","value":""}','{"field":"priority","operator":">","value":"0"}'
+- field: status
+  note: 状态
+  range: published,published,published,published,design
+- field: account
+  note: 创建者
+  range: admin,admin,user1,admin,user1
+- field: type
+  note: 类型
+  range: manual,auto,manual,auto,manual

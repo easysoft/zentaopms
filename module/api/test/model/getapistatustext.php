@@ -1,23 +1,33 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
-title=测试 apiModel->getApiStatusText();
+title=测试 apiModel::getApiStatusText();
 timeout=0
-cid=1
+cid=0
 
-- 测试获取接口状态为doing对应的语言项。 @开发中
-- 测试获取接口状态为done对应的语言项。 @开发完成
-- 测试获取接口状态为wait对应的语言项。 @wait
+- 步骤1：正常状态doing @开发中
+- 步骤2：正常状态done @开发完成
+- 步骤3：正常状态hidden（返回原值因为switch中没有此分支） @hidden
+- 步骤4：无效状态wait @wait
+- 步骤5：空字符串输入 @0
+- 步骤6：非法状态invalid @invalid
+- 步骤7：其他无效状态 @test123
 
 */
 
-global $tester;
-$tester->loadModel('api');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
 
-r($tester->api->getApiStatusText('doing')) && p() && e('开发中');   // 测试获取接口状态为doing对应的语言项。
-r($tester->api->getApiStatusText('done'))  && p() && e('开发完成'); // 测试获取接口状态为done对应的语言项。
-r($tester->api->getApiStatusText('wait'))  && p() && e('wait');     // 测试获取接口状态为wait对应的语言项。
+su('admin');
+
+$apiTest = new apiTest();
+
+r($apiTest->getApiStatusTextTest('doing')) && p() && e('开发中');       // 步骤1：正常状态doing
+r($apiTest->getApiStatusTextTest('done')) && p() && e('开发完成');       // 步骤2：正常状态done
+r($apiTest->getApiStatusTextTest('hidden')) && p() && e('hidden');     // 步骤3：正常状态hidden（返回原值因为switch中没有此分支）
+r($apiTest->getApiStatusTextTest('wait')) && p() && e('wait');         // 步骤4：无效状态wait
+r($apiTest->getApiStatusTextTest('')) && p() && e('0');               // 步骤5：空字符串输入
+r($apiTest->getApiStatusTextTest('invalid')) && p() && e('invalid');   // 步骤6：非法状态invalid
+r($apiTest->getApiStatusTextTest('test123')) && p() && e('test123');   // 步骤7：其他无效状态

@@ -1,0 +1,49 @@
+---
+title: 需求表测试数据 - unlinkStoryByType方法
+desc: 用于测试根据类型解除需求关联功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 需求标题
+  range: "用户需求1,用户需求2,用户需求3,用户需求4,用户需求5,需求需求1,需求需求2,需求需求3,需求需求4,需求需求5,史诗需求1,史诗需求2,史诗需求3,史诗需求4,史诗需求5,测试需求1,测试需求2,测试需求3,测试需求4,测试需求5"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 需求类型
+  range: story{10}, requirement{5}, epic{3}, feature{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 需求状态
+  range: active{8}, draft{4}, closed{3}, reviewing{3}, developed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-3{7}, 1{6}, 2{4}, 3{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

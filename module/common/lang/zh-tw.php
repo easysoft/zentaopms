@@ -497,4 +497,11 @@ $lang->datepicker->dayNames     = array('星期日', '星期一', '星期二', '
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
 
+/* AI */
+$lang->aiapp->conversation = '智能會話';
+$lang->aiapp->zentaoAgent  = '禪道智能體';
+$lang->aiapp->generalAgent = '通用智能體';
+$lang->aiapp->models       = '模型列表';
+$lang->aiapp->config       = 'ZAI配置';
+
 include(dirname(__FILE__) . '/menu.php');

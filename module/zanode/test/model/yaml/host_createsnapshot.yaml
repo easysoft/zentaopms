@@ -1,0 +1,60 @@
+---
+title: 创建快照节点测试数据
+desc: 用于测试createSnapshot方法的执行节点数据
+author: Claude
+version: 1.0
+
+table: host
+
+fields:
+- field: id
+  note: 节点ID
+  range: 10-14
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 节点名称
+  range: test-node10,test-node11,test-node12,test-node13,test-node14
+  format: ""
+- field: type
+  note: 节点类型
+  range: node{5}
+  format: ""
+- field: status
+  note: 节点状态
+  range: running{3},ready{2}
+  format: ""
+- field: extranet
+  note: 外网IP
+  range: 192.168.1.100,192.168.1.101,192.168.1.102,192.168.1.103,127.0.0.1
+  format: ""
+- field: zap
+  note: Agent端口
+  range: 8080{3},8081{1},0{1}
+  format: ""
+- field: tokenSN
+  note: Token
+  range: valid_token_123,valid_token_456,valid_token_789,empty_token,''
+  format: ""
+- field: osName
+  note: 操作系统
+  range: Ubuntu20.04{2},CentOS7{2},Windows10{1}
+  format: ""
+- field: parent
+  note: 父节点ID
+  range: 0{5}
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: '0{5}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{3},user{2}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{5}'
+  format: ""

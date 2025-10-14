@@ -1,0 +1,17 @@
+title: projectproduct表测试数据，用于getlinkedobjects方法
+author: Claude
+version: 1
+
+fields:
+- field: project
+  range: '6{3}, 7{2}, 8{3}, 9{2}, 10{3}'
+  note: 执行ID
+- field: product
+  range: '1{3}, 2{2}, 3{3}, 4{2}, 5{3}'
+  note: 产品ID
+- field: branch
+  range: '0{10}, 1{2}, 2{1}'
+  note: 分支ID
+- field: plan
+  range: '1,2{2}, 3,4{2}, 5{3}, 6,7{3}, 8,9,10{3}'
+  note: 关联计划

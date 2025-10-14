@@ -1,0 +1,23 @@
+---
+title: 用户浏览视图数据配置
+desc: 用于测试buildBrowseView方法的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-5
+- field: account
+  note: 用户账号
+  range: 'admin,user1,user2,user3,user4'
+- field: realname
+  note: 真实姓名
+  range: '管理员,用户一,用户二,用户三,用户四'
+- field: role
+  note: 角色
+  range: 'admin,dev{2},qa,pm'
+- field: dept
+  note: 部门
+  range: '1{2},2{2},3{1}'
+- field: deleted
+  note: 删除状态
+  range: '0'

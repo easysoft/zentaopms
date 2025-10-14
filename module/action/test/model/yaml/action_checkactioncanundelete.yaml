@@ -1,0 +1,33 @@
+---
+title: Action数据定义
+desc: 用于测试checkActionCanUndelete方法的action数据
+
+fields:
+- field: id
+  note: action ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: execution{2}, repo{2}, module{2}, case{1}, scene{1}, reviewissue{1}, kanban{1}
+- field: objectID
+  note: 对象ID
+  range: 1-10
+- field: action
+  note: 操作类型
+  range: deleted{10}
+- field: actor
+  note: 操作者
+  range: admin{5}, user{5}
+- field: date
+  note: 操作日期
+  range: '2024-01-01 00:00:00, 2024-01-02 00:00:00'
+- field: comment
+  note: 注释
+  range: 'test comment{5}, []{5}'
+- field: extra
+  note: 额外信息
+  range: '[]{10}'

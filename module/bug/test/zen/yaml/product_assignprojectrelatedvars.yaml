@@ -1,0 +1,35 @@
+---
+title: 为assignProjectRelatedVars方法提供测试Product数据
+desc: 产品数据包含普通产品和影子产品，用于测试项目相关变量的分配
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: '产品1,产品2,产品3,产品4,产品5,影子产品6,影子产品7,影子产品8,产品9,产品10'
+- field: code
+  range: 'product{1-10}'
+- field: type
+  range: 'normal'
+- field: status
+  range: 'normal'
+- field: line
+  range: '0'
+- field: shadow
+  range: '0{5},1{5}'
+- field: bind
+  range: '0{5},1{2},2{1},3{1},4{1}'
+- field: acl
+  range: 'open{8},private{2}'
+- field: whitelist
+  range: ''
+- field: createdBy
+  range: 'admin'
+- field: createdDate
+  range: '2023-01-01 00:00:00'
+- field: createdVersion
+  range: '1.0.0'
+- field: order
+  range: 1-10
+- field: deleted
+  range: '0'

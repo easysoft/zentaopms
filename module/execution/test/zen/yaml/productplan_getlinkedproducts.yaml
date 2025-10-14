@@ -1,0 +1,31 @@
+---
+title: productplan表getLinkedProducts方法测试数据
+desc: 用于测试execution模块getLinkedProducts方法的产品计划数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 产品计划ID
+- field: product
+  range: 1-5
+  note: 产品ID
+- field: branch
+  range: '0{3},1{1},2{1}'
+  note: 分支ID
+- field: title
+  range: '产品计划1{1},产品计划2{1},产品计划3{1},产品计划4{1},产品计划5{1}'
+  note: 计划标题
+- field: begin
+  range: '2024-01-01{1},2024-02-01{1},2024-03-01{1},2024-04-01{1},2024-05-01{1}'
+  note: 开始时间
+- field: end
+  range: '2024-12-31{1},2024-11-30{1},2024-10-31{1},2024-09-30{1},2024-08-31{1}'
+  note: 结束时间
+- field: status
+  range: 'wait{2},doing{2},done{1}'
+  note: 状态
+- field: deleted
+  range: '0{4},1{1}'
+  note: 删除状态

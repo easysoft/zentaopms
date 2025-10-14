@@ -541,10 +541,10 @@ class testtaskZen extends testtask
         $doneCount    = 0;
         foreach($testtasks as $testtask)
         {
-            if($testtask->status == 'wait')    $waitCount ++;
-            if($testtask->status == 'doing')   $testingCount ++;
-            if($testtask->status == 'blocked') $blockedCount ++;
-            if($testtask->status == 'done')    $doneCount ++;
+            if($testtask->rawStatus == 'wait')    $waitCount ++;
+            if($testtask->rawStatus == 'doing')   $testingCount ++;
+            if($testtask->rawStatus == 'blocked') $blockedCount ++;
+            if($testtask->rawStatus == 'done')    $doneCount ++;
             if($testtask->build == 'trunk' || empty($testtask->buildName)) $testtask->buildName = $this->lang->trunk;
         }
 

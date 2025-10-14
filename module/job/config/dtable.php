@@ -84,7 +84,7 @@ $config->job->dtable->fieldList['lastExec']['show']       = true;
 $config->job->dtable->fieldList['lastExec']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->job->actionList = array();
-$config->job->actionList['compile']['icon'] = 'history';
+$config->job->actionList['compile']['icon'] = 'file-log';
 $config->job->actionList['compile']['text'] = $lang->compile->browse;
 $config->job->actionList['compile']['hint'] = $lang->compile->browse;
 $config->job->actionList['compile']['url']  = array('module' => 'compile', 'method' => 'browse', 'params' => "repoID={repo}&jobID={id}");

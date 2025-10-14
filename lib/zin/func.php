@@ -107,6 +107,7 @@ function productMenu(): productMenu {return createWg('productMenu', func_get_arg
 function moduleMenu(): moduleMenu {return createWg('moduleMenu', func_get_args());}
 function docMenu(): docMenu {return createWg('docMenu', func_get_args());}
 function docApp(): docApp {return createWg('docApp', func_get_args());}
+function docViewer(): docViewer {return createWg('docViewer', func_get_args());}
 function tree(): Tree {return createWg('tree', func_get_args());}
 function treeEditor(): TreeEditor {return createWg('treeEditor', func_get_args());}
 function fileList(): fileList {return createWg('fileList', func_get_args());}

@@ -404,11 +404,15 @@ class giteaModel extends model
      */
     public function apiGetMergeRequests(int $giteaID,  string $project): array
     {
-        $apiRoot  = $this->getApiRoot($giteaID, false);
+        $apiRoot = $this->getApiRoot($giteaID, false);
+        if(!$apiRoot) return array();
+
         $apiPath  = "/repos/{$project}/pulls";
         $url      = sprintf($apiRoot, $apiPath);
 
         $mrList = json_decode(common::http($url));
+        if(!is_array($mrList)) return array();
+
         foreach($mrList as $mr)
         {
             $mr->web_url = $mr->url;
@@ -422,7 +426,7 @@ class giteaModel extends model
             $mr->source_branch     = $mr->head->ref;
             $mr->source_project_id = $project;
             $mr->target_project_id = $project;
-            $mr->has_conflicts     = empty($diff) ? true : false;
+            $mr->has_conflicts     = !$mr->mergeable;
             $mr->is_draft          = strpos($mr->title, 'Draft:') === 0;
         }
 

@@ -11,7 +11,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/activeprojectlite.ui.class.php';
+include '../lib/ui/activeprojectlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-4');

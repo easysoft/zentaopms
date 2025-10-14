@@ -1,0 +1,28 @@
+---
+title: 项目表数据定义
+desc: 用于buildProductForm方法测试的项目数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 项目ID
+- field: name
+  range: 'Project1,Project2,Project3,Project4,Project5'
+  note: 项目名称
+- field: parent
+  range: 1,2,1,2,1
+  note: 父项目集ID
+- field: path
+  range: '/program1/project1/,/program2/project2/,/program1/project3/,/program2/project4/,/program1/project5/'
+  note: 项目路径
+- field: model
+  range: 'scrum,waterfall,kanban,scrum,waterfall'
+  note: 项目模型
+- field: status
+  range: 'doing,wait,doing,closed,doing'
+  note: 项目状态
+- field: deleted
+  range: '0'
+  note: 删除状态

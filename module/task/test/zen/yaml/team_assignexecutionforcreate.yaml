@@ -1,0 +1,33 @@
+---
+title: 团队成员数据定义
+desc: 用于测试assignExecutionForCreate方法的团队成员数据
+
+fields:
+- field: id
+  range: 1-20
+- field: root
+  range: 1-10
+- field: type
+  range: 'execution'
+- field: account
+  range: 'admin,user1,user2,user3,user4,user5,user6,user7,user8,user9'
+- field: role
+  range: '项目经理,开发工程师,测试工程师,产品经理,UI设计师'
+- field: position
+  range: '高级,中级,初级'
+- field: limited
+  range: 'no'
+- field: join
+  range: '2024-01-01'
+- field: days
+  range: 1-365
+- field: hours
+  range: 8.0
+- field: estimate
+  range: 0.00
+- field: consumed
+  range: 0.00
+- field: left
+  range: 0.00
+- field: order
+  range: 1-20

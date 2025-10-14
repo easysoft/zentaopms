@@ -1,0 +1,2 @@
+.is-readonly .form-control {box-shadow: none; outline: none; background: var(--color-canvas);}
+.is-readonly .form-label.required:after {display: none;}

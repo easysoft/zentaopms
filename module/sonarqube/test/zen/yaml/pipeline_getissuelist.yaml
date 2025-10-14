@@ -1,0 +1,55 @@
+---
+title: Pipeline数据定义
+desc: 用于SonarQube getIssueList方法测试的Pipeline数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Pipeline ID
+  range: 100-110
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: sonarqube{5},jenkins{3},gitlab{2}
+- field: name
+  note: Pipeline名称
+  range: SonarQube服务器{3},测试服务器{2},生产服务器{2},开发服务器{3}
+- field: url
+  note: 服务器URL
+  range: http://sonarqube.test.com{3},http://sonar.dev.com{2},https://sonar.prod.com{2},http://localhost:9000{3}
+- field: account
+  note: 账户
+  range: admin{5},sonar{3},user{2}
+- field: password
+  note: 密码
+  range: admin123{3},password{2},sonar123{3},test123{2}
+- field: token
+  note: Token
+  range: squ_1234567890abcdef{3},squ_abcdef1234567890{2},squ_token123456{2},squ_test_token{3}
+- field: private
+  note: 私有key
+  range: []{5},private123{3},key456{2}
+- field: instanceID
+  note: 实例ID
+  range: 0{5},1-5{5}
+- field: createdBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+- field: createdDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:30D
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin{3},user1{3},user2{2},[]{2}
+- field: editedDate
+  note: 编辑日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:30D,[]{3}
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 删除状态
+  range: 0{8},1{2}

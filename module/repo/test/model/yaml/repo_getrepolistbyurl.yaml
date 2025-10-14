@@ -1,0 +1,80 @@
+---
+title: 测试repoModel::getRepoListByUrl方法的测试数据
+desc: 用于测试根据URL获取代码库列表的功能，包含多种测试场景
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 代码库ID
+  range: 1-8
+  prefix: ""
+  postfix: ""
+
+- field: SCM
+  note: 版本管理系统类型
+  range: Gitlab{8}
+
+- field: serviceHost
+  note: 服务主机地址
+  range: 1{3},2{3},3{2}
+
+- field: serviceProject
+  note: 服务项目ID
+  range: 101{2},102{2},103{2},104{2}
+
+- field: name
+  note: 代码库名称
+  range: testhtml,zentao,demo-project,sample-repo,test-project1,test-project2,app-repo,web-repo
+
+- field: path
+  note: 代码库路径
+  range: /opt/zentao/repo{8}
+
+- field: product
+  note: 关联产品
+  range: 1,2,3,1,2,3,1,2
+
+- field: projects
+  note: 关联项目
+  range: 1,2,3,4,5,6,1,2
+
+- field: deleted
+  note: 删除状态
+  range: 0
+
+- field: account
+  note: 账号
+  range: admin{4},user{4}
+
+- field: password
+  note: 密码
+  range: 123456{8}
+
+- field: encoding
+  note: 编码格式
+  range: utf-8{8}
+
+- field: client
+  note: 客户端
+  range: git{8}
+
+- field: acl
+  note: 访问控制列表
+  range: '{"acl":"open","groups":[],"users":[]}'
+
+- field: synced
+  note: 同步状态
+  range: 1{4},0{4}
+
+- field: lastSync
+  note: 最后同步时间
+  range: 2024-01-01 00:00:00{8}
+
+- field: preMerge
+  note: 预合并
+  range: 0{6},1{2}
+
+- field: job
+  note: 关联任务
+  range: 0{4},1{4}

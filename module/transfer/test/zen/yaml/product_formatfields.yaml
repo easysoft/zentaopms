@@ -1,0 +1,44 @@
+---
+title: 用于formatFields测试的产品数据
+desc: 产品测试数据
+fields:
+- field: id
+  range: 1-5
+- field: program
+  range: 0
+- field: name
+  range: 正常产品,多分支产品,平台产品,影子产品,关闭产品
+- field: code
+  range: normal1,branch1,platform1,shadow1,closed1
+- field: shadow
+  range: 0,0,0,1,0
+- field: line
+  range: 0
+- field: type
+  range: normal,branch,platform,normal,normal
+- field: status
+  range: normal,normal,normal,normal,closed
+- field: subStatus
+  range: ''
+- field: desc
+  range: 测试产品描述
+- field: PO
+  range: po1,po2,po3,po4,po5
+- field: QD
+  range: test1,test2,test3,test4,test5
+- field: RD
+  range: dev1,dev2,dev3,dev4,dev5
+- field: acl
+  range: open
+- field: whitelist
+  range: ''
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: 2023-01-01 00:00:00
+- field: createdVersion
+  range: 15.6
+- field: order
+  range: 5,10,15,20,25
+- field: deleted
+  range: 0

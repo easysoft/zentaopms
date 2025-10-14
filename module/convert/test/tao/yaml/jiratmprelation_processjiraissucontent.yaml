@@ -1,0 +1,17 @@
+---
+title: jiratmprelation测试数据
+desc: 为processJiraIssueContent方法提供完整的测试关联数据
+
+fields:
+- field: id
+  range: 1-25
+- field: AType
+  range: jissue{20},jproject{5}
+- field: AID
+  range: 1-25
+- field: BType
+  range: astory{5},arequirement{3},aepic{2},abug{5},atask{5},aticket{3},afeedback{3},atestcase{2},acustomflow{2}
+- field: BID
+  range: 1{8},2{8},3{6},4{2},5{1}
+- field: extra
+  range: '[]'{15},test{5},import{5}

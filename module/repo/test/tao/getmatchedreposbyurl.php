@@ -1,27 +1,32 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
-title=测试 repoModel::getMatchedReposByUrl();
+title=测试 repoTao::getMatchedReposByUrl();
 timeout=0
-cid=1
+cid=0
 
-- 使用错误的url @0
-- 使用正确的url
- - 第0条的gitlab属性 @1
- - 第0条的project属性 @2
+- 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'http://github.com/example/test.git'  @0
+- 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'https://bitbucket.org/example/test.git'  @0
+- 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'http://192.168.1.161:51080/gitlab-instance-f9325ed1/azalea723test.git'  @0
+- 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git' 第0条的gitlab属性 @1
+- 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git' 第0条的project属性 @2
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(4);
 
-$repoModel = $tester->loadModel('repo');
+su('admin');
 
-$url = 'http://192.168.1.161:51080/gitlab-instance-f9325ed1/azalea723test.git';
-r($repoModel->getMatchedReposByUrl($url)) && p() && e('0'); //使用错误的url
+$repoTest = new repoTest();
 
-$url = 'https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git';
-r($repoModel->getMatchedReposByUrl($url)) && p('0:gitlab,project') && e('1,2'); //使用正确的url
+r($repoTest->getMatchedReposByUrlTest('http://github.com/example/test.git')) && p() && e('0');
+r($repoTest->getMatchedReposByUrlTest('https://bitbucket.org/example/test.git')) && p() && e('0');
+r($repoTest->getMatchedReposByUrlTest('http://192.168.1.161:51080/gitlab-instance-f9325ed1/azalea723test.git')) && p() && e('0');
+r($repoTest->getMatchedReposByUrlTest('https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git')) && p('0:gitlab') && e('1');
+r($repoTest->getMatchedReposByUrlTest('https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git')) && p('0:project') && e('2');

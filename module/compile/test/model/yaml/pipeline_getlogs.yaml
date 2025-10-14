@@ -1,0 +1,47 @@
+---
+title: 测试 compileModel::getLogs() 方法的pipeline测试数据
+desc: 为getLogs方法提供Jenkins和GitLab服务器配置数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-6
+  note: 流水线服务器ID
+
+- field: name
+  range: 'jenkins-server{3}','gitlab-server{3}'
+  note: 服务器名称
+
+- field: type
+  range: jenkins{3},gitlab{3}
+  note: 服务器类型
+
+- field: url
+  range: 'http://jenkins.test.com'{3},'http://gitlab.test.com'{3}
+  note: 服务器URL
+
+- field: account
+  range: 'admin','testuser','jenkins_user','gitlab_user','ci_user','deploy_user'
+  note: 账户名
+
+- field: token
+  range: 'test_token_{1-6}'
+  note: 访问令牌
+
+- field: password
+  range: 'test_pwd_{1-6}'
+  note: 密码
+
+- field: createdBy
+  range: admin{4},user{2}
+  note: 创建者
+
+- field: createdDate
+  range: '2024-01-01 00:00:00'-'2024-12-31 23:59:59':86400
+  format: YYYY-MM-DD hh:mm:ss
+  note: 创建时间
+
+- field: deleted
+  range: '0'
+  note: 删除标记

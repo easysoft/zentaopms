@@ -1,0 +1,132 @@
+---
+title: 工作流动作测试数据
+desc: 用于测试createWorkflowAction方法的数据
+
+fields:
+- field: id
+  note: 工作流动作ID
+  range: 1-10
+  
+- field: group
+  note: 分组ID
+  range: 1-3
+  
+- field: module
+  note: 模块名
+  range: bug{3},story{3},task{3},product{1}
+  
+- field: action
+  note: 动作标识
+  range: bugaction1{2},bugaction2{1},storyaction1{3},taskaction1{3},productaction1{1}
+  
+- field: method
+  note: 方法名
+  range: operate{10}
+  
+- field: name
+  note: 动作名称
+  range: 处理缺陷{3},处理需求{3},处理任务{3},处理产品{1}
+  
+- field: type
+  note: 动作类型
+  range: single{8},batch{2}
+  
+- field: batchMode
+  note: 批量模式
+  range: same{8},different{2}
+  
+- field: extensionType
+  note: 扩展类型
+  range: override{10}
+  
+- field: open
+  note: 打开方式
+  range: none{10}
+  
+- field: position
+  note: 显示位置
+  range: browseandview{10}
+  
+- field: layout
+  note: 布局
+  range: ''{10}
+  
+- field: show
+  note: 显示方式
+  range: dropdownlist{10}
+  
+- field: order
+  note: 排序
+  range: 999{10}
+  
+- field: buildin
+  note: 内置标识
+  range: 0{10}
+  
+- field: role
+  note: 角色
+  range: custom{10}
+  
+- field: virtual
+  note: 虚拟标识
+  range: 0{10}
+  
+- field: conditions
+  note: 条件
+  range: '[]'{10}
+  
+- field: verifications
+  note: 验证
+  range: ''{10}
+  
+- field: hooks
+  note: 钩子
+  range: '[]'{10}
+  
+- field: linkages
+  note: 联动
+  range: ''{10}
+  
+- field: js
+  note: JS脚本
+  range: ''{10}
+  
+- field: css
+  note: CSS样式
+  range: ''{10}
+  
+- field: toList
+  note: 跳转列表
+  range: ''{10}
+  
+- field: blocks
+  note: 区块
+  range: ''{10}
+  
+- field: desc
+  note: 描述
+  range: ''{10}
+  
+- field: status
+  note: 状态
+  range: disable{10}
+  
+- field: vision
+  note: 版本
+  range: rnd{10}
+  
+- field: createdBy
+  note: 创建者
+  range: admin{10}
+  
+- field: createdDate
+  note: 创建时间
+  range: 2025-01-01 10:00:00{10}
+  
+- field: editedBy
+  note: 编辑者
+  range: ''{10}
+  
+- field: editedDate
+  note: 编辑时间
+  range: 0000-00-00 00:00:00{10}

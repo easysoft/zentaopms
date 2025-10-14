@@ -1,0 +1,25 @@
+---
+title: project表getLinkedProducts方法测试数据
+desc: 用于测试execution模块getLinkedProducts方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目ID
+- field: name
+  range: '测试项目1{1},测试项目2{1},测试项目3{1},无产品项目{1},Shadow项目{1},其他项目{5}'
+  note: 项目名称
+- field: hasProduct
+  range: '1{7},0{3}'
+  note: 是否关联产品
+- field: model
+  range: 'scrum{5},waterfall{3},kanban{2}'
+  note: 项目模式
+- field: status
+  range: 'wait{3},doing{4},suspended{2},closed{1}'
+  note: 项目状态
+- field: deleted
+  range: '0{9},1{1}'
+  note: 删除状态

@@ -1,0 +1,35 @@
+title: table zt_compile for syncGitlabBuildList test
+desc: "编译任务测试数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "编译ID"
+    range: 1-10
+  - field: name
+    note: "编译名称"
+    range: 'Compile1,Compile2,Compile3,Compile4,Compile5,Compile6,Compile7,Compile8,Compile9,Compile10'
+  - field: job
+    note: "任务ID"
+    range: 1-5
+  - field: queue
+    note: "队列ID"
+    range: 1001-1010
+  - field: status
+    note: "状态"
+    range: 'created,pending,running,success,failure'
+  - field: logs
+    note: "日志"
+    range: 'Build started,Build in progress,Build completed,Build failed,No logs'
+  - field: atTime
+    note: "执行时间"
+    range: '2024-01-01 09:00:00-2024-12-31 18:00:00'
+  - field: createdBy
+    note: "创建者"
+    range: 'admin,system'
+  - field: createdDate
+    note: "创建时间"
+    range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  - field: deleted
+    note: "删除标记"
+    range: '0'

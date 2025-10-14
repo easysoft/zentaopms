@@ -1,0 +1,82 @@
+---
+title: 待办表数据定义 - getBatchEditInitTodos方法测试
+desc: 为getBatchEditInitTodos方法测试生成测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 待办ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 所属账户
+  range: admin{8},user1{6},user2{4},manager{2}
+  format: ""
+- field: name
+  note: 待办名称
+  range: 测试待办{5},开发任务{3},测试用例{2},需求分析{3},缺陷修复{2},代码审查{3},部署工作{2}
+  format: ""
+- field: type
+  note: 待办类型
+  range: custom{8},task{5},story{3},bug{2},testtask{2}
+  format: ""
+- field: objectID
+  note: 关联对象ID
+  range: 0{8},10,20,30,40,50,60,70,80,90,100,110,120
+  format: ""
+- field: status
+  note: 状态
+  range: wait{12},doing{4},done{4}
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1{6},2{8},3{6}
+  format: ""
+- field: date
+  note: 日期
+  range: 2023-12-01,2023-12-02,2023-12-03,2023-12-04,2023-12-05,2023-12-06,2023-12-07,2023-12-08,2023-12-09,2023-12-10,2023-12-11,2023-12-12,2023-12-13,2023-12-14,2023-12-15,2023-12-16,2023-12-17,2023-12-18,2023-12-19,2023-12-20
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: admin{10},user1{6},user2{4}
+  format: ""
+- field: assignedBy
+  note: 指派人
+  range: admin{12},manager{4},user1{4}
+  format: ""
+- field: assignedDate
+  note: 指派日期
+  range: 2023-12-01 09:00:00,2023-12-01 10:00:00,2023-12-01 11:00:00,2023-12-01 14:00:00,2023-12-01 15:00:00,2023-12-02 09:00:00,2023-12-02 10:00:00,2023-12-02 11:00:00,2023-12-02 14:00:00,2023-12-02 15:00:00,2023-12-03 09:00:00,2023-12-03 10:00:00,2023-12-03 11:00:00,2023-12-03 14:00:00,2023-12-03 15:00:00,2023-12-04 09:00:00,2023-12-04 10:00:00,2023-12-04 11:00:00,2023-12-04 14:00:00,2023-12-04 15:00:00
+  format: ""
+- field: begin
+  note: 开始时间
+  range: 0800,0830,0900,0930,1000,1030,1100,1130,1200,1230,1300,1330,1400,1430,1500,1530,1600,1630,1700,1730
+  format: ""
+- field: end
+  note: 结束时间
+  range: 1000,1030,1100,1130,1200,1230,1300,1330,1400,1430,1500,1530,1600,1630,1700,1730,1800,1830,1900,1930
+  format: ""
+- field: desc
+  note: 描述
+  range: 这是一个测试待办{5},需要完成的开发任务{3},重要的测试工作{2},关键的需求分析{3},紧急的缺陷修复{2},必要的代码审查{3},计划的部署工作{2}
+  format: ""
+- field: private
+  note: 是否私有
+  range: 0{16},1{4}
+  format: ""
+- field: cycle
+  note: 是否周期
+  range: 0{18},1{2}
+  format: ""
+- field: config
+  note: 配置信息
+  range: ''{18},{"type":"day","begin":"2023-12-01"}{2}
+  format: ""
+- field: vision
+  note: 版本
+  range: rnd{20}
+  format: ""

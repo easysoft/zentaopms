@@ -1,0 +1,54 @@
+---
+title: 工作流字段测试数据
+desc: 用于测试createBuildinField方法的工作流字段数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: testmodule,testmodule2,testmodule3
+  format: ""
+- field: field
+  note: 字段名称
+  range: testfieldpri,testfieldresolution,testfieldsummary
+  format: ""
+- field: type
+  note: 字段类型
+  range: int,varchar,text
+  format: ""
+- field: length
+  note: 字段长度
+  range: 3,255,0
+  format: ""
+- field: name
+  note: 字段显示名
+  range: 优先级,解决方案,标题
+  format: ""
+- field: control
+  note: 控件类型
+  range: select,input,textarea
+  format: ""
+- field: optionType
+  note: 选项类型
+  range: custom,user
+  format: ""
+- field: group
+  note: 字段分组
+  range: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00
+  format: ""

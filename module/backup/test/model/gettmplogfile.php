@@ -1,18 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
-title=backupModel->getTmpLogFile();
+title=测试 backupModel::getTmpLogFile();
 timeout=0
-cid=1
+cid=0
+
+- 执行backupTest模块的getTmpLogFileTest方法，参数是'/tmp/backup_test'  @/tmp/backup_test.tmp.summary
+- 执行backupTest模块的getTmpLogFileTest方法，参数是''  @.tmp.summary
+- 执行backupTest模块的getTmpLogFileTest方法，参数是'/backup/test with spaces'  @/backup/test with spaces.tmp.summary
+- 执行backupTest模块的getTmpLogFileTest方法，参数是'/home/user/backup'  @/home/user/backup.tmp.summary
+- 执行backupTest模块的getTmpLogFileTest方法，参数是'./relative/path'  @./relative/path.tmp.summary
 
 */
 
-global $tester;
-$backupModel = $tester->loadModel('backup');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
 
-$summaryFile = dirname(__FILE__) . DS . 'test';
-r($backupModel->getTmpLogFile($summaryFile) == $summaryFile . '.tmp.summary') && p() && e('1'); //设置备份路径。
+su('admin');
+
+$backupTest = new backupTest();
+
+r($backupTest->getTmpLogFileTest('/tmp/backup_test')) && p() && e('/tmp/backup_test.tmp.summary');
+r($backupTest->getTmpLogFileTest('')) && p() && e('.tmp.summary');
+r($backupTest->getTmpLogFileTest('/backup/test with spaces')) && p() && e('/backup/test with spaces.tmp.summary');
+r($backupTest->getTmpLogFileTest('/home/user/backup')) && p() && e('/home/user/backup.tmp.summary');
+r($backupTest->getTmpLogFileTest('./relative/path')) && p() && e('./relative/path.tmp.summary');

@@ -1,0 +1,54 @@
+---
+title: assignKanbanForCreate方法测试数据
+desc: 为assignKanbanForCreate方法测试提供kanban相关测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+# 项目/执行数据
+- field: project_id
+  note: 项目ID
+  range: 1-5
+- field: project_name
+  note: 项目名称
+  range: 'project{5}'
+- field: project_type
+  note: 项目类型
+  range: 'kanban{3}, sprint{2}'
+- field: project_status
+  note: 项目状态
+  range: 'wait{1}, doing{3}, suspended{1}'
+
+# kanban区域数据
+- field: region_id
+  note: 区域ID
+  range: 1-10
+- field: region_name
+  note: 区域名称
+  range: '区域{10}'
+- field: region_order
+  note: 区域排序
+  range: 1-10
+- field: region_kanban
+  note: 区域所属看板
+  range: 1-3
+
+# kanban泳道数据
+- field: lane_id
+  note: 泳道ID
+  range: 1-20
+- field: lane_name
+  note: 泳道名称
+  range: '泳道{20}'
+- field: lane_type
+  note: 泳道类型
+  range: 'task{15}, story{5}'
+- field: lane_region
+  note: 泳道所属区域
+  range: 1-10
+- field: lane_order
+  note: 泳道排序
+  range: 1-20
+- field: lane_execution
+  note: 泳道所属执行
+  range: 1-5

@@ -1,0 +1,19 @@
+---
+title: projectproduct表getAllProductsForCreate方法测试数据
+desc: 用于测试execution模块getAllProductsForCreate方法的项目产品关联数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  range: 1-7
+  note: 项目ID，与项目表对应
+- field: product
+  range: 1-6
+  note: 产品ID，与产品表对应
+- field: branch
+  range: '0{6},1{1}'
+  note: 分支ID，0表示主干分支
+- field: plan
+  range: '1{2},2{2},3{2},0{1}'
+  note: 计划ID，0表示无计划

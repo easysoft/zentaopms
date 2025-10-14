@@ -1,0 +1,17 @@
+---
+title: OAuth绑定用户测试数据
+desc: 用于bindUsers方法的OAuth表测试数据
+
+fields:
+- field: account
+  note: 绑定的禅道账号
+  range: user1,user2,admin,test{2}
+- field: openID
+  note: GitLab用户ID
+  range: 100,101,200,300,400
+- field: providerType
+  note: 提供商类型
+  range: gitlab{5}
+- field: providerID
+  note: GitLab实例ID
+  range: 1{5}

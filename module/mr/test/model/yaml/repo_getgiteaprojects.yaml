@@ -1,0 +1,67 @@
+---
+title: repo数据用于测试getGiteaProjects方法
+desc: 创建用于测试mr模块getGiteaProjects方法的repo服务器数据
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    note: 服务器ID
+    range: 1-5
+  - field: product
+    note: 产品
+    range: '1,2,3'
+  - field: projects
+    note: 项目
+    range: '1,2,3'
+  - field: name
+    note: 仓库名称
+    range: 'test-repo-{1-5},gitea-repo-{1-3}'
+  - field: path
+    note: 仓库路径
+    range: '/var/www/repos/test{1-5},/opt/gitea/repos/project{1-3}'
+  - field: prefix
+    note: 前缀
+    range: 'test_,gitea_'
+  - field: encoding
+    note: 编码
+    range: 'utf-8'
+  - field: SCM
+    note: 源代码管理类型
+    range: 'Gitea'
+  - field: client
+    note: 客户端路径
+    range: '/usr/bin/git'
+  - field: serviceHost
+    note: 服务主机ID
+    range: 1-5
+  - field: serviceProject
+    note: 服务项目
+    range: 'test/unittest,example/demo,project/main'
+  - field: encrypt
+    note: 加密
+    range: 'plain'
+  - field: account
+    note: 账户
+    range: 'admin,test,user'
+  - field: password
+    note: 密码
+    range: 'admin123,test123,user123'
+  - field: token
+    note: 令牌
+    range: 'token123,abc456,xyz789'
+  - field: preMerge
+    note: 预合并
+    range: '0,1'
+  - field: acl
+    note: 访问控制
+    range: '""'
+  - field: synced
+    note: 同步状态
+    range: '1'
+  - field: lastSync
+    note: 最后同步时间
+    range: '2023-12-01 00:00:00,2023-12-02 00:00:00'
+  - field: deleted
+    note: 删除状态
+    range: '0'

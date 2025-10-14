@@ -1,0 +1,45 @@
+---
+title: 为assignProjectRelatedVars方法提供测试Bug数据
+desc: Bug数据包含不同产品、项目和执行的Bug，用于测试项目相关变量的分配
+
+fields:
+- field: id
+  range: 1-30
+- field: product
+  range: '1{5},2{5},3{5},6{5},7{5},8{5}'
+- field: project
+  range: '0{5},1{5},2{5},3{5},4{5},5{5}'
+- field: execution
+  range: '0{5},101{5},102{5},103{5},104{5},105{5}'
+- field: branch
+  range: '0{15},1{8},2{7}'
+- field: module
+  range: 1-10
+- field: title
+  range: 'Bug项目相关测试{1-30}'
+- field: severity
+  range: '1{8},2{8},3{8},4{6}'
+- field: type
+  range: 'codeerror{15},interface{8},config{7}'
+- field: status
+  range: 'active{20},resolved{6},closed{4}'
+- field: openedBy
+  range: 'admin{10},user{10},tester{10}'
+- field: openedDate
+  range: '2023-01-01 00:00:00'
+- field: assignedTo
+  range: 'admin{8},user{12},tester{10}'
+- field: plan
+  range: '0{15},1{5},2{5},3{5}'
+- field: story
+  range: '0{20},1{5},2{5}'
+- field: task
+  range: '0{20},1{5},2{5}'
+- field: pri
+  range: '1{8},2{8},3{8},4{6}'
+- field: os
+  range: 'all{15},windows{8},linux{7}'
+- field: browser
+  range: 'all{15},chrome{8},firefox{7}'
+- field: deleted
+  range: '0'

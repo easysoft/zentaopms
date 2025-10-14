@@ -1,0 +1,29 @@
+---
+title: assignCreateVars 方法测试用模块数据
+desc: 为 taskZen::assignCreateVars 方法提供模块测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 101-110
+- field: root
+  range: 1-5
+- field: branch
+  range: 0
+- field: name
+  range: 前端模块,后端模块,数据库模块,测试模块,设计模块
+- field: path
+  range: ',101,',',102,',',103,',',104,',',105,'
+- field: grade
+  range: 1
+- field: order
+  range: 5-50:5
+- field: type
+  range: task
+- field: parent
+  range: 0
+- field: collector
+  range: ''
+- field: deleted
+  range: '0'

@@ -1,0 +1,45 @@
+---
+title: 关联设计与提交测试数据
+desc: 用于测试linkCommit方法的关联关系数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关联ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目ID
+  range: 1-3
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: execution
+  note: 执行ID
+  range: 0
+- field: AType
+  note: A类型
+  range: design{10}
+- field: AID
+  note: A对象ID
+  range: 1-10
+- field: AVersion
+  note: A对象版本
+  range: ""
+- field: relation
+  note: 关联关系
+  range: completedin{10}
+- field: BType
+  note: B类型
+  range: commit{10}
+- field: BID
+  note: B对象ID
+  range: 1-10
+- field: BVersion
+  note: B对象版本
+  range: ""
+- field: extra
+  note: 额外信息
+  range: 1-3

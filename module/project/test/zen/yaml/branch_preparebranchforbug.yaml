@@ -1,0 +1,37 @@
+---
+title: 分支测试数据
+desc: 用于prepareBranchForBug方法的分支测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品ID
+  range: 3{3},4{3},5{4}
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 分支名称
+  range: 主干,分支1,分支2,分支3,分支4,分支5,分支6,分支7,分支8,分支9
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 分支状态
+  range: active{8},closed{2}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""

@@ -118,16 +118,10 @@ class dbh
         global $config;
         $this->config = $config;
 
-        $driver = $dbConfig->driver;
-        if($dbConfig->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
+        $driverAlias = array('oceanbase' => 'mysql', 'highgo' => 'pgsql', 'postgres' => 'pgsql');
+        $driver      = isset($driverAlias[$dbConfig->driver]) ? $driverAlias[$dbConfig->driver] : $dbConfig->driver;
 
-        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
-        if($setSchema) $dsn .= ";dbname={$dbConfig->name}";
-
-        $password = helper::decryptPassword($dbConfig->password);
-        $pdo = new PDO($dsn, $dbConfig->user, $password);
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = $this->pdoInit($driver, $dbConfig, $setSchema);
 
         $queries = [];
         /* Mysql driver include mysql and oceanbase. */
@@ -138,7 +132,7 @@ class dbh
         }
         else if($setSchema)
         {
-            $queries[] = "SET SCHEMA {$dbConfig->name}";
+            $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
         }
         if(!empty($queries))
         {
@@ -168,6 +162,36 @@ class dbh
         $this->pdo      = $pdo;
         $this->dbConfig = $dbConfig;
         $this->flag     = $flag;
+    }
+
+    /**
+     * 初始化PDO对象。
+     * Init pdo.
+     *
+     * @param  string $driver
+     * @param  object $dbConfig
+     * @param  bool   $setSchema
+     * @access private
+     * @return object
+     */
+    private function pdoInit($driver, $dbConfig, $setSchema)
+    {
+        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        if($setSchema)
+        {
+            $dsn .= ";dbname={$dbConfig->name}";
+        }
+        elseif($driver == 'pgsql') // pgsql(postgres,highgo) need database to connect
+        {
+            $dsn .= ";dbname={$dbConfig->driver}"; // default database
+        }
+
+        $password = helper::decryptPassword($dbConfig->password);
+        $pdo = new PDO($dsn, $dbConfig->user, $password);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $pdo;
     }
 
     /**
@@ -240,24 +264,23 @@ class dbh
             if($mode == 'exec' && !empty($this->dbConfig->enableSqlite)) $this->pushSqliteQueue($sql);
         }
 
+        $result = false;
+        $begin  = microtime(true);
+        $method = $mode == 'exec' ? 'exec' : 'query';
+
         try
         {
-            $result   = false;
-            $begin    = microtime(true);
-            $method   = $mode == 'exec' ? 'exec' : 'query';
-            $result   = $this->pdo->$method($sql);
-            $duration = microtime(true) - $begin;
+            $result = $this->pdo->$method($sql);
         }
         catch(PDOException $e)
         {
-            $duration = microtime(true) - $begin;
             $this->sqlError($e);
         }
         finally
         {
             dbh::$flags[]     = $this->flag;
             dbh::$queries[]   = dao::processKeywords($sql);
-            dbh::$durations[] = round($duration, 6);
+            dbh::$durations[] = round(microtime(true) - $begin, 6);
 
             if(!empty($this->config->debug))
             {
@@ -330,8 +353,6 @@ class dbh
      */
     public function execute($sql, $params)
     {
-        $this->trace();
-
         $this->statement = $this->prepare($sql);
 
         try
@@ -376,6 +397,10 @@ class dbh
             case 'dm':
                 $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->dbConfig->name}'";
                 break;
+            case 'postgres':
+            case 'highgo':
+                $sql = "SELECT * FROM pg_database WHERE datname ='{$this->dbConfig->name}'";
+                break;
             default:
                 $sql = '';
         }
@@ -398,6 +423,12 @@ class dbh
             $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
             return $this->rawQuery($sql)->fetch();
         }
+        elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+        {
+            $this->useDB($this->dbConfig->name);
+            $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_name='{$tableName}'";
+            return $this->rawQuery($sql)->fetch();
+        }
 
         $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
         return $this->rawQuery($sql)->fetch();
@@ -414,9 +445,6 @@ class dbh
     {
         switch($this->dbConfig->driver)
         {
-            case 'oceanbase':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                return $this->rawQuery($sql);
             case 'mysql':
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
@@ -429,21 +457,13 @@ class dbh
                 }
                 return $this->rawQuery($sql);
             case 'dm':
-                /*
-                $tableSpace = strtoupper($this->dbConfig->name);
-                $res = $this->rawQuery("SELECT * FROM dba_data_files WHERE TABLESPACE_NAME = '$tableSpace'")->fetchAll();
-
-                if(empty($res))
-                {
-                    $createTableSpace = "CREATE TABLESPACE $tableSpace DATAFILE '{$this->dbConfig->name}.DBF' size 150 AUTOEXTEND ON";
-                    $createUser       = "CREATE USER {$this->dbConfig->name} IDENTIFIED by {$this->dbConfig->password} DEFAULT TABLESPACE {$this->dbConfig->name} DEFAULT INDEX TABLESPACE {$this->dbConfig->name}";
-
-                    $this->rawQuery($createTableSpace);
-                    $this->rawQuery($createUser);
-                }
-                */
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
                 return $this->rawQuery($createSchema);
+            case 'oceanbase':
+            case 'postgres':
+            case 'highgo':
+                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
+                return $this->rawQuery($sql);
             default:
                 return false;
         }
@@ -463,10 +483,12 @@ class dbh
             case 'oceanbase':
             case 'mysql':
                 return $this->exec("USE {$this->dbConfig->name}");
-
             case 'dm':
                 return $this->exec("SET SCHEMA {$this->dbConfig->name}");
-
+            case 'postgres':
+            case 'highgo':
+                $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
+                return $this->exec("SET SCHEMA 'public'");
             default:
                 return false;
         }
@@ -487,11 +509,124 @@ class dbh
         {
             case 'dm':
                 return $this->formatDmSQL($sql);
-                return $sql;
+
+            case 'postgres':
+            case 'highgo':
+                return $this->formatPgSQL($sql);
 
             default:
                 return $sql;
         }
+    }
+
+    /**
+     * Format pgsql sql.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function formatPgSQL($sql)
+    {
+        $sql = trim($sql);
+        $sql = $this->formatFunction($sql);
+        $sql = $this->processDmChangeColumn($sql);
+        $sql = $this->processDmTableIndex($sql);
+
+        $actionPos = strpos($sql, ' ');
+        $action    = strtoupper(substr($sql, 0, $actionPos));
+        $setPos    = 0;
+        switch($action)
+        {
+            case 'SELECT':
+                return $this->formatField($sql);
+            case 'REPLACE':
+                $result = $this->processReplace($sql);
+                if($result != $sql) return $result;
+
+                $sql = str_replace('REPLACE', 'INSERT', $sql);
+            case 'INSERT':
+            case 'UPDATE':
+                $setPos = stripos($sql, ' VALUES');
+                $sql    = str_replace('0000-00-00', '1970-01-01', $sql);
+                $sql    = str_replace('00:00:00', '00:00:01', $sql);
+                if(strpos($sql, "\\'") !== false) $sql = str_replace("\\'", "''''", $sql);
+                if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
+                if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
+                if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
+                break;
+            case 'CREATE':
+                if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
+                if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
+
+                if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
+                {
+                    // Modify if function.
+                    $fieldsBegin = stripos($sql, 'select');
+                    $fieldsEnd   = stripos($sql, 'from');
+                    $fields      = substr($sql, $fieldsBegin+6, $fieldsEnd-$fieldsBegin-6);
+                    $fieldList   = preg_split("/,(?![^(]+\))/", $fields);
+                    foreach($fieldList as $key => $field)
+                    {
+                        $aliasPos = stripos($field, ' AS ');
+                        $subField = substr($field, 0, $aliasPos);
+                        if(stripos($field, 'SUM(') === 0) $subField = substr($subField, 4, -1);
+
+                        $fieldParts = preg_split("/\+(?![^(]+\))/", $subField);
+                        foreach($fieldParts as $pkey => $fieldPart)
+                        {
+                            $originField = trim($fieldPart);
+                            if(stripos($originField, 'if(') === false) continue;
+                            $fieldParts[$pkey] = $this->formatDmIfFunction($originField);
+                        }
+                        $fieldList[$key] = str_replace($subField, implode(' + ', $fieldParts), $field);
+                    }
+                    $fields = implode(',', $fieldList);
+                    $sql = substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
+                    return str_replace('CREATE OR REPLACE VIEW ', 'CREATE VIEW ', $sql);
+                }
+                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
+                {
+                    preg_match('/ON\s+([^.`\s]+\.)?`([^\s`]+)`/', $sql, $matches);
+
+                    $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
+                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
+                }
+
+                /* Remove FULLTEXT index. */
+                if(stripos($sql, 'FULLTEXT'))
+                {
+                    $pattern = '/,\s*FULLTEXT\s+KEY\s+`[^`]+`\s*\([^)]+\)\s*/i';
+                    $sql = preg_replace($pattern, '', $sql);
+                }
+
+            case 'ALTER':
+                $sql = $this->formatField($sql);
+                $sql = $this->formatAttr($sql);
+
+                return $sql;
+            case 'SET':
+                if(stripos($sql, 'SET SCHEMA') === 0) return $sql;
+            case 'USE':
+                return '';
+            case 'DESC';
+                $tableName = str_ireplace(array('DESC ', '`'), '', $sql);
+                $tableName = trim($tableName);
+                if(strpos($tableName, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
+                $sql = "select COLUMN_NAME as Field, DATA_TYPE as `Type`, DATA_LENGTH as Length, DATA_DEFAULT as `Default`, NULLABLE as `Null` from all_tab_columns where Table_Name='$tableName'";
+                if(!empty($columnName)) $sql .= " and COLUMN_NAME='$columnName'";
+                return $sql;
+            case 'DROP':
+                $sql .= ' CASCADE';
+                return $this->formatField($sql);
+        }
+
+        if($setPos <= 0) return $sql;
+
+        $fields = substr($sql, 0, $setPos);
+        $fields = $this->formatField($fields);
+
+        return $fields . substr($sql, $setPos);
     }
 
     /**
@@ -516,7 +651,7 @@ class dbh
             case 'SELECT':
                 return $this->formatField($sql);
             case 'REPLACE':
-                $result = $this->processReplace($sql);
+                $result = $this->processReplace($sql, 'dm');
                 if($result != $sql) return $result;
 
                 $sql    = str_replace('REPLACE', 'INSERT', $sql);
@@ -682,7 +817,9 @@ class dbh
      */
     public function formatDmIfFunction($field)
     {
-        preg_match('/if\(.+\)+/i', $field, $matches);
+        preg_match('/(?<![a-zA-Z\'"])\bif\s*\(.+\)/i', $field, $matches);
+
+        if(empty($matches)) return $field;
 
         $if = $matches[0];
         if(substr_count($if, '(') == 1)
@@ -710,7 +847,7 @@ class dbh
      */
     public function formatAttr($sql)
     {
-        if($this->dbConfig->driver == 'dm')
+        if(in_array($this->dbConfig->driver, array('dm', 'postgres', 'highgo')))
         {
             $pos = stripos($sql, ' ENGINE');
             if($pos > 0) $sql = substr($sql, 0, $pos);
@@ -718,7 +855,6 @@ class dbh
             $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
 
             $replace = array(
-                " AUTO_INCREMENT"           => ' IDENTITY(1, 1)',
                 " int "                     => ' integer ',
                 " mediumint "               => ' integer ',
                 " smallint "                => ' integer ',
@@ -733,6 +869,16 @@ class dbh
                 " zerofill "                => ' ',
                 "0000-00-00"                => '1970-01-01',
             );
+
+            if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+            {
+                $sql = preg_replace('/(\s*`[^`]+`)\s+\K.+AUTO_INCREMENT(,)/i', ' serial,', $sql);
+                $sql = str_ireplace(' DATETIME', ' TIMESTAMP', $sql);
+            }
+            else
+            {
+                $sql = str_ireplace(' AUTO_INCREMENT', ' IDENTITY(1, 1)', $sql);
+            }
 
             $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
             $sql = str_ireplace(array_keys($replace), array_values($replace), $sql);
@@ -765,11 +911,12 @@ class dbh
     /**
      * Process replace into sql.
      *
-     * @param mixed $sql
+     * @param mixed  $sql
+     * @param string $driver
      * @access public
      * @return void
      */
-    public function processReplace($sql)
+    public function processReplace($sql, $driver = 'pgsql')
     {
         // 解析REPLACE INTO语句，提取出表名、字段和值
         $matches = [];
@@ -782,19 +929,20 @@ class dbh
 
         // 构造SELECT语句，查询数据是否存在
         $where = [];
-        foreach ($columns as $index => $column) {
+        foreach($columns as $index => $column)
+        {
             $value  = trim($values[$index], "'");
             $column = trim($column, '`');
             $values[$index]  = $value;
             $columns[$index] = $column;
-            $where[] = "`$column` = '$value'";
+            if($value != 'NULL') $where[] = "`$column` = '$value'";
         }
 
         $select_sql = "SELECT * FROM `$table_name` WHERE " . implode(' AND ', $where);
 
         $result = $this->query($select_sql);
         $result = $result->fetchAll();
-        $sql    = in_array('id', $columns) ? "SET IDENTITY_INSERT `$table_name` ON;" : '';
+        $sql    = in_array('id', $columns) && $driver == 'dm' ? "SET IDENTITY_INSERT `$table_name` ON;" : '';
 
         if($result)
         {
@@ -803,8 +951,8 @@ class dbh
             $where = [];
             foreach ($columns as $index => $column) {
                 $value   = $values[$index];
-                $set[]   = "`$column` = '$value'";
-                $where[] = "`$column` = '$value'";
+                $set[]   = $value == 'NULL' ? "`$column` = NULL" : "`$column` = '$value'";
+                $where[] = $value == 'NULL' ? "`$column` IS NULL" : "`$column` = '$value'";
             }
 
             $sql .= "UPDATE `$table_name` SET " . implode(', ', $set) . " WHERE " . implode(' AND ', $where);
@@ -815,6 +963,8 @@ class dbh
             $selectColumn = array();
             $selectValue  = array();
             foreach ($columns as $index => $column) {
+                if($values[$index] == 'NULL') continue;
+
                 $selectColumn[] .= "`$column`";
                 $selectValue[]  .= "'{$values[$index]}'";
             }

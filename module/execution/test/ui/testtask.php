@@ -20,7 +20,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/testtask.ui.class.php';
+include '../lib/ui/testtask.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

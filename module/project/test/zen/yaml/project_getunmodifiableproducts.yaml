@@ -1,0 +1,37 @@
+---
+title: 项目getUnmodifiableProducts方法测试数据
+desc: 为getUnmodifiableProducts方法生成测试数据，涵盖瀑布项目产品关联场景
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+- field: name
+  note: 项目名称
+  range: '瀑布项目,瀑布增强项目,敏捷项目,看板项目,测试项目'
+- field: model
+  note: 项目模式
+  range: 'waterfall,waterfallplus,scrum,kanban,scrum'
+- field: stageBy
+  note: 分阶段方式
+  range: 'product,project,product,product,product'
+- field: type
+  note: 项目类型
+  range: 'project{5}'
+- field: status
+  note: 项目状态
+  range: 'doing{5}'
+- field: hasProduct
+  note: 是否关联产品
+  range: 1{5}
+- field: multiple
+  note: 是否多执行
+  range: 1{5}
+- field: openedBy
+  note: 创建者
+  range: 'admin{5}'
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{5}'

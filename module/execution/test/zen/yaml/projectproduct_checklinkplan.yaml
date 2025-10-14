@@ -1,0 +1,13 @@
+---
+title: checkLinkPlan方法projectproduct测试数据
+desc: 用于测试execution的checkLinkPlan方法的项目产品关联数据
+
+fields:
+- field: project
+  range: 1,2,3,4,5
+- field: product
+  range: 1,2,3,1,2
+- field: plan
+  range: "1,2","3,4","5","","6,7"
+- field: branch
+  range: "0"

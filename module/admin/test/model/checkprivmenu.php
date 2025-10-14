@@ -3,38 +3,33 @@
 
 /**
 
-title=测试adminModel->checkPrivMenu();
+title=测试 adminModel::checkPrivMenu();
 timeout=0
 cid=0
 
-- 获取key为system的导航菜单信息。
- - 第system条的name属性 @系统设置
- - 第system条的order属性 @5
-- 获取key为switch的导航菜单信息。
- - 第switch条的name属性 @功能开关
- - 第switch条的order属性 @10
-- 获取key为company的导航菜单信息。
- - 第company条的name属性 @人员管理
- - 第company条的order属性 @15
-- 获取key为feature的导航菜单信息。
- - 第feature条的name属性 @功能配置
- - 第feature条的order属性 @25
-- 获取key为message的导航菜单信息。
- - 第message条的name属性 @通知设置
- - 第message条的order属性 @35
-- 获取key为dev的导航菜单信息。
- - 第dev条的name属性 @二次开发
- - 第dev条的order属性 @45
+- 步骤1：检查是否有菜单列表属性hasMenuList @1
+- 步骤2：检查菜单数量属性menuCount @11
+- 步骤3：检查是否有已链接菜单属性hasLinkedMenu @1
+- 步骤4：检查是否有已禁用菜单属性hasDisabledMenu @1
+- 步骤5：验证菜单列表结构
+ - 属性hasMenuList @1
+ - 属性menuCount @11
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-global $tester,$lang;
-$tester->loadModel('admin');
-r($lang->admin->menuList) && p('system:name,order')  && e('系统设置,5');  // 获取key为system的导航菜单信息。
-r($lang->admin->menuList) && p('switch:name,order')  && e('功能开关,10'); // 获取key为switch的导航菜单信息。
-r($lang->admin->menuList) && p('company:name,order') && e('人员管理,15'); // 获取key为company的导航菜单信息。
-$tester->admin->checkPrivMenu();
-r($lang->admin->menuList) && p('feature:name,order') && e('功能配置,25'); // 获取key为feature的导航菜单信息。
-r($lang->admin->menuList) && p('message:name,order') && e('通知设置,35'); // 获取key为message的导航菜单信息。
-r($lang->admin->menuList) && p('dev:name,order')     && e('二次开发,45'); // 获取key为dev的导航菜单信息。
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+
+// 2. 用户登录（选择合适角色）
+su('admin');
+
+// 3. 创建测试实例（变量名与模块名一致）
+$adminTest = new adminTest();
+
+// 4. 强制要求：必须包含至少5个测试步骤
+r($adminTest->checkPrivMenuTest()) && p('hasMenuList') && e('1'); // 步骤1：检查是否有菜单列表
+r($adminTest->checkPrivMenuTest()) && p('menuCount') && e('11'); // 步骤2：检查菜单数量
+r($adminTest->checkPrivMenuTest()) && p('hasLinkedMenu') && e('1'); // 步骤3：检查是否有已链接菜单
+r($adminTest->checkPrivMenuTest()) && p('hasDisabledMenu') && e('1'); // 步骤4：检查是否有已禁用菜单
+r($adminTest->checkPrivMenuTest()) && p('hasMenuList,menuCount') && e('1,11'); // 步骤5：验证菜单列表结构

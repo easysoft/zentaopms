@@ -1,0 +1,50 @@
+---
+title: Entry Token验证测试数据
+desc: 为checkEntryToken方法提供测试用的entry数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  
+- field: name
+  range: ['测试应用1', '测试应用2', '测试应用3', '测试应用4', '测试应用5']
+
+- field: account
+  range: ['admin', 'user1', 'user2', '', 'test']
+
+- field: code
+  range: ['test_entry', 'api_entry', 'web_entry', 'mobile_entry', 'invalid_entry']
+
+- field: key
+  range: ['abcdef1234567890abcdef1234567890', '1234567890abcdef1234567890abcdef', 'fedcba0987654321fedcba0987654321', 'test_key_test_key_test_key_te', '']
+
+- field: freePasswd
+  range: ['0', '1', '0', '1', '0']
+
+- field: ip
+  range: ['*', '192.168.1.100', '10.0.0.1', '', '127.0.0.1']
+
+- field: desc
+  range: ['用于token验证测试的应用', 'API访问应用', '网页应用', '移动端应用', '无效应用']
+
+- field: createdBy
+  range: ['admin', 'user1', 'admin', 'user2', 'admin']
+
+- field: createdDate
+  range: '(-7d)-(-1d):1D'
+  format: 'YYYY-MM-DD hh:mm:ss'
+
+- field: calledTime
+  range: '(-3600)-(-100):300'
+
+- field: editedBy
+  range: ['admin', 'user1', '', 'user2', '']
+
+- field: editedDate
+  range: '(-1d)-(+0d):1h'
+  format: 'YYYY-MM-DD hh:mm:ss'
+
+- field: deleted
+  range: ['0', '0', '0', '0', '1']

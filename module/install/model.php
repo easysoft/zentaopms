@@ -133,8 +133,10 @@ class installModel extends model
                 /* Skip sql that is note. */
                 if(strpos($table, '--') === 0) continue;
 
-                $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
-                $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
+                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+
+                $table = str_replace('`zt_', $prefix . '.`zt_', $table);
+                $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
 
                 if($saveLog) file_put_contents($this->buildDBLogFile('progress'), $table . "\n", FILE_APPEND);
@@ -152,28 +154,71 @@ class installModel extends model
     }
 
     /**
-     * 执行dm.sql里的SQL语句。
-     * Exec dm.sql.
+     * 执行安装前的SQL语句。
+     * Exec pre install SQL.
      *
      * @access public
      * @return bool
      */
-    public function execDMSQL(): bool
+    public function execPreInstallSQL(): bool
     {
-        if($this->config->db->driver != 'dm') return true;
+        $this->dbh->useDB($this->config->db->name);
 
-        $dbPath     = $this->app->getAppRoot() . 'db' . DS;
-        $dbFile     = $dbPath . 'dm.sql';
-        $dbFuncFile = $dbPath . 'dm_function.sql';
+        $tables = array();
+        $dbPath = $this->app->getAppRoot() . 'db' . DS;
 
-        $tables   = explode(';', file_get_contents($dbFile));
-        $tables[] = file_get_contents($dbFuncFile);
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $dbFile = $dbPath . 'pgsql_function.sql';
+            $tables = explode('--', file_get_contents($dbFile));
+        }
 
         foreach($tables as $table)
         {
+            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+
             $table = trim($table);
-            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
+            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
+            if($table) $this->dbh->exec($table);
+        }
+
+        return true;
+    }
+
+    /**
+     * 执行安装后的SQL语句。
+     * Exec post install SQL.
+     *
+     * @access public
+     * @return bool
+     */
+    public function execPostInstallSQL(): bool
+    {
+        $tables = array();
+        $dbPath = $this->app->getAppRoot() . 'db' . DS;
+
+        if($this->config->db->driver == 'dm')
+        {
+            $dbFile     = $dbPath . 'dm.sql';
+            $dbFuncFile = $dbPath . 'dm_function.sql';
+
+            $tables   = explode(';', file_get_contents($dbFile));
+            $tables[] = file_get_contents($dbFuncFile);
+        }
+        elseif(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $dbFile = $dbPath . 'pgsql.sql';
+            $tables = explode('--', file_get_contents($dbFile));
+        }
+
+        foreach($tables as $table)
+        {
+            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+
+            $table = trim($table);
+            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
+            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
             if($table) $this->dbh->exec($table);
         }
 
@@ -362,7 +407,9 @@ class installModel extends model
             $table = trim($table);
             if(empty($table)) continue;
 
-            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+
+            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
 
@@ -396,7 +443,7 @@ class installModel extends model
         /* Prepare built-in sqls of bi. */
 
         $insertTables = array();
-        if(in_array($this->config->db->driver, $this->config->mysqlDriverList))
+        if(in_array($this->config->db->driver, $this->config->mysqlDriverList) || in_array($this->config->db->driver, $this->config->pgsqlDriverList))
         {
             $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
             $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();

@@ -1,0 +1,77 @@
+---
+title: Bug测试数据 - getLinkBugs方法
+desc: 为repoZen::getLinkBugs()方法提供测试用的bug数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Bug标题
+  range: 修复登录问题,解决数据加载慢,优化界面显示,修复导出功能,解决权限错误,修复API接口问题,优化性能问题,解决兼容性,修复安全漏洞,解决崩溃问题
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Bug状态
+  range: active{7},closed{2},resolved{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: severity
+  note: 严重程度
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin,user1,user2,tester1,tester2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: (-30d)-(-1d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: assignedTo
+  note: 指派给
+  range: admin,dev1,dev2,dev3,[]
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Bug类型
+  range: codeerror,interface,config,install,security,performance,standard,automation,others
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

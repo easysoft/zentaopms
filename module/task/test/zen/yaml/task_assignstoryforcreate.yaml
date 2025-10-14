@@ -1,0 +1,57 @@
+---
+title: 任务创建时分配故事测试数据
+desc: 为assignStoryForCreate方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目ID
+  range: 1-5
+- field: execution
+  note: 执行ID
+  range: 1-10
+- field: module
+  note: 模块ID
+  range: 0,1-10
+- field: story
+  note: 需求ID
+  range: 0,1-15
+- field: name
+  note: 任务名称
+  range: "任务{1-20}"
+- field: type
+  note: 任务类型
+  range: "design,devel,test,study,discuss,ui,affair"
+- field: status
+  note: 任务状态
+  range: "wait,doing,done,pause,cancel,closed"
+- field: pri
+  note: 优先级
+  range: 1-4
+- field: estimate
+  note: 预计工时
+  range: 0-40:2
+- field: consumed
+  note: 消耗工时
+  range: 0-10:0.5
+- field: left
+  note: 剩余工时
+  range: 0-20:0.5
+- field: assignedTo
+  note: 指派给
+  range: "admin,user1,user2,user3,[]"
+- field: openedBy
+  note: 由谁创建
+  range: "admin,user1,user2"
+- field: openedDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+- field: deleted
+  note: 是否删除
+  range: "0{18},1{2}"

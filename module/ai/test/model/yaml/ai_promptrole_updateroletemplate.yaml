@@ -1,0 +1,56 @@
+---
+title: AI角色模板测试数据
+desc: 用于测试updateRoleTemplate方法的角色模板数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 角色模板ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 角色模板名称
+  range: 产品经理,开发工程师,测试工程师,QA工程师,文案编辑,项目经理
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 角色描述
+  range: 负责产品管理,负责开发工作,负责测试工作,负责质量管理,负责文案编辑,负责项目管理
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 关联模型ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: role
+  note: 角色定义
+  range: 请你扮演一名资深的产品经理。,你是一名经验丰富的开发工程师。,作为一名资深的测试工程师。,假如你是一名资深的QA工程师。,你是一名文章写得很好的文案编辑。,请你扮演一名经验丰富的项目经理。
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: characterization
+  note: 角色特征描述
+  range: 负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面,精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护,测试工程师应该是专业且严谨的。熟悉测试流程和方法，精通自动化测试和性能测试,熟悉质量管理体系和流程，擅长测试策略和方法设计，能够进行质量度量和数据分析,文笔流畅、条理清晰。精通广告文案写作和编辑，擅长创意思维和品牌策略,具备项目计划制定、进度管理、成本控制、团队管理、沟通协调、风险管理、质量控制、敏捷开发
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

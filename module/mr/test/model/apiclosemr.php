@@ -7,10 +7,15 @@ title=测试 mrModel::apiCloseMR();
 timeout=0
 cid=0
 
-- 不存在的主机 @0
-- 重新打开并关闭Gitlab合并请求
+- 测试步骤1：不存在的主机ID @0
+- 测试步骤2：有效的Gitlab主机关闭MR
  - 属性title @test
  - 属性state @closed
+- 测试步骤3：再次关闭同一个MR
+ - 属性title @test
+ - 属性state @closed
+- 测试步骤4：使用不同项目ID关闭MR @
+- 测试步骤5：不存在主机和项目的组合 @0
 
 */
 
@@ -22,21 +27,8 @@ su('admin');
 
 $mrModel = new mrTest();
 
-$hostID = array
-(
-    'gitlab' => 1,
-    'error'  => 10
-);
-
-$projectID = array
-(
-    'gitlab' => 3,
-);
-
-$mrID = array
-(
-    'gitlab' => 114,
-);
-
-r($mrModel->apiCloseMrTester($hostID['error'], $projectID['gitlab'], $mrID['gitlab'])) && p() && e('0'); // 不存在的主机
-r($mrModel->apiCloseMrTester($hostID['gitlab'], $projectID['gitlab'], $mrID['gitlab'])) && p('title,state') && e('test,closed'); // 重新打开并关闭Gitlab合并请求
+r($mrModel->apiCloseMrTester(10, '3', 114)) && p() && e('0'); // 测试步骤1：不存在的主机ID
+r($mrModel->apiCloseMrTester(1, '3', 114)) && p('title,state') && e('test,closed'); // 测试步骤2：有效的Gitlab主机关闭MR
+r($mrModel->apiCloseMrTester(1, '3', 114)) && p('title,state') && e('test,closed'); // 测试步骤3：再次关闭同一个MR
+r($mrModel->apiCloseMrTester(1, '4', 114)) && p() && e(''); // 测试步骤4：使用不同项目ID关闭MR
+r($mrModel->apiCloseMrTester(10, '4', 115)) && p() && e('0'); // 测试步骤5：不存在主机和项目的组合

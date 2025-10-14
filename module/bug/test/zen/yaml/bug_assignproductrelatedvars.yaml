@@ -1,0 +1,45 @@
+---
+title: 为assignProductRelatedVars方法提供测试Bug数据
+desc: Bug数据包含不同产品和分支的Bug，用于测试产品相关变量的分配
+
+fields:
+- field: id
+  range: 1-20
+- field: product
+  range: 1-10
+- field: branch
+  range: '0{10},1{5},2{5}'
+- field: module
+  range: 1-5
+- field: title
+  range: 'Bug{1-20}'
+- field: severity
+  range: 1-4
+- field: type
+  range: 'codeerror{10},interface{5},config{5}'
+- field: status
+  range: 'active{15},resolved{3},closed{2}'
+- field: openedBy
+  range: 'admin{10},user{5},tester{5}'
+- field: openedDate
+  range: '2023-01-01 00:00:00'
+- field: assignedTo
+  range: 'admin{5},user{10},tester{5}'
+- field: project
+  range: 1-5
+- field: execution
+  range: 1-10
+- field: plan
+  range: 0-5
+- field: story
+  range: 0-10
+- field: task
+  range: 0-10
+- field: pri
+  range: 1-4
+- field: os
+  range: 'all{10},windows{5},linux{5}'
+- field: browser
+  range: 'all{10},chrome{5},firefox{5}'
+- field: deleted
+  range: '0'

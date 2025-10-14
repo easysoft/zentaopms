@@ -1,0 +1,42 @@
+---
+title: 项目产品关联表测试数据 - getByList方法
+desc: 为programplanModel::getByList()方法生成项目产品关联测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-10:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{8},1{1},2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: plan
+  note: 计划
+  range: []{5},1{2},2{2},3{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: roadmap
+  note: 路线图
+  range: []{7},roadmap1{2},roadmap2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

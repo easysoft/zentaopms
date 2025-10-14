@@ -216,6 +216,8 @@ function openApp(url, code, options)
     {
         updateApp(code, url, openedApp.currentTitle, 'show');
     }
+
+    $('body').attr('data-app', code);
     openedApp.zIndex = ++apps.zIndex;
     openedApp.$app.show().css('z-index', openedApp.zIndex);
     openedApp.getPageInfo = () => {
@@ -515,11 +517,7 @@ function getAppCode(urlOrModuleName, defaultCode)
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';
     }
-    if(moduleName === 'ai')
-    {
-        /* Match admin ai pages. */
-        if(['adminindex', 'prompts', 'promptview', 'conversations', 'models', 'modelcreate', 'modelview', 'modeledit', 'editmodel', 'promptassignrole', 'promptselectdatasource', 'promptsetpurpose', 'promptsettargetform', 'promptfinalize', 'promptedit', 'miniprograms', 'createminiprogram', 'editminiprogram', 'configuredminiprogram', 'editminiprogramcategory', 'miniprogramview', 'assistants', 'assistantcreate', 'assistantview', 'assistantedit'].includes(methodLowerCase)) return 'admin';
-    }
+    if(moduleName === 'ai' || moduleName === 'zai') return 'aiapp';
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : defaultCode;

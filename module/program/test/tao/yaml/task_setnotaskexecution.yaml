@@ -1,0 +1,33 @@
+---
+title: task表测试数据
+desc: 用于setNoTaskExecution方法测试的任务数据
+
+fields:
+- field: id
+  range: 1-8
+- field: execution
+  range: 4,4,5,5,5,7,7,8
+  note: 执行4有2个任务，执行5有3个任务，执行7有2个任务，执行8有1个任务，执行6和9、10没有任务
+- field: name
+  range: 任务4-1,任务4-2,任务5-1,任务5-2,任务5-3,任务7-1,任务7-2,任务8-1
+- field: status
+  range: wait{2},doing{3},done{2},closed{1}
+- field: type
+  range: devel{4},test{2},design{2}
+- field: estimate
+  range: 8,10,6,12,5,15,8,10
+- field: consumed
+  range: 4,5,3,6,2,8,4,5
+- field: left
+  range: 4,5,3,6,3,7,4,5
+- field: deleted
+  range: 0{7},1{1}
+  note: 前7个任务未删除，最后1个任务已删除
+- field: assignedTo
+  range: user1{2},user2{3},user3{2},admin{1}
+- field: finishedBy
+  range: ''{4},user1,user2,'',''
+- field: deadline
+  range: 2024-06-30{8}
+- field: priority
+  range: 1{2},2{4},3{2}

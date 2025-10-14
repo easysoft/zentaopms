@@ -1,0 +1,42 @@
+---
+title: checkBranchAndProduct测试项目数据
+desc: 用于测试checkBranchAndProduct方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 顶级项目1,顶级项目2,顶级项目3,子项目4,子项目5,子项目6,子项目7,子项目8,子项目9,子项目10
+  format: ""
+- field: type
+  note: 项目类型
+  range: program{3},project{7}
+  format: ""
+- field: model
+  note: 项目模型
+  range: scrum{5},waterfall{5}
+  format: ""
+- field: status
+  note: 项目状态
+  range: wait{2},doing{6},suspended{1},closed{1}
+  format: ""
+- field: parent
+  note: 父级项目
+  range: 0{3},1{2},2{3},3{2}
+  format: ""
+- field: path
+  note: 项目路径
+  range: ',1,,1,2,,1,2,3,,1,2,4,,2,,2,5,,2,5,6,,3,,3,7,,3,7,8,'
+  format: ""
+- field: vision
+  note: 视野
+  range: rnd{10}
+  format: ""

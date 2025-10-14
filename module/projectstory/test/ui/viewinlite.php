@@ -10,7 +10,7 @@ cid=90
 
 */
 chdir (__DIR__);
-include '../lib/viewinlite.ui.class.php';
+include '../lib/ui/viewinlite.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

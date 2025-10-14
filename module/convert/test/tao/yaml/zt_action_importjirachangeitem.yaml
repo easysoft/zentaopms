@@ -1,0 +1,29 @@
+---
+title: ChangeItem测试的Action数据
+desc: 为importJiraChangeItem方法测试提供Action数据，模拟由change item生成的操作记录
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID，自动递增
+  range: 1-20
+- field: objectType
+  note: 对象类型，去掉前缀z的实际类型
+  range: 'story{6}, task{4}, bug{3}'
+- field: objectID
+  note: 对象ID，对应业务对象的ID
+  range: 1-10
+- field: actor
+  note: 操作者账号，对应change group中的author
+  range: 'admin{5}, user1{4}, user2{3}, jirauser{1}'
+- field: action
+  note: 动作类型，change item统一为commented
+  range: 'commented{13}'
+- field: date
+  note: 操作日期，格式为YYYY-MM-DD HH:mm:ss
+  range: '2024-01-01 09:00:00, 2024-01-01 10:30:00, 2024-01-01 14:15:00, 2024-01-02 08:45:00, 2024-01-02 16:20:00'
+  format: "YYYY-MM-DD HH:mm:ss"
+- field: comment
+  note: 评论内容，记录字段变更信息
+  range: 'Changed status from Open to In Progress, Changed priority from High to Critical, Changed assignee from user1 to user2, Updated description content, Fixed resolution issue'

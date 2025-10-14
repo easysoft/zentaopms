@@ -1,0 +1,49 @@
+---
+title: Bug数据
+desc: 用于测试getProductTestTable方法的Bug数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-80
+  note: Bug ID
+- field: product
+  range: 1-5{16}
+  note: 所属产品ID
+- field: case
+  range: 1-50{1},0{1}
+  note: 关联测试用例ID（0表示无关联）
+- field: title
+  range: '[登录Bug,界面Bug,功能Bug,性能Bug,安全Bug]{16}'
+  note: Bug标题
+- field: severity
+  range: 1{10},2{30},3{30},4{10}
+  note: 严重程度
+- field: pri
+  range: 1{10},2{30},3{30},4{10}
+  note: 优先级
+- field: type
+  range: codeerror{40},config{20},install{10},security{10}
+  note: Bug类型
+- field: status
+  range: active{30},resolved{25},closed{20},fixed{5}
+  note: Bug状态
+- field: resolution
+  range: '[fixed{25},duplicate{5},external{5},notrepro{10},postponed{5}]{1},^${30}'
+  note: 解决方案
+- field: deleted
+  range: '0'
+  note: 删除状态
+- field: openedBy
+  range: admin,user1,user2,tester1,tester2,dev1,dev2
+  note: 创建人
+- field: openedDate
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  note: 创建时间
+- field: closedBy
+  range: '[admin,user1,dev1,dev2]{1},^${30}'
+  note: 关闭人
+- field: closedDate
+  range: '[2024-01-01 00:00:00-2024-12-31 23:59:59]{50},^${30}'
+  note: 关闭时间

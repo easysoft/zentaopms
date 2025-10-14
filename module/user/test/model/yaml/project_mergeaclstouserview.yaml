@@ -1,0 +1,15 @@
+title: 项目数据配置
+
+fields:
+- field: id
+  range: 1-20
+- field: name
+  range: 项目1,项目2,项目3,迭代1,迭代2,迭代3
+- field: type
+  range: project{10},sprint{5},stage{3},kanban{2}
+- field: status
+  range: open{15},closed{3},suspended{2}
+- field: project
+  range: 1{5},2{3},3{2},0{10}
+- field: acl
+  range: open{10},private{5},custom{5}

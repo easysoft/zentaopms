@@ -1,0 +1,21 @@
+title: zt_build table for getReleaseRelated test
+author: Claude
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 11-20
+  - field: execution
+    range: 21-30
+  - field: name
+    range: Build{10}
+  - field: date
+    range: 2024-01-01{10}
+  - field: createdBy
+    range: admin{10}
+  - field: createdDate
+    range: 2024-01-01{10}
+  - field: deleted
+    range: 0{10}

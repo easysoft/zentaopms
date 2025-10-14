@@ -1,0 +1,83 @@
+title: table zt_relation for getRelationByObject test
+desc: "gitlab关联关系测试数据"
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    note: "关联ID"
+    range: 1-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1{15}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 1{15}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AType
+    note: "对象类型"
+    range: task{5},bug{5},story{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AID
+    note: "对象ID"
+    range: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AVersion
+    note: "对象版本"
+    range: 1{10},2{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: relation
+    note: "关联类型"
+    range: gitlab{15}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BType
+    note: "关联对象类型"
+    range: issue{15}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BID
+    note: "GitLab Issue ID"
+    range: 100-115
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BVersion
+    note: "GitLab Project ID"
+    range: 10{5},20{5},30{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: "GitLab服务器ID"
+    range: 1{10},2{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

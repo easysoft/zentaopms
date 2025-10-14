@@ -1,0 +1,54 @@
+---
+title: GitLab Issue to ZenTao Object Test Data
+desc: 测试issueToZentaoObject方法的测试数据配置
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: GitLab服务器ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: GitLab服务器名称
+  range: 'GitLab Server {1-3}'
+  prefix: ""
+  postfix: ""
+- field: url
+  note: GitLab服务器地址
+  range: 'https://gitlab{1-3}.example.com'
+  prefix: ""
+  postfix: ""
+- field: token
+  note: GitLab访问令牌
+  range: 'token{1-3}'
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 10:00:00'
+  prefix: ""
+  postfix: ""
+- field: editedBy
+  note: 编辑者
+  range: 'admin'
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-01 10:00:00'
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除状态
+  range: '0'
+  prefix: ""
+  postfix: ""

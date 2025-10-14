@@ -10,7 +10,7 @@ timeout=0
  - 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
-include '../lib/projectview.ui.class.php';
+include '../lib/ui/projectview.ui.class.php';
 
 zendata('project')->loadYaml('program', false, 2)->gen(10);
 $tester = new createProgramTester();

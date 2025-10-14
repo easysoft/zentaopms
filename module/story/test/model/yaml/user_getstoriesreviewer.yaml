@@ -1,0 +1,19 @@
+---
+title: 用户审核人员测试数据
+desc: 用于测试getStoriesReviewer方法的用户数据
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+- field: realname
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9
+- field: password
+  range: 123456{10}
+- field: role
+  range: admin,dev,qa,pm,td,dev,qa,dev,qa,dev
+- field: deleted
+  range: 0{10}
+- field: locked
+  range: '0000-00-00 00:00:00'{10}

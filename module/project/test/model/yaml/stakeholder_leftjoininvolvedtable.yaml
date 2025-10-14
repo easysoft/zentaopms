@@ -1,0 +1,20 @@
+---
+title: stakeholder表测试数据
+desc: 用于测试leftJoinInvolvedTable方法中stakeholder表关联的数据
+
+fields:
+- field: id
+  note: 干系人ID
+  range: 1-15
+- field: objectID
+  note: 关联对象ID
+  range: 1-10:1.5
+- field: objectType
+  note: 对象类型
+  range: project{15}
+- field: user
+  note: 用户账号
+  range: admin,user1,user2{13}
+- field: deleted
+  note: 删除状态
+  range: 0{12},1{3}

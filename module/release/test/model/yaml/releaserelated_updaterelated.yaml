@@ -1,0 +1,23 @@
+---
+title: 发布关联数据测试
+desc: 用于updateRelated方法的测试数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关联记录ID
+  range: 1-100
+  format: ""
+
+- field: release
+  note: 发布ID
+  range: 1-10
+
+- field: objectID
+  note: 关联对象ID
+  range: 1-1000
+
+- field: objectType
+  note: 关联对象类型
+  range: story{5}, bug{5}, project{3}, build{3}, branch{2}, release{1}, leftBug{1}

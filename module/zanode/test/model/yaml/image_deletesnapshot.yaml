@@ -1,0 +1,46 @@
+---
+title: 快照删除测试数据
+desc: 用于测试deleteSnapshot方法的快照数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 快照ID
+  range: 1-6
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: host
+  note: 关联的节点ID
+  range: 1,2,3,1,2,3
+  format: ""
+- field: name
+  note: 快照名称
+  range: test-snapshot1,test-snapshot2,test-snapshot3,test-snapshot4,test-snapshot5,test-snapshot6
+  format: ""
+- field: localName
+  note: 本地名称
+  range: test-snapshot1,test-snapshot2,test-snapshot3,test-snapshot4,test-snapshot5,test-snapshot6
+  format: ""
+- field: status
+  note: 快照状态
+  range: completed{6}
+  format: ""
+- field: from
+  note: 来源类型
+  range: snapshot{6}
+  format: ""
+- field: memory
+  note: 内存大小
+  range: 0{6}
+  format: ""
+- field: disk
+  note: 磁盘大小
+  range: 0{6}
+  format: ""
+- field: fileSize
+  note: 文件大小
+  range: 0{6}
+  format: ""

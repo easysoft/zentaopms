@@ -1,0 +1,34 @@
+---
+title: ai_message表saveMiniProgramMessage方法测试数据
+desc: 为saveMiniProgramMessage方法测试生成ai_message表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: appID
+  note: 应用ID
+  range: 1-10
+  format: ""
+- field: user
+  note: 用户ID
+  range: 1-5
+  format: ""
+- field: type
+  note: 消息类型
+  range: req{3},res{3},ntf{3}
+  format: ""
+- field: content
+  note: 消息内容
+  range: "测试消息内容{3},这是一个长文本消息内容用于测试边界情况这是一个长文本消息内容用于测试边界情况这是一个长文本消息内容用于测试边界情况{2},[]{1},正常请求消息{2},正常响应消息{2}"
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (M)-(w)
+  format: YYYY-MM-DD hh:mm:ss

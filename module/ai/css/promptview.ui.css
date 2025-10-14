@@ -1,0 +1,2 @@
+#mainContent .detail-body {height: unset; min-height: calc(100vh - 108px);}
+.float-toolbar {height: 44px;}
