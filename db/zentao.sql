@@ -623,6 +623,7 @@ CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
 
+-- DROP TABLE IF EXISTS `zt_decision`;
 CREATE TABLE IF NOT EXISTS `zt_decision` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
