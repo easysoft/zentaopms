@@ -901,10 +901,23 @@ class storyZenTest
      */
     public function buildStoryForEditTest(int $storyID): object|bool
     {
-        $method = $this->storyZenTest->getMethod('buildStoryForEdit');
-        $method->setAccessible(true);
+        $result = callZenMethod('story', 'buildStoryForEdit', [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 
-        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyID]);
+    /**
+     * 构建编辑需求数据。
+     * Build story for edit.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function buildStoriesForBatchCreateTest(int $productID, string $storyType): array
+    {
+        $result = callZenMethod('story', 'buildStoriesForBatchCreate', [$productID, $storyType]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
