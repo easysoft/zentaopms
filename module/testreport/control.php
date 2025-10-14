@@ -104,11 +104,10 @@ class testreport extends control
         {
             $param = '';
             if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
-            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$extra}";
+            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra=" . implode(',', $_POST['taskIdList']);
             if($param)
             {
                 $url = $this->createLink('testreport', 'create', $param);
-                if(!empty($_POST['taskIdList'])) $url .= (strpos($url, '?') !== false ? '&' : '?') . 'taskIdList=' . implode(',', $_POST['taskIdList']);
                 $this->locate($url);
             }
         }
@@ -163,7 +162,6 @@ class testreport extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID={$reportID}"), 'id' => $reportID));
         }
 
-        if($this->get->taskIdList) $extra = $this->get->taskIdList;
         if($objectType == 'testtask') list($objectID, $task, $productID) = $this->testreportZen->assignTaskParisForCreate($objectID, $extra);
 
         if(!$objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noObjectID, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
