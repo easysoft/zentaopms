@@ -396,6 +396,7 @@ $lang->story->batchGradeSameRoot     = 'The requirements %s has a parent-child r
 $lang->story->batchGradeGtParent     = 'The grade of %s requirements cannot be higher than its parent requirement, and it has been ignored in this modification.';
 $lang->story->batchParentError       = "The parent requirement of %s requirement cannot be itself or its child requirement, which has been ignored in this modification.";
 $lang->story->errorNoGradeSplit      = "There has no grade to split.";
+$lang->story->errorRecordMinus       = '『%s』should not be negative number.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
