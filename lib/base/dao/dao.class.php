@@ -2825,6 +2825,8 @@ class baseSQL
      */
     public function notin($ids)
     {
+        if(is_string($ids) && $ids === '') return $this;
+        if(is_array($ids)  && empty($ids)) return $this;
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         $dbIN = helper::dbIN($ids);
