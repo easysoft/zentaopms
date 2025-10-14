@@ -12542,14 +12542,26 @@ class upgradeModel extends model
                         $decision->builtin     = '1';
                         $decision->createdBy   = 'system';
                         $decision->createdDate = helper::now();
-                        foreach($this->config->review->ipdReviewPoint->{$stage->type} as $point)
+
+                        $decisionFlow = new stdClass();
+                        $decisionFlow->flow        = 1;
+                        $decisionFlow->objectType  = 'point';
+                        $decisionFlow->relatedBy   = 'system';
+                        $decisionFlow->relatedDate = helper::now();
+                        foreach($this->config->review->ipdReviewPoint->{$stage->type} as $index => $point)
                         {
                             $decision->workflowGroup = $stage->workflowGroup;
                             $decision->stage         = $stageID;
+                            $decision->order         = $index + 1;
                             $decision->title         = $point;
                             $decision->type          = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
                             $decision->category      = $point;
                             $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+                            $decisionID = $this->dao->lastInsertID();
+
+                            $decisionFlow->root     = $stage->workflowGroup;
+                            $decisionFlow->objectID = $decisionID;
+                            $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
                         }
                     }
                 }

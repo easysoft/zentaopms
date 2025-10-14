@@ -268,9 +268,10 @@ class stageModel extends model
         $decisionFlow->relatedDate = helper::now();
         foreach($stageList as $id => $stage)
         {
-            foreach($this->config->review->ipdReviewPoint->{$stage->type} as $point)
+            foreach($this->config->review->ipdReviewPoint->{$stage->type} as $index => $point)
             {
                 $decision->stage    = $id;
+                $decision->order    = $index + 1;
                 $decision->title    = $point;
                 $decision->type     = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
                 $decision->category = $point;
