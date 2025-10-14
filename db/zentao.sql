@@ -16382,7 +16382,7 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
 
--- DROP TABLE IF EXISTS `zt_mark`;yy
+-- DROP TABLE IF EXISTS `zt_mark`;
 CREATE TABLE IF NOT EXISTS `zt_mark` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(50) NOT NULL DEFAULT '',
@@ -16401,9 +16401,9 @@ CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 CREATE TABLE IF NOT EXISTS `zt_ops_space` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `updatedBy` char(30) NOT NULL DEFAULT '',
+  `updatedBy` varchar(30) NOT NULL DEFAULT '',
   `updatedDate`datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
@@ -16414,7 +16414,7 @@ CREATE TABLE IF NOT EXISTS `zt_ops_space` (
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `space` mediumint(8) unsigned NOT NULL default '0',
-  `account` char(30) NOT NULL DEFAULT '',
+  `account` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

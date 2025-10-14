@@ -24,9 +24,9 @@ UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
 CREATE TABLE IF NOT EXISTS `zt_ops_space` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `updatedBy` char(30) NOT NULL DEFAULT '',
+  `updatedBy` varchar(30) NOT NULL DEFAULT '',
   `updatedDate`datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
@@ -38,7 +38,7 @@ ALTER TABLE `zt_repo` ADD `space` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `space` mediumint(8) unsigned NOT NULL default '0',
-  `account` char(30) NOT NULL DEFAULT '',
+  `account` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

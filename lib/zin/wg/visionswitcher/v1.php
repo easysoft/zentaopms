@@ -120,11 +120,11 @@ class visionSwitcher extends wg
             {
                 $devopsItems[] = array
                 (
-                    'selected'  => $currentSpace == $space->id,
-                    'trailingIcon'  => $currentSpace == $space->id ? 'check' : '',
-                    'url'       => "javascript:selectVision('devops', '$space->id')",
-                    'data-type' => 'ajax',
-                    'text'      => $space->name,
+                    'selected'     => $currentSpace == $space->id,
+                    'trailingIcon' => $currentSpace == $space->id ? 'check' : '',
+                    'url'          => "javascript:selectVision('devops', '$space->id')",
+                    'data-type'    => 'ajax',
+                    'text'         => $space->name,
                 );
             }
         }
@@ -132,13 +132,13 @@ class visionSwitcher extends wg
         {
             $items[] = array
             (
-                'selected'  => $currentVision == $vision,
-                'trailingIcon'  => $currentVision == $vision && $vision != 'devops' ? 'check' : '',
-                'url' => $vision == 'devops' ? null : "javascript:selectVision('$vision')",
-                'icon'      => $this->getVisionIcon($vision),
-                'data-type' => 'ajax',
-                'text'      => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
-                'items' => $vision == 'devops' && !empty($devopsItems) ? $devopsItems : null,
+                'selected'     => $currentVision == $vision,
+                'trailingIcon' => $currentVision == $vision && $vision != 'devops' ? 'check' : '',
+                'url'          => $vision == 'devops' ? null : "javascript:selectVision('$vision')",
+                'icon'         => $this->getVisionIcon($vision),
+                'data-type'    => 'ajax',
+                'text'         => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
+                'items'        => $vision == 'devops' && !empty($devopsItems) ? $devopsItems : null,
             );
         }
 
