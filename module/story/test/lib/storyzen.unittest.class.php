@@ -907,8 +907,8 @@ class storyZenTest
     }
 
     /**
-     * 构建编辑需求数据。
-     * Build story for edit.
+     * 构建批量创建需求数据。
+     * Build stories for batch create.
      *
      * @param  int    $productID
      * @param  string $storyType
@@ -918,6 +918,22 @@ class storyZenTest
     public function buildStoriesForBatchCreateTest(int $productID, string $storyType): array
     {
         $result = callZenMethod('story', 'buildStoriesForBatchCreate', [$productID, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 构建批量编辑需求数据。
+     * Build stories for batch edit page.
+     *
+     * @param  array  $data
+     * @access public
+     * @return array
+     */
+    public function buildStoriesForBatchEditTest(array $data): array
+    {
+        $_POST = $data;
+        $result = callZenMethod('story', 'buildStoriesForBatchEdit', []);
         if(dao::isError()) return dao::getError();
         return $result;
     }
