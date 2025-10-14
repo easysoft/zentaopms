@@ -1790,6 +1790,7 @@ CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `obj
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `space` varchar(255) NOT NULL DEFAULT '',
   `product` varchar(255) NOT NULL DEFAULT '',
   `projects` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -16395,3 +16396,25 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
+
+-- DROP TABLE IF EXISTS `zt_ops_space`;
+CREATE TABLE IF NOT EXISTS `zt_ops_space` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `updatedBy` varchar(30) NOT NULL DEFAULT '',
+  `updatedDate`datetime NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DROP TABLE IF EXISTS `zt_ops_spaceuser`;
+CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `space` mediumint(8) unsigned NOT NULL default '0',
+  `account` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `account` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
