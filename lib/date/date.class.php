@@ -126,6 +126,24 @@ class date
     }
 
     /**
+     * Get the begin and end date of next week.
+     *
+     * @access public
+     * @return array
+     */
+    public static function getNextWeek()
+    {
+        $weekDay  = date('N');
+        $baseTime = time() + 86400 * 7;
+        if($weekDay == 1) $baseTime = time() + 86400;
+        if($weekDay == 7) $baseTime = time() - 86400;
+
+        $begin = date(DT_DATE1, strtotime('last monday', $baseTime)) . ' 00:00:00';
+        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime)) . ' 23:59:59';
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    /**
      * Get the begin and end date of this week.
      *
      * @access public
@@ -184,6 +202,23 @@ class date
         if($weekDay == 1) $baseTime = time() - 86400 * 4;  // Make sure is last thursday.
         if($weekDay == 7) $baseTime = time() - 86400 * 10; // Make sure is last thursday.
         return $baseTime;
+    }
+
+    /**
+     * Get begin and end time of next month.
+     *
+     * @access public
+     * @return array
+     */
+    public static function getNextMonth()
+    {
+        $thisYear  = date('Y');
+        $thisMonth = date('m');
+        $year      = $thisMonth == 12 ? $thisYear + 1 : $thisYear;
+        $month     = $thisMonth == 12 ? 1 : $thisMonth + 1;
+        $begin     = "{$year}-{$month}-01 00:00:00";
+        $end       = date("{$year}-{$month}-t 23:59:59", strtotime($begin));
+        return array('begin' => $begin, 'end' => $end);
     }
 
     /**

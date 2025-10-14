@@ -1,0 +1,19 @@
+---
+title: checkLinkPlan方法测试数据
+desc: 用于测试execution的checkLinkPlan方法
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1,2,3,1,2,3,1,2,3,1
+- field: title
+  range: 测试计划1,测试计划2,测试计划3,测试计划4,测试计划5,测试计划6,测试计划7,测试计划8,测试计划9,测试计划10
+- field: status
+  range: wait{3},doing{4},done{3}
+- field: begin
+  range: 2025-01-01
+- field: end
+  range: 2025-12-31
+- field: deleted
+  range: "0"

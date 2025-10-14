@@ -115,6 +115,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.7.6']      = '2025-09-29';
 $lang->misc->releaseDate['21.7.5']      = '2025-09-11';
 $lang->misc->releaseDate['21.7.4']      = '2025-07-29';
 $lang->misc->releaseDate['21.7.3']      = '2025-07-03';
@@ -254,6 +255,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.7.6'][]        = array('title' => '..报告模板和项目报告功能。.兼容旗舰版。', 'desc' => '');
 $lang->misc->feature->all['21.7.5'][]        = array('title' => '....', 'desc' => '');
 $lang->misc->feature->all['21.7.5'][]        = array('title' => '....', 'desc' => '');
 $lang->misc->feature->all['21.7.4'][]        = array('title' => '', 'desc' => '');

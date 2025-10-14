@@ -17,7 +17,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/assign.ui.class.php';
+include '../lib/ui/assign.ui.class.php';
 global $config;
 
 $product = zenData('product');

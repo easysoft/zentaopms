@@ -1,0 +1,50 @@
+---
+title: 分支数据定义
+desc: 为assignBranchForEdit方法提供分支测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 0,1,2,3,4,5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{2},2{4}
+  format: ""
+- field: name
+  note: 分支名称
+  range: trunk,branch1,branch2,closed_branch,missing_branch,main_branch
+  format: ""
+- field: default
+  note: 是否默认分支
+  range: 1,0{5}
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{4},closed{2}
+  format: ""
+- field: desc
+  note: 分支描述
+  range: 主干分支,功能分支1,功能分支2,已关闭分支,缺失分支,主分支
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: (d)-30d,(d)-20d,(d)-10d,(d)-5d,(d)-2d,(d)
+  format: YYYY-MM-DD
+- field: closedDate
+  note: 关闭日期
+  range: ""{4},(d)-1d,(d)
+  format: YYYY-MM-DD
+- field: order
+  note: 排序
+  range: 0,1,2,3,4,5
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  format: ""

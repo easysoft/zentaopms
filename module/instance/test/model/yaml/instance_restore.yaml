@@ -1,0 +1,64 @@
+---
+title: instance restore test data
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: '1-5'
+  - field: space
+    range: '`1`'
+  - field: solution
+    range: '`1`,0'
+  - field: name
+    range: '`Test-GitLab`,`Test-Subversion`,`Test-Jenkins`,`Test-Nexus`,`Test-SonarQube`'
+  - field: appID
+    range: '`42`,`156`,`78`,`89`,`96`'
+  - field: appName
+    range: '`GitLab`,`Subversion`,`Jenkins`,`Nexus`,`SonarQube`'
+  - field: appVersion
+    range: '`15.3.4`,`1.14.2`,`2.414.3`,`3.41.1`,`9.9.0`'
+  - field: chart
+    range: '`gitlab`,`subversion`,`jenkins`,`nexus`,`sonarqube`'
+  - field: logo
+    range: '`//img.qucheng.com/app/g/gitlab-icon.svg`,`//img.qucheng.com/app/s/svn-icon.png`,`//img.qucheng.com/app/j/jenkins-icon.svg`,`//img.qucheng.com/app/n/nexus-icon.png`,`//img.qucheng.com/app/s/sonarqube-icon.svg`'
+  - field: version
+    range: '`2023.10.901`,`2023.12.1201`,`2023.11.1105`,`2023.09.802`,`2024.01.1501`'
+  - field: desc
+    range: '`GitLab备份还原测试实例`,`Subversion备份还原测试实例`,`Jenkins备份还原测试实例`,`Nexus备份还原测试实例`,`SonarQube备份还原测试实例`'
+  - field: introduction
+    range: '`GitLab 备份还原测试`,`Subversion 备份还原测试`,`Jenkins 备份还原测试`,`Nexus 备份还原测试`,`SonarQube 备份还原测试`'
+  - field: source
+    range: '`cloud`'
+  - field: channel
+    range: '`stable`'
+  - field: k8name
+    range: '`test-gitlab-restore`,`test-subversion-restore`,`test-jenkins-restore`,`test-nexus-restore`,`test-sonarqube-restore`'
+  - field: status
+    range: '`running`,`stopped`,`abnormal`'
+  - field: pinned
+    range: "0"
+  - field: domain
+    range: '`test-gitlab.dops.corp.cc`,`test-svn.dops.corp.cc`,`test-jenkins.dops.corp.cc`,`test-nexus.dops.corp.cc`,`test-sonar.dops.corp.cc`'
+  - field: smtpSnippetName
+    range: ""
+  - field: ldapSnippetName
+    range: ""
+  - field: ldapSettings
+    range: ""
+  - field: dbSettings
+    range: '`{"mysql":{"enabled":true,"auth":{"user":"test_user","password":"test_pass","host":"mysql.test.svc","port":3306,"database":"test_db"}}}`,`{}`'
+  - field: autoBackup
+    range: "0,1"
+  - field: backupKeepDays
+    range: '`1`,`7`,`30`'
+  - field: autoRestore
+    range: "0"
+  - field: env
+    range: ""
+  - field: createdBy
+    range: '`admin`,`test_user`,`backup_user`'
+  - field: createdAt
+    range: '`2024-01-01 10:00:00`,`2024-01-15 14:30:00`,`2024-02-01 09:15:00`'
+  - field: deleted
+    range: "0"
+...

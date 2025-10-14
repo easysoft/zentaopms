@@ -1,0 +1,91 @@
+---
+title: 项目集测试数据用于removeSubjectToCurrent方法
+desc: 用于测试removeSubjectToCurrent方法的项目集层级数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目集名称
+  range: 顶级项目集1{1},子项目集A{1},子项目集B{1},子子项目集A1{1},子子项目集A2{1},子子项目集B1{1},独立项目集1{1},独立项目集2{1},独立项目集3{1},其他项目集{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: program{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: wait{3},doing{8},closed{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父级项目集ID
+  range: 0{1},1{2},2{2},0{3},3{1},0{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 项目集路径
+  range: ',1,'{1},',1,2,'{1},',1,3,'{1},',1,2,4,'{1},',1,2,5,'{1},',1,3,6,'{1},',7,'{1},',8,'{1},',9,'{1},',10,'{1},',11,'{1},',12,'{1},',13,'{1},',14,'{1},',15,'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 项目集层级
+  range: 1{1},2{2},3{3},1{9}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: begin
+  note: 开始日期
+  range: 2024-01-01{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: end
+  note: 结束日期
+  range: 2024-12-31{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建人
+  range: admin{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,30 @@
+---
+title: assignBatchCreateVars测试的项目数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的项目相关数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-20
+- field: name
+  note: 项目名称
+  range: '项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10'
+  loop: 2
+- field: type
+  note: 项目类型
+  range: 'project{5},sprint{10},stage{3},kanban{2}'
+- field: model
+  note: 项目模式
+  range: 'scrum{8},waterfall{7},kanban{5}'
+- field: status
+  note: 项目状态
+  range: 'wait{8},doing{7},suspended{3},closed{2}'
+- field: project
+  note: 父项目ID
+  range: 0-5
+- field: begin
+  note: 开始日期
+  range: '2023-01-01,2023-02-01,2023-03-01,2023-04-01,2023-05-01'
+- field: end
+  note: 结束日期
+  range: '2023-12-31,2024-01-31,2024-02-29,2024-03-31,2024-04-30'

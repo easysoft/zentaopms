@@ -77,6 +77,7 @@ class executionModel extends model
                 if(in_array($execution->attribute, array('request', 'review'))) $features['plan'] = false;
                 if($execution->attribute == 'review') $features['story'] = false;
             }
+            if(empty($execution->hasProduct) && in_array($execution->attribute, array('plan', 'develop', 'qualify', 'launch'))) $features['plan'] = false;
         }
 
         /* The plan function is disabled for no-product project. */
@@ -229,6 +230,11 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
+        if($this->config->inCompose)
+        {
+            $repoServers = $this->loadModel('pipeline')->getPairs($this->config->pipeline->checkRepoServers);
+            if(empty($repoServers)) unset($this->lang->execution->menu->devops);
+        }
 
         return true;
     }
@@ -799,7 +805,7 @@ class executionModel extends model
         if(!empty($postData->comment) || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Started', isset($postData->comment) ? $postData->comment : '');
+            $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -836,7 +842,7 @@ class executionModel extends model
         if($postData->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Delayed', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -867,7 +873,7 @@ class executionModel extends model
         $changes = common::createChanges($oldExecution, $execution);
         if(!empty($changes) || $this->post->comment != '')
         {
-            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', isset($postData->comment) ? $postData->comment : '');
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -965,10 +971,10 @@ class executionModel extends model
         }
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($postData->comment != '' or !empty($changes))
+        if($this->post->comment != '' or !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Activated', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -1370,7 +1376,7 @@ class executionModel extends model
      */
     public function getExecutionCounts(int $projectID = 0, string $browseType = 'all'): int
     {
-        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1511,7 +1517,7 @@ class executionModel extends model
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
-        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -4173,6 +4179,7 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
@@ -5019,7 +5026,7 @@ class executionModel extends model
                 }
             }
 
-            $prefixLabel = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> ";
+            $prefixLabel = "<span class='pri-{$task->pri} mr-1'>" . zget($this->lang->task->priList, $task->pri) . '</span> ';
             if($task->isParent > 0)
             {
                 $prefixLabel .= "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->parentAB}</span>";
@@ -5285,6 +5292,8 @@ class executionModel extends model
                 if($execution->grade > 1 && $execution->parent) $childExecutions[$execution->parent][$execution->id] = $execution;
             }
         }
+
+        if(empty($parentExecutions)) return $executions;
 
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)

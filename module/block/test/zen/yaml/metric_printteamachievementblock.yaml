@@ -1,0 +1,53 @@
+---
+title: 团队成就区块测试数据
+desc: printTeamAchievementBlock方法的测试数据，包含各种度量指标
+
+fields:
+- field: id
+  note: 度量数据ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 度量指标代码
+  range: count_of_daily_finished_task{10},count_of_daily_created_story{10},count_of_daily_closed_bug{10},count_of_daily_run_case{10},hour_of_daily_effort{10}
+  prefix: ""
+  postfix: ""
+
+- field: year
+  note: 年份
+  range: 2024{25},2023{25}
+  format: ""
+
+- field: month
+  note: 月份
+  range: 01-12
+  format: "%02d"
+
+- field: day
+  note: 日期
+  range: 01-31
+  format: "%02d"
+
+- field: value
+  note: 度量值
+  range: 0-50:2
+  format: ""
+
+- field: scope
+  note: 度量范围
+  range: system{50}
+  prefix: ""
+  postfix: ""
+
+- field: object
+  note: 对象ID
+  range: 0{50}
+  format: ""
+
+- field: purpose
+  note: 用途
+  range: cron{50}
+  prefix: ""
+  postfix: ""

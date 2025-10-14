@@ -1,0 +1,56 @@
+---
+title: pivot表数据 for getMaxVersionByIDList测试
+desc: 用于测试getMaxVersionByIDList方法的透视表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 透视表ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 透视表名称
+  range: 透视表1,透视表2,透视表3,透视表4,透视表5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: published{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL语句
+  range: SELECT * FROM test{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

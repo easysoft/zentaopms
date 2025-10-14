@@ -1,0 +1,66 @@
+---
+title: System数据定义 - setSystemRelease方法测试
+desc: 用于测试setSystemRelease方法的system表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 系统ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 系统名称
+  range: 'system1,system2,system3,system4,system5'
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: integrated
+  note: 是否集成
+  range: '0'
+  format: ""
+- field: latestRelease
+  note: 最新发布ID
+  range: 1,1,2,3,4
+  format: ""
+- field: latestDate
+  note: 最新发布日期
+  range: '2024-01-10 09:00:00,2024-01-10 09:00:00,2024-01-12 10:00:00,2024-01-13 11:00:00,2024-01-14 12:00:00'
+  format: ""
+- field: children
+  note: 子系统
+  range: ''
+  format: ""
+- field: status
+  note: 状态
+  range: 'active'
+  format: ""
+- field: desc
+  note: 描述
+  range: 'Test system for setSystemRelease'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: '2024-01-01 00:00:00'
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: ''
+  format: ""
+- field: editedDate
+  note: 编辑日期
+  range: '0000-00-00 00:00:00'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  format: ""

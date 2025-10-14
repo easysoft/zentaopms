@@ -1,0 +1,38 @@
+---
+title: workflowrule表测试数据
+desc: 用于formConfig方法单元测试的工作流规则数据
+author: claude
+version: 1
+
+fields:
+- field: id
+  range: 1-10
+  note: 规则ID
+
+- field: type
+  range: system{5},regex{3},func{2}
+  note: 规则类型
+
+- field: name
+  range: 必填{2},唯一{1},日期{1},email{1},数字{1},电话{1},IP{1},自定义规则{2}
+  note: 规则名称
+
+- field: rule
+  range: notempty{2},unique{1},date{1},email{1},float{1},phone{1},ip{1},custom{2}
+  note: 规则内容
+
+- field: createdBy
+  range: admin{8},user1{1},user2{1}
+  note: 创建人
+
+- field: createdDate
+  range: 2023-01-01 10:00:00-2023-12-31 23:59:59
+  note: 创建时间
+
+- field: editedBy
+  range: admin{6},[]{4}
+  note: 编辑人
+
+- field: editedDate
+  range: 2023-06-01 10:00:00-2023-12-31 23:59:59,[null]{4}
+  note: 编辑时间

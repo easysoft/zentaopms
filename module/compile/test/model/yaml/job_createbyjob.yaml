@@ -1,0 +1,59 @@
+title: table zt_job for createByJob test
+desc: "构建任务测试数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "任务ID"
+    range: 1-5
+  - field: name
+    note: "任务名称"
+    range: 'Job1,Job2,Job3,Job4,Job5'
+  - field: repo
+    note: "代码库ID"
+    range: 1-3
+  - field: product
+    note: "产品ID"
+    range: 1-2
+  - field: frame
+    note: "框架"
+    range: 'phpunit,cypress,selenium'
+  - field: engine
+    note: "引擎"
+    range: 'jenkins,gitlab'
+  - field: autoRun
+    note: "自动运行"
+    range: '0,1'
+  - field: server
+    note: "服务器ID"
+    range: 1-3
+  - field: pipeline
+    note: "流水线配置"
+    range: 'simple-job,`{"project":"2","reference":"master"}`,`{"project":"3","reference":"develop"}`'
+  - field: triggerType
+    note: "触发类型"
+    range: 'tag,commit,schedule'
+  - field: svnDir
+    note: "SVN目录"
+    range: 'trunk,branches/dev,tags/v1.0'
+  - field: comment
+    note: "注释"
+    range: 'Test comment,Build comment,Deploy comment'
+  - field: atDay
+    note: "执行日期"
+    range: '1-7'
+  - field: atTime
+    note: "执行时间"
+    range: '09:00,12:00,15:00,18:00'
+  - field: customParam
+    note: "自定义参数"
+    range: '`{"param1":"value1"}`,`{"param2":"value2"}`,{}'
+  - field: deleted
+    note: "删除标记"
+    range: '0'
+  - field: createdBy
+    note: "创建者"
+    range: 'admin,user1,user2'
+  - field: createdDate
+    note: "创建时间"
+    range: '2024-01-01 00:00:00-2024-12-31 23:59:59'

@@ -1,0 +1,14 @@
+title: table zt_projectproduct
+author: Claude
+version: "1.0"
+fields:
+  - field: project
+    range: 1-5
+  - field: product
+    range: 101-105
+  - field: branch
+    range: 0
+  - field: plan
+    range: ""
+  - field: roadmap
+    range: ""

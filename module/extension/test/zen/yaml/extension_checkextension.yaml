@@ -1,0 +1,34 @@
+title: extension表测试数据
+desc: 插件表测试数据，用于checkExtension方法测试
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 测试插件1,测试插件2,测试插件3,测试插件4,测试插件5
+- field: code
+  range: testplugin1,testplugin2,testplugin3,testplugin4,testplugin5
+- field: version
+  range: 1.0.0,1.1.0,1.2.0,2.0.0,2.1.0
+- field: author
+  range: 作者1,作者2,作者3,作者4,作者5
+- field: desc
+  range: 这是测试插件1,这是测试插件2,这是测试插件3,这是测试插件4,这是测试插件5
+- field: license
+  range: MIT,GPL,BSD,Apache,Custom
+- field: type
+  range: extension{5}
+- field: site
+  range: http://test1.com,http://test2.com,http://test3.com,http://test4.com,http://test5.com
+- field: zentaoCompatible
+  range: '18.0-20.0',18.5-19.5,19.0-21.0,20.0-22.0,21.0-23.0
+- field: installedTime
+  range: '2023-01-01 10:00:00','2023-02-01 10:00:00','2023-03-01 10:00:00','2023-04-01 10:00:00','2023-05-01 10:00:00'
+- field: depends
+  range: '{}','{plugin1}','{plugin2,plugin3}','{}','{plugin4}'
+- field: dirs
+  range: '{}','{"dir1","dir2"}','{"dir3","dir4","dir5"}','{}','{"dir6"}'
+- field: files
+  range: '{}','{"file1.php":"hash1"}','{"file2.php":"hash2","file3.php":"hash3"}','{}','{"file4.php":"hash4"}'
+- field: status
+  range: installed{3},available{1},disabled{1}

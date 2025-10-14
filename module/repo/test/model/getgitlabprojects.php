@@ -1,35 +1,33 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
-title=测试 gitlabModel::getGitlabProjects();
+title=测试 repoModel::getGitlabProjects();
 timeout=0
-cid=1
+cid=0
 
-- 使用正确的gitlabID,空的filter查询群组属性name @unittest1
-- 普通用户使用正确的gitlabID,IS_DEVELOPER filter查询群组属性name @privateProject
-- 普通用户使用正确的gitlabID,filter查询群组属性name @unittest1
+- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, ''  @14
+- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, 'IS_DEVELOPER'  @14
+- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, 'ALL'  @14
+- 执行repoTest模块的getGitlabProjectsTest方法，参数是999, ''  @0
+- 执行repoTest模块的getGitlabProjectsTest方法，参数是0, ''  @0
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('user')->gen(10);
 zenData('repo')->loadYaml('repo')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
+
 su('admin');
-$repo = $tester->loadModel('repo');
+$repoTest = new repoTest();
 
-$gitlabID       = 1;
-$projectFilters = array('IS_DEVELOPER', 'ALL');
-
-$result = $repo->getGitlabProjects($gitlabID, '');
-r(end($result)) && p('name') && e('unittest1'); //使用正确的gitlabID,空的filter查询群组
-
-su('user6');
-$result = $repo->getGitlabProjects($gitlabID, $projectFilters[0]);
-r(end($result)) && p('name') && e('privateProject'); //普通用户使用正确的gitlabID,IS_DEVELOPER filter查询群组
-
-$result = $repo->getGitlabProjects($gitlabID, $projectFilters[1]);
-r(end($result)) && p('name') && e('unittest1'); //普通用户使用正确的gitlabID,filter查询群组
+r(count($repoTest->getGitlabProjectsTest(1, ''))) && p() && e('14');
+r(count($repoTest->getGitlabProjectsTest(1, 'IS_DEVELOPER'))) && p() && e('14');
+r(count($repoTest->getGitlabProjectsTest(1, 'ALL'))) && p() && e('14');
+r(count($repoTest->getGitlabProjectsTest(999, ''))) && p() && e('0');
+r(count($repoTest->getGitlabProjectsTest(0, ''))) && p() && e('0');

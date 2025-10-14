@@ -1,0 +1,134 @@
+---
+title: 我创建的文档测试数据
+desc: 用于printDocMyCreatedBlock方法测试的doc表数据
+
+fields:
+- field: id
+  range: 1-10
+  note: 文档ID
+
+- field: vision
+  range: 'rnd{10}'
+  note: 视图类型
+
+- field: project
+  range: '[0,1,2]{10}'
+  note: 项目ID
+
+- field: product
+  range: '[0,1,2]{10}'
+  note: 产品ID
+
+- field: execution
+  range: '0{10}'
+  note: 执行ID
+
+- field: lib
+  range: '1-5'
+  note: 文档库ID
+
+- field: template
+  range: ''
+  note: 模板
+
+- field: templateType
+  range: ''
+  note: 模板类型
+
+- field: chapterType
+  range: ''
+  note: 章节类型
+
+- field: module
+  range: '0{10}'
+  note: 模块ID
+
+- field: title
+  range: '我的测试文档{5},技术文档{3},产品需求{2}'
+  note: 文档标题
+
+- field: keywords
+  range: '测试,文档,需求'
+  note: 关键词
+
+- field: type
+  range: 'text{8},markdown{2}'
+  note: 文档类型
+
+- field: status
+  range: 'normal{10}'
+  note: 文档状态
+
+- field: parent
+  range: '0{10}'
+  note: 父文档ID
+
+- field: path
+  range: ',1,{5},2,{3},3,{2}'
+  note: 文档路径
+
+- field: grade
+  range: '1{10}'
+  note: 文档等级
+
+- field: order
+  range: '1-10'
+  note: 排序
+
+- field: views
+  range: '1-100:R'
+  note: 查看次数
+
+- field: assetLib
+  range: '0{10}'
+  note: 资产库ID
+
+- field: assetLibType
+  range: ''
+  note: 资产库类型
+
+- field: from
+  range: '0{10}'
+  note: 来源文档ID
+
+- field: fromVersion
+  range: '1{10}'
+  note: 来源版本
+
+- field: draft
+  range: '[]{10}'
+  note: 草稿内容
+
+- field: collects
+  range: '0-5:R'
+  note: 收藏数
+
+- field: addedBy
+  range: 'admin{10}'
+  note: 创建者
+
+- field: addedDate
+  range: '(-7d)-(-1d):1d'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  note: 创建时间
+
+- field: assignedTo
+  range: ''
+  note: 指派给
+
+- field: assignedDate
+  range: '[]{10}'
+  note: 指派时间
+
+- field: editedBy
+  range: 'admin{5},user1{3},user2{2}'
+  note: 编辑者
+
+- field: editedDate
+  range: '(-3d)-(now):1d'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  note: 编辑时间
+
+- field: deleted
+  range: '0{10}'
+  note: 是否删除

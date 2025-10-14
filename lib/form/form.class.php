@@ -129,6 +129,7 @@ class form extends fixer
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
         if($moduleName == 'projectbuild')   $moduleName = 'build';
+        if($moduleName == 'projectplan')    $moduleName = 'productplan';
 
         /* 项目复制用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm')  $methodName = 'create';

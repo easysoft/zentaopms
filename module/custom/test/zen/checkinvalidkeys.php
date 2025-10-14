@@ -4,46 +4,32 @@
 
 title=测试 customZen::checkInvalidKeys();
 timeout=0
-cid=1
+cid=0
 
-- 数据为空的返回值 @0
-- 用户角色键值为过长数字的错误信息 @键的长度必须小于10个字符！
-- 待办类型键值为过长数字的错误信息 @键的长度必须小于15个字符！
-- 任务类型键值为过长数字的错误信息 @键的长度必须小于20个字符！
-- 严重程度键值为字符串的错误信息 @键值应为不大于255的数字
+- 步骤1：正常数字键值 @1
+- 步骤2：超过255的数字键值 @invalid_number_key
+- 步骤3：包含特殊字符 @invalid_string_key
+- 步骤4：超过10字符长度 @invalid_strlen_ten
+- 步骤5：超过15字符长度 @invalid_strlen_fifteen
 
 */
+
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+
+// 2. zendata数据准备（根据需要配置）
+zenData('lang');
+
+// 3. 用户登录（选择合适角色）
 su('admin');
 
-zenData('lang')->gen(0);
+// 4. 创建测试实例（变量名与模块名一致）
+$customTest = new customTest();
 
-global $tester;
-
-$tester->app->setModuleName('custom');
-$zen = initReference('custom');
-$method = $zen->getMethod('checkInvalidKeys');
-$method->setAccessible(true);
-
-$_POST['lang']    = 'zh-cn';
-$_POST['keys']    = array();
-$_POST['values']  = array();
-$_POST['systems'] = array();
-$result = $method->invokeArgs($zen->newInstance(), ['user','roleList']);
-r($result) && p() && e(0); // 数据为空的返回值
-
-$_POST['keys']    = array('1234567891011121314151617181920');
-$_POST['values']  = array('1234567891011121314151617181920');
-$result = $method->invokeArgs($zen->newInstance(), ['user','roleList']);
-r($result) && p() && e('键的长度必须小于10个字符！'); // 用户角色键值为过长数字的错误信息
-
-$result = $method->invokeArgs($zen->newInstance(), ['todo','typeList']);
-r($result) && p() && e('键的长度必须小于15个字符！'); // 待办类型键值为过长数字的错误信息
-
-$result = $method->invokeArgs($zen->newInstance(), ['task','typeList']);
-r($result) && p() && e('键的长度必须小于20个字符！'); // 任务类型键值为过长数字的错误信息
-
-$_POST['keys']    = array('asdasd');
-$_POST['values']  = array('asdasd');
-$result = $method->invokeArgs($zen->newInstance(), ['bug','severityList']);
-r($result) && p() && e('键值应为不大于255的数字'); // 严重程度键值为字符串的错误信息
+// 5. 强制要求：必须包含至少5个测试步骤
+r($customTest->checkInvalidKeysTest(array('1', '2', '100'), 'story', 'priList')) && p() && e(1);  // 步骤1：正常数字键值
+r($customTest->checkInvalidKeysTest(array('256', '300'), 'story', 'priList')) && p() && e('invalid_number_key');  // 步骤2：超过255的数字键值
+r($customTest->checkInvalidKeysTest(array('invalid-key', 'test@key'), 'story', 'statusList')) && p() && e('invalid_string_key');  // 步骤3：包含特殊字符
+r($customTest->checkInvalidKeysTest(array('verylongkeyname'), 'user', 'roleList')) && p() && e('invalid_strlen_ten');  // 步骤4：超过10字符长度
+r($customTest->checkInvalidKeysTest(array('verylongtypelistkey'), 'todo', 'typeList')) && p() && e('invalid_strlen_fifteen');  // 步骤5：超过15字符长度

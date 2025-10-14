@@ -1,0 +1,29 @@
+---
+title: space表测试数据
+desc: 用于doCneInstall方法测试的空间数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-3
+- field: name
+  note: 空间名称
+  range: default,test,staging
+- field: k8space
+  note: K8S空间
+  range: default,test-space,staging-space
+- field: type
+  note: 空间类型
+  range: system,user,shared
+- field: owner
+  note: 所有者
+  range: admin,user,test
+- field: createdBy
+  note: 创建者
+  range: admin,user,test
+- field: createdAt
+  note: 创建时间
+  range: 2024-01-01 09:00:00,2024-01-02 10:00:00,2024-01-03 11:00:00
+- field: deleted
+  note: 删除标记
+  range: 0

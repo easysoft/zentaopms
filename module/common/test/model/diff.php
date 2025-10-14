@@ -12,7 +12,9 @@ timeout=0
 cid=1
 
 - 查看任务一和任务二的描述差异长度 @77
+- 查看返回的差异中001-序号的位置 @0
 - 查看返回的差异中<ins>标签的位置 @44
+- 查看返回的差异中001+序号的位置 @39
 - 查看返回的差异中<del>标签的位置 @5
 
 */
@@ -26,5 +28,7 @@ $task2 = $tester->task->fetchById(2);
 $changes = common::diff($task1->desc, $task2->desc);
 
 r(strlen($changes))          && p() && e('77'); // 查看任务一和任务二的描述差异长度
+r(strpos($changes, '001-'))  && p() && e('0');  // 查看返回的差异中001-序号的位置
 r(strpos($changes, '<ins>')) && p() && e('44'); // 查看返回的差异中<ins>标签的位置
+r(strpos($changes, '001+'))  && p() && e('39'); // 查看返回的差异中001+序号的位置
 r(strpos($changes, '<del>')) && p() && e('5');  // 查看返回的差异中<del>标签的位置

@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/buildlinkbug.ui.class.php';
+include '../lib/ui/buildlinkbug.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

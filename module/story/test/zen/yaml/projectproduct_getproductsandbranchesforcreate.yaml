@@ -1,0 +1,26 @@
+---
+title: projectproduct数据定义用于getProductsAndBranchesForCreate方法测试
+desc: 为测试getProductsAndBranchesForCreate方法准备的projectproduct测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{5},1-5
+  format: ""
+- field: plan
+  note: 计划
+  range: '',1,2,3,''
+  format: ""

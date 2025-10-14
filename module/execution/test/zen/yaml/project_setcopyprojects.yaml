@@ -1,0 +1,40 @@
+---
+title: project表setCopyProjects方法测试数据
+desc: 用于测试execution模块setCopyProjects方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目ID
+- field: name
+  range: '正常项目1,正常项目2,敏捷项目,瀑布项目,敏捷增强项目,瀑布增强项目,看板项目,关闭项目,测试项目1,测试项目2'
+  note: 项目名称
+- field: model
+  range: 'scrum{2},waterfall{2},agileplus{1},waterfallplus{1},kanban{2},[]{2}'
+  note: 项目模式
+- field: status
+  range: 'wait{3},doing{4},suspended{2},closed{1}'
+  note: 项目状态
+- field: type
+  range: 'project{8},execution{2}'
+  note: 项目类型
+- field: parent
+  range: '0{5},1{2},2{3}'
+  note: 父项目ID，0表示根项目
+- field: deleted
+  range: '0{9},1{1}'
+  note: 删除状态，0表示正常，1表示已删除
+- field: begin
+  range: '2024-01-01{3},2024-02-01{3},2024-03-01{4}'
+  note: 项目开始时间
+- field: end
+  range: '2024-12-31{3},2025-01-31{3},2025-02-28{4}'
+  note: 项目结束时间
+- field: hasProduct
+  range: '1{7},0{3}'
+  note: 是否关联产品
+- field: grade
+  range: '1{8},2{2}'
+  note: 项目级别

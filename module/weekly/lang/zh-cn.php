@@ -9,7 +9,7 @@
  * @version     $Id
  * @link        https://www.zentao.net
  */
-$lang->weekly->common   = $lang->projectCommon . '周报';
+$lang->weekly->common   = '报告';
 $lang->weekly->index    = '周报总览';
 $lang->weekly->progress = '完成百分比';
 $lang->weekly->workload = '工作量';
@@ -22,10 +22,11 @@ $lang->weekly->postponed      = '本周未完成工作';
 $lang->weekly->nextWeek       = '下周工作计划';
 $lang->weekly->workloadByType = '工作量统计';
 
-$lang->weekly->term    = '报告周期';
-$lang->weekly->project = $lang->projectCommon . '名称';
-$lang->weekly->master  = '项目经理 ';
-$lang->weekly->staff   = '本周投入人数';
+$lang->weekly->term            = '报告周期';
+$lang->weekly->project         = $lang->projectCommon . '名称';
+$lang->weekly->master          = '项目经理 ';
+$lang->weekly->staff           = '本周投入人数';
+$lang->weekly->projectTemplate = "{$lang->projectCommon}周报模板";
 
 $lang->weekly->weekDesc       = '第 %s 周( %s ~ %s)';
 $lang->weekly->progress       = $lang->projectCommon . '当前进展状况';
@@ -38,9 +39,19 @@ $lang->weekly->ac = '实际花费的成本(AC)';
 $lang->weekly->sv = '进度偏差率(SV%)';
 $lang->weekly->cv = '成本偏差率（CV%）';
 
-$lang->weekly->totalCount = '总计 : %u 个任务';
+$lang->weekly->totalCount  = '总计 : %u 个任务';
+$lang->weekly->builtinDesc = "系统内置的{$lang->projectCommon}周报模板，每周一在{$lang->projectCommon}下自动生成本周周报。";
 
 $lang->weekly->exportWeeklyReport = '导出周报';
+
+$lang->weekly->builtInScopes = array();
+$lang->weekly->builtInScopes['rnd']  = array();
+$lang->weekly->builtInScopes['rnd']['project'] = '项目';
+
+$lang->weekly->builtInCategoryList['month']     = '月报';
+$lang->weekly->builtInCategoryList['week']      = '周报';
+$lang->weekly->builtInCategoryList['day']       = '日报';
+$lang->weekly->builtInCategoryList['milestone'] = '里程碑报告';
 
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV 计划完成的工作</h2>
@@ -144,3 +155,5 @@ $lang->weekly->blockHelpNotice = <<<EOD
 <h2>CV(%) 成本偏差率</h2>
 计算方式：CV(%) = -1 * (1 - (EV / AC))%
 EOD;
+
+$lang->weekly->builtinRawContent = '{"type":"page","meta":{"id":"mKJhETwxpP","title":"项目周报模板","createDate":1758524215597,"tags":[]},"blocks":{"type":"block","id":"leP1pQM_0N","flavour":"affine:page","version":2,"props":{"title":{"$blocksuite:internal:text$":true,"delta":[{"insert":"项目周报模板"}]}},"children":[{"type":"block","id":"cDel0u6OKK","flavour":"affine:note","version":1,"props":{"xywh":"[0,0,498,92]","background":"--affine-note-background-white","index":"a0","lockedBySelf":false,"hidden":false,"displayMode":"both","edgeless":{"style":{"borderRadius":8,"borderSize":4,"borderStyle":"none","shadowType":"--affine-note-shadow-box"}}},"children":[{"type":"block","id":"57JpxtRtgl","flavour":"affine:paragraph","version":1,"props":{"align":"left","type":"text","text":{"$blocksuite:internal:text$":true,"delta":[{"insert":" ","attributes":{"holder":{"id":"-bGoKXonda","name":"weekly_term","text":"报告周期","hint":"筛选条件：“日期范围”介于本周","data":{"type":"weekly_term","blockID":1538,"hint":"筛选条件：“日期范围”介于本周","text":"报告周期"}}}},{"insert":"周报："},{"insert":" ","attributes":{"holder":{"id":"ZZ2iJ1NbSm","name":"property_name","text":"项目名称","hint":"项目名称"}}},{"insert":"项目由项目经理"},{"insert":" ","attributes":{"holder":{"id":"No8p_noVvo","name":"property_PM","text":"负责人","hint":"负责人"}}},{"insert":"负责，投入人数为"},{"insert":" ","attributes":{"holder":{"id":"yMx6IXU_PN","name":"weekly_staff","text":"投入人数","hint":"筛选条件：“日期范围”介于本周","data":{"type":"weekly_staff","blockID":1539,"hint":"筛选条件：“日期范围”介于本周","text":"投入人数"}}}}]},"collapsed":false},"children":[]},{"type":"block","id":"u_7TkQplvX","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{project_progress_summary}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=project_progress_summary&blockID=__TML_ZENTAOCHART__{project_progress_summary}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"项目进展状况"}},"children":[]},{"type":"block","id":"JF8LjhZ00l","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_finished}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_finished&blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"已完成任务情况"}},"children":[]},{"type":"block","id":"vLxMdWbsaL","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_unfinished}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_unfinished&blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"未完成任务情况"}},"children":[]},{"type":"block","id":"2kIWtGbWIc","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_workplan}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_workplan&blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"工作计划"}},"children":[]},{"type":"block","id":"YQQsS51bpa","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{project_basicStatistic_workload}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=project_basicStatistic_workload&blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"项目计划工作量统计"}},"children":[]},{"type":"block","id":"woAbzWK8vw","flavour":"affine:paragraph","version":1,"props":{"align":"left","type":"text","text":{"$blocksuite:internal:text$":true,"delta":[]},"collapsed":false},"children":[]}]}]}}';

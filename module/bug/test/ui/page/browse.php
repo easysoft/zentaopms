@@ -24,7 +24,22 @@ class browsePage extends page
             'closeComment'  => "//zen-editor[@id='comment']",
             'resolve'       => "//span[text()='解决']",
             'batchEdit'     => "//span[text()='编辑']",
-            'saveButton'    => "//span[text()='保存']"
+            'saveButton'    => "//span[text()='保存']",
+            'assignTo'      => "//span[text()='指派给']",
+            'assign'        => "//span[text()='指派']",
+            'activate'      => "//span[text()='激活']",
+            'all'           => "//span[text()='全部']",
+            'solvedByMe'    => "//span[text()='由我解决']",
+            'misc'          => "//span[text()='其他相关']",
+            'relatedBugs'   => '//*[@title="相关Bug"]',
+            'bugAssigned'   => "//div[@data-col='assignedTo' and @data-type='assign']/div/a/span[text()]",
+            'popupMenu'     => '//div[contains(@class,"popover show fade dropdown in")]',
+            'selectActBtn'  => '//div[contains(@class,"is-checked") and @data-col="actions"]//a[@title="激活"]',
+            'editDropdown'  => '(//button[contains(@class, "btn-group-dropdown")]/span[@class="caret-up"])',
+            'linkBugsBox'   => '//*[@id="linkBugsBox"]',
+            'linkBug'       => '//*[@id="linkBug"]',
+            'linkBugsSave'  => "//*[@id='table-bug-linkbugs']//button",
+            'linkedBugs'    => "//*[@id='zin_bug_view_1_tabPane_3']/div/ul/li/ul/li/a/div[2]",
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);

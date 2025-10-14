@@ -1,0 +1,53 @@
+---
+fields:
+- field: id
+  range: "1001,1002"
+- field: dimension
+  range: "85,59"
+- field: group
+  range: "85,59"
+- field: code
+  range: project_complete,product_complete
+- field: driver
+  range: mysql{2}
+- field: mode
+  range: builder{2}
+- field: name
+  range: 项目完成度统计,产品完成度统计
+- field: desc
+  range: 显示项目完成度统计信息,显示产品完成度统计信息
+- field: acl
+  range: open{2}
+- field: whitelist
+  range: admin{2}
+- field: sql
+  range: 'SELECT p.id, p.name as project, p.status, p.begin, p.end, p.closedDate, SUM(t.consumed) as consumed FROM zt_project p LEFT JOIN zt_task t ON p.id = t.project GROUP BY p.id,p.name,p.status,p.begin,p.end,p.closedDate','SELECT p.id, p.name as product, p.status, p.createdDate, p.PO FROM zt_product p'
+- field: langs
+  range: '{"zh-cn":"中文"},{}'
+- field: vars
+  range: '{},{}'
+- field: objects
+  range: project,product
+- field: settings
+  range: '{"display":"table"},{"display":"chart"}'
+- field: filters
+  range: '[],[{"field":"status","operator":"=","value":"normal"}]'
+- field: step
+  range: 2{2}
+- field: stage
+  range: published{2}
+- field: builtin
+  range: 0{2}
+- field: version
+  range: 1{2}
+- field: createdBy
+  range: admin{2}
+- field: createdDate
+  range: 2024-01-01 10:00:00,2024-01-02 11:00:00
+- field: editedBy
+  range: admin{2}
+- field: editedDate
+  range: 2024-01-06 10:00:00,2024-01-07 11:00:00
+- field: deleted
+  range: 0{2}
+...

@@ -1,0 +1,30 @@
+---
+title: getKanbanVariable方法测试用的kanbanlane数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: execution
+  range: 101{3}, 102{3}, 103{2}, 104{2}
+- field: type
+  range: bug{5}, task{3}, story{2}
+- field: region
+  range: 1{5}, 2{3}, 3{2}
+- field: group
+  range: 1{4}, 2{3}, 3{3}
+- field: groupby
+  range: status{5}, module{3}, assignedTo{2}
+- field: extra
+  range: unconfirmed{5}, confirmed{3}, active{2}
+- field: name
+  range: 未确认{2}, 已确认{2}, 处理中{2}, 已解决{2}, 已关闭{2}
+- field: color
+  range: "#f1c232"{2}, "#ff9900"{2}, "#34a853"{2}, "#ea4335"{2}, "#4285f4"{2}
+- field: order
+  range: 1-10
+- field: lastEditedTime
+  range: "2023-01-01 00:00:00"{10}
+- field: deleted
+  range: "0"{10}

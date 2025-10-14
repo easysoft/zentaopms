@@ -18,7 +18,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/batchcreateinlite.ui.class.php';
+include '../lib/ui/batchcreateinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

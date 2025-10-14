@@ -1,0 +1,50 @@
+---
+title: 测试任务区块测试数据
+desc: 用于测试printCaseBlock方法的测试任务数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 测试任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 所属项目
+  range: 1{4},2{3},3{2},4{1}
+- field: product
+  note: 所属产品
+  range: 1{5},2{3},3{2}
+- field: name
+  note: 测试任务名称
+  range: 版本1.0测试{3},功能测试{2},回归测试{2},集成测试{2},验收测试{1}
+- field: execution
+  note: 所属执行
+  range: 1{4},2{3},3{2},4{1}
+- field: build
+  note: 关联版本
+  range: trunk{4},1{2},2{2},3{1},4{1}
+- field: owner
+  note: 负责人
+  range: admin{4},user1{3},user2{2},user3{1}
+- field: pri
+  note: 优先级
+  range: 1{2},2{3},3{4},4{1}
+- field: begin
+  note: 开始日期
+  range: (`-30D`)-(`-1D`):3D
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: (`+1D`)-(`+30D`):3D
+  format: YYYY-MM-DD
+- field: status
+  note: 任务状态
+  range: wait{3},doing{4},done{3}
+- field: deleted
+  note: 是否删除
+  range: 0{9},1{1}
+- field: auto
+  note: 自动化类型
+  range: no{8},unit{1},func{1}

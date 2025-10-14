@@ -49,7 +49,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/story.ui.class.php';
+include '../lib/ui/story.ui.class.php';
 global $config;
 
 $product = zenData('product');

@@ -1,0 +1,40 @@
+---
+title: metric test data for getLatestChart
+desc: Test data for metric table used in getLatestChart method testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 指标ID
+- field: scope
+  range: product,project
+  note: 指标范围
+- field: stage
+  range: released{3},wait{2}
+  note: 指标阶段
+- field: deleted
+  range: 0{4},1{1}
+  note: 删除状态
+- field: name
+  range: 测试指标1,测试指标2,测试指标3,测试指标4,测试指标5
+  note: 指标名称
+- field: code
+  range: metric1,metric2,metric3,metric4,metric5
+  note: 指标编码
+- field: definition
+  range: SELECT COUNT(*) FROM zt_bug
+  note: 指标定义
+- field: purpose
+  range: scale,hour,rate,ratio,count
+  note: 指标目的
+- field: unit
+  range: 个,小时,%,比例,次
+  note: 指标单位
+- field: createdBy
+  range: admin
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 00:00:00'
+  note: 创建时间

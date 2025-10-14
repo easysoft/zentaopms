@@ -1,0 +1,82 @@
+---
+title: 数据定义 for syncCompile method test
+desc: syncCompile方法测试数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 编译ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 编译名称
+  range: 1-50
+  prefix: "构建"
+  postfix: ""
+  loop: 0
+  format: ""
+- field: job
+  note: 关联任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: queue
+  note: 队列ID
+  range: 100-1000
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 构建状态
+  range: success{20},failure{10},running{5},pending{5},canceled{5},create_fail{3},timeout{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: logs
+  note: 构建日志
+  range: ''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: atTime
+  note: 执行时间
+  range: ''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: tag
+  note: 标签
+  range: v1.0{5},v2.0{5},master{10},develop{10},''
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{30},user{10},system{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: "(M)-(w)"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

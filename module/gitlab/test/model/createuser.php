@@ -1,47 +1,71 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
 title=测试 gitlabModel::createUser();
 timeout=0
-cid=1
+cid=0
 
-- 使用空的name创建gitlab用户第name条的0属性 @名称不能为空
-- 使用空的username创建gitlab用户第username条的0属性 @用户名不能为空
-- 检查二次密码不一致的情况 @二次密码不一致！
-- 通过gitlabID,projectID,分支对象正确创建GitLab用户 @1
+- 步骤1：空account参数验证第account条的0属性 @禅道用户不能为空
+- 步骤2：空name参数验证第name条的0属性 @名称不能为空
+- 步骤3：空username参数验证第username条的0属性 @用户名不能为空
+- 步骤4：空email参数验证第email条的0属性 @邮箱不能为空
+- 步骤5：空password参数验证第password条的0属性 @密码不能为空
+- 步骤6：密码不一致验证第password_repeat条的0属性 @二次密码不一致！
+- 步骤7：用户名已存在验证 @Email has already been taken
+- 步骤8：邮箱已存在验证 @Username has already been taken
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('oauth')->gen(5);
 
+su('admin');
+
 $gitlab = new gitlabTest();
+$gitlabID = 1;
 
-$gitlabID  = 1;
+$baseUser = new stdclass();
+$baseUser->account         = 'testuser01';
+$baseUser->name            = 'Test User';
+$baseUser->username        = 'testuser01';
+$baseUser->email           = 'testuser01@example.com';
+$baseUser->password        = '123Qwe!@#';
+$baseUser->password_repeat = '123Qwe!@#';
 
-$user = new stdclass();
-$user->account         = 'admin';
-$user->name            = '';
-$user->username        = 'apiuser17';
-$user->email           = 'apiuser17@test.com';
-$user->password        = '123Qwe!@#';
-$user->password_repeat = '';
+$user = clone $baseUser;
+$user->account = '';
+r($gitlab->createUserTest($gitlabID, $user)) && p('account:0') && e('禅道用户不能为空'); // 步骤1：空account参数验证
 
-r($gitlab->createUserTest($gitlabID, $user)) && p('name:0') && e('名称不能为空'); //使用空的name创建gitlab用户
+$user = clone $baseUser;
+$user->name = '';
+r($gitlab->createUserTest($gitlabID, $user)) && p('name:0') && e('名称不能为空'); // 步骤2：空name参数验证
 
-$user->name     = 'apiCreatedUser';
+$user = clone $baseUser;
 $user->username = '';
-r($gitlab->createUserTest($gitlabID, $user)) && p('username:0') && e('用户名不能为空'); //使用空的username创建gitlab用户
+r($gitlab->createUserTest($gitlabID, $user)) && p('username:0') && e('用户名不能为空'); // 步骤3：空username参数验证
 
-$user->username = 'apiuser17';
-r($gitlab->createUserTest($gitlabID, $user)) && p('password_repeat:0') && e('二次密码不一致！'); //检查二次密码不一致的情况
+$user = clone $baseUser;
+$user->email = '';
+r($gitlab->createUserTest($gitlabID, $user)) && p('email:0') && e('邮箱不能为空'); // 步骤4：空email参数验证
 
-$user->password_repeat = '123Qwe!@#';
-$result = $gitlab->createUserTest($gitlabID, $user); //
-if(!empty($result[0]) and $result[0] == 'Email has already been taken') $result = true;
-r($result) && p() && e('1');         //通过gitlabID,projectID,分支对象正确创建GitLab用户
+$user = clone $baseUser;
+$user->password = '';
+r($gitlab->createUserTest($gitlabID, $user)) && p('password:0') && e('密码不能为空'); // 步骤5：空password参数验证
+
+$user = clone $baseUser;
+$user->password_repeat = 'differentPassword';
+r($gitlab->createUserTest($gitlabID, $user)) && p('password_repeat:0') && e('二次密码不一致！'); // 步骤6：密码不一致验证
+
+$user = clone $baseUser;
+$user->account = 'admin';
+$user->username = 'admin';
+r($gitlab->createUserTest($gitlabID, $user)) && p('0') && e('Email has already been taken'); // 步骤7：用户名已存在验证
+
+$user = clone $baseUser;
+$user->email = 'admin@zentao.com';
+r($gitlab->createUserTest($gitlabID, $user)) && p('0') && e('Username has already been taken'); // 步骤8：邮箱已存在验证

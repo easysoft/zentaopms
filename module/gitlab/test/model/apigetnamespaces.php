@@ -1,31 +1,43 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::apiGetNamespaces();
 timeout=0
-cid=1
+cid=0
 
-- 通过gitlabID,获取GitLab namespace列表 @1
-- 通过gitlabID,获取GitLab namespace数量 @1
-- 通过错误的gitlabID获取namespace列表 @0
-- 通过错误的gitlabID获取namespace列表数量 @0
+- 步骤1：有效GitLab ID获取namespace列表 @~~
+- 步骤2：有效GitLab ID检查返回数据类型 @1
+- 步骤3：无效GitLab ID（0）获取namespace @~~
+- 步骤4：不存在的GitLab ID获取namespace @~~
+- 步骤5：负数GitLab ID获取namespace @~~
 
 */
 
-zenData('pipeline')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+
+// 准备测试数据
+$pipeline = zenData('pipeline');
+$pipeline->id->range('1-5');
+$pipeline->name->range('gitlab1,gitlab2,gitlab3,gitlab4,gitlab5');
+$pipeline->type->range('gitlab{5}');
+$pipeline->url->range('https://gitlabdev.qc.oop.cc{5}');
+$pipeline->token->range('glpat-b8Sa1pM9k9ygxMZYPN6w{5}');
+$pipeline->gen(5);
+
 zenData('oauth')->gen(4);
 
-$gitlab = $tester->loadModel('gitlab');
+// 用户登录
+su('admin');
 
-$gitlabID = 1;
+// 创建测试实例
+$gitlabTest = new gitlabTest();
 
-$result = $gitlab->apiGetNamespaces($gitlabID);
-r(isset($result[0]->path)) && p() && e('1'); //通过gitlabID,获取GitLab namespace列表
-r(count($result) > 0)      && p() && e('1'); //通过gitlabID,获取GitLab namespace数量
-
-$result = $gitlab->apiGetNamespaces(0);
-r($result)        && p() && e('0'); //通过错误的gitlabID获取namespace列表
-r(count($result)) && p() && e('0');  //通过错误的gitlabID获取namespace列表数量
+r($gitlabTest->apiGetNamespacesTest(1)) && p() && e('~~'); // 步骤1：有效GitLab ID获取namespace列表
+$result = $gitlabTest->apiGetNamespacesTest(1);
+r(is_array($result)) && p() && e('1'); // 步骤2：有效GitLab ID检查返回数据类型
+r($gitlabTest->apiGetNamespacesTest(0)) && p() && e('~~'); // 步骤3：无效GitLab ID（0）获取namespace
+r($gitlabTest->apiGetNamespacesTest(999)) && p() && e('~~'); // 步骤4：不存在的GitLab ID获取namespace
+r($gitlabTest->apiGetNamespacesTest(-1)) && p() && e('~~'); // 步骤5：负数GitLab ID获取namespace

@@ -1,0 +1,49 @@
+---
+title: Story数据
+desc: 用于测试processToStoryActionExtra方法的Story数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 用户故事ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 用户故事标题
+  range: '作为用户我希望能够登录系统,作为管理员我希望能够管理用户,作为开发者我希望能够查看代码,测试故事标题,'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 故事状态
+  range: 'active,draft,closed'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 故事类型
+  range: story
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

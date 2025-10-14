@@ -1,0 +1,20 @@
+---
+title: 测试数据 - 故事分级选项
+desc: 用于测试getGradeOptions方法的测试数据
+
+fields:
+- field: type
+  note: 故事类型
+  range: epic,epic,requirement,requirement,requirement,story,story,story,story
+
+- field: grade
+  note: 分级等级
+  range: 1,2,1,2,3,1,2,3,4
+
+- field: name
+  note: 分级名称
+  range: BR1,BR2,UR1,UR2,UR3,SR1,SR2,SR3,子
+
+- field: status
+  note: 状态
+  range: enable{8}, disable{1}

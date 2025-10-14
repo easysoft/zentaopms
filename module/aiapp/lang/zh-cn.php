@@ -9,7 +9,7 @@
  * @package     ai
  * @link        https://www.zentao.net
  */
-$lang->aiapp->common           = 'AI广场';
+$lang->aiapp->common           = 'AI';
 $lang->aiapp->squareCategories = array('collection' => '我的收藏', 'discovery' => '发现', 'latest' => '最新');
 $lang->aiapp->newVersionTip    = '小程序已于 %s 更新，以上为过往记录';
 $lang->aiapp->noMiniProgram    = '您访问的小程序不存在';
@@ -33,7 +33,46 @@ $lang->aiapp->newChatTip       = '请在左侧输入字段内容，开启新对�
 $lang->aiapp->disabledTip      = '当前小程序已被禁用。';
 $lang->aiapp->continueasking   = '继续追问';
 
-$lang->aiapp->miniProgramSquare       = '查看AI小程序列表';
-$lang->aiapp->collectMiniProgram      = '收藏AI小程序';
-$lang->aiapp->miniProgramChat         = '执行AI小程序';
-$lang->aiapp->view                    = '查看AI小程序详情';
+$lang->aiapp->miniProgramSquare  = '查看通用智能体广场';
+$lang->aiapp->collectMiniProgram = '收藏通用智能体';
+$lang->aiapp->miniProgramChat    = '执行通用智能体';
+$lang->aiapp->view               = '查看通用智能体详情';
+$lang->aiapp->browseConversation = '浏览智能会话';
+$lang->aiapp->manageGeneralAgent = '管理通用智能体';
+$lang->aiapp->models             = '浏览模型列表';
+
+$lang->aiapp->id                 = 'ID';
+$lang->aiapp->model              = '模型名称';
+$lang->aiapp->converse           = '开始会话';
+$lang->aiapp->pageSummary        = '共 %s 项';
+
+$lang->aiapp->tips = new stdClass();
+$lang->aiapp->tips->noData = '暂无数据';
+
+$lang->aiapp->langData                     = new stdClass();
+$lang->aiapp->langData->name               = '禅道';
+$lang->aiapp->langData->storyReview        = '需求评审';
+$lang->aiapp->langData->storyReviewHint    = '对当前页面需求进行评审';
+$lang->aiapp->langData->storyReviewMessage = "下面是要进行评审的需求：\n\n### 需求标题\n\n{title}\n\n### 需求描述\n\n{spec}\n\n### 需求验收标准\n\n{verify}";
+$lang->aiapp->langData->aiReview           = 'AI 评审';
+$lang->aiapp->langData->currentPage        = '当前页面';
+$lang->aiapp->langData->story              = '需求';
+$lang->aiapp->langData->demand             = '需求池需求';
+$lang->aiapp->langData->bug                = 'BUG';
+$lang->aiapp->langData->doc                = '文档';
+$lang->aiapp->langData->design             = '设计';
+$lang->aiapp->langData->feedback           = '反馈';
+$lang->aiapp->langData->currentDocContent  = '当前文档';
+$lang->aiapp->langData->globalMemoryTitle  = '禅道';
+$lang->aiapp->langData->zaiConfigNotValid  = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
+$lang->aiapp->langData->unauthorizedError  = '授权失败，无效的 API 密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
+$lang->aiapp->langData->applyFormFormat    = '应用到%s表单';
+$lang->aiapp->langData->beforeChange       = '变更前';
+$lang->aiapp->langData->afterChange        = '变更后';
+$lang->aiapp->langData->changeProp         = '属性';
+$lang->aiapp->langData->changeTitleFormat  = '变更{type} #{id}';
+$lang->aiapp->langData->applyFormSuccess   = '已成功应用到%s表单';
+$lang->aiapp->langData->changeExplainDesc  = '对方案中数据的变化进行解释，尽量对变化的属性分别进行说明。';
+$lang->aiapp->langData->promptResultTitle  = '方案标题，如果没有合适标题可以省略';
+$lang->aiapp->langData->promptExtraLimit   = '通常工具 `{toolName}` 只需要调用一次，除非用户特殊要求提供多个方案。';
+$lang->aiapp->langData->goTesting          = '去调试';

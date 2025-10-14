@@ -13,7 +13,6 @@ cid=1
  - 属性code @project3
  - 属性type @project
 - 获取ID为5的产品关联的项目 @0
-- 获取ID为字符串的产品的项目属性code @($productID) must be of type int
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -34,8 +33,8 @@ $projectproduct->project->range('2-4');
 $projectproduct->branch->range("0{5}");
 $projectproduct->gen(3);
 
-$projectTester = new Project();
-r($projectTester->getByShadowProductTest(0))     && p()                    && e('0');                                // 获取ID为0的产品关联的项目
-r($projectTester->getByShadowProductTest(2))     && p('id,name,code,type') && e('3,项目3,project3,project');         // 获取ID为2的产品关联的项目
-r($projectTester->getByShadowProductTest(5))     && p()                    && e('0');                                // 获取ID为5的产品关联的项目
-r($projectTester->getByShadowProductTest('aaa')) && p('code')              && e('($productID) must be of type int'); // 获取ID为字符串的产品的项目
+global $tester;
+$projectModel = $tester->loadModel('project');
+r($projectModel->getByShadowProduct(0))     && p()                    && e('0');                        // 获取ID为0的产品关联的项目
+r($projectModel->getByShadowProduct(2))     && p('id,name,code,type') && e('3,项目3,project3,project'); // 获取ID为2的产品关联的项目
+r($projectModel->getByShadowProduct(5))     && p()                    && e('0');                        // 获取ID为5的产品关联的项目

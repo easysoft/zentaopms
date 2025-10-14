@@ -1,0 +1,49 @@
+---
+title: buildTaskForCreate 方法测试用项目数据（项目即执行）
+desc: 为 taskZen::buildTaskForCreate 方法提供项目测试数据，项目表既包含项目又包含执行
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 1,2,3,1,2,3,1,2,3,1
+- field: parent
+  range: 0
+- field: name
+  range: 迭代1,迭代2,迭代3,Sprint1,Sprint2,项目1,项目2
+- field: code
+  range: sprint1,sprint2,iteration1,project1,project2
+- field: type
+  range: sprint,stage,project
+- field: status
+  range: wait,doing,done,suspended,closed
+- field: desc
+  range: 执行描述1,执行描述2,执行描述3,项目描述1,项目描述2
+- field: begin
+  range: '2024-01-01'
+- field: end
+  range: '2024-03-31'
+- field: realBegan
+  range: '2024-01-01'
+- field: realEnd
+  range: '2024-03-31'
+- field: openedBy
+  range: admin,user1,user2
+- field: openedDate
+  range: '2024-01-01 09:00:00'
+- field: closedBy
+  range: ''
+- field: closedDate
+  range: '0000-00-00 00:00:00'
+- field: closedReason
+  range: ''
+- field: deleted
+  range: '0'
+- field: vision
+  range: rnd,lite
+- field: taskDateLimit
+  range: auto,limit
+- field: PM
+  range: admin,user1,user2

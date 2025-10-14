@@ -1,0 +1,62 @@
+title: ZenTao测试数据
+desc:
+author:
+version:
+
+fields:
+- field: id
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: objectType
+  range: todo
+  prefix: ""
+  postfix: ""
+- field: objectID
+  range: 1,2,3,4,5
+  prefix: ""
+  postfix: ""
+- field: product
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: project
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: execution
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: actor
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: action
+  range: opened,edited
+  prefix: ""
+  postfix: ""
+- field: date
+  range: 2023-12-01 09:00:00,2023-12-01 10:00:00,2023-12-01 11:00:00
+  prefix: ""
+  postfix: ""
+- field: comment
+  range: "",创建待办,编辑待办
+  prefix: ""
+  postfix: ""
+- field: extra
+  range: ""
+  prefix: ""
+  postfix: ""
+- field: read
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: vision
+  range: rnd
+  prefix: ""
+  postfix: ""
+- field: efforted
+  range: 0
+  prefix: ""
+  postfix: ""

@@ -1,0 +1,77 @@
+---
+title: Doc test data for processMaxDocObjectLink
+desc: Test data for different doc types
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 文档ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 文档标题
+  range: 'Practice Doc,Component Doc,Practice Doc 2,Component Doc 2,Normal Doc,Normal Doc 2,Practice Doc 3,Component Doc 3,Normal Doc 3,Normal Doc 4'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assetLibType
+  note: 资产库类型
+  range: 'practice,component,practice,component,[],[],practice,component,[],[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lib
+  note: 文档库
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 文档类型
+  range: 'text{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedBy
+  note: 添加者
+  range: 'admin{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedDate
+  note: 添加时间
+  range: '2025-09-27 00:00:00{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: 'normal{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

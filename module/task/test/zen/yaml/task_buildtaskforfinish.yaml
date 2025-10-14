@@ -1,0 +1,84 @@
+---
+title: 任务完成数据构建测试数据
+desc: 用于测试buildTaskForFinish方法的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: 测试任务1,测试任务2,测试任务3,测试任务4,测试任务5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 任务状态
+  range: doing{3},wait{1},pause{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: consumed
+  note: 已消耗工时
+  range: 0{2},1,2,3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realStarted
+  note: 实际开始时间
+  range: []{2},2024-01-01 09:00:00,2024-01-02 10:00:00,2024-01-01 08:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin{2},user1{2},user2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: finishedDate
+  note: 完成时间
+  range: 2024-01-02 18:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: admin{2},user1{2},user2{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 任务类型
+  range: devel{3},test{1},design{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

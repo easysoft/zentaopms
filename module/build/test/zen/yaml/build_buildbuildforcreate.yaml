@@ -1,0 +1,72 @@
+---
+title: 版本构建数据
+desc: buildBuildForCreate方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 11-13
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: branch
+  note: 分支
+  range: 0,1,2
+- field: execution
+  note: 执行ID
+  range: 101-103
+- field: builds
+  note: 关联版本
+  range: '[]'
+- field: name
+  note: 版本名称
+  range: Build001,Build002,TestBuild,DevBuild,ReleaseBuild
+- field: system
+  note: 系统ID
+  range: 1-3
+- field: scmPath
+  note: 代码库路径
+  range: '/trunk/src,/branches/dev,/tags/v1.0'
+- field: filePath
+  note: 文件路径
+  range: '/builds/build001.zip,/builds/build002.tar.gz,[]'
+- field: date
+  note: 版本日期
+  range: '2024-01-01:2024-12-31:30D'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: stories
+  note: 关联需求
+  range: '1,2,3,4,5,[]'
+- field: bugs
+  note: 关联Bug
+  range: '1,2,3,[]'
+- field: artifactRepoID
+  note: 制品库ID
+  range: 0,1,2
+- field: builder
+  note: 构建者
+  range: admin,user1,user2,dev1,tester1
+- field: desc
+  note: 版本描述
+  range: '测试版本描述,正式版本,开发版本,[]'
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00:2024-12-31 23:59:59:1D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'

@@ -1,0 +1,49 @@
+---
+title: 搜索查询数据定义
+desc: 用于测试repoZen::getSearchForm()方法的搜索查询数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 查询ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 查询标题
+  range: 搜索1,搜索2,搜索3,搜索4,搜索5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: form
+  note: 表单数据序列化
+  range: 'a:2:{s:9:"committer";a:3:{s:8:"operator";s:1:"=";s:5:"field";s:9:"committer";s:5:"value";s:5:"admin";}s:6:"commit";a:3:{s:8:"operator";s:8:"include";s:5:"field";s:6:"commit";s:5:"value";s:7:"test123";}},{0},{0},{0},{0}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL查询条件
+  range: '`committer` = "admin"," 1 = 1"," 1 = 1"," 1 = 1"," 1 = 1"'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 创建用户
+  range: admin{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 所属模块
+  range: repo{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

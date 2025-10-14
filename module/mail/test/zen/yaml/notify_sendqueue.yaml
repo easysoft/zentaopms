@@ -1,0 +1,62 @@
+---
+title: 邮件队列发送测试数据
+desc: 用于测试sendQueue方法的notify表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 队列ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: mail{5}
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  format: ""
+- field: action
+  note: 操作ID
+  range: 1-5
+  format: ""
+- field: toList
+  note: 收件人列表
+  range: admin@test.com{2},user@test.com{2},invalid-email{1}
+  format: ""
+- field: ccList
+  note: 抄送列表
+  range: []{3},cc@test.com{2}
+  format: ""
+- field: subject
+  note: 邮件主题
+  range: 测试邮件主题{5}
+  format: ""
+- field: data
+  note: 邮件内容
+  range: 测试邮件内容{5}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (now){5}
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: sendTime
+  note: 发送时间
+  range: []{5}
+  format: ""
+- field: status
+  note: 状态
+  range: wait{2},sending{1},sended{1},fail{1}
+  format: ""
+- field: failReason
+  note: 失败原因
+  range: []{4},发送失败{1}
+  format: ""

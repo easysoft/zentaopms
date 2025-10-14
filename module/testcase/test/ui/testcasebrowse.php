@@ -13,7 +13,7 @@ cid=1
  - 最终测试状态 @SUCCESS
 
 */
-include '../lib/testcase.ui.class.php';
+include '../lib/ui/testcase.ui.class.php';
 $data1 = zenData('product')->loadYaml('product')->gen(1);
 $data2 = zenData('case')->loadYaml('case')->gen(1);
 $tester = new testcase();

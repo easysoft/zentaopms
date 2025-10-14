@@ -1,0 +1,13 @@
+title: 用户视图数据配置
+
+fields:
+- field: account
+  range: admin,user1,user2,manager,test
+- field: programs
+  range: 1,2,3,4,5
+- field: products
+  range: 1,2,3,4,5
+- field: projects
+  range: 1,2,3,4,5
+- field: sprints
+  range: 1,2,3,4,5

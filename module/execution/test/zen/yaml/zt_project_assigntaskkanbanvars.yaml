@@ -1,0 +1,37 @@
+---
+title: assignTaskKanbanVars方法测试数据-项目表
+desc: 为assignTaskKanbanVars方法生成项目测试数据
+author: Claude
+version: 1
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+- field: project
+  note: 父项目ID
+  range: 0{3},1{2}
+- field: model
+  note: 项目模型
+  range: scrum{3},waterfall{2}
+- field: type
+  note: 项目类型
+  range: project{2},sprint{3}
+- field: name
+  note: 项目名称
+  range: 测试项目一,测试项目二,测试项目三,敏捷项目,瀑布项目
+- field: code
+  note: 项目代码
+  range: TEST1,TEST2,TEST3,AGILE,WATERFALL
+- field: status
+  note: 项目状态
+  range: wait{1},doing{3},done{1}
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01
+- field: end
+  note: 结束日期
+  range: 2024-06-01,2024-07-01,2024-08-01,2024-09-01,2024-10-01
+- field: deleted
+  note: 删除状态
+  range: 0

@@ -1,0 +1,64 @@
+---
+title: 瀑布项目统计报告测试数据
+desc: 用于测试 printWaterfallGeneralReportBlock 方法的项目数据
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目ID
+
+- field: name
+  range: 瀑布项目{1-5}
+  note: 项目名称
+
+- field: model
+  range: waterfall{10}
+  note: 项目模型类型
+
+- field: type
+  range: project{10}
+  note: 项目类型
+
+- field: status
+  range: wait,doing,done{3},closed{2}
+  note: 项目状态
+
+- field: budget
+  range: 10000-500000:10000
+  note: 项目预算
+
+- field: begin
+  range: 2024-01-01-2024-06-01:30D
+  note: 项目开始时间
+
+- field: end
+  range: 2024-06-01-2024-12-31:30D
+  note: 项目结束时间
+
+- field: team
+  range: admin,user1,user2,user3
+  note: 项目团队成员
+
+- field: acl
+  range: open{5},private{5}
+  note: 访问控制权限
+
+- field: openedBy
+  range: admin{10}
+  note: 创建者
+
+- field: openedDate
+  range: 2024-01-01-2024-03-01:15D
+  note: 创建时间
+
+- field: closedBy
+  range: []{8},admin{2}
+  note: 关闭者
+
+- field: closedDate
+  range: []{8},2024-12-01-2024-12-31:15D{2}
+  note: 关闭时间
+
+- field: deleted
+  range: '0'{10}
+  note: 删除标志

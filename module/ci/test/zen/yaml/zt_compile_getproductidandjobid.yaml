@@ -1,0 +1,112 @@
+---
+title: compile数据定义，用于测试ciZen::getProductIdAndJobID()方法
+desc: 为getProductIdAndJobID方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 编译ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 编译名称
+  range: compile1,compile2,compile3,compile4,compile5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: job
+  note: 关联任务ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: queue
+  note: 队列号
+  range: 0-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 编译状态
+  range: success,fail,create_fail,timeout
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支名称
+  range: master,develop,feature-test
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: logs
+  note: 编译日志
+  range: "Build successful,Build failed,Timeout occurred"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: atTime
+  note: 运行时间
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: testtask
+  note: 测试任务ID
+  range: 0-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: tag
+  note: 标签
+  range: v1.0,v1.1,v2.0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: times
+  note: 次数
+  range: 0-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: updateDate
+  note: 更新时间
+  range: "2023-01-01 00:00:00"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: "['0','1']"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

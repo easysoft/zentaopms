@@ -108,7 +108,7 @@ class mailTao extends mailModel
         {
             if(!$fileID) continue;
 
-            $file = $this->file->getByID((int)$fileID);
+            $file = $this->file->getById((int)$fileID);
             if(!$file) continue;
             if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
 

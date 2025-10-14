@@ -1,32 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetSingleTag();
+title=测试 gitlabModel::apiGetSingleTag();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的tag信息属性name @tag3
-- 使用不存在的gitlabID查询tag信息 @0
-- 使用不存在的projectID查询tag信息属性message @404 Project Not Found
-- 使用不存在的tag名称查询tag信息属性message @404 Tag Not Found
+- 执行gitlabTest模块的apiGetSingleTagTest方法，参数是1, 2, 'tag3' 属性name @tag3
+- 执行gitlabTest模块的apiGetSingleTagTest方法，参数是0, 2, 'tag3'  @0
+- 执行gitlabTest模块的apiGetSingleTagTest方法，参数是1, 0, 'tag3' 属性message @404 Project Not Found
+- 执行gitlabTest模块的apiGetSingleTagTest方法，参数是1, 2, 'nonexistent' 属性message @404 Tag Not Found
+- 执行gitlabTest模块的apiGetSingleTagTest方法，参数是1, 2, '' 属性message @404 Tag Not Found
 
 */
 
-zenData('pipeline')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = new gitlabTest();
+su('admin');
 
-$tag1 = $gitlab->apiGetSingleTagTest(1, 2, 'tag3');
-$tag2 = $gitlab->apiGetSingleTagTest(0, 2, 'tag3');
-$tag3 = $gitlab->apiGetSingleTagTest(1, 0, 'tag3');
-$tag4 = $gitlab->apiGetSingleTagTest(1, 2, '0');
+$gitlabTest = new gitlabTest();
 
-r($tag1) && p('name')    && e('tag3');                   // 查询正确的tag信息
-r($tag2) && p()          && e('0');                      // 使用不存在的gitlabID查询tag信息
-r($tag3) && p('message') && e('404 Project Not Found');  // 使用不存在的projectID查询tag信息
-r($tag4) && p('message') && e('404 Tag Not Found');      // 使用不存在的tag名称查询tag信息
+r($gitlabTest->apiGetSingleTagTest(1, 2, 'tag3')) && p('name') && e('tag3');
+r($gitlabTest->apiGetSingleTagTest(0, 2, 'tag3')) && p() && e('0');
+r($gitlabTest->apiGetSingleTagTest(1, 0, 'tag3')) && p('message') && e('404 Project Not Found');
+r($gitlabTest->apiGetSingleTagTest(1, 2, 'nonexistent')) && p('message') && e('404 Tag Not Found');
+r($gitlabTest->apiGetSingleTagTest(1, 2, '')) && p('message') && e('404 Tag Not Found');

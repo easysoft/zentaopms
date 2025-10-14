@@ -1,0 +1,63 @@
+---
+title: 测试 getChildBuilds 方法的版本数据
+desc: 用于测试版本构建中子版本获取功能的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1{2},2{2},3{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 版本名称
+  range: 版本1.0,版本1.1,版本1.2,版本2.0,版本2.1,版本2.2,版本3.0,子版本1,子版本2,子版本3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: builds
+  note: 子版本ID列表（逗号分隔）
+  range: '[]{4},8,9,8{2},10,[]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: bugs
+  note: 关联的Bug ID列表
+  range: '1,2,3{2},[]{2},4,5{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: stories
+  note: 关联的需求ID列表
+  range: '1{3},2{2},[]{2},3{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除标识
+  range: 0{9},1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

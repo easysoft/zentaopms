@@ -2761,7 +2761,11 @@ class pivotModel extends model
                 $drillField  = $drillAlias . $drillField;
             }
 
-            if(!empty($condition['value'])) $conditionSQLs[] = "t1.{$drillField}{$value}";
+            if(!empty($condition['value']))
+            {
+                if(!empty($condition['htmlspecialed'])) $value .= " OR t1.{$drillField} = {$condition['htmlspecialed']}";
+                $conditionSQLs[] = "(t1.{$drillField}{$value})";
+            }
         }
 
         $referSQL     = $this->getReferSQL($objectTable, $whereSQL, $fieldList);
@@ -2829,7 +2833,12 @@ class pivotModel extends model
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
         foreach($conditions as $index => $condition)
         {
-            if(isset($condition['value'])) $conditions[$index]['value'] = " = '{$condition['value']}'";
+            if(isset($condition['value']))
+            {
+                $htmlspecialed = htmlspecialchars($condition['value']);
+                $conditions[$index]['value'] = " = " . $this->dbh->quote($condition['value']);
+                if($htmlspecialed != $condition['value']) $conditions[$index]['htmlspecialed'] = $this->dbh->quote($htmlspecialed);
+            }
         }
 
         $data   = array();

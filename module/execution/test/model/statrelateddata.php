@@ -1,62 +1,90 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
-
-$execution = zenData('project');
-$execution->id->range('1-5');
-$execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
-$execution->type->range('project{2},sprint,waterfall,kanban');
-$execution->status->range('doing{3},closed,doing');
-$execution->parent->range('0,0,1,1,2');
-$execution->grade->range('2{2},1{3}');
-$execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
-$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->gen(5);
-
-$stroy = zenData('story');
-$stroy->id->range('4,324,364');
-$stroy->title->range('1-3')->prefix('需求');
-$stroy->type->range('story');
-$stroy->status->range('active');
-$stroy->gen(3);
-
-$projectstory = zenData('projectstory');
-$projectstory->project->range('3-5');
-$projectstory->product->range('1-3');
-$projectstory->story->range('4,324,364');
-$projectstory->gen(3);
-
-$task = zenData('task');
-$task->id->range('1-10');
-$task->execution->range('3,4,5');
-$task->status->range('wait,doing');
-$task->estimate->range('6');
-$task->left->range('3');
-$task->consumed->range('3');
-$task->gen(10);
-
-$bug = zenData('bug');
-$bug->id->range('1-10');
-$bug->project->range('1,2,1');
-$bug->execution->range('3,4,5');
-$bug->status->range('active,resolved,closed');
-$bug->gen(10);
-
-su('admin');
 
 /**
 
-title=测试executionModel->statRelatedDataTest();
+title=测试 executionModel::statRelatedData();
 timeout=0
-cid=1
+cid=0
+
+- 执行executionTest模块的statRelatedDataTest方法，参数是3
+ - 属性storyCount @3
+ - 属性taskCount @3
+ - 属性bugCount @4
+- 执行executionTest模块的statRelatedDataTest方法，参数是4
+ - 属性storyCount @1
+ - 属性taskCount @3
+ - 属性bugCount @1
+- 执行executionTest模块的statRelatedDataTest方法，参数是5
+ - 属性storyCount @0
+ - 属性taskCount @0
+ - 属性bugCount @1
+- 执行executionTest模块的statRelatedDataTest方法，参数是999
+ - 属性storyCount @0
+ - 属性taskCount @0
+ - 属性bugCount @0
+- 执行executionTest模块的statRelatedDataTest方法
+ - 属性storyCount @0
+ - 属性taskCount @0
+ - 属性bugCount @0
 
 */
 
-$executionIDList = array(3, 4, 5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = new executionTest();
-r($execution->statRelatedDataTest($executionIDList[0])) && p('storyCount') && e('1'); // 敏捷执行数据统计
-r($execution->statRelatedDataTest($executionIDList[1])) && p('taskCount')  && e('3'); // 瀑布执行数据统计
-r($execution->statRelatedDataTest($executionIDList[2])) && p('bugCount')   && e('3'); // 看板执行数据统计
+zenData('user')->gen(5);
+
+$execution = zenData('project');
+$execution->id->range('1-6');
+$execution->name->range('项目1,项目2,有数据执行,仅任务执行,空执行,不存在执行');
+$execution->type->range('project{2},sprint{2},waterfall{2}');
+$execution->status->range('doing{4},closed{2}');
+$execution->parent->range('0,0,1,1,2,2');
+$execution->grade->range('2{2},1{4}');
+$execution->path->range('1,2,`1,3`,`1,4`,`2,5`,`2,6`')->prefix(',')->postfix(',');
+$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->gen(6);
+
+$story = zenData('story');
+$story->id->range('1-5');
+$story->title->range('需求1,需求2,需求3,需求4,需求5');
+$story->type->range('story');
+$story->status->range('active{3},draft{2}');
+$story->deleted->range('0{4},1{1}');
+$story->gen(5);
+
+$projectstory = zenData('projectstory');
+$projectstory->project->range('3{3},4{1}');
+$projectstory->product->range('1{4}');
+$projectstory->story->range('1,2,3,4');
+$projectstory->gen(4);
+
+$task = zenData('task');
+$task->id->range('1-8');
+$task->execution->range('3{3},4{3},6{2}');
+$task->status->range('wait{3},doing{3},done{2}');
+$task->deleted->range('0{7},1{1}');
+$task->estimate->range('6');
+$task->left->range('3');
+$task->consumed->range('3');
+$task->gen(8);
+
+$bug = zenData('bug');
+$bug->id->range('1-6');
+$bug->project->range('1{2},2{2},3{2}');
+$bug->execution->range('3{4},4{1},5{1}');
+$bug->status->range('active{3},resolved{2},closed{1}');
+$bug->deleted->range('0{5},1{1}');
+$bug->gen(6);
+
+su('admin');
+
+$executionTest = new executionTest();
+
+r($executionTest->statRelatedDataTest(3)) && p('storyCount,taskCount,bugCount') && e('3,3,4');
+r($executionTest->statRelatedDataTest(4)) && p('storyCount,taskCount,bugCount') && e('1,3,1');
+r($executionTest->statRelatedDataTest(5)) && p('storyCount,taskCount,bugCount') && e('0,0,1');
+r($executionTest->statRelatedDataTest(999)) && p('storyCount,taskCount,bugCount') && e('0,0,0');
+r($executionTest->statRelatedDataTest(0)) && p('storyCount,taskCount,bugCount') && e('0,0,0');

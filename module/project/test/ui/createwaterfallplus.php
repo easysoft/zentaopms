@@ -20,7 +20,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createwaterfallplus.ui.class.php';
+include '../lib/ui/createwaterfallplus.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-2');

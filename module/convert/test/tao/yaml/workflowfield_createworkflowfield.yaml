@@ -1,0 +1,79 @@
+---
+title: 工作流字段测试数据
+desc: 用于测试createWorkflowField方法的工作流字段数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-100
+- field: group
+  note: 字段分组
+  range: 0
+- field: module
+  note: 模块名称
+  range: testmodule,testmodule2,testmodule3
+- field: field
+  note: 字段名称
+  range: testfield1,testfield2,testfield3
+- field: type
+  note: 字段类型
+  range: varchar,text,int
+- field: length
+  note: 字段长度
+  range: 255,0,10
+- field: name
+  note: 字段显示名
+  range: 测试字段1,测试字段2,测试字段3
+- field: control
+  note: 控件类型
+  range: input,textarea,select
+- field: expression
+  note: 表达式
+  range: []{3}
+- field: options
+  note: 选项
+  range: []{3}
+- field: default
+  note: 默认值
+  range: []{3}
+- field: rules
+  note: 验证规则
+  range: []{3}
+- field: placeholder
+  note: 占位符
+  range: []{3}
+- field: canExport
+  note: 可导出
+  range: 1,0,1
+- field: canSearch
+  note: 可搜索
+  range: 1,0,1
+- field: isValue
+  note: 是否为值
+  range: 1,0,1
+- field: order
+  note: 排序
+  range: 1-10
+- field: buildin
+  note: 内置字段
+  range: 0,1,0
+- field: desc
+  note: 描述
+  range: []{3}
+- field: readonly
+  note: 只读
+  range: 0,1,0
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00
+- field: editedBy
+  note: 编辑者
+  range: []{3}
+- field: editedDate
+  note: 编辑时间
+  range: []{3}

@@ -700,7 +700,7 @@ class project extends control
         $this->view->planGroup    = $this->loadModel('execution')->getPlans(array_keys($products));
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'ignoreNormal', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50, 'all', $projectID);
-        $this->view->programList  = $this->loadModel('program')->getPairsByList(explode(',', trim($project->path, ',')));
+        $this->view->programList  = $this->loadModel('program')->getPairsByList(toIntArray($project->path));
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
 
@@ -1532,7 +1532,7 @@ class project extends control
 
         $response['result']     = 'success';
         $response['closeModal'] = true;
-        $response['load']       = true;
+        $response['load']       = $this->app->tab == 'my' ? true : inlink('browse');
 
         $message = $this->executeHooks($projectID);
         if($message) $response['message'] = $message;

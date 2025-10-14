@@ -1,0 +1,26 @@
+---
+title: 项目数据定义
+desc: 为createProduct方法测试准备项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-100
+- field: name
+  note: 项目名称
+  range: 测试项目{1-10}
+- field: code
+  note: 项目代号
+  range: project{1-10}
+- field: openedBy
+  note: 创建者
+  range: admin
+- field: openedDate
+  note: 开始日期
+  range: '2024-01-01 10:00:00'
+- field: status
+  note: 项目状态
+  range: wait
+- field: desc
+  note: 项目描述
+  range: 测试项目描述

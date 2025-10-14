@@ -1,0 +1,40 @@
+---
+title: zt_metriclib data for fetchLatestMetricRecords test
+author: Claude Code
+version: "1.0"
+fields:
+- field: id
+  range: 1-20
+- field: metricID
+  range: 101{5},102{5},103{5},104{5}
+- field: metricCode
+  range: count_of_normal_product{5},count_of_annual_finished_productplan_in_product{5},count_of_closed_execution_in_project{5},count_of_invalid_story_in_execution{5}
+- field: system
+  range: 1{5},0{15}
+- field: product
+  range: 0{5},1{5},2{5},3{5}
+- field: project
+  range: 0{10},1{5},2{5}
+- field: execution
+  range: 0{15},1{5}
+- field: year
+  range: 2023{10},2024{10}
+- field: month
+  range: 01{5},02{5},11{5},12{5}
+- field: week
+  range: 01{5},02{5},45{5},46{5}
+- field: day
+  range: 01{5},02{5},15{5},16{5}
+- field: value
+  range: 10-100
+- field: date
+  range: "2023-01-01 00:00:00-2024-12-31 23:59:59:30D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: calcType
+  range: system{10},manual{10}
+- field: calculatedBy
+  range: admin{10},user{10}
+- field: deleted
+  range: 0{18},1{2}
+...

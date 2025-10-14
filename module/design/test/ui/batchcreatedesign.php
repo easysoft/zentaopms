@@ -12,7 +12,7 @@ cid=4
 
 */
 chdir(__DIR__);
-include '../lib/batchcreatedesign.ui.class.php';
+include '../lib/ui/batchcreatedesign.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 zendata('design')->loadYaml('design', false, 2)->gen(0);

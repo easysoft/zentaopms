@@ -1,0 +1,74 @@
+---
+title: 镜像下载取消测试数据
+desc: 为取消镜像下载功能提供测试数据
+
+fields:
+- field: id
+  note: 镜像ID
+  range: 1-5
+
+- field: host
+  note: 宿主机ID
+  range: 1,1,2,2,3
+
+- field: name
+  note: 镜像名称
+  range: ubuntu-20.04,centos-7,debian-11,alpine-3.16,fedora-36
+
+- field: localName
+  note: 本地镜像名称
+  range: ubuntu20,centos7,debian11,alpine316,fedora36
+
+- field: address
+  note: 镜像下载地址
+  range: https://repo.zentao.net/ubuntu-20.04.qcow2,https://repo.zentao.net/centos-7.qcow2,https://repo.zentao.net/debian-11.qcow2,https://repo.zentao.net/alpine-3.16.qcow2,https://repo.zentao.net/fedora-36.qcow2
+
+- field: path
+  note: 镜像路径
+  range: /var/lib/images/ubuntu-20.04.qcow2,/var/lib/images/centos-7.qcow2,,/var/lib/images/alpine-3.16.qcow2,
+
+- field: status
+  note: 镜像状态
+  range: inprogress,created,notDownloaded,canceled,completed
+
+- field: osName
+  note: 操作系统名称
+  range: Ubuntu,CentOS,Debian,Alpine,Fedora
+
+- field: from
+  note: 镜像来源
+  range: zentao{4},user
+
+- field: memory
+  note: 内存需求(GB)
+  range: 1-4
+
+- field: disk
+  note: 磁盘需求(GB)
+  range: 5-20
+
+- field: fileSize
+  note: 文件大小(GB)
+  range: 1.5-8.5:0.5
+
+- field: md5
+  note: MD5校验值
+  range: a1b2c3d4e5f6,b2c3d4e5f6a1,c3d4e5f6a1b2,d4e5f6a1b2c3,e5f6a1b2c3d4
+
+- field: desc
+  note: 镜像描述
+  range: Ubuntu 20.04 LTS镜像,CentOS 7镜像,Debian 11镜像,Alpine 3.16轻量镜像,Fedora 36镜像
+
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+
+- field: createdDate
+  note: 创建时间
+  range: (NOW-7D)-(NOW-1D)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: restoreDate
+  note: 恢复时间
+  range: []{3},(NOW-1D)-(NOW)
+  format: YYYY-MM-DD hh:mm:ss

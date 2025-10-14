@@ -1,0 +1,98 @@
+---
+title: 测试用例数据
+desc: 为assignCasesForBrowse方法生成测试数据
+
+case:
+  fields:
+  - field: id
+    range: 1-20
+  - field: title
+    range: '[测试用例标题1, 测试用例标题2, 测试用例标题3, 测试用例标题4, 测试用例标题5, 测试用例标题6, 测试用例标题7, 测试用例标题8, 测试用例标题9, 测试用例标题10, 测试用例标题11, 测试用例标题12, 测试用例标题13, 测试用例标题14, 测试用例标题15, 测试用例标题16, 测试用例标题17, 测试用例标题18, 测试用例标题19, 测试用例标题20]'
+  - field: product
+    range: 1-3
+  - field: branch
+    range: '[all,0,1]'
+  - field: module
+    range: 1001-1005
+  - field: scene
+    range: '[1,2,3,0,0]'
+  - field: status
+    range: '[wait,normal,blocked,investigate,done]'
+  - field: type
+    range: '[feature,performance,config,install,security,interface,unit,other]'
+  - field: pri
+    range: 1-4
+  - field: color
+    range: '["","#3da7f5","#2dbaa4","#f5914d","#ec4758"]'
+  - field: stage
+    range: '[unittest,feature,intergrate,system,smoke,bvt]'
+  - field: openedBy
+    range: '[admin,user1,user2,test1,dev1]'
+  - field: openedDate
+    range: '(-1w)-(+1w):1D'
+    format: 'YYYY-MM-DD hh:mm:ss'
+  - field: version
+    range: 1-3
+  - field: story
+    range: 1-10
+  - field: auto
+    range: '[no,yes,unit]'
+  - field: deleted
+    range: '[0,0,0,0,1]'
+
+product:
+  fields:
+  - field: id
+    range: 1-3
+  - field: name
+    range: '[产品1, 产品2, 产品3]'
+  - field: code
+    range: '[product1, product2, product3]'
+  - field: type
+    range: '[normal,branch,platform]'
+  - field: status
+    range: '[normal,closed]'
+  - field: deleted
+    range: 0
+
+story:
+  fields:
+  - field: id
+    range: 1-10
+  - field: title
+    range: '[用户故事1, 用户故事2, 用户故事3, 用户故事4, 用户故事5, 用户故事6, 用户故事7, 用户故事8, 用户故事9, 用户故事10]'
+  - field: product
+    range: 1-3
+  - field: module
+    range: 1001-1005
+  - field: status
+    range: '[draft,active,reviewing,closed,changed]'
+  - field: stage
+    range: '[wait,planned,projected,developing,developed,testing,tested,verified,released,closed]'
+  - field: needNotReview
+    range: '[0,1]'
+  - field: deleted
+    range: 0
+
+module:
+  fields:
+  - field: id
+    range: 1001-1005
+  - field: root
+    range: 1-3
+  - field: branch
+    range: 0
+  - field: name
+    range: '[模块1, 模块2, 模块3, 模块4, 模块5]'
+  - field: parent
+    range: 0
+  - field: path
+    range: '[,1001,, ,1002,, ,1003,, ,1004,, ,1005,]'
+  - field: grade
+    range: 1
+  - field: order
+    range: 5-50:5
+  - field: type
+    range: case
+  - field: deleted
+    range: 0

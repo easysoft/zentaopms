@@ -1,0 +1,26 @@
+title: 用于createBug方法测试的project数据
+desc: 提供createBug方法测试需要的项目基础数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 项目A,项目B,项目C,测试项目,Demo项目
+- field: code
+  range: PROJ_A,PROJ_B,PROJ_C,TEST_PROJ,DEMO_PROJ
+- field: status
+  range: wait{2},doing{2},closed{1}
+- field: begin
+  range: 2023-01-01-2023-06-30
+- field: end
+  range: 2023-07-01-2023-12-31
+- field: openedBy
+  range: admin{3},user1{1},user2{1}
+- field: openedDate
+  range: 2023-01-01 00:00:00-2023-06-30 23:59:59
+- field: acl
+  range: open{3},private{1},custom{1}
+- field: type
+  range: project
+- field: deleted
+  range: '0'

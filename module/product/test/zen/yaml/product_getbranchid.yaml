@@ -1,0 +1,54 @@
+---
+title: 产品表数据定义
+desc: 用于测试getBranchID方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0{10}
+  format: ""
+- field: name
+  note: 产品名称
+  range: 普通产品,分支产品1,分支产品2,分支产品3,分支产品4
+  format: ""
+- field: code
+  note: 产品代码
+  range: normal,branch1,branch2,branch3,branch4
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{2},branch{8}
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  format: ""
+- field: desc
+  note: 产品描述
+  range: 这是一个测试产品{10}
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2
+  format: ""
+- field: QD
+  note: 测试负责人
+  range: admin,user1,user2
+  format: ""
+- field: RD
+  note: 研发负责人
+  range: admin,user1,user2
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{8},private{2}
+  format: ""

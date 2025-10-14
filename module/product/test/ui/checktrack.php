@@ -8,7 +8,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/track.ui.class.php';
+include '../lib/ui/track.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

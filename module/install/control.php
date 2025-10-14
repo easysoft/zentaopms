@@ -144,6 +144,8 @@ class install extends control
             $return = $this->installZen->checkConfig($data);
             if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '480', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
 
+            $this->install->execPreInstallSQL();
+
             $myConfig = array();
             foreach($data as $key => $value) $myConfig[$key] = $value;
             $this->session->set('myConfig', $myConfig);
@@ -309,6 +311,7 @@ class install extends control
             $mode = form::data()->get()->mode;
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('custom')->disableFeaturesByMode($mode);
+            $this->loadModel('weekly')->addBuiltinWeeklyTemplate();
             return $this->send(array('result' => 'success', 'load' => inlink('step5')));
         }
 
@@ -346,7 +349,6 @@ class install extends control
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->install->errorNotSaveConfig}').then((res) => {loadPage('" . $this->createLink('install', 'step3') . "')});"));
 
             $this->loadModel('common');
-            if($this->config->db->driver == 'dm') $this->install->execDMSQL();
 
             $data = form::data()->get();
             $this->install->grantPriv($data);
@@ -391,6 +393,8 @@ class install extends control
             /* 保存sn到数据库。*/
             /* Save SN to database. */
             $this->loadModel('setting')->setSN();
+
+            $this->install->execPostInstallSQL();
 
             return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }

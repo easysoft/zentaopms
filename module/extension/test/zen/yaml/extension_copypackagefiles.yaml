@@ -1,0 +1,98 @@
+---
+title: 测试copyPackageFiles方法的插件数据
+desc: 为copyPackageFiles方法测试准备的插件扩展数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 插件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 插件名称
+  range: 测试插件{5}, 示例插件{3}, 空插件{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: code
+  note: 插件代码
+  range: testextension{5}, sampleextension{3}, emptyextension{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: version
+  note: 插件版本
+  range: 1.0.0{3}, 1.1.0{3}, 2.0.0{2}, 0.9.0{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: author
+  note: 插件作者
+  range: 开发者A{4}, 开发者B{3}, 测试者{3}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: desc
+  note: 插件描述
+  range: 这是一个测试插件{5}, 这是示例插件{3}, 空插件描述{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: license
+  note: 插件许可证
+  range: MIT{5}, GPL{3}, Apache{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: type
+  note: 插件类型
+  range: extension{8}, theme{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: site
+  note: 插件网站
+  range: http://test.com{5}, http://sample.com{3}, http://empty.com{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: zentaoCompatible
+  note: ZenTao兼容版本
+  range: 18.0{4}, 17.0{3}, 16.0{3}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: installedTime
+  note: 安装时间
+  range: '[-5D]-[NOW]:1D'
+  prefix: ""
+  postfix: ""
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: depends
+  note: 依赖插件
+  range: '[]'{7}, 'dependency1'{2}, 'dependency2'{1}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: dirs
+  note: 安装目录
+  range: '[]'{5}, '/module/test{3}, /extension/test'{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: files
+  note: 安装文件
+  range: '[]'{5}, '/test/file1.php{3}, /test/file2.php'{2}
+  prefix: ""
+  postfix: ""
+  format: ""
+- field: status
+  note: 插件状态
+  range: installed{6}, uninstalled{2}, disabled{2}
+  prefix: ""
+  postfix: ""
+  format: ""

@@ -1,0 +1,41 @@
+---
+title: 文件表数据定义
+desc: 用于importUnitResult方法测试的文件数据
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-5
+- field: pathname
+  note: 文件路径名
+  range: "202409/f_609e0b8c91dd7b2c_0910144735.xml","202409/f_609e0b8c91dd7b2d_0910144736.xml","202409/f_609e0b8c91dd7b2e_0910144737.xml","202409/f_609e0b8c91dd7b2f_0910144738.xml","202409/f_609e0b8c91dd7b30_0910144739.xml"
+- field: title
+  note: 文件标题
+  range: "test-result.xml","junit-report.xml","unit-test.xml","test-output.xml","result.xml"
+- field: extension
+  note: 文件扩展名
+  range: xml{5}
+- field: size
+  note: 文件大小
+  range: 1024,2048,3072,4096,5120
+- field: objectType
+  note: 对象类型
+  range: ""
+- field: objectID
+  note: 对象ID
+  range: 0
+- field: addedBy
+  note: 添加人
+  range: admin{5}
+- field: addedDate
+  note: 添加时间
+  range: "2024-09-10 14:47:35"
+- field: downloads
+  note: 下载次数
+  range: 0
+- field: extra
+  note: 额外信息
+  range: ""
+- field: deleted
+  note: 删除状态
+  range: "0"{5}

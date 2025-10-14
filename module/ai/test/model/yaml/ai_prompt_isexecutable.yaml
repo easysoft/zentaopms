@@ -1,0 +1,78 @@
+---
+title: ai_prompt测试数据定义-isExecutable方法
+desc: 为isExecutable方法测试准备的prompt数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: prompt ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: prompt名称
+  range: prompt{5},[]{2},test{3}
+  format: ""
+- field: desc
+  note: prompt描述
+  range: test description{8},[]{2}
+  format: ""
+- field: model
+  note: 模型ID
+  range: 1-5,0{3},[]{2}
+  format: ""
+- field: module
+  note: 模块名称
+  range: story{3},task{2},[]{3},bug{2}
+  format: ""
+- field: source
+  note: 数据源配置
+  range: ',story.title,story.spec,{3},[]{4},,{3}'
+  format: ""
+- field: targetForm
+  note: 目标表单
+  range: 'story.create{3},task.edit{2},[]{3},bug.edit{2}'
+  format: ""
+- field: purpose
+  note: 用途说明
+  range: test purpose{5},[]{3},help{2}
+  format: ""
+- field: elaboration
+  note: 详细说明
+  range: elaboration{8},[]{2}
+  format: ""
+- field: role
+  note: 角色定义
+  range: role{8},[]{2}
+  format: ""
+- field: characterization
+  note: 角色特征
+  range: characterization{8},[]{2}
+  format: ""
+- field: status
+  note: 状态
+  range: active{7},draft{3}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{6},user{4}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (2023-01-01)-(2023-12-31)
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin{4},user{3},[]{3}
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: (2023-01-01)-(2023-12-31),[]{3}
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  format: ""

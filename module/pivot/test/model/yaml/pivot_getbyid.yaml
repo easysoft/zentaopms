@@ -1,0 +1,114 @@
+---
+title: pivot表测试数据 - getByID方法
+desc: 透视表测试数据，包含有效和无效的透视表记录
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 透视表ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: dimension
+  note: 维度ID
+  range: 0{3},1{2}
+  format: ""
+- field: group
+  note: 分组
+  range: system{2},project{2},custom{1}
+  format: ""
+- field: code
+  note: 透视表编码
+  range: pivot_code_1,pivot_code_2,pivot_code_3,pivot_code_4,pivot_code_5
+  format: ""
+- field: driver
+  note: 驱动类型
+  range: mysql{4},duckdb{1}
+  format: ""
+- field: mode
+  note: 模式
+  range: builder{4},text{1}
+  format: ""
+- field: name
+  note: 透视表名称
+  range: 测试透视表1,测试透视表2,测试透视表3,测试透视表4,测试透视表5
+  format: ""
+- field: desc
+  note: 描述
+  range: 这是透视表1的描述,这是透视表2的描述,这是透视表3的描述,这是透视表4的描述,这是透视表5的描述
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{3},private{2}
+  format: ""
+- field: whitelist
+  note: 白名单
+  range: '[]'{3},admin,user1{2}
+  format: ""
+- field: sql
+  note: SQL语句
+  range: SELECT * FROM zt_user{3},SELECT COUNT(*) FROM zt_project{2}
+  format: ""
+- field: fields
+  note: 字段设置
+  range: '{"field1":"value1"}'{2},'{"field2":"value2"}'{3}
+  format: ""
+- field: langs
+  note: 语言设置
+  range: '{"zh-cn":"中文"}'{5}
+  format: ""
+- field: vars
+  note: 变量设置
+  range: '[]'{5}
+  format: ""
+- field: objects
+  note: 对象设置
+  range: user{2},project{2},product{1}
+  format: ""
+- field: settings
+  note: 其他设置
+  range: '[]'{5}
+  format: ""
+- field: filters
+  note: 过滤器设置
+  range: '[]'{3},'{"status":"active"}'{2}
+  format: ""
+- field: step
+  note: 步骤
+  range: 0{2},1{2},2{1}
+  format: ""
+- field: stage
+  note: 阶段
+  range: draft{2},published{3}
+  format: ""
+- field: builtin
+  note: 内置标识
+  range: 0{4},1{1}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{3},user1{2}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00'{2},'2023-06-01 00:00:00'{3}
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: admin{2},user1{2},'[]'{1}
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-01 00:00:00'{2},'2023-06-01 00:00:00'{2},'0000-00-00 00:00:00'{1}
+  format: ""
+- field: deleted
+  note: 删除标识
+  range: 0{5}
+  format: ""
+- field: version
+  note: 版本号
+  range: 1{3},2{2}
+  format: ""

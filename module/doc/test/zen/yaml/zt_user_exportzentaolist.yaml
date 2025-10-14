@@ -1,0 +1,21 @@
+---
+title: exportZentaoList测试数据
+desc: 为exportZentaoList方法生成用户测试数据
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin,user1,user2,user3,user4,user5,test{4}
+- field: realname  
+  range: 管理员,用户一,用户二,用户三,用户四,用户五,测试{4}
+- field: password
+  range: 123456{10}
+- field: role
+  range: admin,dev,qa,po,td,pd,pm,top{3}
+- field: email
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com,user5@test.com,test{4}@test.com
+- field: deleted
+  range: 0{8},1{2}
+- field: vision
+  range: rnd{10}

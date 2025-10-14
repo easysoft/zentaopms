@@ -1,29 +1,41 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 /**
 
-title=测试 repoModel->link();
+title=测试 repoModel::link();
 timeout=0
-cid=1
+cid=0
 
-- 关联需求第0条的relation属性 @commit
-- 关联bug第0条的BType属性 @bug
-- 关联task第0条的BType属性 @task
-- 关联错误的revision @失败
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $validLinks 第0条的relation属性 @commit
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $validLinks 第0条的BType属性 @story
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $validLinks 第0条的AType属性 @revision
+- 执行repoTest模块的linkTest方法，参数是1, $invalidRevision, 'story', 'repo', $validLinks  @失败
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $emptyLinks  @0
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'commit', $validLinks 第0条的relation属性 @commit
+- 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'task', 'repo', $validLinks 第0条的BType属性 @task
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 zenData('repo')->loadYaml('repo', true)->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(1);
 
-$revision = 'c808480afe22d3a55d94e91c59a8f3170212ade0';
-$links    = array(1, 2);
+$validRevision = 'c808480afe22d3a55d94e91c59a8f3170212ade0';
+$invalidRevision = '22222';
+$validLinks = array(1, 2);
+$emptyLinks = array();
 
-$repo = new repoTest();
-r($repo->linkTest(1, $revision, 'story', 'repo', $links)) && p('0:relation') && e('commit'); //关联需求
-r($repo->linkTest(1, $revision, 'bug', 'repo', $links))   && p('0:BType')    && e('bug'); //关联bug
-r($repo->linkTest(1, $revision, 'task', 'repo', $links))  && p('0:BType')    && e('task'); //关联task
-r($repo->linkTest(1, '22222', 'task', 'repo', $links))    && p('')           && e('失败'); //关联错误的revision
+su('admin');
+
+$repoTest = new repoTest();
+
+r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $validLinks)) && p('0:relation') && e('commit');
+r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $validLinks)) && p('0:BType') && e('story');
+r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $validLinks)) && p('0:AType') && e('revision');
+r($repoTest->linkTest(1, $invalidRevision, 'story', 'repo', $validLinks)) && p('') && e('失败');
+r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $emptyLinks)) && p('') && e('0');
+r($repoTest->linkTest(1, $validRevision, 'story', 'commit', $validLinks)) && p('0:relation') && e('commit');
+r($repoTest->linkTest(1, $validRevision, 'task', 'repo', $validLinks)) && p('0:BType') && e('task');

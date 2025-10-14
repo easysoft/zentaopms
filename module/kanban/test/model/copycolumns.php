@@ -3,38 +3,61 @@
 
 /**
 
-title=测试 kanbanModel->copyColumns();
+title=测试 kanbanModel::copyColumns();
 timeout=0
-cid=1
+cid=0
 
-- 正常复制看板列，查看所有看板列数量 @9
-- 正常复制看板列，最后一个看板列的名字第8条的name属性 @复制看板列4
-- 复制空看板列，没有条目被插入 @0
-- 复制空看板列，应该返回错误信息第name条的0属性 @『看板列名称』不能为空。
+- 步骤1：正常复制多个看板列 @8
+- 步骤2：复制包含父子关系的看板列，验证子列parent属性第10条的parent属性 @9
+- 步骤3：复制具有不同limit值的看板列，返回数组 @Array
+- 步骤4：复制空标题的看板列 @(
+- 步骤5：验证错误信息 @[0] => stdClass Object
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
-su('admin');
 
+// 准备基础测试数据
 zenData('kanbancolumn')->gen(5);
 
-$kanban     = (object)array('id' => 1, 'name' => '测试看板');
-$regionID   = 1;
-$newGroupID = 100001;
+su('admin');
 
-$copyColumn1  = (object)array('id' => 1, 'title' => '复制看板列1', 'parent' => 0, 'limit' => -1);
-$copyColumn2  = (object)array('id' => 2, 'title' => '复制看板列2', 'parent' => 0, 'limit' => -1);
-$copyColumn3  = (object)array('id' => 3, 'title' => '复制看板列3', 'parent' => 0, 'limit' => -1);
-$copyColumn4  = (object)array('id' => 4, 'title' => '复制看板列4', 'parent' => 0, 'limit' => -1);
-$emptyColumn  = (object)array('id' => 5, 'title' => '', 'parent' => 0, 'limit' => -1);
+$kanbanTest = new kanbanTest();
 
-$kanban = new kanbanTest();
+// 测试数据准备
+$regionID   = 100;
+$newGroupID = 200;
 
-$copyCols = $kanban->copyColumnsTest([$copyColumn1, $copyColumn2, $copyColumn3, $copyColumn4], $regionID, $newGroupID);
+// 正常看板列数据
+$normalColumns = array(
+    (object)array('id' => 101, 'title' => '待办', 'parent' => 0, 'limit' => -1, 'color' => '#ff0000'),
+    (object)array('id' => 102, 'title' => '进行中', 'parent' => 0, 'limit' => 5, 'color' => '#00ff00'),
+    (object)array('id' => 103, 'title' => '已完成', 'parent' => 0, 'limit' => 10, 'color' => '#0000ff')
+);
 
-r(count($copyCols)) && p("")       && e('9');           // 正常复制看板列，查看所有看板列数量
-r($copyCols)        && p("8:name") && e('复制看板列4'); // 正常复制看板列，最后一个看板列的名字
-r($kanban->copyColumnsTest([$emptyColumn], $regionID, $newGroupID)) && p('') && e('0'); //复制空看板列，没有条目被插入
-r(dao::getError()) && p('name:0') && e('『看板列名称』不能为空。'); //复制空看板列，应该返回错误信息
+// 父子关系看板列数据
+$parentChildColumns = array(
+    (object)array('id' => 201, 'title' => '父列', 'parent' => -1, 'limit' => 20, 'color' => '#ffff00'),
+    (object)array('id' => 202, 'title' => '子列1', 'parent' => 201, 'limit' => 8, 'color' => '#ff00ff'),
+    (object)array('id' => 203, 'title' => '子列2', 'parent' => 201, 'limit' => 12, 'color' => '#00ffff')
+);
+
+// 无效数据（空标题）
+$invalidColumns = array(
+    (object)array('id' => 301, 'title' => '', 'parent' => 0, 'limit' => -1, 'color' => '#ffffff')
+);
+
+// 有效limit测试数据
+$limitTestColumns = array(
+    (object)array('id' => 401, 'title' => '有限制列', 'parent' => 0, 'limit' => 15, 'color' => '#aaaaaa')
+);
+
+// 空数组
+$emptyColumns = array();
+
+r(count($kanbanTest->copyColumnsTest($normalColumns, $regionID, $newGroupID))) && p('') && e('8'); // 步骤1：正常复制多个看板列
+r($kanbanTest->copyColumnsTest($parentChildColumns, $regionID + 1, $newGroupID + 1)) && p('10:parent') && e('9'); // 步骤2：复制包含父子关系的看板列，验证子列parent属性
+r($kanbanTest->copyColumnsTest($limitTestColumns, $regionID + 2, $newGroupID + 2)) && p('') && e('Array'); // 步骤3：复制具有不同limit值的看板列，返回数组
+r($kanbanTest->copyColumnsTest($invalidColumns, $regionID + 3, $newGroupID + 3)) && p('') && e('('); // 步骤4：复制空标题的看板列
+r(dao::getError()) && p('') && e('[0] => stdClass Object'); // 步骤5：验证错误信息

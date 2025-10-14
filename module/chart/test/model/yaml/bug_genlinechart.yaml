@@ -1,0 +1,25 @@
+---
+title: Bug测试数据 for genLineChart
+desc: 专门用于genLineChart方法的测试数据
+author: Claude
+
+fields:
+- field: id
+  range: 1-50
+- field: status
+  range: active{20},resolved{15},closed{15}
+- field: openedDate
+  range: 2024-01-01{15},2024-02-01{15},2024-03-01{20}
+  format: YYYY-MM-DD HH:mm:ss
+- field: pri
+  range: 1{10},2{20},3{15},4{5}
+- field: project
+  range: 1-10:R
+- field: product
+  range: 1-5:R
+- field: title
+  range: BUG{50}
+- field: openedBy
+  range: admin
+- field: type
+  range: codeerror{10},config{10},install{10},security{10},performance{10}

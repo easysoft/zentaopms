@@ -1,0 +1,87 @@
+---
+title: 文档文档区块测试数据
+desc: 为printProductDocBlock方法准备文档测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文档ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 关联产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: lib
+  note: 文档库ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: title
+  note: 文档标题
+  range: 用户手册{10}, 技术文档{10}, 产品说明{10}, 接口文档{10}, 测试文档{10}
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 文档类型
+  range: [text{30}, markdown{15}, html{5}]
+  prefix: ""
+  postfix: ""
+- field: addedBy
+  note: 创建者
+  range: [admin{25}, user1{15}, user2{10}]
+  prefix: ""
+  postfix: ""
+- field: addedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00~2023-12-31 23:59:59
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: 2023-06-01 00:00:00~2024-01-31 23:59:59
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 文档状态
+  range: [normal{40}, draft{8}, archived{2}]
+  prefix: ""
+  postfix: ""
+- field: acl
+  note: 访问控制
+  range: [open{35}, private{10}, custom{5}]
+  prefix: ""
+  postfix: ""
+- field: groups
+  note: 访问分组
+  range: [""{35}, 1,2,3{10}, 2,4{5}]
+  prefix: ""
+  postfix: ""
+- field: readGroups
+  note: 只读分组
+  range: [""{40}, 1,2{8}, 3,4{2}]
+  prefix: ""
+  postfix: ""
+- field: users
+  note: 访问用户
+  range: [""{35}, admin,user1{10}, user2,user3{5}]
+  prefix: ""
+  postfix: ""
+- field: readUsers
+  note: 只读用户
+  range: [""{40}, admin{5}, user1{3}, user2{2}]
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: "0"
+  prefix: ""
+  postfix: ""
+- field: vision
+  note: 界面版本
+  range: rnd{50}
+  prefix: ""
+  postfix: ""

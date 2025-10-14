@@ -1,0 +1,29 @@
+title: project表测试数据，用于getlinkedobjects方法
+author: Claude
+version: 1
+
+fields:
+- field: id
+  range: 1-10
+  note: 项目ID
+- field: name
+  range: '项目{1-5}, 执行{6-10}'
+  note: 项目名称
+- field: type
+  range: 'project{5}, sprint{5}'
+  note: 项目类型
+- field: status
+  range: 'wait{2}, doing{3}, suspended{2}, closed{3}'
+  note: 项目状态
+- field: begin
+  range: '2024-01-01, 2024-02-01, 2024-03-01{8}'
+  note: 开始时间
+- field: end
+  range: '2024-12-31, 2025-01-31, 2025-02-28{8}'
+  note: 结束时间
+- field: project
+  range: '0{5}, 1{3}, 2{2}'
+  note: 父项目ID
+- field: deleted
+  range: '0{9}, 1{1}'
+  note: 删除状态

@@ -1,0 +1,54 @@
+---
+title: 项目团队成员插入测试数据
+desc: 用于测试projectTao::insertMember方法的测试数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 团队成员ID
+  range: 1-100
+  format: ""
+- field: root
+  note: 项目/执行ID
+  range: 1-10
+- field: type
+  note: 类型
+  range: project{80},execution{20}
+- field: account
+  note: 用户账户
+  range: user1,user2,user3,user4,user5,admin
+- field: role
+  note: 角色
+  range: dev{30},qa{20},pm{15},po{15},tester{20}
+- field: position
+  note: 职位
+  range: ""
+- field: limited
+  note: 权限限制
+  range: no{80},yes{20}
+- field: join
+  note: 加入日期
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD
+- field: days
+  note: 可用工作天数
+  range: 1-30
+- field: hours
+  note: 每日工作小时数
+  range: 6.0-8.5:0.5
+- field: estimate
+  note: 预计工时
+  range: 0-100:10
+  format: "%.2f"
+- field: consumed
+  note: 已消耗工时
+  range: 0-50:5
+  format: "%.2f"
+- field: left
+  note: 剩余工时
+  range: 0-80:10
+  format: "%.2f"
+- field: order
+  note: 排序
+  range: 0-10

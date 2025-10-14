@@ -57,6 +57,7 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router', 'upgrading
 $common = $app->loadCommon();
 
 /* Reset the config params to make sure the install program will be lauched. */
+$oldRequestType = zget($config, 'requestType', '');
 $config->set('requestType', 'GET');
 $config->set('default.module', 'upgrade');
 if($config->debug > 1) $config->debug = true;

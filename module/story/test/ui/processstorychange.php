@@ -9,7 +9,7 @@ timeout=0
 cid=83
 */
 chdir (__DIR__);
-include '../lib/processstorychange.ui.class.php';
+include '../lib/ui/processstorychange.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

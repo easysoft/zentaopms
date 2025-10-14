@@ -12,7 +12,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/editprogram.ui.class.php';
+include '../lib/ui/editprogram.ui.class.php';
 
 $program = zenData('project');
 $program->id->range('1-2');

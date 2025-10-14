@@ -35,7 +35,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/activatetask.ui.class.php';
+include '../lib/ui/activatetask.ui.class.php';
 
 $user = zenData('user');
 $user->id->range('1-3');

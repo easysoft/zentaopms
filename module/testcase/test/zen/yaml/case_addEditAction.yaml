@@ -1,0 +1,90 @@
+---
+title: 测试用例表数据
+desc: 为addEditAction方法提供测试用例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0
+  format: ""
+- field: module
+  note: 模块ID
+  range: 1-5
+  format: ""
+- field: story
+  note: 需求ID
+  range: 0
+  format: ""
+- field: title
+  note: 用例标题
+  range: '测试用例标题1,测试用例标题2,测试用例标题3,测试用例标题4,测试用例标题5,测试用例标题6,测试用例标题7,测试用例标题8,测试用例标题9,测试用例标题10'
+  format: ""
+- field: precondition
+  note: 前置条件
+  range: '前置条件1,前置条件2,前置条件3,前置条件4,前置条件5{6}'
+  format: ""
+- field: keywords
+  note: 关键字
+  range: '关键字1,关键字2,关键字3{8}'
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4:R
+  format: ""
+- field: type
+  note: 用例类型
+  range: 'feature{5},performance{2},config{1},install{1},security{1}'
+  format: ""
+- field: stage
+  note: 适用阶段
+  range: '1,2,3,4,5'
+  format: ""
+- field: status
+  note: 用例状态
+  range: 'wait{3},active{4},blocked{2},investigating{1}'
+  format: ""
+- field: openedBy
+  note: 由谁创建
+  range: 'admin,user1,user2,tester1,tester2'
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: '2023-01-01 10:00:00,2023-01-02 10:00:00,2023-01-03 10:00:00{8}'
+  format: ""
+- field: lastEditedBy
+  note: 最后修改者
+  range: 'admin,user1,user2'
+  format: ""
+- field: lastEditedDate
+  note: 最后修改时间
+  range: '2023-01-05 15:00:00,2023-01-06 15:00:00,2023-01-07 15:00:00{8}'
+  format: ""
+- field: version
+  note: 版本号
+  range: 1-3
+  format: ""
+- field: linkCase
+  note: 相关用例
+  range: '0{8},1,2'
+  format: ""
+- field: fromBug
+  note: 来源Bug
+  range: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  format: ""

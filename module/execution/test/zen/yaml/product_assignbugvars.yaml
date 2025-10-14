@@ -1,0 +1,18 @@
+---
+title: product data for assignBugVars test
+desc: Test data for product related to assignBugVars method
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: "产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10"
+- field: code
+  range: "prod001,prod002,prod003,prod004,prod005,prod006,prod007,prod008,prod009,prod010"
+- field: type
+  range: "normal{8},branch{2}"
+- field: status
+  range: "normal{8},closed{2}"
+- field: line
+  range: 0

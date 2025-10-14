@@ -1,0 +1,42 @@
+---
+title: assignEditSceneVars方法分支测试数据
+desc: 为testcaseZen::assignEditSceneVars()方法提供分支测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: "主干,分支1,分支2,分支3,分支4"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: "active{3},closed{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

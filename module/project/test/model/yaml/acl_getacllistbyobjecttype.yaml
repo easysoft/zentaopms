@@ -1,0 +1,49 @@
+---
+title: ACL表测试数据 - getAclListByObjectType方法
+desc: 用于测试根据对象类型获取访问控制列表功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 访问控制列表ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{3}, user1{3}, user2{3}, testuser{3}, guest{3}, dev{3}, pm{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: project{7}, product{5}, program{3}, execution{3}, task{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 权限类型
+  range: whitelist{15}, blacklist{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: source
+  note: 来源
+  range: system{10}, manual{6}, auto{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

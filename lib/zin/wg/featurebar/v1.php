@@ -94,8 +94,9 @@ class featureBar extends wg
                     $subItem['text']   = $text;
                     $subItem['active'] = $rawItem->name == 'QUERY' ? $key == $param : $key == $current;
                     $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
+                    $subItem['url']    = $isModal ? '#featureBar' : $url;
 
-                    $isModal ? ($subItem['onClick'] = jsRaw("() => loadModal('{$url}')")) : ($subItem['url'] = $url);
+                    if($isModal) $subItem['onClick'] = jsRaw("() => loadModal('{$url}')");
 
                     if($rawItem->name == 'QUERY')
                     {
@@ -138,9 +139,11 @@ class featureBar extends wg
                 'active'    => $isActive,
                 'badge'     => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
                 'props'     => array('data-id' => $rawItem->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'title' => $rawItem->text),
-                'textClass' => 'text-ellipsis max-w-32'
+                'textClass' => 'text-ellipsis max-w-32',
+                'url'       => $isModal ? '#featureBar' : $url
             );
-            $isModal ? ($item['onClick'] = "loadModal('{$url}')") : ($item['url'] = $url);
+
+            if($isModal) $item['onClick'] = "loadModal('{$url}')";
             $items[] = $item;
         }
 

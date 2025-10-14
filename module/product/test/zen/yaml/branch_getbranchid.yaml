@@ -1,0 +1,46 @@
+---
+title: 分支表数据定义
+desc: 用于测试getBranchID方法的分支数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  format: ""
+- field: name
+  note: 分支名称
+  range: main,dev,feature,release,hotfix
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{4},closed{1}
+  format: ""
+- field: desc
+  note: 分支描述
+  range: 主分支,开发分支,功能分支,发布分支,热修复分支
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: 2023-01-01-2023-12-31
+  format: YYYY-MM-DD
+- field: closedDate
+  note: 关闭日期
+  range: []{4},2023-12-31{1}
+  format: YYYY-MM-DD
+- field: order
+  note: 排序
+  range: 1-10
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{9},1{1}
+  format: ""

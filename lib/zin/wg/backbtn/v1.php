@@ -99,7 +99,9 @@ class backBtn extends btn
             'program'        => 'program-browse,program-productview',
             'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
             'cm'             => 'cm-browse,cm-view',
-            'deliverable'    => 'deliverable-browse,project-deliverable,action-trash'
+            'deliverable'    => 'deliverable-browse,project-deliverable,action-trash',
+            'weekly'         => 'weekly-browse',
+            'milestone'      => 'weekly-browse'
         );
 
         $props  = parent::getProps();

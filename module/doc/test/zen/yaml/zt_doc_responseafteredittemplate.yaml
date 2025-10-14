@@ -1,0 +1,134 @@
+---
+title: 测试文档模板编辑后响应数据
+desc: 为responseAfterEditTemplate方法提供测试数据
+
+fields:
+- field: id
+  note: 文档ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: vision
+  note: 版本类型
+  range: rnd{10}
+  
+- field: lib
+  note: 文档库ID
+  range: 1-3
+
+- field: template
+  note: 模板ID
+  range: 1{3}, 2{3}, 3{4}
+
+- field: templateType
+  note: 模板类型
+  range: general{5}, system{3}, custom{2}
+
+- field: title
+  note: 文档标题
+  range: 文档模板{3}, 系统模板{3}, 自定义模板{2}, 测试模板{2}
+
+- field: type
+  note: 文档类型
+  range: html{6}, word{2}, excel{1}, ppt{1}
+
+- field: status
+  note: 文档状态
+  range: draft{4}, normal{5}, closed{1}
+
+- field: parent
+  note: 父文档ID
+  range: 0{7}, 1{2}, 2{1}
+
+- field: path
+  note: 文档路径
+  range: ',1,'{3}, ',2,'{3}, ',1,2,'{2}, ',3,'{2}
+
+- field: grade
+  note: 文档等级
+  range: 0{5}, 1{3}, 2{2}
+
+- field: order
+  note: 排序
+  range: 1-10
+
+- field: views
+  note: 浏览次数
+  range: 0-100:R
+
+- field: collector
+  note: 收藏者
+  range: ',admin,'{3}, ',user1,admin,'{2}, ''{5}
+
+- field: keywords
+  note: 关键字
+  range: 模板,系统{3}, 文档,测试{3}, 自定义{2}, ''{2}
+
+- field: version
+  note: 版本号
+  range: 1{8}, 2{2}
+
+- field: addedBy
+  note: 创建者
+  range: admin{5}, user1{3}, user2{2}
+
+- field: addedDate
+  note: 创建时间
+  range: (M)-(w):60s
+
+- field: editedBy
+  note: 编辑者
+  range: admin{4}, user1{3}, user2{2}, ''{1}
+
+- field: editedDate
+  note: 编辑时间
+  range: (w)-(D):30m
+
+- field: assignedTo
+  note: 指派给
+  range: ''{6}, admin{2}, user1{1}, user2{1}
+
+- field: assignedBy
+  note: 指派者
+  range: ''{6}, admin{2}, user1{1}, user2{1}
+
+- field: assignedDate
+  note: 指派时间
+  range: '0000-00-00 00:00:00'{6}, (w)-(D):30m
+
+- field: mailto
+  note: 抄送
+  range: ''{8}, 'admin,user1'{1}, 'user2'{1}
+
+- field: deleted
+  note: 是否删除
+  range: '0'{9}, '1'{1}
+
+- field: acl
+  note: 访问控制
+  range: open{4}, private{3}, custom{3}
+
+- field: groups
+  note: 分组权限
+  range: ''{7}, '1,2'{2}, '3'{1}
+
+- field: users
+  note: 用户权限
+  range: ''{7}, 'admin,user1'{2}, 'user2'{1}
+
+- field: project
+  note: 项目ID
+  range: 0{5}, 1{3}, 2{2}
+
+- field: product
+  note: 产品ID
+  range: 0{6}, 1{2}, 2{2}
+
+- field: execution
+  note: 执行ID
+  range: 0{7}, 1{2}, 3{1}
+
+- field: module
+  note: 模块ID
+  range: 0{5}, 1{3}, 2{2}

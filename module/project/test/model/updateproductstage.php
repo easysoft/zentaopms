@@ -63,7 +63,7 @@ $postData->products = array(1, 2, 3, 4);
 $postData->branch   = array(array(0), array(1, 2), array(3, 4), array(5));
 $postData->plans    = array(1 => array(1), 2 => array(2), 3 => array(3), 4 => array(4));
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 r($projectTester->updateProductStageTest(1, $postData)[2]) && p('product:1')    && e('1');     //检查阶段一关联产品一
 r($projectTester->updateProductStageTest(1, $postData)[2]) && p('branch:0')     && e('0');     //检查阶段一关联分支
 r($projectTester->updateProductStageTest(1, $postData)[2]) && p('plan:1')       && e('1');     //检查阶段一关联计划

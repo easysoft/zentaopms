@@ -1,0 +1,36 @@
+title: checkDocPriv方法测试文档库数据
+desc: 用于测试search模块tao层checkDocPriv方法的文档库数据
+
+fields:
+- field: id
+  range: 1-5
+- field: vision
+  range: 'rnd'
+- field: type
+  range: 'custom'
+- field: parent
+  range: '0'
+- field: product
+  range: '0'
+- field: project
+  range: '0'
+- field: execution
+  range: '0'
+- field: name
+  range: 'Test Doc Lib {1-5}'
+- field: acl
+  range: 'open{3},private{2}'
+- field: whitelist
+  range: ''
+- field: groups
+  range: ''
+- field: users
+  range: ''
+- field: main
+  range: '0'
+- field: collector
+  range: ''
+- field: order
+  range: '5,10,15,20,25'
+- field: deleted
+  range: '0'

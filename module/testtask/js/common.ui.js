@@ -130,8 +130,11 @@ function createBug(event)
         if($(this).prop('checked')) stepIdList += $(this).val() + '_';
     });
 
-    var link = $.createLink('bug', 'create', $form.data('params') + ',stepIdList=' + stepIdList);
-    openUrl(link, {load: 'modal'});
+    const formData = new FormData();
+    formData.append('stepIdList', stepIdList);
+
+    var link = $.createLink('bug', 'create', $form.data('params'));
+    postAndLoadPage(link, formData);
 
     $('#runCaseModal').closest('.modal').off('hide.zui.modal');
     $('#casesResults').closest('.modal').off('hide.zui.modal');

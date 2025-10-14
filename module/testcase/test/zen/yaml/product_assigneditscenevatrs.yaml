@@ -1,0 +1,19 @@
+---
+title: 产品测试数据
+desc: 用于测试assignEditSceneVars方法的产品数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 产品一,产品二,产品三,产品四,产品五
+- field: code
+  range: product1,product2,product3,product4,product5
+- field: type
+  range: normal{5}
+- field: status
+  range: normal{4},closed{1}
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: '2024-01-01 00:00:00{5}'

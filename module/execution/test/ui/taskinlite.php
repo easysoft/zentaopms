@@ -62,7 +62,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/taskinlite.ui.class.php';
+include '../lib/ui/taskinlite.ui.class.php';
 global $config;
 
 $user = zenData('user');

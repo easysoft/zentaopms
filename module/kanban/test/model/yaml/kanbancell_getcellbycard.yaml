@@ -1,0 +1,27 @@
+---
+title: 看板单元格数据定义
+desc: 用于测试getCellByCard方法的看板单元格数据
+
+fields:
+- field: id
+  note: 单元格ID
+  range: 1-10
+- field: kanban
+  note: 看板ID
+  range: 101{5},102{5}
+- field: lane
+  note: 泳道ID
+  range: 1{5},2{5}
+- field: column
+  note: 列ID  
+  range: 1-5,1-5
+- field: type
+  note: 单元格类型
+  range: common
+- field: cards
+  note: 卡片ID列表，逗号分隔格式
+  fields:
+  - field: cardid
+    range: 101,102,103,999,,201,,,,
+    prefix: ","
+    postfix: ","

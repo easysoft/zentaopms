@@ -1,0 +1,45 @@
+---
+title: Action数据用于importJiraAction测试
+desc: 用于测试Jira Action导入功能的Action表数据
+
+fields:
+- field: id
+  range: 1-1000
+  note: 操作记录ID
+
+- field: objectType
+  range: [story, task, bug]
+  note: 对象类型
+
+- field: objectID  
+  range: 101-103
+  note: 对象ID
+
+- field: actor
+  range: [admin, testuser, user1, user2]
+  note: 操作者
+
+- field: action
+  range: commented{10}
+  note: 操作类型
+
+- field: date
+  range: 2024-01-01 10:00:00-2024-01-10 18:00:00
+  format: YYYY-MM-DD hh:mm:ss
+  note: 操作时间
+
+- field: comment
+  range: [This is a test comment, First comment, Second comment, Third comment]
+  note: 评论内容
+
+- field: extra
+  range: ['']
+  note: 额外信息
+
+- field: read
+  range: ['0']
+  note: 阅读状态
+
+- field: vision
+  range: rnd{10}
+  note: 视图类型

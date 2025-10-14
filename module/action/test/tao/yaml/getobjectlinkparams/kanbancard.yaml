@@ -1,0 +1,57 @@
+---
+title: kanbancard表测试数据
+desc: 看板卡片数据
+
+fields:
+- field: id
+  range: 1-10
+- field: kanban
+  range: 1{4},2{3},3{3}
+- field: region
+  range: 1{4},2{3},3{3}
+- field: group
+  range: 1{4},2{3},3{3}
+- field: fromID
+  range: 0{3},1{3},2{2},3{2}
+- field: fromType
+  range: task{4},story{3},bug{3}
+- field: name
+  range: 卡片1{3},卡片2{3},卡片3{4}
+- field: status
+  range: doing{4},wait{3},done{3}
+- field: pri
+  range: 1{2},2{3},3{3},4{2}
+- field: estimate
+  range: 0{2},4{3},8{3},16{2}
+- field: consumed
+  range: 0{4},2{3},4{2},8{1}
+- field: left
+  range: 0{3},2{3},4{2},8{2}
+- field: assignedTo
+  range: admin{4},user1{3},user2{3}
+- field: color
+  range: '[]{5}',red{2},blue{2},green{1}
+- field: acl
+  range: open{7},private{2},custom{1}
+- field: whitelist
+  range: '[]{7}',user1,user2{2},admin,user1{1}
+- field: desc
+  range: 测试卡片描述{3},项目任务卡片{3},Bug修复卡片{4}
+- field: begin
+  range: (-7d)-(-3d){6},[]{4}
+- field: end
+  range: (-2d)-(+3d){6},[]{4}
+- field: createdBy
+  range: admin{5},user1{3},user2{2}
+- field: createdDate
+  range: (-10d)-(-1d)
+- field: lastEditedBy
+  range: admin{4},user1{3},user2{2},[]{1}
+- field: lastEditedDate
+  range: (-5d)-(now),[]{1}
+- field: assignedBy
+  range: admin{4},user1{3},user2{2},[]{1}
+- field: assignedDate
+  range: (-6d)-(-1d){9},[]{1}
+- field: deleted
+  range: 0{9},1{1}

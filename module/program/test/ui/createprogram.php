@@ -24,7 +24,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/createprogram.ui.class.php';
+include '../lib/ui/createprogram.ui.class.php';
 
 zendata('project')->loadYaml('program', false, 2)->gen(10);
 $tester = new createProgramTester();

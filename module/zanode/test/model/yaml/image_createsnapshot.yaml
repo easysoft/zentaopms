@@ -1,0 +1,62 @@
+---
+title: 创建快照测试数据
+desc: 用于测试createSnapshot方法的镜像快照数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 快照ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: host
+  note: 关联的节点ID
+  range: 1,2,3,1,2
+  format: ""
+- field: name
+  note: 快照名称
+  range: test-snapshot1,test-snapshot2,test-snapshot3,test-snapshot4,test-snapshot5
+  format: ""
+- field: localName
+  note: 本地名称
+  range: test-snapshot1,test-snapshot2,test-snapshot3,test-snapshot4,test-snapshot5
+  format: ""
+- field: desc
+  note: 快照描述
+  range: '测试快照1,测试快照2,测试快照3,测试快照4,测试快照5'
+  format: ""
+- field: status
+  note: 快照状态
+  range: creating{5}
+  format: ""
+- field: osName
+  note: 操作系统名称
+  range: Ubuntu20.04{2},CentOS7{2},Windows10{1}
+  format: ""
+- field: memory
+  note: 内存大小
+  range: 0{5}
+  format: ""
+- field: disk
+  note: 磁盘大小
+  range: 0{5}
+  format: ""
+- field: fileSize
+  note: 文件大小
+  range: 0{5}
+  format: ""
+- field: from
+  note: 来源类型
+  range: snapshot{5}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{2},user{2},system{1}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{5}'
+  format: ""

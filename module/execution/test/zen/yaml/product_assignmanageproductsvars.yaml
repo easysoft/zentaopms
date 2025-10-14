@@ -1,0 +1,53 @@
+---
+title: 产品测试数据 - assignManageProductsVars
+desc: 用于测试assignManageProductsVars方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  note: 产品代码
+  range: PROD001-PROD005
+- field: type
+  note: 产品类型
+  range: normal
+- field: status
+  note: 状态
+  range: normal
+- field: line
+  note: 产品线
+  range: 0
+- field: desc
+  note: 产品描述
+  range: 这是测试产品1,这是测试产品2,这是测试产品3,这是测试产品4,这是测试产品5
+- field: po
+  note: 产品负责人
+  range: admin
+- field: qd
+  note: 测试负责人
+  range: admin
+- field: rd
+  note: 发布负责人
+  range: admin
+- field: feedback
+  note: 反馈负责人
+  range: admin
+- field: acl
+  note: 访问控制
+  range: open
+- field: whitelist
+  note: 白名单
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00
+- field: deleted
+  note: 删除标记
+  range: 0

@@ -1,0 +1,44 @@
+---
+title: Tree数据 for getSidebarMenus测试
+desc: 用于测试pivot模块zen层getSidebarMenus方法的Tree数据
+
+fields:
+- field: id
+  range: 1-10
+  note: 分组ID
+
+- field: name  
+  range: '系统报表,产品报表,项目报表,测试报表'
+  note: 分组名称
+
+- field: path
+  range: ',1,',',2,',',3,',',4,'
+  note: 分组路径
+
+- field: grade
+  range: 1{4}
+  note: 分组等级
+
+- field: type
+  range: 'pivot'
+  note: 分组类型
+
+- field: root
+  range: 1-4
+  note: 分组根节点
+
+- field: parent
+  range: 0{4}
+  note: 父分组ID
+
+- field: order
+  range: 1-4
+  note: 显示顺序
+
+- field: collector
+  range: product,project,execution,test
+  note: 收集器类型
+
+- field: deleted
+  range: '0'
+  note: 删除状态

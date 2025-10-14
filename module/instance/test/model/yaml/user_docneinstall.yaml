@@ -1,0 +1,23 @@
+---
+title: user表测试数据
+desc: 用于doCneInstall方法测试的用户数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-2
+- field: account
+  note: 用户账号
+  range: admin,user
+- field: realname
+  note: 真实姓名
+  range: 管理员,普通用户
+- field: password
+  note: 密码
+  range: 5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9{2}
+- field: role
+  note: 角色
+  range: admin,dev
+- field: deleted
+  note: 删除标记
+  range: 0

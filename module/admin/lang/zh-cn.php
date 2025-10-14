@@ -184,8 +184,6 @@ $lang->admin->menuSetting['dev']['name']           = '二次开发';
 $lang->admin->menuSetting['dev']['desc']           = '支持对系统进行二次开发。';
 $lang->admin->menuSetting['convert']['name']       = '数据导入';
 $lang->admin->menuSetting['convert']['desc']       = '第三方系统的数据导入。';
-$lang->admin->menuSetting['ai']['name']            = 'AI 配置';
-$lang->admin->menuSetting['ai']['desc']            = '支持配置与管理AI提词、AI小程序及大语言模型。';
 $lang->admin->menuSetting['adminregister']['name'] = '加入禅道社区';
 $lang->admin->menuSetting['adminregister']['desc'] = '获取项目管理大礼包、技术支持服务、体验各版本Demo。';
 
@@ -215,13 +213,6 @@ $lang->admin->productFeature['ipd'][] = '内置需求池管理，用于需求收
 $lang->admin->productFeature['ipd'][] = '完整支持产品路标规划和立项流程';
 $lang->admin->productFeature['ipd'][] = '提供完整的市场管理、调研管理和报告管理';
 $lang->admin->productFeature['ipd'][] = '提供完整的IPD研发流程，内置TR和DCP评审';
-
-$lang->admin->ai = new stdclass();
-$lang->admin->ai->model        = '语言模型';
-$lang->admin->ai->conversation = 'AI 会话';
-$lang->admin->ai->miniPrograms = 'AI 小程序';
-$lang->admin->ai->prompt       = 'AI 提词';
-$lang->admin->ai->assistant    = 'AI 助手';
 
 $lang->admin->community = new stdclass();
 $lang->admin->community->registerTitle       = '加入禅道社区';

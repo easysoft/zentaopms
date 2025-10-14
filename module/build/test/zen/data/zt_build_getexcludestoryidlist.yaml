@@ -1,0 +1,45 @@
+---
+fields:
+- field: id
+  range: 1-5
+- field: project
+  range: 11{3},12{2}
+- field: product
+  range: 1{3},2{1},3{1}
+- field: branch
+  range: 0{4},1{1}
+- field: execution
+  range: 101{2},102{2},103{1}
+- field: builds
+  range: '[]{3},1,2{1},2,3,4{1}'
+- field: name
+  range: 构建版本001{2},构建版本002{2},构建版本003{1}
+- field: system
+  range: 1-5
+- field: scmPath
+  range: 'https://gitlab.test.com/project{3},[]{2}'
+- field: filePath
+  range: '/data/builds/{3},[]{2}'
+- field: date
+  range: (-7D)-(+7D):1D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: stories
+  range: '"1,2,3"{2},"4,5"{1},"6,7,8,9"{1},[]{1}'
+- field: bugs
+  range: '"1,2"{2},"3,4,5"{1},[]{2}'
+- field: artifactRepoID
+  range: 0
+- field: builder
+  range: admin{2},user{2},test{1}
+- field: desc
+  range: 构建版本描述信息{3},[]{2}
+- field: createdBy
+  range: admin{3},user{2}
+- field: createdDate
+  range: (-7D)-(+7D):1D
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0
+...

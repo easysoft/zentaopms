@@ -74,16 +74,32 @@ class groupTest
      */
     public function insertPrivsTest($privs)
     {
-        $this->objectModel->insertPrivs($privs);
+        $result = $this->objectModel->insertPrivs($privs);
+        if(dao::isError()) return dao::getError();
 
-        $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->fetchGroup('group');
-        foreach($privs as $group => $privList)
-        {
-            foreach($privList as $key => $priv) $privs[$group][$key] = $priv->module . '-' . $priv->method;
-        }
-
-        return $privs;
+        return $result;
     }
+
+    public function getGroupPrivsTest($groupId = 0)
+    {
+        if($groupId == 0)
+        {
+            $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->fetchGroup('group');
+            foreach($privs as $group => $privList)
+            {
+                foreach($privList as $key => $priv) $privs[$group][$key] = $priv->module . '-' . $priv->method;
+            }
+            return $privs;
+        }
+        else
+        {
+            $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->where('group')->eq($groupId)->fetchAll();
+            $result = array();
+            foreach($privs as $key => $priv) $result[$key] = $priv->module . '-' . $priv->method;
+            return $result;
+        }
+    }
+
 
     /**
      * Copy a group.
@@ -353,6 +369,36 @@ class groupTest
     }
 
     /**
+     * Verify remove operation completeness.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return object
+     */
+    public function verifyRemoveCompleteTest($groupID)
+    {
+        $this->objectModel->remove($groupID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 检查group表中是否还存在该记录
+        $groupExists = $this->objectModel->dao->select('count(*)')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('count(*)');
+
+        // 检查usergroup表中是否还存在该组的关联记录
+        $usergroupExists = $this->objectModel->dao->select('count(*)')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetch('count(*)');
+
+        // 检查grouppriv表中是否还存在该组的权限记录
+        $groupprivExists = $this->objectModel->dao->select('count(*)')->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetch('count(*)');
+
+        $result = new stdclass();
+        $result->groupExists = $groupExists;
+        $result->usergroupExists = $usergroupExists;
+        $result->groupprivExists = $groupprivExists;
+
+        return $result;
+    }
+
+    /**
      * Update privilege of a group.
      *
      * @param  int    $groupID
@@ -569,5 +615,111 @@ class groupTest
         }
 
         return array('depend' => $depend, 'recommend' => $recommend);
+    }
+
+    /**
+     * Test getProgramsForAdminGroup method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramsForAdminGroupTest()
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProgramsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsForAdminGroup method.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return array
+     */
+    public function getProductsForAdminGroupTest($programs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('getProductsForAdminGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $programs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProductsForAdminGroup method return count.
+     *
+     * @param  array  $programs
+     * @access public
+     * @return int
+     */
+    public function getProductsForAdminGroupCountTest($programs = array())
+    {
+        $result = $this->getProductsForAdminGroupTest($programs);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
+
+    /**
+     * Test processDepends method.
+     *
+     * @param  array $depends
+     * @param  array $privs
+     * @param  array $excludes
+     * @param  array $processedPrivs
+     * @access public
+     * @return array
+     */
+    public function processDependsTest($depends, $privs, $excludes, $processedPrivs = array())
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('processDepends');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $depends, $privs, $excludes, $processedPrivs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkNavSubset method.
+     *
+     * @param  string $nav
+     * @param  string $subset
+     * @access public
+     * @return bool
+     */
+    public function checkNavSubsetTest($nav, $subset)
+    {
+        $reflectionClass = new ReflectionClass($this->objectModel);
+        $method = $reflectionClass->getMethod('checkNavSubset');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $nav, $subset);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getPrivsByParents method.
+     *
+     * @param  string $selectedSubset
+     * @param  string $selectedPackages
+     * @access public
+     * @return array
+     */
+    public function getPrivsByParentsTest($selectedSubset, $selectedPackages = '')
+    {
+        $result = $this->objectModel->getPrivsByParents($selectedSubset, $selectedPackages);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

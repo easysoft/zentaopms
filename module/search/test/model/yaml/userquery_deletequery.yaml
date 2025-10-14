@@ -1,0 +1,30 @@
+---
+title: 用户查询删除测试数据
+desc: 为deleteQuery方法测试提供数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 查询ID
+  range: 1-10
+
+- field: account
+  note: 用户账号
+  range: admin,admin,admin,user1,user1,user1,user2,user2,user2,user2
+
+- field: module
+  note: 模块名称
+  range: bug,story,task,bug,story,task,bug,story,task,bug
+
+- field: title
+  note: 查询标题
+  range: 查询1,查询2,查询3,查询4,查询5,查询6,查询7,查询8,查询9,查询10
+
+- field: form
+  note: 表单数据
+  range: 'a:0:{}','a:1:{}','a:2:{}','a:3:{}','a:4:{}','a:5:{}','a:6:{}','a:7:{}','a:8:{}','a:9:{}'
+
+- field: sql
+  note: SQL查询语句
+  range: '1=1','id>0','status="active"','deleted="0"','type="bug"','priority>1','status in ("active","doing")','owner="admin"','openedBy="user1"','id between 1 and 100'

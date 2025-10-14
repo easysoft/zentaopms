@@ -1,0 +1,88 @@
+---
+title: chart表测试数据用于checkAccess方法
+desc: 包含不同ACL权限和用户创建者的图表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 图表ID
+  range: 1-10
+- field: name
+  note: 图表名称
+  range: 测试图表1,测试图表2,测试图表3,测试图表4,测试图表5,测试图表6,测试图表7,测试图表8,测试图表9,测试图表10
+- field: code
+  note: 图表代码
+  range: chart1,chart2,chart3,chart4,chart5,chart6,chart7,chart8,chart9,chart10
+- field: driver
+  note: 驱动类型
+  range: mysql{10}
+- field: mode
+  note: 模式
+  range: builder{10}
+- field: dimension
+  note: 维度
+  range: 1{10}
+- field: type
+  note: 图表类型
+  range: pie,line,bar{3},cluBarX{2},radar{3}
+- field: group
+  note: 分组
+  range: 1{5},2{5}
+- field: dataset
+  note: 数据集
+  range: 0{10}
+- field: desc
+  note: 描述
+  range: 测试图表描述{10}
+- field: acl
+  note: 访问控制
+  range: open{5},private{5}
+- field: whitelist
+  note: 白名单
+  range: []{3},user1,user2,user3{2},user7,user8,user9
+- field: settings
+  note: 设置
+  range: []{10}
+- field: filters
+  note: 过滤器
+  range: []{10}
+- field: step
+  note: 步骤
+  range: 0{10}
+- field: fields
+  note: 字段
+  range: []{10}
+- field: langs
+  note: 语言
+  range: []{10}
+- field: sql
+  note: SQL语句
+  range: 'SELECT * FROM zt_project'{10}
+- field: version
+  note: 版本
+  range: 1{10}
+- field: stage
+  note: 状态
+  range: published{10}
+- field: builtin
+  note: 内置标识
+  range: 0{10}
+- field: objects
+  note: 对象
+  range: []{10}
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2,user3,user4{2},user5,user6,user7,user8
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00{10}
+- field: editedBy
+  note: 编辑者
+  range: []{10}
+- field: editedDate
+  note: 编辑时间
+  range: []{10}
+- field: deleted
+  note: 删除标识
+  range: 0{10}

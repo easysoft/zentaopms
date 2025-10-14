@@ -1,0 +1,35 @@
+---
+title: 项目需求关联数据表用于updateLane测试
+desc: 用于测试storyTao::updateLane()方法的项目需求关联数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-10
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0-2
+  loop: 0
+  format: ""
+- field: story
+  note: 需求ID
+  range: 1-20
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1-3
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 0-100
+  loop: 0
+  format: ""

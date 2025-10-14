@@ -1,0 +1,63 @@
+---
+title: action表数据定义 - getDocLibLinkParameters方法测试
+desc: 为getDocLibLinkParameters方法提供测试数据，覆盖各种文档库类型场景
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+
+- field: objectType
+  note: 对象类型
+  range: doclib{20}
+- field: objectID
+  note: 对象ID，对应文档库ID
+  range: 1-20
+
+- field: product
+  note: 产品ID，用于测试产品类型文档库
+  range: 1{5},2{5},[]{10}
+
+- field: project
+  note: 项目ID，用于测试项目类型文档库
+  range: []{5},1{5},2{5},[]{5}
+
+- field: execution
+  note: 执行ID，用于测试执行类型文档库
+  range: []{10},1{5},2{5}
+
+- field: actor
+  note: 操作人
+  range: admin{10},user1{5},user2{5}
+
+- field: action
+  note: 操作类型
+  range: created{5},edited{5},deleted{5},viewed{5}
+
+- field: date
+  note: 操作时间
+  range: (-7d)-(-1d)
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: comment
+  note: 备注
+  range: 测试备注{5},空备注{10},[]{5}
+
+- field: extra
+  note: 额外信息
+  range: 1{5},2{5},[]{10}
+
+- field: read
+  note: 是否已读
+  range: 0{15},1{5}
+
+- field: vision
+  note: 视图
+  range: rnd{20}
+
+- field: efforted
+  note: 是否记录工时
+  range: 0{20}

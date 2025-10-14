@@ -1,0 +1,41 @@
+---
+title: 测试用例数据
+desc: 用于测试prepareCasesForBatchRun方法的测试用例数据
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1{8},2{2}
+- field: title
+  note: 用例标题
+  range: 测试用例{1-10}
+- field: type
+  note: 用例类型
+  range: feature{5},interface{3},performance{2}
+- field: status
+  note: 用例状态
+  range: normal{7},blocked{2},investigate{1}
+- field: version
+  note: 用例版本
+  range: 1{6},2{3},3{1}
+- field: auto
+  note: 自动化标识
+  range: no{7},auto{3}
+- field: stage
+  note: 适用阶段
+  range: unittest{3},feature{4},integration{3}
+- field: pri
+  note: 优先级
+  range: 1{2},2{4},3{3},4{1}
+- field: openedBy
+  note: 创建者
+  range: admin{5},user1{3},tester{2}
+- field: openedDate
+  note: 创建时间
+  range: (-1M)-(0)
+- field: deleted
+  note: 删除标识
+  range: 0{9},1{1}

@@ -1,0 +1,69 @@
+---
+title: 项目表数据定义
+desc: 为buildStartForm方法测试提供项目基础数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 项目名称
+  range: '[测试项目{5},正式项目{3},临时项目{2}]'
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 项目状态
+  range: '[wait{3},doing{4},suspended{2},closed{1}]'
+  prefix: ""
+  postfix: ""
+- field: model
+  note: 项目模型
+  range: '[scrum{4},waterfall{3},kanban{2},agile{1}]'
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 项目类型
+  range: 'project'
+  prefix: ""
+  postfix: ""
+- field: begin
+  note: 开始日期
+  range: '(-30d)-(+30d):7d'
+  format: YYYY-MM-DD
+  prefix: ""
+  postfix: ""
+- field: end
+  note: 结束日期
+  range: '(+30d)-(+90d):7d'
+  format: YYYY-MM-DD
+  prefix: ""
+  postfix: ""
+- field: PM
+  note: 项目经理
+  range: '[admin{3},user1{2},user2{2},user3{2},user4{1}]'
+  prefix: ""
+  postfix: ""
+- field: openedBy
+  note: 由谁创建
+  range: '[admin{5},user1{3},user2{2}]'
+  prefix: ""
+  postfix: ""
+- field: openedDate
+  note: 创建时间
+  range: '(-60d)-(now):1d'
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+- field: lastEditedBy
+  note: 最后编辑者
+  range: '[admin{4},user1{3},user2{2},user3{1}]'
+  prefix: ""
+  postfix: ""
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '(-30d)-(now):1d'
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""

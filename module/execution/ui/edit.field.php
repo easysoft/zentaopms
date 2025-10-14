@@ -224,3 +224,5 @@ $fields->field('acl')
         'userItems' => data('users'),
         'userValue' => data('execution.whitelist')
     ));
+
+if($project->model == 'ipd') $fields->field('attribute')->hidden();

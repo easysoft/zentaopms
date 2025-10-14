@@ -1,0 +1,26 @@
+---
+title: 干系人数据
+desc: 用于测试 getInvolvedListByCurrentUser 方法的项目干系人数据
+author: claude
+
+fields:
+- field: id
+  range: 1-10
+- field: objectID
+  range: 1-10
+- field: objectType
+  range: 'project{10}'
+- field: user
+  range: 'admin{2},user1{2},user2{2},user3{2},testuser{2}'
+- field: type
+  range: 'inside{5},outside{5}'
+- field: key
+  range: '0{7},1{3}'
+- field: from
+  range: 'manual{5},sync{5}'
+- field: deleted
+  range: '0{10}'
+- field: createdBy
+  range: 'admin{5},system{5}'
+- field: createdDate
+  range: '2024-01-01{5},2024-02-01{5}'

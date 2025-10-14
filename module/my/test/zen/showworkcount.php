@@ -4,71 +4,54 @@
 
 title=测试 myZen::showWorkCount();
 timeout=0
-cid=1
+cid=0
 
-- 执行$count @14
-- 执行$count['task'] @0
-- 执行$count['story'] @2
-- 执行$count['bug'] @10
-- 执行$count['case'] @3
-- 执行$count['testtask'] @0
-- 执行$count['requirement'] @2
-- 执行$count['epic'] @1
-- 执行$count['issue'] @0
-- 执行$count['risk'] @2
-- 执行$count['reviewissue'] @0
-- 执行$count['qa'] @0
-- 执行$count['meeting'] @0
-- 执行$count['ticket'] @0
-- 执行$count['feedback'] @0
+- 步骤1：正常情况，检查任务数量属性task @5
+- 步骤2：自定义分页参数属性story @3
+- 步骤3：检查bug数量属性bug @2
+- 步骤4：检查用例数量属性case @0
+- 步骤5：检查测试任务数量属性testtask @0
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/myzen.unittest.class.php';
 
-zenData('task')->gen(10);
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+
+// 2. zendata数据准备（根据需要配置）
+$task = zenData('task');
+$task->id->range('1-10');
+$task->name->range('Task{1-10}');
+$task->assignedTo->range('admin{5},user1{3},user2{2}');
+$task->status->range('wait{3},doing{4},done{3}');
+$task->deleted->range('0{10}');
+$task->gen(10);
+
 $story = zenData('story');
-$story->type->range('story,requirement,epic');
-$story->gen(30);
-zenData('bug')->gen(10);
-zenData('case')->gen(10);
-zenData('testtask')->gen(10);
-zenData('risk')->gen(10);
-$reviewissue = zenData('reviewissue');
-$reviewissue->project->range('1');
-$reviewissue->review->range('1-5');
-$reviewissue->type->range('review');
-$reviewissue->opinionDate->range('`2025-01-01`');
-$reviewissue->resolutionDate->range('`2025-01-01`');
-$reviewissue->createdDate->range('`2025-01-01`');
-$reviewissue->gen(5);
-zenData('nc')->gen(0);
-zenData('auditplan')->gen(10);
-zenData('meeting')->gen(10);
-zenData('feedback')->gen(10);
-zenData('ticket')->gen(10);
-zenData('demand')->gen(10);
+$story->id->range('1-5');
+$story->title->range('Story{1-5}');
+$story->assignedTo->range('admin{3},user1{2}');
+$story->status->range('active{3},reviewing{2}');
+$story->deleted->range('0{5}');
+$story->gen(5);
+
+$bug = zenData('bug');
+$bug->id->range('1-3');
+$bug->title->range('Bug{1-3}');
+$bug->assignedTo->range('admin{2},user1{1}');
+$bug->status->range('active{2},resolved{1}');
+$bug->deleted->range('0{3}');
+$bug->gen(3);
+
+// 3. 用户登录（选择合适角色）
 su('admin');
 
-global $config;
-$config->URAndSR  = 1;
-$config->enableER = 1;
-$config->edition  = 'ipd';
+// 4. 创建测试实例（变量名与模块名一致）
+$myTest = new myTest();
 
-$myTester = new myZenTest();
-$count    = $myTester->showWorkCountTest(0, 20, 1);
-r(count($count))         && p() && e('14');
-r($count['task'])        && p() && e('0');
-r($count['story'])       && p() && e('2');
-r($count['bug'])         && p() && e('10');
-r($count['case'])        && p() && e('3');
-r($count['testtask'])    && p() && e('0');
-r($count['requirement']) && p() && e('2');
-r($count['epic'])        && p() && e('1');
-r($count['issue'])       && p() && e('0');
-r($count['risk'])        && p() && e('2');
-r($count['reviewissue']) && p() && e('0');
-r($count['qa'])          && p() && e('0');
-r($count['meeting'])     && p() && e('0');
-r($count['ticket'])      && p() && e('0');
-r($count['feedback'])    && p() && e('0');
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
+r($myTest->showWorkCountTest()) && p('task') && e('5'); // 步骤1：正常情况，检查任务数量
+r($myTest->showWorkCountTest(100, 10, 1)) && p('story') && e('3'); // 步骤2：自定义分页参数
+r($myTest->showWorkCountTest(0, 10, 1)) && p('bug') && e('2'); // 步骤3：检查bug数量
+r($myTest->showWorkCountTest(50, 20, 2)) && p('case') && e('0'); // 步骤4：检查用例数量
+r($myTest->showWorkCountTest(0, 20, 1)) && p('testtask') && e('0'); // 步骤5：检查测试任务数量

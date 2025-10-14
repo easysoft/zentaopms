@@ -2,29 +2,29 @@ title: zt_project
 author: jukui
 version: '1.0'
 fields:
-    - field: id
-      range: 1-10
-    - field: project
-      range: '0,1,2,3,1,2,2,1,5,5'
-    - field: name
-      range: '新瀑布项目1,新阶段a,新阶段a子1,新阶段a子1子1,新阶段b,新阶段a子2,新阶段a子3,新阶段a子1子2,新阶段b子1,新阶段b子2'
-    - field: parent
-      range: '0,1,2,1,1,1,2,3,5,10'
-    - field: type
-      range: 'project,stage{9}'
-    - field: percent
-      range: 1-10
-      prefix: '2'
-    - field: grade
-      range: 1
-    - field: days
-      range: 1
-    - field: status
-      range: 'doing,doing,doing,closed,suspended,closed'
-    - field: desc
-      range: 1-10
-      prefix: '项目描述'
-    - field: path
-      range: "`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`,`,1,5,`,`,1,2,6,`,`,1,2,7`,`1,2,3,8`,`1,5.9`,`1,5,10`"
-    - field: attribute
-      range: '``,review,release,qa,dev,design,design,design,design,design'
+  - field: id
+    range: 1-10
+  - field: name
+    range: '项目1,阶段a,阶段a子1,阶段a子1子1,阶段b,阶段a子2,阶段a子3,阶段a子1子2,阶段b子1,阶段b子2'
+  - field: type
+    range: 'project,stage{9}'
+  - field: project
+    range: '0,1{9}'
+  - field: parent
+    range: '0,1,2,3,1,1,2,3,5,1'
+  - field: path
+    range: "`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`,`,1,5,`,`,1,2,6,`,`,1,2,7`,`1,2,3,8`,`1,5,9`,`1,10,`"
+  - field: status
+    range: 'doing{10}'
+  - field: attribute
+    range: '``,review,release,qa,dev,design,request,qa,review,release'
+  - field: openedBy
+    range: 'admin{10}'
+  - field: begin
+    range: '20230501 000000:0'
+    type: timestamp
+    format: YY/MM/DD
+  - field: end
+    range: '20300501 000000:0'
+    type: timestamp
+    format: YY/MM/DD

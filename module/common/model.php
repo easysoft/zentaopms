@@ -494,7 +494,9 @@ class commonModel extends model
 
         if(helper::isAjaxRequest())
         {
-            echo json_encode(array('load' => $denyLink));
+            $isModal = helper::isAjaxRequest('modal');
+            if($isModal) header("Location: $denyLink");
+            if(!$isModal) echo json_encode(array('load' => $denyLink));
         }
         else
         {
@@ -1860,12 +1862,20 @@ eof;
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
+        if(empty($object)) return true;
+
         global $config;
         static $productsStatus   = array();
         static $projectsStatus   = array();
         static $executionsStatus = array();
 
         $commonModel = new commonModel();
+
+        if($config->edition != 'open')
+        {
+            $workflow = $commonModel->loadModel('workflow')->getByModule($module);
+            if($workflow && $workflow->buildin == '0') return true;
+        }
 
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))

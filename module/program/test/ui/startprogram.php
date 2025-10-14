@@ -13,7 +13,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/startprogram.ui.class.php';
+include '../lib/ui/startprogram.ui.class.php';
 
 $program = zenData('project');
 $program->id->range('1-2');

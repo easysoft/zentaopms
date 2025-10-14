@@ -1,0 +1,21 @@
+title: zt_execution
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 敏捷项目,瀑布项目,看板项目,迭代{10},阶段{10},看板{10}
+    - field: name2
+      range: 1-100
+  - field: project
+    range: 0{3},1{10},2{10},3{10}
+  - field: model
+    range: scrum,waterfall,kanban,[]{30}
+  - field: type
+    range: project,sprint{10},stage{10},kanban{10}
+  - field: milestone
+    range: 0{13},1{5},0{15}

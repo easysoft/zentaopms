@@ -1,0 +1,26 @@
+---
+title: Doc Content data for appendFiles test
+desc: Test data for doccontent table used in appendFiles method testing
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: doc
+  note: Document ID
+  range: 1-10
+- field: title
+  note: Document Title
+  range: 'Test Document {1-10}'
+- field: content
+  note: Document Content
+  range: 'Document content for testing {1-10}'
+- field: files
+  note: File IDs separated by comma
+  range: '1,2,3{3}, 4,5{2}, 6{2}, []{3}'
+- field: version
+  note: Version
+  range: 1-3
+- field: type
+  note: Content Type
+  range: 'html{5}, markdown{3}, text{2}'

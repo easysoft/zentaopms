@@ -9,7 +9,7 @@
  * @version     $Id
  * @link        https://www.zentao.net
  */
-$lang->weekly->common   = $lang->projectCommon . ' Weekly';
+$lang->weekly->common   = 'Report';
 $lang->weekly->index    = 'Weekly Overview';
 $lang->weekly->progress = 'Progress';
 $lang->weekly->workload = 'Workload';
@@ -22,10 +22,11 @@ $lang->weekly->postponed      = 'Work unfinished this week';
 $lang->weekly->nextWeek       = 'Work planned for next week';
 $lang->weekly->workloadByType = 'Workload Summary';
 
-$lang->weekly->term    = 'Reporting Cycle';
-$lang->weekly->project = $lang->projectCommon . ' Name';
-$lang->weekly->master  = 'Project Manager ';
-$lang->weekly->staff   = 'Weekly Effort';
+$lang->weekly->term            = 'Reporting Cycle';
+$lang->weekly->project         = $lang->projectCommon . ' Name';
+$lang->weekly->master          = 'Project Manager ';
+$lang->weekly->staff           = 'Weekly Effort';
+$lang->weekly->projectTemplate = "{$lang->projectCommon} Weekly Report Template";
 
 $lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
 $lang->weekly->progress       = 'Progress of the ' . $lang->projectCommon;
@@ -38,9 +39,19 @@ $lang->weekly->ac = 'Actual Cost(AC)';
 $lang->weekly->sv = 'Schedule Variance(SV%)';
 $lang->weekly->cv = 'Cost Variance(CV%)';
 
-$lang->weekly->totalCount = 'Total : %u tasks';
+$lang->weekly->totalCount  = 'Total : %u tasks';
+$lang->weekly->builtinDesc = "The system's built-in {$lang->projectCommon} weekly report template automatically generates this week's report under the {$lang->projectCommon} every Monday.";
 
 $lang->weekly->exportWeeklyReport = 'Export Weekly Report';
+
+$lang->weekly->builtInScopes = array();
+$lang->weekly->builtInScopes['rnd']  = array();
+$lang->weekly->builtInScopes['rnd']['project'] = 'Project';
+
+$lang->weekly->builtInCategoryList['month']     = 'Monthly Report';
+$lang->weekly->builtInCategoryList['week']      = 'Weekly Report';
+$lang->weekly->builtInCategoryList['day']       = 'Daily Report';
+$lang->weekly->builtInCategoryList['milestone'] = 'Milestone Report';
 
 $lang->weekly->reportHelpNotice = <<<EOD
 <h2>PV Planned Value</h2>
@@ -143,3 +154,5 @@ Calculation method: SV(%) = -1 * (1 - (EV / PV))%
 <h2>CV(%) Schedule Variance</h2>
 Calculation method: CV(%) = -1 * (1 - (EV / AC))%
 EOD;
+
+$lang->weekly->builtinRawContent = '{"type":"page","meta":{"id":"mKJhETwxpP","title":"Project Weekly Report Template","createDate":1758524215597,"tags":[]},"blocks":{"type":"block","id":"leP1pQM_0N","flavour":"affine:page","version":2,"props":{"title":{"$blocksuite:internal:text$":true,"delta":[{"insert":"Project Weekly Report Template"}]}},"children":[{"type":"block","id":"cDel0u6OKK","flavour":"affine:note","version":1,"props":{"xywh":"[0,0,498,92]","background":"--affine-note-background-white","index":"a0","lockedBySelf":false,"hidden":false,"displayMode":"both","edgeless":{"style":{"borderRadius":8,"borderSize":4,"borderStyle":"none","shadowType":"--affine-note-shadow-box"}}},"children":[{"type":"block","id":"57JpxtRtgl","flavour":"affine:paragraph","version":1,"props":{"align":"left","type":"text","text":{"$blocksuite:internal:text$":true,"delta":[{"insert":" ","attributes":{"holder":{"id":"-bGoKXonda","name":"weekly_term","text":"Report Term","hint":"Filter: “Date Range”BetweenThis Week","data":{"type":"weekly_term","blockID":1538,"hint":"Filter: “Date Range”BetweenThis Week","text":"Report Term"}}}},{"insert":"weekly report:"},{"insert":" ","attributes":{"holder":{"id":"ZZ2iJ1NbSm","name":"property_name","text":"Name","hint":"Name"}}},{"insert":" is managed by the project manager "},{"insert":" ","attributes":{"holder":{"id":"No8p_noVvo","name":"property_PM","text":"Manager","hint":"Manager"}}},{"insert":", the number of people involved is "},{"insert":" ","attributes":{"holder":{"id":"yMx6IXU_PN","name":"weekly_staff","text":"Staff Number","hint":"Filter: “Date Range”BetweenThis Week","data":{"type":"weekly_staff","blockID":1539,"hint":"Filter: “Date Range”BetweenThis Week","text":"Staff Number"}}}}]},"collapsed":false},"children":[]},{"type":"block","id":"u_7TkQplvX","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{project_progress_summary}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=project_progress_summary&blockID=__TML_ZENTAOCHART__{project_progress_summary}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"Project Progress Summary"}},"children":[]},{"type":"block","id":"JF8LjhZ00l","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_finished}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_finished&blockID=__TML_ZENTAOCHART__{task_basicStatistic_finished}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"Finished Tasks"}},"children":[]},{"type":"block","id":"vLxMdWbsaL","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_unfinished}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_unfinished&blockID=__TML_ZENTAOCHART__{task_basicStatistic_unfinished}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"Unfinished Tasks"}},"children":[]},{"type":"block","id":"2kIWtGbWIc","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{task_basicStatistic_workplan}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=task_basicStatistic_workplan&blockID=__TML_ZENTAOCHART__{task_basicStatistic_workplan}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"Work Plan"}},"children":[]},{"type":"block","id":"YQQsS51bpa","flavour":"affine:embed-zui-custom","version":1,"props":{"index":"a0","xywh":"[0,0,0,0]","lockedBySelf":false,"rotate":0,"content":{"exportUrl":"exportZentaoChart___TML_ZENTAOCHART__{project_basicStatistic_workload}","fetcher":[{"module":"reporttemplate","method":"ajaxZentaoChart","params":"type=project_basicStatistic_workload&blockID=__TML_ZENTAOCHART__{project_basicStatistic_workload}"}],"clearBeforeLoad":false,"isTemplate":true,"title":"Project Plan Workload Statistic"}},"children":[]},{"type":"block","id":"woAbzWK8vw","flavour":"affine:paragraph","version":1,"props":{"align":"left","type":"text","text":{"$blocksuite:internal:text$":true,"delta":[]},"collapsed":false},"children":[]}]}]}}';

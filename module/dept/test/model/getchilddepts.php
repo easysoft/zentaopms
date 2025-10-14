@@ -1,23 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
-su('admin');
 
-zenData('dept')->loadYaml('dept')->gen(50)->fixPath();
 /**
 
-title=测试 deptModel->getChildDepts();
+title=测试 deptModel::getChildDepts();
 timeout=0
-cid=1
+cid=0
 
-- 测试获取ID为6的部门名称第6条的name属性 @开发部26
-- 测试获取父ID为2且ID为8的部门名称第8条的name属性 @一级部门8
+- 测试步骤1：获取所有部门，验证总数量 @50
+- 测试步骤2：获取ID为1的部门，验证部门名称第1条的name属性 @产品部1
+- 测试步骤3：获取不存在部门的子部门，返回所有部门 @50
+- 测试步骤4：验证部门层级信息第3条的parent属性 @0
+- 测试步骤5：验证特定父部门下子部门数量 @7
 
 */
 
-global $tester;
-$tester->loadModel('dept');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
 
-r($tester->dept->getChildDepts(0)) && p('6:name') && e('开发部26');  // 测试获取ID为6的部门名称
-r($tester->dept->getChildDepts(2)) && p('8:name') && e('一级部门8'); // 测试获取父ID为2且ID为8的部门名称
+zenData('dept')->loadYaml('dept')->gen(50)->fixPath();
+
+su('admin');
+
+$deptTest = new deptTest();
+
+r($deptTest->getChildDeptsTest(0, 'count')) && p() && e('50');            // 测试步骤1：获取所有部门，验证总数量
+r($deptTest->getChildDeptsTest(1)) && p('1:name') && e('产品部1');        // 测试步骤2：获取ID为1的部门，验证部门名称
+r($deptTest->getChildDeptsTest(999, 'count')) && p() && e('50');         // 测试步骤3：获取不存在部门的子部门，返回所有部门
+r($deptTest->getChildDeptsTest(3)) && p('3:parent') && e('0');           // 测试步骤4：验证部门层级信息
+r($deptTest->getChildDeptsTest(2, 'count')) && p() && e('7');            // 测试步骤5：验证特定父部门下子部门数量

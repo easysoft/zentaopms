@@ -1,0 +1,28 @@
+title: repo test data for getListByCondition
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: product
+    range: 1
+  - field: name
+    range: testGit,testSvn,testHtml,testCI,testDoc
+  - field: path
+    range: /path1,/path2,/path3,/path4,/path5
+  - field: SCM
+    range: Git{2},Gitlab{2},Subversion{1}
+  - field: client
+    range: 1
+  - field: serviceHost
+    range: 1
+  - field: serviceProject
+    range: 42
+  - field: extra
+    range: 42
+  - field: preMerge
+    range: 1
+  - field: job
+    range: 1
+  - field: deleted
+    range: 0

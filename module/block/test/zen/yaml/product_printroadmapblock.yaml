@@ -1,0 +1,89 @@
+---
+title: 产品路线图区块测试数据
+desc: 用于测试printRoadmapBlock方法的产品数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 产品代码
+  range: PROD_A,PROD_B,PROD_C,PROD_D,PROD_E
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{3},branch{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{4},closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: RD
+  note: 研发负责人
+  range: dev1,dev2,dev3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: QD
+  note: 测试负责人
+  range: tester1,tester2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (2024-01-01)-(2024-06-01):30D
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,33 @@
+---
+title: Module test data for bug getModulesForCreate
+desc: Test data for module table
+
+fields:
+- field: id
+  range: 1-10
+- field: root
+  range: 1{10}
+- field: branch
+  range: 0{10}
+- field: name
+  range: 模块1,模块2,模块3,子模块1,子模块2,子模块3,子模块4,子模块5,子模块6,子模块7
+- field: parent
+  range: 0{3},1{2},2{2},3{3}
+- field: path
+  range: ',1,',',2,',',3,',',1,4,',',1,5,',',2,6,',',2,7,',',3,8,',',3,9,',',3,10,'
+- field: grade
+  range: 1{3},2{7}
+- field: order
+  range: 5,10,15,20,25,30,35,40,45,50
+- field: type
+  range: bug{10}
+- field: from
+  range: 0{10}
+- field: owner
+  range: []{5},admin{2},user1{2},user2{1}
+- field: collector
+  range: []{10}
+- field: short
+  range: mod1,mod2,mod3,sm1,sm2,sm3,sm4,sm5,sm6,sm7
+- field: deleted
+  range: 0{10}

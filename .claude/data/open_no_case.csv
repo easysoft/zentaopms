@@ -887,7 +887,7 @@ zanode,model,getVncUrl
 zanode,model,runZTFScript
 zanode,model,linkAgentService
 zanode,model,setMenu
-﻿action,tao,getLinkedExtra
+action,tao,getLinkedExtra
 action,tao,processActionExtra
 action,tao,processStoryGradeActionExtra
 action,tao,processAttribute
@@ -1127,7 +1127,7 @@ webhook,tao,getActionText
 zanode,tao,getSubZahostListByID
 zanode,tao,getZaNodeListByQuery
 zanode,tao,getHostsByIDList
-﻿action,zen,getTrashesHeaderNavigation
+action,zen,getTrashesHeaderNavigation
 action,zen,saveUrlIntoSession
 action,zen,processTrash
 action,zen,getReplaceNameAndCode

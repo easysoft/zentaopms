@@ -1,0 +1,18 @@
+---
+title: table zt_pivotspec for getMaxVersionByIDList test
+author: Claude
+version: "1.0"
+
+fields:
+- field: pivot
+  range: 1{4},2{2}
+- field: version
+  range: 1.0,1.5,2.0,2.1,2.5,2.9
+- field: driver
+  range: mysql
+- field: mode
+  range: builder
+- field: name
+  range: 透视表测试{1-6}
+- field: desc
+  range: 测试描述{1-6}

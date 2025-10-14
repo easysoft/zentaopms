@@ -31,7 +31,7 @@ if($config->inQuickon) $lang->space->featureBar['browse']['abnormal'] = '异常'
 $lang->space->appType['gitlab']    = 'GitLab';
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';
-if(!$config->inQuickon)
+if(!$config->inQuickon && !$config->inCompose)
 {
     $lang->space->appType['gitea'] = 'Gitea';
     $lang->space->appType['gogs']  = 'Gogs';

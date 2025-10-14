@@ -25,7 +25,7 @@ $projectIdList   = array(1, 2, 3);
 $productsList[0] = array();
 $productsList[1] = array(1, 2, 3);
 
-$projectTester = new project();
+$projectTester = new projectTest();
 r($projectTester->getLinkedProductsCountTest($projectIdList[0], $productsList[0])) && p() && e('0'); // 测试敏捷项目没有选择产品时获取的数量
 r($projectTester->getLinkedProductsCountTest($projectIdList[1], $productsList[0])) && p() && e('0'); // 测试瀑布项目没有选择产品时获取的数量
 r($projectTester->getLinkedProductsCountTest($projectIdList[2], $productsList[0])) && p() && e('0'); // 测试看板项目没有选择产品时获取的数量

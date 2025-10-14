@@ -1268,6 +1268,9 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         if($story->result != 'reject') $this->setStage($storyID);
+        if($story->result == 'reject' && $this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
+
+        if($oldStory->parent) $this->computeEstimate($oldStory->parent);
 
         $changes = common::createChanges($oldStory, $story);
         if($changes)
@@ -1579,7 +1582,7 @@ class storyModel extends model
             $isChanged = !empty($oldStory->changedBy) ? true : false;
             if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
-            $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', $this->post->comment, ucfirst(zget($this->post, 'closedReason', '')) . (zget($this->post, 'duplicateStory', '') ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
             $this->action->logHistory($actionID, $changes);
         }
 

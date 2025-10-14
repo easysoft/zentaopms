@@ -1,0 +1,58 @@
+---
+title: cron表changeStatus方法测试数据
+desc: 为changeStatus方法测试准备的cron任务数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 定时任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: m
+  note: 分钟
+  range: '*{3},0{2},30{2},15{3}'
+  format: ""
+- field: h
+  note: 小时
+  range: '*{3},1{2},23{2},8{3}'
+  format: ""
+- field: dom
+  note: 日期
+  range: '*{8},1{1},15{1}'
+  format: ""
+- field: mon
+  note: 月份
+  range: '*{10}'
+  format: ""
+- field: dow
+  note: 星期
+  range: '*{10}'
+  format: ""
+- field: command
+  note: 执行命令
+  range: 'moduleName=project&methodName=computeburn{3},moduleName=report&methodName=remind{3},moduleName=backup&methodName=backup{2},[]{2}'
+  format: ""
+- field: remark
+  note: 备注说明
+  range: '更新燃尽图{3},每日任务提醒{3},数据备份{2},测试任务{2}'
+  format: ""
+- field: type
+  note: 任务类型
+  range: 'zentao{8},system{2}'
+  format: ""
+- field: buildin
+  note: 是否内置
+  range: 1{6},0{4}
+  format: ""
+- field: status
+  note: 状态
+  range: 'normal{4},stop{3},running{2},error{1}'
+  format: ""
+- field: lastTime
+  note: 最后执行时间
+  range: '2023-01-01 00:00:00{3},2023-12-01 12:00:00{3},0000-00-00 00:00:00{4}'
+  format: ""

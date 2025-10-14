@@ -1,0 +1,21 @@
+---
+title: 产品数据配置
+desc: 为buildLinkStorySearchForm方法测试生成产品数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  range: product1,product2,product3,product4,product5
+- field: type
+  range: normal{3},branch{2}
+- field: status
+  range: normal{5}
+- field: deleted
+  range: '0'
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: '2023-01-01 10:00:00'

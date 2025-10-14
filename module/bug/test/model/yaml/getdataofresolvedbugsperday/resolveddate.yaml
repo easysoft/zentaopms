@@ -1,0 +1,14 @@
+---
+title: zt_bug
+author: Claude
+version: "1.0"
+fields:
+- field: resolvedDate
+  range: "20250917 100000{3},20250918 110000{2},20250919 120000{1},0000-00-00{2},[]{2}"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: resolvedBy
+  range: "admin{6},[]{4}"
+- field: status
+  range: "resolved{6},closed{4}"
+...

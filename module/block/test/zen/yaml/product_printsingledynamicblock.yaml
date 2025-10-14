@@ -1,0 +1,60 @@
+---
+title: printSingleDynamicBlock方法产品测试数据
+desc: 为blockZen::printSingleDynamicBlock()方法提供product表测试数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 产品名称
+  range: 测试产品1, 测试产品2, 测试产品3, 测试产品4, 测试产品5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: code
+  note: 产品代号
+  range: PRODUCT1, PRODUCT2, PRODUCT3, PRODUCT4, PRODUCT5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 产品状态
+  range: normal{3}, closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 产品类型
+  range: normal{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: desc
+  note: 产品描述
+  range: 这是测试产品1的描述, 这是测试产品2的描述, 这是测试产品3的描述, 这是测试产品4的描述, 这是测试产品5的描述
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

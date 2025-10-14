@@ -3,17 +3,20 @@
 
 /**
 
-title=测试jenkinsModel->getDepthJobs();
-cid=1
+title=测试 jenkinsModel::getDepthJobs();
+timeout=0
+cid=0
 
-- 测试获取获取深度 1 userPWD userPWD1 的 全部流水线。 @folder1.1.1.1:0,folder1.1.1.2:0,folder1.1.2:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job
+- 测试正常情况：深度为1时解析Jenkins作业结构 @{"\/job\/simpleJob\/":"Simple Job","\/job\/paramJob\/":"Param Job","folder1":{"\/job\/folder1\/job\/subJob1\/":"Sub Job 1","\/job\/folder1\/job\/subJob2\/":"Sub Job 2"}}
 
-- 测试获取获取深度 2 userPWD userPWD1 的 全部流水线。 @folder1.1.1:0,folder1.1.2:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job
+- 测试空数据：传入空的作业数组 @[]
+- 测试递归深度：超过最大深度限制（depth > 4） @[]
+- 测试异常输入：传入无效的作业数据结构 @[]
+- 测试作业类型识别：区分文件夹和可执行作业 @{"\/job\/buildableJob\/":"Buildable Job","\/job\/regularJob\/":"Regular Job","multibranchPipeline":[]}
 
-- 测试获取获取深度 3 userPWD userPWD1 的 全部流水线。 @folder1.1:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job
+- 测试URL解析：处理包含特殊字符的作业URL @{"\/job\/hello%20world\/":"Hello World","\/job\/test-job\/":"Test Job"}
 
-- 测试获取获取深度 4 userPWD userPWD1 的 全部流水线。 @/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job
-
+- 测试文件夹处理：识别文件夹类型并处理为空数组 @{"folder":[]}
 
 */
 
@@ -24,11 +27,12 @@ zenData('user')->gen('1');
 
 su('admin');
 
-$jenkins = new jenkinsTest();
+$jenkinsTest = new jenkinsTest();
 
-$depth = array(1, 2, 3, 4);
-
-r($jenkins->getDepthJobsTest($depth[0])) && p() && e('folder1.1.1.1:0,folder1.1.1.2:0,folder1.1.2:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job'); // 测试获取获取深度 1 userPWD userPWD1 的 全部流水线。
-r($jenkins->getDepthJobsTest($depth[1])) && p() && e('folder1.1.1:0,folder1.1.2:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job'); // 测试获取获取深度 2 userPWD userPWD1 的 全部流水线。
-r($jenkins->getDepthJobsTest($depth[2])) && p() && e('folder1.1:0,folder1.2:0,/job/folder1/job/paramsJob1/:paramsJob1,/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job'); // 测试获取获取深度 3 userPWD userPWD1 的 全部流水线。
-r($jenkins->getDepthJobsTest($depth[3])) && p() && e('/job/hello%20world/:hello world,/job/paramsJob/:paramsJob,/job/simple-job/:simple-job'); // 测试获取获取深度 4 userPWD userPWD1 的 全部流水线。
+r($jenkinsTest->getDepthJobsDirectTest()) && p() && e('{"\/job\/simpleJob\/":"Simple Job","\/job\/paramJob\/":"Param Job","folder1":{"\/job\/folder1\/job\/subJob1\/":"Sub Job 1","\/job\/folder1\/job\/subJob2\/":"Sub Job 2"}}'); // 测试正常情况：深度为1时解析Jenkins作业结构
+r($jenkinsTest->getDepthJobsEmptyTest()) && p() && e('[]'); // 测试空数据：传入空的作业数组
+r($jenkinsTest->getDepthJobsMaxDepthTest()) && p() && e('[]'); // 测试递归深度：超过最大深度限制（depth > 4）
+r($jenkinsTest->getDepthJobsInvalidDataTest()) && p() && e('[]'); // 测试异常输入：传入无效的作业数据结构
+r($jenkinsTest->getDepthJobsJobTypeTest()) && p() && e('{"\/job\/buildableJob\/":"Buildable Job","\/job\/regularJob\/":"Regular Job","multibranchPipeline":[]}'); // 测试作业类型识别：区分文件夹和可执行作业
+r($jenkinsTest->getDepthJobsUrlEncodingTest()) && p() && e('{"\/job\/hello%20world\/":"Hello World","\/job\/test-job\/":"Test Job"}'); // 测试URL解析：处理包含特殊字符的作业URL
+r($jenkinsTest->getDepthJobsFolderTest()) && p() && e('{"folder":[]}'); // 测试文件夹处理：识别文件夹类型并处理为空数组

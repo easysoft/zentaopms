@@ -1,0 +1,16 @@
+---
+title: getStepsAndExpectsFromImportFile方法测试数据
+desc: 用于测试getStepsAndExpectsFromImportFile方法的各种输入场景
+author: Claude AI
+version: 1.0
+
+fields:
+- field: testField
+  note: 测试字段名
+  range: stepDesc,stepExpect
+- field: testRow  
+  note: 测试行号
+  range: 1-10
+- field: cellValue
+  note: 测试单元格内容
+  range: '1. 登录系统\n2. 打开页面\n3. 执行操作,1.1. 输入用户名\n1.2. 输入密码\n2. 点击登录,单步骤测试'

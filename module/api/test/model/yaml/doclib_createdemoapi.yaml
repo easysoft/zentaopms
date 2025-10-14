@@ -1,0 +1,55 @@
+---
+title: 文档库表数据定义
+desc: 用于createDemoApi方法单元测试的文档库数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 文档库ID
+  range: 1-5
+- field: type
+  note: 文档库类型
+  range: api{5}
+- field: product
+  note: 产品ID
+  range: 0{3}, 1{1}, 2{1}
+- field: project
+  note: 项目ID
+  range: 0{5}
+- field: execution
+  note: 执行ID
+  range: 0{5}
+- field: name
+  note: 文档库名称
+  range: 用户API接口库,产品API接口库,系统API接口库,测试API接口库,通用API接口库
+- field: baseUrl
+  note: 基础URL
+  range: http://demo.zentao.net/api{2}, https://api.example.com{2}, http://localhost:8080/api{1}
+- field: acl
+  note: 访问控制
+  range: open{3}, private{1}, custom{1}
+- field: groups
+  note: 用户组
+  range: []{5}
+- field: users
+  note: 用户列表
+  range: ,admin,{3}, ,admin,user1,{1}, []{1}
+- field: main
+  note: 是否主库
+  range: 0{5}
+- field: collector
+  note: 采集器配置
+  range: []{5}
+- field: addedBy
+  note: 创建者
+  range: admin{5}
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{5}
+- field: vision
+  note: 视图
+  range: rnd{5}
+- field: deleted
+  note: 是否删除
+  range: 0{5}

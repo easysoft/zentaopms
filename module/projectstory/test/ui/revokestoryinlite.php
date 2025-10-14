@@ -13,7 +13,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/changestatusinlite.ui.class.php';
+include '../lib/ui/changestatusinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1');

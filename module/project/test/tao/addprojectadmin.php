@@ -25,7 +25,7 @@ cid=1
 
 */
 
-$projectClass = new project();
+$projectClass = new projectTest();
 
 su('admin');
 r($projectClass->addProjectAdminTest(1)) && p('projects', '|') && e('1');     // 测试将项目ID为1添加admin至分组

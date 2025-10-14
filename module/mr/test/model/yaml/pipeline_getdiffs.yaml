@@ -1,0 +1,23 @@
+---
+title: 用于getDiffs方法测试的Pipeline数据
+desc: 包含不同类型的Pipeline主机数据用于测试getDiffs方法
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: gitlab-host,gitea-host,gogs-host,test-host,dev-host
+- field: url
+  range: https://gitlab.example.com,https://gitea.example.com,https://gogs.example.com,https://test.example.com,https://dev.example.com
+- field: account
+  range: admin{2},apiuser{2},testuser{1}
+- field: password
+  range: token123{2},secret456{2},pass789{1}
+- field: private
+  range: /home/test/.ssh/id_rsa{3},""{2}
+- field: type
+  range: gitlab{2},gitea{2},gogs{1}
+- field: deleted
+  range: '0'{5}

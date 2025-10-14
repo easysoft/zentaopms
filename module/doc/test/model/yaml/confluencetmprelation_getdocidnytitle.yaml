@@ -1,0 +1,19 @@
+---
+title: Confluence临时关系表数据定义
+desc: 用于测试getDocIdByTitle方法的Confluence临时关系数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-5
+- field: AID
+  note: Confluence页面ID
+  range: 1001-1005
+- field: BID
+  note: 文档ID
+  range: 1-5
+- field: BType
+  note: 对象类型
+  range: zdoc{5}

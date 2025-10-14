@@ -1,0 +1,31 @@
+---
+title: Execution data for responseModal test
+desc: Test data for execution table used in responseModal tests
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: Execution ID
+  range: 1-3
+- field: project
+  note: Project ID
+  range: 1-3
+- field: name
+  note: Execution name
+  range: "Execution{1-3}"
+- field: type
+  note: Execution type
+  range: "stage,sprint,kanban"
+- field: status
+  note: Execution status
+  range: "wait,doing,suspended,closed"
+- field: begin
+  note: Begin date
+  range: "2024-01-01,2024-02-01,2024-03-01"
+- field: end
+  note: End date
+  range: "2024-06-01,2024-07-01,2024-08-01"
+- field: deleted
+  note: Delete status
+  range: "0"

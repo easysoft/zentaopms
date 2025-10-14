@@ -22,7 +22,7 @@ cid=2
 
 */
 chdir(__DIR__);
-include '../lib/editstage.ui.class.php';
+include '../lib/ui/editstage.ui.class.php';
 
 $stage = zendata('stage');
 $stage->id->range('1-12');

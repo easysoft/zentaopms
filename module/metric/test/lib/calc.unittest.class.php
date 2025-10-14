@@ -174,6 +174,22 @@ class metricTest
     }
 
     /**
+     * 测试 getScopePairs 方法的测试包装。
+     * Test wrapper for getScopePairs method.
+     *
+     * @param  mixed $all
+     * @access public
+     * @return mixed
+     */
+    public function getScopePairsTest($all = true)
+    {
+        $result = $this->objectModel->getScopePairs($all);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试 groupMetricByObject 方法。
      * Test groupMetricByObject method.
      *
@@ -514,6 +530,21 @@ class metricTest
     }
 
     /**
+     * Test buildOperateMenu method to get full result.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenuTest($metric)
+    {
+        $result = $this->objectModel->buildOperateMenu($metric);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test checkCalcExists.
      *
      * @param  object $metric
@@ -645,11 +676,27 @@ class metricTest
      * @param  string $str
      * @param  string $replace
      * @access public
-     * @return bool
+     * @return string
      */
     public function replaceCRLF($str, $replace = ';')
     {
         return $this->objectModel->replaceCRLF($str, $replace);
+    }
+
+    /**
+     * Test replaceCRLF method.
+     *
+     * @param  string $str
+     * @param  string $replace
+     * @access public
+     * @return mixed
+     */
+    public function replaceCRLFTest($str, $replace = ';')
+    {
+        $result = $this->objectModel->replaceCRLF($str, $replace);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -1007,6 +1054,18 @@ class metricTest
     }
 
     /**
+     * Test fetchMetricsByCodeList.
+     *
+     * @param  array $codeList
+     * @access public
+     * @return array
+     */
+    public function fetchMetricsByCodeList($codeList)
+    {
+        return $this->objectModel->fetchMetricsByCodeList($codeList);
+    }
+
+    /**
      * Test fetchMetricByCode.
      *
      * @param  string $code
@@ -1060,6 +1119,41 @@ class metricTest
         $metric = new stdclass();
         $metric->collector = ",{$user},";
         $this->objectModel->updateMetricFields($metricID, $metric);
+    }
+
+    /**
+     * Test getObjectTable method.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return mixed
+     */
+    public function getObjectTableTest($header = null, $data = null, $dateType = 'day', $withCalcTime = true)
+    {
+        $result = $this->objectModel->getObjectTable($header, $data, $dateType, $withCalcTime);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getObjectOptions method.
+     *
+     * @param  array  $data
+     * @param  string $type
+     * @param  string $chartType
+     * @access public
+     * @return mixed
+     */
+    public function getObjectOptions($data = array(), $type = 'line', $chartType = 'line')
+    {
+        $result = $this->objectModel->getObjectOptions($data, $type, $chartType);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }
 

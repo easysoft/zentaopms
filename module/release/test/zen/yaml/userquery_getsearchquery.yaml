@@ -1,0 +1,61 @@
+---
+title: 用户查询数据定义
+desc: 为release模块getSearchQuery方法测试生成userquery测试数据
+
+fields:
+- field: id
+  note: 查询ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{3}, user1{2}, user2{2}, guest{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: release{5}, product{3}, task{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 查询标题
+  range: Release Search{3}, Product Search{2}, Advanced Search{2}, Custom Search{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: form
+  note: 表单数据
+  range: '{"branch":"all","status":"normal"}', '{"status":"terminate"}', '{"name":"test"}', '{"product":"1"}', '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL查询语句
+  range: '`branch` = "all" AND `status` = "normal"', '`status` = "terminate"', '`name` LIKE "%test%"', '`product` = "1"', ' 1 = 1'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: shortcut
+  note: 是否为快捷方式
+  range: 0{7}, 1{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: common
+  note: 是否为公共查询
+  range: 0{8}, 1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

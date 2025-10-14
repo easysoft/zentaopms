@@ -1,0 +1,50 @@
+---
+title: kanbancolumn表数据定义
+desc: 用于测试updateColumnParent方法的看板列数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 列ID
+  range: 1-20
+
+- field: parent
+  note: 父列ID
+  range: 0{5}, 1{3}, 2{3}, 3{2}, 4{2}, 5{5}
+
+- field: type
+  note: 列类型
+  range: column{15}, backlog{5}
+
+- field: region
+  note: 区域ID
+  range: 1{10}, 2{10}
+
+- field: group
+  note: 分组ID
+  range: 1{10}, 2{10}
+
+- field: name
+  note: 列名称
+  range: 待处理{5}, 进行中{5}, 已完成{5}, 测试列{5}
+
+- field: color
+  note: 列颜色
+  range: blue{10}, red{5}, green{5}
+
+- field: limit
+  note: 列限制数
+  range: -1{15}, 5{3}, 10{2}
+
+- field: order
+  note: 排序号
+  range: 1-20
+
+- field: archived
+  note: 是否归档
+  range: 0{18}, 1{2}
+
+- field: deleted
+  note: 是否删除
+  range: 0{18}, 1{2}

@@ -604,7 +604,7 @@ class subversionRepo
         if(stripos($this->root, 'https') === 0 or stripos($this->root, 'svn') === 0)
         {
             $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:HEAD --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache --xml $path");
-            if($this->svnVersion and version_compare($this->svnVersion, '1.9', '<')) $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --non-interactive --trust-server-cert --no-auth-cache --xml $path");
+            if($this->svnVersion and version_compare($this->svnVersion, '1.9', '<')) $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:HEAD --non-interactive --trust-server-cert --no-auth-cache --xml $path");
         }
         else
         {

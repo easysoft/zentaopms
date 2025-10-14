@@ -1,0 +1,157 @@
+---
+title: Project data for printProjectDocBlock test
+desc: Test data for project document block functionality
+author: Claude AI
+version: 1
+
+fields:
+- field: id
+  range: 1-10
+  note: Project ID
+- field: project
+  range: 0
+  note: Parent project
+- field: isTpl
+  range: 0
+  note: Is template
+- field: charter
+  range: 0
+  note: Charter ID
+- field: model
+  range: scrum{3},kanban{2},waterfall{5}
+  note: Project model
+- field: type
+  range: project
+  note: Project type
+- field: category
+  range: ""
+  note: Project category
+- field: lifetime
+  range: ""
+  note: Project lifetime
+- field: budget
+  range: 0
+  note: Project budget
+- field: budgetUnit
+  range: CNY
+  note: Budget unit
+- field: attribute
+  range: ""
+  note: Project attribute
+- field: percent
+  range: 0
+  note: Project completion percent
+- field: milestone
+  range: 0{8},1{2}
+  note: Is milestone
+- field: output
+  range: ""
+  note: Project output
+- field: auth
+  range: ""
+  note: Auth method
+- field: parent
+  range: 0
+  note: Parent project ID
+- field: path
+  range: ",{id},"
+  note: Project path
+- field: grade
+  range: 1
+  note: Project grade
+- field: name
+  range: 项目1{1},项目2{1},项目3{1},项目4{1},项目5{1},项目6{1},项目7{1},项目8{1},项目9{1},项目10{1}
+  note: Project name
+- field: code
+  range: PROJ001{1},PROJ002{1},PROJ003{1},PROJ004{1},PROJ005{1},PROJ006{1},PROJ007{1},PROJ008{1},PROJ009{1},PROJ010{1}
+  note: Project code
+- field: hasProduct
+  range: 1
+  note: Has product
+- field: begin
+  range: 2024-01-01
+  note: Project begin date
+- field: end
+  range: 2024-12-31
+  note: Project end date
+- field: firstEnd
+  range: ""
+  note: First end date
+- field: realBegan
+  range: ""
+  note: Real begin date
+- field: realEnd
+  range: ""
+  note: Real end date
+- field: days
+  range: 180{5},365{5}
+  note: Project duration days
+- field: status
+  range: wait{2},doing{4},suspended{1},closed{3}
+  note: Project status
+- field: desc
+  range: 这是测试项目描述{5},项目描述内容{5}
+  note: Project description
+- field: goals
+  range: ""
+  note: Project goals
+- field: team
+  range: ""
+  note: Team member
+- field: acl
+  range: open{6},private{4}
+  note: Access control
+- field: whitelist
+  range: ""
+  note: Whitelist users
+- field: order
+  range: 1-10
+  note: Project order
+- field: vision
+  range: rnd
+  note: Project vision
+- field: openedBy
+  range: admin{8},user1{2}
+  note: Opened by user
+- field: openedDate
+  range: 2024-01-01 00:00:00
+  note: Opened date
+- field: openedVersion
+  range: ""
+  note: Opened version
+- field: lastEditedBy
+  range: ""
+  note: Last edited by
+- field: lastEditedDate
+  range: ""
+  note: Last edited date
+- field: closedBy
+  range: ""
+  note: Closed by user
+- field: closedDate
+  range: ""
+  note: Closed date
+- field: canceledBy
+  range: ""
+  note: Canceled by user
+- field: canceledDate
+  range: ""
+  note: Canceled date
+- field: suspendedDate
+  range: ""
+  note: Suspended date
+- field: PO
+  range: ""
+  note: Product owner
+- field: PM
+  range: admin{5},user1{3},user2{2}
+  note: Project manager
+- field: QD
+  range: ""
+  note: Quality director
+- field: RD
+  range: ""
+  note: Release director
+- field: deleted
+  range: 0
+  note: Is deleted

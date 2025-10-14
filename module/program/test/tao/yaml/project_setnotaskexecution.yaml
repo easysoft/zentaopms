@@ -1,0 +1,34 @@
+---
+title: project表测试数据
+desc: 用于setNoTaskExecution方法测试的项目和执行数据
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 0,0,0,1,1,1,2,2,3,3
+  note: 前3个为项目(project=0)，4-6执行属于项目1，7-8执行属于项目2，9-10执行属于项目3
+- field: type
+  range: project,project,project,execution,execution,execution,execution,execution,execution,execution
+  note: 前3个为项目，后7个为执行
+- field: name
+  range: 项目1,项目2,项目3,执行1-1,执行1-2,执行1-3,执行2-1,执行2-2,执行3-1,执行3-2
+- field: status
+  range: doing{10}
+- field: deleted
+  range: 0{10}
+  note: 全部未删除
+- field: path
+  range: ',1,',',2,',',3,',',1,4,',',1,5,',',1,6,',',2,7,',',2,8,',',3,9,',',3,10,'
+- field: begin
+  range: 2024-01-01{10}
+- field: end
+  range: 2024-12-31{10}
+- field: desc
+  range: 测试项目描述{3},测试执行描述{7}
+- field: acl
+  range: open{10}
+- field: whitelist
+  range: ''{10}
+- field: auth
+  range: extend{10}

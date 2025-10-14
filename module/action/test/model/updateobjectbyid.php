@@ -1,40 +1,39 @@
 #!/usr/bin/env php
 <?php
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
-su('admin');
-
-zenData('project')->gen(3);
-
 /**
 
-title=测试 actionModel->updateObjectByID();
+title=测试 actionModel::updateObjectByID();
 timeout=0
-cid=1
+cid=0
 
-- 测试更新table为zt_execution, id为1的记录的name字段,更新后的值为'修改后的名称1'属性name @修改后的名称1
-- 测试更新table为zt_execution, id为2的记录的name字段,更新后的值为'修改后的名称2'属性name @修改后的名称2
-- 测试更新table为zt_execution, id为3的记录的project字段,更新后的值为'12'属性project @12
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 1, array 属性name @更新后的项目名称
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 2, array
+ - 属性name @多字段更新项目
+ - 属性status @doing
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 3, array 属性name @项目名称不变
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 4, array 属性name @特殊字符测试ABC
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 5, array 属性status @closed
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 6, array
+ - 属性name @数值类型测试
+ - 属性type @kanban
+- 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 7, array 属性project @1
 
 */
 
-$paramsList = array(
-    array(
-        'name' => '修改后的名称1',
-    ),
-    array(
-        'name' => '修改后的名称2',
-    ),
-    array(
-        'project' => 12
-    )
-);
-$table  = array(TABLE_PROJECT, TABLE_PROJECT, TABLE_PROJECT);
-$idList = array(1, 2, 3);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+
+zenData('project')->gen(10);
+
+su('admin');
 
 $action = new actionTest();
 
-r($action->updateObjectByIDTest($table[0], $idList[0], $paramsList[0])) && p('name')    && e('修改后的名称1');  //测试更新table为zt_execution, id为1的记录的name字段,更新后的值为'修改后的名称1'
-r($action->updateObjectByIDTest($table[1], $idList[1], $paramsList[1])) && p('name')    && e('修改后的名称2');  //测试更新table为zt_execution, id为2的记录的name字段,更新后的值为'修改后的名称2'
-r($action->updateObjectByIDTest($table[2], $idList[2], $paramsList[2])) && p('project') && e('12');             //测试更新table为zt_execution, id为3的记录的project字段,更新后的值为'12'
+r($action->updateObjectByIDTest(TABLE_PROJECT, 1, array('name' => '更新后的项目名称'))) && p('name') && e('更新后的项目名称');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 2, array('name' => '多字段更新项目', 'status' => 'doing'))) && p('name,status') && e('多字段更新项目,doing');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 3, array('name' => '项目名称不变'))) && p('name') && e('项目名称不变');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 4, array('name' => '特殊字符测试ABC'))) && p('name') && e('特殊字符测试ABC');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 5, array('status' => 'closed'))) && p('status') && e('closed');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 6, array('name' => '数值类型测试', 'type' => 'kanban'))) && p('name,type') && e('数值类型测试,kanban');
+r($action->updateObjectByIDTest(TABLE_PROJECT, 7, array('project' => 1))) && p('project') && e('1');

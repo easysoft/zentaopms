@@ -1,0 +1,34 @@
+---
+title: 执行数据
+desc: 用于测试 getProductsForCreate 方法的执行数据
+
+fields:
+- field: id
+  range: 101-105,111-115
+
+- field: project
+  range: 1{3},2{3},11{4}
+
+- field: name
+  range: 执行1,执行2,执行3,项目执行1,项目执行2,测试执行1,测试执行2,迭代1,迭代2,冲刺1
+
+- field: code
+  range: execution1,execution2,execution3,proj_exec1,proj_exec2,test_exec1,test_exec2,iter1,iter2,sprint1
+
+- field: type
+  range: stage{3},sprint{4},kanban{3}
+
+- field: status
+  range: wait{2},doing{4},suspended{2},done{2}
+
+- field: parent
+  range: 0{8},1{2}
+
+- field: begin
+  range: 2024-01-01{2},2024-06-01{4},2024-09-01{4}
+
+- field: end
+  range: 2024-12-31{4},2025-03-31{3},2025-06-30{3}
+
+- field: deleted
+  range: '0'{9},'1'{1}

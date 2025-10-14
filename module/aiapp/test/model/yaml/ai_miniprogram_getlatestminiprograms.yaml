@@ -1,0 +1,112 @@
+---
+title: ai_miniprogram表数据定义 - getLatestMiniPrograms方法测试
+desc: 为getLatestMiniPrograms方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 小程序ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 小程序名称
+  range: 职业发展导航,工作汇报,市场分析报告,健身计划,广告创意大师,文章撰写助手,视频脚本创意工坊,邮件起草助手,新人介绍,调研问卷生成器,test{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: category
+  note: 分类
+  range: personal{5},work{5},life{3},creative{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 描述
+  range: 这是一个AI小程序的描述信息{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 模型ID
+  range: 1-5:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: icon
+  note: 图标
+  range: writinghand-7,technologist-2,chart-6,cactus-5,palette-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: system,admin,user{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (-2M)-(-1w):7D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: editedBy
+  note: 编辑者
+  range: system,admin,user{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: (-1M)-(w):7D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: published
+  note: 发布状态
+  range: 0{3},1{17}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: publishedDate
+  note: 发布时间
+  range: (-1M)-(w):7D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: 0{18},1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: prompt
+  note: 提示词
+  range: 请帮我生成{20}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: builtIn
+  note: 内置状态
+  range: 0{10},1{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

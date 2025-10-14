@@ -21,7 +21,7 @@ cid=1
 
 */
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 
 r($projectTester->setMenuTest(100)) && p() && e('迭代');     // 项目不存在的情况
 r($projectTester->setMenuTest(11))  && p() && e('迭代');     // 敏捷项目

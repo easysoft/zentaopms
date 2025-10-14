@@ -1,0 +1,27 @@
+---
+title: project data for buildplans test
+desc: 提供buildPlansForCreate测试的project数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 测试项目1,测试项目2,测试项目3,测试项目4,测试项目5
+- field: type
+  range: project{5}
+- field: begin
+  range: 2024-01-01{5}
+- field: end
+  range: 2024-12-31{5}
+- field: hasProduct
+  range: 1{5}
+- field: model
+  range: scrum{5}
+- field: status
+  range: doing{5}
+- field: acl
+  range: open{5}
+- field: parent
+  range: 0{5}
+- field: isTpl
+  range: 0{5}

@@ -13,7 +13,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/view.ui.class.php';
+include '../lib/ui/view.ui.class.php';
 
 zendata('release')->loadYaml('projectrelease', false, 1)->gen(1);
 $tester = new viewTester();

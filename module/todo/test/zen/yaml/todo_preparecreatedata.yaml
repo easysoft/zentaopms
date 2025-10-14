@@ -1,0 +1,106 @@
+---
+title: Todo数据用于prepareCreateData方法测试
+desc: 提供todo表的测试数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{10},user1{5},user2{5}
+  format: ""
+- field: date
+  note: 日期
+  range: 2023-12-01,2023-12-02,2023-12-03
+  format: ""
+- field: begin
+  note: 开始时间
+  range: 0800,0900,1000,1100
+  format: ""
+- field: end
+  note: 结束时间
+  range: 1000,1200,1400,1700
+  format: ""
+- field: type
+  note: 类型
+  range: custom{5},task{5},story{5},bug{5}
+  format: ""
+- field: objectID
+  note: 关联对象ID
+  range: 0{5},1{5},2{5},3{5}
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1,2,3
+  format: ""
+- field: name
+  note: 名称
+  range: 测试待办{5},需求待办{5},任务待办{5},缺陷待办{5}
+  format: ""
+- field: desc
+  note: 描述
+  range: 这是一个测试待办,待办详细描述,重要的待办事项
+  format: ""
+- field: status
+  note: 状态
+  range: wait{10},doing{5},done{5}
+  format: ""
+- field: private
+  note: 是否私有
+  range: 0{15},1{5}
+  format: ""
+- field: config
+  note: 配置
+  range: '',{"type":"day","day":1},{"type":"week","week":"1,2"}
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: admin{10},user1{5},user2{5}
+  format: ""
+- field: assignedBy
+  note: 指派人
+  range: admin{15},user1{3},user2{2}
+  format: ""
+- field: assignedDate
+  note: 指派日期
+  range: 2023-12-01 10:00:00,2023-12-02 11:00:00
+  format: ""
+- field: finishedBy
+  note: 完成人
+  range: "",admin{5},user1{3}
+  format: ""
+- field: finishedDate
+  note: 完成日期
+  range: "0000-00-00 00:00:00"{12},2023-12-03 10:00:00{4},2023-12-04 15:00:00{4}
+  format: ""
+- field: closedBy
+  note: 关闭人
+  range: "",admin{3},user1{2}
+  format: ""
+- field: closedDate
+  note: 关闭日期
+  range: "0000-00-00 00:00:00"{15},2023-12-05 10:00:00{5}
+  format: ""
+- field: closedReason
+  note: 关闭原因
+  range: "",done{5},canceled{3}
+  format: ""
+- field: cycle
+  note: 是否周期
+  range: 0{15},1{5}
+  format: ""
+- field: feedback
+  note: 反馈ID
+  range: 0{18},1{1},2{1}
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd{20}
+  format: ""

@@ -1,0 +1,9 @@
+title: Project story data for getProjectStoryTable test
+desc: Test project story relation data
+author: Claude
+version: "1.0"
+fields:
+  - field: project
+    range: 1-5{15},6-10{5}
+  - field: story
+    range: 1-15{1},1-5{3},6-10{2}

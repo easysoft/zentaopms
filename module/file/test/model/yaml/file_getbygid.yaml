@@ -1,0 +1,60 @@
+---
+title: 通过GID获取文件测试数据
+desc: 用于测试getByGid方法的测试数据
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pathname
+  note: 文件路径
+  range: '202409/test1.txt, 202409/test2.doc, 202409/image.jpg, 202409/report.pdf, 202409/data.xlsx'
+  format: ""
+- field: title
+  note: 文件标题
+  range: 'test_file_1, test_file_2, image_file, report_doc, data_sheet, gid_test_1, gid_test_2, special_file, normal_file, empty_gid_file'
+  format: ""
+- field: extension
+  note: 文件扩展名
+  range: 'txt{4}, doc{2}, pdf{2}, jpg{1}, xlsx{1}'
+  format: ""
+- field: size
+  note: 文件大小
+  range: 1024-102400
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: 'story{3}, task{3}, bug{2}, project{2}'
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  format: ""
+- field: gid
+  note: 全局ID
+  range: 'test_gid_001{1}, test_gid_002{1}, empty_gid{1}, special_gid_123{1}, normal_gid_abc{1}, {5}'
+  format: ""
+- field: addedBy
+  note: 添加者
+  range: 'admin{5}, user{5}'
+  format: ""
+- field: addedDate
+  note: 添加日期
+  range: '2024-09-01 10:00:00{3}, 2024-09-05 14:30:00{3}, 2024-09-08 09:15:00{4}'
+  format: ""
+- field: downloads
+  note: 下载次数
+  range: 0-10
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '{8}, editor{2}'
+  format: ""
+- field: deleted
+  note: 删除标志
+  range: '0{10}'
+  format: ""

@@ -1,0 +1,28 @@
+---
+title: 自动化配置数据定义 - runZTFScript测试
+desc: 为runZTFScript方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 自动化配置ID
+- field: product
+  range: 1-5
+  note: 产品ID
+- field: node
+  range: 1-5
+  note: 执行节点ID
+- field: shell
+  range: php,python,bash
+  note: 执行命令
+- field: scriptPath
+  range: /test/scripts/path1,/test/scripts/path2,/test/scripts/path3
+  note: 脚本路径
+- field: desc
+  range: 测试自动化配置{5}
+  note: 配置描述
+- field: deleted
+  range: 0
+  note: 删除状态

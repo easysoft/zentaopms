@@ -1,0 +1,39 @@
+---
+title: getGroupCases方法需求测试数据
+desc: 为testcaseZen::getGroupCases方法提供需求测试数据
+
+fields:
+- field: id
+  range: 1-5
+- field: product
+  range: 1{4},2{1}
+- field: branch
+  range: 0{3},1{2}
+- field: title
+  range: 用户登录需求,用户注册需求,数据导出需求,系统配置需求,性能优化需求
+- field: type
+  range: story{4},requirement{1}
+- field: status
+  range: active{3},reviewing{1},closed{1}
+- field: stage
+  range: wait{2},planned{2},released{1}
+- field: pri
+  range: 1{1},2{2},3{2}
+- field: estimate
+  range: 1{1},2{2},3{1},5{1}
+- field: openedBy
+  range: admin{3},pm{2}
+- field: openedDate
+  range: (-30d)-(-7d)
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: assignedTo
+  range: dev1{2},dev2{2},[]{1}
+- field: lastEditedBy
+  range: admin{4},[]{1}
+- field: lastEditedDate
+  range: (-7d)-(0d)
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: version
+  range: 1{4},2{1}
+- field: deleted
+  range: '0'{4},'1'{1}

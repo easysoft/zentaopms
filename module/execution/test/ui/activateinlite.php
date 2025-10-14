@@ -25,7 +25,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/activateinlite.ui.class.php';
+include '../lib/ui/activateinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');

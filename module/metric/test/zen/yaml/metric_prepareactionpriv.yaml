@@ -1,0 +1,34 @@
+---
+title: 度量项数据定义
+desc: 用于测试prepareActionPriv方法的度量项测试数据
+author: zentao-unit-test
+version: 1.0
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 度量项名称
+  range: 需求完成率,缺陷修复率,任务完成度,质量指标,时间指标
+  format: ""
+- field: code
+  note: 度量项编码
+  range: requirement_completion_rate,bug_fix_rate,task_completion_degree,quality_metric,time_metric
+  format: ""
+- field: stage
+  note: 度量项阶段
+  range: wait{3},released{2}
+  format: ""
+- field: builtin
+  note: 是否内置
+  range: '0'{3},'1'{2}
+  format: ""
+- field: dateType
+  note: 日期类型
+  range: year,month,week,day,nodate
+  format: ""

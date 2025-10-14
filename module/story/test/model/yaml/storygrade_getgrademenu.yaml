@@ -1,0 +1,10 @@
+---
+fields:
+- field: type
+  range: story,story,requirement,requirement,epic,epic
+- field: grade
+  range: 1,2,1,2,1,2
+- field: name
+  range: L1,L2,UR1,UR2,ER1,ER2
+- field: status
+  range: enable,enable,enable,enable,enable,enable

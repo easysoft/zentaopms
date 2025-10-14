@@ -1,14 +1,19 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 stakeholderModel->isClickable();
-cid=1
+title=测试 stakeholderModel::isClickable();
+timeout=0
+cid=0
 
-- 测试ID为0的干系人中期望按钮是否可点击 @1
-- 测试ID为0的干系人中不存在干系人是否可点击 @0
-- 测试ID为1的干系人中期望按钮是否可点击 @1
-- 测试ID为1的干系人中不存在干系人是否可点击 @0
+- 测试存在的干系人使用普通操作按钮 @1
+- 测试存在的干系人使用notexists操作 @0
+- 测试存在的干系人使用userissue操作(开源版) @0
+- 测试不存在的干系人使用普通操作按钮 @1
+- 测试空对象使用普通操作按钮 @1
+- 测试大小写不敏感的操作名称 @0
+- 测试默认可点击的其他操作 @1
 
 */
 
@@ -16,13 +21,15 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
 zenData('user')->gen(5);
-zenData('stakeholder')->gen(1);
+zenData('stakeholder')->gen(2);
 
-$idList  = array(0, 1);
-$actions = array('expcet', 'notExists');
+su('admin');
 
 $stakeholderTester = new stakeholderTest();
-r($stakeholderTester->isClickableTest($idList[0], $actions[0])) && p() && e('1'); // 测试ID为0的干系人中期望按钮是否可点击
-r($stakeholderTester->isClickableTest($idList[0], $actions[1])) && p() && e('0'); // 测试ID为0的干系人中不存在干系人是否可点击
-r($stakeholderTester->isClickableTest($idList[1], $actions[0])) && p() && e('1'); // 测试ID为1的干系人中期望按钮是否可点击
-r($stakeholderTester->isClickableTest($idList[1], $actions[1])) && p() && e('0'); // 测试ID为1的干系人中不存在干系人是否可点击
+r($stakeholderTester->isClickableTest(1, 'edit')) && p() && e('1');         // 测试存在的干系人使用普通操作按钮
+r($stakeholderTester->isClickableTest(1, 'notexists')) && p() && e('0');    // 测试存在的干系人使用notexists操作
+r($stakeholderTester->isClickableTest(1, 'userissue')) && p() && e('0');    // 测试存在的干系人使用userissue操作(开源版)
+r($stakeholderTester->isClickableTest(999, 'edit')) && p() && e('1');       // 测试不存在的干系人使用普通操作按钮
+r($stakeholderTester->isClickableTest(0, 'delete')) && p() && e('1');       // 测试空对象使用普通操作按钮
+r($stakeholderTester->isClickableTest(1, 'NOTEXISTS')) && p() && e('0');    // 测试大小写不敏感的操作名称
+r($stakeholderTester->isClickableTest(1, 'view')) && p() && e('1');         // 测试默认可点击的其他操作

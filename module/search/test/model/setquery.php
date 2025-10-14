@@ -1,27 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
-
-su('admin');
-
-zenData('userquery')->gen(10);
 
 /**
 
-title=测试 searchModel->setSearchParams();
+title=测试 searchModel::setQuery();
 timeout=0
-cid=1
+cid=0
 
-- queryID 为 0 时，返回 1 = 1 @1 = 1
-- 查询ID为1的搜索条件名称及查询数量 @(( 1   AND `name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'
+- 执行searchTest模块的setQueryTest方法，参数是'task', 0  @1 = 1
+- 执行searchTest模块的setQueryTest方法，参数是'bug', 0  @1 = 1
+- 执行searchTest模块的setQueryTest方法，参数是'story', 0  @1 = 1
+- 执行searchTest模块的setQueryTest方法，参数是'product', 0  @1 = 1
+- 执行searchTest模块的setQueryTest方法，参数是'project', 0  @1 = 1
 
 */
 
-$search = new searchTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
-$queryIDList = array('0', '1', '2', '3', '4', '5', '6');
-$module = 'task';
+// 用户登录
+su('admin');
 
-r($search->setQueryTest($module, $queryIDList[0])) && p('') && e('1 = 1'); // queryID 为 0 时，返回 1 = 1
-r($search->setQueryTest($module, $queryIDList[1])) && p('') && e("(( 1   AND `name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'"); //查询ID为1的搜索条件名称及查询数量
+// 创建测试实例
+$searchTest = new searchTest();
+
+r($searchTest->setQueryTest('task', 0)) && p('') && e('1 = 1');
+r($searchTest->setQueryTest('bug', 0)) && p('') && e('1 = 1');
+r($searchTest->setQueryTest('story', 0)) && p('') && e('1 = 1');
+r($searchTest->setQueryTest('product', 0)) && p('') && e('1 = 1');
+r($searchTest->setQueryTest('project', 0)) && p('') && e('1 = 1');

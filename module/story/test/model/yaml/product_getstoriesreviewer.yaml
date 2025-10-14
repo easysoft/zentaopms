@@ -1,0 +1,25 @@
+---
+title: 产品审核人员测试数据
+desc: 用于测试getStoriesReviewer方法的产品数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  range: product1,product2,product3,product4,product5
+- field: type
+  range: normal{5}
+- field: status
+  range: normal{5}
+- field: acl
+  range: open{2},private{2},custom{1}
+- field: reviewer
+  range: 'admin,user1,user2','user1,user2,user3','admin','',''
+- field: groups
+  range: '1,2,3','2,3','1','',''
+- field: whitelist
+  range: 'admin,user1','user2,user3','','',''
+- field: deleted
+  range: 0{5}

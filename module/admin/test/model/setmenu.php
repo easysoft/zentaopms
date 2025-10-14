@@ -3,38 +3,31 @@
 
 /**
 
-title=测试adminModel->setMenu();
+title=测试 adminModel::setMenu();
 timeout=0
 cid=0
 
-- 获取key为system的导航菜单信息。
- - 第system条的name属性 @系统设置
- - 第system条的order属性 @5
-- 获取key为switch的导航菜单信息。
- - 第switch条的name属性 @功能开关
- - 第switch条的order属性 @10
-- 获取key为company的导航菜单信息。
- - 第company条的name属性 @人员管理
- - 第company条的order属性 @15
-- 获取key为feature的导航菜单信息。
- - 第feature条的name属性 @功能配置
- - 第feature条的order属性 @25
-- 获取key为message的导航菜单信息。
- - 第message条的name属性 @通知设置
- - 第message条的order属性 @35
-- 获取key为dev的导航菜单信息。
- - 第dev条的name属性 @二次开发
- - 第dev条的order属性 @45
+- 步骤1：admin模块在system组中的方法测试属性hasSwitcherMenu @1
+- 步骤2：user模块在company组中的方法测试属性hasSwitcherMenu @1
+- 步骤3：custom模块在feature组中的特殊方法测试属性hasSwitcherMenu @1
+- 步骤4：admin模块不在任何组中的方法测试属性hasSwitcherMenu @~~
+- 步骤5：不存在模块的处理测试属性hasSwitcherMenu @~~
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-global $tester,$lang;
-$tester->loadModel('admin');
-r($lang->admin->menuList) && p('system:name,order')  && e('系统设置,5');  // 获取key为system的导航菜单信息。
-r($lang->admin->menuList) && p('switch:name,order')  && e('功能开关,10'); // 获取key为switch的导航菜单信息。
-r($lang->admin->menuList) && p('company:name,order') && e('人员管理,15'); // 获取key为company的导航菜单信息。
-$tester->admin->setMenu();
-r($lang->admin->menuList) && p('feature:name,order') && e('功能配置,25'); // 获取key为feature的导航菜单信息。
-r($lang->admin->menuList) && p('message:name,order') && e('通知设置,35'); // 获取key为message的导航菜单信息。
-r($lang->admin->menuList) && p('dev:name,order')     && e('二次开发,45'); // 获取key为dev的导航菜单信息。
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+
+// 2. 用户登录（管理员权限）
+su('admin');
+
+// 3. 创建测试实例
+$adminTest = new adminTest();
+
+// 4. 必须包含至少5个测试步骤
+r($adminTest->setMenuTest('admin', 'safe', array())) && p('hasSwitcherMenu') && e('1'); // 步骤1：admin模块在system组中的方法测试
+r($adminTest->setMenuTest('user', 'browse', array())) && p('hasSwitcherMenu') && e('1'); // 步骤2：user模块在company组中的方法测试
+r($adminTest->setMenuTest('custom', 'required', array('product'))) && p('hasSwitcherMenu') && e('1'); // 步骤3：custom模块在feature组中的特殊方法测试
+r($adminTest->setMenuTest('admin', 'index', array())) && p('hasSwitcherMenu') && e('~~'); // 步骤4：admin模块不在任何组中的方法测试
+r($adminTest->setMenuTest('nonexistent', 'test', array())) && p('hasSwitcherMenu') && e('~~'); // 步骤5：不存在模块的处理测试

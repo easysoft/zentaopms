@@ -15,7 +15,7 @@ timeout=0
 
 */
 chdir(__DIR__);
-include '../lib/addtodo.ui.class.php';
+include '../lib/ui/addtodo.ui.class.php';
 
 $todo = zenData('todo');
 $todo->id->range('1-5');

@@ -1,0 +1,69 @@
+---
+title: 待办更新测试数据定义
+desc: 测试todoTao::updateRow()方法的数据配置
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 待办ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 待办所有者账号
+  range: admin{5},user1{3},user2{2}
+  prefix: ""
+  postfix: ""
+- field: date
+  note: 待办日期
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD
+- field: begin
+  note: 开始时间
+  range: 0800,0900,1000,1400,1500
+- field: end
+  note: 结束时间
+  range: 1000,1200,1400,1600,1800
+- field: type
+  note: 待办类型
+  range: custom{3},task{2},bug{2},story{2},epic{1}
+- field: name
+  note: 待办名称
+  range: 测试待办{3},[]{2},新功能开发{2},修复BUG{2},用户故事{1}
+- field: desc
+  note: 待办描述
+  range: 详细描述{5},[]{3},测试描述{2}
+- field: status
+  note: 待办状态
+  range: wait{5},doing{3},done{2}
+- field: objectID
+  note: 关联对象ID
+  range: 0{3},1-100{7}
+- field: pri
+  note: 优先级
+  range: 1{2},2{3},3{3},4{2}
+- field: private
+  note: 是否私有
+  range: 0{8},1{2}
+- field: assignedTo
+  note: 指派给
+  range: admin{3},user1{3},user2{2},[]{2}
+- field: assignedBy
+  note: 指派者
+  range: admin{5},user1{3},user2{2}
+- field: assignedDate
+  note: 指派日期
+  range: (Y-1)-(Y+1)
+  format: YYYY-MM-DD hh:mm:ss
+- field: vision
+  note: 视图类型
+  range: rnd{8},lite{2}
+- field: deleted
+  note: 是否删除
+  range: 0{10}
+- field: cycle
+  note: 是否周期待办
+  range: 0{10}

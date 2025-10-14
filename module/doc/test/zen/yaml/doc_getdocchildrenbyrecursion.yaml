@@ -1,0 +1,63 @@
+---
+title: doc数据用于getDocChildrenByRecursion测试
+desc: 
+author: 
+version: 1.0
+
+fields:
+- field: id
+  range: 1-20
+- field: product
+  range: 1-20
+- field: project
+  range: 0
+- field: execution
+  range: 0
+- field: lib
+  range: 1
+- field: template
+  range: ""
+- field: templateType
+  range: ""
+- field: chapterType
+  range: article
+- field: module
+  range: 0
+- field: title
+  range: 文档1,文档2,文档3,文档4,文档5,子文档1,子文档2,子文档3,孙文档1,孙文档2,孙文档3,曾孙文档1,曾孙文档2,曾孙文档3,叶子文档1,叶子文档2,叶子文档3,叶子文档4,叶子文档5,叶子文档6
+- field: keywords
+  range: 关键词1,关键词2,关键词3,关键词4,关键词5,关键词6,关键词7,关键词8,关键词9,关键词10,关键词11,关键词12,关键词13,关键词14,关键词15,关键词16,关键词17,关键词18,关键词19,关键词20
+- field: type
+  range: text
+- field: parent
+  range: 0,0,0,0,0,1,1,1,2,2,2,3,3,3,10,10,10,11,11,11
+- field: path
+  range: 0
+- field: grade
+  range: 0
+- field: order
+  range: 0
+- field: views
+  range: 0
+- field: addedBy
+  range: admin
+- field: addedDate
+  range: 2023-01-01 00:00:00
+- field: editedBy
+  range: admin
+- field: editedDate
+  range: 2025-09-14 00:00:00
+- field: acl
+  range: open{5},custom{5},private{10}
+- field: groups
+  range: 1{10},0{10}
+- field: users
+  range: admin{10},{10}
+- field: draft
+  range: 0
+- field: version
+  range: 1{10},2{10}
+- field: deleted
+  range: 0
+- field: status
+  range: normal

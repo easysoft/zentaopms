@@ -1,0 +1,42 @@
+---
+title: Test branch data for buildZen::assignProductVarsForView method
+desc: 提供测试构建版本产品变量视图分配方法的分支数据
+author: Claude Code AI
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 2{3}, 4{2}
+  format: ""
+- field: name
+  note: 分支名称
+  range: '主分支{1}, 开发分支{1}, 测试分支{1}, 发布分支{1}, 热修复分支{1}'
+  format: ""
+- field: desc
+  note: 分支描述
+  range: '分支描述{3}, ""{2}'
+  format: ""
+- field: status
+  note: 分支状态
+  range: 'active{4}, closed{1}'
+  format: ""
+- field: createdBy
+  note: 创建人
+  range: 'admin{3}, user1{2}'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01{2}, 2024-01-15{2}, 2024-02-01{1}'
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{5}
+  format: ""

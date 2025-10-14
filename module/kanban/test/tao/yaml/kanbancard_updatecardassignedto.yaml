@@ -1,0 +1,76 @@
+---
+title: 看板卡片数据定义，用于测试updateCardAssignedTo方法
+desc: 生成不同指派人情况的看板卡片测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-6
+  note: 卡片ID
+- field: kanban
+  range: 1
+  note: 看板ID
+- field: region
+  range: 1
+  note: 区域ID
+- field: group
+  range: 1
+  note: 分组ID
+- field: fromID
+  range: 0
+  note: 来源ID
+- field: fromType
+  range: ''
+  note: 来源类型
+- field: name
+  range: '测试卡片{1-6}'
+  note: 卡片名称
+- field: status
+  range: 'doing'
+  note: 状态
+- field: pri
+  range: 1
+  note: 优先级
+- field: assignedTo
+  range: 'admin,user1', 'user2,user3', 'admin', '', 'invalid,user1', 'user1,admin,user2'
+  note: 指派人列表
+- field: desc
+  range: '测试卡片描述'
+  note: 描述
+- field: begin
+  range: '2024-01-01'
+  note: 开始日期
+- field: end
+  range: '2024-12-31'
+  note: 结束日期
+- field: estimate
+  range: 8.0
+  note: 预估工时
+- field: progress
+  range: 0
+  note: 进度
+- field: color
+  range: '#3da7f5'
+  note: 颜色
+- field: acl
+  range: 'open'
+  note: 访问控制
+- field: archived
+  range: '0'
+  note: 是否归档
+- field: deleted
+  range: '0'
+  note: 是否删除
+- field: lastEditedBy
+  range: ''
+  note: 最后编辑者
+- field: lastEditedDate
+  range: '0000-00-00 00:00:00'
+  note: 最后编辑日期
+- field: createdBy
+  range: 'admin'
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 08:00:00'
+  note: 创建日期

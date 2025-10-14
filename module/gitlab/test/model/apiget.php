@@ -1,33 +1,42 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
 title=测试 gitlabModel::apiGet();
 timeout=0
-cid=1
+cid=0
 
-- 用host url 发送一个请求 @success
-- 用host ID 发送一个请求 @success
-- 用不合规范的host url 发送一个请求 @return null
-- 用不存在host ID 发送一个请求 @return null
+- 步骤1：使用有效的host URL发送API请求 @success
+- 步骤2：使用有效的host ID发送API请求 @success
+- 步骤3：使用无效的host URL格式 @return null
+- 步骤4：使用不存在的host ID @return null
+- 步骤5：使用空字符串作为API参数 @success
 
 */
 
-zenData('pipeline')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = new gitlabTest();
+// 准备测试数据
+$pipeline = zenData('pipeline');
+$pipeline->id->range('1-5');
+$pipeline->name->range('gitlab1,gitlab2,gitlab3,gitlab4,gitlab5');
+$pipeline->type->range('gitlab{5}');
+$pipeline->url->range('https://gitlabdev.qc.oop.cc{5}');
+$pipeline->token->range('glpat-b8Sa1pM9k9ygxMZYPN6w{5}');
+ob_start();
+$pipeline->gen(5);
+ob_end_clean();
 
-$hostID = 1;
-$host   = 'https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w';
-$host2  = 'abc.com';
-$api    = '/user';
+// 用户登录
+su('admin');
 
-r($gitlab->apiGetTest($host, $api))   && p() && e('success'); //用host url 发送一个请求
-r($gitlab->apiGetTest($hostID, $api)) && p() && e('success'); //用host ID 发送一个请求
-r($gitlab->apiGetTest($host2, $api))  && p() && e('return null'); //用不合规范的host url 发送一个请求
-r($gitlab->apiGetTest(0, $api))       && p() && e('return null'); //用不存在host ID 发送一个请求
+// 创建测试实例
+$gitlabTest = new gitlabTest();
+
+r($gitlabTest->apiGetTest('https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w', '/user')) && p() && e('success'); // 步骤1：使用有效的host URL发送API请求
+r($gitlabTest->apiGetTest(1, '/user')) && p() && e('success'); // 步骤2：使用有效的host ID发送API请求
+r($gitlabTest->apiGetTest('abc.com', '/user')) && p() && e('return null'); // 步骤3：使用无效的host URL格式
+r($gitlabTest->apiGetTest(999, '/user')) && p() && e('return null'); // 步骤4：使用不存在的host ID
+r($gitlabTest->apiGetTest(1, '')) && p() && e('success'); // 步骤5：使用空字符串作为API参数

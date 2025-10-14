@@ -1,0 +1,126 @@
+---
+title: 执行数据定义
+desc: 用于测试setObjectsForEdit方法的执行数据（使用项目表结构）
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 所属项目ID
+  range: 1{5},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 执行名称
+  range: Sprint1{3},Sprint2{3},Sprint3{3},阶段A{2},阶段B{2},看板执行{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: code
+  note: 执行代码
+  range: SPRINT_1,SPRINT_2,SPRINT_3,STAGE_A,STAGE_B,KANBAN_1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 执行类型
+  range: sprint{10},stage{3},kanban{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 执行状态
+  range: wait{3},doing{8},suspended{2},done{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: model
+  note: 执行模型
+  range: scrum{10},waterfall{3},kanban{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: grade
+  note: 执行层级
+  range: 1{5},2{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: parent
+  note: 父执行ID
+  range: 0{5},1{5},2{3},3{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: PM
+  note: 执行负责人
+  range: admin,user1,user2,user3,user4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: end
+  note: 结束日期
+  range: 2024-03-31,2024-04-30,2024-05-31,2024-06-30,2024-07-31
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: budget
+  note: 执行预算
+  range: 50000{5},100000{5},150000{3},200000{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: budgetUnit
+  note: 预算单位
+  range: CNY{12},USD{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0{14},1{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

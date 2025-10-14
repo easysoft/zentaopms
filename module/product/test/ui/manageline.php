@@ -9,7 +9,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/manageline.ui.class.php';
+include '../lib/ui/manageline.ui.class.php';
 
 $tester = new manageLineTester();
 $tester->login();

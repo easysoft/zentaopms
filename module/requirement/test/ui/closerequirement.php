@@ -10,7 +10,7 @@ cid=91
 
 */
 chdir (__DIR__);
-include '../lib/closerequirement.ui.class.php';
+include '../lib/ui/closerequirement.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

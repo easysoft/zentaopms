@@ -4,22 +4,40 @@ declare(strict_types=1);
 
 /**
 
-title=测试 actionTao->getReleaseRelated().
+title=测试 actionTao::getReleaseRelated();
 timeout=0
-cid=1
+cid=0
 
-- 测试当objectType为release,objectID为1时，返回的数据是否正确
+- 步骤1：正常情况
  - 第0条的0属性 @1
  - 属性1 @11
+- 步骤2：不存在ID
+ - 第0条的0属性 @0
+ - 属性1 @0
+- 步骤3：边界值0
+ - 第0条的0属性 @0
+ - 属性1 @0
+- 步骤4：负数ID
+ - 第0条的0属性 @0
+ - 属性1 @0
+- 步骤5：发布版本存在但构建不存在
+ - 第0条的0属性 @8
+ - 属性1 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zenData('release')->gen(1);
-zenData('build')->gen(1);
+zenData('release')->loadYaml('release_getreleaserelated', false, 2)->gen(10);
+zenData('build')->loadYaml('build_getreleaserelated', false, 2)->gen(10);
+
+su('admin');
 
 $actionTest = new actionTest();
 
-r($actionTest->getReleaseRelated('release', 1)) && p('0:0;1') && e('1,11');   //测试当objectType为release,objectID为1时，返回的数据是否正确
+r($actionTest->getReleaseRelated('release', 1)) && p('0:0;1') && e('1,11');  // 步骤1：正常情况
+r($actionTest->getReleaseRelated('release', 999)) && p('0:0;1') && e('0,0'); // 步骤2：不存在ID
+r($actionTest->getReleaseRelated('release', 0)) && p('0:0;1') && e('0,0');   // 步骤3：边界值0
+r($actionTest->getReleaseRelated('release', -1)) && p('0:0;1') && e('0,0');  // 步骤4：负数ID
+r($actionTest->getReleaseRelated('release', 8)) && p('0:0;1') && e('8,0');   // 步骤5：发布版本存在但构建不存在

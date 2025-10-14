@@ -1,0 +1,15 @@
+---
+title: 版本库历史测试数据
+desc: 用于测试getLinkedExtra方法的版本库历史数据
+version: 1.0
+
+fields:
+- field: id
+  note: 历史ID
+  range: 1-10
+- field: repo
+  note: 版本库ID
+  range: 1-5:R
+- field: revision
+  note: 提交版本号
+  range: abcd123456,efgh789012,ijkl345678,mnop901234,qrst567890,commit123,commit456,commit789,feature001,hotfix002

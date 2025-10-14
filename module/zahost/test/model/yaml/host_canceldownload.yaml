@@ -1,0 +1,152 @@
+---
+title: 宿主机取消下载测试数据
+desc: 为取消镜像下载功能提供宿主机测试数据
+
+fields:
+- field: id
+  note: 宿主机ID
+  range: 1-3
+
+- field: name
+  note: 宿主机名称
+  range: zahost-001,zahost-002,zahost-003
+
+- field: type
+  note: 主机类型
+  range: zahost{3}
+
+- field: hostType
+  note: 宿主机类型
+  range: physical,virtual,cloud
+
+- field: mac
+  note: MAC地址
+  range: 00:11:22:33:44:55,00:aa:bb:cc:dd:ee,00:ff:ee:dd:cc:bb
+
+- field: memory
+  note: 内存大小
+  range: 16,32,64
+
+- field: diskSize
+  note: 磁盘大小
+  range: 500,1000,2000
+
+- field: status
+  note: 主机状态
+  range: online,offline,wait
+
+- field: secret
+  note: 密钥
+  range: secret123,secret456,secret789
+
+- field: desc
+  note: 描述
+  range: 测试宿主机1,测试宿主机2,测试宿主机3
+
+- field: tokenSN
+  note: 令牌序列号
+  range: token123456,token234567,token345678
+
+- field: tokenTime
+  note: 令牌时间
+  range: (NOW-1H)-(NOW)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: oldTokenSN
+  note: 旧令牌序列号
+  range: oldtoken123,oldtoken234,oldtoken345
+
+- field: vsoft
+  note: 虚拟化软件
+  range: qemu,vmware,kvm
+
+- field: heartbeat
+  note: 心跳时间
+  range: (NOW-30M)-(NOW)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: zap
+  note: ZAP端口
+  range: 8080,8081,8082
+
+- field: vnc
+  note: VNC端口
+  range: 5900,5901,5902
+
+- field: ztf
+  note: ZTF端口
+  range: 9090,9091,9092
+
+- field: zd
+  note: ZD端口
+  range: 7070,7071,7072
+
+- field: ssh
+  note: SSH端口
+  range: 22,2222,2223
+
+- field: parent
+  note: 父节点ID
+  range: 0{3}
+
+- field: image
+  note: 镜像ID
+  range: 0{3}
+
+- field: admin
+  note: 管理员
+  range: 0{3}
+
+- field: serverRoom
+  note: 机房ID
+  range: 1,2,3
+
+- field: cpuNumber
+  note: CPU数量
+  range: 4,8,16
+
+- field: cpuCores
+  note: CPU核心数
+  range: 8,16,32
+
+- field: intranet
+  note: 内网地址
+  range: 192.168.1.10,192.168.1.11,192.168.1.12
+
+- field: extranet
+  note: 外网地址
+  range: 192.168.1.10,192.168.1.11,192.168.1.12
+
+- field: osName
+  note: 操作系统名称
+  range: Ubuntu,CentOS,Debian
+
+- field: osVersion
+  note: 操作系统版本
+  range: 20.04,7.9,11
+
+- field: group
+  note: 分组
+  range: default,production,testing
+
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+
+- field: createdDate
+  note: 创建时间
+  range: (NOW-30D)-(NOW-1D)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: editedBy
+  note: 编辑者
+  range: admin,user1,user2
+
+- field: editedDate
+  note: 编辑时间
+  range: (NOW-7D)-(NOW)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 是否删除
+  range: 0{3}

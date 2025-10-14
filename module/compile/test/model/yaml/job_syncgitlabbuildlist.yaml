@@ -1,0 +1,41 @@
+title: table zt_job for syncGitlabBuildList test
+desc: "GitLab构建任务测试数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "任务ID"
+    range: 1-5
+  - field: name
+    note: "任务名称"
+    range: 'GitLabJob1,GitLabJob2,GitLabJob3,GitLabJob4,GitLabJob5'
+  - field: repo
+    note: "代码库ID"
+    range: 1-3
+  - field: product
+    note: "产品ID"
+    range: 1-2
+  - field: engine
+    note: "引擎"
+    range: 'gitlab'
+  - field: server
+    note: "服务器ID"
+    range: 1-3
+  - field: pipeline
+    note: "流水线配置"
+    range: '`{"project":"1","reference":"master"}`,`{"project":"2","reference":"develop"}`,`{"project":"3","reference":"feature"}`'
+  - field: triggerType
+    note: "触发类型"
+    range: 'commit'
+  - field: lastSyncDate
+    note: "最后同步时间"
+    range: '2024-01-01 00:00:00,2024-06-01 12:00:00,[]{1}'
+  - field: deleted
+    note: "删除标记"
+    range: '0'
+  - field: createdBy
+    note: "创建者"
+    range: 'admin'
+  - field: createdDate
+    note: "创建时间"
+    range: '2024-01-01 00:00:00'

@@ -1,0 +1,31 @@
+---
+title: release表测试数据
+desc: 用于deleteRelated方法测试的发布记录数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1{10}
+- field: branch
+  range: 0{10}
+- field: build
+  range: '1,2,3'
+- field: name
+  range: 'Release{1-10}'
+- field: marker
+  range: '1{10}'
+- field: date
+  range: '2024-01-01{10}'
+- field: desc
+  range: 'Release description {1-10}'
+- field: status
+  range: 'normal{10}'
+- field: createdBy
+  range: 'admin{10}'
+- field: createdDate
+  range: '2024-01-01 10:00:00{10}'
+- field: deleted
+  range: '0{10}'

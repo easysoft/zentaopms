@@ -1,0 +1,44 @@
+---
+title: assignModulesForCreate方法测试数据
+desc: 为assignModulesForCreate方法提供全面的测试数据，包括story、module、scene等相关数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 记录ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: title
+  note: 标题
+  range: Test{1-100}
+  prefix: ""
+  postfix: ""
+
+- field: product_id
+  note: 产品ID
+  range: 1-5
+
+- field: module_id
+  note: 模块ID
+  range: 1-30
+
+- field: story_id
+  note: 需求ID
+  range: 1-10, []{5}
+
+- field: branch
+  note: 分支
+  range: 0{50}, main{30}, dev{20}
+
+- field: status
+  note: 状态
+  range: active{80}, draft{20}
+
+- field: deleted
+  note: 是否删除
+  range: 0{95}, 1{5}

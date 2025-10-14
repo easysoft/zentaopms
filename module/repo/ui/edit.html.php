@@ -85,7 +85,7 @@ formPanel
     ),
     formRow
     (
-        ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
+        ($config->inContainer || $config->inQuickon || $this->config->inCompose) ? setClass('hidden') : setClass('hide-service'),
         formGroup
         (
             set::width('1/2'),

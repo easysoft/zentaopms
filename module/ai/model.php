@@ -43,30 +43,43 @@ class aiModel extends model
      * @static
      * @return boolean
      */
-    public static function isClickable($object, $action)
+    public function isClickable($object, $action)
     {
+        $action = strtolower($action);
         if(empty($object) || empty($action)) return false;
 
         /* Assumes object is a language model record. */
-        if(strtolower($action) === 'modelenable')
+        if(in_array($this->app->rawMethod, array('models', 'modelview')))
         {
-            if($object->enabled == '1') return false;
+            if($action === 'modelenable')       return $object->enabled != '1';
+            if($action === 'modeldisable')      return $object->enabled != '0';
+            if($action === 'assistantpublish')  return $object->enabled != '1';
+            if($action === 'assistantwithdraw') return $object->enabled != '0';
+            if($action === 'assistantedit')     return $object->enabled != '1';
         }
-        elseif(strtolower($action) === 'modeldisable')
+
+        if(in_array($this->app->rawMethod, array('prompts', 'promptview')))
         {
-            if($object->enabled == '0') return false;
+            $executable = $this->isExecutable($object);
+            $published  = $object->status == 'active';
+
+            if($action == 'promptassignrole') return common::hasPriv('ai', 'designPrompt') && !$published;
+            if($action == 'promptaudit')      return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
+            if($action == 'promptedit')       return common::hasPriv('ai', 'promptedit');
+            if($action == 'promptpublish')    return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
+            if($action == 'promptunpublish')  return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
         }
-        elseif (strtolower($action) === 'assistantpublish')
+
+        if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
         {
-            if($object->enabled == '1') return false;
-        }
-        elseif (strtolower($action) === 'assistantwithdraw')
-        {
-            if($object->enabled == '0') return false;
-        }
-        elseif (strtolower($action) === 'assistantedit')
-        {
-            if($object->enabled == '1') return false;
+            $isPublished = $object->published === '1';
+            $isBuiltIn   = $object->builtIn === '1';
+
+            if($action == 'editminiprogram')      return common::hasPriv('ai', 'editMiniProgram') && !$isPublished && !$isBuiltIn;
+            if($action == 'testminiprogram')      return common::hasPriv('ai', 'testMiniProgram') && !$isPublished && !$isBuiltIn;
+            if($action == 'publishminiprogram')   return common::hasPriv('ai', 'publishMiniProgram') && !$isPublished;
+            if($action == 'unpublishminiprogram') return common::hasPriv('ai', 'unpublishMiniProgram') && $isPublished;
+            if($action == 'exportminiprogram')    return common::hasPriv('ai', 'exportMiniProgram') && $isPublished && !$isBuiltIn;
         }
 
         return true;
@@ -1172,14 +1185,14 @@ class aiModel extends model
      */
     public function updateCustomCategories()
     {
-        $data = array_filter($_POST);
-        if(empty($data)) return;
-
         $this->dao->delete()
             ->from(TABLE_CONFIG)
             ->where('module')->eq('ai')
             ->andWhere('section')->eq('miniProgram')
             ->exec();
+
+        $data = array_filter($_POST);
+        if(empty($data)) return;
 
         foreach($data as $key => $value)
         {
@@ -1401,8 +1414,6 @@ class aiModel extends model
         if(!isset($data->prompt))      $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
         if($data->published === '1')   $data->publishedDate = helper::now();
         $data->builtIn = '0';
-
-        $data->model = (empty($data->model) || $data->model == 'default') ? 0 : $data->model;
 
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
@@ -1730,14 +1741,19 @@ class aiModel extends model
         if(is_object($data)) $data = (array)$data;
 
         /* Handle raw (non-exploded) sources. */
-        if(is_string($sources) && strpos($sources, ',') !== false)
+        if(is_string($sources))
         {
-            $sources = array_filter(explode(',', $sources));
+            if(empty($sources)) return '';
+            if(strpos($sources, ',') !== false) $sources = array_filter(explode(',', $sources));
+            else                                $sources = array($sources);
             $sources = array_map(function ($source)
             {
                 return explode('.', $source);
             }, $sources);
         }
+
+        /* Handle empty sources array. */
+        if(empty($sources)) return '';
 
         $dataObject = array();
 
@@ -1749,6 +1765,9 @@ class aiModel extends model
             $objectName = $source[0];
             $objectKey  = $source[1];
 
+            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
+            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
+
             $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
             $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
 
@@ -1757,7 +1776,7 @@ class aiModel extends model
             $obj = $data[$objectName];
             if(static::isAssoc($obj))
             {
-                $dataObject[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
+                $dataObject[$semanticName][$semanticKey] = isset($data[$objectName][$objectKey]) ? $data[$objectName][$objectKey] : '';
             }
             else
             {
@@ -1778,7 +1797,7 @@ class aiModel extends model
         return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match)
         {
             return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
-        }, json_encode($dataObject)) . "\n" . $supplement;
+        }, json_encode($dataObject)) . (empty($supplement) ? '' : ("\n" . $supplement));
     }
 
     /**
@@ -1909,7 +1928,7 @@ class aiModel extends model
             case 'release':
                 if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
                 if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
-                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
                 break;
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
@@ -2038,28 +2057,12 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        if(!empty($prompt->model))
-        {
-            /* Check if model required by prompt is available, fallback to default (first enabled) model if not. */
-            $model = $this->getLanguageModel($prompt->model);
-            if(empty($model) || !$model->enabled)
-            {
-                $defaultModel = $this->getDefaultLanguageModel();
-                if(empty($defaultModel)) return -4;
-
-                $prompt->model = $defaultModel->id;
-            }
-        }
-
         $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($prompt->model, array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
-        if(empty($response)) return -6;
-
-        return current($response);
+        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'model' => $this->modelConfig->type, 'promptID' => $prompt->id);
     }
 
     /**
@@ -2594,7 +2597,7 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
-            ->beginIF(!commonModel::hasPriv('ai', 'promptaudit') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
+            ->beginIF(!commonModel::hasPriv('ai', 'designPrompt') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
             ->orderBy('id_desc')
             ->fetchAll('id', false);
     }

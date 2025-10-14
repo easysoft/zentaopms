@@ -1357,7 +1357,7 @@ class executionZen extends execution
         $statusCount  = array();
         $myExecutions = array();
         $kanbanGroup  = array();
-        $teams        = $this->execution->getMembersByIdList(explode(',', $this->app->user->view->sprints));
+        $teams        = $this->execution->getMembersByIdList(toIntArray($this->app->user->view->sprints));
         foreach($projectIdList as $projectID)
         {
             foreach(array_keys($this->lang->execution->statusList) as $status)

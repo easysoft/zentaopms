@@ -17,7 +17,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/dynamic.ui.class.php';
+include '../lib/ui/dynamic.ui.class.php';
 global $config;
 
 $user = zenData('user');

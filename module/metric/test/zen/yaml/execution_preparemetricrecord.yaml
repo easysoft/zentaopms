@@ -1,0 +1,25 @@
+---
+title: 为 prepareMetricRecord 方法准备执行数据
+desc: 包含不同状态的执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: [执行1, 执行2, 执行3, 执行4, 执行5, 执行6, 执行7, 执行8, 执行9, 执行10]
+- field: code
+  range: [exec1, exec2, exec3, exec4, exec5, exec6, exec7, exec8, exec9, exec10]
+- field: status
+  range: [wait{2}, doing{4}, closed{2}, done{2}]
+- field: closedDate
+  range: [0000-00-00 00:00:00{8}, 2022-10-01 00:00:00{1}, 2023-04-01 00:00:00{1}]
+- field: type
+  range: [sprint{6}, stage{2}, kanban{2}]
+- field: deleted
+  range: ['0']{10}
+- field: createdBy
+  range: admin{10}
+- field: createdDate
+  range: 2023-01-01 00:00:00{10}

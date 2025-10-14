@@ -1,0 +1,70 @@
+---
+title: 文档库createDocLib测试数据
+desc: 为createDocLib方法提供测试数据配置
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文档库ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 文档库类型
+  range: product,project,execution
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd
+  format: ""
+- field: parent
+  note: 父级ID
+  range: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 0-10
+  format: ""
+- field: project
+  note: 项目ID
+  range: 0-10
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0-10
+  format: ""
+- field: name
+  note: 文档库名称
+  range: 产品文档库,项目文档库,执行文档库
+  format: ""
+- field: baseUrl
+  note: 基础URL
+  range: ""
+  format: ""
+- field: acl
+  note: 访问控制
+  range: default,open
+  format: ""
+- field: groups
+  note: 分组
+  range: ""
+  format: ""
+- field: users
+  note: 用户
+  range: ""
+  format: ""
+- field: main
+  note: 是否主要
+  range: "1"
+  format: ""
+- field: collector
+  note: 收集器
+  range: ""
+  format: ""
+- field: order
+  note: 排序
+  range: 0-10
+  format: ""

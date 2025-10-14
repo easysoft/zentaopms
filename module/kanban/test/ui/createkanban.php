@@ -6,7 +6,7 @@ timeout=0
 cid=0
 */
 chdir(__DIR__);
-include '../lib/kanban.ui.class.php';
+include '../lib/ui/kanban.ui.class.php';
 
 $kanbanspace = zenData('kanbanspace');
 $kanbanspace->id->range('1');

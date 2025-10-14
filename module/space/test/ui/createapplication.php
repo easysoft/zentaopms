@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-include '../lib/space.ui.class.php';
+include '../lib/ui/space.ui.class.php';
 $tester = new space();
 function randomString($length = 4)
 {

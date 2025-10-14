@@ -1,0 +1,66 @@
+---
+title: getPivotVersions方法透视表规格测试数据
+desc: 用于测试pivotModel::getPivotVersions()方法的透视表规格数据
+author: Claude
+version: 1.0
+
+fields:
+- field: pivot
+  note: 透视表ID
+  range: '1-3,5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: '1.0{2},2.0{2}'
+  format: ""
+- field: name
+  note: 规格名称(JSON格式)
+  range: '{"zh-cn":"规格版本1","en":"Spec1"}, {"zh-cn":"规格版本2","en":"Spec2"}, {"zh-cn":"规格版本3","en":"Spec3"}, {"zh-cn":"规格版本4","en":"Spec4"}'
+  format: ""
+- field: desc
+  note: 规格描述(JSON格式)
+  range: '{"zh-cn":"规格描述1","en":"Spec Desc1"}, {"zh-cn":"规格描述2","en":"Spec Desc2"}, {"zh-cn":"规格描述3","en":"Spec Desc3"}, {"zh-cn":"规格描述4","en":"Spec Desc4"}'
+  format: ""
+- field: driver
+  note: 数据库驱动
+  range: 'mysql{3},duckdb{1}'
+  format: ""
+- field: mode
+  note: 模式
+  range: 'builder{4}'
+  format: ""
+- field: sql
+  note: SQL查询语句
+  range: 'SELECT * FROM table1{2}, SELECT * FROM table2{2}'
+  format: ""
+- field: fields
+  note: 字段配置
+  range: '{"field1":"config1"}{2}, {"field2":"config2"}{2}'
+  format: ""
+- field: langs
+  note: 语言配置
+  range: '{"zh-cn":"中文"}{2}, {"en":"English"}{2}'
+  format: ""
+- field: vars
+  note: 变量配置
+  range: '{"var1":"value1"}{2}, {"var2":"value2"}{2}'
+  format: ""
+- field: objects
+  note: 对象配置
+  range: '{"object1":"config1"}{2}, {"object2":"config2"}{2}'
+  format: ""
+- field: settings
+  note: 设置配置
+  range: '{"setting1":"value1"}{2}, {"setting2":"value2"}{2}'
+  format: ""
+- field: filters
+  note: 过滤器配置
+  range: '{"filter1":"condition1"}{2}, {"filter2":"condition2"}{2}'
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59:30D'
+  format: 'YYYY-MM-DD hh:mm:ss'

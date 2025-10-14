@@ -1,0 +1,19 @@
+---
+title: 项目测试数据
+desc: 为checkCreateTask方法提供项目测试数据
+
+fields:
+- field: id
+  range: 1
+- field: name
+  range: '测试项目'
+- field: code
+  range: 'test'
+- field: type
+  range: 'project'
+- field: status
+  range: 'wait'
+- field: openedBy
+  range: 'admin'
+- field: openedDate
+  range: '`2024-01-01 10:00:00`'

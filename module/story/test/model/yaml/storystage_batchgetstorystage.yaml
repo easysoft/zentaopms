@@ -1,0 +1,19 @@
+---
+title: 需求阶段测试数据
+desc: 用于batchGetStoryStage方法测试
+author: Claude
+version: 1.0
+
+fields:
+- field: story
+  note: 需求ID
+  range: 1,2,3,4,5
+- field: branch
+  note: 分支ID
+  range: 0{3},1{1},2{1}
+- field: stage
+  note: 阶段状态
+  range: wait,planned,projected,developing,testing
+- field: stagedBy
+  note: 阶段设置者
+  range: admin{5}

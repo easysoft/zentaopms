@@ -1,0 +1,29 @@
+title: zt_release table for getReleaseRelated test
+author: Claude
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 11-20
+  - field: product
+    range: 1-10
+  - field: branch
+    range: 0{5},1{5}
+  - field: build
+    range: 1-10
+  - field: name
+    range: Release{10}
+  - field: marker
+    range: 0{5},1{5}
+  - field: date
+    range: 2024-01-01{10}
+  - field: status
+    range: normal{8},terminate{2}
+  - field: createdBy
+    range: admin{10}
+  - field: createdDate
+    range: 2024-01-01{10}
+  - field: deleted
+    range: 0{10}

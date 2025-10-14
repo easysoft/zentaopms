@@ -15,7 +15,7 @@ cid=1
 
 */
 
-$projectTester = new project();
+$projectTester = new projectTest();
 
 $programIdList = array(1, 2, 0);
 $projectIdList = array(11, 60, 61, 100);

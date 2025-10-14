@@ -1,66 +1,33 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
-su('admin');
-
-zenData('project')->loadYaml('project_for_card')->gen(50);
-zenData('story')->gen(20);
-zenData('bug')->gen(20);
 
 /**
 
-title=测试 screenModel->getchartoption();
+title=测试 screenModel::buildCardChart();
 timeout=0
-cid=1
+cid=0
 
-- 测试type为card图表是否显示正确,目前不存在统计方式为value的图表。 @1
-- 测试统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。 @1
-- 测试type为card图表是否显示正确,目前不存在统计方式为count的图表。 @1
-- 测试统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。 @1
-- 测试type为card以及统计方式类型为sum的图表是否显示正确，生成的数据项数量是否正确。 @1
+- 步骤1：测试空chart参数情况属性option @object
+- 步骤2：测试chart无settings的情况属性option @object
+- 步骤3：测试chart有settings但无sql的情况属性option @object
+- 步骤4：测试chart有settings和sql但value设置不完整的情况属性option @object
+- 步骤5：测试chart完整配置的text类型值计算属性option @object
 
 */
 
-$screen = new screenTest();
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-function getComponetAndChart($screen, $valueType = array(), $filters = array())
-{
-    global $tester;
-    $componets = $screen->getAllComponent($filters);
-    foreach($componets as $componet)
-    {
-        if(!isset($componet->sourceID)) continue;
-        $type  = $componet->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
-        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
-        $chart = $tester->dao->select('*')->from($table)->where('id')->eq($componet->sourceID)->fetch();
+// 2. 用户登录
+su('admin');
 
-        if(!$chart) continue;
-        if(!empty($valueType))
-        {
-            $setting = json_decode($chart->settings);
-            if($setting && isset($setting->value))
-            {
-                if(isset($valueType['type']) && $setting->value->type != $valueType['type']) continue;
-                if(isset($valueType['egg']) && $setting->value->agg != $valueType['egg']) continue;
-            }
-        }
+// 3. 创建测试实例
+$screenTest = new screenTest();
 
-        return array($componet, $chart);
-    }
-    return array(null, null);
-}
-
-$filter12 = array('type' => 'card');
-
-list($component13, $chart13) = getComponetAndChart($screen, array('type' => 'value'), $filter12); 
-r(is_null($component13)) && p('') && e(1); // 测试type为card图表是否显示正确,目前不存在统计方式为value的图表。
-r(is_null($chart13)) && p('') && e(1);    // 测试统计方式类型为value的图表是否显示正确，目前不存在统计方式为value的图表。
-
-list($component14, $chart14) = getComponetAndChart($screen, array('type' => 'count'), $filter12);
-r(is_null($component14)) && p('') && e(1); // 测试type为card图表是否显示正确,目前不存在统计方式为count的图表。
-r(is_null($chart14)) && p('') && e(1);    // 测试统计方式类型为count的图表是否显示正确，目前不存在统计方式为count的图表。
-
-list($component15, $chart15) = getComponetAndChart($screen, array('egg' => 'sum'), $filter12);
-$screen->buildCardChart($component15, $chart15);
-r(isset($component15->option->dataset)) && p('') && e('1');  //测试type为card以及统计方式类型为sum的图表是否显示正确，数据项参数是否正确。
+// 4. 测试步骤
+r($screenTest->buildCardChartTest(null, null)) && p('option') && e('object'); // 步骤1：测试空chart参数情况
+r($screenTest->buildCardChartTest((object)array(), (object)array('settings' => null))) && p('option') && e('object'); // 步骤2：测试chart无settings的情况
+r($screenTest->buildCardChartTest((object)array(), (object)array('settings' => '{}', 'sql' => null))) && p('option') && e('object'); // 步骤3：测试chart有settings但无sql的情况
+r($screenTest->buildCardChartTest((object)array(), (object)array('settings' => '{"value":{}}', 'sql' => 'SELECT 1', 'id' => 9999))) && p('option') && e('object'); // 步骤4：测试chart有settings和sql但value设置不完整的情况
+r($screenTest->buildCardChartTest((object)array(), (object)array('settings' => '{"value":{"field":"test","type":"text"}}', 'sql' => 'SELECT 1', 'id' => 1003))) && p('option') && e('object'); // 步骤5：测试chart完整配置的text类型值计算

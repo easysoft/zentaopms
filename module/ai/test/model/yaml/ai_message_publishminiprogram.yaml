@@ -1,0 +1,49 @@
+---
+title: AI消息测试数据
+desc: 为publishMiniProgram方法中的通知功能提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: appID
+  note: 关联小程序ID
+  range: 1{2},2{2},3{2},6{2},7{1},8{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: user
+  note: 用户ID
+  range: 1{4},2{3},3{2},4{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 消息类型
+  range: req{5},res{3},ntf{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: content
+  note: 消息内容
+  range: 测试请求消息{3},测试响应消息{3},测试通知消息{2},历史消息内容{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 11:00:00,2024-01-01 11:10:00,2024-01-01 11:20:00,2024-01-01 11:30:00,2024-01-01 11:40:00,2024-01-01 11:50:00,2024-01-01 12:00:00,2024-01-01 12:10:00,2024-01-01 12:20:00,2024-01-01 12:30:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

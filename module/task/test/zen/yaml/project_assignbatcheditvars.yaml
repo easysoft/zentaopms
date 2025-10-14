@@ -1,0 +1,56 @@
+---
+title: 项目执行数据
+desc: 用于测试任务批量编辑的项目执行数据
+
+fields:
+- field: id
+  range: 1-10
+  type: int
+
+- field: project
+  range: 1-5
+  type: int
+
+- field: type
+  range: sprint{5}, stage{3}, kanban{2}
+
+- field: name
+  fields:
+  - field: prefix
+    range: 迭代,阶段,看板,执行
+  - field: id
+    range: 1-10
+
+- field: code
+  range: EXEC001-EXEC010
+
+- field: begin
+  range: 2024-01-01-2024-06-01
+  format: YYYY-MM-DD
+
+- field: end
+  range: 2024-06-01-2024-12-31
+  format: YYYY-MM-DD
+
+- field: status
+  range: wait{3}, doing{4}, suspended{2}, closed{1}
+
+- field: openedBy
+  range: admin, projectManager, user1
+
+- field: openedDate
+  range: 2024-01-01-2024-03-01
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: closedBy
+  range: [''], admin{2}, projectManager{1}
+
+- field: closedDate
+  range: [null]{7}, 2024-07-01-2024-12-31{3}
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: desc
+  range: 这是一个测试执行{5}, 开发迭代执行{3}, 测试阶段执行{2}
+
+- field: deleted
+  range: ['0']{10}

@@ -1,0 +1,133 @@
+---
+title: 项目数据定义
+desc: 用于测试getProjectProductList方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-3
+- field: project
+  note: 父项目ID
+  range: 0
+- field: isTpl
+  note: 是否模板
+  range: 0
+- field: charter
+  note: 章程
+  range: 0
+- field: model
+  note: 模型
+  range: scrum{2},waterfall{1}
+- field: type
+  note: 类型
+  range: project
+- field: category
+  note: 分类
+  range: ''
+- field: lifetime
+  note: 生命周期
+  range: ''
+- field: budget
+  note: 预算
+  range: '0'
+- field: budgetUnit
+  note: 预算单位
+  range: CNY
+- field: attribute
+  note: 属性
+  range: ''
+- field: percent
+  note: 百分比
+  range: 0.1
+- field: milestone
+  note: 里程碑
+  range: '0'
+- field: output
+  note: 输出
+  range: ''
+- field: auth
+  note: 权限
+  range: extend
+- field: parent
+  note: 父级
+  range: 0
+- field: path
+  note: 路径
+  range: ',{1-3},'
+- field: grade
+  note: 等级
+  range: 1
+- field: name
+  note: 项目名称
+  range: '项目{1-3}'
+- field: code
+  note: 项目代码
+  range: 'PRJ{1-3}'
+- field: begin
+  note: 开始时间
+  range: '2024-01-01'
+- field: end
+  note: 结束时间
+  range: '2024-12-31'
+- field: realBegan
+  note: 实际开始时间
+  range: '2024-01-01 00:00:00'
+- field: realEnd
+  note: 实际结束时间
+  range: '0000-00-00 00:00:00'
+- field: status
+  note: 状态
+  range: doing{2},wait{1}
+- field: subStatus
+  note: 子状态
+  range: ''
+- field: pri
+  note: 优先级
+  range: 1-3
+- field: desc
+  note: 项目描述
+  range: '这是项目{1-3}的描述'
+- field: goal
+  note: 目标
+  range: ''
+- field: order
+  note: 排序
+  range: 0
+- field: vision
+  note: 视图
+  range: rnd
+- field: displayCards
+  note: 显示卡片
+  range: ''
+- field: fluidBoard
+  note: 流动板
+  range: '0'
+- field: deleted
+  note: 删除状态
+  range: '0'
+- field: storyType
+  note: 需求类型
+  range: story
+- field: lastEditedBy
+  note: 最后编辑者
+  range: ''
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '0000-00-00 00:00:00'
+- field: closedBy
+  note: 关闭者
+  range: ''
+- field: closedDate
+  note: 关闭时间
+  range: '0000-00-00 00:00:00'
+- field: closedReason
+  note: 关闭原因
+  range: ''
+- field: activatedBy
+  note: 激活者
+  range: ''
+- field: activatedDate
+  note: 激活时间
+  range: '0000-00-00 00:00:00'

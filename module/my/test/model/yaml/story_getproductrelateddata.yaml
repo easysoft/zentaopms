@@ -1,0 +1,25 @@
+---
+title: getProductRelatedData方法测试用的故事数据
+desc: 为测试产品相关数据统计功能提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: product  
+  range: 1{3}, 2{3}, 3{2}, 4{2}
+- field: status
+  range: active{4}, closed{3}, draft{3}
+- field: stage
+  range: wait{3}, projected{2}, developing{2}, released{2}, closed{1}
+- field: estimate
+  range: 1{2}, 2{3}, 3{3}, 5{2}
+- field: deleted
+  range: 0{9}, 1{1}
+- field: title
+  range: 产品需求1{3}, 产品需求2{3}, 产品需求3{4}
+- field: type
+  range: story{8}, epic{1}, requirement{1}
+- field: vision
+  range: rnd{10}

@@ -1,0 +1,35 @@
+---
+title: story表测试数据，用于getByAssignedTo方法
+desc: 用于测试getByAssignedTo方法的story分配数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-20
+- field: product
+  note: 所属产品
+  range: '1,1,1,1,1,2,2,2,2,2,1,1,1,1,1,2,2,2,2,2'
+- field: branch
+  note: 分支
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: module
+  note: 模块
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: type
+  note: 需求类型
+  range: story,story,story,story,requirement,story,story,story,requirement,requirement,story,story,story,story,story,story,story,story,story,story
+- field: assignedTo
+  note: 指派给
+  range: admin,admin,user1,user1,admin,admin,user1,user2,admin,user1,admin,admin,user1,admin,admin,user1,user2,admin,user1,user2
+- field: status
+  note: 需求状态
+  range: active,active,active,active,active,active,active,active,active,active,active,active,active,active,active,active,active,active,active,active
+- field: deleted
+  note: 删除状态
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: title
+  note: 需求标题
+  prefix: 需求标题
+- field: vision
+  note: 视图
+  range: rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd

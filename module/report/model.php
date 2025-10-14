@@ -311,7 +311,7 @@ class reportModel extends model
             unset($this->lang->report->contributionCountObject['qa']);
         }
 
-        $tips = $this->lang->report->tips->contributionCount[$mode] . '<br>';
+        $tips = isset($this->lang->report->tips->contributionCount[$mode]) ? $this->lang->report->tips->contributionCount[$mode] . '<br>' : $this->lang->report->tips->contributionCount['company'] . '<br>';
         foreach($this->lang->report->contributionCountObject as $objectTip) $tips .= $objectTip . '<br>';
         return $tips;
     }

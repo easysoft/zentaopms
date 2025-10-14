@@ -1,0 +1,45 @@
+---
+title: 项目数据用于构建区块测试
+desc: 用于测试printBuildBlock方法的项目数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 项目名称
+  range: 移动应用开发{2},Web平台重构{2},桌面软件升级{2},API接口开发{2},数据分析平台{2}
+- field: code
+  note: 项目代码
+  range: mobile{2},web{2},desktop{2},api{2},data{2}
+- field: type
+  note: 项目类型
+  range: project{8},program{2}
+- field: status
+  note: 项目状态
+  range: wait{2},doing{6},suspended{1},done{1}
+- field: begin
+  note: 开始日期
+  range: (`-60D`)-(`-30D`):5D
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: (`+30D`)-(`+90D`):5D
+  format: YYYY-MM-DD
+- field: PM
+  note: 项目经理
+  range: admin{4},user1{3},user2{2},user3{1}
+- field: acl
+  note: 访问控制
+  range: open{6},private{4}
+- field: createdBy
+  note: 创建者
+  range: admin{6},user1{4}
+- field: createdDate
+  note: 创建时间
+  range: (`-90D`)-(`-60D`):3D
+  format: YYYY-MM-DD hh:mm:ss

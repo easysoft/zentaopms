@@ -1,0 +1,28 @@
+---
+title: 产品表数据定义
+desc: 用于buildProductForm方法测试的产品数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 产品ID
+- field: name
+  range: 'Product1,Product2,Product3,Product4,Product5,Product6,Product7,Product8,Product9,Product10'
+  note: 产品名称
+- field: program
+  range: 1,2,1,2,1,2,1,2,1,2
+  note: 所属项目集ID
+- field: type
+  range: 'normal'
+  note: 产品类型
+- field: status
+  range: 'normal'
+  note: 产品状态
+- field: deleted
+  range: '0'
+  note: 删除状态
+- field: shadow
+  range: '0'
+  note: 影子产品标识

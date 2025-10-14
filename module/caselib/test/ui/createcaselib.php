@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createcaselib.ui.class.php';
+include '../lib/ui/createcaselib.ui.class.php';
 
 zenData('testsuite')->gen(0);
 

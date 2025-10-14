@@ -1,0 +1,22 @@
+---
+title: 发布关联数据删除测试
+desc: 用于deleteRelated方法的测试数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关联记录ID
+  range: 1-100
+
+- field: release
+  note: 发布ID  
+  range: 1-5{5}
+
+- field: objectID
+  note: 关联对象ID
+  range: 1-50
+
+- field: objectType
+  note: 关联对象类型
+  range: story{10}, bug{8}, project{5}, build{3}, branch{2}

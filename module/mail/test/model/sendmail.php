@@ -3,30 +3,64 @@
 
 /**
 
-title=测试 mailModel->sendmail();
+title=测试 mailModel::sendmail();
+timeout=0
 cid=0
 
-- 不传入任何参数 @0
-- 只传入actionID @0
-- 只传入objectID @0
-- 测试为需求2发送邮件通知 @0
+- 测试步骤1：空参数输入情况属性processed @1
+- 测试步骤2：只传入actionID无objectID属性processed @1
+- 测试步骤3：只传入objectID无actionID属性processed @1
+- 测试步骤4：传入有效的objectID和actionID属性processed @0
+- 测试步骤5：测试不同对象类型的邮件发送属性processed @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+
+// 手动插入基础测试数据，避免zendata工具路径问题
+global $tester;
+
+// 插入基础action数据
+$tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(0)->exec();
+for($i = 1; $i <= 5; $i++)
+{
+    $action = new stdClass();
+    $action->id = $i;
+    $action->objectType = $i <= 2 ? 'story' : 'task';
+    $action->objectID = $i <= 3 ? $i : $i - 2;
+    $action->actor = 'admin';
+    $action->action = 'opened';
+    $action->date = '2024-01-01 00:00:00';
+    $action->comment = '测试注释';
+    $tester->dao->insert(TABLE_ACTION)->data($action)->exec();
+}
+
+// 插入基础用户数据
+$tester->dao->delete()->from(TABLE_USER)->where('account')->ne('system')->exec();
+$users = array(
+    array('id' => 1, 'account' => 'admin', 'realname' => '管理员', 'email' => 'admin@test.com'),
+    array('id' => 2, 'account' => 'user1', 'realname' => '用户1', 'email' => 'user1@test.com'),
+    array('id' => 3, 'account' => 'user2', 'realname' => '用户2', 'email' => 'user2@test.com'),
+);
+foreach($users as $userData)
+{
+    $user = new stdClass();
+    foreach($userData as $key => $value) $user->$key = $value;
+    $user->password = md5('123456');
+    $user->deleted = '0';
+    $user->type = 'inside';
+    $user->dept = 1;
+    $user->role = 'dev';
+    $tester->dao->insert(TABLE_USER)->data($user)->exec();
+}
+
 su('admin');
 
-$action = zenData('action');
-$action->execution->range('101');
-$action->gen(2);
-zenData('story')->gen(2);
-zenData('product')->gen(2);
-
 $mail = new mailTest();
-$mail->objectModel->config->webRoot = '/';
 
-r($mail->objectModel->sendmail(0, 0)) && p() && e('0'); //不传入任何参数
-r($mail->objectModel->sendmail(0, 2)) && p() && e('0'); //只传入actionID
-r($mail->objectModel->sendmail(2, 0)) && p() && e('0'); //只传入objectID
-
-r($mail->objectModel->sendmail(2, 2)) && p() && e('0'); //测试为需求2发送邮件通知
+r($mail->sendmailTest(0, 0)) && p('processed') && e('1'); // 测试步骤1：空参数输入情况
+r($mail->sendmailTest(0, 1)) && p('processed') && e('1'); // 测试步骤2：只传入actionID无objectID
+r($mail->sendmailTest(1, 0)) && p('processed') && e('1'); // 测试步骤3：只传入objectID无actionID
+r($mail->sendmailTest(1, 1)) && p('processed') && e('0'); // 测试步骤4：传入有效的objectID和actionID
+r($mail->sendmailTest(2, 2)) && p('processed') && e('0'); // 测试步骤5：测试不同对象类型的邮件发送

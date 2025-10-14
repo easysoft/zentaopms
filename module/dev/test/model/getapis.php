@@ -1,22 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
-su('admin');
 
 /**
 
 title=测试 devModel::getAPIs();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-获取todo模块第一个函数名字 >> create
-获取product模块第一个函数名字 >> index
-获取project模块第一个函数描述 >> 创建项目引导。
+- 测试API扩展路径功能属性hasExtPaths @1
+- 测试common模块特殊处理 @array
+- 测试dev模块特殊处理 @array
+- 测试API方法参数解析功能属性hasParams @1
+- 测试API扩展路径数量属性extPathCount @1
 
 */
 
-$dev = new devTest();
-r($dev->getAPIsTest('todo'))    && p('0:name') && e('create');         //获取todo模块第一个函数名字
-r($dev->getAPIsTest('product')) && p('0:name') && e('index');          //获取product模块第一个函数名字
-r($dev->getAPIsTest('project')) && p('0:desc') && e('创建项目引导。'); //获取project模块第一个函数描述
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+
+su('admin');
+
+$devTest = new devTest();
+
+r($devTest->getAPIsExtensionTest()) && p('hasExtPaths') && e('1');             // 测试API扩展路径功能
+r($devTest->getAPIsTest('common')) && p() && e('array');                      // 测试common模块特殊处理
+r($devTest->getAPIsTest('dev')) && p() && e('array');                         // 测试dev模块特殊处理
+r($devTest->getAPIsParameterTest('user')) && p('hasParams') && e('1');        // 测试API方法参数解析功能
+r($devTest->getAPIsExtensionTest()) && p('extPathCount') && e('1');            // 测试API扩展路径数量

@@ -1,0 +1,30 @@
+title: action表数据，用于测试printAction方法
+fields:
+- field: id
+  range: 1-10
+- field: objectType
+  range: task,story,bug
+- field: objectID
+  range: 1-100
+- field: product
+  range: 1,2,3
+- field: project
+  range: 1-5
+- field: execution
+  range: 1-5
+- field: actor
+  range: admin,user1,user2
+- field: action
+  range: created,edited,started,finished
+- field: date
+  range: 2023-01-01 10:00:00-2023-12-31 23:59:59
+- field: comment
+  range: ['', '测试注释', '修改内容']
+- field: extra
+  range: ['', 'fixed', 'postponed']
+- field: read
+  range: 0,1
+- field: vision
+  range: rnd
+- field: efforted
+  range: 0,1

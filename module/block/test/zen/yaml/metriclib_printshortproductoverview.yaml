@@ -1,0 +1,28 @@
+---
+title: metriclib数据定义
+desc: 为printShortProductOverview方法提供度量结果数据
+
+fields:
+- field: id
+  note: 度量结果ID
+  range: 1-5
+  
+- field: metricID
+  note: 度量项ID
+  range: 1-3:1,1-3:1
+  
+- field: metricCode
+  note: 度量代码
+  range: count_of_product{2},count_of_annual_created_release{2},count_of_marker_release{1}
+  
+- field: year
+  note: 年份
+  range: 2024{3},2023{2}
+  
+- field: value
+  note: 度量值
+  range: 10,5,3,8,12
+  
+- field: calcType
+  note: 计算类型
+  range: cron{5}

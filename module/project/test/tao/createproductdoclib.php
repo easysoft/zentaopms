@@ -21,5 +21,5 @@ cid=1
 
 */
 
-$projectTester = new project();
+$projectTester = new projectTest();
 r($projectTester->createProductDocLibTest(10)) && p('id,type,name,product,addedBy') && e('2,product,产品主库,10,admin');  // 测试创建产品文档库

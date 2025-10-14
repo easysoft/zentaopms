@@ -1,0 +1,43 @@
+---
+title: 项目数据用于assignForBrowse测试
+desc: 为assignForBrowse方法提供项目测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  type: int
+- field: name
+  note: 项目名称
+  range: '项目1,项目2,项目3,项目4,项目5,测试项目{5}'
+  type: string
+- field: code
+  note: 项目代码
+  range: 'PRJ001,PRJ002,PRJ003,PRJ004,PRJ005,TEST{5}'
+  type: string
+- field: model
+  note: 项目模型
+  range: 'scrum{4},waterfall{3},kanban{3}'
+  type: string
+- field: type
+  note: 项目类型
+  range: 'project{6},sprint{4}'
+  type: string
+- field: status
+  note: 项目状态
+  range: 'wait{2},doing{4},suspended{2},done{2}'
+  type: string
+- field: begin
+  note: 开始时间
+  range: '2023-01-01,2023-06-01,2023-12-01'
+  type: date
+- field: end
+  note: 结束时间
+  range: '2023-12-31,2024-06-30,2024-12-31'
+  type: date
+- field: deleted
+  note: 是否删除
+  range: '0'
+  type: enum

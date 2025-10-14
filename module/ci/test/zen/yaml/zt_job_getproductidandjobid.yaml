@@ -1,0 +1,91 @@
+---
+title: job数据定义，用于测试ciZen::getProductIdAndJobID()方法
+desc: 为getProductIdAndJobID方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: job1,job2,job3,job4,job5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: repo
+  note: 代码库ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: frame
+  note: 框架类型
+  range: phpunit,pytest,junit
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: engine
+  note: 引擎类型
+  range: jenkins,gitlab,docker
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: autoRun
+  note: 自动运行
+  range: "['0','1']"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: server
+  note: 服务器ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pipeline
+  note: 流水线配置
+  range: pipeline1,pipeline2,pipeline3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: triggerType
+  note: 触发类型
+  range: manual,auto,schedule
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

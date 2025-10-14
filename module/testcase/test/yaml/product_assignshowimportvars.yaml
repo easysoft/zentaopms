@@ -1,0 +1,24 @@
+title: 产品数据定义
+desc: assignShowImportVars方法测试用的产品数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: name
+  note: 产品名称
+  range: 产品{5}
+- field: code
+  note: 产品代号
+  range: PROD{5}
+- field: type
+  note: 产品类型
+  range: normal
+- field: status
+  note: 产品状态
+  range: normal
+- field: PO
+  note: 产品负责人
+  range: admin

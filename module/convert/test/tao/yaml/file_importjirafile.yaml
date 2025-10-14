@@ -1,0 +1,50 @@
+---
+title: Jira文件导入测试数据
+desc: 用于测试importJiraFile方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pathname
+  note: 文件路径
+  range: '202309/11/112230{20}.txt,202309/11/112231{20}.pdf,202309/11/112232{20}.jpg,202309/11/112233{20}.docx,202309/11/112234{20}.png'
+  format: ""
+- field: title
+  note: 文件标题
+  range: 'test{20}.txt,document{20}.pdf,image{20}.jpg,story{20}.docx,screenshot{20}.png'
+  format: ""
+- field: extension
+  note: 文件扩展名
+  range: 'txt{20},pdf{20},jpg{20},docx{20},png{20}'
+  format: ""
+- field: size
+  note: 文件大小
+  range: 1024-102400:R
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: 'story{40},task{30},bug{20},epic{10}'
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-50:R
+  format: ""
+- field: addedBy
+  note: 添加者
+  range: 'admin{30},user1{25},user2{20},user3{15},user4{10}'
+  format: ""
+- field: addedDate
+  note: 添加时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59':30D
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: extra
+  note: 扩展字段
+  range: '1{20},{80}'
+  format: ""

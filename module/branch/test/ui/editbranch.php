@@ -8,7 +8,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/editbranch.ui.class.php';
+include '../lib/ui/editbranch.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('11');

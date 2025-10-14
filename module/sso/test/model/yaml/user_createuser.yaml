@@ -1,0 +1,80 @@
+---
+title: SSO createUser测试数据
+desc: 用于测试ssoModel::createUser()方法的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+
+- field: company
+  note: 公司ID
+  range: 1
+
+- field: type
+  note: 用户类型
+  range: inside
+
+- field: dept
+  note: 部门ID
+  range: 0
+
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4
+
+- field: password
+  note: 密码
+  range: e10adc3949ba59abbe56e057f20f883e
+
+- field: role
+  note: 角色
+  range: qa{2},dev{2},pm{1}
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,测试用户1,测试用户2,测试用户3,测试用户4
+
+- field: gender
+  note: 性别
+  range: f,m
+
+- field: email
+  note: 邮箱地址
+  range: admin@test.com,user1@test.com,user2@test.com,user3@test.com,user4@test.com
+
+- field: ranzhi
+  note: 然之账号
+  range: ''{1},ranzhiUser1,ranzhiUser2,ranzhiUser3,ranzhiUser4
+
+- field: deleted
+  note: 删除状态
+  range: 0
+
+- field: join
+  note: 加入时间
+  range: 2024-01-01
+
+- field: visits
+  note: 访问次数
+  range: 0
+
+- field: ip
+  note: IP地址
+  range: 127.0.0.1
+
+- field: last
+  note: 最后登录时间
+  range: 0000-00-00 00:00:00
+
+- field: locked
+  note: 锁定时间
+  range: 0000-00-00 00:00:00
+
+- field: clientStatus
+  note: 客户端状态
+  range: online
+
+- field: clientLang
+  note: 客户端语言
+  range: zh-cn

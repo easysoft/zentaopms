@@ -1,0 +1,72 @@
+---
+title: weeklyreport 数据定义
+desc: 为测试 printWaterfallProgressBlock 方法提供周报数据
+author: test
+version: 1.0
+
+fields:
+- field: id
+  note: 周报ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 1{5}, 2{3}, 3{2}
+  prefix: ""
+  postfix: ""
+
+- field: weekStart
+  note: 周开始日期
+  range: '2024-01-01,2024-01-08,2024-01-15,2024-01-22,2024-01-29,2024-02-05,2024-02-12,2024-02-19,2024-02-26,2024-03-04'
+  prefix: ""
+  postfix: ""
+
+- field: pv
+  note: PV计划价值
+  range: 100.50,150.00,200.00,250.00,300.00,350.00,400.00,450.00,500.00,550.00
+  prefix: ""
+  postfix: ""
+
+- field: ev
+  note: EV挣值
+  range: 80.00,120.00,180.00,220.00,280.00,320.00,380.00,420.00,480.00,520.00
+  prefix: ""
+  postfix: ""
+
+- field: ac
+  note: AC实际成本
+  range: 90.00,140.00,190.00,240.00,290.00,340.00,390.00,440.00,490.00,540.00
+  prefix: ""
+  postfix: ""
+
+- field: sv
+  note: 进度偏差
+  range: 10.00,-5.00,20.00,-8.00,15.00,-3.00,25.00,-10.00,30.00,-12.00
+  prefix: ""
+  postfix: ""
+
+- field: cv
+  note: 成本偏差
+  range: -10.00,5.00,-20.00,8.00,-15.00,3.00,-25.00,10.00,-30.00,12.00
+  prefix: ""
+  postfix: ""
+
+- field: staff
+  note: 员工数
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: progress
+  note: 进度描述
+  range: '进度报告1,进度报告2,进度报告3,进度报告4,进度报告5,进度报告6,进度报告7,进度报告8,进度报告9,进度报告10'
+  prefix: ""
+  postfix: ""
+
+- field: workload
+  note: 工作量描述
+  range: '工作量1,工作量2,工作量3,工作量4,工作量5,工作量6,工作量7,工作量8,工作量9,工作量10'
+  prefix: ""
+  postfix: ""

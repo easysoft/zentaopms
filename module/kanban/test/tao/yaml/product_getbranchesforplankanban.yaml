@@ -1,0 +1,46 @@
+---
+title: 产品数据定义，用于测试getBranchesForPlanKanban方法
+desc: 生成不同产品类型的测试数据，包含正常产品和多分支产品
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 产品ID
+- field: name
+  range: '正常产品', '多分支产品A', '多分支产品B', '测试产品C', '测试产品D'
+  note: 产品名称
+- field: code
+  range: 'NORMAL', 'BRANCH_A', 'BRANCH_B', 'TEST_C', 'TEST_D'
+  note: 产品代号
+- field: type
+  range: 'normal', 'branch', 'branch', 'normal', 'branch'
+  note: 产品类型
+- field: status
+  range: 'normal'
+  note: 产品状态
+- field: desc
+  range: '测试产品描述'
+  note: 产品描述
+- field: PO
+  range: 'admin'
+  note: 产品负责人
+- field: QD
+  range: 'admin'
+  note: 测试负责人
+- field: RD
+  range: 'admin'
+  note: 发布负责人
+- field: acl
+  range: 'open'
+  note: 访问控制
+- field: createdBy
+  range: 'admin'
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 08:00:00'
+  note: 创建日期
+- field: deleted
+  range: '0'
+  note: 是否删除

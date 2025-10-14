@@ -3,26 +3,35 @@
 
 /**
 
-title=测试 mailModel->autoDetect();
+title=测试 mailModel::autoDetect();
+timeout=0
 cid=0
 
-- 检测qq邮箱信息属性host @smtp.qq.com
-- 检测163邮箱信息属性host @smtp.163.com
-- 检测搜狐邮箱信息属性host @smtp.sohu.com
-- 检测搜狐vip邮箱信息属性host @smtp.vip.sohu.com
-- 检测不存在的邮箱服务商信息 @没有检测到相关信息
+- 步骤1：正常QQ邮箱配置检测属性host >> smtp.qq.com
+- 步骤2：正常163邮箱配置检测属性host >> smtp.163.com
+- 步骤3：正常搜狐邮箱配置检测属性host >> smtp.sohu.com
+- 步骤4：正常Gmail邮箱配置检测属性host >> smtp.gmail.com
+- 步骤5：无效邮箱地址检测返回空host >> 空字符串
+- 步骤6：空字符串邮箱地址检测返回空host >> 空字符串
+- 步骤7：QQ邮箱端口配置验证属性port >> 465
+- 步骤8：QQ邮箱加密方式验证属性secure >> ssl
+- 步骤9：Gmail邮箱端口和加密配置验证属性port,secure >> 465,ssl
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+
 su('admin');
 
-$mail = new mailTest();
+$mailTest = new mailTest();
 
-$data = array('test@qq.com', 'test@163.com', 'test@sohu.com', 'test@vip.sohu.com', 'testm');
-
-r($mail->autoDetectTest($data[0])) && p('host') && e('smtp.qq.com');        //检测qq邮箱信息
-r($mail->autoDetectTest($data[1])) && p('host') && e('smtp.163.com');       //检测163邮箱信息
-r($mail->autoDetectTest($data[2])) && p('host') && e('smtp.sohu.com');      //检测搜狐邮箱信息
-r($mail->autoDetectTest($data[3])) && p('host') && e('smtp.vip.sohu.com');  //检测搜狐vip邮箱信息
-r($mail->autoDetectTest($data[4])) && p()       && e('没有检测到相关信息'); //检测不存在的邮箱服务商信息
+r($mailTest->autoDetectTest('test@qq.com')) && p('host') && e('smtp.qq.com');        // 步骤1：正常QQ邮箱配置检测
+r($mailTest->autoDetectTest('test@163.com')) && p('host') && e('smtp.163.com');       // 步骤2：正常163邮箱配置检测
+r($mailTest->autoDetectTest('test@sohu.com')) && p('host') && e('smtp.sohu.com');      // 步骤3：正常搜狐邮箱配置检测
+r($mailTest->autoDetectTest('test@gmail.com')) && p('host') && e('smtp.gmail.com');  // 步骤4：正常Gmail邮箱配置检测
+r($mailTest->autoDetectTest('invalid-email')) && p('host') && e('');        // 步骤5：无效邮箱地址检测
+r($mailTest->autoDetectTest('')) && p('host') && e('');                          // 步骤6：空字符串邮箱地址检测
+r($mailTest->autoDetectTest('test@qq.com')) && p('port') && e('465');                // 步骤7：QQ邮箱端口配置验证
+r($mailTest->autoDetectTest('test@qq.com')) && p('secure') && e('ssl');              // 步骤8：QQ邮箱加密方式验证
+r($mailTest->autoDetectTest('test@gmail.com')) && p('port,secure') && e('465,ssl');  // 步骤9：Gmail邮箱端口和加密配置验证

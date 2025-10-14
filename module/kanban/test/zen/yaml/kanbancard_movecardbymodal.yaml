@@ -1,0 +1,119 @@
+---
+title: Test moveCardByModal kanban card data
+desc: Testing kanban card data for moveCardByModal method
+
+fields:
+- field: id
+  note: Card ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: kanban
+  note: Kanban ID
+  range: 1,2,1,2,3,1,2,3,1,2
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: region
+  note: Region ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: group
+  note: Group ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: fromID
+  note: From ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: fromType
+  note: From type
+  range: story,task,bug
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: name
+  note: Card name
+  range: "卡片1,卡片2,卡片3,卡片4,卡片5,卡片6,卡片7,卡片8,卡片9,卡片10"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: status
+  note: Status
+  range: doing,wait,done
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: pri
+  note: Priority
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: assignedTo
+  note: Assigned user
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: estimate
+  note: Estimate
+  range: 1-8
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: consumed
+  note: Consumed
+  range: 0-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: left
+  note: Left hours
+  range: 0-8
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: progress
+  note: Progress
+  range: 0-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: color
+  note: Card color
+  range: "#fff,#ff0000,#00ff00,#0000ff"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: acl
+  note: Access control
+  range: open,private
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: whitelist
+  note: Whitelist
+  range: admin,user1
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: archived
+  note: Archived
+  range: 0,1
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: deleted
+  note: Deleted
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0

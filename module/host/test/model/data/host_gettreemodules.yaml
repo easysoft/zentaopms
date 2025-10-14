@@ -1,0 +1,19 @@
+---
+fields:
+- field: id
+  range: 1-5
+- field: hostType
+  range: virtual
+- field: osName
+  range: linux
+- field: status
+  range: online
+- field: name
+  range: 主机1,主机2,主机3,主机4,主机5
+- field: group
+  range: "1,2,3,1,2"
+- field: type
+  range: normal{5}
+- field: deleted
+  range: 0{5}
+...

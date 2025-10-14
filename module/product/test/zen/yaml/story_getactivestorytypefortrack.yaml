@@ -1,0 +1,224 @@
+---
+title: 测试getActiveStoryTypeForTrack方法的需求数据
+desc: 为getActiveStoryTypeForTrack方法提供不同类型的需求数据用于测试
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+  type: int
+
+- field: vision
+  note: 视角
+  range: rnd
+  type: string
+
+- field: parent
+  note: 父需求ID
+  range: 0
+  type: int
+
+- field: isParent
+  note: 是否为父需求
+  range: '0'
+  type: enum
+
+- field: root
+  note: 根需求ID
+  range: 0
+  type: int
+
+- field: path
+  note: 路径
+  range: ',1,{@id},'
+  type: string
+
+- field: grade
+  note: 等级
+  range: 0
+  type: int
+
+- field: product
+  note: 产品ID
+  range: 1-2
+  type: int
+
+- field: branch
+  note: 分支ID
+  range: 0
+  type: int
+
+- field: module
+  note: 模块ID
+  range: 0
+  type: int
+
+- field: plan
+  note: 计划
+  range: '0'
+  type: string
+
+- field: source
+  note: 来源
+  range: ''
+  type: string
+
+- field: sourceNote
+  note: 来源备注
+  range: ''
+  type: string
+
+- field: fromBug
+  note: 来自Bug ID
+  range: 0
+  type: int
+
+- field: feedback
+  note: 反馈ID
+  range: 0
+  type: int
+
+- field: title
+  note: 需求标题
+  range: 'Epic需求{@id},用户需求{@id},研发需求{@id}'
+  type: string
+
+- field: keywords
+  note: 关键词
+  range: ''
+  type: string
+
+- field: type
+  note: 需求类型
+  range: 'epic{3},requirement{3},story{4}'
+  type: string
+
+- field: category
+  note: 分类
+  range: feature
+  type: string
+
+- field: pri
+  note: 优先级
+  range: 3
+  type: int
+
+- field: estimate
+  note: 预估工时
+  range: 1-8
+  type: float
+
+- field: status
+  note: 状态
+  range: 'active{8},draft{2}'
+  type: string
+
+- field: stage
+  note: 阶段
+  range: 'wait{5},projected{3},developing{2}'
+  type: string
+
+- field: mailto
+  note: 邮件通知
+  range: ''
+  type: string
+
+- field: openedBy
+  note: 创建者
+  range: admin
+  type: string
+
+- field: openedDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{5},2024-01-02 00:00:00{3},2024-01-03 00:00:00{2}'
+  type: datetime
+
+- field: assignedTo
+  note: 指派给
+  range: 'admin{5},user1{3},user2{2}'
+  type: string
+
+- field: assignedDate
+  note: 指派时间
+  range: '2024-01-01 08:00:00{5},2024-01-02 08:00:00{3},2024-01-03 08:00:00{2}'
+  type: datetime
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin
+  type: string
+
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '2024-01-01 12:00:00{5},2024-01-02 12:00:00{3},2024-01-03 12:00:00{2}'
+  type: datetime
+
+- field: reviewedBy
+  note: 评审者
+  range: ''
+  type: string
+
+- field: reviewedDate
+  note: 评审时间
+  range: '0000-00-00 00:00:00'
+  type: datetime
+
+- field: closedBy
+  note: 关闭者
+  range: ''
+  type: string
+
+- field: closedDate
+  note: 关闭时间
+  range: '0000-00-00 00:00:00'
+  type: datetime
+
+- field: closedReason
+  note: 关闭原因
+  range: ''
+  type: string
+
+- field: toBug
+  note: 转为Bug
+  range: 0
+  type: int
+
+- field: childStories
+  note: 子需求
+  range: ''
+  type: string
+
+- field: linkStories
+  note: 关联需求
+  range: ''
+  type: string
+
+- field: linkRequirements
+  note: 关联用户需求
+  range: ''
+  type: string
+
+- field: duplicateStory
+  note: 重复需求
+  range: 0
+  type: int
+
+- field: reviewedBy
+  note: 评审人员
+  range: ''
+  type: string
+
+- field: version
+  note: 版本
+  range: 1
+  type: int
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  type: enum
+
+- field: vision
+  note: 视角
+  range: rnd
+  type: string

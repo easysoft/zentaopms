@@ -136,4 +136,20 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $pipeline;
     }
+
+    /**
+     * 获取用户空间的应用列表AppID。
+     * Get app list AppID in space by space id.
+     *
+     * @param  int   $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaceInstancesAppIDsTest(int $spaceID): array
+    {
+        $result = $this->objectModel->getSpaceInstancesAppIDs($spaceID);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

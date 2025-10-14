@@ -41,7 +41,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/createinlite.ui.class.php';
+include '../lib/ui/createinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');

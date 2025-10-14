@@ -1,0 +1,43 @@
+---
+title: 文档库访问控制测试数据
+desc: 用于测试setAclForEditLib方法的文档库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: vision
+  range: rnd
+- field: type
+  range: '[custom{2},api{2},mine{2},product{2},project{2}]'
+- field: product
+  range: '[0{5},1{3},2{2}]'
+- field: project
+  range: '[0{5},1{3},2{2}]'
+- field: execution
+  range: '[0{8},1{1},2{1}]'
+- field: name
+  range: '[测试库{5},API库{2},我的文档{2},产品库{1}]'
+- field: acl
+  range: '[open{3},private{3},default{2},custom{2}]'
+- field: main
+  range: '[0{8},1{2}]'
+- field: parent
+  range: '[0{9},1{1}]'
+- field: addedBy
+  range: '[admin{8},user1{1},user2{1}]'
+- field: addedDate
+  range: '2023-01-01 00:00:00,2023-12-31 23:59:59'
+- field: editedBy
+  range: '[]'
+- field: editedDate
+  range: '[]'
+- field: deleted
+  range: '[0{10}]'
+- field: users
+  range: '[]{8},[admin,user1]{1},[user1,user2]{1}'
+- field: groups
+  range: '[]{9},[1,2]{1}'
+- field: order
+  range: 1-10

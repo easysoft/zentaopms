@@ -1,0 +1,64 @@
+---
+title: mr_assigneditdata
+author: Claude
+version: "1.0"
+desc: 测试数据for assignEditData方法
+
+fields:
+- field: id
+  note: MR ID
+  range: 1-5
+- field: hostID
+  note: 主机ID
+  range: 1-3
+- field: sourceProject
+  note: 源项目ID
+  range: 1-10
+- field: sourceBranch
+  note: 源分支
+  range: feature-branch,develop,test-branch
+- field: targetProject
+  note: 目标项目ID
+  range: 1-10
+- field: targetBranch
+  note: 目标分支
+  range: master,main,develop
+- field: mriid
+  note: 合并请求ID
+  range: 100-105
+- field: title
+  note: 合并请求标题
+  range: Test MR 1,Test MR 2,Feature Update
+- field: assignee
+  note: 分配者
+  range: admin,user1,user2
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+- field: createdDate
+  note: 创建时间
+  range: '`2023-12-13 13:14:34`'
+- field: status
+  note: 状态
+  range: opened,merged,closed
+- field: mergeStatus
+  note: 合并状态
+  range: can_be_merged,cannot_be_merged,checking
+- field: repoID
+  note: 代码库ID
+  range: 1-5
+- field: executionID
+  note: 执行ID
+  range: 1-5
+- field: jobID
+  note: 作业ID
+  range: 0-3
+- field: compileID
+  note: 编译ID
+  range: 0-2
+- field: synced
+  note: 同步状态
+  range: 1
+- field: deleted
+  note: 删除状态
+  range: 0

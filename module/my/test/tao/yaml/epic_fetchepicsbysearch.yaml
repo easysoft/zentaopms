@@ -1,0 +1,28 @@
+title: zt_story for fetchEpicsBySearch test
+desc: Epic data for fetchEpicsBySearch method testing
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: product
+    range: 1-5
+  - field: title
+    range: "Epic Title {}"
+    format: "Epic Title %d"
+  - field: type
+    range: epic{10}
+  - field: status
+    range: active{5},reviewing{3},closed{2}
+  - field: pri
+    range: 1-4
+  - field: openedBy
+    range: admin{5},user1{3},user2{2}
+  - field: assignedTo
+    range: admin{4},user1{3},user2{2},""
+  - field: closedBy
+    range: admin{2},user1{1},""
+  - field: deleted
+    range: 0{10}
+  - field: vision
+    range: rnd{10}

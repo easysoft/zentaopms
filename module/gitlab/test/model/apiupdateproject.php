@@ -8,23 +8,28 @@ title=测试 gitlabModel::apiUpdateProject();
 timeout=0
 cid=1
 
-- 使用空的projectID创建gitlab群组 @0
-- 使用错误gitlabID创建群组 @0
-- 通过gitlabID,用户对象正确更新项目描述属性description @apiUpdatedProject
+- 执行gitlab模块的apiUpdateProject方法，参数是$gitlabID, $emptyProject  @0
+- 执行gitlab模块的apiUpdateProject方法，参数是0, $invalidProject  @0
+- 执行gitlab模块的apiUpdateProject方法，参数是$gitlabID, $validProject 属性description @apiUpdatedProject
+- 执行gitlab模块的apiUpdateProject方法，参数是$gitlabID, $multiAttrProject 属性name @Updated Project Name
+- 执行gitlab模块的apiUpdateProject方法，参数是$gitlabID, $nonExistentProject  @~~
 
 */
 
 zenData('pipeline')->gen(5);
 
+global $app;
+$app->rawModule = 'gitlab';
+$app->rawMethod = 'browse';
+
 $gitlab = $tester->loadModel('gitlab');
 
-$gitlabID    = 1;
-$projectName = 'unitTestUpdateProject' . time();
+$gitlabID = 1;
 
-/* Create project. */
+/* Create test project first. */
 $project = new stdclass();
-$project->name         = $projectName;
-$project->path         = $projectName;
+$project->name         = 'unitTestProject99';
+$project->path         = 'unit_test_project99';
 $project->description  = 'unit_test_project desc';
 $project->visibility   = 'public';
 $project->namespace_id = '1';
@@ -32,20 +37,39 @@ $gitlab->apiCreateProject($gitlabID, $project);
 
 /* Get projectID. */
 $gitlabProjects = $gitlab->apiGetProjects($gitlabID);
+$projectID = 0;
 foreach($gitlabProjects as $gitlabProject)
 {
-    if($gitlabProject->name == $projectName)
+    if($gitlabProject->name == 'unitTestProject99')
     {
         $projectID = $gitlabProject->id;
         break;
     }
 }
 
-$project = new stdclass();
-$project->description = 'apiUpdatedProject';
+/* Test cases. */
+$emptyProject = new stdclass();
+$emptyProject->description = 'test description';
 
-r($gitlab->apiUpdateProject($gitlabID, $project)) && p() && e('0'); //使用空的projectID创建gitlab群组
-r($gitlab->apiUpdateProject(0, $project))         && p() && e('0'); //使用错误gitlabID创建群组
+$invalidProject = new stdclass();
+$invalidProject->id = $projectID;
+$invalidProject->description = 'apiUpdatedProject';
 
-$project->id = $projectID;
-r($gitlab->apiUpdateProject($gitlabID, $project)) && p('description') && e('apiUpdatedProject'); //通过gitlabID,用户对象正确更新项目描述
+$validProject = new stdclass();
+$validProject->id = $projectID;
+$validProject->description = 'apiUpdatedProject';
+
+$multiAttrProject = new stdclass();
+$multiAttrProject->id = $projectID;
+$multiAttrProject->name = 'Updated Project Name';
+$multiAttrProject->description = 'Updated description';
+
+$nonExistentProject = new stdclass();
+$nonExistentProject->id = 888888;
+$nonExistentProject->description = 'Non-existent project';
+
+r($gitlab->apiUpdateProject($gitlabID, $emptyProject)) && p() && e('0');
+r($gitlab->apiUpdateProject(0, $invalidProject)) && p() && e('0');
+r($gitlab->apiUpdateProject($gitlabID, $validProject)) && p('description') && e('apiUpdatedProject');
+r($gitlab->apiUpdateProject($gitlabID, $multiAttrProject)) && p('name') && e('Updated Project Name');
+r($gitlab->apiUpdateProject($gitlabID, $nonExistentProject)) && p() && e('~~');

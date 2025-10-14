@@ -1,0 +1,43 @@
+---
+title: testsuite表数据用于测试checkTestsuiteAccess方法
+desc: 生成不同类型和权限的测试套件数据，用于权限验证测试
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 测试套件ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1
+- field: project
+  note: 项目ID
+  range: 1
+- field: name
+  note: 测试套件名称
+  range: 功能测试套件1,接口测试套件1,性能测试套件1,安全测试套件1,功能测试套件2,接口测试套件2,性能测试套件2,安全测试套件2,功能测试套件3,接口测试套件3
+- field: desc
+  note: 测试套件描述
+  range: 这是功能测试套件,这是接口测试套件,这是性能测试套件,这是安全测试套件,这是功能测试套件,这是接口测试套件,这是性能测试套件,这是安全测试套件,这是功能测试套件,这是接口测试套件
+- field: type
+  note: 测试套件类型，包含private和public类型
+  range: public,private,public,private,private,public,private,public,private,public
+- field: order
+  note: 显示顺序
+  range: 1-10
+- field: addedBy
+  note: 创建者，包含admin和普通用户
+  range: admin,user1,admin,user1,admin,admin,user2,admin,user3,admin
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00
+- field: lastEditedBy
+  note: 最后修改者
+  range: admin
+- field: lastEditedDate
+  note: 最后修改时间
+  range: 2024-05-01 00:00:00
+- field: deleted
+  note: 删除状态
+  range: 0
