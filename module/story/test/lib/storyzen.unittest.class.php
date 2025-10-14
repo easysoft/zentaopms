@@ -890,4 +890,22 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 构建编辑需求数据。
+     * Build story for edit.
+     *
+     * @param  int         $storyID
+     * @access public
+     * @return object|bool
+     */
+    public function buildStoryForEditTest(int $storyID): object|bool
+    {
+        $method = $this->storyZenTest->getMethod('buildStoryForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
