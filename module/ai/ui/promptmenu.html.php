@@ -25,7 +25,7 @@ $promptMenuInject = function()
     if(isInModal()) return;
 
     $this->loadModel('ai');
-    if(!$this->ai->hasModelsAvailable() || !commonModel::hasPriv('ai', 'promptExecute')) return;
+    if(!commonModel::hasPriv('ai', 'promptExecute')) return;
 
     $this->app->loadLang('ai');
     $this->app->loadConfig('ai');
@@ -89,6 +89,7 @@ $promptMenuInject = function()
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
     (() => {
+        if(!window.top.zai) return;
         const container = window.frameElement?.closest('.load-indicator');
         if(container && container.dataset.loading)
         {
