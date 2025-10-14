@@ -9,6 +9,7 @@ return array(
     'phpseclib3\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'cweagans\\Composer\\' => array($vendorDir . '/cweagans/composer-patches/src'),
     'WpOrg\\Requests\\' => array($vendorDir . '/rmccue/requests/src'),
+    'Vendor\\Spyc\\' => array($vendorDir . '/mustangostang/spyc'),
     'Vendor\\PclZip\\' => array($vendorDir . '/pclzip/pclzip'),
     'Vendor\\Parsedown\\' => array($vendorDir . '/erusev/parsedown'),
     'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

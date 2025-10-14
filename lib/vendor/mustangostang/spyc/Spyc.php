@@ -1,4 +1,6 @@
 <?php
+namespace Vendor\Spyc;
+
 /**
    * Spyc -- A Simple PHP YAML Class
    * @version 0.6.2

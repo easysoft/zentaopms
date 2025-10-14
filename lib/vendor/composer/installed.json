@@ -886,6 +886,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.5.x-dev"
+                },
+                "patches_applied": {
+                    "Add namespace to Spyc class": "patches/spyc-add-namespace.patch"
                 }
             },
             "installation-source": "dist",

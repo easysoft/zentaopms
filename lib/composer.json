@@ -47,6 +47,9 @@
             "masterexploder/phpthumb": {
                 "Fix options array initialization in GD class": "patches/phpthumb-fix-options-array-initialization.patch"
             },
+            "mustangostang/spyc": {
+                "Add namespace to Spyc class": "patches/spyc-add-namespace.patch"
+            },
             "pclzip/pclzip": {
                 "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
             }
@@ -55,7 +58,8 @@
     "autoload": {
         "psr-4": {
             "Vendor\\Parsedown\\": "vendor/erusev/parsedown/",
-            "Vendor\\PclZip\\": "vendor/pclzip/pclzip/"
+            "Vendor\\PclZip\\": "vendor/pclzip/pclzip/",
+            "Vendor\\Spyc\\": "vendor/mustangostang/spyc/"
         }
     }
 }

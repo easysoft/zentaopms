@@ -88,6 +88,7 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         ),
         'V' => 
         array (
+            'Vendor\\Spyc\\' => 12,
             'Vendor\\PclZip\\' => 14,
             'Vendor\\Parsedown\\' => 17,
         ),
@@ -144,6 +145,10 @@ class ComposerStaticIniteb70fe9ec81c9f50588dedfb7a386792
         'WpOrg\\Requests\\' => 
         array (
             0 => __DIR__ . '/..' . '/rmccue/requests/src',
+        ),
+        'Vendor\\Spyc\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mustangostang/spyc',
         ),
         'Vendor\\PclZip\\' => 
         array (
