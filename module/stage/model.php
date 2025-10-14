@@ -164,11 +164,29 @@ class stageModel extends model
                 ->fetchAll('id');
         }
 
-        return $this->dao->select('*')->from(TABLE_STAGE)
+        $stages = $this->dao->select('*')->from(TABLE_STAGE)
             ->where('deleted')->eq(0)
             ->andWhere('workflowGroup')->eq($groupID)
             ->orderBy($orderBy)
             ->fetchAll('id');
+
+        $stagePoints = $this->dao->select('*')->from(TABLE_DECISION)->where('stage')->in(array_keys($stages))->fetchGroup('stage');
+        $pointList   = array();
+        foreach($stagePoints as $stageID => $points)
+        {
+            if(!isset($pointList[$stageID])) $pointList[$stageID] = array();
+            foreach($points as $point)
+            {
+                if(!isset($pointList[$stageID][$point->type])) $pointList[$stageID][$point->type] = array();
+                $pointList[$stageID][$point->type][$point->id] = $point->title;
+            }
+        }
+        foreach($stages as $stage)
+        {
+            $stage->TRpoint  = isset($pointList[$stage->id]['TR']) ? implode(', ', $pointList[$stage->id]['TR']) : '';
+            $stage->DCPpoint = isset($pointList[$stage->id]['DCP']) ? implode(', ', $pointList[$stage->id]['DCP']) : '';
+        }
+        return $stages;
     }
 
     /**
@@ -194,5 +212,64 @@ class stageModel extends model
     public function getTotalPercent(int $groupID): float
     {
         return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('workflowGroup')->eq($groupID)->fetch('total');
+    }
+
+    /**
+     * 添加内置评审点。
+     * Add the builtin point.
+     *
+     *  @param  int    $groupID
+     *  @return void
+     */
+    public function addBuiltinPoint(int $groupID)
+    {
+        $workflowGroup = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->eq($groupID)->fetch();
+        if($workflowGroup->projectModel != 'ipd') return;
+
+        $builtinPoints = $this->dao->select('*')->from(TABLE_DECISION)->where('workflowGroup')->eq($groupID)->andWhere('builtin')->eq('1')->fetchAll();
+        if(!empty($builtinPoints)) return;
+
+        $this->app->loadConfig('review');
+        $this->app->loadConfig('project');
+        $stageList = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->fetchAll('id');
+        if(empty($stageList))
+        {
+            $stageTypeList = array();
+            if($workflowGroup->projectType == 'ipd') $stageTypeList = $this->config->project->categoryStages['IPD'];
+            if($workflowGroup->projectType == 'tpd') $stageTypeList = $this->config->project->categoryStages['TPD'];
+            if($workflowGroup->projectType == 'cbb') $stageTypeList = $this->config->project->categoryStages['CBB'];
+            if(in_array($workflowGroup->projectType, array('cpdproduct', 'cpdproject'))) $stageTypeList= $this->config->project->categoryStages['CPD'];
+
+            foreach($stageTypeList as $stageType)
+            {
+                $builtinStage = new stdClass();
+                $builtinStage->workflowGroup = $groupID;
+                $builtinStage->createdBy     = 'system';
+                $builtinStage->createdDate   = helper::now();
+                $builtinStage->name          = zget($this->lang->stage->ipdTypeList, $stageType, '');
+                $builtinStage->type          = $stageType;
+                $this->dao->insert(TABLE_STAGE)->data($builtinStage)->exec();
+
+                $stageID = $this->dao->lastInsertID();
+                $stageList[$stageID] = $builtinStage;
+            }
+        }
+
+        $decision = new stdClass();
+        $decision->builtin       = '1';
+        $decision->createdBy     = 'system';
+        $decision->createdDate   = helper::now();
+        $decision->workflowGroup = $groupID;
+        foreach($stageList as $id => $stage)
+        {
+            foreach($this->config->review->ipdReviewPoint->{$stage->type} as $point)
+            {
+                $decision->stage    = $id;
+                $decision->title    = $point;
+                $decision->type     = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
+                $decision->category = $point;
+                $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+            }
+        }
     }
 }

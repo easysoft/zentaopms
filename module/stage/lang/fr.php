@@ -21,13 +21,16 @@ $lang->stage->setTRpoint  = 'Set TR Point';
 $lang->stage->setDCPpoint = 'Set DCP Point';
 
 /* Fields. */
-$lang->stage->id       = 'ID';
-$lang->stage->name     = 'Name';
-$lang->stage->type     = 'Type';
-$lang->stage->percent  = 'Workload %';
-$lang->stage->setType  = 'Set Type';
-$lang->stage->TRpoint  = 'TR Point';
-$lang->stage->DCPpoint = 'DCP Point';
+$lang->stage->id        = 'ID';
+$lang->stage->name      = 'Name';
+$lang->stage->type      = 'Type';
+$lang->stage->percent   = 'Workload %';
+$lang->stage->setType   = 'Set Type';
+$lang->stage->TRpoint   = 'TR Point';
+$lang->stage->DCPpoint  = 'DCP Point';
+$lang->stage->TRname    = 'TR Point Name';
+$lang->stage->DCPname   = 'DCP Point Name';
+$lang->stage->pointFlow = 'Approval Flow';
 
 $lang->stage->typeList['mix']     = 'Mix';
 $lang->stage->typeList['request'] = 'Story';

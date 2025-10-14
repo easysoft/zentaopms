@@ -21,13 +21,16 @@ $lang->stage->setTRpoint  = 'TR评审点配置';
 $lang->stage->setDCPpoint = 'DCP评审点配置';
 
 /* Fields. */
-$lang->stage->id       = 'ID';
-$lang->stage->name     = '阶段名称';
-$lang->stage->type     = '阶段类型';
-$lang->stage->percent  = '工作量占比';
-$lang->stage->setType  = '阶段类型';
-$lang->stage->TRpoint  = 'TR评审点';
-$lang->stage->DCPpoint = 'DCP评审点';
+$lang->stage->id        = 'ID';
+$lang->stage->name      = '阶段名称';
+$lang->stage->type      = '阶段类型';
+$lang->stage->percent   = '工作量占比';
+$lang->stage->setType   = '阶段类型';
+$lang->stage->TRpoint   = 'TR评审点';
+$lang->stage->DCPpoint  = 'DCP评审点';
+$lang->stage->TRname    = 'TR评审点名称';
+$lang->stage->DCPname   = 'DCP评审点名称';
+$lang->stage->pointFlow = '审批流';
 
 $lang->stage->typeList['mix']     = '综合';
 $lang->stage->typeList['request'] = '需求';
