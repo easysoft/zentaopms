@@ -295,15 +295,14 @@ class stageModel extends model
      */
     public function getStagePoints(string $type, int $stageID)
     {
-        $stage       = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
-        $stagePoints = $this->dao->select('t1.*,t2.flow')->from(TABLE_DECISION)->alias('t1')
+        $stage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
+        return $this->dao->select('t1.*,t2.flow')->from(TABLE_DECISION)->alias('t1')
             ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.objectID AND t2.objectType = 'point'")
             ->where('t1.stage')->eq($stageID)
             ->andWhere('t1.type')->eq($type)
             ->andWhere('t2.root')->eq($stage->workflowGroup)
             ->orderBy('order_asc')
             ->fetchAll('id');
-        return $stagePoints;
     }
 
     /**
