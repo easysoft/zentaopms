@@ -11663,7 +11663,7 @@ class upgradeModel extends model
             ->fetchPairs();
 
         $testDeliverable = $this->dao->select('category')->from(TABLE_DELIVERABLE)
-            ->where('builtin')->eq('1')
+            ->where('builtin')->eq('0')
             ->andWhere('module')->in($testModules)
             ->fetchPairs();
 
@@ -11673,7 +11673,7 @@ class upgradeModel extends model
             if(empty($name)) continue;
             if(!empty($testDeliverable[$key]))
             {
-                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
+                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
                 unset($modules[$key]);
             }
         }
@@ -11691,16 +11691,29 @@ class upgradeModel extends model
         $deliverable->createdDate = helper::now();
         $deliverable->template    = '[]';
         $deliverable->trimmable   = '1';
-        $deliverable->builtin     = '1';
+        $deliverable->builtin     = '0';
 
         $deliverableStage = new stdClass();
-        $deliverableStage->stage    = 'project';
         $deliverableStage->required = '0';
 
-        $workflows = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
+            $projectModel = $workflow->projectModel;
+
+            if($projectModel == 'ipd')
+            {
+                $deliverableStage->stage = 'qualify';
+            }
+            elseif(in_array($projectModel, array('waterfall', 'waterfallplus')))
+            {
+                $deliverableStage->stage = 'qa';
+            }
+            else
+            {
+                $deliverableStage->stage = 'sprint';
+            }
 
             if(empty($activityList[$groupID])) continue;
             $otherActivity   = reset($activityList[$groupID]);
@@ -11731,7 +11744,7 @@ class upgradeModel extends model
     {
         foreach($modules as $key => $name)
         {
-            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
+            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
         }
         return true;
     }
@@ -11748,7 +11761,7 @@ class upgradeModel extends model
     {
         foreach($modules as $key => $name)
         {
-            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('1')->exec();
+            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
         }
         return true;
     }
