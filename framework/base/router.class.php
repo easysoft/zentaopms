@@ -169,6 +169,15 @@ class baseRouter
     public $tab;
 
     /**
+     * API版本号
+     * The version of API.
+     *
+     * @var string
+     * @access public
+     */
+    public $apiVersion = '';
+
+    /**
      * 用户使用的主题。
      * The theme of the client user.
      *
@@ -1186,15 +1195,17 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
-        if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
-        if(ini_get('session.save_handler') == 'files')
+        /* API session use tmp/apisession directory. */
+        $apiMode = (defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar]);
+
+        if(ini_get('session.save_handler') == 'files' || $apiMode)
         {
-            $savePath = $this->getTmpRoot() . 'session';
+            $savePath = $this->getTmpRoot() . ($apiMode ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
             if(is_writable($savePath))
             {
-                session_save_path($this->getTmpRoot() . 'session');
+                session_save_path($savePath);
 
                 $ztSessionHandler = new ztSessionHandler();
                 session_set_save_handler($ztSessionHandler, true);
@@ -3104,7 +3115,7 @@ class baseRouter
             if(!isset($params->emulatePrepare) and PHP_OS == 'Linux') $params->emulatePrepare = true;
             if(!isset($params->bufferQuery) and PHP_OS == 'Linux')    $params->bufferQuery = true;
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api') $params->emulatePrepare = false;
+            if(!$this->apiVersion) $params->emulatePrepare = false;
 
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3909,6 +3920,9 @@ class ztSessionHandler implements SessionHandlerInterface
     #[\ReturnTypeWillChange]
     public function gc($maxlifeTime): int|false
     {
+        /* API session never expires. */
+        if((defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar])) return 0;
+
         $time  = time();
         $count = 0;
         foreach(glob("{$this->sessSavePath}/sess_*") as $fileName)
