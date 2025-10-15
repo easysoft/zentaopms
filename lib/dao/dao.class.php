@@ -238,7 +238,7 @@ class dao extends baseDAO
         elseif(in_array($module, $linkProductModules))
         {
             $productVar = in_array($module, array('feedback', 'ticket')) ? "{$module}Product" : 'product';
-            if(!empty($_SESSION[$productVar]))
+            if(!empty($_SESSION[$productVar]) && is_numeric($_SESSION[$productVar]))
             {
                 $productID = $_SESSION[$productVar];
                 $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
