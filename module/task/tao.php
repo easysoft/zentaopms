@@ -372,15 +372,42 @@ class taskTao extends taskModel
     {
         $users = $this->loadModel('user')->getPairs('noletter|noempty');
 
-        $oldTeams = $oldTask->team;
-        $oldTask->team = '';
-        foreach($oldTeams as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
+        $oldTeams    = $oldTask->team;
+        $oldTeamInfo = array();
+        foreach($oldTeams as $team) $oldTeamInfo[$team->account][] = "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left;
 
-        $task->team = '';
+        $newTeamInfo = array();
         foreach($this->post->team as $i => $account)
         {
             if(empty($account)) continue;
-            $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0) . "\n";
+            $newTeamInfo[$account][] = "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0);
+        }
+
+        /* 只保留有变化的部分, 方便对比。*/
+        $oldTask->team = '';
+        $task->team    = '';
+        foreach($oldTeamInfo as $account => $infos)
+        {
+            foreach($infos as $index => $info)
+            {
+                if(isset($newTeamInfo[$account][$index]) && $newTeamInfo[$account][$index] == $info)
+                {
+                    unset($newTeamInfo[$account][$index]);
+                    continue;
+                }
+                else
+                {
+                    $oldTask->team .= $info . "\n";
+                }
+            }
+        }
+
+        foreach($newTeamInfo as $account => $infos)
+        {
+            foreach($infos as $info)
+            {
+                $task->team .= $info . "\n";
+            }
         }
 
         return array($oldTask, $task);
