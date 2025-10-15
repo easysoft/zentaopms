@@ -33,3 +33,19 @@ $lang->mainNav->menuOrder[50] = 'space';
 $lang->mainNav->menuOrder[55] = 'dynamic';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[65] = 'setting';
+
+if($config->edition != 'open')
+{
+    $lang->mainNav->artifactrepo = "{$lang->navIcons['artifactrepo']} {$lang->devops->artifactrepo}|artifactrepo|browse|";
+    $lang->mainNav->deploy       = "{$lang->navIcons['deploy']} {$lang->deployment->common}|deploy|browse|";
+
+    $lang->mainNav->menuOrder[25] = 'artifactrepo';
+
+    $lang->deploy = new stdclass();
+    $lang->deploy->menu = new stdclass();
+    $lang->deploy->menu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'subModule' => 'deploy');
+    $lang->deploy->menu->host   = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'treemap,create,edit,tree,view,tree-browse', 'subModule' => 'tree,serverroom');
+
+    $lang->deploy->menuOrder[10] = 'deploy';
+    $lang->deploy->menuOrder[25] = 'host';
+}
