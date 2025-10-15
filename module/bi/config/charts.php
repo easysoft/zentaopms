@@ -6403,15 +6403,15 @@ $config->bi->builtin->charts[] = array
     'type'      => 'table',
     'group'     => '84',
     'sql'       => <<<EOT
-    SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', CAST(t1.`end` AS VARCHAR(20))) AS `end`,
-    IF(YEAR(t1.`end`) = '2059', '长期', CAST((DATEDIFF(t1.`end`, t1.`begin`) + 1) AS VARCHAR(20))) AS planDuration,
-    IF(LEFT(t1.realBegan, 4) = '0000', '/', CAST(t1.realBegan AS VARCHAR(20))) AS realBegan,
+    SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', CAST(t1.`end` AS CHAR))) AS `end`,
+    IF(YEAR(t1.`end`) = '2059', '长期', CAST((DATEDIFF(t1.`end`, t1.`begin`) + 1) AS CHAR)) AS planDuration,
+    IF(LEFT(t1.realBegan, 4) = '0000', '/', CAST(t1.realBegan AS CHAR)) AS realBegan,
     IF(
         YEAR(t1.`end`) = '2059',
         '长期',
         IF(
             DATEDIFF(t1.`end`, NOW()) >= 0,
-            CAST((DATEDIFF(t1.`end`, NOW()) + 1) AS VARCHAR(20)),
+            CAST((DATEDIFF(t1.`end`, NOW()) + 1) AS CHAR),
             '0'
         )
     ) AS realDuration,
@@ -6448,7 +6448,7 @@ LEFT JOIN (
     ) t
     GROUP BY t.project
 ) AS t2 ON t1.id = t2.project
-LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path, 2)) -1) = CAST(t3.id AS VARCHAR(20)) AND t3.type = 'program' AND t3.deleted = '0'
+LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path, 2)) -1) = CAST(t3.id AS CHAR) AND t3.type = 'program' AND t3.deleted = '0'
 WHERE t1.deleted = '0'
 AND t1.status = 'doing'
 AND t1.type = 'project'
