@@ -118,19 +118,3 @@ CREATE TABLE IF NOT EXISTS `zt_decision` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `zt_stage` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
-
-CREATE TABLE IF NOT EXISTS `zt_decision` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `stage` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '',
-  `category` varchar(30) NOT NULL DEFAULT '',
-  `builtin` enum('0','1') NOT NULL DEFAULT '0',
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` char(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
