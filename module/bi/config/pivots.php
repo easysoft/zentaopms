@@ -26,7 +26,7 @@ select
 from
     (select
         name,
-        CAST(substr(path,2,4) AS INTEGER) as program1,
+        CAST(substr(path,2,4) AS DECIMAL) as program1,
         begin,
         `end`,
         realBegan,
@@ -119,7 +119,7 @@ from
         select
             id,
             name,
-            CAST(substr(`path`, 2, 4) AS INTEGER) as program1,
+            CAST(substr(`path`, 2, 4) AS DECIMAL) as program1,
             closedDate
         from zt_project
         where deleted = '0'
