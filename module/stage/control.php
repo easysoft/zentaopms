@@ -235,6 +235,19 @@ class stage extends control
      */
     public function setPoint(string $type, int $stageID)
     {
+        $this->app->loadLang('review');
 
+        if(!empty($_POST))
+        {
+            $points = form::batchData()->get();
+            $this->stage->setPoint($type, $stageID, $points);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+        }
+
+        $this->view->type        = $type;
+        $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
+        $this->view->stagePoints = $this->stage->getStagePoints($type, $stageID);
+        $this->display();
     }
 }
