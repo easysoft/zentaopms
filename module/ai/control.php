@@ -362,7 +362,7 @@ class ai extends control
     public function publishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '1');
-        if($result) return $this->send(array('result' => 'success', 'load' => true));
+        if($result) return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->publishSuccess));
         $this->sendError(dao::getError());
     }
 
@@ -376,7 +376,7 @@ class ai extends control
     public function unpublishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '0');
-        if($result) return $this->send(array('result' => 'success', 'load' => true));
+        if($result) return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->unpublishSuccess));
         $this->sendError(dao::getError());
     }
 
@@ -907,7 +907,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id")));
         }
 
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->prompts->action->publishSuccess));
     }
 
     /**
