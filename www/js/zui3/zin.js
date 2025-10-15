@@ -1407,8 +1407,8 @@
         if(window.getPageFormHelper) formHelper = window.getPageFormHelper(formSelector, data);
         if(!formHelper)
         {
-            const $form = $(formSelector || '#mainContainer form');
-            formHelper = zui.formHelper($form);
+            const $form = $(formSelector || '#mainContainer form').filter(function() {return $(this).closest('#formSettingBtn').length === 0;});
+            formHelper = zui.zentaoFormHelper($form);
         }
 
         formHelper.setFormData(data);

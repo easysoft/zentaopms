@@ -89,7 +89,7 @@ window.executeZentaoPrompt = async function(info, auto)
             const h               = zui.html;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
-            const renderValue     = value => (typeof value === 'object') ? JSON.stringify(value, 2) : value;
+            const renderValue     = value => (typeof value === 'object') ? langData.notSupportPreview : value;
             if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
