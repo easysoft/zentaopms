@@ -107,6 +107,7 @@ $tableData = initTableData($projectStats, $settings, $this->project);
 /* zin: Define the dtable in main content. */
 dtable
 (
+    set::id('table-project-browse'),
     set::groupDivider(true),
     set::cols($settings),
     set::data($tableData),
