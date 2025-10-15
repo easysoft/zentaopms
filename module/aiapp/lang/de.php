@@ -76,3 +76,4 @@ $lang->aiapp->langData->changeExplainDesc  = 'Erklären Sie die Änderungen an d
 $lang->aiapp->langData->promptResultTitle  = 'Lösungstitel, wenn kein geeigneter Titel angegeben werden kann';
 $lang->aiapp->langData->promptExtraLimit   = 'Normalerweise muss das Werkzeug `{toolName}` nur einmal aufgerufen werden, es sei denn, der Benutzer fordert mehrere Lösungen an.';
 $lang->aiapp->langData->goTesting          = 'Zur Prüfung';
+$lang->aiapp->langData->notSupportPreview  = 'Voraussichtlich nicht unterstützt';
