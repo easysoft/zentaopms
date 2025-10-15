@@ -67,3 +67,17 @@ $lang->my->menuOrder[15] = 'contribute';
 $lang->my->menuOrder[20] = 'setting';
 
 $lang->my->dividerMenu = ',todo,';
+
+$lang->repo->menu = new stdclass();
+
+$lang->repo->homeMenu = new stdclass();
+$lang->repo->homeMenu->repos = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
+
+$lang->repo->menu->code      = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
+$lang->repo->menu->commit    = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
+$lang->repo->menu->branch    = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
+$lang->repo->menu->tag       = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
+$lang->repo->menu->review    = array('link' => "{$lang->devops->review}|mr|browse|repoID=%s");
+$lang->repo->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->repo->menu->dynamic   = array('link' => "{$lang->devops->dynamic}|company|browse|");
+$lang->repo->menu->dashboard = array('link' => "{$lang->dashboard}|repo|dashboard|");
