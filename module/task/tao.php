@@ -393,7 +393,6 @@ class taskTao extends taskModel
                 if(isset($newTeamInfo[$account][$index]) && $newTeamInfo[$account][$index] == $info)
                 {
                     unset($newTeamInfo[$account][$index]);
-                    continue;
                 }
                 else
                 {
