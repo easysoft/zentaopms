@@ -124,3 +124,22 @@ $lang->compile->menuOrder[10] = 'log';
 $lang->bi->menu = new stdclass();
 $lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
 $lang->bi->menu->metric = array('link' => "{$lang->metric->common}|metric|preview");
+
+/* Admin menu. */
+$lang->setting = new stdclass();
+$lang->setting->menu = new stdclass();
+$lang->setting->menu->repo         = array('link' => "{$lang->devops->repo}|repo|setrules");
+$lang->setting->menu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse");
+$lang->setting->menu->ai           = array('link' => "{$lang->ai->common}|zai|setting");
+
+/* Admin menu order. */
+$lang->setting->menuOrder[5]  = 'repo';
+$lang->setting->menuOrder[10] = 'artifactrepo';
+$lang->setting->menuOrder[20] = 'ai';
+
+$lang->setting->menu->repo['subMenu'] = new stdclass();
+$lang->setting->menu->repo['subMenu']->repo   = array('link' => "{$lang->devops->repo}|repo|setrules");
+$lang->setting->menu->repo['subMenu']->branch = array('link' => "{$lang->devops->branch}|repo|branchrule");
+
+$lang->setting->menu->repo['menuOrder'][5]  = 'repo';
+$lang->setting->menu->repo['menuOrder'][10] = 'branch';
