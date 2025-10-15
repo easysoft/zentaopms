@@ -1689,9 +1689,10 @@
      * Select vision.
      * @param {string} vision
      */
-    function selectVision(vision)
+    function selectVision(vision, devopsSpace)
     {
-        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function()
+        if(typeof(devopsSpace) === 'undefined' || !devopsSpace) devopsSpace = 0;
+        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision + '&devopsSpace=' + devopsSpace), function()
         {
             window.top.location.href = $.createLink('index', 'index');
         });

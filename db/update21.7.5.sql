@@ -20,3 +20,25 @@ ALTER TABLE `zt_ai_promptrole` MODIFY `model` varchar(255) COLLATE 'utf8mb4_gene
 UPDATE `zt_ai_miniprogram` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_prompt` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
+
+CREATE TABLE IF NOT EXISTS `zt_ops_space` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `updatedBy` varchar(30) NOT NULL DEFAULT '',
+  `updatedDate`datetime NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `zt_repo` ADD `space` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
+
+CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `space` mediumint(8) unsigned NOT NULL default '0',
+  `account` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `account` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
