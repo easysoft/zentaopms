@@ -96,3 +96,10 @@ $lang->repo->menuOrder[35] = 'tag';
 $lang->repo->menuOrder[40] = 'review';
 $lang->repo->menuOrder[45] = 'compile';
 $lang->repo->menuOrder[60] = 'dynamic';
+
+if($config->edition != 'open')
+{
+    $lang->repo->menu->issue = array('link' => "{$lang->devops->issue}|repo|review|repoID=%s", 'subModule' => 'bug', 'alias' => 'create');
+
+    $lang->repo->menuOrder[55] = 'issue';
+}
