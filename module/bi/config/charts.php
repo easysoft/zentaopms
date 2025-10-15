@@ -1194,12 +1194,12 @@ from (
   SELECT
     firstDay,
     CURRENT_DATE AS today,
-    CAST(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM firstDay) AS INTEGER) AS years,
+    CAST(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM firstDay) AS DECIMAL) AS years,
     MOD(
         CAST(
             (EXTRACT(MONTH FROM CURRENT_DATE) - EXTRACT(MONTH FROM firstDay)) * 30 +
             (EXTRACT(DAY FROM CURRENT_DATE) - EXTRACT(DAY FROM firstDay)) + 365
-            AS INTEGER
+            AS DECIMAL
         ),
         365
     ) days
@@ -1504,7 +1504,7 @@ SELECT
 FROM zt_project AS t1
 LEFT JOIN (
   SELECT
-    CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
+    CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS DECIMAL) AS topProgram,
     COUNT(1) AS subProgram
   FROM zt_project
   WHERE deleted = '0' AND type = 'program' AND grade > 1
@@ -1547,7 +1547,7 @@ LEFT JOIN (
     SUM(COALESCE(t3.execution, 0)) AS execution
   FROM (
     SELECT
-      CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
+      CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS DECIMAL) AS topProgram,
       id AS project
     FROM zt_project
     WHERE deleted = '0' AND type = 'project'
