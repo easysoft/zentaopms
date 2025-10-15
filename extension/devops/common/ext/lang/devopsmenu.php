@@ -113,3 +113,10 @@ $lang->space->menu->spaces   = array('link' => "{$lang->devops->spaces}|devopssp
 $lang->space->menuOrder[5]  = 'baseinfo';
 $lang->space->menuOrder[10] = 'team';
 $lang->space->menuOrder[15] = 'spaces';
+
+$lang->compile->menu = new stdclass();
+$lang->compile->menu->browse = array('link' => "{$lang->devops->compile}|job|browse");
+$lang->compile->menu->log    = array('link' => "{$lang->devops->compileLog}|compile|browse");
+
+$lang->compile->menuOrder[5]  = 'browse';
+$lang->compile->menuOrder[10] = 'log';
