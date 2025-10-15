@@ -4,13 +4,13 @@ window.checkZAIPanel = async function(showMessage)
     const store = zaiPanel ? zaiPanel.store : null;
     if(!store || !store.isConfigOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.zaiConfigNotValid);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.zaiConfigNotValid}});
         return;
     }
     const isOK = await store.isOK();
     if(!isOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.unauthorizedError);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.unauthorizedError}});
         return;
     }
     return zaiPanel;
@@ -359,7 +359,8 @@ function bindAICommandsInApp(win)
     }
 }
 
-$(() => {
+$(() =>
+{
     if(getZentaoPageType() !== 'home')
     {
         bindAICommandsInApp(window);
@@ -371,9 +372,8 @@ $(() => {
 
     const zaiConfig = window.zai || window.top.zai;
     if(zaiConfig)
-    {
-        const langData = zaiConfig.langData;
-        registerZentaoAIPlugin(langData);
+    {;
+        registerZentaoAIPlugin(zaiLang);
 
         const aiStore = zui.ZAIStore.createFromZentao(zaiConfig);
         if(!aiStore) return
@@ -384,7 +384,7 @@ $(() => {
             store            : aiStore,
             position         : {bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
             maximizedPosition: {left: 'calc(var(--zt-menu-width) + 4px)', top: 4, bottom: 'calc(var(--zt-apps-bar-height) + 4px)', right: 16},
-            langData         : langData,
+            langData         : zaiLang,
             getAvatar        : (info, props) =>
             {
                 if(info.role === 'user')
