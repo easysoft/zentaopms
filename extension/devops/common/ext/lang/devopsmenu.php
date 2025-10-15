@@ -49,3 +49,21 @@ if($config->edition != 'open')
     $lang->deploy->menuOrder[10] = 'deploy';
     $lang->deploy->menuOrder[25] = 'host';
 }
+
+$lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
+
+/* My menu. */
+$lang->my->menu = new stdclass();
+$lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
+$lang->my->menu->contribute = array('link' => "{$lang->devops->contribute}|my|index");
+$lang->my->menu->todo       = array('link' => "{$lang->devops->todo}|mr|browse|", 'subModule' => 'pullreq', 'alias' => 'pullreq');
+$lang->my->menu->setting    = array('link' => "{$lang->devops->setting}|user|ssh|");
+
+/* My menu order. */
+$lang->my->menuOrder     = array();
+$lang->my->menuOrder[5]  = 'index';
+$lang->my->menuOrder[10] = 'todo';
+$lang->my->menuOrder[15] = 'contribute';
+$lang->my->menuOrder[20] = 'setting';
+
+$lang->my->dividerMenu = ',todo,';
