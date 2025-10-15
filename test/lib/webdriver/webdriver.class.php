@@ -754,17 +754,13 @@ class dom
             if($showPerf)
             {
                 $perfMsg = $this->driver->executeScript("return $('.page-app body').attr('z-perf-message');");
-                if(!empty($perfMsg)) $errors[] = $perfMsg;
+                if(!empty($perfMsg)) $errors[] = "perf: {$perfMsg}";
             }
-            $parentDiv = $this->driver->findElement(WebDriverBy::xpath('//*[@id="zinbar"]/div/div[3]'));
-            $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
 
-            foreach($errorDivs as $errorDiv)
+            $zinbarErrors = $this->driver->executeScript("return $('#zinbar').zinbar('state').errors || {};");
+            if(!empty($zinbarErrors))
             {
-                $errorInfo = $errorDiv->findElement(WebDriverBy::xpath('div[1]'))->getText();
-                $errorLine = $errorDiv->findElement(WebDriverBy::xpath('div[2]/strong'))->getText();
-                $errorFile = $errorDiv->findElement(WebDriverBy::xpath('div[2]/span'))->getText();
-                $errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
+                foreach($zinbarErrors as $error) $errors[] = "message: {$error['message']}, file: vim +{$error['line']} {$error['file']}";
             }
 
             return $errors;
