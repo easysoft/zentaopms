@@ -81,3 +81,18 @@ $lang->repo->menu->review    = array('link' => "{$lang->devops->review}|mr|brows
 $lang->repo->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 $lang->repo->menu->dynamic   = array('link' => "{$lang->devops->dynamic}|company|browse|");
 $lang->repo->menu->dashboard = array('link' => "{$lang->dashboard}|repo|dashboard|");
+
+$lang->repo->menu->compile['subMenu'] = new stdclass();
+$lang->repo->menu->compile['subMenu']->compile    = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s");
+$lang->repo->menu->compile['subMenu']->compileLog = array('link' => "{$lang->devops->compileLog}|compile|browse|jobID=%s");
+
+$lang->repo->menu->compile['menuOrder'][5]  = 'compile';
+$lang->repo->menu->compile['menuOrder'][10] = 'compileLog';
+
+$lang->repo->menuOrder[15] = 'code';
+$lang->repo->menuOrder[20] = 'commit';
+$lang->repo->menuOrder[25] = 'branch';
+$lang->repo->menuOrder[35] = 'tag';
+$lang->repo->menuOrder[40] = 'review';
+$lang->repo->menuOrder[45] = 'compile';
+$lang->repo->menuOrder[60] = 'dynamic';
