@@ -103,3 +103,13 @@ if($config->edition != 'open')
 
     $lang->repo->menuOrder[55] = 'issue';
 }
+
+$lang->space = new stdclass();
+$lang->space->menu = new stdclass();
+$lang->space->menu->baseinfo = array('link' => "{$lang->devops->spaceInfo}|devopsspace|view");
+$lang->space->menu->team     = array('link' => "{$lang->devops->spaceTeam}|devopsspace|team");
+$lang->space->menu->spaces   = array('link' => "{$lang->devops->spaces}|devopsspace|browse");
+
+$lang->space->menuOrder[5]  = 'baseinfo';
+$lang->space->menuOrder[10] = 'team';
+$lang->space->menuOrder[15] = 'spaces';
