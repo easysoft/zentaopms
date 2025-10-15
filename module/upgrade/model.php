@@ -12177,11 +12177,11 @@ class upgradeModel extends model
         if(empty($objectList) && !empty($this->lang->baseline->objectList)) $objectList = $this->lang->baseline->objectList;
         if(empty($objectList)) $objectList = $this->lang->upgrade->reviewObjectList;
 
-        $workflowGroupPairs = $this->dao->select('id, projectModel')->from(TABLE_WORKFLOWGROUP)->fetchPairs();
+        $workflowGroups = $this->dao->select('id, projectModel, projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
 
         $moduleGroup = $this->dao->select('id, root, extra')->from(TABLE_MODULE)
             ->where('type')->eq('deliverable')
-            ->andWhere('root')->in(array_keys($workflowGroupPairs))
+            ->andWhere('root')->in(array_keys($workflowGroups))
             ->fetchGroup('root', 'extra');
 
         $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->where('type')->ne('')->fetchGroup('type');
@@ -12218,8 +12218,11 @@ class upgradeModel extends model
         $waterfallStageMap = array('PP' => 'request', 'SRS' => 'request', 'QAP' => 'request', 'CMP' => 'request', 'ERS' => 'request', 'URS' => 'request', 'Code' => 'dev', 'ITP' => 'dev', 'STP' => 'dev', 'ITTC' => 'qa', 'STTC' => 'qa', 'UM' => 'release');
         $ipdStageMap       = array('PP' => 'plan', 'SRS' => 'plan', 'QAP' => 'plan', 'CMP' => 'plan', 'ERS' => 'concept', 'URS' => 'concept', 'Code' => 'develop', 'ITP' => 'plan', 'STP' => 'plan', 'ITTC' => 'qualify', 'STTC' => 'qualify', 'UM' => 'launch');
 
-        foreach($workflowGroupPairs as $groupID => $projectModel)
+        foreach($workflowGroups as $groupID => $workflowGroup)
         {
+            $projectModel = $workflowGroup->projectModel;
+            $projectType  = $workflowGroup->projectType;
+
             if(empty($activityList[$groupID])) continue;
             $otherActivity   = reset($activityList[$groupID]);
             $otherActivityID = $otherActivity->id;
@@ -12251,6 +12254,8 @@ class upgradeModel extends model
                 elseif($projectModel == 'ipd')
                 {
                     $deliverableStage->stage = isset($ipdStageMap[$key]) ? $ipdStageMap[$key] : 'project';
+                    if(in_array($projectType, array('tpd', 'cbb')) && $deliverableStage->stage == 'launch') $deliverableStage->stage = 'project';
+                    if(in_array($projectType, array('cpdproduct', 'cpdproject')) && $deliverableStage->stage == 'concept') $deliverableStage->stage = 'plan';
                 }
 
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
