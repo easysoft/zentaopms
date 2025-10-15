@@ -143,3 +143,20 @@ $lang->setting->menu->repo['subMenu']->branch = array('link' => "{$lang->devops-
 
 $lang->setting->menu->repo['menuOrder'][5]  = 'repo';
 $lang->setting->menu->repo['menuOrder'][10] = 'branch';
+
+if($config->inQuickon)
+{
+    $lang->setting->menu->platform = array('link' => "{$lang->devops->platform}|system|dblist");
+    $lang->setting->menuOrder[15]  = 'platform';
+
+    $lang->setting->menu->platform['subMenu'] = new stdclass();
+    $lang->setting->menu->platform['subMenu']->db    = array('link' => "{$lang->devops->db}|system|dblist");
+    $lang->setting->menu->platform['subMenu']->oss   = array('link' => "{$lang->devops->oss}|system|ossview");
+    $lang->setting->menu->platform['subMenu']->space = array('link' => "{$lang->devops->service}|space|browse");
+    $lang->setting->menu->platform['subMenu']->store = array('link' => "{$lang->devops->store}|store|browse");
+
+    $lang->setting->menu->platform['menuOrder'][25] = 'db';
+    $lang->setting->menu->platform['menuOrder'][30] = 'oss';
+    $lang->setting->menu->platform['menuOrder'][35] = 'space';
+    $lang->setting->menu->platform['menuOrder'][40] = 'store';
+}
