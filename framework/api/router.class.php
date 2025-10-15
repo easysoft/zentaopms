@@ -23,15 +23,6 @@ class api extends router
     public $path;
 
     /**
-     * API版本号
-     * The version of API.
-     *
-     * @var string
-     * @access public
-     */
-    public $version = '';
-
-    /**
      * 请求API的参数，包括键值
      * The requested params of api: key and value.
      *
@@ -68,6 +59,15 @@ class api extends router
     public $action;
 
     /**
+     * 选择性输出json数据
+     * Extract json data
+     *
+     * @var string
+     * @access public
+     */
+    public $responseExtractor = '*';
+
+    /**
      * 构造方法, 设置请求路径，版本等
      *
      * The construct function.
@@ -80,23 +80,16 @@ class api extends router
     {
         parent::__construct($appName, $appRoot);
 
+        $this->viewType    = 'json';
         $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
-
-        /*
-        $documentRoot = zget($_SERVER, 'CONTEXT_DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
-        $fileName     = ltrim(substr($_SERVER['SCRIPT_FILENAME'], strlen($documentRoot)), '/');
-        $webRoot      = ltrim($this->config->webRoot, '/');
-        $this->path   = substr(ltrim($_SERVER['REQUEST_URI'], '/'), strlen($webRoot . $fileName) + 1);
-
-        if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
-         */
 
         $this->path = trim(substr((string) $_SERVER['REQUEST_URI'], strpos((string) $_SERVER['REQUEST_URI'], 'api.php') + 7), '/');
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
         $subPos = $this->path ? strpos($this->path, '/') : false;
-        $this->version = $subPos !== false ? substr($this->path, 0, $subPos) : '';
-        $this->path    = $subPos !== false ? substr($this->path, $subPos) : '';
+
+        $this->apiVersion = $subPos !== false ? substr($this->path, 0, $subPos) : '';
+        $this->path       = $subPos !== false ? substr($this->path, $subPos) : '';
 
         $this->loadApiLang();
     }
@@ -142,6 +135,209 @@ class api extends router
         $this->action = 'notFound';
     }
 
+        /**
+     * 复数转单数
+     * Converting plural nouns to singular.
+     *
+     * @param  string $word
+     * @access public
+     * @return string
+     */
+    public function singular($word)
+    {
+        /* 特殊词处理 */
+        $irregular = array(
+            'children' => 'child',
+            'men' => 'man',
+            'women' => 'woman',
+            'people' => 'person',
+            'feet' => 'foot',
+            'teeth' => 'tooth',
+            'mice' => 'mouse',
+            'geese' => 'goose',
+            'oxen' => 'ox',
+            'cacti' => 'cactus',
+            'foci' => 'focus',
+            'nuclei' => 'nucleus',
+            'syllabi' => 'syllabus',
+            'radii' => 'radius',
+            'phenomena' => 'phenomenon',
+            'criteria' => 'criterion',
+            'data' => 'datum',
+            'media' => 'medium',
+            'lice' => 'louse',
+            'selves' => 'self',
+            'loaves' => 'loaf',
+            'leaves' => 'leaf',
+            'lives' => 'life',
+            'wives' => 'wife',
+            'knives' => 'knife',
+            'wolves' => 'wolf',
+            'elves' => 'elf',
+            'halves' => 'half',
+            'scarves' => 'scarf',
+            'hooves' => 'hoof',
+            'veterans' => 'veteran', // 特殊情况示例
+        );
+
+        if(isset($irregular[strtolower($word)])) {
+            $lowerWord = strtolower($word);
+            $singular = $irregular[$lowerWord];
+            if (ctype_upper($word[0])) {
+                $singular = ucfirst($singular);
+            }
+            return $singular;
+        }
+
+        $rules = [
+            '/sses$/i' => 'ss',
+            '/ies$/i' => 'y',
+            '/ves$/i' => 'f',
+            '/zes$/i' => 'z',
+            '/ches$/i' => 'ch',
+            '/shes$/i' => 'sh',
+            '/men$/i' => 'man',
+            '/s$/i' => '',
+        ];
+
+        foreach($rules as $pattern => $replacement)
+        {
+            if(preg_match($pattern, $word)) return preg_replace($pattern, $replacement, $word, 1);
+        }
+
+        return $word;
+    }
+
+    /**
+     * 路由正则匹配
+     * Match routes.
+     *
+     * @param  array $routes
+     * @access private
+     * @return array
+     */
+    private function matchRoutes($routes)
+    {
+        foreach($routes as $route => $info)
+        {
+            $patternAsRegex = preg_replace_callback(
+                '#:([\w]+)\+?#',
+                $this->matchesCallback(...),
+                str_replace(')', ')?', $route)
+            );
+            if(str_ends_with($route, '/')) $patternAsRegex .= '?';
+
+            /* Cache URL params' names and values if this route matches the current HTTP request. */
+            if(!preg_match('#^' . $patternAsRegex . '$#', $this->path, $paramValues)) continue;
+
+            return array($info, $paramValues);
+        }
+
+        return array(null, array());
+    }
+
+    /**
+     * API2.0 根据路由表设置path和params
+     * API2.0 Set path, params by routes.
+     *
+     * @param  array $routes
+     * @access private
+     * @return void
+     */
+    public function parseRouteV2($routes)
+    {
+        list($info, $paramValues) = $this->matchRoutes($routes);
+
+        if($info)
+        {
+            if(isset($info['redirect']))
+            {
+                foreach($paramValues as $key => $value)
+                {
+                    if(is_numeric($key)) continue;
+
+                    $_GET[$key]       = $value;
+                    $info['redirect'] = str_replace(':'.$key, $value, $info['redirect']);
+                }
+                if(isset($info['response'])) $this->responseExtractor = $info['response'];
+
+                $url = parse_url($info['redirect']);
+                $this->path = $url['path'];
+
+                if(isset($url['query']))
+                {
+                    parse_str($url['query'], $params);
+                    foreach($params as $key => $value) $_GET[$key] = $value;
+                }
+
+                list($info, $paramValues) = $this->matchRoutes($routes);
+            }
+
+            if(isset($info['response'])) $this->responseExtractor = $info['response'];
+        }
+
+        foreach($paramValues as $key => $value)
+        {
+            if(is_numeric($key)) continue;
+            $_GET[$key] = $value;
+        }
+    }
+
+    /**
+     * API2.0 路由
+     * API2.0 routing.
+     *
+     * @param  array $routes
+     * @access private
+     * @return array
+     */
+    public function routeV2($routes)
+    {
+        $this->action = strtolower((string) $_SERVER['REQUEST_METHOD']);
+
+        if($this->action == 'get') $this->parseRouteV2($routes);
+
+        $pathItems  = explode('/', trim($this->path, '/'));
+        $moduleName = $this->singular($pathItems[0]);
+
+        $actionToMethod = array(
+            'get'    => 'browse',
+            'post'   => 'create',
+            'put'    => 'edit',
+            'delete' => 'delete'
+        );
+
+        $methodName = $actionToMethod[$this->action];
+
+        if(isset($pathItems[1]))
+        {
+            if(is_numeric($pathItems[1]))
+            {
+                if($this->action == 'get')
+                {
+                    $methodName = 'view';
+                }
+                else
+                {
+                    $_GET[$moduleName.'ID'] = $pathItems[1];
+                }
+            }
+            else
+            {
+                $methodName = $pathItems[1];
+            }
+        }
+
+        if(isset($pathItems[2]))
+        {
+            $methodName = $pathItems[2];
+        }
+
+        $this->setModuleName($moduleName);
+        $this->setMethodName($methodName);
+        $this->setControlFile();
+    }
+
     /**
      * 将路由路径参数转化为正则
      *
@@ -168,9 +364,19 @@ class api extends router
     public function parseRequest()
     {
         /* If version of api don't exists, call parent method. */
-        if(!$this->version) return parent::parseRequest();
+        if(!$this->apiVersion) return parent::parseRequest();
 
-        $this->route($this->config->routes);
+        global $routes;
+        if($this->apiVersion == 'v1')
+        {
+            include $this->appRoot . "config/apiv1.php";
+            $this->route($routes);
+        }
+        else
+        {
+            include $this->appRoot . "config/apiv2.php";
+            $this->routeV2($routes);
+        }
     }
 
     /**
@@ -186,15 +392,24 @@ class api extends router
         try
         {
             /* If the version of api don't exists, call parent method. */
-            if(!$this->version)
+            if($this->apiVersion == 'v2')
             {
-                global $app;
-                $app->setParams();
+                $this->setParams();
+                if(in_array($this->action, array('post', 'put')))
+                {
+                    $this->setFormData();
+                }
+                return parent::loadModule();
+            }
+            elseif(!$this->apiVersion)
+            {
+                parent::setParams();
                 return parent::loadModule();
             }
 
+            /* api v1. */
             $entry    = strtolower($this->entry);
-            $filename = $this->appRoot . "api/$this->version/entries/$entry.php";
+            $filename = $this->appRoot . "api/$this->apiVersion/entries/$entry.php";
 
             if(file_exists($filename)) include($filename);
 
@@ -217,6 +432,92 @@ class api extends router
     }
 
     /**
+     * 设置form data。
+     * Set form data.
+     *
+     * @access public
+     * @return void
+     */
+    public function setFormData()
+    {
+        $requestBody = file_get_contents("php://input");
+        if(!$requestBody) return;
+
+        $_POST = json_decode($requestBody, true);
+
+        /* 更新操作的表单需要拼接原始的值。 Merge original values. */
+        if($this->action == 'put')
+        {
+            /* Get form data by get request. */
+            $postData = $_POST;
+            $_POST    = array();
+            $objectID = (int)current($_GET);
+
+            $this->control->viewType    = 'html';
+            $this->control->getFormData = true;
+
+            $this->control->edit($objectID);
+
+            $this->control->getFormData = false;
+            $this->control->viewType    = 'json';
+
+            $_POST = $postData;
+            foreach($this->control->formData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
+        }
+    }
+
+    /**
+     * 设置要被调用方法的参数。
+     * Set the params of method calling.
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        $defaultParams = $this->getDefaultParams();
+
+        $this->params = array();
+
+        /* POST/PUT/DELETE methods have no correct param name, use index. */
+        if($this->action != 'get')
+        {
+            $values = array_values($_GET);
+            $index  = 0;
+            foreach($defaultParams as $key => $defaultItem)
+            {
+                if(isset($values[$index])) $_GET[$key] = $values[$index];
+                $index++;
+            }
+        }
+
+        foreach($defaultParams as $key => $defaultItem)
+        {
+            if(isset($_GET[$key]))
+            {
+                $this->params[$key] = helper::convertType(strip_tags((string) $_GET[$key]), $defaultItem['type']);
+            }
+            else
+            {
+                $this->params[$key] = $defaultItem['default'];
+            }
+        }
+
+        if($this->config->framework->filterParam == 2)
+        {
+            $_GET    = validater::filterParam($_GET, 'get');
+            $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
+        }
+
+        $this->rawParams = $this->params;
+
+        return true;
+    }
+
+    /**
      * 加载配置文件
      *
      * Load config file of api.
@@ -228,7 +529,7 @@ class api extends router
     public function loadApiConfig(string $configPath)
     {
         global $config;
-        include($this->appRoot . "api/$this->version/config/$configPath.php");
+        include($this->appRoot . "api/$this->apiVersion/config/$configPath.php");
     }
 
     /**
@@ -242,8 +543,8 @@ class api extends router
     public function loadApiLang()
     {
         global $lang;
-        $filename = $this->appRoot . "api/$this->version/lang/$this->clientLang.php";
-        if($this->version && file_exists($filename)) include($filename);
+        $filename = $this->appRoot . "api/$this->apiVersion/lang/$this->clientLang.php";
+        if($this->apiVersion && file_exists($filename)) include($filename);
     }
 
     /**
@@ -258,7 +559,7 @@ class api extends router
     public function formatData(string $output)
     {
         /* If the version exists, return output directly. */
-        if($this->version) return $output;
+        if($this->apiVersion) return $output;
 
         $output = json_decode((string) $output);
 
