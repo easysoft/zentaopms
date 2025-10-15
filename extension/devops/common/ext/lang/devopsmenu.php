@@ -120,3 +120,7 @@ $lang->compile->menu->log    = array('link' => "{$lang->devops->compileLog}|comp
 
 $lang->compile->menuOrder[5]  = 'browse';
 $lang->compile->menuOrder[10] = 'log';
+
+$lang->bi->menu = new stdclass();
+$lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
+$lang->bi->menu->metric = array('link' => "{$lang->metric->common}|metric|preview");
