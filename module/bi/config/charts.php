@@ -6403,7 +6403,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'table',
     'group'     => '84',
     'sql'       => <<<EOT
-    SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', CAST(t1.`end` AS CHAR))) AS `end`,
+    SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', CAST(t1.`end` AS CHAR)) AS `end`,
     IF(YEAR(t1.`end`) = '2059', '长期', CAST((DATEDIFF(t1.`end`, t1.`begin`) + 1) AS CHAR)) AS planDuration,
     IF(LEFT(t1.realBegan, 4) = '0000', '/', CAST(t1.realBegan AS CHAR)) AS realBegan,
     IF(
