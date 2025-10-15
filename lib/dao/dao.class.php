@@ -242,7 +242,7 @@ class dao extends baseDAO
             {
                 $productID = $_SESSION[$productVar];
                 $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
-                $groupID   = !$result->shadow ? $result->workflowGroup : 0;
+                $groupID   = isset($result->shadow) && !$result->shadow ? $result->workflowGroup : 0;
                 if(empty($groupID))
                 {
                     $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
