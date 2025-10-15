@@ -628,6 +628,7 @@ CREATE TABLE IF NOT EXISTS `zt_decision` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `stage` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `category` varchar(30) NOT NULL DEFAULT '',
