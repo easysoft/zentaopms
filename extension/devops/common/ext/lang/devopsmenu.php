@@ -160,3 +160,32 @@ if($config->inQuickon)
     $lang->setting->menu->platform['menuOrder'][35] = 'space';
     $lang->setting->menu->platform['menuOrder'][40] = 'store';
 }
+
+if($config->vision == 'devops')
+{
+    $lang->navGroup->repo             = 'repo';
+    $lang->navGroup->repo_setRules    = 'setting';
+    $lang->navGroup->job              = 'repo';
+    $lang->navGroup->jenkins          = 'repo';
+    $lang->navGroup->mr               = 'repo';
+    $lang->navGroup->gitlab           = 'repo';
+    $lang->navGroup->gogs             = 'repo';
+    $lang->navGroup->gitea            = 'repo';
+    $lang->navGroup->sonarqube        = 'repo';
+    $lang->navGroup->sonarqubeproject = 'repo';
+    $lang->navGroup->compile          = 'repo';
+    $lang->navGroup->ci               = 'repo';
+    $lang->navGroup->svn              = 'repo';
+    $lang->navGroup->git              = 'repo';
+    $lang->navGroup->app              = 'repo';
+    $lang->navGroup->pipeline         = 'repo';
+    $lang->navGroup->devopssetting    = 'repo';
+    $lang->navGroup->space            = 'repo';
+    $lang->navGroup->store            = 'repo';
+    $lang->navGroup->instance         = 'repo';
+    $lang->navGroup->deploy           = 'repo';
+    $lang->navGroup->host             = 'repo';
+    $lang->navGroup->artifactrepo     = 'artifactrepo';
+    $lang->navGroup->company          = 'dynamic';
+    $lang->navGroup->zai              = 'setting';
+}
