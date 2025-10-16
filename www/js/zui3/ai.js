@@ -20,9 +20,11 @@ window.openPageForm = function(url, data, callback)
 {
     return new Promise((resolve, reject) => {
         const openedApp = $.apps.openApp(url);
-        const handlePageLoad = () =>
+        let updateTimer = 0;
+        const tryUpdateForm = () =>
         {
-            setTimeout(() =>
+            if(updateTimer) clearTimeout(updateTimer);
+            updateTimer = setTimeout(() =>
             {
                 try
                 {
@@ -36,8 +38,8 @@ window.openPageForm = function(url, data, callback)
                 } catch (error) {reject(error)}
             }, 2000);
         };
-        openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
-        setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+        openedApp.$app.one('updateapp.apps updatepage.app', tryUpdateForm);
+        setTimeout(() => openedApp.$app.off('updateapp.apps', tryUpdateForm), 5000);
     });
 }
 
@@ -80,6 +82,7 @@ window.executeZentaoPrompt = async function(info, auto)
             }
         },
         fn: (response) => {
+            console.log('> executeZentaoPrompt', info.name, {info, response});
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
