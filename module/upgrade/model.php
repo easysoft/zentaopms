@@ -11289,6 +11289,7 @@ class upgradeModel extends model
 
         $deliverableStage = new stdClass();
         $deliverableStage->required = '0';
+        $deliverableStage->stage    = 'project';
         foreach($moduleList as $module)
         {
             if(empty($activityList[$module->workflowGroup])) continue;
@@ -11303,8 +11304,6 @@ class upgradeModel extends model
             {
                 if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
                 $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
-                if($module->projectModel == 'waterfall') $deliverableStage->stage = 'design';
-                if($module->projectModel == 'ipd')       $deliverableStage->stage = 'develop';
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
                 /* 将历史设计的设计类型替换为交付物ID。 */
@@ -11696,25 +11695,12 @@ class upgradeModel extends model
 
         $deliverableStage = new stdClass();
         $deliverableStage->required = '0';
+        $deliverableStage->stage    = 'project';
 
         $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
-            $projectModel = $workflow->projectModel;
-
-            if($projectModel == 'ipd')
-            {
-                $deliverableStage->stage = 'qualify';
-            }
-            elseif(in_array($projectModel, array('waterfall', 'waterfallplus')))
-            {
-                $deliverableStage->stage = 'qa';
-            }
-            else
-            {
-                $deliverableStage->stage = 'sprint';
-            }
 
             if(empty($activityList[$groupID])) continue;
             $otherActivity   = reset($activityList[$groupID]);
@@ -12216,13 +12202,10 @@ class upgradeModel extends model
 
         $upgradeReviewcls  = array();
         $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
-        $waterfallStageMap = array('PP' => 'request', 'SRS' => 'request', 'QAP' => 'request', 'CMP' => 'request', 'ERS' => 'request', 'URS' => 'request', 'Code' => 'dev', 'ITP' => 'dev', 'STP' => 'dev', 'ITTC' => 'qa', 'STTC' => 'qa', 'UM' => 'release');
-        $ipdStageMap       = array('PP' => 'plan', 'SRS' => 'plan', 'QAP' => 'plan', 'CMP' => 'plan', 'ERS' => 'concept', 'URS' => 'concept', 'Code' => 'develop', 'ITP' => 'plan', 'STP' => 'plan', 'ITTC' => 'qualify', 'STTC' => 'qualify', 'UM' => 'launch');
 
         foreach($workflowGroups as $groupID => $workflowGroup)
         {
             $projectModel = $workflowGroup->projectModel;
-            $projectType  = $workflowGroup->projectType;
 
             if(empty($activityList[$groupID])) continue;
             $otherActivity   = reset($activityList[$groupID]);
@@ -12243,21 +12226,6 @@ class upgradeModel extends model
                 /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
                 $moduleKey           = isset($categoryModuleMap[$key]) ? $categoryModuleMap[$key] : 'other';
                 $deliverable->module = isset($moduleGroup[$groupID][$moduleKey]) ? $moduleGroup[$groupID][$moduleKey]->id : 0;
-
-                if(in_array($projectModel, array('waterfall', 'waterfallplus')))
-                {
-                    $deliverableStage->stage = isset($waterfallStageMap[$key]) ? $waterfallStageMap[$key] : 'project';
-                }
-                elseif(in_array($projectModel, array('scrum', 'agileplus')))
-                {
-                    $deliverableStage->stage = 'sprint';
-                }
-                elseif($projectModel == 'ipd')
-                {
-                    $deliverableStage->stage = isset($ipdStageMap[$key]) ? $ipdStageMap[$key] : 'project';
-                    if(in_array($projectType, array('tpd', 'cbb')) && $deliverableStage->stage == 'launch') $deliverableStage->stage = 'project';
-                    if(in_array($projectType, array('cpdproduct', 'cpdproject')) && $deliverableStage->stage == 'concept') $deliverableStage->stage = 'plan';
-                }
 
                 $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
 
