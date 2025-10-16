@@ -1642,7 +1642,11 @@ class executionZen extends execution
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
-        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        elseif($module == 'pssp')
+        {
+            $link = helper::createLink($module, 'browse', "projectID=%s#app={$this->app->tab}");
+        }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'auditplan', 'nc', 'meeting')))
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
         }
