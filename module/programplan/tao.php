@@ -557,7 +557,7 @@ class programplanTao extends programplanModel
         $this->insertProjectSpec($stageID, $plan);
 
         /* Ipd project create default review points. */
-        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
+        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id);
 
         if($plan->type == 'kanban')
         {

@@ -201,7 +201,9 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     {
         foreach($stages as $stage)
         {
-            $points = !empty($enabledPoints->{$stage->type}) ? $enabledPoints->{$stage->type} : array();
+            $TRpoints  = isset($stage->pointList['TR']) ? array_keys($stage->pointList['TR']) : array();
+            $DCPpoints = isset($stage->pointList['DCP']) ? array_keys($stage->pointList['DCP']) : array();
+            $points    = array_merge($TRpoints, $DCPpoints);
 
             $item            = new stdClass();
             $item->name      = $stage->name;
@@ -212,6 +214,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
             $item->milestone = 0;
             $item->point     = implode(',', $points);
             $item->parallel  = 0;
+            $item->stageID   = $stage->id;
 
             $items[] = $item;
         }
@@ -273,7 +276,7 @@ jsVar('childEnabledTip',  $lang->programplan->childEnabledTip);
 jsVar('typeList',         $lang->execution->typeList);
 jsVar('confirmCreateTip', $lang->project->confirmCreateStage);
 jsVar('errorLang',        $lang->programplan->error);
-jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
+jsVar('ipdStagePoint',    $project->model == 'ipd' ? $ipdStagePoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');

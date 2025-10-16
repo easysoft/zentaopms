@@ -251,12 +251,12 @@ window.handleRenderRow = function($row, index, data)
 
             if(typeof data != 'undefined' && typeof data.attribute != 'undefined' && !disabled)
             {
-                const attribute = data.attribute;
-                for(let point in ipdStagePoint[attribute])
+                const stageID = data.stageID;
+                for(let point in ipdStagePoint[stageID])
                 {
                     let disabled = false
-                    let value    = ipdStagePoint[attribute][point];
-                    let hint     = value;
+                    let text     = ipdStagePoint[stageID][point];
+                    let hint     = text;
 
                     /* 如果已经评审过，则置灰不能选。*/
                     if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
@@ -265,7 +265,7 @@ window.handleRenderRow = function($row, index, data)
                         hint     = reviewedPointTip;
                     }
 
-                    items.push({text: value, value: value, disabled: disabled, hint: hint});
+                    items.push({text: text, value: point, disabled: disabled, hint: hint});
                 }
             }
 

@@ -183,8 +183,9 @@ class stageModel extends model
         }
         foreach($stages as $stage)
         {
-            $stage->TRpoint  = isset($pointList[$stage->id]['TR']) ? implode(', ', $pointList[$stage->id]['TR']) : '';
-            $stage->DCPpoint = isset($pointList[$stage->id]['DCP']) ? implode(', ', $pointList[$stage->id]['DCP']) : '';
+            $stage->TRpoint   = isset($pointList[$stage->id]['TR']) ? implode(', ', $pointList[$stage->id]['TR']) : '';
+            $stage->DCPpoint  = isset($pointList[$stage->id]['DCP']) ? implode(', ', $pointList[$stage->id]['DCP']) : '';
+            $stage->pointList = $pointList[$stage->id];
         }
         return $stages;
     }
