@@ -124,7 +124,7 @@ $config->ai->targetForm['productplan']['create']         = (object)array('m' => 
 // $config->ai->targetForm['project']['issue/create']       = (object)array('m' => 'issue', 'f' => 'create');
 // $config->ai->targetForm['project']['doc/create']         = (object)array('m' => 'doc', 'f' => 'create');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
-$config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate');
+$config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
 // $config->ai->targetForm['execution']['createtestreport'] = (object)array('m' => 'execution', 'f' => 'testreport');
 // $config->ai->targetForm['execution']['createqa']         = (object)array('m' => 'execution', 'f' => 'createQA');
 // $config->ai->targetForm['execution']['createrisk']       = (object)array('m' => 'execution', 'f' => 'createRisk');
@@ -210,7 +210,7 @@ $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->men
 $config->ai->menuPrint->locations['execution']['view'] = (object)array( // TODO: fix this.
     'module'          => 'execution',
     'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child  > .detail-title',
+    'targetContainer' => '#mainContent .ai-menu-box',
     'class'           => 'pull-right'
 );
 
@@ -222,14 +222,14 @@ $config->ai->menuPrint->locations['project']['view']->module = 'project';
 $config->ai->menuPrint->locations['product']['view'] = (object)array( // TODO: fix this.
     'module'          => 'product',
     'injectMethod'    => 'append',
-    'targetContainer' => '#mainContent.main-row > .col-8.main-col .detail:first-child > .detail-title',
+    'targetContainer' => '#mainContent .ai-menu-box',
     'class'           => 'pull-right'
 );
 
 $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'module'          => 'productplan',
     'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent .toolbar',
+    'targetContainer' => '#mainContent .tab-actions',
     'objectVarName'   => 'plan'
 );
 $config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];

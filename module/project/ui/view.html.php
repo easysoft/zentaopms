@@ -272,7 +272,8 @@ row
                             setClass('ghost form-label-hint text-gray-300 ml-2'),
                             toggle::tooltip(array('title' => $lang->project->subAclList[$project->acl], 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right'))
                         )
-                    )
+                    ),
+                    div(setClass('ai-menu-box flex-auto'))
                 ),
                 div
                 (
