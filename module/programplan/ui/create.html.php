@@ -15,7 +15,6 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 $fields         = $this->config->programplan->form->create;
-$enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 $canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
@@ -193,7 +192,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
 };
 
 /* Generate default rendering data. */
-$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints, $project)
+$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $project)
 {
     $items = array();
 
@@ -225,7 +224,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     /* Create stages for exist project. */
     foreach($plans as $plan)
     {
-        $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
+        $points = isset($plan->enabledPoints) ? array_keys($plan->enabledPoints) : array();
 
         $item               = new stdClass();
         $item->disabled     = $plan->type != 'stage';
@@ -249,6 +248,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->order        = $plan->order;
         $item->parallel     = $plan->parallel;
         $item->point        = implode(',', $points);
+        $plan->stageID      = $plan->id;
         $plan->disabled     = !isset($plan->setMilestone);
         $plan->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
         $plan->point        = implode(',', $points);

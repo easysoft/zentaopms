@@ -26,7 +26,7 @@ class programplanTao extends programplanModel
         if(empty($executionID)) return array();
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
 
-        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+        $stageList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
@@ -45,6 +45,24 @@ class programplanTao extends programplanModel
             ->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id', false);
+
+        if($projectModel == 'ipd')
+        {
+            $stagePointGroup = $this->dao->select('execution,category,categoryTitle')->from(TABLE_OBJECT)
+                ->where('execution')->in(array_keys($stageList))
+                ->andWhere('type')->eq('decision')
+                ->andWhere('enabled')->eq('1')
+                ->fetchGroup('execution', 'category');
+            foreach($stageList as $stage)
+            {
+                $stage->enabledPoints = array();
+                if(isset($stagePointGroup[$stage->id]))
+                {
+                    foreach($stagePointGroup[$stage->id] as $point) $stage->enabledPoints[$point->category] = $point->categoryTitle;
+                }
+            }
+        }
+        return $stageList;
     }
 
     /**

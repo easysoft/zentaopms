@@ -120,4 +120,5 @@ CREATE TABLE IF NOT EXISTS `zt_decision` (
 ALTER TABLE `zt_stage` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 
 ALTER TABLE `zt_object` ADD `execution` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `project`;
+ALTER TABLE `zt_object` ADD `categoryTitle` varchar(255) NOT NULL DEFAULT '' AFTER `category`;
 ALTER TABLE `zt_object` MODIFY COLUMN `type` enum('reviewed','taged','decision') NOT NULL DEFAULT 'reviewed';
