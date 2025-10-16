@@ -243,7 +243,7 @@ window.handleRenderRow = function($row, index, data)
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
 
-        const $point = $row.find('[data-name="point"]');
+        const $point = $row.find('[data-name="point"],[data-name="defaultPoint"]');
         $point.find('.picker-box').on('inited', function(e, info)
         {
             let items    = [{text: '', value: ''}];
@@ -259,11 +259,11 @@ window.handleRenderRow = function($row, index, data)
                     let hint     = text;
 
                     /* 如果已经评审过，则置灰不能选。*/
-                    if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
-                    {
-                        disabled = true;
-                        hint     = reviewedPointTip;
-                    }
+                    //if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
+                    //{
+                    //    disabled = true;
+                    //    hint     = reviewedPointTip;
+                    //}
 
                     items.push({text: text, value: point, disabled: disabled, hint: hint});
                 }

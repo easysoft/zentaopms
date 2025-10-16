@@ -185,7 +185,7 @@ class stageModel extends model
         {
             $stage->TRpoint   = isset($pointList[$stage->id]['TR']) ? implode(', ', $pointList[$stage->id]['TR']) : '';
             $stage->DCPpoint  = isset($pointList[$stage->id]['DCP']) ? implode(', ', $pointList[$stage->id]['DCP']) : '';
-            $stage->pointList = $pointList[$stage->id];
+            $stage->pointList = zget($pointList, $stage->id, array());
         }
         return $stages;
     }

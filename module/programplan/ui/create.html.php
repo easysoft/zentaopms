@@ -181,6 +181,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
                 'data-class-name' => 'text-gray border border-gray-300'
             );
         }
+        if($name == 'defaultPoint') $field['hidden'] = true;
 
         if($name == 'name') $field['width'] = '240px';
         if(!isset($field['width'])) $field['width'] = '120px';
@@ -205,16 +206,17 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
             $DCPpoints = isset($stage->pointList['DCP']) ? array_keys($stage->pointList['DCP']) : array();
             $points    = array_merge($TRpoints, $DCPpoints);
 
-            $item            = new stdClass();
-            $item->name      = $stage->name;
-            $item->code      = isset($stage->code) ? $stage->code : '';
-            $item->percent   = $stage->percent;
-            $item->attribute = $stage->type;
-            $item->acl       = 'open';
-            $item->milestone = 0;
-            $item->point     = implode(',', $points);
-            $item->parallel  = 0;
-            $item->stageID   = $stage->id;
+            $item               = new stdClass();
+            $item->name         = $stage->name;
+            $item->code         = isset($stage->code) ? $stage->code : '';
+            $item->percent      = $stage->percent;
+            $item->attribute    = $stage->type;
+            $item->acl          = 'open';
+            $item->milestone    = 0;
+            $item->point        = implode(',', $points);
+            $item->defaultPoint = implode(',', $points);
+            $item->parallel     = 0;
+            $item->stageID      = $stage->id;
 
             $items[] = $item;
         }
