@@ -1057,6 +1057,7 @@ class upgradeTao extends upgradeModel
     {
         unset($activity->id);
         $activity->process       = $processID;
+        $activity->optional      = !empty($activity->optional) ? $activity->optional : 'no';
         $activity->workflowGroup = $groupID;
         $activity->editedBy      = '';
         $activity->editedDate    = null;
