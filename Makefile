@@ -35,7 +35,7 @@ common:
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
 	cp -fr db zentaopms/
-	cp -fr doc zentaopms/ && rm -fr zentaopms/doc/phpdoc && rm -fr zentaopms/doc/doxygen
+	cp -fr doc zentaopms/ && rm -fr zentaopms/doc/phpdoc zentaopms/doc/doxygen zentaopms/doc/LICENSE.LITE.* zentaopms/doc/standard.php
 	cp -fr framework zentaopms/
 	cp -fr lib zentaopms/
 	cp -fr module zentaopms/
