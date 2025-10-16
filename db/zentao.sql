@@ -14931,6 +14931,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `from` mediumint(8) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
+  `categoryTitle` varchar(255) NOT NULL DEFAULT '',
   `categoryVersion` text DEFAULT NULL,
   `version` varchar(255) NOT NULL DEFAULT '',
   `type` enum('reviewed','taged', 'decision') NOT NULL DEFAULT 'reviewed',
