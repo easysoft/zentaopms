@@ -1138,7 +1138,7 @@ class customModel extends model
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return (int)$this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = CAST(t2.id AS CHAR)')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t2.model')->eq('scrum')
@@ -1160,7 +1160,7 @@ class customModel extends model
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return (int)$this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = CAST(t2.id AS CHAR)')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t2.model')->eq('scrum')
