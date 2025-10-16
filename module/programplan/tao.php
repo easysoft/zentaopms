@@ -93,7 +93,7 @@ class programplanTao extends programplanModel
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
-        $this->dao->update(TABLE_PROJECT)->data($plan, 'point')->autoCheck()
+        $this->dao->update(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->autoCheck()
             ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$relatedIdList}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$planID} and type in ('sprint','stage','kanban') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->where('id')->eq($planID)
