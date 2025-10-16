@@ -13,7 +13,7 @@ class myIm extends im
      * @access public
      * @return void
      */
-    public function authorize($account = '', $token = '', $device = '', $url = '')
+    public function authorize(string $account = '', string $token = '', string $device = '', string $url = '')
     {
         if(!empty($url)) $url = str_replace('_', $this->config->requestFix, $url);
         if(empty($account) || empty($token)) die('Invalid params. Please provide account, token and url.');
