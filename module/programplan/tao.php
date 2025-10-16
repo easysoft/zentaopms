@@ -26,7 +26,7 @@ class programplanTao extends programplanModel
         if(empty($executionID)) return array();
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
 
-        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+        $stageList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
@@ -45,6 +45,24 @@ class programplanTao extends programplanModel
             ->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id', false);
+
+        if($projectModel == 'ipd')
+        {
+            $stagePointGroup = $this->dao->select('execution,category,categoryTitle')->from(TABLE_OBJECT)
+                ->where('execution')->in(array_keys($stageList))
+                ->andWhere('type')->eq('decision')
+                ->andWhere('enabled')->eq('1')
+                ->fetchGroup('execution', 'category');
+            foreach($stageList as $stage)
+            {
+                $stage->enabledPoints = array();
+                if(isset($stagePointGroup[$stage->id]))
+                {
+                    foreach($stagePointGroup[$stage->id] as $point) $stage->enabledPoints[$point->category] = $point->categoryTitle;
+                }
+            }
+        }
+        return $stageList;
     }
 
     /**
@@ -75,7 +93,7 @@ class programplanTao extends programplanModel
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
-        $this->dao->update(TABLE_PROJECT)->data($plan, 'point')->autoCheck()
+        $this->dao->update(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->autoCheck()
             ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$relatedIdList}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$planID} and type in ('sprint','stage','kanban') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->where('id')->eq($planID)
@@ -549,7 +567,7 @@ class programplanTao extends programplanModel
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;
         if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
-        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point')->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->exec();
 
         if(dao::isError()) return false;
 
@@ -557,7 +575,7 @@ class programplanTao extends programplanModel
         $this->insertProjectSpec($stageID, $plan);
 
         /* Ipd project create default review points. */
-        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
+        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $stageID, $plan->defaultPoint);
 
         if($plan->type == 'kanban')
         {
