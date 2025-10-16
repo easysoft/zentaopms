@@ -83,6 +83,7 @@ window.executeZentaoPrompt = async function(info, auto)
             required: ['data', 'explain'],
         },
         fn: (response) => {
+            console.log('> executeZentaoPrompt', info.name, {info, response});
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
