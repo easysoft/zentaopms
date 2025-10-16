@@ -201,6 +201,7 @@ div(
                 ? null
                 : div(
                     setClass('form-container p-1 flex-1 overflow-y-auto'),
+                    setID('miniProgramForm'),
                     form(
                         set::grid(false),
                         set::actions(array()),
