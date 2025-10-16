@@ -126,6 +126,14 @@ class Date
     }
 
     /**
+     * Return the Default timezone, or local timezone if default is not set.
+     */
+    public static function getDefaultOrLocalTimezone(): DateTimeZone
+    {
+        return self::$defaultTimeZone ?? new DateTimeZone(date_default_timezone_get());
+    }
+
+    /**
      * Validate a timezone.
      *
      * @param DateTimeZone|string $timeZone The timezone to validate, either as a timezone string or object
@@ -489,5 +497,13 @@ class Date
         }
 
         return $day;
+    }
+
+    public static function dateTimeFromTimestamp($date, $timeZone = null)
+    {
+        $dtobj = \DateTime::createFromFormat('U', $date) ?: new \DateTime();
+        $dtobj->setTimeZone($timeZone ?? self::getDefaultOrLocalTimezone());
+
+        return $dtobj;
     }
 }

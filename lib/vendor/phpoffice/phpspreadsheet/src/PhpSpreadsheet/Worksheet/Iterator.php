@@ -42,7 +42,7 @@ class Iterator implements \Iterator
     /**
      * Rewind iterator.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -52,7 +52,7 @@ class Iterator implements \Iterator
      *
      * @return Worksheet
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->subject->getSheet($this->position);
     }
@@ -62,7 +62,7 @@ class Iterator implements \Iterator
      *
      * @return int
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }
@@ -70,7 +70,7 @@ class Iterator implements \Iterator
     /**
      * Next value.
      */
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -80,7 +80,7 @@ class Iterator implements \Iterator
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->position < $this->subject->getSheetCount() && $this->position >= 0;
     }

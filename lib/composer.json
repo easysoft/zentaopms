@@ -52,6 +52,11 @@
             },
             "pclzip/pclzip": {
                 "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+            },
+            "phpoffice/phpspreadsheet": {
+                "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
+                "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
+                "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch"
             }
         }
     },

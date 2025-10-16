@@ -1285,6 +1285,13 @@
             },
             "time": "2019-07-08T21:21:25+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
+                    "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
+                    "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
