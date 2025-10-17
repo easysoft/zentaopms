@@ -34,7 +34,8 @@
         }
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.7"
+        "cweagans/composer-patches": "^1.7",
+        "rector/rector": "^2.2"
     },
     "extra": {
         "patches": {

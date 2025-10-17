@@ -217,6 +217,15 @@
             'reference' => '9d6ca36a6c2dd434765b1071b2644a1c683b385d',
             'dev_requirement' => false,
         ),
+        'phpstan/phpstan' => array(
+            'pretty_version' => '2.1.31',
+            'version' => '2.1.31.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpstan/phpstan',
+            'aliases' => array(),
+            'reference' => 'ead89849d879fe203ce9292c6ef5e7e76f867b96',
+            'dev_requirement' => true,
+        ),
         'psr/simple-cache' => array(
             'pretty_version' => '1.0.1',
             'version' => '1.0.1.0',
@@ -225,6 +234,15 @@
             'aliases' => array(),
             'reference' => '408d5eafb83c57f6365a3ca330ff23aa4a5fa39b',
             'dev_requirement' => false,
+        ),
+        'rector/rector' => array(
+            'pretty_version' => '2.2.3',
+            'version' => '2.2.3.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rector/rector',
+            'aliases' => array(),
+            'reference' => 'd27f976a332a87b5d03553c2e6f04adbe5da034f',
+            'dev_requirement' => true,
         ),
         'rmccue/requests' => array(
             'pretty_version' => 'v2.0.15',

@@ -1,0 +1,67 @@
+{
+    "name": "rector\/rector-doctrine",
+    "type": "rector-extension",
+    "license": "MIT",
+    "description": "Rector upgrades rules for Doctrine",
+    "require": {
+        "php": ">=8.2",
+        "symfony\/yaml": "^7.2"
+    },
+    "require-dev": {
+        "doctrine\/doctrine-bundle": "^2.14",
+        "doctrine\/orm": "^2.20",
+        "phpstan\/extension-installer": "^1.4",
+        "phpstan\/phpstan": "^2.1.14",
+        "phpstan\/phpstan-deprecation-rules": "^2.0",
+        "phpstan\/phpstan-webmozart-assert": "^2.0",
+        "phpunit\/phpunit": "^11.5",
+        "rector\/rector-src": "dev-main",
+        "rector\/type-perfect": "^2.1",
+        "phpecs\/phpecs": "^2.1",
+        "symplify\/phpstan-rules": "^14.6.9",
+        "symplify\/vendor-patches": "^11.3",
+        "tomasvotruba\/class-leak": "^2.0",
+        "tracy\/tracy": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\Doctrine\\": [
+                "src",
+                "rules"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\Doctrine\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ]
+        },
+        "classmap": [
+            "stubs"
+        ],
+        "files": [
+            "tests\/debug_functions.php"
+        ]
+    },
+    "scripts": {
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi",
+        "rector": "vendor\/bin\/rector --ansi",
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi"
+    },
+    "extra": {
+        "enable-patching": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "cweagans\/composer-patches": true,
+            "rector\/extension-installer": true,
+            "phpstan\/extension-installer": true
+        }
+    }
+}
