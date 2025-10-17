@@ -15,7 +15,7 @@ featureBar();
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
 if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}"), 'data-toggle' => 'modal');
-if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}"));
+if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}"));
 toolbar
 (
     !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
