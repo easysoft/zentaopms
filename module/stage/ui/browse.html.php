@@ -22,6 +22,42 @@ toolbar
     !empty($createItem) ? item(set($createItem)) : null
 );
 
+if($this->config->edition == 'open')
+{
+    if(hasPriv('stage', 'settype'))
+    {
+        $menuItems[] = li
+        (
+            setClass('menu-item'),
+            a
+            (
+                set::href(createLink('stage', 'settype')),
+                $lang->stage->setType
+            )
+        );
+    }
+
+    $menuItems[] = li
+    (
+        setClass('menu-item'),
+        a
+        (
+            setClass('active'),
+            set::href(createLink('stage', 'browse')),
+            $lang->stage->browse
+        )
+    );
+
+    sidebar
+    (
+        div
+        (
+            setClass('cell p-2.5 bg-white'),
+            menu($menuItems)
+        )
+    );
+}
+
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
 dtable
 (
