@@ -86,7 +86,17 @@ class control extends baseControl
 
         $output = $this->view ? json_encode($this->view) : null;
 
-        if($this->app->responseExtractor != '*')
+        if($this->app->apiVersion == 'v1')
+        {
+            $output = array();
+
+            $output['status'] = is_object($this->view) ? 'success' : 'fail';
+            $output['data']   = json_encode($this->view) ? json_encode($this->view) : '';
+            $output['md5']    = md5($output['data']);
+
+            $this->output = json_encode($output);
+        }
+        elseif($this->app->responseExtractor != '*')
         {
             $this->app->loadClass('jsonextractor');
             $extractor = new jsonextractor();
