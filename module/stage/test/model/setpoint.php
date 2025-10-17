@@ -8,7 +8,7 @@ cid=1
 - 测试修改评审点标题 @TR1 change
 - 测试修改评审点的审批流 @2
 - 测试修改评审点的顺序 @2
-- 测试删除评审点 @0
+- 测试删除评审点 @1
 - 测试添加评审点第6条的title属性 @test add point
 
 */
@@ -65,8 +65,8 @@ $result = $stageTester->dao->select('`order`')->from(TABLE_DECISION)->where('id'
 r($result) && p() && e('2'); //测试修改评审点的顺序
 
 $stageTester->setPoint('DCP', 4, array());
-$result = $stageTester->dao->select('*')->from(TABLE_DECISION)->where('stage')->eq(4)->fetchAll();
-r(count($result)) && p() && e('0'); //测试删除评审点
+$result = $stageTester->dao->select('*')->from(TABLE_DECISION)->where('stage')->eq(4)->fetchAll('id');
+r($result) && p('4:deleted') && e('1'); //测试删除评审点
 
 $addPoint = new stdClass();
 $addPoint->id    = 0;
