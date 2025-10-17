@@ -31,6 +31,7 @@ $lang->stage->DCPpoint  = 'DCP评审点';
 $lang->stage->TRname    = 'TR评审点名称';
 $lang->stage->DCPname   = 'DCP评审点名称';
 $lang->stage->pointFlow = '审批流';
+$lang->stage->order     = '排序';
 
 $lang->stage->typeList['mix']     = '综合';
 $lang->stage->typeList['request'] = '需求';
