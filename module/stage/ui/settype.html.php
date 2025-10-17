@@ -129,6 +129,19 @@ $menuItems[] = li
     )
 );
 
+if($config->edition == 'open' && hasPriv('stage', 'browse'))
+{
+    $menuItems[] = li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('stage', 'browse')),
+            $lang->stage->browse
+        )
+    );
+}
+
 div
 (
     setClass('row has-sidebar-left'),
