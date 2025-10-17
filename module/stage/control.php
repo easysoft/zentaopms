@@ -250,4 +250,17 @@ class stage extends control
         $this->view->stagePoints = $this->stage->getStagePoints($type, $stageID);
         $this->display();
     }
+
+    /**
+     * 更新排序。
+     * Update order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrder()
+    {
+        $sortedIdList = json_decode($this->post->sortedIdList, true);
+        $this->stage->updateOrder($sortedIdList);
+    }
 }

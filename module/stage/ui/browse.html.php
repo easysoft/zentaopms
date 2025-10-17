@@ -28,5 +28,9 @@ dtable
     set::cols($config->stage->dtable->fieldList),
     set::data($tableData),
     set::orderBy($orderBy),
-    set::sortLink(createLink('stage', 'browse', "groupID={$groupID}&orderBy={name}_{sortType}"))
+    set::sortLink(createLink('stage', 'browse', "groupID={$groupID}&orderBy={name}_{sortType}")),
+    set::plugins(array('sortable')),
+    set::sortHandler('.move-stage'),
+    set::onSortEnd(jsRaw('window.onSortEnd')),
+    set::onRenderCell(jsRaw('window.renderCell'))
 );

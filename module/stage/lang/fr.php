@@ -31,6 +31,7 @@ $lang->stage->DCPpoint  = 'DCP Point';
 $lang->stage->TRname    = 'TR Point Name';
 $lang->stage->DCPname   = 'DCP Point Name';
 $lang->stage->pointFlow = 'Approval Flow';
+$lang->stage->order     = 'Order';
 
 $lang->stage->typeList['mix']     = 'Mix';
 $lang->stage->typeList['request'] = 'Story';

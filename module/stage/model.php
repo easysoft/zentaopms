@@ -384,4 +384,20 @@ class stageModel extends model
         }
         return true;
     }
+
+    /**
+     * 更新排序。
+     * Update order.
+     *
+     * @param  array  $sortedIdList
+     * @access public
+     * @return void
+     */
+    public function updateOrder(array $sortedIdList)
+    {
+        foreach($sortedIdList as $stageID => $order)
+        {
+            $this->dao->update(TABLE_STAGE)->set('order')->eq($order + 1)->where('id')->eq($stageID)->exec();
+        }
+    }
 }
