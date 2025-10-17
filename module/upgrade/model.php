@@ -11310,7 +11310,7 @@ class upgradeModel extends model
                 if(!empty($projectWorkflowGroup[$module->workflowGroup]))
                 {
                     $projects = array_keys($projectWorkflowGroup[$module->workflowGroup]);
-                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($value)->andWhere('project')->in($projects)->exec();
+                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in($projects)->exec();
                 }
             }
 
@@ -11324,7 +11324,7 @@ class upgradeModel extends model
                 if(!empty($projectWorkflowGroup[$module->workflowGroup]))
                 {
                     $projects = array_keys($projectWorkflowGroup[$module->workflowGroup]);
-                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($value)->andWhere('project')->in($projects)->exec();
+                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in($projects)->exec();
                 }
             }
         }
