@@ -1008,7 +1008,7 @@ class testtaskModel extends model
         return $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
-            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
+            ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
