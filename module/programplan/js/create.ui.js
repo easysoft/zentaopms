@@ -259,11 +259,11 @@ window.handleRenderRow = function($row, index, data)
                     let hint     = text;
 
                     /* 如果已经评审过，则置灰不能选。*/
-                    //if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
-                    //{
-                    //    disabled = true;
-                    //    hint     = reviewedPointTip;
-                    //}
+                    if(reviewedPoints[point] !== undefined && reviewedPoints[point].disabled)
+                    {
+                        disabled = true;
+                        hint     = reviewedPointTip;
+                    }
 
                     items.push({text: text, value: point, disabled: disabled, hint: hint});
                 }
@@ -296,11 +296,11 @@ window.handleRenderRow = function($row, index, data)
         {
             let selection = $row.find('div.picker-multi-selection');
             selection.each(function(index, element) {
-                /* 获取title。*/
-                let $title = $(element).attr('title');
+                /* 获取评审点ID。*/
+                let pointID = $(element).find('div.picker-deselect-btn').data('value');
 
                 /* 如果该评审点以提交评审，则不能取消选择。*/
-                if(reviewedPoints[$title] !== undefined && reviewedPoints[$title].disabled)
+                if(reviewedPoints[pointID] !== undefined && reviewedPoints[pointID].disabled)
                 {
                     $(element).attr('title', reviewedPointTip); // 修改title
                     $(element).find(".picker-deselect-btn").remove(); // 禁用点击事件

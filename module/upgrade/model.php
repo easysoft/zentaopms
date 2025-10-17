@@ -12575,6 +12575,52 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->exec();
 
         $this->dao->exec('ALTER TABLE ' . TABLE_STAGE . ' DROP COLUMN `projectType`');
+        return true;
+    }
+
+    /**
+     * 升级评审点评审。
+     * Upgrade object of decision.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeObjectOfDecision()
+    {
+        $ipdProject = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('model')->eq('ipd')->andWhere('type')->eq('project')->fetchPairs('id');
+        if(empty($ipdProject)) return true;
+
+        $this->app->loadConfig('review');
+        $stagePointGroup = array();
+        $ipdProjectStage = $this->dao->select('id,project,attribute')->from(TABLE_PROJECT)->where('project')->in(array_keys($ipdProject))->andWhere('type')->eq('stage')->fetchGroup('project', 'attribute');
+        foreach($ipdProjectStage as $projectID => $stageList)
+        {
+            if(!isset($stagePointGroup[$projectID])) $stagePointGroup[$projectID] = array();
+            foreach($stageList as $attribute => $stage)
+            {
+                foreach($this->config->review->ipdReviewPoint->$attribute as $pointCategory)
+                {
+                    $stagePointGroup[$projectID][$pointCategory] = $stage->id;
+                }
+            }
+        }
+
+        $decisionGroup  = $this->dao->select('id,workflowGroup,category')->from(TABLE_DECISION)->fetchGroup('workflowGroup', 'category');
+        $ipdStagePoints = $this->dao->select('*')->from(TABLE_OBJECT)->where('project')->in(array_keys($ipdProject))->andWhere('category')->in($this->config->review->ipdPointOrder)->fetchAll();
+        foreach($ipdStagePoints as $point)
+        {
+            $category      = $point->category;
+            $projectID     = $point->project;
+            $workflowGroup = $ipdProject[$projectID];
+
+            $this->dao->update(TABLE_OBJECT)
+                ->set('categoryTitle')->eq($category)
+                ->set('execution')->eq($stagePointGroup[$projectID][$category])
+                ->set('category')->eq($decisionGroup[$workflowGroup][$category]->id)
+                ->where('id')->eq($point->id)
+                ->exec();
+        }
+        return true;
     }
 
     /**

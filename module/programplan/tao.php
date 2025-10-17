@@ -452,11 +452,12 @@ class programplanTao extends programplanModel
     {
         if($point->end and !helper::isZeroDate($point->end)) return $point->end;
 
-        $end     = $reviewDeadline[$planID]['stageEnd'];
-        $begin   = $reviewDeadline[$planID]['stageBegin'];
+        $end   = $reviewDeadline[$planID]['stageEnd'];
+        $begin = $reviewDeadline[$planID]['stageBegin'];
 
-        if(strpos($point->category, "DCP") !== false) $end = $this->getReviewDeadline($end, 2);
-        if(strpos($point->category, "TR") !== false)
+        $pointType = $this->dao->select('type')->from(TABLE_DECISION)->where('id')->eq($point->id)->fetch('type');
+        if($pointType == 'DCP') $end = $this->getReviewDeadline($end, 2);
+        if($pointType == 'TR')
         {
             if(isset($reviewDeadline[$planID]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$planID]['taskEnd'])) return $reviewDeadline[$planID]['taskEnd'];
             $end = $this->getReviewDeadline($end);
