@@ -21,7 +21,7 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function browse(int $groupID = 0, string $orderBy = "id_asc")
+    public function browse(int $groupID = 0, string $orderBy = "order_asc")
     {
         $workflowGroup = $this->loadModel('workflowgroup')->getByID($groupID);
         if($workflowGroup->projectModel == 'ipd')
@@ -108,7 +108,7 @@ class stage extends control
             $this->stage->batchCreate($groupID, $stages);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink('browse', "groupID={$groupID}&orderBy=id_asc")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink('browse', "groupID={$groupID}")));
         }
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
@@ -249,5 +249,18 @@ class stage extends control
         $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
         $this->view->stagePoints = $this->stage->getStagePoints($type, $stageID);
         $this->display();
+    }
+
+    /**
+     * 更新排序。
+     * Update order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrder()
+    {
+        $sortedIdList = json_decode($this->post->sortedIdList, true);
+        $this->stage->updateOrder($sortedIdList);
     }
 }

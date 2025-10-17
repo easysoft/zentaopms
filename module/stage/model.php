@@ -46,6 +46,10 @@ class stageModel extends model
             ->autoCheck()
             ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
             ->exec();
+        $stageID = $this->dao->lastInsertID();
+
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($stage->workflowGroup)->andWhere('deleted')->eq('0')->fetch('maxOrder');
+        $this->dao->update(TABLE_STAGE)->set('order')->eq((int)$maxOrder + 1)->where('id')->eq($stageID)->exec();
 
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
@@ -80,6 +84,8 @@ class stageModel extends model
             }
         }
 
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
+
         $this->loadModel('action');
         foreach($stages as $rowID => $stage)
         {
@@ -97,6 +103,9 @@ class stageModel extends model
 
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
+
+            $stageOrder = empty($maxOrder) ? 1 : ++ $maxOrder;
+            $this->dao->update(TABLE_STAGE)->set('order')->eq($stageOrder)->where('id')->eq($stageID)->exec();
         }
 
         return true;
@@ -147,7 +156,7 @@ class stageModel extends model
      * @access public
      * @return array
      */
-    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, int $groupID = 0): array
+    public function getStages(string $orderBy = 'order_desc', int $projectID = 0, int $groupID = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
 
@@ -383,5 +392,21 @@ class stageModel extends model
             $this->dao->update(TABLE_DECISION)->set('deleted')->eq('1')->where('id')->in(array_keys($oldStagePoints))->exec();
         }
         return true;
+    }
+
+    /**
+     * 更新排序。
+     * Update order.
+     *
+     * @param  array  $sortedIdList
+     * @access public
+     * @return void
+     */
+    public function updateOrder(array $sortedIdList)
+    {
+        foreach($sortedIdList as $stageID => $order)
+        {
+            $this->dao->update(TABLE_STAGE)->set('order')->eq($order + 1)->where('id')->eq($stageID)->exec();
+        }
     }
 }
