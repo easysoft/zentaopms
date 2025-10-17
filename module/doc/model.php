@@ -999,7 +999,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.templateType')->eq('')
-                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t2.id')->subIn($docSQL)
@@ -1023,7 +1023,7 @@ class docModel extends model
             $docIdList = $type == 'editedby' ? $this->docTao->getEditedDocIdList() : array();
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
@@ -2858,7 +2858,7 @@ class docModel extends model
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.lib')->ne('')
+            ->andWhere('t2.lib')->ne(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
@@ -2869,7 +2869,7 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('lib')->ne('')
+            ->andWhere('lib')->ne(0)
             ->fetch();
 
         $statistic->myDocs = $myStatistic->myDocs;
