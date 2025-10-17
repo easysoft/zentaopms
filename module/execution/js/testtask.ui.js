@@ -81,7 +81,7 @@ $(function()
     initialOptions = $.extend(true, {}, options);
 });
 
-function resetFooterPadding()
+window.resetFooterPadding = function()
 {
     const width = $('#taskTable .dtable-body .dtable-cells-container .dtable-cell.is-last-row').width();
     $('#taskTable .dtable-footer').css('padding-left', width + 12);

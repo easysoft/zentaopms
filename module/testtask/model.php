@@ -324,7 +324,7 @@ class testtaskModel extends model
             ->andWhere('(t1.owner')->eq($account)
             ->orWhere("FIND_IN_SET('$account', t1.members)")
             ->markRight(1)
-            ->andWhere('t2.id')->in($this->app->user->view->sprints)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
