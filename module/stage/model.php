@@ -48,8 +48,8 @@ class stageModel extends model
             ->exec();
         $stageID = $this->dao->lastInsertID();
 
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($stage->workflowGroup)->fetch('maxOrder');
-        $this->dao->update(TABLE_STAGE)->set('order')->eq($maxOrder + 1)->where('id')->eq($stageID)->exec();
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($stage->workflowGroup)->andWhere('deleted')->eq('0')->fetch('maxOrder');
+        $this->dao->update(TABLE_STAGE)->set('order')->eq((int)$maxOrder + 1)->where('id')->eq($stageID)->exec();
 
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
@@ -84,7 +84,7 @@ class stageModel extends model
             }
         }
 
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->fetch('maxOrder');
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
 
         $this->loadModel('action');
         foreach($stages as $rowID => $stage)
@@ -104,7 +104,7 @@ class stageModel extends model
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
 
-            $stageOrder = $maxOrder ++;
+            $stageOrder = empty($maxOrder) ? 1 : ++ $maxOrder;
             $this->dao->update(TABLE_STAGE)->set('order')->eq($stageOrder)->where('id')->eq($stageID)->exec();
         }
 
