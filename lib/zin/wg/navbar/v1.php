@@ -36,7 +36,7 @@ class navbar extends wg
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return;
 
-        $project          = $app->dbh->query('SELECT id,model FROM ' . TABLE_PROJECT . " WHERE `id` = '{$object->project}'")->fetch();
+        $project          = $app->dbh->query('SELECT id,`model` FROM ' . TABLE_PROJECT . " WHERE `id` = '{$object->project}'")->fetch();
         $executionPairs   = array();
         $userCondition    = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy          = in_array($project->model, array('waterfall', 'waterfallplus')) ? 'ORDER BY `order` ASC' : 'ORDER BY `id` DESC';
