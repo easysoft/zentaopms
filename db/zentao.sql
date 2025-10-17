@@ -806,7 +806,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `lib` varchar(30) NOT NULL DEFAULT '',
+  `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
   `templateDesc` text NULL,
