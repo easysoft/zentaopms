@@ -148,7 +148,8 @@ $lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/Kanban cannot create a sub stage.';
 $lang->programplan->error->sameType        = 'Type of the stage must be as same as parent: "%s"';
 $lang->programplan->error->emptyParentName = "Contains sub stages, stage names cannot be empty.";
-$lang->programplan->error->noProject       = "When there are no waterfall, waterfall plus, or IPD {$lang->projectCommon} in the system, Gantt charts cannot be added.";
+$lang->programplan->error->noProject       = "When there are no waterfall, waterfall plus {$lang->projectCommon} in the system, Gantt charts cannot be added.";
+$lang->programplan->error->noProject4IPD   = "When there are no waterfall, waterfall plus, or IPD {$lang->projectCommon} in the system, Gantt charts cannot be added.";
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';
