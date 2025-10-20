@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 stageModel->getStagePoints();
+timeout=0
 cid=1
 
 - 获取阶段1的TR评审点
@@ -41,7 +43,7 @@ $approvalFlowObject = zenData('approvalflowobject');
 $approvalFlowObject->id->range('1-5');
 $approvalFlowObject->root->range('4');
 $approvalFlowObject->objectID->range('1-5');
-$approvalFlowObject->objectType->range('point');
+$approvalFlowObject->objectType->range('decision');
 $approvalFlowObject->extra->range('review');
 $approvalFlowObject->gen(5);
 
