@@ -128,7 +128,7 @@ class stageModel extends model
         if(isset($this->config->setPercent) && $this->config->setPercent == 1)
         {
             $totalPercent = $this->getTotalPercent($oldStage->workflowGroup);
-            if(round($totalPercent + (float)$stage->percent - $oldStage->percent) > 100)
+            if(round($totalPercent + (float)$stage->percent - (float)$oldStage->percent) > 100)
             {
                 dao::$errors['percent'] = $this->lang->stage->error->percentOver;
                 return false;
