@@ -82,7 +82,6 @@ window.executeZentaoPrompt = async function(info, auto)
             }
         },
         fn: (response) => {
-            console.log('> executeZentaoPrompt', info.name, {info, response});
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
@@ -219,24 +218,6 @@ function registerZentaoAIPlugin(lang)
         },
     });
 
-    plugin.bindEvent('updatepage', function(_context, data)
-    {
-        if(data.page.path === 'story-view')
-        {
-            const pageWindow         = $.apps.getLastApp().iframe.contentWindow;
-            const page$              = pageWindow.$;
-            const $firstSectionTitle = page$('#mainContent .detail-sections[zui-key="main"] > .detail-section').first().children('.detail-section-title,.flex.items-center').first();
-            if(!$firstSectionTitle.length) return;
-
-            let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
-            if(!$injectActions.length)
-            {
-                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${lang.aiReview}</button></div>`).appendTo($firstSectionTitle);
-                $firstSectionTitle.find('span').first().addClass('flex-auto');
-            }
-        }
-    });
-
     plugin.defineContextProvider(
     {
         code: 'currentPage',
@@ -273,9 +254,9 @@ function registerZentaoAIPlugin(lang)
     const zentaoVersion = window.config?.version || '';
     const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
 
-    ["story", "demand", "bug", "doc", "design", "feedback"].forEach(objectType => {
-        if(objectType === "feedback" && !zentaoEdition) return;
-        if(objectType === "demand" && zentaoEdition !== "ipd") return;
+    ['story', 'demand', 'bug', 'doc', 'design', 'feedback'].forEach(objectType => {
+        if(objectType === 'feedback' && !zentaoEdition) return;
+        if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
         plugin.defineContextProvider({
             code: `${objectType}Lib`,
             title: lang[objectType],
@@ -287,15 +268,15 @@ function registerZentaoAIPlugin(lang)
             },
             generate: (userPrompt, { plugin }) => {
                 const objectName = plugin?.getLang(objectType) ?? objectType;
-                const matches = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+                const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
                 {
                     return matches.map(match => {
                         const objectID = match[2];
                         return {
-                            code: `${objectType}-${objectID}`,
+                            code:      `${objectType}-${objectID}`,
                             recommend: true,
-                            title: `${objectName} #${objectID}`,
+                            title:     `${objectName} #${objectID}`,
                             data: () => ({
                                 memory:
                                 {
