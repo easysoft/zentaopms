@@ -6,11 +6,11 @@ title=测试 projectModel::fetchProjectList();
 timeout=0
 cid=17905
 
-- 查询状态为空的项目 @0
+- 查询状态为空的项目第11条的name属性 @项目11
 - 获取所有项目数量 @9
 - 查询未完成的第一个项目的code第11条的code属性 @project11
 - 获取我参与的一个项目的项目名第12条的name属性 @项目12
-- 获取错误类型的项目 @0
+- 获取错误类型的项目第13条的name属性 @项目13
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -52,8 +52,8 @@ su('admin');
 $statusList = array('', 'all', 'undone', 'unclosed', 'error');
 
 $projectTester = new projectTest();
-r($projectTester->fetchProjectListTest($statusList[0]))        && p()          && e('0');         // 查询状态为空的项目
+r($projectTester->fetchProjectListTest($statusList[0]))        && p('11:name') && e('项目11');    // 查询状态为空的项目
 r(count($projectTester->fetchProjectListTest($statusList[1]))) && p()          && e('9');         // 获取所有项目数量
 r($projectTester->fetchProjectListTest($statusList[2]))        && p('11:code') && e('project11'); // 查询未完成的第一个项目的code
 r($projectTester->fetchProjectListTest($statusList[3], true))  && p('12:name') && e('项目12');    // 获取我参与的一个项目的项目名
-r($projectTester->fetchProjectListTest($statusList[4]))        && p()          && e('0');         // 获取错误类型的项目
+r($projectTester->fetchProjectListTest($statusList[4]))        && p('13:name') && e('项目13');    // 获取错误类型的项目
