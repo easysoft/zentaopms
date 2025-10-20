@@ -239,6 +239,7 @@ class stage extends control
 
         if(!empty($_POST))
         {
+            $this->lang->stage->title = $type == 'TR' ? $this->lang->stage->TRname : $this->lang->stage->DCPname;
             $points = form::batchData()->get();
             $this->stage->setPoint($type, $stageID, $points);
             if(dao::isError()) return $this->sendError(dao::getError());
