@@ -12545,7 +12545,7 @@ class upgradeModel extends model
 
                         $decisionFlow = new stdClass();
                         $decisionFlow->flow        = 1;
-                        $decisionFlow->objectType  = 'point';
+                        $decisionFlow->objectType  = 'decision';
                         $decisionFlow->relatedBy   = 'system';
                         $decisionFlow->relatedDate = helper::now();
                         foreach($this->config->review->ipdReviewPoint->{$stage->type} as $index => $point)
