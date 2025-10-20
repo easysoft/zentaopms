@@ -33,7 +33,7 @@ $approvalFlowObject->id->range('1-5');
 $approvalFlowObject->root->range('4');
 $approvalFlowObject->flow->range('1');
 $approvalFlowObject->objectID->range('1-5');
-$approvalFlowObject->objectType->range('point');
+$approvalFlowObject->objectType->range('decision');
 $approvalFlowObject->extra->range('review');
 $approvalFlowObject->gen(5);
 
@@ -53,7 +53,7 @@ $changeFlow->id    = 2;
 $changeFlow->title = 'TR2';
 $changeFlow->flow  = 2;
 $stageTester->setPoint('TR', 2, array(1 => $changeFlow));
-$result = $stageTester->dao->select('flow')->from(TABLE_APPROVALFLOWOBJECT)->where('objectType')->eq('point')->andWhere('objectID')->eq(2)->fetch('flow');
+$result = $stageTester->dao->select('flow')->from(TABLE_APPROVALFLOWOBJECT)->where('objectType')->eq('decision')->andWhere('objectID')->eq(2)->fetch('flow');
 r($result) && p() && e('2'); //测试修改评审点的审批流
 
 $changeOrder = new stdClass();
