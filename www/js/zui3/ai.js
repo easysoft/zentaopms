@@ -218,24 +218,6 @@ function registerZentaoAIPlugin(lang)
         },
     });
 
-    plugin.bindEvent('updatepage', function(_context, data)
-    {
-        if(data.page.path === 'story-view')
-        {
-            const pageWindow         = $.apps.getLastApp().iframe.contentWindow;
-            const page$              = pageWindow.$;
-            const $firstSectionTitle = page$('#mainContent .detail-sections[zui-key="main"] > .detail-section').first().children('.detail-section-title,.flex.items-center').first();
-            if(!$firstSectionTitle.length) return;
-
-            let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
-            if(!$injectActions.length)
-            {
-                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${lang.aiReview}</button></div>`).appendTo($firstSectionTitle);
-                $firstSectionTitle.find('span').first().addClass('flex-auto');
-            }
-        }
-    });
-
     plugin.defineContextProvider(
     {
         code: 'currentPage',
