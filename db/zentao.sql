@@ -16215,6 +16215,53 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+-- DROP TABLE IF EXISTS `zt_ai_knowledgelib`;
+CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `type` varchar(30) NOT NULL DEFAULT '',
+  `importType` varchar(10) NOT NULL DEFAULT '',
+  `importID` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` text DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `published` enum('0','1') NOT NULL DEFAULT '0',
+  `publishedDate` datetime DEFAULT NULL,
+  `publishedBy` varchar(30) NOT NULL DEFAULT '',
+  `externalID` varchar(255) NOT NULL DEFAULT '',
+  `syncedBy` varchar(30) NOT NULL DEFAULT '',
+  `syncedDate` datetime DEFAULT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DROP TABLE IF EXISTS `zt_ai_knowledgeitem`;
+CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `lib` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `type` varchar(30) NOT NULL DEFAULT '',
+  `file` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `objectType` varchar(10) NOT NULL DEFAULT '',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `content` text DEFAULT NULL,
+  `contentType` varchar(10) NOT NULL DEFAULT 'markdown',
+  `attrs` text DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `acl` varchar(10) NOT NULL DEFAULT 'open',
+  `groups` varchar(255) NOT NULL DEFAULT '',
+  `users` text DEFAULT NULL,
+  `externalID` varchar(255) NOT NULL DEFAULT '',
+  `syncedDate` datetime DEFAULT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
