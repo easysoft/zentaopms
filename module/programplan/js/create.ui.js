@@ -124,7 +124,7 @@ window.handleRenderRow = function($row, index, data)
     /* 存储当前行层级信息： */
     this.nestedLevelMap[$row.attr('data-gid')] = level;
     $row.attr('data-level', level);
-    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
+    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" data-name="level" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
 
     /* 追加 parent 属性，以记录父级index。 */
     let $prevLevelRow = $prevRow;
