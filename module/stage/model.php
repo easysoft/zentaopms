@@ -390,6 +390,11 @@ class stageModel extends model
         if(!empty($oldStagePoints))
         {
             $this->dao->update(TABLE_DECISION)->set('deleted')->eq('1')->where('id')->in(array_keys($oldStagePoints))->exec();
+            $this->dao->delete()->from(TABLE_APPROVALFLOWOBJECT)
+                ->where('objectID')->in(array_keys($oldStagePoints))
+                ->andWhere('objectType')->eq('decision')
+                ->andWhere('root')->eq($stage->workflowGroup)
+                ->exec();
         }
         return true;
     }
