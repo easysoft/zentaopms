@@ -12490,6 +12490,30 @@ class upgradeModel extends model
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
 
+        if($this->config->edition == 'open')
+        {
+            $typeNamePairs   = array();
+            $needDeleteStage = array();
+            foreach($stageGroup as $projectModel => $stageList)
+            {
+                if($projectModel == 'ipd') continue;
+                foreach($stageList as $stageInfo)
+                {
+                    if(isset($typeNamePairs[$stageInfo->type]) && in_array($stageInfo->name, $typeNamePairs[$stageInfo->type]))
+                    {
+                        $needDeleteStage[$stageInfo->id] = $stageInfo->id;
+                        continue;
+                    }
+                    if(!isset($typeNamePairs[$stageInfo->type])) $typeNamePairs[$stageInfo->type] = array();
+                    $typeNamePairs[$stageInfo->type][] = $stageInfo->name;
+                }
+            }
+
+            if(!empty($needDeleteStage)) $this->dao->delete()->from(TABLE_STAGE)->where('id')->in($needDeleteStage)->exec();
+            $this->dao->delete()->from(TABLE_STAGE)->where('projectType')->eq('ipd')->exec();
+            return true;
+        }
+
         $this->app->loadConfig('project');
         $this->app->loadConfig('review');
         $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
@@ -12497,6 +12521,8 @@ class upgradeModel extends model
         {
             foreach(array_keys($flowList) as $flowCode)
             {
+                if(!isset($stageGroup[$projectModel])) continue;
+
                 foreach($stageGroup[$projectModel] as $stage)
                 {
                     if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
