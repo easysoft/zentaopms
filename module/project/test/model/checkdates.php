@@ -9,6 +9,9 @@ cid=0
 
 - 步骤1：不存在的项目ID @1
 - 步骤2：正常项目日期范围 @1
+- 步骤3：结束日期冲突属性end @项目的完成日期应大于等于执行的最大完成日期：2024-12-31
+- 步骤4：开始日期冲突属性begin @项目的开始日期应小于等于执行的最小开始日期：2024-01-01
+- 步骤5：多重日期冲突属性end @项目的完成日期应大于等于执行的最大完成日期：2024-12-31
 
 */
 
@@ -52,6 +55,12 @@ $project5->end = '2024-05-01';
 
 r($projectModel->checkDates(999, $project1)) && p() && e('1'); // 步骤1：不存在的项目ID
 r($projectModel->checkDates(1, $project2)) && p() && e('1'); // 步骤2：正常项目日期范围
-$projectModel->checkDates(1, $project3); r(dao::getError()) && p('end') && e('项目的完成日期应大于等于执行的最大完成日期：2024-12-31'); // 步骤3：结束日期冲突
-$projectModel->checkDates(1, $project4); r(dao::getError()) && p('begin') && e('项目的开始日期应小于等于执行的最小开始日期：2024-01-01'); // 步骤4：开始日期冲突
-$projectModel->checkDates(1, $project5); r(dao::getError()) && p('end') && e('项目的完成日期应大于等于执行的最大完成日期：2024-12-31'); // 步骤5：多重日期冲突
+
+$projectModel->checkDates(1, $project3);
+r(dao::getError()) && p('end') && e('项目的完成日期应大于等于执行的最大完成日期：2024-12-31'); // 步骤3：结束日期冲突
+
+$projectModel->checkDates(1, $project4);
+r(dao::getError()) && p('begin') && e('项目的开始日期应小于等于执行的最小开始日期：2024-01-01'); // 步骤4：开始日期冲突
+
+$projectModel->checkDates(1, $project5);
+r(dao::getError()) && p('end') && e('项目的完成日期应大于等于执行的最大完成日期：2024-12-31'); // 步骤5：多重日期冲突
