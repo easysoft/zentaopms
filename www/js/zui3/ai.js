@@ -266,7 +266,7 @@ function registerZentaoAIPlugin(lang)
             {
                 memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
             },
-            generate: (userPrompt, { plugin }) => {
+            generate: (userPrompt) => {
                 const objectName = lang[objectType] || objectType;
                 const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
