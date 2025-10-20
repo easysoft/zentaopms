@@ -273,7 +273,7 @@ class stageModel extends model
 
         $decisionFlow = new stdClass();
         $decisionFlow->flow        = 1;
-        $decisionFlow->objectType  = 'point';
+        $decisionFlow->objectType  = 'decision';
         $decisionFlow->relatedBy   = 'system';
         $decisionFlow->relatedDate = helper::now();
         foreach($stageList as $id => $stage)
@@ -308,7 +308,7 @@ class stageModel extends model
     {
         $stage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
         return $this->dao->select('t1.*,t2.flow')->from(TABLE_DECISION)->alias('t1')
-            ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.objectID AND t2.objectType = 'point'")
+            ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.objectID AND t2.objectType = 'decision'")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.stage')->eq($stageID)
             ->andWhere('t1.type')->eq($type)
@@ -353,7 +353,7 @@ class stageModel extends model
                     $this->dao->update(TABLE_APPROVALFLOWOBJECT)
                         ->set('flow')->eq($point->flow)
                         ->where('objectID')->eq($point->id)
-                        ->andWhere('objectType')->eq('point')
+                        ->andWhere('objectType')->eq('decision')
                         ->andWhere('root')->eq($stage->workflowGroup)
                         ->exec();
                     if(dao::isError()) return false;
@@ -378,7 +378,7 @@ class stageModel extends model
                 $approvalFlowObject = new stdClass();
                 $approvalFlowObject->root        = $stage->workflowGroup;
                 $approvalFlowObject->flow        = $point->flow;
-                $approvalFlowObject->objectType  = 'point';
+                $approvalFlowObject->objectType  = 'decision';
                 $approvalFlowObject->objectID    = $newPointID;
                 $approvalFlowObject->relatedBy   = $this->app->user->account;
                 $approvalFlowObject->relatedDate = helper::now();
