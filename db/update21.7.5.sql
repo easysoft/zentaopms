@@ -27,4 +27,6 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('all',	  'weekly', 'categoryList', 'day',      '日报',       '1', 'rnd'),
 ('all',	  'weekly', 'categoryList', 'milestone','里程碑报告', '1', 'rnd');
 
-ALTER TABLE `zt_doc` CHANGE `lib` `lib` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_doc`   CHANGE `lib` `lib` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_risk`  CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_issue` CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0';
