@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 $percentRow = '';
-if(isset($config->setPercent) && $config->setPercent == 1 && $flow->projectModel != 'ipd')
+if(isset($config->setPercent) && $config->setPercent == 1 && isset($flow->projectModel) && $flow->projectModel != 'ipd')
 {
     $percentRow = formRow(
         formGroup
@@ -53,7 +53,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->stage->type),
             set::name('type'),
-            set::items($flow->projectModel == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList)
+            set::items(isset($flow->projectModel) && $flow->projectModel == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList)
         )
     )
 );

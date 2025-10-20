@@ -393,6 +393,7 @@ class adminModel extends model
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
         $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
+        if($this->config->edition == 'open') $this->config->admin->menuGroup['feature'][] = 'stage|browse';
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
