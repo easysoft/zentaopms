@@ -82,7 +82,6 @@ window.executeZentaoPrompt = async function(info, auto)
             }
         },
         fn: (response) => {
-            console.log('> executeZentaoPrompt', info.name, {info, response});
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
@@ -273,9 +272,9 @@ function registerZentaoAIPlugin(lang)
     const zentaoVersion = window.config?.version || '';
     const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
 
-    ["story", "demand", "bug", "doc", "design", "feedback"].forEach(objectType => {
-        if(objectType === "feedback" && !zentaoEdition) return;
-        if(objectType === "demand" && zentaoEdition !== "ipd") return;
+    ['story', 'demand', 'bug', 'doc', 'design', 'feedback'].forEach(objectType => {
+        if(objectType === 'feedback' && !zentaoEdition) return;
+        if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
         plugin.defineContextProvider({
             code: `${objectType}Lib`,
             title: lang[objectType],
@@ -287,15 +286,15 @@ function registerZentaoAIPlugin(lang)
             },
             generate: (userPrompt, { plugin }) => {
                 const objectName = plugin?.getLang(objectType) ?? objectType;
-                const matches = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+                const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
                 {
                     return matches.map(match => {
                         const objectID = match[2];
                         return {
-                            code: `${objectType}-${objectID}`,
+                            code:      `${objectType}-${objectID}`,
                             recommend: true,
-                            title: `${objectName} #${objectID}`,
+                            title:     `${objectName} #${objectID}`,
                             data: () => ({
                                 memory:
                                 {
