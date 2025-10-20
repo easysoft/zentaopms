@@ -748,6 +748,7 @@ class myModel extends model
 
         $myStoryQuery = $this->session->{$queryName};
         $myStoryQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myStoryQuery);
+        if(strpos($myStoryQuery, 'result') !== false) $myStoryQuery = str_replace('t1.`result`', 't5.`result`', $myStoryQuery);
 
         return $this->myTao->fetchStoriesBySearch($myStoryQuery, $type, $orderBy, $pager, $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'story') : array());
     }
