@@ -78,8 +78,11 @@ class stage extends control
      */
     public function create(int $groupID = 0)
     {
+        $flow = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
         if($_POST)
         {
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->create->requiredFields = 'name,type';
+
             $stageData = form::data()->setDefault('workflowGroup', $groupID)->get();
             $stageID   = $this->stage->create($stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -90,7 +93,7 @@ class stage extends control
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
         $this->view->groupID = $groupID;
-        $this->view->flow    = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
+        $this->view->flow    = $flow;
 
         $this->display();
     }
@@ -105,8 +108,15 @@ class stage extends control
      */
     public function batchCreate(int $groupID = 0)
     {
+        $flow = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
         if($_POST)
         {
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd')
+            {
+                $this->config->stage->create->requiredFields = 'name,type';
+                $this->config->stage->form->batchcreate['percent']['required'] = false;
+            }
+
             $stages = form::batchData()->get();
             $this->stage->batchCreate($groupID, $stages);
 
@@ -116,7 +126,7 @@ class stage extends control
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
         $this->view->groupID = $groupID;
-        $this->view->flow    = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
+        $this->view->flow    = $flow;
 
         $this->display();
     }
@@ -132,8 +142,12 @@ class stage extends control
     public function edit(int $stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
+        $flow  = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($stage->workflowGroup);
+
         if($_POST)
         {
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->edit->requiredFields = 'name,type';
+
             $stageData = form::data()->get();
             $changes   = $this->stage->update($stageID, $stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -146,7 +160,7 @@ class stage extends control
 
         $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->edit;
         $this->view->stage = $stage;
-        $this->view->flow  = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($stage->workflowGroup);
+        $this->view->flow  = $flow;
 
         $this->display();
     }
