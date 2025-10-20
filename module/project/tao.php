@@ -802,7 +802,7 @@ class projectTao extends projectModel
     protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
     {
         $query = '';
-        if($status == 'bysearch' && $this->this->session->projectQuery !== false) $query = $this->session->projectQuery;
+        if($status == 'bysearch' && $this->session->projectQuery !== false) $query = $this->session->projectQuery;
         $query = str_replace('`id`','t1.id', $query);
 
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
@@ -811,7 +811,7 @@ class projectTao extends projectModel
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
-            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed', 'delayed'), true))->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed', 'delayed', 'bysearch'), true))->andWhere('t1.status')->eq($status)->fi()
             ->beginIF(in_array($status, array('undone', 'unclosed')))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($status == 'delayed')->andWhere('t1.status')->notIn('done,closed,suspend')->andWhere('t1.end')->lt(helper::today())->fi()
             ->beginIF($status == 'review')
