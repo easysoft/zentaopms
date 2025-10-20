@@ -14471,7 +14471,7 @@ CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
 CREATE TABLE IF NOT EXISTS `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `resolvedBy` varchar(30) NOT NULL DEFAULT '',
-  `project` varchar(255) NOT NULL DEFAULT '',
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
@@ -14508,7 +14508,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
 -- DROP TABLE IF EXISTS `zt_risk`;
 CREATE TABLE IF NOT EXISTS `zt_risk` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project` varchar(255) NOT NULL DEFAULT '',
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `source` char(30) NOT NULL DEFAULT '',
