@@ -2829,6 +2829,8 @@ class baseSQL
      */
     public function notin($ids)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+
         if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
         {
            $pattern = '/\s+(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
