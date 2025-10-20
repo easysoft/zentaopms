@@ -962,7 +962,7 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
 
-        $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
+        $auditplans = $this->loadModel('auditplan')->getList(0, 'my', $browseType, $param, $orderBy, $pager);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
