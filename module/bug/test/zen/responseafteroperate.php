@@ -7,25 +7,27 @@ title=测试 bugZen::responseAfterOperate();
 timeout=0
 cid=0
 
-- 执行bugTest模块的responseAfterOperateTest方法，参数是1, array 
+- 执行bugTest模块的responseAfterOperateTest方法，参数是1, array
  - 属性result @success
  - 属性message @操作成功
-- 执行bugTest模块的responseAfterOperateTest方法，参数是2, array 
+- 执行bugTest模块的responseAfterOperateTest方法，参数是2, array
  - 属性result @success
  - 属性message @保存成功
-- 执行bugTest模块的responseAfterOperateTest方法，参数是3, array 
+- 执行bugTest模块的responseAfterOperateTest方法，参数是3, array
  - 属性result @success
  - 属性message @自定义消息
-- 执行bugTest模块的responseAfterOperateTest方法，参数是4, array 
+- 执行bugTest模块的responseAfterOperateTest方法，参数是4, array
  - 属性result @success
  - 属性message @看板操作
-- 执行bugTest模块的responseAfterOperateTest方法，参数是5, array 
+- 执行bugTest模块的responseAfterOperateTest方法，参数是5, array
  - 属性result @success
  - 属性message @状态更新
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 3) . '/control.php';
+include dirname(__FILE__, 3) . '/zen.php';
 include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 su('admin');
