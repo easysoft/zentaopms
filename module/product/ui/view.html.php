@@ -160,9 +160,9 @@ div
                         setClass($product->status == 'normal' ? 'text-success' : 'text-gray'),
                         $this->processStatus('product', $product)
                     ),
-                    span
+                    div
                     (
-                        setClass('ml-2 flex-none'),
+                        setClass('ml-2 flex-none row items-center gap-2'),
                         $lang->product->abbr->aclList[$product->acl],
                         icon
                         (
@@ -171,9 +171,10 @@ div
                             set('data-placement', 'right'),
                             set('data-type', 'white'),
                             set('data-class-name', 'text-gray border border-light'),
-                            setClass('ml-2 mt-2 text-gray')
+                            setClass('text-gray')
                         )
-                    )
+                    ),
+                    div(setClass('ai-menu-box flex-auto'))
                 ),
                 div
                 (

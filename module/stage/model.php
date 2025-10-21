@@ -145,10 +145,11 @@ class stageModel extends model
      * @param  string $orderBy
      * @param  int    $projectID
      * @param  string $type
+     * @param  string $grade
      * @access public
      * @return array
      */
-    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
+    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, string $type = '', int $grade = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
 
@@ -160,6 +161,7 @@ class stageModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($grade)->andWhere('grade')->eq($grade)->fi()
                 ->andWhere('project')->eq($projectID)
                 ->orderBy($orderBy)
                 ->fetchAll('id');

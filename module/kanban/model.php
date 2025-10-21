@@ -3682,7 +3682,7 @@ class kanbanModel extends model
             ->beginIF($excludedID)->andWhere('kanban')->ne($excludedID)->fi()
             ->orderBy('order')
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**

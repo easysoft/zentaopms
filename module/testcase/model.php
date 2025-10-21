@@ -2797,7 +2797,7 @@ class testcaseModel extends model
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->beginIF(count($canImport) <= count($canNotImport))->andWhere('id')->in($canImport)->fi()
-            ->beginIF(count($canImport) > count($canNotImport))->andWhere('id')->notIn($canNotImport)->fi()
+            ->beginIF(count($canImport) > count($canNotImport) && !empty($canNotImport))->andWhere('id')->notIn($canNotImport)->fi()
             ->andWhere('product')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)

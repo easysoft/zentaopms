@@ -93,6 +93,7 @@ class tutorialModel extends model
         $product->totalRequirements = 0;
         $product->feedback          = 0;
         $product->ticket            = 0;
+        $product->workflowGroup     = 1;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guideTask == 'branchManage')

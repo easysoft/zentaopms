@@ -113,3 +113,8 @@ window.docAppCommands.exportWord = function(_, args)
     const url   = $.createLink('doc', `${type}2export`, `libID=${libID}&moduleID=${moduleID}&docID=${docID}`);
     window.open(url, '_self');
 };
+
+window.onPageUnmount = function()
+{
+    window._currentLibID = null;
+};

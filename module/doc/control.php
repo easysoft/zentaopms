@@ -1008,6 +1008,7 @@ class doc extends control
                     ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
                     ->setIF(!isset($_POST['readUsers']), 'readUsers', $doc->readUsers)
                     ->setIF(!isset($_POST['readGroups']), 'readGroups', $doc->readGroups)
+                    ->setIF(!isset($_POST['fromVersion']), 'fromVersion', $doc->fromVersion)
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')

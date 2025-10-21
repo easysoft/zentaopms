@@ -148,7 +148,8 @@ $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/看板不支持创建子阶段';
 $lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类型需与父阶段一致';
 $lang->programplan->error->emptyParentName = "包含子阶段，阶段名称不能为空。";
-$lang->programplan->error->noProject       = "系统中没有瀑布、融合瀑布、ipd{$lang->projectCommon}时，无法添加甘特图。";
+$lang->programplan->error->noProject       = "系统中没有瀑布、融合瀑布{$lang->projectCommon}时，无法添加甘特图。";
+$lang->programplan->error->noProject4IPD   = "系统中没有瀑布、融合瀑布、ipd{$lang->projectCommon}时，无法添加甘特图。";
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

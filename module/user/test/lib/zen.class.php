@@ -1,19 +1,12 @@
 <?php
 declare(strict_types = 1);
-class userZenTest
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class userZenTest extends baseTest
 {
-    public $userZenTest;
-    public $tester;
-
-    function __construct()
-    {
-        global $tester;
-        $this->tester = $tester;
-        $tester->app->setModuleName('user');
-
-        $this->objectModel = $tester->loadModel('user');
-        $this->userZenTest = initReference('user');
-    }
+    protected $moduleName = 'user';
+    protected $className  = 'zen';
 
     /**
      * Test checkDirPermission method.
@@ -23,15 +16,9 @@ class userZenTest
      */
     public function checkDirPermissionTest()
     {
-        try {
-            $result = callZenMethod('user', 'checkDirPermission', array());
-            if(dao::isError()) return dao::getError();
-            return 'success';
-        } catch (EndResponseException $e) {
-            return 'permission_denied';
-        } catch (Exception $e) {
-            return 'exception: ' . $e->getMessage();
-        }
+        $result = $this->invokeArgs('checkDirPermission');
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -42,7 +29,7 @@ class userZenTest
      */
     public function checkTmpTest()
     {
-        $result = callZenMethod('user', 'checkTmp', array());
+        $result = $this->invokeArgs('checkTmp');
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -57,7 +44,7 @@ class userZenTest
      */
     public function getUserForJSONTest($user = null)
     {
-        $result = callZenMethod('user', 'getUserForJSON', array($user));
+        $result = $this->invokeArgs('getUserForJSON', [$user]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -86,7 +73,7 @@ class userZenTest
             $_POST['passwordStrength'] = 1;
         }
 
-        $result = callZenMethod('user', 'login', array($referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
+        $result = $this->invokeArgs('login', [$referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot]);
         if(dao::isError()) return dao::getError();
 
         unset($_POST['account']);
@@ -106,7 +93,7 @@ class userZenTest
      */
     public function parseLoginModuleAndMethodTest($referer = '')
     {
-        $result = callZenMethod('user', 'parseLoginModuleAndMethod', array($referer));
+        $result = $this->invokeArgs('parseLoginModuleAndMethod', [$referer]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -120,10 +107,10 @@ class userZenTest
      */
     public function prepareRolesAndGroupsTest()
     {
-        $result = callZenMethod('user', 'prepareRolesAndGroups', array(), 'view');
+        $this->invokeArgs('prepareRolesAndGroups');
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $this->getProperty('view');
     }
 
     /**
@@ -136,10 +123,10 @@ class userZenTest
      */
     public function prepareCustomFieldsTest($method = 'batchCreate', $requiredMethod = 'create')
     {
-        $result = callZenMethod('user', 'prepareCustomFields', array($method, $requiredMethod), 'view');
+        $this->invokeArgs('prepareCustomFields', [$method, $requiredMethod]);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return $this->getProperty('view');
     }
 
     /**
@@ -151,12 +138,12 @@ class userZenTest
      */
     public function reloadLangTest($lang = 'zh-cn')
     {
-        $originalLang = $this->tester->app->getClientLang();
+        $originalLang = $this->instance->app->getClientLang();
 
-        $result = callZenMethod('user', 'reloadLang', array($lang));
+        $this->invokeArgs('reloadLang', [$lang]);
         if(dao::isError()) return dao::getError();
 
-        $currentLang = $this->tester->app->getClientLang();
+        $currentLang = $this->instance->app->getClientLang();
 
         return array(
             'originalLang' => $originalLang,
@@ -180,7 +167,7 @@ class userZenTest
      */
     public function responseForLogonTest($referer = '', $viewType = '', $loginLink = '', $denyLink = '', $locateReferer = '', $locateWebRoot = '')
     {
-        $result = callZenMethod('user', 'responseForLogon', array($referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
+        $result = $this->invokeArgs('responseForLogon', [$referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -195,7 +182,7 @@ class userZenTest
      */
     public function responseForLockedTest($viewType = '')
     {
-        $result = callZenMethod('user', 'responseForLocked', array($viewType));
+        $result = $this->invokeArgs('responseForLocked', [$viewType]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -211,7 +198,7 @@ class userZenTest
      */
     public function responseForLoginFailTest($viewType = '', $account = '')
     {
-        $result = callZenMethod('user', 'responseForLoginFail', array($viewType, $account));
+        $result = $this->invokeArgs('responseForLoginFail', [$viewType, $account]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -226,7 +213,7 @@ class userZenTest
      */
     public function setRefererTest($referer = '')
     {
-        $result = callZenMethod('user', 'setReferer', array($referer));
+        $result = $this->invokeArgs('setReferer', [$referer]);
         if(dao::isError()) return dao::getError();
 
         return $result;

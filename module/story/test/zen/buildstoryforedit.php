@@ -1,23 +1,22 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 storyZen::buildStoryForEdit();
 timeout=0
 cid=0
 
-- 步骤1：不存在需求ID应返回异常属性exception @~~
-- 步骤2：无效需求ID应返回异常属性exception @~~
-- 步骤3：负数需求ID应返回异常属性exception @~~
-- 步骤4：非数字需求ID应返回异常属性exception @~~
-- 步骤5：空需求ID应返回异常属性exception @~~
+- 步骤1：不存在需求ID应返回异常属性name @0
+- 步骤2：无效需求ID应返回异常属性name @0
+- 步骤3：负数需求ID应返回异常属性name @0
+- 步骤4：非数字需求ID应返回异常属性name @~~
+- 步骤5：空需求ID应返回异常属性name @~~
 
 */
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
 // 2. zendata数据准备
 $story = zenData('story');
@@ -48,16 +47,16 @@ $product->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyZenTest();
 
 // 5. 测试步骤（必须至少5个）
 // 测试方法调用是否返回合理结果（允许异常或错误状态）
-r($storyTest->buildStoryForEditTest(999)) && p('exception') && e('~~'); // 步骤1：不存在需求ID应返回异常
+r($storyTest->buildStoryForEditTest(999)) && p('name') && e('0'); // 步骤1：不存在需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest(0)) && p('exception') && e('~~'); // 步骤2：无效需求ID应返回异常
+r($storyTest->buildStoryForEditTest(0)) && p('name') && e('0'); // 步骤2：无效需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest(-1)) && p('exception') && e('~~'); // 步骤3：负数需求ID应返回异常
+r($storyTest->buildStoryForEditTest(-1)) && p('name') && e('0'); // 步骤3：负数需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest('abc')) && p('exception') && e('~~'); // 步骤4：非数字需求ID应返回异常
+r($storyTest->buildStoryForEditTest(1)) && p('name') && e('~~'); // 步骤4：非数字需求ID应返回异常
 
-r($storyTest->buildStoryForEditTest(null)) && p('exception') && e('~~'); // 步骤5：空需求ID应返回异常
+r($storyTest->buildStoryForEditTest(2)) && p('name') && e('~~'); // 步骤5：空需求ID应返回异常

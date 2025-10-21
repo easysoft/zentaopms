@@ -27,9 +27,9 @@ $schema->joins['testcase']   = '`testcase`.`id`   = `testrun`.`case`';
 $schema->joins['product']    = '`product`.`id`    = `testcase`.`product`';
 $schema->joins['testtask']   = '`testtask`.`id`   = `testrun`.`task`';
 $schema->joins['casemodule'] = '`casemodule`.`id` = `testcase`.`module`';
-$schema->joins['project']    = '`project`.`id`    = `testtask`.`project`';
+$schema->joins['project']    = '`project`.`id`    = CAST(`testtask`.`project` AS DECIMAL)';
 $schema->joins['execution']  = '`execution`.`id`  = `testtask`.`execution`';
-$schema->joins['build']      = '`build`.`id`      = `testtask`.`build`';
+$schema->joins['build']      = '`build`.`id`      = CAST(`testtask`.`build` AS DECIMAL)';
 
 $schema->fields = array();
 $schema->fields['testtask']      = array('type' => 'object', 'name' => $this->lang->testtask->common, 'object' => 'testtask', 'show' => 'testtask.name');

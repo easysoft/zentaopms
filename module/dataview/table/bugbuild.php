@@ -26,7 +26,7 @@ $schema->tables['casemodule']   = 'zt_module';
 $schema->joins = array();
 $schema->joins['product']     = '`product`.`id` = `bug`.`product`';
 $schema->joins['testtask']    = '`testtask`.`id` = `bug`.`testtask`';
-$schema->joins['build']       = '`build`.`id` = `testtask`.`build`';
+$schema->joins['build']       = '`build`.`id` = CAST(`testtask`.`build` AS DECIMAL)';
 $schema->joins['execution']   = '`execution`.`id` = `build`.`execution`';
 $schema->joins['project']     = '`project`.`id` = `build`.`project`';
 $schema->joins['module']      = '`module`.`id` = `bug`.`module`';

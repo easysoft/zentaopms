@@ -24,4 +24,4 @@ formPanel
     )
 );
 hr();
-history();
+history(set::objectID($objectID));

@@ -107,9 +107,22 @@ class baseHelper
         }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
-        if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
-        if($config->requestType != 'PATH_INFO')  $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
-        if($config->requestType == 'PATH_INFO2') $link = '/';
+        if($app->apiVersion == 'v2')
+        {
+            $link = $config->webRoot . '/api.php/v2/';
+        }
+        else if($config->requestType == 'PATH_INFO2')
+        {
+            $link = '/';
+        }
+        else if($config->requestType == 'PATH_INFO')
+        {
+            $link = $config->webRoot . $appName;
+        }
+        else
+        {
+            $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
+        }
 
         /**
          * #1: RequestType为GET。When the requestType is GET.

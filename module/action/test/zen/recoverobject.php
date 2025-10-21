@@ -19,7 +19,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('action');
@@ -42,7 +42,7 @@ $productTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$actionTest = new actionTest();
+$actionTest = new actionZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($actionTest->recoverObjectTest('产品1', 'product1', '产品1_1', 'product1_1', 'both')) && p('name,code') && e('产品1_1,product1_1'); // 步骤1：名称和代码都重复时恢复对象

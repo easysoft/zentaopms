@@ -1336,7 +1336,7 @@ class testcase extends control
 
                 $importedCases[] = $oldCaseID;
 
-                $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
+                $this->action->create('case', $caseID, 'fromlib', '', $libID);
             }
 
             if(!empty($errors)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$errors}');"));

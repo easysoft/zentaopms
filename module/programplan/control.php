@@ -57,7 +57,7 @@ class programplan extends control
         {
             $this->loadModel('doc');
             $projects = $this->loadModel('project')->getPairsByModel(array('ipd', 'waterfall', 'waterfallplus'));
-            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->error->noProject));
+            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->config->edition == 'ipd' ? $this->lang->programplan->error->noProject4IPD : $this->lang->programplan->error->noProject));
 
             if(!$projectID) $projectID = key($projects);
             $this->view->projects = $projects;

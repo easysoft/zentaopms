@@ -71,7 +71,7 @@ $config->ai->actionList['promptedit']['data-size']   = 'sm';
 $config->ai->actionList['promptpublish']['icon']      = 'publish';
 $config->ai->actionList['promptpublish']['text']      = $lang->ai->prompts->action->publish;
 $config->ai->actionList['promptpublish']['hint']      = $lang->ai->prompts->action->publish;
-$config->ai->actionList['promptpublish']['url']       = array('module' => 'ai', 'method' => 'promptpublish', 'params' => 'prompt={id}&backToTestingLocation=true');
+$config->ai->actionList['promptpublish']['url']       = array('module' => 'ai', 'method' => 'promptpublish', 'params' => 'prompt={id}');
 $config->ai->actionList['promptpublish']['className'] = 'ajax-submit';
 
 $config->ai->actionList['promptunpublish']['icon']         = 'ban';

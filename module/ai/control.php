@@ -362,7 +362,7 @@ class ai extends control
     public function publishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '1');
-        if($result) return $this->send(array('result' => 'success', 'load' => true));
+        if($result) return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->publishSuccess));
         $this->sendError(dao::getError());
     }
 
@@ -376,7 +376,7 @@ class ai extends control
     public function unpublishMiniProgram($appID)
     {
         $result = $this->ai->publishMiniProgram($appID, '0');
-        if($result) return $this->send(array('result' => 'success', 'load' => true));
+        if($result) return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->unpublishSuccess));
         $this->sendError(dao::getError());
     }
 
@@ -406,6 +406,15 @@ class ai extends control
         if(!is_file($fileName)) return $this->send($failResponse);
 
         $content = file_get_contents($fileName);
+        unlink($fileName);
+        if(!empty($content) && strpos($content, '<?php') === 0)
+        {
+            $content = str_replace(['<?php', "\r", "\n"], '', $content);
+            $pos = strpos($content, "\$ztApp = '");
+            if($pos != 0) return $this->send($failResponse);
+
+            $content = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
+        }
         if(empty($content)) return $this->send($failResponse);
 
         $ztApp  = json_decode($content);
@@ -898,7 +907,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id")));
         }
 
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'load' => true, 'message' => $this->lang->ai->prompts->action->publishSuccess));
     }
 
     /**

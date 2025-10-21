@@ -47,7 +47,7 @@ $config->ai->dtable->prompts['createdDate']['sortType'] = true;
 $config->ai->dtable->prompts['createdDate']['required'] = true;
 
 $config->ai->dtable->prompts['targetFormLabel']['title']    = $lang->ai->prompts->targetForm;
-$config->ai->dtable->prompts['targetFormLabel']['sortType'] = true;
+$config->ai->dtable->prompts['targetFormLabel']['sortType'] = false;
 $config->ai->dtable->prompts['targetFormLabel']['required'] = true;
 
 $config->ai->dtable->prompts['actions']['type'] = 'actions';
@@ -71,6 +71,7 @@ $config->ai->dtable->miniPrograms['publishedLabel']['required'] = true;
 $config->ai->dtable->miniPrograms['category']['title']    = $lang->prompt->module;
 $config->ai->dtable->miniPrograms['category']['required'] = true;
 $config->ai->dtable->miniPrograms['category']['map']      = $lang->ai->miniPrograms->categoryList;
+$config->ai->dtable->miniPrograms['category']['hint']     = true;
 
 $config->ai->dtable->miniPrograms['createdByLabel']['title']    = $lang->prompt->createdBy;
 $config->ai->dtable->miniPrograms['createdByLabel']['required'] = true;

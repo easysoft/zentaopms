@@ -811,6 +811,7 @@ class bug extends control
 
         if(!empty($_POST))
         {
+            $this->config->bug->create->requiredFields = $this->config->bug->batchcreate->requiredFields;
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $bugImagesFile);
             $bugs = $this->bugZen->checkBugsForBatchCreate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
