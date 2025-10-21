@@ -382,6 +382,7 @@ class stageModel extends model
                 $approvalFlowObject->objectID    = $newPointID;
                 $approvalFlowObject->relatedBy   = $this->app->user->account;
                 $approvalFlowObject->relatedDate = helper::now();
+                $approvalFlowObject->extra       = $type;
                 $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalFlowObject)->exec();
                 if(dao::isError()) return false;
             }

@@ -12569,6 +12569,7 @@ class upgradeModel extends model
 
                             $decisionFlow->root     = $stage->workflowGroup;
                             $decisionFlow->objectID = $decisionID;
+                            $decisionFlow->extra    = $decision->type;
                             $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
                         }
                     }
