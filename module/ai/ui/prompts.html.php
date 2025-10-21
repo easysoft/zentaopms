@@ -74,9 +74,43 @@ sidebar
     )
 );
 
-$promptCard = function($prompt)
+$promptCard = function($prompt) use ($lang)
 {
-    return div($prompt->name);
+    $draftTag = $prompt->status === 'draft'
+        ? span(
+            setClass('draft-tag'),
+            '未发布'
+        )
+        : null;
+    return div(
+        setClass('prompt-card'),
+        a(
+            set::href(inlink('promptview', "id={$prompt->id}")),
+            h3(
+                setClass('card-title'),
+                set::title($prompt->name),
+                span($prompt->name),
+                $draftTag
+            ),
+            div(
+                setClass('card-description'),
+                set::title($prompt->desc),
+                $prompt->desc
+            ),
+            div(
+                setClass('card-meta'),
+                div(
+                    setClass('creator'),
+                    img(),
+                    span($prompt->createdBy)
+                ),
+                span(
+                    setClass('created-date'),
+                    sprintf('创建时间：%s', $prompt->createdDate)
+                )
+            )
+        )
+    );
 };
 
 function renderCardView($promptCard, $prompts)
@@ -87,6 +121,10 @@ function renderCardView($promptCard, $prompts)
             set::class('prompts-container'),
             array_map($promptCard, $prompts)
         ),
+        div(
+            set::class('pager-container'),
+            pager(set(usePager()))
+        )
     );
 }
 
