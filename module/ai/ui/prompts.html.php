@@ -94,6 +94,23 @@ $buildDropdown = function($prompt) use ($lang, $config)
                 'disabled' => $disabled
             );
 
+            if(isset($actionConfig['url']))
+            {
+                if(is_array($actionConfig['url']))
+                {
+                    $params = str_replace('{id}', (string)$prompt->id, $actionConfig['url']['params']);
+                    $item['url'] = helper::createLink($actionConfig['url']['module'], $actionConfig['url']['method'], $params);
+                }
+                else
+                {
+                    $item['url'] = str_replace(
+                        array('{id}', '{module}', '{targetForm}'),
+                        array((string)$prompt->id, $prompt->module, $prompt->targetForm),
+                        $actionConfig['url']
+                    );
+                }
+            }
+
             if(isset($actionConfig['className'])) $item['innerClass'] = $actionConfig['className'];
             if(isset($actionConfig['data-toggle'])) $item['data-toggle'] = $actionConfig['data-toggle'];
             if(isset($actionConfig['data-size'])) $item['data-size'] = $actionConfig['data-size'];
