@@ -112,7 +112,6 @@ $config->upgrade->execFlow['21_6_beta']   = array('functions' => 'processCharter
 $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan9.1.2.sql");
 $config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
 $config->upgrade->execFlow['21_7_1']      = array('functions' => 'convertCharset,processActionProduct');
-$config->upgrade->execFlow['21_7_3']      = array('functions' => 'modifyProjectWorkflowGroup,upgradeProcessAndActivity,addWorkflowGroupOtherActivity,addDefaultDeliverableModule,upgradeDesignToDeliverable,buildinTestcaseStageDeliverable,upgradeDeliverable,buildinBaselineReview,upgradeReviewclCategory,upgradeBaselineObjects,upgradeReviewToDeliverable,upgradeBaseline,addDeliverablePrivs,upgradeStageAndPoint,upgradeObjectOfDecision');
 $config->upgrade->execFlow['21_7_5']      = array('functions' => 'weekly-addBuiltinWeeklyTemplate,adjustPriv21_7_5');
 
 if(!empty($config->isINT))
@@ -146,6 +145,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_3']['functions']      .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
     $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
+    $config->upgrade->execFlow['21_7_5']['functions']    .= ',modifyProjectWorkflowGroup,upgradeProcessAndActivity,addWorkflowGroupOtherActivity,addDefaultDeliverableModule,upgradeDesignToDeliverable,buildinTestcaseStageDeliverable,upgradeDeliverable,buildinBaselineReview,upgradeReviewclCategory,upgradeBaselineObjects,upgradeReviewToDeliverable,upgradeBaseline,addDeliverablePrivs,upgradeStageAndPoint,upgradeObjectOfDecision';
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
