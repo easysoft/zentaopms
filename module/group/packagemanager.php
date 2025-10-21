@@ -424,6 +424,38 @@ if($config->inQuickon || $config->inCompose)
     $config->group->subset->ruleset->nav   = 'devops';
 }
 
+$config->group->subset->ci = new stdclass();
+$config->group->subset->ci->order = 2440;
+$config->group->subset->ci->nav   = 'devops';
+
+$config->group->subset->codereview = new stdclass();
+$config->group->subset->codereview->order = 2450;
+$config->group->subset->codereview->nav   = 'devops';
+
+$config->group->subset->artifactrepo = new stdclass();
+$config->group->subset->artifactrepo->order = 2460;
+$config->group->subset->artifactrepo->nav   = 'devops';
+
+$config->group->subset->systemManage = new stdclass();
+$config->group->subset->systemManage->order = 2470;
+$config->group->subset->systemManage->nav   = 'devops';
+
+$config->group->subset->deployment = new stdclass();
+$config->group->subset->deployment->order = 2480;
+$config->group->subset->deployment->nav   = 'devops';
+
+$config->group->subset->repoSettings = new stdclass();
+$config->group->subset->repoSettings->order = 2490;
+$config->group->subset->repoSettings->nav   = 'devops';
+
+$config->group->subset->configure = new stdclass();
+$config->group->subset->configure->order = 2900;
+$config->group->subset->configure->nav   = 'devops';
+
+$config->group->subset->app = new stdclass();
+$config->group->subset->app->order = 3000;
+$config->group->subset->app->nav   = 'devops';
+
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
 
