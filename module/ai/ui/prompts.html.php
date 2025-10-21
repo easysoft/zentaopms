@@ -74,7 +74,50 @@ sidebar
     )
 );
 
-$promptCard = function($prompt) use ($lang)
+$buildDropdown = function($prompt) use ($lang, $config)
+{
+    $items = array();
+
+    if(!empty($prompt->actions))
+    {
+        foreach($prompt->actions as $action)
+        {
+            $actionName = $action['name'];
+            $disabled   = $action['disabled'];
+
+            if(!isset($config->ai->actionList[$actionName])) continue;
+
+            $actionConfig = $config->ai->actionList[$actionName];
+
+            $item = array(
+                'text'     => $actionConfig['text'],
+                'disabled' => $disabled
+            );
+
+            if(isset($actionConfig['className'])) $item['innerClass'] = $actionConfig['className'];
+            if(isset($actionConfig['data-toggle'])) $item['data-toggle'] = $actionConfig['data-toggle'];
+            if(isset($actionConfig['data-size'])) $item['data-size'] = $actionConfig['data-size'];
+            if(isset($actionConfig['data-confirm'])) $item['data-confirm'] = $actionConfig['data-confirm'];
+            if(isset($actionConfig['data-app'])) $item['data-app'] = $actionConfig['data-app'];
+
+            $items[] = $item;
+        }
+    }
+
+    if(empty($items)) return null;
+
+    return dropdown(
+        btn(
+            setClass('ghost size-sm card-action-btn'),
+            set::icon('ellipsis-v')
+        ),
+        set::items($items),
+        set::placement('bottom-end'),
+        set::caret(false)
+    );
+};
+
+$promptCard = function($prompt) use ($lang, $buildDropdown)
 {
     $draftTag = $prompt->status === 'draft'
         ? span(
@@ -109,7 +152,8 @@ $promptCard = function($prompt) use ($lang)
                     sprintf('创建时间：%s', $prompt->createdDate)
                 )
             )
-        )
+        ),
+        $buildDropdown($prompt)
     );
 };
 
