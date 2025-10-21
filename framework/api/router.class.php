@@ -370,6 +370,7 @@ class api extends router
         if($this->apiVersion == 'v1')
         {
             include $this->appRoot . "config/apiv1.php";
+            if(isset($this->config->routes)) $routes = array_merge($routes, $this->config->routes);
             $this->route($routes);
         }
         else
