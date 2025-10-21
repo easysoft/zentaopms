@@ -447,26 +447,29 @@ class api extends router
         $_POST = json_decode($requestBody, true);
 
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
-        if($this->action == 'put')
+        /* Get form data by get request. */
+        $postData = $_POST;
+        $_POST    = array();
+
+        $this->control->viewType    = 'html';
+        $this->control->getFormData = true;
+
+        $method = $this->control->methodName;
+        call_user_func_array(array($this->control, $method), $_GET);
+
+        $this->control->getFormData = false;
+        $this->control->viewType    = 'json';
+
+        $_POST = $postData;
+        foreach($this->control->formData as $key => $value)
         {
-            /* Get form data by get request. */
-            $postData = $_POST;
-            $_POST    = array();
-            $objectID = (int)current($_GET);
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
 
-            $this->control->viewType    = 'html';
-            $this->control->getFormData = true;
-
-            $this->control->edit($objectID);
-
-            $this->control->getFormData = false;
-            $this->control->viewType    = 'json';
-
-            $_POST = $postData;
-            foreach($this->control->formData as $key => $value)
-            {
-                if(!isset($_POST[$key])) $_POST[$key] = $value;
-            }
+        $zen = $this->control->moduleName . 'Zen';
+        foreach($this->control->$zen->formData as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
     }
 
