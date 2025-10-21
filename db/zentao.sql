@@ -13975,6 +13975,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
 -- DROP TABLE IF EXISTS `zt_auditcl`;
 CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `model` char(30) NOT NULL DEFAULT 'waterfall',
   `practiceArea` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT '',
