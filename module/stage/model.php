@@ -40,11 +40,13 @@ class stageModel extends model
             }
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         if(!empty($stage->percent)) $stage->percent = (float)$stage->percent;
         $this->dao->insert(TABLE_STAGE)
             ->data($stage)
             ->autoCheck()
             ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
+            ->checkIF(!empty($stage->name), 'name', 'unique', "`workflowGroup` = '$stage->workflowGroup' AND `deleted` = '0'")
             ->exec();
         $stageID = $this->dao->lastInsertID();
 
@@ -82,6 +84,17 @@ class stageModel extends model
                 dao::$errors['message'] = $this->lang->stage->error->percentOver;
                 return false;
             }
+        }
+
+        $stageNames = $this->dao->select('id,name')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs('name');
+        foreach($stages as $rowID => $stage)
+        {
+            if(in_array($stage->name, $stageNames))
+            {
+                dao::$errors["name[$rowID]"] = sprintf($this->lang->error->repeat, $this->lang->stage->name, $stage->name);
+                return false;
+            }
+            $stageNames[] = $stage->name;
         }
 
         $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
@@ -135,11 +148,13 @@ class stageModel extends model
             }
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_STAGE)
             ->data($stage)
             ->autoCheck()
             ->batchCheck($this->config->stage->edit->requiredFields, 'notempty')
             ->checkIF(isset($stage->percent) && $stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
+            ->checkIF(!empty($stage->name), 'name', 'unique', "`id` != '$stageID' AND `workflowGroup` = '$oldStage->workflowGroup' AND `deleted` = '0'")
             ->exec();
 
         if(dao::isError()) return false;
