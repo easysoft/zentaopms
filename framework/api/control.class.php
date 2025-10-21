@@ -128,8 +128,37 @@ class control extends baseControl
      * @access  public
      * @return  void
      */
+    public function display($moduleName = '', $methodName = '')
+    {
+        $this->render($moduleName, $methodName);
+    }
+
+    /**
+     * 向浏览器输出内容。
+     * Print the content of the view.
+     *
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
+     * @access  public
+     * @return  void
+     */
     public function render($moduleName = '', $methodName = '')
     {
+        if($this->app->apiVersion != 'v2')
+        {
+            $this->parseJSON($moduleName, $methodName);
+
+            $output           = array();
+            $output['status'] = is_object($this->view) ? 'success' : 'fail';
+            $output['data']   = json_encode($this->view) ? json_encode($this->view) : '';
+            $output['md5']    = md5($output['data']);
+
+            ob_start();
+            echo $this->output;
+
+            return;
+        }
+
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
