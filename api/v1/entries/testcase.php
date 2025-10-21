@@ -28,7 +28,7 @@ class testcaseEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->case)) $this->sendError(400, 'error');
 
-        $case = $data->case;
+        $case = $data->data->case;
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars((object)$case->steps)) : array();
         if(!empty($case->steps))
         {
