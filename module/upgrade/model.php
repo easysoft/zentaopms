@@ -11214,10 +11214,17 @@ class upgradeModel extends model
     public function addWorkflowGroupOtherActivity()
     {
         $projectModules  = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
-        $groupList       = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        $groupList       = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         foreach($groupList as $group)
         {
-            if(!empty($projectModules[$group->id])) $this->createOtherActivity($projectModules[$group->id], $group->id);
+            if($this->config->edition != 'open' && $group->projectModel == 'ipd')
+            {
+                $this->loadModel('workflowGroup')->addProcessAndActivity($group, 'ipd');
+            }
+            elseif(!empty($projectModules[$group->id]))
+            {
+                $this->createOtherActivity($projectModules[$group->id], $group->id);
+            }
         }
     }
 
@@ -11230,7 +11237,7 @@ class upgradeModel extends model
      */
     public function addDefaultDeliverableModule()
     {
-        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->fetchAll();
+        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
         foreach($groupList as $group)
         {
             foreach($this->lang->upgrade->deliverableModule as $code => $name) $this->createDeliverableModule($group->id, $name, $code);
@@ -11937,6 +11944,7 @@ class upgradeModel extends model
                 $workflow->projectType  = $projectType;
                 $workflow->code         = $code;
                 $workflow->editedDate   = null;
+                $workflow->main         = '0';
 
                 $this->dao->insert(TABLE_WORKFLOWGROUP)->data($workflow)->exec();
                 $newWorkflowGroupID = $this->dao->lastInsertId();
