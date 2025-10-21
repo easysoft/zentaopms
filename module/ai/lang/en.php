@@ -129,6 +129,10 @@ $lang->ai->prompts->draftedBy    = 'Drafted By';
 $lang->ai->prompts->lastEditor   = 'Last Editor';
 $lang->ai->prompts->modelNeutral = 'Model Neutral';
 
+$lang->ai->prompts->viewTypeList            = array();
+$lang->ai->prompts->viewTypeList['list']    = 'List View';
+$lang->ai->prompts->viewTypeList['card']    = 'Card View';
+
 $lang->ai->prompts->summary = 'There are %s zenTao agents on this page.';
 $lang->ai->prompts->fieldSeparator = ', ';
 

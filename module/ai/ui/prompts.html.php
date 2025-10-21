@@ -74,7 +74,7 @@ sidebar
     )
 );
 
-$buildDropdown = function($prompt) use ($lang, $config)
+$buildDropdown = function($prompt) use ($config)
 {
     $items = array();
 
@@ -139,7 +139,7 @@ $promptCard = function($prompt) use ($lang, $buildDropdown)
     $draftTag = $prompt->status === 'draft'
         ? span(
             setClass('draft-tag'),
-            '未发布'
+            $lang->ai->prompts->statuses['draft']
         )
         : null;
     return div(
@@ -166,7 +166,7 @@ $promptCard = function($prompt) use ($lang, $buildDropdown)
                 ),
                 span(
                     setClass('created-date'),
-                    sprintf('创建时间：%s', $prompt->createdDate)
+                    sprintf($lang->ai->prompts->createdDate . '：%s', substr($prompt->createdDate, 0, 10))
                 )
             )
         ),
