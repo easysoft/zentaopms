@@ -613,6 +613,7 @@ class actionModel extends model
             ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
             ->fetchAll('objectType');
     }
 
