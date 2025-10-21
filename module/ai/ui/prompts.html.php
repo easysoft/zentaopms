@@ -74,13 +74,41 @@ sidebar
     )
 );
 
-dtable
-(
-    set::cols($cols),
-    set::data($prompts),
-    set::userMap($users),
-    set::orderBy($orderBy),
-    set::sortLink(inlink('prompts', "module={$module}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager(usePager()),
-    set::emptyTip($lang->ai->prompts->emptyList),
-);
+$promptCard = function($prompt)
+{
+    return div($prompt->name);
+};
+
+function renderCardView($promptCard, $prompts)
+{
+    return div(
+        set::class('page-prompts'),
+        div(
+            set::class('prompts-container'),
+            array_map($promptCard, $prompts)
+        ),
+    );
+}
+
+function renderListView($cols, $prompts, $users, $module, $status, $orderBy, $pager, $lang)
+{
+    return dtable
+    (
+        set::cols($cols),
+        set::data($prompts),
+        set::userMap($users),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('prompts', "module={$module}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+        set::footPager(usePager()),
+        set::emptyTip($lang->ai->prompts->emptyList)
+    );
+}
+
+if($viewType == 'list')
+{
+    renderListView($cols, $prompts, $users, $module, $status, $orderBy, $pager, $lang);
+}
+else
+{
+    renderCardView($promptCard, $prompts);
+}
