@@ -2,9 +2,29 @@
 declare(strict_types=1);
 namespace zin;
 
+$viewType = $this->cookie->aiPromptsViewType ? $this->cookie->aiPromptsViewType : 'card';
+
 featureBar(set::current($status), set::linkParams("module={$module}&status={key}"));
 toolbar
 (
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(
+            array(
+                'icon'      => 'format-list-bulleted',
+                'class'     => 'btn-icon switchButton' . ($viewType == 'list' ? ' text-primary' : ''),
+                'data-type' => 'list',
+                'hint'      => $lang->ai->prompts->viewTypeList['list']
+            ),
+            array(
+                'icon'      => 'cards-view',
+                'class'     => 'btn-icon switchButton' . ($viewType == 'card' ? ' text-primary' : ''),
+                'data-type' => 'card',
+                'hint'      => $lang->ai->prompts->viewTypeList['card']
+            )
+        )
+    ))),
     $this->config->edition != 'open' && common::hasPriv('ai', 'createprompt') ? item(set(array(
         'class'       => 'primary',
         'icon'        => 'plus',

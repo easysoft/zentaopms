@@ -81,6 +81,7 @@ $filter->group        = new stdclass();
 $filter->convert      = new stdclass();
 $filter->admin        = new stdclass();
 $filter->install      = new stdclass();
+$filter->ai           = new stdclass();
 
 $filter->index->index                   = new stdclass();
 $filter->block->default                 = new stdclass();
@@ -214,6 +215,7 @@ $filter->admin->getcaptcha              = new stdclass();
 $filter->admin->sendcode                = new stdclass();
 $filter->admin->giftpackage             = new stdclass();
 $filter->install->step5                 = new stdclass();
+$filter->ai->prompts                    = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -461,6 +463,8 @@ $filter->misc->checkupdate->get['note']    = 'reg::base64';
 $filter->misc->installevent->cookie['sn'] = 'string';
 
 $filter->install->step5->cookie['sn'] = 'string';
+
+$filter->ai->prompts->cookie['aiPromptsViewType'] = 'code';
 
 $filter->sso->getbindusers->get['hash'] = 'reg::md5';
 $filter->sso->gettodolist->get['hash']  = 'reg::md5';

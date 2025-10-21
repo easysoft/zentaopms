@@ -129,6 +129,10 @@ $lang->ai->prompts->draftedBy    = '由谁下架';
 $lang->ai->prompts->lastEditor   = '最后编辑';
 $lang->ai->prompts->modelNeutral = '通用';
 
+$lang->ai->prompts->viewTypeList            = array();
+$lang->ai->prompts->viewTypeList['list']    = '列表视图';
+$lang->ai->prompts->viewTypeList['card']    = '卡片视图';
+
 $lang->ai->prompts->summary = '本页共 %s 个禅道智能体。';
 $lang->ai->prompts->fieldSeparator = '、';
 
