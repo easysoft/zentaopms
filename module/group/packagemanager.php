@@ -393,6 +393,10 @@ $config->group->subset->deployment = new stdclass();
 $config->group->subset->deployment->order = 2400;
 $config->group->subset->deployment->nav   = 'devops';
 
+$config->group->subset->devopsspace = new stdclass();
+$config->group->subset->devopsspace->order = 2300;
+$config->group->subset->devopsspace->nav   = 'devops';
+
 $config->group->subset->configure = new stdclass();
 $config->group->subset->configure->order = 2900;
 $config->group->subset->configure->nav   = 'devops';
@@ -1802,6 +1806,16 @@ $config->group->package->host->privs['host-view']         = array('edition' => '
 $config->group->package->host->privs['host-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('host-browse'), 'recommend' => array('host-create', 'host-edit'));
 $config->group->package->host->privs['host-changeStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('host-browse'), 'recommend' => array('host-create', 'host-edit'));
 $config->group->package->host->privs['host-treemap']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('host-browse'), 'recommend' => array());
+
+$config->group->package->devopsspace = new stdclass();
+$config->group->package->devopsspace->order  = 2230;
+$config->group->package->devopsspace->subset = 'devopsspace';
+$config->group->package->devopsspace->privs  = array();
+$config->group->package->devopsspace->privs['devopsspace-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete', 'devopsspace-view'));
+$config->group->package->devopsspace->privs['devopsspace-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-edit', 'devopsspace-view', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-view', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-view'));
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;
