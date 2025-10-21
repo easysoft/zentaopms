@@ -495,11 +495,8 @@ class programplanTao extends programplanModel
 
             foreach($reviewPoints as $point)
             {
-                if(!isset($this->config->review->ipdReviewPoint->{$plan->attribute})) continue;
+                if($point->execution != $plan->id) continue;
                 if(!isset($point->status)) $point->status = '';
-
-                $categories = $this->config->review->ipdReviewPoint->{$plan->attribute};
-                if(!in_array($point->category, $categories)) continue;
 
                 $dataID = "{$plan->id}-{$point->category}-{$point->id}";
                 if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$dataID] = $this->buildPointDataForGantt($plan->id, $point, $reviewDeadline);
