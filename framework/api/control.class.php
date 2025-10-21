@@ -32,6 +32,15 @@ class control extends baseControl
     public $getFormData = false;
 
     /**
+     * Form表单数据
+     * FormData.
+     *
+     * @var array
+     * @access public
+     */
+    public $formData = array();
+
+    /**
      * Check requiredFields and set exportFields for workflow.
      *
      * @param  string $moduleName
