@@ -211,7 +211,8 @@ class ai extends control
     public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('user');
-        $users = $this->user->getPairs('noletter');
+        $users     = $this->user->getPairs('noletter');
+        $userList  = $this->user->getList('nodeleted');
 
         /* Set pager and order. */
         $this->app->loadClass('pager', $static = true);
@@ -225,6 +226,7 @@ class ai extends control
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->aiapp->zentaoAgent;
         $this->view->users      = $users;
+        $this->view->userList   = $userList;
 
         if($this->config->edition == 'open')
         {

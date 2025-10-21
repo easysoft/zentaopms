@@ -46,6 +46,12 @@ foreach($prompts as $prompt)
     }
 }
 
+$userListMap = array();
+foreach($userList as $user)
+{
+    $userListMap[$user->account] = $user;
+}
+
 unset($lang->ai->prompts->modules['']);
 $moduleList = $this->config->edition == 'open' ? array_intersect_key($lang->ai->prompts->modules, array_flip($promptModules)) : $lang->ai->prompts->modules;
 $moduleTree = array();
@@ -134,8 +140,11 @@ $buildDropdown = function($prompt) use ($config)
     );
 };
 
-$promptCard = function($prompt) use ($lang, $buildDropdown)
+$promptCard = function($prompt) use ($lang, $buildDropdown, $userListMap)
 {
+    $creator = isset($userListMap[$prompt->createdBy]) ? $userListMap[$prompt->createdBy] : null;
+    $creatorName = $creator ? $creator->realname : $prompt->createdBy;
+
     $draftTag = $prompt->status === 'draft'
         ? span(
             setClass('draft-tag'),
@@ -161,8 +170,12 @@ $promptCard = function($prompt) use ($lang, $buildDropdown)
                 setClass('card-meta'),
                 div(
                     setClass('creator'),
-                    img(),
-                    span($prompt->createdBy)
+                    avatar(
+                        set::size('sm'),
+                        set::text($creatorName),
+                        $creator && !empty($creator->avatar) ? set::src($creator->avatar) : null
+                    ),
+                    span($creatorName)
                 ),
                 span(
                     setClass('created-date'),
