@@ -8,18 +8,8 @@ class actionTest
     public function __construct()
     {
         global $tester;
-        /* 对于processDynamicForAPI方法，我们只需要模拟数据，不需要实际的数据库连接 */
-        if($tester)
-        {
-            try {
-                $this->objectModel = $tester->loadModel('action');
-                $this->objectTao   = $tester->loadTao('action');
-            } catch (Exception $e) {
-                // 在测试环境中，如果加载失败，使用mock对象
-                $this->objectModel = null;
-                $this->objectTao   = null;
-            }
-        }
+        $this->objectModel = $tester->loadModel('action');
+        $this->objectTao   = $tester->loadTao('action');
     }
 
     /**
@@ -37,27 +27,25 @@ class actionTest
      */
     public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', string $version = '')
     {
-        global $tester, $config;
-        if($tester->app->upgrading && !empty($version))
+        if($this->objectModel->app->upgrading && !empty($version))
         {
-            $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('global')->exec();
+            $this->objectModel->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('global')->exec();
         }
 
         $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
         if($uid)
         {
             $_POST['uid'] = $uid;
-            global $tester;
-            $tester->session->set('album', null);
-            $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
+            $this->objectModel->session->set('album', null);
+            $this->objectModel->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
         }
 
-        $objectID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor);
-
+        $actionID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor);
         unset($_POST);
+
         if(dao::isError()) return dao::getError();
 
-        return $objectID ? $this->objectModel->getById($objectID) : 0;
+        return $actionID ? $this->objectModel->getById($actionID) : 0;
     }
 
     /**
@@ -71,12 +59,9 @@ class actionTest
     public function readTest($objectType, $objectID)
     {
         $this->objectModel->read($objectType, $objectID);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll();
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll();
     }
 
     /**
@@ -90,9 +75,7 @@ class actionTest
     {
         $objects = $this->objectModel->getUnreadActions($actionID);
         $objects = json_decode($objects);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -110,9 +93,7 @@ class actionTest
     public function getRelatedFieldsTest(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
         $objects = $this->objectModel->getRelatedFields($objectType, $objectID, $actionType, $extra);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -127,13 +108,9 @@ class actionTest
      */
     public function getListTest(string $objectType, int $objectID): string
     {
-        global $tester;
-
-        $objects  = $this->objectModel->getList($objectType, $objectID);
-
-        $modules   = $objectType == 'module' ? $tester->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
-        $actions   = $this->objectModel->getActionListByTypeAndID($objectType, $objectID, $modules);
-
+        $objects = $this->objectModel->getList($objectType, $objectID);
+        $modules = $objectType == 'module' ? $this->objectModel->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
+        $actions = $this->objectModel->getActionListByTypeAndID($objectType, $objectID, $modules);
         if(dao::isError()) return dao::getError();
 
         $actionID = key($actions);
@@ -154,104 +131,17 @@ class actionTest
      * 测试将项目日志类型转换为动态类型。
      * Test process Project Actions change actionStype.
      *
-     * @param  mixed  $actions
+     * @param  mixed  $actionIdList
      * @access public
      * @return object|string
      */
-    public function processProjectActionsTest($actions)
+    public function processProjectActionsTest($actionIdList)
     {
-        global $tester;
+        if(empty($actionIdList)) return [];
 
-        // 处理不同类型的输入
-        if(is_string($actions))
-        {
-            if(empty($actions)) return (object)array('count' => 0);
-            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-        }
-        elseif(is_array($actions) && empty($actions))
-        {
-            return (object)array('count' => 0);
-        }
-        elseif(is_array($actions) && !empty($actions) && !is_object(reset($actions)))
-        {
-            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-        }
-
-        $objects = $this->objectModel->processProjectActions($actions);
-
+        $actions = $this->objectModel->dao->select('objectType, action')->from(TABLE_ACTION)->where('id')->in($actionIdList)->fetchAll();
+        $result  = $this->objectModel->processProjectActions($actions);
         if(dao::isError()) return dao::getError();
-
-        // 返回结果统计
-        $result = new stdClass();
-        $result->count = count($objects);
-
-        // 添加详细信息以便调试
-        $actionData = array();
-        foreach($objects as $id => $action)
-        {
-            $actionData[$id] = array(
-                'objectType' => $action->objectType,
-                'action' => $action->action,
-                'objectID' => $action->objectID ?? 0
-            );
-        }
-        $result->actions = $actionData;
-
-        return $result;
-    }
-
-    /**
-     * 测试将项目日志类型转换为动态类型 - 详细版本。
-     * Test process Project Actions change actionStype - detailed version.
-     *
-     * @param  mixed  $actions
-     * @access public
-     * @return object|string
-     */
-    public function processProjectActionsDetailTest($actions)
-    {
-        global $tester;
-
-        // 处理不同类型的输入
-        if(is_string($actions))
-        {
-            if(empty($actions)) return (object)array('isEmpty' => true);
-            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-        }
-        elseif(is_array($actions) && empty($actions))
-        {
-            return (object)array('isEmpty' => true);
-        }
-        elseif(is_array($actions) && !empty($actions) && !is_object(reset($actions)))
-        {
-            $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-        }
-
-        $objects = $this->objectModel->processProjectActions($actions);
-
-        if(dao::isError()) return dao::getError();
-
-        // 返回详细信息
-        $result = new stdClass();
-        if(empty($objects))
-        {
-            $result->isEmpty = true;
-        }
-        else
-        {
-            $result->isEmpty = false;
-            $first = reset($objects);
-            $result->firstObjectType = $first->objectType;
-            $result->firstAction = $first->action;
-
-            // 如果只有一个结果，直接返回其信息
-            if(count($objects) == 1)
-            {
-                $result->singleObjectType = $first->objectType;
-                $result->singleAction = $first->action;
-            }
-        }
-
         return $result;
     }
 
@@ -265,9 +155,7 @@ class actionTest
     public function getByIdTest($actionID)
     {
         $object = $this->objectModel->getById((int)$actionID);
-
         if(dao::isError()) return dao::getError();
-
         return $object;
     }
 
@@ -286,9 +174,7 @@ class actionTest
     public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
     {
         $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -305,9 +191,7 @@ class actionTest
     public function getTrashesTest($objectType, $type, $orderBy, $pager)
     {
         $objects = $this->objectModel->getTrashes($objectType, $type, $orderBy, $pager);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -321,39 +205,22 @@ class actionTest
     public function getTrashObjectTypesTest($type)
     {
         $objects = $this->objectModel->getTrashObjectTypes($type);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
     /**
      * Test get histories of an action.
      *
-     * @param  int    $actionID
+     * @param  int|array $actionID
      * @access public
      * @return array
      */
-    public function getHistoryTest($actionID)
+    public function getHistoryTest(int|array $actionID): array
     {
-        // 转换字符串为整数以满足类型要求
-        if(is_string($actionID) && is_numeric($actionID))
-        {
-            $actionID = (int)$actionID;
-        }
-
-        $objects = $this->objectModel->getHistory($actionID);
-
+        $result = $this->objectModel->getHistory($actionID);
         if(dao::isError()) return dao::getError();
-
-        if(is_array($actionID))
-        {
-            return $objects;
-        }
-        else
-        {
-            return isset($objects[$actionID]) ? $objects[$actionID] : false;
-        }
+        return $result;
     }
 
     /**
@@ -364,39 +231,13 @@ class actionTest
      * @access public
      * @return array
      */
-    public function logHistoryTest($actionID, $changes)
+    public function logHistoryTest(int $actionID, array $changes): array
     {
-        // 确保actionID是整数类型
-        $actionID = (int)$actionID;
-
-        // 如果actionID无效或变更为空，直接返回空数组
-        if($actionID <= 0 || empty($changes)) return array();
-
-        // 先创建一个基础的action记录，避免processHistory失败
-        global $tester;
-        $existingAction = $tester->dao->select('id')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
-        if(!$existingAction)
-        {
-            $tester->dao->insert(TABLE_ACTION)->data(array(
-                'id' => $actionID,
-                'objectType' => 'task',
-                'objectID' => 1,
-                'actor' => 'admin',
-                'action' => 'edited',
-                'date' => date('Y-m-d H:i:s'),
-                'extra' => ''
-            ))->exec();
-        }
-
         $result = $this->objectModel->logHistory($actionID, $changes);
-
         if(dao::isError()) return dao::getError();
 
-        // 如果logHistory返回false，说明有问题
-        if($result === false) return array();
-
-        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll('', false);
-        return $objects;
+        $histories = $this->objectModel->getHistory($actionID);
+        return $histories[$actionID] ?? [];
     }
 
     /**
@@ -409,9 +250,7 @@ class actionTest
     public function getActionConditionTest($module = '')
     {
         $objects = $this->objectModel->getActionCondition($module);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -432,17 +271,11 @@ class actionTest
      */
     public function getDynamicBySearchTest(int $queryID, string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next')
     {
-        if($queryID)
-        {
-            global $tester;
-            $tester->session->set('actionQuery', null);
-        }
+        if($queryID) $this->objectModel->session->set('actionQuery', null);
 
-        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        if($date == 'today') $date = date('Y-m-d');
         $objects = $this->objectModel->getDynamicBySearch($queryID, $orderBy, $limit, $date, $direction);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -461,11 +294,9 @@ class actionTest
      */
     public function getDynamicTest($account = 'all', $period = 'all', $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
-        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        if($date == 'today') $date = date('Y-m-d');
         $objects = $this->objectModel->getDynamic($account, $period, 'date_desc', 50, $productID, $projectID, $executionID, $date, $direction);
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -482,12 +313,10 @@ class actionTest
      */
     public function getDynamicByProductTest($productID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
-        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        if($date == 'today') $date = date('Y-m-d');
         $objects = $this->objectModel->getDynamicByProduct((int)$productID, $account, $period, 'date_desc', 50, $date, $direction);
-
         if(dao::isError()) return 0;
-
-        return is_array($objects) ? count($objects) : 0;
+        return count($objects);
     }
 
     /**
@@ -503,11 +332,9 @@ class actionTest
      */
     public function getDynamicByProjectTest($projectID, $account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $date = '', $direction = 'next')
     {
-        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        if($date == 'today') $date = date('Y-m-d');
         $objects = $this->objectModel->getDynamicByProject((int)$projectID, $account, $period, $orderBy, $limit, $date, $direction);
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -524,13 +351,9 @@ class actionTest
      */
     public function getDynamicByExecutionTest($executionID, $account = '', $period = 'all', $date = '', $direction = 'next')
     {
-        ob_start();
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
         $objects = $this->objectModel->getDynamicByExecution((int)$executionID, $account, $period, 'date_desc', 50, $date, $direction);
-        ob_end_clean();
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -546,11 +369,9 @@ class actionTest
      */
     public function getDynamicByAccountTest($account = '', $period = 'all', $date = '', $direction = 'next')
     {
-        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        if($date == 'today') $date = date('Y-m-d', time());
         $objects = $this->objectModel->getDynamicByAccount($account, $period, 'date_desc', 50, $date, $direction);
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -566,9 +387,7 @@ class actionTest
     public function getBySQLTest(string $sql, string $orderBy = 'id_desc'): int
     {
         $objects = $this->objectModel->getBySQL($sql, $orderBy);
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -581,13 +400,9 @@ class actionTest
      */
     public function transformActionsTest($actions)
     {
-        global $tester;
-        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id', false);
-
+        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id', false);
         $objects = $this->objectModel->transformActions($actions);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -601,13 +416,9 @@ class actionTest
      */
     public function getRelatedDataByActionsTest($actions, $field)
     {
-        global $tester;
-        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-
+        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
         list($objectNames, $relatedProjects, $requirements) = $this->objectModel->getRelatedDataByActions($actions);
-
         if(dao::isError()) return dao::getError();
-
         return ${$field};
     }
 
@@ -625,9 +436,7 @@ class actionTest
     public function getObjectLabelTest($objectType, $objectID, $actionType, $requirements, $epics)
     {
         $object = $this->objectModel->getObjectLabel($objectType, $objectID, $actionType, $requirements, $epics);
-
         if(dao::isError()) return dao::getError();
-
         return $object;
     }
 
@@ -677,12 +486,9 @@ class actionTest
     public function deleteByTypeTest($objectType)
     {
         $this->objectModel->deleteByType($objectType);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->fetchAll();
-
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->fetchAll();
         return empty($objects);
     }
 
@@ -697,18 +503,13 @@ class actionTest
     public function undeleteTest(int $actionID): string|bool
     {
         $result = $this->objectModel->undelete($actionID);
-
         if(dao::isError()) return dao::getError();
         if(is_string($result) || !$result) return $result;
 
-        $object = $this->objectModel->getByID($actionID);
-
-        global $tester;
-        $table = $tester->config->objectTables[$object->objectType];
-
-        $recoverObject = $tester->dao->select('*')->from($table)->where('id')->eq($object->objectID)->fetch();
-
-        return isset($recoverObject->deleted) ? !$recoverObject->deleted : false;
+        $action = $this->objectModel->getByID($actionID);
+        $table  = $this->objectModel->config->objectTables[$action->objectType];
+        $object = $this->objectModel->dao->select('deleted')->from($table)->where('id')->eq($action->objectID)->fetch();
+        return $object->deleted == 0;
     }
 
     /**
@@ -721,11 +522,8 @@ class actionTest
     public function hideOneTest($actionID)
     {
         $this->objectModel->hideOne($actionID);
-
         if(dao::isError()) return dao::getError();
-
-        $object = $this->objectModel->getByID($actionID);
-        return $object;
+        return $this->objectModel->getByID($actionID);
     }
 
     /**
@@ -737,10 +535,8 @@ class actionTest
     public function hideAllTest()
     {
         $this->objectModel->hideAll();
-
         if(dao::isError()) return dao::getError();
-
-        return $this->objectModel->dao->select('id,extra')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll('', false);
+        return $this->objectModel->dao->select('id,extra')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll();
     }
 
     /**
@@ -754,10 +550,10 @@ class actionTest
         if($uid)
         {
             $_POST['uid'] = $uid;
-            global $tester;
-            $tester->session->set('album', null);
-            $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
+            $this->objectModel->session->set('album', null);
+            $this->objectModel->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
         }
+
         $action = new stdclass();
         $action->lastComment = $comment;
         $action->uid         = $uid;
@@ -765,13 +561,11 @@ class actionTest
         $action->renameFiles = array();
 
         $this->objectModel->updateComment($actionID, $action);
-
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getByID($actionID);
-        return $object;
+        return $this->objectModel->getByID($actionID);
     }
 
     /**
@@ -785,13 +579,10 @@ class actionTest
      */
     public function hasPreOrNextTest(string $date, string $direction = 'next'): bool
     {
-        global $tester;
-        $tester->session->set('actionQueryCondition', '1=1');
+        $this->objectModel->session->set('actionQueryCondition', '1=1');
         if($date == 'today') $date = date('Y-m-d');
         $result = $this->objectModel->hasPreOrNext($date, $direction);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -807,11 +598,8 @@ class actionTest
     public function saveIndexTest(string $objectType, int $objectID, string $actionType, string $comment = '')
     {
         if($comment) $_POST['comment'] = $comment;
-
         $result = $this->objectModel->saveIndex($objectType, $objectID, $actionType);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -824,69 +612,7 @@ class actionTest
      */
     public function processDynamicForAPITest($dynamics)
     {
-        // 完全模拟processDynamicForAPI方法的逻辑，避免数据库依赖
-        if(empty($dynamics)) return array();
-
-        /* 获取用户列表。模拟数据 */
-        $users = array(
-            'admin' => (object)array(
-                'id' => 1,
-                'account' => 'admin',
-                'realname' => '管理员',
-                'avatar' => ''
-            ),
-            'user1' => (object)array(
-                'id' => 2,
-                'account' => 'user1',
-                'realname' => '用户1',
-                'avatar' => ''
-            ),
-            'user2' => (object)array(
-                'id' => 3,
-                'account' => 'user2',
-                'realname' => '用户2',
-                'avatar' => ''
-            )
-        );
-
-        $simplifyUsers = array();
-        foreach($users as $user)
-        {
-            $simplifyUser = new stdclass();
-            $simplifyUser->id       = $user->id;
-            $simplifyUser->account  = $user->account;
-            $simplifyUser->realname = $user->realname;
-            $simplifyUser->avatar   = $user->avatar;
-            $simplifyUsers[$user->account] = $simplifyUser;
-        }
-
-        $actions = array();
-        foreach($dynamics as $dynamic)
-        {
-            if($dynamic->objectType == 'user') continue; //过滤掉用户动态。
-
-            /* 获取原始actor字符串，防止对象被修改 */
-            $actorName = is_object($dynamic->actor) ? $dynamic->actor->account : $dynamic->actor;
-
-            /* 模拟zget函数：如果存在则返回，否则返回空字符串 */
-            $simplifyUser = isset($simplifyUsers[$actorName]) ? $simplifyUsers[$actorName] : '';
-            $actor = $simplifyUser;
-            if(empty($simplifyUser))
-            {
-                $actor = new stdclass();
-                $actor->id       = 0;
-                $actor->account  = $actorName;
-                $actor->realname = $actorName;
-                $actor->avatar   = '';
-            }
-
-            /* 创建动态对象的副本避免修改原对象 */
-            $newDynamic = clone $dynamic;
-            $newDynamic->actor = $actor;
-            $actions[]      = $newDynamic;
-        }
-
-        return $actions;
+        return $this->objectModel->processDynamicForAPI($dynamics);
     }
 
     /**
@@ -902,7 +628,6 @@ class actionTest
     public function buildDateGroupTest(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
         $objects = $this->objectModel->buildDateGroup($actions, $direction, $orderBy);
-
         if(dao::isError()) return dao::getError();
 
         if(!$objects) $objects = array();
@@ -920,15 +645,13 @@ class actionTest
     public function restoreStagesTest($stageList, $actionIdList)
     {
         $this->objectModel->restoreStages($stageList);
-
         if(dao::isError()) return dao::getError();
 
         $actionList = array();
         foreach($actionIdList as $actionID) $actionList[$actionID] = $this->objectModel->getByID($actionID);
-        global $tester;
         foreach($stageList as $stageId)
         {
-            $stage = $tester->dao->select('id, deleted')->from(TABLE_STAGE)->where('id')->eq($stageId)->fetch();
+            $stage = $this->objectModel->dao->select('id, deleted')->from(TABLE_STAGE)->where('id')->eq($stageId)->fetch();
             if(!$stage || $stage->deleted) return false;
         }
 
@@ -949,11 +672,8 @@ class actionTest
     public function getRepeatObjectTest(int $actionID, string $table): object|string
     {
         $action = $this->objectModel->getById($actionID);
-
         $result = $this->objectModel->getRepeatObject($action, $table);
-
         if(dao::isError()) return dao::getError();
-
         return $result[0];
     }
 
@@ -969,12 +689,9 @@ class actionTest
     public function updateStageAttributeTest(string $attribute, array $stages): array|bool
     {
         $this->objectModel->updateStageAttribute($attribute, $stages);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stages)->fetchAll();
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stages)->fetchAll();
     }
 
     /**
@@ -988,9 +705,7 @@ class actionTest
     public function getDeletedStagedByListTest(array $list): array
     {
         $objects = $this->objectModel->getDeletedStagedByList($list);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -1007,12 +722,9 @@ class actionTest
     public function updateObjectByIDTest(string $table, int $id, array $updateParams)
     {
         $this->objectModel->updateObjectByID($table, $id, $updateParams);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from($table)->where('id')->eq($id)->fetch();
-        return $object;
+        return $this->objectModel->dao->select('*')->from($table)->where('id')->eq($id)->fetch();
     }
 
     /**
@@ -1029,9 +741,7 @@ class actionTest
     public function getLikeObjectTest(string $table, string $field, string $param, string $value): int
     {
         $objects = $this->objectModel->getLikeObject($table, $field, $param, $value);
-
-        if(dao::isError()) return dao::getError();
-
+        if(dao::isError()) return 0;
         return count($objects);
     }
 
@@ -1045,24 +755,8 @@ class actionTest
     public function getFirstActionTest(): array|object|false
     {
         $object = $this->objectModel->getFirstAction();
-
         if(dao::isError()) return dao::getError();
-
         return $object;
-    }
-
-    /**
-     * 魔术方法，可以调用一些比较简单的方法。
-     * Magic methods can refer to some relatively simple methods.
-     *
-     * @param  string $method
-     * @param  array $args
-     * @access public
-     * @return mixed
-     */
-    public function __call(string $method, array $args): mixed
-    {
-        return call_user_func_array(array($this->objectModel, $method), $args);
     }
 
     /**
@@ -1123,8 +817,7 @@ class actionTest
     {
         $result = $this->objectModel->getAccountFirstAction($account);
         if(dao::isError()) return dao::getError();
-
-        return $result ?: false;
+        return $result;
     }
 
     /**
@@ -1139,7 +832,6 @@ class actionTest
     {
         $result = $this->objectModel->renderAction($action, $desc);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1154,7 +846,6 @@ class actionTest
     {
         $result = $this->objectModel->formatActionComment($comment);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1190,107 +881,14 @@ class actionTest
      */
     public function printChangesTest(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): string
     {
-        try {
-            // 尝试直接调用renderChanges方法
-            $result = $this->objectModel->renderChanges($objectType, $objectID, $histories, $canChangeTag);
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            // 如果调用失败，使用备用的模拟实现
-            return $this->mockRenderChanges($objectType, $objectID, $histories, $canChangeTag);
-        }
-    }
+        ob_start();
+        $this->objectModel->printChanges($objectType, $objectID, $histories, $canChangeTag);
+        $output = ob_get_contents();
+        ob_end_clean();
 
-    /**
-     * 备用的模拟renderChanges实现，用于测试环境有问题时
-     */
-    private function mockRenderChanges(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): string
-    {
-        if(empty($histories)) return '';
+        if(dao::isError()) return dao::getError();
 
-        global $tester;
-
-        // 初始化语言包
-        $this->initMockLang($tester, $objectType);
-
-        $maxLength = 0;
-        $historiesWithDiff = array();
-        $historiesWithoutDiff = array();
-
-        // 处理历史记录
-        foreach($histories as $history)
-        {
-            $fieldName = $history->field;
-            $history->fieldLabel = $this->getFieldLabel($tester, $objectType, $fieldName);
-
-            if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
-
-            if(!empty($history->diff))
-            {
-                $historiesWithDiff[] = $history;
-            }
-            else
-            {
-                $historiesWithoutDiff[] = $history;
-            }
-        }
-
-        $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
-
-        $content = '';
-        foreach($histories as $history)
-        {
-            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, ' ');
-
-            if(!empty($history->diff))
-            {
-                $history->diff = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff = htmlspecialchars($history->diff);
-                $history->diff = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
-                $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
-
-                $content .= sprintf($tester->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
-            }
-            else
-            {
-                $content .= sprintf($tester->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
-            }
-        }
-
-        return $content;
-    }
-
-    private function initMockLang($tester, string $objectType): void
-    {
-        if(!isset($tester->lang->task))
-        {
-            $tester->lang->task = (object)array(
-                'status' => '任务状态',
-                'assignedTo' => '指派给',
-                'desc' => '任务描述',
-                'title' => '任务名称'
-            );
-        }
-
-        if(!isset($tester->lang->action))
-        {
-            $tester->lang->action = (object)array(
-                'desc' => (object)array(
-                    'diff1' => '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n",
-                    'diff2' => '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>"
-                ),
-                'label' => (object)array('space' => ' ')
-            );
-        }
-    }
-
-    private function getFieldLabel($tester, string $objectType, string $fieldName): string
-    {
-        if(isset($tester->lang->{$objectType}) && isset($tester->lang->{$objectType}->{$fieldName}))
-        {
-            return $tester->lang->{$objectType}->{$fieldName};
-        }
-        return $fieldName;
+        return $output;
     }
 
     /**
@@ -1302,43 +900,14 @@ class actionTest
      */
     public function printActionForGitLabTest(object $action): string|false
     {
-        // 模拟printActionForGitLab方法的逻辑，避免数据库依赖
-        if(!isset($action->objectType) || !isset($action->action)) return '0';
+        ob_start();
+        $this->objectModel->printActionForGitLab($action);
+        $output = ob_get_contents();
+        ob_end_clean();
 
-        $actionType = strtolower($action->action);
+        if(dao::isError()) return dao::getError();
 
-        // 模拟lang->action->apiTitle的定义
-        $apiTitles = array(
-            'opened'     => '首次创建。',
-            'created'    => '首次创建。',
-            'assigned'   => '指派给 <strong>%s</strong>。',
-            'closed'     => '执行了关闭操作。',
-            'edited'     => '编辑操作。',
-            'commented'  => '添加了备注',
-            'activated'  => '执行激活操作。',
-            'resolved'   => '解决。',
-        );
-
-        if(isset($apiTitles[$actionType]) && isset($action->extra))
-        {
-            /* 如果extra列是一个用户名，则组装链接。 */
-            if($action->action == "assigned" && $action->extra == 'admin')
-            {
-                // 模拟创建用户链接
-                $url = 'user-profile-1.html';
-                $action->extra = "<a href='{$url}' target='_blank'>{$action->extra}</a>";
-            }
-
-            return sprintf($apiTitles[$actionType], $action->extra);
-        }
-        elseif(isset($apiTitles[$actionType]) && !isset($action->extra))
-        {
-            return $apiTitles[$actionType];
-        }
-        else
-        {
-            return $actionType;
-        }
+        return $output;
     }
 
     /**
@@ -1352,68 +921,9 @@ class actionTest
      */
     public function processActionForAPITest($actions, $users = array(), $objectLang = array()): array
     {
-        // 简化版本，专注于核心逻辑测试，避免数据库依赖
-        if(is_object($actions))    $actions    = (array)$actions;
-        if(is_object($users))      $users      = (array)$users;
-        if(is_object($objectLang)) $objectLang = (array)$objectLang;
-
-        // 空数组处理
-        if(empty($actions)) return array();
-
-        foreach($actions as $action)
-        {
-            // 核心逻辑1：处理actor映射
-            if(isset($users[$action->actor])) {
-                $action->actor = $users[$action->actor];
-            }
-
-            // 核心逻辑2：处理assigned类型的extra映射
-            if($action->action == 'assigned' && isset($users[$action->extra])) {
-                $action->extra = $users[$action->extra];
-            }
-
-            // 核心逻辑3：处理带冒号的actor
-            if(is_string($action->actor) && strpos($action->actor, ':') !== false) {
-                $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
-            }
-
-            // 核心逻辑4：添加desc字段（避免调用printAction）
-            $action->desc = 'Test action description';
-
-            // 核心逻辑5：处理history的fieldName映射
-            if($action->history && is_array($action->history))
-            {
-                foreach($action->history as $i => $history)
-                {
-                    if(isset($objectLang[$history->field])) {
-                        $history->fieldName = $objectLang[$history->field];
-                    } else {
-                        $history->fieldName = $history->field;
-                    }
-                    $action->history[$i] = $history;
-                }
-            }
-        }
-
-        return array_values($actions);
-    }
-
-    /**
-     * Test processActionForAPI method specifically for history field mapping.
-     *
-     * @param  array|object $actions
-     * @param  array|object $users
-     * @param  array|object $objectLang
-     * @access public
-     * @return string
-     */
-    public function processActionForAPIHistoryTest($actions, $users = array(), $objectLang = array()): string
-    {
-        $result = $this->processActionForAPITest($actions, $users, $objectLang);
-        if(empty($result) || !isset($result[0]->history) || !is_array($result[0]->history) || empty($result[0]->history)) {
-            return '';
-        }
-        return $result[0]->history[0]->fieldName ?? '';
+        $result = $this->objectModel->processActionForAPI($actions, $users, $objectLang);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -1426,25 +936,18 @@ class actionTest
      */
     public function buildTrashSearchFormTest(int $queryID, string $actionURL): array
     {
-        global $tester;
-
-        // 备份原始配置
-        $originalConfig = isset($tester->config->trash->search) ? $tester->config->trash->search : null;
+        $originalConfig = $this->objectModel->config->trash->search ?? null; // 备份原始配置
 
         $this->objectModel->buildTrashSearchForm($queryID, $actionURL);
-
         if(dao::isError()) return dao::getError();
 
         // 获取设置后的配置值
         $result = array(
-            'actionURL' => $tester->config->trash->search['actionURL'] ?? '',
-            'queryID'   => $tester->config->trash->search['queryID'] ?? 0
+            'actionURL' => $this->objectModel->config->trash->search['actionURL'] ?? '',
+            'queryID'   => $this->objectModel->config->trash->search['queryID'] ?? 0
         );
 
-        // 恢复原始配置
-        if($originalConfig !== null) {
-            $tester->config->trash->search = $originalConfig;
-        }
+        if($originalConfig !== null) $this->objectModel->config->trash->search = $originalConfig; // 恢复原始配置
 
         return $result;
     }
@@ -1460,7 +963,6 @@ class actionTest
     {
         $result = $this->objectModel->getAttributeByExecutionID($executionID);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1479,7 +981,6 @@ class actionTest
 
         $result = $method->invoke($this->objectModel, $action);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1492,12 +993,8 @@ class actionTest
      */
     public function processAttributeTest(string $type): string
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-        $result = $actionTao->processAttribute($type);
-
+        $result = $this->objectTao->processAttribute($type);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1517,7 +1014,6 @@ class actionTest
 
         $result = $method->invoke($this->objectModel, $action, $object);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1531,12 +1027,8 @@ class actionTest
      */
     public function getLinkedExtraTest(object $action, string $type): bool
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-        $result = $actionTao->getLinkedExtra($action, $type);
-
+        $result = $this->objectTao->getLinkedExtra($action, $type);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1555,36 +1047,26 @@ class actionTest
      */
     public function processActionExtraTest(string $table, int $extraID, string $fields, string $type, string $method = 'view', bool $onlyBody = false, bool $addLink = true): string
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-
         // 创建测试用的action对象
         $action = new stdClass();
-        $action->extra = $extraID;
+        $action->extra      = $extraID;
         $action->objectType = 'bug';
-        $action->action = 'converttotask';
-        $action->project = 1;
+        $action->action     = 'converttotask';
+        $action->project    = 1;
 
-        // 备份原始extra值
-        $originalExtra = $action->extra;
+        $originalExtra = $action->extra; // 备份原始extra值
 
         // 模拟onlyBody场景
         if($onlyBody)
         {
-            $originalIsonlybody = $tester->config->requestType ?? 'GET';
+            $originalIsonlybody = $this->objectModel->config->requestType ?? 'GET';
             $_GET['onlybody'] = 'yes';
         }
 
-        // 调用测试方法
-        $actionTao->processActionExtra($table, $action, $fields, $type, $method, $onlyBody, $addLink);
-
+        $this->objectTao->processActionExtra($table, $action, $fields, $type, $method, $onlyBody, $addLink);
         if(dao::isError()) return dao::getError();
 
-        // 恢复onlyBody状态
-        if($onlyBody)
-        {
-            unset($_GET['onlybody']);
-        }
+        if($onlyBody) unset($_GET['onlybody']); // 恢复onlyBody状态
 
         // 分析结果 - 优先检查特殊场景
         if($action->extra == $originalExtra) return 'no_change';
@@ -1592,7 +1074,6 @@ class actionTest
         if(!$addLink && strpos($action->extra, '#') !== false && strpos($action->extra, '<a') === false) return 'no_link';
         if($action->objectType == 'bug' && $type == 'task' && strpos($action->extra, 'data-app=') !== false) return 'bug_to_task';
         if(strpos($action->extra, '<a') !== false) return 'contains_link';
-
         return 'processed';
     }
 
@@ -1605,18 +1086,13 @@ class actionTest
      */
     public function processStoryGradeActionExtraTest(int $storyID): object
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-
         // 创建测试用的action对象
         $action = new stdClass();
         $action->objectID = $storyID;
-        $action->extra = '';
+        $action->extra    = '';
 
-        $result = $actionTao->processStoryGradeActionExtra($action);
-
+        $result = $this->objectTao->processStoryGradeActionExtra($action);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1630,12 +1106,8 @@ class actionTest
      */
     public function processParamStringTest(object $action, string $type): string
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-        $result = $actionTao->processParamString($action, $type);
-
+        $result = $this->objectTao->processParamString($action, $type);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1652,112 +1124,22 @@ class actionTest
         $action = new stdClass();
         $action->extra = $taskIds;
 
-        // 检查tao对象是否存在，如果不存在则使用简化的逻辑
-        if(isset($this->objectTao) && $this->objectTao)
-        {
-            try {
-                $this->objectTao->processCreateChildrenActionExtra($action);
-            } catch (Exception $e) {
-                // 如果调用失败，使用备用逻辑
-                $this->processCreateChildrenActionExtraBackup($action);
-            }
-        }
-        else
-        {
-            // 使用备用逻辑
-            $this->processCreateChildrenActionExtraBackup($action);
-        }
-
+        $this->objectTao->processCreateChildrenActionExtra($action);
         if(dao::isError()) return dao::getError();
-
         return $action;
-    }
-
-    /**
-     * 备用的processCreateChildrenActionExtra实现
-     *
-     * @param  object $action
-     * @access private
-     * @return void
-     */
-    private function processCreateChildrenActionExtraBackup(object $action): void
-    {
-        if(empty($action->extra))
-        {
-            $action->extra = '';
-            return;
-        }
-
-        global $tester;
-        if(!$tester || !isset($tester->dao))
-        {
-            $action->extra = '';
-            return;
-        }
-
-        try {
-            $names = $tester->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs();
-            $action->extra = '';
-            if($names)
-            {
-                foreach($names as $id => $name)
-                {
-                    // 简化版本：直接生成文本格式，不检查权限
-                    $action->extra .= "#{$id} " . $name . ', ';
-                }
-            }
-            $action->extra = trim(trim($action->extra), ',');
-        } catch (Exception $e) {
-            // 如果数据库操作失败，设置为空字符串
-            $action->extra = '';
-        }
     }
 
     /**
      * Test processCreateRequirementsActionExtra method.
      *
-     * @param  string $storyIds
+     * @param  object $action
      * @access public
-     * @return string
+     * @return object
      */
-    public function processCreateRequirementsActionExtraTest(string $storyIds): string
+    public function processCreateRequirementsActionExtraTest(object $action): object
     {
-        // 完全独立的测试逻辑，不依赖tester对象
-        // 基于processCreateRequirementsActionExtra方法的逻辑进行测试
-
-        if(empty($storyIds)) return 'empty_input';
-
-        // 模拟数据库查询 - 检查story是否存在
-        $names = array();
-        $storyIdArray = array_filter(explode(',', $storyIds));
-
-        foreach($storyIdArray as $id)
-        {
-            $id = trim($id);
-            if(is_numeric($id) && $id > 0 && $id <= 10) // 假设我们有1-10的测试数据
-            {
-                $names[$id] = "需求标题{$id}";
-            }
-        }
-
-        if(empty($names)) return 'no_valid_ids';
-
-        // 模拟processCreateRequirementsActionExtra的行为
-        $extra = '';
-        foreach($names as $id => $name)
-        {
-            // 模拟有权限查看需求的情况
-            $extra .= "#{$id} " . $name . ', ';
-        }
-        $extra = trim(trim($extra), ',');
-
-        // 由于方法会尝试生成链接，在正常情况下应该包含链接
-        if(strpos($extra, '#') !== false)
-        {
-            return 'with_hash_only'; // 模拟没有权限或链接生成失败的情况
-        }
-
-        return 'processed';
+        $this->objectTao->processCreateRequirementsActionExtra($action);
+        return $action;
     }
 
     /**
@@ -1770,17 +1152,12 @@ class actionTest
      */
     public function processAppendLinkByExtraTest(string $extra, string $objectType = 'task'): object
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-
         $action = new stdClass();
-        $action->extra = $extra;
+        $action->extra      = $extra;
         $action->objectType = $objectType;
 
-        $actionTao->processAppendLinkByExtra($action);
-
+        $this->objectTao->processAppendLinkByExtra($action);
         if(dao::isError()) return dao::getError();
-
         return $action;
     }
 
@@ -1798,35 +1175,7 @@ class actionTest
         $action = new stdClass();
         $action->extra = $extra;
 
-        // 模拟processLinkStoryAndBugActionExtra方法的核心逻辑，避免框架依赖
-        // 处理空字符串情况
-        if(empty(trim($extra)))
-        {
-            $action->extra = '';
-            return $action;
-        }
-
-        // 核心逻辑：处理链接到故事和bug的额外信息
-        $extraResult = '';
-        foreach(explode(',', $action->extra) as $id)
-        {
-            $id = trim($id);
-            if(empty($id)) continue;
-
-            // 模拟权限检查通过的情况 (common::hasPriv($module, $method))
-            $hasPriv = true; // 假设admin用户有权限
-            if($hasPriv)
-            {
-                // 模拟html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-toggle='modal'")
-                $extraResult .= "<a href='/' data-size='lg' data-toggle='modal'>#{$id} </a>" . ', ';
-            }
-            else
-            {
-                $extraResult .= "#{$id}, ";
-            }
-        }
-        $action->extra = trim(trim($extraResult), ',');
-
+        $this->objectTao->processLinkStoryAndBugActionExtra($action, $module, $method);
         return $action;
     }
 
@@ -1840,9 +1189,7 @@ class actionTest
     public function processToStoryActionExtraTest(object $action): object
     {
         $this->objectTao->processToStoryActionExtra($action);
-
         if(dao::isError()) return dao::getError();
-
         return $action;
     }
 
@@ -1856,9 +1203,7 @@ class actionTest
     public function getActionTableTest(string $period): string
     {
         $result = $this->objectTao->getActionTable($period);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1875,75 +1220,34 @@ class actionTest
      */
     public function addObjectNameForActionTest(string $objectType, int $objectID, array $objectNames, string $actionType = '', string $extra = ''): object
     {
-        global $tester;
-        $actionTao = $tester->loadTao('action');
-
         // 创建测试用的action对象
         $action = new stdClass();
         $action->objectType = $objectType;
-        $action->objectID = $objectID;
-        $action->action = $actionType;
-        $action->extra = $extra;
+        $action->objectID   = $objectID;
+        $action->action     = $actionType;
+        $action->extra      = $extra;
         $action->objectName = '';
 
-        $actionTao->addObjectNameForAction($action, $objectNames, $objectType);
-
+        $this->objectTao->addObjectNameForAction($action, $objectNames, $objectType);
         if(dao::isError()) return dao::getError();
-
         return $action;
     }
 
     /**
      * Test processMaxDocObjectLink method.
      *
-     * @param  int    $objectID
-     * @param  string $objectType
+     * @param  object $action
+     * @param  string $moduleName
      * @param  string $methodName
      * @param  string $vars
      * @access public
      * @return object
      */
-    public function processMaxDocObjectLinkTest(int $objectID, string $objectType, string $methodName, string $vars): object
+    public function processMaxDocObjectLinkTest(object $action, string $moduleName, string $methodName, string $vars): object
     {
-        // 直接使用模拟逻辑，避免框架初始化问题
-        $result = new stdClass();
-        $result->moduleName = $objectType;
-        $result->methodName = $methodName;
-
-        // 模拟processMaxDocObjectLink方法的核心逻辑
-        if($objectType == 'doc')
-        {
-            // 模拟数据库查询结果：根据测试数据设置
-            $assetLibType = '';
-            if($objectID == 1) $assetLibType = 'practice';
-            if($objectID == 2) $assetLibType = 'component';
-            if($objectID == 3) $assetLibType = 'practice';
-            if($objectID == 4) $assetLibType = 'component';
-            // ID为5及以上的assetLibType为空
-
-            if($assetLibType)
-            {
-                $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
-                $result->moduleName = 'assetlib';
-                $result->methodName = $method;
-            }
-        }
-        else
-        {
-            // 模拟非doc类型的配置
-            $assetViewMethod = array(
-                'task' => 'taskView',
-                'story' => 'storyView'
-            );
-
-            if(isset($assetViewMethod[$objectType]))
-            {
-                $result->moduleName = 'assetlib';
-                $result->methodName = $assetViewMethod[$objectType];
-            }
-        }
-
-        return $result;
+        $this->objectTao->processMaxDocObjectLink($action, $moduleName, $methodName, $vars);
+        if(dao::isError()) return dao::getError();
+        return $action;
     }
 
     /**
@@ -1956,9 +1260,7 @@ class actionTest
     public function getDocLibLinkParametersTest(object $action)
     {
         $result = $this->objectTao->getDocLibLinkParameters($action);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1972,9 +1274,7 @@ class actionTest
     public function getDoclibTypeParamsTest(object $action): array
     {
         $result = $this->objectTao->getDoclibTypeParams($action);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1989,410 +1289,8 @@ class actionTest
     public function getObjectLinkParamsTest(object $action, string $vars): string
     {
         $result = $this->objectTao->getObjectLinkParams($action, $vars);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
-    }
-
-    /**
-     * Test getTrashesHeaderNavigation method.
-     *
-     * @param  array $objectTypeList
-     * @access public
-     * @return array
-     */
-    public function getTrashesHeaderNavigationTest(array $objectTypeList): array
-    {
-        global $tester;
-
-        // 加载action控制器基类
-        if(!class_exists('action'))
-        {
-            include dirname(__FILE__, 3) . '/control.php';
-        }
-
-        // 包含zen文件并实例化
-        include_once dirname(__FILE__, 3) . '/zen.php';
-        $actionZen = new actionZen();
-        $result = $actionZen->getTrashesHeaderNavigation($objectTypeList);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test saveUrlIntoSession method.
-     *
-     * @param  string $testUri
-     * @access public
-     * @return array|string
-     */
-    public function saveUrlIntoSessionTest(string $testUri = ''): array|string
-    {
-        global $tester;
-
-        // 备份原来的session数据
-        $sessionKeys = array(
-            'productList', 'productPlanList', 'releaseList', 'programList', 'projectList',
-            'executionList', 'taskList', 'buildList', 'bugList', 'caseList', 'testtaskList',
-            'docList', 'opportunityList', 'riskList', 'trainplanList', 'roomList',
-            'researchplanList', 'researchreportList', 'meetingList', 'designList',
-            'storyLibList', 'issueLibList', 'riskLibList', 'opportunityLibList',
-            'practiceLibList', 'componentLibList'
-        );
-
-        $originalSession = array();
-        foreach($sessionKeys as $key)
-        {
-            $originalSession[$key] = isset($tester->session->$key) ? $tester->session->$key : '';
-        }
-
-        // 加载action控制器基类并创建actionZen实例
-        if(!class_exists('action'))
-        {
-            include dirname(__FILE__, 3) . '/control.php';
-        }
-        include_once dirname(__FILE__, 3) . '/zen.php';
-
-        // 创建一个模拟的actionZen类用于测试
-        $actionZen = new class($testUri) extends actionZen {
-            private $mockUri;
-
-            public function __construct($uri = '')
-            {
-                $this->mockUri = $uri;
-                parent::__construct();
-            }
-
-            public function saveUrlIntoSession()
-            {
-                global $tester;
-                $uri = $this->mockUri ?: $this->app->getURI(true);
-                $tester->session->productList         = $uri;
-                $tester->session->productPlanList     = $uri;
-                $tester->session->releaseList         = $uri;
-                $tester->session->programList         = $uri;
-                $tester->session->projectList         = $uri;
-                $tester->session->executionList       = $uri;
-                $tester->session->taskList            = $uri;
-                $tester->session->buildList           = $uri;
-                $tester->session->bugList             = $uri;
-                $tester->session->caseList            = $uri;
-                $tester->session->testtaskList        = $uri;
-                $tester->session->docList             = $uri;
-                $tester->session->opportunityList     = $uri;
-                $tester->session->riskList            = $uri;
-                $tester->session->trainplanList       = $uri;
-                $tester->session->roomList            = $uri;
-                $tester->session->researchplanList    = $uri;
-                $tester->session->researchreportList  = $uri;
-                $tester->session->meetingList         = $uri;
-                $tester->session->designList          = $uri;
-                $tester->session->storyLibList        = $uri;
-                $tester->session->issueLibList        = $uri;
-                $tester->session->riskLibList         = $uri;
-                $tester->session->opportunityLibList  = $uri;
-                $tester->session->practiceLibList     = $uri;
-                $tester->session->componentLibList    = $uri;
-            }
-        };
-
-        // 调用测试方法
-        $actionZen->saveUrlIntoSession();
-
-        if(dao::isError()) return dao::getError();
-
-        // 获取保存后的session数据
-        $result = array();
-        foreach($sessionKeys as $key)
-        {
-            $result[$key] = isset($tester->session->$key) ? $tester->session->$key : '';
-        }
-
-        // 恢复原来的session数据
-        foreach($originalSession as $key => $value)
-        {
-            if($value !== '')
-            {
-                $tester->session->set($key, $value);
-            }
-            else
-            {
-                unset($tester->session->$key);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Test processTrash method.
-     *
-     * @param  object $trash
-     * @param  array  $projectList
-     * @param  array  $productList
-     * @param  array  $executionList
-     * @access public
-     * @return object
-     */
-    public function processTrashTest(object $trash, array $projectList = array(), array $productList = array(), array $executionList = array()): object
-    {
-        global $tester;
-
-        // 加载action控制器基类
-        if(!class_exists('action'))
-        {
-            include dirname(__FILE__, 3) . '/control.php';
-        }
-
-        // 包含zen文件并实例化
-        include_once dirname(__FILE__, 3) . '/zen.php';
-        $actionZen = new actionZen();
-
-        // 调用测试方法
-        $actionZen->processTrash($trash, $projectList, $productList, $executionList);
-
-        if(dao::isError()) return dao::getError();
-
-        return $trash;
-    }
-
-    /**
-     * Test getReplaceNameAndCode method.
-     *
-     * @param  string $name
-     * @param  string $code
-     * @param  string $table
-     * @access public
-     * @return array
-     */
-    public function getReplaceNameAndCodeTest(string $name, string $code, string $table): array
-    {
-        global $tester;
-
-        // 创建模拟的重复对象和原对象
-        $repeatObject = new stdClass();
-        $repeatObject->name = $name;
-        $repeatObject->code = $code;
-
-        $object = new stdClass();
-        $object->code = $code;
-
-        // 直接调用model层的方法来模拟zen层的逻辑
-        $existNames = $this->objectModel->getLikeObject($table, 'name', 'name', $repeatObject->name . '_%');
-        $replaceName = '';
-        for($i = 1; $i < 10000; $i++)
-        {
-            $replaceName = $repeatObject->name . '_' . $i;
-            if(!in_array($replaceName, $existNames)) break;
-        }
-
-        $replaceCode = '';
-        if($object->code)
-        {
-            $existCodes = $this->objectModel->getLikeObject($table, 'code', 'code', $repeatObject->code . '_%');
-            for($i = 1; $i < 10000; $i++)
-            {
-                $replaceCode = $repeatObject->code . '_' . $i;
-                if(!in_array($replaceCode, $existCodes)) break;
-            }
-        }
-
-        if(dao::isError()) return dao::getError();
-
-        return array($replaceName, $replaceCode);
-    }
-
-    /**
-     * Test checkActionExist method.
-     *
-     * @param  int $actionID
-     * @access public
-     * @return object|array
-     */
-    public function checkActionExistTest(int $actionID): object|array
-    {
-        if($actionID <= 0) return array('result' => 'fail', 'message' => '页面不存在。');
-        $action = $this->objectModel->getById($actionID);
-
-        if(!$action) return array('result' => 'fail', 'message' => '页面不存在。');
-        return $action;
-    }
-
-    /**
-     * Test getConfirmNoMessage method.
-     *
-     * @param  string $repeatName
-     * @param  string $replaceName
-     * @param  string $replaceCode
-     * @param  string $objectName
-     * @param  string $objectCode
-     * @param  string $testType
-     * @access public
-     * @return string
-     */
-    public function getConfirmNoMessageTest(string $repeatName, string $replaceName, string $replaceCode, string $objectName, string $objectCode, string $testType): string
-    {
-        global $tester;
-
-        // 加载action控制器基类
-        if(!class_exists('action'))
-        {
-            include dirname(__FILE__, 3) . '/control.php';
-        }
-
-        // 包含zen文件并实例化
-        include_once dirname(__FILE__, 3) . '/zen.php';
-        $actionZen = new actionZen();
-
-        // 创建模拟的重复对象
-        $repeatObject = new stdClass();
-        $repeatObject->name = $repeatName;
-        $repeatObject->code = ($testType == 'both' && $replaceCode) ? substr($replaceCode, 0, -2) : (($testType == 'code' && $replaceCode) ? substr($replaceCode, 0, -2) : '');
-
-        // 创建模拟的原对象
-        $object = new stdClass();
-        $object->name = $objectName;
-        $object->code = $objectCode;
-
-        // 创建模拟的旧Action对象
-        $oldAction = new stdClass();
-        switch($testType) {
-            case 'both':
-                $oldAction->objectType = 'product';
-                break;
-            case 'name':
-                $oldAction->objectType = 'story';
-                break;
-            case 'code':
-                $oldAction->objectType = 'task';
-                break;
-            case 'none':
-                $oldAction->objectType = 'project';
-                break;
-            case 'name_only':
-                $oldAction->objectType = 'bug';
-                break;
-        }
-
-        // 调用测试方法
-        $result = $actionZen->getConfirmNoMessage($repeatObject, $object, $oldAction, $replaceName, $replaceCode);
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test recoverObject method.
-     *
-     * @param  string $repeatName
-     * @param  string $repeatCode
-     * @param  string $replaceName
-     * @param  string $replaceCode
-     * @param  string $testType
-     * @access public
-     * @return object|string
-     */
-    public function recoverObjectTest(string $repeatName, string $repeatCode, string $replaceName, string $replaceCode, string $testType): object|string
-    {
-        global $tester;
-
-        // 加载action控制器基类
-        if(!class_exists('action'))
-        {
-            include dirname(__FILE__, 3) . '/control.php';
-        }
-
-        // 包含zen文件并实例化
-        include_once dirname(__FILE__, 3) . '/zen.php';
-        $actionZen = new actionZen();
-
-        // 确保actionZen类有正确的action属性
-        $actionZen->action = $this->objectModel;
-
-        // 创建模拟的重复对象
-        $repeatObject = new stdClass();
-        $repeatObject->name = $repeatName;
-        $repeatObject->code = $repeatCode;
-
-        // 创建模拟的原对象
-        $object = new stdClass();
-        $object->name = $repeatName;
-        $object->code = $repeatCode;
-
-        // 创建模拟的旧Action对象
-        $oldAction = new stdClass();
-        $oldAction->objectID = 1;
-        $oldAction->objectType = 'product';
-
-        // 设置数据表
-        $table = TABLE_PRODUCT;
-
-        if($testType == 'empty' || ($testType == 'none'))
-        {
-            // 如果是测试无变化的情况，直接返回
-            if(empty($replaceName) && empty($replaceCode)) return 'no_change';
-
-            // 模拟无重复的情况，修改重复对象的名称和代码
-            if($testType == 'none')
-            {
-                $repeatObject->name = '不重复产品';
-                $repeatObject->code = 'no_repeat';
-            }
-        }
-
-        // 调用测试方法
-        $actionZen->recoverObject($repeatObject, $object, $replaceName, $replaceCode, $table, $oldAction);
-
-        if(dao::isError()) return dao::getError();
-
-        // 检查更新结果
-        $updatedObject = $tester->dao->select('*')->from($table)->where('id')->eq($oldAction->objectID)->fetch();
-
-        if(!$updatedObject) return 'no_object';
-
-        // 根据测试类型返回相应的结果
-        switch($testType) {
-            case 'both':
-                return (object)array('name' => $updatedObject->name, 'code' => $updatedObject->code);
-            case 'name':
-                return (object)array('name' => $updatedObject->name);
-            case 'code':
-                return (object)array('code' => $updatedObject->code);
-            case 'none':
-            case 'empty':
-                return 'no_change';
-            default:
-                return $updatedObject;
-        }
-    }
-
-    /**
-     * Test restoreStages zen method.
-     *
-     * @param  int    $executionID
-     * @param  string $confirmChange
-     * @access public
-     * @return mixed
-     */
-    public function restoreStagesZenTest(int $executionID, string $confirmChange = 'no')
-    {
-        // 创建模拟的action对象
-        $action = new stdClass();
-        $action->objectID = $executionID;
-        $action->objectType = 'execution';
-
-        // 调用测试方法，因为测试数据限制，直接返回模拟结果
-        if($executionID == 16) return true; // 正常情况
-        if($executionID == 17) return '父阶段未创建过任务，不能恢复子阶段。'; // 未创建任务
-        if($executionID == 18) return '同级不能存在多种执行类型。'; // 类型冲突
-        if($executionID == 19 && $confirmChange == 'no') return '已删除的父阶段是:阶段2,阶段3,是否要同时恢复这些阶段?'; // 需要确认
-        if($executionID == 20 && $confirmChange == 'yes') return true; // 确认后成功
-
-        return false;
     }
 
     /**
@@ -2407,7 +1305,6 @@ class actionTest
     {
         $result = $this->objectTao->getReleaseRelated($objectType, $objectID);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2423,7 +1320,6 @@ class actionTest
     {
         $result = $this->objectTao->getReviewRelated($objectType, $objectID);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2441,8 +1337,6 @@ class actionTest
     {
         $result = $this->objectTao->getNeedRelatedFields($objectType, $objectID, $actionType, $extra);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
-
 }

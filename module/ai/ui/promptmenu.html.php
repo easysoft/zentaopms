@@ -25,17 +25,31 @@ $promptMenuInject = function()
     if(isInModal()) return;
 
     $this->loadModel('ai');
-    if(!$this->ai->hasModelsAvailable() || !commonModel::hasPriv('ai', 'promptExecute')) return;
+    if(!commonModel::hasPriv('ai', 'promptExecute')) return;
 
     $this->app->loadLang('ai');
     $this->app->loadConfig('ai');
-    $module = $this->app->getModuleName();
-    $method = $this->app->getMethodName();
+    $module   = $this->app->getModuleName();
+    $method   = $this->app->getMethodName();
+    $isDocApp = $module === 'doc' && $method === 'app';
+
+    if($isDocApp) $method = 'view';
     if(!isset($this->config->ai->menuPrint->locations[$module][$method])) return;
 
     $menuOptions = $this->config->ai->menuPrint->locations[$module][$method];
     $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
+
+    if($isDocApp)
+    {
+        h::globalJS
+        (
+            'window.docAIPrompts = ' . json_encode($prompts) . ";\n",
+            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $this->lang->ai->promptMenu->dropdownTitle, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
+        );
+        return;
+    }
+
     if(empty($prompts)) return;
 
     $html = '';
@@ -75,6 +89,7 @@ $promptMenuInject = function()
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
     (() => {
+        if(!window.top.zai) return;
         const container = window.frameElement?.closest('.load-indicator');
         if(container && container.dataset.loading)
         {
@@ -83,7 +98,9 @@ $promptMenuInject = function()
             container.classList.remove('no-delay');
         }
     JAVASCRIPT;
-    $script .= "$(`$menuOptions->targetContainer`).first()." . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
+    $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
+    $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
+    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
     JAVASCRIPT;

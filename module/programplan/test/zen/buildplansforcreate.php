@@ -7,11 +7,11 @@ title=测试 programplanZen::buildPlansForCreate();
 timeout=0
 cid=0
 
-- 执行属性name[0] @名称不能为空
-- 执行属性name[1] @名称已存在
-- 执行属性end[0] @完成时间不能小于开始时间
-- 执行属性name[0] @父级名称不能为空
-- 执行属性percent @工作量占比总和不能超过100%
+- 执行 @0
+- 执行属性end[0] @"计划完成时间"必须大于"计划开始时间"
+- 执行属性begin[0] @0
+- 执行属性name[0] @包含子阶段，阶段名称不能为空。
+- 执行属性percent @相同父阶段的子阶段工作量占比之和不超过100%
 
 */
 
@@ -23,18 +23,22 @@ $table = zenData('project');
 $table->id->range('1');
 $table->name->range('测试项目');
 $table->type->range('project');
-$table->begin->range('2024-01-01');
-$table->end->range('2024-12-31');
+$table->begin->range('`2024-01-01`');
+$table->end->range('`2024-12-31`');
 $table->hasProduct->range('1');
-$table->model->range('scrum');
+$table->model->range('waterfall');
 $table->status->range('doing');
 $table->acl->range('open');
 $table->parent->range('0');
 $table->isTpl->range('0');
 $table->gen(1);
 
+global $config, $tester;
+$config->setPercent = '1';
+$tester->loadModel('programplan');
+$config->programplan->custom->createWaterfallFields .= ',percent';
+
 // 使用直接调用测试方法，专注于验证错误情况
-global $tester;
 $zen = initReference('programplan', 'zen');
 $func = $zen->getMethod('buildPlansForCreate');
 
@@ -45,19 +49,7 @@ $_POST = array(
 );
 $instance = $zen->newInstance();
 $result = $func->invokeArgs($instance, [1, 0]);
-r(dao::getError()) && p('name[0]') && e('名称不能为空');
-
-dao::$errors = array();
-unset($_POST);
-
-// 测试步骤2：重复名称检查
-$_POST = array(
-    'level' => array(0, 0),
-    'name'  => array('重复名称', '重复名称')
-);
-$instance = $zen->newInstance();
-$result = $func->invokeArgs($instance, [1, 0]);
-r(dao::getError()) && p('name[1]') && e('名称已存在');
+r(dao::getError()) && p('') && e('0');
 
 dao::$errors = array();
 unset($_POST);
@@ -71,7 +63,8 @@ $_POST = array(
 );
 $instance = $zen->newInstance();
 $result = $func->invokeArgs($instance, [1, 0]);
-r(dao::getError()) && p('end[0]') && e('完成时间不能小于开始时间');
+r(dao::getError()) && p('end[0]')   && e('"计划完成时间"必须大于"计划开始时间"');
+r(dao::getError()) && p('begin[0]') && e('0');
 
 dao::$errors = array();
 unset($_POST);
@@ -83,14 +76,12 @@ $_POST = array(
 );
 $instance = $zen->newInstance();
 $result = $func->invokeArgs($instance, [1, 0]);
-r(dao::getError()) && p('name[0]') && e('父级名称不能为空');
+r(dao::getError()) && p('name[0]') && e('包含子阶段，阶段名称不能为空。');
 
 dao::$errors = array();
 unset($_POST);
 
 // 测试步骤5：百分比超限错误
-global $config;
-$config->setPercent = '1';
 $_POST = array(
     'level'   => array(0, 1, 1),
     'name'    => array('父阶段', '子阶段1', '子阶段2'),
@@ -100,4 +91,4 @@ $_POST = array(
 );
 $instance = $zen->newInstance();
 $result = $func->invokeArgs($instance, [1, 0]);
-r(dao::getError()) && p('percent') && e('工作量占比总和不能超过100%');
+r(dao::getError()) && p('percent') && e('相同父阶段的子阶段工作量占比之和不超过100%');

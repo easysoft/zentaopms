@@ -175,14 +175,15 @@ class actionZen extends action
      *
      * @param  int    $actionID
      * @access public
-     * @return object
+     * @return array|object
      */
-    public function checkActionExist(int $actionID): object
+    public function checkActionExist(int $actionID): array|object
     {
-        if($actionID <= 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
-        $action = $this->action->getById($actionID);
+        if($actionID <= 0) return ['result' => 'fail', 'message' => $this->lang->notFound];
 
-        if(!$action) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+        $action = $this->action->getById($actionID);
+        if(!$action) return ['result' => 'fail', 'message' => $this->lang->notFound];
+
         return $action;
     }
 

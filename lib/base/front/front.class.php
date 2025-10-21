@@ -1039,7 +1039,11 @@ EOT;
             $url = $config->webRoot;
         }
 
-        if($app->viewType == 'json')
+        if($app->apiVersion == 'v2')
+        {
+            helper::send(array("status" => "fail", "message" => "Not allowed"), 401);
+        }
+        elseif($app->viewType == 'json')
         {
             $data = strtolower((string) $url) == 'back' ? array('locate' => 'back') : array('locate' => common::getSysURL() . $url);
 

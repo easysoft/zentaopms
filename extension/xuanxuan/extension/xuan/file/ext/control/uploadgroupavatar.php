@@ -7,7 +7,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function uploadChatAvatar()
+    public function uploadGroupAvatar()
     {
         if($this->app->user->account == 'guest') die;
 

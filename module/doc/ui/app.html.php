@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 /*
  * 定义库类型名称和图标。
  * Define the lib types and icons.

@@ -403,7 +403,7 @@ class userEntry extends entry
         $this->setPost('account', $oldUser->account);
 
         $userGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->fetchPairs('group', 'group');
-        $this->setPost('groups', $this->request('groups', zget($_POST, 'groups', array_values($userGroups))));
+        $this->setPost('group', $this->request('group', zget($_POST, 'group', array_values($userGroups))));
 
         $gender = $this->request('gender', zget($_POST, 'gender', 'f'));
         if(!in_array($gender, array('f', 'm'))) return $this->sendError(400, "The value of gender must be 'f' or 'm'");

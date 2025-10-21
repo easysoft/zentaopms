@@ -56,7 +56,7 @@ window.changeType = function(e)
     {
         items = nameItems[type];
         $nameBox.html("<div class='picker-box' id='" + type + "'></div>");
-        $nameBox.find('#' + type).picker({items: items, name: type});
+        $nameBox.find('#' + type).picker({items: items, name: `${type}[${index}]`});
     }
     else
     {

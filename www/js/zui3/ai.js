@@ -4,13 +4,13 @@ window.checkZAIPanel = async function(showMessage)
     const store = zaiPanel ? zaiPanel.store : null;
     if(!store || !store.isConfigOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.zaiConfigNotValid);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.zaiConfigNotValid}});
         return;
     }
     const isOK = await store.isOK();
     if(!isOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.unauthorizedError);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.unauthorizedError}});
         return;
     }
     return zaiPanel;
@@ -20,9 +20,11 @@ window.openPageForm = function(url, data, callback)
 {
     return new Promise((resolve, reject) => {
         const openedApp = $.apps.openApp(url);
-        const handlePageLoad = () =>
+        let updateTimer = 0;
+        const tryUpdateForm = () =>
         {
-            setTimeout(() =>
+            if(updateTimer) clearTimeout(updateTimer);
+            updateTimer = setTimeout(() =>
             {
                 try
                 {
@@ -36,8 +38,8 @@ window.openPageForm = function(url, data, callback)
                 } catch (error) {reject(error)}
             }, 2000);
         };
-        openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
-        setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+        openedApp.$app.one('updateapp.apps updatepage.app', tryUpdateForm);
+        setTimeout(() => openedApp.$app.off('updateapp.apps', tryUpdateForm), 5000);
     });
 }
 
@@ -54,8 +56,17 @@ window.executeZentaoPrompt = async function(info, auto)
         openedFormApp = await openPageForm(info.formLocation);
     }
 
-    const langData = zaiPanel.options.langData || {};
-    const toolName = `zentao_tool_${info.promptID}`;
+    const langData  = zaiPanel.options.langData || {};
+    const toolName  = `zentao_tool_${info.promptID}`;
+    const dataPropNames = info.dataPropNames || {};
+    let   propNames = dataPropNames[info.objectType] || {};
+    const isChange  = info.schema.title === dataPropNames.common;
+    if(!isChange)
+    {
+        const properties = info.schema.properties;
+        propNames = {title: info.schema.title};
+        Object.keys(properties).forEach(key => propNames[key] = properties[key].title || properties[key].description);
+    }
     const tools = [{
         name       : toolName,
         displayName: info.name,
@@ -77,11 +88,11 @@ window.executeZentaoPrompt = async function(info, auto)
 
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
-            const propNames       = info.dataPropNames ? (info.dataPropNames[info.objectType] || {}) : {};
             const h               = zui.html;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
-            if(originObject)
+            const renderValue     = value => (typeof value === 'object') ? langData.notSupportPreview : value;
+            if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
@@ -89,8 +100,8 @@ window.executeZentaoPrompt = async function(info, auto)
                     const isSame = String(oldValue) === String(value);
                     return h`<tr class="whitespace-pre-wrap">
     <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
-    <td class=${isSame ? '' : 'success-pale'}>${value}</td>
-    <td class=${isSame ? '' : 'danger-pale'}>${oldValue}</td>
+    <td class=${isSame ? '' : 'success-pale'}>${renderValue(value)}</td>
+    <td class=${isSame ? '' : 'danger-pale'}>${renderValue(oldValue)}</td>
 </tr>`;
                 };
                 diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID})}</h6>
@@ -100,6 +111,24 @@ window.executeZentaoPrompt = async function(info, auto)
             <th style="width: 100px;">${langData.changeProp}</th>
             <th>${langData.afterChange}</th>
             <th>${langData.beforeChange}</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}
+    </tbody>
+</table>`;
+            }
+            else
+            {
+                const renderProp = (prop, value) => {
+                    return h`<tr class="whitespace-pre-wrap"><td class="font-bold">${propNames[prop] || prop}</td><td>${renderValue(value)}</td></tr>`;
+                };
+                diffView = h`<h6>${info.targetFormName}</h6>
+<table class="table bordered" style="min-width: 600px">
+    <thead>
+        <tr>
+            <th style="width: 100px;">${langData.changeProp}</th>
+            <th>${langData.afterChange}</th>
         </tr>
     </thead>
     <tbody>
@@ -189,24 +218,6 @@ function registerZentaoAIPlugin(lang)
         },
     });
 
-    plugin.bindEvent('updatepage', function(_context, data)
-    {
-        if(data.page.path === 'story-view')
-        {
-            const pageWindow         = $.apps.getLastApp().iframe.contentWindow;
-            const page$              = pageWindow.$;
-            const $firstSectionTitle = page$('#mainContent .detail-sections[zui-key="main"] > .detail-section').first().children('.detail-section-title,.flex.items-center').first();
-            if(!$firstSectionTitle.length) return;
-
-            let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
-            if(!$injectActions.length)
-            {
-                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${lang.aiReview}</button></div>`).appendTo($firstSectionTitle);
-                $firstSectionTitle.find('span').first().addClass('flex-auto');
-            }
-        }
-    });
-
     plugin.defineContextProvider(
     {
         code: 'currentPage',
@@ -243,9 +254,9 @@ function registerZentaoAIPlugin(lang)
     const zentaoVersion = window.config?.version || '';
     const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
 
-    ["story", "demand", "bug", "doc", "design", "feedback"].forEach(objectType => {
-        if(objectType === "feedback" && !zentaoEdition) return;
-        if(objectType === "demand" && zentaoEdition !== "ipd") return;
+    ['story', 'demand', 'bug', 'doc', 'design', 'feedback'].forEach(objectType => {
+        if(objectType === 'feedback' && !zentaoEdition) return;
+        if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
         plugin.defineContextProvider({
             code: `${objectType}Lib`,
             title: lang[objectType],
@@ -255,17 +266,17 @@ function registerZentaoAIPlugin(lang)
             {
                 memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
             },
-            generate: (userPrompt, { plugin }) => {
-                const objectName = plugin?.getLang(objectType) ?? objectType;
-                const matches = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+            generate: (userPrompt) => {
+                const objectName = lang[objectType] || objectType;
+                const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
                 {
                     return matches.map(match => {
                         const objectID = match[2];
                         return {
-                            code: `${objectType}-${objectID}`,
+                            code:      `${objectType}-${objectID}`,
                             recommend: true,
-                            title: `${objectName} #${objectID}`,
+                            title:     `${objectName} #${objectID}`,
                             data: () => ({
                                 memory:
                                 {
@@ -323,7 +334,7 @@ function bindAICommandsInApp(win)
     const panel = win.zui.AIPanel.shared;
     if(panel)
     {
-        win.zui.bindCommands(contextWindow.document.body,
+        win.zui.bindCommands(win.document.body,
         {
             commands: {},
             scope: panel.commandScope,
@@ -332,7 +343,8 @@ function bindAICommandsInApp(win)
     }
 }
 
-$(() => {
+$(() =>
+{
     if(getZentaoPageType() !== 'home')
     {
         bindAICommandsInApp(window);
@@ -344,9 +356,8 @@ $(() => {
 
     const zaiConfig = window.zai || window.top.zai;
     if(zaiConfig)
-    {
-        const langData = zaiConfig.langData;
-        registerZentaoAIPlugin(langData);
+    {;
+        registerZentaoAIPlugin(zaiLang);
 
         const aiStore = zui.ZAIStore.createFromZentao(zaiConfig);
         if(!aiStore) return
@@ -357,7 +368,7 @@ $(() => {
             store            : aiStore,
             position         : {bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
             maximizedPosition: {left: 'calc(var(--zt-menu-width) + 4px)', top: 4, bottom: 'calc(var(--zt-apps-bar-height) + 4px)', right: 16},
-            langData         : langData,
+            langData         : zaiLang,
             getAvatar        : (info, props) =>
             {
                 if(info.role === 'user')

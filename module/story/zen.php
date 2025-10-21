@@ -1215,6 +1215,9 @@ class storyZen extends story
                 if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
             }
         }
+
+        if(!empty($_POST['estimate']) && $_POST['estimate'] < 0) dao::$errors['estimate'] = sprintf($this->lang->story->errorRecordMinus, $this->lang->story->estimateAB);
+
         if(dao::isError()) return false;
 
         $storyData = form::data($fields)
@@ -1252,6 +1255,7 @@ class storyZen extends story
     {
         $storyPlan = array();
         $oldStory  = $this->story->getByID($storyID);
+        if(!$oldStory) return false;
 
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview($oldStory->type) and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
@@ -1268,6 +1272,9 @@ class storyZen extends story
             if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
             if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
         }
+
+        if(!empty($_POST['estimate']) && $_POST['estimate'] < 0) dao::$errors['estimate'] = sprintf($this->lang->story->errorRecordMinus, $this->lang->story->estimateAB);
+
         if(dao::isError()) return false;
 
         $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1498,6 +1505,7 @@ class storyZen extends story
 
         if($result == 'reject' && empty($closedReason)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->rejectedReason);
         if($result == 'reject' && $closedReason == 'duplicate' && empty($storyData->duplicateStory)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+        if(!empty($storyData->estimate) && $storyData->estimate < 0) dao::$errors['estimate'] = sprintf($this->lang->story->errorRecordMinus, $this->lang->story->estimate);
         if(dao::isError()) return false;
 
         return $this->loadModel('file')->processImgURL($storyData, $this->config->story->editor->review['id'], $this->post->uid);
@@ -1528,6 +1536,8 @@ class storyZen extends story
             {
                 dao::$errors["title[$i]"] = sprintf($this->lang->story->error->length, 255);
             }
+
+            if(!empty($story->estimate) && $story->estimate < 0) dao::$errors["estimate[$i]"] = sprintf($this->lang->story->errorRecordMinus, $this->lang->story->estimate);
 
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
@@ -1595,6 +1605,8 @@ class storyZen extends story
                 if($story->stage == 'wait' && !empty($story->roadmap) && isset($roadmaps[$story->roadmap])) $story->stage = $roadmaps[$story->roadmap]->status == 'launched' ? 'incharter' : 'inroadmap';
                 if(empty($story->roadmap)) $story->stage = 'wait';
             }
+
+            if(!empty($story->estimate) && $story->estimate < 0) dao::$errors["estimate[{$storyID}]"] = sprintf($this->lang->story->errorRecordMinus, $this->lang->story->estimate);
         }
 
         return $stories;

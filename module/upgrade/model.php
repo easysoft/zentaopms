@@ -10996,7 +10996,7 @@ class upgradeModel extends model
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc && t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.templateType')->ne('')
-            ->andWhere('t1.lib')->eq('')
+            ->andWhere('t1.lib')->eq(0)
             ->andWhere('t1.module')->eq('')
             ->fetchAll('id', false);
         if(empty($templateList)) return array();

@@ -26,22 +26,17 @@ function formatDateTime(date = new Date())
 
 /**
  * Get form value map.
- *
- * @returns {Map<string, string>}
  */
 function getFormValue()
 {
-    /**
-     * @type {Map<string, string>}
-     */
     const fieldValueMap = new Map();
     fieldArr.forEach(field =>
     {
         const {id, name} = field;
-        let $field = $(`[data-name="${name}"]`);
-        if(!$field.length) $field = $(`[name="field-${id}"]`);
-        if(!$field.hasClass('picker-box')) fieldValueMap.set(name, $field.prop('value'));
-        else                               fieldValueMap.set(name, $field.zui('picker').$.value);
+        let $field = $(`[name="field-${id}"]`);
+        if(!$field.length) $field = $(`.form-group[data-name="${name}"]`).find('input,textarea,select');
+        const picker = zui.FormHelper.globalControls.picker($field, $('#miniProgramForm'));
+        fieldValueMap.set(name, picker ? picker.getVal() : $field.prop('value'));
     });
     return fieldValueMap;
 }

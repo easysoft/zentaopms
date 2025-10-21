@@ -21,7 +21,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('project');
@@ -40,11 +40,11 @@ $actionTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$actionTest = new actionTest();
+$actionTest = new actionZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($actionTest->getReplaceNameAndCodeTest('项目A', 'PROJA', TABLE_PROJECT)) && p('0,1') && e('项目A_3,PROJA_3'); // 步骤1：正常情况下获取重复名称和代号的替换方案
 r($actionTest->getReplaceNameAndCodeTest('项目B', '', TABLE_PROJECT)) && p('0') && e('项目B_1'); // 步骤2：只有名称重复，代号为空的情况
-r($actionTest->getReplaceNameAndCodeTest('新项目', 'PROJB', TABLE_PROJECT)) && p('1') && e('PROJB_1'); // 步骤3：只有代号重复的情况  
+r($actionTest->getReplaceNameAndCodeTest('新项目', 'PROJB', TABLE_PROJECT)) && p('1') && e('PROJB_1'); // 步骤3：只有代号重复的情况
 r($actionTest->getReplaceNameAndCodeTest('全新项目', 'NEWPROJ', TABLE_PROJECT)) && p('0') && e('全新项目_1'); // 步骤4：名称和代号都不重复的情况
 r($actionTest->getReplaceNameAndCodeTest('项目C', 'PROJC', TABLE_PROJECT)) && p('0,1') && e('项目C_1,PROJC_1'); // 步骤5：存在一个重复名称时的情况

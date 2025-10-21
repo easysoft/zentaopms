@@ -74,6 +74,7 @@ if(count($fields) !== 0)
         $formGroups[] = formGroup(
             set::label($field->name),
             set::required($field->required === '1'),
+            setData('name', $field->name),
             $control
         );
     }
@@ -200,6 +201,7 @@ div(
                 ? null
                 : div(
                     setClass('form-container p-1 flex-1 overflow-y-auto'),
+                    setID('miniProgramForm'),
                     form(
                         set::grid(false),
                         set::actions(array()),

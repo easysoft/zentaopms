@@ -4,12 +4,14 @@ $config->bug->batchCreate  = 10;
 $config->bug->longlife     = 7;
 $config->bug->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID';
 
-$config->bug->create  = new stdclass();
-$config->bug->edit    = new stdclass();
-$config->bug->resolve = new stdclass();
-$config->bug->create->requiredFields  = 'title,openedBuild';
-$config->bug->edit->requiredFields    = 'title,openedBuild';
-$config->bug->resolve->requiredFields = 'resolution';
+$config->bug->create      = new stdclass();
+$config->bug->edit        = new stdclass();
+$config->bug->resolve     = new stdclass();
+$config->bug->batchcreate = new stdclass();
+$config->bug->create->requiredFields      = 'title,openedBuild';
+$config->bug->batchcreate->requiredFields = 'title,openedBuild';
+$config->bug->edit->requiredFields        = 'title,openedBuild';
+$config->bug->resolve->requiredFields     = 'resolution';
 
 $config->bug->actions = new stdclass();
 $config->bug->actions->view = array();

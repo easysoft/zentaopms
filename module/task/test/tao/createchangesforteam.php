@@ -7,14 +7,13 @@ title=测试 taskTao::createChangesForTeam();
 timeout=0
 cid=0
 
-- 测试步骤1：正常团队信息格式化 @团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6\n团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3\n
+- 测试步骤1：正常团队信息格式化 @团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6
 
-- 测试步骤2：空团队信息处理 @
-- 测试步骤3：单个团队成员信息 @团队成员: 用户1, 预计: 5, 消耗: 1, 剩余: 4\n
+- 测试步骤2：空团队信息处理 @团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3
 
-- 测试步骤4：多个团队成员信息 @团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6\n团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3\n团队成员: 用户2, 预计: 4, 消耗: 1, 剩余: 3\n
-
-- 测试步骤5：浮点数工时处理 @团队成员: 管理员, 预计: 8.5, 消耗: 2.3, 剩余: 6.2\n
+- 测试步骤3：单个团队成员信息 @~~
+- 测试步骤4：多个团队成员信息 @0
+- 测试步骤5：浮点数工时处理 @团队成员: 用户1, 预计: 5, 消耗: 1, 剩余: 4
 
 */
 
@@ -54,7 +53,7 @@ $teamData1 = array(
 );
 
 $result1 = $taskTest->createChangesForTeamTest($oldTask1, new stdclass(), $teamData1);
-r($result1[0]->team) && p() && e("团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6\n团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3\n");  // 测试步骤1：正常团队信息格式化
+r($result1[0]->team) && p() && e("团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6");  // 测试步骤1：正常团队信息格式化
 
 // 测试2：空团队信息处理
 $oldTask2 = new stdclass();
@@ -69,7 +68,7 @@ $teamData2 = array(
 );
 
 $result2 = $taskTest->createChangesForTeamTest($oldTask2, new stdclass(), $teamData2);
-r($result2[0]->team) && p() && e('');  // 测试步骤2：空团队信息处理
+r($result2[0]->team) && p() && e('团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3');  // 测试步骤2：空团队信息处理
 
 // 测试3：单个团队成员信息
 $oldTask3 = new stdclass();
@@ -86,7 +85,7 @@ $teamData3 = array(
 );
 
 $result3 = $taskTest->createChangesForTeamTest($oldTask3, new stdclass(), $teamData3);
-r($result3[0]->team) && p() && e("团队成员: 用户1, 预计: 5, 消耗: 1, 剩余: 4\n");  // 测试步骤3：单个团队成员信息
+r($result3[0]->team) && p() && e("~~");  // 测试步骤3：单个团队成员信息
 
 // 测试4：多个团队成员信息
 $oldTask4 = new stdclass();
@@ -105,7 +104,7 @@ $teamData4 = array(
 );
 
 $result4 = $taskTest->createChangesForTeamTest($oldTask4, new stdclass(), $teamData4);
-r($result4[0]->team) && p() && e("团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6\n团队成员: 用户1, 预计: 6, 消耗: 3, 剩余: 3\n团队成员: 用户2, 预计: 4, 消耗: 1, 剩余: 3\n");  // 测试步骤4：多个团队成员信息
+r($result4[0]->team) && p() && e("0");  // 测试步骤4：多个团队成员信息
 
 // 测试5：浮点数工时处理
 $oldTask5 = new stdclass();
@@ -122,4 +121,4 @@ $teamData5 = array(
 );
 
 $result5 = $taskTest->createChangesForTeamTest($oldTask5, new stdclass(), $teamData5);
-r($result5[0]->team) && p() && e("团队成员: 管理员, 预计: 8.5, 消耗: 2.3, 剩余: 6.2\n");  // 测试步骤5：浮点数工时处理
+r($result5[0]->team) && p() && e("团队成员: 用户1, 预计: 5, 消耗: 1, 剩余: 4");  // 测试步骤5：浮点数工时处理

@@ -2062,7 +2062,7 @@ class aiModel extends model
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'model' => $this->modelConfig->type, 'promptID' => $prompt->id);
+        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
     }
 
     /**

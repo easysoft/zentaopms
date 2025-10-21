@@ -169,7 +169,7 @@ class userZen extends user
 
         /* 以 json 格式返回用户数据。*/
         /* Return user data in json format. */
-        if($viewType == 'json') return array('status' => 'success', 'user' => $this->getUserForJSON($user));
+        if($viewType == 'json') return array('status' => 'success', 'token' => session_id(), 'user' => $this->getUserForJSON($user));
 
         /* 来源网址不满足条件时跳转到首页。*/
         /* Jump to home page if the referer does not meet the conditions. */
@@ -340,7 +340,7 @@ class userZen extends user
 
         /* 以 json 格式返回用户数据。*/
         /* Return user data in json format. */
-        if($viewType == 'json') return array('status' => 'success', 'user' => $this->getUserForJSON($this->app->user));
+        if($viewType == 'json') return array('status' => 'success', 'token' => session_id(), 'user' => $this->getUserForJSON($this->app->user));
 
         /* 来源网址不满足条件时跳转到首页。*/
         /* Jump to home page if the referer does not meet the conditions. */

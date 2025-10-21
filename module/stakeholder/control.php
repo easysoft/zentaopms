@@ -351,9 +351,10 @@ class stakeholder extends control
 
         $this->commonAction($stakeholderID, 'stakeholder');
 
-        $this->view->title = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
-        $this->view->user  = $this->stakeholder->getByID($stakeholderID);
-        $this->view->users = $this->loadModel('user')->getTeamMemberPairs($this->view->user->objectID, 'project', 'nodeleted');
+        $this->view->title    = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
+        $this->view->user     = $this->stakeholder->getByID($stakeholderID);
+        $this->view->objectID = $stakeholderID;
+        $this->view->users    = $this->loadModel('user')->getTeamMemberPairs($this->view->user->objectID, 'project', 'nodeleted');
 
         $this->display();
     }

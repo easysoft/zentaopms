@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('tab', $this->app->tab);
 jsVar('caseModule', $lang->testcase->module);
+jsVar('sceneID', $scene->id);
 
 formPanel
 (

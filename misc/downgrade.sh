@@ -119,6 +119,7 @@ downGradeDir() {
     rectorCmd="rector"
 
     export PHP_VERSION=${1/./}
+     if [[ "$PHP_VERSION" == "84" ]];then return; fi
     shift
 
     if [ "$1" = "nocache" ];then

@@ -48,15 +48,8 @@ class upgrade extends control
     {
         if($this->get->agree == true) $this->locate(inlink('backup'));
 
-        $clientLang = $this->app->getClientLang();
-        $licenseCN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.CN');
-        $licenseEN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.EN');
-
-        $license = $licenseEN . $licenseCN;
-        if($clientLang == 'zh-cn' || $clientLang == 'zh-tw') $license = $licenseCN . $licenseEN;
-
         $this->view->title   = $this->lang->upgrade->common;
-        $this->view->license = $license;
+        $this->view->license = $this->loadModel('install')->getLicense();
         $this->display();
     }
 

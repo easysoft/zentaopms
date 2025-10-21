@@ -104,12 +104,12 @@ class testreport extends control
         {
             $param = '';
             if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
-            if(strpos('|project|execution|', $objectType) !== false && ($extra || !empty($_POST['taskIdList'])))
+            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra=" . implode(',', $_POST['taskIdList']);
+            if($param)
             {
-                $param  = "objectID={$objectID}&objectType={$objectType}";
-                $param .= isset($_POST['taskIdList']) ? '&extra=' . join(',', $_POST['taskIdList']) : '&extra=' . $extra;
+                $url = $this->createLink('testreport', 'create', $param);
+                $this->locate($url);
             }
-            if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
 
         $this->session->set('reportList', $this->app->getURI(true), $this->app->tab);
