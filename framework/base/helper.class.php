@@ -111,11 +111,11 @@ class baseHelper
         {
             $link = $config->webRoot . '/api.php/v2/';
         }
-        else if($config->requestType == 'PATH_INFO2')
+        elseif($config->requestType == 'PATH_INFO2')
         {
             $link = '/';
         }
-        else if($config->requestType == 'PATH_INFO')
+        elseif($config->requestType == 'PATH_INFO')
         {
             $link = $config->webRoot . $appName;
         }
@@ -330,8 +330,9 @@ class baseHelper
         if(is_array($idList))
         {
             foreach($idList as $key=>$value) $idList[$key] = addslashes((string) $value);
-            if(count($idList) == 0) return "= NULL";
-            if(count($idList) == 1) return "= '" . current($idList) . "'";
+            $idCount = count($idList);
+            if($idCount == 0) return "= NULL";
+            if($idCount == 1) return "= '" . current($idList) . "'";
             return "IN ('" . join("','", $idList) . "')";
         }
 
