@@ -1394,6 +1394,19 @@ $lang->zanode->methodOrder[75] = 'restoreSnapshot';
 $lang->zanode->methodOrder[80] = 'deleteSnapshot';
 $lang->zanode->methodOrder[85] = 'instruction';
 
+$lang->resource->devopsspace = new stdclass();
+$lang->resource->devopsspace->browse = 'browse';
+$lang->resource->devopsspace->view   = 'view';
+$lang->resource->devopsspace->create = 'create';
+$lang->resource->devopsspace->edit   = 'edit';
+$lang->resource->devopsspace->delete = 'delete';
+
+$lang->devopsspace->methodOrder[0]  = 'browse';
+$lang->devopsspace->methodOrder[5]  = 'view';
+$lang->devopsspace->methodOrder[10] = 'create';
+$lang->devopsspace->methodOrder[15] = 'edit';
+$lang->devopsspace->methodOrder[20] = 'delete';
+
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
 $lang->resource->repo->visit           = 'visit';
@@ -2236,6 +2249,7 @@ if(!$inUpgrade)
         unset($lang->resource->gitea);
         unset($lang->resource->sonarqube);
         unset($lang->resource->mr);
+        unset($lang->resource->devopsspace);
     }
     if(!helper::hasFeature('kanban')) unset($lang->resource->kanban);
 
