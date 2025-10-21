@@ -165,6 +165,8 @@ $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
 $lang->projectstory   = new stdclass();
 
+$lang->devopsspace = new stdclass();
+
 /* Common action icons. */
 $lang->icons['todo']      = 'check';
 $lang->icons['product']   = 'product';

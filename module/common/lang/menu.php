@@ -520,6 +520,7 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
+$lang->devops->homeMenu->space   = array('link' => "{$lang->devopsspace->common}|devopsspace|browse", 'alias' => 'create,edit');
 $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
@@ -550,6 +551,7 @@ if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'st
 $lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
+$lang->devops->menuOrder[5]  = 'space';
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'commit';
