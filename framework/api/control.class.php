@@ -458,7 +458,7 @@ class control extends baseControl
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
         $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
-        $viewType     = ($this->viewType == 'mhtml' or $this->viewType == 'xhtml') ? 'html' : $this->viewType;
+        $viewType     = 'html';
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
