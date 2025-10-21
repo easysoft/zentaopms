@@ -2223,7 +2223,7 @@ class aiModel extends model
         $method = strtolower($targetFormConfig->f);
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
-        $varsConfig = $this->config->ai->targetFormVars[$module][$method];
+        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
         $vars = array();
         foreach($varsConfig->args as $arg => $isRequired)
         {
