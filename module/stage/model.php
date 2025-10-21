@@ -154,7 +154,7 @@ class stageModel extends model
             ->autoCheck()
             ->batchCheck($this->config->stage->edit->requiredFields, 'notempty')
             ->checkIF(isset($stage->percent) && $stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
-            ->checkIF(!empty($stage->name), 'name', 'unique', "`workflowGroup` = '$oldStage->workflowGroup' AND `deleted` = '0'")
+            ->checkIF(!empty($stage->name), 'name', 'unique', "`id` != '$stageID' AND `workflowGroup` = '$oldStage->workflowGroup' AND `deleted` = '0'")
             ->exec();
 
         if(dao::isError()) return false;
