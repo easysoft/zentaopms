@@ -493,7 +493,12 @@ class api extends router
             $index  = 0;
             foreach($defaultParams as $key => $defaultItem)
             {
-                if(isset($values[$index])) $_GET[$key] = $values[$index];
+                if(isset($values[$index]))
+                {
+                    $value = $values[$index];
+                    settype($value, $defaultItem['type']);
+                    $_GET[$key] = $value;
+                }
                 $index++;
             }
         }
