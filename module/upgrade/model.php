@@ -11901,7 +11901,7 @@ class upgradeModel extends model
      */
     public function upgradeAuditcl()
     {
-        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectType')->eq('product')->fetchAll('id');
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectType')->eq('product')->fetchPairs();
         foreach($workflows as $id => $projectModel)
         {
             $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($projectModel)->exec();
