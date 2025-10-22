@@ -849,6 +849,13 @@ class baseHelper
         if(empty($sessionID)) $sessionID = sha1((string)mt_rand(0, mt_getrandmax()));
 
         session_write_close();
+
+        if(ini_get('session.save_handler') == 'user') // Once enable the custom session handler in baseRouter, session.save_handler becomes user.
+        {
+            $ztSessionHandler = new ztSessionHandler();
+            session_set_save_handler($ztSessionHandler, true);
+        }
+
         session_id($sessionID);
         session_start();
 
