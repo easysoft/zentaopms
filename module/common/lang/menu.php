@@ -751,6 +751,7 @@ $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
 $lang->navGroup->host             = 'devops';
+$lang->navGroup->devopsspace      = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
