@@ -11,4 +11,17 @@ declare(strict_types=1);
  */
 class devopsspace extends control
 {
+    /**
+     * 空间列表。
+     * Browse space.
+     *
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function browse(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+    }
 }
