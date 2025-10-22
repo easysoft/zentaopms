@@ -11893,6 +11893,24 @@ class upgradeModel extends model
     }
 
     /**
+     * 将检查单迁移到内置项目流程中。
+     * Migrate auditcl to built-in project workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeAuditcl()
+    {
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectType')->eq('product')->fetchAll('id');
+        foreach($workflows as $id => $projectModel)
+        {
+            $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($projectModel)->exec();
+        }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_AUDITCL . " DROP `model`;");
+    }
+
+    /**
      * 之前IPD、融合瀑布使用的是瀑布项目流程，融合敏捷使用的是敏捷项目流程。现在统一使用自己的项目流程。
      * Before IPD, fusion waterfall uses the waterfall project workflow, and fusion agile uses the agile project workflow. Now use the own project workflow.
      *
