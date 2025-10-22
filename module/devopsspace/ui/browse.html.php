@@ -13,3 +13,17 @@ namespace zin;
 $canCreate  = hasPriv('devopsspace', 'create');
 $createLink = $this->createLink('devopsspace', 'create');
 $createItem = array('text' => $lang->devopsspace->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+
+featureBar();
+toolbar
+(
+    $canCreate ? item(set($createItem)) : null,
+);
+
+$tableData = initTableData($spaces, $config->devopsspace->dtable->fieldList, $this->devopsspace);
+dtable
+(
+    set::cols($config->devopsspace->dtable->fieldList),
+    set::data($tableData),
+    set::footPager(usePager())
+);
