@@ -45,13 +45,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: parent
-    note: "父流程ID"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: assignedTo
     note: "指派给"
     from: common.user.v1.yaml
@@ -62,13 +55,6 @@ fields:
     format: ""
   - field: status
     note: "状态"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: subStatus
-    note: "子状态"
     range: 0
     prefix: ""
     postfix: ""
