@@ -354,6 +354,7 @@ $lang->systemcompany->common    = 'System company';
 $lang->pipeline->common         = 'Pipeline';
 $lang->devopssetting->common    = 'Setting';
 $lang->deployment->common       = 'Host';
+$lang->devopsspace->common      = 'Space';
 
 $lang->dashboard       = 'Dashboard';
 $lang->contribute      = 'Contribute';

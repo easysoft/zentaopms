@@ -365,37 +365,96 @@ $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
 $config->group->subset->notifysetting->nav   = 'admin';
 
-$config->group->subset->mr = new stdclass();
-$config->group->subset->mr->order = 2660;
-$config->group->subset->mr->nav   = 'devops';
-
-$config->group->subset->repocode = new stdclass();
-$config->group->subset->repocode->order = 2520;
-$config->group->subset->repocode->nav   = 'devops';
-
-$config->group->subset->ci = new stdclass();
-$config->group->subset->ci->order = 2740;
-$config->group->subset->ci->nav   = 'devops';
-
-$config->group->subset->app = new stdclass();
-$config->group->subset->app->order = 3000;
-$config->group->subset->app->nav   = 'devops';
-
-$config->group->subset->pipeline = new stdclass();
-$config->group->subset->pipeline->order = 2700;
-$config->group->subset->pipeline->nav   = 'devops';
+$config->group->subset->devopsspace = new stdclass();
+$config->group->subset->devopsspace->order = 2300;
+$config->group->subset->devopsspace->nav   = 'devops';
 
 $config->group->subset->repo = new stdclass();
-$config->group->subset->repo->order = 2400;
+$config->group->subset->repo->order = 2310;
 $config->group->subset->repo->nav   = 'devops';
 
+$config->group->subset->repocode = new stdclass();
+$config->group->subset->repocode->order = 2320;
+$config->group->subset->repocode->nav   = 'devops';
+
+$config->group->subset->pullreq = new stdclass();
+$config->group->subset->pullreq->order = 2330;
+$config->group->subset->pullreq->nav   = 'devops';
+
+$config->group->subset->mr = new stdclass();
+$config->group->subset->mr->order = 2340;
+$config->group->subset->mr->nav   = 'devops';
+
+$config->group->subset->pipeline = new stdclass();
+$config->group->subset->pipeline->order = 2350;
+$config->group->subset->pipeline->nav   = 'devops';
+
+$config->group->subset->runner = new stdclass();
+$config->group->subset->runner->order = 2360;
+$config->group->subset->runner->nav   = 'devops';
+
+if($config->inQuickon || $config->inCompose)
+{
+    $config->group->subset->scanOverview = new stdclass();
+    $config->group->subset->scanOverview->order = 2370;
+    $config->group->subset->scanOverview->nav   = 'devops';
+
+    $config->group->subset->scanissue = new stdclass();
+    $config->group->subset->scanissue->order = 2380;
+    $config->group->subset->scanissue->nav   = 'devops';
+
+    $config->group->subset->scantask = new stdclass();
+    $config->group->subset->scantask->order = 2390;
+    $config->group->subset->scantask->nav   = 'devops';
+
+    $config->group->subset->scanplan = new stdclass();
+    $config->group->subset->scanplan->order = 2400;
+    $config->group->subset->scanplan->nav   = 'devops';
+
+    $config->group->subset->scansolution = new stdclass();
+    $config->group->subset->scansolution->order = 2410;
+    $config->group->subset->scansolution->nav   = 'devops';
+
+    $config->group->subset->codeScan = new stdclass();
+    $config->group->subset->codeScan->order = 2420;
+    $config->group->subset->codeScan->nav   = 'devops';
+
+    $config->group->subset->ruleset = new stdclass();
+    $config->group->subset->ruleset->order = 2430;
+    $config->group->subset->ruleset->nav   = 'devops';
+}
+
+$config->group->subset->ci = new stdclass();
+$config->group->subset->ci->order = 2440;
+$config->group->subset->ci->nav   = 'devops';
+
+$config->group->subset->codereview = new stdclass();
+$config->group->subset->codereview->order = 2450;
+$config->group->subset->codereview->nav   = 'devops';
+
+$config->group->subset->artifactrepo = new stdclass();
+$config->group->subset->artifactrepo->order = 2460;
+$config->group->subset->artifactrepo->nav   = 'devops';
+
+$config->group->subset->systemManage = new stdclass();
+$config->group->subset->systemManage->order = 2470;
+$config->group->subset->systemManage->nav   = 'devops';
+
 $config->group->subset->deployment = new stdclass();
-$config->group->subset->deployment->order = 2400;
+$config->group->subset->deployment->order = 2480;
 $config->group->subset->deployment->nav   = 'devops';
+
+$config->group->subset->repoSettings = new stdclass();
+$config->group->subset->repoSettings->order = 2490;
+$config->group->subset->repoSettings->nav   = 'devops';
 
 $config->group->subset->configure = new stdclass();
 $config->group->subset->configure->order = 2900;
 $config->group->subset->configure->nav   = 'devops';
+
+$config->group->subset->app = new stdclass();
+$config->group->subset->app->order = 3000;
+$config->group->subset->app->nav   = 'devops';
 
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
@@ -500,10 +559,6 @@ $config->group->subset->roadmap->nav   = 'product';
 $config->group->subset->aiapp = new stdclass();
 $config->group->subset->aiapp->order = 2030;
 $config->group->subset->aiapp->nav   = 'aiapp';
-
-$config->group->subset->codereview = new stdclass();
-$config->group->subset->codereview->order = 2580;
-$config->group->subset->codereview->nav   = 'devops';
 
 $config->group->subset->market = new stdclass();
 $config->group->subset->market->nav = 'market';
@@ -1802,6 +1857,16 @@ $config->group->package->host->privs['host-view']         = array('edition' => '
 $config->group->package->host->privs['host-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('host-browse'), 'recommend' => array('host-create', 'host-edit'));
 $config->group->package->host->privs['host-changeStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('host-browse'), 'recommend' => array('host-create', 'host-edit'));
 $config->group->package->host->privs['host-treemap']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('host-browse'), 'recommend' => array());
+
+$config->group->package->devopsspace = new stdclass();
+$config->group->package->devopsspace->order  = 2230;
+$config->group->package->devopsspace->subset = 'devopsspace';
+$config->group->package->devopsspace->privs  = array();
+$config->group->package->devopsspace->privs['devopsspace-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete', 'devopsspace-view'));
+$config->group->package->devopsspace->privs['devopsspace-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-edit', 'devopsspace-view', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-view', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete'));
+$config->group->package->devopsspace->privs['devopsspace-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-view'));
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;
