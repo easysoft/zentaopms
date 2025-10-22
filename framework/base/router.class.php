@@ -1217,9 +1217,12 @@ class baseRouter
         session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if(!session_id()) session_start();
 
+        $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+
         if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
         {
             helper::restartSession($_SERVER['HTTP_TOKEN']);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
         }
         elseif(isset($_GET[$this->config->sessionVar]))
         {
@@ -1228,8 +1231,6 @@ class baseRouter
             $this->sessionID = $_GET[$this->config->sessionVar];
             helper::restartSession($_GET[$this->config->sessionVar]);
         }
-
-        $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
         define('SESSION_STARTED', true);
     }
