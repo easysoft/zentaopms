@@ -77,7 +77,7 @@ $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
 $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);
 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
-$cols['pri']['priList'] = $lang->testcase->priList;
+if(!empty($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
 if($isFromDoc)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
