@@ -975,7 +975,7 @@
                     $(document).trigger('pageload.app');
                     const iframeWindow = $iframe[0].contentWindow;
                     oldPageCofnig = iframeWindow.config;
-                    iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
+                    if(iframeWindow.$) iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                     clearTimer();
                 });
         }

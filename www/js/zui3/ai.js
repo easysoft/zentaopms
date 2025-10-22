@@ -329,10 +329,19 @@ function registerZentaoAIPlugin(lang)
     });
 }
 
-function bindAICommandsInApp(win)
+/* Bind AI commands in app when app is loaded, example:
+$(document).on('loadapp.apps updateapp.apps', (e, args) =>
 {
+    const win = (e.type === 'updateapp' ? $.apps.openedApps[args[0]] : args).iframe.contentWindow;
+    bindAICommandsInApp(win, 1000);
+});*/
+function bindAICommandsInApp(win, delay)
+{
+    if(!win || !win.zui || win._bindedAICommands !== undefined) return;
     const panel = win.zui.AIPanel.shared;
-    if(panel)
+    if(!panel) return;
+    if(win._bindedAICommands) clearTimeout(win._bindedAICommands);
+    win._bindedAICommands = setTimeout(() =>
     {
         win.zui.bindCommands(win.document.body,
         {
@@ -340,7 +349,8 @@ function bindAICommandsInApp(win)
             scope: panel.commandScope,
             onCommand: panel.executeCommand.bind(panel)
         });
-    }
+        win._bindedAICommands = 0;
+    }, delay || 0);
 }
 
 $(() =>
@@ -363,7 +373,7 @@ $(() =>
         if(!aiStore) return
 
         let userAvatarProps;
-        const aiPanel = zui.AIPanel.init(
+        zui.AIPanel.init(
         {
             store            : aiStore,
             position         : {bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
@@ -431,10 +441,4 @@ $(() =>
 
         aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
     }
-
-    /* Bind AI commands in app when app is loaded. */
-    $(document).on('loadapp.apps', (_, args) =>
-    {
-        setTimeout(() => bindAICommandsInApp(args[0].iframe.contentWindow), 1000);
-    });
 });
