@@ -454,11 +454,15 @@ class api extends router
         $this->control->viewType    = 'html';
         $this->control->getFormData = true;
 
+        $zen = $this->control->moduleName . 'Zen';
+        $this->control->$zen->getFormData = true;
+
         $method = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $_GET);
 
-        $this->control->getFormData = false;
-        $this->control->viewType    = 'json';
+        $this->control->getFormData       = false;
+        $this->control->$zen->getFormData = false;
+        $this->control->viewType          = 'json';
 
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
@@ -466,7 +470,6 @@ class api extends router
             if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
 
-        $zen = $this->control->moduleName . 'Zen';
         foreach($this->control->$zen->formData as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
