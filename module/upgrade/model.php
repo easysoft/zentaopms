@@ -12637,8 +12637,8 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_OBJECT)
                 ->set('categoryTitle')->eq($category)
-                ->set('execution')->eq($stagePointGroup[$projectID][$category])
-                ->set('category')->eq($decisionGroup[$workflowGroup][$category]->id)
+                ->set('execution')->eq(!empty($stagePointGroup[$projectID][$category]) ? $stagePointGroup[$projectID][$category] : 0)
+                ->set('category')->eq(!empty($decisionGroup[$workflowGroup][$category]->id) ? $decisionGroup[$workflowGroup][$category]->id : 0)
                 ->where('id')->eq($point->id)
                 ->exec();
         }
