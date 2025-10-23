@@ -88,7 +88,7 @@ class actionTao extends actionModel
         switch($objectType)
         {
             case 'story':
-                list($product, $project, $execution) = $this->getStoryActionRelated($actionType, $objectID, (int)$extra);
+                list($product, $project, $execution) = $this->getStoryActionRelated($objectType, $actionType, $objectID, (int)$extra);
                 break;
             case 'productplan':
             case 'branch':
@@ -139,16 +139,16 @@ class actionTao extends actionModel
      * 获取用户故事相关的产品、项目、阶段。
      * Get story related product, project, stage.
      *
+     * @param  string $objectType
      * @param  string $actionType
      * @param  int    $objectID
      * @param  int    $extra
      * @access public
      * @return array
      */
-    public function getStoryActionRelated(string $actionType, int $objectID, int $extra): array
+    public function getStoryActionRelated(string $objectType, string $actionType, int $objectID, int $extra): array
     {
-        $product = array(0);
-        $project = $execution = 0;
+        list($product, $project, $execution) = $this->getGenerateRelated($objectType, $objectID);
         switch($actionType)
         {
             case 'linked2build':
