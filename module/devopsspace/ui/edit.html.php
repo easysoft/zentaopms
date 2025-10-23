@@ -17,4 +17,22 @@ formPanel
     set::title($title),
     set::titleClass('text-lg gap-0'),
     set::submitBtnText($lang->save),
+    set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+    formGroup
+    (
+        set::name('name'),
+        set::width($width),
+        set::label($lang->devopsspace->name),
+        set::required(true),
+        set::value($space->name)
+    ),
+    formGroup
+    (
+        set::name('owner'),
+        set::width($width),
+        set::label($lang->devopsspace->owner),
+        set::items($users),
+        set::required(true),
+        set::value($space->owner)
+    ),
 );
