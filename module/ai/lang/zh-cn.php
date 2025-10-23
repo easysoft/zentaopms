@@ -390,6 +390,7 @@ $lang->ai->targetForm['task']['common']           = '任务';
 $lang->ai->targetForm['testcase']['common']       = '用例';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = '文档';
+$lang->ai->targetForm['empty']['common']          = '';
 
 $lang->ai->targetForm['product']['tree/managechild'] = '维护模块';
 $lang->ai->targetForm['product']['doc/create']       = '创建文档';
@@ -429,6 +430,8 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 
 $lang->ai->targetForm['doc']['create'] = '创建文档';
 $lang->ai->targetForm['doc']['edit']   = '编辑文档';
+
+$lang->ai->targetForm['empty']['empty'] = '空';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = '全部';

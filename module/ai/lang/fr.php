@@ -390,6 +390,7 @@ $lang->ai->targetForm['task']['common']           = 'Task';
 $lang->ai->targetForm['testcase']['common']       = 'Test Case';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = 'Document';
+$lang->ai->targetForm['empty']['common']          = '';
 
 $lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
 $lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
@@ -429,6 +430,8 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 
 $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
+
+$lang->ai->targetForm['empty']['empty'] = 'Empty';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
