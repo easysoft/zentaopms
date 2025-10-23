@@ -42,7 +42,7 @@ foreach($prompts as $prompt)
     if($prompt->targetForm)
     {
         $targetFormPath = explode('.', $prompt->targetForm);
-        if(count($targetFormPath) == 2) $prompt->targetFormLabel = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
+        if(count($targetFormPath) == 2) $prompt->targetFormLabel = $prompt->targetForm == 'empty.empty' ? $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]] : $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
     }
 }
 
