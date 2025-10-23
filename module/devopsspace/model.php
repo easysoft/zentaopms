@@ -41,7 +41,7 @@ class devopsspaceModel extends model
      */
     public function getList($pager = null): array
     {
-        return $this->dao->select('t1.*')->from(TABLE_DEVOPSSPACE)->alias('t1')
+        return $this->dao->select('t1.*, t1.desc')->from(TABLE_DEVOPSSPACE)->alias('t1')
             ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')
             ->on('t1.id=t2.space')
             ->where('t1.deleted')->eq(0)
@@ -49,5 +49,17 @@ class devopsspaceModel extends model
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
+    }
+
+    /**
+     * 创建空间。
+     * Create space.
+     *
+     * @param  object $formData
+     * @access public
+     * @return int|bool
+     */
+    public function create(object $formData): int|bool
+    {
     }
 }
