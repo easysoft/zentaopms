@@ -64,4 +64,22 @@ class devopsspace extends control
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->display();
     }
+
+    /**
+     * 编辑空间。
+     * Edit space.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        $space = $this->devopsspace->getByID($id);
+
+        $this->view->title = $this->lang->devopsspace->edit;
+        $this->view->space = $space;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->display();
+    }
 }
