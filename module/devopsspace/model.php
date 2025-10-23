@@ -121,6 +121,16 @@ class devopsspaceModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        if(array_intersect($newTeam, $space->team))
+        {
+            $this->dao->delete()->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($space->id)->exec();
+            foreach($newTeam as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $space->id, 'account' => $account))->exec();
+            if(dao::isError()) return false;
+
+            $formData->team = implode(',', $newTeam);
+            $space->team    = implode(',', $space->team);
+        }
+
         return common::createChanges($space, $formData);
     }
 }
