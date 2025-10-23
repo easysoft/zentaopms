@@ -195,7 +195,8 @@ formPanel
     (
         set::label($lang->testtask->mailto),
         mailto(set::items($users))
-    )
+    ),
+    $app->tab == 'project' ? formHidden('project', $projectID) : null
 );
 
 render();
