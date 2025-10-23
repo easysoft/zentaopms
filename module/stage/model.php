@@ -406,11 +406,14 @@ class stageModel extends model
         if(!empty($oldStagePoints))
         {
             $this->dao->update(TABLE_DECISION)->set('deleted')->eq('1')->where('id')->in(array_keys($oldStagePoints))->exec();
-            $this->dao->delete()->from(TABLE_APPROVALFLOWOBJECT)
+            $approvalFlowObjectIDList = $this->dao->select('id')->from(TABLE_APPROVALFLOWOBJECT)
                 ->where('objectID')->in(array_keys($oldStagePoints))
                 ->andWhere('objectType')->eq('decision')
                 ->andWhere('root')->eq($stage->workflowGroup)
-                ->exec();
+                ->fetchPairs();
+
+            $this->dao->delete()->from(TABLE_APPROVALFLOWOBJECT)->where('id')->in($approvalFlowObjectIDList)->exec(); // 删除评审流程
+            $this->dao->delete()->from(TABLE_REVIEWCL)->where('object')->in($approvalFlowObjectIDList)->exec(); // 删除检查清单
         }
         return true;
     }
