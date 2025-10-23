@@ -7,10 +7,17 @@ $lang->devopsspace->delete = '删除空间';
 
 $lang->devopsspace->name         = '名称';
 $lang->devopsspace->owner        = '负责人';
+$lang->devopsspace->team         = '成员';
 $lang->devopsspace->createdDate  = '创建时间';
 $lang->devopsspace->desc         = '描述';
 $lang->devopsspace->repo         = '代码库';
 $lang->devopsspace->artifactrepo = '制品库';
+$lang->devopsspace->acl          = '访问控制';
+
+$lang->devopsspace->aclList = array();
+$lang->devopsspace->aclList['open']    = '公开(即有空间视图的权限即可访问该空间)';
+$lang->devopsspace->aclList['private'] = '私有(仅团队成员、负责人和空间管理员可访问)';
 
 $lang->devopsspace->notice = new stdclass();
+$lang->devopsspace->notice->noSpaces      = '暂无任何空间';
 $lang->devopsspace->notice->confirmDelete = '您确定要删除该空间吗？';

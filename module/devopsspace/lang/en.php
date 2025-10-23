@@ -7,10 +7,17 @@ $lang->devopsspace->delete = 'Delete Space';
 
 $lang->devopsspace->name         = 'Name';
 $lang->devopsspace->owner        = 'Owner';
+$lang->devopsspace->team         = 'Team';
 $lang->devopsspace->createdDate  = 'Created Date';
 $lang->devopsspace->desc         = 'Description';
 $lang->devopsspace->repo         = 'Repository';
 $lang->devopsspace->artifactrepo = 'Artifact Repository';
+$lang->devopsspace->acl          = 'Access Control';
+
+$lang->devopsspace->aclList = array();
+$lang->devopsspace->aclList['open']    = 'Open (The space view can be accessed by anyone)';
+$lang->devopsspace->aclList['private'] = 'Private (Only team members, team leaders and space administrators can access)';
 
 $lang->devopsspace->notice = new stdclass();
+$lang->devopsspace->notice->noSpaces      = 'No space exists';
 $lang->devopsspace->notice->confirmDelete = 'Are you sure to delete this space?';
