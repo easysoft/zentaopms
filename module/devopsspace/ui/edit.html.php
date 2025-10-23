@@ -35,4 +35,28 @@ formPanel
         set::required(true),
         set::value($space->owner)
     ),
+    formGroup
+    (
+        set::name('team'),
+        set::width($width),
+        set::label($lang->devopsspace->team),
+        set::items($users),
+        set::multiple(true),
+        set::value($space->team)
+    ),
+    formGroup
+    (
+        set::name('desc'),
+        set::label($lang->devopsspace->desc),
+        set::control(array('control' => 'editor', 'upload' => 'false')),
+        set::value($space->desc)
+    ),
+    formGroup
+    (
+        set::name('acl'),
+        set::label($lang->devopsspace->acl),
+        set::control('radioList'),
+        set::items($lang->devopsspace->aclList),
+        set::value($space->acl)
+    )
 );
