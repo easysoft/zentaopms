@@ -230,7 +230,7 @@ class pivotTao extends pivotModel
      */
     protected function getExecutionList(string $begin, string $end, $executionIDList = array()): array
     {
-        return $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, t2.end, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
@@ -241,7 +241,7 @@ class pivotTao extends pivotModel
             ->beginIF($begin)->andWhere('t2.realBegan')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.realEnd')->le($end)->fi()
             ->beginIF(!empty($executionIDList))->andWhere('t2.id')->in($executionIDList)->fi()
-            ->groupBy('t1.project, t1.execution, t2.multiple')
+            ->groupBy('t1.project, t1.execution, t2.multiple, t2.end, t2.name, t3.multiple, t3.name')
             ->orderBy('t2.end_desc')
             ->fetchAll();
     }
