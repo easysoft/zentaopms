@@ -7,3 +7,8 @@ fields:
   - field: name
     range: 1-10
     prefix: "space"
+  - field: owner
+    range: 1-10
+    prefix: "test"
+  - field: acl
+    range: open,private
