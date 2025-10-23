@@ -80,4 +80,22 @@ class devopsspaceModel extends model
 
         return $spaceID;
     }
+
+    /**
+     * 通过空间ID获取空间信息。
+     * Get space info by space ID.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array|object
+     */
+    public function getByID(int $spaceID): array|object
+    {
+        $space = $this->dao->select('*')->from(TABLE_DEVOPSSPACE)->where('id')->eq($spaceID)->fetch();
+        if(empty($space)) return array();
+
+        $team = $this->dao->select('account')->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($spaceID)->fetchAll('account');
+        $space->team = empty($team) ? array() : array_keys($team);
+        return $space;
+    }
 }
