@@ -22,8 +22,11 @@ UPDATE `zt_ai_prompt` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
 
 CREATE TABLE IF NOT EXISTS `zt_ops_space` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
+  `owner` varchar(30) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `desc` TEXT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updatedBy` varchar(30) NOT NULL DEFAULT '',
@@ -33,15 +36,16 @@ CREATE TABLE IF NOT EXISTS `zt_ops_space` (
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `zt_repo` ADD `space` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
-
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` mediumint(8) unsigned NOT NULL default '0',
-  `account` varchar(30) NOT NULL DEFAULT '',
+  `space` smallint(5) unsigned NOT NULL default '0',
+  `account` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `zt_repo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
+ALTER TABLE `zt_artifactrepo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('all',	  'weekly', 'categoryList', 'month',    '月报',       '1', 'rnd'),

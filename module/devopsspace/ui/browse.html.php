@@ -12,13 +12,32 @@ namespace zin;
 
 $canCreate  = hasPriv('devopsspace', 'create');
 $createLink = $this->createLink('devopsspace', 'create');
-$createItem = array('text' => $lang->devopsspace->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$createItem = array('text' => $lang->devopsspace->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
 featureBar();
 toolbar
 (
     $canCreate ? item(set($createItem)) : null,
 );
+
+if(empty($spaces))
+{
+    div
+    (
+        setClass('w-full dtable-empty-tip text-center bg-white'),
+        div
+        (
+            setClass('text-gray'),
+            $lang->devopsspace->notice->noSpaces,
+            hasPriv('devopsspace', 'create') ?
+            btn
+            (
+                set(array('text' => $lang->devopsspace->create, 'url' => inLink('create'), 'class' => 'ml-2 primary-pale border-primary', 'icon'  => 'plus'))
+            ) : null
+        ),
+    );
+    return;
+}
 
 $tableData = initTableData($spaces, $config->devopsspace->dtable->fieldList, $this->devopsspace);
 dtable

@@ -1790,7 +1790,7 @@ CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `obj
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `space` varchar(255) NOT NULL DEFAULT '',
+  `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
   `projects` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -14436,6 +14436,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
 CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
   `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(45) NOT NULL DEFAULT '',
   `products` varchar(255) NOT NULL DEFAULT '',
   `serverID` smallint(8) NOT NULL DEFAULT 0,
@@ -16403,8 +16404,11 @@ CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 
 -- DROP TABLE IF EXISTS `zt_ops_space`;
 CREATE TABLE IF NOT EXISTS `zt_ops_space` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
+  `owner` varchar(30) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `desc` TEXT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updatedBy` varchar(30) NOT NULL DEFAULT '',
@@ -16417,8 +16421,8 @@ CREATE TABLE IF NOT EXISTS `zt_ops_space` (
 -- DROP TABLE IF EXISTS `zt_ops_spaceuser`;
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` mediumint(8) unsigned NOT NULL default '0',
-  `account` varchar(30) NOT NULL DEFAULT '',
+  `space` smallint(5) unsigned NOT NULL default '0',
+  `account` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
