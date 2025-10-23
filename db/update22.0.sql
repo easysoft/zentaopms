@@ -125,3 +125,9 @@ ALTER TABLE `zt_object` ADD `categoryTitle` varchar(255) NOT NULL DEFAULT '' AFT
 ALTER TABLE `zt_object` MODIFY COLUMN `type` enum('reviewed','taged','decision') NOT NULL DEFAULT 'reviewed';
 
 ALTER TABLE `zt_auditcl` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
+
+UPDATE zt_activity SET optional = CASE
+    WHEN optional = 'yes' THEN 'no'
+    WHEN optional = 'no' THEN 'yes'
+    ELSE optional
+END;
