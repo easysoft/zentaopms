@@ -151,7 +151,7 @@ class todoTester extends tester
      * @access public
      * @return object
      */
-    public function verifyTodoPagination($form, $todos, $pageSize = 5)
+    private function verifyTodoPagination($form, $todos, $pageSize = 5)
     {
         $totalTodos = count($todos);
         $pages      = (int) ceil($totalTodos / $pageSize);
