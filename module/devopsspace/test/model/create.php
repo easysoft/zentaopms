@@ -6,12 +6,13 @@ title=测试 devopsspaceModel::getList();
 timeout=0
 cid=0
 
-- 查询空间列表
- - 第1条的id属性 @1
- - 第1条的name属性 @space1
- - 第2条的id属性 @2
- - 第2条的name属性 @space2
-- 查询空间总数 @10
+- 正常创建 @1
+- 空间名重复 @0
+- 空间名重复信息第name条的0属性 @『name』已经有『space1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 空间名为空 @0
+- 空间名为空信息第name条的0属性 @『name』不能为空。
+- owner为空 @0
+- owner为空信息第owner条的0属性 @『owner』不能为空。
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 

@@ -2,6 +2,8 @@
 global $lang;
 $config->devopsspace->create = new stdclass();
 $config->devopsspace->create->requiredFields = 'name,owner';
+$config->devopsspace->edit = new stdclass();
+$config->devopsspace->edit->requiredFields = 'name,owner';
 
 $config->devopsspace->actionList = array();
 $config->devopsspace->actionList['repo']['icon']     = 'code';
@@ -16,12 +18,11 @@ $config->devopsspace->actionList['artifactrepo']['hint']     = $lang->devopsspac
 $config->devopsspace->actionList['artifactrepo']['showText'] = true;
 $config->devopsspace->actionList['artifactrepo']['url']      = array('module' => 'artifactrepo', 'method' => 'browse', 'params' => 'id={id}');
 
-$config->devopsspace->actionList['edit']['icon']        = 'edit';
-$config->devopsspace->actionList['edit']['text']        = $lang->edit;
-$config->devopsspace->actionList['edit']['hint']        = $lang->edit;
-$config->devopsspace->actionList['edit']['showText']    = true;
-$config->devopsspace->actionList['edit']['url']         = array('module' => 'devopsspace', 'method' => 'edit', 'params' => 'id={id}');
-$config->devopsspace->actionList['edit']['data-toggle'] = 'modal';
+$config->devopsspace->actionList['edit']['icon']     = 'edit';
+$config->devopsspace->actionList['edit']['text']     = $lang->edit;
+$config->devopsspace->actionList['edit']['hint']     = $lang->edit;
+$config->devopsspace->actionList['edit']['showText'] = true;
+$config->devopsspace->actionList['edit']['url']      = array('module' => 'devopsspace', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->devopsspace->actionList['delete']['icon']         = 'trash';
 $config->devopsspace->actionList['delete']['text']         = $lang->delete;

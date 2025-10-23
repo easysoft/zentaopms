@@ -11,7 +11,7 @@ cid=0
 - 用户为admin第1条的name属性 @space1
 - 用户不存在 @0
 - 用户为test1第2条的account属性 @test1
-- 查询用户为test2的空间总数 @2
+- 查询用户为test2的空间总数 @3
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
@@ -29,4 +29,4 @@ r($devopsspaceModel->getListByAccount($accountList[1])) && p('1:name')    && e('
 r($devopsspaceModel->getListByAccount($accountList[2])) && p()            && e('0');      //用户不存在
 r($devopsspaceModel->getListByAccount($accountList[3])) && p('2:account') && e('test1');  //用户为test1
 
-r(count($devopsspaceModel->getListByAccount($accountList[4]))) && p() && e('2');     //查询用户为test2的空间总数
+r(count($devopsspaceModel->getListByAccount($accountList[4]))) && p() && e('3');     //查询用户为test2的空间总数
