@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\avatar;
+
 /**
  * The model file of devopsspace module of ZenTaoPMS.
  *
@@ -27,6 +30,7 @@ class devopsspaceModel extends model
             ->on('t1.id=t2.space')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.account')->eq($account)
+            ->orWhere('t1.owner')->eq($account)
             ->fetchAll('id');
     }
 
@@ -41,11 +45,10 @@ class devopsspaceModel extends model
      */
     public function getList($pager = null): array
     {
-        return $this->dao->select('t1.*, t1.desc')->from(TABLE_DEVOPSSPACE)->alias('t1')
-            ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')
-            ->on('t1.id=t2.space')
-            ->where('t1.deleted')->eq(0)
-            ->beginIf(!$this->app->user->admin)->andWhere('t2.account')->ne($this->app->user->account)->fi()
+        $userSpaces = $this->app->user->admin ? array() : $this->getListByAccount($this->app->user->account);
+        return $this->dao->select('*, `desc`')->from(TABLE_DEVOPSSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIf(!empty($userSpaces))->andWhere('id')->in(array_keys($userSpaces))->fi()
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
