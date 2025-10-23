@@ -123,16 +123,9 @@ class todoTester extends tester
                 $private = array_column($todos, 'private', 'id')[$id];
                 $account = array_column($todos, 'account', 'id')[$id];
 
-                if(($column == 'name') and $private and ($account != $viewerAccount))
-                {
-                    $data = $this->lang->todo->thisIsPrivate;
-                }
-
+                if(($column == 'name') and $private and ($account != $viewerAccount)) $data = $this->lang->todo->thisIsPrivate;
                 if($column == 'date' && $data == FUTURE_DATE) $data = $this->lang->todo->periods->future;
-                if($column == 'begin' || $column == 'end')
-                {
-                    $data = sprintf('%02d:%02d', intval($data) / 100, intval($data) % 100);
-                }
+                if($column == 'begin' || $column == 'end') $data = sprintf('%02d:%02d', intval($data) / 100, intval($data) % 100);
                 if($column == 'status') $data = $this->lang->todo->statusList->{$data} ?? $data;
                 if($column == 'type')   $data = $this->lang->todo->typeList->{$data} ?? $data;
 
@@ -180,9 +173,14 @@ class todoTester extends tester
             $ids         = $form->dom->getElementListByXpathKey('id', true);
             $statusTexts = $form->dom->getElementListByXpathKey('status', true);
             $totalActual = count($statusTexts);
-            $waitActual  = count(array_filter($statusTexts, function($st) use($waitLabel){ $st = trim($st); return in_array($st, array($waitLabel, 'wait'), true); }));
-            $doingActual = count(array_filter($statusTexts, function($st) use($doingLabel){ $st = trim($st); return in_array($st, array($doingLabel, 'doing'), true); }));
-
+            $waitActual  = 0;
+            $doingActual = 0;
+            foreach ($statusTexts as $st)
+            {
+                $st = trim($st);
+                if ($st === $waitLabel)  $waitActual++;
+                if ($st === $doingLabel) $doingActual++;
+            }
             $waitExpected  = 0;
             $doingExpected = 0;
             foreach($ids as $id)
@@ -197,16 +195,15 @@ class todoTester extends tester
 
             $totalExpected = ($pages === 1) ? $totalTodos : ($i < $pages ? $pageSize : ($totalTodos - $pageSize * ($pages - 1)));
 
-            if($totalActual !== $totalExpected)
-            {
-                return $this->failed("分页第{$i}页数量不匹配：期望{$totalExpected}，实际{$totalActual}");
-            }
-            if($waitActual !== $waitExpected || $doingActual !== $doingExpected)
-            {
-                return $this->failed("分页第{$i}页状态计数不匹配：wait期望{$waitExpected}/实际{$waitActual}，doing期望{$doingExpected}/实际{$doingActual}");
-            }
+            if($totalActual !== $totalExpected) return $this->failed("分页第{$i}页数量不匹配：期望{$totalExpected}，实际{$totalActual}");
+            if($waitActual !== $waitExpected)   return $this->failed("分页第{$i}页状态计数不匹配：wait期望{$waitExpected}/实际{$waitActual}");
+            if($doingActual !== $doingExpected) return $this->failed("分页第{$i}页状态计数不匹配：doing期望{$doingExpected}/实际{$doingActual}");
 
-            if($i < $pages && $form->dom->nextPage) { $form->dom->nextPage->click(); $form->wait(1); }
+            if($i < $pages && $form->dom->nextPage)
+            {
+                $form->dom->nextPage->click();
+                $form->wait(1);
+            }
         }
 
         return null;
