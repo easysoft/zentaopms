@@ -98,4 +98,29 @@ class devopsspaceModel extends model
         $space->team = empty($team) ? array() : array_keys($team);
         return $space;
     }
+
+    /**
+     * 更新空间。
+     * Update space.
+     *
+     * @param  object $space
+     * @param  object $formData
+     * @access public
+     * @return bool|array
+     */
+    public function update(object $space, object $formData): false|array
+    {
+        $newTeam = empty($formData->team) ? array() : explode(',', $formData->team);
+        unset($formData->team);
+
+        $this->dao->update(TABLE_DEVOPSSPACE)->data($formData)
+            ->check('name', 'unique', "`id` != '{$space->id}'")
+            ->batchCheck($this->config->devopsspace->edit->requiredFields, 'notempty')
+            ->autoCheck()
+            ->where('id')->eq($space->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return common::createChanges($space, $formData);
+    }
 }
