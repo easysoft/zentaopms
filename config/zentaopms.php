@@ -754,6 +754,7 @@ $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 $config->objectTables['system']         = TABLE_SYSTEM;
 $config->objectTables['mark']           = TABLE_MARK;
+$config->objectTables['devopsspace']    = TABLE_DEVOPSSPACE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

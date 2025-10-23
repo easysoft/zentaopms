@@ -1,5 +1,8 @@
 <?php
 global $lang;
+$config->devopsspace->create = new stdclass();
+$config->devopsspace->create->requiredFields = 'name,owner';
+
 $config->devopsspace->actionList = array();
 $config->devopsspace->actionList['repo']['icon']     = 'code';
 $config->devopsspace->actionList['repo']['text']     = $lang->devopsspace->repo;

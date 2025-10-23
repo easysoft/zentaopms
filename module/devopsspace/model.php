@@ -27,6 +27,7 @@ class devopsspaceModel extends model
             ->on('t1.id=t2.space')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.account')->eq($account)
+            ->orWhere('t1.owner')->eq($account)
             ->fetchAll('id');
     }
 
@@ -41,13 +42,42 @@ class devopsspaceModel extends model
      */
     public function getList($pager = null): array
     {
-        return $this->dao->select('t1.*')->from(TABLE_DEVOPSSPACE)->alias('t1')
-            ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')
-            ->on('t1.id=t2.space')
-            ->where('t1.deleted')->eq(0)
-            ->beginIf(!$this->app->user->admin)->andWhere('t2.account')->ne($this->app->user->account)->fi()
+        $userSpaces = $this->app->user->admin ? array() : $this->getListByAccount($this->app->user->account);
+        return $this->dao->select('*, `desc`')->from(TABLE_DEVOPSSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIf(!empty($userSpaces))->andWhere('id')->in(array_keys($userSpaces))->fi()
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
+    }
+
+    /**
+     * 创建空间。
+     * Create space.
+     *
+     * @param  object $formData
+     * @access public
+     * @return int|bool
+     */
+    public function create(object $formData): int|bool
+    {
+        $team = empty($formData->team) ? array() : explode(',', $formData->team);
+
+        unset($formData->team);
+        $this->dao->insert(TABLE_DEVOPSSPACE)->data($formData)
+            ->check('name', 'unique')
+            ->batchCheck($this->config->devopsspace->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $spaceID = $this->dao->lastInsertID();
+        if(!empty($team))
+        {
+            foreach($team as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $spaceID, 'account' => $account))->exec();
+            if(dao::isError()) return false;
+        }
+
+        return $spaceID;
     }
 }
