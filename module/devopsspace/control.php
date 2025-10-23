@@ -58,7 +58,7 @@ class devopsspace extends control
                 if(dao::isError()) return $this->sendError(dao::getError());
             }
 
-            $this->sendSuccess(array('load' => helper::createLink('devopsspace', 'browse')));
+            $this->sendSuccess(array('load' => $this->inLink('browse')));
         }
         $this->view->title = $this->lang->devopsspace->create;
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
@@ -91,7 +91,7 @@ class devopsspace extends control
                 $this->loadModel('action')->logHistory($actionID, $changes);
             }
 
-            $this->sendSuccess(array('load' => helper::createLink('devopsspace', 'browse')));
+            $this->sendSuccess(array('load' => $this->inLink('browse')));
         }
 
         $this->view->title = $this->lang->devopsspace->edit;
