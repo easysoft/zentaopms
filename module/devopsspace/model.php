@@ -61,5 +61,23 @@ class devopsspaceModel extends model
      */
     public function create(object $formData): int|bool
     {
+        $team = empty($formData->team) ? array() : explode(',', $formData->team);
+
+        unset($formData->team);
+        $this->dao->insert(TABLE_DEVOPSSPACE)->data($formData)
+            ->check('name', 'unique')
+            ->batchCheck($this->config->devopsspace->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $spaceID = $this->dao->lastInsertID();
+        if(!empty($team))
+        {
+            foreach($team as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $spaceID, 'account' => $account))->exec();
+            if(dao::isError()) return false;
+        }
+
+        return $spaceID;
     }
 }
