@@ -12,7 +12,6 @@ $linkedPlans     = data('product.plans');
 $linkedProducts  = data('linkedProducts');
 $branchGroups    = data('branchGroups');
 $productPlans    = data('productPlans');
-$hidden          = empty($project->hasProduct) ? 'hidden' : '';
 
 if($project)
 {
@@ -143,8 +142,7 @@ if($hasPercent && $project && $project->model != 'ipd')
 
 $fields->field('productsBox')
     ->id('productsBox')
-    ->width('full')
-    ->className($hidden)
+    ->width(!empty($project->hasProduct) ? 'full' : '1/2')
     ->control(array(
         'control'           => 'productsBox',
         'productItems'      => data('allProducts'),

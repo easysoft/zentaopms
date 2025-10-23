@@ -102,7 +102,7 @@ $fields->field('percent')
 
 $fields->field('productsBox')
     ->id('productsBox')
-    ->width('full')
+    ->width(!empty($project->hasProduct) ? 'full' : '1/2')
     ->control(array
     (
         'control'           => 'productsBox',

@@ -32,6 +32,15 @@ class control extends baseControl
     public $getFormData = false;
 
     /**
+     * Form表单数据
+     * FormData.
+     *
+     * @var array
+     * @access public
+     */
+    public $formData = array();
+
+    /**
      * Check requiredFields and set exportFields for workflow.
      *
      * @param  string $moduleName
@@ -119,8 +128,46 @@ class control extends baseControl
      * @access  public
      * @return  void
      */
+    public function display($moduleName = '', $methodName = '')
+    {
+        $this->render($moduleName, $methodName);
+    }
+
+    /**
+     * 向浏览器输出内容。
+     * Print the content of the view.
+     *
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
+     * @access  public
+     * @return  void
+     */
     public function render($moduleName = '', $methodName = '')
     {
+        if($this->app->apiVersion != 'v2')
+        {
+            $this->parseJSON($moduleName, $methodName);
+
+            $output           = array();
+            $output['status'] = is_object($this->view) ? 'success' : 'fail';
+            $output['data']   = json_encode($this->view) ? json_encode($this->view) : '';
+            $output['md5']    = md5($output['data']);
+
+            ob_start();
+            echo $this->output;
+
+            return;
+        }
+        elseif(!$this->getFormData)
+        {
+            $this->parseJSON($moduleName, $methodName);
+
+            ob_start();
+            echo $this->output;
+
+            return;
+        }
+
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
 
@@ -458,7 +505,7 @@ class control extends baseControl
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
         $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
-        $viewType     = ($this->viewType == 'mhtml' or $this->viewType == 'xhtml') ? 'html' : $this->viewType;
+        $viewType     = 'html';
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */

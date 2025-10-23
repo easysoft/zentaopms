@@ -975,7 +975,7 @@
                     $(document).trigger('pageload.app');
                     const iframeWindow = $iframe[0].contentWindow;
                     oldPageCofnig = iframeWindow.config;
-                    iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
+                    if(iframeWindow.$) iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                     clearTimer();
                 });
         }
@@ -1811,7 +1811,15 @@
             delete options.loadId;
         }
 
-        if(url && ((/^(https?|javascript):/.test(url) && !options.app) || url.startsWith('#'))) return;
+        if(url)
+        {
+            if(/^(https?|javascript):/.test(url) && !options.app) return;
+            if(url[0] === '#')
+            {
+                if(/firefox/i.test(navigator.userAgent)) e.preventDefault();
+                return;
+            }
+        }
         if(!url && $link.is('a') && !options.back && !options.load) return;
 
         if($modal.length)

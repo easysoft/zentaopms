@@ -421,6 +421,7 @@ class formdom
     private function addValue(&$data, $name, $value)
     {
         /* 使用 parse_str 来处理名称 */
+        if($value === null) $value = '';
         parse_str($name . '=' . urlencode($value), $temp);
 
         /* 合并到数据中 */

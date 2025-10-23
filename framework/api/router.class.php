@@ -370,6 +370,7 @@ class api extends router
         if($this->apiVersion == 'v1')
         {
             include $this->appRoot . "config/apiv1.php";
+            if(isset($this->config->routes)) $routes = array_merge($routes, $this->config->routes);
             $this->route($routes);
         }
         else
@@ -446,26 +447,32 @@ class api extends router
         $_POST = json_decode($requestBody, true);
 
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
-        if($this->action == 'put')
+        /* Get form data by get request. */
+        $postData = $_POST;
+        $_POST    = array();
+
+        $this->control->viewType    = 'html';
+        $this->control->getFormData = true;
+
+        $zen = $this->control->moduleName . 'Zen';
+        $this->control->$zen->getFormData = true;
+
+        $method = $this->control->methodName;
+        call_user_func_array(array($this->control, $method), $_GET);
+
+        $this->control->getFormData       = false;
+        $this->control->$zen->getFormData = false;
+        $this->control->viewType          = 'json';
+
+        $_POST = $postData;
+        foreach($this->control->formData as $key => $value)
         {
-            /* Get form data by get request. */
-            $postData = $_POST;
-            $_POST    = array();
-            $objectID = (int)current($_GET);
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
 
-            $this->control->viewType    = 'html';
-            $this->control->getFormData = true;
-
-            $this->control->edit($objectID);
-
-            $this->control->getFormData = false;
-            $this->control->viewType    = 'json';
-
-            $_POST = $postData;
-            foreach($this->control->formData as $key => $value)
-            {
-                if(!isset($_POST[$key])) $_POST[$key] = $value;
-            }
+        foreach($this->control->$zen->formData as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
     }
 
@@ -489,7 +496,12 @@ class api extends router
             $index  = 0;
             foreach($defaultParams as $key => $defaultItem)
             {
-                if(isset($values[$index])) $_GET[$key] = $values[$index];
+                if(isset($values[$index]))
+                {
+                    $value = $values[$index];
+                    settype($value, $defaultItem['type']);
+                    $_GET[$key] = $value;
+                }
                 $index++;
             }
         }

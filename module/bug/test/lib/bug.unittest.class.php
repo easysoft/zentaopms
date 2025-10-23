@@ -3220,19 +3220,13 @@ class bugTest
         );
 
         // 如果有bugID，添加到响应中
-        if($bugID) {
-            $response['bugID'] = $bugID;
-        }
+        if($bugID) $response['bugID'] = $bugID;
 
         // 如果在看板模式
-        if($isInKanban) {
-            $response['kanban'] = true;
-        }
+        if($isInKanban) $response['kanban'] = true;
 
         // 如果有变更信息
-        if(!empty($changes)) {
-            $response['changes'] = $changes;
-        }
+        if(!empty($changes)) $response['changes'] = $changes;
 
         return $response;
     }

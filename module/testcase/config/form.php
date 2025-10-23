@@ -57,7 +57,7 @@ $config->testcase->form->edit['pri']          = array('required' => false, 'type
 $config->testcase->form->edit['status']       = array('required' => false, 'type' => 'string', 'default' => 'wait');
 $config->testcase->form->edit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['linkCase']     = array('required' => false, 'type' => 'array',  'default' => array(''));
-$config->testcase->form->edit['linkBug']      = array('required' => false, 'type' => 'array',  'default' => array(''));
+$config->testcase->form->edit['linkBug']      = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->edit['title']        = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->testcase->form->edit['color']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);

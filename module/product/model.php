@@ -1912,7 +1912,8 @@ class productModel extends model
             foreach($releases as $release)
             {
                 $year         = substr($release->date, 0, 4);
-                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = trim($release->branch, ',');
+                $branchIdList = empty($branchIdList) ? array(0) : explode(',', $branchIdList);
                 $branchIdList = array_unique($branchIdList);
                 foreach($branchIdList as $branchID)
                 {

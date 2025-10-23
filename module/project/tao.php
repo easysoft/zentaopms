@@ -1180,6 +1180,9 @@ class projectTao extends projectModel
      */
     protected function createMilestoneReport(int $projectID): bool
     {
+        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('module')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
+        if(!empty($reportID)) return true;
+
         $report = new stdclass();
         $report->title        = $this->lang->project->milestoneReport;
         $report->project      = $projectID;

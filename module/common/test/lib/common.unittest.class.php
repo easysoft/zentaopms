@@ -93,64 +93,6 @@ class commonTest
     }
 
     /**
-     * Test sendHeader method.
-     *
-     * @param  string $scenario
-     * @access public
-     * @return mixed
-     */
-    public function sendHeaderTest($scenario = 'basic')
-    {
-        global $config;
-
-        // 根据场景设置配置
-        switch($scenario) {
-            case 'basic':
-                $config->charset = 'UTF-8';
-                $config->framework->sendXCTO = false;
-                $config->framework->sendXXP = false;
-                $config->framework->sendHSTS = false;
-                $config->framework->sendRP = false;
-                $config->framework->sendXPCDP = false;
-                $config->framework->sendXDO = false;
-                $config->CSPs = array();
-                $config->xFrameOptions = '';
-                break;
-
-            case 'security_headers':
-                $config->framework->sendXCTO = true;
-                $config->framework->sendXXP = true;
-                $config->framework->sendHSTS = true;
-                $config->framework->sendRP = true;
-                $config->framework->sendXPCDP = true;
-                $config->framework->sendXDO = true;
-                break;
-
-            case 'csp':
-                $config->CSPs = array("default-src 'self'", "script-src 'self' 'unsafe-inline'");
-                break;
-
-            case 'xframe':
-                $config->xFrameOptions = 'DENY';
-                break;
-        }
-
-        try {
-            // 使用输出缓冲来捕获可能的输出
-            ob_start();
-            $this->objectModel->sendHeader();
-            ob_end_clean();
-            return 1;
-        } catch (Exception $e) {
-            ob_end_clean();
-            return 0;
-        } catch (Error $e) {
-            ob_end_clean();
-            return 0;
-        }
-    }
-
-    /**
      * Test checkSafeFile method.
      *
      * @param string $scenario 测试场景
@@ -485,11 +427,11 @@ class commonTest
     public function getActiveMainMenuTest($testType = 1)
     {
         global $app;
-        
+
         // 模拟应用状态以进行测试
         if(!isset($app->rawModule)) $app->rawModule = 'product';
         if(!isset($app->rawMethod)) $app->rawMethod = 'browse';
-        
+
         // 测试类型决定不同的测试场景
         switch($testType)
         {
@@ -500,27 +442,27 @@ class commonTest
             case 5: $app->rawModule = 'bug'; $app->rawMethod = 'browse'; break;
             default: $app->rawModule = 'product'; $app->rawMethod = 'browse'; break;
         }
-        
+
         // 验证方法是否存在
         if(!method_exists('commonModel', 'getActiveMainMenu'))
         {
             return 'method_not_exists';
         }
-        
+
         // 验证方法是否为静态方法
         $reflection = new ReflectionMethod('commonModel', 'getActiveMainMenu');
         if(!$reflection->isStatic())
         {
             return 'not_static_method';
         }
-        
+
         // 验证返回类型声明
         $returnType = $reflection->getReturnType();
         if(!$returnType || $returnType->getName() !== 'string')
         {
             return 'wrong_return_type';
         }
-        
+
         // 基本的方法存在性和类型验证通过
         return 'method_validated';
     }
@@ -992,12 +934,12 @@ class commonTest
             // 创建一个模拟的app对象
             $mockApp = new class($lang) {
                 private $lang;
-                
+
                 public function __construct($lang = 'zh-cn')
                 {
                     $this->lang = $lang ?: 'zh-cn';
                 }
-                
+
                 public function getClientLang()
                 {
                     return $this->lang;
@@ -1035,15 +977,15 @@ class commonTest
     {
         // 由于http方法涉及真实的网络请求，在测试环境中我们模拟其行为
         // 避免真实的网络调用，防止测试依赖外部服务
-        
+
         // 验证URL参数
         if(empty($url)) return false;
-        
+
         // 验证URL格式
         if(!filter_var($url, FILTER_VALIDATE_URL) && !preg_match('/^https?:\/\//', $url)) {
             return false;
         }
-        
+
         // 模拟不同情况的返回值
         if(strpos($url, 'error') !== false) {
             // 模拟错误情况
@@ -1082,29 +1024,29 @@ class commonTest
     {
         // 为了避免数据库依赖问题，直接验证方法的存在性和基本特征
         // 这样可以确保方法按预期存在并具有正确的签名
-        
+
         // 验证方法是否存在
         if(!method_exists('commonModel', 'setMainMenu')) {
             return 'method_not_exists';
         }
-        
+
         // 验证方法是否为静态方法
         $reflection = new ReflectionMethod('commonModel', 'setMainMenu');
         if(!$reflection->isStatic()) {
             return 'not_static_method';
         }
-        
+
         // 验证返回类型声明
         $returnType = $reflection->getReturnType();
         if(!$returnType || $returnType->getName() !== 'bool') {
             return 'wrong_return_type';
         }
-        
+
         // 验证参数数量
         if($reflection->getNumberOfParameters() !== 0) {
             return 'wrong_parameters';
         }
-        
+
         // 根据测试类型返回不同的验证结果
         switch($testType) {
             case 1: // 方法存在性验证
@@ -1185,12 +1127,12 @@ class commonTest
         // 创建独立的测试环境，不依赖框架初始化
         $testApp = new stdClass();
         $testLang = new stdClass();
-        
+
         // 备份并替换全局变量
         global $app, $lang;
         $originalApp = isset($app) ? $app : null;
         $originalLang = isset($lang) ? $lang : null;
-        
+
         $app = $testApp;
         $lang = $testLang;
         $app->viewType = 'html';
@@ -1202,29 +1144,29 @@ class commonTest
                     $lang->test->menu = new stdClass();
                     $lang->test->menu->browse = array('link' => 'browse-%s');
                     $lang->test->homeMenu = array();
-                    
+
                     $this->setMenuVarsStandalone('test', 123);
                     return $lang->test->menu->browse['link'];
-                    
+
                 case 2: // 测试带html后缀的链接
                     $lang->test = new stdClass();
                     $lang->test->menu = new stdClass();
                     $lang->test->menu->view = array('link' => 'view-%s.html');
                     $lang->test->homeMenu = array();
-                    
+
                     $this->setMenuVarsStandalone('test', 456);
                     return $lang->test->menu->view['link'];
-                    
+
                 case 3: // 测试webMenu模式
                     $app->viewType = 'mhtml';
                     $lang->test = new stdClass();
                     $lang->test->webMenu = new stdClass();
                     $lang->test->webMenu->browse = array('link' => 'browse-%s');
                     $lang->test->homeMenu = array();
-                    
+
                     $this->setMenuVarsStandalone('test', 789);
                     return $lang->test->webMenu->browse['link'];
-                    
+
                 case 4: // 测试空菜单项跳过
                     $app->viewType = 'html';
                     $lang->test = new stdClass();
@@ -1232,19 +1174,19 @@ class commonTest
                     $lang->test->menu->empty = null;
                     $lang->test->menu->browse = array('link' => 'browse-%s');
                     $lang->test->homeMenu = array();
-                    
+
                     $this->setMenuVarsStandalone('test', 999);
                     return $lang->test->menu->browse['link'];
-                    
+
                 case 5: // 测试homeMenu删除
                     $lang->test = new stdClass();
                     $lang->test->menu = new stdClass();
                     $lang->test->menu->browse = array('link' => 'browse-%s');
                     $lang->test->homeMenu = array('test' => 'value');
-                    
+
                     $this->setMenuVarsStandalone('test', 111);
                     return !isset($lang->test->homeMenu) ? '1' : '0';
-                    
+
                 default:
                     return 'error';
             }
@@ -1258,7 +1200,7 @@ class commonTest
             } else {
                 unset($GLOBALS['app']);
             }
-            
+
             if($originalLang !== null) {
                 $lang = $originalLang;
             } else {
@@ -1290,7 +1232,7 @@ class commonTest
                 if(!$menu) continue;
 
                 $lang->$moduleName->$menuKey->$label = $this->setMenuVarsExStandalone($menu, $objectID, $params);
-                
+
                 if(isset($menu['subMenu']))
                 {
                     foreach($menu['subMenu'] as $key1 => $subMenu)
@@ -1299,7 +1241,7 @@ class commonTest
                             $lang->$moduleName->$menuKey->{$label}['subMenu'] = new stdClass();
                         }
                         $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = $this->setMenuVarsExStandalone($subMenu, $objectID, $params);
-                        
+
                         if(!isset($subMenu['dropMenu'])) continue;
                         foreach($subMenu['dropMenu'] as $key2 => $dropMenu)
                         {
@@ -1378,27 +1320,27 @@ class commonTest
         {
             return 'method_not_exists';
         }
-        
+
         $reflection = new ReflectionMethod('commonModel', 'checkMenuVarsReplaced');
-        
+
         switch($testCase) {
             case 1: // 验证方法是公开的且静态的
                 $isPublic = $reflection->isPublic();
                 $isStatic = $reflection->isStatic();
                 return ($isPublic && $isStatic) ? 'public_static_method' : 'method_attributes_wrong';
-                
+
             case 2: // 验证方法返回类型
                 $returnType = $reflection->getReturnType();
                 return !$returnType ? 'no_return_type' : 'has_return_type';
-                
+
             case 3: // 验证方法无参数
                 $paramCount = $reflection->getNumberOfParameters();
                 return $paramCount === 0 ? 'no_parameters' : 'has_parameters';
-                
+
             case 4: // 验证方法具有文档注释
                 $docComment = $reflection->getDocComment();
                 return $docComment !== false ? 'has_doc_comment' : 'no_doc_comment';
-                
+
             case 5: // 测试方法签名完整性
                 $signature = $reflection->__toString();
                 $hasCorrectSignature = (
@@ -1406,12 +1348,12 @@ class commonTest
                     strpos($signature, 'checkMenuVarsReplaced') !== false
                 );
                 return $hasCorrectSignature ? 'correct_signature' : 'incorrect_signature';
-                
+
             default:
                 return 'invalid_test_case';
         }
     }
-    
+
     /**
      * Test processMarkdown method.
      *
@@ -1439,24 +1381,24 @@ class commonTest
         switch($testCase) {
             case 1: // 验证方法存在性
                 return method_exists('commonModel', 'sortFeatureMenu') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证返回类型为bool
                 $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
                 $returnType = $reflection->getReturnType();
                 return ($returnType && $returnType->getName() === 'bool') ? '1' : '0';
-                
+
             case 4: // 验证参数数量
                 $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
                 return (string)$reflection->getNumberOfParameters();
-                
+
             case 5: // 验证方法为公共可访问
                 $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 6: // 验证参数类型
                 $reflection = new ReflectionMethod('commonModel', 'sortFeatureMenu');
                 $parameters = $reflection->getParameters();
@@ -1467,7 +1409,7 @@ class commonTest
                 } else {
                     return '0';
                 }
-                
+
             default:
                 return '0';
         }
@@ -1494,7 +1436,7 @@ class commonTest
             $error->message = 'HTTP Server Error';
             return $error;
         }
-        
+
         // 模拟不同情况的API响应
         if(strpos($url, 'success') !== false) {
             // 模拟成功响应
@@ -1555,7 +1497,7 @@ class commonTest
             $error->message = 'HTTP Server Error';
             return $error;
         }
-        
+
         // 模拟不同情况的API响应
         if(strpos($url, 'success') !== false) {
             // 模拟成功响应
@@ -1613,7 +1555,7 @@ class commonTest
             $error->message = 'HTTP Server Error';
             return $error;
         }
-        
+
         // 模拟不同情况的API响应
         if(strpos($url, 'success') !== false) {
             // 模拟成功响应
@@ -1671,7 +1613,7 @@ class commonTest
             $error->message = 'HTTP Server Error';
             return $error;
         }
-        
+
         // 模拟不同情况的API响应
         if(strpos($url, 'success') !== false) {
             // 模拟成功响应
@@ -1825,24 +1767,24 @@ class commonTest
         switch($testCase) {
             case 1: // 验证方法存在
                 return method_exists('commonModel', 'buildIconButton') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证方法为公共方法
                 $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 4: // 验证参数数量
                 $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
                 return (string)$reflection->getNumberOfParameters();
-                
+
             case 5: // 验证方法签名中第一个参数名称
                 $reflection = new ReflectionMethod('commonModel', 'buildIconButton');
                 $parameters = $reflection->getParameters();
                 return count($parameters) > 0 ? $parameters[0]->getName() : 'no_params';
-                
+
             default:
                 return '0';
         }
@@ -1860,22 +1802,22 @@ class commonTest
         switch($testType) {
             case 1: // 验证方法存在
                 return method_exists('commonModel', 'printAboutBar') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证方法为公共方法
                 $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 4: // 验证参数数量为0
                 $reflection = new ReflectionMethod('commonModel', 'printAboutBar');
                 return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
-                
+
             case 5: // 模拟输出测试 - 验证方法可以被调用
                 global $app, $config, $lang;
-                
+
                 // 备份原始状态
                 $originalConfig = isset($config) ? $config : null;
                 $originalLang = isset($lang) ? $lang : null;
@@ -1886,49 +1828,49 @@ class commonTest
                     // 设置基本的测试环境
                     if (!isset($config)) $config = new stdClass();
                     if (!isset($lang)) $lang = new stdClass();
-                    
+
                     // 设置必要的配置和语言项
                     $config->isINT = false;
                     $config->manualUrl = array('home' => 'http://test.com', 'int' => 'http://test.com');
                     $config->xxserver = new stdClass();
                     $config->xxserver->installed = false;
                     $_COOKIE['theme'] = 'default';
-                    
+
                     $lang->help = 'Help';
                     $lang->manual = 'Manual';
                     $lang->changeLog = 'Change Log';
                     $lang->aboutZenTao = 'About ZenTao';
                     $lang->designedByAIUX = 'Designed by AIUX';
-                    
+
                     // 模拟helper类
                     if (!class_exists('html')) {
-                        eval('class html { 
-                            public static function a($href, $title = "", $target = "", $misc = "") { 
-                                return "<a href=\"$href\" $target $misc>$title</a>"; 
-                            } 
+                        eval('class html {
+                            public static function a($href, $title = "", $target = "", $misc = "") {
+                                return "<a href=\"$href\" $target $misc>$title</a>";
+                            }
                         }');
                     }
-                    
+
                     if (!class_exists('helper')) {
-                        eval('class helper { 
-                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) { 
-                                return "/$module-$method-$params.html"; 
-                            } 
+                        eval('class helper {
+                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) {
+                                return "/$module-$method-$params.html";
+                            }
                         }');
                     }
-                    
+
                     // 捕获输出
                     ob_start();
                     commonModel::printAboutBar();
                     $output = ob_get_clean();
-                    
+
                     // 检查输出是否包含预期内容
                     if(strpos($output, 'Help') !== false) {
                         return '1';
                     }
-                    
+
                     return '0';
-                    
+
                 } catch (Exception $e) {
                     if (ob_get_level()) ob_end_clean();
                     return '0';
@@ -1943,7 +1885,7 @@ class commonTest
                         unset($_COOKIE['theme']);
                     }
                 }
-                
+
             default:
                 return '0';
         }
@@ -1972,33 +1914,33 @@ class commonTest
     {
         // 由于printCreateList方法涉及复杂的全局状态和数据库依赖，
         // 在测试环境中我们验证方法的基本属性和存在性
-        
+
         switch ($testCase) {
             case 1: // 验证方法存在
                 return method_exists('commonModel', 'printCreateList') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'printCreateList');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证方法为公共方法
                 $reflection = new ReflectionMethod('commonModel', 'printCreateList');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 4: // 验证参数数量为0
                 $reflection = new ReflectionMethod('commonModel', 'printCreateList');
                 return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
-                
+
             case 5: // 验证返回类型为void（直接输出）
                 $reflection = new ReflectionMethod('commonModel', 'printCreateList');
                 $returnType = $reflection->getReturnType();
                 return !$returnType ? '1' : '0'; // void方法没有返回类型声明
-                
+
             default:
                 return '0';
         }
     }
-    
+
     /**
      * Create mock DAO for printCreateList testing.
      *
@@ -2010,77 +1952,77 @@ class commonTest
     {
         return new class($scenario) {
             private $scenario;
-            
+
             public function __construct($scenario)
             {
                 $this->scenario = $scenario;
             }
-            
+
             public function select($fields)
             {
                 return $this;
             }
-            
+
             public function from($table)
             {
                 return $this;
             }
-            
+
             public function where($field)
             {
                 return $this;
             }
-            
+
             public function eq($value)
             {
                 return $this;
             }
-            
+
             public function andWhere($field)
             {
                 return $this;
             }
-            
+
             public function in($values)
             {
                 return $this;
             }
-            
+
             public function orderBy($order)
             {
                 return $this;
             }
-            
+
             public function limit($limit)
             {
                 return $this;
             }
-            
+
             public function beginIF($condition)
             {
                 return $this;
             }
-            
+
             public function fi()
             {
                 return $this;
             }
-            
+
             public function leftJoin($table)
             {
                 return $this;
             }
-            
+
             public function alias($alias)
             {
                 return $this;
             }
-            
+
             public function on($condition)
             {
                 return $this;
             }
-            
+
             public function fetchAll()
             {
                 $result = array();
@@ -2090,7 +2032,7 @@ class commonTest
                 }
                 return $result;
             }
-            
+
             public function fetch()
             {
                 if ($this->scenario == 'no_product') {
@@ -2151,7 +2093,7 @@ class commonTest
         // 备份并设置全局变量
         $oldConfig = $config ?? null;
         $oldLang = $lang ?? null;
-        
+
         $config = $tempConfig;
         $lang = $tempLang;
 
@@ -2188,19 +2130,19 @@ class commonTest
         switch($testCase) {
             case 1: // 验证方法存在
                 return method_exists('commonModel', 'printIcon') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'printIcon');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证方法为公共方法
                 $reflection = new ReflectionMethod('commonModel', 'printIcon');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 4: // 验证参数数量
                 $reflection = new ReflectionMethod('commonModel', 'printIcon');
                 return (string)$reflection->getNumberOfParameters();
-                
+
             case 5: // 验证方法功能 - printIcon调用buildIconButton
                 try {
                     // 使用反射来验证printIcon方法的源码中是否包含buildIconButton调用
@@ -2208,9 +2150,9 @@ class commonTest
                     $filename = $reflection->getFileName();
                     $startLine = $reflection->getStartLine();
                     $endLine = $reflection->getEndLine();
-                    
+
                     if (!$filename) return '0';
-                    
+
                     $lines = file($filename);
                     $methodBody = '';
                     for ($i = $startLine - 1; $i < $endLine; $i++) {
@@ -2218,13 +2160,13 @@ class commonTest
                             $methodBody .= $lines[$i];
                         }
                     }
-                    
+
                     // 验证方法体是否包含buildIconButton调用
                     return strpos($methodBody, 'buildIconButton') !== false ? '1' : '0';
                 } catch (Exception $e) {
                     return '0';
                 }
-                
+
             default:
                 return '0';
         }
@@ -2240,9 +2182,9 @@ class commonTest
     public function printModuleMenuTest($activeMenu = 'user')
     {
         global $app, $lang;
-        
+
         // Mock basic global variables if not set
-        if (!isset($app)) 
+        if (!isset($app))
         {
             $app = new stdClass();
             $app->rawModule = 'user';
@@ -2251,12 +2193,12 @@ class commonTest
             $app->viewType = 'html';
             $app->isFlow = false;
         }
-        
-        if (!isset($lang)) 
+
+        if (!isset($lang))
         {
             $lang = new stdClass();
         }
-        
+
         // Set up basic tab menu structure
         if (!isset($lang->{$app->tab}))
         {
@@ -2275,7 +2217,7 @@ class commonTest
             ob_end_clean();
             return 'Exception: ' . $e->getMessage();
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2394,39 +2336,39 @@ class commonTest
         switch($testCase) {
             case 1: // 验证方法存在
                 return method_exists('commonModel', 'printUserBar') ? '1' : '0';
-                
+
             case 2: // 验证方法为静态方法
                 $reflection = new ReflectionMethod('commonModel', 'printUserBar');
                 return $reflection->isStatic() ? '1' : '0';
-                
+
             case 3: // 验证方法为公共方法
                 $reflection = new ReflectionMethod('commonModel', 'printUserBar');
                 return $reflection->isPublic() ? '1' : '0';
-                
+
             case 4: // 验证参数数量为0
                 $reflection = new ReflectionMethod('commonModel', 'printUserBar');
                 return $reflection->getNumberOfParameters() === 0 ? '1' : '0';
-                
+
             case 5: // 验证方法可以被调用
                 global $app, $lang, $config;
-                
+
                 // 备份原始状态
                 $originalApp = isset($app) ? clone $app : null;
                 $originalLang = isset($lang) ? $lang : null;
                 $originalConfig = isset($config) ? $config : null;
-                
+
                 try {
                     // 初始化必要的全局变量
                     if(!isset($app)) $app = new stdClass();
                     if(!isset($lang)) $lang = new stdClass();
                     if(!isset($config)) $config = new stdClass();
-                    
+
                     // 设置测试用户
                     $app->user = new stdClass();
                     $app->user->account = 'admin';
                     $app->user->realname = 'Administrator';
                     $app->user->role = 'admin';
-                    
+
                     // 设置语言配置
                     $lang->user = new stdClass();
                     $lang->user->roleList = array('admin' => 'Administrator', 'user' => 'User');
@@ -2435,7 +2377,7 @@ class commonTest
                     $lang->theme = 'Theme';
                     $lang->lang = 'Language';
                     $lang->logout = 'Logout';
-                    
+
                     // 设置应用配置
                     $app->config = new stdClass();
                     $app->config->vision = 'rnd';
@@ -2444,46 +2386,46 @@ class commonTest
                     $app->cookie = new stdClass();
                     $app->cookie->theme = 'default';
                     $app->cookie->lang = 'zh-cn';
-                    
+
                     // 模拟必要的类
                     if (!class_exists('html')) {
-                        eval('class html { 
-                            public static function a($href, $title = "", $target = "", $misc = "") { 
-                                return "<a href=\"$href\" $target $misc>$title</a>"; 
-                            } 
-                            public static function avatar($user, $size = "", $class = "", $id = "") { 
-                                return "<img class=\"$class\" id=\"$id\" />"; 
-                            } 
+                        eval('class html {
+                            public static function a($href, $title = "", $target = "", $misc = "") {
+                                return "<a href=\"$href\" $target $misc>$title</a>";
+                            }
+                            public static function avatar($user, $size = "", $class = "", $id = "") {
+                                return "<img class=\"$class\" id=\"$id\" />";
+                            }
                         }');
                     }
-                    
+
                     if (!class_exists('helper')) {
-                        eval('class helper { 
-                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) { 
-                                return "/$module-$method-$params.html"; 
-                            } 
+                        eval('class helper {
+                            public static function createLink($module, $method, $params = "", $misc = "", $onlyBody = false) {
+                                return "/$module-$method-$params.html";
+                            }
                         }');
                     }
-                    
+
                     if (!class_exists('common')) {
-                        eval('class common { 
-                            public static function hasPriv($module, $method) { 
-                                return true; 
-                            } 
+                        eval('class common {
+                            public static function hasPriv($module, $method) {
+                                return true;
+                            }
                         }');
                     }
-                    
+
                     // 捕获输出
                     ob_start();
                     commonModel::printUserBar();
                     $output = ob_get_clean();
-                    
+
                     // 验证输出包含预期的HTML结构（至少包含基本的下拉菜单结构）
                     $hasDropdownMenu = strpos($output, 'dropdown-menu') !== false;
                     $hasBasicStructure = strpos($output, 'ul') !== false || strpos($output, 'dropdown') !== false;
-                    
+
                     return ($hasDropdownMenu || $hasBasicStructure) ? '1' : '0';
-                    
+
                 } catch (Exception $e) {
                     if (ob_get_level()) ob_end_clean();
                     return '0';
@@ -2499,7 +2441,7 @@ class commonTest
                         $config = $originalConfig;
                     }
                 }
-                
+
             default:
                 return '0';
         }
@@ -2748,19 +2690,19 @@ class commonTest
     public function checkPrivByRightsTest(string $module, string $method, array $acls, mixed $object)
     {
         global $app, $lang;
-        
+
         // 备份原始状态
         $originalApp = isset($app) ? clone $app : null;
         $originalLang = isset($lang) ? $lang : null;
-        
+
         try {
             // 初始化必要的全局变量
             if(!isset($app)) $app = new stdClass();
             if(!isset($lang)) $lang = new stdClass();
-            
+
             // 设置应用tab，用于checkPrivByRights方法中的逻辑判断
             $app->tab = 'system';
-            
+
             // 初始化语言分组配置
             if(!isset($lang->navGroup)) $lang->navGroup = new stdClass();
             $lang->navGroup->user = 'system';
@@ -2770,7 +2712,7 @@ class commonTest
             $lang->navGroup->epic = 'product';
             $lang->navGroup->bug = 'qa';
             $lang->navGroup->my = 'my';
-            
+
             // 初始化菜单配置以满足checkPrivByRights方法的检查
             $lang->system = new stdClass();
             $lang->system->menu = array('user' => array(), 'team' => array());
@@ -2780,12 +2722,12 @@ class commonTest
             $lang->qa->menu = array('bug' => array());
             $lang->my = new stdClass();
             $lang->my->menu = array('team' => array());
-            
+
             // 通过反射访问protected static方法
             $reflectionClass = new ReflectionClass('commonTao');
             $method_reflection = $reflectionClass->getMethod('checkPrivByRights');
             $method_reflection->setAccessible(true);
-            
+
             // 模拟特殊情况：当object为'no_db_priv'时，模拟hasDBPriv返回false
             if($object === 'no_db_priv') {
                 // 创建一个会导致hasDBPriv返回false的对象
@@ -2794,12 +2736,12 @@ class commonTest
                 $app->user->account = 'testuser';
                 $app->user->admin = false;
                 $app->user->rights = array('rights' => array('my' => array('limited' => true)));
-                
+
                 $mockObject = new stdClass();
                 $mockObject->openedBy = 'other_user'; // 不是当前用户
                 $mockObject->assignedTo = 'other_user'; // 不是当前用户
                 $mockObject->addedBy = 'other_user'; // 不是当前用户
-                
+
                 $result = $method_reflection->invokeArgs(null, array($module, $method, $acls, $mockObject));
             } else {
                 // 正常调用
@@ -2807,14 +2749,14 @@ class commonTest
                 $app->user = new stdClass();
                 $app->user->account = 'admin';
                 $app->user->admin = true;
-                
+
                 $result = $method_reflection->invokeArgs(null, array($module, $method, $acls, $object));
             }
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result ? '1' : '0';
-            
+
         } catch (Exception $e) {
             return '0';
         } finally {
@@ -2840,29 +2782,29 @@ class commonTest
     {
         try {
             global $app, $lang;
-            
+
             // 备份原始状态
             $originalApp = isset($app) ? clone $app : null;
             $originalLang = isset($lang) ? clone $lang : null;
-            
+
             // 初始化必要的全局变量
             if(!isset($app)) $app = new stdClass();
             if(!isset($app->user)) $app->user = new stdClass();
             if(!isset($app->session)) $app->session = new stdClass();
             if(!isset($lang)) $lang = new stdClass();
             if(!isset($lang->navGroup)) $lang->navGroup = new stdClass();
-            
+
             // 使用反射调用protected方法
             $reflection = new ReflectionClass('commonTao');
             $method = $reflection->getMethod('isProjectAdmin');
             $method->setAccessible(true);
-            
+
             $result = $method->invokeArgs(null, array($module, $object));
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result ? '1' : '0';
-            
+
         } catch (Exception $e) {
             return '0';
         } finally {
@@ -2891,25 +2833,25 @@ class commonTest
     {
         try {
             global $app;
-            
+
             // 备份原始状态
             $originalApp = isset($app) ? clone $app : null;
-            
+
             // 初始化必要的全局变量
             if(!isset($app)) $app = new stdClass();
             if(!isset($app->params)) $app->params = array();
-            
+
             // 使用反射调用protected方法
             $reflection = new ReflectionClass('commonTao');
             $method_ref = $reflection->getMethod('getStoryModuleAndMethod');
             $method_ref->setAccessible(true);
-            
+
             $result = $method_ref->invokeArgs(null, array($module, $method, $params));
-            
+
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
-            
+
         } catch (Exception $e) {
             return array($module, $method);
         } finally {
@@ -2960,7 +2902,7 @@ class commonTest
 
             // 初始化基本配置
             $config->webRoot = '/';
-            
+
             // 确保不在CLI模式下运行（PHP_SAPI != 'cli'）
             // 确保不在安装或升级模式
             $app->installing = false;

@@ -1276,6 +1276,12 @@ class execution extends control
             unset($parentStageList[0]);
         }
 
+        if(empty($project->hasProduct))
+        {
+            $linkedProduct = current($linkedObjects->linkedProducts);
+            $linkedPlans   = !empty($linkedProduct->plans) ? array_values($linkedProduct->plans) : array();
+        }
+
         $this->view->title                = $this->lang->execution->edit . $this->lang->hyphen . $execution->name;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
@@ -1296,7 +1302,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $linkedObjects->unmodifiableBranches;
         $this->view->productPlans         = $linkedObjects->productPlans;
         $this->view->productPlan          = $linkedObjects->productPlan;
-        $this->view->currentPlan          = $linkedObjects->currentPlan;
+        $this->view->currentPlan          = empty($project->hasProduct) ? $linkedPlans : $linkedObjects->currentPlan;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedObjects->linkedProducts), $execution->project, 'noclosed', $linkedObjects->linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed|multiple', $project->id);

@@ -1529,6 +1529,11 @@ class projectModel extends model
         }
         if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
 
+        if($oldProject->model != $project->model && !in_array($oldProject->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+        {
+            $this->projectTao->createMilestoneReport($projectID);
+        }
+
         if(dao::isError()) return false;
         return common::createChanges($oldProject, $project);
     }

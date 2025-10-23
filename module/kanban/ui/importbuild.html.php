@@ -46,7 +46,7 @@ formBase
         set::userMap($users),
         set::cols(array_values($config->build->dtable->fieldList)),
         set::data(array_values($builds2Imported)),
-        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importCard, 'btnType' => 'primary', 'className' => 'size-sm batch-btn', 'data-url'  => inlink('importBuild', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID"))))),
+        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importAB, 'btnType' => 'primary', 'className' => 'size-sm batch-btn', 'data-url'  => inlink('importBuild', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID"))))),
         set::footPager(usePager())
     )
 );

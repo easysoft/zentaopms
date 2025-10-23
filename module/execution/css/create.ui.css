@@ -8,3 +8,5 @@
 #copyExecutions .btn.primary-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 10px;}
 #copyExecutions .btn.primary-outline span{color: rgba(var(--color-fore-rgb),var(--tw-text-opacity));}
 #copyExecutions .execution-block span {width: calc(100% - 45px); overflow: hidden;}
+
+#form-execution-create [data-name='dateRange'] > .input-group {display: block;}
