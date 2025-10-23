@@ -1,8 +1,5 @@
 <?php
 declare(strict_types=1);
-
-use function zin\avatar;
-
 /**
  * The model file of devopsspace module of ZenTaoPMS.
  *
