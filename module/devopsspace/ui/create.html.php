@@ -33,4 +33,26 @@ formPanel
         set::items($users),
         set::required(true)
     ),
+    formGroup
+    (
+        set::name('team'),
+        set::width($width),
+        set::label($lang->devopsspace->team),
+        set::items($users),
+        set::multiple(true)
+    ),
+    formGroup
+    (
+        set::name('desc'),
+        set::label($lang->devopsspace->desc),
+        set::control(array('control' => 'editor', 'upload' => 'false'))
+    ),
+    formGroup
+    (
+        set::name('acl'),
+        set::label($lang->devopsspace->acl),
+        set::control('radioList'),
+        set::items($lang->devopsspace->aclList),
+        set::value('open')
+    )
 );
