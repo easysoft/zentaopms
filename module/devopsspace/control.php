@@ -27,10 +27,25 @@ class devopsspace extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $spaces = $this->devopsspace->getList($pager);
+        foreach($spaces as &$space) $space->desc = str_replace('&nbsp;', ' ', strip_tags(htmlspecialchars_decode($space->desc)));
 
         $this->view->title  = $this->lang->devopsspace->browse;
         $this->view->spaces = $spaces;
         $this->view->pager  = $pager;
+        $this->display();
+    }
+
+    /**
+     * 创建空间。
+     * Create space.
+     *
+     * @access public
+     * @return void
+     */
+    public function create()
+    {
+        $this->view->title = $this->lang->devopsspace->create;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->display();
     }
 }
