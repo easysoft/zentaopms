@@ -380,6 +380,16 @@ class zaiModel extends model
         return array('result' => 'success', 'target' => $target, 'id' => $target->id, 'data' => $result['data']);
     }
 
+
+    /**
+     * 判断用户是否可以查看对象。
+     * Check if user can view object.
+     *
+     * @access public
+     * @param string $objectType
+     * @param int $objectID
+     * @return bool
+     */
     public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
         if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
