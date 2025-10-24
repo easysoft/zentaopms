@@ -325,6 +325,55 @@ $lang->ai->prompts->testData['doc']['doc']['title']      = 'Why Do Well-Crafted 
 $lang->ai->prompts->testData['doc']['doc']['addedBy']    = '-';
 $lang->ai->prompts->testData['doc']['doc']['addedDate']  = '-';
 $lang->ai->prompts->testData['doc']['doc']['editedBy']   = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedDate'] = '-';
+$lang->ai->prompts->testData['doc']['doc']['content']    = 'Every product manager has experienced this confusion: <br>
+We have invested countless efforts to develop products that outperform competitors, have competitive prices, and in which the team is confident... yet the market feedback is icy. Sales data is bleak, user growth has stagnated, and return on investment seems distant. <br>
+What’s even more frustrating is that when you gather the team to analyze the reasons, each department has its own explanation: <br>
+"It’s the marketing budget!" <br>"It’s the channel strategy!" <br>"The market hasn’t been educated!" <br>"It’s the sales team’s execution!" <br>
+Amidst this cacophony, the truth becomes increasingly unclear. You start to wonder: What have we overlooked? Why can a seemingly perfect product fail to win the market? <br>
+In fact, product success is never determined by a single factor. Like a precision lock, all gears need to align for it to open smoothly. In a fiercely competitive market, products fail not in areas where you excel, but in the shortcomings you’ve overlooked. <br>
+The Eight Dimensions of Product Success <br>
+The $APPEALS model is a systematic tool that helps us identify this "shortcoming." It breaks down product competitiveness into eight key dimensions: <br>
+$ (Price): It’s not just about the numbers; it’s about perceived value. <br>
+A (Availability): How easily can the target users access the product? <br>
+P (Packaging): The overall experience from visual to tactile. <br>
+P (Performance): The actual performance of core functionalities. <br>
+E (Easy to use): The convenience of user onboarding and usage. <br>
+A (Assurances): Quality guarantees and after-sales service. <br>
+L (Life cycle of cost): The overall cost of long-term use. <br>
+S (Social acceptance): Brand image and social recognition. <br>
+These eight dimensions collectively form the panoramic view of product market competitiveness. Just as a doctor needs a comprehensive examination to determine the cause of an illness, product teams also need a thorough diagnosis through the $APPEALS model to identify the real issues. <br>
+From Subjective Judgement to Data-Driven Decision Making <br>
+Some may question: "But we usually consider these dimensions, what’s different?" <br>
+Indeed, experienced product managers often rely on intuition to consider multiple factors. However, intuitive analysis has three major pitfalls: <br>
+Omitted Dimensions: We often focus on familiar areas while neglecting others. <br>
+Subjective Bias: Emotional investment in one’s own product can lead to biased assessments. <br>
+Weight Confusion: The importance of each dimension varies across different markets and product types. <br>
+The $APPEALS model transforms vague intuition into clear data through structured analysis, making product decisions more scientific and objective. <br>
+Making Powerful Models Accessible <br>
+However, knowing the $APPEALS model is just the first step; effectively applying it is key. This is the intention behind developing the "Zen Dao Decision Analysis Solution"—to make powerful theoretical models simple and usable. <br>
+The "Zen Dao Decision Analysis Solution" is an intelligent analysis tool designed for product and market decision-makers, with a robust model designer that digitizes and streamlines the $APPEALS model, helping teams quickly identify competitive advantages and critical shortcomings of their products. <br>
+How Intelligent Analysis Unlocks Product Potential?? <br>
+Smart Dimension Weight Configuration <br>
+The importance of the eight dimensions varies across different industries and product types. The Zen Dao Decision Analysis Solution can intelligently recommend weight configurations for each dimension based on product characteristics and also supports teams in customizing adjustments based on industry experience. <br>
+Structured Problem Guidance <br>
+Under each dimension, the "Thinking Guide" has designed a series of key questions to guide teams in comprehensive thinking. For example, under the "Social Acceptance" dimension, the system will prompt you to consider: "Does the product align with current social values?" "Is it recognized by well-known KOLs?" "Will users gain social recognition by using the product?" <br>
+Competitive Product Comparison Analysis <br>
+Simultaneously evaluate multiple competing products, visually displaying the performance differences across the eight dimensions through radar charts, allowing for an immediate understanding of your product’s strengths and weaknesses. <br>
+Intelligent Improvement Suggestions <br>
+Based on analysis results, provide a tabular view that supports both problem-oriented and analysis-object-oriented viewing, offering a multi-perspective overview of analysis results. It also provides built-in graphical suggestions for results, ensuring resource allocation is more precise and efficient. <br>
+Four-Step Path from Problems to Solutions?? <br>
+Configuration Object: Define the main product to be analyzed, its market segment, and competing products. <br>Dimension Configuration: Adjust the definitions and weights of the eight dimensions to highlight key factors. <br>Problem Assessment: The team collaboratively answers the system-guided structured questions and scores them for comparison. <br>Improvement Planning: Overview analysis results and system suggestions from multiple angles to formulate optimization plans. <br>
+The entire process usually takes only 1-2 hours, avoiding months of market trial-and-error costs. As one user said: "The $APPEALS model is like a holographic scanner for products, revealing systemic problems we have long ignored in a structured way, shifting product decisions from subjective guesses to precise, data-driven analysis." <br>
+The value of the Zen Dao Decision Analysis Solution lies not only in analysis but also in changing the way teams think: <br>
+Breaking Down Departmental Barriers: Eight-dimensional analysis requires collaboration across multiple departments, including R&D, marketing, and sales, fostering cross-departmental cooperation. <br>
+Overcoming Cognitive Bias: Structured questions and data visualization help teams break free from subjective judgments. <br>
+Forming a Consensus Foundation: Analysis results based on the same model make it easier for teams to reach strategic consensus. <br>
+Let Data Safeguard Your Product Decisions <br>
+Why are products not selling? The answer often lies not in your known strengths but in those overlooked dimensions. The $APPEALS eight-dimensional analysis framework serves as an accurate market map, guiding you to the optimal path for product success. <br>
+When market feedback falls short of expectations, and competitors seem to always seize the initiative, stop relying on intuition for decisions. Systematic analysis can bring genuine breakthroughs. <br>
+If your product is facing market challenges and you seek to find true differentiation in fierce competition, the $APPEALS analysis will be your most powerful decision-making tool. <br>
+Starting today, we offer a 30-day free trial. Scan the QR code below to start your product diagnosis journey immediately. Let data drive decisions, let models guide the way, and let your product find its true competitiveness!';
 
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
