@@ -58,9 +58,44 @@ class devopsspace extends control
                 if(dao::isError()) return $this->sendError(dao::getError());
             }
 
-            $this->sendSuccess(array('load' => helper::createLink('devopsspace', 'browse')));
+            $this->sendSuccess(array('load' => $this->inLink('browse')));
         }
         $this->view->title = $this->lang->devopsspace->create;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->display();
+    }
+
+    /**
+     * 编辑空间。
+     * Edit space.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        $space = $this->devopsspace->getByID($id);
+        if($_POST)
+        {
+            $formData = form::data($this->config->devopsspace->form->edit)
+                ->setDefault('updatedBy', $this->app->user->account)
+                ->get();
+            $changes = $this->devopsspace->update($space, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            if(!empty($changes))
+            {
+                $actionID = $this->loadModel('action')->create('devopsspace', $id, 'edited');
+                if(dao::isError()) return $this->sendError(dao::getError());
+
+                $this->loadModel('action')->logHistory($actionID, $changes);
+            }
+
+            $this->sendSuccess(array('load' => $this->inLink('browse')));
+        }
+
+        $this->view->title = $this->lang->devopsspace->edit;
+        $this->view->space = $space;
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->display();
     }

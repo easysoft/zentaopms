@@ -80,4 +80,57 @@ class devopsspaceModel extends model
 
         return $spaceID;
     }
+
+    /**
+     * 通过空间ID获取空间信息。
+     * Get space info by space ID.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array|object
+     */
+    public function getByID(int $spaceID): array|object
+    {
+        $space = $this->dao->select('*')->from(TABLE_DEVOPSSPACE)->where('id')->eq($spaceID)->fetch();
+        if(empty($space)) return array();
+
+        $team = $this->dao->select('account')->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($spaceID)->fetchAll('account');
+        $space->team = empty($team) ? array() : array_keys($team);
+        return $space;
+    }
+
+    /**
+     * 更新空间。
+     * Update space.
+     *
+     * @param  object $space
+     * @param  object $formData
+     * @access public
+     * @return bool|array
+     */
+    public function update(object $space, object $formData): false|array
+    {
+        $newTeam = empty($formData->team) ? array() : explode(',', $formData->team);
+        unset($formData->team);
+
+        $this->dao->update(TABLE_DEVOPSSPACE)->data($formData)
+            ->check('name', 'unique', "`id` != '{$space->id}'")
+            ->batchCheck($this->config->devopsspace->edit->requiredFields, 'notempty')
+            ->autoCheck()
+            ->where('id')->eq($space->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        if(array_intersect($newTeam, $space->team))
+        {
+            $this->dao->delete()->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($space->id)->exec();
+            foreach($newTeam as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $space->id, 'account' => $account))->exec();
+            if(dao::isError()) return false;
+
+            $formData->team = implode(',', $newTeam);
+            $space->team    = implode(',', $space->team);
+        }
+
+        return common::createChanges($space, $formData);
+    }
 }
