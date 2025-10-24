@@ -380,6 +380,28 @@ class zaiModel extends model
         return array('result' => 'success', 'target' => $target, 'id' => $target->id, 'data' => $result['data']);
     }
 
+    /**
+     * 搜索知识库。
+     * Search knowledge base.
+     *
+     * @access public
+     * @param string $collection
+     * @param array  $filter
+     * @return array
+     */
+    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
+    {
+        $postData = array();
+        $postData['query']          = $query;
+        $postData['limit']          = $limit;
+        $postData['min_similarity'] = $minSimilarity;
+        $postData['content_filter'] = $filter;
+
+        $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-contents', 'POST', null, $postData);
+
+        if($result['result'] != 'success') return array();
+        return $result['data'];
+    }
 
     /**
      * 判断用户是否可以查看对象。
