@@ -92,6 +92,7 @@ class repo extends control
      * List all repo.
      *
      * @param  int    $objectID
+     * @param  int    $space
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -100,12 +101,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function maintain(int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
+    public function maintain(int $objectID = 0, int $space = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList = $this->repo->getList(0, '', $orderBy, null, false, true, $type, $param);
+        $repoList = $this->repo->getList(0, $space, '', $orderBy, null, false, true, $type, $param);
         /* Pager. */
         $this->app->loadClass('pager', true);
         $recTotal = count($repoList);
@@ -136,6 +137,8 @@ class repo extends control
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
         $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
+        $this->view->space         = $space;
+        $this->view->spaces        = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
 
         $this->display();
     }
@@ -178,6 +181,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateForm($objectID);
+
+        $this->display();
     }
 
     /**
@@ -216,6 +221,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateRepoForm($objectID);
+
+        $this->display();
     }
 
     /**
@@ -332,6 +339,8 @@ class repo extends control
         }
 
         $this->repoZen->buildEditForm($repoID, $objectID);
+
+        $this->display();
     }
 
     /**
@@ -1107,6 +1116,7 @@ class repo extends control
         $this->view->server      = $server;
         $this->view->repoList    = array_values($repoList);
         $this->view->hiddenRepos = explode(',', $hiddenRepos);
+        $this->view->spaces      = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->display();
     }
 

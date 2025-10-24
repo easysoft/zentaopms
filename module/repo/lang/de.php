@@ -42,6 +42,8 @@ $lang->repo->codeBranch      = 'Code branch';
 $lang->repo->createdBranch   = 'Created branch';
 $lang->repo->unlink          = 'Unlink';
 $lang->repo->visit           = 'Visit';
+$lang->repo->space           = 'Space';
+$lang->repo->allSpace        = 'All Spaces';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->createTagAction    = 'Create Tag';
