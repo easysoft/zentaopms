@@ -380,6 +380,52 @@ class zaiModel extends model
         return array('result' => 'success', 'target' => $target, 'id' => $target->id, 'data' => $result['data']);
     }
 
+    public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
+    {
+        if($attrs === null) $attrs = array();
+        $canView = false;
+        if($objectType === 'story' || $objectType === 'demand')
+        {
+            $table   = $objectType === 'story' ? TABLE_STORY : TABLE_DEMAND;
+            $product = isset($attrs['product']) ? $attrs['product'] : 0;
+            if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
+            $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
+        }
+        elseif($objectType === 'bug' || $objectType === 'case')
+        {
+            $table   = $objectType === 'bug' ? TABLE_BUG : TABLE_CASE;
+            $product = isset($attrs['product']) ? $attrs['product'] : 0;
+            if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
+            $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
+            if(!$canView)
+            {
+                $project = isset($attrs['project']) ? $attrs['project'] : 0;
+                if(!$project) $project = $this->dao->select('project')->from($table)->where('id')->eq($objectID)->fetch('project');
+                $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
+            }
+        }
+        elseif($objectType === 'task')
+        {
+            $project = isset($attrs['project']) ? $attrs['project'] : 0;
+            if(!$project) $project = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('project');
+            $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
+        }
+        elseif($objectType === 'feedback')
+        {
+            $product = isset($attrs['product']) ? $attrs['product'] : 0;
+            if(!$product) $product = $this->dao->select('product')->from(TABLE_FEEDBACK)->where('id')->eq($objectID)->fetch('product');
+            $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
+        }
+        elseif($objectType === 'doc')
+        {
+            $doc = $this->loadModel('doc')->getByID($objectID);
+            $canView = $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+
+        static::$objectViews[$objectType][$objectID] = $canView;
+        return $canView;
+    }
+
     /**
      * 同步表。
      * Sync tables.
