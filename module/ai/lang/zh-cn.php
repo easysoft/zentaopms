@@ -203,6 +203,29 @@ $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型�
 $lang->ai->prompts->goingTesting        = '即将跳转至调试页面';
 $lang->ai->prompts->goingTestingFail    = '暂无可调试的对象';
 
+$lang->ai->prompts->testData['product']['product']['name'] = '企业网站建设平台';
+$lang->ai->prompts->testData['product']['product']['desc'] = '企业网站建设平台是一个专为现代企业设计的官网管理平台，旨在帮助公司以专业、创新的方式展示自我。该平台整合了最新的企业动态、项目成果、联系方式以及工商信息，让访客能够一目了然地了解公司的核心价值和服务。通过清晰简洁的界面和直观的导航，企业在线视窗提升了用户体验，帮助企业与客户和合作伙伴之间建立更紧密的联系。无论是信息更新还是内容管理，企业在线视窗都为企业提供了高效、灵活的解决方案，助力品牌建设与业务发展。';
+
+$lang->ai->prompts->testData['project']['project']['name']     = '企业网站开发项目';
+$lang->ai->prompts->testData['project']['project']['type']     = '产品型';
+$lang->ai->prompts->testData['project']['project']['desc']     = '企业网站开发项目旨在通过结合瀑布与敏捷的开发模式，快速、高效地构建一个功能齐全、用户友好且具备高可扩展性的企业官网。该项目将通过详细的需求分析、设计、开发和测试阶段确保最终交付的产品能够满足用户需求并具备良好的用户体验。';
+$lang->ai->prompts->testData['project']['project']['begin']    = '2025-01-01';
+$lang->ai->prompts->testData['project']['project']['end']      = '2025-06-01';
+$lang->ai->prompts->testData['project']['project']['estimate'] = '800h';
+
+$lang->ai->prompts->testData['project']['programplans']['name']         = array('需求分析与规划', '系统设计', '开发与测试', '上线准备与发布');
+$lang->ai->prompts->testData['project']['programplans']['desc']         = array('在这一阶段，将与各个利益相关者进行沟通，收集、分析并确认网站的功能需求和用户故事。', '基于确认的需求，进行系统架构设计与页面原型设计，为后续的开发打下基础。', '在这一阶段，将根据系统设计进行详细开发，并进行单元测试以确保功能的正确性。', '进行最终的系统测试、用户验收测试以及上线准备，确保官网能够顺利交付。');
+$lang->ai->prompts->testData['project']['programplans']['status']       = array('已关闭', '已关闭', '进行中', '未开始');
+$lang->ai->prompts->testData['project']['programplans']['begin']        = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
+$lang->ai->prompts->testData['project']['programplans']['end']          = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
+$lang->ai->prompts->testData['project']['programplans']['realBegan']    = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
+$lang->ai->prompts->testData['project']['programplans']['realEnd']      = array('2025-01-31', '2025-02-28', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['planDuration'] = array('-', '-', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['progress']     = array('100%', '100%', '41%', '0%');
+$lang->ai->prompts->testData['project']['programplans']['estimate']     = array('190', '190', '290', '120');
+$lang->ai->prompts->testData['project']['programplans']['consumed']     = array('200', '190', '120', '0');
+$lang->ai->prompts->testData['project']['programplans']['left']         = array('0', '0', '170', '120');
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
