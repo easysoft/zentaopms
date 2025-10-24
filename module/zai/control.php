@@ -198,7 +198,7 @@ class zai extends control
      * @access public
      * @return void
      */
-    public function ajaxSearchKnowledges($limit = 10)
+    public function ajaxSearchKnowledges(int $limit = 10)
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST')
         {
