@@ -385,8 +385,11 @@ class zaiModel extends model
      * Search knowledge base.
      *
      * @access public
+     * @param string $query
      * @param string $collection
      * @param array  $filter
+     * @param int $limit
+     * @param float $minSimilarity
      * @return array
      */
     public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
