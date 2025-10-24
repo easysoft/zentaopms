@@ -399,11 +399,6 @@ class api extends router
                 if(in_array($this->action, array('post', 'put')))
                 {
                     $this->setFormData();
-
-                    foreach($_POST as $key => $value)
-                    {
-                        if(isset($this->params[$key])) $this->params[$key] = $value;
-                    }
                 }
                 return parent::loadModule();
             }
@@ -456,6 +451,12 @@ class api extends router
         $postData = $_POST;
         $_POST    = array();
 
+        /* 以POST的值为准。 Set GET value from POST data. */
+        foreach($_POST as $key => $value)
+        {
+            if(isset($this->params[$key])) $this->params[$key] = $value;
+        }
+
         $this->control->viewType    = 'html';
         $this->control->getFormData = true;
 
@@ -463,7 +464,7 @@ class api extends router
         $this->control->$zen->getFormData = true;
 
         $method = $this->control->methodName;
-        call_user_func_array(array($this->control, $method), $_GET);
+        call_user_func_array(array($this->control, $method), $this->params);
 
         $this->control->getFormData       = false;
         $this->control->$zen->getFormData = false;
