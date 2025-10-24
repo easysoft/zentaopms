@@ -313,6 +313,20 @@ $lang->ai->prompts->testData['case']['case']['status']        = '正常';
 $lang->ai->prompts->testData['case']['steps']['desc']   = array('1.用户访问企业网站首页。', '2.用户查看最新动态模块，检查是否包含最近的新闻和活动信息。', '3.用户查看成果展示模块，检查是否突出展示公司的重要项目和成就。', '4.用户查看联系方式模块，确认包含有效的电话、电子邮件和公司地址。', '5.用户查看工商信息模块，确认公司注册信息和相关资质是否详细且准确。', '6.检查所有信息的显示位置是否清晰可见。', '7.用户使用导航功能查看其他页面，确保导航易于使用。');
 $lang->ai->prompts->testData['case']['steps']['expect'] = array('用户成功访问企业网站首页，首页加载正常。', '最新动态模块：显示最近的新闻和活动信息', '成果展示模块：突出展示公司过去的重要项目和成就。', '联系方式模块：清晰展示电话、电子邮件和地址，用户能够轻松找到。', '工商信息模块：详细列出公司注册信息和相关资质。', '用户能够一眼看到所有信息，且信息的位置合理，版面美观。', '用户能够顺利使用导航功能找到其他相关页面，导航过程流畅无障碍。');
 
+$lang->ai->prompts->testData['bug']['bug']['title']     = '首页最新动态模块报错';
+$lang->ai->prompts->testData['bug']['bug']['steps']     = "步骤：<br> 1. 打开应用首页<br> 2. 滚动到最新动态模块 <br>结果：<br> 观察到模块出现错误提示。<br>期望：<br> 正常显示最新动态，没有报错。";
+$lang->ai->prompts->testData['bug']['bug']['severity']  = '1';
+$lang->ai->prompts->testData['bug']['bug']['pri']       = '1';
+$lang->ai->prompts->testData['bug']['bug']['status']    = '已解决';
+$lang->ai->prompts->testData['bug']['bug']['confirmed'] = '已确认';
+$lang->ai->prompts->testData['bug']['bug']['type']      = '代码错误';
+
+$lang->ai->prompts->testData['doc']['doc']['title']      = '为何精心打造的产品遭遇市场冷遇？';
+$lang->ai->prompts->testData['doc']['doc']['addedBy']    = '-';
+$lang->ai->prompts->testData['doc']['doc']['addedDate']  = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedBy']   = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedDate'] = '-';
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
