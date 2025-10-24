@@ -709,17 +709,49 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTestingLocation($promptID, $module, $targetForm)
+    public function ajaxTestPrompt($promptID)
     {
-        $prompt = new stdclass();
-        $prompt->id         = $promptID;
-        $prompt->module     = $module;
-        $prompt->targetForm = $targetForm;
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
-        $location = $this->ai->getTestingLocation($prompt);
-        if($location === false) return $this->send(array('error' => $this->lang->ai->prompts->goingTestingFail));
+        $object = $this->ai->getTestPromptData($prompt);
+        list($objectData, $showText) = $object;
 
-        return $this->send(array('data' => $location));
+        /* Execute prompt and catch exceptions. */
+        try
+        {
+            $response = $this->ai->executePrompt($prompt, $object);
+        }
+        catch (AIResponseException $e)
+        {
+            $output = array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $e->getMessage()));
+
+            /* Audition shall quit on such exception. */
+            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60)
+            {
+                $output['locate'] = $this->inlink('promptAudit', "promptID=$promptId&objectId=$objectId&exit=true");
+            }
+            return $this->send($output);
+        }
+
+        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
+        if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
+
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty')
+        {
+            $targetFormPaths            = explode('.', $prompt->targetForm);
+            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+        }
+
+        $response['objectType']   = $prompt->module;
+        $response['object']       = $objectData;
+        $response['formLocation'] = '';
+        $response['promptConfig'] = $prompt;
+        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
+        $response['content']      = $showText;
+
+        return $this->send(array('result' => 'success', 'data' => $response));
     }
 
     /**
