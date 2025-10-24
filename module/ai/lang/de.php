@@ -203,6 +203,55 @@ $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be dir
 $lang->ai->prompts->goingTesting        = 'Redirecting to testing page';
 $lang->ai->prompts->goingTestingFail    = 'No testable object available.';
 
+$lang->ai->prompts->testData['product']['product']['name'] = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['product']['product']['desc'] = 'The Corporate Website Construction Platform is a management platform designed specifically for modern enterprises, aimed at helping companies showcase themselves in a professional and innovative manner. The platform integrates the latest corporate news, project achievements, contact information, and business details, allowing visitors to easily understand the core values and services of the company. With a clear and concise interface and intuitive navigation, the platform enhances user experience and helps build closer connections between businesses and their customers and partners. Whether for information updates or content management, the platform provides efficient and flexible solutions for enterprises, supporting brand building and business development.';
+
+$lang->ai->prompts->testData['project']['project']['name']     = 'Corporate Website Development Project';
+$lang->ai->prompts->testData['project']['project']['type']     = 'Product Type';
+$lang->ai->prompts->testData['project']['project']['desc']     = 'The Corporate Website Development Project aims to quickly and efficiently build a fully functional, user-friendly, and highly scalable corporate website by combining waterfall and agile development methods. This project will ensure that the final product meets user needs and provides a good user experience through detailed requirements analysis, design, development, and testing phases.';
+$lang->ai->prompts->testData['project']['project']['begin']    = '2025-01-01';
+$lang->ai->prompts->testData['project']['project']['end']      = '2025-06-01';
+$lang->ai->prompts->testData['project']['project']['estimate'] = '800h';
+
+$lang->ai->prompts->testData['project']['programplans']['name']         = array('Requirements Analysis and Planning', 'System Design', 'Development and Testing', 'Deployment Preparation and Release');
+$lang->ai->prompts->testData['project']['programplans']['desc']         = array('During this phase, communication will be done with various stakeholders to collect, analyze, and confirm the functional requirements and user stories of the website.', 'Based on the confirmed requirements, system architecture design and page prototype design will lay the foundation for subsequent development.', 'In this phase, detailed development will be carried out according to the system design, and unit testing will be conducted to ensure functionality.', 'Final system testing, user acceptance testing, and deployment preparation will be conducted to ensure the website can be delivered smoothly.');
+$lang->ai->prompts->testData['project']['programplans']['status']       = array('Closed', 'Closed', 'In Progress', 'Not Started');
+$lang->ai->prompts->testData['project']['programplans']['begin']        = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
+$lang->ai->prompts->testData['project']['programplans']['end']          = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
+$lang->ai->prompts->testData['project']['programplans']['realBegan']    = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
+$lang->ai->prompts->testData['project']['programplans']['realEnd']      = array('2025-01-31', '2025-02-28', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['planDuration'] = array('-', '-', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['progress']     = array('100%', '100%', '41%', '0%');
+$lang->ai->prompts->testData['project']['programplans']['estimate']     = array('190', '190', '290', '120');
+$lang->ai->prompts->testData['project']['programplans']['consumed']     = array('200', '190', '120', '0');
+$lang->ai->prompts->testData['project']['programplans']['left']         = array('0', '0', '170', '120');
+
+$lang->ai->prompts->testData['project']['executions']['name']      = array('Corporate Website 1.0', 'Corporate Website 2.0', 'Corporate Website 3.0');
+$lang->ai->prompts->testData['project']['executions']['desc']      = array('Develop the core functional modules of the intelligent corporate website, including the homepage, news center, and about us, completing unit testing.', 'Implement the Corporate Website 2.0 version, including the achievement display and after-sales service pages, fix bugs from version 1.0, and complete unit testing.', 'Develop additional functional modules such as contact information and business details, while conducting integration testing to ensure modules work together.');
+$lang->ai->prompts->testData['project']['executions']['status']    = array('In Progress', 'Not Started', 'Not Started');
+$lang->ai->prompts->testData['project']['executions']['begin']     = array('2025-04-01', '2025-04-14', '2025-04-21');
+$lang->ai->prompts->testData['project']['executions']['end']       = array('2025-04-11', '2025-04-18', '2025-05-14');
+$lang->ai->prompts->testData['project']['executions']['realBegan'] = array('2025-04-01', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['realEnd']   = array('-', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['estimate']  = array('120', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['consumed']  = array('77', '0', '0');
+$lang->ai->prompts->testData['project']['executions']['left']      = array('50', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['progress']  = array('64%', '0%', '0%');
+
+$lang->ai->prompts->testData['story']['story']['title']    = 'Implement Corporate Website Homepage';
+$lang->ai->prompts->testData['story']['story']['spec']     = 'As a user of this company, I want to conveniently access the basic information of the website on the homepage, so that I can quickly understand the company’s latest news, some achievement displays, contact information, and business details. <br> - Company latest news module. <br> - Company achievement display module. <br> - Company contact information and business details display.';
+$lang->ai->prompts->testData['story']['story']['verify']   = "1. The homepage should include the latest news section displaying recent news and event information. \n2. There should be a section for achievement display, highlighting the company\'s important projects and achievements.\n 3. Contact information should be clearly displayed, including phone, email, and address, ensuring visitors can easily find it.\n 4. Business details should be detailed, including company registration information and relevant qualifications, ensuring users can verify the legality and reliability of the company.\n 5. All information should be clearly visible on the homepage, with a beautiful layout and easy navigation.";
+$lang->ai->prompts->testData['story']['story']['product']  = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['story']['story']['module']   = 'Homepage';
+$lang->ai->prompts->testData['story']['story']['pri']      = '1';
+$lang->ai->prompts->testData['story']['story']['category'] = 'Development Demand';
+$lang->ai->prompts->testData['story']['story']['estimate'] = '3sp';
+
+$lang->ai->prompts->testData['productplan']['productplan']['title']  = 'Version 2.0';
+$lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- Implement Corporate Website 2.0 version, including achievement display and after-sales service pages \n - Fix bugs left over from version 1.0";
+$lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
+$lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
 
