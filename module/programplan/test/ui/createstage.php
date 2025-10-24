@@ -7,19 +7,21 @@ title=设置瀑布项目阶段测试
 timeout=0
 cid=1
 
-- 校验阶段名称不能为空
- - 测试结果 @创建阶段表单页提示信息正确
+ 校验阶段名称不能为空
+ - 测试结果 @阶段名称不能为空提示信息正确
  - 最终测试状态 @SUCCESS
 - 校验计划开始必填
- - 测试结果 @创建阶段表单页提示信息正确
+ - 测试结果 @计划开始日期不能为空提示信息正确
  - 最终测试状态 @SUCCESS
 - 校验计划完成必填
- - 测试结果 @创建阶段表单页提示信息正确
+ - 测试结果 @计划结束日期不能为空提示信息正确
  - 最终测试状态 @SUCCESS
 - 校验计划完成必须大于计划开始
- - 测试结果 @创建阶段表单页提示信息正确
+ - 测试结果 @计划开始不能大于计划完成提示信息正确
  - 最终测试状态 @SUCCESS
-- 创建需求阶段最终测试状态 @SUCCESS
+- 创建需求阶段
+ - 测试结果 @创建阶段成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -66,10 +68,10 @@ $waterfall = array(
     array('name_0' => '需求阶段', 'begin_0' => '2024-10-24', 'end_0' => '2024-10-30'),
 );
 
-r($tester->createStage($waterfall['0'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验阶段名称不能为空
-r($tester->createStage($waterfall['1'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划开始必填
-r($tester->createStage($waterfall['2'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划完成必填
-r($tester->createStage($waterfall['3'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划完成必须大于计划开始
-r($tester->createStage($waterfall['4'])) && p('message,status') && e('创建阶段成功,SUCCESS');               //创建需求阶段
+r($tester->createStage($waterfall['0'])) && p('message,status') && e('阶段名称不能为空提示信息正确,SUCCESS'); //校验阶段名称不能为空
+r($tester->createStage($waterfall['1'])) && p('message,status') && e('计划开始日期不能为空提示信息正确,SUCCESS'); //校验计划开始必填
+r($tester->createStage($waterfall['2'])) && p('message,status') && e('计划结束日期不能为空提示信息正确,SUCCESS'); //校验计划完成必填
+r($tester->createStage($waterfall['3'])) && p('message,status') && e('计划开始不能大于计划完成提示信息正确,SUCCESS'); //校验计划完成必须大于计划开始
+r($tester->createStage($waterfall['4'])) && p('message,status') && e('创建阶段成功,SUCCESS'); //创建需求阶段
 
 $tester->closeBrowser();
