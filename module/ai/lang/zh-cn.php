@@ -226,6 +226,32 @@ $lang->ai->prompts->testData['project']['programplans']['estimate']     = array(
 $lang->ai->prompts->testData['project']['programplans']['consumed']     = array('200', '190', '120', '0');
 $lang->ai->prompts->testData['project']['programplans']['left']         = array('0', '0', '170', '120');
 
+$lang->ai->prompts->testData['project']['executions']['name']      = array('企业网站1.0', '企业网站2.0', '企业网站3.0');
+$lang->ai->prompts->testData['project']['executions']['desc']      = array('开发智能企业官网的核心功能模块，包括首页、新闻中心和关于我们，完成单元测试。', '实现企业网站2.0版本，包括成果展示和售后服务页面，修复y1.0版本Bug，完成单元测试', '开发附加功能模块，如联系方式、工商信息等，同时进行集成测试，确保各模块协同工作。');
+$lang->ai->prompts->testData['project']['executions']['status']    = array('进行中', '未开始', '未开始');
+$lang->ai->prompts->testData['project']['executions']['begin']     = array('2025-04-01', '2025-04-14', '2025-04-21');
+$lang->ai->prompts->testData['project']['executions']['end']       = array('2025-04-11', '2025-04-18', '2025-05-14');
+$lang->ai->prompts->testData['project']['executions']['realBegan'] = array('2025-04-01', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['realEnd']   = array('-', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['estimate']  = array('120', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['consumed']  = array('77', '0', '0');
+$lang->ai->prompts->testData['project']['executions']['left']      = array('50', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['progress']  = array('64%', '0%', '0%');
+
+$lang->ai->prompts->testData['story']['story']['title']    = '实现企业网站首页';
+$lang->ai->prompts->testData['story']['story']['spec']     = "作为本公司的用户，我希望在首页能够方便地获取网站的基本信息，以便我能够快速了解公司的最新动态、部分成果展示、联系方式及工商信息等。\n - 公司最新动态模块。\n - 公司成果展示模块。\n - 公司联系方式和工商信息展示。";
+$lang->ai->prompts->testData['story']['story']['verify']   = "1. 首页应包含最新动态版块，展示最近的新闻和活动信息。\n2. 应有一个部分成果展示区，突出公司过去的重要项目和成就。\n 3. 明确展示联系方式，包括电话、电子邮件和地址，确保访客能轻松找到。\n 4. 工商信息应详细列出，包括公司注册信息和相关资质，确保用户能够核实公司的合法性和可靠性。\n 5. 所有信息应在首页清晰可见，布局美观，易于导航。";
+$lang->ai->prompts->testData['story']['story']['product']  = '企业网站建设平台';
+$lang->ai->prompts->testData['story']['story']['module']   = '首页';
+$lang->ai->prompts->testData['story']['story']['pri']      = '1';
+$lang->ai->prompts->testData['story']['story']['category'] = '研发需求';
+$lang->ai->prompts->testData['story']['story']['estimate'] = '3sp';
+
+$lang->ai->prompts->testData['productplan']['productplan']['title']  = '2.0版本';
+$lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- 实现企业网站2.0版本，包括成果展示和售后服务页面 \n - 修复1.0版本遗留的Bug";
+$lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
+$lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
