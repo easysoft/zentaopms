@@ -289,6 +289,30 @@ $lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025
 $lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
 $lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('已完成', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
+$lang->ai->prompts->testData['task']['task']['name']        = '迭代计划会';
+$lang->ai->prompts->testData['task']['task']['desc']        = "迭代计划会旨在确保团队在下一个开发周期内的工作具有清晰的方向和目标，促进团队成员之间的沟通与协作，并帮助团队合理分配资源。<br> 本次计划会任务目标是：产品经理跟研发和测试人员澄清企业官网的核心功能模块（包括首页、新闻中心和关于我们）的需求，保证研发测试能在迭代周期内按期完成计划需求。";
+$lang->ai->prompts->testData['task']['task']['pri']         = '1';
+$lang->ai->prompts->testData['task']['task']['status']      = '已关闭';
+$lang->ai->prompts->testData['task']['task']['estimate']    = '40h';
+$lang->ai->prompts->testData['task']['task']['consumed']    = '40h';
+$lang->ai->prompts->testData['task']['task']['left']        = '0h';
+$lang->ai->prompts->testData['task']['task']['progress']    = '100%';
+$lang->ai->prompts->testData['task']['task']['estStarted']  = '2025-04-01';
+$lang->ai->prompts->testData['task']['task']['realStarted'] = '2025-04-01';
+
+$lang->ai->prompts->testData['case']['case']['title']         = '实现企业网站首页';
+$lang->ai->prompts->testData['case']['case']['precondition']  = '1. 企业网站的基础框架已建成，并部署在服务器上。2. 用户已能访问企业网站。';
+$lang->ai->prompts->testData['case']['case']['scene']         = '用户访问企业网站首页';
+$lang->ai->prompts->testData['case']['case']['product']       = '企业网站建设平台';
+$lang->ai->prompts->testData['case']['case']['module']        = '首页';
+$lang->ai->prompts->testData['case']['case']['pri']           = '1';
+$lang->ai->prompts->testData['case']['case']['type']          = '功能测试';
+$lang->ai->prompts->testData['case']['case']['lastRunResult'] = '通过';
+$lang->ai->prompts->testData['case']['case']['status']        = '正常';
+
+$lang->ai->prompts->testData['case']['steps']['desc']   = array('1.用户访问企业网站首页。', '2.用户查看最新动态模块，检查是否包含最近的新闻和活动信息。', '3.用户查看成果展示模块，检查是否突出展示公司的重要项目和成就。', '4.用户查看联系方式模块，确认包含有效的电话、电子邮件和公司地址。', '5.用户查看工商信息模块，确认公司注册信息和相关资质是否详细且准确。', '6.检查所有信息的显示位置是否清晰可见。', '7.用户使用导航功能查看其他页面，确保导航易于使用。');
+$lang->ai->prompts->testData['case']['steps']['expect'] = array('用户成功访问企业网站首页，首页加载正常。', '最新动态模块：显示最近的新闻和活动信息', '成果展示模块：突出展示公司过去的重要项目和成就。', '联系方式模块：清晰展示电话、电子邮件和地址，用户能够轻松找到。', '工商信息模块：详细列出公司注册信息和相关资质。', '用户能够一眼看到所有信息，且信息的位置合理，版面美观。', '用户能够顺利使用导航功能找到其他相关页面，导航过程流畅无障碍。');
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
