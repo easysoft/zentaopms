@@ -2670,6 +2670,45 @@ class aiModel extends model
         }
 
         $result = '';
+        foreach($categorized as $groupKey => $pathInfo)
+        {
+            if(in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps')))
+            {
+                if($module == 'release' && $groupKey == 'bugs')
+                {
+                    $result .= '### ' . $titleData[$groupKey]['common'] . "\n";
+                    $result .= $testData[$groupKey]['title'] . "\n";
+                }
+                else
+                {
+                    $result .= '### ' . $titleData[$groupKey]['common'] . "\n";
+                    $result .= "| ";
+                    foreach($pathInfo as $value) $result .= $titleData[$groupKey][$value] . " | ";
+                    $result .= "\n";
+
+                    $result .= "| ";
+                    foreach($pathInfo as $value) $result .= "--- | ";
+                    $result .= "\n";
+
+                    $firstData = $pathInfo[0];
+                    $count     = count($testData[$groupKey][$firstData]);
+                    for($i = 0; $i < $count; $i++)
+                    {
+                        $result .= "| ";
+                        foreach($pathInfo as $value) $result .= $testData[$groupKey][$value][$i] . " | ";
+                        $result .= "\n";
+                    }
+                }
+            }
+            else
+            {
+                foreach($pathInfo as $value)
+                {
+                    $result .= '### ' . $titleData[$groupKey][$value] . "\n";
+                    $result .= $testData[$groupKey][$value] . "\n";
+                }
+            }
+        }
 
         return array($testData, $result);
     }
