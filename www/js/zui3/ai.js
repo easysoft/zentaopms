@@ -70,7 +70,7 @@ window.executeZentaoPrompt = async function(info, auto)
     const tools = [{
         name       : toolName,
         displayName: info.name,
-        description: info.name,
+        description: info?.content || info.name,
         parameters :
         {
             type: 'object',
