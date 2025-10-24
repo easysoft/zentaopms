@@ -383,6 +383,14 @@ class zaiModel extends model
     /**
      * 搜索知识库。
      * Search knowledge base.
+     *
+     * @access public
+     * @param string $query
+     * @param string $collection
+     * @param array  $filter
+     * @param int $limit
+     * @param float $minSimilarity
+     * @return array
      */
     public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
     {
@@ -401,6 +409,11 @@ class zaiModel extends model
     /**
      * 判断用户是否可以查看对象。
      * Check if user can view object.
+     *
+     * @access public
+     * @param string $objectType
+     * @param int $objectID
+     * @return bool
      */
     public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
