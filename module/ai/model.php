@@ -2599,7 +2599,7 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
-            ->beginIF(!commonModel::hasPriv('ai', 'designPrompt') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
+            ->andWhere('status')->eq('active')
             ->orderBy('id_desc')
             ->fetchAll('id', false);
     }
