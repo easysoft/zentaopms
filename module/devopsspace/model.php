@@ -42,7 +42,7 @@ class devopsspaceModel extends model
      */
     public function getPairs(string $account = ''): array
     {
-        $userSpaces = $this->getListByAccount('admin');
+        $userSpaces = $this->getListByAccount($account);
         if(!$this->app->user->admin && empty($userSpaces)) return array();
 
         return $this->dao->select('id, name')->from(TABLE_DEVOPSSPACE)
