@@ -45,3 +45,9 @@ $unknownPrompt = new stdClass();
 $unknownPrompt->id = 5;
 $unknownPrompt->module = 'product';
 $unknownPrompt->source = '';
+
+r($aiTest->getTestPromptDataTest($storyPrompt))   && p() && e('1'); // 获取禅道智能体中需求的示例数据。
+r($aiTest->getTestPromptDataTest($projectPrompt)) && p() && e('1'); // 获取禅道智能体中项目的示例数据。
+r($aiTest->getTestPromptDataTest($bugPrompt))     && p() && e('1'); // 获取禅道智能体中bug的示例数据。
+r($aiTest->getTestPromptDataTest($releasePrompt)) && p() && e('1'); // 获取禅道智能体中发布的示例数据。
+r($aiTest->getTestPromptDataTest($unknownPrompt)) && p() && e('0'); // 验证异常数据。
