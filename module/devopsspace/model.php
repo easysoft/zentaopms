@@ -32,6 +32,27 @@ class devopsspaceModel extends model
     }
 
     /**
+     * 获取空间列表键值对。
+     * Get space list pairs.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $account = ''): array
+    {
+        $userSpaces = $this->getListByAccount($account);
+        if(!$this->app->user->admin && empty($userSpaces)) return array();
+
+        return $this->dao->select('id, name')->from(TABLE_DEVOPSSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIf(!empty($userSpaces))->andWhere('id')->in(array_keys($userSpaces))
+            ->orWhere('owner')->eq($account)
+            ->fi()
+            ->fetchPairs('id');
+    }
+
+    /**
      * 获取空间列表。
      * Get space list.
      *
