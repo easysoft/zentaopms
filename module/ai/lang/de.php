@@ -289,6 +289,43 @@ $lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025
 $lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
 $lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('Completed', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
+$lang->ai->prompts->testData['task']['task']['name']        = 'Iteration Planning Meeting';
+$lang->ai->prompts->testData['task']['task']['desc']        = "The iteration planning meeting aims to ensure that the team has a clear direction and goals for the next development cycle, promote communication and collaboration among team members, and help the team allocate resources effectively.<br> objective of this planning meeting is to clarify the core functional modules of the corporate website (including the homepage, news center, and about us) with the product manager, ensuring that development and testing can complete the planned requirements on time during the iteration cycle.";
+$lang->ai->prompts->testData['task']['task']['pri']         = '1';
+$lang->ai->prompts->testData['task']['task']['status']      = 'Closed';
+$lang->ai->prompts->testData['task']['task']['estimate']    = '40h';
+$lang->ai->prompts->testData['task']['task']['consumed']    = '40h';
+$lang->ai->prompts->testData['task']['task']['left']        = '0h';
+$lang->ai->prompts->testData['task']['task']['progress']    = '100%';
+$lang->ai->prompts->testData['task']['task']['estStarted']  = '2025-04-01';
+$lang->ai->prompts->testData['task']['task']['realStarted'] = '2025-04-01';
+
+$lang->ai->prompts->testData['case']['case']['title']         = 'Implement Corporate Website Homepage';
+$lang->ai->prompts->testData['case']['case']['precondition']  = '1. The basic framework of the corporate website has been established and deployed on the server. 2. Users can access the corporate website.';
+$lang->ai->prompts->testData['case']['case']['scene']         = 'User accesses the corporate website homepage';
+$lang->ai->prompts->testData['case']['case']['product']       = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['case']['case']['module']        = 'Homepage';
+$lang->ai->prompts->testData['case']['case']['pri']           = '1';
+$lang->ai->prompts->testData['case']['case']['type']          = 'Functional Testing';
+$lang->ai->prompts->testData['case']['case']['lastRunResult'] = 'Passed';
+$lang->ai->prompts->testData['case']['case']['status']        = 'Normal';
+
+$lang->ai->prompts->testData['case']['steps']['desc']   = array('1. User accesses the corporate website homepage.', '2. User views the latest news module and checks if it includes recent news and event information.', '3. User checks the achievement display module to see if it prominently showcases the company\'s important projects and achievements.', '4. User checks the contact information module to confirm it contains valid phone numbers, emails, and company addresses.', '5. User checks the business information module to confirm that the company registration information and relevant qualifications are detailed and accurate.', '6. Check if all information is clearly visible in their display locations.', '7. User uses the navigation function to view other pages, ensuring navigation is easy to use.');
+$lang->ai->prompts->testData['case']['steps']['expect'] = array('User successfully accesses the corporate website homepage, and the homepage loads normally.', 'Latest news module: displays recent news and event information', 'Achievement display module: prominently showcases the company\'s important projects and achievements.', 'Contact information module: clearly displays phone, email, and address, making it easy for users to find.', 'Business information module: details the company registration information and relevant qualifications.', 'Users can see all information at a glance, with reasonable information placement and beautiful layout.', 'Users can smoothly use the navigation function to find other related pages, with a seamless navigation process.');
+
+$lang->ai->prompts->testData['bug']['bug']['title']     = 'Homepage Latest News Module Error';
+$lang->ai->prompts->testData['bug']['bug']['steps']     = "Steps:1. Open the application homepage<br> 2. Scroll to the latest news module <br>Result: <br> An error message appears in the module.<br>Expectation:<br> Latest news displays normally without errors.";
+$lang->ai->prompts->testData['bug']['bug']['severity']  = '1';
+$lang->ai->prompts->testData['bug']['bug']['pri']       = '1';
+$lang->ai->prompts->testData['bug']['bug']['status']    = 'Resolved';
+$lang->ai->prompts->testData['bug']['bug']['confirmed'] = 'Confirmed';
+$lang->ai->prompts->testData['bug']['bug']['type']      = 'Code Error';
+
+$lang->ai->prompts->testData['doc']['doc']['title']      = 'Why Do Well-Crafted Products Encounter Market Indifference?';
+$lang->ai->prompts->testData['doc']['doc']['addedBy']    = '-';
+$lang->ai->prompts->testData['doc']['doc']['addedDate']  = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedBy']   = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedDate'] = '-';
 
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
