@@ -252,6 +252,43 @@ $lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- 实现
 $lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
 $lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
 
+$lang->ai->prompts->testData['productplan']['stories']['title']    = array('实现成果展示页面', '实现售后服务页面');
+$lang->ai->prompts->testData['productplan']['stories']['module']   = array('成果展示', '售后服务');
+$lang->ai->prompts->testData['productplan']['stories']['pri']      = array('1', '1');
+$lang->ai->prompts->testData['productplan']['stories']['estimate'] = array('1sp', '2sp');
+$lang->ai->prompts->testData['productplan']['stories']['status']   = array('激活', '激活');
+$lang->ai->prompts->testData['productplan']['stories']['stage']    = array('测试中', '研发中');
+
+$lang->ai->prompts->testData['productplan']['bugs']['title']  = array('首页最新动态模块报错', '成果展示图标与标题重叠');
+$lang->ai->prompts->testData['productplan']['bugs']['pri']    = array('1', '2');
+$lang->ai->prompts->testData['productplan']['bugs']['status'] = array('已解决', '激活');
+
+$lang->ai->prompts->testData['release']['release']['product'] = '企业网站建设平台';
+$lang->ai->prompts->testData['release']['release']['name']    = '企业官网1.0版本';
+$lang->ai->prompts->testData['release']['release']['desc']    = "- 实现企业网站首页 \n - 实现新闻中心页面 \n - 实现关于我们页面";
+$lang->ai->prompts->testData['release']['release']['date']    = '2025-04-11';
+
+$lang->ai->prompts->testData['release']['stories']['title']    = array('实现企业网站首页', '实现新闻中心页面', '实现关于我们页面');
+$lang->ai->prompts->testData['release']['stories']['estimate'] = array('3sp', '2sp', '1sp');
+
+$lang->ai->prompts->testData['release']['bugs']['title']  = '无';
+
+$lang->ai->prompts->testData['execution']['execution']['name']     = '企业网站1.0';
+$lang->ai->prompts->testData['execution']['execution']['desc']     = '开发智能企业官网的核心功能模块，包括首页、新闻中心和关于我们，完成单元测试。';
+$lang->ai->prompts->testData['execution']['execution']['estimate'] = '120';
+
+$lang->ai->prompts->testData['execution']['tasks']['name']         = array('迭代计划会', '首页开发设计', '首页开发', '首页测试', '新闻中心开发设计', '新闻中心页面开发', '新闻中心页面测试', '关于我们开发设计', '关于我们页面开发', '关于我们页面测试', '迭代回顾会');
+$lang->ai->prompts->testData['execution']['tasks']['pri']          = array('1', '1', '2', '3', '1', '2', '3', '1', '2', '3', '4');
+$lang->ai->prompts->testData['execution']['tasks']['status']       = array('已关闭', '已完成', '已完成', '进行中', '已完成', '进行中', '未开始', '进行中', '未开始', '未开始', '未开始');
+$lang->ai->prompts->testData['execution']['tasks']['estimate']     = array('40h', '12h', '10h', '2h', '6h', '8h', '4h', '4h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['consumed']     = array('40h', '12h', '10h', '1h', '6h', '6h', '0h', '2h', '0h', '0h', '0h');
+$lang->ai->prompts->testData['execution']['tasks']['left']         = array('0h', '0h', '0h', '1h', '0h', '2h', '4h', '2h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['progress']     = array('100%', '100%', '100%', '50%', '100%', '75%', '0%', '50%', '0%', '0%', '0%');
+$lang->ai->prompts->testData['execution']['tasks']['estStarted']   = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '2025-04-07', '2025-04-03', '2025-04-03', '2025-04-08', '2025-04-11');
+$lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '-', '2025-04-03', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('已完成', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
