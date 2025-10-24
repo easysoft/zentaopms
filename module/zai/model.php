@@ -382,6 +382,10 @@ class zaiModel extends model
 
     public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
+        if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
+
+        if(!isset(static::$objectViews[$objectType])) static::$objectViews[$objectType] = array();
+
         if($attrs === null) $attrs = array();
         $canView = false;
         if($objectType === 'story' || $objectType === 'demand')
@@ -425,6 +429,15 @@ class zaiModel extends model
         static::$objectViews[$objectType][$objectID] = $canView;
         return $canView;
     }
+
+    /**
+     * 用户对象可查看缓存配置。
+     * User object view cache configuration.
+     *
+     * @access public
+     * @var array
+     */
+    static $objectViews = array();
 
     /**
      * 同步表。
