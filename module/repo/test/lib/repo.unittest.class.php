@@ -80,9 +80,9 @@ class repoTest
      * @access public
      * @return mixed
      */
-    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null)
+    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', int $space = 0, string $orderBy = 'id_desc', ?object $pager = null)
     {
-        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $space, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -120,9 +120,9 @@ class repoTest
         return $objects;
     }
 
-    public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest($projectID = 0, $space = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($projectID , $SCM, $orderBy , $pager );
+        $objects = $this->objectModel->getList($projectID, $space, $SCM, $orderBy , $pager );
 
         if(dao::isError()) return dao::getError();
 

@@ -1,67 +1,56 @@
 <?php
 declare(strict_types = 1);
-class repoZenTest
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+class repoZenTest extends baseTest
 {
-    public function __construct()
+    protected $moduleName = 'repo';
+    protected $className  = 'zen';
+
+
+    /**
+     * 测试buildCreateRepoForm 方法。
+     * build create repo form.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return object
+     */
+    public function buildCreateRepoFormTest(int $objectID): object
     {
-        global $tester;
-        $this->objectModel = $tester->loadModel('repo');
-        $this->objectTao   = $tester->loadTao('repo');
-        $this->objectZen   = initReference('repo');
+        $this->invokeArgs('buildCreateRepoForm', [$objectID]);
+
+        return $this->getProperty('view');
     }
 
     /**
+     * 测试buildEditForm 方法。
      * Test buildCreateForm method in zen layer.
      *
      * @param  int $objectID
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function buildCreateFormTest(int $objectID)
+    public function buildCreateFormTest(int $objectID): object
     {
-        // 模拟app环境和配置
-        $this->objectModel->app->tab = 'project';
+        $this->invokeArgs('buildCreateForm', [$objectID]);
 
-        // 模拟保存状态
-        $this->objectModel->saveState(0, $objectID);
+        return $this->getProperty('view');
+    }
 
-        // 捕获视图输出，避免实际页面渲染
-        ob_start();
+    /**
+     * 测试buildEditForm 方法。
+     * Test buildEditForm method in zen layer.
+     *
+     * @param  int $repoID
+     * @param  int $objectID
+     * @access public
+     * @return object
+     */
+    public function buildEditFormTest(int $repoID, int $objectID): object
+    {
+        $this->invokeArgs('buildEditForm', [$repoID, $objectID]);
 
-        // 模拟buildCreateForm方法的核心逻辑
-        $this->objectModel->app->loadLang('action');
-        $this->objectModel->loadModel('product');
-
-        // 根据tab类型获取产品列表
-        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
-        {
-            $products = $this->objectModel->loadModel('project')->getBranchesByProject($objectID);
-            $products = $this->objectModel->product->getProducts($objectID, 'all', '', false, array_keys($products));
-        }
-        else
-        {
-            $products = $this->objectModel->product->getPairs('', 0, '', 'all');
-        }
-
-        // 模拟设置视图变量
-        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->create;
-        $groups = $this->objectModel->loadModel('group')->getPairs();
-        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs(implode(',', $this->objectModel->config->repo->notSyncSCM), true);
-
-        ob_end_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        // 返回设置的关键数据
-        return array(
-            'title' => $title,
-            'products' => $products,
-            'groups' => $groups,
-            'users' => $users,
-            'serviceHosts' => $serviceHosts,
-            'objectID' => $objectID
-        );
+        return $this->getProperty('view');
     }
 
     /**
