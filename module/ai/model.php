@@ -2645,6 +2645,36 @@ class aiModel extends model
     }
 
     /**
+     * Get prompt test data.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return array
+     */
+    public function getTestPromptData($prompt)
+    {
+        $module = $prompt->module;
+        $source = explode(',', $prompt->source);
+        $source = array_filter($source, function($value) {return !empty($value);});
+
+        $titleData = $this->lang->ai->dataSource[$module];
+        $testData  = $this->lang->ai->prompts->testData[$module];
+
+        $categorized = array();
+        foreach($source as $value)
+        {
+            $prefix = explode('.', $value)[0];
+            $column = explode('.', $value)[1];
+            if(!isset($categorized[$prefix])) $categorized[$prefix] = [];
+            $categorized[$prefix][] = $column;
+        }
+
+        $result = '';
+
+        return array($testData, $result);
+    }
+
+    /**
      * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
      *
      * @param  string|array  $form  'module.method' or array('module', 'method').
