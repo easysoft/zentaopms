@@ -1952,7 +1952,7 @@ class repoModel extends model
     public function getExecutionPairs(int $product, int $branch = 0): array
     {
         $pairs      = array();
-        $executions = $this->loadModel('execution')->getList(0, 0, 'all', 'undone', 0, $product, $branch);
+        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
         $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($executions as $execution)
         {

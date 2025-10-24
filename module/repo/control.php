@@ -181,6 +181,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateForm($objectID);
+
+        $this->display();
     }
 
     /**
@@ -219,6 +221,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateRepoForm($objectID);
+
+        $this->display();
     }
 
     /**
@@ -335,6 +339,8 @@ class repo extends control
         }
 
         $this->repoZen->buildEditForm($repoID, $objectID);
+
+        $this->display();
     }
 
     /**
