@@ -1128,7 +1128,7 @@ $lang->ai->formSchema['programplan']['create']->properties->stages->items->prope
 $lang->ai->formSchema['programplan']['create']->required = array('stages');
 
 $lang->ai->promptMenu = new stdclass();
-$lang->ai->promptMenu->dropdownTitle = 'AI';
+$lang->ai->promptMenu->dropdownTitle = '%s智能助手';
 
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = '已将禅道智能体执行结果填写到表单中';
