@@ -26,7 +26,7 @@ class devopsspaceModel extends model
             ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')
             ->on('t1.id=t2.space')
             ->where('t1.deleted')->eq(0)
-            ->markLeft()->andWhere('t2.account')->eq($account)
+            ->andWhere('(t2.account')->eq($account)
             ->orWhere('t1.owner')->eq($account)
             ->markRight()
             ->fetchAll('id');
@@ -47,7 +47,7 @@ class devopsspaceModel extends model
 
         return $this->dao->select('id, name')->from(TABLE_DEVOPSSPACE)
             ->where('deleted')->eq(0)
-            ->beginIf(!empty($userSpaces))->markLeft()->andWhere('id')->in(array_keys($userSpaces))
+            ->beginIf(!empty($userSpaces))->andWhere('(id')->in(array_keys($userSpaces))
             ->orWhere('owner')->eq($account)
             ->markRight()
             ->fi()
