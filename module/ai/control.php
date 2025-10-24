@@ -729,7 +729,7 @@ class ai extends control
             /* Audition shall quit on such exception. */
             if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60)
             {
-                $output['locate'] = $this->inlink('promptAudit', "promptID=$promptId&objectId=$objectId&exit=true");
+                $output['locate'] = $this->inlink('promptAudit', "promptID=$promptID&objectId=0&exit=true");
             }
             return $this->send($output);
         }
