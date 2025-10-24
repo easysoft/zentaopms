@@ -11,6 +11,12 @@ $config->repo->dtable->fieldList['name']['type']  = 'title';
 $config->repo->dtable->fieldList['name']['width'] = '0.2';
 $config->repo->dtable->fieldList['name']['hint']  = '{desc}';
 
+$config->repo->dtable->fieldList['space']['name']     = 'space';
+$config->repo->dtable->fieldList['space']['title']    = $lang->repo->space;
+$config->repo->dtable->fieldList['space']['sortType'] = false;
+$config->repo->dtable->fieldList['space']['width']    = '136';
+$config->repo->dtable->fieldList['space']['hint']     = true;
+
 $config->repo->dtable->fieldList['product']['name']     = 'productNames';
 $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']     = 'text';

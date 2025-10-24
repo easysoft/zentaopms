@@ -394,8 +394,7 @@ class repoZen extends repo
         $this->view->products     = $products;
         $this->view->serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         $this->view->objectID     = $objectID;
-
-        $this->display();
+        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
     }
 
     /**
@@ -436,8 +435,7 @@ class repoZen extends repo
         $this->view->serviceHosts = $serviceHosts;
         $this->view->repoGroups   = $repoGroups;
         $this->view->objectID     = $objectID;
-
-        $this->display();
+        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
     }
 
     /**
@@ -478,8 +476,7 @@ class repoZen extends repo
         $this->view->products        = $products;
         $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
         $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
-
-        $this->display();
+        $this->view->spaces          = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
     }
 
     /**

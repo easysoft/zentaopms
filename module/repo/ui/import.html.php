@@ -15,6 +15,7 @@ $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
 $items[] = array('name' => $server->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static');
 $items[] = array('name' => 'name', 'label' => $lang->repo->importName, 'className' => 'w-1/3');
+$items[] = array('name' => 'space', 'label' => $lang->repo->space, 'control' => array('control' => 'picker'), 'items' => $spaces, 'className' => 'w-1/4');
 $items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products, 'className' => 'w-1/4');
 
 $no = 1;

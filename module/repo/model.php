@@ -89,6 +89,7 @@ class repoModel extends model
      * Get repo list.
      *
      * @param  int    $projectID
+     * @param  int    $space
      * @param  string $SCM  Subversion|Git|Gitlab
      * @param  string $orderBy
      * @param  object $pager
@@ -96,10 +97,10 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
+    public function getList(int $projectID = 0, int $space = 0, string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
         $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
-        $repos     = $this->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $repos     = $this->getListByCondition($repoQuery, $SCM, $space, $orderBy, $pager);
 
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
@@ -289,7 +290,7 @@ class repoModel extends model
         $this->loadModel('instance');
         foreach($repos as $index => $repo)
         {
-            if(empty($repo->product)) continue;
+            if(empty($repo->product) || empty($repo->space)) continue;
             if(empty($repo->name))
             {
                 dao::$errors["name[$index]"] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
@@ -320,7 +321,7 @@ class repoModel extends model
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
-            if(method_exists($this->instance, 'saveWaitSyncData')) $this->instance->saveWaitSyncData('repo', $repoID, 'add', false);
+            if(method_exists($this->instance, 'saveWaitSyncData')) $this->instance->saveWaitSyncData('repo', (string)$repoID, 'add', false);
         }
 
         return true;
@@ -599,7 +600,7 @@ class repoModel extends model
      */
     public function getRepoGroup(string $type, int $projectID = 0, array $scmList = array()): array
     {
-        $repos      = $this->getList(0, implode(',', $scmList));
+        $repos      = $this->getList(0, 0, implode(',', $scmList));
         $productIds = $productItems = array();
         if($projectID)
         {
@@ -2959,17 +2960,21 @@ class repoModel extends model
      *
      * @param  string    $repoQuery
      * @param  string    $SCM
+     * @param  int       $space
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getListByCondition(string $repoQuery, string $SCM, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
+        $userSpaces = $this->app->user->admin ? array() : $this->loadModel('devopsspace')->getPairs($this->app->user->account);
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->beginIF($space)->andWhere('space')->eq($space)->fi()
             ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
             ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
+            ->beginIF(!empty($userSpaces))->andWhere('space')->in($userSpaces)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);

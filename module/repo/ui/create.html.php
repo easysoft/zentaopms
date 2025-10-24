@@ -152,6 +152,14 @@ formPanel
             )
         )
     ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("space"),
+        set::label($lang->repo->space),
+        set::required(true),
+        set::items($spaces)
+    ),
     formRow
     (
         $this->app->tab != 'devops' ? setClass('hidden') : null,
