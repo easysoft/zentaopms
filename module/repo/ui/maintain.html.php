@@ -19,7 +19,8 @@ $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink
 
 foreach($repoList as $repo)
 {
-    $jobID       = 0;
+    $repo->space  = $repo->space ? $repo->space : '';
+    $jobID        = 0;
     $repo->exec   = 'disabled';
     $repo->report = 'disabled';
     if(isset($sonarRepoList[$repo->id]))
@@ -52,6 +53,7 @@ foreach($repoList as $repo)
 
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
 $config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
+$config->repo->dtable->fieldList['space']['map']                   = $spaces;
 
 if(empty($config->repo->maintain->showRepoPath))
 {
@@ -65,7 +67,7 @@ if(empty($config->repo->maintain->showRepoPath))
 if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo.visit';
 
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
-$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&space={$space}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
@@ -86,8 +88,23 @@ foreach($repos as $repo)
     }
 }
 
-\zin\featureBar
+$spaceItems = array();
+$spaceItems[] = array('text' => $lang->repo->allSpace, 'url' => createLink('repo', 'maintain', "objectID=$objectID&space=0"));
+foreach($spaces as $spaceID => $spaceName)
+{
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('repo', 'maintain', "objectID=$objectID&space=$spaceID"));
+}
+
+featureBar
 (
+    to::before
+    (
+        dropdown
+        (
+            to('trigger', btn(zget($spaces, $space, $lang->repo->allSpace), setClass('ghost'))),
+            set::items($spaceItems)
+        )
+    ),
     set::current('all'),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
@@ -140,7 +157,7 @@ dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&space={$space}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager()),
     set::actionItemCreator(jsRaw('window.renderActions'))

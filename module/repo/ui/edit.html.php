@@ -138,6 +138,15 @@ formPanel
     formGroup
     (
         set::width('1/2'),
+        set::name("space"),
+        set::label($lang->repo->space),
+        set::required(true),
+        set::items($spaces),
+        set::value($repo->space)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
         set::name("product[]"),
         set::label($lang->story->product),
         set::required(true),
