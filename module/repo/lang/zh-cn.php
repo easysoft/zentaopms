@@ -42,6 +42,8 @@ $lang->repo->codeBranch      = '代码分支';
 $lang->repo->createdBranch   = '已创建分支';
 $lang->repo->unlink          = '解除关联';
 $lang->repo->visit           = '访问';
+$lang->repo->space           = '所属空间';
+$lang->repo->allSpace        = '全部空间';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->createTagAction    = '创建标签';
