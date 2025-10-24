@@ -247,6 +247,48 @@ $lang->ai->prompts->testData['story']['story']['pri']      = '1';
 $lang->ai->prompts->testData['story']['story']['category'] = 'Development Demand';
 $lang->ai->prompts->testData['story']['story']['estimate'] = '3sp';
 
+$lang->ai->prompts->testData['productplan']['productplan']['title']  = 'Version 2.0';
+$lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- Implement Corporate Website 2.0 version, including achievement display and after-sales service pages \n - Fix bugs left over from version 1.0";
+$lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
+$lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
+
+$lang->ai->prompts->testData['productplan']['stories']['title']    = array('Implement Achievement Display Page', 'Implement After-sales Service Page');
+$lang->ai->prompts->testData['productplan']['stories']['module']   = array('Achievement Display', 'After-sales Service');
+$lang->ai->prompts->testData['productplan']['stories']['pri']      = array('1', '1');
+$lang->ai->prompts->testData['productplan']['stories']['estimate'] = array('1sp', '2sp');
+$lang->ai->prompts->testData['productplan']['stories']['status']   = array('Activated', 'Activated');
+$lang->ai->prompts->testData['productplan']['stories']['stage']    = array('Testing', 'In Development');
+
+$lang->ai->prompts->testData['productplan']['bugs']['title']  = array('Homepage Latest News Module Error', 'Achievement Display Icon Overlapping with Title');
+$lang->ai->prompts->testData['productplan']['bugs']['pri']    = array('1', '2');
+$lang->ai->prompts->testData['productplan']['bugs']['status'] = array('Resolved', 'Activated');
+
+$lang->ai->prompts->testData['release']['release']['product'] = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['release']['release']['name']    = 'Corporate Website Version 1.0';
+$lang->ai->prompts->testData['release']['release']['desc']    = "- Implement Corporate Website Homepage \n - Implement News Center Page \n - Implement About Us Page";
+$lang->ai->prompts->testData['release']['release']['date']    = '2025-04-11';
+
+$lang->ai->prompts->testData['release']['stories']['title']    = array('Implement Corporate Website Homepage', 'Implement News Center Page', 'Implement About Us Page');
+$lang->ai->prompts->testData['release']['stories']['estimate'] = array('3sp', '2sp', '1sp');
+
+$lang->ai->prompts->testData['release']['bugs']['title']  = 'None';
+
+$lang->ai->prompts->testData['execution']['execution']['name']     = 'Corporate Website 1.0';
+$lang->ai->prompts->testData['execution']['execution']['desc']     = 'Develop the core functional modules of the intelligent corporate website, including the homepage, news center, and about us, completing unit testing.';
+$lang->ai->prompts->testData['execution']['execution']['estimate'] = '120';
+
+$lang->ai->prompts->testData['execution']['tasks']['name']         = array('Iteration Planning Meeting', 'Homepage Development Design', 'Homepage Development', 'Homepage Testing', 'News Center Development Design', 'News Center Page Development', 'News Center Page Testing', 'About Us Development Design', 'About Us Page Development', 'About Us Page Testing', 'Iteration Review Meeting');
+$lang->ai->prompts->testData['execution']['tasks']['pri']          = array('1', '1', '2', '3', '1', '2', '3', '1', '2', '3', '4');
+$lang->ai->prompts->testData['execution']['tasks']['status']       = array('Closed', 'Completed', 'Completed', 'In Progress', 'Completed', 'In Progress', 'Not Started', 'In Progress', 'Not Started', 'Not Started', 'Not Started');
+$lang->ai->prompts->testData['execution']['tasks']['estimate']     = array('40h', '12h', '10h', '2h', '6h', '8h', '4h', '4h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['consumed']     = array('40h', '12h', '10h', '1h', '6h', '6h', '0h', '2h', '0h', '0h', '0h');
+$lang->ai->prompts->testData['execution']['tasks']['left']         = array('0h', '0h', '0h', '1h', '0h', '2h', '4h', '2h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['progress']     = array('100%', '100%', '100%', '50%', '100%', '75%', '0%', '50%', '0%', '0%', '0%');
+$lang->ai->prompts->testData['execution']['tasks']['estStarted']   = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '2025-04-07', '2025-04-03', '2025-04-03', '2025-04-08', '2025-04-11');
+$lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '-', '2025-04-03', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('Completed', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
 
