@@ -325,6 +325,44 @@ function registerZentaoAIPlugin(lang)
         when : context => !!context.store.globalMemory,
         data : {memory: {collections: ['$global']}},
     });
+
+    plugin.defineCallback('onCreateChat', async function(chat, info)
+    {
+        if(info.isLocal || !info.userPrompt) return;
+        const zentaoMemories = {};
+        const otherMemories  = info.memories.reduce((others, memory) =>
+        {
+            const ohterCollections = [];
+            for(const collection of memory.collections)
+            {
+                if(collection.startsWith('zentao:'))
+                {
+                    const lib       = collection.substr(7);
+                    const oldMemory = zentaoMemories[lib];
+                    zentaoMemories[lib] = oldMemory ? $.extend({}, oldMemory, memory, {attrs: $.extend({}, oldMemory.attrs, memory.attrs)}) : memory;
+                    continue;
+                }
+                ohterCollections.push(collection);
+            }
+            if(ohterCollections.length) others.push($.extend({}, memory, {collections: ohterCollections}));
+            return others;
+        });
+        const filterLibs = Object.keys(zentaoMemories);
+        if(!filterLibs.length) return;
+        info.memories = otherMemories;
+
+        const newPrompts = info.prompt !== undefined ? [info.prompt] : [];
+        const response = await $.ajaxSubmit(
+        {
+            url: $.createLink('zai', 'ajaxSearchKnowledges'),
+            data: {userPrompt: info.userPrompt, filters: JSON.stringify(zentaoMemories)}
+        });
+        if(response.result === 'success' && response.data && response.data.prompt)
+        {
+            newPrompts.push(response.data.prompt);
+        }
+        if(newPrompts.length) info.prompt = newPrompts.join('\n\n');
+    });
 }
 
 /* Bind AI commands in app when app is loaded, example:
