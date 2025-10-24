@@ -1869,6 +1869,8 @@ class aiModel extends model
      */
     public function getFunctionCallSchema($form)
     {
+        if($form == 'empty.empty') return $form;
+
         $formPath = explode('.', $form);
         if(count($formPath) !== 2) return array();
 
