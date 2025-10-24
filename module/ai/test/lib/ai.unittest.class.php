@@ -2437,6 +2437,21 @@ class aiTest
     }
 
     /**
+     * Test getTestPromptData method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestPromptDataTest($prompt)
+    {
+        $result = $this->objectModel->getTestPromptData($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return !empty($result[1]) ? '1' : '0';
+    }
+
+    /**
      * Test AIResponseException::__construct method.
      *
      * @param  string $type
