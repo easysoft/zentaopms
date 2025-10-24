@@ -359,4 +359,38 @@ class zaiTest
 
         return $result;
     }
+
+    /**
+     * Test isCanViewObject method.
+     *
+     * @param  string $objectType
+     * @param  int $objectID
+     * @param  array|null $attrs
+     * @access public
+     * @return bool
+     */
+    public function isCanViewObjectTest($objectType, $objectID, $attrs = null)
+    {
+        $result = $this->objectModel->isCanViewObject($objectType, $objectID, $attrs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test searchKnowledges method.
+     *
+     * @param  string $query
+     * @param  string $collection
+     * @param  array $filter
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgesTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.8)
+    {
+        $result = $this->objectModel->searchKnowledges($query, $collection, $filter, $limit, $minSimilarity);
+        return $result;
+    }
 }
