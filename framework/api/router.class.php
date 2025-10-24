@@ -399,6 +399,11 @@ class api extends router
                 if(in_array($this->action, array('post', 'put')))
                 {
                     $this->setFormData();
+
+                    foreach($_POST as $key => $value)
+                    {
+                        if(isset($this->params[$key])) $this->params[$key] = $value;
+                    }
                 }
                 return parent::loadModule();
             }
