@@ -200,12 +200,12 @@ class zaiModel extends model
         $tokenData = array('hash' => $tokenInfo['data']['hash'], 'expired_time' => $tokenInfo['data']['expiredTime'], 'app_id' => $tokenInfo['data']['appID'], 'user_id' => $tokenInfo['data']['userID']);
         $token = ($admin ? 'ak-' : 'ek-') . base64_encode(json_encode($tokenData));
 
+        /* Check if the request is HTTPS. */
         if($path[0] != '/') $path = '/' . $path;
-        $isHttps = (
-            (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
-            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
-            (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
-        );
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        if(!$isHttps) $isHttps = !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+        if(!$isHttps) $isHttps = !empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443;
+
         $protocol = $isHttps ? 'https://' : 'http://';
         $host     = $setting->host;
         $port     = $setting->port;
