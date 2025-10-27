@@ -13,7 +13,7 @@
 ### 📝 统一占位符说明
 **AI大模型必须严格按照以下占位符规范，保持命名一致性：**
 - `{moduleName}` - 模块名（小写，如：user、task、project）
-- `{layerName}` - 业务分层（小写，如：model、tao、zen、control、ui）
+- `{layerName}` - 业务分层（小写，如：control、model、tao、zen、ui）
 - `{className}` - 类名（驼峰命名，如：userModel、taskTao、projectZen）
 - `{methodName}` - 方法名（驼峰命名，如：getById、createUser）
 - `{tableName}` - 数据表名（小写，如：user、task、project）
@@ -34,12 +34,14 @@
 
 **第一步：每个测试用例必须包含至少5个测试步骤（r()...e()语句）！**
 **第二步：r()...e()语句必须写在同一行内，禁止换行！**
-**第三步：必须按照指定格式提交代码！必须使用 test/runtime/ztf 运行测试验证！**
-**第四步：必须先使用 php 命令验证脚本没有错误再使用 test/runtime/ztf 验证测试是否通过**
+**第三步：r()...e()语句必须从行首开始，行内不能有其他代码！
+**第四步：必须按照指定格式提交代码！必须使用 test/runtime/ztf 运行测试验证！**
+**第五步：必须先使用 php 命令验证脚本没有错误再使用 test/runtime/ztf 验证测试是否通过**
 
 **⛔ 绝对禁止的行为：**
 - 测试步骤少于5个
 - r()...e()语句换行
+- r()...e()语句没有从行首开始
 - 不遵循提交信息格式
 - 代码包含行尾空格（会导致提交失败）
 - 使用 `test/spider.php` 运行测试（必须使用 `test/runtime/ztf`）
@@ -78,22 +80,15 @@ r($userTest->getByIdTest('abc')) && p() && e(false);           // 测试步骤5�
 
 ```
 module/{moduleName}/test/
-├── lib/                                   # 测试类库
-│   └── {moduleName}.unittest.class.php    # model层和tao层单元测试类
-│   └── {moduleName}zen.unittest.class.php # zen层单元测试类
-├── model/                                 # model层单元测试
-│   ├── {methodName}.php                   # 测试执行脚本
-│   └── yaml/                              # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
-├── tao/                                   # tao层业务逻辑测试
-│   ├── {methodName}.php                   # 测试执行脚本
-│   └── yaml/                              # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
-├── zen/                                   # zen层新架构测试
-│   ├── {methodName}.php                   # 测试执行脚本
-│   └── yaml/                              # 测试数据目录
-│   │   ├── {tableName}_{methodName}.yaml  # YAML测试数据
-└── ui/                                    # UI自动化测试（独立文档）
+├── lib                           # 模块测试类库目录
+│  ├── model.class.php            # 测试类文件
+├── model                         # 测试目录
+│  ├── yaml                       # 测试数据目录
+│  │   ├── {methodName}           # 被测方法专用测试数据目录
+│  │   │    ├── {tableName}.yaml  # 被测方法专用测试数据定义文件
+│  ├── {methodName}.php           # 被测方法专用测试脚本文件
+├── yaml                          # 模块通用测试数据目录
+│  ├── {tableName}.yaml           # 模块通用测试数据定义文件
 ```
 
 ## 核心文件类型详解
@@ -140,7 +135,7 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/{moduleName}.unittest.class.php';  // 或 include dirname(__FILE__, 2) . '/lib/{moduleName}zen.unittest.class.php'; 根据测试需要
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('{tableName}');
@@ -152,7 +147,7 @@ $table->gen({count});                                // 生成数据数量
 su('admin');  // 或 su('user'); 根据测试需要
 
 // 4. 创建测试实例（变量名与模块名一致）
-${moduleName}Test = new {moduleName}Test();
+${moduleName}Test = new {moduleName}ModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r(${moduleName}Test->{methodName}Test({param1})) && p('{checkProperty}') && e('{expectedValue}'); // 步骤1：正常情况
@@ -174,31 +169,21 @@ r(${moduleName}Test->{methodName}Test({param5})) && p('{checkProperty}') && e('{
 
 ### 2. 单元测试类
 
-#### 2.1 业务分层为 model 或 tao
-
 **类文件：**
-{moduleName}.unittest.class.php
+model.class.php
 
 **类结构模板：**
 ```php
 <?php
 declare(strict_types = 1);
-class {moduleName}Test
-{
-    public function __construct()
-    {
-        global $tester;
-        $this->objectModel = $tester->loadModel('{moduleName}');
-        $this->objectTao   = $tester->loadTao('{moduleName}');
-    }
 
-    /**
-     * Test {methodName} method.
-     *
-     * @param  {paramType} ${paramName}
-     * @access public
-     * @return mixed
-     */
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class {moduleName}ModelTest extends baseTest
+{
+    protected $moduleName = '{moduleName}';
+    protected $className  = 'model';
+
     /**
      * Test {methodName} method.
      *
@@ -208,52 +193,8 @@ class {moduleName}Test
      */
     public function {methodName}Test($param = null)
     {
-        $result = $this->objectModel->{methodName}($param);
+        $result = $this->invokeArgs('{moduleName}', [$param]);
         if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-}
-```
-
-#### 2.2 业务分层为 zen
-
-**类文件：**
-{moduleName}zen.unittest.class.php
-
-**类结构模板：**
-
-```php
-<?php
-declare(strict_types = 1);
-class {moduleName}Test
-{
-    public function __construct()
-    {
-        $this->objectZen = initReference('{moduleName}');
-    }
-
-    /**
-     * Test {methodName} method.
-     *
-     * @param  {paramType} ${paramName}
-     * @access public
-     * @return mixed
-     */
-    /**
-     * Test {methodName} method.
-     *
-     * @param  mixed $param 参数描述
-     * @access public
-     * @return mixed
-     */
-    public function {methodName}Test($param = null)
-    {
-        $method = $this->objectZen->getMethod('{methodName}');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->objectZen, $param);
-        if(dao::isError()) return dao::getError();
-
         return $result;
     }
 }
@@ -466,10 +407,10 @@ fields:
 ```bash
 
 # 使用 php 命令运行测试脚本，检查是否有错误
-php module/{moduleName}/test/{layerName}/{methodName}.php
+php module/{moduleName}/test/model/{methodName}.php
 
 # 使用 ztf 运行测试脚本
-test/runtime/ztf module/{moduleName}/test/{layerName}/{methodName}.php
+test/runtime/ztf module/{moduleName}/test/model/{methodName}.php
 ```
 
 #### 5.2 验证测试结果
@@ -496,10 +437,9 @@ test/runtime/ztf module/{moduleName}/test/{layerName}/{methodName}.php
 1. **添加测试文件到git（仅添加测试相关文件）**：
 
    ```bash
-   git add module/{moduleName}/test/lib/{moduleName}.unittest.class.php
-   git add module/{moduleName}/test/lib/{moduleName}zen.unittest.class.php
-   git add module/{moduleName}/test/{layerName}/{methodName}.php
-   git add module/{moduleName}/test/{layerName}/yaml/{tableName}_{methodName}.yaml
+   git add module/{moduleName}/test/lib/model.class.php
+   git add module/{moduleName}/test/model/{methodName}.php
+   git add module/{moduleName}/test/model/yaml/{methodName}/{tableName}.yaml
    ```
 
 2. **提交代码**：
@@ -654,9 +594,9 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 
 ### 1. 命名规范
 - 测试文件：使用被测方法名
-- 测试类：{moduleName}Test
+- 测试类：{moduleName}ModelTest
 - 测试方法：{methodName}Test
-- YAML文件：{tableName}_{methodName}.yaml
+- YAML文件：{tableName}.yaml
 
 ### 2. 测试数据管理
 - 每个测试脚本独立准备数据
@@ -713,9 +653,10 @@ r($userTest->createTest($invalidUser)) && p('errors,account') && e('用户名不
 
 **📋 代码生成检查**
 - [ ] 测试文件名使用小写方法名：`{methodName}.php`
-- [ ] 单元测试类名格式：`{moduleName}Test`
+- [ ] 单元测试类名格式：`{moduleName}ModelTest`
 - [ ] 测试方法名格式：`{methodName}Test`
 - [ ] 每个测试用例包含≥5个 `r()...e()` 测试步骤
+- [ ] 每个 `r()...e()` 从行首开始
 - [ ] 每个 `r()...e()` 没有换行
 - [ ] 文件头包含完整的测试步骤描述
 - [ ] **🚨 所有代码行尾无空格**：检查每行末尾是否清洁
