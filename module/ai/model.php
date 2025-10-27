@@ -2648,13 +2648,14 @@ class aiModel extends model
     }
 
     /**
+     * 获取禅道智能体的测试数据。
      * Get prompt test data.
      *
      * @param  object $prompt
      * @access public
      * @return array
      */
-    public function getTestPromptData($prompt)
+    public function getTestPromptData(object $prompt): array
     {
         $module = $prompt->module;
         $source = explode(',', $prompt->source);
