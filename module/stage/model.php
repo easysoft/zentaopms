@@ -249,21 +249,20 @@ class stageModel extends model
     public function addBuiltinPoint(int $groupID)
     {
         $workflowGroup = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->eq($groupID)->fetch();
-        if($workflowGroup->projectModel != 'ipd') return;
 
-        $builtinPoints = $this->dao->select('*')->from(TABLE_DECISION)->where('workflowGroup')->eq($groupID)->andWhere('builtin')->eq('1')->fetchAll();
-        if(!empty($builtinPoints)) return;
-
-        $this->app->loadConfig('review');
         $this->app->loadConfig('project');
         $stageList = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->fetchAll('id');
         if(empty($stageList))
         {
             $stageTypeList = array();
-            if($workflowGroup->projectType == 'ipd') $stageTypeList = $this->config->project->categoryStages['IPD'];
-            if($workflowGroup->projectType == 'tpd') $stageTypeList = $this->config->project->categoryStages['TPD'];
-            if($workflowGroup->projectType == 'cbb') $stageTypeList = $this->config->project->categoryStages['CBB'];
-            if(in_array($workflowGroup->projectType, array('cpdproduct', 'cpdproject'))) $stageTypeList= $this->config->project->categoryStages['CPD'];
+            if($workflowGroup->projectModel == 'ipd')
+            {
+                if($workflowGroup->projectType == 'ipd') $stageTypeList = $this->config->project->categoryStages['IPD'];
+                if($workflowGroup->projectType == 'tpd') $stageTypeList = $this->config->project->categoryStages['TPD'];
+                if($workflowGroup->projectType == 'cbb') $stageTypeList = $this->config->project->categoryStages['CBB'];
+                if(in_array($workflowGroup->projectType, array('cpdproduct', 'cpdproject'))) $stageTypeList = $this->config->project->categoryStages['CPD'];
+            }
+            if(in_array($workflowGroup->projectModel, array('waterfall', 'waterfallplus'))) $stageTypeList = $this->config->project->categoryStages['waterfall'];
 
             foreach($stageTypeList as $stageType)
             {
@@ -271,7 +270,7 @@ class stageModel extends model
                 $builtinStage->workflowGroup = $groupID;
                 $builtinStage->createdBy     = 'system';
                 $builtinStage->createdDate   = helper::now();
-                $builtinStage->name          = zget($this->lang->stage->ipdTypeList, $stageType, '');
+                $builtinStage->name          = in_array($workflowGroup->projectModel, array('waterfall', 'waterfallplus')) ? zget($this->lang->stage->typeList, $stageType, '') : zget($this->lang->stage->ipdTypeList, $stageType, '');
                 $builtinStage->type          = $stageType;
                 $this->dao->insert(TABLE_STAGE)->data($builtinStage)->exec();
 
@@ -279,6 +278,10 @@ class stageModel extends model
                 $stageList[$stageID] = $builtinStage;
             }
         }
+        if($workflowGroup->projectModel != 'ipd') return;
+
+        $builtinPoints = $this->dao->select('*')->from(TABLE_DECISION)->where('workflowGroup')->eq($groupID)->andWhere('builtin')->eq('1')->fetchAll();
+        if(!empty($builtinPoints)) return;
 
         $decision = new stdClass();
         $decision->builtin       = '1';
@@ -293,7 +296,7 @@ class stageModel extends model
         $decisionFlow->relatedDate = helper::now();
         foreach($stageList as $id => $stage)
         {
-            foreach($this->config->review->ipdReviewPoint->{$stage->type} as $index => $point)
+            foreach($this->config->stage->ipdReviewPoint->{$stage->type} as $index => $point)
             {
                 $decision->stage    = $id;
                 $decision->order    = $index + 1;

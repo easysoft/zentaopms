@@ -2640,13 +2640,13 @@ INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
 ('story',       1,    'SR', 'enable'),
 ('story',       2,    '子', 'enable');
 
-REPLACE INTO `zt_stage` (`workflowGroup`, `name`, `percent`, `type`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
-('0', '需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
-('0', '设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
-('0', '开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
-('0', '测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
-('0', '发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
-('0', '总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0');
+REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
+('需求',     '10', 'request', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('设计',     '10', 'design',  'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('开发',     '50', 'dev',     'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('测试',     '15', 'qa',      'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('发布',     '10', 'release', 'admin', '2020-02-08 21:08:30', 'admin', '2020-02-12 13:50:27', '0'),
+('总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint',   '0');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
