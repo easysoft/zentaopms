@@ -94,7 +94,7 @@ if($config->edition == 'ipd')
             {
                 if(in_array($action['name'], array('start', 'finish', 'record')))
                 {
-                    $tip = $action['name'] . 'Tip';
+                    $tip = $action['name'] == 'record' ? 'recordWorkhourTip' : $action['name'] . 'Tip';
                     $task->actions[$key]['disabled'] = true;
                     $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
                 }
