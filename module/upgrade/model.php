@@ -12546,6 +12546,40 @@ class upgradeModel extends model
     }
 
     /**
+     * 升级开源版的阶段。
+     * Update stage for PMS.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeStage4PMS()
+    {
+        $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
+        if(empty($stageGroup)) return true;
+
+        $typeNamePairs   = array();
+        $needDeleteStage = array();
+        foreach($stageGroup as $projectModel => $stageList)
+        {
+            if($projectModel == 'ipd') continue;
+            foreach($stageList as $stageInfo)
+            {
+                if(isset($typeNamePairs[$stageInfo->type]) && in_array($stageInfo->name, $typeNamePairs[$stageInfo->type]))
+                {
+                    $needDeleteStage[$stageInfo->id] = $stageInfo->id;
+                    continue;
+                }
+                if(!isset($typeNamePairs[$stageInfo->type])) $typeNamePairs[$stageInfo->type] = array();
+                $typeNamePairs[$stageInfo->type][] = $stageInfo->name;
+            }
+        }
+
+        if(!empty($needDeleteStage)) $this->dao->delete()->from(TABLE_STAGE)->where('id')->in($needDeleteStage)->exec();
+        $this->dao->delete()->from(TABLE_STAGE)->where('projectType')->eq('ipd')->exec();
+        return true;
+    }
+
+    /**
      * 升级阶段列表及评审点。
      * Update stage and point.
      *
@@ -12557,32 +12591,8 @@ class upgradeModel extends model
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
 
-        if($this->config->edition == 'open')
-        {
-            $typeNamePairs   = array();
-            $needDeleteStage = array();
-            foreach($stageGroup as $projectModel => $stageList)
-            {
-                if($projectModel == 'ipd') continue;
-                foreach($stageList as $stageInfo)
-                {
-                    if(isset($typeNamePairs[$stageInfo->type]) && in_array($stageInfo->name, $typeNamePairs[$stageInfo->type]))
-                    {
-                        $needDeleteStage[$stageInfo->id] = $stageInfo->id;
-                        continue;
-                    }
-                    if(!isset($typeNamePairs[$stageInfo->type])) $typeNamePairs[$stageInfo->type] = array();
-                    $typeNamePairs[$stageInfo->type][] = $stageInfo->name;
-                }
-            }
-
-            if(!empty($needDeleteStage)) $this->dao->delete()->from(TABLE_STAGE)->where('id')->in($needDeleteStage)->exec();
-            $this->dao->delete()->from(TABLE_STAGE)->where('projectType')->eq('ipd')->exec();
-            return true;
-        }
-
         $this->app->loadConfig('project');
-        $this->app->loadConfig('review');
+        $this->app->loadConfig('stage');
         $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
         foreach($typeCodeGroup as $projectModel => $flowList)
         {
@@ -12615,7 +12625,7 @@ class upgradeModel extends model
                         $decisionFlow->objectType  = 'decision';
                         $decisionFlow->relatedBy   = 'system';
                         $decisionFlow->relatedDate = helper::now();
-                        foreach($this->config->review->ipdReviewPoint->{$stage->type} as $index => $point)
+                        foreach($this->config->stage->ipdReviewPoint->{$stage->type} as $index => $point)
                         {
                             $decision->workflowGroup = $stage->workflowGroup;
                             $decision->stage         = $stageID;
@@ -12635,9 +12645,7 @@ class upgradeModel extends model
                 }
             }
         }
-        $this->dao->delete()->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->exec();
 
-        $this->dao->exec('ALTER TABLE ' . TABLE_STAGE . ' DROP COLUMN `projectType`');
         return true;
     }
 
