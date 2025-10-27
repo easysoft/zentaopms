@@ -1970,16 +1970,16 @@ class aiTest
 
             $targetFormVars = array(
                 'story' => array(
-                    'change' => array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product')
+                    'change' => array('format' => '%d', 'args' => array('story' => 1), 'app' => 'product')
                 ),
                 'task' => array(
-                    'edit' => array('format' => 'taskID=%d', 'args' => array('task' => 1), 'app' => 'execution')
+                    'edit' => array('format' => '%d', 'args' => array('task' => 1), 'app' => 'execution')
                 ),
                 'bug' => array(
-                    'edit' => array('format' => 'bugID=%d', 'args' => array('bug' => 1), 'app' => 'qa')
+                    'edit' => array('format' => '%d', 'args' => array('bug' => 1), 'app' => 'qa')
                 ),
                 'doc' => array(
-                    'edit' => array('format' => 'docID=%d', 'args' => array('doc' => 1), 'app' => 'doc')
+                    'edit' => array('format' => '%d', 'args' => array('doc' => 1), 'app' => 'doc')
                 ),
             );
 
