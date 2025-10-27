@@ -9,7 +9,7 @@ cid=80
 
 */
 chdir(__DIR__);
-include '../lib/createrelease.ui.class.php';
+include '../lib/ui/createrelease.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

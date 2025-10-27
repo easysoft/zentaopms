@@ -1,16 +1,20 @@
 title: zt_image
-author: Qiyu Xie
+author: Claude Code
 version: "1.0"
+desc: Image data for linkAgentService test
 fields:
   - field: id
-    range: 1-1000
-  - field: host
-    range: 2
+    range: 1-5
+    note: 镜像ID
   - field: name
-    fields:
-      - field: name1
-        range: snapshot
-      - field: name2
-        range: 1-1000
+    range: ubuntu{1-5}
+    note: 镜像名称
+  - field: osName
+    range: ubuntu20.04,ubuntu18.04,centos7,centos8,debian
+    note: 操作系统名称
+  - field: path
+    range: /path/to/image{1-5}
+    note: 镜像路径
   - field: status
-    range: completed,restoring,running
+    range: completed
+    note: 镜像状态

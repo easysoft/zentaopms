@@ -20,7 +20,7 @@ $(".form-actions .btn[type='submit']").on('click', function(e, hasConfirmed)
     }
 });
 
-$(document).on('click', '.modal-actions > button', function()
+$(document).on('click', '.modal-dialog[id^=modal-record-hours-task] .modal-actions > button', function()
 {
     loadCurrentPage();
 })

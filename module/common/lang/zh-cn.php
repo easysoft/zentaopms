@@ -653,6 +653,7 @@ $lang->datepicker->dpText->TEXT_THIS_WEEK   = '本周';
 $lang->datepicker->dpText->TEXT_TODAY       = '今天';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = '明年';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = '下月';
+$lang->datepicker->dpText->TEXT_NEXT_WEEK   = '下周';
 $lang->datepicker->dpText->TEXT_CLOSE       = '关闭';
 $lang->datepicker->dpText->TEXT_DATE        = '选择时间段';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = '选择日期';
@@ -660,5 +661,12 @@ $lang->datepicker->dpText->TEXT_CHOOSE_DATE = '选择日期';
 $lang->datepicker->dayNames     = array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
+
+/* AI */
+$lang->aiapp->conversation = '智能会话';
+$lang->aiapp->zentaoAgent  = '禅道智能体';
+$lang->aiapp->generalAgent = '通用智能体';
+$lang->aiapp->models       = '模型列表';
+$lang->aiapp->config       = 'ZAI配置';
 
 include(dirname(__FILE__) . '/menu.php');

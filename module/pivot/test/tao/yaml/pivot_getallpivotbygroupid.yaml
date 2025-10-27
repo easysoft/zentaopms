@@ -1,0 +1,28 @@
+---
+title: pivot table data for getAllPivotByGroupID test
+author: test
+version: "1.0"
+
+fields:
+- field: id
+  range: 1001-1010
+- field: dimension
+  range: 1{5},2{3},3{2}
+- field: group
+  range: 60{3},85{2},100{2},999{3}
+- field: code
+  range: test_pivot1,test_pivot2,test_pivot3
+- field: name
+  range: 透视表1,透视表2,透视表3,产品统计表,Bug统计表
+- field: stage
+  range: published
+- field: deleted
+  range: 0
+- field: builtin
+  range: 0{5},1{5}
+- field: version
+  range: 1,2,3,1.1,1.2
+- field: createdBy
+  range: admin,user1,user2
+- field: createdDate
+  range: 2024-01-01 10:00:00,2024-01-02 10:00:00,2024-01-03 10:00:00

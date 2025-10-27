@@ -1,0 +1,47 @@
+title: user data for buildStoryTree test
+desc: "buildStoryTree方法的用户测试数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "用户ID"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户账号"
+    range: "admin,user,dev,test,guest"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: realname
+    note: "真实姓名"
+    range: "管理员,普通用户,开发人员,测试人员,访客"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: avatar
+    note: "头像"
+    range: "/data/upload/avatar/admin_avatar.jpg,/data/upload/avatar/user_avatar.jpg,{3}"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: role
+    note: "角色"
+    range: "admin,user,dev,test,guest"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -1,1 +1,0 @@
-$(".tree .active").parent('li').addClass('active');

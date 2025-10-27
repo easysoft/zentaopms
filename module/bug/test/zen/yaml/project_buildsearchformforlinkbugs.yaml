@@ -1,0 +1,92 @@
+---
+fields:
+- field: id
+  range: 1-5
+- field: project
+  range: 0{2},1-3{3}
+- field: model
+  range: scrum{2},waterfall{1},kanban{1},agileplus{1}
+- field: name
+  fields:
+  - field: name1
+    range: 测试项目{5}
+  - field: name2
+    range: 1-5
+- field: type
+  range: project{5}
+- field: status
+  range: doing{5}
+- field: lifetime
+  range: ops{2},long{3}
+- field: budget
+  range: 100000
+- field: budgetUnit
+  range: CNY
+- field: attribute
+  range: ~
+- field: percent
+  range: 50
+- field: milestone
+  range: 0
+- field: output
+  range: ~
+- field: auth
+  range: extend
+- field: parent
+  range: 0{2},1-3{3}
+- field: path
+  fields:
+  - field: path1
+    prefix: ','
+    range: 1-3
+  - field: path2
+    prefix: ','
+    range: '[]{2},4-5{3}'
+    postfix: ','
+- field: grade
+  range: "2"
+- field: code
+  fields:
+  - field: code1
+    range: project
+  - field: code2
+    range: 1-5
+- field: begin
+  range: (-1M)-(+1w):1D
+  type: timestamp
+  format: YY-MM-DD hh:mm:ss
+- field: end
+  range: (+1M)-(+2M):1D
+  type: timestamp
+  format: YY-MM-DD hh:mm:ss
+- field: PO
+  range: admin
+- field: PM
+  range: admin
+- field: QD
+  range: admin
+- field: RD
+  range: admin
+- field: team
+  range: ~
+- field: acl
+  range: open
+- field: order
+  range: 5-25:5
+- field: openedVersion
+  range: "18.0"
+- field: openedDate
+  range: (-1M)-(+1w):1D
+  type: timestamp
+  format: YY-MM-DD hh:mm:ss
+- field: multiple
+  range: 1{3},0{2}
+- field: category
+  range: ""
+- field: hasProduct
+  range: 1{3},0{2}
+- field: progress
+  range: "0.00"
+- field: deleted
+  range: 0
+...

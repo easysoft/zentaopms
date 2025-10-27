@@ -1,0 +1,40 @@
+---
+title: GitLab API获取合并请求测试数据
+desc: 为apiGetMergeRequests方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: GitLab服务器ID
+  range: 1-3
+
+- field: name
+  note: GitLab服务器名称
+  range: GitLab测试服务器{1-3}
+
+- field: url
+  note: GitLab服务器URL
+  range: 'http://gitlab{1-3}.test.com'
+
+- field: token
+  note: API访问令牌
+  range: 'glpat-{xxxxxxxxxxxxxxxxxxxx}'
+  format: "glpat-%020d"
+
+- field: private
+  note: 私有令牌
+  range: 'private{1-3}'
+
+- field: deleted
+  note: 删除状态
+  range: '0'
+
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+
+- field: createdDate
+  note: 创建时间
+  range: (2023-01-01)-(2024-12-31):30D
+  format: YYYY-MM-DD hh:mm:ss

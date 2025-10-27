@@ -1,8 +1,13 @@
 ---
-title: zt_bug
-author: Tingting Dai
+title: zt_bug测试数据 - 按关闭人统计
+author: Claude Code
 version: "1.0"
+desc: 为getDataOfClosedBugsPerUser方法提供测试数据
 fields:
 - field: closedBy
-  range: admin
+  range: 'admin{8},user1{5},user2{3},[]{4}'
+  note: 关闭人，包含空值情况
+- field: deleted
+  range: '0'
+  note: 删除标记
 ...

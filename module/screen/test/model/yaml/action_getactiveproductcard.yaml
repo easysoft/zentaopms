@@ -1,0 +1,70 @@
+---
+title: 操作记录表测试数据 - getActiveProductCard方法
+desc: 为getActiveProductCard方法提供操作记录表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 操作记录ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: story{8}, bug{6}, build{4}, release{2}
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-50:R
+  format: ""
+- field: product
+  note: 产品ID列表
+  range: ',1,{5}, ,2,{4}, ,3,{3}, ,4,{2}, ,5,{1}, ,1,2,{2}, ,2,3,{3}'
+  format: ""
+- field: project
+  note: 项目ID
+  range: 0{8}, 1-5:R{12}
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0{10}, 1-5:R{10}
+  format: ""
+- field: actor
+  note: 操作者
+  range: admin{8}, user1{6}, user2{4}, tester{2}
+  format: ""
+- field: action
+  note: 操作类型
+  range: created{5}, edited{4}, changed{3}, opened{2}, resolved{2}, closed{2}, activated{2}
+  format: ""
+- field: date
+  note: 操作时间
+  range: '2023-12-01 10:00:00{10}, 2024-01-01 09:00:00{10}'
+  format: ""
+- field: comment
+  note: 操作备注
+  range: 'Action comment {20}'
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '""'
+  format: ""
+- field: `read`
+  note: 已读标记
+  range: '0{15}, 1{5}'
+  format: ""
+- field: efforted
+  note: 是否已记录工时
+  range: '0{18}, 1{2}'
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd{18}, lite{2}
+  format: ""
+- field: from
+  note: 来源
+  range: '""'
+  format: ""

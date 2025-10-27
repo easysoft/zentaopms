@@ -11,7 +11,7 @@ cid=7
 
 */
 chdir(__DIR__);
-include '../lib/deletedesign.ui.class.php';
+include '../lib/ui/deletedesign.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 zendata('design')->loadYaml('design', false, 2)->gen(2);

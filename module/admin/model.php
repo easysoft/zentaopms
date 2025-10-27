@@ -58,7 +58,7 @@ class adminModel extends model
      * @access public
      * @return object
      */
-    public function getApiConfig(): object
+    public function getApiConfig(): ?object
     {
         if(!$this->session->apiConfig || time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
         {

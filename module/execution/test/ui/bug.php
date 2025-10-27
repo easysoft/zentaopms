@@ -32,7 +32,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/bug.ui.class.php';
+include '../lib/ui/bug.ui.class.php';
 global $config;
 
 $product = zenData('product');

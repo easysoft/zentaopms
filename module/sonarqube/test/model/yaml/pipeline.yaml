@@ -1,0 +1,40 @@
+---
+title: Pipeline data for getProjectPairs test
+desc: Test data for pipeline table for getProjectPairs method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Pipeline ID
+  range: 1-5
+- field: type
+  note: Pipeline type
+  range: sonarqube{5}
+- field: name
+  note: Pipeline name
+  range: "SonarQube1,SonarQube2,SonarQube3,SonarQube4,SonarQube5"
+- field: url
+  note: Server URL
+  range: "http://127.0.0.1:9000{5}"
+- field: account
+  note: Account name
+  range: "admin{5}"
+- field: password
+  note: Password
+  range: "password{5}"
+- field: token
+  note: Access token
+  range: "token1,token2,token3,token4,token5"
+- field: private
+  note: Private key
+  range: "private{5}"
+- field: createdBy
+  note: Creator
+  range: "admin{5}"
+- field: createdDate
+  note: Creation date
+  range: "2023-01-01 00:00:00{5}"
+- field: deleted
+  note: Deletion status
+  range: "0{5}"

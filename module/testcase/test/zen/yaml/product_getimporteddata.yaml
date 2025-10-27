@@ -1,0 +1,52 @@
+---
+title: 产品数据 - getImportedData方法
+desc: 为getImportedData方法提供产品测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 禅道项目管理,测试产品{5},演示产品{3}
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 产品代码
+  range: zentao,test{5},demo{3}
+  prefix: ""
+  postfix: ""
+- field: line
+  note: 产品线
+  range: 0,1-5
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 产品类型
+  range: normal,branch,platform
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 产品状态
+  range: normal,closed
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 产品描述
+  range: 项目管理系统,测试系统,演示系统
+  prefix: ""
+  postfix: ""
+- field: order
+  note: 排序
+  range: 1-100
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除状态
+  range: '0'
+  prefix: ""
+  postfix: ""

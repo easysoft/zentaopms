@@ -13,7 +13,7 @@ cid=1
  - 最终测试状态 @SUCCESS
 
 */
-include '../lib/testcase.ui.class.php';
+include '../lib/ui/testcase.ui.class.php';
 zenData('product')->loadYaml('product')->gen(1);
 $story = zenData('story');
 $story->id->setFields(array(array('range' => '2')));

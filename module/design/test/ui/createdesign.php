@@ -18,7 +18,7 @@ cid=1
 
 */
 chdir(__DIR__);
-include '../lib/createdesign.ui.class.php';
+include '../lib/ui/createdesign.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 $tester = new createDesignTester();

@@ -1,0 +1,158 @@
+---
+title: 产品表测试数据
+desc: 为测试getProductRelatedAssignedByMe方法提供产品数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E{2},产品F,产品G,产品H,产品I,产品J
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 产品代码
+  range: prod-a,prod-b,prod-c,prod-d,prod-e{2},prod-f,prod-g,prod-h,prod-i,prod-j
+  prefix: ""
+  postfix: ""
+
+- field: shadow
+  note: 影子产品
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: bind
+  note: 绑定状态
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: line
+  note: 产品线
+  range: 0{5},1{3},2{2}
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 产品类型
+  range: normal{8},branch{2}
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 产品状态
+  range: normal{7},closed{2},end{1}
+  prefix: ""
+  postfix: ""
+
+- field: subStatus
+  note: 子状态
+  range: [{5}],developing{3},testing{2}
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 产品描述
+  range: 这是产品A的描述,这是产品B的描述,这是产品C的描述,这是产品D的描述,这是产品E的描述{2},这是产品F的描述,这是产品G的描述,这是产品H的描述,这是产品I的描述
+  prefix: ""
+  postfix: ""
+
+- field: PO
+  note: 产品负责人
+  range: admin{2},user1{2},user2{2},user3{2},user4{2}
+  prefix: ""
+  postfix: ""
+
+- field: QD
+  note: 测试负责人
+  range: admin{2},user1{2},user2{2},user3{2},user4{2}
+  prefix: ""
+  postfix: ""
+
+- field: RD
+  note: 开发负责人
+  range: admin{2},user1{2},user2{2},user3{2},user4{2}
+  prefix: ""
+  postfix: ""
+
+- field: feedback
+  note: 反馈负责人
+  range: [{5}],admin{2},user1{2},user2{1}
+  prefix: ""
+  postfix: ""
+
+- field: ticket
+  note: 工单负责人
+  range: [{5}],admin{2},user1{2},user2{1}
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: open{6},private{3},custom{1}
+  prefix: ""
+  postfix: ""
+
+- field: groups
+  note: 用户组
+  range: [{7}],1,2,3
+  prefix: ""
+  postfix: ""
+
+- field: whitelist
+  note: 白名单
+  range: [{8}],admin,user1
+  prefix: ""
+  postfix: ""
+
+- field: vision
+  note: 视图
+  range: rnd{10}
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin{3},user1{3},user2{2},user3{2}
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建日期
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: editedBy
+  note: 编辑者
+  range: [{5}],admin{2},user1{2},user2{1}
+  prefix: ""
+  postfix: ""
+
+- field: editedDate
+  note: 编辑日期
+  range: [{5}],(-15d)-(-1d):R{5}
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: order
+  note: 排序
+  range: 0-100
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  prefix: ""
+  postfix: ""

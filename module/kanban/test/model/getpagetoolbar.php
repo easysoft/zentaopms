@@ -1,29 +1,47 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zenData('kanban')->gen(2);
-zenData('user')->gen(5);
 
 /**
 
-title=测试 kanbanModel->getPageToolBar();
+title=测试 kanbanModel::getPageToolBar();
 timeout=0
-cid=1
+cid=0
 
-- 查看普通用户获取操作按钮的字符长度 @161
-- 查看管理员获取操作按钮的字符长度 @1282
+- 执行$userToolbar @161
+- 执行$adminToolbar) > strlen($userToolbar @1
+- 执行$closedKanbanToolbar, '激活看板') !== false @1
+- 执行$adminToolbar, 'icon-fullscreen') !== false @1
+- 执行$adminToolbar, '设置') !== false @1
 
 */
-global $tester;
-$tester->loadModel('kanban');
 
-$kanban1 = $tester->kanban->getByID(1);
-$kanban2 = $tester->kanban->getByID(2);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
-$toolbar1 = $tester->kanban->getPageToolBar($kanban1);
+zenData('kanban')->gen(3);
+zenData('user')->gen(5);
+
+su('user1');
+
+$kanbanTest = new kanbanTest();
+
+// 创建测试用的看板对象
+$activeKanban = new stdclass();
+$activeKanban->id = 1;
+$activeKanban->status = 'active';
+
+$closedKanban = new stdclass();
+$closedKanban->id = 2;
+$closedKanban->status = 'closed';
+
+$userToolbar = $kanbanTest->getPageToolBarTest($activeKanban);
+
 su('admin');
-$toolbar2 = $tester->kanban->getPageToolBar($kanban2);
+$adminToolbar = $kanbanTest->getPageToolBarTest($activeKanban);
+$closedKanbanToolbar = $kanbanTest->getPageToolBarTest($closedKanban);
 
-r(strlen($toolbar1)) && p('') && e('161');  // 查看普通用户获取操作按钮的字符长度
-r(strlen($toolbar2)) && p('') && e('1282'); // 查看管理员获取操作按钮的字符长度
+r(strlen($userToolbar)) && p() && e('161');
+r(strlen($adminToolbar) > strlen($userToolbar)) && p() && e('1');
+r(strpos($closedKanbanToolbar, '激活看板') !== false) && p() && e('1');
+r(strpos($adminToolbar, 'icon-fullscreen') !== false) && p() && e('1');
+r(strpos($adminToolbar, '设置') !== false) && p() && e('1');

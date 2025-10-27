@@ -37,7 +37,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/tree.ui.class.php';
+include '../lib/ui/tree.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');

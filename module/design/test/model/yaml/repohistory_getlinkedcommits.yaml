@@ -1,0 +1,19 @@
+---
+title: 代码仓库历史记录测试数据
+desc: 为getLinkedCommits方法提供测试数据
+
+fields:
+- field: id
+  range: 1-5
+- field: repo
+  range: 1{5}
+- field: revision
+  range: abc123,def456,ghi789,jkl012,mno345
+- field: commit
+  range: 1-5
+- field: comment
+  range: Initial commit,Bug fix,Feature update,Code refactor,Test update
+- field: committer
+  range: admin,user1,user2,dev1,dev2
+- field: time
+  range: 2023-01-01 10:00:00{5}

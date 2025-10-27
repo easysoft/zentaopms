@@ -1,0 +1,55 @@
+---
+title: doclib表数据定义
+desc: 用于getTeamSpaces方法测试的doclib表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文档库ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 文档库类型
+  range: custom{8},product{3},project{2},execution{2}
+- field: vision
+  note: 视野
+  range: rnd{15}
+- field: parent
+  note: 父节点ID
+  range: 0{10},1{3},2{2}
+- field: name
+  note: 文档库名称
+  range: 团队空间1,团队空间2,团队空间3,团队空间4,团队空间5,产品空间1,产品空间2,产品空间3,项目空间1,项目空间2,执行空间1,执行空间2,子空间1,子空间2,子空间3
+- field: product
+  note: 产品ID
+  range: 0{12},1{2},2{1}
+- field: project
+  note: 项目ID
+  range: 0{13},1{1},2{1}
+- field: execution
+  note: 执行ID
+  range: 0{13},1{1},2{1}
+- field: acl
+  note: 访问控制
+  range: open{8},private{4},default{3}
+- field: groups
+  note: 用户组
+  range: ''{12},1,2,3{1}
+- field: users
+  note: 用户列表
+  range: ''{10},admin{3},user1,user2{1}
+- field: main
+  note: 是否主库
+  range: 0{13},1{2}
+- field: addedBy
+  note: 创建者
+  range: admin{10},user1{3},user2{2}
+- field: addedDate
+  note: 创建时间
+  range: 2023-01-01 10:00:00-2023-12-31 23:59:59:10D
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: 0{12},1{3}

@@ -1,0 +1,29 @@
+---
+title: 分支测试数据 - assignManageProductsVars
+desc: 用于测试assignManageProductsVars方法的分支数据
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-8
+- field: product
+  note: 产品ID
+  range: 1{2},2{2},3{2},1{2}
+- field: name
+  note: 分支名称
+  range: 主分支,开发分支,测试分支,发布分支,主分支,开发分支,主分支,开发分支
+- field: status
+  note: 状态
+  range: active
+- field: desc
+  note: 分支描述
+  range: 主分支描述,开发分支描述,测试分支描述,发布分支描述,主分支描述,开发分支描述,主分支描述,开发分支描述
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00
+- field: deleted
+  note: 删除标记
+  range: 0

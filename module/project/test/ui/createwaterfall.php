@@ -26,7 +26,7 @@ cid=73
  */
 
 chdir(__DIR__);
-include '../lib/createwaterfall.ui.class.php';
+include '../lib/ui/createwaterfall.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(3);
 zendata('product')->loadYaml('product', false, 2)->gen(3);

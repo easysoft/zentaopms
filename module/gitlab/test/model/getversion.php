@@ -1,32 +1,43 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 gitlabModel::getVersion();
 timeout=0
-cid=1
+cid=0
 
-- 通过host,token检验api权限 @success
-- 通过正确的host，错误的token获取api权限 @return false
-- 通过错误或低版本的的host，token获取api权限 @return false
+- 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com', 'glpat-test1234567890abcdef' 属性version @*
+- 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com', 'invalid-token'  @~~
+- 执行gitlabTest模块的getVersionTest方法，参数是'https://invalid-host.com', 'glpat-test1234567890abcdef'  @~~
+- 执行gitlabTest模块的getVersionTest方法，参数是'', 'glpat-test1234567890abcdef'  @~~
+- 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com', ''  @~~
+- 执行gitlabTest模块的getVersionTest方法，参数是'incomplete-url', 'glpat-test1234567890abcdef'  @~~
+- 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com/', 'glpat-test1234567890abcdef' 属性version @*
 
 */
 
-$gitlab = $tester->loadModel('gitlab');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlabID     = 1;
-$gitlabServer = $tester->loadModel('pipeline')->getByID($gitlabID);
+$table = zenData('pipeline');
+$table->id->range('1-5');
+$table->type->range('gitlab{5}');
+$table->name->range('gitlab-test{2},gitlab-prod{2},gitlab-dev{1}');
+$table->url->range('https://gitlab.example.com{2},http://gitlab.test.com{2},https://gitlab.dev.com{1}');
+$table->token->range('glpat-test1234567890abcdef{2},glpat-prod{2},glpat-dev{1}');
+$table->account->range('admin{3},user{2}');
+$table->deleted->range('0{5}');
+$table->gen(5);
 
-$result = $gitlab->getVersion($gitlabServer->url, $gitlabServer->token);
-if(isset($result->version)) $result = 'success';
-r($result) && p() && e('success'); //通过host,token检验api权限
+su('admin');
 
-$result = $gitlab->getVersion($gitlabServer->url, $gitlabServer->token . 'a');
-if(!isset($result->version)) $result = 'return false';
-r($result) && p() && e('return false'); //通过正确的host，错误的token获取api权限
+$gitlabTest = new gitlabTest();
 
-$result = $gitlab->getVersion($gitlabServer->url . '1', $gitlabServer->token);
-if(!isset($result->version)) $result = 'return false';
-r($result) && p() && e('return false'); //通过错误或低版本的的host，token获取api权限
+r($gitlabTest->getVersionTest('https://gitlab.example.com', 'glpat-test1234567890abcdef')) && p('version') && e('*');
+r($gitlabTest->getVersionTest('https://gitlab.example.com', 'invalid-token')) && p() && e('~~');
+r($gitlabTest->getVersionTest('https://invalid-host.com', 'glpat-test1234567890abcdef')) && p() && e('~~');
+r($gitlabTest->getVersionTest('', 'glpat-test1234567890abcdef')) && p() && e('~~');
+r($gitlabTest->getVersionTest('https://gitlab.example.com', '')) && p() && e('~~');
+r($gitlabTest->getVersionTest('incomplete-url', 'glpat-test1234567890abcdef')) && p() && e('~~');
+r($gitlabTest->getVersionTest('https://gitlab.example.com/', 'glpat-test1234567890abcdef')) && p('version') && e('*');

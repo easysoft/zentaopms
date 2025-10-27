@@ -1,0 +1,30 @@
+title: zt_host for restoreSnapshot test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: hostType
+    range: virtual
+  - field: type
+    range: node
+  - field: osName
+    range: linux
+  - field: status
+    range: online
+  - field: parent
+    range: 1
+  - field: heartbeat
+    range: "(-2M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: extranet
+    range: 10.0.0.100
+  - field: ip
+    range: 10.0.0.100
+  - field: hzap
+    range: 8080
+  - field: tokenSN
+    range: test_token_123
+  - field: name
+    range: test_node_1,test_node_2

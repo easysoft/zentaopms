@@ -38,7 +38,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/grouptask.ui.class.php';
+include '../lib/ui/grouptask.ui.class.php';
 global $config;
 
 $user = zenData('user');

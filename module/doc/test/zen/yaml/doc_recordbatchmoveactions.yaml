@@ -1,0 +1,33 @@
+---
+title: 批量移动文档操作记录测试数据
+desc: 用于测试docZen::recordBatchMoveActions()方法的测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 文档ID
+  range: 1-10
+- field: lib
+  note: 文档所在库ID
+  range: 1{3},2{3},3{4}
+- field: title
+  note: 文档标题
+  range: '批量移动测试文档1,批量移动测试文档2,批量移动测试文档3,批量移动测试文档4,批量移动测试文档5,批量移动测试文档6,批量移动测试文档7,批量移动测试文档8,批量移动测试文档9,批量移动测试文档10'
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 文档类型
+  range: text{10}
+- field: status
+  note: 文档状态
+  range: normal{10}
+- field: addedBy
+  note: 创建者
+  range: admin{10}
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00{10}
+- field: version
+  note: 版本号
+  range: 1{10}

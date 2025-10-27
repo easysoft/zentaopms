@@ -1,0 +1,35 @@
+---
+title: 分支extractUnModifyForm方法测试数据
+desc: 用于测试产品分支相关的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+
+- field: product
+  note: 产品ID
+  range: 1{2},2{2},3{2},4{1},5{1},6{1},7{1}
+
+- field: name
+  note: 分支名称
+  range: 主干,开发分支,测试分支,发布分支,功能分支,修复分支,实验分支,V1.0,V2.0,V3.0
+
+- field: status
+  note: 分支状态
+  range: active{8},closed{2}
+
+- field: createdBy
+  note: 创建人
+  range: admin,user1,user2
+
+- field: createdDate
+  note: 创建时间
+  range: (2024-01-01)-(2024-12-31)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 是否删除
+  range: 0{9},1{1}

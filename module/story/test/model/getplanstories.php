@@ -3,49 +3,37 @@
 
 /**
 
-title=测试 storyModel->getPlanStories();
+title=测试 storyModel::getPlanStories();
+timeout=0
 cid=0
 
-- 获取计划1下的需求数量，每页10条 @10
-- 获取计划1下的需求数量，不分页 @20
-- 获取计划1下，按照模块排序的需求数量，不分页 @20
+- 执行storyTest模块的getPlanStoriesTest方法，参数是1, 'all', 'id_desc'  @4
+- 执行storyTest模块的getPlanStoriesTest方法，参数是1, 'all', 'module, id_desc'  @4
+- 执行storyTest模块的getPlanStoriesTest方法，参数是999, 'all', 'id_desc'  @0
+- 执行storyTest模块的getPlanStoriesTest方法，参数是1, 'active', 'id_desc'  @1
+- 执行storyTest模块的getPlanStoriesTest方法，参数是-1, 'all', 'id_desc'  @0
+- 执行storyTest模块的getPlanStoriesTest方法，参数是0, 'all', 'id_desc'  @0
+- 执行storyTest模块的getPlanStoriesTest方法，参数是3, 'all', 'id_desc'  @0
 
 */
+
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+zendata('product')->loadYaml('story_getplanstories', false, 2)->gen(5);
+zendata('story')->loadYaml('story_getplanstories', false, 2)->gen(50);
+zendata('planstory')->loadYaml('planstory_getplanstories', false, 2)->gen(40);
+zendata('module')->loadYaml('module_getplanstories', false, 2)->gen(20);
+
 su('admin');
 
-zenData('product')->gen(100);
-$projectstory = zenData('projectstory');
-$projectstory->project->range('11{50},36{50}');
-$projectstory->product->range('1');
-$projectstory->story->range('1-50');
-$projectstory->gen(100);
+$storyTest = new storyTest();
 
-$story = zenData('story');
-$story->product->range('1');
-$story->gen(50);
-
-$planstory = zenData('planstory');
-$planstory->plan->range('1{20},2{20},3{20}');
-$planstory->gen(50);
-
-$project = zenData('project');
-$project->type->range('project{25},sprint{25}');
-$project->gen(50);
-
-global $tester, $app;
-$tester->loadModel('story');
-$app->moduleName = 'story';
-$app->methodName = 'getPlanStories';
-$app->rawModule  = 'story';
-$app->rawMethod  = 'getPlanStories';
-$app->loadClass('pager', $static = true);
-$pager = new pager(0, 10, 1);
-
-$plan1Stories = $tester->story->getPlanStories(1, 'all', 'id_desc', $pager);
-$plan2Stories = $tester->story->getPlanStories(1, 'all', 'id_desc');
-$plan3Stories = $tester->story->getPlanStories(1, 'all', 'module,id_desc');
-
-r(count($plan1Stories)) && p() && e('10'); //获取计划1下的需求数量，每页10条
-r(count($plan2Stories)) && p() && e('20'); //获取计划1下的需求数量，不分页
-r(count($plan3Stories)) && p() && e('20'); //获取计划1下，按照模块排序的需求数量，不分页
+r(count($storyTest->getPlanStoriesTest(1, 'all', 'id_desc'))) && p() && e('4');
+r(count($storyTest->getPlanStoriesTest(1, 'all', 'module,id_desc'))) && p() && e('4');
+r(count($storyTest->getPlanStoriesTest(999, 'all', 'id_desc'))) && p() && e('0');
+r(count($storyTest->getPlanStoriesTest(1, 'active', 'id_desc'))) && p() && e('1');
+r(count($storyTest->getPlanStoriesTest(-1, 'all', 'id_desc'))) && p() && e('0');
+r(count($storyTest->getPlanStoriesTest(0, 'all', 'id_desc'))) && p() && e('0');
+r(count($storyTest->getPlanStoriesTest(3, 'all', 'id_desc'))) && p() && e('0');

@@ -73,6 +73,7 @@ spec:
             spec:
               container: hub.zentao.net/ci/zentao-package:master
               script:
+                - export DELETE_TEST="false"
                 - mkdir -pv ${ZENTAO_RELEASE_PATH}
                 - mkdir -pv /opt/build/zentaopms
                 - test -d $PWD/zentaoext/zentaomax && rm -rf
@@ -87,7 +88,7 @@ spec:
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
                 - mkdir ${GITFOX_WORKSPACE_BASE}/testcode
-                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* ${GITFOX_WORKSPACE_BASE}/testcode && cp -r ${GITFOX_WORKSPACE_BASE}/zentaopms/test ${GITFOX_WORKSPACE_BASE}/testcode/
+                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* ${GITFOX_WORKSPACE_BASE}/testcode && cp -r ${GITFOX_WORKSPACE_BASE}/test  ${GITFOX_WORKSPACE_BASE}/testcode/
                 - cd ${GITFOX_WORKSPACE_BASE}/testcode
                 - rm -rf tmp
                 - echo "<?php\n\$config->edition = 'ipd';"

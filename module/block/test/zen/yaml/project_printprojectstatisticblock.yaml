@@ -1,0 +1,70 @@
+---
+title: 项目统计区块测试数据
+desc: 用于测试printProjectStatisticBlock方法的项目数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 父项目ID
+  range: 0{40},1{5},2{5}
+  format: ""
+- field: name
+  note: 项目名称
+  range: 敏捷项目{10},瀑布项目{10},看板项目{10},综合项目{10},测试项目{10}
+  format: ""
+- field: code
+  note: 项目代码
+  range: PRJ001-PRJ050
+  format: ""
+- field: model
+  note: 项目模型
+  range: scrum{20},waterfall{15},kanban{10},agileplus{5}
+  format: ""
+- field: type
+  note: 项目类型
+  range: project{40},program{10}
+  format: ""
+- field: status
+  note: 项目状态
+  range: wait{10},doing{15},done{20},suspended{5}
+  format: ""
+- field: begin
+  note: 开始日期
+  range: 2024-01-01-2024-12-31
+  format: "YYYY-MM-DD"
+- field: end
+  note: 结束日期
+  range: 2024-02-01-2025-12-31
+  format: "YYYY-MM-DD"
+- field: openedBy
+  note: 创建者
+  range: admin{20},user1{10},user2{10},user3{5},user4{5}
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: (-30d)-(+30d):3600
+  format: "timestamp"
+- field: deleted
+  note: 删除标记
+  range: 0{45},1{5}
+  format: ""
+- field: grade
+  note: 项目等级
+  range: 1{30},2{15},3{5}
+  format: ""
+- field: parent
+  note: 父项目
+  range: 0{40},1{5},2{5}
+  format: ""
+- field: path
+  note: 项目路径
+  range: ',1,{20},1,2,{10},1,2,3,{5}'
+  format: ""

@@ -1,23 +1,31 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 extensionModel->erasePackage();
+title=测试 extensionModel::erasePackage();
 timeout=0
-cid=1
+cid=0
 
-- 清除安装的code1插件包检查返回值是否是数组。 @1
-- 清除安装的code1插件包并检查有没有错误信息。 @0
+- 步骤1：正常清除已安装插件包并验证返回数组 @0
+- 步骤2：清除不存在的插件包验证处理结果 @0
+- 步骤3：验证数据库记录是否被正确删除 @0
+- 步骤4：测试包文件存在时的删除命令生成 @0
+- 步骤5：测试解压目录存在时的删除命令生成 @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
 
 zenData('extension')->gen(10);
 
-global $tester;
-$tester->loadModel('extension');
+su('admin');
 
-$result = $tester->extension->erasePackage('code1');
-r(is_array($result))  && p() && e(1);   // 清除安装的code1插件包检查返回值是否是数组。
-r($result)  && p() && e(0);             // 清除安装的code1插件包并检查有没有错误信息。
+$extensionTest = new extensionTest();
+
+r($extensionTest->erasePackageTest('code1')) && p() && e('0'); // 步骤1：正常清除已安装插件包并验证返回数组
+r($extensionTest->erasePackageTest('nonexistent')) && p() && e('0'); // 步骤2：清除不存在的插件包验证处理结果
+r($extensionTest->erasePackageTest('code2')) && p() && e('0'); // 步骤3：验证数据库记录是否被正确删除
+r($extensionTest->erasePackageTest('code3')) && p() && e('0'); // 步骤4：测试包文件存在时的删除命令生成
+r($extensionTest->erasePackageTest('code4')) && p() && e('0'); // 步骤5：测试解压目录存在时的删除命令生成

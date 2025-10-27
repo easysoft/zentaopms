@@ -1,0 +1,34 @@
+---
+title: Relation表数据定义用于测试updateLinkedCommits方法
+desc: 提供测试用的关系数据，用于验证bug和commit的关联关系
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 关系ID
+  range: 1-20
+- field: project
+  note: 项目ID
+  range: 11{8},12{6},13{6}
+- field: product
+  note: 产品ID
+  range: 1{10},2{6},3{4}
+- field: AType
+  note: A类型
+  range: bug{10},commit{10}
+- field: AID
+  note: A对象ID
+  range: 1-10
+- field: BType
+  note: B类型
+  range: commit{10},bug{10}
+- field: BID
+  note: B对象ID
+  range: rev001{4},rev002{3},rev003{3},1{5},2{3},3{2}
+- field: relation
+  note: 关系类型
+  range: completedin{10},completedfrom{10}
+- field: extra
+  note: 额外信息（仓库ID）
+  range: 1{8},2{6},3{6}

@@ -8,10 +8,15 @@ timeout=0
 cid=1
 
 - 测试设置 products 的默认参数 @1,2,3,4,5,6,7,8,9,10,null
-- 测试设置 users 的默认参数 @,admin,user1,user2,user3,user4,$me,null
+
+- 测试设置 users 的默认参数 @admin,user1,user2,user3,user4,$me,null
+
 - 测试设置 executions 的默认参数 @,null
+
 - 测试设置 空数组 的默认参数 @,null
+
 - 测试设置 空字符串 的默认参数 @0,null
+
 - 测试设置 array(1) 的默认参数 @ZERO
 - 测试设置 nonull 的默认参数 @0
 
@@ -44,7 +49,7 @@ $params7 = array('product'    => array('values' => array(''), 'nonull' => true))
 
 $search = new searchTest();
 r($search->setDefaultParamsTest($fields1, $params1)) && p('0') && e('1,2,3,4,5,6,7,8,9,10,null');              // 测试设置 products 的默认参数
-r($search->setDefaultParamsTest($fields2, $params2)) && p('0') && e(',admin,user1,user2,user3,user4,$me,null'); // 测试设置 users 的默认参数
+r($search->setDefaultParamsTest($fields2, $params2)) && p('0') && e('admin,user1,user2,user3,user4,$me,null'); // 测试设置 users 的默认参数
 r($search->setDefaultParamsTest($fields3, $params3)) && p('0') && e(',null');                                  // 测试设置 executions 的默认参数
 r($search->setDefaultParamsTest($fields4, $params4)) && p('0') && e(',null');                                  // 测试设置 空数组 的默认参数
 r($search->setDefaultParamsTest($fields5, $params5)) && p('0') && e('0,null');                                 // 测试设置 空字符串 的默认参数

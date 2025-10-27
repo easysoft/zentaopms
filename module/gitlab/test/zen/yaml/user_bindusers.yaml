@@ -1,0 +1,23 @@
+---
+title: 用户绑定测试数据
+desc: 用于bindUsers方法的用户表测试数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,user5,test{4}
+- field: password
+  note: 用户密码
+  range: 21232f297a57a5a743894a0e4a801fc3{10}
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户一,用户二,用户三,用户四,用户五,测试用户{4}
+- field: role
+  note: 用户角色
+  range: admin,dev{9}
+- field: deleted
+  note: 是否删除
+  range: 0{10}

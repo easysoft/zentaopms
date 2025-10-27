@@ -9,7 +9,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/roadmap.ui.class.php';
+include '../lib/ui/roadmap.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

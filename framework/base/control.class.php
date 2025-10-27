@@ -107,7 +107,7 @@ class baseControl
 
     /**
      * $cookie对象，用户可以通过$this->cookie->key来引用$_COOKIE变量。
-     * The $cookie object, useer can access a cookie var by $this->cookie->key.
+     * The $cookie object, user can access a cookie var by $this->cookie->key.
      *
      * @var object
      * @access public

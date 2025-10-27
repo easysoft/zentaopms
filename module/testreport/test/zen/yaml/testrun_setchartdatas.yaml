@@ -1,0 +1,39 @@
+---
+title: 测试运行数据定义
+desc: 为setChartDatas方法测试生成测试运行数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 测试运行ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: task
+  note: 测试单ID
+  range: 1-10
+- field: case
+  note: 用例ID
+  range: 1-20
+- field: version
+  note: 版本
+  range: 1-3
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2,tester1,tester2
+- field: lastRunner
+  note: 最后执行人
+  range: admin,user1,user2,tester1,tester2
+- field: lastRunDate
+  note: 最后执行时间
+  range: '2023-01-01 00:00:00'-'2023-12-31 23:59:59'
+  format: YYYY-MM-DD hh:mm:ss
+- field: lastRunResult
+  note: 最后执行结果
+  range: 'pass{20},fail{15},blocked{10},skipped{5}'
+- field: status
+  note: 状态
+  range: 'normal{40},blocked{10}'

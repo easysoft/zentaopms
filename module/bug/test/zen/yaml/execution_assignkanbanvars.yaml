@@ -1,0 +1,63 @@
+---
+title: execution表数据定义
+desc: 为assignKanbanVars方法测试准备execution数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 执行名称
+  range: "Execution{1-10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 执行类型
+  range: "kanban{5},stage{3},sprint{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 执行状态
+  range: "wait{3},doing{5},done{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: "admin,user1,user2"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: "0{9},1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

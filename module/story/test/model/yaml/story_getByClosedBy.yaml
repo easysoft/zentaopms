@@ -1,0 +1,38 @@
+---
+title: story表测试数据，用于getByClosedBy方法
+desc: 用于测试getByClosedBy方法的story关闭数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-20
+- field: product
+  note: 所属产品
+  range: '1,1,1,1,1,2,2,2,2,2,1,1,1,1,1,2,2,2,2,2'
+- field: branch
+  note: 分支
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: module
+  note: 模块
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: type
+  note: 需求类型
+  range: story,story,story,story,requirement,story,story,story,requirement,requirement,story,story,story,story,story,story,story,story,story,story
+- field: closedBy
+  note: 关闭者
+  range: admin,admin,user1,user1,admin,user1,user1,user2,admin,user1,admin,admin,user1,admin,admin,user1,user2,admin,user1,user2
+- field: status
+  note: 需求状态
+  range: closed,closed,closed,closed,closed,closed,closed,closed,closed,closed,active,active,active,active,active,active,active,active,active,active
+- field: deleted
+  note: 删除状态
+  range: '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0'
+- field: title
+  note: 需求标题
+  prefix: 需求标题
+- field: vision
+  note: 视图
+  range: rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd,rnd
+- field: closedDate
+  note: 关闭日期
+  range: '2024-01-01 10:00:00','2024-01-02 11:00:00','2024-01-03 12:00:00','2024-01-04 13:00:00','2024-01-05 14:00:00','2024-01-06 15:00:00','2024-01-07 16:00:00','2024-01-08 17:00:00','2024-01-09 18:00:00','2024-01-10 19:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'

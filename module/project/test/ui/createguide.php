@@ -16,7 +16,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/createguide.ui.class.php';
+include '../lib/ui/createguide.ui.class.php';
 
 $tester = new createGuideTester();
 $tester->login();

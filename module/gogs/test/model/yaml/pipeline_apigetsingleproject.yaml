@@ -1,0 +1,32 @@
+title: 测试 apiGetSingleProject 方法的 pipeline 数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1,2,3,4,5
+  - field: name
+    range: 'Gogs有效服务器,Gogs测试服务器,无效Gogs服务器,空配置服务器,已删除服务器'
+  - field: type
+    range: 'gogs,gogs,gitlab,gogs,gitea'
+  - field: url
+    range: 'https://gogsdev.qc.oop.cc,http://valid-gogs.test.com,http://invalid-gogs.com,,http://deleted-server.com'
+  - field: token
+    range: 'valid_gogs_token_123,another_valid_token,invalid_token_456,,expired_token'
+  - field: account
+    range: 'admin,gogsuser,testuser,emptyuser,deleteduser'
+  - field: password
+    range: 'password123,gogspwd,testpwd,,delpwd'
+  - field: private
+    range: '0,0,1,0,1'
+  - field: instanceID
+    range: '0,0,0,0,0'
+  - field: createdBy
+    range: 'admin,admin,user,admin,user'
+  - field: createdDate
+    range: '2023-01-01 00:00:00,2023-06-01 12:00:00,2023-12-01 18:30:00,2023-05-01 09:15:00,2023-08-01 14:45:00'
+  - field: editedBy
+    range: 'admin,admin,user,,user'
+  - field: editedDate
+    range: '2023-01-15 10:00:00,2023-06-15 14:30:00,2023-12-15 20:15:00,,2023-08-15 16:20:00'
+  - field: deleted
+    range: '0,0,0,0,1'

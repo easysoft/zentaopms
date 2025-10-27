@@ -657,7 +657,7 @@ $config->my->bug->actionList['edit']['data-toggle'] = 'modal';
 $config->my->bug->actionList['copy']['icon']        = 'copy';
 $config->my->bug->actionList['copy']['text']        = $lang->bug->copy;
 $config->my->bug->actionList['copy']['hint']        = $lang->bug->copy;
-$config->my->bug->actionList['copy']['url']         = helper::createLink('bug', 'create',"productID={product}&branch={branch}&extra=bugID={id}");
+$config->my->bug->actionList['copy']['url']         = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
 $config->my->bug->actionList['copy']['data-size']   = 'lg';
 $config->my->bug->actionList['copy']['data-toggle'] = 'modal';
 
@@ -1197,10 +1197,12 @@ $config->my->doc->actionList['edit']['text'] = $lang->edit;
 $config->my->doc->actionList['edit']['hint'] = $lang->edit;
 $config->my->doc->actionList['edit']['url']  = array('module' => 'doc', 'method' => 'edit', 'params' => "docID={id}");
 
-$config->my->doc->actionList['delete']['icon'] = 'trash';
-$config->my->doc->actionList['delete']['text'] = $lang->delete;
-$config->my->doc->actionList['delete']['hint'] = $lang->delete;
-$config->my->doc->actionList['delete']['url']  = array('module' => 'doc', 'method' => 'delete', 'params' => "docID={id}");
+$config->my->doc->actionList['delete']['icon']         = 'trash';
+$config->my->doc->actionList['delete']['text']         = $lang->delete;
+$config->my->doc->actionList['delete']['hint']         = $lang->delete;
+$config->my->doc->actionList['delete']['url']          = array('module' => 'doc', 'method' => 'delete', 'params' => "docID={id}");
+$config->my->doc->actionList['delete']['className']    = 'ajax-submit';
+$config->my->doc->actionList['delete']['data-confirm'] = array('message' => $lang->doc->confirmDelete);
 
 $config->my->doc->dtable = new stdclass();
 $config->my->doc->dtable->fieldList['id']['name']  = 'id';

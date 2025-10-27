@@ -1,0 +1,59 @@
+---
+title: 任务数据配置
+desc: 用于测试buildStages方法的任务数据
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+- field: name
+  note: 任务名称
+  range: '需求分析{3},概要设计{4},详细设计{4},编码实现{5},单元测试{4}'
+- field: type
+  note: 任务类型
+  range: 'devel{10},test{6},study{2},discuss{2}'
+- field: status
+  note: 任务状态
+  range: 'wait{5},doing{8},done{5},closed{2}'
+- field: pri
+  note: 优先级
+  range: '1{2},2{8},3{8},4{2}'
+- field: estimate
+  note: 预估工时
+  range: 1-40
+- field: consumed
+  note: 消耗工时
+  range: 0-35
+- field: left
+  note: 剩余工时
+  range: 0-20
+- field: deadline
+  note: 截止日期
+  range: '2024-03-01{10},2024-04-01{10}'
+- field: assignedTo
+  note: 指派给
+  range: 'admin{5},user1{8},user2{7}'
+- field: assignedDate
+  note: 指派日期
+  range: '2024-01-15{10},2024-02-01{10}'
+- field: estStarted
+  note: 预计开始
+  range: '2024-01-10{10},2024-02-01{10}'
+- field: realStarted
+  note: 实际开始
+  range: '2024-01-12{8},0000-00-00{12}'
+- field: finishedBy
+  note: 完成者
+  range: 'admin{3},user1{5},{12}'
+- field: finishedDate
+  note: 完成时间
+  range: '2024-02-01{5},0000-00-00{15}'
+- field: execution
+  note: 所属执行
+  range: 1-5
+- field: project
+  note: 所属项目
+  range: 1-3
+- field: deleted
+  note: 删除状态
+  range: '0{19},1{1}'

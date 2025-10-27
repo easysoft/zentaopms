@@ -1,0 +1,94 @@
+---
+title: 测试单开始操作测试数据
+desc: 为buildTaskForStart方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 测试单ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 项目ID
+  range: 1-3
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1-2
+  format: ""
+
+- field: name
+  note: 测试单名称
+  range: 测试单1,测试单2,测试单3{2},功能测试单{3},自动化测试{2}
+  format: ""
+
+- field: execution
+  note: 执行ID
+  range: 1-5
+  format: ""
+
+- field: build
+  note: 版本
+  range: 1,2,3{3},trunk{5}
+  format: ""
+
+- field: type
+  note: 测试类型
+  range: feature,integration,performance{2},security{3},compatibility{3}
+  format: ""
+
+- field: owner
+  note: 负责人
+  range: admin,user1,user2{3},tester{5}
+  format: ""
+
+- field: pri
+  note: 优先级
+  range: 1-4
+  format: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-01-15,2024-02-01{8}
+  format: ""
+
+- field: end
+  note: 结束日期
+  range: 2024-01-31,2024-02-15,2024-03-01{8}
+  format: ""
+
+- field: status
+  note: 状态
+  range: wait{5},doing{3},done{2}
+  format: ""
+
+- field: realBegan
+  note: 实际开始时间
+  range: 2024-01-01,2024-01-15,2024-02-01{8}
+  format: ""
+
+- field: desc
+  note: 描述
+  range: 测试描述1,测试描述2{3},详细的测试说明{6}
+  format: ""
+
+- field: mailto
+  note: 邮件通知
+  range: admin@test.com,user1@test.com{4},tester@test.com{5}
+  format: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin,user1{4},system{5}
+  format: ""
+
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00,2024-01-15 09:00:00{9}
+  format: ""

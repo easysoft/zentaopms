@@ -1,0 +1,22 @@
+---
+title: checkOneClickPackage方法测试数据
+desc: 用于测试一键安装包安全性检查功能的用户数据
+
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin{5}, user{3}, test{2}
+- field: password
+  range: e10adc3949ba59abbe56e057f20f883e{5}, 202cb962ac59075b964b07152d234b70{3}, 098f6bcd4621d373cade4e832627b4f6{2}
+  note: admin用5个弱密码(123456的MD5), user用3个普通密码(hello的MD5), test用2个测试密码(test的MD5)
+- field: realname
+  range: 管理员{5}, 普通用户{3}, 测试用户{2}
+- field: role
+  range: admin{5}, user{3}, qa{2}
+- field: email
+  range: admin@test.com{5}, user@test.com{3}, test@test.com{2}
+- field: deleted
+  range: 0{8}, 1{2}
+- field: status
+  range: active{8}, inactive{2}

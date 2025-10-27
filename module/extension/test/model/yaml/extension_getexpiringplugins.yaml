@@ -1,0 +1,66 @@
+---
+title: 插件到期测试数据
+desc: 为getExpiringPlugins方法提供不同到期场景的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 插件ID
+  range: 1-15
+
+- field: name
+  note: 插件名称
+  range: plugin_normal,plugin_30days,plugin_14days,plugin_7days,plugin_1day,plugin_today,plugin_expired1,plugin_expired7,plugin_life1,plugin_life2,plugin_uninstalled1,plugin_uninstalled2,plugin_empty_expire1,plugin_empty_expire2,plugin_invalid_expire
+
+- field: code
+  note: 插件代码
+  range: normal,exp30,exp14,exp7,exp1,exptoday,expired1,expired7,life1,life2,uninst1,uninst2,empty1,empty2,invalid
+
+- field: version
+  note: 插件版本
+  range: 1.0.0{15}
+
+- field: author
+  note: 插件作者
+  range: TestAuthor{15}
+
+- field: desc
+  note: 插件描述
+  range: 测试插件描述{15}
+
+- field: license
+  note: 插件许可证
+  range: LGPL{15}
+
+- field: type
+  note: 插件类型
+  range: extension{15}
+
+- field: site
+  note: 插件网站
+  range: http://test.com{15}
+
+- field: zentaoCompatible
+  note: 禅道兼容性
+  range: all{15}
+
+- field: installedTime
+  note: 安装时间
+  range: 2024-01-01 00:00:00{15}
+
+- field: depends
+  note: 依赖
+  range: []{15}
+
+- field: dirs
+  note: 目录
+  range: []{15}
+
+- field: files
+  note: 文件
+  range: []{15}
+
+- field: status
+  note: 状态
+  range: installed{13},uninstalled{2}

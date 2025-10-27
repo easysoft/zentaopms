@@ -1,0 +1,37 @@
+---
+title: 测试用例数据
+desc: 用于测试getProductTestTable方法的测试用例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-50
+  note: 用例ID
+- field: product
+  range: 1-5{10}
+  note: 所属产品ID
+- field: title
+  range: '[测试用例1,测试用例2,测试用例3,登录功能测试,注册功能测试]{10}'
+  note: 用例标题
+- field: type
+  range: feature{30},performance{10},security{10}
+  note: 用例类型
+- field: status
+  range: normal{40},blocked{5},investigate{5}
+  note: 用例状态
+- field: stage
+  range: unittest{15},feature{20},integration{15}
+  note: 适用阶段
+- field: pri
+  range: 1{5},2{20},3{20},4{5}
+  note: 优先级
+- field: deleted
+  range: '0'
+  note: 删除状态
+- field: openedBy
+  range: admin,user1,user2,tester1,tester2
+  note: 创建人
+- field: openedDate
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  note: 创建时间

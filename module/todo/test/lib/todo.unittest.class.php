@@ -5,6 +5,7 @@ class todoTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('todo');
+        $this->objectTao   = $tester->loadTao('todo');
         $tester->app->loadClass('dao');
     }
 
@@ -425,14 +426,66 @@ class todoTest
      * @access public
      * @return bool|string
      */
-    public function getCycleTodoDateTest(string $configType): bool|string
+    public function getCycleTodoDateTest(string $configType, int $todoId = 0, string $lastCycleDate = '', string $today = ''): mixed
     {
         global $tester;
-        $typeMap  = array('day' => 1, 'week' => 2, 'month' => 3);
-        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($typeMap[$configType])->fetchAll('id');
+
+        // 如果没有指定todoId，使用默认映射
+        if($todoId == 0)
+        {
+            $typeMap = array('day' => 1, 'week' => 2, 'month' => 3);
+            $todoId = $typeMap[$configType];
+        }
+
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoId)->fetchAll('id');
+        $todo = current($todoList);
+        if(!$todo) return false;
+
+        $todo->config = json_decode($todo->config);
+        if(dao::isError()) return dao::getError();
+        if(!$todo->config) return 'config_decode_error';
+
+        // 如果没有指定today，使用当前日期
+        if(empty($today)) $today = date('Y-m-d');
+
+        // 构造lastCycle对象
+        $lastCycle = '';
+        if(!empty($lastCycleDate))
+        {
+            $lastCycle = new stdClass();
+            $lastCycle->date = $lastCycleDate;
+        }
+
+        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+
+        // 对于按天类型，返回0表示false，1表示有日期
+        if($configType == 'day')
+        {
+            return $date === false ? '0' : ($date ? '1' : '0');
+        }
+
+        // 对于其他类型，直接返回日期或空字符串
+        return $date === false ? '0' : ($date ? $date : '');
+    }
+
+    /**
+     * Test getCycleTodoDate method with simple approach.
+     *
+     * @param  string $configType
+     * @param  int    $todoId
+     * @access public
+     * @return string
+     */
+    public function getCycleTodoDateTestSimple(string $configType, int $todoId): string
+    {
+        global $tester;
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoId)->fetchAll('id');
 
         $todo = current($todoList);
+        if(!$todo) return '0';
+
         $todo->config = json_decode($todo->config);
+        if(!$todo->config) return '0';
 
         $today     = date('Y-m-d');
         $cycleList = $this->objectModel->getCycleList($todoList);
@@ -440,11 +493,66 @@ class todoTest
 
         $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
 
-        if($configType == 'day')   return $date == false;
-        if($configType == 'week')  return $date == $today;
-        if($configType == 'month') return $date == $today;
+        if($configType == 'day')   return $date === false ? '0' : '1';
+        if($configType == 'week')  return $date == $today ? '1' : '0';
+        if($configType == 'month') return $date == $today ? '1' : '0';
 
-        return $date;
+        return $date ? '1' : '0';
+    }
+
+    /**
+     * Test getCycleTodoDate method with edge cases.
+     *
+     * @param  string $caseType
+     * @access public
+     * @return string
+     */
+    public function getCycleTodoDateTestEdgeCase(string $caseType): string
+    {
+        global $tester;
+
+        switch($caseType)
+        {
+            case 'valid_empty_result':
+                // 创建一个有效但会返回空结果的配置（周类型，但今天不匹配）
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'week';
+                $todo->config->week = '0,6'; // 只在周日和周六生效
+                $today = date('Y-m-d'); // 假设今天不是周日或周六
+                $date = $this->objectModel->getCycleTodoDate($todo, '', $today);
+                return empty($date) ? '0' : '1';
+
+            case 'invalid_type':
+                // 创建一个无效类型的todo对象
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'invalid';
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return empty($date) ? '0' : '1';
+
+            case 'empty_lastcycle':
+                // 使用第一个todo但空lastCycle
+                $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq(1)->fetchAll('id');
+                $todo = current($todoList);
+                $todo->config = json_decode($todo->config);
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return $date === false ? '0' : '1';
+
+            case 'past_config':
+                // 创建一个过期的配置
+                $todo = new stdClass();
+                $todo->config = new stdClass();
+                $todo->config->type = 'day';
+                $todo->config->day = '1';
+                $todo->config->begin = '2020-01-01';
+                $todo->config->end = '2020-12-31';
+                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                return $date === false ? '0' : '1';
+
+            default:
+                return '0';
+        }
     }
 
     /**
@@ -459,5 +567,220 @@ class todoTest
     {
         $result = $this->objectModel->insert($todo);
         return dao::isError() ? dao::getError() : $result;
+    }
+
+    /**
+     * Test dateRange method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function dateRangeTest(string $type): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('dateRange');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->objectModel, $type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getCycleDailyTodoDate method.
+     *
+     * @param  object $todo
+     * @param  object|string $lastCycle
+     * @param  string $today
+     * @access public
+     * @return false|string
+     */
+    public function getCycleDailyTodoDateTest(object $todo, object|string $lastCycle, string $today): false|string
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getCycleDailyTodoDate');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todo, $lastCycle, $today);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test fetchRows method.
+     *
+     * @param  array $todoIdList
+     * @access public
+     * @return array|int
+     */
+    public function fetchRowsTest(array $todoIdList): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('fetchRows');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoIdList);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
+
+    /**
+     * Test getCycleList method in Tao layer.
+     *
+     * @param  array $todoList
+     * @param  string $orderBy
+     * @access public
+     * @return array|int
+     */
+    public function getCycleListTaoTest(array $todoList, string $orderBy = 'date_asc'): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getCycleList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoList, $orderBy);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
+
+    /**
+     * Test getListBy method.
+     *
+     * @param  string       $type
+     * @param  string       $account
+     * @param  string|array $status
+     * @param  string       $begin
+     * @param  string       $end
+     * @param  int          $limit
+     * @param  string       $orderBy
+     * @param  object       $pager
+     * @access public
+     * @return array
+     */
+    public function getListByTest(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, ?object $pager = null): array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getListBy');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $type, $account, $status, $begin, $end, $limit, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProjectList method.
+     *
+     * @param  string $table
+     * @param  array  $idList
+     * @access public
+     * @return array|int
+     */
+    public function getProjectListTest(string $table, array $idList): array|int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getProjectList');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $table, $idList);
+        if(dao::isError()) return dao::getError();
+
+        // 如果结果为空数组，返回0以便于测试断言
+        if(empty($result)) return 0;
+
+        return $result;
+    }
+
+    /**
+     * Test getTodoCountByAccount method.
+     *
+     * @param  string $account
+     * @access public
+     * @return int
+     */
+    public function getTodoCountByAccountTest(string $account): int
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getTodoCountByAccount');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $account);
+        if(dao::isError()) return 0;
+
+        return (int)$result;
+    }
+
+    /**
+     * Test setTodoNameByType method.
+     *
+     * @param  int $todoID
+     * @access public
+     * @return object
+     */
+    public function setTodoNameByTypeTest(int $todoID): object
+    {
+        $todo = $this->objectModel->getByID($todoID);
+        if(!$todo) return new stdclass();
+
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('setTodoNameByType');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todo);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateDate method.
+     *
+     * @param  array  $todoIdList
+     * @param  string $date
+     * @access public
+     * @return bool|array
+     */
+    public function updateDateTest(array $todoIdList, string $date): bool|array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateDate');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoIdList, $date);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateRow method.
+     *
+     * @param  int    $todoID
+     * @param  object $todo
+     * @access public
+     * @return bool|array
+     */
+    public function updateRowTest(int $todoID, object $todo): bool|array
+    {
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('updateRow');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->objectTao, $todoID, $todo);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

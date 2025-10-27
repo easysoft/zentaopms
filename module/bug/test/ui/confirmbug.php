@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-include '../lib/confirmbug.ui.class.php';
+include '../lib/ui/confirmbug.ui.class.php';
 
 /**
 

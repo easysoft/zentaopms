@@ -1,0 +1,42 @@
+title: todoTao::getCycleList comprehensive test data
+desc: Test data for getCycleList method including various scenarios
+author: Claude
+version: 2.0.0
+
+fields:
+  - field: id
+    range: 1-15
+  - field: account
+    range: 'admin{5}, user1{3}, user2{2}, guest{5}'
+  - field: name
+    range: '`周期任务1`, `自定义任务2`, `周期任务3`, `非自定义任务4`, `周期任务5`, `自定义任务6`, `周期任务7`, `自定义任务8`, `周期任务9`, `自定义任务10`, `周期任务11`, `周期任务12`, `周期任务13`, `自定义任务14`, `自定义任务15`'
+  - field: date
+    range: 1-15
+    prefix: '2023-05-'
+    format: '%02d'
+  - field: type
+    range: 'custom{10}, story{3}, task{2}'
+  - field: cycle
+    range: 0
+  - field: begin
+    range: 0800-1200
+  - field: end
+    range: 1400-1800
+  - field: assignedTo
+    range: 'admin{8}, user1{4}, user2{3}'
+  - field: desc
+    range: '`测试周期任务描述`, `自定义任务描述`, `普通任务描述`'
+  - field: status
+    range: 'wait{5}, doing{5}, done{3}, closed{2}'
+  - field: objectID
+    range: 1-15
+  - field: assignedBy
+    range: 'admin{10}, user1{3}, user2{2}'
+  - field: pri
+    range: 1-4
+  - field: private
+    range: 0-1
+  - field: deleted
+    range: '0{12}, 1{3}'
+  - field: vision
+    range: 'rnd'

@@ -1,0 +1,61 @@
+---
+title: block表测试数据
+desc: 用于测试getAssignMeBlockID方法的block表数据
+
+fields:
+- field: id
+  note: Block ID
+  range: 1-20
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{5}, user1{5}, user2{5}, test{5}
+  format: ""
+- field: dashboard
+  note: 仪表盘
+  range: my{20}
+  format: ""
+- field: module
+  note: 模块名
+  range: assigntome{10}, other{10}
+  format: ""
+- field: title
+  note: 标题
+  range: 指派给我{10}, 其他{10}
+  format: ""
+- field: block
+  note: 区块名
+  range: assigntome{10}, other{10}
+  format: ""
+- field: code
+  note: 代码
+  range: assigntome{10}, other{10}
+  format: ""
+- field: width
+  note: 宽度
+  range: 1{5}, 2{10}, 3{5}
+  format: ""
+- field: height
+  note: 高度
+  range: 3{20}
+  format: ""
+- field: left
+  note: 左侧位置
+  range: 0{10}, 1{5}, 2{5}
+  format: ""
+- field: top
+  note: 顶部位置
+  range: 0{20}
+  format: ""
+- field: params
+  note: 参数
+  range: []{20}
+  format: ""
+- field: hidden
+  note: 是否隐藏
+  range: 0{15}, 1{5}
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd{15}, lite{3}, op{2}
+  format: ""

@@ -93,6 +93,7 @@ class tutorialModel extends model
         $product->totalRequirements = 0;
         $product->feedback          = 0;
         $product->ticket            = 0;
+        $product->workflowGroup     = 1;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guideTask == 'branchManage')
@@ -492,6 +493,7 @@ class tutorialModel extends model
         if($type == 'story')       return array(1 => 'SR');
         if($type == 'requirement') return array(1 => 'UR');
         if($type == 'epic')        return array(1 => 'BR');
+        return array();
     }
 
     /**
@@ -2164,6 +2166,7 @@ class tutorialModel extends model
     {
         if($type == 'custom') return array(1 => 'Test Team Space');
         if($type == 'mine')   return array(1 => 'Test My Space');
+        return array();
     }
 
     /**

@@ -1,0 +1,70 @@
+---
+title: repo表测试数据 - buildCreateForm方法
+desc: 用于测试buildCreateForm方法的版本库基础数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 版本库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 版本库名称
+  range: test_repo{5}, unit_test_repo{3}, demo_repo{2}
+  format: ""
+- field: SCM
+  note: 版本控制系统类型
+  range: Git{5}, Subversion{3}, Gitlab{2}
+  format: ""
+- field: product
+  note: 关联产品ID
+  range: 1,2,3,1,2
+  format: ""
+- field: projects
+  note: 关联项目ID
+  range: 1,2,3,4,5
+  format: ""
+- field: client
+  note: 客户端路径
+  range: git, svn, /usr/bin/git, /usr/bin/svn
+  format: ""
+- field: path
+  note: 版本库路径
+  range: /data/repo/test{3}, https://github.com/test{2}, file:///svn/test{5}
+  format: ""
+- field: encoding
+  note: 编码格式
+  range: UTF-8{8}, GBK{2}
+  format: ""
+- field: account
+  note: 访问账号
+  range: admin, testuser, '', demo
+  format: ""
+- field: password
+  note: 访问密码
+  range: '123456{3}, []{4}, password{3}'
+  format: ""
+- field: desc
+  note: 版本库描述
+  range: '测试版本库{5}, 单元测试{3}, 演示项目{2}'
+  format: ""
+- field: acl
+  note: 访问控制
+  range: '{"acl":"open"}{5}, {"acl":"private"}{3}, {"acl":"custom"}{2}'
+  format: ""
+- field: synced
+  note: 是否已同步
+  range: 0{5}, 1{5}
+  format: ""
+- field: commits
+  note: 提交数量
+  range: 0-100
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{9}, 1{1}
+  format: ""

@@ -1,0 +1,30 @@
+---
+title: AI消息数据定义
+desc: 用于测试saveMiniProgramMessage方法的AI消息数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 消息ID
+  range: 1-10000
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: appID
+  note: 应用ID
+  range: 1-100
+- field: user
+  note: 用户ID
+  range: admin{20},user1{30},user2{25},user3{25}
+- field: type
+  note: 消息类型
+  range: req{30},res{40},ntf{30}
+- field: content
+  note: 消息内容
+  range: 测试消息内容{20},Hello world{30},This is a test{25},Sample content{25}
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00':'2024-12-31 23:59:59'
+  format: YYYY-MM-DD hh:mm:ss

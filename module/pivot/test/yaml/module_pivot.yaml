@@ -7,3 +7,9 @@ fields:
     range: 1{3},2{3},3{3}
   - field: type
     range: pivot
+  - field: grade
+    range: 1
+  - field: order
+    range: 1-9
+  - field: deleted
+    range: 0

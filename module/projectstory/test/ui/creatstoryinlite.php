@@ -19,7 +19,7 @@ cid=0
 
 */
 chdir(__DIR__);
-include '../lib/createstoryinlite.ui.class.php';
+include '../lib/ui/createstoryinlite.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1');

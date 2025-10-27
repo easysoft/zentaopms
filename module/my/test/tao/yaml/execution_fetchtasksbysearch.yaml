@@ -1,0 +1,41 @@
+---
+title: 执行测试数据
+desc: 用于 fetchTasksBySearch 方法的执行测试数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: project
+  note: 所属项目
+  range: 1{4},2{3},3{3}
+- field: name
+  note: 执行名称
+  range: 迭代1{2},迭代2{3},迭代3{2},Sprint1{1},Sprint2{2}
+- field: type
+  note: 执行类型
+  range: sprint{6},stage{4}
+- field: status
+  note: 执行状态
+  range: wait{2},doing{6},suspended{1},closed{1}
+- field: multiple
+  note: 是否多执行
+  range: '1'{8},'0'{2}
+- field: grade
+  note: 级别
+  range: '1'{6},'2'{4}
+- field: percent
+  note: 完成百分比
+  range: 0{3},50{4},80{2},100{1}
+- field: openedBy
+  note: 由谁创建
+  range: admin{8},user{2}
+- field: openedDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00{3},2023-01-15 10:00:00{4},2023-02-01 14:00:00{3}
+- field: deleted
+  note: 是否删除
+  range: '0'
+- field: vision
+  note: 视野
+  range: rnd{10}

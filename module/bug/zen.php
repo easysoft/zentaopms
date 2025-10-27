@@ -1247,7 +1247,7 @@ class bugZen extends bug
 
         $cases = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
 
-        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
+        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "productID={$bug->product}");
 
         if($bug->execution)
         {
@@ -2154,8 +2154,7 @@ class bugZen extends bug
                 if($change['field'] == 'status')
                 {
                     $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    $canceledURL  = $this->server->http_referer;
-                    return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                    return $this->send(array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->bug->notice->remindTask, $bug->toTask) . "').then((res) => {if(res) openUrl('{$confirmedURL}', {load: 'modal', size: 'lg'})});", 'closeModal' => true));
                 }
             }
         }

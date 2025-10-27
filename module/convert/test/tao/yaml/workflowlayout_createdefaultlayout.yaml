@@ -1,0 +1,70 @@
+---
+title: createDefaultLayout测试数据
+desc: 为convertTao::createDefaultLayout方法生成测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 工作流布局ID
+  range: 1-1000
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: group
+  note: 分组ID  
+  range: 0-10
+  format: ""
+- field: module
+  note: 模块名称
+  range: feedback,issue,task,story,bug
+  format: ""
+- field: action
+  note: 动作类型
+  range: browse,create,edit,view,adminview
+  format: ""
+- field: ui
+  note: UI界面ID
+  range: 0
+  format: ""
+- field: field
+  note: 字段名
+  range: id,name,title,description,status,priority,deleted,actions
+  format: ""
+- field: order
+  note: 排序
+  range: 0-100
+  format: ""
+- field: width
+  note: 宽度
+  range: "0"
+  format: ""
+- field: position
+  note: 位置
+  range: info,""
+  format: ""
+- field: readonly
+  note: 只读标识
+  range: "0","1"
+  format: ""
+- field: mobileShow
+  note: 移动端显示
+  range: "1"
+  format: ""
+- field: summary
+  note: 摘要
+  range: ""
+  format: ""
+- field: defaultValue
+  note: 默认值
+  range: ""
+  format: ""
+- field: layoutRules
+  note: 布局规则
+  range: ""
+  format: ""
+- field: vision
+  note: 视图版本
+  range: rnd,lite
+  format: ""

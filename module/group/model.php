@@ -30,7 +30,7 @@ class groupModel extends model
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' && project='{$group->project}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -78,7 +78,7 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' && project = '{$group->project}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' and project = '{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -914,7 +914,7 @@ class groupModel extends model
                 if($hiddenHost && $moduleName == 'zahost') continue;
                 if($hiddenHost && $moduleName == 'zanode' && !in_array($methodName, $this->config->group->showNodePriv)) continue;
 
-                if(!$this->config->inQuickon && in_array("{$moduleName}-{$methodName}", $this->config->group->hiddenPriv)) continue;
+                if(!$this->config->inQuickon && !$this->config->inCompose && in_array("{$moduleName}-{$methodName}", $this->config->group->hiddenPriv)) continue;
                 if(strpos(',' . $priv['edition'] . ',', ',' . $this->config->edition . ',') === false) continue;
                 if(strpos(',' . $priv['vision'] . ',',  ',' . $this->config->vision . ',')  === false) continue;
 

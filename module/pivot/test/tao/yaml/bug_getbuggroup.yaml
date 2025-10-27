@@ -1,0 +1,115 @@
+title: zt_bug for getBugGroup test
+desc: "Bug表专用于getBugGroup方法测试"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+  - field: project
+    range: 11,12,13,0
+  - field: product
+    range: 1,2,3
+  - field: branch
+    range: 0
+  - field: module
+    range: 1821,1822,1823
+  - field: execution
+    range: 101,102,103
+  - field: plan
+    range: 1,2,0
+  - field: story
+    range: 1,2,3,0
+  - field: storyVersion
+    range: 1
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    range: 测试Bug1,测试Bug2,测试Bug3,测试Bug4,测试Bug5
+  - field: keywords
+    range: ""
+  - field: severity
+    range: 1,2,3
+  - field: pri
+    range: 1,2,3
+  - field: type
+    range: codeerror,config,install
+  - field: os
+    range: ""
+  - field: browser
+    range: ""
+  - field: hardware
+    range: ""
+  - field: found
+    range: ""
+  - field: steps
+    range: "<p>【步骤】测试步骤</p><br/><p>【结果】测试结果</p><br/><p>【期望】期望结果</p><br/>"
+  - field: status
+    range: active{10},resolved{5},closed{5}
+  - field: subStatus
+    range: ""
+  - field: color
+    range: "#3da7f5"
+  - field: confirmed
+    range: 1
+  - field: activatedCount
+    range: 0
+  - field: mailto
+    range: ""
+  - field: openedBy
+    range: admin{10},user1{5},user2{5}
+  - field: openedDate
+    range: "2025-09-01 10:00:00{5},2025-09-15 14:30:00{5},2025-09-25 16:45:00{5},2024-08-01 09:00:00{5}"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: openedBuild
+    range: trunk
+  - field: assignedTo
+    range: admin,dev1,test1
+  - field: assignedDate
+    range: "2025-09-02 10:00:00"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deadline
+    range: "2025-10-01"
+    format: "YYYY-MM-DD"
+  - field: resolvedBy
+    range: "",admin,dev1
+  - field: resolution
+    range: "",fixed,bydesign,duplicate,external
+  - field: resolvedBuild
+    range: "",trunk
+  - field: resolvedDate
+    range: "2025-09-20 10:00:00"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: closedBy
+    range: "",admin
+  - field: duplicateBug
+    range: 0
+  - field: relatedBug
+    range: ""
+  - field: case
+    range: 0
+  - field: caseVersion
+    range: 0
+  - field: result
+    range: 0
+  - field: repo
+    range: 0
+  - field: entry
+    range: ""
+  - field: lines
+    range: ""
+  - field: v1
+    range: ""
+  - field: v2
+    range: ""
+  - field: repoType
+    range: ""
+  - field: testtask
+    range: 0
+  - field: lastEditedBy
+    range: ""
+  - field: deleted
+    range: 0

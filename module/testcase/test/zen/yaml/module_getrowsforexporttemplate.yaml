@@ -1,0 +1,30 @@
+---
+title: 模块导出模板数据
+desc: 用于测试getRowsForExportTemplate方法的模块数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 模块名称
+  range: 模块1,模块2,模块3,模块4,模块5,模块6,模块7,模块8,模块9,模块10
+  format: ""
+- field: type
+  note: 模块类型
+  range: case
+  format: ""
+- field: root
+  note: 所属产品
+  range: 1-5
+  format: ""
+- field: branch
+  note: 所属分支
+  range: 0,1,2,3
+  format: ""

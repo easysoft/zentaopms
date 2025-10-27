@@ -1,0 +1,90 @@
+---
+title: 文档库测试数据 - getObjectIDByLib方法
+desc: 用于测试getObjectIDByLib方法的文档库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 文档库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 文档库类型
+  range: 'product{2},project{2},execution{2},custom{2},mine{2}'
+  format: ""
+- field: vision
+  note: 视图类型
+  range: 'rnd'
+  format: ""
+- field: parent
+  note: 父库ID
+  range: '0{5},1{3},2{2}'
+  format: ""
+- field: product
+  note: 产品ID
+  range: '0{5},1{3},2{2}'
+  format: ""
+- field: project
+  note: 项目ID
+  range: '0{5},1{2},2{2},3{1}'
+  format: ""
+- field: execution
+  note: 执行ID
+  range: '0{6},1{2},2{2}'
+  format: ""
+- field: name
+  note: 文档库名称
+  range: '产品主库,项目主库,执行主库,自定义库,个人库,API库,测试库,开发库,设计库,文档库'
+  format: ""
+- field: baseUrl
+  note: 基础URL
+  range: '[@http://api.example.com,@https://test.api.com,@]'
+  format: ""
+- field: acl
+  note: 访问控制
+  range: 'open{6},private{2},custom{2}'
+  format: ""
+- field: groups
+  note: 权限组
+  range: '[@,@admin,@dev,@qa]'
+  format: ""
+- field: users
+  note: 权限用户
+  range: '[@,@admin,@user1]'
+  format: ""
+- field: main
+  note: 是否主库
+  range: '0{7},1{3}'
+  format: ""
+- field: collector
+  note: 收藏者
+  range: '[@,@admin]'
+  format: ""
+- field: desc
+  note: 描述
+  range: '[@,@测试描述]'
+  format: ""
+- field: order
+  note: 排序
+  range: 0-9
+  format: ""
+- field: addedBy
+  note: 创建者
+  range: 'admin{8},user1{2}'
+  format: ""
+- field: addedDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00{5},2024-02-01 10:00:00{3},2024-03-01 10:00:00{2}'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  format: ""
+- field: archived
+  note: 是否归档
+  range: '0'
+  format: ""

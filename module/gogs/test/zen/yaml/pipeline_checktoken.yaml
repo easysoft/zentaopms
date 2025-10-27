@@ -1,0 +1,66 @@
+---
+title: Gogs CheckToken测试数据
+desc: 用于测试gogsZen::checkToken方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: gogs{100}
+  format: ""
+- field: name
+  note: 服务器名称
+  range: TestGogsServer{20}, GogsTest{30}, ValidGogs{50}
+  format: ""
+- field: url
+  note: 服务器地址
+  range: http://localhost:3000{30}, http://test.gogs.com{30}, http://valid.gogs.server{40}
+  format: ""
+- field: token
+  note: Token值
+  range: valid_token_{30}, test_token_{30}, admin_token_{40}
+  format: ""
+- field: account
+  note: 账户
+  range: admin{40}, testuser{30}, gogsadmin{30}
+  format: ""
+- field: password
+  note: 密码
+  range: password123{100}
+  format: ""
+- field: private
+  note: 私有字段
+  range: private_key_{100}
+  format: ""
+- field: instanceID
+  note: 实例ID
+  range: 1-10
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{50}, system{50}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin{50}, system{50}
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 删除标记
+  range: 0{95}, 1{5}
+  format: ""

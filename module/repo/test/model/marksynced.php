@@ -1,28 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 repoModel->markSynced();
+title=测试 repoModel::markSynced();
 timeout=0
-cid=1
+cid=0
 
-- 更新代码库1属性synced @1
-- 更新不存在代码库属性synced @0
+- 步骤1：正常代码库ID属性synced @1
+- 步骤2：不存在的代码库ID属性synced @0
+- 步骤3：边界值0属性synced @0
+- 步骤4：负数代码库ID属性synced @0
+- 步骤5：验证fixCommit功能的代码库属性synced @1
 
 */
 
-$repo = zenData('repo')->loadYaml('repo');
-$repo->synced->range('0');
-$repo->gen(4);
-zenData('repohistory')->loadYaml('repohistory')->gen(4);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
-$repo = new repoTest();
+// 准备测试数据
+$repoTable = zenData('repo');
+$repoTable->id->range('1-4');
+$repoTable->name->range('测试代码库{1-4}');
+$repoTable->path->range('/test/repo{1-4}');
+$repoTable->SCM->range('Git');
+$repoTable->synced->range('0');
+$repoTable->deleted->range('0');
+$repoTable->gen(4);
 
-$repoID = 1;
+// 准备repohistory测试数据，验证fixCommit功能
+zenData('repohistory')->loadYaml('repohistory')->gen(3);
 
-r($repo->markSyncedTest($repoID)) && p('synced') && e('1'); //更新代码库1
-r($repo->markSyncedTest(10001))   && p('synced') && e('0'); //更新不存在代码库
+// 用户登录
+su('admin');
+
+// 创建测试实例
+$repoTest = new repoTest();
+
+r($repoTest->markSyncedTest(1)) && p('synced') && e('1');    // 步骤1：正常代码库ID
+r($repoTest->markSyncedTest(999)) && p('synced') && e('0');  // 步骤2：不存在的代码库ID
+r($repoTest->markSyncedTest(0)) && p('synced') && e('0');    // 步骤3：边界值0
+r($repoTest->markSyncedTest(-1)) && p('synced') && e('0');   // 步骤4：负数代码库ID
+r($repoTest->markSyncedTest(2)) && p('synced') && e('1');    // 步骤5：验证fixCommit功能的代码库

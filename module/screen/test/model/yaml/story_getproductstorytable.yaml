@@ -1,0 +1,29 @@
+title: table zt_story for getProductStoryTable test
+desc: "需求表测试数据"
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+  - field: product
+    range: "1{5},2{5},3{5},4{3},5{2}"
+  - field: type
+    range: "story"
+  - field: stage
+    range: "wait{5},projected{5},developing{5},released{5}"
+  - field: status
+    range: "active{10},closed{10}"
+  - field: closedReason
+    range: "done{5},[]{15}"
+  - field: deleted
+    range: "0"
+  - field: openedDate
+    range: "2023-12-01 00:00:00{5},2023-01-01 00:00:00{15}"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: closedDate
+    range: "2023-12-01 00:00:00{3},[]{17}"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: vision
+    range: "rnd"

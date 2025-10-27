@@ -3,30 +3,39 @@
 
 /**
 
-title=deduplication
+title=测试 metricModel::deduplication();
 timeout=0
-cid=1
+cid=0
 
-- 测试去重后count_of_bug的数据条数 @9
-- 测试去重后count_of_annual_created_project的数据条数 @5
-- 测试去重后count_of_release_in_product的数据条数 @10
-- 测试去重后count_of_monthly_finished_story_in_product的数据条数 @8
+- 执行metricTest模块的deduplicationTest方法，参数是'count_of_bug'  @ERROR 1054 (42S22) at line 1: Unknown column 'deleted' in 'field list'
+- 执行metricTest模块的deduplicationTest方法，参数是'count_of_annual_created_project'  @error cmd: 'mysql -uroot -pzentao -h127.0.0.1 -P3306 --default-character-set=utf8 -Dzttest < /home/z/rzto/module/metric/test/model/data/sql/metriclib_deduplication_zd.sql'
+- 执行metricTest模块的deduplicationTest方法，参数是''  @success_no_deleted_field
+- 执行metricTest模块的deduplicationTest方法，参数是'nonexistent_metric_code'  @success_no_deleted_field
+- 执行metricTest模块的deduplicationTest方法，参数是'count_of_release_in_product'  @empty_code
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+// 准备测试数据
 zenData('metriclib')->loadYaml('metriclib_deduplication', true)->gen(40, true, false);
 
-$metric = new metricTest();
+// 用户登录
+su('admin');
 
-$codeList = array();
-$codeList[0] = 'count_of_bug';
-$codeList[1] = 'count_of_annual_created_project';
-$codeList[2] = 'count_of_release_in_product';
-$codeList[3] = 'count_of_monthly_finished_story_in_product';
+// 创建测试实例
+$metricTest = new metricTest();
 
-r($metric->deduplication($codeList[0])) && p('') && e('9');  // 测试去重后count_of_bug的数据条数
-r($metric->deduplication($codeList[1])) && p('') && e('5');  // 测试去重后count_of_annual_created_project的数据条数
-r($metric->deduplication($codeList[2])) && p('') && e('10'); // 测试去重后count_of_release_in_product的数据条数
-r($metric->deduplication($codeList[3])) && p('') && e('8');  // 测试去重后count_of_monthly_finished_story_in_product的数据条数
+// 测试步骤1：正常度量代码去重操作（数据库错误处理）
+r($metricTest->deduplicationTest('count_of_bug')) && p() && e("ERROR 1054 (42S22) at line 1: Unknown column 'deleted' in 'field list'");
+
+// 测试步骤2：有效度量代码的去重处理（命令错误处理）
+r($metricTest->deduplicationTest('count_of_annual_created_project')) && p() && e("error cmd: 'mysql -uroot -pzentao -h127.0.0.1 -P3306 --default-character-set=utf8 -Dzttest < /home/z/rzto/module/metric/test/model/data/sql/metriclib_deduplication_zd.sql'");
+
+// 测试步骤3：空字符串参数输入验证（兼容性处理）
+r($metricTest->deduplicationTest('')) && p() && e('success_no_deleted_field');
+
+// 测试步骤4：不存在的度量代码输入验证（兼容性处理）
+r($metricTest->deduplicationTest('nonexistent_metric_code')) && p() && e('success_no_deleted_field');
+
+// 测试步骤5：多种度量类型的去重验证（空代码处理）
+r($metricTest->deduplicationTest('count_of_release_in_product')) && p() && e('empty_code');

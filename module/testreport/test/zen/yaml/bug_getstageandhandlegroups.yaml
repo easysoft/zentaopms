@@ -1,0 +1,204 @@
+---
+title: Bug数据用于测试getStageAndHandleGroups方法
+desc: 为getStageAndHandleGroups方法提供测试用的bug数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1-3
+
+- field: project
+  note: 项目ID
+  range: 1-2
+
+- field: execution
+  note: 执行ID
+  range: 1-2
+
+- field: module
+  note: 模块ID
+  range: 1-5
+
+- field: pri
+  note: 优先级
+  range: 1-4
+
+- field: severity
+  note: 严重程度
+  range: 1-4
+
+- field: type
+  note: Bug类型
+  range: codeerror{5},interface{3},config{2},install{2},security{2},performance{2},standard{2},automation{2}
+
+- field: status
+  note: Bug状态
+  range: active{8},resolved{7},closed{5}
+
+- field: openedBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2},tester1{5},tester2{3},dev1{2}
+
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00-2024-01-05 23:59:59
+
+- field: openedBuild
+  note: 影响版本
+  range: 1{8},2{6},3{4},trunk{2}
+
+- field: resolvedBy
+  note: 解决者
+  range: admin{4},dev1{3},dev2{2},[]{11}
+
+- field: resolvedDate
+  note: 解决时间
+  range: 2024-01-02 00:00:00-2024-01-06 23:59:59,[]{11}
+
+- field: resolution
+  note: 解决方案
+  range: fixed{4},postponed{2},duplicate{1},bydesign{2},[]{11}
+
+- field: title
+  note: Bug标题
+  range: Bug标题{1-20}
+  format: "Bug标题%02d"
+
+- field: testtask
+  note: 测试任务ID
+  range: 1-5,[]{10}
+
+- field: case
+  note: 测试用例ID
+  range: 1-10,[]{10}
+
+- field: assignedTo
+  note: 指派给
+  range: admin{5},dev1{3},dev2{2},tester1{5},tester2{3},[]{2}
+
+- field: assignedDate
+  note: 指派时间
+  range: 2024-01-01 00:00:00-2024-01-05 23:59:59,[]{2}
+
+- field: mailto
+  note: 抄送给
+  range: ""{20}
+
+- field: keywords
+  note: 关键词
+  range: ""{20}
+
+- field: steps
+  note: 重现步骤
+  range: 测试步骤描述{1-20}
+  format: "测试步骤描述%02d"
+
+- field: story
+  note: 相关需求
+  range: 1-5,0{15}
+
+- field: task
+  note: 相关任务
+  range: 1-5,0{15}
+
+- field: toTask
+  note: 转任务
+  range: 0{20}
+
+- field: toStory
+  note: 转需求
+  range: 0{20}
+
+- field: childCounted
+  note: 子bug已统计
+  range: 1{20}
+
+- field: linkBug
+  note: 相关bug
+  range: ""{20}
+
+- field: plan
+  note: 所属计划
+  range: 1-3,0{17}
+
+- field: duplicateBug
+  note: 重复bug
+  range: 0{20}
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{10},user1{5},dev1{3},[]{2}
+
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: 2024-01-01 00:00:00-2024-01-05 23:59:59,[]{2}
+
+- field: closedBy
+  note: 关闭者
+  range: admin{3},dev1{2},[]{15}
+
+- field: closedDate
+  note: 关闭时间
+  range: 2024-01-03 00:00:00-2024-01-07 23:59:59,[]{15}
+
+- field: activatedBy
+  note: 激活者
+  range: admin{2},tester1{1},[]{17}
+
+- field: activatedDate
+  note: 激活时间
+  range: 2024-01-04 00:00:00-2024-01-06 23:59:59,[]{17}
+
+- field: activatedCount
+  note: 激活次数
+  range: 0{17},1{2},2{1}
+
+- field: confirmed
+  note: 确认状态
+  range: 1{18},0{2}
+
+- field: fromBug
+  note: 来源bug
+  range: 0{20}
+
+- field: branch
+  note: 分支
+  range: 0{20}
+
+- field: feedback
+  note: 反馈ID
+  range: 0{20}
+
+- field: notifyEmail
+  note: 通知邮箱
+  range: ""{20}
+
+- field: deleted
+  note: 删除状态
+  range: 0{20}
+
+- field: os
+  note: 操作系统
+  range: Windows{5},Linux{3},MacOS{2},""{10}
+
+- field: browser
+  note: 浏览器
+  range: Chrome{8},Firefox{4},Safari{2},""{6}
+
+- field: hardware
+  note: 硬件环境
+  range: ""{20}
+
+- field: found
+  note: 发现版本
+  range: ""{20}

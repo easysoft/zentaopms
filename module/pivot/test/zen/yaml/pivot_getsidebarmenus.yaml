@@ -1,0 +1,40 @@
+---
+title: Pivot数据 for getSidebarMenus测试
+desc: 用于测试pivot模块zen层getSidebarMenus方法的Pivot数据
+
+fields:
+- field: id
+  range: 1-20
+  note: 透视表ID
+
+- field: name
+  range: '产品需求统计,项目任务统计,Bug统计报表,测试用例报表,产品计划报表'
+  note: 透视表名称
+
+- field: group
+  range: 1{4},2{4},3{4},4{4},5{4}
+  note: 所属分组ID
+
+- field: builtin
+  range: 0{10},1{10}
+  note: 是否内置
+
+- field: version
+  range: 1{10},2{10}
+  note: 版本号
+
+- field: createdBy
+  range: admin{10},user{10}
+  note: 创建者
+
+- field: createdDate
+  range: '2024-01-01 00:00:00'{20}
+  note: 创建时间
+
+- field: dataset
+  range: 1{10},2{10}
+  note: 数据集ID
+
+- field: deleted
+  range: '0'
+  note: 删除状态

@@ -1,0 +1,107 @@
+---
+title: 测试getFirstGroup方法的module表数据
+desc: 为getFirstGroup方法提供完整的测试数据覆盖
+author: Claude Code
+version: "1.0"
+
+fields:
+- field: id
+  note: "模块ID"
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: "根维度ID"
+  range: 1{10},2{5},3{8},999{2},0{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: "分支ID"
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: "模块名称"
+  range: 宏观管理{3},项目管理{5},质量管理{8},组织管理{4},办公管理{6},其他{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: "父模块ID"
+  range: 0{15},1{10},2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: "路径"
+  fields:
+    - field: pathPrefix
+      range: ","
+      postfix: ""
+    - field: pathId
+      range: 1-30
+      postfix: ","
+- field: grade
+  note: "层级"
+  range: 1{20},2{8},3{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: "排序"
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: "类型"
+  range: chart{25},other{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: from
+  note: "来源"
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: owner
+  note: "所有者"
+  range: admin{10},user1{8},user2{6},tester{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: collector
+  note: "收集者"
+  range: []{15},admin{8},user1{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: short
+  note: "简称"
+  range: []{20},GM{3},PM{3},QM{2},OM{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: "是否删除"
+  range: 0{25},1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

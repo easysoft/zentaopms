@@ -70,7 +70,7 @@ class heading extends wg
 
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
-        if(in_array("$moduleName-$methodName", $config->excludeDropmenuList)) return null;
+        if(in_array("$moduleName-$methodName", $config->excludeDropmenuList) || in_array($moduleName, $config->excludeDropmenuModules)) return null;
 
         if(in_array($app->tab, $config->hasDropmenuApps))
         {

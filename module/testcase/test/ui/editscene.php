@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/editscene.ui.class.php';
+include '../lib/ui/editscene.ui.class.php';
 
 $module = zenData('module');
 $module->gen(0);

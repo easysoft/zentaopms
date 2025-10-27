@@ -1,0 +1,74 @@
+---
+title: 项目集数据定义
+desc: 用于getProgramsByType方法测试的项目集数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: program{10}, project{10}
+  format: ""
+- field: parent
+  note: 父级ID
+  range: 0{10}, 1-5{10}
+  format: ""
+- field: name
+  note: 项目集名称
+  range: 程序集A,程序集B,程序集C,项目D,项目E,项目F,项目G,项目H,项目I,项目J,项目K,项目L,项目M,项目N,项目O,项目P,项目Q,项目R,项目S,项目T
+  format: ""
+- field: code
+  note: 项目集代码
+  range: PROG001-PROG020
+  format: ""
+- field: status
+  note: 状态
+  range: wait{3}, doing{7}, suspended{3}, closed{7}
+  format: ""
+- field: grade
+  note: 层级
+  range: 1{10}, 2{10}
+  format: ""
+- field: path
+  note: 路径
+  range: ,1,{5}, ,2,{5}, ,3,{5}, ,1,{5}
+  format: ""
+- field: begin
+  note: 开始日期
+  range: 2024-01-01-2024-12-31
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: 2025-01-01-2025-12-31
+  format: YYYY-MM-DD
+- field: openedBy
+  note: 创建者
+  range: admin{10}, user1{5}, user2{5}
+  format: ""
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+- field: PM
+  note: 项目经理
+  range: admin{5}, pm1{5}, pm2{5}, pm3{5}
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{18}, 1{2}
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open{15}, private{5}
+  format: ""
+- field: order
+  note: 排序
+  range: 1-20
+  format: ""

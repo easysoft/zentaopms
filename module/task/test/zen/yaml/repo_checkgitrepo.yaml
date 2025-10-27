@@ -1,0 +1,92 @@
+---
+title: checkGitRepo测试数据
+desc: 为taskZen::checkGitRepo方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 仓库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 关联的产品ID（逗号分隔）
+  range: ['1,2', '2,3', '3,4', '1', '2', '3', '4', '', '1,2,3', '5,6']
+- field: projects
+  note: 关联的项目ID（逗号分隔）
+  range: ['1,2', '2,3', '3,4', '1', '2', '3', '4', '', '1,2,3', '5,6']
+- field: name
+  note: 仓库名称
+  range: ['test-repo-1', 'test-repo-2', 'test-repo-3', 'test-repo-4', 'test-repo-5', 'test-repo-6', 'test-repo-7', 'test-repo-8', 'test-repo-9', 'test-repo-10']
+- field: path
+  note: 仓库路径
+  range: ['/path/to/repo1', '/path/to/repo2', '/path/to/repo3', '/path/to/repo4', '/path/to/repo5', '/path/to/repo6', '/path/to/repo7', '/path/to/repo8', '/path/to/repo9', '/path/to/repo10']
+- field: prefix
+  note: 前缀
+  range: ['', 'pre1', 'pre2', 'pre3', 'pre4', 'pre5', 'pre6', 'pre7', 'pre8', 'pre9']
+- field: encoding
+  note: 编码
+  range: ['utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8', 'utf-8']
+- field: SCM
+  note: 版本控制系统
+  range: ['Gitlab', 'Gitea', 'Gogs', 'Gitlab', 'Gitea', 'Gogs', 'Gitlab', 'Gitea', 'Gogs', 'Gitlab']
+- field: client
+  note: 客户端
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: serviceHost
+  note: 服务主机
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: serviceProject
+  note: 服务项目
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: commits
+  note: 提交数量
+  range: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+- field: account
+  note: 账号
+  range: ['', 'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9']
+- field: password
+  note: 密码
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: encrypt
+  note: 加密方式
+  range: ['plain', 'plain', 'plain', 'plain', 'plain', 'plain', 'plain', 'plain', 'plain', 'plain']
+- field: acl
+  note: 访问控制列表
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: synced
+  note: 是否已同步
+  range: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+- field: lastSync
+  note: 最后同步时间
+  range: [null, '2023-01-01 00:00:00', '2023-01-02 00:00:00', '2023-01-03 00:00:00', '2023-01-04 00:00:00', '2023-01-05 00:00:00', '2023-01-06 00:00:00', '2023-01-07 00:00:00', '2023-01-08 00:00:00', '2023-01-09 00:00:00']
+- field: lastCommit
+  note: 最后提交时间
+  range: [null, '2023-01-01 00:00:00', '2023-01-02 00:00:00', '2023-01-03 00:00:00', '2023-01-04 00:00:00', '2023-01-05 00:00:00', '2023-01-06 00:00:00', '2023-01-07 00:00:00', '2023-01-08 00:00:00', '2023-01-09 00:00:00']
+- field: desc
+  note: 描述
+  range: ['', '描述1', '描述2', '描述3', '描述4', '描述5', '描述6', '描述7', '描述8', '描述9']
+- field: extra
+  note: 额外信息
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: preMerge
+  note: 预合并
+  range: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+- field: job
+  note: 任务ID
+  range: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+- field: fileServerUrl
+  note: 文件服务器URL
+  range: [null, null, null, null, null, null, null, null, null, null]
+- field: fileServerAccount
+  note: 文件服务器账号
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: fileServerPassword
+  note: 文件服务器密码
+  range: ['', '', '', '', '', '', '', '', '', '']
+- field: deleted
+  note: 是否删除
+  range: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0']

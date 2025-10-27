@@ -1,0 +1,66 @@
+---
+title: GitLab Pipeline测试数据
+desc: 用于apiGetSingleBranch方法测试的pipeline表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Pipeline ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Pipeline类型
+  range: gitlab{5},jenkins{3},sonarqube{2}
+  format: ""
+- field: name
+  note: Pipeline名称
+  range: GitLab-Server-1,GitLab-Server-2,GitLab-Server-3,GitLab-Test-Server,GitLab-Dev-Server,Jenkins-CI,Jenkins-CD,Jenkins-Test,SonarQube-Main,SonarQube-QA
+  format: ""
+- field: url
+  note: Pipeline服务器URL
+  range: http://gitlab1.test.com,http://gitlab2.test.com,http://gitlab3.test.com,http://gitlab-test.example.com,http://gitlab-dev.example.com,http://jenkins1.test.com,http://jenkins2.test.com,http://jenkins-test.test.com,http://sonar1.test.com,http://sonar2.test.com
+  format: ""
+- field: account
+  note: 账户名称
+  range: admin,gitlab_user,jenkins_admin,sonar_user,test_user,dev_user,ci_user,cd_user,qa_user,ops_user
+  format: ""
+- field: password
+  note: 密码
+  range: admin123,gitlab123,jenkins123,sonar123,test123,dev123,ci123,cd123,qa123,ops123
+  format: ""
+- field: token
+  note: API Token
+  range: glpat-xxxxxxxxxxxxxxxxxxxx,jenkins-token-xxxxxxxx,sonar-token-xxxxxxxx,[]{7}
+  format: ""
+- field: private
+  note: 私钥
+  range: '[]{10}'
+  format: ""
+- field: instanceID
+  note: 实例ID
+  range: 0{3},1-3{7}
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5},system{3},user1,user2
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (Y-2)-(Y):30D
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 修改者
+  range: admin{3},user1{3},user2{2},[]{2}
+  format: ""
+- field: editedDate
+  note: 修改时间
+  range: (Y-1)-(Y):15D
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0{9},1{1}'
+  format: ""

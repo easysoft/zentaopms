@@ -1,0 +1,63 @@
+---
+title: 任务数据定义
+desc: 用于测试processCreateChildrenActionExtra方法的任务数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: 子任务1,子任务2,子任务3,子任务4,子任务5,子任务6,子任务7,子任务8,子任务9,子任务10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 任务状态
+  range: wait,doing,done
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 任务类型
+  range: devel,test,study,discuss,ui,logic,config,other
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,35 @@
+---
+title: 为assignProductRelatedVars方法提供测试产品数据
+desc: 产品数据包含正常产品和分支产品，用于测试产品相关变量的分配
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: '产品{1-5}, Product{6-10}'
+- field: type
+  range: 'normal{5}, branch{5}'
+- field: status
+  range: 'normal'
+- field: code
+  range: 'PRD{001-010}'
+- field: line
+  range: 1-5
+- field: PO
+  range: 'admin,user{9}'
+- field: QD
+  range: 'tester{5},qa{5}'
+- field: RD
+  range: 'dev{5},developer{5}'
+- field: acl
+  range: 'open'
+- field: order
+  range: 1-10
+- field: vision
+  range: 'rnd'
+- field: deleted
+  range: '0'
+- field: createdBy
+  range: 'admin'
+- field: createdDate
+  range: '2023-01-01 00:00:00'

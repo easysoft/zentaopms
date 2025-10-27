@@ -1,0 +1,60 @@
+---
+title: 删除对象文件测试数据
+desc: 用于测试deleteByObject方法的测试数据
+
+fields:
+- field: id
+  note: 文件ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pathname
+  note: 文件路径
+  range: '202409/test{5}, 202409/demo{5}'
+  format: ""
+- field: title
+  note: 文件标题
+  range: 'test_file{5}, demo_file{5}'
+  format: ""
+- field: extension
+  note: 文件扩展名
+  range: 'txt{3}, doc{3}, pdf{2}, jpg{2}'
+  format: ""
+- field: size
+  note: 文件大小
+  range: 1024-102400
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: 'story{3}, task{3}, bug{2}, project{2}'
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-5
+  format: ""
+- field: gid
+  note: 分组ID
+  range: '{10}'
+  format: ""
+- field: addedBy
+  note: 添加者
+  range: 'admin{5}, user{5}'
+  format: ""
+- field: addedDate
+  note: 添加日期
+  range: '2024-09-01 10:00:00{3}, 2024-09-05 14:30:00{3}, 2024-09-08 09:15:00{4}'
+  format: ""
+- field: downloads
+  note: 下载次数
+  range: 0-10
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '{5}, editor{5}'
+  format: ""
+- field: deleted
+  note: 删除标志
+  range: '0{10}'
+  format: ""

@@ -1,0 +1,38 @@
+---
+title: zt_metric data for fetchLatestMetricRecords test
+author: Claude Code
+version: "1.0"
+fields:
+- field: id
+  range: 101-104
+- field: purpose
+  range: QAM{2},PRM{2}
+- field: scope
+  range: system{1},product{1},project{1},execution{1}
+- field: object
+  range: bug{1},product{1},project{1},execution{1}
+- field: stage
+  range: released
+- field: type
+  range: php
+- field: name
+  range: 系统级测试度量{1},产品级测试度量{1},项目级测试度量{1},执行级测试度量{1}
+- field: alias
+  range: System Test Metric{1},Product Test Metric{1},Project Test Metric{1},Execution Test Metric{1}
+- field: code
+  range: count_of_normal_product{1},count_of_annual_finished_productplan_in_product{1},count_of_closed_execution_in_project{1},count_of_invalid_story_in_execution{1}
+- field: unit
+  range: count{2},percent{2}
+- field: desc
+  range: 测试用的系统级度量{1},测试用的产品级度量{1},测试用的项目级度量{1},测试用的执行级度量{1}
+- field: definition
+  range: SELECT COUNT(*) FROM table{4}
+- field: dateType
+  range: day{2},month{2}
+- field: lastCalcTime
+  range: "2024-01-01 00:00:00-2024-12-31 23:59:59:1D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0
+...

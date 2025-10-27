@@ -3,38 +3,59 @@
 
 /**
 
-title=测试 userModel->su();
+title=测试 userModel::su();
+timeout=0
 cid=0
 
-- 当前用户为 user1。属性account @user1
-- 当前用户为 admin。属性account @admin
-- 没有管理员用户。属性account @No admin users.
+- 执行userTest模块的suTest方法 属性result @1
+- 执行userTest模块的suTest方法 第currentUser条的account属性 @admin
+- 执行userTest模块的suTest方法 第currentUser条的account属性 @manager
+- 执行userTest模块的suTest方法 第currentUser条的account属性 @admin
+- 执行$error属性message @No admin users.
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('user')->gen(3);
-zenData('company')->gen(1);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+
+$userTable = zenData('user');
+$userTable->id->range('1-5');
+$userTable->account->range('admin,user1,user2,manager,developer');
+$userTable->realname->range('管理员,用户1,用户2,经理,开发者');
+$userTable->password->range('123456{5}');
+$userTable->deleted->range('0{5}');
+$userTable->gen(5);
+
+$companyTable = zenData('company');
+$companyTable->id->range('1');
+$companyTable->name->range('测试公司');
+$companyTable->admins->range('admin,user1,user2');
+$companyTable->gen(1);
 
 su('user1');
 
-global $app, $tester;
+$userTest = new userTest();
 
-r($app->user) && p('account') && e('user1'); // 当前用户为 user1。
+r($userTest->suTest()) && p('result') && e('1');
 
-$userModel = $tester->loadModel('user');
-$userModel->su();
+r($userTest->suTest()) && p('currentUser:account') && e('admin');
 
-r($app->user) && p('account') && e('admin'); // 当前用户为 admin。
+$userTest->objectModel->dao->update(TABLE_COMPANY)->set('admins')->eq('manager,developer,user1')->exec();
+r($userTest->suTest()) && p('currentUser:account') && e('manager');
 
-$user = new stdclass();
-$userModel->dao->update(TABLE_COMPANY)->set('admins')->eq('')->exec();
+$userTest->objectModel->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,user1,')->exec();
+r($userTest->suTest()) && p('currentUser:account') && e('admin');
+
+$userTest->objectModel->dao->update(TABLE_COMPANY)->set('admins')->eq('')->exec();
 try
 {
-    $userModel->su();
+    $userTest->suTest();
+    $error = new stdClass();
+    $error->message = 'Test failed';
 }
 catch(EndResponseException $e)
 {
-    $user->account = $e->getContent();
+    $error = new stdClass();
+    $error->message = $e->getContent();
 }
-r($user) && p('account') && e('No admin users.'); // 没有管理员用户。
+r($error) && p('message') && e('No admin users.');

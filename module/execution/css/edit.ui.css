@@ -1,3 +1,5 @@
 .editPanel {max-width: 1200px !important;}
 .items-center {align-items: center !important;}
 #lifeTimeTips {padding-left: 1rem; align-items: center;}
+
+.form [data-name='planDate'] > .input-group {display: block;}

@@ -1,0 +1,38 @@
+title: table zt_pipeline for syncGitlabBuildList test
+desc: "GitLab流水线测试数据"
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    note: "流水线ID"
+    range: 1-5
+  - field: name
+    note: "流水线名称"
+    range: 'GitLab1,GitLab2,GitLab3,GitLab4,GitLab5'
+  - field: type
+    note: "流水线类型"
+    range: 'gitlab'
+  - field: url
+    note: "GitLab地址"
+    range: 'https://gitlab.example.com'
+  - field: account
+    note: "账户"
+    range: 'gitlab_user'
+  - field: password
+    note: "密码"
+    range: 'gitlab_password'
+  - field: token
+    note: "访问令牌"
+    range: 'gitlab_token_123'
+  - field: private
+    note: "私钥"
+    range: 'gitlab_private_key'
+  - field: createdBy
+    note: "创建者"
+    range: 'admin'
+  - field: createdDate
+    note: "创建时间"
+    range: '2024-01-01 00:00:00'
+  - field: deleted
+    note: "删除标记"
+    range: '0'

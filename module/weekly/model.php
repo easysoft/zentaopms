@@ -581,7 +581,7 @@ class weeklyModel extends model
         $data->postponed = $this->getPostponed($projectID, $date);
         $data->nextWeek  = $this->getTasksOfNextWeek($projectID, $date);
         $data->workload  = $this->getWorkloadByType($projectID, $date);
-        $data->progress  = $this->getTips('progress', $data->sv);
+        $data->progress  = $this->getTips('progress', $data->sv) . '<br/>' . $this->getTips('cost', $data->cv);
 
         if($loadMaster)
         {
@@ -590,5 +590,214 @@ class weeklyModel extends model
         }
 
         return $data;
+    }
+
+    /**
+     * 添加内置项目周报模板。
+     * Add builtin project weekly report template.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltinWeeklyTemplate(): bool
+    {
+        /* Set scope data. */
+        $scopeID = $this->addBuiltinScope();
+        if(!$scopeID) return false;
+
+        /* Set category data. */
+        $categoryID = $this->addBuiltinCategory($scopeID);
+
+        /* Set docblock data. */
+        $blockIdList = array();
+        $docBlock    = new stdclass();
+        foreach($this->config->weekly->charts as $chartKey => $chartContent)
+        {
+            $docBlock->type    = $chartKey;
+            $docBlock->content = json_encode($chartContent);
+            $this->dao->insert(TABLE_DOCBLOCK)->data($docBlock)->exec();
+            $blockIdList[$chartKey] = $this->dao->lastInsertId();
+        }
+
+        /* Set template data. */
+        $this->addBuiltinTemplate($scopeID, $categoryID, $blockIdList);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 添加内置报告模板范围。
+     * Add builtin report template scope.
+     *
+     * @access public
+     * @return int|bool
+     */
+    public function addBuiltinScope(): int|bool
+    {
+        $scope = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('reportTemplate')->andWhere('main')->eq(1)->andWhere('vision')->eq($this->config->vision)->fetch();
+        if($scope) return $scope->id;
+
+        $this->loadModel('setting');
+
+        /* Set scope data. */
+        $scope = new stdClass();
+        $scope->type      = 'reportTemplate';
+        $scope->main      = '1';
+        $scope->vision    = $this->config->vision;
+        $scope->addedBy   = 'system';
+        $scope->addedDate = helper::now();
+        foreach($this->lang->weekly->builtInScopes as $vision => $scopeList)
+        {
+            $scopeMaps = array();
+            $scope->vision = $vision;
+            foreach($scopeList as $scopeKey => $scopeName)
+            {
+                if(empty($scopeName)) continue;
+
+                $scope->name = $scopeName;
+                $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+                $scopeMaps[$scopeKey] = $this->dao->lastInsertID();
+            }
+            if(!empty($scopeMaps)) $this->setting->setItem("system.reporttemplate.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
+        }
+
+        return array_pop($scopeMaps);
+    }
+
+    /**
+     * 添加内置报告模板分类。
+     * Add builtin report template category.
+     *
+     * @param  int $scopeID
+     * @access public
+     * @return int
+     */
+    public function addBuiltinCategory(int $scopeID): int
+    {
+        /* Set category data. */
+        $category = new stdClass();
+        $category->root  = $scopeID;
+        $category->name  = $this->lang->projectCommon;
+        $category->grade = 1;
+        $category->type  = 'reportTemplate';
+        $this->dao->insert(TABLE_MODULE)->data($category)->exec();
+
+        $categoryID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$categoryID},")->where('id')->eq($categoryID)->exec();
+
+        return $categoryID;
+    }
+
+    /**
+     * 添加内置报告模板。
+     * Add builtin report template.
+     *
+     * @param  int   $libID
+     * @param  int   $moduleID
+     * @param  array $blockIdList
+     * @access public
+     * @return bool
+     */
+    public function addBuiltinTemplate(int $libID, int $moduleID, array $blockIdList): bool
+    {
+        $now         = helper::now();
+        $cycleConfig = array('turnon' => 'on', 'frequency' => 'week', 'acl' => 'open', 'readGroups' => '', 'readUsers' => '', 'groups' => '', 'users' => '');
+
+        $objects = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->eq('waterfall')->andWhere('status')->eq('normal')->andWhere('vision')->eq($this->config->vision)->andWhere('objectID')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs('id');
+
+        $template = new stdclass();
+        $template->lib          = $libID;
+        $template->module       = $moduleID;
+        $template->title        = $this->lang->weekly->projectTemplate;
+        $template->type         = 'text';
+        $template->status       = 'normal';
+        $template->acl          = 'open';
+        $template->builtIn      = 1;
+        $template->templateType = 'reportTemplate';
+        $template->templateDesc = $this->lang->weekly->builtinDesc;
+        $template->cycle        = 'week';
+        $template->cycleConfig  = json_encode($cycleConfig);
+        $template->objects      = ',' . implode(',', $objects) . ',';
+        $template->addedBy      = 'system';
+        $template->addedDate    = $now;
+        $this->dao->insert(TABLE_DOC)->data($template)->exec();
+
+        $templateID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_DOC)->set('`path`')->eq(",{$templateID},")->set('`order`')->eq($templateID)->where('id')->eq($templateID)->exec();
+        $this->dao->update(TABLE_DOCBLOCK)->set('doc')->eq($templateID)->where('id')->in(array_values($blockIdList))->exec();
+
+        $templateContent = new stdclass();
+        $templateContent->doc        = $templateID;
+        $templateContent->title      = $template->title;
+        $templateContent->type       = 'doc';
+        $templateContent->version    = 1;
+        $templateContent->rawContent = $this->getBuildinRawContent($blockIdList);
+        $templateContent->addedBy    = 'system';
+        $templateContent->addedDate  = $now;
+        $this->dao->insert(TABLE_DOCCONTENT)->data($templateContent)->exec();
+
+        $this->loadModel('action')->create('reportTemplate', $templateID, 'Created', '', '', 'system');
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取内置项目周报模板内容。
+     * Get builtin project weekly report template content.
+     *
+     * @param  array $blockIdList
+     * @access public
+     * @return string
+     */
+    public function getBuildinRawContent(array $blockIdList): string
+    {
+        global $oldRequestType;
+        if(!empty($oldRequestType) && $oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+
+        $blockCodes = array();
+        foreach($blockIdList as $blockKey => $blockID) $blockCodes[] = '{' . $blockKey . '}';
+
+        $rawContent = json_decode($this->lang->weekly->builtinRawContent);
+        foreach($rawContent as $content)
+        {
+            if(isset($content->id)) $content->id = uniqid();
+            if(isset($content->createDate)) $content->createDate = time();
+            if(empty($content->children)) continue;
+
+            foreach($content->children as $childList)
+            {
+                if(isset($childList->id)) $childList->id = uniqid();
+                if(empty($childList->children)) continue;
+                foreach($childList->children as $child)
+                {
+                    if(isset($child->id)) $child->id = uniqid();
+                    if(!empty($child->props->text->delta))
+                    {
+                        foreach($child->props->text->delta as $delta)
+                        {
+                            if(isset($delta->attributes->holder->id)) $delta->attributes->holder->id = uniqid();
+                            if(isset($delta->attributes->holder->name) && isset($blockIdList[$delta->attributes->holder->name])) $delta->attributes->holder->name = "{$delta->attributes->holder->name}_{$blockIdList[$delta->attributes->holder->name]}";
+                            if(isset($delta->attributes->holder->data->blockID) && isset($blockIdList[$delta->attributes->holder->data->type])) $delta->attributes->holder->data->blockID = $blockIdList[$delta->attributes->holder->data->type];
+                        }
+                    }
+                    if(!empty($child->props->content))
+                    {
+                        if(!empty($child->props->content->fetcher[0]))
+                        {
+                            $fetcher = $child->props->content->fetcher[0];
+                            $fetcher->params = str_replace($blockCodes, array_values($blockIdList), $fetcher->params);
+
+                            $fetcherLink = helper::createLink($fetcher->module, $fetcher->method, $fetcher->params);
+                            $fetcherLink = str_replace(array('install.php', 'upgrade.php'), 'index.php', $fetcherLink);
+                            $child->props->content->fetcher = "{$fetcherLink}";
+                        }
+                        if(isset($child->props->content->exportUrl)) $child->props->content->exportUrl = str_replace($blockCodes, array_values($blockIdList), $child->props->content->exportUrl);
+                    }
+                }
+            }
+        }
+
+        if(!empty($oldRequestType) && $oldRequestType == 'PATH_INFO') $this->config->requestType = 'GET';
+        return json_encode($rawContent);
     }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
 
 /**
 
@@ -9,14 +9,26 @@ title=测试 dataviewModel::isClickable();
 timeout=0
 cid=1
 
-- 获取create操作的可点击验证。 @1
-- 获取edit操作的可点击验证。 @1
+- 测试create操作可点击验证 @1
+- 测试edit操作可点击验证 @1
+- 测试空action操作可点击验证 @1
+- 测试数字action操作可点击验证 @1
+- 测试特殊字符action操作可点击验证 @1
 
 */
-global $tester;
-$tester->loadModel('dataview');
 
-$dataview = new stdclass();
+su('admin');
 
-r($tester->dataview->isClickable($dataview, 'create')) && p() && e('1');  //获取create操作的可点击验证。
-r($tester->dataview->isClickable($dataview, 'edit'))   && p() && e('1');  //获取edit操作的可点击验证。
+$dataviewTest = new dataviewTest();
+
+$normalDataview = new stdclass();
+$normalDataview->id = 1;
+$normalDataview->name = 'test_dataview';
+
+$emptyDataview = new stdclass();
+
+r($dataviewTest->isClickableTest($normalDataview, 'create')) && p() && e('1');  //测试create操作可点击验证
+r($dataviewTest->isClickableTest($normalDataview, 'edit')) && p() && e('1');    //测试edit操作可点击验证
+r($dataviewTest->isClickableTest($emptyDataview, '')) && p() && e('1');         //测试空action操作可点击验证
+r($dataviewTest->isClickableTest($normalDataview, '123')) && p() && e('1');     //测试数字action操作可点击验证
+r($dataviewTest->isClickableTest($normalDataview, '@#$%')) && p() && e('1');    //测试特殊字符action操作可点击验证

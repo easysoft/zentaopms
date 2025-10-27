@@ -1,0 +1,89 @@
+---
+title: Story data for getStoryCardMenu test
+desc: Test data for story card menu functionality
+
+fields:
+- field: id
+  range: 1-5
+- field: title
+  range: 测试需求1,测试需求2,测试需求3,测试需求4,测试需求5
+- field: status
+  range: active{3},draft{2}
+- field: stage
+  range: projected{3},wait{2}
+- field: version
+  range: 1{5}
+- field: product
+  range: 1{3},2{2}
+- field: branch
+  range: 0{5}
+- field: module
+  range: 1{3},2{2}
+- field: plan
+  range: 0{5}
+- field: source
+  range: customer{3},user{2}
+- field: sourceNote
+  range: ''
+- field: fromBug
+  range: 0{5}
+- field: feedback
+  range: 0{5}
+- field: type
+  range: story{5}
+- field: estimate
+  range: 1{2},2{2},3{1}
+- field: pri
+  range: 1{1},2{2},3{2}
+- field: spec
+  range: 需求规格说明{5}
+- field: verify
+  range: 需求验收标准{5}
+- field: keywords
+  range: test{3},story{2}
+- field: openedBy
+  range: admin{3},user1{2}
+- field: openedDate
+  range: '`2023-01-01 00:00:00`{3},`2023-01-02 00:00:00`{2}'
+- field: assignedTo
+  range: user1{2},user2{2},admin{1}
+- field: assignedDate
+  range: '`2023-01-01 00:00:00`{3},`2023-01-02 00:00:00`{2}'
+- field: mailto
+  range: ''
+- field: lastEditedBy
+  range: admin{3},user1{2}
+- field: lastEditedDate
+  range: '`2023-01-05 00:00:00`{3},`2023-01-06 00:00:00`{2}'
+- field: closedBy
+  range: []{5}
+- field: closedDate
+  range: '[]{5}'
+- field: closedReason
+  range: '[]{5}'
+- field: toBug
+  range: 0{5}
+- field: childStories
+  range: ''
+- field: linkStories
+  range: ''
+- field: duplicateStory
+  range: 0{5}
+- field: reviewedBy
+  range: ''
+- field: reviewedDate
+  range: '[]{5}'
+- field: deleted
+  range: 0{5}
+- field: vision
+  range: rnd{5}
+- field: parent
+  range: 0{5}
+- field: isParent
+  range: 0{5}
+- field: root
+  range: 0{5}
+- field: path
+  range: ',1,{1},',2,'{1},',3,'{1},',4,'{1},',5,'{1}'
+- field: grade
+  range: 0{5}

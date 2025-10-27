@@ -1,0 +1,80 @@
+---
+title: 用户数据
+desc: 用于buildProgramForCreate测试的用户数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,pm1,pm2,dev1,dev2,test1,test2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: password
+  note: 用户密码
+  range: 1-10
+  format: "e10adc3949ba59abbe56e057f20f883e"
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,项目经理1,项目经理2,开发1,开发2,测试1,测试2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: role
+  note: 用户角色
+  range: others{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: dept
+  note: 部门ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: gender
+  note: 性别
+  range: m{5},f{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: email
+  note: 邮箱
+  range: 1-10
+  format: "test%d@example.com"
+
+- field: join
+  note: 入职日期
+  range: 2020-01-01,2021-01-01,2022-01-01,2023-01-01,2024-01-01{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 删除标志
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

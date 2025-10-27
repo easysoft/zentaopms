@@ -1,0 +1,35 @@
+---
+title: 发布邮件反馈测试数据
+desc: 为sendMail2Feedback方法提供测试数据
+
+fields:
+- field: id
+  note: 发布ID
+  range: 1-5
+- field: name
+  note: 发布名称
+  range: '版本1.0,版本2.0,版本3.0,版本4.0,版本5.0'
+- field: stories
+  note: 关联的需求ID列表
+  range: ',1,2,3,,1,4,5,,'
+- field: bugs
+  note: 关联的Bug ID列表
+  range: ',1,2,3,,6,7,8,,'
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: marker
+  note: 里程碑标记
+  range: 1{5}
+- field: build
+  note: 版本号
+  range: '1,2,3,4,5'
+- field: date
+  note: 发布日期
+  range: '2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01'
+- field: status
+  note: 发布状态
+  range: 'normal{5}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}'

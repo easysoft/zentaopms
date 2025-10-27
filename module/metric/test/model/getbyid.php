@@ -3,22 +3,35 @@
 
 /**
 
-title=getByID
+title=测试 metricModel::getByID();
 timeout=0
-cid=1
+cid=0
 
-- 获取id为1的度量名称属性name @按系统统计的所有层级的项目集总数
-- 获取id为10的度量代号属性code @count_of_annual_closed_top_program
-- 获取id为100并指定fieldList后检测名称不应该存在属性name @~~
-- 获取一个不存在的度量属性name @0
+- 步骤1：正常获取存在的度量项属性name @按系统统计的所有层级的项目集总数
+- 步骤2：验证最小有效ID返回正确的对象属性id @1
+- 步骤3：ID为0应返回false @0
+- 步骤4：不存在的大ID值应返回false @0
+- 步骤5：指定字段列表时name字段不存在属性name @~~
+- 步骤6：数组格式字段列表，code字段不存在属性code @~~
+- 步骤7：负数ID应返回false @0
 
 */
+
+// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 
-$metric = new metricTest();
+// 2. 用户登录
+su('admin');
 
-r($metric->getByID(1)) && p('name') && e('按系统统计的所有层级的项目集总数');    // 获取id为1的度量名称
-r($metric->getByID(10)) && p('code') && e('count_of_annual_closed_top_program'); // 获取id为10的度量代号
-r($metric->getByID(100, 'id')) && p('name') && e('~~');                          // 获取id为100并指定fieldList后检测名称不应该存在
-r($metric->getByID(0)) && p('name') && e('0');                                  // 获取一个不存在的度量
+// 3. 创建测试实例
+$metricTest = new metricTest();
+
+// 4. 执行7个测试步骤
+r($metricTest->getByID(1)) && p('name') && e('按系统统计的所有层级的项目集总数');                    // 步骤1：正常获取存在的度量项
+r($metricTest->getByID(1)) && p('id') && e('1');                                                    // 步骤2：验证最小有效ID返回正确的对象
+r($metricTest->getByID(0)) && p() && e('0');                                                        // 步骤3：ID为0应返回false
+r($metricTest->getByID(999999)) && p() && e('0');                                                  // 步骤4：不存在的大ID值应返回false
+r($metricTest->getByID(1, 'id,code')) && p('name') && e('~~');                                     // 步骤5：指定字段列表时name字段不存在
+r($metricTest->getByID(1, array('id', 'name'))) && p('code') && e('~~');                          // 步骤6：数组格式字段列表，code字段不存在
+r($metricTest->getByID(-1)) && p() && e('0');                                                      // 步骤7：负数ID应返回false

@@ -38,7 +38,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/finishtask.ui.class.php';
+include '../lib/ui/finishtask.ui.class.php';
 
 $user = zenData('user');
 $user->id->range('1-3');

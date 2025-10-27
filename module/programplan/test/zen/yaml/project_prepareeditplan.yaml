@@ -1,0 +1,28 @@
+title: 项目计划编辑测试数据
+desc: 为prepareEditPlan方法提供测试数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: 测试项目1,调研项目,阶段1,阶段2,父阶段
+- field: type
+  range: project{2},stage{3}
+- field: begin
+  range: 2024-01-01{5}
+- field: end
+  range: 2024-12-31{5}
+- field: model
+  range: scrum,research,scrum{3}
+- field: acl
+  range: open{5}
+- field: attribute
+  range: mix{4},request
+- field: milestone
+  range: 0{5}
+- field: percent
+  range: 0{5}
+- field: parent
+  range: 0{5}
+- field: status
+  range: doing{5}

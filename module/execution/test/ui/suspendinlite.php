@@ -17,7 +17,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/suspendinlite.ui.class.php';
+include '../lib/ui/suspendinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');

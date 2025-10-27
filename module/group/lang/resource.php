@@ -1643,11 +1643,6 @@ $lang->custom->methodOrder[100] = 'hours';
 $lang->custom->methodOrder[105] = 'percent';
 $lang->custom->methodOrder[110] = 'limitTaskDate';
 
-$lang->resource->datatable = new stdclass();
-$lang->resource->datatable->setGlobal = 'setGlobal';
-
-$lang->datatable->methodOrder[5]  = 'setGlobal';
-
 /* Subversion. */
 $lang->resource->svn = new stdclass();
 $lang->resource->svn->diff    = 'diff';
@@ -1823,10 +1818,10 @@ $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
 $lang->tree->methodOrder[10] = 'browseTask';
-$lang->tree->methodOrder[15] = 'updateOrder';
-$lang->tree->methodOrder[20] = 'manageChild';
-$lang->tree->methodOrder[25] = 'edit';
-$lang->tree->methodOrder[30] = 'delete';
+$lang->tree->methodOrder[20] = 'updateOrder';
+$lang->tree->methodOrder[25] = 'manageChild';
+$lang->tree->methodOrder[30] = 'edit';
+$lang->tree->methodOrder[35] = 'delete';
 
 /* Screen. */
 $lang->resource->screen = new stdclass();
@@ -1959,21 +1954,12 @@ $lang->webhook->methodOrder[35] = 'chooseDept';
 
 /* AI methods. */
 $lang->resource->ai = new stdclass();
-$lang->resource->ai->models                  = 'modelBrowse';
-$lang->resource->ai->modelView               = 'modelView';
-$lang->resource->ai->modelCreate             = 'modelCreate';
-$lang->resource->ai->modelEdit               = 'modelEdit';
-$lang->resource->ai->modelEnable             = 'modelEnable';
-$lang->resource->ai->modelDisable            = 'modelDisable';
-$lang->resource->ai->modelDelete             = 'modelDelete';
-$lang->resource->ai->modelTestConnection     = 'modelTestConnection';
 $lang->resource->ai->promptPublish           = 'promptPublish';
 $lang->resource->ai->promptUnpublish         = 'promptUnpublish';
 $lang->resource->ai->prompts                 = 'promptBrowse';
 $lang->resource->ai->promptView              = 'promptView';
 $lang->resource->ai->promptExecute           = 'promptExecute';
 $lang->resource->ai->promptExecutionReset    = 'promptExecutionReset';
-$lang->resource->ai->chat                    = 'chat';
 $lang->resource->ai->createMiniProgram       = 'createMiniProgram';
 $lang->resource->ai->editMiniProgram         = 'editMiniProgram';
 $lang->resource->ai->testMiniProgram         = 'testMiniProgram';
@@ -1985,19 +1971,18 @@ $lang->resource->ai->deleteMiniProgram       = 'deleteMiniProgram';
 $lang->resource->ai->exportMiniProgram       = 'exportMiniProgram';
 $lang->resource->ai->importMiniProgram       = 'importMiniProgram';
 $lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
-$lang->resource->ai->assistants              = 'assistants';
-$lang->resource->ai->assistantCreate         = 'assistantCreate';
-$lang->resource->ai->assistantEdit           = 'assistantEdit';
-$lang->resource->ai->assistantDelete         = 'assistantDelete';
-$lang->resource->ai->assistantView           = 'assistantView';
-$lang->resource->ai->assistantPublish        = 'assistantPublish';
-$lang->resource->ai->assistantWithdraw       = 'assistantWithdraw';
 
 $lang->resource->aiapp = new stdclass();
-$lang->resource->aiapp->square                  = 'miniProgramSquare';
-$lang->resource->aiapp->view                    = 'view';
-$lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
-$lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
+$lang->resource->aiapp->square             = 'miniProgramSquare';
+$lang->resource->aiapp->view               = 'view';
+$lang->resource->aiapp->miniProgramChat    = 'miniProgramChat';
+$lang->resource->aiapp->collectMiniProgram = 'collectMiniProgram';
+$lang->resource->aiapp->models             = 'models';
+$lang->resource->aiapp->conversation       = 'browseConversation';
+
+$lang->resource->zai = new stdclass();
+$lang->resource->zai->setting    = 'setting';
+$lang->resource->zai->vectorized = 'vectorized';
 
 /* Others. */
 $lang->resource->api = new stdclass();

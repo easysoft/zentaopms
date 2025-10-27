@@ -131,6 +131,7 @@ $lang->project->lifetime           = "{$lang->projectCommon} Cycle";
 $lang->project->attribute          = 'Stage Type';
 $lang->project->percent            = 'Workload %';
 $lang->project->milestone          = 'Milestone';
+$lang->project->milestoneReport    = 'Milestone Report';
 $lang->project->output             = 'Output';
 $lang->project->path               = 'Path';
 $lang->project->grade              = 'Grade';
@@ -407,6 +408,9 @@ if($config->systemMode == 'light')
 
 $lang->project->authList['extend'] = "Inherit (system privilege and {$lang->projectCommon} privilege)";
 $lang->project->authList['reset']  = "Reset ({$lang->projectCommon} privilege only)";
+
+$lang->project->sortAuthList['extend'] = 'Inherit';
+$lang->project->sortAuthList['reset']  = 'Reset';
 
 $lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = 'Waiting';

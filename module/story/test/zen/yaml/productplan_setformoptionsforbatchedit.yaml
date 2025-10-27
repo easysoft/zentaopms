@@ -1,0 +1,27 @@
+---
+title: 产品计划数据配置
+desc: 用于setFormOptionsForBatchEdit方法测试
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-6
+- field: product
+  range: 1{3},2{2},3{1}
+- field: branch
+  range: 0{6}
+- field: title
+  range: 计划1,计划2,计划3,计划4,计划5,计划6
+- field: desc
+  range: ''
+- field: begin
+  range: 2024-01-01{6}
+- field: end
+  range: 2024-12-31{6}
+- field: status
+  range: doing{6}
+- field: order
+  range: 1-6
+- field: deleted
+  range: 0{6}

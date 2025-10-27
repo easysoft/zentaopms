@@ -1,0 +1,28 @@
+---
+title: project表updateLinkedPlans方法测试数据
+desc: 用于测试execution模块updateLinkedPlans方法的项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 执行ID
+- field: project
+  range: '1{3},2{2},3{2},4{2},5{1}'
+  note: 所属项目ID
+- field: name
+  range: '测试执行1{1},测试执行2{1},测试执行3{1},多分支执行{2},普通执行{5}'
+  note: 执行名称
+- field: type
+  range: 'sprint{6},stage{4}'
+  note: 执行类型
+- field: status
+  range: 'wait{3},doing{4},suspended{2},closed{1}'
+  note: 执行状态
+- field: storyType
+  range: 'story{7},requirement,epic{2}'
+  note: 需求类型
+- field: deleted
+  range: '0{9},1{1}'
+  note: 删除状态

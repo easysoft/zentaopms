@@ -1,0 +1,77 @@
+---
+title: 测试getParentEstStartedAndDeadline方法的任务数据
+desc: 包含多层级任务数据，用于测试父任务开始时间和截止时间获取功能
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父任务ID
+  range: 0{4},1{3},2{2},4{3},5{2},6{2},7{2},8{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 任务路径
+  range: ',1,',',1,2,',',1,2,3,',',1,3,',',4,',',4,5,',',4,5,6,',',4,6,',',7,',',7,8,',',7,8,9,',',7,9,',',10,',',10,11,',',10,11,12,',',10,12,',',13,',',13,14,',',13,14,15,',',13,15,',',16,',',17,'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1{10},2{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 1{10},2{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 任务名称
+  range: '根任务1,子任务1-1,孙任务1-1-1,子任务1-2,根任务2,子任务2-1,孙任务2-1-1,子任务2-2,根任务3,子任务3-1,孙任务3-1-1,子任务3-2,根任务4,子任务4-1,孙任务4-1-1,子任务4-2,独立任务1,独立任务2,删除任务,测试任务'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 任务类型
+  range: devel{8},test{6},design{4},study{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 任务状态
+  range: wait{6},doing{6},done{4},pause{2},cancel{1},closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: estStarted
+  note: 预计开始时间
+  range: '2024-01-01,0000-00-00,2024-01-05,2024-01-03,2024-02-01,0000-00-00,2024-02-10,2024-02-05,2024-03-01,0000-00-00,2024-03-15,2024-03-10,0000-00-00,2024-04-01,2024-04-05,2024-04-03,2024-05-01,2024-06-01,0000-00-00,2024-07-01'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deadline
+  note: 截止时间
+  range: '2024-01-31,2024-01-15,0000-00-00,2024-01-25,2024-02-28,2024-02-20,0000-00-00,2024-02-25,0000-00-00,2024-03-20,2024-03-25,2024-03-18,2024-04-30,0000-00-00,2024-04-15,2024-04-20,2024-05-31,2024-06-30,2024-07-15,0000-00-00'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

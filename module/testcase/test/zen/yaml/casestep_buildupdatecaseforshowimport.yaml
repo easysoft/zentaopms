@@ -1,0 +1,30 @@
+---
+title: 测试用例步骤数据，用于buildUpdateCaseForShowImport方法测试
+desc: 包含测试用例步骤的基本数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 步骤ID
+  range: 1-20
+
+- field: case
+  note: 用例ID
+  range: 1-10
+
+- field: version
+  note: 版本号
+  range: 1-5
+
+- field: type
+  note: 步骤类型
+  range: '[step,group,item]{20}'
+
+- field: desc
+  note: 步骤描述
+  range: '[打开页面,输入用户名,输入密码,点击登录,验证结果]{20}'
+
+- field: expect
+  note: 期望结果
+  range: '[页面正常显示,用户名输入成功,密码输入成功,登录成功,验证通过]{20}'

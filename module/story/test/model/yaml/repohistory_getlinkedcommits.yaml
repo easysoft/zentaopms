@@ -1,0 +1,27 @@
+---
+title: 仓库历史记录数据定义
+desc: 用于getLinkedCommits方法测试的仓库历史记录数据
+
+fields:
+- field: id
+  note: 历史记录ID
+  range: 1-10
+- field: repo
+  note: 仓库ID
+  range: 1{5}, 2{3}, 3{2}
+- field: revision
+  note: 版本号
+  range: abc123,def456,ghi789,jkl012,mno345
+- field: commit
+  note: 提交ID
+  range: 1-10
+- field: comment
+  note: 提交注释
+  range: Fix bug in user module,Add new feature to story,Update documentation,Refactor code structure,Optimize database queries,Add unit tests,Fix typo in comments,Remove unused code,Update configuration,Clean up old files
+- field: committer
+  note: 提交者
+  range: admin{3},user1{2},user2{2},tester{2},developer{1}
+- field: time
+  note: 提交时间
+  range: (-30D)-(-1D):1D
+  format: YYYY-MM-DD hh:mm:ss

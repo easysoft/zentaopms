@@ -241,6 +241,12 @@ class bug extends control
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
+        if(isset($_POST['stepIdList']))
+        {
+            $extras .= "&stepIdList={$this->post->stepIdList}";
+            unset($_POST['stepIdList']);
+        }
+
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extras);
         parse_str($extras, $params);
 
@@ -482,7 +488,7 @@ class bug extends control
             /* Return response after resolving bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
+            return $this->bugZen->responseAfterOperate($bugID, common::createChanges($oldBug, $bug), $message);
         }
 
         /* 移除解决方案“转需求”。 */
@@ -805,6 +811,7 @@ class bug extends control
 
         if(!empty($_POST))
         {
+            $this->config->bug->create->requiredFields = $this->config->bug->batchcreate->requiredFields;
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $bugImagesFile);
             $bugs = $this->bugZen->checkBugsForBatchCreate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

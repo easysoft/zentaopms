@@ -84,6 +84,22 @@ class branchTest
     }
 
     /**
+     * Test get status list.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getStatusListTest($productID)
+    {
+        $result = $this->objectModel->getStatusList($productID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test create a branch.
      *
      * @param  int    $productID
@@ -387,12 +403,13 @@ class branchTest
         $app::$loadedLangs = array();
         $app->loadLang('branch');
 
-        $this->objectModel->changeBranchLanguage($productID);
-
-        $createLang = $tester->lang->branch->create;
+        $result = $this->objectModel->changeBranchLanguage($productID);
 
         if(dao::isError()) return dao::getError();
 
+        if($result === false) return '0';
+
+        $createLang = $tester->lang->branch->create;
         return $createLang;
     }
 
@@ -450,5 +467,40 @@ class branchTest
     {
         $branch = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
         return $this->objectModel->isClickable($branch, $status);
+    }
+
+    /**
+     * Test manage branch.
+     *
+     * @param  int    $productID
+     * @param  array  $branchData
+     * @param  array  $newBranches
+     * @access public
+     * @return mixed
+     */
+    public function manageTest(int $productID, array $branchData = array(), array $newBranches = array())
+    {
+        global $tester;
+
+        // 清空之前的POST数据
+        $_POST = array();
+
+        // 设置POST数据以模拟实际提交
+        if(!empty($branchData)) $_POST['branch'] = $branchData;
+        $_POST['newbranch'] = $newBranches; // 确保newbranch总是存在
+
+        // 调用被测方法
+        $result = $this->objectModel->manage($productID);
+
+        if(dao::isError()) return dao::getError();
+
+        // 如果返回false，表示DAO错误或其他问题
+        if($result === false) return false;
+
+        // 如果结果包含JavaScript代码（空分支名错误），返回错误标识
+        if(!is_array($result)) return 'error';
+
+        // 返回新创建分支的数量
+        return count($result);
     }
 }

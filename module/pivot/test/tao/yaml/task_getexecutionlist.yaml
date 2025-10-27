@@ -1,0 +1,56 @@
+---
+title: task表测试数据 for getExecutionList
+desc: 用于测试获取执行列表方法的task表数据
+
+fields:
+- field: id
+  note: 任务ID
+  range: 1-20
+- field: project
+  note: 项目ID
+  range: 1{4},2{4},3{4},4{4},5{4}
+- field: execution
+  note: 执行ID
+  range: 6{4},7{4},8{4},9{4},10{4}
+- field: parent
+  note: 父任务ID
+  range: 0{18},-1{2}
+- field: name
+  note: 任务名称
+  range: '任务1','任务2','任务3','任务4','任务5','任务6','任务7','任务8','任务9','任务10','任务11','任务12','任务13','任务14','任务15','任务16','任务17','任务18','任务19','任务20'
+- field: type
+  note: 任务类型
+  range: devel{10},test{6},design{4}
+- field: status
+  note: 任务状态
+  range: wait{4},doing{6},done{6},cancel{2},closed{2}
+- field: pri
+  note: 优先级
+  range: 1{5},2{7},3{6},4{2}
+- field: estimate
+  note: 预估工时
+  range: 1{4},2{4},4{4},8{4},16{4}
+- field: consumed
+  note: 消耗工时
+  range: 0.5{4},1{4},2{4},4{4},8{4}
+- field: left
+  note: 剩余工时
+  range: 0{6},1{4},2{4},4{4},8{2}
+- field: deadline
+  note: 截止日期
+  range: 2024-06-30{5},2024-07-31{5},2024-08-31{5},2024-09-30{5}
+- field: assignedTo
+  note: 指派给
+  range: admin{6},user1{5},user2{4},user3{3},user4{2}
+- field: assignedDate
+  note: 指派时间
+  range: 2024-01-01{20}
+- field: openedBy
+  note: 创建者
+  range: admin{20}
+- field: openedDate
+  note: 创建时间
+  range: 2024-01-01{20}
+- field: deleted
+  note: 是否删除
+  range: '0'{20}

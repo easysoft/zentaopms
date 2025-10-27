@@ -1,0 +1,83 @@
+---
+title: API接口表数据定义
+desc: 用于createDemoApi方法单元测试的API接口数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: API接口ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 0{5}, 1{3}, 2{2}
+- field: lib
+  note: 接口库ID
+  range: 1{10}
+- field: module
+  note: 模块ID
+  range: 1-5
+- field: title
+  note: 接口标题
+  range: 获取用户信息,创建用户,更新用户,删除用户,获取用户列表,用户登录,用户注销,修改密码,重置密码,获取权限
+- field: path
+  note: 接口路径
+  range: /users/{2}, /users/{3}, /login{2}, /logout{1}, /password{2}
+- field: protocol
+  note: 协议类型
+  range: HTTP{8}, HTTPS{2}
+- field: method
+  note: HTTP方法
+  range: GET{4}, POST{3}, PUT{2}, DELETE{1}
+- field: requestType
+  note: 请求数据类型
+  range: application/json{7}, application/x-www-form-urlencoded{2}, []{1}
+- field: responseType
+  note: 响应数据类型
+  range: application/json{8}, text/plain{1}, []{1}
+- field: status
+  note: 接口状态
+  range: done{7}, doing{2}, hidden{1}
+- field: owner
+  note: 接口负责人
+  range: admin{4}, user1{3}, user2{2}, dev{1}
+- field: desc
+  note: 接口描述
+  range: 用户管理相关接口{3}, 认证相关接口{2}, 数据查询接口{3}, 系统接口{1}, []{1}
+- field: version
+  note: 接口版本
+  range: 1{6}, 2{3}, 3{1}
+- field: params
+  note: 参数配置
+  range: '{"header":[],"params":[],"paramsType":"json","query":[]}'
+- field: paramsExample
+  note: 参数示例
+  range: '{"id": 1}'{3}, '{"name": "test"}'{2}, '{}'{3}, []{2}
+- field: responseExample
+  note: 响应示例
+  range: '{"success": true}'{3}, '{"data": []}'{2}, '{"error": "not found"}'{2}, []{3}
+- field: response
+  note: 响应配置
+  range: '[{"field":"id","type":"int"}]'{3}, '[{"field":"name","type":"string"}]'{2}, '[]'{5}
+- field: commonParams
+  note: 公共参数
+  range: []{10}
+- field: addedBy
+  note: 创建者
+  range: admin{10}
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00{10}
+- field: editedBy
+  note: 编辑者
+  range: admin{10}
+- field: editedDate
+  note: 编辑时间
+  range: 2024-01-01 00:00:00{10}
+- field: deleted
+  note: 是否删除
+  range: 0{10}

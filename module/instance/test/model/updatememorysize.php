@@ -1,27 +1,47 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zenData('instance')->loadYaml('instance')->gen(5);
-zenData('space')->loadYaml('space')->gen(5);
 
 /**
 
-title=instanceModel->updateMemorySize();
+title=测试 instanceModel::updateMemorySize();
 timeout=0
-cid=1
+cid=0
 
-- 编辑应用的内存，查看返回结果 @0
-- 调整内存失败，查看错误信息： @调整内存失败
+- 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance1, 1024  @0
+- 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance2, 0  @0
+- 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance3, 2048  @0
+- 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance4, 4096  @0
+- 执行 @调整内存失败
 
 */
 
-global $tester;
-$tester->loadModel('instance');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
 
-$instance = $tester->instance->getByID(1);
-$instance->oldValue = 0;
+zenData('instance')->loadYaml('instance_updatememorysize', false, 2)->gen(5);
+zenData('space')->loadYaml('space')->gen(5);
 
-r($tester->instance->updateMemorySize($instance, 1024)) && p('') && e('0'); // 编辑应用的内存，查看返回结果
-r(dao::getError()) && p('0') && e('调整内存失败'); // 调整内存失败，查看错误信息：
+su('admin');
+
+$instanceTest = new instanceTest();
+
+$instance1 = $instanceTest->objectModel->getByID(1);
+$instance1->oldValue = 512;
+
+$instance2 = $instanceTest->objectModel->getByID(2);
+$instance2->oldValue = 1024;
+
+$instance3 = $instanceTest->objectModel->getByID(3);
+$instance3->oldValue = 2048;
+
+$instance4 = $instanceTest->objectModel->getByID(4);
+$instance4->oldValue = 1024;
+
+$instance5 = $instanceTest->objectModel->getByID(5);
+$instance5->oldValue = 512;
+
+r($instanceTest->updateMemorySizeTest($instance1, 1024)) && p() && e('0');
+r($instanceTest->updateMemorySizeTest($instance2, 0)) && p() && e('0');
+r($instanceTest->updateMemorySizeTest($instance3, 2048)) && p() && e('0');
+r($instanceTest->updateMemorySizeTest($instance4, 4096)) && p() && e('0');
+r(dao::getError()) && p('0') && e('调整内存失败');

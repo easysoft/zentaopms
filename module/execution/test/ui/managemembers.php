@@ -26,7 +26,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/managemembers.ui.class.php';
+include '../lib/ui/managemembers.ui.class.php';
 global $config;
 
 $project = zenData('project');

@@ -1,0 +1,25 @@
+---
+title: 工时保存测试数据
+desc: 为weekly模块save方法提供工时测试数据
+
+fields:
+- field: id
+  range: 1-100
+- field: project
+  range: 1-10:R
+- field: execution
+  range: 1-20:R
+- field: account
+  range: admin{40},user1{30},user2{30}
+- field: objectType
+  range: task{80},bug{10},story{10}
+- field: objectID
+  range: 1-50:R
+- field: date
+  range: 2023-09-01{30},2023-10-01{35},2023-10-15{35}
+- field: consumed
+  range: 1-8:R
+- field: work
+  range: 开发工作{40},测试工作{30},设计工作{30}
+- field: deleted
+  range: 0{100}

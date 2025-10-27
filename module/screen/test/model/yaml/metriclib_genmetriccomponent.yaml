@@ -1,0 +1,43 @@
+---
+title: metriclib test data for genMetricComponent
+desc: Test data for metriclib table used in genMetricComponent method testing
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-50
+- field: metricID
+  range: 1-10
+- field: metricCode
+  range: story_count{10},task_completion{10},bug_density{10},test_coverage{10},code_quality{5},performance_metric{5}
+- field: system
+  range: 1{25},2{15},3{10}
+- field: year
+  range: 2023{30},2022{15},2021{5}
+- field: month
+  range: 1-12
+- field: week
+  range: 1-52
+- field: day
+  range: 01-31
+- field: date
+  range: 2023-01-01-2023-12-31
+- field: value
+  range: 0{5},1-100{20},101-1000{15},1001-10000{10}
+- field: cron
+  range: 1{40},0{10}
+- field: system2
+  range: '[]{40}',1-3{10}
+- field: year2
+  range: '[]{40}',2022-2023{10}
+- field: month2
+  range: '[]{40}',1-12{10}
+- field: week2
+  range: '[]{40}',1-52{10}
+- field: day2
+  range: '[]{40}',01-31{10}
+- field: date2
+  range: '[]{40}',2023-01-01-2023-12-31{10}
+- field: value2
+  range: '[]{30}',0-1000{20}

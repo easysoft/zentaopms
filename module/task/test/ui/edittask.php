@@ -14,7 +14,7 @@ cid=1
 
 */
 chdir(__DIR__);
-include '../lib/edittask.ui.class.php';
+include '../lib/ui/edittask.ui.class.php';
 global $config;
 
 $user = zenData('user');

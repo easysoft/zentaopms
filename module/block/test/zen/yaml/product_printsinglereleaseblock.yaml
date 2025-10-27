@@ -1,0 +1,19 @@
+---
+title: Product测试数据
+desc: printSingleReleaseBlock方法的product表测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: Product 1,Product 2,Product 3,Product 4,Product 5
+- field: code
+  range: PRD1,PRD2,PRD3,PRD4,PRD5
+- field: type
+  range: normal
+- field: status
+  range: normal
+- field: deleted
+  range: "0"

@@ -1,0 +1,50 @@
+---
+title: 项目数据 - setUserMoreLink方法测试
+desc: 为setUserMoreLink方法测试提供项目执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+
+- field: project
+  note: 父项目ID
+  range: '0{5},1-5{5}'
+
+- field: name
+  note: 项目名称
+  range: 项目1,项目2,项目3,项目4,项目5,执行1,执行2,执行3,执行4,执行5
+
+- field: code
+  note: 项目代码
+  range: P001,P002,P003,P004,P005,E001,E002,E003,E004,E005
+
+- field: type
+  note: 项目类型
+  range: project{5},sprint{5}
+
+- field: status
+  note: 项目状态
+  range: doing{8},wait{1},closed{1}
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01,2024-04-01,2024-05-01,2024-06-01,2024-07-01,2024-08-01,2024-09-01,2024-10-01
+
+- field: end
+  note: 结束日期
+  range: 2024-12-31,2024-11-30,2024-10-31,2024-09-30,2024-08-31,2024-07-31,2024-06-30,2024-05-31,2024-04-30,2024-03-31
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+
+- field: parent
+  note: 父级ID
+  range: '0{5},1-5{5}'
+
+- field: path
+  note: 路径
+  range: ',1,',',2,',',3,',',4,',',5,',',1,1,',',2,2,',',3,3,',',4,4,',',5,5,'

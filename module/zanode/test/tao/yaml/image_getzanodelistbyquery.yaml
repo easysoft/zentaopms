@@ -1,0 +1,46 @@
+---
+title: zanode模块getZaNodeListByQuery方法镜像测试数据
+desc: 用于测试关联镜像表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 镜像ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: host
+  note: 关联主机ID
+  range: 1-5
+  format: ""
+- field: name
+  note: 镜像名称
+  range: 'ubuntu-latest, centos-7, windows-server, debian-11, alpine-latest, node-14, python-3.9, java-11, nginx-latest, redis-6'
+  format: ""
+- field: localName
+  note: 本地名称
+  range: 'ubuntu:latest, centos:7, mcr.microsoft.com/windows/servercore, debian:11, alpine:latest, node:14, python:3.9, openjdk:11, nginx:latest, redis:6'
+  format: ""
+- field: address
+  note: 镜像地址
+  range: 'docker.io, registry.cn-hangzhou.aliyuncs.com, mcr.microsoft.com, quay.io, gcr.io, hub.docker.com, harbor.local, nexus.local, gitlab.local, private.registry'
+  format: ""
+- field: path
+  note: 镜像路径
+  range: '/ubuntu, /centos, /windows, /debian, /alpine, /node, /python, /java, /nginx, /redis'
+  format: ""
+- field: status
+  note: 镜像状态
+  range: 'active{6}, inactive{2}, error{1}, pending{1}'
+  format: ""
+- field: osName
+  note: 操作系统名称
+  range: 'Ubuntu{3}, CentOS{2}, Windows{2}, Debian{1}, Alpine{1}, Linux{1}'
+  format: ""
+- field: from
+  note: 来源
+  range: 'zentao{5}, docker{3}, custom{2}'
+  format: ""

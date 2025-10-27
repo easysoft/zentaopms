@@ -1,0 +1,1 @@
+ajaxInstallEvent('generate-config');

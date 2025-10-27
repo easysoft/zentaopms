@@ -22,7 +22,7 @@ $productIdList = array(0, 1, 2, 3);
 $branches      = array(0, 1, 2, 3);
 $plans         = array(1, 2, 3, 4);
 
-$projectTester = new Project();
+$projectTester = new projectTest();
 r(count($projectTester->linkProductsTest($projectIdList[0])))                                    && p() && e('0'); // 测试敏捷项目没有关联产品的数量
 r(count($projectTester->linkProductsTest($projectIdList[0], $productIdList)))                    && p() && e('3'); // 测试敏捷项目关联产品的数量
 r(count($projectTester->linkProductsTest($projectIdList[0], $productIdList, $branches)))         && p() && e('3'); // 测试敏捷项目关联产品、分支的数量

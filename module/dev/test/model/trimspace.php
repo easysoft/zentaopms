@@ -1,18 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
 
 /**
 
 title=测试 devModel::trimSpace();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-获取去除空白字符的数据 >> test
+- 执行devTest模块的trimSpaceTest方法，参数是'* test '  @test
+- 执行devTest模块的trimSpaceTest方法，参数是" \t\n\r * hello world \t\n\r "  @hello world
+- 执行devTest模块的trimSpaceTest方法，参数是''  @0
+- 执行devTest模块的trimSpaceTest方法，参数是'* \t\n\r '  @\t\n\r
+- 执行devTest模块的trimSpaceTest方法，参数是'normal string'  @normal string
 
 */
 
-global $tester;
-$tester->loadModel('dev');
-r($tester->dev->trimSpace('* test ')) && p() && e('test'); //获取去除空白字符的数据
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+
+su('admin');
+
+$devTest = new devTest();
+
+r($devTest->trimSpaceTest('* test ')) && p() && e('test');
+r($devTest->trimSpaceTest(" \t\n\r * hello world \t\n\r ")) && p() && e('hello world');
+r($devTest->trimSpaceTest('')) && p() && e('0');
+r($devTest->trimSpaceTest('* \t\n\r ')) && p() && e('\t\n\r');
+r($devTest->trimSpaceTest('normal string')) && p() && e('normal string');

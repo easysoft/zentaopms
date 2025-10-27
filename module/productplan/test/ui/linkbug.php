@@ -7,7 +7,7 @@ timeout=0
 cid=0
 */
 chdir(__DIR__);
-include '../lib/linkbug.ui.class.php';
+include '../lib/ui/linkbug.ui.class.php';
 
 zendata('product')->loadYaml('product', false, 2)->gen(10);
 zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);

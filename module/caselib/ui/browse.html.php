@@ -77,6 +77,7 @@ $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
 $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);
 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
+if(!empty($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
 if($isFromDoc)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
@@ -84,7 +85,6 @@ if($isFromDoc)
     {
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
-        if($key == 'pri') $cols[$key]['priList'] = $lang->testcase->priList;
         if($key == 'title') $cols[$key]['link'] = array('url' => createLink('caselib', 'viewCase', "caseID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
@@ -266,4 +266,3 @@ dtable
 );
 
 render();
-

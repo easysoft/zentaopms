@@ -3,23 +3,25 @@ author: jukui
 version: '1.0'
 fields:
     - field: id
-      range: 1-6
+      range: 1-10
     - field: project
-      range: '0,1{4}'
+      range: '0,1{8},0'
     - field: name
-      range: '瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b,阶段a子1子1子1'
+      range: '瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b,阶段a子1子1子1,测试阶段,独立阶段,删除阶段,空阶段'
     - field: parent
-      range: '0,1,2,3,1,4'
+      range: '0,1,2,3,1,4,2,0,1,0'
     - field: type
-      range: 'project,stage{4}'
+      range: 'project,stage{8},stage'
     - field: grade
       range: 1
     - field: days
       range: 1
     - field: status
-      range: 'doing,doing,doing,closed,suspended'
+      range: 'doing,doing,doing,closed,suspended,wait,pause,doing,closed'
     - field: desc
-      range: 1-6
+      range: 1-10
       prefix: '项目描述'
     - field: path
-      range: "`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`,`,1,5,`,`,1,2,3,4,6,`"
+      range: "`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`,`,1,5,`,`,1,2,3,4,6,`,`,1,2,7,`,`,1,8,`,`,1,9,`,`,10,`"
+    - field: deleted
+      range: '0{8},1,0'

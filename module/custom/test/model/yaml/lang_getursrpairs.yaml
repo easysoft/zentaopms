@@ -1,0 +1,46 @@
+---
+title: 需求概念集合测试数据
+desc: 用于测试customModel::getURSRPairs()方法的语言表数据
+
+fields:
+- field: id
+  note: 唯一标识
+  range: 1-10
+
+- field: lang
+  note: 语言类型
+  range: zh-cn
+
+- field: module
+  note: 模块名
+  range: custom
+
+- field: section
+  note: 配置段
+  range: URSRList
+
+- field: key
+  note: 配置键
+  range: 1-10
+
+- field: value
+  note: JSON格式的配置值
+  range: |
+    {"ERName":"业务需求","SRName":"软件需求","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"研发需求","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"软需","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"故事","URName":"史诗"},
+    {"ERName":"业务需求","SRName":"需求","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"用户故事","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"功能需求","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"特性","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"任务","URName":"用户需求"},
+    {"ERName":"业务需求","SRName":"工作项","URName":"用户需求"}
+
+- field: system
+  note: 是否系统级
+  range: 1
+
+- field: vision
+  note: 版本类型
+  range: rnd

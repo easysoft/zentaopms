@@ -228,6 +228,7 @@ $config->openMethods[] = 'admin.register';
 $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.sendcode';
 $config->openMethods[] = 'admin.planmodal';
+$config->openMethods[] = 'im.authorize';
 
 /* 登录用户可以使用的方法。The methods that can be used by the logged users. */
 $config->logonMethods = array();
@@ -723,6 +724,7 @@ $config->objectTables['privlang']       = TABLE_PRIVLANG;
 $config->objectTables['privmanager']    = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation']   = TABLE_PRIVRELATION;
 $config->objectTables['scene']          = TABLE_SCENE;
+$config->objectTables['chart']          = TABLE_CHART;
 $config->objectTables['pivot']          = TABLE_PIVOT;
 $config->objectTables['serverroom']     = TABLE_SERVERROOM;
 $config->objectTables['host']           = TABLE_ZAHOST;
@@ -756,6 +758,7 @@ $config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 $config->mysqlDriverList  = array('mysql', 'oceanbase');
+$config->pgsqlDriverList  = array('postgres', 'highgo');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
@@ -787,12 +790,13 @@ $config->featureGroup->waterfallplus = array();
 $config->featureGroup->assetlib      = array();
 $config->featureGroup->other         = array('devops', 'kanban', 'setCode');
 
-$config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
-$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback', 'demandpool');
-$config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
-$config->excludeBranchMenu    = array('product-dashboard', 'product-view', 'product-whitelist', 'product-addwhitelist', 'branch-manage', 'branch-batchedit');
-$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-template', 'project-createtemplate', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose', 'feedback-showimport', 'dimension-browse', 'dataview-browse', 'dataview-create', 'dataview-query', 'ticket-batchedit', 'ticket-batchfinish', 'ticket-batchactivate', 'file-download');
-$config->hasSwitcherModules   = array('design');
-$config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases', 'testtask-view', 'testtask-report', 'testtask-groupcase', 'testtask-linkcase');
-$config->excludeSwitcherList  = array();
-$config->hasMainNavBar        = array();
+$config->db->sqliteBlacklist    = array('sqlite_queue', 'cron');
+$config->hasDropmenuApps        = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback', 'demandpool');
+$config->hasBranchMenuModules   = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
+$config->excludeBranchMenu      = array('product-dashboard', 'product-view', 'product-whitelist', 'product-addwhitelist', 'branch-manage', 'branch-batchedit');
+$config->excludeDropmenuList    = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-template', 'project-createtemplate', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose', 'feedback-showimport', 'dimension-browse', 'dataview-browse', 'dataview-create', 'dataview-query', 'ticket-batchedit', 'ticket-batchfinish', 'ticket-batchactivate', 'file-download');
+$config->excludeDropmenuModules = array('reporttemplate');
+$config->hasSwitcherModules     = array('design');
+$config->hasSwitcherMethods     = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases', 'testtask-view', 'testtask-report', 'testtask-groupcase', 'testtask-linkcase');
+$config->excludeSwitcherList    = array();
+$config->hasMainNavBar          = array();

@@ -1,0 +1,75 @@
+---
+title: 产品分支路线图区块测试数据
+desc: 用于测试printRoadmapBlock方法的产品分支数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: 主干,开发分支,测试分支,发布分支,热修复分支
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: default
+  note: 是否默认分支
+  range: '1'{1},'0'{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: active{4},closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 分支描述
+  range: 分支描述内容{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建日期
+  range: (2024-01-01)-(2024-06-01):30D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: closedDate
+  note: 关闭日期
+  range: ""
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

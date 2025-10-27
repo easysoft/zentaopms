@@ -1,0 +1,40 @@
+---
+title: Task data for responseModal test
+desc: Test data for responseModal method covering different scenarios
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: Task ID
+  range: 1-10
+- field: project
+  note: Project ID
+  range: 1-3
+- field: execution
+  note: Execution ID
+  range: 1-3
+- field: name
+  note: Task name
+  range: "Task{1-10}"
+- field: type
+  note: Task type
+  range: "devel,test,design,study,misc,ui,affair,business"
+- field: status
+  note: Task status
+  range: "wait,doing,done,pause,cancel,closed"
+- field: assignedTo
+  note: Assigned user
+  range: "admin,user1,user2"
+- field: estimate
+  note: Estimated hours
+  range: 1-40:0.5
+- field: consumed
+  note: Consumed hours
+  range: 0-20:0.5
+- field: left
+  note: Left hours
+  range: 0-30:0.5
+- field: deleted
+  note: Delete status
+  range: "0"

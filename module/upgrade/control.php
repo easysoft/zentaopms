@@ -48,15 +48,8 @@ class upgrade extends control
     {
         if($this->get->agree == true) $this->locate(inlink('backup'));
 
-        $clientLang = $this->app->getClientLang();
-        $licenseCN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.CN');
-        $licenseEN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.EN');
-
-        $license = $licenseEN . $licenseCN;
-        if($clientLang == 'zh-cn' || $clientLang == 'zh-tw') $license = $licenseCN . $licenseEN;
-
         $this->view->title   = $this->lang->upgrade->common;
-        $this->view->license = $license;
+        $this->view->license = $this->loadModel('install')->getLicense();
         $this->display();
     }
 
@@ -545,10 +538,11 @@ class upgrade extends control
      * @param  string $skipMoveFile
      * @param  string $skipUpdateDocs
      * @param  string $skipUpdateDocTemplates
+     * @param  string $skipUpdateProjectReports
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -593,6 +587,18 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocTemplates', $mergedTemplateList);
                 return $this->locate(inlink('upgradeDocTemplates', "fromVersion={$fromVersion}"));
+            }
+        }
+
+        /* 如果有需要升级的周报、里程碑报告，显示升级周报、里程碑报告界面。*/
+        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
+        if($skipUpdateProjectReports == 'no' && version_compare($openVersion, '21.7.6', '<'))
+        {
+            $upgradeProjectReports = $this->upgrade->getUpgradeProjectReports();
+            if(!empty($upgradeProjectReports))
+            {
+                $this->session->set('upgradeProjectReports', $upgradeProjectReports);
+                $this->locate(inlink('upgradeProjectReports', "fromVersion={$fromVersion}"));
             }
         }
 
@@ -1033,6 +1039,47 @@ class upgrade extends control
             $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
             if(is_string($wikis)) $wikis = explode(',', $wikis);
             if($wikis) $this->upgrade->upgradeWikiTemplates($wikis);
+            $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * 升级项目报告数据。
+     * Upgrade project reports.
+     *
+     * @param  string $fromVersion
+     * @param  string $processed
+     * @access public
+     * @return void
+     */
+    public function upgradeProjectReports(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeReports = $this->session->upgradeProjectReports;
+        if($processed === 'yes' || empty($upgradeReports))
+        {
+            if(!empty($upgradeReports)) $this->session->set('upgradeProjectReports', true);
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateProjectReports=yes"));
+        }
+
+        $this->view->title          = $this->lang->upgrade->upgradeProjectReports;
+        $this->view->upgradeReports = $upgradeReports;
+        $this->view->fromVersion    = $fromVersion;
+        $this->display();
+    }
+
+    /**
+     * 升级项目报告数据。
+     * Upgrade project reports.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeProjectReport()
+    {
+        if($_POST)
+        {
+            $data = isset($_POST['data']) ? $_POST['data'] : array();
+            if($data) $this->upgrade->upgradeProjectReport($data);
             $this->send(array('result' => 'success'));
         }
     }

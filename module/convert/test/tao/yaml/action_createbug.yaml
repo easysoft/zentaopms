@@ -1,0 +1,26 @@
+title: 用于createBug方法测试的action数据
+desc: 提供createBug方法测试需要的action操作记录数据
+
+fields:
+- field: id
+  range: 1-10
+- field: objectType
+  range: bug{8},story{2}
+- field: objectID
+  range: 1-5
+- field: product
+  range: ',1,{5},2,{3},3,{2}'
+- field: project
+  range: 1-3
+- field: execution
+  range: 0-2
+- field: actor
+  range: admin{4},user1{3},user2{2},testuser{1}
+- field: action
+  range: opened{6},edited{2},resolved{1},closed{1}
+- field: date
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+- field: comment
+  range: '',创建bug,修改bug,解决bug
+- field: extra
+  range: ''

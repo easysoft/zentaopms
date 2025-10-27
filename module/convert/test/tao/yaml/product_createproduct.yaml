@@ -1,0 +1,41 @@
+---
+title: 产品数据定义
+desc: 为createProduct方法测试准备产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-100
+- field: program
+  note: 项目集ID
+  range: 0
+- field: name
+  note: 产品名称
+  range: 测试产品{1-10}
+- field: code
+  note: 产品代号
+  range: product{1-10}
+- field: type
+  note: 产品类型
+  range: normal
+- field: status
+  note: 产品状态
+  range: normal
+- field: desc
+  note: 产品描述
+  range: ''
+- field: acl
+  note: 访问控制
+  range: open
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 10:00:00'
+- field: createdVersion
+  note: 创建版本
+  range: '18.8'
+- field: order
+  note: 排序
+  range: 5-50:5

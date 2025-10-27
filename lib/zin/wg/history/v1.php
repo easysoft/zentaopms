@@ -87,7 +87,7 @@ class history extends wg
             if(empty($actions))
             {
                 $actions = data('actions');
-                if(empty($actions) && !empty($objectID)) $actions = $app->loadTarget('action')->getList($objectType, $objectID);
+                if(empty($actions) && !empty($objectID)) $actions = $app->loadTarget('action')->getList($objectType, (int)$objectID);
                 if(!empty($actions))                     $actions = $app->loadTarget('action')->buildActionList($actions, $users, (bool)$this->prop('commentBtn'));
             }
             $this->setProp('actions', $actions);

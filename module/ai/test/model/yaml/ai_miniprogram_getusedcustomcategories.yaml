@@ -1,0 +1,52 @@
+---
+title: AI小程序表数据 - getUsedCustomCategories方法测试
+desc: 为测试getUsedCustomCategories方法准备的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 小程序ID
+  range: 1-10
+- field: name
+  note: 小程序名称
+  range: 'test1,test2,test3,test4,test5,test6,test7,test8,test9,test10'
+- field: category
+  note: 小程序分类
+  range: 'work{3},personal{3},creative{3},life{1}'
+- field: desc
+  note: 小程序描述
+  range: 'This is test miniprogram{10}'
+- field: model
+  note: 模型ID
+  range: 1{10}
+- field: icon
+  note: 图标
+  range: 'writinghand-7{10}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{10}'
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{10}'
+- field: editedBy
+  note: 编辑者
+  range: 'admin{10}'
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00{10}'
+- field: published
+  note: 发布状态
+  range: '0{3},1{7}'
+- field: publishedDate
+  note: 发布时间
+  range: '2024-01-01 00:00:00{10}'
+- field: deleted
+  note: 删除状态
+  range: '0{8},1{2}'
+- field: prompt
+  note: 提示词
+  range: 'This is test prompt{10}'
+- field: builtIn
+  note: 内置状态
+  range: '0{10}'

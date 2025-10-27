@@ -1,0 +1,17 @@
+---
+title: getProductRelatedData方法测试用的项目数据
+desc: 为测试产品相关数据统计功能提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: type
+  range: stage{2}, sprint{3}
+- field: deleted
+  range: 0{5}
+- field: name
+  range: 敏捷项目1{2}, 瀑布项目1{3}
+- field: status
+  range: wait{1}, doing{3}, closed{1}

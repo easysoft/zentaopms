@@ -1,0 +1,80 @@
+---
+title: AI小程序重复名称检查测试数据
+desc: 用于测试checkDuplicatedAppName方法的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 小程序ID
+  range: 1-6
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 小程序名称
+  range: 测试应用1{2}, 测试应用2, 测试应用3, 唯一应用, 已删除应用
+  prefix: ""
+  postfix: ""
+- field: category
+  note: 分类
+  range: 工具{3}, 效率{2}, 测试{1}
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 描述
+  range: 这是一个测试应用{6}
+  prefix: ""
+  postfix: ""
+- field: model
+  note: 模型ID
+  range: 1{6}
+  prefix: ""
+  postfix: ""
+- field: icon
+  note: 图标
+  range: writinghand-7{6}
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: admin{6}
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00'{6}
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: admin{6}
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-01 00:00:00'{6}
+  format: YYYY-MM-DD hh:mm:ss
+- field: published
+  note: 是否发布
+  range: '0'{6}
+  prefix: ""
+  postfix: ""
+- field: publishedDate
+  note: 发布时间
+  range: []{6}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'{5}, '1'{1}
+  prefix: ""
+  postfix: ""
+- field: prompt
+  note: 提示词模板
+  range: 请帮我{6}
+  prefix: ""
+  postfix: ""
+- field: builtIn
+  note: 是否内置
+  range: '0'{6}
+  prefix: ""
+  postfix: ""

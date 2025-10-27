@@ -52,6 +52,7 @@ $fields->field('days')
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
+$fields->field('desc')->value(data('copyProject.desc'));
 $fields->field('PM')->value(data('copyProject.PM'));
 $fields->field('budget')->value(data('copyProject.budget'));
 

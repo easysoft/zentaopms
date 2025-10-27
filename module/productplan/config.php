@@ -64,13 +64,13 @@ $config->productplan->actionList['linkStory']['icon']         = 'link';
 $config->productplan->actionList['linkStory']['hint']         = $lang->productplan->linkStory;
 $config->productplan->actionList['linkStory']['text']         = $lang->productplan->linkStory;
 $config->productplan->actionList['linkStory']['notLoadModel'] = true;
-if($app->rawModule) $config->productplan->actionList['linkStory']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=story&orderBy=id_desc&link=true');
+if($app->rawModule) $config->productplan->actionList['linkStory']['url']  = common::hasPriv('productplan', 'linkStory') ? array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=story&orderBy=id_desc&link=true') : null;
 
 $config->productplan->actionList['linkBug']['icon']         = 'bug';
 $config->productplan->actionList['linkBug']['hint']         = $lang->productplan->linkBug;
 $config->productplan->actionList['linkBug']['text']         = $lang->productplan->linkBug;
 $config->productplan->actionList['linkBug']['notLoadModel'] = true;
-if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=bug&orderBy=id_desc&link=true');
+if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = common::hasPriv('productplan', 'linkBug') ? array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=bug&orderBy=id_desc&link=true') : null;
 
 $config->productplan->actionList['edit']['icon']         = 'edit';
 $config->productplan->actionList['edit']['hint']         = $lang->productplan->edit;

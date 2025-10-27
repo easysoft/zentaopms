@@ -1,0 +1,72 @@
+---
+title: instance表测试数据定义
+desc: 用于install方法测试的instance表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: space
+  note: 空间ID
+  range: 1-5
+- field: name
+  note: 应用名称
+  range: 测试应用{3},示例应用{2}
+- field: appID
+  note: 应用ID
+  range: 1-5
+- field: appName
+  note: 应用别名
+  range: TestApp{3},DemoApp{2}
+- field: appVersion
+  note: 应用版本
+  range: 1.0.0,2.0.0,1.1.0
+- field: chart
+  note: Chart名称
+  range: testapp{3},demoapp{2}
+- field: logo
+  note: 应用图标
+  range: test-logo.png,demo-logo.png
+- field: version
+  note: 版本
+  range: 1.0.0,2.0.0,1.1.0
+- field: desc
+  note: 应用描述
+  range: 测试应用描述,演示应用描述
+- field: introduction
+  note: 应用介绍
+  range: 这是一个测试应用,这是一个演示应用
+- field: source
+  note: 来源
+  range: cloud{3},system{2}
+- field: channel
+  note: 渠道
+  range: stable{4},beta{1}
+- field: k8name
+  note: K8s名称
+  range: testapp-001{1},testapp-002{1},demoapp-001{1}
+- field: status
+  note: 状态
+  range: creating{2},running{2},stopped{1}
+- field: pinned
+  note: 是否置顶
+  range: 0{4},1{1}
+- field: domain
+  note: 域名
+  range: test.example.com,demo.example.com,[]{3}
+- field: createdBy
+  note: 创建者
+  range: admin{3},user1{2}
+- field: createdAt
+  note: 创建时间
+  range: (-1d)-now
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 删除标记
+  range: 0{5}

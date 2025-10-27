@@ -1,0 +1,26 @@
+---
+title: buildEditForm方法需求数据
+desc: 用于测试taskZen::buildEditForm()方法的需求数据
+
+fields:
+- field: id
+  range: 1-20
+- field: product
+  range: 1-3
+- field: module
+  range: 0{5},1-10{15}
+- field: title
+  range: 用户登录功能{5},商品管理{5},订单处理{5},支付系统{5}
+- field: type
+  range: story{15},epic{3},requirement{2}
+- field: pri
+  range: 1-4
+- field: status
+  range: draft{3},active{10},developed{5},testing{2}
+- field: stage
+  range: wait{5},planned{5},projected{5},developing{3},testing{2}
+- field: openedBy
+  range: admin{5},user1{5},user2{5},user3{5}
+- field: openedDate
+  range: (-45D)-(0D):1D
+  format: YYYY-MM-DD hh:mm:ss

@@ -153,7 +153,7 @@ class projectZen extends project
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
-                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                if($this->app->apiVersion == 'v1')
                 {
                     $product = $this->loadModel('product')->getById($productID);
                     if(empty($product)) dao::$errors['products'][$index][$productID] = $this->lang->project->api->error->productNotFound;
@@ -1144,7 +1144,7 @@ class projectZen extends project
 
         /* 如果是瀑布项目单套阶段，更新关联产品。*/
         /* If it is a single stage of the waterfall project, update associated products. */
-        if($project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
+        if($project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
             foreach($IdList as $executionID)
             {

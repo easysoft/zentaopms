@@ -1,36 +1,37 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试gitlabModel->apiGetSinglePipeline();
+title=测试 gitlabModel::apiGetSinglePipeline();
 timeout=0
-cid=1
+cid=0
 
-- 查询正确的pipeline信息属性status @failed
-- 使用不存在的gitlabID查询pipeline信息 @0
-- 使用不存在的projectID查询pipeline信息属性message @404 Project Not Found
-- 使用不存在的pipelineID查询pipeline信息属性message @404 Not found
+- 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是1, 2, 8 属性status @failed
+- 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是0, 2, 8  @0
+- 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是1, 0, 8 属性message @404 Project Not Found
+- 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是1, 2, 10001 属性message @404 Not found
+- 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是-1, -1, -1  @0
 
 */
 
-zenData('pipeline')->gen(5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-$gitlab = $tester->loadModel('gitlab');
+$table = zenData('pipeline');
+$table->id->range('1-10');
+$table->name->range('pipeline{10}');
+$table->product->range('1-3');
+$table->execution->range('1-5');
+$table->url->range('http://localhost/gitlab/project/2/pipelines/8');
+$table->gen(5);
 
-$gitlabID   = 1;
-$projectID  = 2;
-$pipelineID = 8;
+su('admin');
 
-$pipeline1 = $gitlab->apiGetSinglePipeline($gitlabID, $projectID, $pipelineID);
-$pipeline2 = $gitlab->apiGetSinglePipeline(0, $projectID, $pipelineID);
-$pipeline3 = $gitlab->apiGetSinglePipeline($gitlabID, 0, $pipelineID);
-$pipeline4 = $gitlab->apiGetSinglePipeline($gitlabID, $projectID, 10001);
+$gitlabTest = new gitlabTest();
 
-r($pipeline1) && p('status')  && e('failed');                // 查询正确的pipeline信息
-r($pipeline2) && p()          && e('0');                     // 使用不存在的gitlabID查询pipeline信息
-r($pipeline3) && p('message') && e('404 Project Not Found'); // 使用不存在的projectID查询pipeline信息
-r($pipeline4) && p('message') && e('404 Not found');         // 使用不存在的pipelineID查询pipeline信息
+r($gitlabTest->apiGetSinglePipelineTest(1, 2, 8)) && p('status') && e('failed');
+r($gitlabTest->apiGetSinglePipelineTest(0, 2, 8)) && p() && e('0');
+r($gitlabTest->apiGetSinglePipelineTest(1, 0, 8)) && p('message') && e('404 Project Not Found');
+r($gitlabTest->apiGetSinglePipelineTest(1, 2, 10001)) && p('message') && e('404 Not found');
+r($gitlabTest->apiGetSinglePipelineTest(-1, -1, -1)) && p() && e('0');

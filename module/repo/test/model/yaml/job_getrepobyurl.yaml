@@ -1,0 +1,60 @@
+---
+title: 测试repoModel::getRepoByUrl方法相关的job数据
+desc: 为getRepoByUrl方法测试提供job表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Job ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: Job名称
+  range: job1,job2,job3,job4,job5
+
+- field: repo
+  note: 关联的代码库ID
+  range: 1,2,3,4,5
+
+- field: server
+  note: 服务器ID
+  range: 1{5}
+
+- field: product
+  note: 产品ID
+  range: 1{5}
+
+- field: frame
+  note: 框架类型
+  range: unittest{5}
+
+- field: engine
+  note: 引擎类型
+  range: phpunit{5}
+
+- field: triggerType
+  note: 触发类型
+  range: manual{5}
+
+- field: private
+  note: 是否私有
+  range: 0{5}
+
+- field: customParam
+  note: 自定义参数
+  range: '[]'{5}
+
+- field: deleted
+  note: 删除状态
+  range: 0{4},1{1}
+
+- field: lastStatus
+  note: 最后状态
+  range: success{3},failure{1},running{1}
+
+- field: lastExec
+  note: 最后执行时间
+  range: 2023-01-01 00:00:00{5}

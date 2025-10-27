@@ -1,41 +1,97 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-function initData()
-{
-    $block = zenData('block');
-    $block->id->range('2-5');
-    $block->account->range('admin');
-    $block->dashboard->range('my');
-    $block->module->range('welcome,guide,project,project');
-    $block->code->range('welcome,guide,list,statistic');
-    $block->title->prefix('区块名称')->range('1-4');
-    $block->width->range('2,2,1,1');
-
-    $block->gen(4);
-}
 
 /**
 
-title=测试 block 模块 model下的 getMyDashboard 方法
+title=测试 blockModel::getSpecifiedBlockID();
 timeout=0
-cid=39
+cid=0
 
-- 测试 能找到区块 返回值 是否正确 @2
-
-- 测试 找不到区块 返回值 是否为 false @0
-
-- 测试 不传参数 返回值 是否为 false @0
+- 步骤1：正常情况查找存在的区块 @1
+- 步骤2：查找不存在的区块 @0
+- 步骤3：传入空参数 @0
+- 步骤4：部分参数为空 @0
+- 步骤5：查找项目列表区块 @3
+- 步骤6：用户1的区块 @4
 
 */
 
+// 1. 导入依赖（路径固定，不可修改）
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+
+// 2. 手动准备测试数据
 global $tester;
-$tester->loadModel('block');
+$dao = $tester->dao;
 
-initData();
+// 清理现有数据
+$dao->delete()->from(TABLE_BLOCK)->exec();
 
-r($tester->block->getSpecifiedBlockID('my', 'welcome', 'welcome'))  && p('') && e('2'); // 测试 能找到区块 返回值 是否正确
-r($tester->block->getSpecifiedBlockID('qa', 'bug', 'list'))  && p('') && e('0');        // 测试 找不到区块 返回值 是否为 false
-r($tester->block->getSpecifiedBlockID('', '', ''))  && p('') && e('0');                 // 测试 不传参数 返回值 是否为 false
+// 插入测试数据
+$dao->insert(TABLE_BLOCK)->data(array(
+    'id'        => 1,
+    'account'   => 'admin',
+    'dashboard' => 'my',
+    'module'    => 'welcome',
+    'code'      => 'welcome',
+    'title'     => 'block1',
+    'params'    => '{}'
+))->exec();
+
+$dao->insert(TABLE_BLOCK)->data(array(
+    'id'        => 2,
+    'account'   => 'admin',
+    'dashboard' => 'my',
+    'module'    => 'guide',
+    'code'      => 'guide',
+    'title'     => 'block2',
+    'params'    => '{}'
+))->exec();
+
+$dao->insert(TABLE_BLOCK)->data(array(
+    'id'        => 3,
+    'account'   => 'admin',
+    'dashboard' => 'my',
+    'module'    => 'project',
+    'code'      => 'list',
+    'title'     => 'block3',
+    'params'    => '{}'
+))->exec();
+
+$dao->insert(TABLE_BLOCK)->data(array(
+    'id'        => 4,
+    'account'   => 'user1',
+    'dashboard' => 'my',
+    'module'    => 'guide',
+    'code'      => 'guide',
+    'title'     => 'block4',
+    'params'    => '{}'
+))->exec();
+
+$dao->insert(TABLE_BLOCK)->data(array(
+    'id'        => 5,
+    'account'   => 'user1',
+    'dashboard' => 'qa',
+    'module'    => 'bug',
+    'code'      => 'list',
+    'title'     => 'block5',
+    'params'    => '{}'
+))->exec();
+
+// 3. 用户登录
+su('admin');
+
+// 4. 创建测试实例
+$blockTest = new blockTest();
+
+// 5. 至少5个测试步骤
+r($blockTest->getSpecifiedBlockIDTest('my', 'welcome', 'welcome')) && p('') && e('1'); // 步骤1：正常情况查找存在的区块
+r($blockTest->getSpecifiedBlockIDTest('qa', 'bug', 'notexist')) && p('') && e('0'); // 步骤2：查找不存在的区块
+r($blockTest->getSpecifiedBlockIDTest('', '', '')) && p('') && e('0'); // 步骤3：传入空参数
+r($blockTest->getSpecifiedBlockIDTest('my', '', 'welcome')) && p('') && e('0'); // 步骤4：部分参数为空
+r($blockTest->getSpecifiedBlockIDTest('my', 'project', 'list')) && p('') && e('3'); // 步骤5：查找项目列表区块
+
+// 步骤6：验证不同用户权限
+su('user1');
+$blockTest2 = new blockTest(); // 重新创建实例以获取新的用户上下文
+r($blockTest2->getSpecifiedBlockIDTest('my', 'guide', 'guide')) && p('') && e('4'); // 步骤6：用户1的区块

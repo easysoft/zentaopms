@@ -1,0 +1,44 @@
+title: checkDocPriv方法测试文档数据
+desc: 用于测试search模块tao层checkDocPriv方法的文档数据
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: '0'
+- field: project
+  range: '0'
+- field: execution
+  range: '0'
+- field: lib
+  range: '1-5'
+- field: module
+  range: '0'
+- field: title
+  range: 'Test Document {1-10}'
+- field: content
+  range: 'This is test document content {1-10}'
+- field: type
+  range: 'text'
+- field: status
+  range: 'normal'
+- field: addedBy
+  range: 'admin'
+- field: addedDate
+  range: '`2024-01-01`'
+- field: editedBy
+  range: 'admin'
+- field: editedDate
+  range: '`2024-01-01`'
+- field: acl
+  range: 'open{5},private{5}'
+- field: whitelist
+  range: ''
+- field: groups
+  range: ''
+- field: users
+  range: ''
+- field: version
+  range: '1'
+- field: deleted
+  range: '0'

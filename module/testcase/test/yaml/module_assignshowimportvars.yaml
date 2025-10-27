@@ -1,0 +1,36 @@
+title: 模块数据定义
+desc: assignShowImportVars方法测试用的模块数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-10
+- field: root
+  note: 所属产品
+  range: 1-5
+- field: branch
+  note: 所属分支
+  range: 0,1,2
+- field: name
+  note: 模块名称
+  range: 模块{10}
+- field: parent
+  note: 父模块
+  range: 0
+- field: path
+  note: 模块路径
+  range: `,1,`
+- field: grade
+  note: 模块等级
+  range: 1
+- field: order
+  note: 排序
+  range: 5
+- field: type
+  note: 模块类型
+  range: case
+- field: owner
+  note: 模块负责人
+  range: admin,user1,user2

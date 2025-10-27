@@ -1,0 +1,43 @@
+---
+title: Space data for instancesMetrics test
+desc: Test data for space table to support instancesMetrics test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Space ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  format: ""
+
+- field: name
+  note: Space name
+  range: test-namespace{1}, prod-space{1}, dev-space{1}
+  format: ""
+
+- field: k8space
+  note: Kubernetes namespace
+  range: test-namespace{1}, prod-ns{1}, dev-ns{1}
+  format: ""
+
+- field: owner
+  note: Space owner
+  range: admin{2}, user{1}
+  format: ""
+
+- field: default
+  note: Default space flag
+  range: 1{1}, 0{2}
+  format: ""
+
+- field: createdAt
+  note: Creation time
+  range: (now)-(1w)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: Delete status
+  range: 0{3}
+  format: ""

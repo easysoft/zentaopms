@@ -1,0 +1,69 @@
+---
+title: dept数据定义 - createManageProjectAdminLink方法测试
+desc: 为createManageProjectAdminLink方法生成测试部门数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 部门ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 部门名称
+  range: '研发部,产品部,测试部,运维部,市场部,人事部,财务部,行政部,销售部,技术支持部'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父部门ID
+  range: 0,1{3},2{2},3{2},4{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 部门路径
+  range: ',1,,1,2,,1,3,,1,4,,2,5,,2,6,,3,7,,3,8,,4,9,,4,10,'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 部门层级
+  range: 1{4},2{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: position
+  note: 职位
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: function
+  note: 部门职能
+  range: '软件开发,产品规划,质量保证,系统运维,市场推广,人力资源,财务管理,行政管理,销售业务,客户服务'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: manager
+  note: 部门经理
+  range: 'admin,user1,user2,user3,user4,user5,user6,user7,user8,user9'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

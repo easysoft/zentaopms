@@ -127,7 +127,7 @@ class actionModel extends model
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
 
-        $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
+        if(empty($this->app->installing) && empty($this->app->upgrading)) $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
         $this->saveIndex($objectType, $objectID, $actionType);
 
@@ -426,7 +426,7 @@ class actionModel extends model
      * @access public
      * @return object
      */
-    public function getAccountFirstAction(string $account): object
+    public function getAccountFirstAction(string $account): object|false
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->where('actor')->eq($account)->orderBy('id')->limit(1)->fetch();
     }
@@ -1953,7 +1953,7 @@ class actionModel extends model
 
         $beginAndEnd = $this->computeBeginAndEnd($period, '', $direction);
         $hasProduct = preg_match('/t2\.(`?)product/', $condition);
-        $condition  = preg_replace("/AND +`?date`?\s?(<|>|<=|>=)\s?'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $condition  = preg_replace("/AND +`?date`?\s*(<|>|<=|>=)\s*'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)

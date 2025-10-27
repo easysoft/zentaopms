@@ -1,0 +1,34 @@
+title: 用于createBug方法测试的bug数据
+desc: 提供createBug方法测试需要的基础bug数据
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 1-3
+- field: product
+  range: 1-3
+- field: execution
+  range: 0-2
+- field: title
+  range: 测试Bug{3},修复Bug{3},功能Bug{4}
+- field: pri
+  range: 1-4
+- field: severity
+  range: 1-4
+- field: status
+  range: active{5},resolved{3},closed{2}
+- field: openedBy
+  range: admin,user1,user2,testuser
+- field: openedDate
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+- field: assignedTo
+  range: admin,user1,user2,''
+- field: steps
+  range: 测试步骤1,测试步骤2,重现步骤,操作步骤
+- field: openedBuild
+  range: trunk{5},v1.0{3},v2.0{2}
+- field: resolution
+  range: fixed{4},postponed{2},duplicate{2},bydesign{1},''[1]
+- field: deleted
+  range: '0'

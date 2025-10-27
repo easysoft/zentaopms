@@ -1,0 +1,9 @@
+---
+title: table zt_flow_customflow
+author: automated export
+version: "1.0"
+fields:
+- field: id
+  range: 1-3
+- field: customflowdesc
+  range: 'Custom flow with !design.psd|image! mockup,Flow with !document.pdf|attachment! specification,Simple custom flow without files'

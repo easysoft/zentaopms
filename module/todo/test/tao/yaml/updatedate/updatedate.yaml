@@ -1,39 +1,45 @@
-title: zt_updatedate
-author: shenshulong
+title: zt_todo for updateDate test
+author: claude
 version: '1.0'
 fields:
     - field: id
-      range: 1-100
+      range: 1-10
     - field: account
-      range: 'admin,user1,user2'
+      range: 'admin,user1,user2,test'
     - field: objectID
-      range: 10-20
+      range: 10-30
     - field: date
       range: 1-9
       prefix: '2023-04-2'
     - field: begin
-      range: 1000-1100
+      range: 1000-1800
     - field: end
-      range: 1200-1300
+      range: 1200-1900
     - field: type
-      range: 'task'
+      range: 'task,story,bug,custom'
     - field: cycle
       range: 0
     - field: pri
-      range: 3
+      range: 1-4
     - field: name
-      range: 1-5
-      prefix: '我的待办'
+      range: 1-10
+      prefix: '测试待办'
     - field: desc
-      range: 1-5
-      prefix: '这是待办描述'
+      range: 1-10
+      prefix: '测试待办描述'
     - field: status
-      range: 'wait,doing,done'
+      range: 'wait,doing,done,closed'
     - field: vision
-      range: 'rnd,litle'
-    - field: finishedDate
+      range: 'rnd,lite'
+    - field: assignedTo
+      range: 'admin,user1,user2'
+    - field: assignedBy
+      range: 'admin'
+    - field: assignedDate
       range: 1-9
       prefix: '2023-04-2'
-    - field: closedDate
-      range: 1-9
-      prefix: '2023-04-2'
+      postfix: ' 10:00:00'
+    - field: private
+      range: 0-1
+    - field: deleted
+      range: 0

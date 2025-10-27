@@ -1,0 +1,107 @@
+---
+title: bug测试数据
+desc: 为processJiraIssueContent方法提供缺陷测试数据
+
+fields:
+- field: id
+  range: 1-3
+- field: product
+  range: 1-3
+- field: module
+  range: 0
+- field: project
+  range: 1-3
+- field: plan
+  range: 0
+- field: story
+  range: 0
+- field: task
+  range: 0
+- field: title
+  range: [缺陷标题1,缺陷标题2,缺陷标题3]
+- field: keywords
+  range: ''
+- field: severity
+  range: 3
+- field: pri
+  range: 3
+- field: type
+  range: codeerror
+- field: os
+  range: all
+- field: browser
+  range: all
+- field: steps
+  range: [缺陷重现步骤1,缺陷重现步骤2,缺陷重现步骤3]
+- field: status
+  range: active
+- field: color
+  range: ''
+- field: confirmed
+  range: 1
+- field: activatedCount
+  range: 0
+- field: activatedDate
+  range: '0000-00-00'
+- field: feedbackBy
+  range: ''
+- field: notifyEmail
+  range: ''
+- field: mailto
+  range: ''
+- field: openedBy
+  range: admin
+- field: openedDate
+  range: '2023-01-01 09:00:00':'2023-12-31 18:00:00'
+- field: openedBuild
+  range: trunk
+- field: assignedTo
+  range: admin
+- field: assignedDate
+  range: '2023-01-01 09:00:00':'2023-12-31 18:00:00'
+- field: deadline
+  range: '0000-00-00'
+- field: resolvedBy
+  range: ''
+- field: resolution
+  range: ''
+- field: resolvedBuild
+  range: ''
+- field: resolvedDate
+  range: '0000-00-00 00:00:00'
+- field: closedBy
+  range: ''
+- field: closedDate
+  range: '0000-00-00 00:00:00'
+- field: duplicateBug
+  range: 0
+- field: linkBug
+  range: ''
+- field: case
+  range: 0
+- field: caseVersion
+  range: 1
+- field: result
+  range: 0
+- field: repo
+  range: 0
+- field: mr
+  range: 0
+- field: entry
+  range: ''
+- field: lines
+  range: ''
+- field: v1
+  range: ''
+- field: v2
+  range: ''
+- field: repoType
+  range: ''
+- field: testtask
+  range: 0
+- field: lastEditedBy
+  range: ''
+- field: lastEditedDate
+  range: '0000-00-00 00:00:00'
+- field: deleted
+  range: 0

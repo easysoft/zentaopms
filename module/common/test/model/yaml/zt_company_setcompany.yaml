@@ -1,0 +1,39 @@
+---
+title: 公司数据用于setCompany方法测试
+desc: 测试setCompany方法在不同公司数据场景下的行为
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 公司ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 公司名称
+  range: 易软天创网络科技有限公司,测试公司A,测试公司B,禅道软件,超长名称测试公司
+- field: phone
+  note: 公司电话
+  range: 0532-88888888,400-123-4567,010-12345678,021-87654321,028-12345678
+- field: fax
+  note: 传真号码
+  range: 0532-99999999,021-87654321,010-98765432,[],028-98765432
+- field: address
+  note: 公司地址
+  range: 青岛市市南区,北京市朝阳区,上海市浦东新区,[],成都市高新区
+- field: zipcode
+  note: 邮政编码
+  range: 266000,100000,200000,[],610000
+- field: website
+  note: 公司网站
+  range: www.zentao.net,www.test.com,http://example.com,[],www.company.com
+- field: backyard
+  note: 后台地址
+  range: /zentao/,/admin/,/backend/,[],/manage/
+- field: guest
+  note: 是否允许游客访问
+  range: '0','1','0','1','0'
+- field: admins
+  note: 管理员列表
+  range: admin,admin,user1,[],test

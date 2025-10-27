@@ -355,7 +355,7 @@ class projectModel extends model
             $pager   = in_array($project->model, array('waterfall', 'ipd')) ? null : new pager(0, 1, 1);
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teamCount[$projectID]) ? $teamCount[$projectID] : 0;
-            $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
+            $project->estimate   = isset($estimates[$projectID]) ? round((float)$estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->path, $project->grade) : '';
         }
         return $projects;
@@ -1096,7 +1096,7 @@ class projectModel extends model
             $projects[$projectID]->program = $programID;
         }
 
-        $programs = $this->loadModel('program')->getPairsByList(array_column($projects, 'program'));
+        $programs = $this->loadModel('program')->getPairsByList(toIntArray(array_column($projects, 'program')));
 
         /* Sort by project order in the program list. */
         $allProjects = array();
@@ -1232,6 +1232,7 @@ class projectModel extends model
         $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
         $this->projectTao->createDocLib($projectID, $project, $program);
         $this->addTeamMembers($projectID, $project, array($project->openedBy));
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->projectTao->createMilestoneReport($projectID);
 
         if($project->hasProduct && empty($postData->rawdata->newProduct))
         {
@@ -1527,6 +1528,11 @@ class projectModel extends model
             if($unlinkType) $this->unlinkStoryByType($projectID, $unlinkType);
         }
         if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
+
+        if($oldProject->model != $project->model && !in_array($oldProject->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+        {
+            $this->projectTao->createMilestoneReport($projectID);
+        }
 
         if(dao::isError()) return false;
         return common::createChanges($oldProject, $project);
@@ -1983,7 +1989,7 @@ class projectModel extends model
         if(!empty($_POST['otherProducts'])) return $this->linkOtherProducts($projectID, $members);
 
         /* Link products of current program of the project. */
-        $products           = isset($_POST['products']) ? (array)$_POST['products'] : $products;
+        $products           = isset($_POST['products']) ? toIntArray($_POST['products']) : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
         $this->linkProducts($projectID, $products, $oldProjectProducts, $members);
 
@@ -2463,6 +2469,7 @@ class projectModel extends model
                 $planIdList[$planID] = $planID;
             }
         }
+        $planIdList = toIntArray($planIdList);
         if(empty($planIdList)) return true;
 
         $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);

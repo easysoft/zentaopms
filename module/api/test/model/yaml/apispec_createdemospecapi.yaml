@@ -1,0 +1,81 @@
+---
+title: apispec表测试数据
+desc: 为创建演示API规格测试提供数据
+
+fields:
+- field: id
+  note: 规格ID
+  range: 1-10
+  
+- field: doc
+  note: 所属文档ID
+  range: 1-5
+  
+- field: module
+  note: 所属模块ID
+  range: 1001-1010
+  
+- field: title
+  note: 规格标题
+  range: 'API规格1,API规格2,API规格3,用户接口,产品接口'
+  
+- field: path
+  note: 接口路径
+  range: '/api/user,/api/product,/api/project,/api/task,/api/bug'
+  
+- field: protocol
+  note: 协议类型
+  range: 'HTTP'
+  
+- field: method
+  note: 请求方法
+  range: 'GET{2},POST{2},PUT{1}'
+  
+- field: requestType
+  note: 请求类型
+  range: 'application/json{3},application/x-www-form-urlencoded{2}'
+  
+- field: responseType
+  note: 响应类型
+  range: 'application/json'
+  
+- field: status
+  note: 状态
+  range: 'doing{2},done{3}'
+  
+- field: owner
+  note: 负责人
+  range: 'admin,user1,user2'
+  
+- field: desc
+  note: 描述
+  range: '用户管理接口,产品管理接口,项目管理接口,任务管理接口,缺陷管理接口'
+  
+- field: version
+  note: 版本号
+  range: 1-3
+  
+- field: params
+  note: 参数配置
+  range: '{"param1":"value1"},{"param2":"value2"},{"id":"number"},{"name":"string"},{}'
+  
+- field: paramsExample
+  note: 参数示例
+  range: '{"id":1},{"name":"test"},{"user":"admin"},{"page":1},{}'
+  
+- field: responseExample
+  note: 响应示例
+  range: '{"code":200,"data":{}},{"success":true},{"result":"ok"},{"status":"done"},{}'
+  
+- field: response
+  note: 响应配置
+  range: '{"code":"number","data":"object"},{"success":"boolean"},{"result":"string"},{"status":"string"},{}'
+  
+- field: addedBy
+  note: 创建者
+  range: 'admin,user1,user2,test'
+  
+- field: addedDate
+  note: 创建时间
+  range: '2023-01-01 10:00:00-2023-12-31 18:00:00'
+  format: YYYY-MM-DD hh:mm:ss

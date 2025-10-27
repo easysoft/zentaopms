@@ -14,6 +14,10 @@ namespace zin;
 if($type == 'edit')
 {
     $https = zget($config->xuanxuan, 'https', 'off');
+    $debug = zget($config->xuanxuan, 'debug', 'off');
+    if($debug == 1) $debug = 'on';
+    else if($debug == 0) $debug = 'off';
+
     formPanel
     (
         set::title($lang->im->settings),
@@ -213,6 +217,20 @@ if($type == 'edit')
                 )
             )
         ),
+        strpos(\extCommonModel::getLicensePropertyValue('permissions'), 'im/messageGetReadStatus') !== false
+            ? formGroup
+            (
+                set::label($lang->im->readStatus),
+                radioList
+                (
+                    width('1/4'),
+                    set::name('readStatus'),
+                    set::inline(true),
+                    set::items($lang->im->readOptions),
+                    set::value(zget($config->xuanxuan, 'readStatus', 'off'))
+                )
+            )
+        : null,
         formGroup
         (
             set::label($lang->im->debug),
@@ -222,7 +240,7 @@ if($type == 'edit')
                 set::name('debug'),
                 set::inline(true),
                 set::items($lang->im->debugStatus),
-                set::value(zget($config->xuanxuan, 'debug', 0))
+                set::value($debug)
             )
         )
     );
@@ -248,6 +266,9 @@ else
             item(set::name($lang->im->xxd->uploadFileSize), $lang->im->xxd->max . zget($config->xuanxuan, 'uploadFileSize', 20) . 'M'),
             item(set::name($lang->im->xxd->aes), zget($lang->im->aesOptions, zget($config->xuanxuan, 'aes', 'on'))),
             item(set::name($lang->im->xxd->https), zget($lang->im->httpsOptions, zget($config->xuanxuan, 'https', 'off'))),
+            strpos(\extCommonModel::getLicensePropertyValue('permissions'), 'im/messageGetReadStatus') !== false
+                ? item(set::name($lang->im->readStatus), zget($lang->im->readOptions, zget($config->xuanxuan, 'readStatus', 'off')))
+                : null,
             item(set::name($lang->im->debug), zget($lang->im->debugStatus, zget($config->xuanxuan, 'debug', 0))),
             $disabled ? null : item
             (

@@ -1,0 +1,47 @@
+---
+title: 需求估算信息测试数据
+desc: 用于测试 getEstimateInfo 方法的测试数据
+author: Claude
+version: "1.0"
+
+fields:
+- field: story
+  note: "需求ID"
+  range: 1,1,1,2,2,2,3,3,3,4,4,4,5,5,5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: round
+  note: "轮次"
+  range: 1,2,3,1,2,3,1,2,3,1,2,3,1,2,3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: estimate
+  note: "估算数据"
+  range: 'user1,user2,admin,test,user1,user2,admin,test,user1,user2,admin,test,user1,user2,admin'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: average
+  note: "平均值"
+  range: 1.5,2.5,3.5,1.5,2.5,3.5,1.5,2.5,3.5,1.5,2.5,3.5,1.5,2.5,3.5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: "创建者"
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: "创建日期"
+  range: "2023-01-01 00:00:00"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"

@@ -1,0 +1,39 @@
+---
+title: Product数据用于assignVarsForEdit测试
+desc: 提供product表的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: name
+  note: 产品名称
+  range: 'Product{1}, Product{2}, Product{3}, Product{4}, Shadow Product{1}'
+  prefix: "Test "
+- field: type
+  note: 产品类型
+  range: 'normal{4}, branch{1}'
+- field: shadow
+  note: 是否为影子产品
+  range: '[]{4}, shadow{1}'
+- field: status
+  note: 产品状态
+  range: 'normal{3}, closed{2}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{3}, user1{2}'
+- field: createdDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00-2023-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: order
+  note: 排序
+  range: 1-100
+- field: desc
+  note: 产品描述
+  range: '[Product description for testing]{3}, []{2}'
+- field: deleted
+  note: 是否删除
+  range: '0{5}'

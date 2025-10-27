@@ -1,0 +1,20 @@
+---
+title: 需求数据
+desc: 用于测试getObjectList方法的需求数据
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+- field: title
+  note: 需求标题
+  range: 需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10
+- field: type
+  note: 需求类型
+  range: story{4},requirement{3},epic{3}
+- field: status
+  note: 需求状态
+  range: draft{2},active{6},closed{2}
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}

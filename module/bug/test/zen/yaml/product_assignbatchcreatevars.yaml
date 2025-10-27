@@ -1,0 +1,26 @@
+---
+title: assignBatchCreateVars测试的产品数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的产品相关数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+- field: name
+  note: 产品名称
+  range: '产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10'
+- field: code
+  note: 产品代码
+  range: 'P001,P002,P003,P004,P005,P006,P007,P008,P009,P010'
+- field: type
+  note: 产品类型
+  range: 'normal{4},branch{3},platform{3}'
+- field: status
+  note: 产品状态
+  range: 'normal{8},closed{2}'
+- field: line
+  note: 产品线
+  range: 1-5
+- field: program
+  note: 项目集
+  range: 0-3

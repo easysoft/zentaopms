@@ -1,0 +1,77 @@
+---
+title: Entry表测试数据
+desc: 用于checkEntry方法的单元测试
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 入口ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 入口名称
+  range: 'Test Entry{5}, Valid Entry{3}, Invalid Entry{2}'
+  prefix: ""
+  postfix: ""
+- field: account
+  note: 绑定账户
+  range: 'admin{3}, user1{2}, user2{2}, testuser{2}, []{1}'
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 入口代码
+  range: 'validcode{3}, testcode{2}, emptykey{2}, invalidip{2}, freeuser{1}'
+  prefix: ""
+  postfix: ""
+- field: key
+  note: 入口密钥
+  range: 'validkey123456789012345678901234{3}, testkey12345678901234567890123{2}, []{2}, invalidkey{3}'
+  prefix: ""
+  postfix: ""
+- field: freePasswd
+  note: 免密码登录
+  range: '0{7}, 1{3}'
+  prefix: ""
+  postfix: ""
+- field: ip
+  note: 允许的IP地址
+  range: '*{3}, 192.168.1.100{2}, 127.0.0.1{2}, 10.0.0.1{2}, invalidip{1}'
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 描述
+  range: 'Test entry description{5}, Valid description{3}, []{2}'
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}, system{3}, user1{2}'
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: calledTime
+  note: 调用次数
+  range: 0-100
+  prefix: ""
+  postfix: ""
+- field: editedBy
+  note: 编辑者
+  range: 'admin{5}, user1{3}, []{2}'
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00-2024-12-31 23:59:59'
+  format: 'YYYY-MM-DD hh:mm:ss'
+- field: deleted
+  note: 是否删除
+  range: '0{8}, 1{2}'
+  prefix: ""
+  postfix: ""

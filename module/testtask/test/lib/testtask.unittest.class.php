@@ -245,12 +245,13 @@ class testtaskTest
         $limit   = count($runs);
         $runs    = $this->objectModel->dao->select('task, `case`, version, assignedTo, status')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->orderBy('id_desc')->limit($limit)->fetchAll();
         $actions = $this->objectModel->dao->select('objectType, objectID, action, extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
+        $task    = $this->objectModel->dao->select('*')->from(TABLE_TESTTASK)->where('id')->eq($taskID)->fetch();
 
         $cases = array();
         $tab   = $this->objectModel->app->tab;
-        if($tab == 'project' || $tab == 'execution')
+        if(!empty($task->project) || !empty($task->execution))
         {
-            $project = $tab == 'project' ? $this->objectModel->session->project : $this->objectModel->session->execution;
+            $project = !empty($task->execution) ? $task->execution : $task->project;
             $cases   = $this->objectModel->dao->select('project, product, `case`, version, `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
         }
 
@@ -420,13 +421,124 @@ class testtaskTest
         return $objects;
     }
 
-    public function importUnitResultTest($productID)
+    /**
+     * Test importUnitResult method.
+     *
+     * @param  object $task
+     * @param  string $scenario
+     * @access public
+     * @return mixed
+     */
+    public function importUnitResultTest(object $task, string $scenario = 'default')
     {
-        $objects = $this->objectModel->importUnitResult($productID);
+        global $tester;
 
-        if(dao::isError()) return dao::getError();
+        // 清理之前的session数据
+        unset($_SESSION['resultFile']);
 
-        return $objects;
+        if($scenario == 'nofile')
+        {
+            // 模拟无文件上传的情况
+            $_SESSION['resultFile'] = array();
+            $result = $this->objectModel->importUnitResult($task);
+            return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+        }
+        elseif($scenario == 'valid')
+        {
+            // 模拟有效的XML文件上传
+            $validXml = '<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ExampleTest" tests="2" failures="0" errors="0" time="0.042">
+  <testcase classname="ExampleTest" name="testExample1" time="0.021"/>
+  <testcase classname="ExampleTest" name="testExample2" time="0.021"/>
+</testsuite>';
+
+            // 创建临时文件
+            $tempFile = sys_get_temp_dir() . '/valid_junit_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $validXml);
+
+            // 模拟上传文件结构
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => 'valid_junit.xml',
+                    'title'     => 'valid_junit.xml',
+                    'size'      => strlen($validXml),
+                    'extension' => 'xml',
+                    'tmpname'   => $tempFile
+                )
+            );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                if(dao::isError()) return 'false';
+                return is_numeric($result) && $result > 0 ? (string)$result : 'false';
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
+        }
+        elseif($scenario == 'invalid')
+        {
+            // 模拟无效XML文件
+            $invalidXml = '<invalid>xml</content>';
+            $tempFile = sys_get_temp_dir() . '/invalid_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $invalidXml);
+
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => 'invalid.xml',
+                    'title'     => 'invalid.xml',
+                    'size'      => strlen($invalidXml),
+                    'extension' => 'xml',
+                    'tmpname'   => $tempFile
+                )
+            );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
+        }
+        elseif($scenario == 'empty')
+        {
+            // 模拟空XML文件（无测试用例）
+            $emptyXml = '<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EmptyTest" tests="0" failures="0" errors="0" time="0">
+</testsuite>';
+            $tempFile = sys_get_temp_dir() . '/empty_' . uniqid() . '.xml';
+            file_put_contents($tempFile, $emptyXml);
+
+            $_SESSION['resultFile'] = array(
+                array(
+                    'pathname'  => 'empty.xml',
+                    'title'     => 'empty.xml',
+                    'size'      => strlen($emptyXml),
+                    'extension' => 'xml',
+                    'tmpname'   => $tempFile
+                )
+            );
+
+            try {
+                $result = $this->objectModel->importUnitResult($task);
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+            } catch(Throwable $e) {
+                if(file_exists($tempFile)) @unlink($tempFile);
+                return 'false';
+            }
+        }
+
+        // 默认情况（无文件）
+        try {
+            $result = $this->objectModel->importUnitResult($task);
+            return dao::isError() ? 'false' : ($result === false ? 'false' : $result);
+        } catch(Throwable $e) {
+            return 'false';
+        }
     }
 
     public function parseCppXMLResultTest($fileName, $productID, $frame)
@@ -588,5 +700,387 @@ class testtaskTest
 
         $newRun = $this->objectModel->dao->select('*')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
         return $newRun ? $newRun : false;
+    }
+
+    /**
+     * Test processExecutionName method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function processExecutionNameTest(array $tasks): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processExecutionName');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($tasks));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getRunByCase method.
+     *
+     * @param  int $taskID
+     * @param  int $caseID
+     * @access public
+     * @return mixed
+     */
+    public function getRunByCaseTest(int $taskID, int $caseID)
+    {
+        $result = $this->objectModel->getRunByCase($taskID, $caseID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test addPrefixToOrderBy method.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return string
+     */
+    public function addPrefixToOrderByTest(string $orderBy): string
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('addPrefixToOrderBy');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, array($orderBy));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getSceneCases method.
+     *
+     * @param  int   $productID
+     * @param  array $runs
+     * @access public
+     * @return array
+     */
+    public function getSceneCasesTest(int $productID, array $runs): array
+    {
+        $result = $this->objectModel->getSceneCases($productID, $runs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getGroupByCases method.
+     *
+     * @param  int|array $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getGroupByCasesTest($caseIDList)
+    {
+        $result = $this->objectModel->getGroupByCases($caseIDList);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initResultForAutomatedTest method.
+     *
+     * @param  int $runID
+     * @param  int $caseID
+     * @param  int $version
+     * @param  int $nodeID
+     * @access public
+     * @return int|false
+     */
+    public function initResultForAutomatedTestTest(int $runID = 0, int $caseID = 0, int $version = 0, int $nodeID = 0)
+    {
+        $result = $this->objectModel->initResultForAutomatedTest($runID, $caseID, $version, $nodeID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processStepResults method.
+     *
+     * @param  array  $caseIdList
+     * @param  int    $caseID
+     * @param  string $caseResult
+     * @param  array  $postSteps
+     * @param  array  $postReals
+     * @access public
+     * @return array
+     */
+    public function processStepResultsTest(array $caseIdList, int $caseID, string $caseResult, array $postSteps, array $postReals): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processStepResults');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$caseIdList, $caseID, $caseResult, $postSteps, $postReals]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test formatZtfLog method.
+     *
+     * @param  string $result
+     * @param  array  $stepResults
+     * @access public
+     * @return string
+     */
+    public function formatZtfLogTest(string $result, array $stepResults): string
+    {
+        $result = $this->objectModel->formatZtfLog($result, $stepResults);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test importDataOfUnitResult method.
+     *
+     * @param  int    $taskID
+     * @param  int    $productID
+     * @param  array  $suites
+     * @param  array  $cases
+     * @param  array  $results
+     * @param  array  $suiteNames
+     * @param  array  $caseTitles
+     * @param  string $auto
+     * @access public
+     * @return bool
+     */
+    public function importDataOfUnitResultTest(int $taskID, int $productID, array $suites, array $cases, array $results, array $suiteNames, array $caseTitles, string $auto = 'unit'): bool
+    {
+        $result = $this->objectModel->importDataOfUnitResult($taskID, $productID, $suites, $cases, $results, $suiteNames, $caseTitles, $auto);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test importSuiteOfUnitResult method.
+     *
+     * @param  object $suite
+     * @access public
+     * @return int
+     */
+    public function importSuiteOfUnitResultTest(object $suite): int
+    {
+        $this->objectModel->loadModel('action');
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('importSuiteOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$suite]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test importRunOfUnitResult method.
+     *
+     * @param  object $case
+     * @param  int    $caseID
+     * @param  object $testRun
+     * @access public
+     * @return mixed
+     */
+    public function importRunOfUnitResultTest(object $case, int $caseID, object $testRun)
+    {
+        // 确保case对象包含必需的属性
+        if(!isset($case->version)) $case->version = 1;
+        if(!isset($case->lastRunner)) $case->lastRunner = '';
+        if(!isset($case->lastRunDate)) $case->lastRunDate = '';
+        if(!isset($case->lastRunResult)) $case->lastRunResult = '';
+
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('importRunOfUnitResult');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->objectModel, [$case, $caseID, $testRun]);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                return 'dao_error: ' . (is_array($errors) ? implode(', ', $errors) : $errors);
+            }
+
+            // 返回插入成功的标志，而不是具体的ID
+            return $result > 0 ? 'success' : 'failed';
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Test linkImportedCaseToSuite method.
+     *
+     * @param  object $case
+     * @param  int    $caseID
+     * @param  object $suiteCase
+     * @access public
+     * @return mixed
+     */
+    public function linkImportedCaseToSuiteTest(object $case, int $caseID, object $suiteCase)
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('linkImportedCaseToSuite');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->objectModel, [$case, $caseID, $suiteCase]);
+            if(dao::isError()) {
+                $errors = dao::getError();
+                return 'dao_error: ' . (is_array($errors) ? implode(', ', $errors) : $errors);
+            }
+            return $result;
+        } catch(Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch(Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * Test getExistSuitesOfUnitResult method.
+     *
+     * @param  array  $names
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    public function getExistSuitesOfUnitResultTest(array $names, int $productID, string $auto): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getExistSuitesOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$names, $productID, $auto]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getExistCasesOfUnitResult method.
+     *
+     * @param  array  $titles
+     * @param  int    $suiteID
+     * @param  int    $productID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    public function getExistCasesOfUnitResultTest(array $titles, int $suiteID, int $productID, string $auto): array
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('getExistCasesOfUnitResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$titles, $suiteID, $productID, $auto]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initSuite method.
+     *
+     * @param  int    $product
+     * @param  string $name
+     * @param  string $now
+     * @access public
+     * @return object
+     */
+    public function initSuiteTest(int $product, string $name, string $now): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initSuite');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$product, $name, $now]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initCase method.
+     *
+     * @param  int    $product
+     * @param  string $title
+     * @param  string $now
+     * @param  string $auto
+     * @param  string $frame
+     * @param  string $type
+     * @param  string $stage
+     * @access public
+     * @return object
+     */
+    public function initCaseTest(int $product, string $title, string $now, string $auto, string $frame, string $type = 'unit', string $stage = 'unittest'): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initCase');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$product, $title, $now, $auto, $frame, $type, $stage]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initResult method.
+     *
+     * @param  string $now
+     * @access public
+     * @return object
+     */
+    public function initResultTest(string $now): object
+    {
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('initResult');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectModel, [$now]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processResult method.
+     *
+     * @param  object $result
+     * @param  object $matchNode
+     * @param  string $failure
+     * @param  string $skipped
+     * @access public
+     * @return object|array
+     */
+    public function processResultTest(object $result, object $matchNode, string $failure, string $skipped): object|array
+    {
+        // Use reflection to access private method
+        $reflection = new ReflectionClass($this->objectModel);
+        $method = $reflection->getMethod('processResult');
+        $method->setAccessible(true);
+
+        $processedResult = $method->invokeArgs($this->objectModel, [$result, $matchNode, $failure, $skipped]);
+        if(dao::isError()) return dao::getError();
+
+        return $processedResult;
     }
 }

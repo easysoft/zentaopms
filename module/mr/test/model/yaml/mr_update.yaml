@@ -1,0 +1,102 @@
+---
+title: mr数据定义 - update方法测试
+desc: 为update方法测试提供专门的MR测试数据
+author: Claude Code
+version: "1.0"
+
+fields:
+- field: id
+  note: MR记录ID
+  range: 10-15
+
+- field: hostID
+  note: 主机ID
+  range: 1
+
+- field: sourceProject
+  note: 源项目ID
+  range: test-project
+
+- field: sourceBranch
+  note: 源分支名称
+  range: develop,feature-test,hotfix-123
+
+- field: targetProject
+  note: 目标项目ID
+  range: test-project
+
+- field: targetBranch
+  note: 目标分支名称
+  range: master
+
+- field: mriid
+  note: 合并请求远程ID
+  range: 100-105
+
+- field: title
+  note: 合并请求标题
+  range: Test MR for update,Feature branch merge,Bug fix merge
+
+- field: assignee
+  note: 指派人
+  range: admin
+
+- field: createdBy
+  note: 创建人
+  range: admin
+
+- field: createdDate
+  note: 创建时间
+  range: "`2023-12-01 10:00:00`"
+
+- field: editedDate
+  note: 编辑时间
+  range: "`2023-12-01 10:00:00`"
+
+- field: status
+  note: MR状态
+  range: opened
+
+- field: mergeStatus
+  note: 合并状态
+  range: can_be_merged
+
+- field: repoID
+  note: 代码库ID
+  range: 1
+
+- field: executionID
+  note: 执行ID
+  range: 1
+
+- field: needCI
+  note: 是否需要CI
+  range: 0
+
+- field: jobID
+  note: 流水线任务ID
+  range: 0
+
+- field: removeSourceBranch
+  note: 是否删除源分支
+  range: 0
+
+- field: squash
+  note: 是否压缩提交
+  range: 0
+
+- field: description
+  note: 描述
+  range: Test description for MR
+
+- field: synced
+  note: 是否已同步
+  range: 1
+
+- field: deleted
+  note: 是否删除
+  range: 0
+
+- field: isFlow
+  note: 是否为流程
+  range: 0

@@ -1,0 +1,54 @@
+---
+title: 执行需求关系分配测试数据
+desc: 用于测试assignRelationForStory方法的数据配置
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 执行名称
+  range: 执行{1-10}
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 执行类型
+  range: execution{8},stage{2}
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 执行状态
+  range: wait{3},doing{5},done{2}
+  prefix: ""
+  postfix: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01,2024-02-01,2024-03-01
+  prefix: ""
+  postfix: ""
+
+- field: end
+  note: 结束日期
+  range: 2024-12-31,2024-11-30,2024-10-31
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}
+  prefix: ""
+  postfix: ""

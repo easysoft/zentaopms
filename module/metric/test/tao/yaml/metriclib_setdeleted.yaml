@@ -1,0 +1,62 @@
+---
+title: metriclib数据定义 - setDeleted方法测试
+desc: 为setDeleted方法测试提供基础数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 度量数据ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: metricCode
+  note: 度量项代码
+  range: test_metric_01{10},test_metric_02{10}
+  format: ""
+- field: value
+  note: 度量值
+  range: 10-200:10
+  format: ""
+- field: year
+  note: 年份
+  range: 2024
+  format: ""
+- field: month
+  note: 月份
+  range: 01-12:R
+  format: "%02d"
+- field: week
+  note: 周数
+  range: 01-52:R
+  format: "%02d"
+- field: day
+  note: 日期
+  range: 01-28:R
+  format: "%02d"
+- field: date
+  note: 完整日期时间
+  range: 2024-01-01 00:00:00,2024-12-31 23:59:59
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: 0{15},1{5}
+  format: ""
+- field: system
+  note: 系统范围
+  range: 0{10},1{10}
+  format: ""
+- field: product
+  note: 产品ID
+  range: 0{10},1-5:R{10}
+  format: ""
+- field: project
+  note: 项目ID
+  range: 0{10},1-5:R{10}
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0{10},1-5:R{10}
+  format: ""

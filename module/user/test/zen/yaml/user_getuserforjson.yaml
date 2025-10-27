@@ -1,0 +1,210 @@
+---
+title: 用户数据定义，用于测试getUserForJSON方法
+desc: 包含完整用户信息的测试数据，用于验证getUserForJSON方法的功能
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: company
+  note: 公司ID
+  range: 1
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 用户类型
+  range: inside,outside{2}
+  prefix: ""
+  postfix: ""
+
+- field: dept
+  note: 部门ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: account
+  note: 用户账号
+  range: admin,user{4},test{3},guest{2}
+  prefix: ""
+  postfix: ""
+
+- field: password
+  note: 用户密码（应被移除）
+  range: a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3{5},098f6bcd4621d373cade4e832627b4f6{5}
+  prefix: ""
+  postfix: ""
+
+- field: role
+  note: 用户角色
+  range: admin{2},dev{3},qa{3},pm{2}
+  prefix: ""
+  postfix: ""
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,张三{2},李四{2},王五{2},测试用户{3}
+  prefix: ""
+  postfix: ""
+
+- field: superior
+  note: 上级用户
+  range: admin,user1,user2,[]{3}
+  prefix: ""
+  postfix: ""
+
+- field: pinyin
+  note: 拼音
+  range: admin,zhangsan{2},lisi{2},wangwu{2},test{3}
+  prefix: ""
+  postfix: ""
+
+- field: nickname
+  note: 昵称
+  range: Admin,张三{2},李四{2},王五{2},Test{3}
+  prefix: ""
+  postfix: ""
+
+- field: commiter
+  note: 提交者
+  range: admin,zhang{2},li{2},wang{2},test{3}
+  prefix: ""
+  postfix: ""
+
+- field: avatar
+  note: 头像
+  range: []{10}
+  prefix: ""
+  postfix: ""
+
+- field: birthday
+  note: 生日
+  range: 1980-01-01,1985-05-15,1990-12-25,1992-08-10,1988-03-20,[]{5}
+  prefix: ""
+  postfix: ""
+
+- field: gender
+  note: 性别
+  range: f{5},m{5}
+  prefix: ""
+  postfix: ""
+
+- field: email
+  note: 邮箱
+  range: admin@test.com,zhang@test.com{2},li@test.com{2},wang@test.com{2},test@test.com{3}
+  prefix: ""
+  postfix: ""
+
+- field: skype
+  note: Skype账号
+  range: admin_skype,zhang_skype{2},li_skype{2},wang_skype{2},[]{3}
+  prefix: ""
+  postfix: ""
+
+- field: qq
+  note: QQ号码
+  range: 123456789,987654321{2},555666777{2},111222333{2},[]{3}
+  prefix: ""
+  postfix: ""
+
+- field: mobile
+  note: 手机号码
+  range: 13812345678,13987654321{2},15555666777{2},13111222333{2},[]{3}
+  prefix: ""
+  postfix: ""
+
+- field: phone
+  note: 座机号码
+  range: 010-12345678,021-87654321{2},0755-5566777{2},[]{5}
+  prefix: ""
+  postfix: ""
+
+- field: address
+  note: 地址
+  range: 北京市朝阳区,上海市浦东新区{2},深圳市南山区{2},[]{5}
+  prefix: ""
+  postfix: ""
+
+- field: zipcode
+  note: 邮编
+  range: 100000,200000{2},518000{2},[]{5}
+  prefix: ""
+  postfix: ""
+
+- field: join
+  note: 入职日期
+  range: 2020-01-01,2021-05-15,2022-12-25,2023-08-10,[]{6}
+  prefix: ""
+  postfix: ""
+
+- field: visits
+  note: 访问次数
+  range: 100-500
+  prefix: ""
+  postfix: ""
+
+- field: ip
+  note: IP地址
+  range: 192.168.1.100,192.168.1.101{2},192.168.1.102{2},[]{5}
+  prefix: ""
+  postfix: ""
+
+- field: last
+  note: 最后登录时间
+  range: 1640995200-1672531199
+  prefix: ""
+  postfix: ""
+
+- field: fails
+  note: 失败登录次数
+  range: 0-3
+  prefix: ""
+  postfix: ""
+
+- field: locked
+  note: 锁定时间
+  range: 0000-00-00 00:00:00{8},[]{2}
+  prefix: ""
+  postfix: ""
+
+- field: feedback
+  note: 反馈权限
+  range: 0{7},1{3}
+  prefix: ""
+  postfix: ""
+
+- field: score
+  note: 积分
+  range: 0-1000
+  prefix: ""
+  postfix: ""
+
+- field: scoreLevel
+  note: 积分等级
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除标记（应被移除）
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: clientStatus
+  note: 客户端状态
+  range: online{5},offline{3},away{2}
+  prefix: ""
+  postfix: ""
+
+- field: clientLang
+  note: 客户端语言
+  range: zh-cn{6},en{3},zh-tw{1}
+  prefix: ""
+  postfix: ""

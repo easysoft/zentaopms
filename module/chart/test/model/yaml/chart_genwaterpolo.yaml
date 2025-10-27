@@ -1,0 +1,62 @@
+title: zt_chart genWaterpolo测试数据
+author: Claude
+version: "1.0"
+desc: 为genWaterpolo方法提供测试数据，包含各种水球图场景
+
+fields:
+  - field: id
+    range: 1-30
+  - field: name
+    range: 'Bug完成率,任务完成率,需求完成率,测试通过率,项目进度率'
+  - field: code
+    range: 'bug_completion,task_completion,story_completion,test_pass,project_progress'
+  - field: driver
+    range: mysql{25},duckdb{5}
+  - field: mode
+    range: builder{25},text{5}
+  - field: dimension
+    range: 1-5
+  - field: type
+    range: waterpolo{30}
+  - field: group
+    range: '1,2,3,4,5'
+  - field: dataset
+    range: '0{20},1{5},2{5}'
+  - field: desc
+    range: '水球图描述1,水球图描述2,水球图描述3,水球图描述4,水球图描述5'
+  - field: acl
+    range: open{20},private{10}
+  - field: whitelist
+    range: 'admin,user{3},pm{2},[]{25}'
+  - field: settings
+    range: '[{"calc":"count","goal":"*","conditions":[{"field":"status","condition":"=","value":"resolved"}]}]{10},[{"calc":"sum","goal":"estimate","conditions":[{"field":"status","condition":"=","value":"done"}]}]{10},[{"calc":"count","goal":"*","conditions":[{"field":"status","condition":"=","value":"closed"}]}]{10}'
+  - field: filters
+    range: '[]{20},[{"field":"module","operator":"IN","value":"(1,2,3)"}]{5},[{"field":"openedDate","operator":"BETWEEN","value":"2023-01-01 and 2023-12-31"}]{5}'
+  - field: step
+    range: 1-5
+  - field: fields
+    range: '{"status":{"name":"状态","object":"bug","field":"status","type":"option"},"estimate":{"name":"工时","object":"task","field":"estimate","type":"number"}}{15},{"module":{"name":"模块","object":"bug","field":"module","type":"option"},"count":{"name":"数量","object":"bug","field":"id","type":"number"}}{15}'
+  - field: langs
+    range: '[]{25},{"status":{"zh-cn":"状态","en":"Status"}}{3},{"module":{"zh-cn":"模块","en":"Module"}}{2}'
+  - field: sql
+    range: 'SELECT id FROM zt_bug WHERE deleted=0{10},SELECT id FROM zt_task WHERE deleted=0{10},SELECT id FROM zt_story WHERE deleted=0{10}'
+  - field: version
+    range: '1.0{20},1.1{5},2.0{5}'
+  - field: stage
+    range: published{25},draft{5}
+  - field: builtin
+    range: 0{25},1{5}
+  - field: objects
+    range: '[]{20},{"bug":true}{5},{"task":true}{5}'
+  - field: createdBy
+    range: admin{15},user1{8},user2{4},pm{3}
+  - field: createdDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: editedBy
+    range: admin{18},user1{7},user2{3},pm{2}
+  - field: editedDate
+    range: (2023-01-01)-(2024-12-31):30D
+    format: YYYY-MM-DD hh:mm:ss
+  - field: deleted
+    range: 0{27},1{3}

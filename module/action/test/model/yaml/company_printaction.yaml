@@ -1,0 +1,24 @@
+title: company表数据，用于测试printAction方法
+fields:
+- field: id
+  range: 1
+- field: name
+  range: 测试公司
+- field: phone
+  range: 0531-12345678
+- field: fax
+  range: 0531-12345678
+- field: address
+  range: 测试地址
+- field: zipcode
+  range: 250000
+- field: website
+  range: https://www.test.com
+- field: backyard
+  range: ['']
+- field: guest
+  range: 1
+- field: admins
+  range: admin
+- field: deleted
+  range: 0

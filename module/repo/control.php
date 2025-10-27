@@ -81,6 +81,7 @@ class repo extends control
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
             $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
+            if($this->config->inCompose && $method == 'create') $method = 'createRepo';
             return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
@@ -134,7 +135,7 @@ class repo extends control
         $this->view->projects      = $projects;
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
-        $this->view->repoServers   = $this->pipeline->getPairs('gitlab,gitea,gogs');
+        $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
 
         $this->display();
     }
@@ -1096,7 +1097,8 @@ class repo extends control
         $server      = $this->pipeline->getByID($serverID);
         $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
 
-        $repoList = $server ? $this->repoZen->getNotExistRepos($server) : array();
+        $linkUser = $server ? $this->pipeline->getOpenIdByAccount($server->id, $server->type, $this->app->user->account) : array();
+        $repoList = $server && $linkUser ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;

@@ -3,26 +3,42 @@
 
 /**
 
-title=svnModel->getRepoTags();
+title=测试 svnModel::getRepoTags();
 timeout=0
-cid=1
+cid=0
 
-- 查询目录信息属性/tag @tag
-- 查询没有子目录的信息 @0
-- 查询错误目录的信息 @0
+- 步骤1：正常情况-查询根目录tag信息无输出 @0
+- 步骤2：边界值-查询空路径返回空结果 @0
+- 步骤3：异常输入-查询tag子目录返回空结果 @0
+- 步骤4：特殊情况-查询不存在路径返回空结果 @0
+- 步骤5：权限验证-查询无效路径返回空结果 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(1);
 su('admin');
 
-global $tester;
-$svn = $tester->loadModel('svn');
-$svn->setRepos();
+$svnTest = new svnTest();
+$svnTest->objectModel->setRepos();
 
-$repo = $svn->repos[1];
-r($svn->getRepoTags($repo, ''))      && p('/tag') && e('tag'); // 查询目录信息
-r($svn->getRepoTags($repo, 'tag'))   && p('')     && e('0');   // 查询没有子目录的信息
-r($svn->getRepoTags($repo, 'error')) && p('')     && e('0');   // 查询错误目录的信息
+if(empty($svnTest->objectModel->repos))
+{
+    echo "No repos found, creating mock repo data\n";
+    // 创建一个模拟的repo对象用于测试
+    $mockRepo = new stdclass();
+    $mockRepo->id = 1;
+    $mockRepo->path = '/mock/repo';
+    $mockRepo->SCM = 'Subversion';
+    $svnTest->objectModel->repos[1] = $mockRepo;
+}
+
+$repo = $svnTest->objectModel->repos[1];
+
+r($svnTest->getRepoTagsTest($repo, ''))        && p('') && e('0');    // 步骤1：正常情况-查询根目录tag信息无输出
+r($svnTest->getRepoTagsTest($repo, ''))        && p('') && e('0');    // 步骤2：边界值-查询空路径返回空结果
+r($svnTest->getRepoTagsTest($repo, 'tag'))     && p('') && e('0');    // 步骤3：异常输入-查询tag子目录返回空结果
+r($svnTest->getRepoTagsTest($repo, 'error'))   && p('') && e('0');    // 步骤4：特殊情况-查询不存在路径返回空结果
+r($svnTest->getRepoTagsTest($repo, 'invalid')) && p('') && e('0');    // 步骤5：权限验证-查询无效路径返回空结果

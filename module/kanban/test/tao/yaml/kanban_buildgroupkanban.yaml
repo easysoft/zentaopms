@@ -1,0 +1,31 @@
+---
+title: 看板分组视图测试数据
+desc: 为buildGroupKanban方法提供测试数据
+
+fields:
+- field: id
+  range: 1-20
+- field: name
+  range: ['泳道1', '泳道2', '泳道3', '模块1', '模块2', '用户1', '用户2', '高优先级', '中优先级', '低优先级']
+- field: execution
+  range: 1-3
+- field: color
+  range: ['red', 'blue', 'green', 'yellow', 'purple']
+- field: order
+  range: 1-20
+- field: type
+  range: ['story', 'task', 'bug', 'common']
+- field: column
+  range: 1-10
+- field: columnName
+  range: ['待处理', '开发中', '测试中', '已完成', '已关闭']
+- field: columnType
+  range: ['column1', 'column2', 'column3', 'column4', 'column5']
+- field: limit
+  range: [0, 5, 10, 15]
+- field: parent
+  range: [0, 1, 2, 3]
+- field: cards
+  range: [0, 3, 5, 8, 12]
+- field: lane
+  range: ['泳道A', '泳道B', '泳道C']

@@ -1,0 +1,85 @@
+---
+title: job表测试数据 - getJobList方法
+desc: 为getJobList方法提供测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: 流水线ID
+- field: name
+  range: 'test_pipeline{3}, jenkins_job{2}, gitlab_pipeline{3}, sonar_job{2}'
+  note: 流水线名称
+- field: repo
+  range: 1-5
+  note: 关联代码库ID
+- field: product
+  range: 1-3
+  note: 关联产品ID
+- field: frame
+  range: 'phpunit{3}, sonarqube{2}, pytest{3}, jest{2}'
+  note: 工具框架
+- field: engine
+  range: 'jenkins{5}, gitlab{5}'
+  note: 引擎类型
+- field: autoRun
+  range: '0{3}, 1{7}'
+  note: 是否自动运行
+- field: server
+  range: 1-5
+  note: 服务器ID
+- field: pipeline
+  range: '"/job/test_pipeline_1", "/job/test_pipeline_2", {"project":1,"reference":"master"}, {"project":2,"reference":"develop"}, "/job/sonar_job", ""'
+  note: 流水线配置
+- field: triggerType
+  range: 'commit{3}, tag{2}, schedule{3}, action{2}'
+  note: 触发类型
+- field: sonarqubeServer
+  range: 0{8}, 1{2}
+  note: SonarQube服务器ID
+- field: projectKey
+  range: '"{8}, test_project{2}"'
+  note: 项目键
+- field: svnDir
+  range: '"{8}, /trunk{1}, /tags{1}"'
+  note: SVN目录
+- field: atDay
+  range: '"{8}, 1,2,3{1}, 0{1}"'
+  note: 执行日期
+- field: atTime
+  range: '"{8}, 09:00{1}, 18:00{1}"'
+  note: 执行时间
+- field: customParam
+  range: 'null{8}, "{\"ENV\":\"test\"}", "{\"VERSION\":\"1.0\"}"'
+  note: 自定义参数
+- field: comment
+  range: '"{8}, fix{1}, feature{1}"'
+  note: 匹配关键字
+- field: triggerActions
+  range: '"{10}"'
+  note: 触发动作
+- field: createdBy
+  range: 'admin{5}, user1{3}, user2{2}'
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 10:00:00{3}, 2024-01-02 11:00:00{4}, 2024-01-03 12:00:00{3}'
+  note: 创建时间
+- field: editedBy
+  range: 'admin{4}, user1{3}, user2{2}, ""{1}'
+  note: 编辑者
+- field: editedDate
+  range: 'null{3}, 2024-01-01 15:00:00{3}, 2024-01-02 16:00:00{4}'
+  note: 编辑时间
+- field: lastExec
+  range: 'null{5}, 2024-01-01 09:00:00{3}, 2024-01-02 10:00:00{2}'
+  note: 最后执行时间
+- field: lastStatus
+  range: '"{5}, success{3}, failure{1}, running{1}"'
+  note: 最后执行状态
+- field: lastTag
+  range: '"{8}, v1.0.0{1}, v2.0.0{1}"'
+  note: 最后标签
+- field: deleted
+  range: '0{10}'
+  note: 删除标记

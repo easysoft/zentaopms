@@ -1,0 +1,46 @@
+---
+title: Action table data for getActionSyncSql test
+desc: Test data for action table with different dates
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Action ID
+  range: 1-30
+  
+- field: objectType
+  note: Object type
+  range: user{5},task{8},bug{7},story{10}
+  
+- field: objectID
+  note: Object ID
+  range: 1-100
+  
+- field: actor
+  note: Actor name
+  range: admin{10},user1{8},user2{7},user3{5}
+  
+- field: action
+  note: Action type
+  range: opened{8},created{7},edited{10},deleted{5}
+  
+- field: date
+  note: Action date with various months and years
+  range: '2023-01-15 10:30:00{3},2023-06-20 14:15:00{4},2023-12-10 09:45:00{3},2024-01-05 11:20:00{5},2024-06-15 16:30:00{8},2024-12-25 08:15:00{7}'
+  
+- field: comment
+  note: Action comment
+  range: 'Comment for action{30}'
+  
+- field: extra
+  note: Extra data
+  range: ''{30}
+  
+- field: read
+  note: Read status
+  range: '0{15},1{15}'
+  
+- field: vision
+  note: Vision
+  range: rnd{30}

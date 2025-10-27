@@ -20,7 +20,7 @@ cid=5
 */
 
 chdir(__DIR__);
-include '../lib/expect.ui.class.php';
+include '../lib/ui/expect.ui.class.php';
 global $config;
 
 $action = zenData('action');

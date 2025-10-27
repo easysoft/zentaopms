@@ -41,7 +41,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/restarttask.ui.class.php';
+include '../lib/ui/restarttask.ui.class.php';
 
 $user = zenData('user');
 $user->id->range('1-3');

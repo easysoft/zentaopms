@@ -1,0 +1,44 @@
+---
+title: notify表getQueue方法测试数据
+desc: 用于测试mailModel::getQueue方法的邮件队列数据
+
+fields:
+- field: id
+  range: 1-9
+  type: int
+
+- field: objectType
+  range: mail{9}
+
+- field: objectID
+  range: 1-9
+
+- field: action
+  range: 1-9
+
+- field: toList
+  range: user1{2},user2{2},user3{2},user4{2},user5{1}
+
+- field: ccList
+  range: '["",user6]'
+
+- field: subject
+  range: 主题1,主题2,主题3,主题4,主题5,主题6,主题7,主题8,主题9
+
+- field: data
+  range: 用户创建了任务1,用户创建了任务2,用户创建了任务3,用户创建了任务4,用户创建了任务5,用户创建了任务6,用户创建了任务7,用户创建了任务8,用户创建了任务9
+
+- field: createdBy
+  range: admin{9}
+
+- field: createdDate
+  range: 2024-01-01 10:00:00{9}
+
+- field: sendTime
+  range: '[""]'
+
+- field: status
+  range: wait{4},fail{5}
+
+- field: failReason
+  range: '[""]'

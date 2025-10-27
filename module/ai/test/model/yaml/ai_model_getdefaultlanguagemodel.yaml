@@ -1,0 +1,59 @@
+---
+title: AI模型测试数据 - getDefaultLanguageModel方法专用
+desc: 用于测试getDefaultLanguageModel方法的数据配置，确保有启用和禁用的模型
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模型ID
+  range: 1-10
+  format: ""
+- field: type
+  note: 模型类型
+  range: gpt{3},claude{2},gemini{2},llama{2},bard{1}
+  format: ""
+- field: vendor
+  note: 供应商
+  range: openai{3},anthropic{2},google{2},meta{2},google{1}
+  format: ""
+- field: credentials
+  note: 认证信息
+  range: '{"api_key": "test_key_001"}{10}'
+  format: ""
+- field: proxy
+  note: 代理设置
+  range: '[""]{7},{"host":"proxy.test.com","port":8080}{3}'
+  format: ""
+- field: name
+  note: 模型名称
+  range: GPT-4{1},GPT-3.5{1},Claude-3-Opus{1},Claude-3-Sonnet{1},Gemini-Pro{1},Gemini-Flash{1},LLaMA-2-70B{1},LLaMA-2-13B{1},LLaMA-2-7B{1},Bard{1}
+  format: ""
+- field: desc
+  note: 模型描述
+  range: 'OpenAI GPT-4 model for complex tasks{1},OpenAI GPT-3.5 model for general use{1},Anthropic Claude-3 Opus model{1},Anthropic Claude-3 Sonnet model{1},Google Gemini Pro model{1},Google Gemini Flash model{1},Meta LLaMA-2 70B model{1},Meta LLaMA-2 13B model{1},Meta LLaMA-2 7B model{1},Google Bard model{1}'
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{5},user{5}
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00-2024-06-30 18:00:00:30d
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: '[admin,user,""]{10}'
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '[2024-02-01 10:00:00-2024-06-30 18:00:00:15d,""]{10}'
+  format: ""
+- field: enabled
+  note: 是否启用
+  range: '1{6},0{4}'
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{10}'
+  format: ""

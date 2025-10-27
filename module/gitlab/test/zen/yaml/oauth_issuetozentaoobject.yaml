@@ -1,0 +1,23 @@
+---
+title: OAuth绑定测试数据
+desc: 用于测试issueToZentaoObject方法的用户映射功能
+author: AI
+version: 1.0
+
+fields:
+- field: openID
+  note: GitLab用户ID
+  range: 1-10
+  format: "%d"
+- field: account
+  note: ZenTao账号
+  range: admin,user1,user2,user3,user4,dev1,dev2,qa1,qa2,pm1
+  format: "%s"
+- field: providerType
+  note: 提供商类型
+  range: gitlab{10}
+  format: "%s"
+- field: providerID
+  note: GitLab服务器ID
+  range: 1{10}
+  format: "%d"

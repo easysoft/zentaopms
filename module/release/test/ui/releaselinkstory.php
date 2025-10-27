@@ -19,7 +19,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/releaselinkstory.ui.class.php';
+include '../lib/ui/releaselinkstory.ui.class.php';
 
 $product = zenData('product');
 $product->gen(0);

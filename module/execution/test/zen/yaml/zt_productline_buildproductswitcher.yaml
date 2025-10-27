@@ -1,0 +1,42 @@
+---
+title: 产品线数据用于buildProductSwitcher测试
+desc: 包含产品线基础数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品线ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品线名称
+  range: 'Line One,Line Two,Line Three'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: 'line{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: 'doing{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

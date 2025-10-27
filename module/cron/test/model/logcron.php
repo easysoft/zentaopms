@@ -3,23 +3,34 @@
 
 /**
 
-title=测试 cronModel->logCron();
+title=测试 cronModel::logCron();
 timeout=0
-cid=1
+cid=0
 
-- 调用日志方法查看日志文件该字符串位置 @14
+- 执行cron模块的logCronTest方法，参数是'test_log_content'  @0
+- 执行$cliFile @1
+- 执行$cliFile), 'test_log_content') !== false @1
+- 执行$cliFile), '<?php') === 0 @1
+- 执行cron模块的logCronTest方法，参数是"multiline\nlog\ncontent"  @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+
 su('admin');
 
 $cron = new cronTest();
-$file = $tester->app->getLogRoot() . 'cron_cli.' . date( 'Ymd') . '.log.php';
-if(is_file($file)) unlink($file);
+$logRoot = $tester->app->getLogRoot();
+$dateStr = date('Ymd');
 
-$cron->logCronTest('cronlogtest');
-$info = file_get_contents($file);
-$strExists = strpos($info, 'cronlogtest');
+$cliFile = $logRoot . 'cron_cli.' . $dateStr . '.log.php';
+$webFile = $logRoot . 'cron.' . $dateStr . '.log.php';
+if(is_file($cliFile)) unlink($cliFile);
+if(is_file($webFile)) unlink($webFile);
 
-r($strExists) && p() && e('14');// 调用日志方法查看日志文件该字符串位置
+r($cron->logCronTest('test_log_content')) && p() && e('0');
+r(file_exists($cliFile)) && p() && e('1');
+r(strpos(file_get_contents($cliFile), 'test_log_content') !== false) && p() && e('1');
+r(strpos(file_get_contents($cliFile), '<?php') === 0) && p() && e('1');
+r($cron->logCronTest("multiline\nlog\ncontent")) && p() && e('0');

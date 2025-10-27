@@ -1,0 +1,91 @@
+---
+title: 发布看板测试数据
+desc: 测试getProductList4Kanban方法的发布数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 发布ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1,1,2,2,3,3,4,4,5,5,6,7,8,9,10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 发布名称
+  range: "发布v1.0,发布v1.1,发布v2.0,发布v2.1,发布v3.0,发布v3.1,发布v4.0,发布v4.1,发布v5.0,发布v5.1,发布v6.0,发布v7.0,发布v8.0,发布v9.0,发布v10.0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: marker
+  note: 里程碑标识
+  range: 0,1,0,1,0,1,0,1,0,1,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: date
+  note: 发布日期
+  range: "2024-01-15,2024-01-30,2024-02-15,2024-02-28,2024-03-15,2024-03-31,2024-04-15,2024-04-30,2024-05-15,2024-05-31,2024-06-15,2024-06-30,2024-07-15,2024-07-31,2024-08-15"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 发布状态
+  range: normal{12},terminate{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: subStatus
+  note: 子状态
+  range: ""{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 发布描述
+  range: "发布描述1,发布描述2,发布描述3,发布描述4,发布描述5,发布描述6,发布描述7,发布描述8,发布描述9,发布描述10,发布描述11,发布描述12,发布描述13,发布描述14,发布描述15"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin{10},user1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-12-01 00:00:00,2023-12-02 00:00:00,2023-12-03 00:00:00,2023-12-04 00:00:00,2023-12-05 00:00:00,2023-12-06 00:00:00,2023-12-07 00:00:00,2023-12-08 00:00:00,2023-12-09 00:00:00,2023-12-10 00:00:00,2023-12-11 00:00:00,2023-12-12 00:00:00,2023-12-13 00:00:00,2023-12-14 00:00:00,2023-12-15 00:00:00"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{15}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

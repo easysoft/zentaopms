@@ -1,0 +1,21 @@
+title: 分支数据定义
+desc: assignShowImportVars方法测试用的分支数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-5
+- field: product
+  note: 所属产品
+  range: 1-5
+- field: name
+  note: 分支名称
+  range: 主干,分支{4}
+- field: status
+  note: 分支状态
+  range: active
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01

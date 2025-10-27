@@ -1,0 +1,40 @@
+---
+title: afterCreate测试数据
+desc: bug模块afterCreate方法的测试数据
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1,2,3
+  format: ""
+- field: module
+  note: 模块ID
+  range: 10-15
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 101-105
+  format: ""
+- field: title
+  note: Bug标题
+  range: "Bug标题{3},测试Bug{3},问题报告{4}"
+  format: ""
+- field: status
+  note: Bug状态
+  range: active{5},resolved{3},closed{2}
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin{3},user1{3},user2{4}
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: (M)-(D)
+  format: YYYY-MM-DD hh:mm:ss

@@ -1,0 +1,24 @@
+title: zt_doclib for responseAfterCreateLib test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: "测试文档库,产品文档库,项目文档库,执行文档库,自定义文档库,我的文档库,API文档库,测试库1,测试库2,测试库3"
+  - field: type
+    range: "product{3},project{2},execution{2},custom,mine,api"
+  - field: product
+    range: "1,2,3,0{7}"
+  - field: project
+    range: "0{3},11,12,0{5}"
+  - field: execution
+    range: "0{5},101,102,0{3}"
+  - field: acl
+    range: "default{5},open{3},private{2}"
+  - field: addedBy
+    range: "admin{8},user1,user2"
+  - field: addedDate
+    range: "2023-01-01 00:00:00{10}"
+  - field: order
+    range: 1-10

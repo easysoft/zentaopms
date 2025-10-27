@@ -1,0 +1,136 @@
+---
+title: Document data for printProjectDocBlock test
+desc: Test data for project document block functionality
+author: Claude AI
+version: 1
+
+fields:
+- field: id
+  range: 1-50
+  note: Document ID
+- field: vision
+  range: rnd
+  note: Document vision
+- field: project
+  range: 1{5},2{5},3{5},4{5},5{5},0{25}
+  note: Project ID
+- field: product
+  range: 0{30},1{10},2{10}
+  note: Product ID
+- field: execution
+  range: 0{40},1{5},2{5}
+  note: Execution ID
+- field: lib
+  range: 1{20},2{15},3{15}
+  note: Document library
+- field: template
+  range: ""
+  note: Document template
+- field: templateType
+  range: ""
+  note: Template type
+- field: templateDesc
+  range: ""
+  note: Template description
+- field: chapterType
+  range: ""
+  note: Chapter type
+- field: module
+  range: 0{30},1{10},2{10}
+  note: Document module
+- field: title
+  range: 需求文档{10},设计文档{10},用户手册{10},API文档{10},测试文档{10}
+  note: Document title
+- field: keywords
+  range: 需求{10},设计{10},API{10},测试{10},文档{10}
+  note: Document keywords
+- field: type
+  range: text{30},url{10},word{10}
+  note: Document type
+- field: status
+  range: normal{40},draft{10}
+  note: Document status
+- field: parent
+  range: 0
+  note: Parent document
+- field: path
+  range: ",{id},"
+  note: Document path
+- field: grade
+  range: 1
+  note: Document grade
+- field: order
+  range: 1-50
+  note: Document order
+- field: views
+  range: 0-100:5
+  note: Document views count
+- field: collector
+  range: ""
+  note: Document collector
+- field: addedBy
+  range: admin{25},user1{15},user2{10}
+  note: Added by user
+- field: addedDate
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:7D
+  note: Added date
+- field: assignedTo
+  range: ""
+  note: Assigned to user
+- field: assignedBy
+  range: ""
+  note: Assigned by user
+- field: assignedDate
+  range: ""
+  note: Assigned date
+- field: approvedDate
+  range: ""
+  note: Approved date
+- field: mailto
+  range: ""
+  note: Mail to users
+- field: keywords
+  range: 需求分析{10},系统设计{10},接口文档{10},测试用例{10},部署文档{10}
+  note: Document keywords
+- field: lang
+  range: zh-cn{40},en{10}
+  note: Document language
+- field: contentType
+  range: html{40},markdown{10}
+  note: Content type
+- field: content
+  range: 这是一个测试文档内容{30},详细的文档描述信息{20}
+  note: Document content
+- field: url
+  range: ""
+  note: Document URL
+- field: files
+  range: ""
+  note: Document files
+- field: editedBy
+  range: admin{20},user1{15},user2{10},"":{5}
+  note: Edited by user
+- field: editedDate
+  range: 2024-01-01 00:00:00-2024-12-31 23:59:59:7D
+  note: Edited date
+- field: version
+  range: 1{35},2{10},3{5}
+  note: Document version
+- field: acl
+  range: open{30},private{20}
+  note: Access control
+- field: groups
+  range: ""
+  note: Access groups
+- field: readGroups
+  range: ""
+  note: Read groups
+- field: users
+  range: ""
+  note: Access users
+- field: readUsers
+  range: ""
+  note: Read users
+- field: deleted
+  range: 0
+  note: Is deleted

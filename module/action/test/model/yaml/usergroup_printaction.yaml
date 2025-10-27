@@ -1,0 +1,6 @@
+title: usergroup表数据，用于测试printAction方法
+fields:
+- field: account
+  range: admin,user1,user2
+- field: group
+  range: 1,2,3

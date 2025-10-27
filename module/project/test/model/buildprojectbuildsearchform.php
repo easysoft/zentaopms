@@ -41,7 +41,7 @@ cid=1
 
 $queryIDList = array('0', '1');
 
-$project = new Project();
+$project = new projectTest();
 r($project->buildProjectBuildSearchFormTest(0, 0, 'project'))   && p() && e('0'); // 不传递项目ID
 r($project->buildProjectBuildSearchFormTest(100, 0, 'project')) && p() && e('0'); // 项目ID不存在
 

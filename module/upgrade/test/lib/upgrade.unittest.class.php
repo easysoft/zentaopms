@@ -902,4 +902,18 @@ class upgradeTest
         $this->objectModel->upgradeWikiTemplates(array($wikiTemplateID));
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($wikiTemplateID)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * 升级项目报告数据。
+     * Upgrade project report data.
+     *
+     * @param  array  $data
+     * @access public
+     * @return object
+     */
+    public function upgradeProjectReportTest(array $data): object
+    {
+        $this->objectModel->upgradeProjectReport($data);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->orderBy('id_desc')->limit(1)->fetch();
+    }
 }

@@ -14,7 +14,7 @@ cid=0
  */
 
 chdir(__DIR__);
-include '../lib/closeprogram.ui.class.php';
+include '../lib/ui/closeprogram.ui.class.php';
 
 $program = zenData('project');
 $program->id->range('1-2');

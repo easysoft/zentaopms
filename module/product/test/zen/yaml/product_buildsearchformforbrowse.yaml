@@ -1,0 +1,49 @@
+---
+title: buildSearchFormForBrowse方法测试数据
+desc: 用于测试产品模块搜索表单构建功能的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: Product1,Product2,Product3,Product4,Product5,Product6,Product7,Product8,Product9,Product10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{7},branch{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

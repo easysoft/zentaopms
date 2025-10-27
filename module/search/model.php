@@ -314,7 +314,7 @@ class searchModel extends model
             {
                 $where .= " $andOr " . '`' . $this->post->$fieldName . "` > '$value 23:59:59'";
             }
-            elseif(in_array($operator, array('include', 'notinclude')) && $control == 'select')
+            elseif(in_array($operator, array('include', 'notinclude')) && $fieldControl == 'select')
             {
                 $where .= " $andOr CONCAT(',', `{$this->post->$fieldName}`, ',') {$condition}";
             }
@@ -644,9 +644,19 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $table = "SELECT *, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) AS score FROM " . TABLE_SEARCHINDEX;
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $table = "SELECT *, ts_rank(to_tsvector('pg_catalog.english', coalesce(title, '') || ' ' || coalesce(content, '')), to_tsquery('pg_catalog.english', '{$againstCond}'))  AS score FROM " . TABLE_SEARCHINDEX;
+            $score = '0.02';
+        }
+        else
+        {
+            $table = "SELECT *, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) AS score FROM " . TABLE_SEARCHINDEX;
+            $score = '1';
+        }
+
         $stmt  = $this->dao->select('*')->from("({$table})")->alias('t1')
-            ->where("(score >= 1 {$likeCondition})")
+            ->where("(score >= {$score} {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)

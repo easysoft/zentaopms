@@ -1,0 +1,26 @@
+---
+title: createBuild关联关系数据
+desc: 用于测试convertTao::createBuild()方法的版本组和问题关联数据
+author: Claude
+version: 1.0
+
+fields:
+- field: versionid
+  note: 版本ID
+  range: 1-3
+
+- field: issueid
+  note: 问题ID  
+  range: 1001-1010
+
+- field: relation
+  note: 关联关系类型
+  range: IssueFixVersion{6}, IssueVersion{4}
+
+- field: BID
+  note: 业务对象ID
+  range: 1-20
+
+- field: BType
+  note: 业务对象类型
+  range: zstory{6}, zbug{4}

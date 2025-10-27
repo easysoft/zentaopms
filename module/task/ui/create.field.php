@@ -87,6 +87,7 @@ if($config->vision != 'lite')
 
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
+    ->required(strpos($config->task->create->requiredFields, 'assignedTo') !== false)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
     ->control($buildAssignedTo);
 

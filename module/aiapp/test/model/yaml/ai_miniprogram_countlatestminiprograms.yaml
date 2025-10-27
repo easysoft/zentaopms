@@ -1,0 +1,40 @@
+---
+title: ai_miniprogram数据定义 - countLatestMiniPrograms方法测试
+desc: 为countLatestMiniPrograms方法提供测试数据，包含不同状态的小程序记录
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: name
+  range: 小程序1,小程序2,小程序3,小程序4,小程序5,小程序6,小程序7,小程序8,小程序9,小程序10
+- field: category
+  range: work,personal,study
+- field: desc
+  range: 这是一个测试小程序1,这是一个测试小程序2,这是一个测试小程序3,这是一个测试小程序4,这是一个测试小程序5,这是一个测试小程序6,这是一个测试小程序7,这是一个测试小程序8,这是一个测试小程序9,这是一个测试小程序10
+- field: model
+  range: 1,2,3,4,5
+- field: icon
+  range: writinghand-7
+- field: createdBy
+  range: admin,user1,user2
+- field: createdDate
+  range: (-15d)-(-1d):1d,(-40d)-(-35d):1d
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  range: admin,user1,user2
+- field: editedDate
+  range: (-15d)-(-1d):1d,(-40d)-(-35d):1d
+  format: YYYY-MM-DD hh:mm:ss
+- field: published
+  range: 1,1,1,1,1,1,1,0,0,0
+- field: publishedDate
+  range: (-15d)-(-1d):1d,(-40d)-(-35d):1d,[]{3}
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0,0,0,0,0,0,0,0,1,1
+- field: prompt
+  range: 测试提示词1,测试提示词2,测试提示词3,测试提示词4,测试提示词5,测试提示词6,测试提示词7,测试提示词8,测试提示词9,测试提示词10
+- field: builtIn
+  range: 0,1

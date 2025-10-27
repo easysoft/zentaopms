@@ -1,0 +1,28 @@
+---
+title: 度量项数据
+desc: 用于printSingleMonthlyProgressBlock测试的度量项数据
+author: Claude
+version: 1
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-100
+- field: code
+  note: 度量项代码
+  range: 'scale_of_monthly_finished_story_in_product{20},count_of_monthly_created_story_in_product{20},count_of_monthly_finished_story_in_product{20},count_of_monthly_created_bug_in_product{20},count_of_monthly_fixed_bug_in_product{10},count_of_monthly_created_release_in_product{10}'
+- field: product
+  note: 产品ID
+  range: '1{50},2{30},3{20}'
+- field: year
+  note: 年份
+  range: '2024{50},2023{50}'
+- field: month
+  note: 月份
+  range: '01,02,03,04,05,06,07,08,09,10,11,12'
+- field: value
+  note: 度量值
+  range: '0-100:R'
+- field: deleted
+  note: 是否删除
+  range: '0{100}'

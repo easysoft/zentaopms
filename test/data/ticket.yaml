@@ -1,0 +1,67 @@
+---
+title: 工单数据
+desc: 用于测试工单相关功能的数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1-3
+- field: module
+  note: 模块ID
+  range: 0{5},1{3},2{2}
+- field: title
+  note: 工单标题
+  range: ['工单标题1','工单标题2','工单标题3','工单标题4','工单标题5','技术支持工单','Bug修复工单','需求变更工单','咨询工单','投诉工单']
+- field: type
+  note: 工单类型
+  range: ['bug','story','task','support','complaint']
+- field: desc
+  note: 工单描述
+  range: ['这是一个测试工单描述','工单详细描述内容','问题描述详情','需求详细说明','技术支持详情']
+- field: openedBuild
+  note: 影响版本
+  range: ['1.0','1.1','1.2','','trunk']
+- field: feedback
+  note: 反馈ID
+  range: 0{3},1{2},2{2},3{2},4{1}
+- field: assignedTo
+  note: 指派给
+  range: ['admin','user1','user2','','']
+- field: assignedDate
+  note: 指派日期
+  range: '0000-00-00 00:00:00{3},2024-01-01 00:00:00~2024-12-31 23:59:59{7}'
+- field: realStarted
+  note: 实际开始时间
+  range: '0000-00-00 00:00:00{5},2024-01-01 08:00:00~2024-12-31 18:00:00{5}'
+- field: startedBy
+  note: 开始者
+  range: '""{3},admin{3},user1{2},user2{2}'
+- field: startedDate
+  note: 开始日期
+  range: '0000-00-00 00:00:00{5},2024-01-01 08:00:00~2024-12-31 18:00:00{5}'
+- field: deadline
+  note: 截止日期
+  range: '0000-00-00{3},2024-03-01~2024-12-31{7}'
+- field: pri
+  note: 优先级
+  range: 1{2},2{3},3{3},4{2}
+- field: estimate
+  note: 预计工时
+  range: 0{2},1{2},2{2},4{2},8{2}
+- field: left
+  note: 剩余工时
+  range: 0{3},1{2},2{2},4{2},8{1}
+- field: status
+  note: 状态
+  range: ['wait','doing','done','closed','cancel']
+- field: openedBy
+  note: 创建者
+  range: ['admin','user1','user2','tester','pm']
+- field: openedDate
+  note: 创建日期
+  range: '2024-01-01 00:00:00~2024-12-31 23:59:59'

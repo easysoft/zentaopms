@@ -1,0 +1,49 @@
+---
+title: importJiraWorkLog方法测试数据
+desc: 为importJiraWorkLog方法提供测试数据，包含effort表的基础数据
+
+fields:
+- field: id
+  note: 工作记录ID
+  range: 1-10
+  
+- field: objectType
+  note: 对象类型
+  range: story{3},task{3},bug{4}
+  
+- field: objectID
+  note: 对象ID
+  range: 101-110
+  
+- field: account
+  note: 用户账号
+  range: admin{2},testuser{4},user1{2},user2{2}
+  
+- field: work
+  note: 工作内容
+  range: 功能开发,代码测试,bug修复,需求分析,设计评审
+  
+- field: vision
+  note: 产品线
+  range: rnd{8},lite{2}
+  
+- field: date
+  note: 工作日期
+  range: 2023-06-01:2023-06-30
+  format: YYYY-MM-DD
+  
+- field: consumed
+  note: 消耗工时
+  range: 0.5-8:0.5
+  
+- field: project
+  note: 项目ID
+  range: 1-5
+  
+- field: execution
+  note: 执行ID
+  range: 1-10
+  
+- field: deleted
+  note: 删除状态
+  range: 0{9},1{1}

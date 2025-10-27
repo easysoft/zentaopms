@@ -1,0 +1,53 @@
+---
+title: instance表测试数据
+desc: 用于doCneInstall方法测试的实例数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-5
+- field: appId
+  note: 应用ID
+  range: 1-3
+- field: appName
+  note: 应用名称
+  range: ZenTao,GitLab,Jenkins
+- field: name
+  note: 实例名称
+  range: test-zentao,test-gitlab,test-jenkins
+- field: domain
+  note: 域名
+  range: zentao.test.com,gitlab.test.com,jenkins.test.com
+- field: chart
+  note: 图表名称
+  range: zentao,gitlab,jenkins
+- field: version
+  note: 版本
+  range: 1.0.0,2.0.0,3.0.0
+- field: appVersion
+  note: 应用版本
+  range: v1.0.0,v2.0.0,v3.0.0
+- field: space
+  note: 空间ID
+  range: 1-3
+- field: k8name
+  note: K8S名称
+  range: zentao-test,gitlab-test,jenkins-test
+- field: channel
+  note: 发布渠道
+  range: stable,beta,alpha
+- field: source
+  note: 来源
+  range: cloud,system,external
+- field: status
+  note: 状态
+  range: creating,initializing,running
+- field: createdBy
+  note: 创建者
+  range: admin,user,test
+- field: createdAt
+  note: 创建时间
+  range: 2024-01-01 10:00:00,2024-01-02 11:00:00,2024-01-03 12:00:00
+- field: deleted
+  note: 删除标记
+  range: 0

@@ -1,0 +1,59 @@
+---
+title: executePrompt方法测试数据
+desc: 为executePrompt方法生成测试数据
+author: AI Assistant  
+version: 1.0
+
+fields:
+- field: id
+  note: 提示词ID
+  range: 1-10
+  
+- field: name  
+  note: 提示词名称
+  range: 需求润色,任务润色,Bug润色,文档润色,需求转任务
+  
+- field: desc
+  note: 提示词描述
+  range: 优化需求描述,优化任务描述,优化Bug描述,优化文档内容,转化需求为任务
+  
+- field: model
+  note: 关联的AI模型ID
+  range: 1-3
+  
+- field: module
+  note: 应用模块
+  range: story,task,bug,doc
+  
+- field: source
+  note: 数据源字段
+  range: ',story.title,story.spec,story.verify,',',task.name,task.desc,',',bug.title,bug.steps,'
+  
+- field: targetForm
+  note: 目标表单
+  range: story.create,story.edit,task.create,task.edit,bug.edit
+  
+- field: purpose
+  note: 目的描述
+  range: 帮助优化表述,提升内容质量,改善用户体验
+  
+- field: role
+  note: 角色描述
+  range: 产品经理,开发工程师,测试工程师,文案编辑
+  
+- field: status
+  note: 状态
+  range: active{4},draft{1}
+  
+- field: deleted
+  note: 删除状态
+  range: '0'{4},'1'{1}
+  
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+  
+- field: createdDate
+  note: 创建时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59
+  format: YYYY-MM-DD hh:mm:ss

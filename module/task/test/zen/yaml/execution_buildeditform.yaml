@@ -1,0 +1,22 @@
+---
+title: buildEditForm方法执行数据
+desc: 用于测试taskZen::buildEditForm()方法的执行数据
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 1-5
+- field: name
+  range: 执行阶段1{2},执行阶段2{2},执行阶段3{2},执行阶段4{2},执行阶段5{2}
+- field: type
+  range: stage{5},sprint{5}
+- field: status
+  range: wait{2},doing{4},suspended{2},closed{2}
+- field: multiple
+  range: 0{5},1{5}
+- field: openedBy
+  range: admin{5},user1{5}
+- field: openedDate
+  range: (-60D)-(0D):1D
+  format: YYYY-MM-DD hh:mm:ss

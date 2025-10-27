@@ -1,0 +1,34 @@
+---
+title: 测试用例规格表基础数据
+desc: 为createCase方法的casespec表提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 规格ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: case
+  note: 关联测试用例ID
+  range: 1-20
+  format: ""
+- field: version
+  note: 版本号
+  range: 1{15},2{3},3{2}
+  format: ""
+- field: title
+  note: 规格标题
+  range: '测试用例规格标题{1-20}'
+  format: ""
+- field: precondition
+  note: 前置条件
+  range: '前置条件描述{1-20},[]{5}'
+  format: ""
+- field: files
+  note: 附件文件
+  range: '[]{15},file1.jpg{3},file2.pdf{2}'
+  format: ""

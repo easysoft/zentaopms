@@ -1,0 +1,40 @@
+---
+title: 项目执行数据用于assignStoryForCreate测试
+desc: 为任务创建时分配故事功能提供项目执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: project
+  note: 项目ID
+  range: 1-5
+- field: type
+  note: 执行类型
+  range: "sprint,stage,kanban"
+- field: name
+  note: 执行名称
+  range: "执行{1-10}"
+- field: code
+  note: 执行代号
+  range: "exec{1-10}"
+- field: status
+  note: 执行状态
+  range: "wait,doing,suspended,closed"
+- field: begin
+  note: 开始日期
+  range: "2023-01-01-2023-06-30"
+- field: end
+  note: 结束日期
+  range: "2023-07-01-2023-12-31"
+- field: openedBy
+  note: 由谁创建
+  range: "admin,user1,user2"
+- field: openedDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+- field: deleted
+  note: 是否删除
+  range: "0{8},1{2}"

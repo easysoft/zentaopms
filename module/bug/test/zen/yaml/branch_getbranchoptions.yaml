@@ -1,0 +1,35 @@
+---
+title: 分支数据定义
+desc: 用于测试getBranchOptions方法的分支测试数据
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+- field: product
+  note: 产品ID
+  range: 1{5}, 2{3}, 3{2}
+- field: name
+  note: 分支名称
+  range: master{2}, develop{2}, feature-v1.0{2}, feature-v2.0{2}, hotfix-bug{2}
+- field: default
+  note: 是否默认分支
+  range: 1{2}, 0{8}
+- field: status
+  note: 分支状态
+  range: active{8}, closed{2}
+- field: desc
+  note: 分支描述
+  range: 主分支{2}, 开发分支{2}, 功能分支v1.0{2}, 功能分支v2.0{2}, 热修复分支{2}
+- field: createdDate
+  note: 创建日期
+  range: 2023-01-01{5}, 2023-06-01{3}, 2023-12-01{2}
+- field: closedDate
+  note: 关闭日期
+  range: '[]{8}, 2023-12-31{2}'
+- field: order
+  note: 排序
+  range: 1-10
+- field: deleted
+  note: 是否删除
+  range: 0{10}

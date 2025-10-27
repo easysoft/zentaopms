@@ -1,0 +1,17 @@
+title: Action data for getProjectStoryTable test
+desc: Test action data for story linked to release
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-30
+  - field: objectType
+    range: 'story{20},task{5},bug{5}'
+  - field: objectID
+    range: 1-15{2}
+  - field: action
+    range: 'linked2release{10},created{8},edited{5},changed{4},closed{3}'
+  - field: date
+    range: '2023-06-01 00:00:00{5},2023-06-15 00:00:00{5},2023-06-30 00:00:00{5},2023-05-15 00:00:00{5},2023-07-01 00:00:00{10}'
+  - field: actor
+    range: 'admin{15},user1{8},user2{7}'

@@ -287,4 +287,29 @@ class testreportTest
         if(dao::isError()) return dao::getError();
         return $isClickable ? 1 : 0;
     }
+
+    /**
+     * Test getChildBuilds method.
+     *
+     * @param  array $buildIdList
+     * @access public
+     * @return array|string
+     */
+    public function getChildBuildsTest(array $buildIdList): array|string
+    {
+        $builds = $this->build->getByList($buildIdList);
+        $childBuilds = $this->objectModel->getChildBuilds($builds);
+        
+        if(dao::isError()) return dao::getError();
+        
+        if(empty($childBuilds)) return '';
+        
+        $result = array();
+        foreach($childBuilds as $childBuild)
+        {
+            $result[] = $childBuild->id . ':' . $childBuild->name;
+        }
+        
+        return implode(',', $result);
+    }
 }

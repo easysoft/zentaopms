@@ -19,7 +19,7 @@ cid=23
 
 */
 chdir(__DIR__);
-include '../lib/createprojectlite.ui.class.php';
+include '../lib/ui/createprojectlite.ui.class.php';
 
 zendata('project')->gen(0);
 $tester = new createProjectLiteTester();

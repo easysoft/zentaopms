@@ -227,3 +227,7 @@ $config->pivot->objectTableFields->product['totalEpics']['width']        = 100;
 $config->pivot->objectTableFields->product['totalRequirements']['width'] = 100;
 $config->pivot->objectTableFields->product['totalStories']['width']      = 100;
 $config->pivot->objectTableFields->product['unresolvedBugs']['width']    = 100;
+
+$config->pivot->userTypeCols      = array('assignedTo', 'openedBy', 'closedBy', 'resolvedBy', 'finishedBy', 'reviewer', 'reviewedBy', 'createdBy', 'editedBy', 'lastEditedBy', 'lastRunner', 'addedBy', 'modifiedBy', 'deletedBy', 'confirmedBy', 'PO', 'PM', 'account', 'user');
+$config->pivot->nameTypeCols      = array('title', 'name');
+$config->pivot->reuseDtableFields = array('name', 'title', 'type', 'width', 'sortType', 'checkbox', 'link', 'map', 'statusMap');

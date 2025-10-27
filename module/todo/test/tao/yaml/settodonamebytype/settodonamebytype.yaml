@@ -1,21 +1,35 @@
 ---
 title: Create todos for todoTao::setTodoNameByType.
-desc: Create todos for todoModel::close.
+desc: Create test todos with different types and scenarios for setTodoNameByType method.
 author: dingguodong
 version: 1.0.0
 
 fields:
   - field: id
-    range: 1-4
+    range: 1-7
+  - field: account
+    range: admin
   - field: date
     range: '`2023-04-23`'
   - field: type
-    range: story,task,bug,testtask
+    range: story,task,bug,testtask,story,custom,story
   - field: objectID
-    range: 1
+    range: 1{1},1{1},1{1},1{1},99{1},0{1},2{1}
+  - field: name
+    range: Original Story Name,Original Task Name,Original Bug Name,Original Testtask Name,Original Todo Name,Custom Todo Name,Empty Object Todo Name
   - field: status
     range: wait
-  - field: finishedDate
+  - field: private
+    range: 0
+  - field: assignedTo
+    range: admin
+  - field: assignedBy
+    range: admin
+  - field: assignedDate
     range: '`2023-04-23`'
-  - field: closedDate
-    range: '`2023-04-23`'
+  - field: vision
+    range: rnd
+  - field: cycle
+    range: 0
+  - field: deleted
+    range: 0

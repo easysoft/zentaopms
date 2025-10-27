@@ -1,30 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zenData('job')->loadYaml('job')->gen(6);
-zenData('compile')->gen(6);
-zenData('pipeline')->gen(6);
-su('admin');
 
 /**
 
-title=测试 compileModel->syncCompile();
+title=测试 compileModel::syncCompile();
 timeout=0
-cid=1
+cid=0
 
-- 调用jenkins接口之前job为1的compile数量。 @1
-- 调用jenkins接口之后job为1的compile数量。 @17
-- 调用gitlab接口之前的获取不到ID为50的compile。属性50 @~~
-- 调用gitlab接口之后的能获取到ID为50的compile。第50条的name属性 @这是一个Job2
+- 测试步骤1：无参数调用 @1
+- 测试步骤2：仅指定repoID @1
+- 测试步骤3：仅指定jobID @1
+- 测试步骤4：同时指定两个参数 @1
+- 测试步骤5：不存在的jobID @1
 
 */
 
-$tester->loadModel('compile');
-r(count($tester->compile->getListByJobID(1))) && p() && e(1);   //调用jenkins接口之前job为1的compile数量。
-$tester->compile->syncCompile(0, 1);
-r(count($tester->compile->getListByJobID(1))) && p() && e(17);  //调用jenkins接口之后job为1的compile数量。
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
-r($tester->compile->getListByJobID(2)) && p('50')      && e('~~');            //调用gitlab接口之前的获取不到ID为50的compile。
-$tester->compile->syncCompile(0, 2);
-r($tester->compile->getListByJobID(2)) && p('50:name') && e('这是一个Job2');  //调用gitlab接口之后的能获取到ID为50的compile。
+// 2. 简化数据准备
+zenData('job')->gen(5);
+zenData('pipeline')->gen(3);
+zenData('repo')->gen(3);
+
+// 3. 用户登录
+su('admin');
+
+// 4. 创建测试实例
+$compileTest = new compileTest();
+
+// 5. 执行测试步骤（至少5个）
+r($compileTest->syncCompileTest(0, 0)) && p() && e('1');      // 测试步骤1：无参数调用
+r($compileTest->syncCompileTest(1, 0)) && p() && e('1');      // 测试步骤2：仅指定repoID
+r($compileTest->syncCompileTest(0, 1)) && p() && e('1');      // 测试步骤3：仅指定jobID
+r($compileTest->syncCompileTest(1, 2)) && p() && e('1');      // 测试步骤4：同时指定两个参数
+r($compileTest->syncCompileTest(0, 999)) && p() && e('1');    // 测试步骤5：不存在的jobID

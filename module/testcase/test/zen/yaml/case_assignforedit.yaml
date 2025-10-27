@@ -1,0 +1,86 @@
+---
+title: assignForEdit方法测试用例数据
+desc: 用于测试testcaseZen::assignForEdit方法的测试数据
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-50
+
+- field: product
+  note: 产品ID
+  range: 1{5}, 2{5}, 3{5}, 0{3}
+
+- field: project
+  note: 项目ID
+  range: 1-10, 0{5}
+
+- field: execution
+  note: 执行ID
+  range: 1-15, 0{5}
+
+- field: branch
+  note: 分支ID
+  range: 0{10}, 1{5}, 2{3}
+
+- field: lib
+  note: 用例库ID
+  range: 0{12}, 1{3}, 2{3}
+
+- field: module
+  note: 模块ID
+  range: 1-20, 0{8}
+
+- field: scene
+  note: 场景ID
+  range: 1-10, 0{8}
+
+- field: story
+  note: 需求ID
+  range: 1-30, 0{5}
+
+- field: title
+  note: 用例标题
+  range: 测试用例{1-20}, 用例{21-30}, 自动化测试{31-35}
+
+- field: type
+  note: 用例类型
+  range: feature{8}, performance{4}, config{3}, install{2}, security{1}
+
+- field: pri
+  note: 优先级
+  range: 1{2}, 2{4}, 3{8}, 4{4}
+
+- field: status
+  note: 用例状态
+  range: normal{10}, blocked{3}, investigating{2}, wait{3}
+
+- field: auto
+  note: 是否自动化
+  range: no{12}, yes{6}
+
+- field: openedBy
+  note: 创建者
+  range: admin{5}, user1{4}, user2{4}, user3{3}, test{2}
+
+- field: openedDate
+  note: 创建时间
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: lastEditedBy
+  note: 最后编辑者
+  range: admin{6}, user1{4}, user2{4}, user3{2}, []{2}
+
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: (-7d)-(+0d)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: version
+  note: 版本号
+  range: 1{12}, 2{4}, 3{2}
+
+- field: deleted
+  note: 是否删除
+  range: 0{16}, 1{2}

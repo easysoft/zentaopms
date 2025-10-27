@@ -1,0 +1,48 @@
+---
+title: zt_basicmeas for getOldMetricInfo test
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: purpose
+    range: duration{5},workload{5}
+  - field: scope  
+    range: project{5},product{5}
+  - field: object
+    range: task{5},bug{5}
+  - field: name
+    range: 度量项1,度量项2,度量项3,度量项4,度量项5,度量项6,度量项7,度量项8,度量项9,度量项10
+  - field: code
+    range: meas1,meas2,meas3,meas4,meas5,meas6,meas7,meas8,meas9,meas10
+  - field: unit
+    range: 个,小时,天,次,人
+  - field: configure  
+    range: 'SELECT COUNT(*) FROM table1','SELECT SUM(value) FROM table2','SELECT AVG(score) FROM table3','SELECT MAX(date) FROM table4','SELECT MIN(time) FROM table5','SELECT COUNT(DISTINCT id) FROM table6','SELECT SUM(amount) FROM table7','SELECT COUNT(*) FROM table8 WHERE status="active"','SELECT AVG(rating) FROM table9','SELECT COUNT(*) FROM table10 WHERE deleted="0"'
+  - field: params
+    range: '{}','{"filter":"active"}','{"group":"status"}','{"sort":"date"}','{"limit":100}'
+  - field: definition
+    range: 定义1,定义2,定义3,定义4,定义5,定义6,定义7,定义8,定义9,定义10
+  - field: source
+    range: 'db','api','file','manual','import'
+  - field: collectType
+    range: crontab{8},action{2}
+  - field: collectConf
+    range: '{"type":"month","month":"1"}','{"type":"month","month":"2"}','{"type":"week","week":"1,2,3"}','{"type":"month","month":"3"}','{"type":"week","week":"4,5"}','{"type":"month","month":"4"}','{"type":"week","week":"6,7"}','{"type":"month","month":"5"}','{"type":"action","action":"created"}','{"type":"action","action":"updated"}'
+  - field: execTime
+    range: '09:00','10:30','14:00','16:15','20:00'
+  - field: collectedBy
+    range: 'system','admin','user','cron','auto'
+  - field: createdBy
+    range: 'admin','system','user1','user2','test'
+  - field: createdDate
+    range: '2024-01-01 09:00:00','2024-01-02 10:00:00','2024-01-03 11:00:00','2024-01-04 12:00:00','2024-01-05 13:00:00'
+  - field: editedBy
+    range: 'admin','system','user1','user2',''
+  - field: editedDate
+    range: '2024-01-01 09:00:00','2024-01-02 10:00:00','2024-01-03 11:00:00','2024-01-04 12:00:00',''
+  - field: order
+    range: 1-10
+  - field: deleted
+    range: '0'
+...

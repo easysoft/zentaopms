@@ -1,0 +1,30 @@
+title: 构建删除测试数据
+desc: 用于测试delete方法的构建数据
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: "11,12,0{8}"
+  - field: product
+    range: "1{5},2{5}"
+  - field: branch
+    range: "0{10}"
+  - field: execution
+    range: "0{3},101{2},0{5}"
+  - field: name
+    range: "构建1,构建2,构建3,构建4,构建5,构建6,构建7,构建8,构建9,构建10"
+  - field: date
+    range: "2023-01-01{10}"
+  - field: stories
+    range: ""
+  - field: bugs
+    range: ""
+  - field: builder
+    range: "admin{10}"
+  - field: desc
+    range: "测试构建描述1,测试构建描述2,测试构建描述3,测试构建描述4,测试构建描述5,测试构建描述6,测试构建描述7,测试构建描述8,测试构建描述9,测试构建描述10"
+  - field: deleted
+    range: "0{10}"

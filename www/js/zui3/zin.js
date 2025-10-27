@@ -43,17 +43,25 @@
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
     const localCacheFirst = config.clientCache === 'local-first';
     const isTutorial  = top.config.currentModule === 'tutorial';
+    let openedOldPage = false;
+    let oldPageCofnig = null;
 
     function getPageInfo()
     {
+        let pageConfig = openedOldPage ? oldPageCofnig : window.config;
+        if(openedOldPage && !pageConfig)
+        {
+            const oldPageLink = $.parseLink(openedOldPage);
+            pageConfig = {currentModule: oldPageLink.moduleName, currentMethod: oldPageLink.methodName};
+        }
         return {
-            app: currentCode,
-            id: `${currentCode}.${config.currentModule}-${config.currentMethod}`,
-            path: `${config.currentModule}-${config.currentMethod}`,
-            url: currentAppUrl,
-            config: config,
-            currentModule: config.currentModule,
-            currentMethod: config.currentMethod,
+            app          : currentCode,
+            id           : `${currentCode}.${pageConfig.currentModule}-${pageConfig.currentMethod}`,
+            path         : `${pageConfig.currentModule}-${pageConfig.currentMethod}`,
+            url          : currentAppUrl,
+            config       : pageConfig,
+            currentModule: pageConfig.currentModule,
+            currentMethod: pageConfig.currentMethod,
         };
     }
 
@@ -213,7 +221,7 @@
         if(window.onPageUnmount) window.onPageUnmount();
         $(document).trigger('pageunmount.app');
 
-        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender'].forEach(key =>
+        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender', 'getPageFormHelper'].forEach(key =>
         {
             if(window[key]) delete window[key];
         });
@@ -754,6 +762,23 @@
                             }
                         }
                     }
+                    if(data.callback)
+                    {
+                        const callback = data.callback;
+                        if(typeof callback === 'string')
+                        {
+                            const func = $.runJS(callback);
+                            if (typeof func === 'function' && !callback.endsWith(';')) func();
+                        }
+                        else if(typeof callback === 'object')
+                        {
+                            const func = $.runJS(callback.name);
+                            if (typeof func === 'function')
+                            {
+                                func.apply(null, Array.isArray(callback.params) ? callback.params : [callback.params]);
+                            }
+                        }
+                    }
                 }
             },
             error: (error, type) =>
@@ -949,7 +974,8 @@
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
                     const iframeWindow = $iframe[0].contentWindow;
-                    iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
+                    oldPageCofnig = iframeWindow.config;
+                    if(iframeWindow.$) iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                     clearTimer();
                 });
         }
@@ -960,6 +986,8 @@
         if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
+        openedOldPage = url;
+        triggerEvent('openOldPage');
         $page.data('timer', setTimeout(() =>
         {
             if($page.hasClass('loading') || $iframe.hasClass('invisible')) $page.trigger('oldPageLoad.app');
@@ -973,6 +1001,8 @@
         const $page = $('#oldPage');
         if(!$page.length) return;
         $page.addClass('in hidden');
+        openedOldPage = null;
+        oldPageCofnig = null;
     }
 
     function getLoadSelector(selector)
@@ -1308,7 +1338,7 @@
                             const $oldMatchItems = $oldItems.filter(`[data-name="${name}"]`);
                             if($oldMatchItems.length)
                             {
-                                $oldMatchItems.replaceWith($items);
+                                try {$oldMatchItems.replaceWith($items);} catch (_) {}
                             }
                             else
                             {
@@ -1369,6 +1399,19 @@
                 return true;
             }
         })
+    }
+
+    function applyFormData(data, formSelector)
+    {
+        let formHelper;
+        if(window.getPageFormHelper) formHelper = window.getPageFormHelper(formSelector, data);
+        if(!formHelper)
+        {
+            const $form = $(formSelector || '#mainContainer form').filter(function() {return $(this).closest('#formSettingBtn').length === 0;});
+            formHelper = zui.zentaoFormHelper($form);
+        }
+
+        formHelper.setFormData(data);
     }
 
     function openPage(url, appCode, options)
@@ -1767,7 +1810,15 @@
             delete options.loadId;
         }
 
-        if(url && ((/^(https?|javascript):/.test(url) && !options.app) || url.startsWith('#'))) return;
+        if(url)
+        {
+            if(/^(https?|javascript):/.test(url) && !options.app) return;
+            if(url[0] === '#')
+            {
+                if(/firefox/i.test(navigator.userAgent)) e.preventDefault();
+                return;
+            }
+        }
         if(!url && $link.is('a') && !options.back && !options.load) return;
 
         if($modal.length)
@@ -1832,7 +1883,7 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData, applyFormData: applyFormData});
     $.extend($.apps, {openUrl: openUrl, getAppUrl: () => currentAppUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 

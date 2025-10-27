@@ -1,0 +1,48 @@
+---
+title: 测试AI小程序自定义分类配置数据
+desc: 为测试getCustomCategories方法准备的config表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 配置ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: vision
+  note: 视图版本
+  range: ['rnd', 'lite']
+  prefix: ""
+  postfix: ""
+
+- field: owner
+  note: 配置拥有者
+  range: ['']
+  prefix: ""
+  postfix: ""
+
+- field: module
+  note: 模块名称
+  range: [ai, user, system, project, task]
+  prefix: ""
+  postfix: ""
+
+- field: section
+  note: 配置段名称
+  range: [miniProgram, general, config, setting, custom]
+  prefix: ""
+  postfix: ""
+
+- field: key
+  note: 配置键名
+  range: [category1, category2, category3, category4, category5, user_setting1, user_setting2, user_setting3, sys_config1, sys_config2]
+  prefix: ""
+  postfix: ""
+
+- field: value
+  note: 配置值
+  range: [开发工具, 数据分析, 项目管理, 质量管理, 文档管理, test_value1, test_value2, test_value3, default_value1, default_value2]
+  prefix: ""
+  postfix: ""

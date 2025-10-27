@@ -1,0 +1,65 @@
+---
+title: Bug数据用于getImportBugs测试
+desc: 为execution模块getImportBugs方法生成测试用的bug数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+  note: Bug ID
+
+- field: project
+  range: 1
+  note: 所属项目ID
+
+- field: product
+  range: '[1{5}, 2{3}, 3{2}]'
+  note: 所属产品ID
+
+- field: execution
+  range: 0
+  note: 关联执行ID，0表示未关联
+
+- field: title
+  range: 'Bug标题{10}'
+  prefix: "[BUG-"
+  postfix: "] "
+  note: Bug标题
+
+- field: status
+  range: '[active{5}, resolved{2}, postponed{3}]'
+  note: Bug状态
+
+- field: assignedTo
+  range: '[admin{3}, user1{2}, user2{2}, {3}]'
+  note: 指派给用户
+
+- field: openedBy
+  range: 'admin'
+  note: 由谁创建
+
+- field: openedDate
+  range: '(-3D)-(-1D)'
+  format: 'YYYY-MM-DD hh:mm:ss'
+  note: 创建时间
+
+- field: type
+  range: '[codeerror{5}, interface{3}, config{2}]'
+  note: Bug类型
+
+- field: severity
+  range: '[1{2}, 2{4}, 3{3}, 4{1}]'
+  note: 严重程度
+
+- field: pri
+  range: '[1{2}, 2{4}, 3{3}, 4{1}]'
+  note: 优先级
+
+- field: confirmed
+  range: '[1{8}, 0{2}]'
+  note: 是否确认
+
+- field: deleted
+  range: '0'
+  note: 是否删除

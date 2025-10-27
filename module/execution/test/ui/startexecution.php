@@ -17,7 +17,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/startexecution.ui.class.php';
+include '../lib/ui/startexecution.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');

@@ -92,6 +92,7 @@ $config->action->needGetRelateField       = ',branch,story,epic,requirement,prod
 $config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,productline,chapter,doc,caselib,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
 $config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr,syncdoingbyticket,syncdoingbystory,syncdoingbyuserstory,syncdoingbyepic,syncdoingbytask,syncdoingbybug,syncdoingbytodo,syncdoingbydemand';
+if(in_array($config->edition, array('open', 'biz'))) $config->action->ignoreObjectType4Dynamic .= ',reporttemplate';
 
 $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');
 

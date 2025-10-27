@@ -1,0 +1,28 @@
+---
+title: Product-Project relation test data for repoZen::getLinkExecutions()
+desc: Test data for product and project relationship
+author: ZenTao Team
+version: 1.0
+
+fields:
+- field: project
+  note: Project ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: Product ID
+  range: 1-10:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: Product branch
+  range: 0{20},1{5},2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

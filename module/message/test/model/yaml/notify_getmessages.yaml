@@ -1,0 +1,100 @@
+---
+title: 消息通知测试数据 - getMessages方法专用
+desc: 为getMessages方法提供完整的测试数据覆盖
+author: Claude
+version: "1.0"
+
+fields:
+- field: id
+  note: "通知ID"
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: "对象类型"
+  range: message{12},task{3},story{3},bug{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: "对象ID"
+  range: 1-100:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: action
+  note: "操作记录ID"
+  range: 1-10:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: toList
+  note: "指派用户"
+  range: ",admin,{15},,test1,{3},,user1,{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: ccList
+  note: "抄送列表"
+  range: ""{15},"cc1,cc2,"{3},"cc3,"{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: subject
+  note: "主题"
+  range: 测试消息主题{5},重要通知{3},系统消息{4},用户消息{8}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: data
+  note: "消息数据"
+  range: 用户创建了任务{4},用户更新了需求{3},用户关闭了缺陷{2},系统通知消息{3},待办提醒{4},会议通知{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: "创建者"
+  range: admin{6},test1{4},user1{4},system{3},guest{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: "创建日期"
+  range: "(3d)-(1h)"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: sendTime
+  note: "发送时间"
+  range: "0000-00-00 00:00:00"{8},"(2d)-(1h)"{12}
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+  prefix: ""
+  postfix: ""
+  loop: 0
+- field: status
+  note: "状态"
+  range: wait{8},sended{6},read{4},fail{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: failReason
+  note: "失败原因"
+  range: ""{15},网络错误{2},邮箱不存在{2},权限不足{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

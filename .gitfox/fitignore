@@ -1,0 +1,19 @@
+*.svg
+*.yml
+*.yaml
+*.md
+*.txt
+*.xml
+*.json
+*.sql
+CHANGELOG
+www/static/
+
+# third-party libraries
+lib/vendor/
+
+# ai test
+.claude/
+.qwen/
+@branch:ai/unit-test/claude
+@branch:ai/ui-test/qwen

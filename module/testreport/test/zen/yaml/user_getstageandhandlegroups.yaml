@@ -1,0 +1,154 @@
+---
+title: User数据用于测试getStageAndHandleGroups方法
+desc: 为getStageAndHandleGroups方法提供测试用的用户数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,tester1,tester2,dev1,dev2,dev3,manager1,pm1
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,测试员1,测试员2,开发1,开发2,开发3,经理1,项目经理1
+
+- field: password
+  note: 密码
+  range: 123456{10}
+
+- field: role
+  note: 角色
+  range: admin{1},qa{3},dev{4},pm{2}
+
+- field: dept
+  note: 部门ID
+  range: 1-3
+
+- field: email
+  note: 邮箱
+  fields:
+  - field: username
+    range: admin,user1,user2,tester1,tester2,dev1,dev2,dev3,manager1,pm1
+  - field: domain
+    range: "@test.com"
+
+- field: avatar
+  note: 头像
+  range: ""{10}
+
+- field: birthday
+  note: 生日
+  range: 1980-01-01-1995-12-31
+
+- field: gender
+  note: 性别
+  range: m{6},f{4}
+
+- field: phone
+  note: 电话
+  range: ""{10}
+
+- field: mobile
+  note: 手机
+  range: ""{10}
+
+- field: qq
+  note: QQ
+  range: ""{10}
+
+- field: yahoo
+  note: Yahoo
+  range: ""{10}
+
+- field: gtalk
+  note: Gtalk
+  range: ""{10}
+
+- field: wangwang
+  note: 旺旺
+  range: ""{10}
+
+- field: msn
+  note: MSN
+  range: ""{10}
+
+- field: skype
+  note: Skype
+  range: ""{10}
+
+- field: address
+  note: 地址
+  range: ""{10}
+
+- field: zipcode
+  note: 邮编
+  range: ""{10}
+
+- field: join
+  note: 入职时间
+  range: 2023-01-01-2024-01-01
+
+- field: visits
+  note: 访问次数
+  range: 1-100
+
+- field: ip
+  note: IP地址
+  range: 127.0.0.1{10}
+
+- field: last
+  note: 最后登录时间
+  range: 2024-01-01 00:00:00-2024-01-31 23:59:59
+
+- field: fails
+  note: 登录失败次数
+  range: 0{10}
+
+- field: locked
+  note: 锁定时间
+  range: 0000-00-00 00:00:00{10}
+
+- field: ranzhi
+  note: 然之账号
+  range: ""{10}
+
+- field: score
+  note: 积分
+  range: 0{10}
+
+- field: scoreLevel
+  note: 积分等级
+  range: 0{10}
+
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+
+- field: clientStatus
+  note: 客户端状态
+  range: online{7},away{2},busy{1}
+
+- field: clientLang
+  note: 客户端语言
+  range: zh-cn{8},en{2}
+
+- field: commiter
+  note: 提交者权限
+  range: ""{10}
+
+- field: feedback
+  note: 反馈权限
+  range: 0{10}
+
+- field: modifyPassword
+  note: 修改密码权限
+  range: 1{10}
+
+- field: visions
+  note: 视图权限
+  range: rnd{10}

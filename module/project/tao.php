@@ -802,7 +802,7 @@ class projectTao extends projectModel
     protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
     {
         $query = '';
-        if($status == 'bysearch' && $this->this->session->projectQuery !== false) $query = $this->session->projectQuery;
+        if($status == 'bysearch' && $this->session->projectQuery !== false) $query = $this->session->projectQuery;
         $query = str_replace('`id`','t1.id', $query);
 
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
@@ -811,7 +811,7 @@ class projectTao extends projectModel
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
-            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed', 'delayed'), true))->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed', 'delayed', 'bysearch'), true))->andWhere('t1.status')->eq($status)->fi()
             ->beginIF(in_array($status, array('undone', 'unclosed')))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($status == 'delayed')->andWhere('t1.status')->notIn('done,closed,suspend')->andWhere('t1.end')->lt(helper::today())->fi()
             ->beginIF($status == 'review')
@@ -1035,7 +1035,7 @@ class projectTao extends projectModel
      */
     protected function setMenuByModel(string $projectModel): bool
     {
-        global $lang, $config;
+        global $lang, $config, $app;
         $model = 'scrum';
         if(in_array($projectModel, $this->config->project->waterfallList))
         {
@@ -1051,6 +1051,8 @@ class projectTao extends projectModel
 
             if($projectModel == 'ipd') unset($lang->waterfall->menu->other['dropMenu']->deliverable);
             $lang->execution->typeList['sprint'] = $executionCommonLang;
+
+            if($app->rawModule == 'project' && $app->rawMethod == 'executionreport') $lang->waterfall->menu->execution['subModule'] .= ',project';
         }
         elseif($projectModel == 'kanban')
         {
@@ -1076,6 +1078,12 @@ class projectTao extends projectModel
                 }
 
                 if($lang->{$model}->dividerMenu) $lang->{$model}->dividerMenu = ',' . trim($lang->{$model}->dividerMenu, ',') . ',';
+            }
+
+            if($this->config->inCompose)
+            {
+                $repoServers = $this->loadModel('pipeline')->getPairs($this->config->pipeline->checkRepoServers);
+                if(empty($repoServers)) unset($lang->{$model}->menu->devops);
             }
 
             $lang->project->menu        = $lang->{$model}->menu;
@@ -1161,5 +1169,29 @@ class projectTao extends projectModel
         }
 
         return true;
+    }
+
+    /**
+     * 创建里程碑报告。
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return bool
+     */
+    protected function createMilestoneReport(int $projectID): bool
+    {
+        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('module')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
+        if(!empty($reportID)) return true;
+
+        $report = new stdclass();
+        $report->title        = $this->lang->project->milestoneReport;
+        $report->project      = $projectID;
+        $report->module       = 'milestone';
+        $report->templateType = 'projectReport';
+        $report->addedBy      = 'system';
+        $report->addedDate    = helper::now();
+        $this->dao->insert(TABLE_DOC)->data($report)->exec();
+
+        return !dao::isError();
     }
 }

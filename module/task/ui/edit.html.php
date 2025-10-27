@@ -286,6 +286,7 @@ detailBody
             item
             (
                 set::name($lang->task->assignedTo),
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",assignedTo,") !== false),
                 inputGroup
                 (
                     div

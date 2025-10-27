@@ -25,7 +25,7 @@ cid=73
 
 */
 chdir(__DIR__);
-include '../lib/createkanban.ui.class.php';
+include '../lib/ui/createkanban.ui.class.php';
 
 $tester = new createKanbanTester();
 $tester->login();

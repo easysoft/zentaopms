@@ -1,0 +1,31 @@
+---
+title: 测试genComponentData方法的图表数据
+desc: 用于genComponentData方法单元测试的图表数据
+
+fields:
+- field: id
+  range: 1-5
+- field: name
+  range: "测试图表1,测试图表2,测试图表3,测试图表4,测试图表5"
+- field: type
+  range: "bar,pie,line,bar,pie"
+- field: sql
+  range: "SELECT 1 as count,SELECT 2 as total,SELECT 3 as value,SELECT 4 as amount,SELECT 5 as number"
+- field: fields
+  range: "count,total,value,amount,number"
+- field: settings
+  range: "{\\"type\\":\\"bar\\"},{\\"type\\":\\"pie\\"},{\\"type\\":\\"line\\"},{\\"type\\":\\"bar\\"},{\\"type\\":\\"pie\\"}"
+- field: filters
+  range: "{},{},{},{},{}"
+- field: langs
+  range: "{},{},{},{},{}"
+- field: stage
+  range: "published,published,published,published,published"
+- field: builtin
+  range: "0,0,0,0,0"
+- field: createdBy
+  range: "admin,admin,admin,admin,admin"
+- field: createdDate
+  range: "`2024-01-01 00:00:00`:`2024-12-31 23:59:59`"
+- field: deleted
+  range: "0,0,0,0,0"

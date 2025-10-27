@@ -1,0 +1,28 @@
+---
+title: productplan表updateLinkedPlans方法测试数据
+desc: 用于测试execution模块updateLinkedPlans方法的产品计划数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-15
+  note: 计划ID
+- field: product
+  range: '1{5},2{5},3{3},4{2}'
+  note: 产品ID
+- field: branch
+  range: '0{10},1{3},2{2}'
+  note: 分支ID
+- field: title
+  range: '计划1.0{1},计划2.0{1},计划3.0{1},紧急计划{2},测试计划{5},发布计划{5}'
+  note: 计划标题
+- field: status
+  range: 'wait{5},doing{6},done{3},closed{1}'
+  note: 计划状态
+- field: parent
+  range: '0{12},1{2},2{1}'
+  note: 父计划ID
+- field: deleted
+  range: '0{14},1{1}'
+  note: 删除状态

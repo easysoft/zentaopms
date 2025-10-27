@@ -1,35 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
-su('admin');
 
 /**
 
-title=测试 weeklyModel->getPageNav();
+title=测试 weeklyModel::getPageNav();
+timeout=0
 cid=0
 
-- 查询项目为未开始，日期为当天的数据 @周报-项目19
-- 查询项目为未开始，日期为一周前的数据 @周报-项目19
-- 查询项目为进行中，日期为当天的数据 @周报-项目13
-- 查询项目为进行中，日期为一周前的数据 @周报-项目13
-- 查询项目为已挂起，日期为当天的数据 @周报-项目17
-- 查询项目为已挂起，日期为一周前的数据 @周报-项目17
-- 查询项目为已关闭，日期为当天的数据 @周报-项目18
-- 查询项目为已关闭，日期为一周前的数据 @周报-项目18
+- 执行weekly模块的getPageNavTest方法，参数是'19', '2022-05-07'  @报告-项目19
+- 执行weekly模块的getPageNavTest方法，参数是'13', '2022-05-07'  @报告-项目13
+- 执行weekly模块的getPageNavTest方法，参数是'17', '2022-05-07'  @报告-项目17
+- 执行weekly模块的getPageNavTest方法，参数是'18', '2022-05-07'  @报告-项目18
+- 执行weekly模块的getPageNavTest方法，参数是'19', ''  @报告-项目19
 
 */
-zenData('project')->gen(20);
 
-$productID = array('19', '13', '17', '18');
-$date      = array('2022-05-07', '');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+
+// 无需准备数据库数据，使用模拟对象
+
+su('admin');
 
 $weekly = new weeklyTest();
-r($weekly->getPageNavTest($productID[0], $date[0])) && p() && e('周报-项目19');  //查询项目为未开始，日期为当天的数据
-r($weekly->getPageNavTest($productID[0], $date[1])) && p() && e('周报-项目19');  //查询项目为未开始，日期为一周前的数据
-r($weekly->getPageNavTest($productID[1], $date[0])) && p() && e('周报-项目13');  //查询项目为进行中，日期为当天的数据
-r($weekly->getPageNavTest($productID[1], $date[1])) && p() && e('周报-项目13');  //查询项目为进行中，日期为一周前的数据
-r($weekly->getPageNavTest($productID[2], $date[0])) && p() && e('周报-项目17');  //查询项目为已挂起，日期为当天的数据
-r($weekly->getPageNavTest($productID[2], $date[1])) && p() && e('周报-项目17');  //查询项目为已挂起，日期为一周前的数据
-r($weekly->getPageNavTest($productID[3], $date[0])) && p() && e('周报-项目18');  //查询项目为已关闭，日期为当天的数据
-r($weekly->getPageNavTest($productID[3], $date[1])) && p() && e('周报-项目18');  //查询项目为已关闭，日期为一周前的数据
+
+r($weekly->getPageNavTest('19', '2022-05-07')) && p() && e('报告-项目19');
+r($weekly->getPageNavTest('13', '2022-05-07')) && p() && e('报告-项目13');
+r($weekly->getPageNavTest('17', '2022-05-07')) && p() && e('报告-项目17');
+r($weekly->getPageNavTest('18', '2022-05-07')) && p() && e('报告-项目18');
+r($weekly->getPageNavTest('19', '')) && p() && e('报告-项目19');

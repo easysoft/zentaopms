@@ -1,0 +1,78 @@
+---
+title: 工作流组createGroup方法测试数据
+desc: 用于测试convertTao::createGroup()方法的数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 工作流组ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+
+- field: objectID
+  note: 对象ID
+  range: 0-10
+  
+- field: type
+  note: 类型
+  range: project{5},product{5}
+  
+- field: projectModel
+  note: 项目模型
+  range: scrum{5},waterfall{3},[]{2}
+  
+- field: projectType
+  note: 项目类型
+  range: product{5},project{3},[]{2}
+  
+- field: name
+  note: 名称
+  range: 测试项目组{5},产品组{3},敏捷组{2}
+  
+- field: code
+  note: 编码
+  range: testgroup{5},productgroup{3},scrumgroup{2}
+  
+- field: desc
+  note: 描述
+  range: 这是测试描述{5},[]{3},测试工作流组{2}
+  
+- field: disabledModules
+  note: 禁用模块
+  range: []{8},task,story{1}
+  
+- field: status
+  note: 状态
+  range: normal{8},wait{2}
+  
+- field: vision
+  note: 视野
+  range: rnd{10}
+  
+- field: main
+  note: 是否主要
+  range: 0{8},1{2}
+  
+- field: exclusive
+  note: 是否独占
+  range: 0{5},1{5}
+  
+- field: createdBy
+  note: 创建者
+  range: admin{5},user1{3},user2{2}
+  
+- field: createdDate
+  note: 创建日期
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59:30D
+  format: YYYY-MM-DD hh:mm:ss
+  
+- field: editedBy
+  note: 编辑者
+  range: []{8},admin{1},user1{1}
+  
+- field: editedDate
+  note: 编辑日期
+  range: []{8},2023-06-01 00:00:00-2023-12-31 23:59:59:30D
+  format: YYYY-MM-DD hh:mm:ss

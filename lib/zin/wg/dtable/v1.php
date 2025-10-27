@@ -115,25 +115,15 @@ class dtable extends wg
             $globalUrl      = is_bool($customColsProp) || empty($customColsProp['globalUrl']) ? null : $customColsProp['globalUrl'];
             $resetUrl       = is_bool($customColsProp) || empty($customColsProp['resetUrl']) ? null : $customColsProp['resetUrl'];
             $resetGlobalUrl = is_bool($customColsProp) || empty($customColsProp['resetGlobalUrl']) ? null : $customColsProp['resetGlobalUrl'];
-            $this->setProp('customCols', array(
-                'custom' => array(
-                    'url' => $customUrl,
-                    'text' => $app->lang->datatable->custom
-                ),
-                'setGlobal' => array(
-                    'url' => $globalUrl ? $globalUrl : createLink('datatable', 'ajaxsaveglobal', "module={$moduleName}&method={$methodName}"),
-                    'text' => $app->lang->datatable->setGlobal
-                ),
-                'reset' => array(
-                    'url' => $resetUrl ? $resetUrl : createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}"),
-                    'text' => $app->lang->datatable->reset
-                ),
-                'resetGlobal' => array(
-                    'url' => $resetGlobalUrl ? $resetGlobalUrl : createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}&system=1"),
-                    'text' => $app->lang->datatable->resetGlobal
-                ),
-                'saveFieldsUrl' => str_replace('ajaxcustom', 'ajaxsavefields', $customUrl)
-            ));
+
+            $customCols           = array();
+            $customCols['custom'] = array('url' => $customUrl, 'text' => $app->lang->datatable->custom);
+            if($app->user->admin) $customCols['setGlobal'] = array('url' => $globalUrl ? $globalUrl : createLink('datatable', 'ajaxsaveglobal', "module={$moduleName}&method={$methodName}"), 'text' => $app->lang->datatable->setGlobal);
+            $customCols['reset'] = array('url' => $resetUrl ? $resetUrl : createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}"), 'text' => $app->lang->datatable->reset);
+            if($app->user->admin) $customCols['resetGlobal'] = array('url' => $resetGlobalUrl ? $resetGlobalUrl : createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}&system=1"), 'text' => $app->lang->datatable->resetGlobal);
+            $customCols['saveFieldsUrl'] = str_replace('ajaxcustom', 'ajaxsavefields', $customUrl);
+
+            $this->setProp('customCols', $customCols);
             $this->setProp('customCol', true);
 
             $fixedLeftWidth = $this->prop('fixedLeftWidth');

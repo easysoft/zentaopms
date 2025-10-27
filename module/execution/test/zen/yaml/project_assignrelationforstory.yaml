@@ -1,0 +1,32 @@
+---
+title: 项目数据配置
+desc: 用于assignRelationForStory方法的项目测试数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+
+- field: name
+  note: 项目名称
+  range: 项目{1-5}
+
+- field: type
+  note: 项目类型
+  range: project{5}
+
+- field: status
+  note: 项目状态
+  range: wait{2},doing{2},done{1}
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01
+
+- field: end
+  note: 结束日期
+  range: 2024-12-31
+
+- field: deleted
+  note: 删除状态
+  range: 0

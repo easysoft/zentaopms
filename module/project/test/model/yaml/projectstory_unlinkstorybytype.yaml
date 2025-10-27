@@ -1,0 +1,49 @@
+---
+title: 项目需求关联表测试数据 - unlinkStoryByType方法
+desc: 用于测试根据类型解除需求关联功能的测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1{4}, 2{4}, 3{4}, 4{4}, 5{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 需求ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

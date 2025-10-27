@@ -1,0 +1,33 @@
+---
+title: project table for isTopStage method test
+author: Claude
+version: "1.0"
+
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 0{3},1{2},2{2},3{1},4{1},5{1}
+  - field: type
+    range: program{3},project{3},stage{3},sprint{1}
+  - field: parent
+    range: 0{3},1{3},2{2},3{1},4{1}
+  - field: name
+    fields:
+      - field: name1
+        range: 顶级项目集{3},子项目{3},子阶段{3},迭代{1}
+      - field: name2
+        range: 1-10
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 1-10
+      - field: path2
+        prefix: ","
+        range: "[]{3},11-100"
+        postfix: ","
+  - field: status
+    range: wait{2},doing{4},suspended{2},closed{2}
+  - field: deleted
+    range: 0

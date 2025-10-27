@@ -1,0 +1,44 @@
+---
+title: 测试用例数据 - getStatusForUpdate方法
+desc: 为testcaseZen::getStatusForUpdate()方法提供测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{5}, 2{3}, 3{2}
+- field: module
+  note: 模块ID
+  range: 1-5
+- field: title
+  note: 用例标题
+  range: '测试用例标题1{3}, 测试用例标题2{3}, 测试用例标题3{2}, 修改后的标题{2}'
+- field: precondition
+  note: 前置条件
+  range: '前置条件描述1{4}, 前置条件描述2{3}, 修改后的前置条件{3}'
+- field: status
+  note: 用例状态
+  range: 'wait{3}, normal{4}, blocked{2}, investigate{1}'
+- field: version
+  note: 版本号
+  range: 1{6}, 2{3}, 3{1}
+- field: lastEditedDate
+  note: 最后编辑时间
+  range: '2023-09-01 10:00:00{3}, 2023-09-01 11:00:00{3}, 2023-09-01 12:00:00{2}, 2023-09-02 10:00:00{2}'
+- field: openedBy
+  note: 创建者
+  range: 'admin{5}, user1{3}, user2{2}'
+- field: openedDate
+  note: 创建时间
+  range: '2023-09-01 09:00:00{5}, 2023-09-01 10:00:00{3}, 2023-09-01 11:00:00{2}'
+- field: deleted
+  note: 是否删除
+  range: '0{9}, 1{1}'

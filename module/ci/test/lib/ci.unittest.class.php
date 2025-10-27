@@ -7,6 +7,7 @@ class ciTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('ci');
+        $tester->app->setModuleName('ci');
     }
 
     /**
@@ -20,7 +21,7 @@ class ciTest
     public function setMenuTest(int $repoID = 0, string $module = '')
     {
         global $app, $lang;
-        $app->moduleName = $module;
+        if($module) $app->moduleName = $module;
 
         $resetLang = clone $lang->devops->menu;
 
@@ -29,6 +30,7 @@ class ciTest
 
         $result = $lang->devops->menu;
         $lang->devops->menu = $resetLang;
+
         return $result;
     }
 
@@ -128,19 +130,21 @@ class ciTest
      *
      * @param  int    $compileID
      * @access public
-     * @return object|array|false
+     * @return object|array|bool
      */
-    public function checkCompileStatusTest(int $compileID): object|array|false
+    public function checkCompileStatusTest(int $compileID): object|array|bool
     {
-        $this->objectModel->checkCompileStatus($compileID);
+        $result = $this->objectModel->checkCompileStatus($compileID);
         if(dao::isError()) return dao::getError();
 
         if($compileID)
         {
-            return $this->objectModel->loadModel('compile')->getByID($compileID);
+            $compile = $this->objectModel->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($compileID)->fetch();
+            return $compile ? $compile : false;
         }
 
-        return $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
+        $compiles = $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
+        return $compiles ? $compiles : $result;
     }
 
     /**
@@ -149,15 +153,23 @@ class ciTest
      * @param  int    $compileID
      * @param  string $response
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function saveCompileTest(int $compileID, string $response): string
+    public function saveCompileTest(int $compileID, string $response): mixed
     {
         $compile = $this->objectModel->getCompileByID($compileID);
-        $this->objectModel->saveCompile($response, $compile, "{$compile->account}:{$compile->token}", $compile->url);
+        if(!$compile) return false;
 
-        $compile = $this->objectModel->getCompileByID($compileID);
-        return str_contains($compile->logs, 'Finished');
+        $result = $this->objectModel->saveCompile($response, $compile, "{$compile->account}:{$compile->token}", $compile->url);
+        if(dao::isError()) return dao::getError();
+
+        $updatedCompile = $this->objectModel->getCompileByID($compileID);
+        return array(
+            'result' => $result,
+            'status' => $updatedCompile->status ?? '',
+            'logs' => $updatedCompile->logs ?? '',
+            'hasLog' => !empty($updatedCompile->logs)
+        );
     }
 
     /**
@@ -175,5 +187,20 @@ class ciTest
         if($taskID) return $this->objectModel->loadModel('testtask')->getByID($taskID);
 
         return $this->objectModel->dao->select('*')->from(TABLE_TESTTASK)->orderBy('id_desc')->fetch();
+    }
+
+    /**
+     * Test transformAnsiToHtml method.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public function transformAnsiToHtmlTest(string $text): string
+    {
+        $result = $this->objectModel->transformAnsiToHtml($text);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

@@ -1,0 +1,54 @@
+---
+fields:
+- field: id
+  range: 1-6
+- field: project
+  range: 11-12
+- field: product
+  range: 1-2
+- field: branch
+  range: 0
+- field: execution
+  range: 101-102
+- field: name
+  range: Build1,Build2,Build3,Build4,Build5,Build6
+- field: system
+  range: 1-100
+- field: scmPath
+  fields:
+  - field: scmPath1
+    range: '[gitlab.zcorp.cc/easycorp/,svn.zcorp.cc/easysoft/trunk/zentaoext/]{3},[]{2}'
+  - field: scmPath2
+    range: zentaopms,xuanxuan,zdoo,zentaopro,zentaobiz,zentaomax,[]{2}
+  - field: scmPath3
+    range: '[.git]{3},[]{5}'
+- field: filePath
+  range: '[www.csdn.net/,www.baidu.com/,www.juejin.cn/]{2},[]{2}'
+- field: date
+  range: 2024-01-01 - 2024-12-31:1D
+- field: stories
+  fields:
+  - field: story1
+    range: 2-400:4
+    prefix: ""
+    postfix: ','
+  - field: story2
+    range: 4-400:4
+- field: bugs
+  fields:
+  - field: bug1
+    range: 1-300:3
+    prefix: ""
+    postfix: ','
+  - field: bug2
+    range: 2-400:3
+- field: builder
+  range: admin,user1,user2
+- field: desc
+  range: <div> <p>司法局阿里水电费加快了时代峰峻辣三丁防 显卡鲁大师，，，asdf，，</p> <p>qoqao穷OA怄气袄怄气欧文饿哦啊OAof噢诶区文诗  熊熊0哦到OA山东全文怄气袄安全o</p>
+    <p>zmvzxcmv啊，。你啊是否为欧舒斯蒂芬你先吃，哪吒，门下车，哦企鹅跑跑水电费，充满着那些，聪明在，需自行车，起伏阿萨德从，名字</p></div>
+- field: artifactRepoID
+  range: 0
+- field: deleted
+  range: 0
+...

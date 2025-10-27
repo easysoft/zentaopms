@@ -1,8 +1,0 @@
-.prompt-details .detail-title {
-    font-weight: normal;
-    color:#838a9d;
-}
-
-.prompt-details .detail-content + .detail-title {
-    margin-top: 10px;
-}

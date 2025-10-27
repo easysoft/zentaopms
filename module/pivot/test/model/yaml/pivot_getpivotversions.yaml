@@ -1,0 +1,62 @@
+---
+title: getPivotVersions方法测试数据
+desc: 用于测试pivotModel::getPivotVersions()方法的透视表和透视表规格数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 透视表ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 透视表名称(JSON格式)
+  range: '{"zh-cn":"透视表1","en":"Pivot1"}, {"zh-cn":"透视表2","en":"Pivot2"}, {"zh-cn":"透视表3","en":"Pivot3"}, {"zh-cn":"透视表4","en":"Pivot4"}, {"zh-cn":"透视表5","en":"Pivot5"}, {"zh-cn":"透视表6","en":"Pivot6"}, {"zh-cn":"透视表7","en":"Pivot7"}, {"zh-cn":"透视表8","en":"Pivot8"}, {"zh-cn":"透视表9","en":"Pivot9"}, {"zh-cn":"透视表10","en":"Pivot10"}'
+  format: ""
+- field: desc
+  note: 透视表描述(JSON格式)
+  range: '{"zh-cn":"描述1","en":"Description1"}, {"zh-cn":"描述2","en":"Description2"}, {"zh-cn":"描述3","en":"Description3"}, {"zh-cn":"描述4","en":"Description4"}, {"zh-cn":"描述5","en":"Description5"}, {"zh-cn":"描述6","en":"Description6"}, {"zh-cn":"描述7","en":"Description7"}, {"zh-cn":"描述8","en":"Description8"}, {"zh-cn":"描述9","en":"Description9"}, {"zh-cn":"描述10","en":"Description10"}'
+  format: ""
+- field: deleted
+  note: 删除标记
+  range: '0{8},1{2}'
+  format: ""
+- field: dimension
+  note: 维度ID
+  range: 0
+  format: ""
+- field: group
+  note: 分组
+  range: 'default'
+  format: ""
+- field: code
+  note: 透视表代码
+  range: 'pivot_code_001-010'
+  format: ""
+- field: driver
+  note: 数据库驱动
+  range: 'mysql{8},duckdb{2}'
+  format: ""
+- field: mode
+  note: 模式
+  range: 'builder{10}'
+  format: ""
+- field: acl
+  note: 访问控制
+  range: 'open{8},private{2}'
+  format: ""
+- field: step
+  note: 步骤
+  range: 0-3
+  format: ""
+- field: stage
+  note: 阶段
+  range: 'draft{3},published{7}'
+  format: ""
+- field: builtin
+  note: 是否内置
+  range: '0{8},1{2}'
+  format: ""

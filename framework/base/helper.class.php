@@ -107,9 +107,22 @@ class baseHelper
         }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
-        if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
-        if($config->requestType != 'PATH_INFO')  $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
-        if($config->requestType == 'PATH_INFO2') $link = '/';
+        if($app->apiVersion == 'v2')
+        {
+            $link = $config->webRoot . '/api.php/v2/';
+        }
+        elseif($config->requestType == 'PATH_INFO2')
+        {
+            $link = '/';
+        }
+        elseif($config->requestType == 'PATH_INFO')
+        {
+            $link = $config->webRoot . $appName;
+        }
+        else
+        {
+            $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
+        }
 
         /**
          * #1: RequestType为GET。When the requestType is GET.
@@ -317,16 +330,20 @@ class baseHelper
         if(is_array($idList))
         {
             foreach($idList as $key=>$value) $idList[$key] = addslashes((string) $value);
-            if(count($idList) <= 1) return "= '" . join("','", $idList) . "'";
+            $idCount = count($idList);
+            if($idCount == 0) return "= NULL";
+            if($idCount == 1) return "= '" . current($idList) . "'";
             return "IN ('" . join("','", $idList) . "')";
         }
 
-        if(is_null($idList)) $idList = '';
+        if(is_null($idList)) return '=NULL';
+
         if(!is_string($idList)) $idList = json_encode($idList);
 
         $idList = str_replace(',', "','", str_replace(' ', '', addslashes($idList)));
         if(substr_count($idList, ',') != 0) return "IN ('" . $idList . "')";
-        return "= '$idList'";
+
+        return $idList == '' ? '= NULL' : "= '$idList'";
     }
 
     /**
@@ -833,7 +850,7 @@ class baseHelper
 
         session_write_close();
 
-        if(ini_get('session.save_handler') == 'user')
+        if(ini_get('session.save_handler') == 'user') // Once enable the custom session handler in baseRouter, session.save_handler becomes user.
         {
             $ztSessionHandler = new ztSessionHandler();
             session_set_save_handler($ztSessionHandler, true);
@@ -1535,4 +1552,26 @@ function uncompress(string $encoded): array
     $decoded = explode(',', gzuncompress($encoded));
     for($i = 1; $i < count($decoded); $i++) $decoded[$i] += $decoded[$i-1];
     return $decoded;
+}
+
+
+/**
+ * 将字符串及数组转为Int数组
+ * Convert string array to int array.
+ *
+ * @param  array|string $strArray
+ * @access public
+ * @return array
+ */
+function toIntArray(array|string $strArray): array
+{
+    if(is_string($strArray)) $strArray = explode(',', $strArray);
+
+    $intArray = [];
+    foreach($strArray as $val)
+    {
+        if($val === '') continue;
+        $intArray[] = (int)$val;
+    }
+    return $intArray;
 }

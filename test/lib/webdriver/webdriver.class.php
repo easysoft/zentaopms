@@ -754,17 +754,13 @@ class dom
             if($showPerf)
             {
                 $perfMsg = $this->driver->executeScript("return $('.page-app body').attr('z-perf-message');");
-                if(!empty($perfMsg)) $errors[] = $perfMsg;
+                if(!empty($perfMsg)) $errors[] = "perf: {$perfMsg}";
             }
-            $parentDiv = $this->driver->findElement(WebDriverBy::xpath('//*[@id="zinbar"]/div/div[3]'));
-            $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
 
-            foreach($errorDivs as $errorDiv)
+            $zinbarErrors = $this->driver->executeScript("return $('#zinbar').zinbar('state').errors || {};");
+            if(!empty($zinbarErrors))
             {
-                $errorInfo = $errorDiv->findElement(WebDriverBy::xpath('div[1]'))->getText();
-                $errorLine = $errorDiv->findElement(WebDriverBy::xpath('div[2]/strong'))->getText();
-                $errorFile = $errorDiv->findElement(WebDriverBy::xpath('div[2]/span'))->getText();
-                $errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
+                foreach($zinbarErrors as $error) $errors[] = "message: {$error['message']}, file: vim +{$error['line']} {$error['file']}";
             }
 
             return $errors;
@@ -1257,5 +1253,44 @@ JS
             $count++;
         }
         return $result;
+    }
+
+    /**
+     * Get elements list by xpath key
+     *
+     * @param  string $key
+     * @param  bool   $text  true return element getText() list, false return element dom list
+     * @access public
+     * @return array  [] if not found
+     */
+    public function getElementListByXpathKey($key = '', $text = false)
+    {
+        if(!$key or !isset($this->xpath[$key])) return [];
+
+        $getList = $this->waitElement($this->xpath[$key], 3)->getElementList($this->xpath[$key]);
+        if(!$getList) return [];
+        $elements = $getList->element;
+        if(!$text) return $elements;
+
+        $list = [];
+        foreach($elements as $element)
+        {
+            array_push($list, $element->getText());
+        }
+        return $list;
+    }
+
+    /**
+     * Pick item in dropdown menu and click.
+     *
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function dropdownPicker($value)
+    {
+        $xpath = "//div[contains(@class,'dropdown')]//div[@class='item-title' and text()='{$value}']";
+        $this->getElement($xpath)->element->click();
+        sleep(3);
     }
 }

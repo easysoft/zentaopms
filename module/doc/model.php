@@ -666,16 +666,17 @@ class docModel extends model
      */
     public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', ?object $pager = null, string $searchName = ''): array
     {
-        return $this->dao->select('*')->from(TABLE_DOC)
-            ->where('templateType')->ne('')
-            ->andWhere('builtIn')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
-            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
-            ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
-            ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
-            ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($searchName)->andWhere('title')->like("%{$searchName}%")->fi()
+        return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->where('t2.type')->eq('docTemplate')
+            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere("(t1.`status` = 'normal' or (t1.`status` = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")->fi()
+            ->beginIF($libID)->andWhere('t1.lib')->eq($libID)->fi()
+            ->beginIF($type == 'draft')->andWhere('t1.status')->eq('draft')->fi()
+            ->beginIF($type == 'released')->andWhere('t1.status')->eq('normal')->fi()
+            ->beginIF($type == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($searchName)->andWhere('t1.title')->like("%{$searchName}%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);
@@ -774,7 +775,7 @@ class docModel extends model
     public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=CAST(t2.id AS CHAR)')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
@@ -998,7 +999,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.templateType')->eq('')
-                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t2.id')->subIn($docSQL)
@@ -1022,7 +1023,7 @@ class docModel extends model
             $docIdList = $type == 'editedby' ? $this->docTao->getEditedDocIdList() : array();
             $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
@@ -1634,11 +1635,11 @@ class docModel extends model
 
         $docID = $this->dao->lastInsertID();
 
-        $path = ",{$docID}";
+        $path = ",{$docID},";
         if($doc->parent)
         {
             $parentDoc = $this->getByID($doc->parent);
-            $path = $parentDoc->path . $path;
+            $path = ',' . trim($parentDoc->path, ',') . ',' . $path;
         }
 
         $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
@@ -2857,7 +2858,7 @@ class docModel extends model
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t2.lib')->ne('')
+            ->andWhere('t2.lib')->ne(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
@@ -2868,7 +2869,7 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('lib')->ne('')
+            ->andWhere('lib')->ne(0)
             ->fetch();
 
         $statistic->myDocs = $myStatistic->myDocs;
@@ -3663,14 +3664,15 @@ class docModel extends model
      * Get editors of a document.
      *
      * @param  int    $docID
+     * @param  string $objectType
      * @access public
      * @return array
      */
-    public function getEditors(int $docID = 0): array
+    public function getEditors(int $docID = 0, string $objectType = 'doc'): array
     {
         if(!$docID) return array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
+            ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($docID)
             ->andWhere('action')->in('edited')
             ->orderBy('date_desc')
@@ -4054,13 +4056,14 @@ class docModel extends model
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
             ->where('t1.module')->eq('baseline')
             ->andWhere('t1.section')->eq('objectList')
             ->andWhere('t1.lang', true)->ne($currentLang)
             ->orWhere('t1.vision')->ne($this->config->vision)
             ->markRight(1)
             ->andWhere('t1.key')->notin(array_keys($templateTypes))
-            ->andWhere('t2.templateType')->ne('')
+            ->andWhere('t3.type')->eq('docTemplate')
             ->andWhere('t2.lib')->eq('')
             ->andWhere('t2.module')->eq('')
             ->andWhere('t2.deleted')->eq(0)
@@ -4299,14 +4302,15 @@ class docModel extends model
      */
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
-            ->where('templateType')->ne('')
-            ->andWhere('builtIn')->eq('0')
-            ->andWhere('deleted')->eq('0')
-            ->andWhere('status')->eq('normal')
-            ->andWhere('parent')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
+        return $this->dao->select('t1.*, CASE WHEN t1.addedDate > t1.editedDate THEN t1.addedDate ELSE t1.editedDate END as hotDate')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
+            ->where('t2.type')->eq('docTemplate')
+            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.status')->eq('normal')
+            ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF($scopeID)->andWhere('t1.lib')->eq($scopeID)->fi()
             ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('', false);
@@ -4374,13 +4378,14 @@ class docModel extends model
             $types[] = $type;
         }
 
-        return $this->dao->select('*')->from(TABLE_DOC)
-            ->where('deleted')->eq('0')
-            ->andWhere('templateType')->ne('')
-            ->andWhere('builtIn')->eq('0')
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+        return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('docTemplate')
+            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!is_null($type))->andWhere('t1.module')->in($types)->fi()
+            ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->fetchAll('id', false);
     }
 
@@ -4756,7 +4761,8 @@ class docModel extends model
      */
     public function addBuiltInDocTemplateByType()
     {
-        $builtInDocTemplate = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->fetchAll();
+        $builtInDocTemplateType = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
+        $builtInDocTemplate     = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->andWhere('templateType')->in($builtInDocTemplateType)->fetchAll();
         if(!empty($builtInDocTemplate)) return;
 
         $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
@@ -4779,7 +4785,7 @@ class docModel extends model
 
         $this->loadModel('upgrade');
         $this->app->loadLang('baseline');
-        foreach(array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') as $type)
+        foreach($builtInDocTemplateType as $type)
         {
             /* 创建与分类同名的内置文档模板。*/
             /* Add the doc template with the same name as the type. */

@@ -1,0 +1,103 @@
+---
+title: createRelease方法测试数据
+desc: 用于测试convertTao::createRelease()方法的发布版本数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 版本发布ID
+  range: 1-10
+  type: int
+
+- field: project
+  note: 项目ID
+  range: 1-5
+
+- field: product
+  note: 产品ID
+  range: 1-3
+
+- field: branch
+  note: 分支ID
+  range: 0{10}, 1{5}, 2{3}
+
+- field: shadow
+  note: 影子产品ID
+  range: 0{15}, 1{3}, 2{2}
+
+- field: build
+  note: 构建版本ID
+  range: 1-10
+
+- field: name
+  note: 版本名称
+  range: Release{5}, Version{5}, Build{5}, Hotfix{3}, Patch{2}
+  format: "v%s.0"
+
+- field: system
+  note: 系统ID
+  range: 0{10}, 1{5}, 2{3}, 3{2}
+
+- field: releases
+  note: 关联版本
+  range: '1{5}, 2{5}, 3{3}, []{7}'
+
+- field: marker
+  note: 版本标记
+  range: 0{15}, 1{5}
+
+- field: date
+  note: 发布日期
+  range: (2024-01-01)-(2024-12-31):30D
+  format: YYYY-MM-DD
+
+- field: releasedDate
+  note: 实际发布日期
+  range: '(2024-01-01)-(2024-12-31):45D, []{5}'
+  format: YYYY-MM-DD
+
+- field: stories
+  note: 包含需求
+  range: '1{3}, 1,2{2}, 1,2,3{5}, 1,2,3,4,5{5}, []{5}'
+
+- field: bugs
+  note: 包含缺陷
+  range: '1{2}, 1,2{3}, 1,2,3{4}, 1,2,3,4{3}, []{8}'
+
+- field: leftBugs
+  note: 遗留缺陷
+  range: '1{3}, 1,2{2}, 1,2,3{3}, []{12}'
+
+- field: desc
+  note: 版本描述
+  range: Release Notes{5}, Bug Fixes{3}, New Features{4}, Performance Improvements{3}, Security Updates{2}, Maintenance Release{3}
+
+- field: mailto
+  note: 通知邮箱
+  range: 'admin@test.com{3}, user@test.com{2}, team@test.com{5}, []{10}'
+
+- field: notify
+  note: 通知设置
+  range: '1{3}, 0{2}, []{15}'
+
+- field: status
+  note: 版本状态
+  range: normal{10}, wait{5}, terminate{3}, published{2}
+
+- field: subStatus
+  note: 子状态
+  range: 'draft{2}, reviewing{1}, approved{1}, rejected{1}, []{15}'
+
+- field: createdBy
+  note: 创建人
+  range: admin{10}, user1{5}, user2{3}, manager{2}
+
+- field: createdDate
+  note: 创建时间
+  range: (2024-01-01 09:00:00)-(2024-12-31 18:00:00)
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  note: 删除状态
+  range: 0{18}, 1{2}

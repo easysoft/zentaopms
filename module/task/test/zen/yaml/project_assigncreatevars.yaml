@@ -1,0 +1,43 @@
+---
+title: assignCreateVars 方法测试用项目数据
+desc: 为 taskZen::assignCreateVars 方法提供项目测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: project
+  range: 0
+- field: model
+  range: scrum,waterfall,kanban
+- field: type
+  range: project,sprint,stage
+- field: category
+  range: ''
+- field: name
+  range: 测试项目1,测试项目2,看板项目3,瀑布项目4,敏捷项目5
+- field: code
+  range: TEST001,TEST002,TEST003,TEST004,TEST005
+- field: hasProduct
+  range: 1
+- field: begin
+  range: '2024-01-01'
+- field: end
+  range: '2024-12-31'
+- field: status
+  range: wait,doing,suspended,closed
+- field: openedBy
+  range: admin,user1,user2
+- field: openedDate
+  range: '2024-01-01 09:00:00'
+- field: deleted
+  range: '0'
+- field: multiple
+  range: 1{8},0{2}
+- field: parent
+  range: 0
+- field: path
+  range: ',1,',',2,',',3,',',4,',',5,'
+- field: grade
+  range: 1

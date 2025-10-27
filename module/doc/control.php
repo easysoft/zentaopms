@@ -166,7 +166,16 @@ class doc extends control
         }
 
         $doc = $this->doc->getByID($blockData->doc);
-        $this->view->isTemplate = !empty($doc->templateType) && $blockData->extra != 'fromReview';
+        $this->view->isTemplate = !empty($doc->templateType) && !in_array($blockData->extra, array('fromReview', 'fromReport'));
+        $this->view->fromReport = $blockData->extra == 'fromReport';
+
+        $noSupport = false;
+        if($this->view->fromReport)
+        {
+            $project   = $this->loadModel('project')->fetchByID((int)$doc->project);
+            $noSupport = in_array($type, array('HLDS', 'DDS', 'DBDS', 'ADS')) && in_array($project->model, array('scrum', 'agileplus', 'kanban'));
+        }
+        $this->view->noSupport = $noSupport;
 
         if($this->view->isTemplate)
         {
@@ -181,7 +190,7 @@ class doc extends control
             return $this->display();
         }
 
-        $fromTemplate = $blockData->extra == 'fromTemplate' || $blockData->extra == 'fromReview';
+        $fromTemplate = in_array($blockData->extra, array('fromTemplate', 'fromReview', 'fromReport'));
         if($fromTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
@@ -258,21 +267,20 @@ class doc extends control
 
         if(empty($blockData->title))
         {
-            if($blockData->extra == 'fromTemplate')
+            $blockType    = $blockData->type;
+            $blockContent = $blockData->content;
+            $templateLang = zget($this->lang, 'docTemplate', array());
+            $searchTab    = zget($blockContent, 'searchTab', '');
+
+            $blockTitle = '';
+            if(!empty($templateLang))
             {
-                $blockType    = $blockData->type;
-                $blockContent = $blockData->content;
-                $searchTab    = zget($blockContent, 'searchTab');
-                $templateLang = $this->lang->docTemplate;
-                $blockTitle   = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
+                $blockTitle = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
                 if($blockType == 'bug' && $searchTab == 'overduebugs') $blockTitle = $templateLang->overdue . $templateLang->of;
                 if(!empty($blockContent->caseStage)) $blockTitle .= $this->app->loadLang('testcase')->testcase->stageList[$blockContent->caseStage];
-                $blockData->title = $blockTitle . $templateLang->zentaoList[$blockType] . $this->lang->doc->list;
             }
-            else
-            {
-                $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
-            }
+
+            $blockData->title = $blockTitle . zget($this->lang->doc->zentaoList, $blockType, '') . $this->lang->doc->list;
         }
         $content = $this->docZen->exportZentaoList($blockData);
         echo $content;
@@ -1000,6 +1008,7 @@ class doc extends control
                     ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
                     ->setIF(!isset($_POST['readUsers']), 'readUsers', $doc->readUsers)
                     ->setIF(!isset($_POST['readGroups']), 'readGroups', $doc->readGroups)
+                    ->setIF(!isset($_POST['fromVersion']), 'fromVersion', $doc->fromVersion)
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')

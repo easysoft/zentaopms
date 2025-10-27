@@ -1,0 +1,67 @@
+---
+title: Doc表的getViewMethodForAssetLib方法测试数据
+desc: 用于测试资产库视图方法获取的文档数据
+
+fields:
+- field: id
+  range: 1-10
+- field: vision
+  range: rnd
+- field: project
+  range: 0
+- field: product
+  range: 0
+- field: execution
+  range: 0
+- field: lib
+  range: 1-5
+- field: template
+  range: ''
+- field: templateType
+  range: ''
+- field: templateDesc
+  range: ''
+- field: chapterType
+  range: ''
+- field: title
+  range: 测试文档{@}
+- field: keywords
+  range: test,doc
+- field: type
+  range: text
+- field: status
+  range: normal
+- field: acl
+  range: open
+- field: assetLibType
+  range: practice{3},component{3},''{4}
+- field: from
+  range: 0
+- field: fromVersion
+  range: 1
+- field: draft
+  range: ''
+- field: collects
+  range: 0
+- field: addedBy
+  range: admin
+- field: addedDate
+  range: '2023-01-01 10:00:00'
+- field: assignedTo
+  range: ''
+- field: assignedDate
+  range: '0000-00-00 00:00:00'
+- field: approvedDate
+  range: '0000-00-00'
+- field: editedBy
+  range: ''
+- field: editedDate
+  range: '0000-00-00 00:00:00'
+- field: lastEditedBy
+  range: ''
+- field: lastEditedDate
+  range: '0000-00-00 00:00:00'
+- field: version
+  range: 1
+- field: deleted
+  range: '0'

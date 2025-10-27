@@ -109,6 +109,7 @@ $lang->docTemplate->content                      = 'Template Text';
 $lang->docTemplate->templateDesc                 = 'Template Desc';
 $lang->docTemplate->status                       = 'Template Status';
 $lang->docTemplate->emptyTip                     = 'There is no system data that conform to this parameter and filtering conditions.';
+$lang->docTemplate->emptyDataTip                 = 'There is no system data that conform to this filtering conditions.';
 $lang->docTemplate->previewTip                   = 'After configuring the parameters, this block will display the corresponding list data according to the filter configuration.';
 $lang->docTemplate->confirmDeleteChapterWithSub  = "After deleting a chapter, the lower level content of the chapter will be hidden. Are you sure you want to delete the chapter?";
 $lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template, the lower level content of the template will be hidden. Are you sure you want to delete this template?";
@@ -368,6 +369,7 @@ $lang->doc->zentaoList['caselib']     = 'Case Library' . $lang->testcase->common
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
 $lang->doc->zentaoList['bug']        = $lang->bug->common;
+$lang->doc->zentaoList['projectBug'] = $lang->projectCommon . $lang->bug->common;
 $lang->doc->zentaoList['productBug'] = 'Product Bug';
 $lang->doc->zentaoList['planBug']    = 'Plan Bug';
 
@@ -381,6 +383,11 @@ $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = 'Feedback';
 $lang->doc->zentaoList['ticket']             = 'Ticket';
 $lang->doc->zentaoList['gantt']              = 'Gantt Chart';
+
+$lang->doc->zentaoList['HLDS'] = 'Outline Design';
+$lang->doc->zentaoList['DDS']  = 'Detailed Design';
+$lang->doc->zentaoList['DBDS'] = 'Database Design';
+$lang->doc->zentaoList['ADS']  = 'Application Design';
 
 $lang->doc->zentaoAction = array();
 $lang->doc->zentaoAction['set']       = 'Setting';
@@ -532,6 +539,7 @@ $lang->doc->previewNotAvailable         = 'Preview function is not available. Pl
 $lang->doc->hocuspocusConnect           = 'The collaborative editing service is connected.';
 $lang->doc->hocuspocusDisconnect        = 'The collaborative editing service is disconnected. Edits will be synchronized after reconnection.';
 $lang->doc->docTemplateConvertComment   = 'The template has been converted to the new editor format. Switch to version %s to view the template before conversion.';
+$lang->doc->noSupportList               = "This {$lang->projectCommon} does not support %s.";
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";

@@ -1,0 +1,91 @@
+---
+title: 工作流字段测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-10
+  type: int
+
+- field: group
+  note: 分组ID
+  range: 0{10}
+  type: int
+
+- field: module
+  note: 模块名称
+  range: jira10001{4}, jira10002{3}, jira10003{3}
+
+- field: field
+  note: 字段名称
+  range: title{2}, status{2}, priority{2}, assignee{2}, description{2}
+
+- field: type
+  note: 字段类型
+  range: varchar{4}, text{3}, int{2}, enum{1}
+
+- field: length
+  note: 字段长度
+  range: 255{4}, 1000{3}, 11{2}, 50{1}
+
+- field: name
+  note: 字段显示名称
+  range: Title{2}, Status{2}, Priority{2}, Assignee{2}, Description{2}
+
+- field: control
+  note: 控制类型
+  range: input{4}, select{3}, textarea{2}, richtext{1}
+
+- field: expression
+  note: 表达式
+  range: []{10}
+
+- field: options
+  note: 选项
+  range: []{10}
+
+- field: default
+  note: 默认值
+  range: []{10}
+
+- field: rules
+  note: 验证规则
+  range: []{10}
+
+- field: placeholder
+  note: 占位符
+  range: []{10}
+
+- field: order
+  note: 排序
+  range: 1-10
+
+- field: searchOrder
+  note: 搜索排序
+  range: 0{10}
+
+- field: readonly
+  note: 只读
+  range: 0{8}, 1{2}
+
+- field: buildin
+  note: 内置字段
+  range: 0{6}, 1{4}
+
+- field: role
+  note: 角色
+  range: custom{10}
+
+- field: vision
+  note: 版本
+  range: rnd{10}
+
+- field: createdBy
+  note: 创建者
+  range: admin{6}, user1{2}, user2{2}
+
+- field: createdDate
+  note: 创建时间
+  range: 2024-01-01 10:00:00{2}, 2024-01-02 11:00:00{2}, 2024-01-03 12:00:00{2}, 2024-01-04 13:00:00{2}, 2024-01-05 14:00:00{2}

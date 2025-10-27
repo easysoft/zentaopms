@@ -1,0 +1,59 @@
+---
+title: workflowdatasource table data for updateWorkflowLang test
+desc: Test data for workflowdatasource table
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: Type
+  range: [system,sql,func,option,lang,category]
+  loop: 0
+- field: name
+  note: Name
+  range: [测试数据源1,测试数据源2,项目数据源,产品数据源,用户数据源]
+  loop: 0
+- field: code
+  note: Code
+  range: [test1,test2,project,product,user]
+  loop: 0
+- field: datasource
+  note: Datasource
+  range: [test_data,project_data,product_data,user_data]
+  loop: 0
+- field: view
+  note: View
+  range: [view1,view2,project_view,product_view,user_view]
+  loop: 0
+- field: keyField
+  note: Key Field
+  range: [id,key,project_id,product_id,user_id]
+  loop: 0
+- field: valueField
+  note: Value Field
+  range: [name,value,project_name,product_name,username]
+  loop: 0
+- field: buildin
+  note: Built-in
+  range: [0,1]
+  loop: 0
+- field: vision
+  note: Vision
+  range: [rnd,lite]
+  loop: 0
+- field: createdBy
+  note: Created By
+  range: [admin,test,user]
+  loop: 0
+- field: createdDate
+  note: Created Date
+  range: "(-1Y)-(+1Y):30D"
+  format: YYYY-MM-DD hh:mm:ss
+  loop: 0

@@ -1,0 +1,33 @@
+---
+title: Team member data for buildMembersForManageMembers test
+desc: Test data for execution team member management
+
+fields:
+  - field: id
+    range: 1-10
+  - field: root
+    range: 1
+  - field: type
+    range: execution
+  - field: account
+    range: user1,user2,user3,admin
+  - field: role
+    range: dev{2},test{2},pm{1},qa{1}
+  - field: position
+    range: ""
+  - field: limited
+    range: no
+  - field: join
+    range: 2024-01-01
+  - field: days
+    range: 5-20
+  - field: hours
+    range: 6-8
+  - field: estimate
+    range: 0.00
+  - field: consumed
+    range: 0.00
+  - field: left
+    range: 0.00
+  - field: order
+    range: 0

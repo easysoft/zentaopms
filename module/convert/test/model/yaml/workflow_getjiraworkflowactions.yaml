@@ -1,0 +1,18 @@
+---
+fields:
+- field: id
+  range: 1-10
+- field: descriptor
+  range: |
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="1" name="Start Progress"><restrict-to><conditions type="AND"><condition type="class"><arg name="class.name">com.atlassian.jira.workflow.condition.AllowOnlyAssignee</arg></condition></conditions></restrict-to><results><unconditional-result old-status="Open" status="In Progress" step="3"><post-functions><function type="class"><arg name="class.name">com.atlassian.jira.workflow.function.issue.UpdateIssueStatusFunction</arg></function></post-functions></unconditional-result></results></action><action id="2" name="Resolve Issue"><restrict-to><conditions type="AND"><condition type="class"><arg name="class.name">com.atlassian.jira.workflow.condition.AllowOnlyReporter</arg></condition></conditions></restrict-to><results><unconditional-result old-status="In Progress" status="Resolved" step="4"><post-functions><function type="class"><arg name="class.name">com.atlassian.jira.workflow.function.issue.UpdateIssueStatusFunction</arg></function></post-functions></unconditional-result></results></action></actions><steps><step id="1" name="Open"><meta name="jira.status.id">1</meta></step><step id="3" name="In Progress"><meta name="jira.status.id">3</meta></step><step id="4" name="Resolved"><meta name="jira.status.id">4</meta></step></steps></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="5" name="Close Issue"><restrict-to><conditions type="AND"><condition type="class"><arg name="class.name">com.atlassian.jira.workflow.condition.AllowOnlyReporter</arg></condition></conditions></restrict-to></action></actions></workflow>',
+    '',
+    invalid_xml_content,
+    '<?xml version="1.0" encoding="UTF-8"?><workflow></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="3" name="Test Action"><restrict-to><conditions type="AND"><condition type="class"><arg name="class.name">TestCondition</arg></condition></conditions></restrict-to></action></actions><steps><step id="2" name="Test Step"><meta name="jira.status.id">2</meta></step></steps></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="4" name="Another Action"></action></actions></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><steps><step id="5" name="Another Step"><meta name="jira.status.id">5</meta></step></steps></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="6" name="Complex Action"><restrict-to><conditions type="OR"><condition type="class"><arg name="class.name">TestCondition1</arg></condition><condition type="class"><arg name="class.name">TestCondition2</arg></condition></conditions></restrict-to></action></actions></workflow>',
+    '<?xml version="1.0" encoding="UTF-8"?><workflow><actions><action id="7" name="Final Action"><restrict-to><conditions><condition type="class"><arg name="class.name">FinalCondition</arg></condition></conditions></restrict-to></action></actions><steps><step id="6" name="Final Step"><meta name="jira.status.id">6</meta></step></steps></workflow>'
+- field: name
+  range: workflow1,workflow2,workflow3,workflow4,workflow5,workflow6,workflow7,workflow8,workflow9,workflow10

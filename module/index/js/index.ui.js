@@ -168,9 +168,13 @@ function openApp(url, code, options)
         }
         else
         {
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write(apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`));
-            iframe.contentWindow.document.close();
+            const writeToDoc = () => {
+                iframe.contentDocument.open();
+                const html = apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`);
+                iframe.contentDocument.write(html);
+                iframe.contentDocument.close();
+            };
+            if(!iframe.contentDocument.body.children.length) setTimeout(() => writeToDoc(), 500);
         }
         iframe.onload = iframe.onreadystatechange = function(e)
         {
@@ -212,6 +216,8 @@ function openApp(url, code, options)
     {
         updateApp(code, url, openedApp.currentTitle, 'show');
     }
+
+    $('body').attr('data-app', code);
     openedApp.zIndex = ++apps.zIndex;
     openedApp.$app.show().css('z-index', openedApp.zIndex);
     openedApp.getPageInfo = () => {
@@ -511,11 +517,7 @@ function getAppCode(urlOrModuleName, defaultCode)
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';
     }
-    if(moduleName === 'ai')
-    {
-        /* Match admin ai pages. */
-        if(['adminindex', 'prompts', 'promptview', 'conversations', 'models', 'modelcreate', 'modelview', 'modeledit', 'editmodel', 'promptassignrole', 'promptselectdatasource', 'promptsetpurpose', 'promptsettargetform', 'promptfinalize', 'promptedit', 'miniprograms', 'createminiprogram', 'editminiprogram', 'configuredminiprogram', 'editminiprogramcategory', 'miniprogramview', 'assistants', 'assistantcreate', 'assistantview', 'assistantedit'].includes(methodLowerCase)) return 'admin';
-    }
+    if(moduleName === 'ai' || moduleName === 'zai') return 'aiapp';
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : defaultCode;
