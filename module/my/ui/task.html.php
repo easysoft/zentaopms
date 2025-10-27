@@ -92,7 +92,7 @@ if($config->edition == 'ipd')
         {
             foreach($task->actions as $key => $action)
             {
-                if(in_array($action['name'], array('start', 'finish', 'recordWorkhour')))
+                if(in_array($action['name'], array('start', 'finish', 'record')))
                 {
                     $tip = $action['name'] . 'Tip';
                     $task->actions[$key]['disabled'] = true;
