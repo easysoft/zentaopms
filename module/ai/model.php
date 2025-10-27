@@ -2218,6 +2218,7 @@ class aiModel extends model
 
         $targetForm = $prompt->targetForm;
         if(empty($targetForm)) return array(false, true);
+        if($targetForm === 'empty.empty') return array(false, false);
 
         list($m, $f) = explode('.', $targetForm);
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
@@ -2623,6 +2624,8 @@ class aiModel extends model
         foreach($prompts as $idx => $prompt)
         {
             list($m, $f) = explode('.', $prompt->targetForm);
+            if($m === 'empty' && $f === 'empty') continue;
+
             $targetFormConfig = $this->config->ai->targetForm[$m][$f];
             if(empty($targetFormConfig))
             {

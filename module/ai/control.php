@@ -546,8 +546,7 @@ class ai extends control
         list($objectData, $rawObject) = $object;
 
         list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
-        if(!empty($stop))    return header("location: $location", true, 302);
+        if(!empty($stop)) return header("location: $location", true, 302);
 
         /* Execute prompt and catch exceptions. */
         try
