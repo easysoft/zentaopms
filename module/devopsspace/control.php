@@ -99,4 +99,21 @@ class devopsspace extends control
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->display();
     }
+
+    /**
+     * 查看空间。
+     * View space.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function view(int $id)
+    {
+        $space = $this->devopsspace->getByID($id);
+
+        $this->view->title = $this->lang->devopsspace->view;
+        $this->view->space = $space;
+        $this->display();
+    }
 }
