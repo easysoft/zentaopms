@@ -1255,7 +1255,6 @@ class projectModel extends model
         if($project->acl != 'open') $this->loadModel('user')->updateUserView(array($projectID), 'project');
 
         if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
-        if(!empty($project->workflowGroup) && $project->model == 'ipd') $this->loadModel('stage')->addBuiltinPoint($project->workflowGroup);
 
         return $projectID;
     }

@@ -377,3 +377,9 @@ $config->project->statusLabelList['doing']     = 'doing primary-pale';
 $config->project->statusLabelList['suspended'] = 'suspended gray text-white';
 $config->project->statusLabelList['closed']    = 'closed success-pale';
 $config->project->statusLabelList['delay']     = 'delay danger-pale';
+
+$config->project->categoryStages['waterfall'] = array('request', 'design', 'dev', 'qa', 'release', 'review');
+$config->project->categoryStages['IPD']       = array('concept', 'plan', 'develop', 'qualify', 'launch', 'lifecycle');
+$config->project->categoryStages['TPD']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CBB']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CPD']       = array('plan', 'develop', 'qualify', 'launch');
