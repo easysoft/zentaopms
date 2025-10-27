@@ -326,7 +326,7 @@ function registerZentaoAIPlugin(lang)
         data : {memory: {collections: ['$global']}},
     });
 
-    plugin.defineCallback('onCreateChat', async function(chat, info)
+    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(chat, info)
     {
         if(info.isLocal || !info.userPrompt) return;
         const zentaoMemories = {};
