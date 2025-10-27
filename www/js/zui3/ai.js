@@ -70,7 +70,7 @@ window.executeZentaoPrompt = async function(info, auto)
     const tools = [{
         name       : toolName,
         displayName: info.name,
-        description: info?.content || info.name,
+        description: info.content || info.name,
         parameters :
         {
             type: 'object',
@@ -326,7 +326,7 @@ function registerZentaoAIPlugin(lang)
         data : {memory: {collections: ['$global']}},
     });
 
-    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(chat, info)
+    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(_chat, info)
     {
         if(info.isLocal || !info.userPrompt) return;
         const zentaoMemories = {};
