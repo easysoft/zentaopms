@@ -11901,10 +11901,26 @@ class upgradeModel extends model
      */
     public function upgradeAuditcl()
     {
-        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectType')->eq('product')->fetchPairs();
-        foreach($workflows as $id => $projectModel)
+        $workflows = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectModel')->in('scrum,agileplus,waterfall,waterfallplus')->fetchAll('id');
+        foreach($workflows as $id => $workflow)
         {
-            $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($projectModel)->exec();
+            if($workflow->projectType == 'product')
+            {
+                $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($workflow->projectModel)->exec();
+            }
+            else
+            {
+                /* 复制一份检查单放到项目型项目流程中。*/
+                $auditclList = $this->dao->select('*')->from(TABLE_AUDITCL)->where('model')->eq($workflow->projectModel)->fetchAll('id', false);
+                foreach($auditclList as $auditcl)
+                {
+                    unset($auditcl->id);
+                    $auditcl->workflowGroup = $id;
+                    if(helper::isZeroDate($auditcl->editedDate))   $auditcl->editedDate   = null;
+                    if(helper::isZeroDate($auditcl->assignedDate)) $auditcl->assignedDate = null;
+                    $this->dao->insert(TABLE_AUDITCL)->data($auditcl)->exec();
+                }
+            }
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_AUDITCL . " DROP `model`;");
