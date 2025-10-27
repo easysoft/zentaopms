@@ -1,0 +1,32 @@
+{
+    "name": "gorhill/PHP-FineDiff",
+    "type": "library",
+    "description": "",
+    "homepage": "http://www.raymondhill.net/finediff/",
+    "license": [
+        "MIT"
+    ],
+    "keywords": [
+        "FineDiff"
+    ],
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Raymond Hill",
+            "email": "r.michael@queo-group.com",
+            "homepage": "http://www.queoflow.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Falk Gräser",
+            "email": "f.graeser@queo-group.com",
+            "homepage": "http://www.queoflow.com/",
+            "role": "The-Clean-Up-Guy"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GorHill\\FineDiff\\": "GorHill/FineDiff"
+        }
+    }
+}

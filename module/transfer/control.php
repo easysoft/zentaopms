@@ -118,12 +118,11 @@ class transfer extends control
 
             /* 读取Excel文件。*/
             /* Read Excel file. */
-            $phpExcel  = $this->app->loadClass('phpexcel');
-            $phpReader = new PHPExcel_Reader_Excel2007();
-            if(!$phpReader->canRead($fileName))
+            $this->app->loadClass('phpexcel', true);
+            if(!phpExcel::canRead($fileName))
             {
-                $phpReader = new PHPExcel_Reader_Excel5();
-                if(!$phpReader->canRead($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
+                unlink($fileName);
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
             }
 
             /* 将文件目录和后缀信息保存到SESSION。*/
