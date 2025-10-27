@@ -11901,10 +11901,26 @@ class upgradeModel extends model
      */
     public function upgradeAuditcl()
     {
-        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectType')->eq('product')->fetchPairs();
-        foreach($workflows as $id => $projectModel)
+        $workflows = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectModel')->in('scrum,agileplus,waterfall,waterfallplus')->fetchAll('id');
+        foreach($workflows as $id => $workflow)
         {
-            $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($projectModel)->exec();
+            if($workflow->projectType == 'product')
+            {
+                $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($workflow->projectModel)->exec();
+            }
+            else
+            {
+                /* 复制一份检查单放到项目型项目流程中。*/
+                $auditclList = $this->dao->select('*')->from(TABLE_AUDITCL)->where('model')->eq($workflow->projectModel)->fetchAll('id', false);
+                foreach($auditclList as $auditcl)
+                {
+                    unset($auditcl->id);
+                    $auditcl->workflowGroup = $id;
+                    if(helper::isZeroDate($auditcl->editedDate))   $auditcl->editedDate   = null;
+                    if(helper::isZeroDate($auditcl->assignedDate)) $auditcl->assignedDate = null;
+                    $this->dao->insert(TABLE_AUDITCL)->data($auditcl)->exec();
+                }
+            }
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_AUDITCL . " DROP `model`;");
@@ -11988,20 +12004,43 @@ class upgradeModel extends model
      */
     public function upgradeProcessAndActivity()
     {
+        $this->loadModel('workflowgroup');
         $this->app->loadLang('process');
         $groupList = $this->upgradeTao->getWorkflowGroupForProcess();
 
         $classifyModule = array();
         foreach($groupList as $groupID => $group)
         {
-            if($group->projectType == 'product' && $group->main == '1')
+            if($group->main == '1' && in_array($group->projectModel, array('scrum', 'agileplus', 'waterfall', 'waterfallplus')))
             {
-                /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
-                $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
+                $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t2.workflowGroup')->eq($groupID)
+                    ->limit(1)
+                    ->fetch('id');
+
+                if($projectActivity)
+                {
+                    /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
+                    if($group->projectType == 'product')
+                    {
+                        $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
+                    }
+                    else
+                    {
+                        $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
+                    }
+                }
+                else
+                {
+                    $projectModel = $group->projectModel;
+                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
+                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+                    $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                }
             }
             else
             {
-                /* 复制过程、活动。 */
                 $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
             }
         }
@@ -12010,6 +12049,8 @@ class upgradeModel extends model
         $this->upgradeTao->updateProcessModules($classifyModule);
 
         /* 删除旧分类。 */
+        $this->dao->delete()->from(TABLE_PROCESS)->where('workflowGroup')->eq(0)->exec();
+        $this->dao->delete()->from(TABLE_ACTIVITY)->where('workflowGroup')->eq(0)->exec();
         $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
     }
 

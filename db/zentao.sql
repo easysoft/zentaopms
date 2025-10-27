@@ -14378,7 +14378,6 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `deliverable` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `deliverables` varchar(255) NOT NULL DEFAULT '',
   `object` mediumint(8) NOT NULL DEFAULT '0',
   `template` mediumint(8) NOT NULL DEFAULT '0',
   `docVersion` varchar(255) NOT NULL DEFAULT '',

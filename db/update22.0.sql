@@ -131,3 +131,5 @@ UPDATE zt_activity SET optional = CASE
     WHEN optional = 'no' THEN 'yes'
     ELSE optional
 END;
+
+ALTER TABLE `zt_process` CHANGE `model` `model` varchar(30) NOT NULL DEFAULT '';
