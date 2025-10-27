@@ -12,7 +12,7 @@ $config->devopsspace->dtable->fieldList['name']['type']     = 'title';
 $config->devopsspace->dtable->fieldList['name']['flex']     = 4;
 $config->devopsspace->dtable->fieldList['name']['hint']     = true;
 $config->devopsspace->dtable->fieldList['name']['sortType'] = false;
-$config->devopsspace->dtable->fieldList['name']['url']      = helper::createLink('devopsspace', 'view', 'id={id}');;
+$config->devopsspace->dtable->fieldList['name']['link']     = helper::createLink('devopsspace', 'view', 'id={id}');;
 $config->devopsspace->dtable->fieldList['name']['group']    = 1;
 
 $config->devopsspace->dtable->fieldList['owner']['title']    = $lang->devopsspace->owner;
