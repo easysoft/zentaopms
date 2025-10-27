@@ -9,3 +9,23 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+detailHeader
+(
+    to::prefix
+    (
+        backBtn
+        (
+            set::icon('back'),
+            set::type('secondary'),
+            set::back('devopsspace-browse'),
+            $lang->goback
+        ),
+        label(setClass('flex-none'), $space->id),
+        entityLabel
+        (
+            set::level(1),
+            set::text($space->name)
+        ),
+    )
+);
