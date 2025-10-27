@@ -213,18 +213,17 @@ $lang->ai->prompts->testData['project']['project']['begin']    = '2025-01-01';
 $lang->ai->prompts->testData['project']['project']['end']      = '2025-06-01';
 $lang->ai->prompts->testData['project']['project']['estimate'] = '800h';
 
-$lang->ai->prompts->testData['project']['programplans']['name']         = array('需求分析与规划', '系统设计', '开发与测试', '上线准备与发布');
-$lang->ai->prompts->testData['project']['programplans']['desc']         = array('在这一阶段，将与各个利益相关者进行沟通，收集、分析并确认网站的功能需求和用户故事。', '基于确认的需求，进行系统架构设计与页面原型设计，为后续的开发打下基础。', '在这一阶段，将根据系统设计进行详细开发，并进行单元测试以确保功能的正确性。', '进行最终的系统测试、用户验收测试以及上线准备，确保官网能够顺利交付。');
-$lang->ai->prompts->testData['project']['programplans']['status']       = array('已关闭', '已关闭', '进行中', '未开始');
-$lang->ai->prompts->testData['project']['programplans']['begin']        = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
-$lang->ai->prompts->testData['project']['programplans']['end']          = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
-$lang->ai->prompts->testData['project']['programplans']['realBegan']    = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
-$lang->ai->prompts->testData['project']['programplans']['realEnd']      = array('2025-01-31', '2025-02-28', '-', '-');
-$lang->ai->prompts->testData['project']['programplans']['planDuration'] = array('-', '-', '-', '-');
-$lang->ai->prompts->testData['project']['programplans']['progress']     = array('100%', '100%', '41%', '0%');
-$lang->ai->prompts->testData['project']['programplans']['estimate']     = array('190', '190', '290', '120');
-$lang->ai->prompts->testData['project']['programplans']['consumed']     = array('200', '190', '120', '0');
-$lang->ai->prompts->testData['project']['programplans']['left']         = array('0', '0', '170', '120');
+$lang->ai->prompts->testData['project']['programplans']['name']      = array('需求分析与规划', '系统设计', '开发与测试', '上线准备与发布');
+$lang->ai->prompts->testData['project']['programplans']['desc']      = array('在这一阶段，将与各个利益相关者进行沟通，收集、分析并确认网站的功能需求和用户故事。', '基于确认的需求，进行系统架构设计与页面原型设计，为后续的开发打下基础。', '在这一阶段，将根据系统设计进行详细开发，并进行单元测试以确保功能的正确性。', '进行最终的系统测试、用户验收测试以及上线准备，确保官网能够顺利交付。');
+$lang->ai->prompts->testData['project']['programplans']['status']    = array('已关闭', '已关闭', '进行中', '未开始');
+$lang->ai->prompts->testData['project']['programplans']['begin']     = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
+$lang->ai->prompts->testData['project']['programplans']['end']       = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
+$lang->ai->prompts->testData['project']['programplans']['realBegan'] = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
+$lang->ai->prompts->testData['project']['programplans']['realEnd']   = array('2025-01-31', '2025-02-28', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['progress']  = array('100%', '100%', '41%', '0%');
+$lang->ai->prompts->testData['project']['programplans']['estimate']  = array('190', '190', '290', '120');
+$lang->ai->prompts->testData['project']['programplans']['consumed']  = array('200', '190', '120', '0');
+$lang->ai->prompts->testData['project']['programplans']['left']      = array('0', '0', '170', '120');
 
 $lang->ai->prompts->testData['project']['executions']['name']      = array('企业网站1.0', '企业网站2.0', '企业网站3.0');
 $lang->ai->prompts->testData['project']['executions']['desc']      = array('开发智能企业官网的核心功能模块，包括首页、新闻中心和关于我们，完成单元测试。', '实现企业网站2.0版本，包括成果展示和售后服务页面，修复y1.0版本Bug，完成单元测试', '开发附加功能模块，如联系方式、工商信息等，同时进行集成测试，确保各模块协同工作。');
@@ -451,19 +450,18 @@ $lang->ai->dataSource['project']['project']['begin']    = '计划开始';
 $lang->ai->dataSource['project']['project']['end']      = '计划结束';
 $lang->ai->dataSource['project']['project']['estimate'] = '预计工时';
 
-$lang->ai->dataSource['project']['programplans']['common']       = '阶段列表';
-$lang->ai->dataSource['project']['programplans']['name']         = '阶段名称';
-$lang->ai->dataSource['project']['programplans']['desc']         = '阶段描述';
-$lang->ai->dataSource['project']['programplans']['status']       = '阶段状态';
-$lang->ai->dataSource['project']['programplans']['begin']        = '计划开始';
-$lang->ai->dataSource['project']['programplans']['end']          = '计划完成';
-$lang->ai->dataSource['project']['programplans']['realBegan']    = '实际开始';
-$lang->ai->dataSource['project']['programplans']['realEnd']      = '实际完成';
-$lang->ai->dataSource['project']['programplans']['planDuration'] = '工期';
-$lang->ai->dataSource['project']['programplans']['progress']     = '任务进度';
-$lang->ai->dataSource['project']['programplans']['estimate']     = '预计工时';
-$lang->ai->dataSource['project']['programplans']['consumed']     = '消耗工时';
-$lang->ai->dataSource['project']['programplans']['left']         = '剩余工时';
+$lang->ai->dataSource['project']['programplans']['common']    = '阶段列表';
+$lang->ai->dataSource['project']['programplans']['name']      = '阶段名称';
+$lang->ai->dataSource['project']['programplans']['desc']      = '阶段描述';
+$lang->ai->dataSource['project']['programplans']['status']    = '阶段状态';
+$lang->ai->dataSource['project']['programplans']['begin']     = '计划开始';
+$lang->ai->dataSource['project']['programplans']['end']       = '计划完成';
+$lang->ai->dataSource['project']['programplans']['realBegan'] = '实际开始';
+$lang->ai->dataSource['project']['programplans']['realEnd']   = '实际完成';
+$lang->ai->dataSource['project']['programplans']['progress']  = '任务进度';
+$lang->ai->dataSource['project']['programplans']['estimate']  = '预计工时';
+$lang->ai->dataSource['project']['programplans']['consumed']  = '消耗工时';
+$lang->ai->dataSource['project']['programplans']['left']      = '剩余工时';
 
 $lang->ai->dataSource['project']['executions']['common']    = '迭代列表';
 $lang->ai->dataSource['project']['executions']['name']      = '执行名称';
@@ -1126,6 +1124,13 @@ $lang->ai->formSchema['programplan']['create']->properties->stages->items->prope
 $lang->ai->formSchema['programplan']['create']->properties->stages->items->properties->end->format             = 'date';
 $lang->ai->formSchema['programplan']['create']->properties->stages->items->properties->end->description        = '阶段结束时间';
 $lang->ai->formSchema['programplan']['create']->required = array('stages');
+
+/* Forms as JSON Schemas. */
+$lang->ai->formSchema['empty']['empty'] = new stdclass();
+$lang->ai->formSchema['empty']['empty']->title = '自定义';
+$lang->ai->formSchema['empty']['empty']->type  = 'object';
+$lang->ai->formSchema['empty']['empty']->properties = new stdclass();
+$lang->ai->formSchema['empty']['empty']->properties->title = new stdclass();
 
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = '%s智能助手';
