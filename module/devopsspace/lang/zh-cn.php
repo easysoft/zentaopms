@@ -12,11 +12,17 @@ $lang->devopsspace->createdDate  = '创建时间';
 $lang->devopsspace->desc         = '描述';
 $lang->devopsspace->repo         = '代码库';
 $lang->devopsspace->artifactrepo = '制品库';
+$lang->devopsspace->pipeline     = '流水线';
+$lang->devopsspace->system       = '应用';
 $lang->devopsspace->acl          = '访问控制';
 
 $lang->devopsspace->aclList = array();
-$lang->devopsspace->aclList['open']    = '公开(即有空间视图的权限即可访问该空间)';
-$lang->devopsspace->aclList['private'] = '私有(仅团队成员、负责人和空间管理员可访问)';
+$lang->devopsspace->aclList['open']    = '公开';
+$lang->devopsspace->aclList['private'] = '私有';
+
+$lang->devopsspace->aclNoticeList = array();
+$lang->devopsspace->aclNoticeList['open']    = '公开(即有空间视图的权限即可访问该空间)';
+$lang->devopsspace->aclNoticeList['private'] = '私有(仅团队成员、负责人和空间管理员可访问)';
 
 $lang->devopsspace->notice = new stdclass();
 $lang->devopsspace->notice->noSpaces      = '暂无任何空间';
