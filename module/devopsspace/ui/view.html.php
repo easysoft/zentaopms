@@ -10,22 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-detailHeader
-(
-    to::prefix
-    (
-        backBtn
-        (
-            set::icon('back'),
-            set::type('secondary'),
-            set::back('devopsspace-browse'),
-            $lang->goback
-        ),
-        label(setClass('flex-none'), $space->id),
-        entityLabel
-        (
-            set::level(1),
-            set::text($space->name)
-        ),
-    )
-);
+$repoBrowseURL = common::hasPriv('repo', 'browse') ? $this->createLink('repo', 'browse', "repoID=%s") : '';
+$repoDom       = initLinkTable($repoList, $repoBrowseURL);
+
+$artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
+$artifactRepoDom = initLinkTable($artifactRepoList, $artifactRepoURL);
