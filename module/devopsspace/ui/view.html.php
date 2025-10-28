@@ -193,6 +193,19 @@ div
             set::title(strip_tags($space->desc)),
             html($space->desc)
         ),
+        common::hasPriv('repo', 'maintain') ? div
+        (
+            setClass('mt-4'),
+            panel
+            (
+                set::title($lang->devopsspace->repo),
+                !empty($repoDom) ? h::table
+                (
+                    setClass('table w-full max-w-full bordered text-center'),
+                    $repoDom
+                ) : div(setClass('w-full text-center'), $lang->noData)
+            )
+        ) : null,
     ),
     cell
     (
