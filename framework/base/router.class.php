@@ -3018,7 +3018,7 @@ class baseRouter
         $driver = $this->config->db->driver;
 
         $classFile = $this->coreLibRoot . 'dao' . DS . $driver . '.class.php';
-        include($classFile);
+        include_once($classFile);
 
         $dao = new $driver($this);
         $this->dao = $dao;
