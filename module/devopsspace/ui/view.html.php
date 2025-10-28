@@ -189,6 +189,9 @@ div
         ),
         div
         (
+            setClass('flex-auto canvas flex p-4'),
+            set::title(strip_tags($space->desc)),
+            html($space->desc)
         ),
     ),
     cell
