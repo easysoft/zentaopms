@@ -12015,29 +12015,11 @@ class upgradeModel extends model
             {
                 $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t2.workflowGroup')->eq($groupID)
+                    ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t3')->on('t2.workflowGroup=t3.id')
+                    ->where('t3.projectModel')->eq($group->projectModel)
                     ->limit(1)
                     ->fetch('id');
 
-                if($projectActivity)
-                {
-                    /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
-                    if($group->projectType == 'product')
-                    {
-                        $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
-                    }
-                    else
-                    {
-                        $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
-                    }
-                }
-                else
-                {
-                    $projectModel = $group->projectModel;
-                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
-                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
-                    $this->workflowgroup->addProcessAndActivity($group, $projectModel);
-                }
             }
             else
             {

@@ -1009,10 +1009,16 @@ class upgradeTao extends upgradeModel
     {
         $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
         $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
+        $outputGroup   = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
+            ->alias('t1')->leftJoin(TABLE_ACTIVITY)
+            ->alias('t2')->on('t1.activity = t2.id')
+            ->where('t2.process')->in(array_keys($processList))
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchGroup('activity', 'id');
 
         foreach($processList as $process)
         {
-            $this->copyProcessWithActivities($process, $groupID, $activityGroup);
+            $this->copyProcessWithActivities($process, $groupID, $activityGroup, $outputGroup);
         }
 
         $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
@@ -1027,8 +1033,9 @@ class upgradeTao extends upgradeModel
      * @param object $process 过程对象
      * @param int    $groupID 流程ID
      * @param array  $activityGroup 活动分组
+     * @param array  $outputGroup 文档分组
      */
-    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup)
+    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup, array $outputGroup)
     {
         $activityList = zget($activityGroup, $process->id, array());
         unset($process->id);
@@ -1042,7 +1049,7 @@ class upgradeTao extends upgradeModel
 
         foreach($activityList as $activity)
         {
-            $this->copyActivity($activity, $processID, $groupID);
+            $this->copyActivity($activity, $processID, $groupID, $outputGroup);
         }
     }
 
@@ -1050,12 +1057,15 @@ class upgradeTao extends upgradeModel
      * 复制活动。
      * Copy activity.
      *
-     * @param object $activity  活动对象
-     * @param int    $processID 过程ID
-     * @param int    $groupID   流程ID
+     * @param object $activity    活动对象
+     * @param int    $processID   过程ID
+     * @param int    $groupID     流程ID
+     * @param array  $outputGroup 文档分组
      */
-    protected function copyActivity(object $activity, int $processID, int $groupID)
+    protected function copyActivity(object $activity, int $processID, int $groupID, array $outputGroup)
     {
+        $outputList = zget($outputGroup, $activity->id, array());
+
         unset($activity->id);
         $activity->process       = $processID;
         $activity->optional      = !empty($activity->optional) ? $activity->optional : 'no';
@@ -1064,6 +1074,53 @@ class upgradeTao extends upgradeModel
         $activity->editedDate    = null;
         $activity->assignedDate  = null;
         $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
+
+        $newActivityID = $this->dao->lastInsertID();
+
+        foreach($outputList as $output)
+        {
+            unset($output->id);
+            $output->activity   = $newActivityID;
+            $output->editedBy   = '';
+            $output->editedDate = null;
+            $this->dao->insert(TABLE_ZOUTPUT)->data($output)->exec();
+        }
+    }
+
+    /**
+     * 将过程文档迁移到交付物。
+     * Migrate process output to deliverable.
+     *
+     * @param object $group
+     * @return void
+     */
+    public function migrateOutputToDeliverable(object $group): void
+    {
+        $outputList = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
+            ->alias('t1')->leftJoin(TABLE_ACTIVITY)
+            ->alias('t2')->on('t1.activity = t2.id')
+            ->where('t2.workflowGroup')->eq($group->id)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id');
+
+        $otherModule = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($group->id)->andWhere('type')->eq('deliverable')->andWhere('deleted')->eq('0')->andWhere('extra')->eq('other')->fetch('id');
+
+        $deliverable = new stdclass();
+        $deliverable->template      = '[]';
+        $deliverable->status        = 'hidden';
+        $deliverable->workflowGroup = $group->id;
+        $deliverable->module        = $otherModule;
+        $deliverable->builtin       = 1;
+        $deliverable->deleted       = '1';
+        foreach($outputList as $output)
+        {
+            $deliverable->name      = $output->name;
+            $deliverable->activity  = $output->activity;
+            $deliverable->trimmable = $output->optional == 'yes' ? '0' : '1';
+            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+            $deliverableID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
+        }
     }
 
     /**
