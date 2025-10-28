@@ -44,3 +44,24 @@ function initLinkTable(array $listData, string $url): array
 
     return $listDom;
 }
+
+$membersDom = array();
+if(!empty($members))
+{
+    foreach($members as $user)
+    {
+        $membersDom[] = div
+        (
+            setClass('w-1/6 center-y'),
+            avatar
+            (
+                setClass('primary-outline'),
+                set::size('36'),
+                set::text($user->realname),
+                set::src($user->avatar)
+            ),
+            span(setClass('my-2'), $user->realname),
+            span(setClass('text-gray'), $user->account == $space->owner ? $lang->devopsspace->owner : $lang->devopsspace->team)
+        );
+    }
+}
