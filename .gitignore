@@ -25,10 +25,8 @@ test/data/sql/
 .vscode
 .gitignore
 .DS_Store
-vendor/
 docker
 .docker-sync
-composer.lock
 CodeSniffer.conf
 test/runtime
 test/runtime/*

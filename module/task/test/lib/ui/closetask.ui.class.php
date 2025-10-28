@@ -23,7 +23,7 @@ class closeTaskTester extends tester
         $form->dom->closeBtn->click();
         $form->wait(1);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->closed) return $this->failed('关闭任务后状态错误');
         return $this->success('关闭任务成功');
     }

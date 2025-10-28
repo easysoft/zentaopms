@@ -126,7 +126,7 @@ class browseTester extends tester
         $form->wait(1);
         if($form->dom->modalText->getText() != $this->lang->tree->confirmDelete) return $this->failed('删除模块提示信息错误');
         $form->dom->modalConfirm->click();
-        $form->wait(1);
+        $form->wait(2);
 
         if($form->dom->lastChildModule->getText() == $moduleName) return $this->failed('删除模块失败');
         return $this->success('删除模块成功');

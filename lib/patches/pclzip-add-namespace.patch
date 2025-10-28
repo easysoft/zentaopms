@@ -1,0 +1,9 @@
+--- a/vendor/pclzip/pclzip/pclzip.lib.php
++++ b/vendor/pclzip/pclzip/pclzip.lib.php
+@@ -1,4 +1,6 @@
+ <?php
++namespace Vendor\PclZip;
++
+ // --------------------------------------------------------------------------------
+ // PhpConcept Library - Zip Module 2.8.2
+ // --------------------------------------------------------------------------------

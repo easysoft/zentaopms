@@ -431,8 +431,8 @@ class extensionModel extends model
         if(!file_exists($infoFile)) return $info;
 
         /* Load the yaml file and parse it into object. */
-        $this->app->loadClass('spyc', true);
-        $info = (object)spyc_load(file_get_contents($infoFile));
+        $spyc = $this->app->loadClass('spyc');
+        $info = (object)$spyc->loadFile($infoFile);
         if(isset($info->releases))
         {
             $info->version = key($info->releases);

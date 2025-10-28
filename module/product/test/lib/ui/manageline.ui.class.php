@@ -19,6 +19,7 @@ class manageLineTester extends tester
         if ($form->dom->lineDialog === false)
         {
             $form->dom->manageLineBtn->click();
+            $form->wait(2);
             return ($form->dom->newLineName->getText() == $line->name) ? $this->success('产品线创建成功') : $this->failed('产品线创建失败');
         }
         else

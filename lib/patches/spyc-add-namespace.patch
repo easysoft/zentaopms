@@ -1,0 +1,9 @@
+--- a/vendor/mustangostang/spyc/Spyc.php
++++ b/vendor/mustangostang/spyc/Spyc.php
+@@ -1,4 +1,6 @@
+ <?php
++namespace Vendor\Spyc;
++
+ /**
+    * Spyc -- A Simple PHP YAML Class
+    * @version 0.6.2

@@ -79,7 +79,7 @@ class createProductTester extends tester
         $viewPage    = $this->loadPage('product', 'view');
         if($viewPage->dom->productName->getText() != $name) return $this->failed('名称错误');
         if($viewPage->dom->type->getText() != $this->lang->product->typeList->branch) return $this->failed('类型错误');
-        if($viewPage->dom->branchProductACL->getText() != $this->lang->product->abbr->aclList->open) return $this->failed('权限错误');
+        if($viewPage->dom->acl->getText() != $this->lang->product->abbr->aclList->open) return $this->failed('权限错误');
 
         return $this->success();
     }

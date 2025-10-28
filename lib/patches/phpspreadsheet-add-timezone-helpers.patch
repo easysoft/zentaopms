@@ -1,0 +1,30 @@
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Date.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Date.php
+@@ -126,6 +126,14 @@
+     }
+
+     /**
++     * Return the Default timezone, or local timezone if default is not set.
++     */
++    public static function getDefaultOrLocalTimezone(): DateTimeZone
++    {
++        return self::$defaultTimeZone ?? new DateTimeZone(date_default_timezone_get());
++    }
++
++    /**
+      * Validate a timezone.
+      *
+      * @param DateTimeZone|string $timeZone The timezone to validate, either as a timezone string or object
+@@ -490,4 +498,12 @@
+
+         return $day;
+     }
++
++    public static function dateTimeFromTimestamp($date, $timeZone = null)
++    {
++        $dtobj = \DateTime::createFromFormat('U', $date) ?: new \DateTime();
++        $dtobj->setTimeZone($timeZone ?? self::getDefaultOrLocalTimezone());
++
++        return $dtobj;
++    }
+ }
