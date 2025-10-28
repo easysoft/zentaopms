@@ -206,6 +206,19 @@ div
                 ) : div(setClass('w-full text-center'), $lang->noData)
             )
         ) : null,
+        common::hasPriv('artifactrepo', 'browse') ? div
+        (
+            setClass('mt-4'),
+            panel
+            (
+                set::title($lang->devopsspace->artifactrepo),
+                !empty($artifactRepoDom) ? h::table
+                (
+                    setClass('table w-full max-w-full bordered text-center'),
+                    $artifactRepoDom
+                ) : div(setClass('w-full text-center'), $lang->noData)
+            )
+        ) : null,
     ),
     cell
     (
