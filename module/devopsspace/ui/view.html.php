@@ -119,6 +119,25 @@ div
                             setClass('text-md font-bold ml-2 clip'),
                             $space->name
                         ),
+                        div
+                        (
+                            setClass('ml-2 flex-none row items-center gap-2'),
+                            $lang->devopsspace->aclList[$space->acl],
+                            icon
+                            (
+                                'help',
+                                toggle::tooltip(array('title' => $lang->devopsspace->aclNoticeList[$space->acl])),
+                                set('data-placement', 'right'),
+                                set('data-type', 'white'),
+                                set('data-class-name', 'text-gray border border-light'),
+                                setClass('text-gray')
+                            )
+                        ),
+                        $space->deleted ? label
+                        (
+                            setClass('danger-outline text-dange flex-noner ml-2'),
+                            $lang->devopsspace->deleted
+                        ) : null,
                     )
                 ),
                 div
