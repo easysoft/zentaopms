@@ -96,6 +96,31 @@ div
     setClass('flex w-full'),
     cell
     (
+        setClass('left-cell mr-5 w-2/3'),
+        div
+        (
+            setClass('flex-auto canvas flex p-4'),
+            div
+            (
+                setClass('w-full mr-5'),
+                div
+                (
+                    setClass('items-center'),
+                    div
+                    (
+                    )
+                ),
+                div
+                (
+                ),
+            ),
+            div
+            (
+            ),
+        ),
+        div
+        (
+        ),
     ),
     cell
     (
