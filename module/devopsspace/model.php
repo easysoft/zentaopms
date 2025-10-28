@@ -172,4 +172,20 @@ class devopsspaceModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 根据空间获取制品库列表。
+     * Get artifact repo list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getArtifactReposBySpace(int $spaceID): array
+    {
+        return $this->dao->select('*')->from(TABLE_ARTIFACTREPO)
+            ->where('space')->eq($spaceID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
