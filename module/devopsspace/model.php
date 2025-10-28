@@ -156,4 +156,80 @@ class devopsspaceModel extends model
 
         return common::createChanges($space, $formData);
     }
+
+    /**
+     * 根据空间获取仓库列表。
+     * Get repo list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getReposBySpace(int $spaceID): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('space')->eq($spaceID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据空间获取制品库列表。
+     * Get artifact repo list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getArtifactReposBySpace(int $spaceID): array
+    {
+        return $this->dao->select('*')->from(TABLE_ARTIFACTREPO)
+            ->where('space')->eq($spaceID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据空间获取流水线列表。
+     * Get pipeline list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getPipelineBySpace(int $spaceID): array
+    {
+        return $this->dao->select('t1.*')->from(TABLE_JOB)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->where('t2.space')->eq($spaceID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据空间获取应用列表。
+     * Get app list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSystemBySpace(int $spaceID): array
+    {
+        $repos = $this->getReposBySpace($spaceID);
+        if(empty($repos)) return array();
+
+        $products = array();
+        foreach($repos as $repo)
+        {
+            if(empty($repo->product)) continue;
+            foreach(explode(',', $repo->product) as $productID) $products[] = $productID;
+        }
+        if(empty($products)) return array();
+
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('product')->in($products)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
