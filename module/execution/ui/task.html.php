@@ -304,7 +304,7 @@ if($canBatchAction)
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $assignedToItems,'type' => 'dropdown');
 }
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#tasks', 'task', $blockID, '$insertListLink')"));
-if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#tasks', 'task', $blockID)"));
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#tasks', 'task')"));
 
 jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
