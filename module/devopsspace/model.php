@@ -188,4 +188,21 @@ class devopsspaceModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 根据空间获取流水线列表。
+     * Get pipeline list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getPipelineBySpace(int $spaceID): array
+    {
+        return $this->dao->select('t1.*')->from(TABLE_JOB)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->where('t2.space')->eq($spaceID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
