@@ -15,3 +15,32 @@ $repoDom       = initLinkTable($repoList, $repoBrowseURL);
 
 $artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
 $artifactRepoDom = initLinkTable($artifactRepoList, $artifactRepoURL);
+
+function initLinkTable(array $listData, string $url): array
+{
+    $listDom = array();
+    $tdDom   = array();
+    foreach($listData as $id => $object)
+    {
+        $tdDom[] = $url ? h::td(h::a(set::href(sprintf($url, $id)), $object->name)) : h::td($object->name);
+
+        $tdCount = count($tdDom);
+        if($tdCount == 3)
+        {
+            $listDom[] = h::tr($tdDom);
+            $tdDom = array();
+        }
+
+        if($id == end($listData)->id)
+        {
+            if($tdCount == 3) continue;
+            for($i = $tdCount; $i < 3; $i++)
+            {
+                $tdDom[] = h::td();
+            }
+            $listDom[] = h::tr($tdDom);
+        }
+    }
+
+    return $listDom;
+}
