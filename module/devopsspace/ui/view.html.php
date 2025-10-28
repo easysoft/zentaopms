@@ -85,3 +85,8 @@ detailHeader
         ),
     )
 );
+
+$repoCount         = empty($repoList) ? 0 : count($repoList);
+$systemCount       = empty($systemList) ? 0 : count($systemList);
+$pipelineCount     = empty($pipelineList) ? 0 : count($pipelineList);
+$artifactRepoCount = empty($artifactRepoList) ? 0 : count($artifactRepoList);
