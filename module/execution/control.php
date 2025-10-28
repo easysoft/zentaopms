@@ -122,7 +122,7 @@ class execution extends control
     public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         $this->app->loadLang('doc');
-        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
+        if(($from == 'doc' || $from == 'ai') && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
