@@ -317,6 +317,7 @@ jsVar('teamLang',       $lang->task->team);
 jsVar('delayWarning',   $lang->task->delayWarning);
 
 if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
+$createTaskLink = $canCreate && common::canModify('execution', $execution) ? $createLink : '';
 dtable
 (
     set::id('tasks'),
@@ -344,6 +345,6 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->task->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : ''),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createTaskLink),
     set::emptyTip($lang->task->noTask)
 );
