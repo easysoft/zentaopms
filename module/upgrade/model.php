@@ -12020,6 +12020,27 @@ class upgradeModel extends model
                     ->limit(1)
                     ->fetch('id');
 
+                if($projectActivity)
+                {
+                    /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
+                    if($group->projectType == 'product')
+                    {
+                        $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
+                    }
+                    else
+                    {
+                        $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
+                    }
+
+                    $this->upgradeTao->migrateOutputToDeliverable($group);
+                }
+                else
+                {
+                    $projectModel = $group->projectModel;
+                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
+                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+                    $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                }
             }
             else
             {
