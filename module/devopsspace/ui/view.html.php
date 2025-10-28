@@ -142,10 +142,49 @@ div
                 ),
                 div
                 (
+                    setClass('mt-4'),
+                    div
+                    (
+                        set::title($space->createdDate),
+                        $lang->devopsspace->createdDate . ': ' . $space->createdDate
+                    )
                 ),
             ),
             div
             (
+                setClass('flex-none w-2/3'),
+                panel
+                (
+                    setClass('border canvas pb-2'),
+                    div
+                    (
+                        setClass('flex-auto flex justify-around text-center items-center'),
+                        cell
+                        (
+                            set::title($repoCount),
+                            div(setClass('text-3xl h-10'), $repoCount),
+                            div($lang->devopsspace->repo)
+                        ),
+                        cell
+                        (
+                            set::title($pipelineCount),
+                            div(setClass('text-3xl h-10'), $pipelineCount),
+                            div($lang->devopsspace->pipeline)
+                        ),
+                        cell
+                        (
+                            set::title($artifactRepoCount),
+                            div(setClass('text-3xl h-10'), $artifactRepoCount),
+                            div($lang->devopsspace->artifactrepo)
+                        ),
+                        cell
+                        (
+                            set::title($systemCount),
+                            div(setClass('text-3xl h-10'), $systemCount),
+                            div($lang->devopsspace->system)
+                        )
+                    )
+                )
             ),
         ),
         div
