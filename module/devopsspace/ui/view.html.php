@@ -119,6 +119,15 @@ div
             set::shadow(false),
             dynamic()
         ),
+        div
+        (
+            setClass('mt-4'),
+            history
+            (
+                set::commentUrl(createLink('action', 'comment', array('objectType' => 'devopsspace', 'objectID' => $space->id))),
+                set::bodyClass('maxh-72 overflow-y-auto')
+            )
+        )
     )
 );
 
