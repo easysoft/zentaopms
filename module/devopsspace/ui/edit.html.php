@@ -56,7 +56,7 @@ formPanel
         set::name('acl'),
         set::label($lang->devopsspace->acl),
         set::control('radioList'),
-        set::items($lang->devopsspace->aclList),
+        set::items($lang->devopsspace->aclNoticeList),
         set::value($space->acl)
     )
 );

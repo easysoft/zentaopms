@@ -520,7 +520,7 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-$lang->devops->homeMenu->space   = array('link' => "{$lang->devopsspace->common}|devopsspace|browse", 'alias' => 'create,edit');
+$lang->devops->homeMenu->space   = array('link' => "{$lang->devopsspace->common}|devopsspace|browse", 'alias' => 'create,edit,view');
 $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');

@@ -21,13 +21,14 @@ $config->devopsspace->actionList['artifactrepo']['url']      = array('module' =>
 $config->devopsspace->actionList['edit']['icon']     = 'edit';
 $config->devopsspace->actionList['edit']['text']     = $lang->edit;
 $config->devopsspace->actionList['edit']['hint']     = $lang->edit;
-$config->devopsspace->actionList['edit']['showText'] = true;
 $config->devopsspace->actionList['edit']['url']      = array('module' => 'devopsspace', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->devopsspace->actionList['delete']['icon']         = 'trash';
-$config->devopsspace->actionList['delete']['text']         = $lang->delete;
 $config->devopsspace->actionList['delete']['hint']         = $lang->delete;
-$config->devopsspace->actionList['delete']['showText']     = true;
 $config->devopsspace->actionList['delete']['ajaxSubmit']   = true;
 $config->devopsspace->actionList['delete']['data-confirm'] = array('message' => $lang->devopsspace->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->devopsspace->actionList['delete']['url']          = array('module' => 'devopsspace', 'method' => 'delete', 'params' => 'id={id}');
+
+$config->devopsspace->actions = new stdclass();
+$config->devopsspace->actions->view['mainActions']   = array('repo', 'artifactrepo');
+$config->devopsspace->actions->view['suffixActions'] = array('edit', 'delete');
