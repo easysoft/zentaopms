@@ -205,4 +205,31 @@ class devopsspaceModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 根据空间获取应用列表。
+     * Get app list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSystemBySpace(int $spaceID): array
+    {
+        $repos = $this->getReposBySpace($spaceID);
+        if(empty($repos)) return array();
+
+        $products = array();
+        foreach($repos as $repo)
+        {
+            if(empty($repo->product)) continue;
+            foreach(explode(',', $repo->product) as $productID) $products[] = $productID;
+        }
+        if(empty($products)) return array();
+
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('product')->in($products)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
