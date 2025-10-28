@@ -156,4 +156,20 @@ class devopsspaceModel extends model
 
         return common::createChanges($space, $formData);
     }
+
+    /**
+     * 根据空间获取仓库列表。
+     * Get repo list by space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getReposBySpace(int $spaceID): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('space')->eq($spaceID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
