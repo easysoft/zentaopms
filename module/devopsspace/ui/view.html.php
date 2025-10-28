@@ -99,6 +99,26 @@ div
     ),
     cell
     (
+        setClass('w-1/3'),
+        panel
+        (
+            to::heading
+            (
+                div(set('class', 'panel-title'), $lang->execution->latestDynamic)
+            ),
+            to::headingActions
+            (
+                common::hasPriv('devopsspace', 'dynamic') ? btn
+                (
+                    setClass('ghost text-gray font-normal'),
+                    set::url(createLink('space', 'dynamic', "spaceID={$space->id}&type=all")),
+                    $lang->more
+                ) : null
+            ),
+            set::bodyClass('h-80 overflow-y-auto pt-0'),
+            set::shadow(false),
+            dynamic()
+        ),
     )
 );
 
