@@ -101,3 +101,24 @@ div
     (
     )
 );
+
+$actionList = !$space->deleted ? $this->loadModel('common')->buildOperateMenu($space) : array();
+foreach($actionList as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actionList[$actionType][$key]['url'] = str_replace('{id}', (string)$space->id, $action['url']);
+    }
+}
+div
+(
+    setClass('w-2/3 center fixed actions-menu'),
+    setClass($space->deleted ? 'no-divider' : ''),
+    floatToolbar
+    (
+        set::object($space),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::back('devopsspace-browse'), $lang->goback)),
+        empty($actionList['mainActions']) ? null : set::main($actionList['mainActions']),
+        empty($actionList['suffixActions']) ? null : set::suffix($actionList['suffixActions'])
+    )
+);
