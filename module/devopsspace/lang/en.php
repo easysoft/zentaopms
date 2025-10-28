@@ -15,6 +15,7 @@ $lang->devopsspace->artifactrepo = 'Artifact Repository';
 $lang->devopsspace->pipeline     = 'Pipeline';
 $lang->devopsspace->system       = 'System';
 $lang->devopsspace->acl          = 'Access Control';
+$lang->devopsspace->deleted      = 'Deleted';
 
 $lang->devopsspace->aclList = array();
 $lang->devopsspace->aclList['open']    = 'Open';
@@ -27,3 +28,4 @@ $lang->devopsspace->aclNoticeList['private'] = 'Private (Only team members, team
 $lang->devopsspace->notice = new stdclass();
 $lang->devopsspace->notice->noSpaces      = 'No space exists';
 $lang->devopsspace->notice->confirmDelete = 'Are you sure to delete this space?';
+$lang->devopsspace->notice->deleteFail    = 'The space exists repositories or artifact repositories, cannot be deleted.';
