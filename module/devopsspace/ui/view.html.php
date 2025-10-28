@@ -219,6 +219,16 @@ div
                 ) : div(setClass('w-full text-center'), $lang->noData)
             )
         ) : null,
+        div
+        (
+            setClass('mt-4 bg-white'),
+            panel
+            (
+                setClass('mb-4 memberBox'),
+                set::title($lang->devopsspace->team),
+                div(setClass('flex flex-wrap member-list pt-2'), $membersDom)
+            )
+        )
     ),
     cell
     (
