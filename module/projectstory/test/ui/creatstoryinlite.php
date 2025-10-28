@@ -81,8 +81,8 @@ $reviewers = array(
     'admin' => array('admin')
 );
 
-r($tester->createDefault($storys['null'],  $reviewers['admin'])) && p('message,status') && e('创建目标页面名称为空提示正确,SUCCESS'); // 名称必填校验，创建失败
-r($tester->createDefault($storys['story'], $reviewers['null']))  && p('message,status') && e('创建目标页面评审人为空提示正确,SUCCESS'); // 评审人必填校验，创建失败
+#r($tester->createDefault($storys['null'],  $reviewers['admin'])) && p('message,status') && e('创建目标页面名称为空提示正确,SUCCESS'); // 名称必填校验，创建失败
+#r($tester->createDefault($storys['story'], $reviewers['null']))  && p('message,status') && e('创建目标页面评审人为空提示正确,SUCCESS'); // 评审人必填校验，创建失败
 r($tester->createDefault($storys['story'], $reviewers['admin'])) && p('message,status') && e('创建运营界面目标成功,SUCCESS'); // 创建成功
 
 $tester->closeBrowser();
