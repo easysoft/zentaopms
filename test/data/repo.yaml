@@ -4,6 +4,8 @@ version: "1.0"
 fields:
   - field: id
     range: 1-10000
+  - field: space
+    range: 1-10000
   - field: product
     range: 1
   - field: name
