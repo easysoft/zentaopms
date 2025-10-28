@@ -108,6 +108,17 @@ div
                     setClass('items-center'),
                     div
                     (
+                        setClass('flex items-center'),
+                        label
+                        (
+                            setClass('rounded-full'),
+                            $space->id
+                        ),
+                        div
+                        (
+                            setClass('text-md font-bold ml-2 clip'),
+                            $space->name
+                        ),
                     )
                 ),
                 div
