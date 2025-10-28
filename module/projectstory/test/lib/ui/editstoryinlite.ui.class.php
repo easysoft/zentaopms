@@ -23,11 +23,12 @@ class editStoryInLiteTester extends tester
         /* 提交表单 */
         $this->switchVision('lite', 3);
         $form = $this->initForm('projectstory', 'story', array('projectID' => 1), 'appIframe-project');
+        $form->wait(3);
         $form = $this->initForm('story', 'edit', array('storyID' => 1, 'kanbangroup' => 'default', 'storyType' => 'story'), 'appIframe-project');
         $form->dom->estimate->setValue(3);
         $form->dom->assignedTo->picker('admin');
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage('projectstory', 'view');
         if($viewPage->dom->storyEstimate->getText() != '3h') return $this->failed('目标工时不正确');
