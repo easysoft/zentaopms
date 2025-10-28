@@ -270,6 +270,11 @@ foreach($actionList as $actionType => $typeActions)
     foreach($typeActions as $key => $action)
     {
         $actionList[$actionType][$key]['url'] = str_replace('{id}', (string)$space->id, $action['url']);
+        if($action['icon'] == 'trash' && !empty($repoList) && !empty($artifactRepoList))
+        {
+            $actionList[$actionType][$key]['disabled'] = true;
+            $actionList[$actionType][$key]['hint']     = $lang->devopsspace->notice->deleteFail;
+        }
     }
 }
 div
