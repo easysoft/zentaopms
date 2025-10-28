@@ -27,8 +27,9 @@ class storyTester extends tester
     public function checkTab($tab, $expectNum)
     {
         $form = $this->loadPage();
-        $form->dom->$tab->click();
         $form->wait(1);
+        $form->dom->$tab->click();
+        $form->wait(3);
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
         return $this->failed($tab . '下显示条数不正确');
     }
@@ -43,12 +44,7 @@ class storyTester extends tester
     public function unlinkStory()
     {
         $form = $this->loadPage();
-        /* 确保全部标签高亮 */
-        if($form->dom->allTab->attr('class') != 'active')
-        {
-            $form->dom->allTab->click();
-            $form->wait(2);
-        }
+        $form->wait(1);
         $name = $form->dom->firstName->getText();
         $form->dom->firstUnlinkBtn->click();
         $form->wait(1);
@@ -71,12 +67,9 @@ class storyTester extends tester
     public function batchUnlinkStory()
     {
         $form = $this->loadPage();
-        /* 确保全部标签高亮 */
-        if($form->dom->allTab->attr('class') != 'active')
-        {
-            $form->dom->allTab->click();
-            $form->wait(2);
-        }
+        $form->dom->allTab->click();
+        $form->wait(3);
+
         $name = $form->dom->firstName->getText();
         $form->dom->firstCheckbox->click();
         $form->wait(1);
@@ -150,12 +143,8 @@ class storyTester extends tester
     public function assignTo($user)
     {
         $form = $this->loadPage();
-        /* 确保全部标签高亮 */
-        if($form->dom->allTab->attr('class') != 'active')
-        {
-            $form->dom->allTab->click();
-            $form->wait(2);
-        }
+        $form->dom->allTab->click();
+        $form->wait(3);
         $form->dom->firstAssignTo->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($user);
@@ -181,12 +170,7 @@ class storyTester extends tester
     public function batchAssignTo()
     {
         $form = $this->loadPage();
-        /* 确保全部标签高亮 */
-        if($form->dom->allTab->attr('class') != 'active')
-        {
-            $form->dom->allTab->click();
-            $form->wait(2);
-        }
+        $form->wait(1);
         $form->dom->firstCheckbox->click();
         $form->wait(1);
         $form->dom->batchAssignBtn->click();
