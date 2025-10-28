@@ -12554,6 +12554,8 @@ class upgradeModel extends model
      */
     public function upgradeStage4PMS()
     {
+        if($this->config->edition != 'open') return true;
+
         $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
         if(empty($stageGroup)) return true;
 
@@ -12575,7 +12577,6 @@ class upgradeModel extends model
         }
 
         if(!empty($needDeleteStage)) $this->dao->delete()->from(TABLE_STAGE)->where('id')->in($needDeleteStage)->exec();
-        $this->dao->delete()->from(TABLE_STAGE)->where('projectType')->eq('ipd')->exec();
         return true;
     }
 
@@ -12593,54 +12594,53 @@ class upgradeModel extends model
 
         $this->app->loadConfig('project');
         $this->app->loadConfig('stage');
-        $typeCodeGroup = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('projectModel')->in('waterfall,waterfallplus,ipd')->fetchGroup('projectModel', 'code');
-        foreach($typeCodeGroup as $projectModel => $flowList)
+        $workflowList = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('waterfall,waterfallplus,ipd')->fetchAll('id');
+        foreach($workflowList as $flow)
         {
-            foreach(array_keys($flowList) as $flowCode)
+            $projectModel = $flow->projectModel;
+            if(!isset($stageGroup[$projectModel])) continue;
+
+            $flowCode = $flow->code;
+            foreach($stageGroup[$projectModel] as $stage)
             {
-                if(!isset($stageGroup[$projectModel])) continue;
+                if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
+                if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
+                if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
 
-                foreach($stageGroup[$projectModel] as $stage)
+                unset($stage->id);
+                $stage->workflowGroup = $flow->id;
+                if(empty($stage->editedDate)) $stage->editedDate = null;
+                $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
+                $stageID = $this->dao->lastInsertID();
+
+                /* 添加IPD项目流程阶段的评审点。*/
+                if($projectModel == 'ipd')
                 {
-                    if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
-                    if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
-                    if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
+                    $decision = new stdClass();
+                    $decision->builtin     = '1';
+                    $decision->createdBy   = 'system';
+                    $decision->createdDate = helper::now();
 
-                    unset($stage->id);
-                    $stage->workflowGroup = $typeCodeGroup[$projectModel][$flowCode]->id;
-                    if(empty($stage->editedDate)) $stage->editedDate = null;
-                    $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
-                    $stageID = $this->dao->lastInsertID();
-
-                    /* 添加IPD项目流程阶段的评审点。*/
-                    if($projectModel == 'ipd')
+                    $decisionFlow = new stdClass();
+                    $decisionFlow->flow        = 1;
+                    $decisionFlow->objectType  = 'decision';
+                    $decisionFlow->relatedBy   = 'system';
+                    $decisionFlow->relatedDate = helper::now();
+                    foreach($this->config->stage->ipdReviewPoint->{$stage->type} as $index => $point)
                     {
-                        $decision = new stdClass();
-                        $decision->builtin     = '1';
-                        $decision->createdBy   = 'system';
-                        $decision->createdDate = helper::now();
+                        $decision->workflowGroup = $stage->workflowGroup;
+                        $decision->stage         = $stageID;
+                        $decision->order         = $index + 1;
+                        $decision->title         = $point;
+                        $decision->type          = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
+                        $decision->category      = $point;
+                        $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+                        $decisionID = $this->dao->lastInsertID();
 
-                        $decisionFlow = new stdClass();
-                        $decisionFlow->flow        = 1;
-                        $decisionFlow->objectType  = 'decision';
-                        $decisionFlow->relatedBy   = 'system';
-                        $decisionFlow->relatedDate = helper::now();
-                        foreach($this->config->stage->ipdReviewPoint->{$stage->type} as $index => $point)
-                        {
-                            $decision->workflowGroup = $stage->workflowGroup;
-                            $decision->stage         = $stageID;
-                            $decision->order         = $index + 1;
-                            $decision->title         = $point;
-                            $decision->type          = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
-                            $decision->category      = $point;
-                            $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
-                            $decisionID = $this->dao->lastInsertID();
-
-                            $decisionFlow->root     = $stage->workflowGroup;
-                            $decisionFlow->objectID = $decisionID;
-                            $decisionFlow->extra    = $decision->type;
-                            $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
-                        }
+                        $decisionFlow->root     = $stage->workflowGroup;
+                        $decisionFlow->objectID = $decisionID;
+                        $decisionFlow->extra    = $decision->type;
+                        $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
                     }
                 }
             }
@@ -12685,6 +12685,7 @@ class upgradeModel extends model
             $workflowGroup = $ipdProject[$projectID];
 
             $this->dao->update(TABLE_OBJECT)
+                ->set('type')->eq('decision')
                 ->set('categoryTitle')->eq($category)
                 ->set('execution')->eq(!empty($stagePointGroup[$projectID][$category]) ? $stagePointGroup[$projectID][$category] : 0)
                 ->set('category')->eq(!empty($decisionGroup[$workflowGroup][$category]->id) ? $decisionGroup[$workflowGroup][$category]->id : 0)
