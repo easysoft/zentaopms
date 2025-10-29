@@ -36,7 +36,9 @@ $storyProductIds   = array();
 $isFromDoc = $from === 'doc';
 $isFromAI  = $from === 'ai';
 
-$hideGrade = (($app->tab == 'product' || $isFromDoc || $isFromAI) && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
+$tabCondition   = $app->tab == 'product' || $isFromDoc || $isFromAI;
+$storyCondition = $storyType == 'story' && count($gradeGroup['story']) <= 2;
+$hideGrade      = ($tabCondition && $storyCondition) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 
