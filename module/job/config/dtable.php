@@ -41,6 +41,13 @@ $config->job->dtable->fieldList['buildSpec']['minWidth'] = '120';
 $config->job->dtable->fieldList['buildSpec']['hint']     = true;
 $config->job->dtable->fieldList['buildSpec']['show']     = true;
 
+$config->job->dtable->fieldList['space']['title']    = $lang->job->space;
+$config->job->dtable->fieldList['space']['type']     = 'text';
+$config->job->dtable->fieldList['space']['sortType'] = false;
+$config->job->dtable->fieldList['space']['minWidth'] = '120';
+$config->job->dtable->fieldList['space']['hint']     = true;
+$config->job->dtable->fieldList['space']['show']     = true;
+
 $config->job->dtable->fieldList['productName']['title']    = $lang->job->product;
 $config->job->dtable->fieldList['productName']['type']     = 'text';
 $config->job->dtable->fieldList['productName']['sortType'] = false;
