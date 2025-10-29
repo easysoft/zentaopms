@@ -725,11 +725,7 @@ class testcase extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
-
-        $caseStories = $this->story->getByList(array_column($cases, 'story'));
-        $caseStories = $this->story->formatStories($caseStories, 'story');
-
-        $cases = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
+        $cases   = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
 
         /* 展示变量. */
         /* Show the variables. */
@@ -737,7 +733,6 @@ class testcase extends control
         $this->view->caseIdList      = $caseIdList;
         $this->view->productID       = $productID;
         $this->view->cases           = $cases;
-        $this->view->caseStories     = $this->story->addGradeLabel($caseStories);
         $this->view->forceNotReview  = $this->testcase->forceNotReview();
         $this->view->testtasks       = $testtasks;
         $this->view->isLibCase       = $type == 'lib' ? true : false;
