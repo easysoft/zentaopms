@@ -11598,6 +11598,9 @@ class upgradeModel extends model
      */
     public function createOtherActivity(int $moduleID, int $workflowGroupID): int
     {
+        $existsProcess = $this->dao->select('id')->from(TABLE_PROCESS)->where('workflowGroup')->eq($workflowGroupID)->andWhere('name')->eq($this->lang->other)->fetch('id');
+        if($existsProcess) return $existsProcess;
+
         $process = new stdclass();
         $process->workflowGroup = $workflowGroupID;
         $process->name          = $this->lang->other;
