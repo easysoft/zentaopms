@@ -298,6 +298,24 @@ toolbar
     backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
 
+if($project->model == 'ipd' && empty($stages) && empty($plans))
+{
+    div
+    (
+        setClass('dtable-empty-tip bg-white'),
+        div
+        (
+            setClass('row gap-4 items-center'),
+            div
+            (
+                setClass('text-gray'),
+                $lang->programplan->emptyStageTip
+            )
+        )
+    );
+    return;
+}
+
 $batchFormOptions = array();
 $batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
 $batchFormOptions['actions']       = array('sort', array('type' => 'addSibling', 'icon' => 'icon-plus', 'text' => $lang->task->addSibling), array('type' => 'addSub', 'icon' => 'icon-split', 'text' => $lang->task->addSub), 'delete');
