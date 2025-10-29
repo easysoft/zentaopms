@@ -955,6 +955,7 @@ $lang->action->label->prompt       = '禅道智能体|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = '通用智能体|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = '节假日|holiday|browse|';
 $lang->action->label->deliverable  = '交付物|deliverable|view|id=%s';
+$lang->action->label->devopsspace  = '空间|devopsspace|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

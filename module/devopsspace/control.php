@@ -125,4 +125,27 @@ class devopsspace extends control
 
         $this->display();
     }
+
+    /**
+     * 删除空间。
+     * Delete space.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $repos         = $this->devopsspace->getReposBySpace($id);
+        $artifactRepos = $this->devopsspace->getArtifactReposBySpace($id);
+
+        if(!empty($repos) || !empty($artifactRepos))
+        {
+            $this->sendError($this->lang->devopsspace->deleteFail);
+        }
+
+        $this->devopsspace->deleteSpace($id);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->sendSuccess(array('load' => $this->inLink('browse')));
+    }
 }
