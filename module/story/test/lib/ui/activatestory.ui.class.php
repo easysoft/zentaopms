@@ -25,7 +25,7 @@ class activateStoryTester extends tester
 
         $form->dom->assignedTo->picker('admin'); //选择指派人
         $form->dom->activate->click();           //点击激活按钮
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage($storyType, 'view');   //进入需求详情页查看状态是否与关闭前一致
         if($viewPage->dom->status->getText() != $status) return $this->failed('激活需求后状态不正确');

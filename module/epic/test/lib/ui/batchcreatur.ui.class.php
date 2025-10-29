@@ -66,6 +66,7 @@ class createChildStoryTester extends tester
         /* 跳转到父需求详情页。 */
 
         $viewPage = $this->initForm('epic', 'view', array('storyID' => '3'), 'appIframe-product');
+        $viewPage->wait(2);
         if($viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[1]/div/div[2]/div/a')->getText() != $childName) return $this->failed('子需求名称不正确');
         if($viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[2]/div/div[3]/div/span')->getText() != '评审中') return $this->failed('子需求状态不正确');
 

@@ -26,7 +26,7 @@ class closeRequirementTester extends tester
         $form->wait(1);
         $form->dom->closedReason->picker($closeReason); //选择关闭原因
         $form->dom->closedButton->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage();
         if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
