@@ -535,6 +535,7 @@ $emptyTip = $lang->story->noStory;
 if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
 if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
 
+$createStoryLink = hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '';
 dtable
 (
     set::id('stories'),
@@ -557,7 +558,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
