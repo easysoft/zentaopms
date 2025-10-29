@@ -325,6 +325,7 @@ class router extends baseRouter
         $config->projectLink   = 'project-browse';
         $config->executionLink = 'execution-task';
         $config->docLink       = 'doc-lastViewedSpace';
+        $config->devopsLink    = 'repo-maintain';
 
         /* Get user preference. */
         $account     = $_SESSION['user']->account ?? '';
@@ -333,7 +334,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR', 'docLink')")->fetchAll();
+            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR', 'docLink', 'devopsLink')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
@@ -344,6 +345,7 @@ class router extends baseRouter
              if($setting->key == 'projectLink')   $config->projectLink   = $setting->value;
              if($setting->key == 'executionLink') $config->executionLink = $setting->value;
              if($setting->key == 'docLink')       $config->docLink       = $setting->value;
+             if($setting->key == 'devopsLink')    $config->devopsLink    = $setting->value;
         }
 
         $lang->ERCommon = $config->storyCommonList[$this->clientLang]['epic'];
