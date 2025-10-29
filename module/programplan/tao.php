@@ -498,7 +498,7 @@ class programplanTao extends programplanModel
                 if($point->execution != $plan->id) continue;
                 if(!isset($point->status)) $point->status = '';
 
-                $dataID = "{$plan->id}-point{$point->category}-{$point->id}-point";
+                $dataID = "{$plan->id}-point{$point->category}-{$point->id}";
                 if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$dataID] = $this->buildPointDataForGantt($plan->id, $point, $reviewDeadline);
             }
         }
