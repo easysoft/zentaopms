@@ -1102,16 +1102,16 @@ class testtaskModel extends model
      * 获取用例以及场景数据。
      * Get cases with scenes data.
      *
-     * @param  int   $productID
-     * @param  array $runs
+     * @param  int|array $productID
+     * @param  array     $runs
      * @access public
      * @return array
      */
-    public function getSceneCases($productID, $runs)
+    public function getSceneCases(int|array $productID, array $runs)
     {
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
-            ->andWhere('product')->eq($productID)
+            ->andWhere('product')->in($productID)
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id', false);
 
@@ -1150,17 +1150,17 @@ class testtaskModel extends model
      * 获取一个测试单关联的用例。
      * Get cases associated with a testtask.
      *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
-     * @param  object $task
+     * @param  int|array $productID
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $sort
+     * @param  object    $pager
+     * @param  object    $task
      * @access public
      * @return array
      */
-    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null, ?object $task = null): array
+    public function getTaskCases(int|array $productID, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null, ?object $task = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -1204,7 +1204,7 @@ class testtaskModel extends model
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($task->id)
                 ->andWhere('t2.deleted')->eq('0')
-                ->beginIF($isQueryProduct === false)->andWhere('t2.product')->eq($productID)->fi()
+                ->beginIF($isQueryProduct === false)->andWhere('t2.product')->in($productID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
