@@ -11598,6 +11598,9 @@ class upgradeModel extends model
      */
     public function createOtherActivity(int $moduleID, int $workflowGroupID): int
     {
+        $existsProcess = $this->dao->select('id')->from(TABLE_PROCESS)->where('workflowGroup')->eq($workflowGroupID)->andWhere('name')->eq($this->lang->other)->fetch('id');
+        if($existsProcess) return $existsProcess;
+
         $process = new stdclass();
         $process->workflowGroup = $workflowGroupID;
         $process->name          = $this->lang->other;
@@ -12015,7 +12018,8 @@ class upgradeModel extends model
             {
                 $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t2.workflowGroup')->eq($groupID)
+                    ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t3')->on('t2.workflowGroup=t3.id')
+                    ->where('t3.projectModel')->eq($group->projectModel)
                     ->limit(1)
                     ->fetch('id');
 
@@ -12030,6 +12034,8 @@ class upgradeModel extends model
                     {
                         $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
                     }
+
+                    $this->upgradeTao->migrateOutputToDeliverable($group);
                 }
                 else
                 {
