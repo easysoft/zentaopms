@@ -9,7 +9,7 @@ cid=0
 - 禅道版本为开源版。 @0
 - gantt数据数。 @11
 - 禅道版本为IPD。
- - 属性id @1-PP-1
+ - 属性id @1-pointPP-1
  - 属性reviewID @1
  - 属性type @point
  - 属性text @<i class='icon-seal'></i> 这个是评审或基线的标题1
@@ -46,8 +46,8 @@ r(isset($datas['data']['1-PP-1'])) && p() && e("0"); //禅道版本为开源版�
 
 $tester->programplan->config->edition = 'ipd';
 $datas = $tester->programplan->buildGanttData4IPD($normalResult['datas'], 1, 1, 'point', $normalResult['reviewDeadline']);
-r(count($datas['data']))    && p()                        && e('11');                                                               //gantt数据数。
-r($datas['data']['1-PP-1']) && p('id,reviewID,type,text') && e("1-PP-1,1,point,<i class='icon-seal'></i> 这个是评审或基线的标题1"); //禅道版本为IPD。
+r(count($datas['data']))         && p()                        && e('11');                                                               //gantt数据数。
+r($datas['data']['1-pointPP-1']) && p('id,reviewID,type,text') && e("1-pointPP-1,1,point,<i class='icon-seal'></i> 这个是评审或基线的标题1"); //禅道版本为IPD。
 
 $datas = $tester->programplan->buildGanttData4IPD($normalResult['datas'], 1, 1, '', $normalResult['reviewDeadline']);
-r(isset($datas['data']['1-PP-1'])) && p() && e("0"); //selectCustom 不包含 point。
+r(isset($datas['data']['1-pointPP-1'])) && p() && e("0"); //selectCustom 不包含 point。

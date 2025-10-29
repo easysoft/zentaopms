@@ -498,7 +498,7 @@ class programplanTao extends programplanModel
                 if($point->execution != $plan->id) continue;
                 if(!isset($point->status)) $point->status = '';
 
-                $dataID = "{$plan->id}-{$point->category}-{$point->id}";
+                $dataID = "{$plan->id}-point{$point->category}-{$point->id}";
                 if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$dataID] = $this->buildPointDataForGantt($plan->id, $point, $reviewDeadline);
             }
         }
@@ -713,7 +713,7 @@ class programplanTao extends programplanModel
 
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
-        $data->id            = $planID . '-' . $point->category . '-' . $point->id;
+        $data->id            = $planID . '-point' . $point->category . '-' . $point->id;
         $data->reviewID      = $point->reviewID;
         $data->type          = 'point';
         $data->text          = "<i class='icon-seal'></i> " . $point->title;
