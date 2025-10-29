@@ -109,6 +109,7 @@ $lang->my->productLink   = $lang->productCommon . ' Default Page';
 $lang->my->projectLink   = $lang->projectCommon . ' Default Page';
 $lang->my->executionLink = 'Execution Default Page';
 $lang->my->docLink       = 'Document Default Page';
+$lang->my->devopsLink    = 'DevOps Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
@@ -137,6 +138,11 @@ $lang->my->docLinkList = array();
 $lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed space homepage';
 $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
+
+$lang->my->devopsLinkList = array();
+$lang->my->devopsLinkList['devopsspace-browse'] = 'Space list';
+$lang->my->devopsLinkList['repo-maintain']      = 'Code library list';
+$lang->my->devopsLinkList['repo-browse']        = 'The most recently visited code library';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT

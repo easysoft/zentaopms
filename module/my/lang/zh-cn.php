@@ -109,6 +109,7 @@ $lang->my->productLink   = $lang->productCommon .'默认着陆页';
 $lang->my->projectLink   = $lang->projectCommon . '默认着陆页';
 $lang->my->executionLink = '执行默认着陆页';
 $lang->my->docLink       = '文档默认着陆页';
+$lang->my->devopsLink    = 'DevOps着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '项目集列表/可以查看所有的项目集';
@@ -137,6 +138,11 @@ $lang->my->docLinkList = array();
 $lang->my->docLinkList['doc-lastViewedSpaceHome'] = '最近一个浏览的空间首页';
 $lang->my->docLinkList['doc-lastViewedSpace']     = '最近一个浏览的空间';
 $lang->my->docLinkList['doc-lastViewedLib']       = '最近一个浏览的库';
+
+$lang->my->devopsLinkList = array();
+$lang->my->devopsLinkList['devopsspace-browse'] = '空间列表';
+$lang->my->devopsLinkList['repo-maintain']      = '代码库列表';
+$lang->my->devopsLinkList['repo-browse']        = '最近访问的代码库';
 
 $lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT
