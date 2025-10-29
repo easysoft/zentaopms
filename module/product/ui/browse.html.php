@@ -535,7 +535,8 @@ $emptyTip = $lang->story->noStory;
 if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
 if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
 
-$createStoryLink = hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '';
+$createStoryLink = createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
+$createStoryLink = hasPriv($storyType, 'create') ?  $createStoryLink : '';
 dtable
 (
     set::id('stories'),
