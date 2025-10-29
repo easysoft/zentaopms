@@ -12014,6 +12014,9 @@ class upgradeModel extends model
         $classifyModule = array();
         foreach($groupList as $groupID => $group)
         {
+            $projectModel = $group->projectModel;
+            if($projectModel == 'agileplus')     $projectModel = 'scrum';
+            if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
             if($group->main == '1' && in_array($group->projectModel, array('scrum', 'agileplus', 'waterfall', 'waterfallplus')))
             {
                 $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
@@ -12039,15 +12042,12 @@ class upgradeModel extends model
                 }
                 else
                 {
-                    $projectModel = $group->projectModel;
-                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
-                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
                     $this->workflowgroup->addProcessAndActivity($group, $projectModel);
                 }
             }
             else
             {
-                $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
+                $this->workflowgroup->addProcessAndActivity($group, $projectModel);
             }
         }
 
@@ -12057,6 +12057,7 @@ class upgradeModel extends model
         /* 删除旧分类。 */
         $this->dao->delete()->from(TABLE_PROCESS)->where('workflowGroup')->eq(0)->exec();
         $this->dao->delete()->from(TABLE_ACTIVITY)->where('workflowGroup')->eq(0)->exec();
+        $this->dao->delete()->from(TABLE_AUDITCL)->where('objectType')->eq('zoutput')->exec();
         $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
     }
 

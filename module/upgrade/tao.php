@@ -1079,11 +1079,14 @@ class upgradeTao extends upgradeModel
 
         foreach($outputList as $output)
         {
+            $oldID = $output->id;
             unset($output->id);
             $output->activity   = $newActivityID;
             $output->editedBy   = '';
             $output->editedDate = null;
             $this->dao->insert(TABLE_ZOUTPUT)->data($output)->exec();
+            $newOutputID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->exec();
         }
     }
 
@@ -1112,14 +1115,74 @@ class upgradeTao extends upgradeModel
         $deliverable->module        = $otherModule;
         $deliverable->builtin       = 1;
         $deliverable->deleted       = '1';
+
+        $approvalflowObject = new stdclass();
+        $approvalflowObject->root        = $group->id;
+        $approvalflowObject->flow        = 1;
+        $approvalflowObject->objectType  = 'deliverable';
+        $approvalflowObject->relatedBy   = 'system';
+        $approvalflowObject->relatedDate = helper::now();
+        $approvalflowObject->extra       = 'review';
+
+        $oldAuditclList = $this->dao->select('*')->from(TABLE_AUDITCL)
+            ->where('objectType')->eq('zoutput')
+            ->andWhere('workflowGroup')->eq($group->id)
+            ->andWhere('objectID')->in(array_keys($outputList))
+            ->andWhere('deleted')->eq('0')
+            ->fetchGroup('objectID', 'id');
+
+        if(!empty($oldAuditclList))
+        {
+            $this->app->loadLang('reviewcl');
+            $categoryList = $this->lang->reviewcl->waterfallCategoryList;
+
+            $item = new stdclass();
+            $item->lang    = $this->app->getClientLang();
+            $item->module  = 'reviewcl';
+            $item->section = "{$group->id}CategoryList";
+            $item->system  = 1;
+            foreach($categoryList as $key => $value)
+            {
+                $item->key   = $key;
+                $item->value = $value;
+                $this->dao->insert(TABLE_LANG)->data($item)->exec();
+            }
+
+            $item->key   = 'QA';
+            $item->value = $this->lang->upgrade->qualityAssurance;
+            $this->dao->insert(TABLE_LANG)->data($item)->exec();
+        }
+
+        $reviewcl = new stdclass();
+        $reviewcl->workflowGroup = $group->id;
+        $reviewcl->category      = 'QA';
+        $reviewcl->createdBy     = 'admin';
+        $reviewcl->createdDate   = helper::now();
         foreach($outputList as $output)
         {
             $deliverable->name      = $output->name;
             $deliverable->activity  = $output->activity;
             $deliverable->trimmable = $output->optional == 'yes' ? '0' : '1';
+
             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
+
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
+
+            $auditclList = zget($oldAuditclList, $output->id, array());
+            if(!empty($auditclList))
+            {
+                $approvalflowObject->objectID = $deliverableID;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalflowObject)->exec();
+                $approvalID = $this->dao->lastInsertID();
+
+                foreach($auditclList as $auditcl)
+                {
+                    $reviewcl->title  = $auditcl->title;
+                    $reviewcl->object = $approvalID;
+                    $this->dao->insert(TABLE_REVIEWCL)->data($reviewcl)->exec();
+                }
+            }
         }
     }
 
