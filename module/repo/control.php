@@ -469,6 +469,8 @@ class repo extends control
      */
     public function browse(int $repoID = 0, string $branchID = '', int $objectID = 0, string $path = '', string $revision = 'HEAD', int $refresh = 0, string $branchOrTag = 'branch', string $type = 'dir', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $hasDevOpsLink = !empty($this->config->devopsLink) && $this->config->devopsLink == 'repo-browse';
+        if(!$repoID && !empty($this->config->devopsLink) && $hasDevOpsLink) $repoID = (int)$this->config->lastRepo;
         $repoID = $this->repo->saveState($repoID, $objectID);
 
         /* Get path. */
@@ -497,6 +499,8 @@ class repo extends control
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
         if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;

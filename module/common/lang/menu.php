@@ -35,6 +35,7 @@ list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 list($docModule, $docMethod)             = explode('-', $config->docLink);
+list($devopsModule, $devopsMethod)       = explode('-', $config->devopsLink);
 
 if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
 {
@@ -46,6 +47,8 @@ if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
     $projectMethod   = 'browse';
     $executionModule = 'execution';
     $executionMethod = 'task';
+    $devopsModule    = 'repo';
+    $devopsMethod    = 'maintain';
 }
 
 /* Main Navigation. */
@@ -56,7 +59,7 @@ $lang->mainNav->product   = "{$lang->navIcons['product']} {$lang->productCommon}
 $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
-$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
+$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|$devopsModule|$devopsMethod|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|conversation|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";

@@ -1430,7 +1430,7 @@ class my extends control
 
         if($_POST)
         {
-            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink');
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink', 'devopsLink');
             foreach($_POST as $key => $value)
             {
                 if(!in_array($key, $keyList)) continue;
@@ -1454,6 +1454,7 @@ class my extends control
         $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
         $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
         $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'doc-lastViewedSpace';
+        $this->view->devopsLink       = isset($this->config->devopsLink)    ? $this->config->devopsLink    : 'repo-maintain';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
