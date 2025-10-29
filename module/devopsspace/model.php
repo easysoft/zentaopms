@@ -232,4 +232,21 @@ class devopsspaceModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 删除空间。
+     * Delete space.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function deleteSpace(int $spaceID): bool
+    {
+        $this->dao->update(TABLE_DEVOPSSPACE)->set('deleted')->eq(1)->where('id')->eq($spaceID)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('devopsspace', $spaceID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        return !dao::isError();
+    }
 }

@@ -955,6 +955,7 @@ $lang->action->label->prompt       = 'ZenTao Agent|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = 'General Agent|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = 'Holiday|holiday|browse|';
 $lang->action->label->deliverable  = 'Deliverable|deliverable|view|id=%s';
+$lang->action->label->devopsspace  = 'Space|devopsspace|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

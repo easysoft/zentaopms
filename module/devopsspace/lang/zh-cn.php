@@ -15,6 +15,7 @@ $lang->devopsspace->artifactrepo = '制品库';
 $lang->devopsspace->pipeline     = '流水线';
 $lang->devopsspace->system       = '应用';
 $lang->devopsspace->acl          = '访问控制';
+$lang->devopsspace->deleted      = '已删除';
 
 $lang->devopsspace->aclList = array();
 $lang->devopsspace->aclList['open']    = '公开';
@@ -27,3 +28,4 @@ $lang->devopsspace->aclNoticeList['private'] = '私有(仅团队成员、负责�
 $lang->devopsspace->notice = new stdclass();
 $lang->devopsspace->notice->noSpaces      = '暂无任何空间';
 $lang->devopsspace->notice->confirmDelete = '您确定要删除该空间吗？';
+$lang->devopsspace->notice->deleteFail    = '空间下存在代码库或制品库, 无法删除。';
