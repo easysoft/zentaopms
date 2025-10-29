@@ -1131,6 +1131,28 @@ class upgradeTao extends upgradeModel
             ->andWhere('deleted')->eq('0')
             ->fetchGroup('objectID', 'id');
 
+        if(!empty($oldAuditclList))
+        {
+            $this->app->loadLang('reviewcl');
+            $categoryList = $this->lang->reviewcl->waterfallCategoryList;
+
+            $item = new stdclass();
+            $item->lang    = $this->app->getClientLang();
+            $item->module  = 'reviewcl';
+            $item->section = "{$group->id}CategoryList";
+            $item->system  = 1;
+            foreach($categoryList as $key => $value)
+            {
+                $item->key   = $key;
+                $item->value = $value;
+                $this->dao->insert(TABLE_LANG)->data($item)->exec();
+            }
+
+            $item->key   = 'QA';
+            $item->value = $this->lang->upgrade->qualityAssurance;
+            $this->dao->insert(TABLE_LANG)->data($item)->exec();
+        }
+
         $reviewcl = new stdclass();
         $reviewcl->workflowGroup = $group->id;
         $reviewcl->category      = 'QA';
