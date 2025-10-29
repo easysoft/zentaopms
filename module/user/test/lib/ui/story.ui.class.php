@@ -102,7 +102,6 @@ class storyTester extends tester
         {
             $sid    = is_object($story) ? ($story->id ?? null) : ($story['id'] ?? null);
             $status = is_object($story) ? ($story->status ?? '') : ($story['status'] ?? '');
-//          if(!$sid) continue;
 
             $val = is_object($story) ? ($story->{$menu} ?? '') : ($story[$menu] ?? '');
             if($val === $account)
