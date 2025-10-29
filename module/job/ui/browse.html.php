@@ -32,7 +32,9 @@ featureBar
 $canCreate  = hasPriv('job', 'create') && (!$this->config->inCompose || $hasJobServer);
 $createItem = array('text' => $lang->job->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
+foreach($jobList as $job) $job->space = $job->space ? $job->space : '';
 $cols = $this->loadModel('datatable')->getSetting('job');
+if(isset($cols['space'])) $cols['space']['map'] = $spaces;
 $tableData = initTableData($jobList, $cols, $this->job);
 
 toolbar
