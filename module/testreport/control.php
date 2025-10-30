@@ -103,7 +103,7 @@ class testreport extends control
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
-            $taskIdList = empty($_POST['taskIdList']) ? '' : implode(',', $_POST['taskIdList']);
+            $taskIdList = empty($_POST['taskIdList']) ? $extra : implode(',', $_POST['taskIdList']);
             if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
             if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$taskIdList}";
             if($param)
@@ -180,8 +180,6 @@ class testreport extends control
             if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
             $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
-
-            if(count($reportData['productIdList']) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink('project', 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink('project', 'testtask', "objectID={$objectID}"))));
         }
 
         $this->testreportZen->assignReportData($reportData, 'create');
