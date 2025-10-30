@@ -457,7 +457,7 @@ class execution extends control
         $this->loadModel('product');
         $this->app->loadLang('doc');
 
-        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
+        if(($from == 'doc' || $from == 'ai') && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
 
         /* Change for requirement story title. */
         $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);

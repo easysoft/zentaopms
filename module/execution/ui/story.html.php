@@ -29,8 +29,9 @@ jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->conver
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
 
 $isFromDoc = $from === 'doc';
+$isFromAI  = $from === 'ai';
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs();
@@ -84,7 +85,7 @@ $queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$exe
 if(empty($param) && $this->cookie->storyModuleParam) $param = $this->cookie->storyModuleParam;
 featureBar
 (
-    $isFromDoc ? null : to::leading
+    ($isFromDoc || $isFromAI) ? null : to::leading
     (
         picker
         (
@@ -110,19 +111,19 @@ featureBar
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#stories_table'),
     li(searchToggle
     (
-        set::simple($isFromDoc),
+        set::simple($isFromDoc || $isFromAI),
         set::module('executionStory'),
         set::open($type == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc) div(setID('docSearchForm'));
+if($isFromDoc || $isFromAI) div(setID('docSearchForm'));
 
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
@@ -226,7 +227,7 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if(!$isFromDoc)
+if(!$isFromDoc && !$isFromAI)
 {
     if($canOpreate['create'])
     {
@@ -255,7 +256,7 @@ if(!$isFromDoc)
 }
 
 $reportText = $config->edition != 'open' ? 'hint' : 'text';
-if($product && !$isFromDoc) toolbar
+if($product && !$isFromDoc && !$isFromAI) toolbar
 (
     common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
     (
@@ -314,7 +315,7 @@ if($product && !$isFromDoc) toolbar
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
-$isFromDoc ? null : sidebar
+($isFromDoc || $isFromAI) ? null : sidebar
 (
     moduleMenu(set(array(
         'modules'     => $moduleTree,
@@ -420,7 +421,7 @@ $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $can
 
 $footToolbar = array();
 
-if($canBatchAction && !$isFromDoc)
+if($canBatchAction && !$isFromDoc && !$isFromAI)
 {
     if($canBatchToTask)
     {
@@ -523,7 +524,7 @@ $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 $cols    = array();
 $setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
 if(!$canModifyExecution) $setting['actions']['actionsMap'] = array();
-if($isFromDoc && isset($setting['actions'])) unset($setting['actions']);
+if(($isFromDoc || $isFromAI) && isset($setting['actions'])) unset($setting['actions']);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 foreach($setting as $key => $col)
 {
@@ -537,7 +538,7 @@ foreach($setting as $key => $col)
         $col['title'] = $this->lang->story->name;
     }
 
-    if($isFromDoc)
+    if($isFromDoc || $isFromAI)
     {
         $col['sortType'] = false;
         if(isset($col['link'])) unset($col['link']);
@@ -574,6 +575,7 @@ foreach($stories as $story)
 }
 
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#table-execution-story', 'executionStory', $blockID, '$insertListLink')"));
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#table-execution-story', 'story')"));
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
@@ -601,14 +603,14 @@ dtable
         'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     set::emptyTip($lang->execution->noStory),
-    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
-    $isFromDoc ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
-    $isFromDoc ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
-    $isFromDoc ? null : set::createTip($lang->story->create),
-    $isFromDoc ? null : set::createLink($canOpreate['create'] ? $createLink : '')
+    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($canOpreate['create'] ? $createLink : '')
 );
 
 render();
