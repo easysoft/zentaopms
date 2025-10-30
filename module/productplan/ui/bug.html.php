@@ -31,7 +31,7 @@ $planChangeLink     = createLink('productplan', 'bug', "productID=$productID&pla
 $insertListLink     = createLink('productplan', 'bug', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from");
 
 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#planBugs', 'planBug', $blockID, '$insertListLink')"));
-if($from == 'ai') $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#planBugs', 'planBug')"));
+if($from == 'ai') $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#planBugs', 'bug')"));
 
 formPanel
 (
