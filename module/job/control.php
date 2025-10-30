@@ -95,6 +95,7 @@ class job extends control
         $this->view->pager   = $pager;
 
         $this->view->hasJobServer = !empty($pipelines);
+        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs();
 
         $this->display();
     }

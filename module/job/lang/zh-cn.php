@@ -52,6 +52,7 @@ $lang->job->deleted         = '已删除';
 $lang->job->repoServer      = '版本库服务器';
 $lang->job->sonarqubeServer = 'SonarQube服务器';
 $lang->job->projectKey      = 'SonarQube项目';
+$lang->job->space           = '空间';
 
 $lang->job->lblBasic = '基本信息';
 
