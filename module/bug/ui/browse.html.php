@@ -19,8 +19,9 @@ jsVar('from',           $from);
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
 $currentType   = $browseType == 'bysearch' ? $param : ($browseType == 'bymodule' ? $this->session->bugBrowseType : $browseType);
 $isFromDoc     = $from === 'doc';
+$isFromAI      = $from === 'ai';
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
@@ -73,18 +74,18 @@ featureBar
 (
     set::current($currentType),
     set::linkParams("product={$product->id}&branch={$branch}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID"),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle
     (
-        set::simple($isFromDoc),
+        set::simple($isFromDoc || $isFromAI),
         set::open($browseType == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     div(setID('docSearchForm'));
 }
@@ -125,7 +126,7 @@ if(!isonlybody())
 
     toolbar
     (
-        setClass(array('hidden' => $isFromDoc)),
+        setClass(array('hidden' => $isFromDoc || $isFromAI)),
         hasPriv('bug', 'report') ? item(set(array
         (
             'icon'  => 'bar-chart',
@@ -160,7 +161,7 @@ $closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch={$br
 $settingLink = $canManageModule ? createLink('tree', 'browse', "productID={$product->id}&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}") : '';
 
 
-if(!$isFromDoc)
+if(!$isFromDoc && !$isFromAI)
 {
     sidebar
     (
@@ -242,6 +243,7 @@ if($canBatchAction)
     $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
 }
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#bugs', 'bug', $blockID, '$insertListLink')"));
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#bugs', 'bug')"));
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
 
@@ -259,7 +261,7 @@ foreach($cols as $colName => $col)
     if(!isset($col['sortType'])) $cols[$colName]['sortType'] = true;
 }
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
@@ -273,28 +275,28 @@ if($isFromDoc)
     }
 }
 
-$bugs = initTableData($bugs, $cols, $this->bug);
-
+$bugs          = initTableData($bugs, $cols, $this->bug);
+$createBugLink = $canBeChanged && hasPriv('bug', 'create') ? createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : '';
 dtable
 (
     set::id('bugs'),
     set::cols($cols),
     set::data(array_values($bugs)),
     set::userMap($users),
-    set::checkable($canBatchAction || $isFromDoc),
+    set::checkable($canBatchAction || $isFromDoc || $isFromAI),
     set::orderBy($orderBy),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::height(400),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::modules($modulePairs),
     set::emptyTip($lang->bug->notice->noBug),
-    $isFromDoc ? null : set::createTip($lang->bug->create),
-    $isFromDoc ? null : set::createLink($canBeChanged && hasPriv('bug', 'create') ? createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : '')
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->bug->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createBugLink)
 );
 
 render();
