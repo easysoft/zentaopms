@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('gradeGroup', $gradeGroup);
+$isFromAI = $from === 'ai';
 
 $storyCols = array();
 foreach($config->productplan->defaultFields['story'] as $field)
@@ -36,11 +37,12 @@ unset($storyCols['actions']);
 
 
 $productsWithShadow = $this->loadModel('product')->getPairs('', 0, '', 'all');
-$productChangeLink  = createLink('productplan', 'story', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-$planChangeLink     = createLink('productplan', 'story', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-$insertListLink     = createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$productChangeLink  = createLink('productplan', 'story', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from");
+$planChangeLink     = createLink('productplan', 'story', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from");
+$insertListLink     = createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from");
 
 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#planStories', 'planStory', $blockID, '$insertListLink')"));
+if($isFromAI) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#planStories', 'story')"));
 
 formPanel
 (
