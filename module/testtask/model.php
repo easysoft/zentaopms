@@ -851,6 +851,7 @@ class testtaskModel extends model
             $run->assignedTo = zget($users, $run->case, '');
             $this->dao->replace(TABLE_TESTRUN)->data($run)->exec();
 
+            if(!empty($testtask->joint)) continue;
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
             /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
             if(!empty($testtask->execution))
