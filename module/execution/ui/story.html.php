@@ -315,7 +315,7 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
-($isFromDoc || $isFromAI) ? null : sidebar
+if(!$isFromDoc && !$isFromAI) sidebar
 (
     moduleMenu(set(array(
         'modules'     => $moduleTree,
