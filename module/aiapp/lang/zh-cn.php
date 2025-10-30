@@ -77,3 +77,4 @@ $lang->aiapp->langData->promptResultTitle  = '方案标题，如果没有合适�
 $lang->aiapp->langData->promptExtraLimit   = '通常工具 `{toolName}` 只需要调用一次，除非用户特殊要求提供多个方案。';
 $lang->aiapp->langData->goTesting          = '去调试';
 $lang->aiapp->langData->notSupportPreview  = '暂不支持预览该内容';
+$lang->aiapp->langData->dataListSizeInfo   = '共 %s 条数据';

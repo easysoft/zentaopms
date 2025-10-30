@@ -580,7 +580,6 @@ class ai extends control
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['promptConfig'] = $prompt;
-        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $auto))));
     }

@@ -92,7 +92,24 @@ window.executeZentaoPrompt = async function(info, auto)
             const h               = zui.html;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
-            const renderValue     = value => (typeof value === 'object') ? langData.notSupportPreview : value;
+            const renderValue     = (value) =>
+            {
+                if(value === undefined || value === null) return '';
+                if(typeof value !== 'object') return value;
+
+                const arr = Object.keys(value) === 1 && Array.isArray(value[Object.keys(value)[0]]) ? value[Object.keys(value)[0]] : value;
+                if(Array.isArray(arr))
+                {
+                    const firstItem = arr[0];
+                    if(firstItem && (firstItem.title || firstItem.name))
+                    {
+                        return h`<ul>${arr.map(x => h`<li>${x.title || x.name}</li>`)}</ul>`;
+                    }
+                    return langData.dataListSizeInfo.replace('%s', arr.length);
+                }
+
+                return langData.notSupportPreview ;
+            };
             if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
@@ -122,20 +139,9 @@ window.executeZentaoPrompt = async function(info, auto)
             else
             {
                 const renderProp = (prop, value) => {
-                    return h`<tr class="whitespace-pre-wrap"><td class="font-bold">${propNames[prop] || prop}</td><td>${renderValue(value)}</td></tr>`;
+                    return h`<div class="text-fore"><div class="font-bold">${propNames[prop] || prop}</div><div>${renderValue(value)}</div></div>`;
                 };
-                diffView = h`<h6>${info.targetFormName}</h6>
-<table class="table bordered" style="min-width: 600px">
-    <thead>
-        <tr>
-            <th style="width: 100px;">${langData.changeProp}</th>
-            <th>${langData.afterChange}</th>
-        </tr>
-    </thead>
-    <tbody>
-        ${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}
-    </tbody>
-</table>`;
+                diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
 
             if(auto && openedFormApp)

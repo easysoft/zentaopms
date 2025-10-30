@@ -77,3 +77,4 @@ $lang->aiapp->langData->promptResultTitle  = 'Solution title, if no suitable tit
 $lang->aiapp->langData->promptExtraLimit   = 'Usually tool `{toolName}` only needs to be called once, unless the user requires multiple solutions.';
 $lang->aiapp->langData->goTesting          = 'Go Testing';
 $lang->aiapp->langData->notSupportPreview  = 'Not support preview this content';
+$lang->aiapp->langData->dataListSizeInfo   = 'Total %s items';

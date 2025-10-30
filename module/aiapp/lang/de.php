@@ -77,3 +77,4 @@ $lang->aiapp->langData->promptResultTitle  = 'Lösungstitel, wenn kein geeignete
 $lang->aiapp->langData->promptExtraLimit   = 'Normalerweise muss das Werkzeug `{toolName}` nur einmal aufgerufen werden, es sei denn, der Benutzer fordert mehrere Lösungen an.';
 $lang->aiapp->langData->goTesting          = 'Zur Prüfung';
 $lang->aiapp->langData->notSupportPreview  = 'Voraussichtlich nicht unterstützt';
+$lang->aiapp->langData->dataListSizeInfo   = 'Total %s items';
