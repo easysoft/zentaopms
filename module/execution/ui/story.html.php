@@ -577,6 +577,7 @@ foreach($stories as $story)
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#table-execution-story', 'executionStory', $blockID, '$insertListLink')"));
 if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#table-execution-story', 'story')"));
 
+$createStoryLink = $canOpreate['create'] ? $createLink : '';
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
 jsVar('checkedSummary', $lang->product->checkedAllSummary);
@@ -610,7 +611,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($canOpreate['create'] ? $createLink : '')
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
 );
 
 render();
