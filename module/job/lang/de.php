@@ -52,6 +52,7 @@ $lang->job->deleted         = 'Deleted';
 $lang->job->repoServer      = 'Repo Server';
 $lang->job->sonarqubeServer = 'SonarQube Server';
 $lang->job->projectKey      = 'SonarQube Project';
+$lang->job->space           = 'Space';
 
 $lang->job->lblBasic = 'Basic Info';
 
