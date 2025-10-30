@@ -538,7 +538,7 @@ detailBody
             item
             (
                 set::name($lang->bug->closedDate),
-                datePicker
+                datetimePicker
                 (
                     set::name('closedDate'),
                     set::value($bug->closedDate)

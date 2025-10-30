@@ -17,7 +17,7 @@ $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
 $fields->autoLoad('product',   array('items' => 'product,module,assignedTo,story,execution,task,openedBuild,project,injection,identify,plan,case,' . (!empty($lang->bug->flowExtraFields) ? implode(',', $lang->bug->flowExtraFields) : ''), 'updateOrders' => true))
-       ->autoLoad('branch',    'module,execution,project,story,task,assignedTo')
+       ->autoLoad('branch',    'module,execution,project,story,task,assignedTo,plan')
        ->autoLoad('module',    'assignedTo,story')
        ->autoLoad('project',   'project,execution,story,task,assignedTo,injection,identify,openedBuild')
        ->autoLoad('execution', 'execution,story,task,assignedTo,openedBuild')
