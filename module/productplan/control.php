@@ -294,7 +294,7 @@ class productplan extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
-        if($from === 'doc')
+        if($from === 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
             $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
@@ -317,7 +317,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, (int)$branch, $from == 'doc' ? true : false);
+        $this->commonAction($productID, (int)$branch, ($from == 'doc' || $from == 'ai') ? true : false);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
