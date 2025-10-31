@@ -1156,13 +1156,12 @@ class upgradeTao extends upgradeModel
         $reviewcl = new stdclass();
         $reviewcl->workflowGroup = $group->id;
         $reviewcl->category      = 'QA';
-        $reviewcl->createdBy     = 'admin';
         $reviewcl->createdDate   = helper::now();
         foreach($outputList as $output)
         {
             $deliverable->name      = $output->name;
             $deliverable->activity  = $output->activity;
-            $deliverable->trimmable = $output->optional == 'yes' ? '0' : '1';
+            $deliverable->trimmable = $output->optional == 'yes' ? '1' : '0';
 
             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
@@ -1178,8 +1177,9 @@ class upgradeTao extends upgradeModel
 
                 foreach($auditclList as $auditcl)
                 {
-                    $reviewcl->title  = $auditcl->title;
-                    $reviewcl->object = $approvalID;
+                    $reviewcl->title     = $auditcl->title;
+                    $reviewcl->object    = $approvalID;
+                    $reviewcl->createdBy = $auditcl->createdBy;
                     $this->dao->insert(TABLE_REVIEWCL)->data($reviewcl)->exec();
                 }
             }
