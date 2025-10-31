@@ -190,13 +190,13 @@ $promptCard = function($prompt) use ($lang, $buildDropdown, $userListMap)
 function renderCardView($promptCard, $prompts)
 {
     return div(
-        set::class('page-prompts'),
+        setClass('page-prompts'),
         div(
-            set::class('prompts-container'),
+            setClass('prompts-container'),
             array_map($promptCard, $prompts)
         ),
         div(
-            set::class('pager-container'),
+            setClass('pager-container'),
             pager(set(usePager()))
         )
     );

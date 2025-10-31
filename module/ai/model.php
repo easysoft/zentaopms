@@ -1890,7 +1890,7 @@ class aiModel extends model
      * @access public
      * @return array|false   array of object data and object, or false if error.
      */
-    public function getObjectForPromptById($prompt, $objectId)
+    public function getObjectForPromptById(object $prompt, int $objectId)
     {
         $module  = $prompt->module;
         $sources = array_filter(explode(',', $prompt->source));

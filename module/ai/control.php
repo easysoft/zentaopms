@@ -531,11 +531,11 @@ class ai extends control
      *
      * @param  int    $promptId
      * @param  int    $objectId
-     * @param  bool   $auto  Auto open target form and apply changes.
+     * @param  string $mode  Execution mode, 'testing' or 'normal'.
      * @access public
      * @return void
      */
-    public function promptExecute($promptId, $objectId, $auto = true)
+    public function promptExecute(int $promptId, int $objectId, string $mode = 'testing')
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
@@ -581,7 +581,7 @@ class ai extends control
         $response['formLocation'] = $location;
         $response['promptConfig'] = $prompt;
 
-        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $auto))));
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
 
     /**
@@ -610,7 +610,7 @@ class ai extends control
      * @access public
      * @return void|int
      */
-    public function promptAudit($promptId, $objectId, $exit = false)
+    public function promptAudit(int $promptId, int $objectId, bool $exit = false)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
 
