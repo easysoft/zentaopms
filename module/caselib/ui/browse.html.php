@@ -13,8 +13,12 @@ namespace zin;
 jsVar('confirmBatchDelete', $lang->testcase->confirmBatchDelete);
 
 $isFromDoc = $from === 'doc';
+$isFromAI  = $from === 'ai';
 
-if($isFromDoc)
+jsVar('isFromDoc', $isFromDoc);
+jsVar('isFromAI', $isFromAI);
+
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $caseLibs = $this->caselib->getPairs();
@@ -78,7 +82,7 @@ $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or 
 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
 if(!empty($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
@@ -94,19 +98,19 @@ $tableData = initTableData($cases, $cols, $this->testcase);
 featureBar
 (
     set::current($this->session->libBrowseType),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::linkParams("libID=$libID&browseType={key}&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID&from=$from&blockID=$blockID"),
     li(searchToggle
     (
-        set::simple($isFromDoc),
+        set::simple($isFromDoc || $isFromAI),
         set::module('caselib'),
         set::open(strtolower($browseType) == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     div(setID('docSearchForm'));
 }
@@ -191,7 +195,7 @@ toolbar
 
 $settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
 $closeLink   = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
-if(!$isFromDoc)
+if(!$isFromDoc && !$isFromAI)
 {
     sidebar
     (
@@ -242,6 +246,7 @@ $footToolbar = ($canBatchAction && !$isFromDoc) ? array('items' => array
 ), 'btnProps' => array('btnType' => 'secondary')) : null;
 
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#caselib', 'caselib', $blockID, '$insertListLink')"));
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#caselib', 'case')"));
 
 dtable
 (
@@ -251,18 +256,18 @@ dtable
     set::customData(array('modules' => $modulePairs)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::userMap($users),
-    set::checkable($canBatchAction),
+    set::checkable($canBatchAction || $isFromDoc || $isFromAI),
     set::emptyTip($lang->testcase->noCase),
     set::orderBy($orderBy),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    $isFromDoc ? null : set::createTip($lang->testcase->create),
-    $isFromDoc ? null : set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
-    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400)
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->testcase->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
+    ($isFromDoc || $isFromAI) ? set::afterRender(jsCallback()->call('toggleCheckRows', $idList)) : null,
+    ($isFromDoc || $isFromAI) ? set::onCheckChange(jsRaw('window.checkedChange')) : null,
+    ($isFromDoc || $isFromAI) ? set::height(400) : null
 );
 
 render();
