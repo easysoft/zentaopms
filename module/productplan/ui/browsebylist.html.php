@@ -201,8 +201,8 @@ if($canBatchAction && !$isFromDoc && !$isFromAI)
 
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#productPlans', 'productPlan', $blockID, '$insertListLink')"));
 if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#productPlans', 'plan')"));
-$sortLink = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-
+$sortLink       = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$createPlanLink = $canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '';
 dtable
 (
     setID('productPlans'),
