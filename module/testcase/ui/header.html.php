@@ -167,6 +167,32 @@ $queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$pr
 $objectID = 0;
 if($app->tab == 'project')   $objectID = $projectID;
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $objectID = $executionID;
+
+$zeroCaseTab = (function() use ($isFromDoc, $isFromAI, $canBrowseZeroCase, $rawMethod, $productID, $branch, $objectID, $app, $lang, $pager)
+{
+    $showZeroCaseTab = !$isFromDoc && !$isFromAI && $canBrowseZeroCase && $rawMethod != 'groupcase';
+    if(!$showZeroCaseTab) return null;
+
+    return li
+    (
+        set::className('nav-item'),
+        a
+        (
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&objectID=$objectID")),
+            set('data-app', $app->tab),
+            set('data-id', 'zerocaseTab'),
+            set('class', $rawMethod == 'zerocase' ? 'active' : ''),
+            $lang->testcase->zeroCase,
+            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
+        )
+    );
+})();
+
+$showAutoCaseCheckbox = !$isFromDoc && !$isFromAI && !in_array($rawMethod, array('browseunits', 'zerocase', 'groupcase'));
+$isFromDocOrAI        = $from == 'doc' || $from == 'ai';
+$showProjectExecView  = ($isProjectApp || $isExecutionApp) && !$isFromDocOrAI;
+$showSidebar          = !in_array($rawMethod, array('zerocase', 'browseunits', 'groupcase')) && !$isFromDoc && !$isFromAI;
+
 featureBar
 (
     set::isModal($isFromDoc || $isFromAI),
@@ -239,8 +265,18 @@ if($isFromDoc || $isFromAI)
     div(setID('docSearchForm'));
 }
 
-$viewItemUrl = (($isProjectApp || $isExecutionApp) && $from != 'doc' && $from != 'ai') ? createLink($isProjectApp ? 'project' : 'execution', 'testcase', $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID") : inlink('browse', "productID=$productID&branch=$branch&browseType=all");
-$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $viewItemUrl, 'active' => $rawMethod != 'groupcase' ? true : false));
+if($showProjectExecView)
+{
+    $module      = $isProjectApp ? 'project' : 'execution';
+    $params      = $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID";
+    $viewItemUrl = createLink($module, 'testcase', $params);
+}
+else
+{
+    $viewItemUrl = inlink('browse', "productID=$productID&branch=$branch&browseType=all");
+}
+
+$viewItems = array(array('text' => $lang->testcase->listView, 'url' => $viewItemUrl, 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)
