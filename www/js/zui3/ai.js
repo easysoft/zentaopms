@@ -199,7 +199,7 @@ function registerZentaoAIPlugin(lang)
 
         panel && panel.openPopup({
             viewType:    'chat',
-            postMessage: `/storyReviewer ${zui.formatString(lang.storyReviewMessage, story)}`,
+            postMessage: {content: `@storyReviewer ${zui.formatString(lang.storyReviewMessage, story)}`, chat: {agent: 'storyReviewer'}},
             viewProps:   {mode: 'simple'}
         });
     });
