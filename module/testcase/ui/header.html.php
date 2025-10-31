@@ -42,7 +42,7 @@ $canCreateSuite      = $canModify && hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
-$canBrowseScene      = hasPriv('testcase', 'browseScene') && ($rawMethod == 'browse' || $rawMethod == 'browsescene') && !$isFromDoc && !$isFromAI;
+$canBrowseScene      = hasPriv('testcase', 'browseScene') && in_array($rawMethod, array('browse', 'browsescene')) && !$isFromDoc && !$isFromAI;
 $canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
 $canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
 $canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');

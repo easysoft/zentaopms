@@ -240,11 +240,11 @@ if($isFromDoc)
 {
     $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#caselib', 'caselib', $blockID, '$insertListLink')"));
 }
-else if($isFromAI)
+elseif($isFromAI)
 {
     $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#caselib', 'case')"));
 }
-else if($canBatchAction)
+elseif($canBatchAction)
 {
     $btnGroupItems = array();
     if($canBatchEdit) $btnGroupItems[] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('caselib', 'batchEditCase', "libID=$libID&branch=0&type=lib"));
