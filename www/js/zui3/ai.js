@@ -43,9 +43,11 @@ window.openPageForm = function(url, data, callback)
     });
 }
 
-window.executeZentaoPrompt = async function(info, auto)
+window.executeZentaoPrompt = async function(info, testingMode)
 {
-    auto = auto && auto !== '0';
+    const htmlDiff = await zui.HTMLDiff.loadModule();
+
+    testingMode = testingMode && testingMode !== '0';
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
 
@@ -70,7 +72,7 @@ window.executeZentaoPrompt = async function(info, auto)
     const tools = [{
         name       : toolName,
         displayName: info.name,
-        description: info.content || info.name,
+        description: info.purpose || info.name,
         parameters :
         {
             type: 'object',
@@ -86,6 +88,7 @@ window.executeZentaoPrompt = async function(info, auto)
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
+            console.log('> executeZentaoPrompt', {info, response});
 
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
@@ -114,21 +117,23 @@ window.executeZentaoPrompt = async function(info, auto)
             {
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
+                    if(oldValue === undefined || oldValue === null) oldValue = '';
+                    if(value === undefined || value === null)       value    = '';
                     if(typeof oldValue === 'string' && oldValue.length) oldValue = $('<div/>').html(oldValue).text();
-                    const isSame = String(oldValue) === String(value);
+                    value = typeof value === 'string' ? value : JSON.stringify(value);
+                    oldValue = typeof oldValue === 'string' ? oldValue : JSON.stringify(oldValue);
+                    const isSame = oldValue === value;
                     return h`<tr class="whitespace-pre-wrap">
     <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
-    <td class=${isSame ? '' : 'success-pale'}>${renderValue(value)}</td>
-    <td class=${isSame ? '' : 'danger-pale'}>${renderValue(oldValue)}</td>
+    <td class=${isSame ? 'text-gray' : ''}>${isSame ? renderValue(value) : (oldValue.length ? h`<div class="htmldiff article whitespace-prewrap" dangerouslySetInnerHTML=${{__html: htmlDiff(oldValue, value)}}></div>` : h`<div class="htmldiff article whitespace-prewrap"><ins data-operation-index="0">${value}</ins></div>`)}</td>
 </tr>`;
                 };
-                diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID})}</h6>
+                diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID ? `#${info.objectID}` : ''})}</h6>
 <table class="table bordered" style="min-width: 600px">
     <thead>
         <tr>
             <th style="width: 100px;">${langData.changeProp}</th>
-            <th>${langData.afterChange}</th>
-            <th>${langData.beforeChange}</th>
+            <th>${langData.changeDetail}</th>
         </tr>
     </thead>
     <tbody>
@@ -144,18 +149,9 @@ window.executeZentaoPrompt = async function(info, auto)
                 diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
 
-            if(auto && openedFormApp)
-            {
-                try
-                {
-                    const iframe = openedFormApp.iframe;
-                    iframe.contentWindow.applyFormData(result);
-                    zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm));
-                } catch (error) {}
-            }
             return {
                 view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
-                actions: [{
+                actions: [testingMode ? null :{
                     text        : (applyFormFormat || '%s').replace('%s', info.targetFormName || info.targetForm),
                     onClick     : () => openPageForm(info.formLocation, result, () => zui.Messager.success(langData.applyFormSuccess.replace('%s', info.targetFormName || info.targetForm))),
                     type        : 'primary-pale',

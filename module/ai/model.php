@@ -2680,12 +2680,12 @@ class aiModel extends model
             {
                 if($module == 'release' && $groupKey == 'bugs')
                 {
-                    $result .= '### ' . $titleData[$groupKey]['common'] . "\n";
+                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
                     $result .= $testData[$groupKey]['title'] . "\n";
                 }
                 else
                 {
-                    $result .= '### ' . $titleData[$groupKey]['common'] . "\n";
+                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
                     $result .= "| ";
                     foreach($pathInfo as $value) $result .= $titleData[$groupKey][$value] . " | ";
                     $result .= "\n";
@@ -2708,7 +2708,7 @@ class aiModel extends model
             {
                 foreach($pathInfo as $value)
                 {
-                    $result .= '### ' . $titleData[$groupKey][$value] . "\n";
+                    $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
                     $result .= $testData[$groupKey][$value] . "\n";
                 }
             }
