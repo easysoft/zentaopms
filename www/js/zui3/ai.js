@@ -72,7 +72,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
     const tools = [{
         name       : toolName,
         displayName: info.name,
-        description: info.purpose || info.name,
+        description: info.name,
         parameters :
         {
             type: 'object',
@@ -88,7 +88,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
             const result     = response.data;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
-            console.log('> executeZentaoPrompt', {info, response});
 
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
@@ -170,6 +169,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
         content: info.name,
         chat:    {type: 'agent', model: info.model, tools: tools, prompt: [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n')},
     };
+    zaiPanel.closePopup('zentao-prompt-popoup');
     zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: info.content ? 800 : 600, postMessage: postMessage});
 };
 

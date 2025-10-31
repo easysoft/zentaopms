@@ -643,7 +643,7 @@ class ai extends control
             }
             else
             {
-                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'promptexecute', "promptId=$promptId&objectId=$objectId"));
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'getTestingLocation', 'params' => array($promptId)));
             }
 
             $this->sendSuccess($response);
