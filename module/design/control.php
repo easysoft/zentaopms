@@ -61,7 +61,7 @@ class design extends control
         $this->view->switcherText     = zget($products, $productID);
         $this->view->switcherObjectID = $productID;
 
-        $this->lang->design->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->lang->design->typeList = in_array($project->model, array('waterfall', 'ipd')) ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
         $this->config->design->dtable->fieldList['type']['statusMap'] = $this->lang->design->typeList;
 
         return $productID;
