@@ -8,18 +8,18 @@ title=业务需求细分用户需求测试
 timeout=0
 cid=79
 
-- 执行tester模块的checkDisplay方法，参数是'评审中业务需求'
- - 测试结果 @细分按钮高亮正确
- - 最终测试状态 @ SUCCESS
-- 执行tester模块的checkDisplay方法，参数是'已关闭业务需求'
- - 测试结果 @细分按钮高亮正确
- - 最终测试状态 @ SUCCESS
-- 执行tester模块的batchCreateDefault方法，参数是'激活业务需求', $storys['null']
- - 测试结果 @批量创建需求页面名称为空提示正确
- - 最终测试状态 @ SUCCESS
-- 执行tester模块的batchCreateDefault方法，参数是'激活业务需求', $storys['child']
- - 测试结果 @拆分业务需求成功
- - 最终测试状态 @ SUCCESS
+-评审中业务需求，不打印细分按钮
+ -最终测试状态 @SUCCESS
+ -测试结果 @细分按钮高亮正确
+-已关闭业务需求，不打印细分按钮
+ -最终测试状态 @SUCCESS
+ -测试结果 @细分按钮高亮正确
+-激活业务需求，打印细分按钮
+ -最终测试状态 @SUCCESS
+ -测试结果 @批量创建需求页面名称为空提示正确
+-激活业务需求，打印细分按钮
+ -最终测试状态 @SUCCESS
+ -测试结果 @拆分业务需求成功
 
 */
 chdir(__DIR__);
