@@ -903,7 +903,7 @@ class my extends control
         $currentMethod = $this->app->rawMethod;
         $queryID       = $type == 'bysearch' ? (int)$param : 0;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=reviewissue&type=bysearch&param=myQueryID");
-        $this->my->buildReviewissueSearchForm($queryID, $actionURL, $currentMethod);
+        $this->my->buildReviewissueSearchForm($queryID, $actionURL);
 
         /* Get reviewissues by type*/
         if($type == 'assignedBy')
