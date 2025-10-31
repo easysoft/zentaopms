@@ -11,7 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 $isFromDoc = $from == 'doc';
-if($isFromDoc)
+$isFromAI  = $from == 'ai';
+if($isFromDoc || $isFromAI)
 {
     jsVar('blockID', $blockID);
 
@@ -66,14 +67,14 @@ featureBar
 (
     set::current($type),
     set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#projectReleases_table')
 );
 
 $canManageSystem = hasPriv('system', 'browse') && common::canModify('project', $project);
 toolbar
 (
-    setClass(array('hidden' => $isFromDoc)),
+    setClass(array('hidden' => $isFromDoc || $isFromAI)),
     !$project->hasProduct && $canManageSystem ? item(set
     (
         array
@@ -111,7 +112,7 @@ foreach(array_column($releases, 'system') as $system)
 }
 if(!empty($cols['system'])) $cols['system']['map'] = array(0 => '') + $appList;
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $cols['id']['type'] = 'checkID';
 
@@ -142,6 +143,10 @@ foreach($releases as $release)
     }
 }
 
+$createReleaseLink = hasPriv('projectrelease', 'create') ? createLink('projectrelease', 'create', "projectID={$projectID}") : '';
+$footToolbar       = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => 'insertListToDoc'));
+if($isFromAI) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#projectreleases', 'release')"));
+
 $tableData = initTableData($releases, $cols);
 dtable
 (
@@ -152,15 +157,15 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
     set::emptyTip($lang->release->noRelease),
-    set::checkable($isFromDoc),
-    $isFromDoc ? set::footToolbar(array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => 'insertListToDoc'))) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
+    set::checkable($isFromDoc || $isFromAI),
+    ($isFromDoc || $isFromAI) ? set::footToolbar($footToolbar) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    $isFromDoc ? null : set::createTip($lang->release->create),
-    $isFromDoc ? null : set::createLink(hasPriv('projectrelease', 'create') ? createLink('projectrelease', 'create', "projectID={$projectID}") : '')
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->release->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createReleaseLink)
 );
 
 /* ====== Render page ====== */
