@@ -162,17 +162,7 @@ if($isFromDoc || $isFromAI)
 $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
-$caseCreateTip  = $browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create;
-
-$caseCreateLink = '';
-if($browseType == 'onlyscene')
-{
-    $caseCreateLink = $canCreateScene ? $createSceneLink : '';
-}
-else
-{
-    $caseCreateLink = $canCreateCase ? $createCaseLink : '';
-}
+$caseCreateLink = $canCreateCase ? $createCaseLink : '';
 
 div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
@@ -188,7 +178,7 @@ div(
         ($isFromDoc || $isFromAI) ? set::height(400) : null,
         ($isFromDoc || $isFromAI) ? null : set::customCols(true),
         ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
-        ($isFromDoc || $isFromAI) ? null : set::createTip($caseCreateTip),
+        ($isFromDoc || $isFromAI) ? null : set::createTip($lang->testcase->create),
         ($isFromDoc || $isFromAI) ? null : set::createLink($caseCreateLink),
         set::userMap($users),
         set::cols($cols),
@@ -201,7 +191,7 @@ div(
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
+        set::emptyTip($lang->testcase->noCase),
         set::customData(array('modules' => $modulePairs))
     )
 );
