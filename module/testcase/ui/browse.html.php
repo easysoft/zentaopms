@@ -163,7 +163,16 @@ $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
 $caseCreateTip  = $browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create;
-$caseCreateLink = $browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '');
+
+$caseCreateLink = '';
+if($browseType == 'onlyscene')
+{
+    $caseCreateLink = $canCreateScene ? $createSceneLink : '';
+}
+else
+{
+    $caseCreateLink = $canCreateCase ? $createCaseLink : '';
+}
 
 div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
