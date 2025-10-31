@@ -297,6 +297,16 @@ class myModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+        if($objectType == 'reviewissue')
+        {
+            return $this->dao->select('t1.*, t2.type')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in($objectIdList)
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
         return $this->dao->select('*')->from($this->config->objectTables[$module])
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($objectIdList)
@@ -642,6 +652,7 @@ class myModel extends model
         $this->config->reviewissue->search['queryID']   = $queryID;
 
         $this->config->reviewissue->search['params']['project']['values'] = array('') + $projects;
+        $this->config->reviewissue->search['params']['type']['values']    = arrayUnion(array('' => ''), $this->lang->reviewissue->issueType);
 
         if(!isset($this->config->reviewissue->search['fields'])) $this->config->reviewissue->search['fields'] = array();
         unset($this->config->reviewissue->search['fields']['module']);
@@ -708,6 +719,70 @@ class myModel extends model
                 ->fetchAll('id');
         }
         return $risks;
+    }
+
+    /**
+     * 通过搜索获取评审问题。
+     * Get review issues by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewissuesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
+    {
+        $queryName = $type == 'contribute' ? 'contributeReviewissueQuery' : 'workReviewissueQuery';
+        if($queryID && $queryID != 'myQueryID')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryName . 'Form', $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $reviewissueQuery = preg_replace('/`([^`]+)`/', 't1.$0', $this->session->{$queryName});
+        if(strpos($reviewissueQuery, 't1.`review`') !== false) $reviewissueQuery = str_replace('t1.`review`', 't2.`object`', $reviewissueQuery);
+        if(strpos($reviewissueQuery, 't1.`type`') !== false)   $reviewissueQuery = str_replace('t1.`type`', 't2.`type`', $reviewissueQuery);
+
+        if($type == 'contribute')
+        {
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'reviewissue');
+            $reviewissues = $this->dao->select('t1.*, t2.type')->from(TABLE_REVIEWISSUE)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where($reviewissueQuery)
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t1.createdBy',1)->eq($this->app->user->account)
+                ->orWhere('t1.id')->in(array_keys($assignedByMe))
+                ->markRight(1)
+                ->orderBy("t1.$orderBy")
+                ->page($pager)
+                ->fetchAll('id', false);
+        }
+        elseif($type == 'work')
+        {
+            $reviewissues = $this->dao->select('t1.*, t2.type')->from(TABLE_REVIEWISSUE)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where($reviewissueQuery)
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->orderBy("t1.$orderBy")
+                ->page($pager)
+                ->fetchAll('id', false);
+        }
+        return $reviewissues;
     }
 
     /**
