@@ -256,6 +256,8 @@ elseif($canBatchAction)
     $footToolbar = array('items' => $toolbarItems, 'btnProps' => array('btnType' => 'secondary'));
 }
 
+$caseCreateLink = $canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : '';
+
 dtable
 (
     setID('caselib'),
@@ -272,7 +274,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::customCols(true),
     ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->testcase->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($caseCreateLink),
     ($isFromDoc || $isFromAI) ? set::afterRender(jsCallback()->call('toggleCheckRows', $idList)) : null,
     ($isFromDoc || $isFromAI) ? set::onCheckChange(jsRaw('window.checkedChange')) : null,
     ($isFromDoc || $isFromAI) ? set::height(400) : null

@@ -192,6 +192,8 @@ $showAutoCaseCheckbox = !$isFromDoc && !$isFromAI && !in_array($rawMethod, array
 $isFromDocOrAI        = $from == 'doc' || $from == 'ai';
 $showProjectExecView  = ($isProjectApp || $isExecutionApp) && !$isFromDocOrAI;
 $showSidebar          = !in_array($rawMethod, array('zerocase', 'browseunits', 'groupcase')) && !$isFromDoc && !$isFromAI;
+$searchTarget         = ($isFromDoc || $isFromAI) ? '#docSearchForm' : null;
+$searchModule         = $this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule;
 
 featureBar
 (
@@ -254,8 +256,8 @@ featureBar
     !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle
     (
         set::simple($isFromDoc || $isFromAI),
-        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
-        set::module($this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule),
+        $searchTarget ? set::target($searchTarget) : null,
+        set::module($searchModule),
         set::open($browseType == 'bysearch')
     ) : null
 );

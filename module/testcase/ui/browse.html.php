@@ -162,6 +162,9 @@ if($isFromDoc || $isFromAI)
 $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
+$caseCreateTip  = $browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create;
+$caseCreateLink = $browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '');
+
 div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
@@ -176,8 +179,8 @@ div(
         ($isFromDoc || $isFromAI) ? set::height(400) : null,
         ($isFromDoc || $isFromAI) ? null : set::customCols(true),
         ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
-        ($isFromDoc || $isFromAI) ? null : set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
-        ($isFromDoc || $isFromAI) ? null : set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
+        ($isFromDoc || $isFromAI) ? null : set::createTip($caseCreateTip),
+        ($isFromDoc || $isFromAI) ? null : set::createLink($caseCreateLink),
         set::userMap($users),
         set::cols($cols),
         set::nested(true),
