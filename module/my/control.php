@@ -1021,22 +1021,19 @@ class my extends control
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        $this->app->loadLang('process');
-        $this->view->executions      = $this->loadModel('execution')->getPairs();
-        $this->view->projects        = $this->loadModel('project')->getPairs();
-        $this->view->processTypeList = $this->lang->process->classify;
-        $this->view->processes       = $this->loadModel('pssp')->getProcesses();
-        $this->view->activities      = $this->pssp->getActivityPairs();
-        $this->view->outputs         = $this->pssp->getOutputPairs();
-
-        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->auditplan;
-        $this->view->browseType = $browseType;
-        $this->view->auditplans = $auditplans;
-        $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->pager      = $pager;
-        $this->view->orderBy    = $orderBy;
-        $this->view->param      = $param;
-        $this->view->mode       = 'auditplan';
+        $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->auditplan;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->mode         = 'auditplan';
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->executions   = $this->loadModel('execution')->getPairs();
+        $this->view->processList  = $this->loadModel('pssp')->getProcessPairs();
+        $this->view->activityList = $this->pssp->getActivityPairs();
+        $this->view->outputList   = $this->pssp->getOutputPairs();
+        $this->view->auditplans   = $auditplans;
+        $this->view->projects     = $this->loadModel('project')->getPairs();
         $this->display();
     }
 
