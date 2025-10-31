@@ -235,18 +235,26 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     );
 }
 
-$footToolbar = ($canBatchAction && !$isFromDoc) ? array('items' => array
-(
-    array('type' => 'btn-group', 'items' => array
-    (
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('caselib', 'batchEditCase', "libID=$libID&branch=0&type=lib")) : null,
-        !empty($navActions) ? array('caret' => 'up', 'btnType' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null
-    )),
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'class' => 'not-hide-menu', 'items' => $moduleItems, 'data-menu' => array('searchBox' => true)) : null
-), 'btnProps' => array('btnType' => 'secondary')) : null;
+$footToolbar = null;
+if($isFromDoc)
+{
+    $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#caselib', 'caselib', $blockID, '$insertListLink')"));
+}
+else if($isFromAI)
+{
+    $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#caselib', 'case')"));
+}
+else if($canBatchAction)
+{
+    $btnGroupItems = array();
+    if($canBatchEdit) $btnGroupItems[] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('caselib', 'batchEditCase', "libID=$libID&branch=0&type=lib"));
+    if(!empty($navActions)) $btnGroupItems[] = array('caret' => 'up', 'btnType' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start');
 
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#caselib', 'caselib', $blockID, '$insertListLink')"));
-if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#caselib', 'case')"));
+    $toolbarItems = array(array('type' => 'btn-group', 'items' => $btnGroupItems));
+    if($canBatchChangeModule) $toolbarItems[] = array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'class' => 'not-hide-menu', 'items' => $moduleItems, 'data-menu' => array('searchBox' => true));
+
+    $footToolbar = array('items' => $toolbarItems, 'btnProps' => array('btnType' => 'secondary'));
+}
 
 dtable
 (

@@ -202,19 +202,7 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    !$isFromDoc && !$isFromAI && ($canBrowseZeroCase && $rawMethod != 'groupcase') ? li
-    (
-        set::className('nav-item'),
-        a
-        (
-            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&objectID=$objectID")),
-            set('data-app', $app->tab),
-            set('data-id', 'zerocaseTab'),
-            set('class', $rawMethod == 'zerocase' ? 'active' : ''),
-            $lang->testcase->zeroCase,
-            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
-        )
-    ) : null,
+    $zeroCaseTab,
     $canBrowseScene ? li
     (
         set::className('nav-item'),
@@ -226,7 +214,7 @@ featureBar
             $lang->testcase->onlyScene
         )
     ) : null,
-    !$isFromDoc && !$isFromAI && $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
+    $showAutoCaseCheckbox ? li
     (
         set::className('nav-item mr-2'),
         checkbox
@@ -396,7 +384,7 @@ toolbar
     ) : null
 );
 
-if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'groupcase' && !$isFromDoc && !$isFromAI)
+if($showSidebar)
 {
     $settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
     $closeLink   = $isOnlyScene ? createLink('testcase', 'browseScene', "productID=$productID&branch=$branch&moduleID=0&orderBy=$orderBy") : createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
