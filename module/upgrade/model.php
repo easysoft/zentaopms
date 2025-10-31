@@ -12043,11 +12043,13 @@ class upgradeModel extends model
                 else
                 {
                     $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                    $this->dao->delete()->from(TABLE_AUDITCL)->where('workflowGroup')->eq($groupID)->exec(); // 新增活动删除旧的检查单
                 }
             }
             else
             {
                 $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                $this->dao->delete()->from(TABLE_AUDITCL)->where('workflowGroup')->eq($groupID)->exec(); // 新增活动删除旧的检查单
             }
         }
 
