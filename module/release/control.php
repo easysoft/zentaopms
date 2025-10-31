@@ -55,7 +55,7 @@ class release extends control
      */
     public function browse(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
-        if($from === 'doc')
+        if($from === 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
 
