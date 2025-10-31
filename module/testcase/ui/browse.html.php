@@ -11,13 +11,15 @@ declare(strict_types=1);
 namespace zin;
 
 $isFromDoc = $from === 'doc';
-if($isFromDoc) $this->app->loadLang('doc');
+$isFromAI  = $from === 'ai';
+if($isFromDoc || $isFromAI) $this->app->loadLang('doc');
 
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
 jsVar('caseChanged', $lang->testcase->changed);
 jsVar('isFromDoc', $isFromDoc);
+jsVar('isFromAI', $isFromAI);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -102,6 +104,7 @@ if($isFromDoc)
     $insertListLink = createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}");
     $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#testcases', 'productCase', $blockID, '$insertListLink')"));
 }
+if($isFromAI) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#testcases', 'case')"));
 
 $cols = $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -143,7 +146,7 @@ foreach($cases as $case)
     if(!$canModify) unset($case->actions);
 }
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
