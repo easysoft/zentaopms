@@ -1162,7 +1162,7 @@ class upgradeTao extends upgradeModel
         {
             $deliverable->name      = $output->name;
             $deliverable->activity  = $output->activity;
-            $deliverable->trimmable = $output->optional == 'yes' ? '0' : '1';
+            $deliverable->trimmable = $output->optional == 'yes' ? '1' : '0';
 
             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
