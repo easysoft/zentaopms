@@ -604,7 +604,7 @@ dtable
         'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     set::emptyTip($lang->execution->noStory),
-    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     ($isFromDoc || $isFromAI) ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),

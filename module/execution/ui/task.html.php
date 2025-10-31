@@ -337,7 +337,7 @@ dtable
         'recTotal'    => $pager->recTotal,
         'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
-    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::noNestedCheck(true),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),

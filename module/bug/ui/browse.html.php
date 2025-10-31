@@ -287,7 +287,7 @@ dtable
     set::orderBy($orderBy),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     ($isFromDoc || $isFromAI) ? null : set::customCols(true),

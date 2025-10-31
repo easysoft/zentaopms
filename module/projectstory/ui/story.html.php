@@ -110,6 +110,7 @@ foreach($stories as $story)
 }
 
 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#projectStories', 'projectStory', $blockID, '$insertListLink')"));
+if($from == 'ai') $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#projectStories', 'story')"));
 
 dtable
 (

@@ -552,7 +552,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($emptyTip),
     set::footToolbar($footToolbar),
-    (!$isFromDoc && !$isFromAI) ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     ($isFromDoc || $isFromAI) ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
