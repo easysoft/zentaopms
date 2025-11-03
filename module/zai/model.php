@@ -486,9 +486,7 @@ class zaiModel extends model
         }
 
         array_multisort(array_column($knowledges, 'similarity'), SORT_DESC, $knowledges);
-        $filteredKnowledges = $this->filterKnowledgesByPriv($knowledges, $type, $limit);
-
-        return $filteredKnowledges;
+        return $this->filterKnowledgesByPriv($knowledges, $type, $limit);
     }
 
     /**
