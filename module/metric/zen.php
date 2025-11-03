@@ -381,7 +381,7 @@ class metricZen extends metric
 
                     /* 如果度量项是产品、项目、执行且不统计关闭时的对象的度量数据，则过滤掉已关闭的数据。*/
                     /* If the metric is product, project, execution, filter out the closed data. */
-                    $closedDate = isset($validObjects[$scope]) && isset($validObjects[$scope][$record->$scope]) ? $validObjects[$scope][$record->$scope] : null;
+                    $closedDate = isset($validObjects[$scope]) && !helper::isZeroDate(zget($validObjects[$scope], $record->$scope, '')) ? $validObjects[$scope][$record->$scope] : null;
                     $isClosedEarlierThanYesterday = $closedDate ? strtotime($closedDate) < $yesterday : false;
                     if(!$endWithClosing && $closedDate !== null && $isClosedEarlierThanYesterday) continue;
 
