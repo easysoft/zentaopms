@@ -91,6 +91,8 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
+
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
         $this->view->groupID = $groupID;
         $this->view->flow    = $flow;
@@ -123,6 +125,8 @@ class stage extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink('browse', "groupID={$groupID}")));
         }
+
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
 
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
         $this->view->groupID = $groupID;
@@ -157,6 +161,8 @@ class stage extends control
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
+
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
 
         $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->edit;
         $this->view->stage = $stage;
