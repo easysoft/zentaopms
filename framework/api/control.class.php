@@ -154,7 +154,7 @@ class control extends baseControl
             $output['md5']    = md5($output['data']);
 
             ob_start();
-            echo $this->output;
+            echo json_encode($output);
 
             return;
         }
