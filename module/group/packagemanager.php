@@ -3138,7 +3138,7 @@ $config->group->package->process->subset = 'featureconfig';
 $config->group->package->process->privs  = array();
 $config->group->package->process->privs['process-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('process-browse'), 'recommend' => array('process-batchCreate', 'process-delete', 'process-edit', 'process-updateOrder', 'process-view'));
 $config->group->package->process->privs['process-batchCreate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
-$config->group->package->process->privs['process-batchUpdate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
+$config->group->package->process->privs['process-batchEdit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
 $config->group->package->process->privs['process-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
 $config->group->package->process->privs['process-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-delete', 'process-updateOrder', 'process-view'));
 $config->group->package->process->privs['process-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('process-browse'), 'recommend' => array());
