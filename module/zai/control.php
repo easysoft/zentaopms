@@ -213,7 +213,9 @@ class zai extends control
         $contents = array();
         foreach($filters as $collection => $setting)
         {
-            $searchContents = $this->zai->searchKnowledges($userPrompt, $collection, $setting, $limit + 10);
+            $key = $this->zai->getCollectionKey($collection);
+            if(empty($key)) continue;
+            $searchContents = $this->zai->searchKnowledges($userPrompt, $key, $setting, $limit + 10);
             if($searchContents) $contents = array_merge($contents, $searchContents);
         }
 

@@ -264,7 +264,7 @@ function registerZentaoAIPlugin(lang)
             when:  ({store}) => !!store.globalMemory,
             data:
             {
-                memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
+                memory: {collections: ['zentao:global'], content_filter: {attrs: {objectType}}},
             },
             generate: ({userPrompt}) => {
                 const objectName = lang[objectType] || objectType;
@@ -280,7 +280,7 @@ function registerZentaoAIPlugin(lang)
                             data: () => ({
                                 memory:
                                 {
-                                    collections:    ['$global'],
+                                    collections:    ['zentao:global'],
                                     content_filter: {attrs: {objectKey: `${objectType}-${objectID}`}},
                                 },
                             })
@@ -325,45 +325,51 @@ function registerZentaoAIPlugin(lang)
         title: lang.globalMemoryTitle,
         icon : 'book',
         when : context => !!context.store.globalMemory,
-        data : {memory: {collections: ['$global']}},
+        data : {memory: {collections: ['zentao:global']}},
     });
 
-    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(_chat, info)
+    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(info)
     {
         if(info.isLocal || !info.userPrompt) return;
+
+        const originMemories = info.options.memories;
+        if(!originMemories || !originMemories.length) return;
         const zentaoMemories = {};
-        const otherMemories  = info.memories.reduce((others, memory) =>
-        {
+        const otherMemories  = originMemories.reduce((others, memory) =>
+            {
             const ohterCollections = [];
             for(const collection of memory.collections)
             {
                 if(collection.startsWith('zentao:'))
                 {
                     const lib       = collection.substr(7);
-                    const oldMemory = zentaoMemories[lib];
-                    zentaoMemories[lib] = oldMemory ? $.extend({}, oldMemory, memory, {attrs: $.extend({}, oldMemory.attrs, memory.attrs)}) : memory;
+                    const oldFilter = zentaoMemories[lib] ? zentaoMemories[lib].content_filter : null;
+                    const newFilter = memory.content_filter;
+                    zentaoMemories[lib] = oldFilter ? $.extend({}, oldFilter, memory, {attrs: $.extend({}, oldFilter.attrs, newFilter.attrs)}) : newFilter;
                     continue;
                 }
                 ohterCollections.push(collection);
             }
             if(ohterCollections.length) others.push($.extend({}, memory, {collections: ohterCollections}));
             return others;
-        });
-        const filterLibs = Object.keys(zentaoMemories);
-        if(!filterLibs.length) return;
-        info.memories = otherMemories;
+        }, []);
 
+        if(!Object.keys(zentaoMemories).length) return;
+
+        const changes    = {memories: otherMemories};
         const newPrompts = info.prompt !== undefined ? [info.prompt] : [];
-        const response = await $.ajaxSubmit(
+        const [response] = await $.ajaxSubmit(
         {
-            url: $.createLink('zai', 'ajaxSearchKnowledges'),
+            url:  $.createLink('zai', 'ajaxSearchKnowledges'),
             data: {userPrompt: info.userPrompt, filters: JSON.stringify(zentaoMemories)}
         });
-        if(response.result === 'success' && response.data && response.data.prompt)
+        if(response && response.result === 'success' && response.data && response.data.prompt)
         {
             newPrompts.push(response.data.prompt);
         }
-        if(newPrompts.length) info.prompt = newPrompts.join('\n\n');
+        if(newPrompts.length) changes.prompt = newPrompts.join('\n\n');
+
+        return changes;
     });
 }
 

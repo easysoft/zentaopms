@@ -110,7 +110,7 @@ class zaiModel extends model
         $vectorizedInfo = $this->getVectorizedInfo();
         if(!empty($vectorizedInfo->key))
         {
-            $setting->globalMemory = $vectorizedInfo->key;
+            $setting->globalMemory = 'zentao:global';
         }
 
         if(!$includeAdmin) unset($setting->adminToken);
@@ -215,6 +215,8 @@ class zaiModel extends model
         $curl = curl_init($url);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+
         if($method === 'GET')
         {
             curl_setopt($curl, CURLOPT_HTTPGET, true);
@@ -239,14 +241,14 @@ class zaiModel extends model
         $info     = curl_getinfo($curl);
         $code     = isset($info['http_code']) ? $info['http_code'] : curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        if (curl_errno($curl))
+        if(curl_errno($curl))
         {
             $error = curl_error($curl);
         }
         else
         {
-            $headerSize   = isset($info['header_size']) ? $info['header_size'] : curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-            $data = substr($response, $headerSize);
+            $headerSize = isset($info['header_size']) ? $info['header_size'] : curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+            $data       = substr($response, $headerSize);
         }
 
         curl_close($curl);
@@ -381,6 +383,25 @@ class zaiModel extends model
     }
 
     /**
+     * 获取知识库在 ZAI 的 key。
+     * Get key of knowledge base in ZAI.
+     *
+     * @access public
+     * @param string|int $collection
+     * @return string
+     */
+    public function getCollectionKey(string|int $collection): string
+    {
+        if($collection === 'global')
+        {
+            $vectorizedInfo = $this->getVectorizedInfo();
+            return empty($vectorizedInfo->key) ? '' : $vectorizedInfo->key;
+        }
+
+        return '';
+    }
+
+    /**
      * 搜索知识库。
      * Search knowledge base.
      *
@@ -388,8 +409,8 @@ class zaiModel extends model
      * @param string $query
      * @param string $collection
      * @param array  $filter
-     * @param int $limit
-     * @param float $minSimilarity
+     * @param int    $limit
+     * @param float  $minSimilarity
      * @return array
      */
     public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
@@ -403,7 +424,7 @@ class zaiModel extends model
         $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-contents', 'POST', null, $postData);
 
         if($result['result'] != 'success') return array();
-        return $result['data'];
+        return empty($result['data']) ? array() : $result['data'];
     }
 
     /**
