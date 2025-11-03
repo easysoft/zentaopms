@@ -571,10 +571,11 @@ class zaiModel extends model
             $key = isset($knowledge[$keyName]) ? $knowledge[$keyName] : '';
             if(empty($key)) continue;
 
-            [$objectType, $objectID] = explode('-', $key);
+            $keyParts = explode('-', $key);
+            if(count($keyParts) < 2) continue;
             $attrs = isset($knowledge[$attrsName]) ? $knowledge[$attrsName] : null;
 
-            if(!$this->isCanViewObject($objectType, $objectID, $attrs)) continue;
+            if(!$this->isCanViewObject($keyParts[0], $keyParts[1], $attrs)) continue;
 
             $filteredKnowledges[] = $knowledge;
 
