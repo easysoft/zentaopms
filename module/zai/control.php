@@ -212,26 +212,11 @@ class zai extends control
 
         if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'failed', 'message' => $this->lang->fail));
 
-        $contents = array();
-        foreach($filters as $collection => $setting)
-        {
-            $key = $this->zai->getCollectionKey($collection);
-            if(empty($key)) continue;
-            $searchContents = $type === 'chunk' ? $this->zai->searchKnowledgeChunks($userPrompt, $key, $setting, $limit + 10) : $this->zai->searchKnowledges($userPrompt, $key, $setting, $limit + 10);
-            if($searchContents) $contents = array_merge($contents, $searchContents);
-        }
-
+        $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit);
         $prompts = array();
-        array_multisort(array_column($contents, 'similarity'), SORT_DESC, $contents);
-        foreach($contents as $content)
+        foreach($knowledges as $knowledge)
         {
-            if(isset($content['key']))
-            {
-                [$objectType, $objectID] = explode('-', $content['key']);
-                if(!$this->zai->isCanViewObject($objectType, $objectID, empty($content['attrs']) ? null : $content['attrs'])) continue;
-            }
-
-            $prompts[] = $content['content'];
+            $prompts[] = $knowledge['content'];
             if(count($prompts) >= $limit) break;
         }
 
