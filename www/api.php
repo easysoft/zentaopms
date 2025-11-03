@@ -42,13 +42,20 @@ try
     $app->parseRequest();
 
     /* APIv1 load entries, not control directly. */
-    if($app->apiVersion != 'v1') $common->checkPriv();
+    if(!$app->apiVersion)
+    {
+        $common->checkEntry();
+    }
+    elseif($app->apiVersion == 'v2')
+    {
+        $common->checkPriv();
+    }
 
     $app->loadModule();
 }
 catch (EndResponseException $endResponseException)
 {
-    echo $endResponseException->getContent();
+    die($endResponseException->getContent());
 }
 
 /* Flush the buffer. */
