@@ -156,7 +156,7 @@ class actionZen extends action
             if(!in_array($replaceName, $existNames)) break;
         }
         $replaceCode = '';
-        if($object->code)
+        if(isset($object->code))
         {
             $existCodes = $this->action->getLikeObject($table, 'code', 'code', $repeatObject->code . '_%');
             for($i = 1; $i < 10000; $i ++)
@@ -199,7 +199,7 @@ class actionZen extends action
     public function getConfirmNoMessage(object $repeatObject, object $object, object $oldAction, string $replaceName, string $replaceCode): string
     {
         $message = '';
-        if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)
+        if($repeatObject->name == $object->name && !empty($repeatObject->code) && $repeatObject->code == $object->code)
         {
             $message = sprintf($this->lang->action->repeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName, $replaceCode);
         }
@@ -207,7 +207,7 @@ class actionZen extends action
         {
             $message = sprintf($this->lang->action->nameRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName);
         }
-        elseif($repeatObject->code && $repeatObject->code == $object->code)
+        elseif(!empty($repeatObject->code) && $repeatObject->code == $object->code)
         {
             $message = sprintf($this->lang->action->codeRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceCode);
         }
@@ -231,7 +231,7 @@ class actionZen extends action
     public function recoverObject(object $repeatObject, object $object, string $replaceName, string $replaceCode, string $table, object $oldAction)
     {
         $recoverData = array();
-        if($repeatObject->name == $object->name && $repeatObject->code && $repeatObject->code == $object->code)
+        if($repeatObject->name == $object->name && !empty($repeatObject->code) && $repeatObject->code == $object->code)
         {
             $recoverData = array('code' => $replaceCode, 'name' => $replaceName);
         }
@@ -239,7 +239,7 @@ class actionZen extends action
         {
             $recoverData = array('name' => $replaceName);
         }
-        elseif($repeatObject->code && $repeatObject->code == $object->code)
+        elseif(!empty($repeatObject->code) && $repeatObject->code == $object->code)
         {
             $recoverData = array('code' => $replaceCode);
         }
