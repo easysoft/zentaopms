@@ -69,7 +69,7 @@ class testcaseEntry extends entry
         $steps    = array();
         $expects  = array();
         $stepType = array();
-        if(isset($this->requestBody->steps))
+        if(isset($this->requestBody->steps) && !isset($this->requestBody->stepType))
         {
             foreach($this->requestBody->steps as $key => $step)
             {
@@ -85,9 +85,9 @@ class testcaseEntry extends entry
             }
         }
 
-        $this->setPost('steps',    $steps);
-        $this->setPost('expects',  $expects);
-        $this->setPost('stepType', $stepType);
+        $this->setPost('steps',    isset($this->requestBody->stepType) ? $this->requestBody->steps : $steps);
+        $this->setPost('expects',  isset($this->requestBody->expects) ? $this->requestBody->expects : $expects);
+        $this->setPost('stepType', isset($this->requestBody->stepType) ? $this->requestBody->stepType : $stepType);
 
         $control->edit($caseID);
 
