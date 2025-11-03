@@ -387,12 +387,12 @@ class zaiModel extends model
      * Get key of knowledge base in ZAI.
      *
      * @access public
-     * @param string|int $collection
+     * @param string|int $libID
      * @return string
      */
-    public function getCollectionKey(string|int $collection): string
+    public function getCollectionKey(string|int $libID): string
     {
-        if($collection === 'global')
+        if($libID === 'global')
         {
             $vectorizedInfo = $this->getVectorizedInfo();
             return empty($vectorizedInfo->key) ? '' : $vectorizedInfo->key;
@@ -411,9 +411,10 @@ class zaiModel extends model
      * @param array  $filter
      * @param int    $limit
      * @param float  $minSimilarity
+     * @param bool   $filterByPriv
      * @return array
      */
-    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
+    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -424,7 +425,10 @@ class zaiModel extends model
         $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-contents', 'POST', null, $postData);
 
         if($result['result'] != 'success') return array();
-        return empty($result['data']) ? array() : $result['data'];
+
+        $knowledges = empty($result['data']) ? array() : $result['data'];
+        if($filterByPriv) $knowledges = $this->filterKnowledgesByPriv($knowledges, 'content');
+        return $knowledges;
     }
 
     /**
@@ -437,9 +441,10 @@ class zaiModel extends model
      * @param array  $filter
      * @param int    $limit
      * @param float  $minSimilarity
+     * @param bool   $filterByPriv
      * @return array
      */
-    public function searchKnowledgeChunks(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
+    public function searchKnowledgeChunks(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -450,7 +455,40 @@ class zaiModel extends model
         $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-chunks', 'POST', null, $postData);
 
         if($result['result'] != 'success') return array();
-        return empty($result['data']) ? array() : $result['data'];
+        $chunks = empty($result['data']) ? array() : $result['data'];
+        if($filterByPriv) $chunks = $this->filterKnowledgesByPriv($chunks, 'chunk');
+        return $chunks;
+    }
+
+    /**
+     * 在多个知识库中搜索知识。
+     * Search knowledges in multiple collections.
+     *
+     * @access public
+     * @param string $query
+     * @param string $type
+     * @param array  $filters
+     * @param int    $limit
+     * @param float  $minSimilarity
+     * @return array
+     */
+    public function searchKnowledgesInCollections(string $query, array $filters, string $type = 'content', int $limit = 20, float $minSimilarity = 0.8): array
+    {
+        $knowledges = array();
+        foreach($filters as $collection => $setting)
+        {
+            $key = $this->getCollectionKey($collection);
+            if(empty($key)) continue;
+
+            /* 不进行权限过滤，按匹配度排序后会统一过滤，减少循环次数。 */
+            $searchKnowledges = $type === 'chunk' ? $this->searchKnowledgeChunks($query, $key, $setting, $limit + 10, $minSimilarity, false) : $this->searchKnowledges($query, $key, $setting, $limit + 10, $minSimilarity, false); // 比预设的数目多搜索 10 个，避免因过滤导致无法匹配到。
+            if($searchKnowledges) $knowledges = array_merge($knowledges, $searchKnowledges);
+        }
+
+        array_multisort(array_column($knowledges, 'similarity'), SORT_DESC, $knowledges);
+        $filteredKnowledges = $this->filterKnowledgesByPriv($knowledges, $type, $limit);
+
+        return $filteredKnowledges;
     }
 
     /**
@@ -459,7 +497,7 @@ class zaiModel extends model
      *
      * @access public
      * @param string $objectType
-     * @param int $objectID
+     * @param int    $objectID
      * @return bool
      */
     public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
