@@ -16221,7 +16221,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `importType` varchar(10) NOT NULL DEFAULT '',
+  `importType` varchar(20) NOT NULL DEFAULT '',
   `importID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` text DEFAULT NULL,
