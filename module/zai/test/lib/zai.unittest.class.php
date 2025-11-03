@@ -425,4 +425,36 @@ class zaiTest
 
         return $result;
     }
+
+    /**
+     * Test searchKnowledgesInCollections method.
+     *
+     * @param  string $query
+     * @param  array $filters
+     * @param  string $type
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgesInCollectionsTest($query, $filters, $type = 'content', $limit = 20, $minSimilarity = 0.8)
+    {
+        $result = $this->objectModel->searchKnowledgesInCollections($query, $filters, $type, $limit, $minSimilarity);
+        return $result;
+    }
+
+    /**
+     * Test filterKnowledgesByPriv method.
+     *
+     * @param  array $knowledges
+     * @param  string $type
+     * @param  int $limit
+     * @access public
+     * @return array
+     */
+    public function filterKnowledgesByPrivTest($knowledges, $type = 'content', $limit = 0)
+    {
+        $result = $this->objectModel->filterKnowledgesByPriv($knowledges, $type, $limit);
+        return $result;
+    }
 }
