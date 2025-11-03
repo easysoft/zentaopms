@@ -393,4 +393,19 @@ class zaiTest
         $result = $this->objectModel->searchKnowledges($query, $collection, $filter, $limit, $minSimilarity);
         return $result;
     }
+
+    /**
+     * Test getCollectionKey method.
+     *
+     * @param  string|int $collection
+     * @access public
+     * @return string
+     */
+    public function getCollectionKeyTest($collection)
+    {
+        $result = $this->objectModel->getCollectionKey($collection);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
