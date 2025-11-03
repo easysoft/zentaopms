@@ -1055,6 +1055,9 @@ class baseControl
         $content = ob_get_clean();
 
         ob_start();
+        $find    = array('&amp;lt;', '&amp;gt;', '&amp;amp;', '&amp;#039;', '&amp;quot;');
+        $replace = array('<', '>', '&', "'", '\\\\&quot;');
+        $content = str_replace($find, $replace, $content);
         echo $content;
 
         /**
