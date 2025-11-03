@@ -513,6 +513,39 @@ class zaiModel extends model
     }
 
     /**
+     * 过滤出有权限的知识。
+     * Filter knowledges which has privilege.
+     *
+     * @access public
+     * @param array  $knowledges
+     * @param string $type     content|chunk
+     * @param int    $limit
+     * @return array
+     */
+    public function filterKnowledgesByPriv(array $knowledges, string $type = 'content', int $limit = 0): array
+    {
+        $filteredKnowledges = array();
+        $isChunk            = $type == 'chunk';
+        $keyName            = $isChunk ? 'content_key' : 'key';
+        $attrsName          = $isChunk ? 'content_attrs' : 'attrs';
+        foreach($knowledges as $knowledge)
+        {
+            $key = isset($knowledge[$keyName]) ? $knowledge[$keyName] : '';
+            if(empty($key)) continue;
+
+            [$objectType, $objectID] = explode('-', $key);
+            $attrs = isset($knowledge[$attrsName]) ? $knowledge[$attrsName] : null;
+
+            if(!$this->isCanViewObject($objectType, $objectID, $attrs)) continue;
+
+            $filteredKnowledges[] = $knowledge;
+
+            if($limit > 0 && count($filteredKnowledges) >= $limit) break;
+        }
+        return $filteredKnowledges;
+    }
+
+    /**
      * 用户对象可查看缓存配置。
      * User object view cache configuration.
      *
