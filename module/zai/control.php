@@ -195,10 +195,12 @@ class zai extends control
      * Ajax: 搜索知识库。
      * Ajax: Search knowledge base.
      *
+     * @param string $type 'chunk'（块） | 'content'（内容）
+     * @param int    $limit
      * @access public
      * @return void
      */
-    public function ajaxSearchKnowledges(int $limit = 10)
+    public function ajaxSearchKnowledges(string $type = 'content', int $limit = 10)
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST')
         {
@@ -215,7 +217,7 @@ class zai extends control
         {
             $key = $this->zai->getCollectionKey($collection);
             if(empty($key)) continue;
-            $searchContents = $this->zai->searchKnowledges($userPrompt, $key, $setting, $limit + 10);
+            $searchContents = $type === 'chunk' ? $this->zai->searchKnowledgeChunks($userPrompt, $key, $setting, $limit + 10) : $this->zai->searchKnowledges($userPrompt, $key, $setting, $limit + 10);
             if($searchContents) $contents = array_merge($contents, $searchContents);
         }
 

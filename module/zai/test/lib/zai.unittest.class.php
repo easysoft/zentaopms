@@ -395,6 +395,23 @@ class zaiTest
     }
 
     /**
+     * Test searchKnowledgeChunks method.
+     *
+     * @param  string $query
+     * @param  string $collection
+     * @param  array $filter
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgeChunksTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.8)
+    {
+        $result = $this->objectModel->searchKnowledgeChunks($query, $collection, $filter, $limit, $minSimilarity);
+        return $result;
+    }
+
+    /**
      * Test getCollectionKey method.
      *
      * @param  string|int $collection

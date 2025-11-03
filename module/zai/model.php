@@ -428,6 +428,32 @@ class zaiModel extends model
     }
 
     /**
+     * 搜索知识块。
+     * Search knowledge chunks.
+     *
+     * @access public
+     * @param string $query
+     * @param string $collection
+     * @param array  $filter
+     * @param int    $limit
+     * @param float  $minSimilarity
+     * @return array
+     */
+    public function searchKnowledgeChunks(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8): array
+    {
+        $postData = array();
+        $postData['query']          = $query;
+        $postData['limit']          = $limit;
+        $postData['min_similarity'] = $minSimilarity;
+        $postData['content_filter'] = $filter;
+
+        $result = $this->callAdminAPI('/v8/memories/' . $collection . '/embeddings-search-chunks', 'POST', null, $postData);
+
+        if($result['result'] != 'success') return array();
+        return empty($result['data']) ? array() : $result['data'];
+    }
+
+    /**
      * 判断用户是否可以查看对象。
      * Check if user can view object.
      *
