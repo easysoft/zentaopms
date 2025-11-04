@@ -1167,6 +1167,7 @@ class upgradeTao extends upgradeModel
             $deliverableID = $this->dao->lastInsertID();
 
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($deliverableID)->where('objectType')->eq('zoutput')->andWhere('objectID')->eq($output->id)->exec();
 
             $auditclList = zget($oldAuditclList, $output->id, array());
             if(!empty($auditclList))
