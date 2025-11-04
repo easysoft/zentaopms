@@ -40,12 +40,12 @@ class programplanZen extends programplan
     /**
      * Process formData before use it to create programplan.
      *
-     * @param  int       $projectID
-     * @param  int       $parentID
+     * @param  int         $projectID
+     * @param  int         $parentID
      * @access protected
-     * @return array
+     * @return array|false
      */
-    protected function buildPlansForCreate(int $projectID, int $parentID): array
+    protected function buildPlansForCreate(int $projectID, int $parentID): array|false
     {
         /* Check parent name is not empty when has child task. */
         $levelNames = array();
@@ -61,7 +61,7 @@ class programplanZen extends programplan
         if(dao::isError()) return false;
 
         $project  = $this->loadModel('project')->getByID($projectID);
-        $oldPlans = $this->programplan->getStage($projectID);
+        $oldPlans = $this->loadModel('programplan')->getStage($projectID);
         if($parentID) $parentStage = $this->programplan->getByID($parentID);
 
         $fields = $this->config->programplan->form->create;
@@ -113,7 +113,7 @@ class programplanZen extends programplan
             }
 
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && !empty($plan->percent))
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && isset($plan->percent))
             {
                 if($plan->level == 0)
                 {

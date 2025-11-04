@@ -21,7 +21,7 @@ ob_start();
 include '../framework/api/router.class.php';
 include '../framework/api/entry.class.php';
 include '../framework/api/helper.class.php';
-include '../framework/control.class.php';
+include '../framework/api/control.class.php';
 include '../framework/model.class.php';
 
 /* Log the time and define the run mode. */
@@ -33,32 +33,30 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
 /* Run the app. */
 $common = $app->loadCommon();
 
-if(!$app->version)
-{
-    try
-    {
-        /* Check entry. */
-        $common->checkEntry();
-    }
-    catch (EndResponseException $endResponseException)
-    {
-        echo $endResponseException->getContent();
-        return print(helper::removeUTF8Bom(ob_get_clean()));
-    }
-}
-
-$common->loadConfigFromDB();
-
 /* Set default params. */
-if(!$app->version) $config->requestType = 'GET';
+$config->requestType = 'GET';
 $config->default->view = 'json';
 
-$app->parseRequest();
+try
+{
+    $app->parseRequest();
 
-/* Old version need check priv here, new version check priv in entry. */
-if(!$app->version) $common->checkPriv();
+    /* APIv1 load entries, not control directly. */
+    if(!$app->apiVersion)
+    {
+        $common->checkEntry();
+    }
+    elseif($app->apiVersion == 'v2')
+    {
+        $common->checkPriv();
+    }
 
-$app->loadModule();
+    $app->loadModule();
+}
+catch (EndResponseException $endResponseException)
+{
+    die($endResponseException->getContent());
+}
 
 /* Flush the buffer. */
 echo $app->formatData(helper::removeUTF8Bom(ob_get_clean()));

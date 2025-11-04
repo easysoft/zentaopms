@@ -255,7 +255,7 @@ class action extends control
     public function hideOne(int $actionID, string $browseType = 'all')
     {
         $result = $this->actionZen->checkActionExist($actionID);
-        if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
+        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
 
         $this->action->hideOne($actionID);
 

@@ -48,7 +48,7 @@ class projectsEntry extends entry
             $result = array();
             foreach($data->data->projectStats as $project)
             {
-                $result[] = $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool');
+                $result[] = $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,whitelist:userList,deleted:bool');
             }
 
             $data = array();

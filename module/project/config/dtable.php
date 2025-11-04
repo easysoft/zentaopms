@@ -290,13 +290,13 @@ $config->project->execution->dtable->fieldList['progress']['width']    = '64';
 $config->project->execution->dtable->fieldList['progress']['group']    = '4';
 $config->project->execution->dtable->fieldList['progress']['show']     = true;
 
-$config->project->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
-$config->project->execution->dtable->fieldList['burn']['name']     = 'burns';
-$config->project->execution->dtable->fieldList['burn']['type']     = 'burn';
-$config->project->execution->dtable->fieldList['burn']['sortType'] = false;
-$config->project->execution->dtable->fieldList['burn']['width']    = '88';
-$config->project->execution->dtable->fieldList['burn']['group']    = '4';
-$config->project->execution->dtable->fieldList['burn']['show']     = true;
+$config->project->execution->dtable->fieldList['burns']['title']    = $lang->execution->burn;
+$config->project->execution->dtable->fieldList['burns']['name']     = 'burns';
+$config->project->execution->dtable->fieldList['burns']['type']     = 'burn';
+$config->project->execution->dtable->fieldList['burns']['sortType'] = false;
+$config->project->execution->dtable->fieldList['burns']['width']    = '88';
+$config->project->execution->dtable->fieldList['burns']['group']    = '4';
+$config->project->execution->dtable->fieldList['burns']['show']     = true;
 
 $config->project->execution->dtable->fieldList['actions']['name']       = 'actions';
 $config->project->execution->dtable->fieldList['actions']['title']      = $lang->actions;

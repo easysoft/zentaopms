@@ -55,6 +55,7 @@ class assignToTester extends tester
             if(!is_object($form->dom->leftTip->getText()) != sprintf($this->lang->error->notempty, $this->lang->task->left)) return $this->failed('预计剩余内容错误提示错误');
             return $this->success('预计剩余内容错误提示正确');
         }
+        $form->wait(1);
         if($form->dom->assignTo->getText() != $account) return $this->failed('指派人错误');
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->done && floatval($form->dom->taskLeft->getText()) != floatval($left)) return $this->failed('预计剩余错误');
         return $this->success('指派任务成功');

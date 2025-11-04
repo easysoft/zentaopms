@@ -2827,6 +2827,15 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
+        if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
+        {
+           $pattern = '/\s+(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
+           $replacement = ' 1=1 ';
+           $this->sql = preg_replace($pattern, $replacement, $this->sql);
+
+           return $this;
+        }
+
         $dbIN = helper::dbIN($ids);
         if(strpos($dbIN, '=') === 0) $this->sql .= ' !' . $dbIN;
         else $this->sql .= ' NOT ' . helper::dbIN($ids);

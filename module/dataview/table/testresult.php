@@ -29,10 +29,10 @@ $schema->joins = array();
 $schema->joins['testcase']   = '`testcase`.`id`   = `testresult`.`case`';
 $schema->joins['testrun']    = '`testrun`.`id`    = `testresult`.`run`';
 $schema->joins['testtask']   = '`testrun`.`task`  = `testtask`.`id`';
-$schema->joins['project']    = '`project`.`id`    = `testtask`.`project`';
+$schema->joins['project']    = '`project`.`id`    = CAST(`testtask`.`project` AS DECIMAL)';
 $schema->joins['execution']  = '`execution`.`id`  = `testtask`.`execution`';
 $schema->joins['casemodule'] = '`casemodule`.`id` = `testcase`.`module`';
-$schema->joins['build']      = '`build`.`id`      = `testtask`.`build`';
+$schema->joins['build']      = '`build`.`id`      = CAST(`testtask`.`build` AS DECIMAL)';
 $schema->joins['caselib']    = '`caselib`.`id`    = `testcase`.`lib`';
 $schema->joins['product']    = '`product`.`id`    = `testcase`.`product`';
 

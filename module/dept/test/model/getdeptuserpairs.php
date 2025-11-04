@@ -4,25 +4,25 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
 su('admin');
 
-zenData('dept')->gen(30); 
+zenData('dept')->gen(30);
 zenData('user')->loadYaml('user')->gen(200);
 
 /**
 
 title=测试 deptModel->getDeptUserPairs();
+timeout=0
 cid=1
-pid=1
 
-查询所有内部用户     >> 用户49
-查询所有外部用户     >> 测试1
-根据部门查询用户     >> 用户10
-键值为account查询    >> 用户40
-键值为out查询        >> 用户10
-type为out查询        >> 用户10
-查询所有内部用户统计 >> 100
-查询所有外部用户统计 >> 100
-根据部门查询用户统计 >> 10
-查询全部用户统计     >> 200
+- 查询所有内部用户属性50 @用户49
+- 查询所有外部用户属性101 @测试1
+- 根据部门查询用户属性11 @用户10
+- 键值为account查询属性user40 @用户40
+- 键值为out查询属性user10 @用户10
+- type为out查询属性user10 @用户10
+- 查询所有内部用户统计 @100
+- 查询所有外部用户统计 @100
+- 根据部门查询用户统计 @10
+- 查询全部用户统计 @200
 
 */
 

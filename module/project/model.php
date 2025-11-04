@@ -1530,6 +1530,11 @@ class projectModel extends model
         if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
         if(in_array($this->config->edition, array('max', 'ipd')) && $oldProject->workflowGroup != $project->workflowGroup) $this->replaceDeliverable($projectID, $project->workflowGroup); // 更新交付物关联信息。
 
+        if($oldProject->model != $project->model && !in_array($oldProject->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+        {
+            $this->projectTao->createMilestoneReport($projectID);
+        }
+
         if(dao::isError()) return false;
         return common::createChanges($oldProject, $project);
     }

@@ -1591,6 +1591,7 @@ class story extends control
         }
 
         $storyStatus = $this->story->getStatusList($status);
+        if($storyStatus == 'active') $storyStatus = 'active,reviewing';
 
         if($objectID)
         {
@@ -1601,6 +1602,11 @@ class story extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if($storyID && !isset($stories[$storyID]))
+        {
+            $story   = $this->story->fetchByID($storyID);
+            $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
+        }
 
         if($isHTML == 0)
         {
@@ -1721,8 +1727,9 @@ class story extends control
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
         }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active,reviewing', 'id_desc', 0, '', 'story', false);
 
-        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
+        if($storyID && !isset($stories[$storyID])) $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
 
         $stories = $this->story->addGradeLabel($stories);
         return print(json_encode($stories));

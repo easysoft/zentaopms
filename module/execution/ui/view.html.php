@@ -268,7 +268,8 @@ div
                         set('data-class-name', 'text-gray border border-light'),
                         setClass('ml-2 mt-2 text-gray')
                     )
-                )
+                ),
+                div(setClass('ai-menu-box flex-auto'))
             ),
             div
             (

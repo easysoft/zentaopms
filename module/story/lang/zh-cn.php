@@ -396,6 +396,7 @@ $lang->story->batchGradeSameRoot     = '%s需求存在父子关系，将不会�
 $lang->story->batchGradeGtParent     = '%s需求的层级不能高于其父需求，本次修改已将其忽略。';
 $lang->story->batchParentError       = "%s需求的父需求不能为其本身或其子需求，本次修改已将其忽略。";
 $lang->story->errorNoGradeSplit      = "没有可拆分的需求层级";
+$lang->story->errorRecordMinus       = '『%s』不能为负数';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";

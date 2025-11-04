@@ -20,3 +20,13 @@ ALTER TABLE `zt_ai_promptrole` MODIFY `model` varchar(255) NOT NULL DEFAULT '';
 UPDATE `zt_ai_miniprogram` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_prompt` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
+
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
+('all',	  'weekly', 'categoryList', 'month',    '月报',       '1', 'rnd'),
+('all',	  'weekly', 'categoryList', 'week',     '周报',       '1', 'rnd'),
+('all',	  'weekly', 'categoryList', 'day',      '日报',       '1', 'rnd'),
+('all',	  'weekly', 'categoryList', 'milestone','里程碑报告', '1', 'rnd');
+
+ALTER TABLE `zt_doc`   CHANGE `lib` `lib` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_risk`  CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_issue` CHANGE `project` `project` mediumint(8) unsigned NOT NULL DEFAULT '0';

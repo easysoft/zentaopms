@@ -1488,7 +1488,7 @@ class executionModel extends model
      */
     public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
     {
-        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -2066,7 +2066,7 @@ class executionModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
-            ->orderBy('t1.order_asc, t1.id_desc')
+            ->orderBy('t1.order_asc, t1.id_asc')
             ->fetchGroup('execution', 'id');
 
         $begin      = $end = helper::today();

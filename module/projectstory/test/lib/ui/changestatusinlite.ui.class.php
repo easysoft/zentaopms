@@ -65,6 +65,7 @@ class changeStatus extends tester
             'storyType' => 'story'
         );
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project');
+        $form->wait(3);
         $form = $this->initForm('story', 'review', $storyURL, 'appIframe-project');  //进入研发评审页面
 
         $resultOptions = array(

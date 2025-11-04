@@ -107,7 +107,7 @@ class baseControl
 
     /**
      * $cookie对象，用户可以通过$this->cookie->key来引用$_COOKIE变量。
-     * The $cookie object, useer can access a cookie var by $this->cookie->key.
+     * The $cookie object, user can access a cookie var by $this->cookie->key.
      *
      * @var object
      * @access public
@@ -1055,6 +1055,9 @@ class baseControl
         $content = ob_get_clean();
 
         ob_start();
+        $find    = array('&amp;lt;', '&amp;gt;', '&amp;amp;', '&amp;#039;', '&amp;quot;');
+        $replace = array('<', '>', '&', "'", '\\\\&quot;');
+        $content = str_replace($find, $replace, $content);
         echo $content;
 
         /**

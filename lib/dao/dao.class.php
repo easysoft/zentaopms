@@ -237,19 +237,23 @@ class dao extends baseDAO
         }
         elseif(in_array($module, $linkProductModules))
         {
-            $productID = in_array($module, array('feedback', 'ticket')) ? $_SESSION["{$module}Product"] : $_SESSION['product'];
-            $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
-            $groupID   = !$result->shadow ? $result->workflowGroup : 0;
-            if(empty($groupID))
+            $productVar = in_array($module, array('feedback', 'ticket')) ? "{$module}Product" : 'product';
+            if(!empty($_SESSION[$productVar]) && is_numeric($_SESSION[$productVar]))
             {
-                $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
-                $groupID = $result->workflowGroup;
+                $productID = $_SESSION[$productVar];
+                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
+                $groupID   = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
+                if(!empty($result->shadow))
+                {
+                    $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
+                    $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
+                }
             }
         }
         elseif(!empty($_SESSION['project']) && in_array($module, $linkProjectModules))
         {
             $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $_SESSION['project'] . "'")->fetch(PDO::FETCH_OBJ);
-            $groupID = $result->workflowGroup;
+            $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
         }
 
         $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}' AND `group` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);

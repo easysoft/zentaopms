@@ -19,7 +19,7 @@ class productsBox extends wg
         'linkedProducts?: array',        // 关联的产品。
         'linkedBranches?: array',        // 关联的分支。
         'currentProduct?: int=0',        // 来源产品ID。
-        'currentPlan?: int=0',           // 来源计划。
+        'currentPlan?: array|int=0',     // 来源计划。
         'currentRoadmap?: int=0',        // 来源路标。
         'productPlans?: array=array()',  // 同来源计划所属产品的计划列表。
         'project?: object',              // 关联的项目。
@@ -187,12 +187,10 @@ class productsBox extends wg
             set::className('productBox noProductBox'),
             formGroup
             (
-                set::width('1/2'),
                 set::label($lang->execution->linkPlan),
                 set::className('planBox'),
                 picker
                 (
-                    set::className('pr-2.5'),
                     set::name("plans[{$planProductID}][]"),
                     set::items(!empty($productPlans) ? $productPlans : array()),
                     set::value($currentPlan),

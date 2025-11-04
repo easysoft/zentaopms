@@ -219,17 +219,26 @@ div
 );
 
 /* Inject zai config to index page. */
+$zaiLang = new stdClass();
+$this->app->loadLang('aiapp');
 if($zaiConfig && !empty($zaiConfig->host) && !empty($zaiConfig->token))
 {
     if(!hasPriv('aiapp', 'conversation')) $zaiConfig->privs = 'disable-all';
-    $this->app->loadLang('aiapp');
-    $zaiConfig->langData = $lang->aiapp->langData;
-    to::head
-    (
-        h::js('window.zai = ' . js::value($zaiConfig) . ';'),
-        h::importJs($app->getWebRoot() . 'js/zui3/ai.js', setID('aiJS'))
-    );
+    $zaiLang = $lang->aiapp->langData;
 }
+else
+{
+    $zaiLang->zaiConfigNotValid = $lang->aiapp->langData->zaiConfigNotValid;
+}
+$zaiConfigUrl = createLink('zai', 'setting');
+$zaiLang->zaiConfigNotValid = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->zaiConfigNotValid);
+if(isset($zaiLang->unauthorizedError)) $zaiLang->unauthorizedError = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->unauthorizedError);
+to::head
+(
+    $zaiConfig ? h::js('window.zai=' . js::value($zaiConfig) . ';') : null,
+    h::js('window.zaiLang=', js::value($zaiLang)),
+    h::importJs($app->getWebRoot() . 'js/zui3/ai.js', setID('aiJS'))
+);
 
 /**
  * Check if the tutorial mode is on, show confirm dialog if it is.

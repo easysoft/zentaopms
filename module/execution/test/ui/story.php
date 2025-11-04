@@ -132,6 +132,7 @@ $team->gen(6);
 
 $tester = new storyTester();
 $tester->login();
+$tester->open();
 
 /* 标签统计 */
 r($tester->checkTab('allTab', '15'))      && p('status,message') && e('SUCCESS,allTab下显示条数正确');       //检查全部标签下显示条数

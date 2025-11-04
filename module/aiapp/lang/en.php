@@ -76,3 +76,4 @@ $lang->aiapp->langData->changeExplainDesc  = 'Explain the changes of the data in
 $lang->aiapp->langData->promptResultTitle  = 'Solution title, if no suitable title can be omitted';
 $lang->aiapp->langData->promptExtraLimit   = 'Usually tool `{toolName}` only needs to be called once, unless the user requires multiple solutions.';
 $lang->aiapp->langData->goTesting          = 'Go Testing';
+$lang->aiapp->langData->notSupportPreview  = 'Not support preview this content';

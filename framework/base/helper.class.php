@@ -107,9 +107,22 @@ class baseHelper
         }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
-        if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
-        if($config->requestType != 'PATH_INFO')  $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
-        if($config->requestType == 'PATH_INFO2') $link = '/';
+        if($app->apiVersion == 'v2')
+        {
+            $link = $config->webRoot . '/api.php/v2/';
+        }
+        elseif($config->requestType == 'PATH_INFO2')
+        {
+            $link = '/';
+        }
+        elseif($config->requestType == 'PATH_INFO')
+        {
+            $link = $config->webRoot . $appName;
+        }
+        else
+        {
+            $link = $config->webRoot . $appName . basename((string) $_SERVER['SCRIPT_NAME']);
+        }
 
         /**
          * #1: RequestType为GET。When the requestType is GET.
@@ -317,8 +330,9 @@ class baseHelper
         if(is_array($idList))
         {
             foreach($idList as $key=>$value) $idList[$key] = addslashes((string) $value);
-            if(count($idList) == 0) return "= NULL";
-            if(count($idList) == 1) return "= '" . current($idList) . "'";
+            $idCount = count($idList);
+            if($idCount == 0) return "= NULL";
+            if($idCount == 1) return "= '" . current($idList) . "'";
             return "IN ('" . join("','", $idList) . "')";
         }
 
@@ -836,7 +850,7 @@ class baseHelper
 
         session_write_close();
 
-        if(ini_get('session.save_handler') == 'user')
+        if(ini_get('session.save_handler') == 'user') // Once enable the custom session handler in baseRouter, session.save_handler becomes user.
         {
             $ztSessionHandler = new ztSessionHandler();
             session_set_save_handler($ztSessionHandler, true);

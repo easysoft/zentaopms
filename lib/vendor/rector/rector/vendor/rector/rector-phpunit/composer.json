@@ -1,0 +1,74 @@
+{
+    "name": "rector\/rector-phpunit",
+    "type": "rector-extension",
+    "license": "MIT",
+    "description": "Rector upgrades rules for PHPUnit",
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpecs\/phpecs": "^2.1.1",
+        "phpstan\/extension-installer": "^1.4",
+        "phpstan\/phpstan": "^2.1.8",
+        "phpstan\/phpstan-deprecation-rules": "^2.0",
+        "phpstan\/phpstan-webmozart-assert": "^2.0",
+        "phpunit\/phpunit": "^11.5",
+        "rector\/rector-src": "dev-main",
+        "rector\/swiss-knife": "^1.0",
+        "rector\/type-perfect": "^2.0",
+        "symplify\/phpstan-extensions": "^12.0",
+        "symplify\/vendor-patches": "^11.4",
+        "tomasvotruba\/class-leak": "^1.2",
+        "tracy\/tracy": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\PHPUnit\\": [
+                "src",
+                "rules"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\PHPUnit\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ]
+        },
+        "classmap": [
+            "stubs"
+        ]
+    },
+    "scripts": {
+        "complete-check": [
+            "@check-cs",
+            "@class-leak",
+            "@phpstan",
+            "@rector",
+            "@docs",
+            "phpunit"
+        ],
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi",
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "class-leak": "vendor\/bin\/class-leak check config src rules --skip-suffix \"Rector\"",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "rector": "vendor\/bin\/rector process --ansi"
+    },
+    "extra": {
+        "enable-patching": true
+    },
+    "conflict": {
+        "rector\/rector": "<2.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "cweagans\/composer-patches": true,
+            "rector\/extension-installer": true,
+            "phpstan\/extension-installer": true
+        }
+    }
+}

@@ -70,7 +70,6 @@ shift $((OPTIND -1))
 
 # 设置变量
 BASE_PATH=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")/../..")
-GUIDE_FILE="$BASE_PATH/.claude/rules/zentao-unit-test-guide.md"
 CSV_FILE="$BASE_PATH/.claude/data/$1"
 LOG_FILE="$BASE_PATH/tmp/log/unit_test_generation_$(date +%Y%m%d_%H%M%S).log"
 
@@ -104,7 +103,7 @@ check_prerequisites() {
 # 调用Claude生成测试脚本
 claude_generate_test() {
     local claude_command="$1"
-    local test_file_path="$2"
+    local test_file="$2"
     local retry_count="${3:-0}"  # 添加重试计数参数，默认为0
 
     # 设置最大重试次数
@@ -124,7 +123,7 @@ claude_generate_test() {
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Claude命令执行成功" | tee -a "$LOG_FILE"
 
         # 记录测试文件已生成到日志
-        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已生成: $test_file_path" | tee -a "$LOG_FILE"
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已生成: $test_file" | tee -a "$LOG_FILE"
 
         # 记录详细的Claude输出到日志
         echo "$(date '+%Y-%m-%d %H:%M:%S') [DEBUG] Claude输出内容:" | tee -a "$LOG_FILE"
@@ -142,7 +141,7 @@ claude_generate_test() {
         sleep 300
 
         # 递归重试
-        claude_generate_test "$claude_command" "$test_file_path" "$((retry_count + 1))"
+        claude_generate_test "$claude_command" "$test_file" "$((retry_count + 1))"
 
         # 返回递归调用的结果
         return $?
@@ -159,24 +158,27 @@ process_method() {
 
     echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 处理第 $CURRENT_LINE 行: 模块=$module, 类=$class, 方法=$method" | tee -a "$LOG_FILE"
 
+    # 构建单元测试指导文件路径
+    local guide_file="$BASE_PATH/.claude/rules/unit-test-$class-guide.md"
+
     # 构建测试文件路径（方法名转为小写）
     local method_lower=$(echo "$method" | tr '[:upper:]' '[:lower:]')
-    local test_file_path="$BASE_PATH/module/$module/test/$class/$method_lower.php"
+    local test_file="$BASE_PATH/module/$module/test/$class/$method_lower.php"
 
     # 检查测试文件是否存在
-    if [ -f "$test_file_path" ]; then
+    if [ -f "$test_file" ]; then
         if [ "$MODE" == "generate" ]; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，跳过: $test_file_path" | tee -a "$LOG_FILE"
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，跳过: $test_file" | tee -a "$LOG_FILE"
             ((TOTAL_SKIPPED++))
             return 0
         else
-            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，将在 $MODE 模式下处理: $test_file_path" | tee -a "$LOG_FILE"
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件已存在，将在 $MODE 模式下处理: $test_file" | tee -a "$LOG_FILE"
         fi
     else
         if [ "$MODE" == "generate" ]; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件不存在，开始生成: $test_file_path" | tee -a "$LOG_FILE"
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 测试文件不存在，开始生成: $test_file" | tee -a "$LOG_FILE"
         else
-            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 测试文件不存在，无法进行 $MODE 操作，跳过: $test_file_path" | tee -a "$LOG_FILE"
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [WARN] 测试文件不存在，无法进行 $MODE 操作，跳过: $test_file" | tee -a "$LOG_FILE"
             ((TOTAL_SKIPPED++))
             return 0
         fi
@@ -192,10 +194,10 @@ process_method() {
     # 在 enhance 模式下检查测试步骤数量
     if [ "$MODE" == "enhance" ]; then
         # 使用 grep 和正则表达式查找符合 r(...) && p(...) && e(...); 模式的行
-        local step_count=$(grep -E 'r\(.*\).*&&.*p\(.*\).*&&.*e\(.*\)' "$test_file_path" | wc -l)
+        local step_count=$(grep -E 'r\(.*\).*&&.*p\(.*\).*&&.*e\(.*\)' "$test_file" | wc -l)
 
         if [ "$step_count" -ge 5 ]; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，已满足要求，跳过增强处理: $test_file_path" | tee -a "$LOG_FILE"
+            echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] 检测到 $step_count 个测试步骤，已满足要求，跳过增强处理: $test_file" | tee -a "$LOG_FILE"
             ((TOTAL_SKIPPED++))
             return 0
         else
@@ -207,13 +209,13 @@ process_method() {
     local claude_prompt=""
     case "$MODE" in
         "generate")
-            claude_prompt="根据$GUIDE_FILE文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
+            claude_prompt="根据$guide_file文档的内容为$module模块的$class.php文件中的$method方法生成单元测试脚本。"
             ;;
         "enhance")
-            claude_prompt="根据$GUIDE_FILE文档的内容，对$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file_path)进行改进和优化，提升测试覆盖率和代码质量并确保测试步骤不少于5个。"
+            claude_prompt="根据$guide_file文档的内容，对$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file)进行改进和优化，提升测试覆盖率和代码质量并确保测试步骤不少于5个。"
             ;;
         "fix")
-            claude_prompt="根据$GUIDE_FILE文档的内容，检查并修复$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file_path)中的错误和问题，确保测试能够稳定通过。"
+            claude_prompt="根据$guide_file文档的内容，检查并修复$module模块的$class.php文件中$method方法对应的现有单元测试脚本($test_file)中的错误和问题，确保测试能够稳定通过。"
             ;;
         *)
             # This should never happen due to validation in getopts
@@ -225,7 +227,7 @@ process_method() {
     local claude_command="claude -p \"$claude_prompt\" --dangerously-skip-permissions < /dev/null 2>&1"
 
     # 调用Claude生成测试脚本
-    claude_generate_test "$claude_command" "$test_file_path"
+    claude_generate_test "$claude_command" "$test_file"
 
     # 返回Claude生成测试脚本的结果
     return $?
