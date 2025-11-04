@@ -1544,7 +1544,7 @@ class productModel extends model
                     $node       = array();
                     $node['href']    = common::hasPriv($moduleName, 'view') ? helper::createLink($moduleName, 'view', "id={$roadmap->id}") : '###';
                     $node['version'] = $isPlan ? $roadmap->title : $roadmap->name;
-                    $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : $roadmap->date;
+                    $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : (empty($roadmap->releasedDate) ? $roadmap->date : $roadmap->releasedDate);
                     $node['marker']  = !empty($roadmap->marker);
                     $yearNodes[] = $node;
                 }
@@ -1912,7 +1912,8 @@ class productModel extends model
             foreach($releases as $release)
             {
                 $year         = substr($release->date, 0, 4);
-                $branchIdList = explode(',', trim($release->branch, ','));
+                $branchIdList = trim($release->branch, ',');
+                $branchIdList = empty($branchIdList) ? array(0) : explode(',', $branchIdList);
                 $branchIdList = array_unique($branchIdList);
                 foreach($branchIdList as $branchID)
                 {

@@ -25,7 +25,7 @@ $promptMenuInject = function()
     if(isInModal()) return;
 
     $this->loadModel('ai');
-    if(!$this->ai->hasModelsAvailable() || !commonModel::hasPriv('ai', 'promptExecute')) return;
+    if(!commonModel::hasPriv('ai', 'promptExecute')) return;
 
     $this->app->loadLang('ai');
     $this->app->loadConfig('ai');
@@ -89,6 +89,7 @@ $promptMenuInject = function()
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
     (() => {
+        if(!window.top.zai) return;
         const container = window.frameElement?.closest('.load-indicator');
         if(container && container.dataset.loading)
         {
@@ -97,7 +98,9 @@ $promptMenuInject = function()
             container.classList.remove('no-delay');
         }
     JAVASCRIPT;
-    $script .= "$(`$menuOptions->targetContainer`).first()." . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
+    $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
+    $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
+    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
     JAVASCRIPT;

@@ -4,13 +4,13 @@ window.checkZAIPanel = async function(showMessage)
     const store = zaiPanel ? zaiPanel.store : null;
     if(!store || !store.isConfigOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.zaiConfigNotValid);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.zaiConfigNotValid}});
         return;
     }
     const isOK = await store.isOK();
     if(!isOK)
     {
-        if(showMessage) zui.Modal.alert(store.error || zaiConfig.langData.unauthorizedError);
+        if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.unauthorizedError}});
         return;
     }
     return zaiPanel;
@@ -20,9 +20,11 @@ window.openPageForm = function(url, data, callback)
 {
     return new Promise((resolve, reject) => {
         const openedApp = $.apps.openApp(url);
-        const handlePageLoad = () =>
+        let updateTimer = 0;
+        const tryUpdateForm = () =>
         {
-            setTimeout(() =>
+            if(updateTimer) clearTimeout(updateTimer);
+            updateTimer = setTimeout(() =>
             {
                 try
                 {
@@ -36,8 +38,8 @@ window.openPageForm = function(url, data, callback)
                 } catch (error) {reject(error)}
             }, 2000);
         };
-        openedApp.$app.one('updateapp.apps updatepage.app', handlePageLoad);
-        setTimeout(() => openedApp.$app.off('updateapp.apps', handlePageLoad), 5000);
+        openedApp.$app.one('updateapp.apps updatepage.app', tryUpdateForm);
+        setTimeout(() => openedApp.$app.off('updateapp.apps', tryUpdateForm), 5000);
     });
 }
 
@@ -58,7 +60,7 @@ window.executeZentaoPrompt = async function(info, auto)
     const toolName  = `zentao_tool_${info.promptID}`;
     const dataPropNames = info.dataPropNames || {};
     let   propNames = dataPropNames[info.objectType] || {};
-    const isChange  = info.schema.title === dataPropNames.title;
+    const isChange  = info.schema.title === dataPropNames.common;
     if(!isChange)
     {
         const properties = info.schema.properties;
@@ -89,8 +91,8 @@ window.executeZentaoPrompt = async function(info, auto)
             const h               = zui.html;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
-            const renderValue     = value => (typeof value === 'object') ? JSON.stringify(value, 2) : value;
-            if(!isChange && originObject)
+            const renderValue     = value => (typeof value === 'object') ? langData.notSupportPreview : value;
+            if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
                     let oldValue = originObject[prop];
@@ -216,24 +218,6 @@ function registerZentaoAIPlugin(lang)
         },
     });
 
-    plugin.bindEvent('updatepage', function(_context, data)
-    {
-        if(data.page.path === 'story-view')
-        {
-            const pageWindow         = $.apps.getLastApp().iframe.contentWindow;
-            const page$              = pageWindow.$;
-            const $firstSectionTitle = page$('#mainContent .detail-sections[zui-key="main"] > .detail-section').first().children('.detail-section-title,.flex.items-center').first();
-            if(!$firstSectionTitle.length) return;
-
-            let $injectActions = $firstSectionTitle.find('.ai-inject-actions');
-            if(!$injectActions.length)
-            {
-                $injectActions = $(`<div class="ai-inject-actions flex-none"><button class="btn ai-styled size-sm ml-2" type="button" zui-command="ai~zentao.reviewStory">${lang.aiReview}</button></div>`).appendTo($firstSectionTitle);
-                $firstSectionTitle.find('span').first().addClass('flex-auto');
-            }
-        }
-    });
-
     plugin.defineContextProvider(
     {
         code: 'currentPage',
@@ -270,9 +254,9 @@ function registerZentaoAIPlugin(lang)
     const zentaoVersion = window.config?.version || '';
     const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
 
-    ["story", "demand", "bug", "doc", "design", "feedback"].forEach(objectType => {
-        if(objectType === "feedback" && !zentaoEdition) return;
-        if(objectType === "demand" && zentaoEdition !== "ipd") return;
+    ['story', 'demand', 'bug', 'doc', 'design', 'feedback'].forEach(objectType => {
+        if(objectType === 'feedback' && !zentaoEdition) return;
+        if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
         plugin.defineContextProvider({
             code: `${objectType}Lib`,
             title: lang[objectType],
@@ -282,17 +266,17 @@ function registerZentaoAIPlugin(lang)
             {
                 memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
             },
-            generate: (userPrompt, { plugin }) => {
-                const objectName = plugin?.getLang(objectType) ?? objectType;
-                const matches = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+            generate: (userPrompt) => {
+                const objectName = lang[objectType] || objectType;
+                const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
                 {
                     return matches.map(match => {
                         const objectID = match[2];
                         return {
-                            code: `${objectType}-${objectID}`,
+                            code:      `${objectType}-${objectID}`,
                             recommend: true,
-                            title: `${objectName} #${objectID}`,
+                            title:     `${objectName} #${objectID}`,
                             data: () => ({
                                 memory:
                                 {
@@ -345,10 +329,19 @@ function registerZentaoAIPlugin(lang)
     });
 }
 
-function bindAICommandsInApp(win)
+/* Bind AI commands in app when app is loaded, example:
+$(document).on('loadapp.apps updateapp.apps', (e, args) =>
 {
+    const win = (e.type === 'updateapp' ? $.apps.openedApps[args[0]] : args).iframe.contentWindow;
+    bindAICommandsInApp(win, 1000);
+});*/
+function bindAICommandsInApp(win, delay)
+{
+    if(!win || !win.zui || win._bindedAICommands !== undefined) return;
     const panel = win.zui.AIPanel.shared;
-    if(panel)
+    if(!panel) return;
+    if(win._bindedAICommands) clearTimeout(win._bindedAICommands);
+    win._bindedAICommands = setTimeout(() =>
     {
         win.zui.bindCommands(win.document.body,
         {
@@ -356,10 +349,12 @@ function bindAICommandsInApp(win)
             scope: panel.commandScope,
             onCommand: panel.executeCommand.bind(panel)
         });
-    }
+        win._bindedAICommands = 0;
+    }, delay || 0);
 }
 
-$(() => {
+$(() =>
+{
     if(getZentaoPageType() !== 'home')
     {
         bindAICommandsInApp(window);
@@ -371,20 +366,19 @@ $(() => {
 
     const zaiConfig = window.zai || window.top.zai;
     if(zaiConfig)
-    {
-        const langData = zaiConfig.langData;
-        registerZentaoAIPlugin(langData);
+    {;
+        registerZentaoAIPlugin(zaiLang);
 
         const aiStore = zui.ZAIStore.createFromZentao(zaiConfig);
         if(!aiStore) return
 
         let userAvatarProps;
-        const aiPanel = zui.AIPanel.init(
+        zui.AIPanel.init(
         {
             store            : aiStore,
             position         : {bottom: +window.config.debug > 4 ? 56 : 40, right: 16},
             maximizedPosition: {left: 'calc(var(--zt-menu-width) + 4px)', top: 4, bottom: 'calc(var(--zt-apps-bar-height) + 4px)', right: 16},
-            langData         : langData,
+            langData         : zaiLang,
             getAvatar        : (info, props) =>
             {
                 if(info.role === 'user')
@@ -447,7 +441,4 @@ $(() => {
 
         aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
     }
-
-    /* Bind AI commands in app when app is loaded. */
-    $(document).on('loadapp.apps', (_, args) => bindAICommandsInApp(args[0].iframe.contentWindow));
 });

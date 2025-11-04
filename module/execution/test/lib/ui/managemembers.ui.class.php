@@ -37,6 +37,7 @@ class manageMembersTester extends tester
         $firstAccount = $form->dom->firstAccount->attr('value');
         $form->dom->firstDelBtn->click();
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
 
         $form = $this->loadPage('execution', 'team');
         if($form->dom->firstUser->getText() != $firstAccount) return $this->success('删除团队成员成功');
@@ -59,7 +60,7 @@ class manageMembersTester extends tester
         $form->dom->firstRemoveBtn->click();
         $form->wait(1);
         $form->dom->alertModal();
-        $form->wait(1);
+        $form->wait(2);
         $numAfter = $form->dom->num->getText();
         if($numBefore == $numAfter + 1) return $this->success('移除团队成员成功');
         return $this->failed('移除团队成员失败');

@@ -173,6 +173,7 @@ $filter->testcase->export               = new stdclass();
 $filter->testcase->groupcase            = new stdclass();
 $filter->testcase->view                 = new stdclass();
 $filter->testreport->default            = new stdclass();
+$filter->testreport->create             = new stdclass();
 $filter->testsuite->default             = new stdclass();
 $filter->testsuite->library             = new stdclass();
 $filter->testtask->default              = new stdclass();
@@ -405,6 +406,7 @@ $filter->testreport->default->cookie['lastProject']  = 'int';
 $filter->testreport->default->cookie['preProductID'] = 'int';
 $filter->testreport->default->cookie['projectMode']  = 'code';
 $filter->testreport->default->cookie['preBranch']    = 'reg::word';
+$filter->testreport->create->get['taskIdList']       = 'reg::any';
 
 $filter->testsuite->default->cookie['lastCaseLib']   = 'int';
 $filter->testsuite->default->cookie['lastProduct']   = 'int';

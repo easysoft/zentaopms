@@ -402,7 +402,11 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
-        $this->commonTao->updateDBWebRoot($this->config->system);
+        /* Web root cannot be changed by api request. */
+        if(!$this->app->apiVersion)
+        {
+            $this->commonTao->updateDBWebRoot($this->config->system);
+        }
 
         /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
@@ -657,7 +661,7 @@ class commonModel extends model
 
             $prev = $group;
 
-            if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
+            if($group != 'my' && !$app->user->admin && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
             if(!isset($lang->mainNav->$group)) continue;
 
             $nav = $lang->mainNav->$group;
@@ -1705,8 +1709,8 @@ eof;
 
         if($notConvertedItems)
         {
-            $convertedPinYin = $pinyin->romanize(implode($sign, $notConvertedItems));
-            $itemsPinYin     = explode(trim($sign), $convertedPinYin);
+            $convertedPinYin = $pinyin->convert(implode($sign, $notConvertedItems), PINYIN_KEEP_NUMBER | PINYIN_KEEP_ENGLISH);
+            $itemsPinYin     = explode(trim($sign), implode("\t", $convertedPinYin));
             foreach($notConvertedItems as $item)
             {
                 $key        = key($itemsPinYin);
@@ -2342,11 +2346,7 @@ eof;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedown');
-
-        $parsedown = new parsedown;
-
-        $parsedown->voidElementSuffix = '>'; // HTML5
+        $parsedown = $app->loadClass('parsedown');
 
         return $parsedown->text($markdown);
     }

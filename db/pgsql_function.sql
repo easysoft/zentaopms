@@ -201,6 +201,21 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
+CREATE OR REPLACE FUNCTION day(date_val DATE)
+RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(DAY FROM date_val)::INTEGER; END; $$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION day(date_val TIMESTAMP)
+RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(DAY FROM date_val)::INTEGER; END; $$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION day(date_val TIMESTAMPTZ)
+RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(DAY FROM date_val)::INTEGER; END; $$ LANGUAGE plpgsql;
+
+--
+
 CREATE OR REPLACE FUNCTION MONTH(date_val DATE)
 RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(MONTH FROM date_val)::INTEGER; END; $$ LANGUAGE plpgsql;
 
@@ -237,5 +252,69 @@ CREATE OR REPLACE FUNCTION DATEDIFF(
 ) RETURNS INTEGER AS $$
 BEGIN
     RETURN (end_date - start_date)::INTEGER;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val DOUBLE PRECISION,
+    false_val INTEGER
+) RETURNS DOUBLE PRECISION AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val::DOUBLE PRECISION;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val TEXT,
+    false_val DATE
+) RETURNS DATE AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val::DATE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val DATE,
+    false_val DATE
+) RETURNS DATE AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val  timestamp without time zone,
+    false_val DATE
+) RETURNS DATE AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val::DATE;
+    ELSE
+        RETURN false_val;
+    END IF;
 END;
 $$ LANGUAGE plpgsql;

@@ -19,7 +19,7 @@ window.getLane = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
-    if(ERURColumn.includes(col.type)) return;
+    if(['story', 'epic', 'requirement', 'parentStory'].includes(col.laneType) && ERURColumn.includes(col.type)) return;
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;
 
@@ -108,7 +108,7 @@ window.buildColActions = function(col)
     let actions = [];
 
     if(col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(col.actionList && col.actionList.includes('setWIP') && !ERURColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert', 'class': 'setWIP-btn'});
+    if(col.actionList && col.actionList.includes('setWIP') && !(['story', 'epic', 'requirement', 'parentStory'].includes(col.laneType) && ERURColumn.includes(col.type))) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert', 'class': 'setWIP-btn'});
 
     return actions;
 }

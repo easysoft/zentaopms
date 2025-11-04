@@ -183,6 +183,7 @@ class stageModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF($grade)->andWhere('grade')->eq($grade)->fi()
                 ->andWhere('project')->eq($projectID)
                 ->orderBy($orderBy)
                 ->fetchAll('id');

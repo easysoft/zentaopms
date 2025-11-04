@@ -5,6 +5,53 @@
 title=维护产品模块
 timeout=0
 cid=1
+
+- 执行tester模块的createModule方法，参数是' '▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建模块时模块名包含空格，提示正确
+- 执行tester模块的createModule方法，参数是'模块1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建模块成功
+- 执行tester模块的createModule方法，参数是'模块1', true▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建模块时模块已存在，提示正确
+- 执行tester模块的createModule方法，参数是'模块2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建模块成功
+- 执行tester模块的createChildModule方法，参数是' '▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建子模块时子模块名包含空格，提示正确
+- 执行tester模块的createChildModule方法，参数是'子模块1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建子模块成功
+- 执行tester模块的createChildModule方法，参数是'模块2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建子模块成功
+- 执行tester模块的createChildModule方法，参数是'子模块1', true▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建子模块时子模块已存在，提示正确
+- 执行tester模块的editModule方法，参数是''▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑模块时模块为空，提示正确
+- 执行tester模块的editModule方法，参数是'      '▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑模块时模块为空，提示正确
+- 执行tester模块的editModule方法，参数是'模块2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑模块时模块已存在，提示正确
+- 执行tester模块的editModule方法，参数是'编辑模块1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑模块成功
+- 执行tester模块的copyModule方法，参数是array▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @复制模块时所选产品下没有模块，提示正确
+- 执行tester模块的copyModule方法，参数是array▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @复制模块成功
+- 执行tester模块的deleteModule方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @删除模块成功
+
  */
 
 chdir(__DIR__);

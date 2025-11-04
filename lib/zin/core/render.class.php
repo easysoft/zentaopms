@@ -74,7 +74,7 @@ class render
         $this->node->prebuild();
 
         if($this->renderType === 'list') return $this->renderList();
-        if($this->renderType === 'json') return $this->renderJSON();
+        if($this->renderType === 'json') return $this->renderJson();
 
         return $this->renderHtml();
     }

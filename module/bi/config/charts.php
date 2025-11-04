@@ -400,41 +400,41 @@ from (
 SELECT
 *
 from (
-SELECT id, YEAR(begin) as year, openedBy as account from zt_project
+SELECT id, YEAR(begin) as `year`, openedBy as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(begin) as year, PO as account from zt_project
+SELECT id, YEAR(begin) as `year`, PO as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(begin) as year, PM as account from zt_project
+SELECT id, YEAR(begin) as `year`, PM as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(begin) as year, QD as account from zt_project
+SELECT id, YEAR(begin) as `year`, QD as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(begin) as year, RD as account from zt_project
+SELECT id, YEAR(begin) as `year`, RD as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(end) as year, openedBy as account from zt_project
+SELECT id, YEAR(end) as `year`, openedBy as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(end) as year, PO as account from zt_project
+SELECT id, YEAR(end) as `year`, PO as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(end) as year, PM as account from zt_project
+SELECT id, YEAR(end) as `year`, PM as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(end) as year, QD as account from zt_project
+SELECT id, YEAR(end) as `year`, QD as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
-SELECT id, YEAR(end) as year, RD as account from zt_project
+SELECT id, YEAR(end) as `year`, RD as account from zt_project
 WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
-SELECT t1.root as id, YEAR(t1.`join`) as year, t1.account from zt_team t1
+SELECT t1.root as id, YEAR(t1.`join`) as `year`, t1.account from zt_team t1
 RIGHT JOIN zt_project t2 on t2.id = t1.root and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.type = 'execution' and YEAR(t1.`join`) != '0000'
 union all
-SELECT t1.execution as id, YEAR(t1.finishedDate) as year, t1.finishedBy as account from zt_task t1
+SELECT t1.execution as id, YEAR(t1.finishedDate) as `year`, t1.finishedBy as account from zt_task t1
 RIGHT JOIN zt_project t2 on t2.id = t1.execution and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.deleted = '0' and YEAR(t1.finishedDate) != '0000'
 ) tt
@@ -1194,12 +1194,12 @@ from (
   SELECT
     firstDay,
     CURRENT_DATE AS today,
-    CAST(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM firstDay) AS INTEGER) AS years,
+    CAST(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM firstDay) AS DECIMAL) AS years,
     MOD(
         CAST(
             (EXTRACT(MONTH FROM CURRENT_DATE) - EXTRACT(MONTH FROM firstDay)) * 30 +
             (EXTRACT(DAY FROM CURRENT_DATE) - EXTRACT(DAY FROM firstDay)) + 365
-            AS INTEGER
+            AS DECIMAL
         ),
         365
     ) days
@@ -1504,7 +1504,7 @@ SELECT
 FROM zt_project AS t1
 LEFT JOIN (
   SELECT
-    CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
+    CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS DECIMAL) AS topProgram,
     COUNT(1) AS subProgram
   FROM zt_project
   WHERE deleted = '0' AND type = 'program' AND grade > 1
@@ -1547,7 +1547,7 @@ LEFT JOIN (
     SUM(COALESCE(t3.execution, 0)) AS execution
   FROM (
     SELECT
-      CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS INTEGER) AS topProgram,
+      CAST(SUBSTRING(path FROM 2 FOR (POSITION(',' IN SUBSTRING(path FROM 2)) - 1)) AS DECIMAL) AS topProgram,
       id AS project
     FROM zt_project
     WHERE deleted = '0' AND type = 'project'
@@ -1609,13 +1609,13 @@ SELECT
     SUM(IFNULL(t4.allStory, 0)) AS allStory,
     CASE
         WHEN SUM(IFNULL(t4.allStory, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
-        ELSE CAST((SUM(IFNULL(t3.doneStory, 0))::FLOAT / SUM(IFNULL(t4.allStory, 0))::FLOAT * 100) AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t3.doneStory, 0)) / SUM(IFNULL(t4.allStory, 0)) * 100) AS DECIMAL(10,2))
     END AS storyDoneRate,
     SUM(IFNULL(t5.solvedBug, 0)) AS solvedBug,
     SUM(IFNULL(t6.allBug, 0)) AS allBug,
     CASE
         WHEN SUM(IFNULL(t6.allBug, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
-        ELSE CAST((SUM(IFNULL(t5.solvedBug, 0))::FLOAT / SUM(IFNULL(t6.allBug, 0))::FLOAT * 100) AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t5.solvedBug, 0)) / SUM(IFNULL(t6.allBug, 0)) * 100) AS DECIMAL(10,2))
     END AS bugSolvedRate
 FROM zt_project AS t1
 LEFT JOIN zt_product AS t2 ON t1.id = t2.program
@@ -5020,7 +5020,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) as `year` FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) as `year` FROM (SELECT id, begin, `end`, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd<=t1.`end` GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5043,7 +5043,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, `end`, IF(left(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1 WHERE t1.realEnd>t1.`end` GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5181,7 +5181,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '73',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd,4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd<=end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, `end`, IF(LEFT(realEnd,4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd,closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd<=t1.`end` GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5204,7 +5204,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '73',
     'sql'       => <<<EOT
-SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd>end GROUP BY `year`
+SELECT COUNT(1) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, `end`, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='sprint' AND status='closed') t1 WHERE t1.realEnd>t1.`end` GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5296,7 +5296,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '78',
     'sql'       => <<<EOT
-SELECT SUM(t2.people*DATEDIFF(t1.realEnd,t1.realBegan)) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, realBegan, IF(LEFT(realEnd, 4) = '0000', closedDate, realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND status='closed' AND type='project' AND realBegan != '0000-00-00') t1 LEFT JOIN (SELECT root, COUNT(id) people FROM zt_team WHERE type='project' GROUP BY `root`) t2 ON t1.id=t2.root GROUP BY `year`
+SELECT SUM(t2.people*DATEDIFF(t1.realEnd,t1.realBegan)) AS number,YEAR(`closedDate`) AS `year` FROM (SELECT id, realBegan, IF(LEFT(realEnd, 4) = '0000', CAST(closedDate AS DATE), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND status='closed' AND type='project' AND realBegan != '1970-01-01') t1 LEFT JOIN (SELECT root, COUNT(id) people FROM zt_team WHERE type='project' GROUP BY `root`) t2 ON t1.id=t2.root GROUP BY `year`
 EOT
 ,
     'settings'  => array
@@ -5319,7 +5319,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
+SELECT t1.id,IF(t1.realEnd<=t1.`end`,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, `end`, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5361,7 +5361,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd<=t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd,4)='0000',LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
+SELECT t1.id,IF(t1.realEnd<=t1.`end`,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, `end`, IF(LEFT(realEnd,4)='0000',LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5403,7 +5403,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd>t1.end ,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
+SELECT t1.id,IF(t1.realEnd>t1.`end` ,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM (SELECT id, begin, `end`, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' AND type='project' AND status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5445,7 +5445,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '71',
     'sql'       => <<<EOT
-SELECT t1.id,IF(t1.realEnd>t1.end,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, end, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
+SELECT t1.id,IF(t1.realEnd>t1.`end`,'done','undone') AS `projectstatus`, YEAR(`closedDate`) AS `year` FROM(SELECT id, begin, `end`, IF(LEFT(realEnd, 4) = '0000', LEFT(closedDate,10), realEnd) AS realEnd, closedDate FROM zt_project WHERE deleted='0' and type='sprint' and status='closed') t1
 EOT
 ,
     'settings'  => array
@@ -5497,7 +5497,7 @@ name,
 id,
 closedDate,
 begin,
-end,
+`end`,
 datediff(`end`,`begin`) planduration,
 realBegan,
 realEnd,
@@ -5629,7 +5629,7 @@ from(
 select
 id,
 closedDate,
-end,
+`end`,
 if(left(realEnd, 4) = '0000', closedDate, realEnd) as realEnd
 from
 zt_project
@@ -5696,7 +5696,7 @@ from(
 select
 id,
 closedDate,
-end,
+`end`,
 if(left(realEnd, 4) = '0000', closedDate, realEnd) as realEnd
 from
 zt_project
@@ -5894,7 +5894,7 @@ SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
@@ -5904,7 +5904,7 @@ LEFT JOIN (
     SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -5943,7 +5943,7 @@ $config->bi->builtin->charts[] = array
 SELECT id, prograss, planPrograss, `end`
 FROM (
 SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS planPrograss,t1.`end`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
@@ -5978,7 +5978,7 @@ SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
@@ -5988,7 +5988,7 @@ LEFT JOIN (
     SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -6028,7 +6028,7 @@ $config->bi->builtin->charts[] = array
 SELECT id, prograss, planPrograss
 FROM (
 SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS planPrograss,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1' AND DATEDIFF(t1.`end`, NOW()) >= 0
@@ -6191,7 +6191,7 @@ SELECT t1.id, t1.name, `taskleft`
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)), 2) AS `taskleft`
+    ROUND(SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)), 2) AS `taskleft`
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'stage', 'kanban')
@@ -6263,7 +6263,7 @@ IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
@@ -6273,7 +6273,7 @@ LEFT JOIN (
     SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -6347,7 +6347,7 @@ SELECT id, name,IF(
 prograss, planPrograss, `end`
 FROM (
 SELECT t1.id,t1.name,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS planPrograss,t1.`end`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
@@ -6403,22 +6403,32 @@ $config->bi->builtin->charts[] = array
     'type'      => 'table',
     'group'     => '84',
     'sql'       => <<<EOT
-SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', t1.`end`) AS `end`, IF(YEAR(t1.`end`) = '2059', '长期', DATEDIFF(t1.`end`, t1.`begin`) + 1) AS planDuration,
-IF(LEFT(t1.realBegan, 4) = '0000', '/', t1.realBegan) AS realBegan, IF(YEAR(t1.`end`) = '2059', '长期', IF(DATEDIFF(t1.`end`, NOW()) >= 0, DATEDIFF(t1.`end`, NOW()) + 1, 0)) AS realDuration,
-IF(
-    DATEDIFF(t1.`end`, NOW()) < 0,
-    '延期',
-    (IF(
-        (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
-        OR LEFT(t1.`end`, 4) = '2059' ,
-        '顺利',
-        '滞后'
-    ))) AS `status`,
+    SELECT t1.id, t1.name, IFNULL(t3.name, '/') AS program,t1.`begin`, IF(YEAR(t1.`end`) = '2059', '长期', CAST(t1.`end` AS CHAR)) AS `end`,
+    IF(YEAR(t1.`end`) = '2059', '长期', CAST((DATEDIFF(t1.`end`, t1.`begin`) + 1) AS CHAR)) AS planDuration,
+    IF(LEFT(t1.realBegan, 4) = '0000', '/', CAST(t1.realBegan AS CHAR)) AS realBegan,
+    IF(
+        YEAR(t1.`end`) = '2059',
+        '长期',
+        IF(
+            DATEDIFF(t1.`end`, NOW()) >= 0,
+            CAST((DATEDIFF(t1.`end`, NOW()) + 1) AS CHAR),
+            '0'
+        )
+    ) AS realDuration,
+    IF(
+        DATEDIFF(t1.`end`, NOW()) < 0,
+        '延期',
+        (IF(
+            (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
+            OR LEFT(t1.`end`, 4) = '2059' ,
+            '顺利',
+            '滞后'
+        ))) AS `status`,
 CONCAT(IFNULL(prograss, 0), '%') AS prograss
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban', 'stage')
@@ -6428,7 +6438,7 @@ LEFT JOIN (
     SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -6438,7 +6448,7 @@ LEFT JOIN (
     ) t
     GROUP BY t.project
 ) AS t2 ON t1.id = t2.project
-LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path, 2)) -1) = t3.id AND t3.type = 'program' AND t3.deleted = '0'
+LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path, 2)) -1) = CAST(t3.id AS CHAR) AND t3.type = 'program' AND t3.deleted = '0'
 WHERE t1.deleted = '0'
 AND t1.status = 'doing'
 AND t1.type = 'project'
@@ -6490,7 +6500,7 @@ FROM (
 SELECT t1.id,t1.name,t1.`begin`,t1.`end`,t1.`realBegan`,IFNULL(t3.name, '/') AS project,t3.id AS projectID,
 DATEDIFF(t1.`end`, t1.`begin`) + 1 AS planDuration, IF(DATEDIFF(t1.`end`, NOW()) >= 0, DATEDIFF(t1.`end`, NOW()) + 1, 0) AS realDuration,
 ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS planPrograss,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' && t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 LEFT JOIN zt_project AS t3 on t1.project = t3.id AND t3.type = 'project' AND t3.deleted = '0'
@@ -6532,7 +6542,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'table',
     'group'     => '83',
     'sql'       => <<<EOT
-SELECT t1.id, t1.NAME AS project, IFNULL( t2.NAME, '/') AS program, IFNULL( t3.story, 0 ) AS story, IFNULL( t3.estimate, 0 ) AS estimate, IFNULL( t4.execution, 0 ) AS execution, IFNULL( t5.workhour, 0 ) AS workhour FROM zt_project AS t1 LEFT JOIN zt_project AS t2 ON FIND_IN_SET( t2.id, t1.path ) AND t2.deleted = '0' AND t2.type = 'program' AND t2.grade = 1 LEFT JOIN( SELECT t1.parent AS project, COUNT( 1 ) AS story, ROUND( SUM( t1.estimate ), 1 ) AS estimate FROM ( SELECT DISTINCT t1.parent, t3.id, t3.estimate FROM zt_project AS t1 LEFT JOIN zt_projectstory AS t2 ON t1.id = t2.project LEFT JOIN zt_story AS t3 ON t2.story = t3.id AND t3.deleted = '0' AND t3.stage NOT IN ( 'verified', 'released', 'closed' ) WHERE t1.deleted = '0' AND t1.type IN ( 'sprint', 'stage', 'kanban' ) AND t3.id IS NOT NULL ) AS t1 GROUP BY project ) AS t3 ON t1.id = t3.project LEFT JOIN ( SELECT parent AS project, COUNT( 1 ) AS execution FROM zt_project WHERE deleted = '0' AND type IN ( 'sprint', 'stage', 'kanban' ) AND multiple = '1' AND STATUS NOT IN ( 'done', 'closed' ) GROUP BY project ) AS t4 ON t1.id = t4.project LEFT JOIN ( SELECT t1.parent AS project, ROUND( SUM( t2.LEFT ), 1 ) AS workhour FROM zt_project AS t1 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution AND t2.deleted = '0' AND t2.parent < 1 WHERE t1.deleted = '0' AND t1.type IN ( 'sprint', 'stage', 'kanban' ) AND t1.STATUS NOT IN ( 'done', 'closed' ) AND t2.id IS NOT NULL GROUP BY project ) AS t5 ON t1.id = t5.project WHERE t1.deleted = '0' AND t1.type = 'project' AND t1.STATUS = 'doing'
+SELECT t1.id, t1.NAME AS project, IFNULL( t2.NAME, '/') AS program, IFNULL( t3.story, 0 ) AS story, IFNULL( t3.estimate, 0 ) AS estimate, IFNULL( t4.execution, 0 ) AS execution, IFNULL( t5.workhour, 0 ) AS workhour FROM zt_project AS t1 LEFT JOIN zt_project AS t2 ON FIND_IN_SET( t2.id, t1.path ) AND t2.deleted = '0' AND t2.type = 'program' AND t2.grade = 1 LEFT JOIN( SELECT t1.parent AS project, COUNT( 1 ) AS story, ROUND( SUM( t1.estimate ), 1 ) AS estimate FROM ( SELECT DISTINCT t1.parent, t3.id, t3.estimate FROM zt_project AS t1 LEFT JOIN zt_projectstory AS t2 ON t1.id = t2.project LEFT JOIN zt_story AS t3 ON t2.story = t3.id AND t3.deleted = '0' AND t3.stage NOT IN ( 'verified', 'released', 'closed' ) WHERE t1.deleted = '0' AND t1.type IN ( 'sprint', 'stage', 'kanban' ) AND t3.id IS NOT NULL ) AS t1 GROUP BY project ) AS t3 ON t1.id = t3.project LEFT JOIN ( SELECT parent AS project, COUNT( 1 ) AS execution FROM zt_project WHERE deleted = '0' AND type IN ( 'sprint', 'stage', 'kanban' ) AND multiple = '1' AND STATUS NOT IN ( 'done', 'closed' ) GROUP BY parent ) AS t4 ON t1.id = t4.project LEFT JOIN ( SELECT t1.parent AS project, ROUND( SUM( t2.LEFT ), 1 ) AS workhour FROM zt_project AS t1 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution AND t2.deleted = '0' AND t2.parent < 1 WHERE t1.deleted = '0' AND t1.type IN ( 'sprint', 'stage', 'kanban' ) AND t1.STATUS NOT IN ( 'done', 'closed' ) AND t2.id IS NOT NULL GROUP BY t1.parent ) AS t5 ON t1.id = t5.project WHERE t1.deleted = '0' AND t1.type = 'project' AND t1.STATUS = 'doing'
 EOT
 ,
     'settings'  => array
@@ -6758,9 +6768,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '92',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'havecase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
+SELECT ROUND(SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'havecase' as havecase FROM (SELECT t2.storyid `fixstory`, (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
 union
-SELECT ROUND(1-SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'nocase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
+SELECT ROUND(1-SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'nocase' as havecase FROM (SELECT t2.storyid `fixstory`, (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
 EOT
 ,
     'settings'  => array
@@ -6932,8 +6942,8 @@ id `Bug总数`,
 (case when  resolution='fixed' then 1 else 0 end) `已解决Bug`,
 openedDate `日期`
 from zt_bug
-where left(openedDate,10) > (select DATE_sub(MAX(NOW()), INTERVAL '30' DAY))
-and left(openedDate,10) < NOW()
+where CAST(left(openedDate,10) AS DATE) > (select DATE_sub(MAX(NOW()), INTERVAL '30' DAY))
+and CAST(left(openedDate, 10) AS DATE) < NOW()
 and deleted='0'
 EOT
 ,
@@ -6982,15 +6992,15 @@ sum(a.effectivebug) as effectiveBugCount,
 sum(a.effectivebug)/count(a.id) effectiveBugRate
 from(
 select
-left(openedDate,4) year,
+left(openedDate,4) `year`,
 id,
 (case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) effectivebug,
 (case when  resolution='fixed' then 1 else 0 end) fixedBug
 from zt_bug
 where zt_bug.deleted='0'
 ) a
-group by a.year
-order by  a.year
+group by a.`year`
+order by a.`year`
 EOT
 ,
     'settings'  => array
@@ -7040,29 +7050,29 @@ $config->bi->builtin->charts[] = array
     'group'     => '91',
     'sql'       => <<<EOT
 select
-bug.year as year,
+bug.`year` as `year`,
 createdBugs,
 exfixedstoryestimate,
 round(createdBugs/exfixedstoryestimate,2) as bugCount
 from
 (select
-left(openedDate,4) year,
+left(openedDate,4) `year`,
 count(id) createdBugs
 from zt_bug
 where zt_bug.deleted='0'
-group by year
+group by `year`
 ) bug
 left join
 (select
 sum(estimate) exfixedstoryestimate,
-left(closedDate,4) year
+left(closedDate,4) `year`
 from
 zt_story
 where zt_story.deleted='0' and zt_story.status='closed' and zt_story.closedReason='done'
-group by year
+group by `year`
 ) story
-on story.year=bug.year
-order by bug.year
+on story.`year`=bug.`year`
+order by bug.`year`
 EOT
 ,
     'settings'  => array
@@ -7529,7 +7539,7 @@ FROM
   LEFT JOIN zt_team AS t2 ON t1.id = t2.root
   LEFT JOIN zt_user AS t3 ON t2.account = t3.account
   LEFT JOIN (
-    SELECT objectID, YEAR(date) AS year, MONTH(date) AS month, cast(`date` as DATE) as date
+    SELECT objectID, YEAR(date) AS `year`, MONTH(date) AS month, cast(`date` as DATE) as date
     FROM zt_action
     WHERE objectType = 'user' AND action = 'login'
   ) AS t4 ON t3.id = t4.objectID and t2.`join` <= t4.date
@@ -7566,7 +7576,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT YEAR(t2.date) AS year, MONTH(t2.date) AS month, DAY(t2.date) AS day, COUNT(DISTINCT t1.account) AS count FROM zt_user AS t1
+SELECT YEAR(t2.date) AS `year`, MONTH(t2.date) AS month, DAY(t2.date) AS day, COUNT(DISTINCT t1.account) AS count FROM zt_user AS t1
 LEFT JOIN zt_action AS t2 ON t1.account = t2.actor
 WHERE t2.objectType = 'user' AND t2.action = 'login'
 GROUP BY YEAR(t2.date), MONTH(t2.date), DAY(t2.date)
@@ -7597,7 +7607,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '47',
     'sql'       => <<<EOT
-select count(distinct REPLACE(product, ',', '')) as count, year(date) as year, month(date) as month
+select count(distinct REPLACE(product, ',', '')) as count, year(date) as `year`, month(date) as month
 from zt_action
 where objectType not in ('project','execution','task')
 and product != ',0,'
@@ -7626,7 +7636,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '47',
     'sql'       => <<<EOT
-SELECT DISTINCT YEAR(createdDate) AS year, MONTH(createdDate) AS month, count(id) as count FROM zt_product
+SELECT DISTINCT YEAR(createdDate) AS `year`, MONTH(createdDate) AS month, count(id) as count FROM zt_product
 WHERE deleted = '0' AND shadow = '0'
 GROUP BY YEAR(createdDate), MONTH(createdDate)
 EOT
@@ -7651,7 +7661,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '47',
     'sql'       => <<<EOT
-SELECT DISTINCT GROUP_CONCAT(name) AS name, YEAR(createdDate) AS year, MONTH(createdDate) AS month FROM zt_product
+SELECT DISTINCT GROUP_CONCAT(name) AS name, YEAR(createdDate) AS `year`, MONTH(createdDate) AS month FROM zt_product
 WHERE deleted = '0' AND shadow = '0'
 GROUP BY YEAR(createdDate), MONTH(createdDate)
 
@@ -7677,7 +7687,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-select year(date) as year, month(date) as month, count(distinct project) as count
+select year(date) as `year`, month(date) as month, count(distinct project) as count
 from zt_action
 where project != 0
 group by year(date), month(date)
@@ -7703,7 +7713,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-SELECT COUNT(id) as count, YEAR(openedDate) AS year, MONTH(openedDate) AS month FROM zt_project
+SELECT COUNT(id) as count, YEAR(openedDate) AS `year`, MONTH(openedDate) AS month FROM zt_project
 WHERE deleted = '0' AND type = 'project'
 GROUP BY YEAR(openedDate), MONTH(openedDate)
 EOT
@@ -7728,7 +7738,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-SELECT DISTINCT GROUP_CONCAT(name) AS name, YEAR(openedDate) AS year, MONTH(openedDate) AS month FROM zt_project
+SELECT DISTINCT GROUP_CONCAT(name) AS name, YEAR(openedDate) AS `year`, MONTH(openedDate) AS month FROM zt_project
 WHERE deleted = '0' AND type = 'project'
 GROUP BY YEAR(openedDate), MONTH(openedDate)
 
@@ -7763,7 +7773,7 @@ SELECT
 	t3.contributors
 FROM
   (
-select distinct year(date) as year, month(date) as month
+select distinct year(date) as `year`, month(date) as month
 from zt_action
   ) as t4
 left join
@@ -7868,7 +7878,7 @@ SELECT
 	IFNULL(t3.fixedCycle / t2.fixedBugs, 0) AS avgFixedCycle
 FROM
 	(
-	select distinct year(date) as year, month(date) as month
+	select distinct year(date) as `year`, month(date) as month
 	from zt_action
 	) AS t6 left join
 	(
@@ -7961,7 +7971,7 @@ GROUP BY
  SELECT
 	t1.id,
 	t1.NAME,
-	YEAR ( t2.openedDate ) AS YEAR,
+	YEAR ( t2.openedDate ) AS `YEAR`,
 	MONTH ( t2.openedDate ) AS MONTH,
 	COUNT( t2.id ) AS createdCases
 FROM
@@ -8019,7 +8029,7 @@ SELECT
 	IFNULL(t2.count, 0) AS deliveredStories
 FROM
 	(
-	select distinct year(date) as year, month(date) as month
+	select distinct year(date) as `year`, month(date) as month
 	from zt_action
 	)
 	as t3 left join
@@ -8128,7 +8138,7 @@ SELECT
 	IFNULL(t2.count, 0) AS deliveredStories
 FROM
 	(
-	select distinct year(date) as year, month(date) as month
+	select distinct year(date) as `year`, month(date) as month
 	from zt_action
 	)
 	as t3 left join

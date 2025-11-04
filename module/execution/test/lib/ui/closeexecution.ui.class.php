@@ -35,6 +35,7 @@ class closeExecutionTester extends tester
     {
         $this->inputFields($realEnd, $executionId);
         $form = $this->loadPage();
+        $form->wait(1);
         if($form->dom->status->getText() != $this->lang->execution->statusList->closed) return $this->failed('执行状态错误');
         if($form->dom->realEndView->getText() != $realEnd) return $this->failed('执行实际完成日期错误');
         return $this->success('关闭执行成功');

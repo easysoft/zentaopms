@@ -203,18 +203,17 @@ class helper extends baseHelper
     {
         global $config;
         $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
-        $pos  = strpos((string) $link, '.php');
 
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = $config->webRoot . 'index' . substr((string) $link, $pos);
+            $link = $config->webRoot . (string) substr($link, 2);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {
             $link = substr((string) $link, $pos + 4);
         }
-        return common::getSysURL() . $link;
+        return $link;
     }
 
     /**
@@ -273,6 +272,87 @@ class helper extends baseHelper
         global $config;
         return $config->cache->enable;
     }
+
+    /**
+     * 发送请求的响应数据
+     * Send response data
+     *
+     * @param  mixed  $data
+     * @param  int    $code
+     * @access public
+     * @return string
+     */
+    static public function send(mixed $data = '', int $code = 200)
+    {
+        self::end(self::response($data, $code));
+    }
+
+    /**
+     * 发送请求的响应数据
+     * Send response data
+     *
+     * @param  mixed  $data
+     * @param  int    $code
+     * @access public
+     * @return string
+     */
+    static public function response(mixed $data = '', int $code = 200)
+    {
+        $statusCode = array(
+            100 => "100 Continue",
+            101 => "101 Switching Protocols",
+            102 => "102 Processing",
+
+            200 => "200 OK",
+            201 => "201 Created",
+            202 => "202 Accepted",
+            203 => "203 Non-Authoritative Information",
+            204 => "204 No Content",
+            205 => "205 Reset Content",
+            206 => "206 Partial Content",
+            207 => "207 Multi-Status",
+
+            300 => "300 Multiple Choices",
+            301 => "301 Moved Permanently",
+            302 => "302 Found",
+            303 => "303 See Other",
+            304 => "304 Not Modified",
+            305 => "305 Use Proxy",
+            307 => "307 Temporary Redirect",
+
+            400 => "400 Bad Request",
+            401 => "401 Authorization Required",
+            402 => "402 Payment Required",
+            403 => "403 Forbidden",
+            404 => "404 Not Found",
+            405 => "405 Method Not Allowed",
+            406 => "406 Not Acceptable",
+            407 => "407 Proxy Authentication Required",
+            408 => "408 Request Time-out",
+            409 => "409 Conflict",
+            410 => "410 Gone",
+            411 => "411 Length Required",
+            412 => "412 Precondition Failed",
+            413 => "413 Request Entity Too Large",
+            414 => "414 Request-URI Too Large",
+            415 => "415 Unsupported Media Type",
+            416 => "416 Requested Range Not Satisfiable",
+            417 => "417 Expectation Failed",
+            422 => "422 Unprocessable Entity",
+            423 => "423 Locked",
+            424 => "424 Failed Dependency",
+            426 => "426 Upgrade Required",
+        );
+
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Headers: Origin,X-Requested-With,Content-Type,Accept,Authorization,Token,Referer,User-Agent");
+        header('Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS,PATCH');
+        header("Content-type: application/json");
+        header("HTTP/1.1 {$statusCode[$code]}");
+
+        return !empty($data) ? json_encode($data, JSON_HEX_TAG) : '';
+    }
 }
 
 /**
@@ -315,6 +395,35 @@ function formatTime(string|null $time, string $format = ''): string
     if(trim($time) == '') return '';
     if($format) return date($format, strtotime($time));
     return trim($time);
+}
+
+/**
+ * 生成随机数。
+ * Generate random number.
+ *
+ * @access public
+ * @return int
+ */
+function updateSessionRandom(): int
+{
+    $random = mt_rand();
+    $_SESSION['rand'] = $random;
+    return $random;
+}
+
+/**
+ * 获取可用的界面列表。
+ * Get available vision list.
+ *
+ * @access public
+ * @return array
+ */
+function getVisions(): array
+{
+    global $config, $lang;
+    $visions    = array_flip(array_unique(array_filter(explode(',', trim($config->visions, ',')))));
+    $visionList = $lang->visionList;
+    return array_intersect_key($visionList, $visions);
 }
 
 /**
