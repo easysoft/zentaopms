@@ -3015,7 +3015,7 @@ class executionModel extends model
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
             if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
-        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->exec();
 
         /* Resolve TABLE_KANBANCELL's field cards. */
         if($execution->type == 'kanban')
@@ -3119,7 +3119,7 @@ class executionModel extends model
             /* Sync unlink case in no multiple execution. */
             if(empty($execution->multiple) && $execution->type != 'project')
             {
-                $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
+                $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->exec();
                 $this->action->create('case', $caseID, 'unlinkedfromproject', '', $execution->project);
             }
         }
