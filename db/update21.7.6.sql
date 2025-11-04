@@ -1,0 +1,1 @@
+ALTER TABLE `zt_demand` CHANGE `version` `version` smallint NOT NULL DEFAULT '1';
