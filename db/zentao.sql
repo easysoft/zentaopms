@@ -16248,7 +16248,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `lib` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `type` varchar(30) NOT NULL DEFAULT '',
   `file` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(20) NOT NULL DEFAULT '',
+  `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `content` text DEFAULT NULL,
   `contentType` varchar(10) NOT NULL DEFAULT 'markdown',
