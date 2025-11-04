@@ -579,7 +579,7 @@ class ai extends control
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
-        $response['promptConfig'] = $prompt;
+        $response['model']        = $prompt->model;
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
@@ -745,7 +745,7 @@ class ai extends control
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
         $response['formLocation'] = '';
-        $response['promptConfig'] = $prompt;
+        $response['model']        = $prompt->model;
         $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
         $response['content']      = $showText;
 
