@@ -152,3 +152,24 @@ ALTER TABLE `zt_auditplan` ADD `cycleType` varchar(10) NOT NULL DEFAULT '' COMME
 ALTER TABLE `zt_auditplan` ADD `cycleConfig` varchar(100) NOT NULL DEFAULT '[]' COMMENT '周期设置' AFTER `cycleType`;
 ALTER TABLE `zt_auditplan` ADD `cyclePlan` smallint unsigned  NOT NULL DEFAULT 0 COMMENT '生成计划(提前的天数)' AFTER `cycleConfig`;
 ALTER TABLE `zt_auditplan` ADD `deadline` date NULL COMMENT '过期时间' AFTER `cyclePlan`;
+
+CREATE TABLE IF NOT EXISTS `zt_projectchange` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `project` int unsigned NOT NULL DEFAULT 0 COMMENT '所属项目',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '变更名称',
+  `urgency` varchar(30) NOT NULL DEFAULT '' COMMENT '变更等级',
+  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '变更类型',
+  `deliverable` varchar(255) NOT NULL DEFAULT '' COMMENT '变更对象',
+  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '变更状态',
+  `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
+  `reason` varchar(1000) NOT NULL DEFAULT '' COMMENT '变更原因',
+  `desc` text NULL COMMENT '变更描述',
+  `deadline` datetime NULL COMMENT '期望完成时间',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑人',
+  `editedDate` datetime NULL COMMENT '编辑时间',
+  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `project` ON `zt_projectchange` (`project`);

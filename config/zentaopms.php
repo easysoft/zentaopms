@@ -431,6 +431,7 @@ define('TABLE_PROJECTPRODUCT',    '`' . $config->db->prefix . 'projectproduct`')
 define('TABLE_PROJECTDELIVERABLE','`' . $config->db->prefix . 'projectdeliverable`');
 define('TABLE_PROJECTSTORY',      '`' . $config->db->prefix . 'projectstory`');
 define('TABLE_PROJECTCASE',       '`' . $config->db->prefix . 'projectcase`');
+define('TABLE_PROJECTCHANGE',     '`' . $config->db->prefix . 'projectchange`');
 define('TABLE_TASKESTIMATE',      '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',            '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',              '`' . $config->db->prefix . 'burn`');
