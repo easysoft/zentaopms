@@ -147,3 +147,8 @@ UPDATE zt_activity SET optional = CASE
 END;
 
 ALTER TABLE `zt_process` CHANGE `model` `model` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_auditplan` ADD `cycleType` varchar(10) NOT NULL DEFAULT '' COMMENT '周期类型' AFTER `status`;
+ALTER TABLE `zt_auditplan` ADD `cycleConfig` varchar(100) NOT NULL DEFAULT '[]' COMMENT '周期设置' AFTER `cycleType`;
+ALTER TABLE `zt_auditplan` ADD `cyclePlan` int unsigned  NOT NULL DEFAULT 0 COMMENT '生成计划(提前的天数)' AFTER `cycleConfig`;
+ALTER TABLE `zt_auditplan` ADD `deadline` datetime NULL COMMENT '过期时间' AFTER `cyclePlan`;
