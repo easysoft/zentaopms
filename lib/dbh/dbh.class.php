@@ -127,7 +127,9 @@ class dbh
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
+            $collation = $dbConfig->collation ?? 'utf8mb4_general_ci';
             $queries[] = "SET NAMES {$dbConfig->encoding}";
+            $queries[] = "SET COLLATION_CONNECTION = '{$collation}'";
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
