@@ -822,7 +822,9 @@ class commonModel extends model
                         {
                             $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
                             $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                            $subAlias   = zget($dropMenuItem, 'alias', '');
                             if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            if($module == $currentModule && ($method == $currentMethod || strpos(",$subAlias,", ",$currentMethod,") !== false) && strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                         }
 
                         if($activeMainMenu) $activeMenu = $dropMenuName;
