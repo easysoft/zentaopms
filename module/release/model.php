@@ -151,15 +151,13 @@ class releaseModel extends model
             $release->builds = $releaseBuilds;
 
             $branchName = array();
-            foreach(explode(',', trim($release->branch, ',')) as $releaseBranch) $branchName[] = $releaseBranch === '
-0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
+            foreach(explode(',', trim($release->branch, ',')) as $releaseBranch) $branchName[] = $releaseBranch === '0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
             $branchName = implode(',', $branchName);
 
             $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
 
             $release->projectName = array();
-            foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zge
-t($projectPairs, $projectID, '');
+            foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zget($projectPairs, $projectID, '');
             $release->projectName = implode(' ', $release->projectName);
         }
         return $releases;
