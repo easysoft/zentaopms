@@ -37,6 +37,7 @@ $common = $app->loadCommon();
 $config->requestType = 'GET';
 $config->default->view = 'json';
 
+/* Only has the api version then use apisession. Fix for passwordless login. */
 if($app->apiVersion) define('RUN_MODE', 'api');
 try
 {
