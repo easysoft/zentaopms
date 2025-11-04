@@ -820,6 +820,7 @@ class bug extends control
             $bugIdList = array();
             foreach($bugs as $bug)
             {
+                if(!empty($bug->assignedTo)) $bug->assignedDate = helper::now();
                 $bug->id = $this->bug->create($bug);
 
                 /* 批量创建后的一些其他操作。*/
@@ -855,6 +856,7 @@ class bug extends control
         $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
         $this->view->moduleID = $moduleID;
         $this->view->product  = $product;
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
 
