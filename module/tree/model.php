@@ -1831,7 +1831,7 @@ class treeModel extends model
             }
 
             $newOrder = $newOrders[$parent][$grade][$branch] * 10;
-            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->limit(1)->exec();
+            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->exec();
         }
     }
 
@@ -1926,7 +1926,7 @@ class treeModel extends model
                 $moduleID       = $this->dao->lastInsertID();
                 $createIdList[] = $moduleID;
                 $childPath      = $parentPath . "$moduleID,";
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
             }
             else
@@ -1944,7 +1944,7 @@ class treeModel extends model
                 $data->order  = $order;
                 $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
 
-                $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
 
                 $newModule = $this->getByID($moduleID);
@@ -2296,7 +2296,7 @@ class treeModel extends model
         }
 
         /* Save modules to database. */
-        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->exec();
     }
 
     /**
