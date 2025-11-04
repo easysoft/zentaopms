@@ -467,7 +467,7 @@ class dbh
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
                 {
-                    $sql .= ' CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci';
+                    $sql .= ' CHARACTER SET utf8mb4 COLLATE ' . $this->getServerCollation();
                 }
                 elseif(version_compare($version, '4.1', '>='))
                 {
