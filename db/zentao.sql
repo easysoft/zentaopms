@@ -15841,7 +15841,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `mailto` text NULL,
   `duplicateDemand` mediumint(8) NULL,
   `childDemands` varchar(255) NOT NULL DEFAULT '',
-  `version` varchar(255) NOT NULL DEFAULT '',
+  `version` smallint NOT NULL DEFAULT '1',
   `parentVersion` smallint NOT NULL DEFAULT 0,
   `vision` varchar(255) NOT NULL DEFAULT 'or',
   `color` varchar(255) NOT NULL DEFAULT '',
