@@ -16073,6 +16073,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `category` varchar(30) NOT NULL,
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
+  `knowledgeLib` varchar(255) NOT NULL DEFAULT '',
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
