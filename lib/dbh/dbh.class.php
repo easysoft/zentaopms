@@ -467,11 +467,11 @@ class dbh
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
                 {
-                    $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+                    $sql .= ' CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci';
                 }
                 elseif(version_compare($version, '4.1', '>='))
                 {
-                    $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                    $sql .= ' CHARACTER SET utf8 COLLATE utf8_general_ci';
                 }
                 return $this->rawQuery($sql);
             case 'dm':
