@@ -435,6 +435,22 @@ class dbh
     }
 
     /**
+     * 获取 MySQL 或 MariaDB 数据库支持的字符集排序规则。
+     * Get the database collation of MySQL or MaraiDB.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatabaseCollation(): string
+    {
+        if($this->dbConfig->driver != 'mysql') return '';
+
+        $sql    = "SELECT DEFAULT_COLLATION_NAME as collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$this->dbConfig->name}';";
+        $result = $this->rawQuery($sql)->fetch();
+        return $result->collation ?? $this->getServerCollation();
+    }
+
+    /**
      * 获取 MySQL 或 MariaDB 服务器支持的字符集排序规则。
      * Get the server collation of MySQL or MaraiDB.
      *
