@@ -31,6 +31,7 @@ $configContent = <<<EOT
 \$config->db->name        = '{$myConfig['dbName']}';
 \$config->db->user        = '{$myConfig['dbUser']}';
 \$config->db->encoding    = '{$myConfig['dbEncoding']}';
+\$config->db->collation   = '{$myConfig['dbCollation']}';
 \$config->db->password    = '{$myConfig['dbPassword']}';
 \$config->db->prefix      = '{$myConfig['dbPrefix']}';
 \$config->webRoot         = getWebRoot();
