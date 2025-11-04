@@ -13,7 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
-define('RUN_MODE', 'api');
+
 /* Start output buffer. */
 ob_start();
 
@@ -37,6 +37,8 @@ $common = $app->loadCommon();
 $config->requestType = 'GET';
 $config->default->view = 'json';
 
+/* Only has the api version then use apisession. Fix for passwordless login. */
+if($app->apiVersion) define('RUN_MODE', 'api');
 try
 {
     $app->parseRequest();
