@@ -11904,10 +11904,10 @@ class upgradeModel extends model
      */
     public function upgradeAuditcl()
     {
-        $workflows = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('projectModel')->in('scrum,agileplus,waterfall,waterfallplus')->fetchAll('id');
+        $workflows = $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->in('scrum,agileplus,waterfall,waterfallplus')->fetchAll('id');
         foreach($workflows as $id => $workflow)
         {
-            if($workflow->projectType == 'product')
+            if($workflow->projectType == 'product' && $workflow->main == '1')
             {
                 $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($workflow->projectModel)->exec();
             }
