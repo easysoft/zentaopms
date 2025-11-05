@@ -124,4 +124,74 @@ class commonModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printPreAndNext method.
+     *
+     * @param  mixed  $preAndNext
+     * @param  string $linkTemplate
+     * @param  bool   $onlyBody
+     * @access public
+     * @return mixed
+     */
+    public function printPreAndNextTest($preAndNext = '', string $linkTemplate = '', bool $onlyBody = false)
+    {
+        global $app, $lang;
+
+        // 保存原始值
+        $originalApp = $app ?? null;
+        $originalLang = $lang ?? null;
+        $originalGet = $_GET ?? array();
+
+        // 设置onlybody模式
+        if($onlyBody)
+        {
+            $_GET['onlybody'] = 'yes';
+        }
+        else
+        {
+            unset($_GET['onlybody']);
+        }
+
+        // 模拟完整的app对象
+        $app = new class {
+            public $tab = 'my';
+            public $apiVersion = '';
+            private $moduleName = 'test';
+            private $methodName = 'view';
+            private $appName = 'sys';
+            private $viewType = '';
+            public function getModuleName() { return $this->moduleName; }
+            public function getMethodName() { return $this->methodName; }
+            public function getAppName() { return $this->appName; }
+            public function getViewType() { return $this->viewType; }
+            public function setModuleName($name) { $this->moduleName = $name; }
+            public function setMethodName($name) { $this->methodName = $name; }
+        };
+
+        // 设置语言
+        if(!isset($lang))
+        {
+            $lang = new stdClass();
+        }
+        if(!isset($lang->preShortcutKey)) $lang->preShortcutKey = '(←)';
+        if(!isset($lang->nextShortcutKey)) $lang->nextShortcutKey = '(→)';
+
+        ob_start();
+        $result = commonModel::printPreAndNext($preAndNext, $linkTemplate);
+        $output = ob_get_clean();
+
+        // 恢复原始值
+        if($originalApp !== null) $app = $originalApp;
+        if($originalLang !== null) $lang = $originalLang;
+        $_GET = $originalGet;
+
+        if(dao::isError()) return dao::getError();
+
+        // 如果是onlybody模式，返回false
+        if($onlyBody) return $result === false ? '0' : '1';
+
+        // 否则返回输出内容
+        return $output;
+    }
 }
