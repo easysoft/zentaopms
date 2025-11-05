@@ -458,6 +458,15 @@ class zaiTest
         return $result;
     }
 
+    /**
+     * Test createKnowledgeLib method.
+     *
+     * @param  string $name
+     * @param  string $description
+     * @param  array|null $options
+     * @access public
+     * @return array|null
+     */
     public function createKnowledgeLibTest(string $name, string $description = '', ?array $options = null): ?array
     {
         $result = $this->objectModel->createKnowledgeLib($name, $description, $options);
@@ -466,6 +475,13 @@ class zaiTest
         return $result;
     }
 
+    /**
+     * Test deleteKnowledgeLib method.
+     *
+     * @param  string $memoryID
+     * @access public
+     * @return bool
+     */
     public function deleteKnowledgeLibTest(string $memoryID): bool
     {
         $result = $this->objectModel->deleteKnowledgeLib($memoryID);
@@ -474,6 +490,17 @@ class zaiTest
         return $result;
     }
 
+    /**
+     * Test updateKnowledgeItem method.
+     *
+     * @param  string $memoryID
+     * @param  string $key
+     * @param  string $content
+     * @param  string $contentType
+     * @param  array|null $attrs
+     * @access public
+     * @return bool
+     */
     public function updateKnowledgeItemTest(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
     {
         $result = $this->objectModel->updateKnowledgeItem($memoryID, $key, $content, $contentType, $attrs);
@@ -482,6 +509,14 @@ class zaiTest
         return $result;
     }
 
+    /**
+     * Test deleteKnowledgeItem method.
+     *
+     * @param  string $memoryID
+     * @param  string $key
+     * @access public
+     * @return bool
+     */
     public function deleteKnowledgeItemTest(string $memoryID, string $key): bool
     {
         $result = $this->objectModel->deleteKnowledgeItem($memoryID, $key);
@@ -490,6 +525,14 @@ class zaiTest
         return $result;
     }
 
+    /**
+     * Test getKnowledgeChunks method.
+     *
+     * @param  string $memoryID
+     * @param  string $contentID
+     * @access public
+     * @return array|null
+     */
     public function getKnowledgeChunksTest(string $memoryID, string $contentID): ?array
     {
         $result = $this->objectModel->getKnowledgeChunks($memoryID, $contentID);
