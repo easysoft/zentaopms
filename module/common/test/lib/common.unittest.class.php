@@ -789,7 +789,7 @@ class commonTest
 
         // 步骤5：检查entry是否存在（模拟数据库查询）
         // 更新有效的code列表，包含所有测试场景
-        $validCodes = array('validcode', 'nokey', 'validip', 'invalidtoken', 'validentry');
+        $validCodes = array('validcode', 'nokey', 'validip', 'invalidtoken', 'validentry', 'unboundaccount');
         if(!in_array($code, $validCodes)) {
             return 'EMPTY_ENTRY';
         }
