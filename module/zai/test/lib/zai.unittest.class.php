@@ -465,9 +465,9 @@ class zaiTest
      * @param  string $description
      * @param  array|null $options
      * @access public
-     * @return array|null
+     * @return mixed
      */
-    public function createKnowledgeLibTest(string $name, string $description = '', ?array $options = null): ?array
+    public function createKnowledgeLibTest(string $name, string $description = '', ?array $options = null)
     {
         $result = $this->objectModel->createKnowledgeLib($name, $description, $options);
         if(dao::isError()) return dao::getError();
@@ -480,9 +480,9 @@ class zaiTest
      *
      * @param  string $memoryID
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function deleteKnowledgeLibTest(string $memoryID): bool
+    public function deleteKnowledgeLibTest(string $memoryID)
     {
         $result = $this->objectModel->deleteKnowledgeLib($memoryID);
         if(dao::isError()) return dao::getError();
@@ -499,9 +499,9 @@ class zaiTest
      * @param  string $contentType
      * @param  array|null $attrs
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function updateKnowledgeItemTest(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
+    public function updateKnowledgeItemTest(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null)
     {
         $result = $this->objectModel->updateKnowledgeItem($memoryID, $key, $content, $contentType, $attrs);
         if(dao::isError()) return dao::getError();
@@ -515,9 +515,9 @@ class zaiTest
      * @param  string $memoryID
      * @param  string $key
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function deleteKnowledgeItemTest(string $memoryID, string $key): bool
+    public function deleteKnowledgeItemTest(string $memoryID, string $key)
     {
         $result = $this->objectModel->deleteKnowledgeItem($memoryID, $key);
         if(dao::isError()) return dao::getError();
@@ -531,9 +531,9 @@ class zaiTest
      * @param  string $memoryID
      * @param  string $contentID
      * @access public
-     * @return array|null
+     * @return mixed
      */
-    public function getKnowledgeChunksTest(string $memoryID, string $contentID): ?array
+    public function getKnowledgeChunksTest(string $memoryID, string $contentID)
     {
         $result = $this->objectModel->getKnowledgeChunks($memoryID, $contentID);
         if(dao::isError()) return dao::getError();
