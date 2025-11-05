@@ -31,7 +31,7 @@ class importBugTester extends tester
         $id = $importForm->dom->firstId->getText();
         $importForm->dom->firstCheckbox->click();
         $importForm->dom->saveBtn->click();
-        $importForm->wait(1);
+        $importForm->wait(3);
         $importForm->dom->btn($this->lang->goback)->click();
 
         $form->dom->search(array("{$this->lang->task->fromBugID},=,{$id}"));
