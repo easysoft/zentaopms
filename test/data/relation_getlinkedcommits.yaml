@@ -1,0 +1,29 @@
+title: zt_relation for getLinkedCommits test
+desc: 关联关系测试数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 1
+  - field: product
+    range: 1
+  - field: execution
+    range: 1
+  - field: AType
+    range: bug
+  - field: AID
+    range: 1-10
+  - field: AVersion
+    range: 1
+  - field: relation
+    range: completedin
+  - field: BType
+    range: commit
+  - field: BID
+    range: 1-10
+  - field: BVersion
+    range: 1
+  - field: extra
+    range: "[]"
