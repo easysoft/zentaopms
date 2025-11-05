@@ -849,7 +849,7 @@ class bugZen extends bug
         else
         {
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array('');
-            $branch = isset($branches[$branch]) ? $branch : '';
+            $branch   = isset($branches[$branch]) && $branch != 0 ? $branch : '';
         }
 
         return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
