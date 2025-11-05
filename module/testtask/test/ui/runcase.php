@@ -5,6 +5,32 @@
 title=单个执行测试单下用例
 timeout=0
 cid=1
+
+- 执行tester模块的runCase方法，参数是true, 'n/a'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是true, 'pass'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是true, 'fail'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是true, 'blocked'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是false, 'n/a'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是false, 'pass'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是false, 'fail'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+- 执行tester模块的runCase方法，参数是false, 'blocked'?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例执行成功
+
  */
 
 chdir(__DIR__);
