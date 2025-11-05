@@ -25,4 +25,20 @@ class commonModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test formConfig method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function formConfigTest(string $module, string $method, int $objectID = 0)
+    {
+        $result = commonModel::formConfig($module, $method, $objectID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
