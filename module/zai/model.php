@@ -187,7 +187,7 @@ class zaiModel extends model
      * @param array|null $params
      * @param array|null $postData
      * @param bool $admin
-     * @return array
+     * @return array 通过 result 属性返回调用结果，通过 data 属性返回调用数据，通过 message 属性返回调用错误信息，通过 code 属性返回调用错误代码。 Return array with result, data, message and code.
      */
     public function callAPI($path, $method = 'POST', $params = null, $postData = null, $admin = false)
     {
@@ -275,7 +275,7 @@ class zaiModel extends model
      * @param string $method
      * @param array|null $params
      * @param array|null $postData
-     * @return array
+     * @return array 通过 result 属性返回调用结果，通过 data 属性返回调用数据，通过 message 属性返回调用错误信息，通过 code 属性返回调用错误代码。 Return array with result, data, message and code.
      */
     public function callAdminAPI($path, $method = 'POST', $params = null, $postData = null)
     {
@@ -403,6 +403,13 @@ class zaiModel extends model
 
     /**
      * 创建知识库。
+     * Create knowledge library.
+     *
+     * @access public
+     * @param string $name
+     * @param string $description
+     * @param array|null $options
+     * @return array 通过 result 属性返回调用结果，通过 data 属性返回调用数据，通过 message 属性返回调用错误信息，通过 code 属性返回调用错误代码。 Return array with result, data, message and code.
      */
     public function createKnowledgeLib(string $name, string $description = '', ?array $options = null): ?array
     {
@@ -417,6 +424,11 @@ class zaiModel extends model
 
     /**
      * 删除知识库。
+     * Delete knowledge library.
+     *
+     * @access public
+     * @param string $memoryID
+     * @return bool
      */
     public function deleteKnowledgeLib(string $memoryID): bool
     {
@@ -426,6 +438,15 @@ class zaiModel extends model
 
     /**
      * 更新知识内容。
+     * Update knowledge content.
+     *
+     * @access public
+     * @param string $memoryID
+     * @param string $key
+     * @param string $content
+     * @param string $contentType
+     * @param array|null $attrs
+     * @return array|null
      */
     public function updateKnowledgeItem(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
     {
@@ -438,6 +459,12 @@ class zaiModel extends model
 
     /**
      * 删除知识内容。
+     * Delete knowledge content.
+     *
+     * @access public
+     * @param string $memoryID
+     * @param string $key
+     * @return bool
      */
     public function deleteKnowledgeItem(string $memoryID, string $key): bool
     {
@@ -445,6 +472,15 @@ class zaiModel extends model
         return $result['result'] === 'success';
     }
 
+    /**
+     * 获取知识内容块列表。
+     * Get list of knowledge content chunks.
+     *
+     * @access public
+     * @param string $memoryID
+     * @param string $contentID
+     * @return array|null
+     */
     public function getKnowledgeChunks(string $memoryID, string $contentID): ?array
     {
         return $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID/chunks", 'GET');
