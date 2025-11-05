@@ -229,7 +229,7 @@ class zaiModel extends model
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             }
         }
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData, JSON_UNESCAPED_UNICODE));
+        if($postData) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData, JSON_UNESCAPED_UNICODE));
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Authorization: Bearer ' . $token,
             'Content-Type: application/json'
@@ -448,13 +448,27 @@ class zaiModel extends model
      * @param array|null $attrs
      * @return array|null
      */
-    public function updateKnowledgeItem(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
+    public function updateKnowledgeItem(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): ?string
     {
         $postData = ['content' => $content, 'content_type' => $contentType, 'key' => $key, 'attrs' => $attrs];
 
         $result = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'POST', null, $postData);
 
-        return $result['result'] === 'success';
+        if($result['result'] === 'success')
+        {
+            if(!empty($result['data']['id'])) return $result['data']['id'];
+
+            $contentsResult = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'GET');
+            if($contentsResult['result'] !== 'success') return null;
+
+            $contentList = empty($contentsResult['data']) ? array() : $contentsResult['data'];
+            foreach($contentList as $content)
+            {
+                if($content['key'] === $key) return $content['id'];
+            }
+        }
+
+        return null;
     }
 
     /**
