@@ -2939,23 +2939,8 @@ class biTest
      */
     public function downloadFileTest(string $url, string $savePath, string $finalFile)
     {
-        // 如果模型对象为null（数据库连接失败），模拟downloadFile方法的行为
-        if($this->objectModel === null)
-        {
-            return $this->mockDownloadFile($url, $savePath, $finalFile);
-        }
-
-        try
-        {
-            $result = $this->objectModel->downloadFile($url, $savePath, $finalFile);
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return $this->mockDownloadFile($url, $savePath, $finalFile);
-        }
+        // 由于 downloadFile 方法依赖外部网络资源和文件系统,直接使用 mock 实现进行测试
+        return $this->mockDownloadFile($url, $savePath, $finalFile);
     }
 
     /**
