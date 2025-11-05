@@ -91,7 +91,7 @@ class browsetaskTester extends tester
         $form->dom->name->setValue($newName);
         $form->wait(1);
         $form->dom->editSubmitBtn->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if(empty($newName) || ctype_space($newName))
         {

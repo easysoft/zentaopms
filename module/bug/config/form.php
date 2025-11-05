@@ -171,6 +171,7 @@ $config->bug->form->batchCreate['severity']    = array('required' => false, 'typ
 $config->bug->form->batchCreate['os']          = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
 $config->bug->form->batchCreate['browser']     = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
 $config->bug->form->batchCreate['keywords']    = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchCreate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchEdit = array();
 $config->bug->form->batchEdit['id']             = array('required' => false, 'type' => 'int',    'base' => true);

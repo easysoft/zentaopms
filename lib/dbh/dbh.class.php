@@ -127,7 +127,9 @@ class dbh
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
+            $collation = $dbConfig->collation ?? 'utf8mb4_general_ci';
             $queries[] = "SET NAMES {$dbConfig->encoding}";
+            $queries[] = "SET COLLATION_CONNECTION = '{$collation}'";
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
@@ -435,6 +437,40 @@ class dbh
     }
 
     /**
+     * 获取 MySQL 或 MariaDB 数据库支持的字符集排序规则。
+     * Get the database collation of MySQL or MaraiDB.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatabaseCollation(): string
+    {
+        if($this->dbConfig->driver != 'mysql') return '';
+
+        $sql    = "SELECT DEFAULT_COLLATION_NAME as collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$this->dbConfig->name}';";
+        $result = $this->rawQuery($sql)->fetch();
+        return $result->collation ?? $this->getServerCollation();
+    }
+
+    /**
+     * 获取 MySQL 或 MariaDB 服务器支持的字符集排序规则。
+     * Get the server collation of MySQL or MaraiDB.
+     *
+     * @access public
+     * @return string
+     */
+    public function getServerCollation(): string
+    {
+        if($this->dbConfig->driver != 'mysql') return '';
+
+        $collations = [];
+        $statement  = $this->rawQuery("SHOW COLLATION WHERE Charset = 'utf8mb4';");
+        while($collation = $statement->fetch()) $collations[$collation->Collation] = $collation->Collation;
+
+        return $collations['utf8mb4_uca1400_ai_ci'] ?? $collations['utf8mb4_0900_ai_ci'] ?? $collations['utf8mb4_unicode_ci'] ?? 'utf8mb4_general_ci';
+    }
+
+    /**
      * Create database.
      *
      * @param  string    $version
@@ -449,11 +485,11 @@ class dbh
                 $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
                 if(version_compare($version, '5.6', '>='))
                 {
-                    $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+                    $sql .= ' CHARACTER SET utf8mb4 COLLATE ' . $this->getServerCollation();
                 }
                 elseif(version_compare($version, '4.1', '>='))
                 {
-                    $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                    $sql .= ' CHARACTER SET utf8 COLLATE utf8_general_ci';
                 }
                 return $this->rawQuery($sql);
             case 'dm':

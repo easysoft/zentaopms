@@ -148,6 +148,7 @@ class install extends control
 
             $myConfig = array();
             foreach($data as $key => $value) $myConfig[$key] = $value;
+            $myConfig['dbCollation'] = $this->install->dbh->getDatabaseCollation();
             $this->session->set('myConfig', $myConfig);
             return $this->send(array('result' => 'success', 'load' => inlink('showTableProgress')));
         }

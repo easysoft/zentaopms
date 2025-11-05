@@ -1042,7 +1042,7 @@ class pivotModel extends model
                 }
             }
 
-            if(isset($langs[$group]) and !empty($langs[$group][$clientLang])) $colLabel = $langs[$group][$clientLang];
+            if(isset($langs[$group]) && !empty($langs[$group][$clientLang])) $colLabel = $langs[$group][$clientLang];
             $col->label = $colLabel;
 
             $cols[0][] = $col;
@@ -2334,7 +2334,7 @@ class pivotModel extends model
                 break;
         }
 
-        if(is_string($source) and $source and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
+        if(is_string($source) && $source && $saveAs && in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
         {
             $options = $this->bi->getOptionsFromSql($source, $driver, $field, $saveAs);
         }
@@ -2593,14 +2593,14 @@ class pivotModel extends model
         $table .= "<tbody>";
         $rowCount = 0;
 
-        $showAllTotal = isset($data->showAllTotal) and $data->showAllTotal;
+        $showAllTotal = isset($data->showAllTotal) && $data->showAllTotal;
         $users        = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
 
         for($i = 0; $i < count($data->array); $i ++)
         {
             $rowCount ++;
 
-            if($showAllTotal and $rowCount == count($data->array)) continue;
+            if($showAllTotal && $rowCount == count($data->array)) continue;
 
             $line   = array_values($data->array[$i]);
             $table .= "<tr class='text-center'>";
@@ -2609,7 +2609,7 @@ class pivotModel extends model
                 $cols    = isset($data->cols[0][$j]) ? $data->cols[0][$j] : array();
                 $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
-                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (bool)$isGroup;
+                $hidden  = (isset($configs[$i][$j]) && $configs[$i][$j]) ? false : (bool)$isGroup;
 
                 $showOrigin = $showOrigins[$j];
                 if($hasShowOrigin && !$isGroup && !$showOrigin)
@@ -2628,7 +2628,7 @@ class pivotModel extends model
             $table .= "</tr>";
         }
 
-        if($showAllTotal and !empty($data->array))
+        if($showAllTotal && !empty($data->array))
         {
             $table .= "<tr class='text-center'>";
             $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->stepDesign->total}</td>";

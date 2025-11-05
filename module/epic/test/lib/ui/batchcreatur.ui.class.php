@@ -49,7 +49,7 @@ class createChildStoryTester extends tester
         $form->wait(1);
 
         $form->dom->decompose->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $form = $this->loadPage('requirement', 'batchCreate');
         $form->dom->name->setValue($childName);

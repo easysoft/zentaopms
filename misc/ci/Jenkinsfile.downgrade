@@ -97,6 +97,7 @@ pipeline {
                   sh 'make ciCommon'
 
                   withCredentials([gitUsernamePassword(credentialsId: 'gitfox-zcorp-cc-ci-robot', gitToolName: 'Default')]) {
+                    sh 'ls -l ; rm -rf $PWD/zentaopms/lib/vendor/rector'
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -b ${GIT_BRANCH} -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'

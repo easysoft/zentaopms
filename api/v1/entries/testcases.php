@@ -87,20 +87,23 @@ class testcasesEntry extends entry
             $expects  = array();
             $stepType = array();
             $index    = 1;
-            $useName  = count(array_column($this->requestBody->steps, 'name')) == count($this->requestBody->steps);
-            foreach($this->requestBody->steps as $step)
+            $useName  = is_array($this->requestBody->steps) && count(array_column($this->requestBody->steps, 'name')) == count($this->requestBody->steps);
+            if(!isset($this->requestBody->stepType))
             {
-                $name  = $useName ? $step->name : $index;
-                $type  = isset($step->type) ? $step->type : 'step';
-                $index ++;
+                foreach($this->requestBody->steps as $step)
+                {
+                    $name  = $useName ? $step->name : $index;
+                    $type  = isset($step->type) ? $step->type : 'step';
+                    $index ++;
 
-                $steps[$name]    = $step->desc;
-                $expects[$name]  = $type == 'group' ? '' : $step->expect;
-                $stepType[$name] = $type;
+                    $steps[$name]    = $step->desc;
+                    $expects[$name]  = $type == 'group' ? '' : $step->expect;
+                    $stepType[$name] = $type;
+                }
             }
-            $this->setPost('steps',    $steps);
-            $this->setPost('expects',  $expects);
-            $this->setPost('stepType', $stepType);
+            $this->setPost('steps',    isset($this->requestBody->stepType) ? $this->requestBody->steps : $steps);
+            $this->setPost('expects',  isset($this->requestBody->expects) ? $this->requestBody->expects : $expects);
+            $this->setPost('stepType', isset($this->requestBody->stepType) ? $this->requestBody->stepType : $stepType);
         }
 
         $this->requireFields('title,type,pri,steps');

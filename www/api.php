@@ -13,7 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
-define('RUN_MODE', 'api');
+
 /* Start output buffer. */
 ob_start();
 
@@ -37,18 +37,27 @@ $common = $app->loadCommon();
 $config->requestType = 'GET';
 $config->default->view = 'json';
 
+/* Only has the api version then use apisession. Fix for passwordless login. */
+if($app->apiVersion) define('RUN_MODE', 'api');
 try
 {
     $app->parseRequest();
 
     /* APIv1 load entries, not control directly. */
-    if($app->apiVersion != 'v1') $common->checkPriv();
+    if(!$app->apiVersion)
+    {
+        $common->checkEntry();
+    }
+    elseif($app->apiVersion == 'v2')
+    {
+        $common->checkPriv();
+    }
 
     $app->loadModule();
 }
 catch (EndResponseException $endResponseException)
 {
-    echo $endResponseException->getContent();
+    die($endResponseException->getContent());
 }
 
 /* Flush the buffer. */

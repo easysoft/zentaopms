@@ -213,7 +213,7 @@ class helper extends baseHelper
         {
             $link = substr((string) $link, $pos + 4);
         }
-        return common::getSysURL() . $link;
+        return $link;
     }
 
     /**
