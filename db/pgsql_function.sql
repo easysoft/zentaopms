@@ -318,3 +318,31 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_FORMAT(
+    date_val DATE,
+    format_str TEXT
+) RETURNS TEXT AS $$
+DECLARE
+    pg_format TEXT;
+BEGIN
+    pg_format := REPLACE(format_str, '%Y', 'YYYY');
+    pg_format := REPLACE(pg_format, '%y', 'YY');
+    pg_format := REPLACE(pg_format, '%m', 'MM');
+    pg_format := REPLACE(pg_format, '%c', 'MM');
+    pg_format := REPLACE(pg_format, '%d', 'DD');
+    pg_format := REPLACE(pg_format, '%e', 'DD');
+    pg_format := REPLACE(pg_format, '%H', 'HH24');
+    pg_format := REPLACE(pg_format, '%h', 'HH12');
+    pg_format := REPLACE(pg_format, '%i', 'MI');
+    pg_format := REPLACE(pg_format, '%s', 'SS');
+    pg_format := REPLACE(pg_format, '%W', 'Day');
+    pg_format := REPLACE(pg_format, '%a', 'Dy');
+    pg_format := REPLACE(pg_format, '%M', 'Month');
+    pg_format := REPLACE(pg_format, '%b', 'Mon');
+
+    RETURN TO_CHAR(date_val, pg_format);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
