@@ -477,12 +477,12 @@ class zaiModel extends model
      *
      * @access public
      * @param string $memoryID
-     * @param string $key
+     * @param string $contentID
      * @return bool
      */
-    public function deleteKnowledgeItem(string $memoryID, string $key): bool
+    public function deleteKnowledgeItem(string $memoryID, string $contentID): bool
     {
-        $result = $this->callAdminAPI("/v8/memories/$memoryID/contents/_$key", 'DELETE');
+        $result = $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID", 'DELETE');
         return $result['result'] === 'success';
     }
 
