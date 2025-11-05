@@ -754,7 +754,7 @@ class bugModel extends model
         $productParams = $productParams + array('all' => $this->lang->all);
 
         /* Get project params. */
-        $projectParams = $this->loadModel('product')->getProjectPairsByProduct($productID, 'all');
+        $projectParams = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch);
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
@@ -770,9 +770,9 @@ class bugModel extends model
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['project']['values']       = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID, '', '', true);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
         $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, '0', (int)$projectID);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $branch, (int)$projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
