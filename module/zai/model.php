@@ -499,9 +499,9 @@ class zaiModel extends model
     {
         $result = $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID/chunks", 'GET');
 
-        if($result['result'] !== 'success' || empty($result['data']['id'])) return null;
+        if($result['result'] !== 'success') return null;
 
-        return $result['data'];
+        return empty($result['data']) ? array() : $result['data'];
     }
 
     /**
