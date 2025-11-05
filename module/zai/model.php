@@ -402,6 +402,55 @@ class zaiModel extends model
     }
 
     /**
+     * 创建知识库。
+     */
+    public function createKnowledgeLib(string $name, string $description = '', ?array $options = null): ?array
+    {
+        $postData = ['name' => $name, 'description' => $description];
+        if($options) $postData = array_merge($postData, $options);
+
+        $result = $this->callAdminAPI('/v8/memories', 'POST', null, $postData);
+        if($result['result'] !== 'success' || empty($result['data']['id'])) return null;
+
+        return $result['data'];
+    }
+
+    /**
+     * 删除知识库。
+     */
+    public function deleteKnowledgeLib(string $memoryID): bool
+    {
+        $result = $this->callAdminAPI("/v8/memories/$memoryID", 'DELETE');
+        return $result['result'] === 'success';
+    }
+
+    /**
+     * 更新知识内容。
+     */
+    public function updateKnowledgeItem(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
+    {
+        $postData = ['content' => $content, 'content_type' => $contentType, 'key' => $key, 'attrs' => $attrs];
+
+        $result = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'POST', null, $postData);
+
+        return $result['result'] === 'success';
+    }
+
+    /**
+     * 删除知识内容。
+     */
+    public function deleteKnowledgeItem(string $memoryID, string $key): bool
+    {
+        $result = $this->callAdminAPI("/v8/memories/$memoryID/contents/_$key", 'DELETE');
+        return $result['result'] === 'success';
+    }
+
+    public function getKnowledgeChunks(string $memoryID, string $contentID): ?array
+    {
+        return $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID/chunks", 'GET');
+    }
+
+    /**
      * 搜索知识库。
      * Search knowledge base.
      *
