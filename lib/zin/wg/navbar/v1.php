@@ -288,11 +288,10 @@ class navbar extends wg
                         }
                         else
                         {
-                            $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                            $subExclude = zget($dropMenuItem, 'exclude', '');
-                            $subAlias   = zget($dropMenuItem, 'alias', '');
-                            if($subModule and in_array($currentModule, $subModule) and !str_contains(",$subExclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
-                            if($module == $currentModule && ($method == $currentMethod || str_contains(",$subAlias,", ",$currentMethod,")) && !str_contains(",$subExclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
+                            $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                            $subAlias  = zget($dropMenuItem, 'alias', '');
+                            if($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
+                            if(str_contains(",$subAlias,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
                         }
 
                         if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;
