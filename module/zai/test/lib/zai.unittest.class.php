@@ -457,4 +457,44 @@ class zaiTest
         $result = $this->objectModel->filterKnowledgesByPriv($knowledges, $type, $limit);
         return $result;
     }
+
+    public function createKnowledgeLibTest(string $name, string $description = '', ?array $options = null): ?array
+    {
+        $result = $this->objectModel->createKnowledgeLib($name, $description, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function deleteKnowledgeLibTest(string $memoryID): bool
+    {
+        $result = $this->objectModel->deleteKnowledgeLib($memoryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function updateKnowledgeItemTest(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null): bool
+    {
+        $result = $this->objectModel->updateKnowledgeItem($memoryID, $key, $content, $contentType, $attrs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function deleteKnowledgeItemTest(string $memoryID, string $key): bool
+    {
+        $result = $this->objectModel->deleteKnowledgeItem($memoryID, $key);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function getKnowledgeChunksTest(string $memoryID, string $contentID): ?array
+    {
+        $result = $this->objectModel->getKnowledgeChunks($memoryID, $contentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
