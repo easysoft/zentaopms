@@ -194,4 +194,18 @@ class commonModelTest extends baseTest
         // 否则返回输出内容
         return $output;
     }
+
+    /**
+     * Test processMarkdown method.
+     *
+     * @param  string $markdown
+     * @access public
+     * @return string|bool
+     */
+    public function processMarkdownTest(string $markdown)
+    {
+        $result = commonModel::processMarkdown($markdown);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
