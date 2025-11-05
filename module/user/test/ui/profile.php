@@ -48,23 +48,11 @@ $user->skype->range('admin,user1,user2')->postfix('@chandao.com');
 $user->slack->range('admin,user1,user2')->postfix('@chandao.com');
 $user->whatsapp->range('admin,user1,user2')->postfix('@chandao.com');
 $user->dingding->range('admin,user1,user2')->postfix('@chandao.com');
-$user->ip->range('10.0.0.1','10.0.0.2','10.0.0.3');
+$user->ip->range('10.0.0.1');
 $user->gen(3);
 
-global $uiTester;
-$users = array();
-foreach(['admin','user1','user2'] as $account)
-{
-    $users[$account] = $uiTester->dao->select('u.*, g.name as `group`, d.name as dept')
-        ->from(TABLE_USER)->alias('u')
-        ->leftJoin(TABLE_USERGROUP)->alias('ug')->on('u.account = ug.account')
-        ->leftJoin(TABLE_GROUP)->alias('g')->on('ug.group = g.id')
-        ->leftJoin(TABLE_DEPT)->alias('d')->on('u.dept = d.id')
-        ->where('u.account')->eq($account)
-        ->fetch();
-}
 $tester = new profileTester();
 
-r($tester->verifyUserProfile($users)) && p('status,message') && e('SUCCESS,开源版m=user&f=profile测试成功'); //开源版m=user&f=profile测试
+r($tester->verifyUserProfile()) && p('status,message') && e('SUCCESS,开源版m=user&f=profile测试成功'); //开源版m=user&f=profile测试
 
 $tester->closeBrowser();
