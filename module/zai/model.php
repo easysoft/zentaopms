@@ -483,7 +483,11 @@ class zaiModel extends model
      */
     public function getKnowledgeChunks(string $memoryID, string $contentID): ?array
     {
-        return $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID/chunks", 'GET');
+        $result = $this->callAdminAPI("/v8/memories/$memoryID/contents/$contentID/chunks", 'GET');
+
+        if($result['result'] !== 'success' || empty($result['data']['id'])) return null;
+
+        return $result['data'];
     }
 
     /**
