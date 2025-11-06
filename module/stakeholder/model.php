@@ -24,7 +24,7 @@ class stakeholderModel extends model
         $stakeholder->type        = $data->from == 'outside' ? 'outside' : 'inside';
         $stakeholder->createdBy   = $this->app->user->account;
         $stakeholder->createdDate = helper::today();
-        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} && deleted = '0'")->autoCheck()->exec();
+        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} AND deleted = '0'")->autoCheck()->exec();
 
         $stakeholderID = $this->dao->lastInsertID();
         if(dao::isError()) return false;
