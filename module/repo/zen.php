@@ -342,7 +342,7 @@ class repoZen extends repo
                 return false;
             }
 
-            if(!chdir($path))
+            if(!is_writable($path) || !chdir($path))
             {
                 if(!is_executable($path))
                 {
