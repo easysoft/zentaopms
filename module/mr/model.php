@@ -133,7 +133,7 @@ class mrModel extends model
 
         $minProject = $maxProject = 0;
         /* Mysql string to int. */
-        $MR = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
+        $MR = $this->dao->select('min(CAST(sourceProject AS DECIMAL)) as minSource, MAX(CAST(sourceProject AS DECIMAL)) as maxSource,MIN(CAST(targetProject AS DECIMAL)) as minTarget,MAX(CAST(targetProject AS DECIMAL)) as maxTarget')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('hostID')->eq($hostID)
             ->beginIF($projectIdList)->andWhere('sourceProject', true)->in($projectIdList)
