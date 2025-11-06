@@ -684,6 +684,7 @@ $lang->ai->miniPrograms->field->edit              = 'Edit field';
 $lang->ai->miniPrograms->field->configuration     = 'Configuration';
 $lang->ai->miniPrograms->field->debug             = 'Debug Area';
 $lang->ai->miniPrograms->field->preview           = 'Preview Area';
+$lang->ai->miniPrograms->field->knowledgeLibs     = 'Knowledge Libraries Configuration';
 $lang->ai->miniPrograms->field->option            = 'Options';
 $lang->ai->miniPrograms->field->contentDebugging  = 'Content debugging';
 $lang->ai->miniPrograms->field->contentDebuggingTip = 'Please enter the field here to debug.';

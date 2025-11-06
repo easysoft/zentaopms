@@ -684,6 +684,7 @@ $lang->ai->miniPrograms->field->edit                = '编辑字段';
 $lang->ai->miniPrograms->field->configuration       = '配置区';
 $lang->ai->miniPrograms->field->debug               = '调试区';
 $lang->ai->miniPrograms->field->preview             = '预览区';
+$lang->ai->miniPrograms->field->knowledgeLibs       = '知识库配置';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';

@@ -16018,6 +16018,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   `name` varchar(20) NOT NULL,
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
+  `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
   `module` varchar(30) DEFAULT NULL,
   `source` text DEFAULT NULL,
   `targetForm` varchar(30) DEFAULT NULL,
