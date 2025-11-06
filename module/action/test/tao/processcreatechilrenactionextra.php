@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 /**
 
-title=测试 actionTao::processCreateChildrenActionExtra();
+title=- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1' 属性extra @
 timeout=0
-cid=0
+cid=1
 
-- 测试单个子任务ID >> 期望返回单个任务信息
-- 测试多个子任务ID >> 期望返回多个任务信息用逗号分隔
-- 测试不存在的任务ID >> 期望返回空字符串
-- 测试空字符串 >> 期望返回空字符串
-- 测试混合存在和不存在的任务ID >> 期望只返回存在的任务信息
+- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1' 属性extra @#1 开发任务11
+- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1, 2, 3'
+ - 属性extra @#1 开发任务11
+- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'999' 属性extra @0
+- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'' 属性extra @0
+- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1, 999, 2'
+ - 属性extra @#1 开发任务11
 
 */
 

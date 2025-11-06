@@ -23,4 +23,21 @@ class kanbanTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test refreshERURCards method.
+     *
+     * @param  array  $cardPairs     卡片对集合
+     * @param  int    $executionID   执行ID
+     * @param  string $otherCardList 其他卡片列表
+     * @param  string $laneType      泳道类型
+     * @access public
+     * @return array
+     */
+    public function refreshERURCardsTest($cardPairs = array(), $executionID = 0, $otherCardList = '', $laneType = 'story')
+    {
+        $result = $this->invokeArgs('refreshERURCards', [$cardPairs, $executionID, $otherCardList, $laneType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
