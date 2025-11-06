@@ -3818,15 +3818,25 @@ class convertTest
             $flow->module = 'test';
         }
 
-        $reflection = new ReflectionClass($this->objectTao);
-        $method = $reflection->getMethod('createDefaultLayout');
-        $method->setAccessible(true);
-
         try
         {
+            // 确保tao对象使用当前的config
+            global $config;
+            $this->objectTao->config = $config;
+
+            $reflection = new ReflectionClass($this->objectTao);
+            $method = $reflection->getMethod('createDefaultLayout');
+            $method->setAccessible(true);
+
             $result = $method->invoke($this->objectTao, $fields, $flow, $group);
             if(dao::isError()) return dao::getError();
             return $result ? '1' : '0';
+        }
+        catch(EndResponseException $e)
+        {
+            /* EndResponseException is thrown by dao->exec() when there's an error. */
+            if(dao::isError()) return dao::getError();
+            return '0';
         }
         catch(Exception $e)
         {
