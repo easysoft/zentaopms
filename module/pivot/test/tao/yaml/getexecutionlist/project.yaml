@@ -1,0 +1,40 @@
+title: project表测试数据 for getExecutionList
+desc: 用于测试获取执行列表方法的project表数据
+version: 1.0
+fields:
+  - field: id
+    range: 1-15
+  - field: project
+    range: 0{5},1{2},2{2},3{2},4{2},5{2}
+  - field: type
+    range: project{5},sprint{6},stage{4}
+  - field: parent
+    range: 0{15}
+  - field: path
+    range: ",1,",",2,",",3,",",4,",",5,",",6,",",7,",",8,",",9,",",10,",",11,",",12,",",13,",",14,",",15,"
+  - field: grade
+    range: 1{15}
+  - field: name
+    range: 项目1,项目2,项目3,项目4,项目5,执行6,执行7,执行8,执行9,执行10,执行11,执行12,执行13,执行14,执行15
+  - field: code
+    range: PRJ001,PRJ002,PRJ003,PRJ004,PRJ005,EXE006,EXE007,EXE008,EXE009,EXE010,EXE011,EXE012,EXE013,EXE014,EXE015
+  - field: begin
+    range: "2024-01-01"
+  - field: end
+    range: "2024-12-31"{5},"2024-06-30"{4},"2024-07-31"{3},"2024-08-31"{3}
+  - field: realBegan
+    range: "2024-01-01"
+  - field: realEnd
+    range: "2024-12-31"{5},"2024-06-30"{4},"2024-07-31"{3},"2024-08-31"{3}
+  - field: status
+    range: doing{5},closed{10}
+  - field: multiple
+    range: "1"
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "2024-01-01 00:00:00"
+  - field: deleted
+    range: "0"
+  - field: vision
+    range: rnd

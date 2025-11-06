@@ -55,4 +55,20 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getExecutionList method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $executionIDList
+     * @access public
+     * @return array
+     */
+    public function getExecutionListTest(string $begin, string $end, array $executionIDList = array()): array
+    {
+        $result = $this->invokeArgs('getExecutionList', [$begin, $end, $executionIDList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
