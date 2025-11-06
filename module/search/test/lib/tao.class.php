@@ -206,4 +206,20 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkTodoPriv method.
+     *
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function checkTodoPrivTest(array $results, array $objectIdList, string $table): array
+    {
+        $result = $this->invokeArgs('checkTodoPriv', [$results, $objectIdList, $table]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
