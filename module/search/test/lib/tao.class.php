@@ -53,4 +53,42 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkFeedbackAndTicketPriv method.
+     *
+     * @param  string $objectType
+     * @param  array  $results
+     * @param  array  $objectIdList
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    public function checkFeedbackAndTicketPrivTest(string $objectType, array $results, array $objectIdList, string $table): array
+    {
+        global $tester, $app;
+
+        $searchTao = $this->getInstance($this->moduleName, $this->className);
+
+        $mockFeedback = new class {
+            public function getGrantProducts()
+            {
+                global $app;
+                $products = array();
+                $feedbackViews = $app->dbh->query("SELECT * FROM " . TABLE_FEEDBACKVIEW . " WHERE account = '{$app->user->account}'")->fetchAll();
+                foreach($feedbackViews as $view)
+                {
+                    if(!empty($view->product)) $products[$view->product] = $view->product;
+                }
+                return $products;
+            }
+        };
+
+        $searchTao->feedback = $mockFeedback;
+
+        $result = $this->invokeArgs('checkFeedbackAndTicketPriv', [$objectType, $results, $objectIdList, $table], $this->moduleName, $this->className, $searchTao);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
