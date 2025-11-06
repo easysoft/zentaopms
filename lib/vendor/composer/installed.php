@@ -236,12 +236,12 @@
             'dev_requirement' => false,
         ),
         'rector/rector' => array(
-            'pretty_version' => '2.2.3',
-            'version' => '2.2.3.0',
+            'pretty_version' => '2.2.7',
+            'version' => '2.2.7.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../rector/rector',
             'aliases' => array(),
-            'reference' => 'd27f976a332a87b5d03553c2e6f04adbe5da034f',
+            'reference' => '022038537838bc8a4e526af86c2d6e38eaeff7ef',
             'dev_requirement' => true,
         ),
         'rmccue/requests' => array(
