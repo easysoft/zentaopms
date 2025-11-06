@@ -422,7 +422,7 @@ class install extends control
         {
             $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
-	}
+        }
 
         $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
         $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
