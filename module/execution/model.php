@@ -446,7 +446,6 @@ class executionModel extends model
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
-            ->limit(1)
             ->exec();
 
         if(dao::isError()) return false;
@@ -561,7 +560,6 @@ class executionModel extends model
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
-                ->limit(1)
                 ->exec();
 
             if(dao::isError()) return false;
