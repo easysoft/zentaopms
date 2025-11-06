@@ -56,4 +56,23 @@ class kanbanTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test updateCardAssignedTo method.
+     *
+     * @param  int    $cardID            卡片ID
+     * @param  string $oldAssignedToList 旧的指派人列表
+     * @param  array  $users             用户数组
+     * @access public
+     * @return string
+     */
+    public function updateCardAssignedToTest($cardID = 0, $oldAssignedToList = '', $users = array())
+    {
+        global $tester;
+        $this->invokeArgs('updateCardAssignedTo', [$cardID, $oldAssignedToList, $users]);
+        if(dao::isError()) return dao::getError();
+
+        $card = $tester->dao->select('assignedTo')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        return $card ? $card->assignedTo : false;
+    }
 }
