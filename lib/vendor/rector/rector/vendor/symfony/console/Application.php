@@ -604,7 +604,7 @@ class Application implements ResetInterface
         if (empty($commands) || \count(preg_grep('{^' . $expr . '$}i', $commands)) < 1) {
             if (\false !== $pos = strrpos($name, ':')) {
                 // check if a namespace exists and contains commands
-                $this->findNamespace(substr($name, 0, $pos));
+                $this->findNamespace((string) substr($name, 0, $pos));
             }
             $message = \sprintf('Command "%s" is not defined.', $name);
             if ($alternatives = $this->findAlternatives($name, $allCommands)) {
@@ -704,7 +704,7 @@ class Application implements ResetInterface
         $abbrevs = [];
         foreach ($names as $name) {
             for ($len = \strlen($name); $len > 0; --$len) {
-                $abbrev = substr($name, 0, $len);
+                $abbrev = (string) substr($name, 0, $len);
                 $abbrevs[$abbrev][] = $name;
             }
         }
@@ -847,12 +847,6 @@ class Application implements ResetInterface
         if ($commandSignals || $this->dispatcher && $this->signalsToDispatchEvent) {
             if (!$this->signalRegistry) {
                 throw new RuntimeException('Unable to subscribe to signal events. Make sure that the "pcntl" extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
-            }
-            if (Terminal::hasSttyAvailable()) {
-                $sttyMode = shell_exec('stty -g');
-                foreach ([\SIGINT, \SIGTERM] as $signal) {
-                    $this->signalRegistry->register($signal, static fn() => shell_exec('stty ' . $sttyMode));
-                }
             }
             if ($this->dispatcher) {
                 // We register application signals, so that we can dispatch the event

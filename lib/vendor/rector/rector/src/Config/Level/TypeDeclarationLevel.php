@@ -3,17 +3,20 @@
 declare (strict_types=1);
 namespace Rector\Config\Level;
 
+use Rector\CodeQuality\Rector\Class_\ReturnIteratorInDataProviderRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Class_\ObjectTypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
+use Rector\TypeDeclaration\Rector\Class_\ScalarTypedPropertyFromJMSSerializerAttributeTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
-use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromJMSSerializerAttributeTypeRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector;
@@ -55,6 +58,9 @@ use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector;
 use Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayMapRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayReduceRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeFromIterableMethodCallRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYieldsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
@@ -73,6 +79,7 @@ final class TypeDeclarationLevel
         AddClosureVoidReturnTypeWhereNoReturnRector::class,
         AddFunctionVoidReturnTypeWhereNoReturnRector::class,
         AddTestsVoidReturnTypeWhereNoReturnRector::class,
+        ReturnIteratorInDataProviderRector::class,
         ReturnTypeFromMockObjectRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
         AddArrowFunctionReturnTypeRector::class,
@@ -115,6 +122,8 @@ final class TypeDeclarationLevel
         ReturnUnionTypeRector::class,
         // closures
         AddClosureNeverReturnTypeRector::class,
+        AddClosureParamTypeForArrayMapRector::class,
+        AddClosureParamTypeForArrayReduceRector::class,
         ClosureReturnTypeRector::class,
         AddArrowFunctionParamArrayWhereDimFetchRector::class,
         // more risky rules
@@ -128,7 +137,9 @@ final class TypeDeclarationLevel
         ReturnTypeFromStrictFluentReturnRector::class,
         ReturnNeverTypeRector::class,
         StrictStringParamConcatRector::class,
-        TypedPropertyFromJMSSerializerAttributeTypeRector::class,
+        // jms attributes
+        ObjectTypedPropertyFromJMSSerializerAttributeTypeRector::class,
+        ScalarTypedPropertyFromJMSSerializerAttributeTypeRector::class,
         // array parameter from dim fetch assign inside
         StrictArrayParamDimFetchRector::class,
         AddParamFromDimFetchKeyUseRector::class,
@@ -136,5 +147,7 @@ final class TypeDeclarationLevel
         // possibly based on docblocks, but also helpful, intentionally last
         AddArrayFunctionClosureParamTypeRector::class,
         TypedPropertyFromDocblockSetUpDefinedRector::class,
+        AddClosureParamTypeFromIterableMethodCallRector::class,
+        TypedStaticPropertyInBehatContextRector::class,
     ];
 }

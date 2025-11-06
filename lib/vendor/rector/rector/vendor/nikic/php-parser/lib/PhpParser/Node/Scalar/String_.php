@@ -59,9 +59,9 @@ class String_ extends Scalar
             $bLength = 1;
         }
         if ('\'' === $str[$bLength]) {
-            return str_replace(['\\\\', '\\\''], ['\\', '\''], substr($str, $bLength + 1, -1));
+            return str_replace(['\\\\', '\\\''], ['\\', '\''], (string) substr($str, $bLength + 1, -1));
         } else {
-            return self::parseEscapeSequences(substr($str, $bLength + 1, -1), '"', $parseUnicodeEscape);
+            return self::parseEscapeSequences((string) substr($str, $bLength + 1, -1), '"', $parseUnicodeEscape);
         }
     }
     /**
@@ -90,14 +90,14 @@ class String_ extends Scalar
                 return self::$replacements[$str];
             }
             if ('x' === $str[0] || 'X' === $str[0]) {
-                return chr(hexdec(substr($str, 1)));
+                return chr(hexdec((string) substr($str, 1)));
             }
             if ('u' === $str[0]) {
                 $dec = hexdec($matches[2]);
                 // If it overflowed to float, treat as INT_MAX, it will throw an error anyway.
                 return self::codePointToUtf8(\is_int($dec) ? $dec : \PHP_INT_MAX);
             } else {
-                return chr(octdec($str));
+                return chr(octdec($str) & 255);
             }
         }, $str);
     }

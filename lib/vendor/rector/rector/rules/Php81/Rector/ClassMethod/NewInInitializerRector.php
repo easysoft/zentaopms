@@ -68,7 +68,7 @@ CODE_SAMPLE
 class SomeClass
 {
     public function __construct(
-        private Logger $logger = new NullLogger,
+        private ?Logger $logger = new NullLogger,
     ) {
     }
 }
@@ -87,10 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
-            return null;
-        }
-        if ($node->isAbstract() || $node->isAnonymous()) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
@@ -105,6 +102,9 @@ CODE_SAMPLE
         foreach ((array) $constructClassMethod->stmts as $key => $stmt) {
             foreach ($params as $param) {
                 $paramName = $this->getName($param);
+                if ($param->type instanceof NullableType && $param->default === null) {
+                    continue;
+                }
                 $coalesce = $this->coalescePropertyAssignMatcher->matchCoalesceAssignsToLocalPropertyNamed($stmt, $paramName);
                 if (!$coalesce instanceof Coalesce) {
                     continue;
@@ -112,9 +112,6 @@ CODE_SAMPLE
                 if ($this->stmtsManipulator->isVariableUsedInNextStmt($constructClassMethod, $key + 1, $paramName)) {
                     continue;
                 }
-                /** @var NullableType $currentParamType */
-                $currentParamType = $param->type;
-                $param->type = $currentParamType->type;
                 $param->default = $coalesce->right;
                 unset($constructClassMethod->stmts[$key]);
                 $this->processPropertyPromotion($node, $param, $paramName);
@@ -187,5 +184,15 @@ CODE_SAMPLE
             }
         }
         return $params;
+    }
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if ($class->stmts === []) {
+            return \true;
+        }
+        if ($class->isAbstract()) {
+            return \true;
+        }
+        return $class->isAnonymous();
     }
 }

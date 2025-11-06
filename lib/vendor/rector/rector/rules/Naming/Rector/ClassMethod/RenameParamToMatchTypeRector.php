@@ -101,6 +101,9 @@ CODE_SAMPLE
             if ($param->variadic) {
                 continue;
             }
+            if ($param->type === null) {
+                continue;
+            }
             if ($node instanceof ClassMethod && $this->shouldSkipClassMethodFromVendor($node)) {
                 return null;
             }
