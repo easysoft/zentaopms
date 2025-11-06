@@ -2476,50 +2476,14 @@ class kanbanTest
      */
     public function getStoryCardMenuTest($execution, $objects)
     {
-        // 模拟getStoryCardMenu方法的核心逻辑
-        if(empty($objects)) return array();
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStoryCardMenu');
+        $method->setAccessible(true);
 
-        $menus = array();
-        foreach($objects as $story)
-        {
-            $menu = array();
+        $menus = $method->invoke($this->objectTao, $execution, $objects);
 
-            // 模拟基本的权限和状态检查
-            $toTaskPriv = strpos('draft,reviewing,closed', $story->status) !== false ? false : true;
-
-            // 模拟基础菜单项
-            $menu[] = array('label' => 'Edit', 'icon' => 'edit', 'action' => 'edit');
-
-            if($story->status != 'closed')
-            {
-                $menu[] = array('label' => 'Change', 'icon' => 'alter', 'action' => 'change');
-            }
-
-            if($story->status == 'reviewing')
-            {
-                $menu[] = array('label' => 'Review', 'icon' => 'search', 'action' => 'review');
-            }
-
-            if($toTaskPriv)
-            {
-                $menu[] = array('label' => 'WBS', 'icon' => 'plus', 'action' => 'create_task');
-                $menu[] = array('label' => 'Batch WBS', 'icon' => 'pluses', 'action' => 'batch_create_task');
-            }
-
-            if($story->status == 'closed')
-            {
-                $menu[] = array('label' => 'Activate', 'icon' => 'magic', 'action' => 'activate');
-            }
-
-            if($execution->hasProduct)
-            {
-                $menu[] = array('label' => 'Unlink', 'icon' => 'unlink', 'action' => 'unlink');
-            }
-
-            $menu[] = array('label' => 'Delete', 'icon' => 'trash', 'action' => 'delete');
-
-            $menus[$story->id] = $menu;
-        }
+        if(dao::isError()) return dao::getError();
 
         return $menus;
     }
