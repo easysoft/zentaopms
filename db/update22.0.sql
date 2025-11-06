@@ -153,6 +153,8 @@ ALTER TABLE `zt_auditplan` ADD `cycleConfig` varchar(100) NOT NULL DEFAULT '[]' 
 ALTER TABLE `zt_auditplan` ADD `cyclePlan` smallint unsigned  NOT NULL DEFAULT 0 COMMENT '生成计划(提前的天数)' AFTER `cycleConfig`;
 ALTER TABLE `zt_auditplan` ADD `deadline` date NULL COMMENT '过期时间' AFTER `cyclePlan`;
 
+UPDATE `zt_auditplan` SET `checkDate` = NULL WHERE `checkDate` = '0000-00-00';
+
 CREATE TABLE IF NOT EXISTS `zt_projectchange` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0 COMMENT '所属项目',
