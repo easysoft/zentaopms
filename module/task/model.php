@@ -758,8 +758,7 @@ class taskModel extends model
             if(in_array($task->status, array('pause', 'cancel', 'closed'))) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
-        if($this->app->user->account == $effort->account) return true;
-        return false;
+        return $this->loadModel('common')->canOperateEffort($effort);
     }
 
     /**
