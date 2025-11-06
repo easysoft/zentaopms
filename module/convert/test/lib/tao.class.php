@@ -21,4 +21,19 @@ class convertTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processJiraContent method.
+     *
+     * @param  string $content
+     * @param  array  $fileList
+     * @access public
+     * @return string
+     */
+    public function processJiraContentTest($content = '', $fileList = array())
+    {
+        $result = $this->invokeArgs('processJiraContent', array($content, $fileList));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
