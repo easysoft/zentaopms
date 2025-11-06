@@ -2393,7 +2393,11 @@ class baseSQL
             if(strpos($set, '=') ===  false)
             {
                 $set = str_replace(',', '', $set);
-                $set = '`' . str_replace('`', '', $set) . '`';
+                $set = $this->dbh->iqchar . str_replace('`', '', $set) . $this->dbh->iqchar;
+            }
+            else
+            {
+                $set = str_replace('`', $this->dbh->iqchar, $set);
             }
 
             $this->sql .= $this->isFirstSet ? " $set" : ", $set";
