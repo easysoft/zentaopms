@@ -44,9 +44,10 @@ $aiTest = new aiTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 
-// 测试步骤1：保存包含prompt和fields的正常数据
+// 测试步骤1：保存包含prompt、knowledgeLib和fields的正常数据
 $testData1 = new stdClass();
-$testData1->prompt = '更新后的提示词模板';
+$testData1->prompt       = '更新后的提示词模板';
+$testData1->knowledgeLib = '1,2';
 $testData1->fields = array(
     (object)array('appID' => 1, 'name' => '姓名', 'type' => 'text', 'placeholder' => '请输入姓名', 'options' => null, 'required' => '1'),
     (object)array('appID' => 1, 'name' => '年龄', 'type' => 'text', 'placeholder' => '请输入年龄', 'options' => null, 'required' => '1')
@@ -74,7 +75,8 @@ r($aiTest->saveMiniProgramFieldsTest(4, $testData4)) && p() && e('0');
 
 // 测试步骤5：使用不存在的appID保存数据
 $testData5 = new stdClass();
-$testData5->prompt = '测试不存在ID的提示词';
+$testData5->prompt       = '测试不存在ID的提示词';
+$testData5->knowledgeLib = '';
 $testData5->fields = array(
     (object)array('appID' => 999, 'name' => '测试字段', 'type' => 'text', 'placeholder' => '测试', 'options' => null, 'required' => '0')
 );
