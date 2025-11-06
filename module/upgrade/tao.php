@@ -1154,6 +1154,7 @@ class upgradeTao extends upgradeModel
             $this->dao->insert(TABLE_LANG)->data($item)->exec();
         }
 
+        $idMap    = array();
         $reviewcl = new stdclass();
         $reviewcl->workflowGroup = $group->id;
         $reviewcl->category      = 'QA';
@@ -1167,8 +1168,9 @@ class upgradeTao extends upgradeModel
             $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
             $deliverableID = $this->dao->lastInsertID();
 
+            $idMap[$output->id] = $deliverableID;
+
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
-            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($deliverableID)->where('objectType')->eq('zoutput')->andWhere('objectID')->eq($output->id)->andWhere('project')->in($projectIdList)->exec();
 
             $auditclList = zget($oldAuditclList, $output->id, array());
             if(!empty($auditclList))
@@ -1185,6 +1187,13 @@ class upgradeTao extends upgradeModel
                     $this->dao->insert(TABLE_REVIEWCL)->data($reviewcl)->exec();
                 }
             }
+        }
+
+        $auditplans = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)->where('objectType')->eq('zoutput')->andWhere('objectID')->in(array_keys($idMap))->andWhere('project')->in($projectIdList)->fetchPairs();
+        foreach($auditplans as $id => $objectID)
+        {
+            $newID = $idMap[$objectID];
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
         }
     }
 
