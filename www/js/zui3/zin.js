@@ -45,7 +45,7 @@
     const isTutorial  = top.config.currentModule === 'tutorial';
     let openedOldPage = false;
     let oldPageCofnig = null;
-    let zinCallbacks = {
+    const zinCallbacks = {
         onSelectLang: null,
         onSelectTheme: null,
         onSelectVision: null,

@@ -87,7 +87,8 @@ function isOldPage(url)
  * @param {string} html
  * @returns {string}
  */
-function extractLabelText(html) {
+function extractLabelText(html)
+{
     return html.replace(/<[^>]*>/g, '').trim();
 }
 
