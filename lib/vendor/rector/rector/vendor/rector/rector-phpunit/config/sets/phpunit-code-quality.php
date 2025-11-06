@@ -16,9 +16,12 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\TypeWillReturnCallableArrowFunction
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableInstanceRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
+use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
+use Rector\PHPUnit\CodeQuality\Rector\FuncCall\AssertFuncCallToPHPUnitAssertRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareOnCountableWithMethodToAssertCountRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
@@ -43,7 +46,10 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRect
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsStringRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
+use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ReplaceAtMethodWithDesiredMatcherRector;
+use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         ConstructClassMethodToSetUpTestCaseRector::class,
@@ -82,12 +88,14 @@ return static function (RectorConfig $rectorConfig): void {
         AssertInstanceOfComparisonRector::class,
         AssertPropertyExistsRector::class,
         AssertRegExpRector::class,
+        AssertFuncCallToPHPUnitAssertRector::class,
         SimplifyForeachInstanceOfRector::class,
         UseSpecificWillMethodRector::class,
         UseSpecificWithMethodRector::class,
         AssertEmptyNullableObjectToAssertInstanceofRector::class,
         // avoid call on nullable object
         AddInstanceofAssertForNullableInstanceRector::class,
+        AssertArrayCastedObjectToAssertSameRector::class,
         /**
          * Improve direct testing of your code, without mock creep. Make it simple, clear and easy to maintain:
          *
@@ -100,7 +108,11 @@ return static function (RectorConfig $rectorConfig): void {
          */
         RemoveExpectAnyFromMockRector::class,
         SingleMockPropertyTypeRector::class,
+        FinalizeTestCaseClassRector::class,
+        DeclareStrictTypesTestsRector::class,
         // prefer simple mocking
         GetMockBuilderGetMockToCreateMockRector::class,
+        EntityDocumentCreateMockToDirectNewRector::class,
+        ReplaceAtMethodWithDesiredMatcherRector::class,
     ]);
 };

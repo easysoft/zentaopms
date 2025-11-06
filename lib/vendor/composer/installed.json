@@ -1289,7 +1289,8 @@
                 "patches_applied": {
                     "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
                     "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
-                    "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch"
+                    "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
+                    "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch"
                 }
             },
             "installation-source": "dist",
@@ -1680,17 +1681,17 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.2.3",
-            "version_normalized": "2.2.3.0",
+            "version": "2.2.7",
+            "version_normalized": "2.2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f"
+                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d27f976a332a87b5d03553c2e6f04adbe5da034f",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/022038537838bc8a4e526af86c2d6e38eaeff7ef",
+                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef",
                 "shasum": ""
             },
             "require": {
@@ -1706,7 +1707,7 @@
             "suggest": {
                 "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
             },
-            "time": "2025-10-11T21:50:23+00:00",
+            "time": "2025-10-29T15:46:12+00:00",
             "bin": [
                 "bin/rector"
             ],
@@ -1731,7 +1732,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.3"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.7"
             },
             "funding": [
                 {

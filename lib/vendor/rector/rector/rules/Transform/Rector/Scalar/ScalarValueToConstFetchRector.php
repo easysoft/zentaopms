@@ -18,9 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
- * @see Rector\Tests\Transform\Rector\Scalar\ScalarValueToConstFetchRector\ScalarValueToConstFetchRectorTest
+ * @see \Rector\Tests\Transform\Rector\Scalar\ScalarValueToConstFetchRector\ScalarValueToConstFetchRectorTest
  */
-class ScalarValueToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
+final class ScalarValueToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var ScalarValueToConstFetch[]

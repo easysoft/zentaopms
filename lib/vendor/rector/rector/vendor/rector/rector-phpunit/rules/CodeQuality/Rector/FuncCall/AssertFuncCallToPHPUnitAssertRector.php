@@ -11,12 +11,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
@@ -40,21 +42,52 @@ final class AssertFuncCallToPHPUnitAssertRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns assert() calls to their explicit PHPUnit assert alternative', [new CodeSample('assert($value === 100, "message");', '$this->assertSame(100, $value, "message");')]);
+        return new RuleDefinition('Turns assert() calls in tests to PHPUnit assert method alternative', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
+{
+    public function test()
+    {
+        $value = 1000;
+        assert($value === 1000, 'message');
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+class SomeClass extends TestCase
+{
+    public function test()
+    {
+        $value = 1000;
+
+        $this->assertSame(1000, $value, "message")
+    }
+}
+CODE_SAMPLE
+)]);
     }
     /**
      * @return class-string[]
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Closure::class, FuncCall::class];
     }
     /**
-     * @param FuncCall $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
+     * @param Closure|FuncCall $node
+     * @return StaticCall|MethodCall|null|NodeVisitor::DONT_TRAVERSE_CHILDREN
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof Closure) {
+            if ($node->static) {
+                return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+            }
+            return null;
+        }
         if ($node->isFirstClassCallable()) {
             return null;
         }
