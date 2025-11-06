@@ -110,4 +110,19 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkPriv method.
+     *
+     * @param  array $results
+     * @param  array $objectPairs
+     * @access public
+     * @return array
+     */
+    public function checkPrivTest(array $results, array $objectPairs = array()): array
+    {
+        $result = $this->invokeArgs('checkPriv', [$results, $objectPairs]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
