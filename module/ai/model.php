@@ -1490,6 +1490,7 @@ class aiModel extends model
         {
             $this->dao->update(TABLE_AI_MINIPROGRAM)
                 ->set('prompt')->eq($data->prompt)
+                ->set('knowledgeLib')->eq($data->knowledgeLib)
                 ->where('id')->eq($appID)
                 ->exec();
         }
