@@ -88,4 +88,17 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $products;
     }
+
+    /**
+     * Test getProductProjects method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductProjectsTest(): array
+    {
+        $result = $this->invokeArgs('getProductProjects', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
