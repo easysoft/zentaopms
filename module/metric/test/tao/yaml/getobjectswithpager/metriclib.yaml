@@ -1,0 +1,118 @@
+---
+title: 度量库数据
+desc: 用于测试getObjectsWithPager方法的度量库数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+
+- field: metricID
+  note: 度量项ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: metricCode
+  note: 度量编码
+  range: test_metric_code_2{5},test_metric_code_3{5},test_metric_code_4{5},test_metric_code_5{5},test_metric_code_6{5},test_metric_code_9{5}
+  prefix: ""
+  postfix: ""
+
+- field: system
+  note: 系统
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: program
+  note: 项目集
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目
+  range: 0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5}
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品
+  range: 1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5}
+  prefix: ""
+  postfix: ""
+
+- field: execution
+  note: 执行
+  range: 0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5},1-5,0{5}
+  prefix: ""
+  postfix: ""
+
+- field: user
+  note: 用户
+  range: []{30}
+  prefix: ""
+  postfix: ""
+
+- field: repo
+  note: 代码库
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: year
+  note: 年份
+  range: 2024
+  prefix: ""
+  postfix: ""
+
+- field: month
+  note: 月份
+  range: 01,02,03,04,05,06,07,08,09,10,11,12
+  prefix: ""
+  postfix: ""
+
+- field: week
+  note: 周
+  range: 01
+  prefix: ""
+  postfix: ""
+
+- field: day
+  note: 日
+  range: 01,02,03,04,05,06,07,08,09,10
+  prefix: ""
+  postfix: ""
+
+- field: value
+  note: 值
+  range: 1-100:R
+  prefix: ""
+  postfix: ""
+
+- field: calcType
+  note: 计算类型
+  range: cron
+  prefix: ""
+  postfix: ""
+
+- field: calculatedBy
+  note: 计算者
+  range: admin
+  prefix: ""
+  postfix: ""
+
+- field: date
+  note: 日期
+  range: 2024-01-01 - 2024-12-31:30D
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0
+  prefix: ""
+  postfix: ""

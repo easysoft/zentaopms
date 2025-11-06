@@ -1,0 +1,46 @@
+---
+title: 执行数据
+desc: 用于测试getObjectsWithPager方法的执行数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 执行名称
+  range: 迭代1,迭代2,迭代3,迭代4,迭代5,迭代6,迭代7,迭代8,迭代9,迭代10
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 执行代号
+  range: sprint1,sprint2,sprint3,sprint4,sprint5,sprint6,sprint7,sprint8,sprint9,sprint10
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 执行类型
+  range: sprint{5},stage{3},kanban{2}
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 状态
+  range: wait,doing,suspended,closed
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""
