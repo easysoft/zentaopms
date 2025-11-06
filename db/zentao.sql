@@ -2,7 +2,7 @@ USE `__TABLE__`;
 
 -- DROP TABLE IF EXISTS `zt_acl`;
 CREATE TABLE IF NOT EXISTS `zt_acl` (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
