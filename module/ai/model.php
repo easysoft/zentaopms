@@ -1488,9 +1488,11 @@ class aiModel extends model
 
         if(isset($data->prompt))
         {
+            $updateData = array('prompt' => $data->prompt);
+            if(isset($data->knowledgeLib)) $updateData['knowledgeLib'] = $data->knowledgeLib;
+
             $this->dao->update(TABLE_AI_MINIPROGRAM)
-                ->set('prompt')->eq($data->prompt)
-                ->set('knowledgeLib')->eq($data->knowledgeLib)
+                ->data($updateData)
                 ->where('id')->eq($appID)
                 ->exec();
         }
