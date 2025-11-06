@@ -1801,7 +1801,7 @@ class screenTest
         $result = $this->objectModel->getUsageReportProjects($year, $month);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return count($result);
     }
 
     /**
