@@ -818,7 +818,7 @@ class zaiModel extends model
         $content[] = "* {$lang->story->product}: $story->product";
         $content[] = "* {$lang->story->plan}: $story->plan";
         $content[] = "* {$lang->story->branch}: $story->branch";
-        $content[] = "* {$lang->story->parent}: $story->parent";
+        $content[] = "* {$lang->story->parent}: " . (is_array($story->parent) ? implode(',', $story->parent) : $story->parent);
         $content[] = "* {$lang->story->module}: $story->module";
         $content[] = "* {$lang->story->keywords}: $story->keywords";
         $content[] = "* {$lang->story->assign}: $story->assignedTo";
