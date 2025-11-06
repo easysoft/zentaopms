@@ -11919,6 +11919,7 @@ class upgradeModel extends model
                 {
                     unset($auditcl->id);
                     $auditcl->workflowGroup = $id;
+                    $auditcl->model         = '';
                     if(helper::isZeroDate($auditcl->editedDate))   $auditcl->editedDate   = null;
                     if(helper::isZeroDate($auditcl->assignedDate)) $auditcl->assignedDate = null;
                     $this->dao->insert(TABLE_AUDITCL)->data($auditcl)->exec();
@@ -12017,7 +12018,7 @@ class upgradeModel extends model
             $projectModel = $group->projectModel;
             if($projectModel == 'agileplus')     $projectModel = 'scrum';
             if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
-            if($group->main == '1' && in_array($group->projectModel, array('scrum', 'agileplus', 'waterfall', 'waterfallplus')))
+            if(in_array($group->projectModel, array('scrum', 'agileplus', 'waterfall', 'waterfallplus')))
             {
                 $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
@@ -12029,7 +12030,7 @@ class upgradeModel extends model
                 if($projectActivity)
                 {
                     /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
-                    if($group->projectType == 'product')
+                    if($group->projectType == 'product' && $group->main == '1')
                     {
                         $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
                     }
