@@ -1106,7 +1106,8 @@ class upgradeTao extends upgradeModel
             ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id');
 
-        $otherModule = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($group->id)->andWhere('type')->eq('deliverable')->andWhere('deleted')->eq('0')->andWhere('extra')->eq('other')->fetch('id');
+        $otherModule   = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($group->id)->andWhere('type')->eq('deliverable')->andWhere('deleted')->eq('0')->andWhere('extra')->eq('other')->fetch('id');
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->andWhere('deleted')->eq('0')->fetchPairs();
 
         $deliverable = new stdclass();
         $deliverable->template      = '[]';
@@ -1167,7 +1168,7 @@ class upgradeTao extends upgradeModel
             $deliverableID = $this->dao->lastInsertID();
 
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
-            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($deliverableID)->where('objectType')->eq('zoutput')->andWhere('objectID')->eq($output->id)->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($deliverableID)->where('objectType')->eq('zoutput')->andWhere('objectID')->eq($output->id)->andWhere('project')->in($projectIdList)->exec();
 
             $auditclList = zget($oldAuditclList, $output->id, array());
             if(!empty($auditclList))
