@@ -60,6 +60,14 @@ unset($fieldList['actions']['list'][$app->tab == 'project' ? 'linkStory' : 'link
 if(!$project->multiple) unset($fieldList['executionName']);
 if(!$canModify) unset($fieldList['actions']['list']);
 $builds = initTableData($builds, $fieldList, $this->build);
+foreach($builds as $build)
+{
+    if(!empty($build->execution)) continue;
+    foreach($build->actions as &$action)
+    {
+        if($action['name'] == 'viewBug') $action['disabled'] = true;
+    }
+}
 
 dtable
 (
