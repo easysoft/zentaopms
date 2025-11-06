@@ -71,4 +71,21 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getPlanStatusStatistics method.
+     *
+     * @param  array $products
+     * @param  array $plans
+     * @param  array $plannedStories
+     * @param  array $unplannedStories
+     * @access public
+     * @return array
+     */
+    public function getPlanStatusStatisticsTest(array $products, array $plans, array $plannedStories, array $unplannedStories): array
+    {
+        $this->invokeArgs('getPlanStatusStatistics', array(&$products, $plans, $plannedStories, $unplannedStories));
+        if(dao::isError()) return dao::getError();
+        return $products;
+    }
 }
