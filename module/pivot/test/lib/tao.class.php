@@ -101,4 +101,19 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processProductPlan method.
+     *
+     * @param  array  $products
+     * @param  string $conditions
+     * @access public
+     * @return array
+     */
+    public function processProductPlanTest(array $products, string $conditions): array
+    {
+        $result = $this->invokeArgs('processProductPlan', array(&$products, $conditions));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
