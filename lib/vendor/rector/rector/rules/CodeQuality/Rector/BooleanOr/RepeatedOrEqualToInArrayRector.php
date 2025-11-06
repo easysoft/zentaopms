@@ -32,7 +32,7 @@ final class RepeatedOrEqualToInArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Simplify repeated || compare of same value, to in_array() class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify repeated || compare of same value, to in_array() call', [new CodeSample(<<<'CODE_SAMPLE'
 if ($value === 10 || $value === 20 || $value === 30) {
     // ...
 }

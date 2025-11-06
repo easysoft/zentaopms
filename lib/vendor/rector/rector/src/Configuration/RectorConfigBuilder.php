@@ -35,6 +35,9 @@ use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
+use RectorPrefix202510\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202510\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202510\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202510\Symfony\Component\Finder\Finder;
 use RectorPrefix202510\Webmozart\Assert\Assert;
 /**
@@ -144,7 +147,7 @@ final class RectorConfigBuilder
     public function __invoke(RectorConfig $rectorConfig): void
     {
         if ($this->setGroups !== [] || $this->setProviders !== []) {
-            $setProviderCollector = new SetProviderCollector(array_map(static fn(string $setProvider): SetProviderInterface => $rectorConfig->make($setProvider), \array_keys($this->setProviders)));
+            $setProviderCollector = new SetProviderCollector(array_map(\Closure::fromCallable([$rectorConfig, 'make']), \array_keys($this->setProviders)));
             $setManager = new SetManager($setProviderCollector, new InstalledPackageResolver(getcwd()));
             $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
             SimpleParameterProvider::addParameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->groupLoadedSets);
@@ -523,10 +526,33 @@ final class RectorConfigBuilder
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
-    public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $typeDeclarationDocblocks = \false, bool $privatization = \false, bool $naming = \false, bool $instanceOf = \false, bool $earlyReturn = \false, bool $strictBooleans = \false, bool $carbon = \false, bool $rectorPreset = \false, bool $phpunitCodeQuality = \false, bool $doctrineCodeQuality = \false, bool $symfonyCodeQuality = \false, bool $symfonyConfigs = \false): self
+    public function withPreparedSets(
+        bool $deadCode = \false,
+        bool $codeQuality = \false,
+        bool $codingStyle = \false,
+        bool $typeDeclarations = \false,
+        bool $typeDeclarationDocblocks = \false,
+        bool $privatization = \false,
+        bool $naming = \false,
+        bool $instanceOf = \false,
+        bool $earlyReturn = \false,
+        /** @deprecated */
+        bool $strictBooleans = \false,
+        bool $carbon = \false,
+        bool $rectorPreset = \false,
+        bool $phpunitCodeQuality = \false,
+        bool $doctrineCodeQuality = \false,
+        bool $symfonyCodeQuality = \false,
+        bool $symfonyConfigs = \false
+    ): self
     {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
-        $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::STRICT_BOOLEANS => $strictBooleans, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
+        if ($strictBooleans) {
+            $message = 'The "strictBooleans" set is deprecated as mostly risky and not practical. Remove it from withPreparedSets() method and use "codeQuality" and "codingStyle" sets instead. They already contain more granular and stable rules on same note.';
+            $symfonyStyle = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
+            $symfonyStyle->warning($message);
+        }
+        $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->sets[] = $setPath;
@@ -705,7 +731,7 @@ final class RectorConfigBuilder
         // too high
         $levelRulesCount = count($levelRules);
         if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow(__METHOD__, $level, $levelRulesCount, 'TypeDeclarationDocblocksLevel', 'TYPE_DECLARATION_DOCBLOCKS');
+            $this->levelOverflows[] = new LevelOverflow(__METHOD__, $level, $levelRulesCount, 'typeDeclarationDocblocks', 'TYPE_DECLARATION_DOCBLOCKS');
         }
         $this->rules = array_merge($this->rules, $levelRules);
         return $this;

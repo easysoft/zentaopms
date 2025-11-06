@@ -8,12 +8,12 @@ use PhpParser\Comment;
 use PhpParser\Internal\TokenStream;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Pipe;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
@@ -22,14 +22,13 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
+use PhpParser\Token;
 use PHPStan\Node\AnonymousClassNode;
 use PHPStan\Node\Expr\AlwaysRememberedExpr;
 use Rector\Configuration\Option;
@@ -38,6 +37,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Util\NewLineSplitter;
+use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\Util\StringUtils;
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
@@ -51,6 +51,10 @@ final class BetterStandardPrinter extends Standard
      */
     private ExprAnalyzer $exprAnalyzer;
     /**
+     * @readonly
+     */
+    private PrivatesAccessor $privatesAccessor;
+    /**
      * Remove extra spaces before new Nop_ nodes
      * @see https://regex101.com/r/iSvroO/1
      * @var string
@@ -61,9 +65,10 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const SPACED_NEW_START_REGEX = '#^new\s+#';
-    public function __construct(ExprAnalyzer $exprAnalyzer)
+    public function __construct(ExprAnalyzer $exprAnalyzer, PrivatesAccessor $privatesAccessor)
     {
         $this->exprAnalyzer = $exprAnalyzer;
+        $this->privatesAccessor = $privatesAccessor;
         parent::__construct();
     }
     /**
@@ -137,19 +142,14 @@ final class BetterStandardPrinter extends Standard
         }
         $this->wrapBinaryOp($node);
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
+        /** @todo remove once fix https://github.com/nikic/PHP-Parser/commit/232169fd7972e018e3d7adbcaa235a2eaa2440c4 is released */
         if ($node instanceof New_ && $node->class instanceof AnonymousClassNode && !StringUtils::isMatch($content, self::SPACED_NEW_START_REGEX)) {
             $content = 'new ' . $content;
         }
-        return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
-    }
-    protected function pAttributeGroup(AttributeGroup $attributeGroup): string
-    {
-        $ret = parent::pAttributeGroup($attributeGroup);
-        $comment = $attributeGroup->getAttribute(AttributeKey::ATTRIBUTE_COMMENT);
-        if (!in_array($comment, ['', null], \true)) {
-            $ret .= ' // ' . $comment;
+        if ($node instanceof CallLike) {
+            $this->cleanVariadicPlaceHolderTrailingComma($node);
         }
-        return $ret;
+        return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
     }
     protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction, int $precedence, int $lhsPrecedence): string
     {
@@ -222,16 +222,6 @@ final class BetterStandardPrinter extends Standard
         return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
     }
     /**
-     * Emulates 1_000 in PHP 7.3- version
-     */
-    protected function pScalar_Float(Float_ $float): string
-    {
-        if ($this->shouldPrintNewRawValue($float)) {
-            return (string) $float->getAttribute(AttributeKey::RAW_VALUE);
-        }
-        return parent::pScalar_Float($float);
-    }
-    /**
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
@@ -256,6 +246,10 @@ final class BetterStandardPrinter extends Standard
         }
         return parent::pExpr_Array($array);
     }
+    protected function pExpr_BinaryOp_Pipe(Pipe $node, int $precedence, int $lhsPrecedence): string
+    {
+        return $this->pInfixOp(Pipe::class, $node->left, "\n" . $this->resolveIndentSpaces() . '|> ', $node->right, $precedence, $lhsPrecedence);
+    }
     /**
      * Fixes escaping of regular patterns
      */
@@ -271,10 +265,10 @@ final class BetterStandardPrinter extends Standard
         }
         $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
         if ($kind === String_::KIND_DOUBLE_QUOTED) {
-            return $this->wrapValueWith($string, '"');
+            return '"' . $string->value . '"';
         }
         if ($kind === String_::KIND_SINGLE_QUOTED) {
-            return $this->wrapValueWith($string, "'");
+            return "'" . $string->value . "'";
         }
         return parent::pScalar_String($string);
     }
@@ -295,6 +289,9 @@ final class BetterStandardPrinter extends Standard
         }
         return parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
     }
+    /**
+     * Used in rector-downgrade-php
+     */
     protected function pScalar_InterpolatedString(InterpolatedString $interpolatedString): string
     {
         $content = parent::pScalar_InterpolatedString($interpolatedString);
@@ -302,17 +299,6 @@ final class BetterStandardPrinter extends Standard
             return $this->cleanStartIndentationOnHeredocNowDoc($content);
         }
         return $content;
-    }
-    /**
-     * Invoke re-print even if only raw value was changed.
-     * That allows PHPStan to use int strict types, while changing the value with literal "_"
-     */
-    protected function pScalar_Int(Int_ $int): string
-    {
-        if ($this->shouldPrintNewRawValue($int)) {
-            return (string) $int->getAttribute(AttributeKey::RAW_VALUE);
-        }
-        return parent::pScalar_Int($int);
     }
     protected function pExpr_MethodCall(MethodCall $methodCall): string
     {
@@ -339,6 +325,39 @@ final class BetterStandardPrinter extends Standard
     {
         $this->wrapAssign($instanceof->expr, $instanceof->class);
         return parent::pExpr_Instanceof($instanceof, $precedence, $lhsPrecedence);
+    }
+    /**
+     * @todo remove once https://github.com/nikic/PHP-Parser/pull/1125 is merged and released
+     */
+    private function cleanVariadicPlaceHolderTrailingComma(CallLike $callLike): void
+    {
+        $originalNode = $callLike->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalNode instanceof CallLike) {
+            return;
+        }
+        if ($originalNode->isFirstClassCallable()) {
+            return;
+        }
+        if (!$callLike->isFirstClassCallable()) {
+            return;
+        }
+        if (!$this->origTokens instanceof TokenStream) {
+            return;
+        }
+        /** @var Token[] $tokens */
+        $tokens = $this->privatesAccessor->getPrivateProperty($this->origTokens, 'tokens');
+        $iteration = 1;
+        while (isset($tokens[$callLike->getEndTokenPos() - $iteration])) {
+            $text = trim((string) $tokens[$callLike->getEndTokenPos() - $iteration]->text);
+            if (in_array($text, [')', ''], \true)) {
+                ++$iteration;
+                continue;
+            }
+            if ($text === ',') {
+                $tokens[$callLike->getEndTokenPos() - $iteration]->text = '';
+            }
+            break;
+        }
     }
     private function wrapBinaryOp(Node $node): void
     {
@@ -377,7 +396,7 @@ final class BetterStandardPrinter extends Standard
     private function cleanStartIndentationOnHeredocNowDoc(string $content): string
     {
         $lines = NewLineSplitter::split($content);
-        $trimmedLines = array_map('ltrim', $lines);
+        $trimmedLines = array_map(\Closure::fromCallable('ltrim'), $lines);
         return implode("\n", $trimmedLines);
     }
     private function resolveIndentSpaces(): string
@@ -391,13 +410,6 @@ final class BetterStandardPrinter extends Standard
     private function getIndentCharacter(): string
     {
         return SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
-    }
-    /**
-     * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $lNumber
-     */
-    private function shouldPrintNewRawValue($lNumber): bool
-    {
-        return $lNumber->getAttribute(AttributeKey::REPRINT_RAW_VALUE) === \true;
     }
     /**
      * @param Node[] $stmts
@@ -428,9 +440,5 @@ final class BetterStandardPrinter extends Standard
             }
         }
         return $hasNop;
-    }
-    private function wrapValueWith(String_ $string, string $wrap): string
-    {
-        return $wrap . $string->value . $wrap;
     }
 }

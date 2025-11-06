@@ -6,6 +6,9 @@ namespace Rector\ValueObject\Error;
 use RectorPrefix202510\Nette\Utils\Strings;
 use Rector\Parallel\ValueObject\BridgeItem;
 use RectorPrefix202510\Symplify\EasyParallel\Contract\SerializableInterface;
+/**
+ * @see \Rector\Tests\ValueObject\Error\SystemErrorTest
+ */
 final class SystemError implements SerializableInterface
 {
     /**
@@ -80,7 +83,7 @@ final class SystemError implements SerializableInterface
     public function getRectorShortClass(): ?string
     {
         $rectorClass = $this->rectorClass;
-        if ($rectorClass !== null && $rectorClass !== '' && $rectorClass !== '0') {
+        if (!in_array($rectorClass, [null, ''], \true)) {
             return (string) Strings::after($rectorClass, '\\', -1);
         }
         return null;

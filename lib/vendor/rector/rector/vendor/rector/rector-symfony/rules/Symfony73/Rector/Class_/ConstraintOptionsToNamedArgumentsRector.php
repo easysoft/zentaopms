@@ -14,8 +14,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector\ConstraintOptionsToNamedArgumentsRectorTest
+ */
 final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector
 {
     /**
@@ -49,6 +53,9 @@ CODE_SAMPLE
         if (!$node instanceof New_) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // Match classes starting with Symfony\Component\Validator\Constraints\
         if (!$node->class instanceof FullyQualified && !$node->class instanceof Name) {
             return null;
@@ -66,6 +73,14 @@ CODE_SAMPLE
         $argName = $node->args[0]->name;
         if ($argName instanceof Identifier && $argName->name !== 'options') {
             return null;
+        }
+        $args = $node->getArgs();
+        if ($className === SymfonyClass::SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION && count($args) === 1 && $args[0]->value instanceof Array_) {
+            if ($args[0]->name instanceof Identifier) {
+                return null;
+            }
+            $args[0]->name = new Identifier('fields');
+            return $node;
         }
         $array = $node->args[0]->value;
         $namedArgs = [];
@@ -87,6 +102,9 @@ CODE_SAMPLE
             $arg = new Arg($item->value);
             $arg->name = new Identifier($keyValue);
             $namedArgs[] = $arg;
+        }
+        if ($namedArgs === []) {
+            return null;
         }
         $node->args = $namedArgs;
         return $node;
