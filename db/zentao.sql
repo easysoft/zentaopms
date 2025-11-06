@@ -764,8 +764,8 @@ CREATE INDEX `path`   ON `zt_dept`(`path`);
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project` varchar(255) NOT NULL DEFAULT '',
-  `product` varchar(255) NOT NULL DEFAULT '',
+  `project` int unsigned NOT NULL DEFAULT 0,
+  `product` int unsigned NOT NULL DEFAULT 0,
   `commit` text NULL,
   `commitedBy` varchar(30) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
