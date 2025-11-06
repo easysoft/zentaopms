@@ -3293,6 +3293,9 @@ class convertTest
             $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
             if(!$project) return 0;
 
+            /* Load doc language to avoid createDocLib error. */
+            $tester->loadModel('doc');
+
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('createDefaultExecution');
             $method->setAccessible(true);
