@@ -1,0 +1,130 @@
+title: Bug测试数据
+desc: 用于测试getBugGroup方法的Bug数据
+version: 1.0
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 1
+  - field: product
+    range: 1-10
+  - field: injection
+    range: ""
+  - field: identify
+    range: ""
+  - field: branch
+    range: 0
+  - field: module
+    range: 0
+  - field: execution
+    range: 0{50},1-5{50}
+  - field: plan
+    range: 0
+  - field: story
+    range: 0
+  - field: storyVersion
+    range: 1
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    range: Bug标题测试
+  - field: keywords
+    range: ""
+  - field: severity
+    range: 1-4
+  - field: pri
+    range: 1-4
+  - field: type
+    range: [codeerror,config,install,security,performance]
+  - field: os
+    range: ""
+  - field: browser
+    range: ""
+  - field: hardware
+    range: ""
+  - field: found
+    range: ""
+  - field: steps
+    range: 测试步骤
+  - field: status
+    range: active{40},resolved{30},closed{30}
+  - field: subStatus
+    range: ""
+  - field: color
+    range: ""
+  - field: confirmed
+    range: 0{50},1{50}
+  - field: activatedCount
+    range: 0
+  - field: activatedDate
+    range: "0000-00-00 00:00:00"
+  - field: feedbackBy
+    range: ""
+  - field: notifyEmail
+    range: ""
+  - field: mailto
+    range: ""
+  - field: openedBy
+    range: admin{30},user1{20},user2{20},user3{15},user4{15}
+  - field: openedDate
+    range: "2024-06-01 00:00:00"
+  - field: openedBuild
+    range: ""
+  - field: assignedTo
+    range: admin{20},user1{20},user2{20},user3{20},user4{20}
+  - field: assignedDate
+    range: "0000-00-00 00:00:00"
+  - field: deadline
+    range: "0000-00-00"
+  - field: resolvedBy
+    range: ""{40},admin{20},user1{20},user2{20}
+  - field: resolution
+    range: ""{40},fixed{25},postponed{15},duplicate{10},notrepro{10}
+  - field: resolvedBuild
+    range: ""
+  - field: resolvedDate
+    range: "0000-00-00 00:00:00"
+  - field: closedBy
+    range: ""
+  - field: closedDate
+    range: "0000-00-00 00:00:00"
+  - field: duplicateBug
+    range: 0
+  - field: relatedBug
+    range: ""
+  - field: case
+    range: 0
+  - field: caseVersion
+    range: 1
+  - field: feedback
+    range: 0
+  - field: result
+    range: 0
+  - field: repo
+    range: 0
+  - field: mr
+    range: 0
+  - field: entry
+    range: ""
+  - field: lines
+    range: ""
+  - field: v1
+    range: ""
+  - field: v2
+    range: ""
+  - field: repoType
+    range: ""
+  - field: issueKey
+    range: ""
+  - field: testtask
+    range: 0
+  - field: lastEditedBy
+    range: ""
+  - field: lastEditedDate
+    range: "0000-00-00 00:00:00"
+  - field: deleted
+    range: "0"

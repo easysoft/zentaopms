@@ -38,4 +38,21 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBugGroup method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  int    $product
+     * @param  int    $execution
+     * @access public
+     * @return array
+     */
+    public function getBugGroupTest(string $begin, string $end, int $product, int $execution): array
+    {
+        $result = $this->invokeArgs('getBugGroup', [$begin, $end, $product, $execution]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
