@@ -94,7 +94,7 @@ class treeModel extends model
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch !== 'all' && $branch !== '' && strpos($param, 'noMainBranch') === false)
                 ->andWhere("(branch")->eq(0)
-                ->orWhere('branch')->eq($branch)
+                ->orWhere('branch')->in($branch)
                 ->markRight(1)
                 ->fi()
                 ->beginIF($branch !== 'all' && $branch !== '' && strpos($param, 'noMainBranch') !== false)
