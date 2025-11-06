@@ -105,6 +105,15 @@ class dbh
     public static $durations = [];
 
     /**
+     * 数据库的标识符引号。
+     * identifier quote character.
+     *
+     * @var string
+     * @access public
+    */
+    public $iqchar = '`';
+
+    /**
      * Constructor
      *
      * @param  object $dbConfig
@@ -132,9 +141,14 @@ class dbh
             $queries[] = "SET COLLATION_CONNECTION = '{$collation}'";
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
-        else if($setSchema)
+        else
         {
-            $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+            $this->iqchar = '"';
+
+            if($setSchema)
+            {
+                $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+            }
         }
         if(!empty($queries))
         {
@@ -814,6 +828,8 @@ class dbh
         switch($this->dbConfig->driver)
         {
             case 'dm':
+            case 'postgres':
+            case 'highgo':
                 $sql = str_replace('`', '"', $sql);
                 return $sql;
 
