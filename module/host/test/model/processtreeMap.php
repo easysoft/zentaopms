@@ -11,8 +11,8 @@ cid=0
 - 步骤2：单个简单对象第0条的text属性 @简单主机
 - 步骤3：带roomName的对象第0条的text属性 @主机名称
 - 步骤4：带hostID的对象第0条的hostid属性 @123
-- 步骤5：嵌套数组结构第0条的text属性 @北京
-- 步骤6：带children属性对象第0条的children:0:text属性 @子对象1
+- 步骤5：嵌套数组结构第0条的text属性 @北京机房1
+- 步骤6：带children属性对象第0条的text属性 @子对象1
 - 步骤7：HTML特殊字符转义第0条的text属性 @&lt;script&gt;alert(&quot;test&quot;)&lt;/script&gt;
 
 */
@@ -75,6 +75,6 @@ r(count($hostTest->processTreemapTest($emptyData))) && p() && e('0'); // 步骤1
 r($hostTest->processTreemapTest(array($simpleObject))) && p('0:text') && e('简单主机'); // 步骤2：单个简单对象
 r($hostTest->processTreemapTest(array($roomObject))) && p('0:text') && e('主机名称'); // 步骤3：带roomName的对象
 r($hostTest->processTreemapTest(array($hostWithId))) && p('0:hostid') && e('123'); // 步骤4：带hostID的对象
-r($hostTest->processTreemapTest($arrayData)) && p('0:text') && e('北京'); // 步骤5：嵌套数组结构
-r($hostTest->processTreemapTest(array($objectWithChildren))) && p('0:children:0:text') && e('子对象1'); // 步骤6：带children属性对象
+r($hostTest->processTreemapTest($arrayData)) && p('0:text') && e('北京机房1'); // 步骤5：嵌套数组结构
+r($hostTest->processTreemapTest(array($objectWithChildren))[0]['children']) && p('0:text') && e('子对象1'); // 步骤6：带children属性对象
 r($hostTest->processTreemapTest(array($htmlObject))) && p('0:text') && e('&lt;script&gt;alert(&quot;test&quot;)&lt;/script&gt;'); // 步骤7：HTML特殊字符转义

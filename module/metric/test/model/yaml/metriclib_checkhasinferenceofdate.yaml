@@ -6,69 +6,69 @@ version: 1.0
 
 fields:
 - field: id
-  note: 记录ID
   range: 1-10
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
+
+- field: metricID
+  range: 1{10}
 
 - field: metricCode
-  note: 度量项编码
   range: test_metric_year{10}
 
-- field: calcType
-  note: 计算类型
-  range: inference{10}
-
-- field: year
-  note: 年份
-  range: 2024{10}
-
-- field: month
-  note: 月份
-  range: 01{10}
-
-- field: week
-  note: 周数
-  range: 03{10}
-
-- field: day
-  note: 日
-  range: 01{2}, 02{2}, 15{3}, 28{3}
-
-- field: value
-  note: 度量值
-  range: 100{5}, 200{3}, 300{2}
-
-- field: date
-  note: 日期
-  range: 2024-01-15{3}, 2024-02-15{3}, 2024-03-15{2}, 2024-04-15{2}
-
 - field: system
-  note: 系统范围
   range: 0{10}
 
 - field: program
-  note: 项目群
   range: 0{10}
 
 - field: project
-  note: 项目
   range: 0{10}
 
 - field: product
-  note: 产品
   range: 0{10}
 
 - field: execution
-  note: 执行
   range: 0{10}
+
+- field: code
+  range: ""{10}
+
+- field: pipeline
+  range: ""{10}
+
+- field: repo
+  range: ""{10}
 
 - field: user
-  note: 用户
-  range: ''{10}
+  range: ""{10}
 
 - field: dept
-  note: 部门
-  range: 0{10}
+  range: ""{10}
+
+- field: calcType
+  range: inference{10}
+
+- field: calculatedBy
+  range: ""{10}
+
+- field: value
+  range: 100{5}, 200{3}, 300{2}
+
+- field: year
+  range: 2024{10}
+
+- field: month
+  range: 01{10}
+
+- field: week
+  range: 03{10}
+
+- field: day
+  range: 01{2}, 02{2}, 15{3}, 28{3}
+
+- field: date
+  range: "20240115 000000"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: deleted
+  range: "0"{10}

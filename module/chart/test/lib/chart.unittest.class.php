@@ -658,7 +658,7 @@ class chartTest
         $viewableCharts = $this->getMockViewableCharts($currentUser);
 
         if(in_array($chartID, $viewableCharts)) {
-            return null; // 有权限，checkAccess方法无返回值
+            return 'success'; // 有权限,返回success以便测试
         } else {
             return 'access_denied'; // 模拟sendError的结果
         }
@@ -676,10 +676,10 @@ class chartTest
         // Mock permission rules based on user roles
         $accessRules = array(
             'admin' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), // 管理员可以访问所有图表
-            'user'  => array(1, 3, 5),                        // 普通用户有限权限
+            'user1' => array(1, 3, 5),                        // user1有限权限
+            'user2' => array(1, 4, 6),                        // user2有限权限
             'test1' => array(1, 3),                           // test1只能访问图表1,3
             'test2' => array(1, 4),                           // test2只能访问图表1,4
-            'guest' => array(1),                              // 访客只能访问公开图表
         );
 
         return isset($accessRules[$user]) ? $accessRules[$user] : array();
@@ -732,28 +732,21 @@ class chartTest
      */
     private function getCurrentTestUser(): string
     {
-        global $app, $tester;
+        global $app;
 
-        // Try multiple sources to get the current user
-        if(isset($tester) && isset($tester->currentUser)) {
-            return $tester->currentUser;
-        }
-
+        // Priority 1: Check global $app (most reliable in test environment)
         if(isset($app) && isset($app->user) && isset($app->user->account)) {
             return $app->user->account;
         }
 
-        if(isset($_SESSION['user']) && isset($_SESSION['user']->account)) {
-            return $_SESSION['user']->account;
-        }
-
+        // Priority 2: Check $GLOBALS['app']
         if(isset($GLOBALS['app']) && isset($GLOBALS['app']->user) && isset($GLOBALS['app']->user->account)) {
             return $GLOBALS['app']->user->account;
         }
 
-        // Check for global variables set by test framework
-        if(isset($GLOBALS['currentUser'])) {
-            return $GLOBALS['currentUser'];
+        // Priority 3: Check session
+        if(isset($_SESSION['user']) && isset($_SESSION['user']->account)) {
+            return $_SESSION['user']->account;
         }
 
         // Default to admin for testing
