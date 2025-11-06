@@ -420,16 +420,12 @@ class install extends control
 
         if($this->config->inQuickon)
         {
-            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
-            $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
-        }
-        elseif($this->config->edition != 'ipd')
-        {
-            $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
-            $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
-        }
+	}
+
+        $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+        $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';
