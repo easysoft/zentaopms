@@ -844,13 +844,13 @@ class customModel extends model
     public function setURAndSR(array $data): bool
     {
         $lang   = $this->app->getClientLang();
-        $maxKey = $this->dao->select('max(cast(`key` as SIGNED)) as maxKey')->from(TABLE_LANG)
+        $maxKey = $this->dao->select('max(cast(`key` as DECIMAL)) as maxKey')->from(TABLE_LANG)
             ->where('section')->eq('URSRList')
             ->andWhere('module')->eq('custom')
             ->andWhere('lang')->eq($lang)
             ->fetch('maxKey');
 
-        $maxKey = $maxKey ? $maxKey : 1;
+        $maxKey = $maxKey ? (int)$maxKey : 1;
 
         /* If has custom UR and SR name. */
         foreach($data['SRName'] as $key => $SRName)
