@@ -3910,15 +3910,22 @@ class convertTest
      */
     public function createWorkflowFieldTest($relations = array(), $fields = array(), $fieldOptions = array(), $jiraResolutions = array(), $jiraPriList = array())
     {
+        global $tester;
+
+        if(!isset($this->objectTao->workflowfield))
+        {
+            $this->objectTao->workflowfield = $this->createMockWorkflowField();
+        }
+
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('createWorkflowField');
         $method->setAccessible(true);
-        
+
         try
         {
             $result = $method->invokeArgs($this->objectTao, array($relations, $fields, $fieldOptions, $jiraResolutions, $jiraPriList));
             if(dao::isError()) return dao::getError();
-            
+
             return $result;
         }
         catch(Exception $e)
