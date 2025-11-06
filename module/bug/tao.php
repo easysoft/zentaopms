@@ -294,7 +294,7 @@ class bugTao extends bugModel
 
         /* 如果查询中没有分支条件，获取主干和当前分支下的 bug。*/
         /* If there is no branch condition in query, append it that is main and current . */
-        $branch = trim($branch, ',');
+        $branch = $branch ? trim($branch, ',') : '0';
         if(strpos($branch, ',') !== false) $branch = str_replace(',', "','", $branch);
         if($branch !== 'all' && strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` = '$branch'";
 
