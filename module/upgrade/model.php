@@ -12037,9 +12037,8 @@ class upgradeModel extends model
                     else
                     {
                         $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
+                        $this->upgradeTao->migrateOutputToDeliverable($group);
                     }
-
-                    $this->upgradeTao->migrateOutputToDeliverable($group);
                 }
                 else
                 {
