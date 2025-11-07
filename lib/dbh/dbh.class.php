@@ -650,6 +650,8 @@ class dbh
                     $sql = preg_replace($pattern, '', $sql);
                 }
 
+                $sql = $this->formatAttr($sql);
+
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
