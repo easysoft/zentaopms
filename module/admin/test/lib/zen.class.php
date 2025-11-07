@@ -48,4 +48,18 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test sendCodeByAPI method.
+     *
+     * @param  string $type mobile|email
+     * @access public
+     * @return mixed
+     */
+    public function sendCodeByAPITest(string $type = 'mobile')
+    {
+        $result = $this->invokeArgs('sendCodeByAPI', [$type]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
