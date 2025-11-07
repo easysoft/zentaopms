@@ -10995,7 +10995,7 @@ class upgradeModel extends model
         $templateList = $this->dao->select('t1.*, t2.title, t2.content, t2.type AS contentType, t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc && t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.templateType')->ne('')
+            ->andWhere('t1.templateType')->notIn(array('', 'reportTemplate', 'projectReport'))
             ->andWhere('t1.lib')->eq(0)
             ->andWhere('t1.module')->eq('')
             ->fetchAll('id', false);
@@ -11267,6 +11267,7 @@ class upgradeModel extends model
             $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
             $report->reportModule = 'week';
             $report->addedDate    = $data['weekStart'] . ' 00:00:00';
+            $report->editedDate   = $data['weekStart'] . ' 00:00:00';
             $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
         }
         else
@@ -11275,10 +11276,13 @@ class upgradeModel extends model
             $report->reportModule = 'milestone';
             $report->project      = $data['id'];
             $report->addedDate    = helper::now();
+            $report->editedDate   = helper::now();
         }
 
+        $report->template     = '0';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
+        $report->editedBy     = 'system';
         $this->dao->insert(TABLE_DOC)->data($report)->exec();
 
         return !dao::isError();
