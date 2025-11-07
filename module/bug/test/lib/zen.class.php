@@ -712,4 +712,19 @@ class bugZenTest extends baseTest
         if(dao::isError()) return (object)array();
         return $result;
     }
+
+    /**
+     * Test mergeChartOption method.
+     *
+     * @param  string $chartCode
+     * @param  string $chartType
+     * @access public
+     * @return object|false
+     */
+    public function mergeChartOptionTest(string $chartCode, string $chartType = 'default')
+    {
+        $result = $this->invokeArgs('mergeChartOption', [$chartCode, $chartType]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
