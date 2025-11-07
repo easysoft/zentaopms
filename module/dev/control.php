@@ -63,7 +63,7 @@ class dev extends control
      */
     public function db($table = '')
     {
-        if(empty($table)) $table = 'zt_todo';
+        if(empty($table)) $table = $this->config->db->prefix . 'todo';
 
         $this->view->title         = $this->lang->dev->db;
         $this->view->tableTree     = $this->dev->getTree($table, 'table');
