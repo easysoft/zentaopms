@@ -573,4 +573,18 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test getExecutionsForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|false
+     */
+    public function getExecutionsForCreateTest(object $bug)
+    {
+        $result = $this->invokeArgs('getExecutionsForCreate', [$bug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }

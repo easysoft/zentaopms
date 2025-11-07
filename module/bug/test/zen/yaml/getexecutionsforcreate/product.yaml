@@ -1,0 +1,61 @@
+---
+title: 产品测试数据
+desc: getExecutionsForCreate方法的产品测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 产品代码
+  range: product1,product2,product3,product4,product5,product6,product7,product8,product9,product10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: normal
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
