@@ -318,4 +318,31 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test buildBugsForBatchCreate method.
+     *
+     * @param  int   $productID
+     * @param  string $branch
+     * @param  array $bugImagesFile
+     * @access public
+     * @return array|false
+     */
+    public function buildBugsForBatchCreateTest(int $productID, string $branch, array $bugImagesFile = array())
+    {
+        $result = $this->invokeArgs('buildBugsForBatchCreate', [$productID, $branch, $bugImagesFile]);
+        if(dao::isError()) return false;
+
+        $output = array();
+        $output['count'] = count($result);
+        if(!empty($result))
+        {
+            foreach($result as $index => $bug)
+            {
+                $output[$index] = $bug;
+            }
+        }
+
+        return $output;
+    }
 }
