@@ -684,4 +684,18 @@ class bugZenTest extends baseTest
     {
         return $this->getInstance('bug', 'zen');
     }
+
+    /**
+     * Test getTasksForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|false
+     */
+    public function getTasksForCreateTest(object $bug)
+    {
+        $result = $this->invokeArgs('getTasksForCreate', [$bug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
