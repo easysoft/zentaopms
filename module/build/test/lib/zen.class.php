@@ -276,4 +276,45 @@ class buildZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return count($result);
     }
+
+    /**
+     * Test setMenuForView method.
+     *
+     * @param  object    $build
+     * @access public
+     * @return array
+     */
+    public function setMenuForViewTest($build = null)
+    {
+        global $tester;
+        if($build === null) return array();
+
+        $tester->session->project = $build->project;
+
+        $objectType = 'execution';
+        $objectID   = $build->execution;
+        if($tester->app->tab == 'project')
+        {
+            $objectType = 'project';
+            $objectID   = $build->project;
+        }
+
+        $executions = $tester->loadModel('execution')->getPairs($tester->session->project, 'all', 'empty');
+        $title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
+        $buildPairs = $tester->loadModel('build')->getBuildPairs(0, 'all', 'noempty,notrunk', (int)$objectID, $objectType);
+        $builds     = $tester->loadModel('build')->getByList(array_keys($buildPairs));
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'title'           => $title,
+            'executionsSet'   => 1,
+            'buildPairsSet'   => 1,
+            'buildsSet'       => 1,
+            'objectIDSet'     => 1,
+            'buildPairsCount' => count($buildPairs),
+            'buildsCount'     => count($builds),
+            'sessionProject'  => $tester->session->project ?? 0
+        );
+    }
 }
