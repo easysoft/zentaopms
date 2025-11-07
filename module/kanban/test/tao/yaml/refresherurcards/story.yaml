@@ -1,0 +1,98 @@
+---
+title: Story数据用于测试refreshERURCards方法
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd
+  prefix: ""
+  postfix: ""
+- field: parent
+  note: 父需求
+  range: '0{10},1{3},1{2}'
+  prefix: ""
+  postfix: ""
+- field: isParent
+  note: 是否父需求
+  range: '1,0{9},1{3},0{2}'
+  prefix: ""
+  postfix: ""
+- field: root
+  note: 根需求
+  range: '1-15'
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品ID
+  range: '1'
+  prefix: ""
+  postfix: ""
+- field: branch
+  note: 分支
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: module
+  note: 模块
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: title
+  note: 需求标题
+  range: '["Epic Story 1", "UR Story 1", "UR Story 2", "Story 1", "Story 2", "Story 3", "Story 4", "Story 5", "Story 6", "Story 7", "Parent Story 1", "Child Story 1", "Child Story 2", "Child Story 3", "Story 15"]'
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 需求类型
+  range: '["epic", "requirement", "requirement", "story", "story", "story", "story", "story", "story", "story", "story", "story", "story", "story", "story"]'
+  prefix: ""
+  postfix: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+- field: estimate
+  note: 预计工时
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 状态
+  range: 'active{14},closed'
+  prefix: ""
+  postfix: ""
+- field: stage
+  note: 阶段
+  range: '["wait", "planned", "projected", "developing", "delivering", "delivered", "closed", "wait", "planned", "projected", "developing", "delivering", "delivered", "closed", "wait"]'
+  prefix: ""
+  postfix: ""
+- field: openedBy
+  note: 由谁创建
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: openedDate
+  note: 创建时间
+  range: '`(-1M)-(-1w):1D`'
+  prefix: ""
+  postfix: ""
+- field: version
+  note: 版本
+  range: '1'
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 已删除
+  range: '0'
+  prefix: ""
+  postfix: ""

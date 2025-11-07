@@ -1,0 +1,26 @@
+---
+title: releaserelated表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: release
+  note: 发布ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: objectID
+  note: 关联对象ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: story{8},bug{8},leftBug{4}
+  prefix: ""
+  postfix: ""

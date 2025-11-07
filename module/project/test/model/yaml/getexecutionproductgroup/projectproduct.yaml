@@ -1,0 +1,10 @@
+title: zt_projectproduct
+author: Claude
+version: "1.0"
+fields:
+    - field: project
+      range: 1{3}, 2{2}, 3{2}, 4, 5{2}
+    - field: product
+      range: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    - field: branch
+      range: 0

@@ -1,0 +1,52 @@
+---
+title: 产品数据
+desc: 用于测试getObjectsWithPager方法的产品数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: program
+  note: 项目集
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 产品代号
+  range: product1,product2,product3,product4,product5,product6,product7,product8,product9,product10
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 产品类型
+  range: normal
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 状态
+  range: normal
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""
+
+- field: shadow
+  note: 影子产品
+  range: 0
+  prefix: ""
+  postfix: ""
