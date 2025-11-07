@@ -93,4 +93,21 @@ class companyZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test saveUriIntoSession method.
+     *
+     * @param  string $testUri
+     * @access public
+     * @return bool
+     */
+    public function saveUriIntoSessionTest(string $testUri = ''): bool
+    {
+        if($testUri) $this->instance->app->uri = $testUri;
+
+        $this->invokeArgs('saveUriIntoSession', []);
+        if(dao::isError()) return false;
+
+        return true;
+    }
 }
