@@ -535,6 +535,7 @@ $lang->group->package->browseExecutionStory  = '浏览执行' . $lang->SRCommon;
 $lang->group->package->manageCard            = '维护卡片';
 $lang->group->package->browseProjectStory    = '浏览项目' . $lang->SRCommon;
 $lang->group->package->chckAuditPlan         = '检查活动';
+$lang->group->package->deliverableChecklist  = '交付物检查';
 $lang->group->package->reviewAssess          = '评审';
 $lang->group->package->reviewAudit           = '审计基线评审';
 $lang->group->package->dimension             = '管理维度';
