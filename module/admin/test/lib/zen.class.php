@@ -35,4 +35,17 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getZentaoData method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getZentaoDataTest()
+    {
+        $result = $this->invokeArgs('getZentaoData', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
