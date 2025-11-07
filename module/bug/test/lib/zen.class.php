@@ -370,4 +370,51 @@ class bugZenTest extends baseTest
 
         return $output;
     }
+
+    /**
+     * Test buildCreateForm method.
+     *
+     * @param  object $bug
+     * @param  array  $param
+     * @param  string $from
+     * @access public
+     * @return array
+     */
+    public function buildCreateFormTest(object $bug, array $param = array(), string $from = ''): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        /* Initialize view users to avoid undefined property error. */
+        if(!isset($instance->view->users))
+        {
+            $instance->view->users = $instance->loadModel('user')->getPairs('noletter');
+        }
+
+        try
+        {
+            $this->invokeArgs('buildCreateForm', [$bug, $param, $from]);
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'title'                 => $instance->view->title ?? '',
+            'productMembers'        => !empty($instance->view->productMembers) ? count($instance->view->productMembers) : 0,
+            'gobackLink'            => $instance->view->gobackLink ?? '',
+            'productName'           => $instance->view->productName ?? '',
+            'productsCount'         => !empty($instance->view->products) ? count($instance->view->products) : 0,
+            'projectsCount'         => !empty($instance->view->projects) ? count($instance->view->projects) : 0,
+            'executionsCount'       => !empty($instance->view->executions) ? count($instance->view->executions) : 0,
+            'branchesCount'         => !empty($instance->view->branches) ? count($instance->view->branches) : 0,
+            'buildsCount'           => !empty($instance->view->builds) ? count($instance->view->builds) : 0,
+            'moduleOptionMenuCount' => !empty($instance->view->moduleOptionMenu) ? count($instance->view->moduleOptionMenu) : 0,
+            'resultFilesCount'      => !empty($instance->view->resultFiles) ? count($instance->view->resultFiles) : 0,
+            'plansCount'            => !empty($instance->view->plans) ? count($instance->view->plans) : 0,
+            'casesCount'            => !empty($instance->view->cases) ? count($instance->view->cases) : 0,
+        );
+    }
 }
