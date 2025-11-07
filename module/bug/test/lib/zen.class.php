@@ -158,4 +158,30 @@ class bugZenTest extends baseTest
             'returnValue'         => $branchCount,
         );
     }
+
+    /**
+     * Test assignUsersForBatchEdit method.
+     *
+     * @param  array  $bugs
+     * @param  array  $productIdList
+     * @param  array  $branchTagOption
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function assignUsersForBatchEditTest(array $bugs, array $productIdList, array $branchTagOption, string $tab = 'execution'): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+        $instance->app->tab = $tab;
+
+        $this->invokeArgs('assignUsersForBatchEdit', [$bugs, $productIdList, $branchTagOption]);
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'users'             => !empty($instance->view->users) ? count($instance->view->users) : 0,
+            'productMembers'    => !empty($instance->view->productMembers) ? count($instance->view->productMembers) : 0,
+            'projectMembers'    => !empty($instance->view->projectMembers) ? count($instance->view->projectMembers) : 0,
+            'executionMembers'  => !empty($instance->view->executionMembers) ? count($instance->view->executionMembers) : 0,
+        );
+    }
 }
