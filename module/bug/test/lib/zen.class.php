@@ -304,4 +304,18 @@ class bugZenTest extends baseTest
             'memberPairs'     => !empty($instance->view->memberPairs) ? count($instance->view->memberPairs) : 0,
         );
     }
+
+    /**
+     * Test buildBugForResolve method.
+     *
+     * @param  object $oldBug
+     * @access public
+     * @return object|false
+     */
+    public function buildBugForResolveTest(object $oldBug)
+    {
+        $result = $this->invokeArgs('buildBugForResolve', [$oldBug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
