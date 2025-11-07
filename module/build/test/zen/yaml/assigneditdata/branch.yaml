@@ -1,0 +1,46 @@
+---
+title: 分支数据for assignEditData测试
+desc: 为assignEditData方法提供分支测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 分支名称
+  range: '主干,分支一,分支二,分支三,分支四{6}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 分支状态
+  range: 'active{8},closed{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
