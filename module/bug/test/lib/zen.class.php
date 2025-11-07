@@ -727,4 +727,19 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test operateAfterBatchEdit method.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return bool
+     */
+    public function operateAfterBatchEditTest(object $bug, object $oldBug): bool
+    {
+        $this->invokeArgs('operateAfterBatchEdit', [$bug, $oldBug]);
+        if(dao::isError()) return false;
+        return true;
+    }
 }
