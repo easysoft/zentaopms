@@ -103,4 +103,17 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBackupList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBackupListTest()
+    {
+        $result = $this->invokeArgs('getBackupList', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
