@@ -1131,10 +1131,17 @@ class upgradeTao extends upgradeModel
             $deliverableID = $this->dao->lastInsertID();
 
             $idMap[$output->id] = $deliverableID;
-            $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($deliverableID)->set('activity')->eq($output->activity)->where('id')->eq($output->id)->exec();
         }
 
         $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
+
+        $projectOutputList = $this->dao->select('id,output')->from(TABLE_PROGRAMOUTPUT)->where('project')->in($projectIdList)->andWhere('output')->in(array_keys($idMap))->fetchPairs();
+        foreach($projectOutputList as $id => $outputID)
+        {
+            $newID = $idMap[$outputID];
+            $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($newID)->where('id')->eq($id)->exec();
+        }
+
         $auditplans    = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)
             ->where('objectType')->eq('zoutput')
             ->andWhere('objectID')->in(array_keys($idMap))
