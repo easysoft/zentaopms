@@ -617,4 +617,29 @@ class bugZenTest extends baseTest
         if(dao::isError()) return (object)array();
         return $result;
     }
+
+    /**
+     * Test getProductMembersForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function getProductMembersForCreateTest(object $bug): array
+    {
+        $result = $this->invokeArgs('getProductMembersForCreate', [$bug]);
+        if(dao::isError()) return array();
+        return $result;
+    }
+
+    /**
+     * Get bug zen instance for setting view.
+     *
+     * @access public
+     * @return object
+     */
+    public function getBugZenInstance(): object
+    {
+        return $this->getInstance('bug', 'zen');
+    }
 }
