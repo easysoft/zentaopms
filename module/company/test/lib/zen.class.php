@@ -1,0 +1,28 @@
+<?php
+declare(strict_types = 1);
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class companyZenTest extends baseTest
+{
+    protected $moduleName = 'company';
+    protected $className  = 'zen';
+
+    /**
+     * Test buildDyanmicSearchForm method.
+     *
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  int    $userID
+     * @param  int    $queryID
+     * @access public
+     * @return mixed
+     */
+    public function buildDyanmicSearchFormTest($products = array(), $projects = array(), $executions = array(), $userID = 0, $queryID = 0)
+    {
+        $result = $this->invokeArgs('buildDyanmicSearchForm', [$products, $projects, $executions, $userID, $queryID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+}
