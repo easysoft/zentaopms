@@ -913,4 +913,31 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printTaskBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printTaskBlockTest(object $block)
+    {
+        $this->invokeArgs('printTaskBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->tasksCount = isset($view->tasks) ? count($view->tasks) : 0;
+
+        if(isset($view->tasks))
+        {
+            foreach($view->tasks as $index => $task)
+            {
+                $result->$index = $task;
+            }
+        }
+
+        return $result;
+    }
 }
