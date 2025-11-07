@@ -1001,4 +1001,35 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallEstimateBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printWaterfallEstimateBlockTest()
+    {
+        $this->invokeArgs('printWaterfallEstimateBlock', array());
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->people = isset($view->people) ? $view->people : 0;
+        $result->members = isset($view->members) ? $view->members : 0;
+        $result->consumed = isset($view->consumed) ? $view->consumed : 0;
+        $result->totalLeft = isset($view->totalLeft) ? $view->totalLeft : 0;
+        $result->hasBudget = isset($view->budget) ? 1 : 0;
+
+        if(isset($view->budget))
+        {
+            $result->budgetScale = isset($view->budget->scale) ? $view->budget->scale : 0;
+            $result->budgetProductivity = isset($view->budget->productivity) ? $view->budget->productivity : 0;
+            $result->budgetDuration = isset($view->budget->duration) ? $view->budget->duration : 0;
+            $result->budgetUnitLaborCost = isset($view->budget->unitLaborCost) ? $view->budget->unitLaborCost : 0;
+            $result->budgetTotalLaborCost = isset($view->budget->totalLaborCost) ? $view->budget->totalLaborCost : 0;
+        }
+
+        return $result;
+    }
 }
