@@ -352,4 +352,35 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printProductDocBlock method.
+     *
+     * @param  object $block  区块对象
+     * @param  array  $params 参数数组
+     * @access public
+     * @return object
+     */
+    public function printProductDocBlockTest(object $block, array $params = array())
+    {
+        ob_start();
+        $this->invokeArgs('printProductDocBlock', array($block, $params));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->type = isset($view->type) ? $view->type : '';
+        $result->usersCount = isset($view->users) ? count($view->users) : 0;
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+        $result->docGroupCount = isset($view->docGroup) ? count($view->docGroup) : 0;
+        if(isset($view->products))
+        {
+            foreach($view->products as $index => $product)
+            {
+                $result->$index = $product;
+            }
+        }
+        return $result;
+    }
 }
