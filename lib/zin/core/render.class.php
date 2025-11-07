@@ -81,13 +81,18 @@ class render
 
     public function renderList(): array
     {
-        $list = array();
+        global $app;
+
+        $isUserLogon = isset($app->user) && $app->user->account != 'guest';
+        $list        = array();
 
         foreach($this->selectors as $selector)
         {
             $name = $selector->name;
             if(isset($selector->command))
             {
+                if(!$isUserLogon) continue;
+
                 $item = new stdClass();
                 $item->name = $name;
                 $item->type = 'data';
@@ -160,13 +165,19 @@ class render
      */
     public function renderJson(): object
     {
-        $output = new stdClass();
+        global $app;
+
+        $isUserLogon = isset($app->user) && $app->user->account != 'guest';
+        $output      = new stdClass();
+
         $output->data = array();
         foreach($this->selectors as $selector)
         {
             $name = $selector->name;
             if(isset($selector->command))
             {
+                if(!$isUserLogon) continue;
+
                 $output->data[$name] = data($selector->command);
             }
             else
@@ -194,9 +205,12 @@ class render
     {
         if(!$selectors) return;
 
+        global $config;
+
         $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
+            if(!empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands)) continue;
             $this->selectors[$selector->name] = $selector;
         }
     }
