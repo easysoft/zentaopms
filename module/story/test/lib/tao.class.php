@@ -84,4 +84,19 @@ class storyTaoTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getProductReviewers method.
+     *
+     * @param  int   $productID
+     * @param  array $storyReviewers
+     * @access public
+     * @return array|bool
+     */
+    public function getProductReviewersTest(int $productID, array $storyReviewers = array()): array|bool
+    {
+        $result = $this->invokeArgs('getProductReviewers', [$productID, $storyReviewers]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
