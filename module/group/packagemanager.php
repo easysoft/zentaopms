@@ -3500,6 +3500,12 @@ $config->group->package->chckAuditPlan->privs  = array();
 $config->group->package->chckAuditPlan->privs['auditplan-batchCheck'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-check'));
 $config->group->package->chckAuditPlan->privs['auditplan-check']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchCheck', 'auditplan-create', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
 
+$config->group->package->deliverableChecklist = new stdclass();
+$config->group->package->deliverableChecklist->order  = 20;
+$config->group->package->deliverableChecklist->subset = 'projectauditplan';
+$config->group->package->deliverableChecklist->privs  = array();
+$config->group->package->deliverableChecklist->privs['project-deliverableChecklist'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->reviewAssess = new stdclass();
 $config->group->package->reviewAssess->order  = 15;
 $config->group->package->reviewAssess->subset = 'projectreview';
