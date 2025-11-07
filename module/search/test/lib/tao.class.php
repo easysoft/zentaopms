@@ -328,4 +328,19 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test unify method.
+     *
+     * @param  string $string
+     * @param  string $to
+     * @access public
+     * @return string
+     */
+    public function unifyTest(string $string, string $to = ','): string
+    {
+        $result = $this->invokeArgs('unify', [$string, $to]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
