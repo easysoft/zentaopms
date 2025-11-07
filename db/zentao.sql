@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `zt_api` (
   `addedDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct` (
   `addedDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   primary key (`id`)
 ) ENGINE=InnoDB;
 
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` text NULL,
   `users` longtext NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -316,7 +316,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `createdDate` date NULL,
   `closedDate` date NULL,
   `order` smallint unsigned NOT NULL DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_branch`(`product`);
@@ -385,7 +385,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `testtask` int unsigned NOT NULL DEFAULT '0',
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product`                ON `zt_bug`(`product`);
@@ -423,7 +423,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `desc` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product`   ON `zt_build`(`product`);
@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `fromCaseID` int unsigned NOT NULL DEFAULT 0,
   `fromCaseVersion` int unsigned NOT NULL default '1',
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime NULL,
   `lastRunResult` char(30) NOT NULL DEFAULT '',
@@ -585,7 +585,7 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   `createdDate` datetime NULL,
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -603,7 +603,7 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `createdDate` date NULL,
   `lastEditedBy` varchar(30) NULL,
   `lastEditedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -619,7 +619,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `code` ON `zt_dimension`(`code`);
@@ -636,7 +636,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `backyard` char(120) default NULL,
   `guest` enum('1','0') NOT NULL default '0',
   `admins` char(255) default NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB;
 
@@ -656,7 +656,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updateDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);
@@ -778,7 +778,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint unsigned NOT NULL DEFAULT '1',
   `docs` text NULL,
@@ -849,7 +849,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readUsers` text NULL,
   `version` smallint unsigned NOT NULL DEFAULT '1',
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product`      ON `zt_doc`(`product`);
@@ -909,7 +909,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `archived` enum('0','1') NOT NULL DEFAULT '0',
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
   PRIMARY KEY  (`id`)
@@ -947,7 +947,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `end` smallint unsigned zerofill NOT NULL DEFAULT '0',
   `extra` text NULL,
   `order` tinyint unsigned NOT NULL DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_effort`(`execution`);
@@ -970,7 +970,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `calledTime` int unsigned NOT NULL DEFAULT '0',
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -983,7 +983,7 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `progress` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1032,7 +1032,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `addedDate` datetime NULL,
   `downloads` int unsigned NOT NULL DEFAULT '0',
   `extra` varchar(255) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `objectType` ON `zt_file`(`objectType`);
@@ -1102,7 +1102,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `lastStatus` varchar(255) NOT NULL DEFAULT '',
   `lastTag` varchar(255) NOT NULL DEFAULT '',
   `lastSyncDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1126,7 +1126,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanspace` (
   `closedDate` datetime NULL,
   `activatedBy` char(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1160,7 +1160,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanban` (
   `closedDate` datetime NULL,
   `activatedBy` char(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1175,7 +1175,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
   `createdDate` datetime NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1209,7 +1209,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
   `archivedDate` datetime NULL,
   `assignedBy` char(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1248,7 +1248,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `color` char(30) NOT NULL DEFAULT '',
   `order` smallint NOT NULL DEFAULT '0',
   `lastEditedTime` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_kanbanlane`(`execution`);
@@ -1266,7 +1266,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `limit` smallint NOT NULL DEFAULT '-1',
   `order` int NOT NULL DEFAULT '0',
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_kanbancolumn`(`parent`);
@@ -1317,7 +1317,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `owner` varchar(30) NOT NULL DEFAULT '',
   `collector` text NULL,
   `short` varchar(60) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `root` ON `zt_module`(`root`);
@@ -1342,7 +1342,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `status` char(30) NOT NULL DEFAULT '',
   `mergeStatus` char(30) NOT NULL DEFAULT '',
   `approvalStatus` char(30) NOT NULL DEFAULT '',
@@ -1421,7 +1421,7 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1535,7 +1535,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `closedDate` date DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `acl`   ON `zt_product` (`acl`);
@@ -1558,7 +1558,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `closedReason` varchar(20) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_productplan` (`product`);
@@ -1643,7 +1643,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `minColWidth` smallint NOT NULL DEFAULT '200',
   `maxColWidth` smallint NOT NULL DEFAULT '384',
   `deliverable` text NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent`     ON `zt_project` (`parent`);
@@ -1719,7 +1719,7 @@ CREATE TABLE IF NOT EXISTS `zt_queue` (
   `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
   `execId` int DEFAULT NULL,
   `createdDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `status_createdDate` ON `zt_queue`(`status`, `createdDate`);
@@ -1769,7 +1769,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `subStatus` varchar(30) NOT NULL default '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_release` (`product`);
@@ -1921,7 +1921,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1938,7 +1938,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `createdDate` date NULL,
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `objectID` ON `zt_stakeholder` (`objectID`);
@@ -2015,7 +2015,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
   `verifiedDate` datetime,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_story` (`parent`);
@@ -2146,7 +2146,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lines` varchar(10) NOT NULL DEFAULT '',
   `v1` varchar(40) NOT NULL DEFAULT '',
   `v2` varchar(40) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -2239,7 +2239,7 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -2294,7 +2294,7 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `addedDate` datetime NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_testsuite` (`product`);
@@ -2325,7 +2325,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',,
   `createdDate` datetime NULL COMMENT '创建时间',
   `members` text DEFAULT NULL COMMENT '团队成员',
-  `deleted` enum('0','1') NOT NULL default '0' COMMENT '是否删除',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_testtask` (`product`);
@@ -2367,7 +2367,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `finishedDate` datetime NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -2421,7 +2421,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `score` int NOT NULL DEFAULT '0',
   `scoreLevel` int NOT NULL DEFAULT '0',
   `resetToken` varchar(50) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `clientStatus` enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
   PRIMARY KEY (`id`)
@@ -2526,7 +2526,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -2739,7 +2739,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `repeatFeedback` int NOT NULL DEFAULT 0,
   `mailto` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -2781,7 +2781,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `repeatTicket` int NOT NULL DEFAULT '0',
   `mailto` varchar(255) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_ticket` (`product`);
@@ -2829,7 +2829,7 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   `createdDate` datetime NULL,
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -2870,7 +2870,7 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -3097,7 +3097,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `result` varchar(20) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -3124,7 +3124,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `finishedDate` datetime NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -3143,7 +3143,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `createdDate` date NULL,
   `editedBy` varchar(255) NOT NULL DEFAULT '',
   `editedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -3174,7 +3174,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincategory` (
   `path` char(255) NOT NULL DEFAULT '',
   `grade` tinyint NOT NULL DEFAULT '0',
   `order` int NOT NULL DEFAULT '0',
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_traincategory` (`parent`);
@@ -13410,7 +13410,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `deliverable` text NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
@@ -13828,7 +13828,7 @@ CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -13847,7 +13847,7 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `editedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `dayHour` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -13864,7 +13864,7 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `situation` varchar(255) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_intervention`(`project`,`activity`);
@@ -13886,7 +13886,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
   `order` int DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -13907,7 +13907,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -13934,7 +13934,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `checkBy` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -13957,7 +13957,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -13986,7 +13986,7 @@ CREATE TABLE IF NOT EXISTS `zt_nc` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14004,7 +14004,7 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `order` int DEFAULT '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14025,7 +14025,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14043,7 +14043,7 @@ CREATE TABLE IF NOT EXISTS `zt_programactivity` (
   `linkedBy` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14062,7 +14062,7 @@ CREATE TABLE IF NOT EXISTS `zt_programoutput` (
   `linkedBy` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14079,7 +14079,7 @@ CREATE TABLE IF NOT EXISTS `zt_programprocess` (
   `linkedBy` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14105,7 +14105,7 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `order` int unsigned NOT NULL DEFAULT 0,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_basicmeas`(`code`);
@@ -14123,7 +14123,7 @@ CREATE TABLE IF NOT EXISTS `zt_budget` (
   `createdDate` date NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14146,7 +14146,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchplan` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14168,7 +14168,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchreport` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14196,7 +14196,7 @@ CREATE TABLE IF NOT EXISTS `zt_meeting` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14212,7 +14212,7 @@ CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14227,7 +14227,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14239,7 +14239,7 @@ CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
   `content` mediumtext NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14253,7 +14253,7 @@ CREATE TABLE IF NOT EXISTS `zt_programreport` (
   `content` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14301,7 +14301,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `end` date NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14331,7 +14331,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `lastEditedDate` date NULL,
   `result` char(30) NOT NULL DEFAULT '',
   `auditResult` char(30) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14351,7 +14351,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14389,7 +14389,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `resolutionDate` DATE NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14407,7 +14407,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
   `editedDate` datetime NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14425,7 +14425,7 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14442,7 +14442,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
  `addedDate` date NULL,
  `editedBy` varchar(30) NOT NULL DEFAULT '',
  `editedDate` date NULL,
- `deleted` enum('0','1') NOT NULL DEFAULT '0',
+ `deleted` tinyint unsigned NOT NULL DEFAULT 0,
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14476,7 +14476,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updateDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
@@ -14515,7 +14515,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
   `approvedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14561,7 +14561,7 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `trackedDate` date NULL,
   `assignedDate` date NULL,
   `approvedDate` date NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14615,7 +14615,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `resolvedDate` datetime NULL,
   `lastCheckedBy` varchar(30) NOT NULL DEFAULT '',
   `lastCheckedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14636,7 +14636,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14652,7 +14652,7 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project_account` ON `zt_gapanalysis`(`project`,`account`);
@@ -14669,7 +14669,7 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `openedDate` datetime NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `parent` int NOT NULL DEFAULT '0',
   `grade` tinyint NOT NULL DEFAULT '0',
   `path` varchar(1000) NOT NULL DEFAULT '',
@@ -15620,7 +15620,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
@@ -15679,7 +15679,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -15822,7 +15822,7 @@ CREATE TABLE IF NOT EXISTS `zt_demandpool` (
   `owner` text NULL,
   `reviewer` text NULL,
   `acl` char(30) NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -15872,7 +15872,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `distributedDate` datetime NULL,
   `feedback` int NOT NULL DEFAULT '0',
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -15942,7 +15942,7 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
   `meetingDate` date NULL,
   `meetingLocation` varchar(255) NOT NULL DEFAULT '',
   `meetingMinutes` mediumtext NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -15974,7 +15974,7 @@ CREATE TABLE IF NOT EXISTS `zt_roadmap` (
   `closedBy` char(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` enum('done','canceled') DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16008,7 +16008,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_model` (
   `editedBy` varchar(30) DEFAULT NULL,
   `editedDate` datetime DEFAULT NULL,
   `enabled` enum('0', '1') NOT NULL DEFAULT '1',
-  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16031,7 +16031,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) DEFAULT NULL,
   `editedDate` datetime DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16080,7 +16080,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
   `model` varchar(255) NOT NULL DEFAULT '',
   `role` text DEFAULT NULL,
   `characterization` text DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16108,7 +16108,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `editedDate` datetime NOT NULL,
   `published` enum('0','1') NOT NULL DEFAULT '0',
   `publishedDate` datetime DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `prompt` text NOT NULL,
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -16240,7 +16240,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `enabled` enum('0', '1') NOT NULL DEFAULT '1',
   `createdDate` datetime NOT NULL,
   `publishedDate` datetime DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16309,7 +16309,7 @@ CREATE TABLE IF NOT EXISTS `zt_market` (
   `openedDate` datetime NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16331,7 +16331,7 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `lastEditedDate` datetime NULL,
   `publishedBy` varchar(30) NOT NULL DEFAULT '',
   `publishedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16368,7 +16368,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `lastCalcRows` int NOT NULL DEFAULT '0',
   `lastCalcTime` datetime DEFAULT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16395,7 +16395,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `calcType` ENUM('cron', 'inference') NOT NULL DEFAULT 'cron',
   `calculatedBy` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
-  `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `metricCode_system_date` ON `zt_metriclib` (`metricCode`, `system`, `date`);
@@ -16471,7 +16471,7 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
   `createdDate` DATETIME NULL,
   `editedBy` VARCHAR(30) NOT NULL DEFAULT '',
   `editedDate` DATETIME NULL,
-  `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
