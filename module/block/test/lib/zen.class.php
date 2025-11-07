@@ -827,4 +827,32 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printSingleStatisticBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printSingleStatisticBlockTest(object $block)
+    {
+        $this->invokeArgs('printSingleStatisticBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productID = isset($view->product) && isset($view->product->id) ? $view->product->id : 0;
+        $result->productName = isset($view->product) && isset($view->product->name) ? $view->product->name : '';
+        $result->storyDeliveryRate = isset($view->product) && isset($view->product->storyDeliveryRate) ? $view->product->storyDeliveryRate : 0;
+        $result->totalStories = isset($view->product) && isset($view->product->totalStories) ? $view->product->totalStories : 0;
+        $result->closedStories = isset($view->product) && isset($view->product->closedStories) ? $view->product->closedStories : 0;
+        $result->unclosedStories = isset($view->product) && isset($view->product->unclosedStories) ? $view->product->unclosedStories : 0;
+        $result->hasNewPlan = isset($view->product) && isset($view->product->newPlan) && $view->product->newPlan ? 1 : 0;
+        $result->hasNewExecution = isset($view->product) && isset($view->product->newExecution) && $view->product->newExecution ? 1 : 0;
+        $result->hasNewRelease = isset($view->product) && isset($view->product->newRelease) && $view->product->newRelease ? 1 : 0;
+        $result->monthFinishCount = isset($view->product) && isset($view->product->monthFinish) ? count($view->product->monthFinish) : 0;
+        $result->monthCreatedCount = isset($view->product) && isset($view->product->monthCreated) ? count($view->product->monthCreated) : 0;
+        return $result;
+    }
 }
