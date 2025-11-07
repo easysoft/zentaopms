@@ -9,6 +9,54 @@ class buildZenTest extends baseTest
     protected $className  = 'zen';
 
     /**
+     * Test assignCreateData method.
+     *
+     * @param  int       $productID
+     * @param  int       $executionID
+     * @param  int       $projectID
+     * @param  string    $status
+     * @access public
+     * @return array
+     */
+    public function assignCreateDataTest($productID = 0, $executionID = 0, $projectID = 0, $status = '')
+    {
+        global $tester;
+        $build = $tester->loadModel('build');
+        $execution = $tester->loadModel('execution');
+        $product = $tester->loadModel('product');
+        $project = $tester->loadModel('project');
+
+        $productGroups = $branchGroups = array();
+        $noClosedParam = (isset($build->config->CRExecution) && $build->config->CRExecution == 0) ? '|noclosed' : '';
+        $executions = $execution->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc' . $noClosedParam);
+        $executionID = empty($executionID) && !empty($executions) ? (int)key($executions) : $executionID;
+
+        if($executionID || $projectID) $productGroups = $product->getProducts($executionID ? $executionID : $projectID, $status);
+        if($executionID || $projectID) $branchGroups = $project->getBranchesByProject($executionID ? $executionID : $projectID);
+
+        $productID = $productID ? $productID : key($productGroups);
+        $branches = $products = array();
+
+        if(!empty($productGroups[$productID]) && $productGroups[$productID]->type != 'normal' && !empty($branchGroups[$productID]))
+        {
+            $branchPairs = $tester->loadModel('branch')->getPairs($productID, 'active');
+            foreach($branchGroups[$productID] as $branchID => $branch) if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
+        }
+
+        foreach($productGroups as $prod) $products[$prod->id] = $prod->name;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'productID' => $productID, 'executionID' => $executionID, 'products' => $products,
+            'executions' => $executions, 'branches' => $branches,
+            'users' => $tester->loadModel('user')->getPairs('nodeleted|noclosed'),
+            'product' => isset($productGroups[$productID]) ? $productGroups[$productID] : '',
+            'project' => $project->getByID($projectID)
+        );
+    }
+
+    /**
      * Test assignBugVarsForView method.
      *
      * @param  object    $build
