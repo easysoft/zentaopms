@@ -37,4 +37,18 @@ class chartZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getMenuItems method.
+     *
+     * @param  array $menus
+     * @access public
+     * @return array
+     */
+    public function getMenuItemsTest(array $menus = array())
+    {
+        $result = $this->invokeArgs('getMenuItems', array($menus));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
