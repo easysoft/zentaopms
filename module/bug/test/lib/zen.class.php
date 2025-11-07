@@ -698,4 +698,18 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test initBug method.
+     *
+     * @param  array $fields
+     * @access public
+     * @return object
+     */
+    public function initBugTest(array $fields = array()): object
+    {
+        $result = $this->invokeArgs('initBug', [$fields]);
+        if(dao::isError()) return (object)array();
+        return $result;
+    }
 }
