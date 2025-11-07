@@ -97,4 +97,48 @@ class buildZenTest extends baseTest
             'hasGeneratedPager' => isset($this->instance->view->generatedBugPager)
         );
     }
+
+    /**
+     * Test assignEditData method.
+     *
+     * @param  object    $build
+     * @access public
+     * @return array
+     */
+    public function assignEditDataTest($build = null)
+    {
+        global $tester;
+        if($build === null) return array();
+
+        $builds    = array();
+        $status    = empty($this->instance->config->CRProduct) ? 'noclosed' : '';
+        $projectID = $build->execution ? (int)$build->execution : (int)$build->project;
+        $productGroups = $tester->loadModel('product')->getProducts($projectID, $status);
+        $branches  = $tester->loadModel('branch')->getList($build->product, $projectID, 'all');
+        if(!$build->execution) $builds = $tester->loadModel('build')->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false, $build->system);
+
+        $executions = $tester->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, (int)$tester->session->project, 'stagefilter');
+        $execution  = $build->execution ? $tester->loadModel('execution')->getByID((int)$build->execution) : '';
+        if($build->execution && !isset($executions[$build->execution]))
+        {
+            $execution = $tester->loadModel('execution')->getByID($build->execution);
+            $executions[$build->execution] = $execution ? $execution->name : '';
+        }
+        if($build->product && !isset($productGroups[$build->product]))
+        {
+            $product = $tester->loadModel('product')->getById($build->product);
+            $product->branch = $build->branch;
+            $productGroups[$build->product] = $product;
+        }
+
+        $branchTagOption = array();
+        foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (已关闭)' : '');
+        foreach(explode(',', $build->branch) as $buildBranch) if(!isset($branchTagOption[$buildBranch])) $branchTagOption[$buildBranch] = $tester->loadModel('branch')->getById($buildBranch, 0, 'name');
+
+        $products = array();
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
+        if(dao::isError()) return dao::getError();
+
+        return array('products' => $products, 'product' => isset($productGroups[$build->product]) ? $productGroups[$build->product] : '', 'branchTagOption' => $branchTagOption, 'builds' => $builds, 'executions' => $executions, 'executionType' => !empty($execution) && $execution->type == 'stage' ? 1 : 0);
+    }
 }
