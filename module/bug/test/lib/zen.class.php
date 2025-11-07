@@ -345,4 +345,29 @@ class bugZenTest extends baseTest
 
         return $output;
     }
+
+    /**
+     * Test buildBugsForBatchEdit method.
+     *
+     * @param  array $oldBugs
+     * @access public
+     * @return array|false
+     */
+    public function buildBugsForBatchEditTest(array $oldBugs = array())
+    {
+        $result = $this->invokeArgs('buildBugsForBatchEdit', [$oldBugs]);
+        if(dao::isError()) return false;
+
+        $output = array();
+        $output['count'] = count($result);
+        if(!empty($result))
+        {
+            foreach($result as $index => $bug)
+            {
+                $output[$index] = $bug;
+            }
+        }
+
+        return $output;
+    }
 }
