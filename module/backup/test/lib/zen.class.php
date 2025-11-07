@@ -39,4 +39,36 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test backupFile method.
+     *
+     * @param  string $fileName 文件名
+     * @param  string $reload   重载参数
+     * @access public
+     * @return mixed
+     */
+    public function backupFileTest(string $fileName = '', string $reload = 'no')
+    {
+        $result = $this->invokeArgs('backupFile', [$fileName, $reload]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test backupFile method with nofile setting.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function backupFileTestWithNofile()
+    {
+        global $config;
+        $oldSetting = $config->backup->setting;
+        $config->backup->setting = 'nofile';
+        $result = $this->invokeArgs('backupFile', ['test_nofile']);
+        $config->backup->setting = $oldSetting;
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
