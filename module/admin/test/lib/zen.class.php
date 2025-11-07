@@ -104,4 +104,18 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test syncPublicClasses method.
+     *
+     * @param  int $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncPublicClassesTest(int $limit = 3)
+    {
+        $result = $this->invokeArgs('syncPublicClasses', [$limit]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
