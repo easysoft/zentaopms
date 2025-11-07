@@ -282,4 +282,20 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processRiskRecord method.
+     *
+     * @param  object $record
+     * @param  string $module
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processRiskRecordTest(object $record, string $module, array $objectList): object
+    {
+        $result = $this->invokeArgs('processRiskRecord', [$record, $module, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
