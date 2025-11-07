@@ -990,4 +990,19 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * Test updateTodoAfterCreate method.
+     *
+     * @param  int $bugID
+     * @param  int $todoID
+     * @access public
+     * @return bool
+     */
+    public function updateTodoAfterCreateTest(int $bugID, int $todoID): bool
+    {
+        $result = $this->invokeArgs('updateTodoAfterCreate', [$bugID, $todoID]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
