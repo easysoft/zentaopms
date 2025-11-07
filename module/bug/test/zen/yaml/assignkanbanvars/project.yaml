@@ -1,0 +1,63 @@
+---
+title: project表数据定义
+desc: 为assignKanbanVars方法测试准备project数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: "Project{1-10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: "project{5},program{3},sprint{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 项目状态
+  range: "wait{3},doing{5},done{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: model
+  note: 项目模型
+  range: "scrum{5},waterfall{3},kanban{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: "admin,user1,user2"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: "0{9},1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

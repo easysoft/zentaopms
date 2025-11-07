@@ -88,4 +88,27 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * Test assignKanbanVars method.
+     *
+     * @param  object $execution
+     * @param  array  $output
+     * @access public
+     * @return array
+     */
+    public function assignKanbanVarsTest(object $execution, array $output = array()): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+        $this->invokeArgs('assignKanbanVars', [$execution, $output]);
+        if(dao::isError()) return array();
+
+        return array(
+            'executionType' => $instance->view->executionType ?? '',
+            'regionID'      => $instance->view->regionID ?? 0,
+            'laneID'        => $instance->view->laneID ?? 0,
+            'regionPairs'   => !empty($instance->view->regionPairs) ? count($instance->view->regionPairs) : 0,
+            'lanePairs'     => !empty($instance->view->lanePairs) ? count($instance->view->lanePairs) : 0,
+        );
+    }
 }

@@ -1,0 +1,49 @@
+---
+title: kanbangroup表数据定义
+desc: 为assignKanbanVars方法测试准备kanban分组数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 分组ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: kanban
+  note: 看板ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: region
+  note: 区域ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分组名称
+  range: "Group{1-10}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: "0{9},1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
