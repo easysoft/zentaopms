@@ -547,7 +547,7 @@ class zaiModel extends model
      * @param bool   $filterByPriv
      * @return array
      */
-    public function searchKnowledgeChunks(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
+    public function searchKnowledgeChunks(string $query, string $collection, array $filter = array(), int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -603,12 +603,15 @@ class zaiModel extends model
      */
     public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
+        if($objectType === 'knowledge') return true;
+
         if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
 
         if(!isset(static::$objectViews[$objectType])) static::$objectViews[$objectType] = array();
 
         if($attrs === null) $attrs = array();
         $canView = false;
+        if($objectType === 'story' || $objectType === 'demand')
         if($objectType === 'story' || $objectType === 'demand')
         {
             $table   = $objectType === 'story' ? TABLE_STORY : TABLE_DEMAND;
@@ -674,9 +677,12 @@ class zaiModel extends model
 
             $keyParts = explode('-', $key);
             if(count($keyParts) < 2) continue;
+            [$objectType, $objectID] = $keyParts;
             $attrs = isset($knowledge[$attrsName]) ? $knowledge[$attrsName] : null;
+            if(!empty($attrs['objectType'])) $objectType = $attrs['objectType'];
+            if(!empty($attrs['objectID']))   $objectID = $attrs['objectID'];
 
-            if(!$this->isCanViewObject($keyParts[0], $keyParts[1], $attrs)) continue;
+            if(!$this->isCanViewObject($objectType, $objectID, $attrs)) continue;
 
             $filteredKnowledges[] = $knowledge;
 
