@@ -1121,4 +1121,19 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test processBlockForRender method.
+     *
+     * @param  array $blocks    区块列表
+     * @param  int   $projectID 项目ID
+     * @access public
+     * @return array
+     */
+    public function processBlockForRenderTest(array $blocks, int $projectID = 0)
+    {
+        $result = $this->invokeArgs('processBlockForRender', array($blocks, $projectID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
