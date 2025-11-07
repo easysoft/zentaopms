@@ -128,6 +128,7 @@ if(!$canBeChanged)
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
+$onlyNoCheckCount = 0;
 if(!empty($build->builds))
 {
     $buildStories = explode(',', $build->stories);
@@ -145,7 +146,6 @@ if(!empty($build->builds))
     $buildBugs = explode(',', $build->bugs);
     $buildBugs = array_combine($buildBugs, $buildBugs);
 
-    $onlyNoCheckCount = 0;
     foreach($bugs as $index => $bug)
     {
         if(empty($bug->actions)) break;
