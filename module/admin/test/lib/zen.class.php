@@ -21,4 +21,18 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test fetchAPI method.
+     *
+     * @param  string $url
+     * @access public
+     * @return mixed
+     */
+    public function fetchAPITest(string $url = '')
+    {
+        $result = $this->invokeArgs('fetchAPI', [$url]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
