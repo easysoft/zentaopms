@@ -1008,8 +1008,19 @@
         clearTimer();
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
-        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
-        else $iframe.attr('src', url);
+        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url)
+        {
+            $iframe[0].contentWindow.location.reload();
+        }
+        else
+        {
+            $iframe.attr('src', url);
+            setTimeout(() =>
+            {
+                // Fix firefox not load page when iframe is not ready.
+                if($iframe[0].contentWindow.location.href === 'about:blank') $iframe[0].contentWindow.location.href = url;
+            }, 500);
+        }
         currentAppUrl = url;
         openedOldPage = url;
         triggerEvent('openOldPage');
