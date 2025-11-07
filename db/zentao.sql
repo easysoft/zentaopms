@@ -2634,13 +2634,13 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
-  `pretask` MEDIUMINT(8) UNSIGNED NOT NULL,
-  `condition` ENUM( 'begin', 'end' ) NOT NULL,
-  `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL,
-  `action` ENUM( 'begin', 'end' ) NOT NULL,
+  `pretask` int(8) UNSIGNED NOT NULL ,
+  `condition` ENUM( 'begin', 'end' ) NOT NULL ,
+  `task` int( 8 ) UNSIGNED NOT NULL ,
+  `action` ENUM( 'begin', 'end' ) NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
@@ -16458,11 +16458,11 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 
 -- DROP TABLE IF EXISTS `zt_system`;
 CREATE TABLE IF NOT EXISTS `zt_system` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL DEFAULT '',
-  `product` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `product` int(8) UNSIGNED NOT NULL DEFAULT '0',
   `integrated` ENUM('0','1') NOT NULL DEFAULT '0',
-  `latestRelease` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `latestRelease` int(8) UNSIGNED NOT NULL DEFAULT '0',
   `latestDate` DATETIME NULL,
   `children` VARCHAR(255) NOT NULL DEFAULT '',
   `status` ENUM('active','inactive') NOT NULL DEFAULT 'active',
