@@ -476,4 +476,37 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printProjectStatisticBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printProjectStatisticBlockTest(object $block)
+    {
+        ob_start();
+        $this->invokeArgs('printProjectStatisticBlock', array($block));
+        ob_get_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->projectCount = isset($view->projects) ? count($view->projects) : 0;
+        $result->userCount = isset($view->users) ? count($view->users) : 0;
+
+        if(isset($view->projects))
+        {
+            foreach($view->projects as $index => $project)
+            {
+                $projectKey = 'project' . $index;
+                $result->$projectKey = new stdClass();
+                $result->$projectKey->id = isset($project->id) ? $project->id : 0;
+                $result->$projectKey->name = isset($project->name) ? $project->name : '';
+                $result->$projectKey->status = isset($project->status) ? $project->status : '';
+            }
+        }
+        return $result;
+    }
 }
