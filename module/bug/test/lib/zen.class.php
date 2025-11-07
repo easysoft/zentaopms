@@ -860,4 +860,35 @@ class bugZenTest extends baseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  object $bug
+     * @param  array  $params
+     * @param  string $message
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest(object $bug, array $params = array(), string $message = ''): array
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('responseAfterCreate', [$bug, $params, $message]);
+            $output = ob_get_clean();
+            if(dao::isError()) return array('error' => dao::getError());
+            return array('result' => $result, 'output' => $output);
+        }
+        catch(EndResponseException $e)
+        {
+            ob_end_clean();
+            return array('result' => true, 'response' => $e->getContent());
+        }
+        catch(Throwable $e)
+        {
+            ob_end_clean();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
