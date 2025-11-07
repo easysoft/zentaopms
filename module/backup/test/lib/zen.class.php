@@ -116,4 +116,17 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test removeExpiredFiles method.
+     *
+     * @access public
+     * @return void
+     */
+    public function removeExpiredFilesTest()
+    {
+        $result = $this->invokeArgs('removeExpiredFiles', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
