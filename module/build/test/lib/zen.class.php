@@ -172,4 +172,17 @@ class buildZenTest extends baseTest
             'storyCount'   => count($this->instance->view->stories ?? array())
         );
     }
+
+    /**
+     * Test buildBuildForCreate method.
+     *
+     * @access public
+     * @return object|array
+     */
+    public function buildBuildForCreateTest()
+    {
+        $result = $this->invokeArgs('buildBuildForCreate', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
