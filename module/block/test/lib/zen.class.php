@@ -671,4 +671,33 @@ class blockZenTest extends baseTest
         $result->closeBugsCount = isset($view->closeBugs) ? count($view->closeBugs) : 0;
         return $result;
     }
+
+    /**
+     * Test printSingleDynamicBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printSingleDynamicBlockTest()
+    {
+        ob_start();
+        $this->invokeArgs('printSingleDynamicBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productID = isset($view->productID) ? $view->productID : 0;
+        $result->actionsCount = isset($view->actions) ? count($view->actions) : 0;
+        $result->usersCount = isset($view->users) ? count($view->users) : 0;
+
+        if(isset($view->actions))
+        {
+            foreach($view->actions as $index => $action)
+            {
+                $result->$index = $action;
+            }
+        }
+        return $result;
+    }
 }
