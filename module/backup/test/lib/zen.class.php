@@ -143,4 +143,35 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test restoreSQL method.
+     *
+     * @param  string $fileName 文件名
+     * @access public
+     * @return mixed
+     */
+    public function restoreSQLTest(string $fileName = '')
+    {
+        $result = $this->invokeArgs('restoreSQL', [$fileName]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test setHoldDays method.
+     *
+     * @param  mixed $holdDays 保留天数
+     * @access public
+     * @return mixed
+     */
+    public function setHoldDaysTest($holdDays = null)
+    {
+        $data = new stdclass();
+        if(!is_null($holdDays)) $data->holdDays = $holdDays;
+
+        $result = $this->invokeArgs('setHoldDays', [$data]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
