@@ -1032,4 +1032,27 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallGeneralReportBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printWaterfallGeneralReportBlockTest()
+    {
+        $this->invokeArgs('printWaterfallGeneralReportBlock', array());
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->pv = isset($view->pv) ? $view->pv : 0;
+        $result->ev = isset($view->ev) ? $view->ev : 0;
+        $result->ac = isset($view->ac) ? $view->ac : 0;
+        $result->sv = isset($view->sv) ? $view->sv : 0;
+        $result->cv = isset($view->cv) ? $view->cv : 0;
+        $result->progress = isset($view->progress) ? $view->progress : 0;
+
+        return $result;
+    }
 }
