@@ -75,4 +75,18 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test syncDynamics method.
+     *
+     * @param  int $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncDynamicsTest(int $limit = 2)
+    {
+        $result = $this->invokeArgs('syncDynamics', [$limit]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
