@@ -492,11 +492,12 @@ class caselibTest
     /**
      * Test prepareCasesForBathcCreate method.
      *
-     * @param  int $libID
+     * @param  int    $libID
+     * @param  string $returnType
      * @access public
      * @return mixed
      */
-    public function prepareCasesForBathcCreateTest(int $libID)
+    public function prepareCasesForBathcCreateTest(int $libID, string $returnType = 'array')
     {
         global $app, $config, $tester;
         
@@ -543,7 +544,7 @@ class caselibTest
             
             // 手动处理prepareCasesForBathcCreate的逻辑
             $now = helper::now();
-            $account = $app->user->account ?? 'admin';
+            $account = isset($tester->app->user->account) ? $tester->app->user->account : (isset($app->user->account) ? $app->user->account : 'admin');
             $forceNotReview = true; // 简化处理
             
             foreach($mockData as $i => $testcase)
@@ -577,9 +578,15 @@ class caselibTest
             
             if(!empty($requiredErrors)) {
                 dao::$errors = $requiredErrors;
+                if($returnType == 'empty') return 1; // 返回1表示为空
+                if($returnType == 'count') return 0; // 返回0表示没有数据
                 return array(); // 返回空数组表示验证失败
             }
-            
+
+            // 根据returnType返回不同的值
+            if($returnType == 'count') return count($mockData);
+            if($returnType == 'empty') return empty($mockData) ? 1 : 0;
+
             return $mockData;
             
         } catch (Exception $e) {
