@@ -22,4 +22,22 @@ class ciZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test parseZtfResult method.
+     *
+     * @param  object $post
+     * @param  int    $taskID
+     * @param  int    $productID
+     * @param  int    $jobID
+     * @param  int    $compileID
+     * @access public
+     * @return bool
+     */
+    public function parseZtfResultTest($post = null, $taskID = 0, $productID = 0, $jobID = 0, $compileID = 0)
+    {
+        $result = $this->invokeArgs('parseZtfResult', [$post, $taskID, $productID, $jobID, $compileID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
