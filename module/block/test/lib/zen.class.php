@@ -612,4 +612,38 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printScrumTestBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printScrumTestBlockTest(object $block)
+    {
+        ob_start();
+        $this->invokeArgs('printScrumTestBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->projectID = (isset($view->project) && $view->project) ? $view->project->id : 0;
+        $result->projectName = (isset($view->project) && $view->project) ? $view->project->name : '';
+        $result->type = isset($block->params->type) ? $block->params->type : '';
+        if(isset($view->testtasks))
+        {
+            $result->count = count($view->testtasks);
+            foreach($view->testtasks as $index => $testtask)
+            {
+                $result->$index = $testtask;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+        return $result;
+    }
 }
