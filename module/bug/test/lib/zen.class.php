@@ -524,4 +524,18 @@ class bugZenTest extends baseTest
         if(dao::isError()) return array();
         return $result;
     }
+
+    /**
+     * Test getBatchResolveVars method.
+     *
+     * @param  array $oldBugs
+     * @access public
+     * @return array|false
+     */
+    public function getBatchResolveVarsTest(array $oldBugs)
+    {
+        $result = $this->invokeArgs('getBatchResolveVars', [$oldBugs]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
