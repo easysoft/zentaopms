@@ -785,4 +785,46 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printSingleReleaseBlock method.
+     *
+     * @param  object $block 区块对象
+     * @param  int    $productID 产品ID
+     * @access public
+     * @return object
+     */
+    public function printSingleReleaseBlockTest(object $block, int $productID = 1)
+    {
+        global $tester;
+
+        // 设置session中的产品ID
+        $tester->session->product = $productID;
+
+        // 调用方法
+        ob_start();
+        $this->invokeArgs('printSingleReleaseBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->releasesCount = isset($view->releases) ? count($view->releases) : 0;
+        $result->buildsCount = isset($view->builds) ? count($view->builds) : 0;
+
+        if(isset($view->releases))
+        {
+            foreach($view->releases as $index => $release)
+            {
+                $result->$index = $release;
+            }
+        }
+
+        if(isset($view->builds))
+        {
+            $result->builds = $view->builds;
+        }
+
+        return $result;
+    }
 }
