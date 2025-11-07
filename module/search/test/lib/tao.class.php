@@ -237,4 +237,19 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processExecutionRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processExecutionRecordTest(object $record, array $objectList): object
+    {
+        $result = $this->invokeArgs('processExecutionRecord', [$record, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
