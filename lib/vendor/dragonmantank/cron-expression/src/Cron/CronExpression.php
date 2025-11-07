@@ -67,7 +67,7 @@ class CronExpression
      *
      * @return CronExpression
      */
-    public static function factory($expression, FieldFactory $fieldFactory = null)
+    public static function factory($expression, ?FieldFactory $fieldFactory = null)
     {
         $mappings = array(
             '@yearly' => '0 0 1 1 *',
@@ -110,7 +110,7 @@ class CronExpression
      * @param string       $expression   CRON expression (e.g. '8 * * * *')
      * @param FieldFactory|null $fieldFactory Factory to create cron fields
      */
-    public function __construct($expression, FieldFactory $fieldFactory = null)
+    public function __construct($expression, ?FieldFactory $fieldFactory = null)
     {
         $this->fieldFactory = $fieldFactory;
         $this->setExpression($expression);

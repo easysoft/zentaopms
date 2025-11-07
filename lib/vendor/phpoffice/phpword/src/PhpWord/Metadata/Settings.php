@@ -267,7 +267,7 @@ class Settings
      *
      * @param TrackChangesView $trackChangesView
      */
-    public function setRevisionView(TrackChangesView $trackChangesView = null)
+    public function setRevisionView(?TrackChangesView $trackChangesView = null)
     {
         $this->revisionView = $trackChangesView;
     }
