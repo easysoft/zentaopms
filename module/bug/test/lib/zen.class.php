@@ -216,4 +216,44 @@ class bugZenTest extends baseTest
             'hasKanbanExecution' => $hasKanbanExecution,
         );
     }
+
+    /**
+     * Test assignVarsForEdit method.
+     *
+     * @param  object $bug
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function assignVarsForEditTest(object $bug, object $product): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        try
+        {
+            $this->invokeArgs('assignVarsForEdit', [$bug, $product]);
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'products'            => !empty($instance->view->products) ? count($instance->view->products) : 0,
+            'openedBuilds'        => !empty($instance->view->openedBuilds) ? count($instance->view->openedBuilds) : 0,
+            'resolvedBuilds'      => !empty($instance->view->resolvedBuilds) ? count($instance->view->resolvedBuilds) : 0,
+            'plans'               => !empty($instance->view->plans) ? count($instance->view->plans) : 0,
+            'stories'             => !empty($instance->view->stories) ? count($instance->view->stories) : 0,
+            'tasks'               => !empty($instance->view->tasks) ? count($instance->view->tasks) : 0,
+            'testtasks'           => !empty($instance->view->testtasks) ? count($instance->view->testtasks) : 0,
+            'cases'               => !empty($instance->view->cases) ? count($instance->view->cases) : 0,
+            'users'               => !empty($instance->view->users) ? count($instance->view->users) : 0,
+            'assignedToList'      => !empty($instance->view->assignedToList) ? count($instance->view->assignedToList) : 0,
+            'actions'             => !empty($instance->view->actions) ? count($instance->view->actions) : 0,
+            'contactList'         => !empty($instance->view->contactList) ? count($instance->view->contactList) : 0,
+            'execution'           => !empty($instance->view->execution) ? (int)$instance->view->execution->id : 0,
+        );
+    }
 }
