@@ -185,4 +185,18 @@ class buildZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildBuildForEdit method.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return object|array
+     */
+    public function buildBuildForEditTest($buildID = 0)
+    {
+        $result = $this->invokeArgs('buildBuildForEdit', [$buildID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
