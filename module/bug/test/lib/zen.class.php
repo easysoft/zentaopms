@@ -453,4 +453,46 @@ class bugZenTest extends baseTest
             'projectExecutionPairs'      => !empty($instance->view->projectExecutionPairs) ? count($instance->view->projectExecutionPairs) : 0,
         );
     }
+
+    /**
+     * Test buildSearchFormForLinkBugs method.
+     *
+     * @param  object $bug
+     * @param  string $excludeBugs
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormForLinkBugsTest(object $bug, string $excludeBugs, int $queryID): array
+    {
+        global $lang;
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        /* Reset search config before each test to ensure independence. */
+        $instance->config->bug->search['fields']['product']   = $lang->bug->product;
+        $instance->config->bug->search['fields']['execution'] = $lang->bug->execution;
+        $instance->config->bug->search['fields']['plan']      = $lang->bug->plan;
+
+        try
+        {
+            $this->invokeArgs('buildSearchFormForLinkBugs', [$bug, $excludeBugs, $queryID]);
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        /* Check if search form fields are properly configured. */
+        $hasProductField = isset($instance->config->bug->search['fields']['product']);
+        $hasExecutionField = isset($instance->config->bug->search['fields']['execution']);
+        $hasPlanField = isset($instance->config->bug->search['fields']['plan']);
+
+        return array(
+            'hasProductField'   => $hasProductField ? 1 : 0,
+            'hasExecutionField' => $hasExecutionField ? 1 : 0,
+            'hasPlanField'      => $hasPlanField ? 1 : 0,
+        );
+    }
 }
