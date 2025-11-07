@@ -647,6 +647,20 @@ class bugZenTest extends baseTest
     }
 
     /**
+     * Test getProjectsForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|false
+     */
+    public function getProjectsForCreateTest(object $bug)
+    {
+        $result = $this->invokeArgs('getProjectsForCreate', [$bug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    /**
      * Get bug zen instance for setting view.
      *
      * @access public
