@@ -65,4 +65,43 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printDocDynamicBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocDynamicBlockTest()
+    {
+        ob_start();
+        $this->invokeArgs('printDocDynamicBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->actions))
+        {
+            $result->actionsCount = count($view->actions);
+            foreach($view->actions as $index => $action)
+            {
+                $result->$index = $action;
+            }
+        }
+        else
+        {
+            $result->actionsCount = 0;
+        }
+
+        if(isset($view->users))
+        {
+            $result->usersCount = count($view->users);
+        }
+        else
+        {
+            $result->usersCount = 0;
+        }
+        return $result;
+    }
 }
