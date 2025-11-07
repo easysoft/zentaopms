@@ -1,0 +1,56 @@
+---
+title: assignBatchEditVars测试的Bug数据
+desc: 用于测试bugZen::assignBatchEditVars()方法的Bug数据
+
+fields:
+- field: id
+  note: BugID
+  range: 1-20
+- field: product
+  note: 所属产品
+  range: '1{5},2{5},3{5},4{5}'
+- field: branch
+  note: 所属分支
+  range: '0{10},1{5},2{5}'
+- field: project
+  note: 所属项目
+  range: '1{10},2{10}'
+- field: execution
+  note: 所属执行
+  range: '0{5},1{5},2{10}'
+- field: module
+  note: 所属模块
+  range: '1-10'
+- field: plan
+  note: 所属计划
+  range: '0{10},1{5},2{5}'
+- field: title
+  note: Bug标题
+  range: 'Bug标题1,Bug标题2,Bug标题3,Bug标题4,Bug标题5{4},Bug标题6{4},Bug标题7{4},Bug标题8{4}'
+- field: type
+  note: Bug类型
+  range: 'codeerror,config,install,security,performance,standard,automation,designdefect{4},others{8}'
+- field: severity
+  note: 严重程度
+  range: '1-4'
+- field: pri
+  note: 优先级
+  range: '1-4'
+- field: status
+  note: Bug状态
+  range: 'active{10},resolved{5},closed{5}'
+- field: confirmed
+  note: 是否确认
+  range: '0{5},1{15}'
+- field: assignedTo
+  note: 指派给
+  range: 'admin{5},user1{5},user2{5},closed{5}'
+- field: openedBy
+  note: 由谁创建
+  range: 'admin'
+- field: openedDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00'
+- field: deleted
+  note: 是否删除
+  range: '0'

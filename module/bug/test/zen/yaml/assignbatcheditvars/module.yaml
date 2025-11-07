@@ -1,0 +1,29 @@
+---
+title: assignBatchEditVars测试的模块数据
+desc: 用于测试bugZen::assignBatchEditVars()方法的模块数据
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-20
+- field: root
+  note: 所属产品
+  range: '1{5},2{5},3{5},4{5}'
+- field: branch
+  note: 所属分支
+  range: '0{10},1{5},2{5}'
+- field: name
+  note: 模块名称
+  range: '模块1,模块2,模块3,模块4,模块5{4},模块6{4},模块7{4},模块8{4}'
+- field: type
+  note: 模块类型
+  range: 'story'
+- field: parent
+  note: 父模块
+  range: '0'
+- field: grade
+  note: 模块等级
+  range: '1'
+- field: deleted
+  note: 是否删除
+  range: '0'

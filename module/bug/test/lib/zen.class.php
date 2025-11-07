@@ -71,4 +71,21 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * Test assignBatchEditVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return bool
+     */
+    public function assignBatchEditVarsTest(int $productID, string $branch): bool
+    {
+        ob_start();
+        $this->invokeArgs('assignBatchEditVars', [$productID, $branch]);
+        ob_end_clean();
+        if(dao::isError()) return false;
+        return true;
+    }
 }
