@@ -940,4 +940,31 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printTeamAchievementBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printTeamAchievementBlockTest()
+    {
+        $this->invokeArgs('printTeamAchievementBlock', array());
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->finishedTasks = isset($view->finishedTasks) ? $view->finishedTasks : 0;
+        $result->yesterdayTasks = isset($view->yesterdayTasks) ? $view->yesterdayTasks : 0;
+        $result->createdStories = isset($view->createdStories) ? $view->createdStories : 0;
+        $result->yesterdayStories = isset($view->yesterdayStories) ? $view->yesterdayStories : 0;
+        $result->closedBugs = isset($view->closedBugs) ? $view->closedBugs : 0;
+        $result->yesterdayBugs = isset($view->yesterdayBugs) ? $view->yesterdayBugs : 0;
+        $result->runCases = isset($view->runCases) ? $view->runCases : 0;
+        $result->yesterdayCases = isset($view->yesterdayCases) ? $view->yesterdayCases : 0;
+        $result->consumedHours = isset($view->consumedHours) ? $view->consumedHours : 0;
+        $result->yesterdayHours = isset($view->yesterdayHours) ? $view->yesterdayHours : 0;
+
+        return $result;
+    }
 }
