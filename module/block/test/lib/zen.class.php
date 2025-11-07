@@ -302,4 +302,26 @@ class blockZenTest extends baseTest
         $result->executionLink = isset($view->executionLink) ? $view->executionLink : '';
         return $result;
     }
+
+    /**
+     * Test printMonthlyProgressBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printMonthlyProgressBlockTest()
+    {
+        $this->invokeArgs('printMonthlyProgressBlock', array());
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->doneStoryEstimateCount = isset($view->doneStoryEstimate) ? count($view->doneStoryEstimate) : 0;
+        $result->doneStoryCountCount = isset($view->doneStoryCount) ? count($view->doneStoryCount) : 0;
+        $result->createStoryCountCount = isset($view->createStoryCount) ? count($view->createStoryCount) : 0;
+        $result->fixedBugCountCount = isset($view->fixedBugCount) ? count($view->fixedBugCount) : 0;
+        $result->createBugCountCount = isset($view->createBugCount) ? count($view->createBugCount) : 0;
+        $result->totalDataArrays = $result->doneStoryEstimateCount + $result->doneStoryCountCount + $result->createStoryCountCount + $result->fixedBugCountCount + $result->createBugCountCount;
+        return $result;
+    }
 }
