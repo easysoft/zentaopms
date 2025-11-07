@@ -111,4 +111,51 @@ class bugZenTest extends baseTest
             'lanePairs'     => !empty($instance->view->lanePairs) ? count($instance->view->lanePairs) : 0,
         );
     }
+
+    /**
+     * Test assignProductRelatedVars method.
+     *
+     * @param  array $bugs
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function assignProductRelatedVarsTest(array $bugs, array $products): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        try
+        {
+            $branchTagOption = $this->invokeArgs('assignProductRelatedVars', [$bugs, $products]);
+        }
+        catch(Throwable $e)
+        {
+            return array(
+                'error'             => $e->getMessage(),
+                'branchProduct'     => false,
+                'modulesCount'      => 0,
+                'productBugOptions' => 0,
+                'branchTagOption'   => 0,
+            );
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        $branchCount = 0;
+        if(!empty($branchTagOption))
+        {
+            foreach($branchTagOption as $productID => $branches)
+            {
+                $branchCount += count($branches);
+            }
+        }
+
+        return array(
+            'branchProduct'       => !empty($instance->view->branchProduct) ? 1 : 0,
+            'modulesCount'        => !empty($instance->view->modules) ? count($instance->view->modules) : 0,
+            'productBugOptions'   => !empty($instance->view->productBugOptions) ? count($instance->view->productBugOptions) : 0,
+            'branchTagOptionView' => !empty($instance->view->branchTagOption) ? count($instance->view->branchTagOption) : 0,
+            'returnValue'         => $branchCount,
+        );
+    }
 }
