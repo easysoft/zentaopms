@@ -75,4 +75,19 @@ class kanbanTaoTest extends baseTest
         $card = $tester->dao->select('assignedTo')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
         return $card ? $card->assignedTo : false;
     }
+
+    /**
+     * Test getStoryCardMenu method.
+     *
+     * @param  object $execution 执行对象
+     * @param  array  $objects   需求对象数组
+     * @access public
+     * @return array
+     */
+    public function getStoryCardMenuTest($execution = null, $objects = array())
+    {
+        $result = $this->invokeArgs('getStoryCardMenu', [$execution, $objects]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
