@@ -152,6 +152,12 @@ ALTER TABLE `zt_auditplan` ADD `cycleType` varchar(10) NOT NULL DEFAULT '' COMME
 ALTER TABLE `zt_auditplan` ADD `cycleConfig` varchar(100) NOT NULL DEFAULT '[]' COMMENT '周期设置' AFTER `cycleType`;
 ALTER TABLE `zt_auditplan` ADD `cyclePlan` smallint unsigned  NOT NULL DEFAULT 0 COMMENT '生成计划(提前的天数)' AFTER `cycleConfig`;
 ALTER TABLE `zt_auditplan` ADD `deadline` date NULL COMMENT '过期时间' AFTER `cyclePlan`;
+ALTER TABLE `zt_auditplan` ADD `templateID` int unsigned NOT NULL DEFAULT 0 COMMENT '周期性活动检查ID' AFTER `deadline`;
+ALTER TABLE `zt_auditplan` DROP COLUMN `dateType`;
+ALTER TABLE `zt_auditplan` DROP COLUMN `config`;
+ALTER TABLE `zt_auditplan` DROP COLUMN `checkBy`;
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES('2','2','*','*','*','moduleName=auditplan&methodName=ajaxCreateCycleAuditplan','生成周期性活动检查','zentao',1,'normal');
 
 UPDATE `zt_auditplan` SET `checkDate` = NULL WHERE `checkDate` = '0000-00-00';
 
