@@ -27,7 +27,7 @@ class assignToStoryTester extends tester
 
         $form->dom->assignedTo->picker('admin'); //指派人选择admin
         $form->dom->assignToBtn->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage($storyType, 'view');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
@@ -70,7 +70,7 @@ class assignToStoryTester extends tester
         $browsePage->dom->batchAssignSearch->setValue('admin');
         $browsePage->wait(2);
         $browsePage->dom->batchAssignAdmin->click();
-        $browsePage->wait(1);
+        $browsePage->wait(3);
 
         $viewPage = $this->initForm($storyType, 'view', array('id' => $storyID), 'appIframe-product');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
