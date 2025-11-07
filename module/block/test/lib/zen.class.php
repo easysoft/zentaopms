@@ -224,4 +224,33 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printExecutionListBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printExecutionListBlockTest(object $block)
+    {
+        $this->invokeArgs('printExecutionListBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->executions))
+        {
+            $result->count = count($view->executions);
+            foreach($view->executions as $index => $execution)
+            {
+                $result->$index = $execution;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+        return $result;
+    }
 }
