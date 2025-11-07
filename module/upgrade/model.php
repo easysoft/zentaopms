@@ -12059,7 +12059,6 @@ class upgradeModel extends model
         /* 删除旧分类。 */
         $this->dao->delete()->from(TABLE_PROCESS)->where('workflowGroup')->eq(0)->exec();
         $this->dao->delete()->from(TABLE_ACTIVITY)->where('workflowGroup')->eq(0)->exec();
-        $this->dao->delete()->from(TABLE_AUDITCL)->where('objectType')->eq('zoutput')->exec();
         $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
     }
 
