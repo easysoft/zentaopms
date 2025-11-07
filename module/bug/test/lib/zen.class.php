@@ -417,4 +417,40 @@ class bugZenTest extends baseTest
             'casesCount'            => !empty($instance->view->cases) ? count($instance->view->cases) : 0,
         );
     }
+
+    /**
+     * Test buildEditForm method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function buildEditFormTest(object $bug): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        try
+        {
+            $this->invokeArgs('buildEditForm', [$bug]);
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'title'                      => $instance->view->title ?? '',
+            'bug'                        => !empty($instance->view->bug) ? (int)$instance->view->bug->id : 0,
+            'duplicateBugs'              => !empty($instance->view->duplicateBugs) ? count($instance->view->duplicateBugs) : 0,
+            'product'                    => !empty($instance->view->product) ? (int)$instance->view->product->id : 0,
+            'moduleOptionMenu'           => !empty($instance->view->moduleOptionMenu) ? count($instance->view->moduleOptionMenu) : 0,
+            'projectID'                  => $instance->view->projectID ?? 0,
+            'projects'                   => !empty($instance->view->projects) ? count($instance->view->projects) : 0,
+            'executions'                 => !empty($instance->view->executions) ? count($instance->view->executions) : 0,
+            'branchTagOption'            => !empty($instance->view->branchTagOption) ? count($instance->view->branchTagOption) : 0,
+            'projectExecutionPairs'      => !empty($instance->view->projectExecutionPairs) ? count($instance->view->projectExecutionPairs) : 0,
+        );
+    }
 }
