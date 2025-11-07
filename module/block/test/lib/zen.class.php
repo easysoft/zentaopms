@@ -857,6 +857,35 @@ class blockZenTest extends baseTest
     }
 
     /**
+     * Test printStoryBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printStoryBlockTest(object $block)
+    {
+        ob_start();
+        $this->invokeArgs('printStoryBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->storiesCount = isset($view->stories) ? count($view->stories) : 0;
+
+        if(isset($view->stories))
+        {
+            foreach($view->stories as $index => $story)
+            {
+                $result->$index = $story;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Test printSingleStoryBlock method.
      *
      * @param  object $block 区块对象
