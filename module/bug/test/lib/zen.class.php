@@ -256,4 +256,52 @@ class bugZenTest extends baseTest
             'execution'           => !empty($instance->view->execution) ? (int)$instance->view->execution->id : 0,
         );
     }
+
+    /**
+     * Test buildBrowseView method.
+     *
+     * @param  array  $bugs
+     * @param  object $product
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $moduleID
+     * @param  array  $executions
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function buildBrowseViewTest(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, int $param, string $orderBy, object $pager): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        try
+        {
+            $this->invokeArgs('buildBrowseView', [$bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager]);
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
+        if(dao::isError()) return array('error' => dao::getError());
+
+        return array(
+            'product'         => !empty($instance->view->product) ? (int)$instance->view->product->id : 0,
+            'branch'          => $instance->view->branch ?? '',
+            'browseType'      => $instance->view->browseType ?? '',
+            'currentModuleID' => $instance->view->currentModuleID ?? 0,
+            'param'           => $instance->view->param ?? 0,
+            'orderBy'         => $instance->view->orderBy ?? '',
+            'bugsCount'       => !empty($instance->view->bugs) ? count($instance->view->bugs) : 0,
+            'executionsCount' => !empty($instance->view->executions) ? count($instance->view->executions) : 0,
+            'stories'         => !empty($instance->view->stories) ? count($instance->view->stories) : 0,
+            'tasks'           => !empty($instance->view->tasks) ? count($instance->view->tasks) : 0,
+            'plans'           => !empty($instance->view->plans) ? count($instance->view->plans) : 0,
+            'builds'          => !empty($instance->view->builds) ? count($instance->view->builds) : 0,
+            'users'           => !empty($instance->view->users) ? count($instance->view->users) : 0,
+            'memberPairs'     => !empty($instance->view->memberPairs) ? count($instance->view->memberPairs) : 0,
+        );
+    }
 }
