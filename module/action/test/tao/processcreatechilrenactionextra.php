@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 /**
 
-title=- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1' 属性extra @
+title=测试 actionTao::processCreateChildrenActionExtra();
 timeout=0
-cid=1
+cid=0
 
-- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1' 属性extra @#1 开发任务11
-- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1, 2, 3'
- - 属性extra @#1 开发任务11
-- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'999' 属性extra @0
-- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'' 属性extra @0
-- 执行actionTest模块的processCreateChildrenActionExtraTest方法，参数是'1, 999, 2'
- - 属性extra @#1 开发任务11
+- 测试单个有效任务ID >> 返回格式化的任务信息
+- 测试多个有效任务ID >> 返回多个任务信息
+- 测试不存在的任务ID >> 返回空字符串
+- 测试空字符串输入 >> 返回空字符串
+- 测试混合有效和无效ID >> 只返回有效任务信息
+- 测试大量任务ID >> 正确处理所有有效任务
+- 测试包含空格的ID字符串 >> 正确处理并过滤空格
 
 */
 
@@ -30,6 +30,8 @@ $actionTest = new actionTest();
 
 r($actionTest->processCreateChildrenActionExtraTest('1')) && p('extra') && e('#1 开发任务11');
 r($actionTest->processCreateChildrenActionExtraTest('1,2,3')) && p('extra') && e('#1 开发任务11, #2 开发任务12, #3 开发任务13');
-r($actionTest->processCreateChildrenActionExtraTest('999')) && p('extra') && e('0');
-r($actionTest->processCreateChildrenActionExtraTest('')) && p('extra') && e('0');
+r($actionTest->processCreateChildrenActionExtraTest('999')) && p('extra') && e('~~');
+r($actionTest->processCreateChildrenActionExtraTest('')) && p('extra') && e('~~');
 r($actionTest->processCreateChildrenActionExtraTest('1,999,2')) && p('extra') && e('#1 开发任务11, #2 开发任务12');
+r($actionTest->processCreateChildrenActionExtraTest('1,2,3,4,5')) && p('extra') && e('#1 开发任务11, #2 开发任务12, #3 开发任务13, #4 开发任务14, #5 开发任务15');
+r($actionTest->processCreateChildrenActionExtraTest('1, 2, 3')) && p('extra') && e('#1 开发任务11, #2 开发任务12, #3 开发任务13');
