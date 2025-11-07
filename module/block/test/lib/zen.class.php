@@ -36,4 +36,33 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printCaseBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printCaseBlockTest(object $block)
+    {
+        $this->invokeArgs('printCaseBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->cases))
+        {
+            $result->count = count($view->cases);
+            foreach($view->cases as $index => $case)
+            {
+                $result->$index = $case;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+        return $result;
+    }
 }
