@@ -40,4 +40,17 @@ class companyZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test loadExecution method.
+     *
+     * @access public
+     * @return array
+     */
+    public function loadExecutionTest()
+    {
+        $result = $this->invokeArgs('loadExecution', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
