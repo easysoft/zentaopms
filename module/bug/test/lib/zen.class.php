@@ -771,4 +771,30 @@ class bugZenTest extends baseTest
             'pageID'      => $result[3]->pageID,
         );
     }
+
+    /**
+     * Test processImageForBatchCreate method.
+     *
+     * @param  object      $bug
+     * @param  string|null $uploadImage
+     * @param  array       $bugImagesFiles
+     * @access public
+     * @return array
+     */
+    public function processImageForBatchCreateTest(object $bug, string|null $uploadImage, array $bugImagesFiles): array
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('processImageForBatchCreate', [$bug, $uploadImage, $bugImagesFiles]);
+            ob_end_clean();
+            if(dao::isError()) return array('error' => dao::getError());
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            ob_end_clean();
+            return array();
+        }
+    }
 }
