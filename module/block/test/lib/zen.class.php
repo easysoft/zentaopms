@@ -412,4 +412,29 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printProductStatisticBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printProductStatisticBlockTest(object $block)
+    {
+        $this->invokeArgs('printProductStatisticBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+        if(isset($view->products))
+        {
+            foreach($view->products as $productID => $product)
+            {
+                $result->$productID = $product;
+            }
+        }
+        return $result;
+    }
 }
