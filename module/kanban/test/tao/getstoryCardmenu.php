@@ -7,18 +7,18 @@ title=测试 kanbanTao::getStoryCardMenu();
 timeout=0
 cid=0
 
-- 步骤1：空对象数组输入 @0
-- 步骤2：单个active状态需求 @1
-- 步骤3：draft状态需求返回菜单 @1
-- 步骤4：closed状态需求返回菜单 @1
-- 步骤5：无产品关联执行返回菜单 @1
-- 步骤6：reviewing状态需求返回菜单 @1
+- 步骤1:空对象数组输入 >> 期望返回空数组
+- 步骤2:单个active状态需求 >> 期望返回包含菜单项的数组
+- 步骤3:draft状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
+- 步骤4:closed状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
+- 步骤5:无产品关联执行无移除需求菜单 >> 期望菜单中不包含移除需求选项
+- 步骤6:reviewing状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
 
 */
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $story = zenData('story');
@@ -71,9 +71,9 @@ $user->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 5. 强制要求：必须包含至少6个测试步骤
 r($kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array())) && p() && e('0'); // 步骤1：空对象数组输入
 
 $story1 = new stdclass();
@@ -86,6 +86,7 @@ $story1->assignedTo = 'admin';
 $story1->version = 1;
 $story1->deleted = '0';
 $story1->story = 1;
+$story1->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($story1));
 r(count($result)) && p() && e('1'); // 步骤2：单个active状态需求
@@ -98,6 +99,7 @@ $storyDraft->title = '需求标题4';
 $storyDraft->stage = 'wait';
 $storyDraft->assignedTo = 'admin';
 $storyDraft->story = 4;
+$storyDraft->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($storyDraft));
 r(count($result)) && p() && e('1'); // 步骤3：draft状态需求返回菜单
@@ -110,6 +112,7 @@ $storyClosed->title = '需求标题6';
 $storyClosed->stage = 'closed';
 $storyClosed->assignedTo = 'closed';
 $storyClosed->story = 6;
+$storyClosed->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($storyClosed));
 r(count($result)) && p() && e('1'); // 步骤4：closed状态需求返回菜单
@@ -125,6 +128,7 @@ $storyReviewing->title = '需求标题8';
 $storyReviewing->stage = 'testing';
 $storyReviewing->assignedTo = 'user1';
 $storyReviewing->story = 8;
+$storyReviewing->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 102, 'hasProduct' => 1), array($storyReviewing));
-r(count($result)) && p() && e('1');  // 步骤6：reviewing状态需求返回菜单
+r(count($result)) && p() && e('1'); // 步骤6：reviewing状态需求返回菜单
