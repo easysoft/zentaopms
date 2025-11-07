@@ -1,0 +1,29 @@
+---
+title: assignBatchCreateVars测试的产品数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: name
+  note: 产品名称
+  range: '正常产品,分支产品1,分支产品2,看板产品,已删除产品'
+- field: type
+  note: 产品类型
+  range: 'normal{2},branch{2},normal'
+- field: status
+  note: 产品状态
+  range: 'normal{4},closed'
+- field: deleted
+  note: 是否删除
+  range: '0{4},1'
+- field: acl
+  note: 访问控制
+  range: 'open'
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+- field: createdDate
+  note: 创建日期
+  range: '2023-01-01 00:00:00'

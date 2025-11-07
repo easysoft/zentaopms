@@ -53,4 +53,22 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test assignBatchCreateVars method.
+     *
+     * @param  int    $executionID
+     * @param  object $product
+     * @param  string $branch
+     * @param  array  $output
+     * @param  array  $bugImagesFile
+     * @access public
+     * @return bool
+     */
+    public function assignBatchCreateVarsTest(int $executionID, object $product, string $branch = '0', array $output = array(), array $bugImagesFile = array()): bool
+    {
+        $this->invokeArgs('assignBatchCreateVars', [$executionID, $product, $branch, $output, $bugImagesFile]);
+        if(dao::isError()) return false;
+        return true;
+    }
 }
