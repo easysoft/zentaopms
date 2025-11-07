@@ -1083,4 +1083,42 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallRiskBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printWaterfallRiskBlockTest(object $block)
+    {
+        global $tester;
+        $tester->session->project = $block->params->projectID ?? 1;
+
+        $this->invokeArgs('printWaterfallRiskBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->risks))
+        {
+            $result->count = count($view->risks);
+            $index = 1;
+            foreach($view->risks as $risk)
+            {
+                $result->$index = $risk;
+                $index++;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+
+        $result->hasUsers = isset($view->users) ? 1 : 0;
+        $result->usersCount = isset($view->users) ? count($view->users) : 0;
+
+        return $result;
+    }
 }
