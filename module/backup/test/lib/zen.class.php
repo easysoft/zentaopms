@@ -129,4 +129,18 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test restoreFile method.
+     *
+     * @param  string $fileName 文件名
+     * @access public
+     * @return mixed
+     */
+    public function restoreFileTest(string $fileName = '')
+    {
+        $result = $this->invokeArgs('restoreFile', [$fileName]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
