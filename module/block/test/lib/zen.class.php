@@ -134,4 +134,34 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printDocMyCreatedBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocMyCreatedBlockTest()
+    {
+        ob_start();
+        $this->invokeArgs('printDocMyCreatedBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->docList))
+        {
+            $result->count = count($view->docList);
+            foreach($view->docList as $index => $doc)
+            {
+                $result->$index = $doc;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+        return $result;
+    }
 }
