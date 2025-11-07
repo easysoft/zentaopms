@@ -2150,12 +2150,16 @@ class bugZen extends bug
         $bug = $this->bug->getByID($bugID);
         if($bug->toTask and !empty($changes))
         {
-            foreach($changes as $change)
+            $task = $this->loadModel('task')->fetchByID($bug->toTask);
+            if(in_array($task->status, array('wait', 'doing')))
             {
-                if($change['field'] == 'status')
+                foreach($changes as $change)
                 {
-                    $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    return $this->send(array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->bug->notice->remindTask, $bug->toTask) . "').then((res) => {if(res) openUrl('{$confirmedURL}', {load: 'modal', size: 'lg'})});", 'closeModal' => true));
+                    if($change['field'] == 'status')
+                    {
+                        $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                        return $this->send(array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->bug->notice->remindTask, $bug->toTask) . "').then((res) => {if(res) openUrl('{$confirmedURL}', {load: 'modal', size: 'lg'})});", 'closeModal' => true));
+                    }
                 }
             }
         }
