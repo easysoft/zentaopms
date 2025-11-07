@@ -855,4 +855,33 @@ class blockZenTest extends baseTest
         $result->monthCreatedCount = isset($view->product) && isset($view->product->monthCreated) ? count($view->product->monthCreated) : 0;
         return $result;
     }
+
+    /**
+     * Test printSingleStoryBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printSingleStoryBlockTest(object $block)
+    {
+        ob_start();
+        $this->invokeArgs('printSingleStoryBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->storiesCount = isset($view->stories) ? count($view->stories) : 0;
+
+        if(isset($view->stories))
+        {
+            foreach($view->stories as $index => $story)
+            {
+                $result->$index = $story;
+            }
+        }
+
+        return $result;
+    }
 }
