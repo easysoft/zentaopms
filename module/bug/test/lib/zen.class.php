@@ -603,4 +603,18 @@ class bugZenTest extends baseTest
         if(dao::isError()) return '';
         return $result;
     }
+
+    /**
+     * Test getModulesForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object
+     */
+    public function getModulesForCreateTest(object $bug): object
+    {
+        $result = $this->invokeArgs('getModulesForCreate', [$bug]);
+        if(dao::isError()) return (object)array();
+        return $result;
+    }
 }
