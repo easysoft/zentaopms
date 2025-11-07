@@ -26,7 +26,7 @@ class PlotArea
      * @param null|Layout $layout
      * @param DataSeries[] $plotSeries
      */
-    public function __construct(Layout $layout = null, array $plotSeries = [])
+    public function __construct(?Layout $layout = null, array $plotSeries = [])
     {
         $this->layout = $layout;
         $this->plotSeries = $plotSeries;

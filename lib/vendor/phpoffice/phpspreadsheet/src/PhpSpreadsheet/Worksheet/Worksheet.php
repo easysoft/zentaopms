@@ -344,7 +344,7 @@ class Worksheet implements IComparable
      * @param Spreadsheet $parent
      * @param string $pTitle
      */
-    public function __construct(Spreadsheet $parent = null, $pTitle = 'Worksheet')
+    public function __construct(?Spreadsheet $parent = null, $pTitle = 'Worksheet')
     {
         // Set parent and title
         $this->parent = $parent;
@@ -2770,7 +2770,7 @@ class Worksheet implements IComparable
      *
      * @return Worksheet
      */
-    public function setHyperlink($pCellCoordinate, Hyperlink $pHyperlink = null)
+    public function setHyperlink($pCellCoordinate, ?Hyperlink $pHyperlink = null)
     {
         if ($pHyperlink === null) {
             unset($this->hyperlinkCollection[$pCellCoordinate]);
@@ -2831,7 +2831,7 @@ class Worksheet implements IComparable
      *
      * @return Worksheet
      */
-    public function setDataValidation($pCellCoordinate, DataValidation $pDataValidation = null)
+    public function setDataValidation($pCellCoordinate, ?DataValidation $pDataValidation = null)
     {
         if ($pDataValidation === null) {
             unset($this->dataValidationCollection[$pCellCoordinate]);
