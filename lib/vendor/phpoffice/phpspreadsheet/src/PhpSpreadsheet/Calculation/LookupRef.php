@@ -238,7 +238,7 @@ class LookupRef
      *
      * @return mixed The value of $displayName (or $linkURL if $displayName was blank)
      */
-    public static function HYPERLINK($linkURL = '', $displayName = null, Cell $pCell = null)
+    public static function HYPERLINK($linkURL = '', $displayName = null, ?Cell $pCell = null)
     {
         $linkURL = ($linkURL === null) ? '' : Functions::flattenSingleValue($linkURL);
         $displayName = ($displayName === null) ? '' : Functions::flattenSingleValue($displayName);
@@ -275,7 +275,7 @@ class LookupRef
      *
      * @todo    Support for the optional a1 parameter introduced in Excel 2010
      */
-    public static function INDIRECT($cellAddress = null, Cell $pCell = null)
+    public static function INDIRECT($cellAddress = null, ?Cell $pCell = null)
     {
         $cellAddress = Functions::flattenSingleValue($cellAddress);
         if ($cellAddress === null || $cellAddress === '') {
@@ -343,7 +343,7 @@ class LookupRef
      *
      * @return string A reference to a cell or range of cells
      */
-    public static function OFFSET($cellAddress = null, $rows = 0, $columns = 0, $height = null, $width = null, Cell $pCell = null)
+    public static function OFFSET($cellAddress = null, $rows = 0, $columns = 0, $height = null, $width = null, ?Cell $pCell = null)
     {
         $rows = Functions::flattenSingleValue($rows);
         $columns = Functions::flattenSingleValue($columns);
@@ -903,7 +903,7 @@ class LookupRef
      *
      * @return string
      */
-    public static function FORMULATEXT($cellReference = '', Cell $pCell = null)
+    public static function FORMULATEXT($cellReference = '', ?Cell $pCell = null)
     {
         if ($pCell === null) {
             return Functions::REF();

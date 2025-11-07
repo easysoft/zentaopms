@@ -28,7 +28,7 @@ final class CopyFileException extends Exception
      * @param int $code The user defined exception code
      * @param \Exception $previous The previous exception used for the exception chaining
      */
-    final public function __construct($source, $destination, $code = 0, \Exception $previous = null)
+    final public function __construct($source, $destination, $code = 0, ?\Exception $previous = null)
     {
         parent::__construct(
             sprintf('Could not copy \'%s\' file to \'%s\'.', $source, $destination),

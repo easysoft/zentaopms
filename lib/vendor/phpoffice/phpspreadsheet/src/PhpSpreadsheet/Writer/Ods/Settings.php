@@ -16,7 +16,7 @@ class Settings extends WriterPart
      *
      * @return string XML Output
      */
-    public function write(Spreadsheet $spreadsheet = null)
+    public function write(?Spreadsheet $spreadsheet = null)
     {
         $objWriter = null;
         if ($this->getParentWriter()->getUseDiskCaching()) {
