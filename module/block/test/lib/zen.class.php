@@ -509,4 +509,36 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printScrumOverviewBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printScrumOverviewBlockTest()
+    {
+        ob_start();
+        $this->invokeArgs('printScrumOverviewBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->projectID = isset($view->projectID) ? $view->projectID : 0;
+        $result->hasProject = isset($view->project) ? 1 : 0;
+
+        if(isset($view->project))
+        {
+            $project = $view->project;
+            $result->projectName = isset($project->name) ? $project->name : '';
+            $result->projectModel = isset($project->model) ? $project->model : '';
+            $result->executionsCount = isset($project->executions) ? count($project->executions) : 0;
+            $result->storyPoints = isset($project->storyPoints) ? $project->storyPoints : 0;
+            $result->tasks = isset($project->tasks) ? $project->tasks : 0;
+            $result->bugs = isset($project->bugs) ? $project->bugs : 0;
+        }
+
+        return $result;
+    }
 }
