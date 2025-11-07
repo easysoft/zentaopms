@@ -141,4 +141,35 @@ class buildZenTest extends baseTest
 
         return array('products' => $products, 'product' => isset($productGroups[$build->product]) ? $productGroups[$build->product] : '', 'branchTagOption' => $branchTagOption, 'builds' => $builds, 'executions' => $executions, 'executionType' => !empty($execution) && $execution->type == 'stage' ? 1 : 0);
     }
+
+    /**
+     * Test assignProductVarsForView method.
+     *
+     * @param  object    $build
+     * @param  string    $type
+     * @param  string    $sort
+     * @param  object    $storyPager
+     * @access public
+     * @return array
+     */
+    public function assignProductVarsForViewTest($build = null, $type = '', $sort = '', $storyPager = null)
+    {
+        if($storyPager === null)
+        {
+            $storyPager = new stdclass();
+            $storyPager->recTotal  = 0;
+            $storyPager->pageTotal = 1;
+        }
+
+        $this->invokeArgs('assignProductVarsForView', [$build, $type, $sort, $storyPager]);
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'branchName'   => $this->instance->view->branchName ?? '',
+            'stories'      => $this->instance->view->stories ?? array(),
+            'hasStoryPager' => isset($this->instance->view->storyPager),
+            'storyCount'   => count($this->instance->view->stories ?? array())
+        );
+    }
 }
