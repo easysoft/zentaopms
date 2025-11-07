@@ -797,4 +797,37 @@ class bugZenTest extends baseTest
             return array();
         }
     }
+
+    /**
+     * Test responseAfterBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $executionID
+     * @param  array  $bugIdList
+     * @param  string $message
+     * @access public
+     * @return array
+     */
+    public function responseAfterBatchCreateTest(int $productID, string $branch, int $executionID, array $bugIdList, string $message = ''): array
+    {
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('responseAfterBatchCreate', [$productID, $branch, $executionID, $bugIdList, $message]);
+            $output = ob_get_clean();
+            if(dao::isError()) return array('error' => dao::getError());
+            return array('result' => $result, 'output' => $output);
+        }
+        catch(EndResponseException $e)
+        {
+            ob_end_clean();
+            return array('result' => true, 'response' => $e->getContent());
+        }
+        catch(Throwable $e)
+        {
+            ob_end_clean();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
