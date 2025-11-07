@@ -426,8 +426,9 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->purpose     = $data->purpose;
-            $prompt->elaboration = $data->elaboration;
+            $prompt->purpose      = $data->purpose;
+            $prompt->elaboration  = $data->elaboration;
+            $prompt->knowledgeLib = $data->knowledgeLib ?? '';
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -437,9 +438,15 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
         }
 
+        $knowledgeLibIds = [];
+        if(!empty($prompt->knowledgeLib)) $knowledgeLibIds = explode(',', $prompt->knowledgeLib);
+
+        $knowledgeLibs = (empty($knowledgeLibIds)) ? [] : $this->ai->getKnowledgeLibsByIDs($knowledgeLibIds);
+
         $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
+        $this->view->knowledgeLibs  = $knowledgeLibs;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
