@@ -700,4 +700,47 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printSingleMonthlyProgressBlock method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return object
+     */
+    public function printSingleMonthlyProgressBlockTest($productID = 1)
+    {
+        global $tester;
+
+        // 设置session中的产品ID
+        $tester->session->product = $productID;
+
+        // 调用方法
+        ob_start();
+        $this->invokeArgs('printSingleMonthlyProgressBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productID = $productID;
+
+        // 获取view中设置的数据
+        $result->doneStoryEstimate = isset($view->doneStoryEstimate) ? $view->doneStoryEstimate : array();
+        $result->doneStoryCount    = isset($view->doneStoryCount) ? $view->doneStoryCount : array();
+        $result->createStoryCount  = isset($view->createStoryCount) ? $view->createStoryCount : array();
+        $result->fixedBugCount     = isset($view->fixedBugCount) ? $view->fixedBugCount : array();
+        $result->createBugCount    = isset($view->createBugCount) ? $view->createBugCount : array();
+        $result->releaseCount      = isset($view->releaseCount) ? $view->releaseCount : array();
+
+        // 统计数据
+        $result->doneStoryEstimateCount = count($result->doneStoryEstimate);
+        $result->doneStoryCountCount    = count($result->doneStoryCount);
+        $result->createStoryCountCount  = count($result->createStoryCount);
+        $result->fixedBugCountCount     = count($result->fixedBugCount);
+        $result->createBugCountCount    = count($result->createBugCount);
+        $result->releaseCountCount      = count($result->releaseCount);
+
+        return $result;
+    }
 }
