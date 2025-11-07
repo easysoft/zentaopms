@@ -89,4 +89,19 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test syncExtensions method.
+     *
+     * @param  string $type  plugin|patch
+     * @param  int    $limit
+     * @access public
+     * @return mixed
+     */
+    public function syncExtensionsTest(string $type = 'plugin', int $limit = 5)
+    {
+        $result = $this->invokeArgs('syncExtensions', [$type, $limit]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
