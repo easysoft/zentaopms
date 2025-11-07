@@ -1017,7 +1017,7 @@
             $iframe.attr('src', url);
             setTimeout(() =>
             {
-                // Fix firefox not load page when iframe is not ready.
+                /* Fix firefox not load page when iframe is not ready. */
                 if($iframe[0].contentWindow.location.href === 'about:blank') $iframe[0].contentWindow.location.href = url;
             }, 500);
         }
