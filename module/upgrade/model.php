@@ -11263,18 +11263,18 @@ class upgradeModel extends model
             $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
             $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
-            $report->project    = $data['project'];
-            $report->title      = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
-            $report->module     = 'week';
-            $report->addedDate  = $data['weekStart'] . ' 00:00:00';
-            $report->weeklyDate = str_replace('-', '', $data['weekStart']);
+            $report->project      = $data['project'];
+            $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+            $report->reportModule = 'week';
+            $report->addedDate    = $data['weekStart'] . ' 00:00:00';
+            $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
         }
         else
         {
-            $report->title     = $this->lang->upgrade->milestoneTitle;
-            $report->module    = 'milestone';
-            $report->project   = $data['id'];
-            $report->addedDate = helper::now();
+            $report->title        = $this->lang->upgrade->milestoneTitle;
+            $report->reportModule = 'milestone';
+            $report->project      = $data['id'];
+            $report->addedDate    = helper::now();
         }
 
         $report->templateType = 'projectReport';

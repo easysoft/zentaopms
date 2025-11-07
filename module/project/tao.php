@@ -1186,7 +1186,7 @@ class projectTao extends projectModel
         $report = new stdclass();
         $report->title        = $this->lang->project->milestoneReport;
         $report->project      = $projectID;
-        $report->module       = 'milestone';
+        $report->reportModule = 'milestone';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
         $report->addedDate    = helper::now();
