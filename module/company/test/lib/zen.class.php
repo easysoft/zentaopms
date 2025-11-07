@@ -79,4 +79,18 @@ class companyZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test loadUserModule method.
+     *
+     * @param  int    $userID
+     * @access public
+     * @return array
+     */
+    public function loadUserModuleTest($userID = 0)
+    {
+        $result = $this->invokeArgs('loadUserModule', [$userID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
