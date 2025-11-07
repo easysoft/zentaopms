@@ -260,4 +260,20 @@ class buildZenTest extends baseTest
             'branchValues'    => $tester->config->product->search['params']['branch']['values'] ?? array()
         );
     }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object    $build
+     * @access public
+     * @return int
+     */
+    public function getExcludeStoryIdListTest($build = null)
+    {
+        if($build === null) return 0;
+
+        $result = $this->invokeArgs('getExcludeStoryIdList', [$build]);
+        if(dao::isError()) return dao::getError();
+        return count($result);
+    }
 }
