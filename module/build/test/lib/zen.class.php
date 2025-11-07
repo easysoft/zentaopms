@@ -199,4 +199,34 @@ class buildZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildLinkBugSearchForm method.
+     *
+     * @param  object    $build
+     * @param  int       $queryID
+     * @param  string    $productType
+     * @access public
+     * @return array
+     */
+    public function buildLinkBugSearchFormTest($build = null, $queryID = 0, $productType = 'normal')
+    {
+        global $tester;
+        if($build === null) return array();
+
+        $this->invokeArgs('buildLinkBugSearchForm', [$build, $queryID, $productType]);
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'actionURL'       => $tester->config->bug->search['actionURL'] ?? '',
+            'queryID'         => $tester->config->bug->search['queryID'] ?? 0,
+            'style'           => $tester->config->bug->search['style'] ?? '',
+            'hasPlanField'    => isset($tester->config->bug->search['fields']['plan']) ? 1 : 0,
+            'hasBranchField'  => isset($tester->config->bug->search['fields']['branch']) ? 1 : 0,
+            'hasProductField' => isset($tester->config->bug->search['fields']['product']) ? 1 : 0,
+            'hasProjectField' => isset($tester->config->bug->search['fields']['project']) ? 1 : 0,
+            'branchValues'    => $tester->config->bug->search['params']['branch']['values'] ?? array()
+        );
+    }
 }
