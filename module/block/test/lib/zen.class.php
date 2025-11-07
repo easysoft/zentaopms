@@ -253,4 +253,27 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printExecutionStatisticBlock method.
+     *
+     * @param  object $block  区块对象
+     * @param  array  $params 参数数组
+     * @access public
+     * @return object
+     */
+    public function printExecutionStatisticBlockTest(object $block, array $params = array())
+    {
+        $this->invokeArgs('printExecutionStatisticBlock', array($block, $params));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->executionsCount  = isset($view->executions) ? count($view->executions) : 0;
+        $result->projectsCount    = isset($view->projects) ? count($view->projects) : 0;
+        $result->hasChartData     = isset($view->chartData) ? 1 : 0;
+        $result->labelsCount      = isset($view->chartData['labels']) ? count($view->chartData['labels']) : 0;
+        $result->currentProjectID = isset($view->currentProjectID) ? $view->currentProjectID : 0;
+        return $result;
+    }
 }
