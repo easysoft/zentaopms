@@ -164,4 +164,34 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printDocRecentUpdateBlock method.
+     *
+     * @access public
+     * @return object
+     */
+    public function printDocRecentUpdateBlockTest()
+    {
+        ob_start();
+        $this->invokeArgs('printDocRecentUpdateBlock', array());
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        if(isset($view->docList))
+        {
+            $result->count = count($view->docList);
+            foreach($view->docList as $index => $doc)
+            {
+                $result->$index = $doc;
+            }
+        }
+        else
+        {
+            $result->count = 0;
+        }
+        return $result;
+    }
 }
