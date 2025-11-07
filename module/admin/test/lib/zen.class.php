@@ -62,4 +62,17 @@ class adminZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setCompanyByAPI method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setCompanyByAPITest()
+    {
+        $result = $this->invokeArgs('setCompanyByAPI', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
