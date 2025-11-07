@@ -2,7 +2,7 @@ USE `__DATABASE__`;
 
 -- DROP TABLE IF EXISTS `zt_acl`;
 CREATE TABLE IF NOT EXISTS `zt_acl` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` int NOT NULL DEFAULT '0',
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
 
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `product` text NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `extra` text NULL,
   `read` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `efforted` tinyint(1) NOT NULL DEFAULT '0',
+  `efforted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
@@ -47,7 +47,7 @@ CREATE INDEX `product` ON `zt_actionproduct`(`product`);
 
 -- DROP TABLE IF EXISTS `zt_actionrecent`;
 CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `product` text NULL,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `extra` text NULL,
   `read` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `efforted` tinyint(1) NOT NULL DEFAULT '0',
+  `efforted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
@@ -73,8 +73,8 @@ CREATE INDEX `objectID`    ON `zt_actionrecent`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lib` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `desc` varchar(255) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
   `snap` mediumtext NULL,
@@ -85,10 +85,10 @@ CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
 
 -- DROP TABLE IF EXISTS `zt_api`;
 CREATE TABLE IF NOT EXISTS `zt_api` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `product` varchar(255) NOT NULL DEFAULT '',
-  `lib` int(11) UNSIGNED NOT NULL DEFAULT 0,
-  `module` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `lib` int UNSIGNED NOT NULL DEFAULT 0,
+  `module` int UNSIGNED NOT NULL DEFAULT 0,
   `title` varchar(100) NOT NULL DEFAULT '',
   `path` varchar(255) NOT NULL DEFAULT '',
   `protocol` varchar(10)  NOT NULL DEFAULT '',
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `zt_api` (
   `status` varchar(20)  NOT NULL DEFAULT '',
   `owner` varchar(30)  NOT NULl DEFAULT 0,
   `desc` mediumtext NULL,
-  `version` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
+  `version` smallint UNSIGNED NOT NULL DEFAULT 0,
   `params` text NULL,
   `paramsExample` text NUll,
   `responseExample` text NUll,
@@ -114,9 +114,9 @@ CREATE TABLE IF NOT EXISTS `zt_api` (
 
 -- DROP TABLE IF EXISTS `zt_apispec`;
 CREATE TABLE IF NOT EXISTS `zt_apispec` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `doc` int(11) UNSIGNED NOT NULL DEFAULT 0,
-  `module` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `doc` int UNSIGNED NOT NULL DEFAULT 0,
+  `module` int UNSIGNED NOT NULL DEFAULT 0,
   `title` varchar(100) NOT NULL DEFAULT '',
   `path` varchar(255) NOT NULL DEFAULT '',
   `protocol` varchar(10)  NOT NULL DEFAULT '',
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `zt_apispec` (
   `status` varchar(20)  NOT NULL DEFAULT '',
   `owner` varchar(255) NOT NULl DEFAULT 0,
   `desc` mediumtext NULL,
-  `version` smallint(6) UNSIGNED NOT NULL DEFAULT 0,
+  `version` smallint UNSIGNED NOT NULL DEFAULT 0,
   `params` text NULL,
   `paramsExample` text NUll,
   `responseExample` text NUll,
@@ -138,12 +138,12 @@ CREATE TABLE IF NOT EXISTS `zt_apispec` (
 
 -- DROP TABLE IF EXISTS `zt_apistruct`;
 CREATE TABLE IF NOT EXISTS `zt_apistruct` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `lib` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(30)  NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
-  `version` smallint(6) unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 0,
   `attribute` text NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
@@ -155,12 +155,12 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct` (
 
 -- DROP TABLE IF EXISTS `zt_apistruct_spec`;
 CREATE TABLE IF NOT EXISTS `zt_apistruct_spec` (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
   `attribute` text NULL,
-  `version` smallint(6) unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 0,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
   primary key (`id`)
@@ -179,13 +179,13 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `extra` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` tinyint(4) NOT NULL DEFAULT '0',
+  `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalflow`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(100) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
@@ -193,15 +193,15 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `workflow` varchar(30) NOT NULL DEFAULT '',
-  `deleted` tinyint(4) NOT NULL DEFAULT '0',
+  `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalflowobject`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `root` int(8) NOT NULL DEFAULT '0',
-  `flow` int(8) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `root` int NOT NULL DEFAULT '0',
+  `flow` int NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` int NOT NULL DEFAULT '0',
   `extra` varchar(255) NOT NULL DEFAULT '',
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `reviewType` varchar(100)  NOT NULL DEFAULT 'manual',
   `agentType` varchar(100)  NOT NULL DEFAULT 'pass',
   `multipleType` enum('and','or') NOT NULL DEFAULT 'and',
-  `percent` smallint(6) NOT NULL DEFAULT 0,
+  `percent` smallint NOT NULL DEFAULT 0,
   `needAll` enum('0', '1') NOT NULL DEFAULT '0',
   `solicit` enum('0','1') NOT NULL DEFAULT '0',
   `prev` mediumtext NULL,
@@ -250,8 +250,8 @@ CREATE INDEX `idx_reviewed_date` ON `zt_approvalnode`(`reviewedDate`);
 
 -- DROP TABLE IF EXISTS `zt_approvalobject`;
 CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `approval` int(8) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `approval` int NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` int NOT NULL DEFAULT '0',
   `reviewers` text DEFAULT NULL,
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
 
 -- DROP TABLE IF EXISTS `zt_approvalrole`;
 CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `code` char(30) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` text NULL,
@@ -295,11 +295,11 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `block` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `width` enum ('1', '2', '3') NOT NULL DEFAULT '1',
-  `height` smallint(6) UNSIGNED NOT NULL DEFAULT 3,
+  `height` smallint UNSIGNED NOT NULL DEFAULT 3,
   `left` enum('0', '1', '2') NOT NULL DEFAULT '0',
-  `top` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
+  `top` smallint UNSIGNED NOT NULL DEFAULT 0,
   `params` text NULL,
-  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `hidden` tinyint unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `desc` varchar(255) NOT NULL DEFAULT '',
   `createdDate` date NULL,
   `closedDate` date NULL,
-  `order` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -333,14 +333,14 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `execution` int unsigned NOT NULL DEFAULT '0',
   `plan` int unsigned NOT NULL DEFAULT '0',
   `story` int unsigned NOT NULL DEFAULT '0',
-  `storyVersion` smallint(6) NOT NULL DEFAULT '1',
+  `storyVersion` smallint NOT NULL DEFAULT '1',
   `task` int unsigned NOT NULL DEFAULT '0',
   `toTask` int unsigned NOT NULL DEFAULT '0',
   `toStory` int NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `severity` tinyint(4) NOT NULL DEFAULT '0',
-  `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `severity` tinyint NOT NULL DEFAULT '0',
+  `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `os` varchar(255) NOT NULL DEFAULT '',
   `browser` varchar(255) NOT NULL DEFAULT '',
@@ -350,8 +350,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `status` enum('active','resolved','closed') NOT NULL DEFAULT 'active',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
-  `confirmed` tinyint(1) NOT NULL DEFAULT '0',
-  `activatedCount` smallint(6) NOT NULL DEFAULT '0',
+  `confirmed` tinyint NOT NULL DEFAULT '0',
+  `activatedCount` smallint NOT NULL DEFAULT '0',
   `activatedDate` datetime NULL,
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `duplicateBug` int unsigned NOT NULL DEFAULT '0',
   `relatedBug` varchar(255) NOT NULL DEFAULT '',
   `case` int unsigned NOT NULL DEFAULT '0',
-  `caseVersion` smallint(6) NOT NULL DEFAULT '1',
+  `caseVersion` smallint NOT NULL DEFAULT '1',
   `feedback` int unsigned NOT NULL DEFAULT '0',
   `result` int unsigned NOT NULL DEFAULT '0',
   `repo` int unsigned NOT NULL DEFAULT '0',
@@ -454,11 +454,11 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `module` int unsigned NOT NULL default '0',
   `path` int unsigned NOT NULL default '0',
   `story` int unsigned NOT NULL default '0',
-  `storyVersion` smallint(6) NOT NULL default '1',
+  `storyVersion` smallint NOT NULL default '1',
   `title` varchar(255) NOT NULL DEFAULT '',
   `precondition` text NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `pri` tinyint(3) unsigned NOT NULL default '3',
+  `pri` tinyint unsigned NOT NULL default '3',
   `type` char(30) NOT NULL default '1',
   `auto` varchar(10) NOT NULL default 'no',
   `frame` varchar(10) NOT NULL DEFAULT '',
@@ -480,7 +480,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `reviewedDate` date NULL,
   `lastEditedBy` char(30) NOT NULL default '',
   `lastEditedDate` datetime NULL,
-  `version` tinyint(3) unsigned NOT NULL default '0',
+  `version` tinyint unsigned NOT NULL default '0',
   `linkCase` varchar(255) NOT NULL DEFAULT '',
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `fromCaseID` int unsigned NOT NULL DEFAULT 0,
@@ -489,8 +489,8 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime NULL,
   `lastRunResult` char(30) NOT NULL DEFAULT '',
-  `scene` int(11) NOT NULL default '0',
-  `sort` int(11) NOT NULL default '0',
+  `scene` int NOT NULL default '0',
+  `sort` int NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_case`(`product`);
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `id` int unsigned NOT NULL auto_increment,
   `parent` int unsigned NOT NULL default '0',
   `case` int unsigned NOT NULL default '0',
-  `version` smallint(6) unsigned NOT NULL default '0',
+  `version` smallint unsigned NOT NULL default '0',
   `type` varchar(10) NOT NULL DEFAULT 'step',
   `desc` text NULL,
   `expect` text NULL,
@@ -517,7 +517,7 @@ CREATE INDEX `version` ON `zt_casestep`(`version`);
 CREATE TABLE IF NOT EXISTS `zt_casespec` (
   `id` int unsigned NOT NULL auto_increment,
   `case` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `precondition` text NULL,
   `files` text NULL,
@@ -527,11 +527,11 @@ CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_cfd`;
 CREATE TABLE IF NOT EXISTS `zt_cfd` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `execution` int(8) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `execution` int NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   `name` char(30) NOT NULL DEFAULT '',
-  `count` smallint(6) NOT NULL DEFAULT '0',
+  `count` smallint NOT NULL DEFAULT '0',
   `date` date NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB;
@@ -553,13 +553,13 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `whitelist` text NULL,
   `settings` mediumtext NULL,
   `filters` mediumtext NULL,
-  `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `step` tinyint unsigned NOT NULL DEFAULT '0',
   `fields` mediumtext NULL,
   `langs` text NULL,
   `sql` mediumtext NULL,
   `version` varchar(10) NOT NULL DEFAULT '1',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
-  `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `builtin` tinyint unsigned NOT NULL DEFAULT '0',
   `objects` mediumtext NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
@@ -591,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
 
 -- DROP TABLE IF EXISTS `zt_deliverable`;
 CREATE TABLE IF NOT EXISTS `zt_deliverable` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `module` varchar(30) NULL,
   `method` varchar(30) NULL,
@@ -652,7 +652,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` int unsigned NOT NULL DEFAULT '0',
   `tag` varchar(255) NOT NULL DEFAULT '',
-  `times` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `times` tinyint unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `updateDate` datetime NULL,
@@ -689,7 +689,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `command` text NULL,
   `remark` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
-  `buildin` tinyint(1) NOT NULL DEFAULT '0',
+  `buildin` tinyint NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT '',
   `lastTime` datetime NULL,
   PRIMARY KEY (`id`)
@@ -700,7 +700,7 @@ CREATE INDEX `lastTime` ON `zt_cron`(`lastTime`);
 CREATE TABLE IF NOT EXISTS `zt_dashboard` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `dimension` int(8) NOT NULL default 0,
+  `dimension` int NOT NULL default 0,
   `module` int NOT NULL DEFAULT '0',
   `desc` mediumtext NULL,
   `layout` mediumtext NULL,
@@ -751,8 +751,8 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `name` char(60) NOT NULL DEFAULT '',
   `parent` int unsigned NOT NULL default '0',
   `path` char(255) NOT NULL default '',
-  `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` smallint(6) unsigned NOT NULL default '0',
+  `grade` tinyint unsigned NOT NULL default '0',
+  `order` smallint unsigned NOT NULL default '0',
   `position` char(30) NOT NULL default '',
   `function` char(255) NOT NULL default '',
   `manager` char(30) NOT NULL default '',
@@ -780,11 +780,11 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL DEFAULT '',
-  `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
+  `storyVersion` smallint UNSIGNED NOT NULL DEFAULT '1',
   `docs` text NULL,
   `docVersions` text NULL,
   `desc` mediumtext NULL,
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -792,7 +792,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `design` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `files` varchar(255) NOT NULL DEFAULT ''
@@ -820,17 +820,17 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT 'normal',
-  `parent` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `parent` smallint unsigned NOT NULL DEFAULT '0',
   `path` char(255) NOT NULL DEFAULT '',
-  `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `order` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `views` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `grade` tinyint unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
+  `views` smallint unsigned NOT NULL DEFAULT '0',
   `assetLib` int unsigned NOT NULL DEFAULT '0',
   `assetLibType` varchar(30) NOT NULL DEFAULT '',
   `from` int unsigned NOT NULL DEFAULT '0',
-  `fromVersion` smallint(6) NOT NULL DEFAULT '1',
+  `fromVersion` smallint NOT NULL DEFAULT '1',
   `draft` longtext NULL,
-  `collects` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `collects` smallint unsigned NOT NULL DEFAULT '0',
   `weeklyDate` char(8) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
@@ -847,7 +847,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `users` text NULL,
   `readGroups` varchar(255) NOT NULL DEFAULT '',
   `readUsers` text NULL,
-  `version` smallint(6) unsigned NOT NULL DEFAULT '1',
+  `version` smallint unsigned NOT NULL DEFAULT '1',
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -883,8 +883,8 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `addedDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `version` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT '0',
+  `fromVersion` smallint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
@@ -943,10 +943,10 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `date` date NULL,
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
-  `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
-  `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+  `begin` smallint unsigned zerofill NOT NULL DEFAULT '0',
+  `end` smallint unsigned zerofill NOT NULL DEFAULT '0',
   `extra` text NULL,
-  `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `order` tinyint unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -967,7 +967,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `desc` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `calledTime` int(11) unsigned NOT NULL DEFAULT '0',
+  `calledTime` int unsigned NOT NULL DEFAULT '0',
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
@@ -1024,7 +1024,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `pathname` char(100) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `extension` char(30) NOT NULL DEFAULT '',
-  `size` int(11) unsigned NOT NULL DEFAULT '0',
+  `size` int unsigned NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` int NOT NULL DEFAULT '0',
   `gid` char(48) NOT NULL DEFAULT '',
@@ -1062,7 +1062,7 @@ CREATE UNIQUE INDEX `group` ON `zt_grouppriv`(`group`,`module`,`method`);
 
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
-  `id` int(11) unsigned NOT NULL auto_increment,
+  `id` int unsigned NOT NULL auto_increment,
   `action` int unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
   `old` longtext NULL,
@@ -1144,12 +1144,12 @@ CREATE TABLE IF NOT EXISTS `zt_kanban` (
   `performable` enum ('0', '1') NOT NULL DEFAULT '0',
   `status` enum('active','closed') NOT NULL default 'active',
   `order` int NOT NULL DEFAULT '0',
-  `displayCards` smallint(6) NOT NULL default '0',
+  `displayCards` smallint NOT NULL default '0',
   `showWIP` enum('0','1') NOT NULL DEFAULT '1',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
-  `colWidth` smallint(4) NOT NULL DEFAULT '264',
-  `minColWidth` smallint(4) NOT NULL DEFAULT '200',
-  `maxColWidth` smallint(4) NOT NULL DEFAULT '384',
+  `colWidth` smallint NOT NULL DEFAULT '264',
+  `minColWidth` smallint NOT NULL DEFAULT '200',
+  `maxColWidth` smallint NOT NULL DEFAULT '384',
   `object` varchar(255) NOT NULL DEFAULT '',
   `alignment` varchar(10) NOT NULL default 'center',
   `createdBy` char(30) NOT NULL DEFAULT '',
@@ -1215,7 +1215,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
 
 -- DROP TABLE IF EXISTS `zt_kanbancell`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `kanban` int NOT NULL DEFAULT '0',
   `lane` int NOT NULL DEFAULT '0',
   `column` int NOT NULL DEFAULT '0',
@@ -1231,13 +1231,13 @@ CREATE TABLE IF NOT EXISTS `zt_kanbangroup` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `kanban` int unsigned NOT NULL DEFAULT '0',
   `region` int unsigned NOT NULL DEFAULT '0',
-  `order` smallint(6) NOT NULL DEFAULT '0',
+  `order` smallint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbanlane`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `execution` int NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   `region` int unsigned NOT NULL DEFAULT '0',
@@ -1246,7 +1246,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `extra` char(30) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   `color` char(30) NOT NULL DEFAULT '',
-  `order` smallint(6) NOT NULL DEFAULT '0',
+  `order` smallint NOT NULL DEFAULT '0',
   `lastEditedTime` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
@@ -1256,14 +1256,14 @@ CREATE INDEX `group` ON `zt_kanbanlane`(`group`);
 
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `parent` int NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   `region` int unsigned NOT NULL DEFAULT '0',
   `group` int NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `color` char(30) NOT NULL DEFAULT '',
-  `limit` smallint(6) NOT NULL DEFAULT '-1',
+  `limit` smallint NOT NULL DEFAULT '-1',
   `order` int NOT NULL DEFAULT '0',
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
@@ -1310,8 +1310,8 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `name` char(60) NOT NULL default '',
   `parent` int unsigned NOT NULL default '0',
   `path` char(255) NOT NULL default '',
-  `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` smallint(5) unsigned NOT NULL default '0',
+  `grade` tinyint unsigned NOT NULL default '0',
+  `order` smallint unsigned NOT NULL default '0',
   `type` char(30) NOT NULL DEFAULT '',
   `from` int unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL DEFAULT '',
@@ -1408,7 +1408,7 @@ CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerT
 
 -- DROP TABLE IF EXISTS `zt_pipeline`;
 CREATE TABLE IF NOT EXISTS `zt_pipeline` (
-  `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL DEFAULT '',
   `name` varchar(50) NOT NULL DEFAULT '',
   `url` varchar(255) NULL,
@@ -1484,7 +1484,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `program` int unsigned NOT NULL DEFAULT '0',
   `name` varchar(110) NOT NULL DEFAULT '',
   `code` varchar(45) NOT NULL DEFAULT '',
-  `shadow` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `shadow` tinyint unsigned NOT NULL DEFAULT 0,
   `bind` enum('0','1') NOT NULL DEFAULT '0',
   `line` int NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT 'normal',
@@ -1496,7 +1496,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `RD` varchar(30) NOT NULL DEFAULT '',
   `feedback` varchar(30) NOT NULL DEFAULT '',
   `ticket` varchar(30) NOT NULL DEFAULT '',
-  `workflowGroup` int(8) NOT NULL DEFAULT '0',
+  `workflowGroup` int NOT NULL DEFAULT '0',
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `groups` text NULL,
   `whitelist` text NULL,
@@ -1568,7 +1568,7 @@ CREATE INDEX `end`     ON `zt_productplan` (`end`);
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int NOT NULL DEFAULT 0,
-  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `isTpl` tinyint unsigned NOT NULL DEFAULT 0,
   `charter` int NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
@@ -1584,25 +1584,25 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `storyType` char(30) NOT NULL DEFAULT '',
   `parent` int unsigned NOT NULL DEFAULT '0',
   `path` varchar(255) NOT NULL DEFAULT '',
-  `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `grade` tinyint unsigned NOT NULL DEFAULT '0',
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(45) NOT NULL DEFAULT '',
-  `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `workflowGroup` int(8) NOT NULL DEFAULT '0',
+  `hasProduct` tinyint unsigned NOT NULL DEFAULT 1,
+  `workflowGroup` int NOT NULL DEFAULT '0',
   `begin` date NULL,
   `end` date NULL,
   `firstEnd` date DEFAULT NULL,
   `realBegan` date NULL,
   `realEnd` date NULL,
-  `days` smallint(6) unsigned NOT NULL DEFAULT 0,
+  `days` smallint unsigned NOT NULL DEFAULT 0,
   `status` varchar(10) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT 1,
   `desc` mediumtext NULL,
-  `version` smallint(6) NOT NULL DEFAULT 0,
-  `parentVersion` smallint(6) NOT NULL DEFAULT 0,
-  `planDuration` int(11) NOT NULL DEFAULT 0,
-  `realDuration` int(11) NOT NULL DEFAULT 0,
+  `version` smallint NOT NULL DEFAULT 0,
+  `parentVersion` smallint NOT NULL DEFAULT 0,
+  `planDuration` int NOT NULL DEFAULT 0,
+  `realDuration` int NOT NULL DEFAULT 0,
   `progress` decimal(5,2) NOT NULL DEFAULT '0',
   `estimate` float NOT NULL DEFAULT '0',
   `left` float NOT NULL DEFAULT '0',
@@ -1632,16 +1632,16 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `order` int unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `stageBy` enum('project','product') NOT NULL DEFAULT 'product',
-  `displayCards` smallint(6) NOT NULL default '0',
+  `displayCards` smallint NOT NULL default '0',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` int NOT NULL DEFAULT '0',
   `enabled` enum('on','off') NOT NULL DEFAULT 'on',
   `linkType` varchar(30) NOT NULL DEFAULT 'plan',
   `taskDateLimit` varchar(30) NOT NULL DEFAULT 'auto',
-  `colWidth` smallint(6) NOT NULL DEFAULT '264',
-  `minColWidth` smallint(6) NOT NULL DEFAULT '200',
-  `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
+  `colWidth` smallint NOT NULL DEFAULT '264',
+  `minColWidth` smallint NOT NULL DEFAULT '200',
+  `maxColWidth` smallint NOT NULL DEFAULT '384',
   `deliverable` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -1657,7 +1657,7 @@ CREATE INDEX `type_order` ON `zt_project` (`type`, `order`);
 
 -- DROP TABLE IF EXISTS `zt_projectadmin`;
 CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
-  `group` smallint(6) NOT NULL DEFAULT '0',
+  `group` smallint NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL DEFAULT '',
   `programs` text NULL,
   `projects` text NULL,
@@ -1672,8 +1672,8 @@ CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `product` int unsigned NOT NULL DEFAULT '0',
   `case` int unsigned NOT NULL DEFAULT '0',
   `count` int unsigned NOT NULL DEFAULT '1',
-  `version` smallint(6) NOT NULL DEFAULT '1',
-  `order` smallint(6) unsigned NOT NULL DEFAULT '0'
+  `version` smallint NOT NULL DEFAULT '1',
+  `order` smallint unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectcase`(`project`,`case`);
 
@@ -1690,7 +1690,7 @@ CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `produc
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `project` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `milestone` enum('0','1') NOT NULL DEFAULT '0',
   `begin` date NULL,
@@ -1704,8 +1704,8 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `product` int unsigned NOT NULL DEFAULT '0',
   `branch` int unsigned NOT NULL DEFAULT '0',
   `story` int unsigned NOT NULL default '0',
-  `version` smallint(6) NOT NULL default '1',
-  `order` smallint(6) unsigned NOT NULL DEFAULT '0'
+  `version` smallint NOT NULL default '1',
+  `order` smallint unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 CREATE INDEX `story` ON `zt_projectstory` (`story`);
@@ -1727,7 +1727,7 @@ CREATE INDEX `cron_createdDate` ON `zt_queue`(`cron`, `createdDate`);
 
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `project` int NOT NULL DEFAULT '0',
   `product` int NOT NULL DEFAULT '0',
   `execution` int NOT NULL DEFAULT '0',
@@ -1778,9 +1778,9 @@ CREATE INDEX `idx_system` ON `zt_release` (`system`);
 
 -- DROP TABLE IF EXISTS `zt_releaserelated`;
 CREATE TABLE IF NOT EXISTS `zt_releaserelated` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `release` int(11) unsigned NOT NULL,
-  `objectID` int(11) unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `release` int unsigned NOT NULL,
+  `objectID` int unsigned NOT NULL,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1806,7 +1806,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `password` varchar(30) NOT NULL DEFAULT '',
   `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
   `acl` text NULL,
-  `synced` tinyint(1) NOT NULL DEFAULT '0',
+  `synced` tinyint NOT NULL DEFAULT '0',
   `lastSync` datetime NULL,
   `lastCommit` datetime NULL,
   `desc` text NULL,
@@ -1816,7 +1816,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `fileServerUrl` text NULL,
   `fileServerAccount` varchar(40) NOT NULL default '',
   `fileServerPassword` varchar(100) NOT NULL default '',
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1832,7 +1832,7 @@ CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,
 
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT '0',
   `revision` int unsigned NOT NULL DEFAULT '0',
   `path` varchar(255) NOT NULL DEFAULT '',
@@ -1863,14 +1863,14 @@ CREATE INDEX `revision` ON `zt_repohistory` (`revision`);
 
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE IF NOT EXISTS `zt_score` (
-  `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `method` varchar(30) NOT NULL DEFAULT '',
   `desc` varchar(250) NOT NULL DEFAULT '',
-  `before` int(11) NOT NULL DEFAULT '0',
-  `score` int(11) NOT NULL DEFAULT '0',
-  `after` int(11) NOT NULL DEFAULT '0',
+  `before` int NOT NULL DEFAULT '0',
+  `score` int NOT NULL DEFAULT '0',
+  `after` int NOT NULL DEFAULT '0',
   `time` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1880,14 +1880,14 @@ CREATE INDEX `method`  ON `zt_score` (`method`);
 
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
-  `key` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `key` smallint unsigned NOT NULL DEFAULT '0',
   `value` char(3) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `objectType` char(20) NOT NULL DEFAULT '',
   `objectID` int NOT NULL DEFAULT '0',
@@ -1905,7 +1905,7 @@ CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,
-    `timestamp` int(10) unsigned DEFAULT NULL,
+    `timestamp` int unsigned DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
@@ -1952,7 +1952,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `isParent` enum('0', '1') NOT NULL DEFAULT '0',
   `root` int NOT NULL DEFAULT '0',
   `path` text NULL,
-  `grade` smallint(6) NOT NULL DEFAULT '0',
+  `grade` smallint NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `branch` int unsigned NOT NULL DEFAULT '0',
   `module` int unsigned NOT NULL DEFAULT '0',
@@ -1965,7 +1965,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT 'story',
   `category` varchar(30) NOT NULL DEFAULT 'feature',
-  `pri` tinyint(3) unsigned NOT NULL DEFAULT '3',
+  `pri` tinyint unsigned NOT NULL DEFAULT '3',
   `estimate` float unsigned NOT NULL DEFAULT '0',
   `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
@@ -1975,7 +1975,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `mailto` text NULL,
   `lib` int unsigned NOT NULL DEFAULT '0',
   `fromStory` int unsigned NOT NULL DEFAULT '0',
-  `fromVersion` smallint(6) NOT NULL DEFAULT '1',
+  `fromVersion` smallint NOT NULL DEFAULT '1',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -1998,9 +1998,9 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `docs` text NULL,
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` int unsigned NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '1',
-  `parentVersion` smallint(6) NOT NULL DEFAULT 0,
-  `demandVersion` smallint(6) NOT NULL DEFAULT 0,
+  `version` smallint NOT NULL DEFAULT '1',
+  `parentVersion` smallint NOT NULL DEFAULT 0,
+  `demandVersion` smallint NOT NULL DEFAULT 0,
   `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
@@ -2036,7 +2036,7 @@ CREATE TABLE IF NOT EXISTS `zt_storygrade` (
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
@@ -2046,7 +2046,7 @@ CREATE UNIQUE INDEX `story` ON `zt_storyreview`(`story`,`version`,`reviewer`);
 -- DROP TABLE IF EXISTS `zt_storyestimate`;
 CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `story` int NOT NULL DEFAULT '0',
-  `round` smallint(6) NOT NULL DEFAULT '0',
+  `round` smallint NOT NULL DEFAULT '0',
   `estimate` text NULL,
   `average` float NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2057,7 +2057,7 @@ CREATE UNIQUE INDEX `story` ON `zt_storyestimate`(`story`,`round`);
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `story` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
@@ -2082,7 +2082,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` int unsigned NOT NULL DEFAULT '0',
   `product` int unsigned NOT NULL DEFAULT '0',
   `case` int unsigned NOT NULL DEFAULT '0',
-  `version` smallint(5) unsigned NOT NULL DEFAULT '0'
+  `version` smallint unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `suitecase` ON `zt_suitecase`(`suite`,`case`);
 
@@ -2091,15 +2091,15 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `parent` int NOT NULL DEFAULT '0',
-  `isParent` tinyint(1) NOT NULL DEFAULT '0',
-  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `isParent` tinyint NOT NULL DEFAULT '0',
+  `isTpl` tinyint unsigned NOT NULL DEFAULT '0',
   `path` varchar(255) NOT NULL DEFAULT '',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `module` int unsigned NOT NULL DEFAULT '0',
   `design` int unsigned NOT NULL DEFAULT '0',
   `story` int unsigned NOT NULL DEFAULT '0',
-  `storyVersion` smallint(6) NOT NULL DEFAULT '1',
-  `designVersion` smallint(6) unsigned NOT NULL DEFAULT '1',
+  `storyVersion` smallint NOT NULL DEFAULT '1',
+  `designVersion` smallint unsigned NOT NULL DEFAULT '1',
   `fromBug` int unsigned NOT NULL DEFAULT '0',
   `feedback` int unsigned NOT NULL DEFAULT '0',
   `fromIssue` int unsigned NOT NULL DEFAULT '0',
@@ -2108,7 +2108,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
-  `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `estimate` float unsigned NOT NULL DEFAULT '0',
   `consumed` float unsigned NOT NULL DEFAULT '0',
   `left` float unsigned NOT NULL DEFAULT '0',
@@ -2119,7 +2119,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `mailto` text NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -2133,8 +2133,8 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `canceledDate` datetime NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
-  `planDuration` int(11) NOT NULL DEFAULT '0',
-  `realDuration` int(11) NOT NULL DEFAULT '0',
+  `planDuration` int NOT NULL DEFAULT '0',
+  `realDuration` int NOT NULL DEFAULT '0',
   `closedReason` varchar(30) NOT NULL DEFAULT '',
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
@@ -2167,7 +2167,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `consumed` float unsigned NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL default '',
   `work` text NULL,
-  `order` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `order` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `task` ON `zt_taskestimate` (`task`);
@@ -2175,7 +2175,7 @@ CREATE INDEX `task` ON `zt_taskestimate` (`task`);
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `estStarted` date NULL,
   `deadline` date NULL
@@ -2192,8 +2192,8 @@ CREATE TABLE IF NOT EXISTS `zt_taskteam` (
   `left` decimal(12,2) NOT NULL DEFAULT '0.00',
   `transfer` char(30) NOT NULL DEFAULT '',
   `status` enum('wait','doing','done','cancel','closed') NOT NULL DEFAULT 'wait',
-  `storyVersion` smallint(6) NOT NULL DEFAULT '1',
-  `order` int(8) NOT NULL DEFAULT '0',
+  `storyVersion` smallint NOT NULL DEFAULT '1',
+  `order` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `task` ON `zt_taskteam` (`task`);
@@ -2208,12 +2208,12 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `position` varchar(30) NOT NULL DEFAULT '',
   `limited` char(8) NOT NULL DEFAULT 'no',
   `join` date NULL,
-  `days` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `days` smallint unsigned NOT NULL DEFAULT '0',
   `hours` float(3,1) unsigned NOT NULL DEFAULT '0.0',
   `estimate` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `consumed` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `left` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
-  `order` tinyint(3) NOT NULL DEFAULT '0',
+  `order` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `team` ON `zt_team`(`root`,`type`,`account`);
@@ -2248,13 +2248,13 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `run` int unsigned NOT NULL DEFAULT '0',
   `case` int unsigned NOT NULL DEFAULT '0',
-  `version` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `version` smallint unsigned NOT NULL DEFAULT '0',
   `job` int unsigned NOT NULL DEFAULT '0',
   `compile` int unsigned NOT NULL DEFAULT '0',
   `caseResult` char(30) NOT NULL DEFAULT '',
   `stepResults` text NULL,
   `ZTFResult` text NULL,
-  `node` int(8) unsigned NOT NULL DEFAULT '0',
+  `node` int unsigned NOT NULL DEFAULT '0',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NULL,
   `duration` float NOT NULL DEFAULT '0',
@@ -2271,7 +2271,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `id` int unsigned NOT NULL auto_increment,
   `task` int unsigned NOT NULL default '0',
   `case` int unsigned NOT NULL default '0',
-  `version` tinyint(3) unsigned NOT NULL default '0',
+  `version` tinyint unsigned NOT NULL default '0',
   `assignedTo` char(30) NOT NULL default '',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime NULL,
@@ -2310,7 +2310,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
   `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
-  `pri` tinyint(3) unsigned NOT NULL default '0' COMMENT '优先级',
+  `pri` tinyint unsigned NOT NULL default '0' COMMENT '优先级',
   `begin` date NULL COMMENT '计划开始日期',
   `end` date NULL COMMENT '计划结束日期',
   `realBegan` date NULL COMMENT '实际开始日期',
@@ -2348,17 +2348,17 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `date` date NULL,
-  `begin` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
-  `end` smallint(4) unsigned zerofill NOT NULL DEFAULT '0',
+  `begin` smallint unsigned zerofill NOT NULL DEFAULT '0',
+  `end` smallint unsigned zerofill NOT NULL DEFAULT '0',
   `feedback` int unsigned NOT NULL DEFAULT '0',
   `type` char(15) NOT NULL DEFAULT '',
-  `cycle` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `cycle` tinyint unsigned NOT NULL DEFAULT '0',
   `objectID` int unsigned NOT NULL DEFAULT '0',
-  `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `name` char(150) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `status` enum('wait','doing','done','closed') NOT NULL DEFAULT 'wait',
-  `private` tinyint(1) NOT NULL DEFAULT '0',
+  `private` tinyint NOT NULL DEFAULT '0',
   `config` varchar(1000) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2412,14 +2412,14 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `visits` int unsigned NOT NULL DEFAULT '0',
   `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
   `ip` varchar(255) NOT NULL DEFAULT '',
-  `last` int(11) unsigned NOT NULL DEFAULT '0',
-  `fails` tinyint(5) NOT NULL DEFAULT '0',
+  `last` int unsigned NOT NULL DEFAULT '0',
+  `fails` tinyint NOT NULL DEFAULT '0',
   `locked` datetime NULL,
   `feedback` enum('0','1') NOT NULL DEFAULT '0',
   `ranzhi` char(30) NOT NULL DEFAULT '',
   `ldap` char(30) NOT NULL DEFAULT '',
-  `score` int(11) NOT NULL DEFAULT '0',
-  `scoreLevel` int(11) NOT NULL DEFAULT '0',
+  `score` int NOT NULL DEFAULT '0',
+  `scoreLevel` int NOT NULL DEFAULT '0',
   `resetToken` varchar(50) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `clientStatus` enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline',
@@ -2438,7 +2438,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `account` char(30) NOT NULL DEFAULT '',
   `listName` varchar(60) NOT NULL DEFAULT '',
   `userList` text NULL,
-  `public` tinyint(1) NOT NULL DEFAULT 0,
+  `public` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_usercontact` (`account`);
@@ -2500,7 +2500,7 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `ac` float(9,2) NOT NULL DEFAULT '0',
   `sv` float(9,2) NOT NULL DEFAULT '0',
   `cv` float(9,2) NOT NULL DEFAULT '0',
-  `staff` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `staff` smallint unsigned NOT NULL DEFAULT '0',
   `progress` varchar(255) NOT NULL DEFAULT '',
   `workload` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
@@ -2634,12 +2634,12 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
-  `pretask` int(8) UNSIGNED NOT NULL ,
+  `pretask` int UNSIGNED NOT NULL ,
   `condition` ENUM( 'begin', 'end' ) NOT NULL ,
-  `task` int( 8 ) UNSIGNED NOT NULL ,
+  `task` int UNSIGNED NOT NULL ,
   `action` ENUM( 'begin', 'end' ) NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -2650,13 +2650,13 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `id` int NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL DEFAULT '',
   `name` text NULL,
-  `dimension` int(8) NOT NULL default 0,
+  `dimension` int NOT NULL default 0,
   `module` varchar(100) NOT NULL DEFAULT '',
   `sql` text NULL,
   `vars` text NULL,
   `langs` text NULL,
   `params` text NULL,
-  `step` tinyint(1) NOT NULL DEFAULT '2',
+  `step` tinyint NOT NULL DEFAULT '2',
   `desc` text NULL,
   `addedBy` char(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
@@ -2765,7 +2765,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `status` varchar(30) NOT NULL DEFAULT '',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
-  `activatedCount` int(11) NOT NULL DEFAULT '0',
+  `activatedCount` int NOT NULL DEFAULT '0',
   `activatedBy` varchar(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2851,13 +2851,13 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `vsoft` varchar(30) NOT NULL DEFAULT '',
   `heartbeat` datetime NULL,
   `zap` varchar(10) NOT NULL DEFAULT '',
-  `vnc` int(11) NOT NULL DEFAULT '0',
-  `ztf` int(11) NOT NULL DEFAULT '0',
-  `zd` int(11) NOT NULL DEFAULT '0',
-  `ssh` int(11) NOT NULL DEFAULT '0',
-  `parent` int(11) unsigned NOT NULL DEFAULT '0',
-  `image` int(11) unsigned NOT NULL DEFAULT '0',
-  `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `vnc` int NOT NULL DEFAULT '0',
+  `ztf` int NOT NULL DEFAULT '0',
+  `zd` int NOT NULL DEFAULT '0',
+  `ssh` int NOT NULL DEFAULT '0',
+  `parent` int unsigned NOT NULL DEFAULT '0',
+  `image` int unsigned NOT NULL DEFAULT '0',
+  `admin` smallint unsigned NOT NULL DEFAULT '0',
   `serverRoom` int unsigned NOT NULL DEFAULT '0',
   `cpuNumber` varchar(16) NOT NULL DEFAULT '',
   `cpuCores` varchar(30) NOT NULL DEFAULT '',
@@ -2877,7 +2877,7 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
 -- DROP TABLE IF EXISTS `zt_image`;
 CREATE TABLE IF NOT EXISTS `zt_image` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `host` int(11) unsigned NOT NULL DEFAULT 0,
+  `host` int unsigned NOT NULL DEFAULT 0,
   `name` varchar(64) NOT NULL DEFAULT '',
   `localName` varchar(64) NOT NULL DEFAULT '',
   `address` varchar(64) NOT NULL DEFAULT '',
@@ -2899,8 +2899,8 @@ CREATE TABLE IF NOT EXISTS `zt_image` (
 -- DROP TABLE IF EXISTS `zt_automation`;
 CREATE TABLE IF NOT EXISTS `zt_automation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `node` int(11) unsigned NOT NULL DEFAULT 0,
-  `product` int(11) unsigned NOT NULL DEFAULT 0,
+  `node` int unsigned NOT NULL DEFAULT 0,
+  `product` int unsigned NOT NULL DEFAULT 0,
   `scriptPath` varchar(255) NOT NULL DEFAULT '',
   `shell` mediumtext NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -2981,7 +2981,7 @@ CREATE TABLE IF NOT EXISTS `zt_overtime` (
   `createdDate` datetime NULL,
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
-  `level` tinyint(3) NOT NULL DEFAULT '0',
+  `level` tinyint NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `reviewers` text NULL,
   PRIMARY KEY (`id`)
@@ -3022,7 +3022,7 @@ CREATE TABLE IF NOT EXISTS `zt_leave` (
   `createdDate` datetime NULL,
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
-  `level` tinyint(3) NOT NULL DEFAULT '0',
+  `level` tinyint NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `reviewers` text NULL,
   `backReviewers` text NULL,
@@ -3050,7 +3050,7 @@ CREATE TABLE IF NOT EXISTS `zt_lieu` (
   `createdDate` datetime NULL,
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
-  `level` tinyint(3) NOT NULL DEFAULT '0',
+  `level` tinyint NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `reviewers` text NULL,
   PRIMARY KEY (`id`)
@@ -3162,7 +3162,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincontents` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -3172,7 +3172,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincategory` (
   `name` char(30) NOT NULL DEFAULT '',
   `parent` int unsigned NOT NULL DEFAULT '0',
   `path` char(255) NOT NULL DEFAULT '',
-  `grade` tinyint(3) NOT NULL DEFAULT '0',
+  `grade` tinyint NOT NULL DEFAULT '0',
   `order` int NOT NULL DEFAULT '0',
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -13368,8 +13368,8 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `flowchart` text NULL,
   `js` text NULL,
   `css` text NULL,
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
+  `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'buildin',
   `belong` varchar(50) NOT NULL DEFAULT '',
   `administrator` text NULL,
@@ -13430,10 +13430,10 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `position` enum('menu','browseandview','browse','view') NOT NULL DEFAULT 'browseandview',
   `layout` char(20) NOT NULL DEFAULT '',
   `show` enum('dropdownlist','direct') NOT NULL DEFAULT 'dropdownlist',
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
+  `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
-  `virtual` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `virtual` tinyint unsigned NOT NULL DEFAULT '0',
   `conditions` text NULL,
   `verifications` text NULL,
   `hooks` text NULL,
@@ -13466,7 +13466,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `view` varchar(20) NOT NULL DEFAULT '',
   `keyField` varchar(50) NOT NULL DEFAULT '',
   `valueField` varchar(50) NOT NULL DEFAULT '',
-  `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
@@ -13491,14 +13491,14 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `default` varchar(100) NOT NULL DEFAULT '',
   `rules` varchar(255) NOT NULL DEFAULT '',
   `placeholder` varchar(255) NOT NULL DEFAULT '',
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
+  `searchOrder` smallint unsigned NOT NULL DEFAULT '0',
+  `exportOrder` smallint unsigned NOT NULL DEFAULT '0',
   `canExport` enum('0', '1') NOT NULL DEFAULT '0',
   `canSearch` enum('0', '1') NOT NULL DEFAULT '0',
   `isValue` enum('0', '1') NOT NULL DEFAULT '0',
   `readonly` enum('0', '1') NOT NULL DEFAULT '0',
-  `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
   `desc` text NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -13520,7 +13520,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `action` varchar(50) NOT NULL DEFAULT '',
   `ui` int NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
   `width` varchar(50) NOT NULL DEFAULT '0',
   `position` text NULL,
   `readonly` enum('0','1') NOT NULL DEFAULT '0',
@@ -13546,8 +13546,8 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
   `label` varchar(255) NOT NULL DEFAULT '',
   `params` text NULL,
   `orderBy` text NULL,
-  `order` tinyint(3) NOT NULL DEFAULT '0',
-  `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `order` tinyint NOT NULL DEFAULT '0',
+  `buildin` tinyint unsigned NOT NULL DEFAULT '0',
   `role` varchar(10) NOT NULL DEFAULT 'custom',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
@@ -13590,7 +13590,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
   `action` varchar(50) NOT NULL DEFAULT '',
   `ui` int NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`,`ui`,`field`);
@@ -13672,7 +13672,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
   `displayType` enum('value', 'percent') NOT NULL DEFAULT 'value',
   `dimension` varchar(130) NOT NULL,
   `fields` text NOT NULL,
-  `order` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `order` smallint unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
@@ -13898,7 +13898,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `type` char(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `objectType` char(30) NOT NULL DEFAULT '',
-  `objectID` int(11) NOT NULL DEFAULT '0',
+  `objectID` int) NOT NULL DEFAULT '0',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -14031,7 +14031,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
 
 -- DROP TABLE IF EXISTS `zt_programactivity`;
 CREATE TABLE IF NOT EXISTS `zt_programactivity` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `process` int NOT NULL DEFAULT '0',
@@ -14049,7 +14049,7 @@ CREATE TABLE IF NOT EXISTS `zt_programactivity` (
 
 -- DROP TABLE IF EXISTS `zt_programoutput`;
 CREATE TABLE IF NOT EXISTS `zt_programoutput` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `execution` int unsigned NOT NULL DEFAULT '0',
   `process` int NOT NULL DEFAULT '0',
@@ -14068,7 +14068,7 @@ CREATE TABLE IF NOT EXISTS `zt_programoutput` (
 
 -- DROP TABLE IF EXISTS `zt_programprocess`;
 CREATE TABLE IF NOT EXISTS `zt_programprocess` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `process` int NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -14112,7 +14112,7 @@ CREATE UNIQUE INDEX `code` ON `zt_basicmeas`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE IF NOT EXISTS `zt_budget` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT '0',
   `stage` char(30) NOT NULL DEFAULT '',
   `subject` int NOT NULL DEFAULT '0',
@@ -14416,11 +14416,11 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL DEFAULT '',
   `projectType` varchar(255) NOT NULL DEFAULT '',
-  `title` int(11) NOT NULL DEFAULT '0',
+  `title` int) NOT NULL DEFAULT '0',
   `contents` text NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
-  `order` int(11) NOT NULL DEFAULT '0',
+  `order` int) NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -14448,10 +14448,10 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
 
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
 CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
-  `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` smallint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL DEFAULT '',
   `products` varchar(255) NOT NULL DEFAULT '',
-  `serverID` smallint(8) NOT NULL DEFAULT 0,
+  `serverID` smallint NOT NULL DEFAULT 0,
   `repoName` varchar(45) NOT NULL DEFAULT '',
   `format` varchar(10) NOT NULL DEFAULT '',
   `type` char(7) NOT NULL DEFAULT '',
@@ -14460,7 +14460,7 @@ CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0,
+  `deleted` tinyint UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14502,7 +14502,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `owner` varchar(255) NOT NULL DEFAULT '',
   `lib` int unsigned NOT NULL default 0,
   `from` int unsigned NOT NULL default 0,
-  `version` smallint(6) NOT NULL default 1,
+  `version` smallint NOT NULL default 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -14540,7 +14540,7 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `actualClosedDate` date NULL,
   `lib` int unsigned NOT NULL default 0,
   `from` int unsigned NOT NULL default 0,
-  `version` smallint(6) NOT NULL default 1,
+  `version` smallint NOT NULL default 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -14596,7 +14596,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `lib` int unsigned NOT NULL default 0,
   `from` int unsigned NOT NULL default 0,
   `desc` mediumtext NULL,
-  `version` smallint(6) NOT NULL default 1,
+  `version` smallint NOT NULL default 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -14664,14 +14664,14 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `branch` int unsigned NOT NULL DEFAULT 0,
   `module` int unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL DEFAULT '',
-  `sort` int(11) unsigned NOT NULL DEFAULT 0,
+  `sort` int unsigned NOT NULL DEFAULT 0,
   `openedBy` char(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `parent` int(11) NOT NULL DEFAULT '0',
-  `grade` tinyint(3) NOT NULL DEFAULT '0',
+  `parent` int NOT NULL DEFAULT '0',
+  `grade` tinyint NOT NULL DEFAULT '0',
   `path` varchar(1000) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -15612,7 +15612,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `objects` text NULL,
   `settings` text NULL,
   `filters` text NULL,
-  `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `step` tinyint unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `version` varchar(10) NOT NULL DEFAULT '1',
@@ -15767,9 +15767,9 @@ CREATE TABLE IF NOT EXISTS `zt_space` (
   `name` varchar(200) NOT NULL,
   `k8space` char(64) NOT NULL,
   `owner` char(30) NOT NULL,
-  `default` tinyint(1) NOT NULL DEFAULT 0,
+  `default` tinyint NOT NULL DEFAULT 0,
   `createdAt` datetime NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `name` ON `zt_space`(`name`);
@@ -15798,13 +15798,13 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   `ldapSnippetName` char(30) NOT NULL DEFAULT '',
   `ldapSettings` text NULL,
   `dbSettings` text NULL,
-  `autoBackup` tinyint(1) NOT NULL DEFAULT 0,
+  `autoBackup` tinyint NOT NULL DEFAULT 0,
   `backupKeepDays` int unsigned NOT NULL DEFAULT 1,
-  `autoRestore` tinyint(1) NOT NULL DEFAULT 0,
+  `autoRestore` tinyint NOT NULL DEFAULT 0,
   `env` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdAt` datetime NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `space` ON `zt_instance`(`space`);
@@ -15812,7 +15812,7 @@ CREATE INDEX `k8name` ON `zt_instance`(`k8name`);
 
 -- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE IF NOT EXISTS `zt_demandpool` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `status` char(30) NOT NULL DEFAULT '',
@@ -15828,9 +15828,9 @@ CREATE TABLE IF NOT EXISTS `zt_demandpool` (
 
 -- DROP TABLE IF EXISTS `zt_demand`;
 CREATE TABLE IF NOT EXISTS `zt_demand` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `pool` int(8) NOT NULL DEFAULT '0',
-  `module` int(8) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `pool` int NOT NULL DEFAULT '0',
+  `module` int NOT NULL DEFAULT '0',
   `product` varchar(255) NOT NULL DEFAULT '',
   `parent` int NOT NULL DEFAULT '0',
   `pri` tinyint unsigned NOT NULL DEFAULT 3,
@@ -15879,7 +15879,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
 -- DROP TABLE IF EXISTS `zt_demandspec`;
 CREATE TABLE IF NOT EXISTS `zt_demandspec` (
   `demand` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
@@ -15890,7 +15890,7 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 -- DROP TABLE IF EXISTS `zt_demandreview`;
 CREATE TABLE IF NOT EXISTS `zt_demandreview` (
   `demand` int NOT NULL DEFAULT '0',
-  `version` smallint(6) NOT NULL DEFAULT '0',
+  `version` smallint NOT NULL DEFAULT '0',
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
@@ -15899,7 +15899,7 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`)
 
 -- DROP TABLE IF EXISTS `zt_charter`;
 CREATE TABLE IF NOT EXISTS `zt_charter` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `level` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
@@ -16374,14 +16374,14 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` int(11) unsigned NOT NULL DEFAULT '0',
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `metricID` int unsigned NOT NULL DEFAULT '0',
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `program` int(11) unsigned NOT NULL DEFAULT '0',
-  `project` int(11) unsigned NOT NULL DEFAULT '0',
-  `product` int(11) unsigned NOT NULL DEFAULT '0',
-  `execution` int(11) unsigned NOT NULL DEFAULT '0',
+  `system` tinyint unsigned NOT NULL DEFAULT '0',
+  `program` int unsigned NOT NULL DEFAULT '0',
+  `project` int unsigned NOT NULL DEFAULT '0',
+  `product` int unsigned NOT NULL DEFAULT '0',
+  `execution` int unsigned NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
@@ -16458,11 +16458,11 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 
 -- DROP TABLE IF EXISTS `zt_system`;
 CREATE TABLE IF NOT EXISTS `zt_system` (
-  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL DEFAULT '',
-  `product` int(8) UNSIGNED NOT NULL DEFAULT '0',
+  `product` int UNSIGNED NOT NULL DEFAULT '0',
   `integrated` ENUM('0','1') NOT NULL DEFAULT '0',
-  `latestRelease` int(8) UNSIGNED NOT NULL DEFAULT '0',
+  `latestRelease` int UNSIGNED NOT NULL DEFAULT '0',
   `latestDate` DATETIME NULL,
   `children` VARCHAR(255) NOT NULL DEFAULT '',
   `status` ENUM('active','inactive') NOT NULL DEFAULT 'active',
