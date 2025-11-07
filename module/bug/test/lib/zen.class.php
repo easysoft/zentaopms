@@ -510,4 +510,18 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test getAssignedToPairs method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function getAssignedToPairsTest(object $bug): array
+    {
+        $result = $this->invokeArgs('getAssignedToPairs', [$bug]);
+        if(dao::isError()) return array();
+        return $result;
+    }
 }
