@@ -958,4 +958,19 @@ class bugZenTest extends baseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test updateBug method.
+     *
+     * @param  object $bug
+     * @param  array  $fields
+     * @access public
+     * @return object|false
+     */
+    public function updateBugTest(object $bug, array $fields): object|false
+    {
+        $result = $this->invokeArgs('updateBug', [$bug, $fields]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
