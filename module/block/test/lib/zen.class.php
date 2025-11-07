@@ -575,4 +575,41 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printScrumRoadMapBlock method.
+     *
+     * @param  int $productID 产品ID
+     * @param  int $roadMapID 路线图ID
+     * @access public
+     * @return object
+     */
+    public function printScrumRoadMapBlockTest(int $productID = 0, int $roadMapID = 0)
+    {
+        ob_start();
+        $this->invokeArgs('printScrumRoadMapBlock', array($productID, $roadMapID));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+        $result->roadmapsCount = isset($view->roadmaps) ? count($view->roadmaps) : 0;
+        $result->productID = isset($view->productID) ? $view->productID : 0;
+        $result->roadMapID = isset($view->roadMapID) ? $view->roadMapID : 0;
+        $result->sync = isset($view->sync) ? $view->sync : 0;
+
+        if(isset($view->roadmaps))
+        {
+            foreach($view->roadmaps as $index => $roadmap)
+            {
+                $roadmapKey = 'roadmap' . $index;
+                if(is_array($roadmap))
+                {
+                    $result->$roadmapKey = count($roadmap);
+                }
+            }
+        }
+        return $result;
+    }
 }
