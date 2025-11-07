@@ -103,8 +103,9 @@ class testreport extends control
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
+            $taskIdList = empty($_POST['taskIdList']) ? '' : implode(',', $_POST['taskIdList']);
             if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
-            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra=" . implode(',', $_POST['taskIdList']);
+            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$taskIdList}";
             if($param)
             {
                 $url = $this->createLink('testreport', 'create', $param);
