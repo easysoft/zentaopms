@@ -1055,4 +1055,32 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printWaterfallProgressBlock method.
+     *
+     * @param  int $projectID 项目ID
+     * @access public
+     * @return object
+     */
+    public function printWaterfallProgressBlockTest(int $projectID = 1)
+    {
+        global $tester;
+        $tester->session->project = $projectID;
+
+        $this->invokeArgs('printWaterfallProgressBlock', array());
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->hasCharts = isset($view->charts) ? 1 : 0;
+        $result->hasPV = isset($view->charts['pv']) ? 1 : 0;
+        $result->hasEV = isset($view->charts['ev']) ? 1 : 0;
+        $result->hasAC = isset($view->charts['ac']) ? 1 : 0;
+        $result->pvCount = isset($view->charts['pv']) ? count($view->charts['pv']) : 0;
+        $result->evCount = isset($view->charts['ev']) ? count($view->charts['ev']) : 0;
+        $result->acCount = isset($view->charts['ac']) ? count($view->charts['ac']) : 0;
+
+        return $result;
+    }
 }
