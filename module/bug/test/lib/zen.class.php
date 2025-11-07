@@ -538,4 +538,39 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test getBrowseBugs method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  array  $executions
+     * @param  int    $moduleID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array|false
+     */
+    public function getBrowseBugsTest(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager)
+    {
+        $result = $this->invokeArgs('getBrowseBugs', [$productID, $branch, $browseType, $executions, $moduleID, $queryID, $orderBy, $pager]);
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    /**
+     * Test getBuildsForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|false
+     */
+    public function getBuildsForCreateTest(object $bug)
+    {
+        $result = $this->invokeArgs('getBuildsForCreate', [$bug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
