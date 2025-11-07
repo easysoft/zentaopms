@@ -184,4 +184,36 @@ class bugZenTest extends baseTest
             'executionMembers'  => !empty($instance->view->executionMembers) ? count($instance->view->executionMembers) : 0,
         );
     }
+
+    /**
+     * Test assignVarsForBatchCreate method.
+     *
+     * @param  object $product
+     * @param  object $project
+     * @param  array  $bugImagesFile
+     * @access public
+     * @return array
+     */
+    public function assignVarsForBatchCreateTest(object $product, object $project, array $bugImagesFile = array()): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        $this->invokeArgs('assignVarsForBatchCreate', [$product, $project, $bugImagesFile]);
+        if(dao::isError()) return array('error' => dao::getError());
+
+        $customFields = $instance->view->customFields ?? array();
+        $hasKanbanExecution = 0;
+        if(!empty($customFields['execution']) && isset($project->model) && $project->model == 'kanban')
+        {
+            $hasKanbanExecution = 1;
+        }
+
+        return array(
+            'customFields'       => !empty($customFields) ? count($customFields) : 0,
+            'showFields'         => !empty($instance->view->showFields) ? $instance->view->showFields : '',
+            'titles'             => !empty($instance->view->titles) ? count($instance->view->titles) : 0,
+            'hasBranch'          => !empty($customFields['branch']) ? 1 : 0,
+            'hasKanbanExecution' => $hasKanbanExecution,
+        );
+    }
 }
