@@ -16253,6 +16253,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的类型，例如 bug',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
   `objectData` text DEFAULT NULL COMMENT '禅道对象数据，JSON 格式',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `content` text DEFAULT NULL COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
   `contentType` varchar(10) NOT NULL DEFAULT 'markdown' COMMENT '内容类型',
   `attrs` text DEFAULT NULL COMMENT '知识库内容条目属性，JSON 格式',
