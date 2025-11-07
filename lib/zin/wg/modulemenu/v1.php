@@ -94,7 +94,7 @@ class moduleMenu extends wg
 
             $items = $this->buildMenuTree($child->id);
             if($items) $item['items'] = $items;
-            if($child->id == $activeKey || $child->id == 'product-' . $activeKey)
+            if($child->id === $activeKey || $child->id === 'product-' . $activeKey)
             {
                 $itemKey = $this->prop('checkbox') ? 'checked' : 'selected';
                 $item[$itemKey] = true;
