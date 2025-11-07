@@ -22,4 +22,20 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test afterCreate method.
+     *
+     * @param  object $bug
+     * @param  array  $params
+     * @param  string $from
+     * @access public
+     * @return bool
+     */
+    public function afterCreateTest(object $bug, array $params = array(), string $from = ''): bool
+    {
+        $result = $this->invokeArgs('afterCreate', [$bug, $params, $from]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
