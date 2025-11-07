@@ -1,0 +1,48 @@
+---
+title: 看板数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: space
+  note: 看板空间
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 看板名称
+  range: 'Kanban{1-5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: object
+  note: 对象类型
+  range: 'execution{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: 'active{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

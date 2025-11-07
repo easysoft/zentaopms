@@ -973,4 +973,21 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test updateKanbanAfterCreate method.
+     *
+     * @param  object $bug
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $from
+     * @access public
+     * @return bool
+     */
+    public function updateKanbanAfterCreateTest(object $bug, int $laneID, int $columnID, string $from = ''): bool
+    {
+        $this->invokeArgs('updateKanbanAfterCreate', [$bug, $laneID, $columnID, $from]);
+        if(dao::isError()) return false;
+        return true;
+    }
 }
