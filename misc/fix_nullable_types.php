@@ -67,7 +67,8 @@ class NullableTypesFixer
 
         foreach($iterator as $file)
         {
-            if ($file->isFile() && $file->getExtension() === 'php') {
+            if($file->isFile() && $file->getExtension() === 'php')
+            {
                 $this->processFile($file->getPathname());
             }
         }
