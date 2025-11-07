@@ -21,4 +21,20 @@ class chartZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getChartToFilter method.
+     *
+     * @param  int   $groupID
+     * @param  int   $chartID
+     * @param  array $filterValues
+     * @access public
+     * @return object|null|string
+     */
+    public function getChartToFilterTest(int $groupID = 0, int $chartID = 0, array $filterValues = array())
+    {
+        $result = $this->invokeArgs('getChartToFilter', array($groupID, $chartID, $filterValues));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
