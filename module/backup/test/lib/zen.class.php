@@ -71,4 +71,36 @@ class backupZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test backupSQL method.
+     *
+     * @param  string $fileName 文件名
+     * @param  string $reload   重载参数
+     * @access public
+     * @return mixed
+     */
+    public function backupSQLTest(string $fileName = '', string $reload = 'no')
+    {
+        $result = $this->invokeArgs('backupSQL', [$fileName, $reload]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test backupSQL method with nosafe setting.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function backupSQLTestWithNosafe()
+    {
+        global $config;
+        $oldSetting = $config->backup->setting;
+        $config->backup->setting = 'nosafe';
+        $result = $this->invokeArgs('backupSQL', ['test_nosafe_' . time()]);
+        $config->backup->setting = $oldSetting;
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
