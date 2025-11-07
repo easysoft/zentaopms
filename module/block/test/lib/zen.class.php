@@ -276,4 +276,30 @@ class blockZenTest extends baseTest
         $result->currentProjectID = isset($view->currentProjectID) ? $view->currentProjectID : 0;
         return $result;
     }
+
+    /**
+     * Test printGuideBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printGuideBlockTest(object $block)
+    {
+        $this->invokeArgs('printGuideBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->blockID = isset($view->blockID) ? $view->blockID : 0;
+        $result->programsCount = isset($view->programs) ? count($view->programs) : 0;
+        $result->programID = isset($view->programID) ? $view->programID : 0;
+        $result->URSRListCount = isset($view->URSRList) ? count($view->URSRList) : 0;
+        $result->URSR = isset($view->URSR) ? $view->URSR : '';
+        $result->programLink = isset($view->programLink) ? $view->programLink : '';
+        $result->productLink = isset($view->productLink) ? $view->productLink : '';
+        $result->projectLink = isset($view->projectLink) ? $view->projectLink : '';
+        $result->executionLink = isset($view->executionLink) ? $view->executionLink : '';
+        return $result;
+    }
 }
