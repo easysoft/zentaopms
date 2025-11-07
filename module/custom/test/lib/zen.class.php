@@ -64,4 +64,21 @@ class customZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test checkDuplicateKeys method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  array  $keys
+     * @access public
+     * @return mixed
+     */
+    public function checkDuplicateKeysTest(string $module = 'story', string $field = 'priList', array $keys = array())
+    {
+        $_POST['keys'] = $keys;
+        $result = $this->invokeArgs('checkDuplicateKeys', array($module, $field));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
