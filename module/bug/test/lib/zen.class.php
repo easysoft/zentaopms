@@ -922,4 +922,40 @@ class bugZenTest extends baseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test responseInModal method.
+     *
+     * @param  string $message
+     * @param  bool   $isInKanban
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function responseInModalTest(string $message = '', bool $isInKanban = false, string $tab = 'execution'): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+        $instance->app->tab = $tab;
+        $instance->viewType = 'json';
+
+        try
+        {
+            ob_start();
+            $result = $this->invokeArgs('responseInModal', [$message, $isInKanban]);
+            $output = ob_get_clean();
+            if(dao::isError()) return array('error' => dao::getError());
+            return array('result' => $result, 'output' => $output);
+        }
+        catch(EndResponseException $e)
+        {
+            ob_end_clean();
+            $responseData = json_decode($e->getContent());
+            return (array)$responseData;
+        }
+        catch(Throwable $e)
+        {
+            ob_end_clean();
+            return array('error' => $e->getMessage());
+        }
+    }
 }
