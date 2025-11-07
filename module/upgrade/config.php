@@ -1511,6 +1511,7 @@ $config->delete['21_7_6'][] = 'module/install/css/index.en.css';
 $config->delete['21_7_6'][] = 'module/install/css/index.vi.css';
 $config->delete['21_7_6'][] = 'module/install/css/step5.en.css';
 $config->delete['21_7_6'][] = 'extension/max/install/ext/view';
+$config->delete['21_7_6'][] = 'extension/ipd/install/ext/control/step6.php';
 $config->delete['21_7_6'][] = 'extension/ipd/install/ext/index.html';
 $config->delete['21_7_6'][] = 'extension/ipd/install/ext/lang/de/ipd.php';
 $config->delete['21_7_6'][] = 'extension/ipd/install/ext/lang/en/ipd.php';
