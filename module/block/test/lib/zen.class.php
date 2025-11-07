@@ -541,4 +541,38 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printScrumProductBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printScrumProductBlockTest(object $block)
+    {
+        $this->invokeArgs('printScrumProductBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+        $result->storiesCount = isset($view->stories) ? count($view->stories) : 0;
+        $result->bugsCount = isset($view->bugs) ? count($view->bugs) : 0;
+        $result->releasesCount = isset($view->releases) ? count($view->releases) : 0;
+
+        if(isset($view->products))
+        {
+            foreach($view->products as $productID => $productName)
+            {
+                $productKey = 'product' . $productID;
+                $result->$productKey = new stdClass();
+                $result->$productKey->name = $productName;
+                $result->$productKey->storyTotal = isset($view->stories[$productID]) ? $view->stories[$productID] : 0;
+                $result->$productKey->bugTotal = isset($view->bugs[$productID]) ? $view->bugs[$productID] : 0;
+                $result->$productKey->releaseTotal = isset($view->releases[$productID]) ? $view->releases[$productID] : 0;
+            }
+        }
+        return $result;
+    }
 }
