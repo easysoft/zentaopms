@@ -324,4 +324,32 @@ class blockZenTest extends baseTest
         $result->totalDataArrays = $result->doneStoryEstimateCount + $result->doneStoryCountCount + $result->createStoryCountCount + $result->fixedBugCountCount + $result->createBugCountCount;
         return $result;
     }
+
+    /**
+     * Test printPlanBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printPlanBlockTest(object $block)
+    {
+        ob_start();
+        $this->invokeArgs('printPlanBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+        $result->plansCount = isset($view->plans) ? count($view->plans) : 0;
+        if(isset($view->plans))
+        {
+            foreach($view->plans as $index => $plan)
+            {
+                $result->$index = $plan;
+            }
+        }
+        return $result;
+    }
 }
