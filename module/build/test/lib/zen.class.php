@@ -229,4 +229,35 @@ class buildZenTest extends baseTest
             'branchValues'    => $tester->config->bug->search['params']['branch']['values'] ?? array()
         );
     }
+
+    /**
+     * Test buildLinkStorySearchForm method.
+     *
+     * @param  object    $build
+     * @param  int       $queryID
+     * @param  string    $productType
+     * @access public
+     * @return array
+     */
+    public function buildLinkStorySearchFormTest($build = null, $queryID = 0, $productType = 'normal')
+    {
+        global $tester;
+        if($build === null) return array();
+
+        $this->invokeArgs('buildLinkStorySearchForm', [$build, $queryID, $productType]);
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'actionURL'       => $tester->config->product->search['actionURL'] ?? '',
+            'queryID'         => $tester->config->product->search['queryID'] ?? 0,
+            'style'           => $tester->config->product->search['style'] ?? '',
+            'hasPlanField'    => isset($tester->config->product->search['fields']['plan']) ? 1 : 0,
+            'hasBranchField'  => isset($tester->config->product->search['fields']['branch']) ? 1 : 0,
+            'hasProductField' => isset($tester->config->product->search['fields']['product']) ? 1 : 0,
+            'hasProjectField' => isset($tester->config->product->search['fields']['project']) ? 1 : 0,
+            'hasGradeField'   => isset($tester->config->product->search['fields']['grade']) ? 1 : 0,
+            'branchValues'    => $tester->config->product->search['params']['branch']['values'] ?? array()
+        );
+    }
 }
