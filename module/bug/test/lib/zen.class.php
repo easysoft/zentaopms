@@ -742,4 +742,33 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * Test prepareBrowseParams method.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function prepareBrowseParamsTest(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    {
+        ob_start();
+        $result = $this->invokeArgs('prepareBrowseParams', [$browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID]);
+        ob_end_clean();
+        if(dao::isError()) return array();
+        return array(
+            'moduleID'    => $result[0],
+            'queryID'     => $result[1],
+            'realOrderBy' => $result[2],
+            'pagerClass'  => get_class($result[3]),
+            'recTotal'    => $result[3]->recTotal,
+            'recPerPage'  => $result[3]->recPerPage,
+            'pageID'      => $result[3]->pageID,
+        );
+    }
 }
