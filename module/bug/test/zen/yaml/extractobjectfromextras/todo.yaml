@@ -1,0 +1,32 @@
+---
+title: todo数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: account
+  note: 所属用户
+  range: admin{5},user1{3},user2{2}
+- field: type
+  note: 类型
+  range: bug{5},task{3},custom{2}
+- field: name
+  note: 待办名称
+  range: Todo name 1,Todo name 2,Todo name 3,Todo name 4,Todo name 5,Todo name 6,Todo name 7,Todo name 8,Todo name 9,Todo name 10
+- field: desc
+  note: 待办描述
+  range: Todo description 1,Todo description 2,Todo description 3,Todo description 4,Todo description 5,Todo description 6,Todo description 7,Todo description 8,Todo description 9,Todo description 10
+- field: pri
+  note: 优先级
+  range: 1{2},2{3},3{5}
+- field: status
+  note: 状态
+  range: wait{5},doing{3},done{2}
+- field: deleted
+  note: 是否删除
+  range: 0{10}

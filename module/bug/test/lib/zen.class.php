@@ -495,4 +495,19 @@ class bugZenTest extends baseTest
             'hasPlanField'      => $hasPlanField ? 1 : 0,
         );
     }
+
+    /**
+     * Test extractObjectFromExtras method.
+     *
+     * @param  object $bug
+     * @param  array  $output
+     * @access public
+     * @return object|false
+     */
+    public function extractObjectFromExtrasTest(object $bug, array $output = array())
+    {
+        $result = $this->invokeArgs('extractObjectFromExtras', [$bug, $output]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
