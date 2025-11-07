@@ -38,4 +38,19 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test afterUpdate method.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return bool
+     */
+    public function afterUpdateTest(object $bug, object $oldBug): bool
+    {
+        $result = $this->invokeArgs('afterUpdate', [$bug, $oldBug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
