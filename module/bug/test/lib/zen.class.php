@@ -587,4 +587,20 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test getExportFileName method.
+     *
+     * @param  int         $executionID
+     * @param  string      $browseType
+     * @param  object|bool $product
+     * @access public
+     * @return string
+     */
+    public function getExportFileNameTest(int $executionID, string $browseType, object|bool $product): string
+    {
+        $result = $this->invokeArgs('getExportFileName', [$executionID, $browseType, $product]);
+        if(dao::isError()) return '';
+        return $result;
+    }
 }
