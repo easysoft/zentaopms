@@ -743,4 +743,46 @@ class blockZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test printSinglePlanBlock method.
+     *
+     * @param  object $block 区块对象
+     * @param  int    $productID 产品ID
+     * @access public
+     * @return object
+     */
+    public function printSinglePlanBlockTest(object $block, int $productID = 1)
+    {
+        global $tester;
+
+        // 设置session中的产品ID
+        $tester->session->product = $productID;
+
+        // 调用方法
+        ob_start();
+        $this->invokeArgs('printSinglePlanBlock', array($block));
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->plansCount = isset($view->plans) ? count($view->plans) : 0;
+        $result->productsCount = isset($view->products) ? count($view->products) : 0;
+
+        if(isset($view->plans))
+        {
+            foreach($view->plans as $index => $plan)
+            {
+                $result->$index = $plan;
+            }
+        }
+
+        if(isset($view->products))
+        {
+            $result->productNames = $view->products;
+        }
+
+        return $result;
+    }
 }
