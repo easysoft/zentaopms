@@ -437,4 +437,43 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printProjectOverviewBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printProjectOverviewBlockTest(object $block)
+    {
+        $this->invokeArgs('printProjectOverviewBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->groupsCount = isset($view->groups) ? count($view->groups) : 0;
+
+        if(isset($view->groups))
+        {
+            foreach($view->groups as $index => $group)
+            {
+                $groupKey = 'group' . $index;
+                $result->$groupKey = new stdClass();
+                $result->$groupKey->type = isset($group->type) ? $group->type : '';
+
+                if(isset($group->type) && $group->type == 'cards' && isset($group->cards))
+                {
+                    $result->$groupKey->cardsCount = count($group->cards);
+                }
+
+                if(isset($group->type) && $group->type == 'barChart' && isset($group->bars))
+                {
+                    $result->$groupKey->barsCount = count($group->bars);
+                    $result->$groupKey->title = isset($group->title) ? $group->title : '';
+                }
+            }
+        }
+        return $result;
+    }
 }
