@@ -646,4 +646,29 @@ class blockZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test printSingleBugStatisticBlock method.
+     *
+     * @param  object $block 区块对象
+     * @access public
+     * @return object
+     */
+    public function printSingleBugStatisticBlockTest(object $block)
+    {
+        $this->invokeArgs('printSingleBugStatisticBlock', array($block));
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->instance->view;
+        $result = new stdClass();
+        $result->productID = isset($view->productID) ? $view->productID : 0;
+        $result->totalBugs = isset($view->totalBugs) ? $view->totalBugs : 0;
+        $result->closedBugs = isset($view->closedBugs) ? $view->closedBugs : 0;
+        $result->unresovledBugs = isset($view->unresovledBugs) ? $view->unresovledBugs : 0;
+        $result->resolvedRate = isset($view->resolvedRate) ? $view->resolvedRate : 0;
+        $result->monthsCount = isset($view->months) ? count($view->months) : 0;
+        $result->activateBugsCount = isset($view->activateBugs) ? count($view->activateBugs) : 0;
+        $result->closeBugsCount = isset($view->closeBugs) ? count($view->closeBugs) : 0;
+        return $result;
+    }
 }
