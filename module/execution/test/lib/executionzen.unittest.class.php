@@ -13,8 +13,14 @@ class executionZenTest
         // 恢复原始initReference调用，但捕获异常
         try {
             $this->executionZenTest = initReference('execution');
+            if(!$this->executionZenTest)
+            {
+                helper::import($tester->app->getModulePath('', 'execution') . 'zen.php');
+                $this->executionZenTest = new ReflectionClass('executionZen');
+            }
         } catch(Exception $e) {
-            $this->executionZenTest = null;
+            helper::import($tester->app->getModulePath('', 'execution') . 'zen.php');
+            $this->executionZenTest = new ReflectionClass('executionZen');
         }
     }
 
@@ -983,10 +989,35 @@ class executionZenTest
      */
     public function buildExecutionForCreateTest()
     {
+        global $tester;
         $method = $this->executionZenTest->getMethod('buildExecutionForCreate');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->objectZen);
+        $executionZen = $this->executionZenTest->newInstanceWithoutConstructor();
+
+        /* Initialize necessary properties. */
+        $appProperty = $this->executionZenTest->getProperty('app');
+        $appProperty->setAccessible(true);
+        $appProperty->setValue($executionZen, $tester->app);
+
+        $configProperty = $this->executionZenTest->getProperty('config');
+        $configProperty->setAccessible(true);
+        $configProperty->setValue($executionZen, $tester->config);
+
+        $langProperty = $this->executionZenTest->getProperty('lang');
+        $langProperty->setAccessible(true);
+        $langProperty->setValue($executionZen, $tester->lang);
+
+        $postProperty = $this->executionZenTest->getProperty('post');
+        $postProperty->setAccessible(true);
+        $postProperty->setValue($executionZen, $tester->post);
+
+        /* Call loadModel to initialize execution model. */
+        $loadModelMethod = $this->executionZenTest->getMethod('loadModel');
+        $loadModelMethod->setAccessible(true);
+        $loadModelMethod->invoke($executionZen, 'execution');
+
+        $result = $method->invoke($executionZen);
 
         if(dao::isError()) return dao::getError();
 
