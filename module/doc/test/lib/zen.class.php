@@ -384,4 +384,38 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
     }
+
+    /**
+     * Test previewTask method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewTaskTest(string $view, array $settings, string $idList)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('previewTask', [$view, $settings, $idList]);
+        if(dao::isError()) return dao::getError();
+        return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
+    }
+
+    /**
+     * Test previewUR method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewURTest(string $view, array $settings, string $idList)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('previewUR', [$view, $settings, $idList]);
+        if(dao::isError()) return dao::getError();
+        return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
+    }
 }
