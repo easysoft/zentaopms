@@ -586,4 +586,44 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterEdit method.
+     *
+     * @param  object $doc
+     * @param  array  $changes
+     * @param  array  $files
+     * @param  array  $postData
+     * @access public
+     * @return object
+     */
+    public function responseAfterEditTest(object $doc, array $changes = array(), array $files = array(), array $postData = array())
+    {
+        /* Set POST data. */
+        $_POST['comment'] = isset($postData['comment']) ? $postData['comment'] : '';
+        $_POST['status']  = isset($postData['status']) ? $postData['status'] : $doc->status;
+
+        /* Set viewType. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = 'json';
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterEdit', [$doc, $changes, $files]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        /* Clean up POST data. */
+        unset($_POST['comment'], $_POST['status']);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
