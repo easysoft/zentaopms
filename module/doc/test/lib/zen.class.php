@@ -551,4 +551,39 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterCreateLib method.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  string $libName
+     * @param  string $orderBy
+     * @param  string $viewType
+     * @access public
+     * @return object
+     */
+    public function responseAfterCreateLibTest(string $type = '', int $objectID = 0, int $libID = 0, string $libName = '', string $orderBy = '', string $viewType = 'json')
+    {
+        /* Set viewType. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = $viewType;
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterCreateLib', [$type, $objectID, $libID, $libName, $orderBy]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
