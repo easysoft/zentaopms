@@ -107,4 +107,19 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkExtractPath method.
+     *
+     * @param  string $extension   插件代号
+     * @param  object $checkResult 检查结果对象
+     * @access public
+     * @return object
+     */
+    public function checkExtractPathTest(string $extension, object $checkResult)
+    {
+        $result = $this->invokeArgs('checkExtractPath', [$extension, $checkResult]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
