@@ -24,7 +24,7 @@ class product extends control
         $this->loadModel('project')->setMenu($projectID);
 
         $branches  = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+        $branch    = ($this->cookie->preBranch and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
         $branchID  = $branch;
 
         /* Lower browse type. */
