@@ -67,4 +67,18 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getAllSpaces method.
+     *
+     * @param  string $extra
+     * @access public
+     * @return array
+     */
+    public function getAllSpacesTest(string $extra = '')
+    {
+        $result = $this->invokeArgs('getAllSpaces', [$extra]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
