@@ -137,4 +137,20 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareCols method.
+     *
+     * @param  array     $cols
+     * @access public
+     * @return array
+     */
+    public function prepareColsTest(array $cols)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $this->instance->view->cols = $cols;
+        $result = $this->invokeArgs('prepareCols', []);
+        if(dao::isError()) return dao::getError();
+        return $this->instance->view->cols;
+    }
 }
