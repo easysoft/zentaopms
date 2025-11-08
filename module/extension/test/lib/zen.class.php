@@ -26,4 +26,22 @@ class extensionZenTest extends baseTest
         }
         return $result;
     }
+
+    /**
+     * Test checkCompatible method.
+     *
+     * @param  string $extension
+     * @param  object $condition
+     * @param  string $ignoreCompatible
+     * @param  string $ignoreLink
+     * @param  string $installType
+     * @access public
+     * @return bool
+     */
+    public function checkCompatibleTest(string $extension, object $condition, string $ignoreCompatible, string $ignoreLink, string $installType)
+    {
+        $result = $this->invokeArgs('checkCompatible', [$extension, $condition, $ignoreCompatible, $ignoreLink, $installType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
