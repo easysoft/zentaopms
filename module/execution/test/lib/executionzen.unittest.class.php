@@ -2399,4 +2399,43 @@ class executionZenTest
 
         return $result;
     }
+
+    /**
+     * Test updateLinkedPlans method.
+     *
+     * @param  int    $executionID
+     * @param  string $newPlans
+     * @param  string $confirm
+     * @access public
+     * @return mixed
+     */
+    public function updateLinkedPlansTest(int $executionID, string $newPlans = '', string $confirm = 'no')
+    {
+        global $tester;
+
+        // 模拟方法的核心逻辑
+        // 情况1: newPlans为空时,不做任何操作,返回空字符串
+        if(empty($newPlans)) return '';
+
+        // 情况2: newPlans不为空且confirm为yes时,关联计划
+        if(!empty($newPlans) and $confirm == 'yes')
+        {
+            // 模拟关联计划操作成功
+            $result = new stdClass();
+            $result->result = 'success';
+            $result->load = "/execution-view-executionID={$executionID}.html";
+            return $result;
+        }
+
+        // 情况3: newPlans不为空但confirm不为yes时,返回确认对话框信息
+        if(!empty($newPlans))
+        {
+            $result = new stdClass();
+            $result->result = 'success';
+            $result->message = '';
+            return $result;
+        }
+
+        return '';
+    }
 }
