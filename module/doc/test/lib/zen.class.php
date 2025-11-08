@@ -519,4 +519,36 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  array  $docResult
+     * @param  string $objectType
+     * @param  string $viewType
+     * @access public
+     * @return object
+     */
+    public function responseAfterCreateTest(array $docResult, string $objectType = 'doc', string $viewType = 'json')
+    {
+        /* Set viewType. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = $viewType;
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterCreate', [$docResult, $objectType]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
