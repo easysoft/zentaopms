@@ -104,4 +104,46 @@ class customZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkInvalidKeys method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $lang
+     * @param  array  $keys
+     * @access public
+     * @return mixed
+     */
+    public function checkInvalidKeysTest(string $module = 'story', string $field = 'priList', string $lang = 'zh-cn', array $keys = array())
+    {
+        $_POST['lang'] = $lang;
+        $_POST['keys'] = $keys;
+        $result = $this->invokeArgs('checkInvalidKeys', array($module, $field));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test checkKeysForSet method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $lang
+     * @param  array  $keys
+     * @param  array  $values
+     * @param  array  $systems
+     * @access public
+     * @return mixed
+     */
+    public function checkKeysForSetTest(string $module = 'story', string $field = 'priList', string $lang = 'zh-cn', array $keys = array(), array $values = array(), array $systems = array())
+    {
+        $_POST['lang']    = $lang;
+        $_POST['keys']    = $keys;
+        $_POST['values']  = $values;
+        $_POST['systems'] = $systems;
+        $result = $this->invokeArgs('checkKeysForSet', array($module, $field));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
