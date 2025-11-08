@@ -1,0 +1,28 @@
+---
+title: 用户分组数据定义
+desc: checkPrivForCreate方法测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: account
+  note: 用户账号
+  range: admin{2},user1{2},user2{2},user3{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: group
+  note: 分组ID
+  range: 1,2,1,2,3,3,4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

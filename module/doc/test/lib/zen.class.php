@@ -38,4 +38,19 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkPrivForCreate method.
+     *
+     * @param  object    $doclib
+     * @param  string    $objectType
+     * @access public
+     * @return bool
+     */
+    public function checkPrivForCreateTest(object $doclib, string $objectType)
+    {
+        $result = $this->invokeArgs('checkPrivForCreate', [$doclib, $objectType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
