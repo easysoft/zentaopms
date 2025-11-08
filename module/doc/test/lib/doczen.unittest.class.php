@@ -261,4 +261,30 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test buildLibForCreateLib method.
+     *
+     * @access public
+     * @return object
+     */
+    public function buildLibForCreateLibTest(): object
+    {
+        global $tester, $lang, $app;
+
+        $tester->app->setMethodName('createLib');
+        $tester->app->setModuleName('doc');
+        $tester->app->loadLang('doc');
+        $tester->app->loadLang('doclib');
+
+        if(!isset($lang->doc)) $lang->doc = new stdclass();
+        if(!isset($lang->doclib)) $lang->doclib = new stdclass();
+        if(!isset($lang->doclib->name)) $lang->doclib->name = 'Library Name';
+        if(!isset($lang->doc->name)) $lang->doc->name = 'Document';
+
+        $result = callZenMethod('doc', 'buildLibForCreateLib', array());
+
+        if(dao::isError()) return (object)dao::getError();
+        return $result;
+    }
 }
