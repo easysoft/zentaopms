@@ -489,4 +489,34 @@ class docZenTest extends baseTest
 
         return (int)$actionCount;
     }
+
+    /**
+     * Test responseAfterAddTemplateType method.
+     *
+     * @param  int $scope
+     * @access public
+     * @return object
+     */
+    public function responseAfterAddTemplateTypeTest(int $scope)
+    {
+        /* Set viewType to json to get json response. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = 'json';
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterAddTemplateType', [$scope]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
