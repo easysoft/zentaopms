@@ -53,4 +53,18 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test formFromSession method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function formFromSessionTest(string $type)
+    {
+        $result = $this->invokeArgs('formFromSession', [$type]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
