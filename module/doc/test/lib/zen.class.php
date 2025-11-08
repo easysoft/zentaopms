@@ -789,4 +789,70 @@ class docZenTest extends baseTest
             'count'      => count($aclList)
         );
     }
+
+    /**
+     * Test setAclForEditLib method.
+     *
+     * @param  object $lib
+     * @access public
+     * @return array
+     */
+    public function setAclForEditLibTest(object $lib)
+    {
+        /* Load language files for different types. */
+        global $app, $lang;
+
+        /* Save initial aclList state. */
+        static $initialAclList = null;
+        static $initialMySpaceAclList = null;
+        static $initialPrivateACL = null;
+
+        /* Initialize on first call. */
+        if($initialAclList === null)
+        {
+            $app->loadLang('doc');
+            $initialAclList = $lang->doclib->aclList;
+            $initialMySpaceAclList = $lang->doclib->mySpaceAclList;
+            $initialPrivateACL = $lang->doclib->privateACL;
+        }
+
+        /* Reset doc language to get fresh aclList. */
+        $lang->doclib->aclList = $initialAclList;
+        $lang->doclib->mySpaceAclList = $initialMySpaceAclList;
+        $lang->doclib->privateACL = $initialPrivateACL;
+
+        $libType = $lib->type;
+        if(in_array($libType, array('product', 'project', 'execution')))
+        {
+            $app->loadLang($libType);
+        }
+
+        /* Update instance language reference. */
+        $this->instance->lang = $lang;
+
+        $result = $this->invokeArgs('setAclForEditLib', [$lib]);
+        if(dao::isError()) return dao::getError();
+
+        /* Return the modified aclList for verification. */
+        $aclList = $this->instance->lang->doclib->aclList;
+
+        /* Check if api language is loaded. */
+        $hasApiLang = isset($this->instance->lang->api) ? 1 : 0;
+
+        /* Check if using mySpaceAclList. */
+        $isMySpaceAclList = 0;
+        if($libType == 'mine' && isset($this->instance->lang->doclib->mySpaceAclList))
+        {
+            $isMySpaceAclList = ($aclList == $this->instance->lang->doclib->mySpaceAclList) ? 1 : 0;
+        }
+
+        return array(
+            'hasDefault'       => isset($aclList['default']) ? 1 : 0,
+            'hasOpen'          => isset($aclList['open']) ? 1 : 0,
+            'hasPrivate'       => isset($aclList['private']) ? 1 : 0,
+            'count'            => count($aclList),
+            'hasApiLang'       => $hasApiLang,
+            'isMySpaceAclList' => $isMySpaceAclList
+        );
+    }
 }
