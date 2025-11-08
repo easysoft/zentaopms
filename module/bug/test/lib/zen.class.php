@@ -497,6 +497,20 @@ class bugZenTest extends baseTest
     }
 
     /**
+     * Test checkRquiredForEdit method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return bool
+     */
+    public function checkRquiredForEditTest(object $bug): bool
+    {
+        $result = $this->invokeArgs('checkRquiredForEdit', [$bug]);
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    /**
      * Test extractObjectFromExtras method.
      *
      * @param  object $bug
