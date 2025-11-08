@@ -93,4 +93,18 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkExtensionPaths method.
+     *
+     * @param  string $extension 插件代号
+     * @access public
+     * @return object
+     */
+    public function checkExtensionPathsTest(string $extension)
+    {
+        $result = $this->invokeArgs('checkExtensionPaths', [$extension]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
