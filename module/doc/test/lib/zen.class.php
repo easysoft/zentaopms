@@ -124,4 +124,17 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test initLibForTeamSpace method.
+     *
+     * @access public
+     * @return void
+     */
+    public function initLibForTeamSpaceTest()
+    {
+        $result = $this->invokeArgs('initLibForTeamSpace', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
