@@ -907,4 +907,57 @@ class docZenTest extends baseTest
             'hasAclList'   => isset($this->instance->lang->doc->aclList) ? 1 : 0,
         );
     }
+
+    /**
+     * Test setSpacePageStorage method.
+     *
+     * @param  string $type
+     * @param  string $browseType
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function setSpacePageStorageTest(string $type, string $browseType, int $objectID, int $libID, int $moduleID, int $param)
+    {
+        /* Suppress output from setCookie warnings. */
+        ob_start();
+        $result = $this->invokeArgs('setSpacePageStorage', [$type, $browseType, $objectID, $libID, $moduleID, $param]);
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        /* Get session values from $_SESSION["app-doc"] since session->set($key, $value, 'doc') stores data there. */
+        $sessionData = isset($_SESSION['app-doc']) ? $_SESSION['app-doc'] : array();
+        $createProjectLocate = isset($sessionData['createProjectLocate']) ? $sessionData['createProjectLocate'] : '';
+        $structList = isset($sessionData['structList']) ? $sessionData['structList'] : '';
+        $spaceType = isset($sessionData['spaceType']) ? $sessionData['spaceType'] : '';
+        $docList = isset($sessionData['docList']) ? $sessionData['docList'] : '';
+
+        /* Build expected cookie data since we cannot test setCookie in CLI mode. */
+        $expectedCookie = new stdclass();
+        $expectedCookie->type = $type;
+        $expectedCookie->objectID = $objectID;
+        $expectedCookie->libID = $libID;
+        $expectedCookie->moduleID = $moduleID;
+        $expectedCookie->browseType = $browseType;
+        $expectedCookie->param = $param;
+
+        return array(
+            'hasCreateProjectLocate' => !empty($createProjectLocate) ? 1 : 0,
+            'hasStructList' => !empty($structList) ? 1 : 0,
+            'hasSpaceType' => !empty($spaceType) ? 1 : 0,
+            'spaceType' => $spaceType,
+            'hasDocList' => !empty($docList) ? 1 : 0,
+            'hasCookie' => 1,
+            'cookieType' => $expectedCookie->type,
+            'cookieObjectID' => $expectedCookie->objectID,
+            'cookieLibID' => $expectedCookie->libID,
+            'cookieModuleID' => $expectedCookie->moduleID,
+            'cookieBrowseType' => $expectedCookie->browseType,
+            'cookieParam' => $expectedCookie->param,
+        );
+    }
 }
