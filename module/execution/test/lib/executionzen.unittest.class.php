@@ -2328,4 +2328,37 @@ class executionZenTest
         // 场景5: 默认返回create链接
         return "/execution-create-projectID={$projectID}&executionID={$executionID}.html";
     }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
+    public function getLinkedObjectsTest(int $executionID): object
+    {
+        global $tester, $app;
+
+        $execution = $this->objectModel->fetchByID($executionID);
+        if(!$execution)
+        {
+            $execution = new stdClass();
+            $execution->id = $executionID;
+            $execution->project = 0;
+        }
+
+        // 使用loadModel获取execution模型,它包含zen层方法
+        helper::import($tester->app->getModulePath('', 'execution') . 'zen.php');
+
+        $method = $this->executionZenTest->getMethod('getLinkedObjects');
+        $method->setAccessible(true);
+
+        $zenObject = $this->executionZenTest->newInstanceWithoutConstructor();
+        // 初始化必要的属性
+        $zenObject->app = $app;
+        $result = $method->invokeArgs($zenObject, [$execution]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
