@@ -435,4 +435,35 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processOutline method.
+     *
+     * @param  object $doc
+     * @access public
+     * @return object
+     */
+    public function processOutlineTest(object $doc)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('processOutline', [$doc]);
+        if(dao::isError()) return dao::getError();
+
+        /* Extract anchor IDs for easier testing. */
+        preg_match_all("/id='anchor(\d+)'/", $result->content, $matches);
+        $anchors = isset($matches[1]) ? $matches[1] : array();
+
+        /* Create a simplified result for testing. */
+        $testResult = new stdClass();
+        $testResult->anchorCount = count($anchors);
+        $testResult->anchor0     = isset($anchors[0]) ? $anchors[0] : '';
+        $testResult->anchor1     = isset($anchors[1]) ? $anchors[1] : '';
+        $testResult->anchor2     = isset($anchors[2]) ? $anchors[2] : '';
+        $testResult->hasH1       = (int)(strpos($result->content, '<h1') !== false);
+        $testResult->hasH2       = (int)(strpos($result->content, '<h2') !== false);
+        $testResult->hasH3       = (int)(strpos($result->content, '<h3') !== false);
+        $testResult->content     = str_replace("\n", "", $result->content); // Remove newlines for easier matching
+
+        return $testResult;
+    }
 }
