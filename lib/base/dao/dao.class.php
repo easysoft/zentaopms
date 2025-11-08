@@ -2842,7 +2842,7 @@ class baseSQL
 
         if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
         {
-           $pattern = '/\s+(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
+           $pattern = '/\s+(?:(?:[a-zA-Z0-9]+\.)?|)(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
            $replacement = ' 1=1 ';
            $this->sql = preg_replace($pattern, $replacement, $this->sql);
 
