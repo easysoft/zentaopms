@@ -332,4 +332,21 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
     }
+
+    /**
+     * Test previewProductStory method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previewProductStoryTest(string $view, array $settings, string $idList)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('previewProductStory', [$view, $settings, $idList]);
+        if(dao::isError()) return dao::getError();
+        return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
+    }
 }
