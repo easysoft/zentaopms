@@ -193,4 +193,18 @@ class customZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setTestcaseReview method.
+     *
+     * @param  array  $data
+     * @access public
+     * @return mixed
+     */
+    public function setTestcaseReviewTest(array $data = array())
+    {
+        $result = $this->invokeArgs('setTestcaseReview', array($data));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
