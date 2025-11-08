@@ -138,4 +138,18 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test copyPackageFiles method.
+     *
+     * @param  string $extension 插件代号
+     * @access public
+     * @return array
+     */
+    public function copyPackageFilesTest(string $extension)
+    {
+        $result = $this->invokeArgs('copyPackageFiles', [$extension]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
