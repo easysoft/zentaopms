@@ -23,4 +23,19 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildOutlineTree method.
+     *
+     * @param  array     $outlineList
+     * @param  int       $parentID
+     * @access public
+     * @return array
+     */
+    public function buildOutlineTreeTest(array $outlineList = array(), int $parentID = -1)
+    {
+        $result = $this->invokeArgs('buildOutlineTree', [$outlineList, $parentID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
