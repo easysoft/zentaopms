@@ -666,4 +666,37 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterMove method.
+     *
+     * @param  string $space
+     * @param  int    $libID
+     * @param  int    $docID
+     * @param  bool   $spaceTypeChanged
+     * @access public
+     * @return object
+     */
+    public function responseAfterMoveTest(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false)
+    {
+        /* Set viewType to json to get json response. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = 'json';
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterMove', [$space, $libID, $docID, $spaceTypeChanged]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
