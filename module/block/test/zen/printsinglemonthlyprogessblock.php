@@ -29,6 +29,9 @@ cid=15297
  - 属性fixedBugCountCount @6
  - 属性createBugCountCount @6
  - 属性releaseCountCount @6
+- 执行blockTest模块的printSingleMonthlyProgressBlockTest方法，参数是1 属性doneStoryCountCount @6
+- 执行blockTest模块的printSingleMonthlyProgressBlockTest方法，参数是1 属性createBugCountCount @6
+- 执行blockTest模块的printSingleMonthlyProgressBlockTest方法，参数是1 属性releaseCountCount @6
 
 */
 
