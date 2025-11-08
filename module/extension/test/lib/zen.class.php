@@ -181,4 +181,20 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test installExtension method.
+     *
+     * @param  string $extension 插件代号
+     * @param  string $type      插件类型
+     * @param  string $upgrade   是否升级
+     * @access public
+     * @return bool
+     */
+    public function installExtensionTest(string $extension, string $type, string $upgrade)
+    {
+        $result = $this->invokeArgs('installExtension', [$extension, $type, $upgrade]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
