@@ -73,4 +73,28 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test assignStoryGradeData method.
+     *
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function assignStoryGradeDataTest(string $type): object
+    {
+        ob_start();
+        $view = callZenMethod('doc', 'assignStoryGradeData', array($type), 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $result = new stdclass();
+        $result->hasGradeGroup = isset($view->gradeGroup) ? 1 : 0;
+        $result->hasStoryType = isset($view->storyType) ? 1 : 0;
+        $result->storyType = isset($view->storyType) ? $view->storyType : '';
+        $result->gradeGroupCount = isset($view->gradeGroup) ? count($view->gradeGroup) : 0;
+
+        return $result;
+    }
 }
