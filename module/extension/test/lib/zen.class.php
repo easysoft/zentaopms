@@ -59,4 +59,19 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkDepends method.
+     *
+     * @param  object $condition
+     * @param  array  $installedExts
+     * @access public
+     * @return bool
+     */
+    public function checkDependsTest(object $condition, array $installedExts)
+    {
+        $result = $this->invokeArgs('checkDepends', [$condition, $installedExts]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
