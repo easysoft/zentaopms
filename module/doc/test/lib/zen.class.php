@@ -170,4 +170,30 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
     }
+
+    /**
+     * Test previeweicket method.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function previeweicketTest(string $view, array $settings, string $idList)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        try
+        {
+            $result = $this->invokeArgs('previeweicket', [$view, $settings, $idList]);
+            if(dao::isError()) return dao::getError();
+            $data = isset($this->instance->view->data) ? $this->instance->view->data : array();
+            if($data === false) $data = array();
+            return array('cols' => isset($this->instance->view->cols) ? $this->instance->view->cols : array(), 'data' => $data);
+        }
+        catch(Exception $e)
+        {
+            return array('cols' => array(), 'data' => array());
+        }
+    }
 }
