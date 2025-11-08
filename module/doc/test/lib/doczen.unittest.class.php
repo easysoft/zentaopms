@@ -97,4 +97,42 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test assignVarsForCreate method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $docType
+     * @access public
+     * @return object
+     */
+    public function assignVarsForCreateTest(string $objectType = 'product', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $docType = ''): object
+    {
+        ob_start();
+        $view = callZenMethod('doc', 'assignVarsForCreate', array($objectType, $objectID, $libID, $moduleID, $docType), 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $result = new stdclass();
+        $result->objectType = isset($view->objectType) ? $view->objectType : '';
+        $result->spaceType  = isset($view->spaceType) ? $view->spaceType : '';
+        $result->type       = isset($view->type) ? $view->type : '';
+        $result->libID      = isset($view->libID) ? (int)$view->libID : 0;
+        $result->objectID   = isset($view->objectID) ? (int)$view->objectID : 0;
+        $result->moduleID   = isset($view->moduleID) ? (int)$view->moduleID : 0;
+        $result->docType    = isset($view->docType) ? $view->docType : '';
+        $result->libName    = isset($view->libName) ? $view->libName : '';
+        $result->hasLib     = isset($view->lib) ? 1 : 0;
+        $result->hasLibs    = isset($view->libs) ? 1 : 0;
+        $result->hasGroups  = isset($view->groups) ? 1 : 0;
+        $result->hasUsers   = isset($view->users) ? 1 : 0;
+        $result->hasObjects = isset($view->objects) ? 1 : 0;
+        $result->hasOptionMenu = isset($view->optionMenu) ? 1 : 0;
+
+        return $result;
+    }
 }
