@@ -152,4 +152,18 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test extractPackage method.
+     *
+     * @param  string $extension 插件代号
+     * @access public
+     * @return object
+     */
+    public function extractPackageTest(string $extension)
+    {
+        $result = $this->invokeArgs('extractPackage', [$extension]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
