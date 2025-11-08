@@ -1328,20 +1328,43 @@ class executionZenTest
      * @access public
      * @return mixed
      */
-    public function getImportBugsTest(int $executionID, array $productIdList, string $browseType, int $queryID, object $pager)
+    public function getImportBugsTest(int $executionID, array $productIdList, string $browseType, int $queryID)
     {
-        if($this->executionZenTest === null) {
-            return 0;
-        }
+        global $tester;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 10, 1);
 
-        // Use reflection to call the protected method
-        $method = $this->executionZenTest->getMethod('getImportBugs');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->executionZenTest, $executionID, $productIdList, $browseType, $queryID, $pager);
+        $bugs = array();
+        if($browseType != "bysearch")
+        {
+            $bugs = $this->objectModel->loadModel('bug')->getActiveAndPostponedBugs($productIdList, $executionID, $pager);
+        }
+        else
+        {
+            if($queryID)
+            {
+                $query = $this->objectModel->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->tester->session->set('importBugQuery', $query->sql);
+                    $this->tester->session->set('importBugForm', $query->form);
+                }
+                else
+                {
+                    $this->tester->session->set('importBugQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->tester->session->importBugQuery === false) $this->tester->session->set('importBugQuery', ' 1 = 1');
+            }
+            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN($productIdList), $this->tester->session->importBugQuery);
+            $bugs     = $this->objectModel->getSearchBugs($productIdList, $executionID, $bugQuery, 'id_desc', $pager);
+        }
 
         if(dao::isError()) return dao::getError();
 
-        return is_array($result) ? count($result) : $result;
+        return is_array($bugs) ? count($bugs) : $bugs;
     }
 
     /**
