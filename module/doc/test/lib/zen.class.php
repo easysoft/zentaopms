@@ -737,4 +737,56 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setAclForCreateLib method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function setAclForCreateLibTest(string $type)
+    {
+        /* Load language files for different types. */
+        global $app, $lang;
+
+        /* Save initial aclList state. */
+        static $initialAclList = null;
+        static $initialMySpaceAclList = null;
+        static $initialPrivateACL = null;
+
+        /* Initialize on first call. */
+        if($initialAclList === null)
+        {
+            $app->loadLang('doc');
+            $initialAclList = $lang->doclib->aclList;
+            $initialMySpaceAclList = $lang->doclib->mySpaceAclList;
+            $initialPrivateACL = $lang->doclib->privateACL;
+        }
+
+        /* Reset doc language to get fresh aclList. */
+        $lang->doclib->aclList = $initialAclList;
+        $lang->doclib->mySpaceAclList = $initialMySpaceAclList;
+        $lang->doclib->privateACL = $initialPrivateACL;
+
+        if(in_array($type, array('product', 'project', 'execution')))
+        {
+            $app->loadLang($type);
+        }
+
+        /* Update instance language reference. */
+        $this->instance->lang = $lang;
+
+        $result = $this->invokeArgs('setAclForCreateLib', [$type]);
+        if(dao::isError()) return dao::getError();
+
+        /* Return the modified aclList for verification. */
+        $aclList = $this->instance->lang->doclib->aclList;
+        return array(
+            'hasDefault' => isset($aclList['default']) ? 1 : 0,
+            'hasOpen'    => isset($aclList['open']) ? 1 : 0,
+            'hasPrivate' => isset($aclList['private']) ? 1 : 0,
+            'count'      => count($aclList)
+        );
+    }
 }
