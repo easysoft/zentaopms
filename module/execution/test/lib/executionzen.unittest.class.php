@@ -2179,4 +2179,54 @@ class executionZenTest
 
         return $view;
     }
+
+    /**
+     * Test checkLinkPlan method.
+     *
+     * @param  int   $executionID
+     * @param  array $oldPlans
+     * @param  array $postPlans
+     * @access public
+     * @return mixed
+     */
+    public function checkLinkPlanTest(int $executionID, array $oldPlans, array $postPlans = array())
+    {
+        global $tester;
+
+        $method = $this->executionZenTest->getMethod('checkLinkPlan');
+        $method->setAccessible(true);
+
+        if(!empty($postPlans))
+        {
+            $_POST['plans'] = $postPlans;
+        }
+        else
+        {
+            unset($_POST['plans']);
+        }
+
+        $executionZen = new executionZen();
+
+        ob_start();
+        try {
+            $result = $method->invoke($executionZen, $executionID, $oldPlans);
+            ob_end_clean();
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(EndResponseException $e)
+        {
+            ob_end_clean();
+            $content = $e->getContent();
+            if(strpos($content, '{') !== false && strpos($content, '}') !== false)
+            {
+                $jsonStart = strpos($content, '{');
+                $jsonEnd = strrpos($content, '}') + 1;
+                $jsonStr = substr($content, $jsonStart, $jsonEnd - $jsonStart);
+                $result = json_decode($jsonStr, true);
+                if($result !== null && isset($result['message'])) return $result['message'];
+            }
+            return $content;
+        }
+    }
 }
