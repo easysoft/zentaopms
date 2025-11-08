@@ -146,4 +146,21 @@ class customZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setFieldListForSet method.
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function setFieldListForSetTest(string $module = 'story', string $field = 'priList', array $postData = array())
+    {
+        $_POST = $postData;
+        $result = $this->invokeArgs('setFieldListForSet', array($module, $field));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
