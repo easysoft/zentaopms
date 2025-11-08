@@ -111,4 +111,17 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test initLibForMySpace method.
+     *
+     * @access public
+     * @return void
+     */
+    public function initLibForMySpaceTest()
+    {
+        $result = $this->invokeArgs('initLibForMySpace', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
