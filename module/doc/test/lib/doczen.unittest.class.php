@@ -135,4 +135,42 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test assignVarsForMySpace method.
+     *
+     * @access public
+     * @return object
+     */
+    public function assignVarsForMySpaceTest(string $type = 'mine', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', array $docs = array(), object $pager = null, array $libs = array(), string $objectTitle = ''): object
+    {
+        if(is_null($pager))
+        {
+            global $tester;
+            $tester->app->loadClass('pager', true);
+            $oldErrorReporting = error_reporting(0);
+            $pager = new pager(0, 20, 1);
+            error_reporting($oldErrorReporting);
+        }
+
+        ob_start();
+        $view = callZenMethod('doc', 'assignVarsForMySpace', array($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectTitle), 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $result = new stdclass();
+        $result->type = isset($view->type) ? $view->type : '';
+        $result->libID = isset($view->libID) ? (int)$view->libID : 0;
+        $result->moduleID = isset($view->moduleID) ? (int)$view->moduleID : 0;
+        $result->browseType = isset($view->browseType) ? $view->browseType : '';
+        $result->orderBy = isset($view->orderBy) ? $view->orderBy : '';
+        $result->objectTitle = isset($view->objectTitle) ? $view->objectTitle : '';
+        $result->objectID = isset($view->objectID) ? (int)$view->objectID : 0;
+        $result->canUpdateOrder = isset($view->canUpdateOrder) ? (int)$view->canUpdateOrder : 0;
+        $result->libType = isset($view->libType) ? $view->libType : '';
+        $result->spaceType = isset($view->spaceType) ? $view->spaceType : '';
+
+        return $result;
+    }
 }
