@@ -699,4 +699,42 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterUploadDocs method.
+     *
+     * @param  array|string $docResult
+     * @param  array        $postData
+     * @param  string       $viewType
+     * @access public
+     * @return object
+     */
+    public function responseAfterUploadDocsTest(array|string $docResult, array $postData = array(), string $viewType = 'json')
+    {
+        /* Set POST data. */
+        $_POST['uploadFormat'] = isset($postData['uploadFormat']) ? $postData['uploadFormat'] : 'separateDocs';
+
+        /* Set viewType. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = $viewType;
+
+        try
+        {
+            $result = $this->invokeArgs('responseAfterUploadDocs', [$docResult]);
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content);
+        }
+
+        /* Restore viewType. */
+        $this->instance->viewType = $originalViewType;
+
+        /* Clean up POST data. */
+        unset($_POST['uploadFormat']);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
