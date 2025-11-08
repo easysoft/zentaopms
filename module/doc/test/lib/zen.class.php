@@ -418,4 +418,21 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('cols' => $this->instance->view->cols, 'data' => $this->instance->view->data);
     }
+
+    /**
+     * Test processFiles method.
+     *
+     * @param  array $files
+     * @param  array $fileIcon
+     * @param  array $sourcePairs
+     * @param  bool  $skipImageWidth
+     * @access public
+     * @return array
+     */
+    public function processFilesTest(array $files, array $fileIcon, array $sourcePairs, bool $skipImageWidth = false)
+    {
+        $result = $this->invokeArgs('processFiles', [$files, $fileIcon, $sourcePairs, $skipImageWidth]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
