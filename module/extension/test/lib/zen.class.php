@@ -44,4 +44,19 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test checkConflicts method.
+     *
+     * @param  object $condition
+     * @param  array  $installedExts
+     * @access public
+     * @return bool
+     */
+    public function checkConflictsTest(object $condition, array $installedExts)
+    {
+        $result = $this->invokeArgs('checkConflicts', [$condition, $installedExts]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
