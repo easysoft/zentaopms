@@ -163,4 +163,19 @@ class customZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setGradeRule method.
+     *
+     * @param  string $module
+     * @param  array  $data
+     * @access public
+     * @return mixed
+     */
+    public function setGradeRuleTest(string $module = 'story', array $data = array())
+    {
+        $result = $this->invokeArgs('setGradeRule', array($module, $data));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
