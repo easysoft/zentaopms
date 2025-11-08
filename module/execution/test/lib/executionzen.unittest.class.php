@@ -1205,7 +1205,7 @@ class executionZenTest
         $method = $this->executionZenTest->getMethod('filterGroupTasks');
         $method->setAccessible(true);
 
-        $executionZen = $this->executionZenTest->newInstance();
+        $executionZen = $this->executionZenTest->newInstanceWithoutConstructor();
         $result = $method->invokeArgs($executionZen, [$groupTasks, $groupBy, $filter, $allCount, $tasks]);
 
         if(dao::isError()) {
