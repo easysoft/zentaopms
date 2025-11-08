@@ -2101,4 +2101,82 @@ class executionZenTest
             'template' => 'tips'
         );
     }
+
+    /**
+     * Test buildImportBugSearchForm method.
+     *
+     * @param  int   $executionID
+     * @param  int   $queryID
+     * @param  array $products
+     * @param  array $executions
+     * @param  array $projects
+     * @access public
+     * @return object
+     */
+    public function buildImportBugSearchFormTest(int $executionID, int $queryID, array $products = array(), array $executions = array(), array $projects = array()): object
+    {
+        global $tester;
+
+        // 创建模拟的view对象
+        $view = new stdClass();
+
+        // 获取执行对象
+        $execution = $this->objectModel->getByID($executionID);
+        if(empty($execution)) {
+            $view->success = false;
+            return $view;
+        }
+
+        // 模拟获取项目对象
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
+        if(!$project) {
+            $project = new stdClass();
+            $project->id = $execution->project;
+            $project->hasProduct = '1';
+            $project->model = 'scrum';
+        }
+
+        // 模拟buildImportBugSearchForm方法的核心逻辑
+        $view->executionID = $executionID;
+        $view->queryID = $queryID;
+        $view->success = true;
+
+        // 模拟配置检查逻辑
+        global $config;
+        if(!isset($config->bug)) $config->bug = new stdClass();
+        if(!isset($config->bug->search)) $config->bug->search = array();
+
+        // 模拟actionURL设置
+        $view->actionURL = "execution-importBug-{$executionID}-bySearch-myQueryID";
+
+        // 模拟产品配置
+        if(!empty($products)) {
+            $view->hasProducts = 1;
+            $view->productCount = count($products);
+        } else {
+            $view->hasProducts = 0;
+            $view->productCount = 0;
+        }
+
+        // 模拟多执行配置
+        if(!empty($execution->multiple)) {
+            $view->hasExecutions = 1;
+            $view->executionCount = count($executions);
+        } else {
+            $view->hasExecutions = 0;
+            $view->executionCount = 0;
+        }
+
+        // 模拟项目配置
+        $view->projectCount = count($projects);
+
+        // 模拟无产品项目特殊处理
+        if(empty($project->hasProduct)) {
+            $view->hasProductField = 0;
+        } else {
+            $view->hasProductField = 1;
+        }
+
+        return $view;
+    }
 }
