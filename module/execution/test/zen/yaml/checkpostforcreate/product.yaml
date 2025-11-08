@@ -1,0 +1,42 @@
+---
+title: product表测试数据 - checkPostForCreate测试
+desc: 为checkPostForCreate方法提供产品测试数据
+author: Claude AI
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal{7},branch{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 删除状态
+  range: 0{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
