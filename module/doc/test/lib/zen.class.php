@@ -96,4 +96,19 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getOutlineParentID method.
+     *
+     * @param  array     $outlineList
+     * @param  int       $currentLevel
+     * @access public
+     * @return int
+     */
+    public function getOutlineParentIDTest(array $outlineList, int $currentLevel)
+    {
+        $result = $this->invokeArgs('getOutlineParentID', [$outlineList, $currentLevel]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
