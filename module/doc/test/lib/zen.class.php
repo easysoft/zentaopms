@@ -883,4 +883,28 @@ class docZenTest extends baseTest
             'hasExecution'  => !empty($execution) ? 1 : 0,
         );
     }
+
+    /**
+     * Test setObjectsForEdit method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function setObjectsForEditTest(string $objectType, int $objectID)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('setObjectsForEdit', [$objectType, $objectID]);
+        if(dao::isError()) return dao::getError();
+
+        $objects = isset($this->instance->view->objects) ? $this->instance->view->objects : array();
+
+        return array(
+            'hasObjects'   => !empty($objects) ? 1 : 0,
+            'objectsCount' => count($objects),
+            'firstKey'     => !empty($objects) ? key($objects) : 0,
+            'hasAclList'   => isset($this->instance->lang->doc->aclList) ? 1 : 0,
+        );
+    }
 }
