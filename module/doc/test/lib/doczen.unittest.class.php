@@ -287,4 +287,44 @@ class docZenTest
         if(dao::isError()) return (object)dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildSearchFormForShowFiles method.
+     *
+     * @param  string  $type
+     * @param  int     $objectID
+     * @param  string  $viewType
+     * @param  int     $param
+     * @access public
+     * @return object
+     */
+    public function buildSearchFormForShowFilesTest(string $type = 'product', int $objectID = 0, string $viewType = '', int $param = 0): object
+    {
+        global $tester, $app;
+
+        $tester->app->setModuleName('doc');
+        $tester->app->setMethodName('showFiles');
+        $app->rawModule = 'doc';
+        $app->rawMethod = 'showFiles';
+
+        ob_start();
+        callZenMethod('doc', 'buildSearchFormForShowFiles', array($type, $objectID, $viewType, $param));
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $result = new stdclass();
+
+        if(isset($this->objectModel->config->file->search))
+        {
+            $searchConfig = $this->objectModel->config->file->search;
+            $result->module = $searchConfig['module'] ?? '';
+            $result->onMenuBar = $searchConfig['onMenuBar'] ?? '';
+            $result->queryID = $searchConfig['queryID'] ?? 0;
+            $result->actionURL = $searchConfig['actionURL'] ?? '';
+            $result->objectTypeValues = isset($searchConfig['params']['objectType']['values']) ? implode(',', array_keys($searchConfig['params']['objectType']['values'])) : '';
+        }
+
+        return $result;
+    }
 }
