@@ -855,4 +855,32 @@ class docZenTest extends baseTest
             'isMySpaceAclList' => $isMySpaceAclList
         );
     }
+
+    /**
+     * Test setObjectsForCreate method.
+     *
+     * @param  string      $linkType
+     * @param  object|null $lib
+     * @param  string      $unclosed
+     * @param  int         $objectID
+     * @access public
+     * @return array
+     */
+    public function setObjectsForCreateTest(string $linkType, object|null $lib, string $unclosed, int $objectID)
+    {
+        if(!isset($this->instance->view)) $this->instance->view = new stdClass();
+        $result = $this->invokeArgs('setObjectsForCreate', [$linkType, $lib, $unclosed, $objectID]);
+        if(dao::isError()) return dao::getError();
+
+        $objects = isset($this->instance->view->objects) ? $this->instance->view->objects : array();
+        $executions = isset($this->instance->view->executions) ? $this->instance->view->executions : array();
+        $execution = isset($this->instance->view->execution) ? $this->instance->view->execution : null;
+
+        return array(
+            'hasObjects'    => !empty($objects) ? 1 : 0,
+            'objectsCount'  => count($objects),
+            'hasExecutions' => !empty($executions) ? 1 : 0,
+            'hasExecution'  => !empty($execution) ? 1 : 0,
+        );
+    }
 }

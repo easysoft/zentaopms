@@ -1,0 +1,57 @@
+---
+title: project表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+- field: project
+  note: 项目ID
+  range: '0'
+- field: model
+  note: 项目模型
+  range: scrum,waterfall
+- field: type
+  note: 项目类型
+  range: project,sprint
+- field: name
+  note: 项目名称
+  range: 测试项目{$}
+- field: code
+  note: 项目代号
+  range: PROJ{$}
+- field: status
+  note: 项目状态
+  range: doing
+- field: acl
+  note: 访问控制
+  range: open
+- field: parent
+  note: 父项目ID
+  range: '0'
+- field: grade
+  note: 项目层级
+  range: '1,2'
+- field: path
+  note: 项目路径
+  range: ",{$},"
+- field: begin
+  note: 开始日期
+  range: (-30D)-(D)
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: (D)-(+30D)
+  format: YYYY-MM-DD
+- field: openedBy
+  note: 创建人
+  range: admin
+- field: openedDate
+  note: 创建时间
+  range: (w)-(-w)
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'
