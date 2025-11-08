@@ -466,4 +466,27 @@ class docZenTest extends baseTest
 
         return $testResult;
     }
+
+    /**
+     * Test recordBatchMoveActions method.
+     *
+     * @param  array  $oldDocList
+     * @param  object $data
+     * @access public
+     * @return int
+     */
+    public function recordBatchMoveActionsTest(array $oldDocList, object $data)
+    {
+        $result = $this->invokeArgs('recordBatchMoveActions', [$oldDocList, $data]);
+        if(dao::isError()) return dao::getError();
+
+        /* Get the count of created actions for this batch. */
+        global $tester;
+        $actionCount = $tester->dao->select('count(1) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('action')->eq('Moved')
+            ->fetch('count');
+
+        return (int)$actionCount;
+    }
 }
