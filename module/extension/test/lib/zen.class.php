@@ -166,4 +166,19 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getHookFile method.
+     *
+     * @param  string $extension 插件代号
+     * @param  string $hook      钩子类型
+     * @access public
+     * @return string|false
+     */
+    public function getHookFileTest(string $extension, string $hook)
+    {
+        $result = $this->invokeArgs('getHookFile', [$extension, $hook]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
