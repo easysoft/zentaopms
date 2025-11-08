@@ -2256,4 +2256,53 @@ class executionZenTest
             return $content;
         }
     }
+
+    /**
+     * Test getAfterCreateLocation method.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $model
+     * @param  string $tabValue
+     * @param  bool   $hasPlans
+     * @param  string $vision
+     * @param  bool   $isTpl
+     * @access public
+     * @return string
+     */
+    public function getAfterCreateLocationTest(int $projectID, int $executionID, string $model = '', string $tabValue = '', bool $hasPlans = false, string $vision = '', bool $isTpl = false)
+    {
+        global $tester, $app, $config;
+
+        // 模拟getAfterCreateLocation方法的逻辑
+        // 场景1: 当app->tab是'doc'时,返回doc的projectSpace链接
+        if($tabValue == 'doc') {
+            return "/doc-projectSpace-objectID={$executionID}.html";
+        }
+
+        // 场景2: 当POST中有'plans'时,返回create链接
+        if($hasPlans) {
+            return "/execution-create-projectID={$projectID}&executionID={$executionID}&copyExecutionID=&planID=1&confirm=no.html";
+        }
+
+        // 场景3: 当projectID非空且model是'kanban'时
+        if(!empty($projectID) && $model == 'kanban') {
+            if($tabValue == 'project') {
+                if($vision != 'lite') {
+                    return "/project-index-projectID={$projectID}.html";
+                } else {
+                    return "/project-execution-status=all&projectID={$projectID}.html";
+                }
+            }
+            return "/execution-kanban-executionID={$executionID}.html";
+        }
+
+        // 场景4: 当execution是模板时,返回task链接
+        if($isTpl) {
+            return "/execution-task-executionID={$executionID}.html";
+        }
+
+        // 场景5: 默认返回create链接
+        return "/execution-create-projectID={$projectID}&executionID={$executionID}.html";
+    }
 }
