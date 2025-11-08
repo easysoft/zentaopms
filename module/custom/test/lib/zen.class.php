@@ -178,4 +178,19 @@ class customZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setStoryReview method.
+     *
+     * @param  string $module
+     * @param  array  $data
+     * @access public
+     * @return mixed
+     */
+    public function setStoryReviewTest(string $module = 'story', array $data = array())
+    {
+        $result = $this->invokeArgs('setStoryReview', array($module, $data));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
