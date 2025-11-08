@@ -122,4 +122,20 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test compareForLimit method.
+     *
+     * @param  string       $version
+     * @param  array|string $limit
+     * @param  string       $type
+     * @access public
+     * @return bool
+     */
+    public function compareForLimitTest(string $version, array|string $limit, string $type = 'between')
+    {
+        $result = $this->invokeArgs('compareForLimit', [$version, $limit, $type]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
