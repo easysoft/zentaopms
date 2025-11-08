@@ -197,4 +197,19 @@ class extensionZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test togglePackageDisable method.
+     *
+     * @param  string $extension 插件代号
+     * @param  string $action    动作类型: disabled|active
+     * @access public
+     * @return bool
+     */
+    public function togglePackageDisableTest(string $extension, string $action = 'disabled')
+    {
+        $result = $this->invokeArgs('togglePackageDisable', [$extension, $action]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
