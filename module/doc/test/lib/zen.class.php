@@ -81,4 +81,19 @@ class docZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getDocChildrenByRecursion method.
+     *
+     * @param  int    $docID
+     * @param  int    $level
+     * @access public
+     * @return array
+     */
+    public function getDocChildrenByRecursionTest(int $docID, int $level)
+    {
+        $result = $this->invokeArgs('getDocChildrenByRecursion', [$docID, $level]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
