@@ -212,4 +212,53 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test assignVarsForView method.
+     *
+     * @access public
+     * @return object
+     */
+    public function assignVarsForViewTest(int $docID = 0, int $version = 0, string $type = 'product', int $objectID = 0, int $libID = 0, object $doc = null, object $object = null, string $objectType = 'product', array $libs = array(), array $objectDropdown = array()): object
+    {
+        if(is_null($doc))
+        {
+            $doc = new stdclass();
+            $doc->id = $docID;
+            $doc->title = 'Test Document';
+            $doc->module = $doc->product = $doc->project = $doc->execution = 0;
+        }
+
+        if(is_null($object))
+        {
+            $object = new stdclass();
+            $object->id = $objectID;
+            $object->project = 0;
+        }
+
+        ob_start();
+        $view = callZenMethod('doc', 'assignVarsForView', array($docID, $version, $type, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown), 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $result = new stdclass();
+        $result->docID = isset($view->docID) ? (int)$view->docID : 0;
+        $result->type = isset($view->type) ? $view->type : '';
+        $result->objectID = isset($view->objectID) ? (int)$view->objectID : 0;
+        $result->libID = isset($view->libID) ? (int)$view->libID : 0;
+        $result->version = isset($view->version) ? (int)$view->version : 0;
+        $result->objectType = isset($view->objectType) ? $view->objectType : '';
+        $result->spaceType = isset($view->spaceType) ? $view->spaceType : '';
+        $result->moduleID = isset($view->moduleID) ? (int)$view->moduleID : 0;
+        $result->productID = isset($view->productID) ? (int)$view->productID : 0;
+        $result->projectID = isset($view->projectID) ? (int)$view->projectID : 0;
+        $result->executionID = isset($view->executionID) ? (int)$view->executionID : 0;
+        $result->hasDoc = isset($view->doc) ? 1 : 0;
+        $result->hasObject = isset($view->object) ? 1 : 0;
+        $result->hasLibs = isset($view->libs) ? 1 : 0;
+        $result->hasUsers = isset($view->users) ? 1 : 0;
+
+        return $result;
+    }
 }
