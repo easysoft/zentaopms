@@ -254,6 +254,21 @@ BEGIN
     RETURN (end_date - start_date)::INTEGER;
 END;
 $$ LANGUAGE plpgsql;
+--
+
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val BOOLEAN,
+    false_val BOOLEAN
+) RETURNS BOOLEAN AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 
 --
 

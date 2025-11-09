@@ -548,9 +548,9 @@ class biModel extends model
         $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
         if($table)
         {
-            $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+            $columns = $this->dbh->descTable($table);
             foreach($columns as $id => $column) $columns[$id] = (array)$column;
-            $fieldList = array_column($columns, 'Field');
+            $fieldList = array_column($columns, 'field');
 
             $useField = in_array($useField, $fieldList) ? $useField : 'id';
             $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
