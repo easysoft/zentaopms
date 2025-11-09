@@ -1563,7 +1563,10 @@ class biModel extends model
         $statement->limit->offset   = $recPerPage * ($pageID - 1);
         $statement->limit->rowCount = $recPerPage;
 
-        if($driver == 'mysql') $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
+        if($driver == 'mysql' && $this->config->db->driver == 'mysql')
+        {
+            $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
+        }
 
         $limitSql = $statement->build();
 
@@ -1665,9 +1668,14 @@ class biModel extends model
         $statement = $this->sql2Statement($sql);
         $limitSql  = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
 
-        $countSql = "SELECT FOUND_ROWS() AS count";
-        if($driver == 'duckdb') $countSql = "SELECT COUNT(1) AS count FROM ($sql)";
-        if($driver == 'dm')     $countSql = "SELECT COUNT(1) as count FROM ($sql)";
+        if($driver == 'mysql' && $this->config->db->driver == 'mysql')
+        {
+            $countSql = "SELECT FOUND_ROWS() AS count";
+        }
+        else
+        {
+            $countSql = "SELECT COUNT(1) AS count FROM ($sql)";
+        }
 
         return array($limitSql, $countSql);
     }
