@@ -401,7 +401,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -484,7 +484,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -557,7 +557,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -631,7 +631,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -718,8 +718,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -822,8 +822,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -910,7 +910,7 @@ and (case when \$project='' then 1=1 else t4.id=\$project end)
 and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate = '')
 EOT,
     'settings'  => array
     (
@@ -927,8 +927,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -1032,10 +1032,10 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
-        array('from' => 'query', 'field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => ''),
-        array('from' => 'query', 'field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
+        array('from' => 'query', 'field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0'),
+        array('from' => 'query', 'field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1141,7 +1141,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -1278,8 +1278,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1372,8 +1372,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1467,8 +1467,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1563,8 +1563,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1659,8 +1659,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1757,8 +1757,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1852,8 +1852,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1965,8 +1965,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2136,7 +2136,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2222,7 +2222,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2319,8 +2319,8 @@ $config->bi->builtin->pivots[] = array
 select t1.actor,LEFT(t1.`date`,10) as `day` from zt_action t1
 left join zt_user as t2 on t1.actor = t2.account
 where t1.`action`='login'
-and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=cast(\$startDate as date))
-and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=cast(\$endDate as date))
+and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=\$startDate)
+and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=\$endDate)
 and if(\$dept='',1=1,t2.`dept`=\$dept)
 and not (\$startDate='' and \$endDate='' and \$dept='')
 order by t1.`date` asc, t1.actor asc
@@ -2339,7 +2339,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY'),
-        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '')
+        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2417,7 +2417,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => ''),
+        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -2676,7 +2676,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => ''),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '解决日期开始', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '解决日期结束', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
@@ -2772,8 +2772,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2932,8 +2932,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -3090,7 +3090,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => ''),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '解决日期开始', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '解决日期结束', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
