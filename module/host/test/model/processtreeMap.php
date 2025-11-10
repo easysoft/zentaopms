@@ -40,7 +40,7 @@ $emptyData = array();
 $simpleObject = new stdClass();
 $simpleObject->name = '简单主机';
 
-// 步骤3:测试有roomName的对象(优先使用roomName作为text)
+// 步骤3:测试有roomName的对象(优先使用name作为text)
 $roomObject = new stdClass();
 $roomObject->roomName = '主机房名称';
 $roomObject->name = '主机名称';
