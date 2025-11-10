@@ -83,7 +83,12 @@ class stage extends control
         {
             if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->create->requiredFields = 'name,type';
 
-            $stageData = form::data()->setDefault('workflowGroup', $groupID)->get();
+            $stageData = form::data()
+                ->setDefault('workflowGroup', $groupID)
+                ->setDefault('createdBy', $this->app->user->account)
+                ->setDefault('createdDate', helper::now())
+                ->get();
+
             $stageID   = $this->stage->create($stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -152,7 +157,10 @@ class stage extends control
         {
             if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->edit->requiredFields = 'name,type';
 
-            $stageData = form::data()->get();
+            $stageData = form::data()
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('editedDate', helper::now())
+                ->get();
             $changes   = $this->stage->update($stageID, $stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

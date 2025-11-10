@@ -100,9 +100,12 @@ class stageModel extends model
         $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_STAGE)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetch('maxOrder');
 
         $this->loadModel('action');
+        $now = helper::now();
         foreach($stages as $rowID => $stage)
         {
             $stage->workflowGroup = $groupID;
+            $stage->createdBy     = $this->app->user->account;
+            $stage->createdDate   = $now;
             if(!empty($stage->percent)) $stage->percent = (float)$stage->percent;
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
