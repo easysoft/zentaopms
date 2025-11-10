@@ -2674,4 +2674,19 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setSelectFormOptions method.
+     *
+     * @param  int   $programID
+     * @param  array $fields
+     * @access public
+     * @return array
+     */
+    public function setSelectFormOptionsTest(int $programID = 0, array $fields = array())
+    {
+        $result = $this->invokeArgs('setSelectFormOptions', array($programID, $fields));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
