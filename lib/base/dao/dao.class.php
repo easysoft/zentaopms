@@ -1133,7 +1133,7 @@ class baseDAO
      * @access public
      * @return array
      */
-    private function getUniqueIndexes($table)
+    protected function getUniqueIndexes($table)
     {
         if(isset(dao::$uniqueIndexes[$table])) return dao::$uniqueIndexes[$table];
 
