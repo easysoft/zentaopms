@@ -1909,4 +1909,17 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFormFields4Close method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFormFields4CloseTest()
+    {
+        $result = $this->invokeArgs('getFormFields4Close', array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
