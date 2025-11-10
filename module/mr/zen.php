@@ -171,6 +171,7 @@ class mrZen extends mr
      */
     protected function buildLinkTaskSearchForm(int $MRID, int $repoID, string $orderBy, int $queryID, array $productExecutions)
     {
+        $this->config->execution->search['module']                        = 'mrTask';
         $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
