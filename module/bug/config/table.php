@@ -171,6 +171,7 @@ $config->bug->dtable->fieldList['activatedCount']['sortType'] = true;
 
 if($config->edition != 'open')
 {
+    $app->loadLang('custom');
     $config->bug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
     $config->bug->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
     $config->bug->dtable->fieldList['relatedObject']['sortType']    = false;
