@@ -501,12 +501,12 @@ class bugZenTest extends baseTest
      *
      * @param  object $bug
      * @access public
-     * @return bool
+     * @return mixed
      */
-    public function checkRquiredForEditTest(object $bug): bool
+    public function checkRquiredForEditTest(object $bug)
     {
         $result = $this->invokeArgs('checkRquiredForEdit', [$bug]);
-        if(dao::isError()) return false;
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
