@@ -2211,4 +2211,34 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareManageLineExtras method.
+     *
+     * @param  array $modules  产品线名称数组
+     * @param  array $programs 产品线所属项目集ID数组
+     * @access public
+     * @return array|false
+     */
+    public function prepareManageLineExtrasTest(array $modules = array(), array $programs = array())
+    {
+        global $tester;
+
+        /* Clear POST data first. */
+        $_POST = array();
+
+        /* Prepare POST data. */
+        $_POST['modules']  = $modules;
+        $_POST['programs'] = $programs;
+
+        /* Clear dao errors. */
+        dao::$errors = array();
+
+        /* Create form object using form::data. */
+        $form = form::data($this->instance->config->product->form->manageLine);
+
+        $result = $this->invokeArgs('prepareManageLineExtras', array($form));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
