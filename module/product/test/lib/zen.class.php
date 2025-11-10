@@ -1678,4 +1678,25 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $actions;
     }
+
+    /**
+     * Test getActionsForDynamic method.
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return mixed
+     */
+    public function getActionsForDynamicTest(string $account = '', string $orderBy = 'date_desc', int $productID = 0, string $type = 'all', string $date = '', string $direction = 'next')
+    {
+        $result = $this->invokeArgs('getActionsForDynamic', array($account, $orderBy, $productID, $type, $date, $direction));
+        if(dao::isError()) return dao::getError();
+
+        /* Return count of actions. */
+        return count($result[0]);
+    }
 }
