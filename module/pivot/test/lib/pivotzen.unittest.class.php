@@ -142,4 +142,20 @@ class pivotZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getSidebarMenus method.
+     *
+     * @param  int $dimensionID
+     * @param  int $groupID
+     * @access public
+     * @return mixed
+     */
+    public function getSidebarMenusTest(int $dimensionID = 0, int $groupID = 0)
+    {
+        $result = $this->invokeArgs('getSidebarMenus', [$dimensionID, $groupID]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
