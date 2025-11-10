@@ -2410,4 +2410,41 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test saveBackUriSessionForDynamic method.
+     *
+     * @access public
+     * @return array
+     */
+    public function saveBackUriSessionForDynamicTest()
+    {
+        /* Call the method. */
+        $this->invokeArgs('saveBackUriSessionForDynamic', array());
+
+        /* Get session values after method execution. */
+        /* Access session using the global variable. */
+        global $tester;
+        $session = $tester->session;
+
+        /* Build result array with all session values. */
+        /* Check different session scopes: product, project, execution, qa. */
+        $result = array(
+            'hasProductList' => !empty($session->product->productList) ? 1 : 0,
+            'hasProductPlanList' => !empty($session->product->productPlanList) ? 1 : 0,
+            'hasReleaseList' => !empty($session->product->releaseList) ? 1 : 0,
+            'hasStoryList' => !empty($session->product->storyList) ? 1 : 0,
+            'hasProjectList' => !empty($session->project->projectList) ? 1 : 0,
+            'hasExecutionList' => !empty($session->execution->executionList) ? 1 : 0,
+            'hasTaskList' => !empty($session->execution->taskList) ? 1 : 0,
+            'hasBuildList' => !empty($session->execution->buildList) ? 1 : 0,
+            'hasBugList' => !empty($session->qa->bugList) ? 1 : 0,
+            'hasCaseList' => !empty($session->qa->caseList) ? 1 : 0,
+            'hasTesttaskList' => !empty($session->qa->testtaskList) ? 1 : 0
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
