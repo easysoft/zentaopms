@@ -2381,4 +2381,33 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test saveBackUriSession4Dashboard method.
+     *
+     * @access public
+     * @return array
+     */
+    public function saveBackUriSession4DashboardTest()
+    {
+        /* Call the method. */
+        $this->invokeArgs('saveBackUriSession4Dashboard', array());
+
+        /* Get session values after method execution. */
+        /* Access the session from the instance. */
+        $session = $this->instance->session;
+        $productPlanList = $session->productPlanList ?? '';
+        $releaseList = $session->releaseList ?? '';
+
+        $result = array(
+            'hasProductPlanList' => !empty($productPlanList) ? 1 : 0,
+            'hasReleaseList' => !empty($releaseList) ? 1 : 0,
+            'productPlanList' => $productPlanList,
+            'releaseList' => $releaseList
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
