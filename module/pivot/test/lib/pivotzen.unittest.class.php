@@ -60,4 +60,20 @@ class pivotZenTest extends baseTest
             'execution'  => $this->instance->view->execution ?? 0,
         );
     }
+
+    /**
+     * Test getBuiltinMenus method.
+     *
+     * @param  int    $dimensionID
+     * @param  object $currentGroup
+     * @access public
+     * @return mixed
+     */
+    public function getBuiltinMenusTest($dimensionID = 0, $currentGroup = null)
+    {
+        $result = $this->invokeArgs('getBuiltinMenus', [$dimensionID, $currentGroup]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

@@ -1,0 +1,21 @@
+---
+title: grouppriv表测试数据
+desc: 组权限数据
+author: Claude
+version: 1.0
+
+fields:
+- field: group
+  note: 用户组ID
+  range: 1
+  loop: 0
+
+- field: module
+  note: 模块名
+  range: pivot
+  loop: 0
+
+- field: method
+  note: 方法名
+  range: productsummary,bugcreate,bugassign,projectdeviation,workload
+  loop: 0
