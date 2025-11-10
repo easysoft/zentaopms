@@ -1980,4 +1980,27 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getModuleTree method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  string $browseType
+     * @access public
+     * @return mixed
+     */
+    public function getModuleTreeTest(int $projectID = 0, int $productID = 0, string $branch = '', int $param = 0, string $storyType = 'story', string $browseType = '')
+    {
+        $this->instance->app->rawModule = $projectID > 0 ? 'projectstory' : 'product';
+        $this->instance->app->rawMethod = 'browse';
+        $_COOKIE['treeBranch'] = $branch;
+
+        $result = $this->invokeArgs('getModuleTree', array($projectID, $productID, &$branch, $param, $storyType, $browseType));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
