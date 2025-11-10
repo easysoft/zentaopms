@@ -2259,4 +2259,22 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterBatchEdit method.
+     *
+     * @param  int    $programID
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function responseAfterBatchEditTest(int $programID = 0, string $tab = 'product')
+    {
+        /* Set app tab. */
+        $this->instance->app->tab = $tab;
+
+        $result = $this->invokeArgs('responseAfterBatchEdit', array($programID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
