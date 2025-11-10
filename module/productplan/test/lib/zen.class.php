@@ -84,4 +84,19 @@ class productplanZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildDataForBrowse method.
+     *
+     * @param  array $plans
+     * @param  array $branchOption
+     * @access public
+     * @return array
+     */
+    public function buildDataForBrowseTest(array $plans, array $branchOption)
+    {
+        $result = $this->invokeArgs('buildDataForBrowse', [$plans, $branchOption]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
