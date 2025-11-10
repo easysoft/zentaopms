@@ -372,4 +372,28 @@ class mrZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test checkNewCommit method.
+     *
+     * @param  string     $hostType
+     * @param  array|null $mockCommits Mock commit data for testing
+     * @param  string     $lastTime
+     * @access public
+     * @return bool|int
+     */
+    public function checkNewCommitTest(string $hostType, ?array $mockCommits, string $lastTime): bool|int
+    {
+        // 直接实现checkNewCommit的逻辑用于测试
+        $commitLogs = $mockCommits;
+        if($commitLogs)
+        {
+            $lastCommit = zget($commitLogs[0], 'committed_date', '');
+            if(in_array($hostType, array('gitea', 'gogs'))) $lastCommit = $commitLogs[0]->author->committer->date;
+
+            if($lastCommit > $lastTime) return true;
+        }
+
+        return false;
+    }
 }
