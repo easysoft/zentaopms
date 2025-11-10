@@ -1,0 +1,35 @@
+---
+title: bug测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1{10}
+- field: title
+  note: Bug标题
+  range: Bug 1,Bug 2,Bug 3,Bug 4,Bug 5,Bug 6,Bug 7,Bug 8,Bug 9,Bug 10
+- field: status
+  note: Bug状态
+  range: active{10}
+- field: severity
+  note: 严重程度
+  range: 1{10}
+- field: pri
+  note: 优先级
+  range: 1{10}
+- field: type
+  note: Bug类型
+  range: codeerror{10}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}

@@ -1,0 +1,35 @@
+---
+title: task测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: execution
+  note: 所属执行
+  range: 1{10}
+- field: name
+  note: 任务名称
+  range: Task 1,Task 2,Task 3,Task 4,Task 5,Task 6,Task 7,Task 8,Task 9,Task 10
+- field: type
+  note: 任务类型
+  range: devel{10}
+- field: status
+  note: 任务状态
+  range: wait{10}
+- field: pri
+  note: 优先级
+  range: 1{10}
+- field: assignedTo
+  note: 指派给
+  range: admin{10}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}

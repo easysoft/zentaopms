@@ -1,0 +1,38 @@
+---
+title: ticket测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1{10}
+- field: title
+  note: 工单标题
+  range: Ticket 1,Ticket 2,Ticket 3,Ticket 4,Ticket 5,Ticket 6,Ticket 7,Ticket 8,Ticket 9,Ticket 10
+- field: type
+  note: 工单类型
+  range: bug{10}
+- field: status
+  note: 工单状态
+  range: open{10}
+- field: pri
+  note: 优先级
+  range: 1{10}
+- field: assignedTo
+  note: 指派给
+  range: admin{10}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}
+- field: assignedDate
+  note: 指派日期
+  range: 2024-01-01 00:00:00{10}
