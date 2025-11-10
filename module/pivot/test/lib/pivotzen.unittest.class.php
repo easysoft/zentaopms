@@ -110,4 +110,21 @@ class pivotZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getFilterOptionUrl method.
+     *
+     * @param  array  $filter
+     * @param  string $sql
+     * @param  array  $fieldSettings
+     * @access public
+     * @return mixed
+     */
+    public function getFilterOptionUrlTest(array $filter = array(), string $sql = '', array $fieldSettings = array())
+    {
+        $result = $this->invokeArgs('getFilterOptionUrl', [$filter, $sql, $fieldSettings]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
