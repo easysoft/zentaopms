@@ -90,10 +90,7 @@ $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = $lang->productCommon;
-$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
-$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
-$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
-$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
+$lang->admin->setModule->project        = $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
@@ -109,6 +106,9 @@ $lang->admin->setModule->roadmap        = 'Roadmap';
 $lang->admin->setModule->track          = 'Track';
 $lang->admin->setModule->ER             = $lang->ERCommon;
 $lang->admin->setModule->UR             = $lang->URCommon;
+$lang->admin->setModule->deliverable    = 'Deliverable';
+$lang->admin->setModule->cm             = 'Baseline';
+$lang->admin->setModule->projectchange  = 'Project Change';
 $lang->admin->setModule->researchplan   = 'Researchplan';
 $lang->admin->setModule->gapanalysis    = 'Gapanalysis';
 $lang->admin->setModule->storylib       = 'Story Lib';
