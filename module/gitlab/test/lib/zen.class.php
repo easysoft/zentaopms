@@ -155,4 +155,48 @@ class gitlabZenTest extends baseTest
 
         return $result ? $result : 'success';
     }
+
+    /**
+     * Test checkUserRepeat method.
+     *
+     * @param  array $zentaoUsers
+     * @param  array $userPairs
+     * @access public
+     * @return array
+     */
+    public function checkUserRepeatTest(array $zentaoUsers, array $userPairs): array
+    {
+        global $app;
+
+        /* 加载 control 和 zen 类 */
+        if(!class_exists('gitlab'))
+        {
+            require_once $app->getModulePath('', 'gitlab') . 'control.php';
+        }
+        if(!class_exists('gitlabZen'))
+        {
+            require_once $app->getModulePath('', 'gitlab') . 'zen.php';
+        }
+
+        /* 使用反射创建 gitlabZen 实例,跳过构造函数 */
+        $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+
+        /* 初始化必要的属性 */
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        /* 通过反射调用 checkUserRepeat 方法 */
+        $method = $reflection->getMethod('checkUserRepeat');
+        $method->setAccessible(true);
+
+        /* 调用 zen 方法 */
+        $result = $method->invoke($zenInstance, $zentaoUsers, $userPairs);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
