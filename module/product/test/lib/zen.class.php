@@ -1542,4 +1542,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildProductForClose method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function buildProductForCloseTest(int $productID = 0)
+    {
+        $result = $this->invokeArgs('buildProductForClose', array($productID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
