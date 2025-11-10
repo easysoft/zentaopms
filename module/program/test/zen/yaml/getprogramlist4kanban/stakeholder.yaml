@@ -1,0 +1,43 @@
+---
+title: 干系人测试数据
+desc: 用于getProgramList4Kanban方法的干系人测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-50
+- field: objectID
+  note: 对象ID
+  range: 1-10:R
+- field: objectType
+  note: 对象类型
+  range: 'program'
+- field: user
+  note: 用户
+  range: 'admin{20},user1{15},user2{15}'
+- field: type
+  note: 类型
+  range: 'inside{40},outside{10}'
+- field: key
+  note: 关键
+  range: 'no{30},yes{20}'
+- field: from
+  note: 来源
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: 'admin{30},user1{10},user2{10}'
+- field: createdDate
+  note: 创建日期
+  range: '`(-180D)-(-30D):10D`'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: '[]{40},admin{5},user1{5}'
+- field: editedDate
+  note: 编辑日期
+  range: '0000-00-00 00:00:00{40},`(-20D)-(+0D):2D`{10}'
+- field: deleted
+  note: 已删除
+  range: '0'

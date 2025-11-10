@@ -135,4 +135,21 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getProgramList4Kanban method.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProgramList4KanbanTest(string $browseType = 'my')
+    {
+        $method = $this->objectZen->getMethod('getProgramList4Kanban');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($browseType));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
