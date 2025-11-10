@@ -44,4 +44,21 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test buildProgramForEdit method.
+     *
+     * @param  int $programID
+     * @access public
+     * @return object|array
+     */
+    public function buildProgramForEditTest(int $programID)
+    {
+        $method = $this->objectZen->getMethod('buildProgramForEdit');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
