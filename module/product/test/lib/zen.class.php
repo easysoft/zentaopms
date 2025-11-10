@@ -1781,4 +1781,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBrowseProduct method.
+     *
+     * @param  int $productID
+     * @access public
+     * @return mixed
+     */
+    public function getBrowseProductTest(int $productID = 0)
+    {
+        $result = $this->invokeArgs('getBrowseProduct', array($productID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
