@@ -201,4 +201,21 @@ class pivotZenTest extends baseTest
             'title'      => $this->instance->view->title ?? ''
         );
     }
+
+    /**
+     * Test setNewMark method.
+     *
+     * @param  object $pivot
+     * @param  object $firstAction
+     * @param  array  $builtins
+     * @access public
+     * @return object
+     */
+    public function setNewMarkTest($pivot = null, $firstAction = null, $builtins = array())
+    {
+        $this->invokeArgs('setNewMark', [$pivot, $firstAction, $builtins]);
+        if(dao::isError()) return dao::getError();
+
+        return $pivot;
+    }
 }
