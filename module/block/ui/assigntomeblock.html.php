@@ -90,7 +90,7 @@ foreach($hasViewPriv as $type => $bool)
     if($type == 'review')
     {
         $statusList = array();
-        foreach($data as $review)
+        foreach($data as $key => $review)
         {
             $reviewType = $review->type;
             if($reviewType == 'projectreview') $reviewType = 'review';
