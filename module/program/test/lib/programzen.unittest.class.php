@@ -28,4 +28,20 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test buildProgramForCreate method.
+     *
+     * @access public
+     * @return object|array
+     */
+    public function buildProgramForCreateTest()
+    {
+        $method = $this->objectZen->getMethod('buildProgramForCreate');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array());
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
