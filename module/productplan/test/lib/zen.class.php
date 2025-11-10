@@ -130,4 +130,25 @@ class productplanZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildPlansForBatchEdit method.
+     *
+     * @param  array $postData
+     * @access public
+     * @return array|string
+     */
+    public function buildPlansForBatchEditTest(array $postData)
+    {
+        // 准备 POST 数据
+        foreach($postData as $key => $value) $_POST[$key] = $value;
+
+        $result = $this->invokeArgs('buildPlansForBatchEdit', []);
+
+        // 清理 POST 数据
+        foreach($postData as $key => $value) unset($_POST[$key]);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
