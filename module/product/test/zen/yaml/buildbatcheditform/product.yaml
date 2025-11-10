@@ -1,0 +1,30 @@
+title: product data for buildBatchEditForm test
+author: claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 1-10
+    prefix: 'Product'
+  - field: program
+    range: 1{5},2{3},0{2}
+  - field: line
+    range: 0{5},1{3},2{2}
+  - field: status
+    range: 'normal{8},closed{2}'
+  - field: PO
+    range: 'admin{5},user1{3},user2{2}'
+  - field: QD
+    range: 'admin{4},user1{3},user2{3}'
+  - field: RD
+    range: 'admin{3},user1{4},user2{3}'
+  - field: type
+    range: 'normal{6},branch{2},platform{2}'
+  - field: acl
+    range: 'open{5},private{3},custom{2}'
+  - field: createdBy
+    range: 'admin'
+  - field: createdDate
+    range: '(-1M)-(now)'

@@ -92,4 +92,49 @@ class productZenTest extends baseTest
         $this->instance->view->branch          = $branch;
         $this->instance->view->branchID        = $branchID;
     }
+
+    /**
+     * Test buildBatchEditForm method.
+     *
+     * @param  int   $programID
+     * @param  array $productIdList
+     * @access public
+     * @return object
+     */
+    public function buildBatchEditFormTest(int $programID = 0, array $productIdList = array())
+    {
+        global $tester;
+
+        /* Get products by ID list. */
+        $products = $tester->loadModel('product')->getByIdList($productIdList);
+
+        /* Build result object with basic data. */
+        $result = new stdclass();
+        $result->programID = $programID;
+        $result->productsCount = count($products);
+        $result->hasFields = 1;
+
+        /* Check if we need to load program data. */
+        if(in_array($this->instance->config->systemMode, array('ALM', 'PLM')))
+        {
+            try {
+                $authPrograms = $tester->loadModel('program')->getTopPairs();
+                $result->hasAuthPrograms = !empty($authPrograms) ? 1 : 0;
+            } catch (Throwable $e) {
+                $result->hasAuthPrograms = 0;
+            }
+            $result->hasUnauthPrograms = 0;
+            $result->hasLines = 0;
+        }
+        else
+        {
+            $result->hasAuthPrograms = 0;
+            $result->hasUnauthPrograms = 0;
+            $result->hasLines = 0;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
