@@ -1,0 +1,105 @@
+---
+title: pipeline表测试数据
+desc: 用于测试getBranchUrl方法的pipeline主机数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 主机类型
+  range: '[gitlab,gitea,gogs]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 主机名称
+  range: 'GitLab Server,Gitea Server,Gogs Server'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: url
+  note: 主机URL
+  range: 'https://gitlab.example.com,https://gitea.example.com,https://gogs.example.com'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账号
+  range: 'admin,test,user'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: '123456{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: token
+  note: 访问令牌
+  range: 'token123{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: private
+  note: 私钥
+  range: '[]{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: instanceID
+  note: 实例ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: 'admin{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: 'admin{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: '2024-01-01 00:00:00{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
