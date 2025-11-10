@@ -66,4 +66,18 @@ class jobZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getJobSearchQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getJobSearchQueryTest($queryID = 0)
+    {
+        $result = $this->invokeArgs('getJobSearchQuery', [$queryID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
