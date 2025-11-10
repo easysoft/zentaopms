@@ -72,4 +72,18 @@ class myZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildTaskData method.
+     *
+     * @param  array $tasks 任务数据列表
+     * @access public
+     * @return array
+     */
+    public function buildTaskDataTest($tasks = array())
+    {
+        $result = $this->invokeArgs('buildTaskData', [$tasks]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
