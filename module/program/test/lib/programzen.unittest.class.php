@@ -192,4 +192,22 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test removeSubjectToCurrent method.
+     *
+     * @param  array $parents
+     * @param  int   $programID
+     * @access public
+     * @return array
+     */
+    public function removeSubjectToCurrentTest(array $parents, int $programID)
+    {
+        $method = $this->objectZen->getMethod('removeSubjectToCurrent');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($parents, $programID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
