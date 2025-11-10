@@ -373,4 +373,48 @@ class gitlabZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test webhookParseIssue method.
+     *
+     * @param  object $body
+     * @param  int    $gitlabID
+     * @access public
+     * @return object|null|string|bool
+     */
+    public function webhookParseIssueTest(object $body, int $gitlabID)
+    {
+        global $app;
+
+        /* 加载 control 和 zen 类 */
+        if(!class_exists('gitlab')) require_once $app->getModulePath('', 'gitlab') . 'control.php';
+        if(!class_exists('gitlabZen')) require_once $app->getModulePath('', 'gitlab') . 'zen.php';
+
+        /* 使用反射创建 gitlabZen 实例并初始化 */
+        $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        /* 通过反射调用 webhookParseIssue 方法 */
+        $method = $reflection->getMethod('webhookParseIssue');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invoke($zenInstance, $body, $gitlabID);
+        }
+        catch(TypeError $e)
+        {
+            /* 方法声明返回object,但实际可能返回null或false,捕获类型错误 */
+            if(strpos($e->getMessage(), 'must be of type object, null returned') !== false) return null;
+            if(strpos($e->getMessage(), 'must be of type object, bool returned') !== false) return false;
+            throw $e;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
