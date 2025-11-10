@@ -442,4 +442,40 @@ class mrZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processLinkTaskPager method.
+     *
+     * @param  int   $recTotal
+     * @param  int   $recPerPage
+     * @param  int   $pageID
+     * @param  array $allTasks
+     * @access public
+     * @return array
+     */
+    public function processLinkTaskPagerTest(int $recTotal, int $recPerPage, int $pageID, array $allTasks): array
+    {
+        $bufferLevel = ob_get_level();
+        ob_start();
+        try
+        {
+            $this->invokeArgs('processLinkTaskPager', [$recTotal, $recPerPage, $pageID, $allTasks]);
+        }
+        catch(Throwable $e)
+        {
+            // Ignore any exceptions
+        }
+        while(ob_get_level() > $bufferLevel) ob_end_clean();
+
+        $result = array();
+        $result['allTasks'] = $this->instance->view->allTasks ?? array();
+        $result['pager'] = $this->instance->view->pager ?? null;
+        $result['recTotal'] = $result['pager'] ? $result['pager']->recTotal : 0;
+        $result['recPerPage'] = $result['pager'] ? $result['pager']->recPerPage : 0;
+        $result['pageID'] = $result['pager'] ? $result['pager']->pageID : 0;
+        $result['pageTotal'] = $result['pager'] ? $result['pager']->pageTotal : 0;
+        $result['taskCount'] = count($result['allTasks']);
+
+        return $result;
+    }
 }
