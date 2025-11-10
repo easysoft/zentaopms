@@ -1,0 +1,172 @@
+---
+title: 产品数据定义
+desc: 用于测试 getProducts4DropMenu 方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: program
+  note: 所属项目集
+  range: 0{5},1{3},2{2}
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 产品代码
+  range: product1,product2,product3,product4,product5,product6,product7,product8,product9,product10
+  prefix: ""
+  postfix: ""
+
+- field: shadow
+  note: 是否影子产品
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+
+- field: bind
+  note: 是否绑定
+  range: '0'
+  prefix: ""
+  postfix: ""
+
+- field: line
+  note: 产品线
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 产品类型
+  range: normal{10}
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 产品状态
+  range: normal{8},closed{2}
+  prefix: ""
+  postfix: ""
+
+- field: subStatus
+  note: 子状态
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 产品描述
+  range: 这是产品1的描述,这是产品2的描述,这是产品3的描述,这是产品4的描述,这是产品5的描述,这是产品6的描述,这是产品7的描述,这是产品8的描述,这是产品9的描述,这是产品10的描述
+  prefix: ""
+  postfix: ""
+
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2,user3,admin,user1,user2,user3,admin,user1
+  prefix: ""
+  postfix: ""
+
+- field: QD
+  note: 测试负责人
+  range: admin,user1,user2,user3,admin,user1,user2,user3,admin,user1
+  prefix: ""
+  postfix: ""
+
+- field: RD
+  note: 发布负责人
+  range: admin,user1,user2,user3,admin,user1,user2,user3,admin,user1
+  prefix: ""
+  postfix: ""
+
+- field: feedback
+  note: 反馈负责人
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: ticket
+  note: 工单负责人
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: workflowGroup
+  note: 工作流分组
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: open{7},private{2},custom{1}
+  prefix: ""
+  postfix: ""
+
+- field: groups
+  note: 分组
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: whitelist
+  note: 白名单
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: reviewer
+  note: 评审人
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: PMT
+  note: PMT
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '`2025-01-01 00:00:00`'
+  prefix: ""
+  postfix: ""
+
+- field: createdVersion
+  note: 创建版本
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: vision
+  note: 视图
+  range: rnd
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
