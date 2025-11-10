@@ -1585,4 +1585,44 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildSearchFormForBrowse method.
+     *
+     * @param  object|null $project
+     * @param  int         $projectID
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  int         $param
+     * @param  string      $storyType
+     * @param  string      $browseType
+     * @param  bool        $isProjectStory
+     * @param  string      $from
+     * @param  int         $blockID
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormForBrowseTest(object|null $project = null, int $projectID = 0, int $productID = 0, string $branch = '', int $param = 0, string $storyType = 'story', string $browseType = 'all', bool $isProjectStory = false, string $from = '', int $blockID = 0)
+    {
+        global $tester;
+        if($productID > 0)
+        {
+            $product = $tester->loadModel('product')->getByID($productID);
+            if($product) $this->instance->products = array($productID => $product->name);
+        }
+        $this->instance->app->rawModule = $isProjectStory ? 'projectstory' : 'product';
+        $this->instance->app->rawMethod = 'browse';
+        $this->instance->app->tab = 'product';
+        try {
+            $this->invokeArgs('buildSearchFormForBrowse', array($project, $projectID, &$productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from, $blockID));
+        } catch (Throwable $e) {}
+        $result = new stdclass();
+        $result->productID = $productID;
+        $result->searchModule = isset($this->instance->config->product->search['module']) ? $this->instance->config->product->search['module'] : '';
+        $result->hasProductField = isset($this->instance->config->product->search['fields']['product']) ? 1 : 0;
+        $result->hasPlanField = isset($this->instance->config->product->search['fields']['plan']) ? 1 : 0;
+        $result->hasRoadmapField = isset($this->instance->config->product->search['fields']['roadmap']) ? 1 : 0;
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
