@@ -1747,4 +1747,23 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBranchID method.
+     *
+     * @param  object|null $product
+     * @param  string      $branch
+     * @param  string      $preBranch
+     * @access public
+     * @return string
+     */
+    public function getBranchIDTest(object|null $product = null, string $branch = '', string $preBranch = '')
+    {
+        /* Set cookie preBranch if provided. */
+        if($preBranch !== '') $_COOKIE['preBranch'] = $preBranch;
+
+        $result = $this->invokeArgs('getBranchID', array($product, $branch));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
