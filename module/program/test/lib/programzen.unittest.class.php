@@ -117,4 +117,22 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getProductsByBrowseType method.
+     *
+     * @param  string $browseType
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function getProductsByBrowseTypeTest(string $browseType, array $products)
+    {
+        $method = $this->objectZen->getMethod('getProductsByBrowseType');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($browseType, $products));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
