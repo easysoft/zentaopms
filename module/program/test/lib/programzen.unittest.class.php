@@ -96,4 +96,25 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getLink method.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $programID
+     * @param  string $vars
+     * @param  string $from
+     * @access public
+     * @return string
+     */
+    public function getLinkTest(string $moduleName, string $methodName, string $programID, string $vars = '', string $from = 'program')
+    {
+        $method = $this->objectZen->getMethod('getLink');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($moduleName, $methodName, $programID, $vars, $from));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
