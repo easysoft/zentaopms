@@ -16410,8 +16410,8 @@ CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort', '计算任务剩余工时', 'zentao', '1', 'normal');
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '7', '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord', '提醒录入日志', 'zentao', '1', 'stop');
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NULL);
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NULL);
 
 UPDATE `zt_chart` SET `createdBy` = 'system' where `createdBy` = 'admin';
 UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
