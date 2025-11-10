@@ -1,0 +1,97 @@
+---
+title: 项目集数据定义
+desc: 用于getProgramsByType方法测试的项目集数据
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-25
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 类型
+  range: program{15}, project{10}
+  prefix: ""
+  postfix: ""
+
+- field: parent
+  note: 父级ID
+  range: 0{15}, 1-5{10}
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 项目集名称
+  range: 顶级项目集A,顶级项目集B,顶级项目集C,顶级项目集D,顶级项目集E,子项目集F,子项目集G,子项目集H,子项目集I,子项目集J,独立项目K,独立项目L,独立项目M,独立项目N,独立项目O,子项目P,子项目Q,子项目R,子项目S,子项目T,子项目U,子项目V,子项目W,子项目X,子项目Y
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 项目集代码
+  range: PROG001-PROG025
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 状态
+  range: wait{5}, doing{9}, suspended{3}, closed{6}, wait,closed
+  prefix: ""
+  postfix: ""
+
+- field: grade
+  note: 层级
+  range: 1{15}, 2{10}
+  prefix: ""
+  postfix: ""
+
+- field: path
+  note: 路径
+  range: ,1,{3}, ,2,{3}, ,3,{3}, ,4,{3}, ,5,{3}, ,1,6,{2}, ,2,7,{2}, ,3,8,{2}, ,4,9,{2}, ,5,10,{2}
+  prefix: ""
+  postfix: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01-2024-06-30
+  format: YYYY-MM-DD
+
+- field: end
+  note: 结束日期
+  range: 2025-01-01-2025-12-31
+  format: YYYY-MM-DD
+
+- field: openedBy
+  note: 创建者
+  range: admin{15}, user1{5}, user2{5}
+  prefix: ""
+  postfix: ""
+
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00-2024-06-30 23:59:59
+  format: YYYY-MM-DD hh:mm:ss
+
+- field: PM
+  note: 项目经理
+  range: admin{10}, pm1{5}, pm2{5}, pm3{5}
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0{23}, 1{2}
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: open{20}, private{5}
+  prefix: ""
+  postfix: ""
+
+- field: order
+  note: 排序
+  range: 1-25
+  prefix: ""
+  postfix: ""

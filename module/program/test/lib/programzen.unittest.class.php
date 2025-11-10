@@ -152,4 +152,24 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test getProgramsByType method.
+     *
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  int         $param
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getProgramsByTypeTest(string $status, string $orderBy, int $param = 0, ?object $pager = null)
+    {
+        $method = $this->objectZen->getMethod('getProgramsByType');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($status, $orderBy, $param, $pager));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
