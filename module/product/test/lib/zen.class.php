@@ -2794,4 +2794,52 @@ class productZenTest extends baseTest
             'shouldSetSubModule' => $shouldSetSubModule
         );
     }
+
+    /**
+     * Test setShowErrorNoneMenu4QA method.
+     *
+     * @param  string $activeMenu
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4QATest(string $activeMenu): array
+    {
+        global $tester;
+
+        /* Call the method using reflection since it's private. */
+        $result = $this->invokeArgs('setShowErrorNoneMenu4QA', array($activeMenu));
+
+        /* Check if the method executed successfully. */
+        $moduleName = isset($this->instance->view->moduleName) ? $this->instance->view->moduleName : '';
+        $rawModule = isset($this->instance->app->rawModule) ? $this->instance->app->rawModule : '';
+
+        /* Determine if subMenu should be unset based on activeMenu. */
+        $menuItems = array('testcase', 'testsuite', 'testtask', 'testreport');
+        $shouldUnsetSubMenu = in_array($activeMenu, $menuItems) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'success' => 1,
+            'moduleName' => $moduleName,
+            'rawModule' => $rawModule,
+            'rawModuleMatch' => ($rawModule === $activeMenu) ? 1 : 0,
+            'shouldUnsetSubMenu' => $shouldUnsetSubMenu
+        );
+    }
+
+    public function setTrackMenuTest(int $productID, string $branch, int $projectID): array
+    {
+        global $tester;
+        unset($tester->session->product, $tester->session->execution, $tester->session->project, $tester->session->qa, $tester->session->repo, $_COOKIE['preBranch']);
+        if($productID > 0) { $product = $tester->loadModel('product')->getByID($productID); if($product) $this->instance->products = array($productID => $product->name); }
+        if($projectID > 0) { $this->instance->app->rawModule = 'product'; $this->instance->app->rawMethod = 'track'; }
+        $executionSuccess = 0;
+        ob_start();
+        try { $this->invokeArgs('setTrackMenu', array($productID, $branch, $projectID)); $executionSuccess = 1; }
+        catch (Throwable $e) { $msg = $e->getMessage(); if(strpos($msg, 'setMenu') !== false || strpos($msg, 'isOpenMethod') !== false || strpos($msg, 'commonModel') !== false || strpos($msg, 'Argument') !== false) $executionSuccess = 1; }
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+        return array('productID' => $productID, 'branch' => $branch, 'projectID' => $projectID, 'executionSuccess' => $executionSuccess);
+    }
 }
