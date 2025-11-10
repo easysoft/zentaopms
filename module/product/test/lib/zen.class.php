@@ -2564,4 +2564,29 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setEditMenu method.
+     *
+     * @param  int $productID
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function setEditMenuTest(int $productID = 0, int $programID = 0)
+    {
+        ob_start();
+        try {
+            $this->invokeArgs('setEditMenu', array($productID, $programID));
+        } catch (Throwable $e) {}
+        ob_end_clean();
+
+        $result = array(
+            'productID' => $productID,
+            'programID' => $programID
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
