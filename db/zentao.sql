@@ -489,12 +489,12 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `fromCaseID` int unsigned NOT NULL DEFAULT 0,
   `fromCaseVersion` smallint unsigned NOT NULL DEFAULT 1,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL DEFAULT '',
   `scene` int unsigned NOT NULL DEFAULT 0,
   `sort` int unsigned NOT NULL DEFAULT 0,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_case`(`product`);
@@ -782,7 +782,6 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint unsigned NOT NULL DEFAULT 1,
   `docs` text DEFAULT NULL,
@@ -790,6 +789,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `desc` mediumtext DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `type` varchar(30) NOT NULL DEFAULT '',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -915,9 +915,9 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `order` int unsigned NOT NULL DEFAULT 0,
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `archived` tinyint unsigned NOT NULL DEFAULT 0,
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_doclib`(`product`);
@@ -1350,7 +1350,6 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `status` varchar(30) NOT NULL DEFAULT '',
   `mergeStatus` varchar(30) NOT NULL DEFAULT '',
   `approvalStatus` varchar(30) NOT NULL DEFAULT '',
@@ -1368,6 +1367,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `syncError` varchar(255) NOT NULL DEFAULT '',
   `hasNoConflict` tinyint unsigned NOT NULL DEFAULT 0,
   `diffs` longtext DEFAULT NULL,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -2188,8 +2188,8 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lines` varchar(10) NOT NULL DEFAULT '',
   `v1` varchar(40) NOT NULL DEFAULT '',
   `v2` varchar(40) NOT NULL DEFAULT '',
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_task` (`execution`);
@@ -2411,8 +2411,8 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `finishedDate` datetime DEFAULT NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `account`    ON `zt_todo` (`account`);
@@ -2465,9 +2465,9 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `score` int unsigned NOT NULL DEFAULT 0,
   `scoreLevel` int unsigned NOT NULL DEFAULT 0,
   `resetToken` varchar(50) NOT NULL DEFAULT '',
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `clientStatus` varchar(10) NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_user`(`account`);
@@ -13901,8 +13901,8 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `editedDate` datetime DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `dayHour` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -13988,8 +13988,8 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `editedDate` datetime DEFAULT NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `checkBy` varchar(30) NOT NULL DEFAULT '',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -14725,10 +14725,10 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `openedDate` datetime DEFAULT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `parent` int unsigned NOT NULL DEFAULT 0,
   `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `path` varchar(1000) NOT NULL DEFAULT '',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16176,9 +16176,9 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `editedDate` datetime DEFAULT NULL,
   `published` tinyint unsigned NOT NULL DEFAULT 0,
   `publishedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `prompt` text DEFAULT NULL,
   `builtIn` tinyint unsigned NOT NULL DEFAULT 0,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
