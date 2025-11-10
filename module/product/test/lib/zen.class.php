@@ -2479,4 +2479,40 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test saveSession4Roadmap method.
+     *
+     * @access public
+     * @return array
+     */
+    public function saveSession4RoadmapTest()
+    {
+        global $tester;
+
+        /* Set up app environment for the test. */
+        $this->instance->app->rawModule = 'product';
+        $this->instance->app->rawMethod = 'roadmap';
+        $this->instance->app->moduleName = 'product';
+        $this->instance->app->methodName = 'roadmap';
+
+        /* Call the method. */
+        $this->invokeArgs('saveSession4Roadmap', array());
+
+        /* Get session values after method execution. */
+        $session = $tester->session;
+        $releaseList = isset($session->product->releaseList) ? $session->product->releaseList : '';
+        $productPlanList = isset($session->product->productPlanList) ? $session->product->productPlanList : '';
+
+        /* Build result array. */
+        $result = array(
+            'hasReleaseList' => !empty($releaseList) ? 1 : 0,
+            'hasProductPlanList' => !empty($productPlanList) ? 1 : 0,
+            'releaseListContains' => strpos($releaseList, 'product') !== false ? 1 : 0,
+            'productPlanListContains' => strpos($productPlanList, 'product') !== false ? 1 : 0
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
