@@ -426,4 +426,20 @@ class mrZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return is_array($result) ? 'array' : '0';
     }
+
+    /**
+     * Test getBranchUrl method.
+     *
+     * @param  object     $host
+     * @param  int|string $projectID
+     * @param  string     $branch
+     * @access public
+     * @return string
+     */
+    public function getBranchUrlTest(object $host, int|string $projectID, string $branch): string
+    {
+        $result = $this->invokeArgs('getBranchUrl', [$host, $projectID, $branch]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
