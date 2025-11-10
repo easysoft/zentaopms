@@ -158,4 +158,26 @@ class pivotZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test productSummary method.
+     *
+     * @param  string     $conditions
+     * @param  int|string $productID
+     * @param  string     $productStatus
+     * @param  string     $productType
+     * @access public
+     * @return mixed
+     */
+    public function productSummaryTest(string $conditions = '', int|string $productID = 0, string $productStatus = 'normal', string $productType = 'normal')
+    {
+        $this->invokeArgs('productSummary', [$conditions, $productID, $productStatus, $productType]);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'products' => $this->instance->view->products ?? array(),
+            'filters'  => $this->instance->view->filters ?? array(),
+            'title'    => $this->instance->view->title ?? ''
+        );
+    }
 }
