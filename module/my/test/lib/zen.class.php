@@ -115,4 +115,43 @@ class myZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test showWorkCountNotInOpen method.
+     *
+     * @param  array  $count 待处理工作数量数组
+     * @access public
+     * @return object
+     */
+    public function showWorkCountNotInOpenTest($count = array())
+    {
+        /* Create a mock pager object. */
+        $pager = new stdClass();
+        $pager->recTotal = 0;
+        $pager->recPerPage = 20;
+        $pager->pageID = 1;
+
+        $result = $this->invokeArgs('showWorkCountNotInOpen', [$count, $pager]);
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->getProperty('view');
+        $output = new stdClass();
+        $output->task = isset($result['task']) ? $result['task'] : 0;
+        $output->story = isset($result['story']) ? $result['story'] : 0;
+        $output->bug = isset($result['bug']) ? $result['bug'] : 0;
+        $output->case = isset($result['case']) ? $result['case'] : 0;
+        $output->testtask = isset($result['testtask']) ? $result['testtask'] : 0;
+        $output->requirement = isset($result['requirement']) ? $result['requirement'] : 0;
+        $output->issue = isset($result['issue']) ? $result['issue'] : 0;
+        $output->risk = isset($result['risk']) ? $result['risk'] : 0;
+        $output->qa = isset($result['qa']) ? $result['qa'] : 0;
+        $output->meeting = isset($result['meeting']) ? $result['meeting'] : 0;
+        $output->ticket = isset($result['ticket']) ? $result['ticket'] : 0;
+        $output->feedback = isset($result['feedback']) ? $result['feedback'] : 0;
+        $output->isBiz = isset($view->isBiz) ? $view->isBiz : 0;
+        $output->isMax = isset($view->isMax) ? $view->isMax : 0;
+        $output->isIPD = isset($view->isIPD) ? $view->isIPD : 0;
+
+        return $output;
+    }
 }
