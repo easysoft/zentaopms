@@ -2174,4 +2174,18 @@ class productZenTest extends baseTest
 
         return array('count' => 0);
     }
+
+    /**
+     * Test getStoryIdList method.
+     *
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function getStoryIdListTest(array $stories = array())
+    {
+        $result = $this->invokeArgs('getStoryIdList', array($stories));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
