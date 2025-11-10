@@ -1837,4 +1837,19 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getEditedLocate method.
+     *
+     * @param  int $productID
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function getEditedLocateTest(int $productID = 0, int $programID = 0)
+    {
+        $result = $this->invokeArgs('getEditedLocate', array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
