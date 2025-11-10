@@ -1,0 +1,33 @@
+---
+title: User数据定义
+desc: bugCreate测试使用的user数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin,user1,user2,user3,user4,user5,test1,test2,pm1,dev1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,测试1,测试2,项目经理1,开发1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

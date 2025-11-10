@@ -1,0 +1,54 @@
+---
+title: Product数据定义
+desc: bugCreate测试使用的product数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 产品名称
+  range: 产品
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 产品代号
+  range: product
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 产品类型
+  range: normal
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 产品状态
+  range: normal{3},closed{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
