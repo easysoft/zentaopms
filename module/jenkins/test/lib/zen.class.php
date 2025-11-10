@@ -4,6 +4,28 @@ declare(strict_types = 1);
 class jenkinsZenTest
 {
     /**
+     * Create jenkinsZen instance.
+     *
+     * @access private
+     * @return object
+     */
+    private function createZenInstance()
+    {
+        global $app;
+        if(!class_exists('jenkins')) require_once $app->getModulePath('', 'jenkins') . 'control.php';
+        if(!class_exists('jenkinsZen')) require_once $app->getModulePath('', 'jenkins') . 'zen.php';
+        $app->loadLang('jenkins');
+
+        $reflection = new ReflectionClass('jenkinsZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+        return $zenInstance;
+    }
+
+    /**
      * Test buildTree method.
      *
      * @param  array $tasks
@@ -12,37 +34,34 @@ class jenkinsZenTest
      */
     public function buildTreeTest($tasks = array())
     {
-        global $app;
-
-        /* 加载 control 和 zen 类 */
-        if(!class_exists('jenkins'))
-        {
-            require_once $app->getModulePath('', 'jenkins') . 'control.php';
-        }
-        if(!class_exists('jenkinsZen'))
-        {
-            require_once $app->getModulePath('', 'jenkins') . 'zen.php';
-        }
-
-        /* 使用反射创建 jenkinsZen 实例,跳过构造函数 */
+        $zenInstance = $this->createZenInstance();
         $reflection = new ReflectionClass('jenkinsZen');
-        $zenInstance = $reflection->newInstanceWithoutConstructor();
-
-        /* 初始化必要的属性 */
-        $zenInstance->app = $app;
-        $zenInstance->config = $app->config;
-        $zenInstance->lang = $app->lang;
-        $zenInstance->dao = $app->loadClass('dao');
-
-        /* 通过反射调用 buildTree 方法 */
         $method = $reflection->getMethod('buildTree');
         $method->setAccessible(true);
-
-        /* 调用 zen 方法 */
         $result = $method->invoke($zenInstance, $tasks);
-
         if(dao::isError()) return dao::getError();
+        return $result;
+    }
 
+    /**
+     * Test checkTokenAccess method.
+     *
+     * @param  string $url
+     * @param  string $account
+     * @param  string $password
+     * @param  string $token
+     * @access public
+     * @return bool
+     */
+    public function checkTokenAccessTest($url = '', $account = '', $password = '', $token = '')
+    {
+        $zenInstance = $this->createZenInstance();
+        $reflection = new ReflectionClass('jenkinsZen');
+        $method = $reflection->getMethod('checkTokenAccess');
+        $method->setAccessible(true);
+        dao::$errors = array();
+        $result = $method->invoke($zenInstance, $url, $account, $password, $token);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 }
