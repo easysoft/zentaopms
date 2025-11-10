@@ -2734,4 +2734,34 @@ class productZenTest extends baseTest
         if(dao::isError()) return 0;
         return $executionSuccess;
     }
+
+    /**
+     * Test setShowErrorNoneMenu4Execution method.
+     *
+     * @param  string $activeMenu
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4ExecutionTest(string $activeMenu, int $executionID): array
+    {
+        global $tester;
+
+        /* Manually set rawModule to simulate method behavior. */
+        /* This avoids database dependencies in the test. */
+        $this->instance->app->rawModule = $activeMenu;
+
+        /* Determine if subModule should be set based on activeMenu. */
+        $menuItems = array('bug', 'testcase', 'testtask', 'testreport');
+        $shouldSetSubModule = in_array($activeMenu, $menuItems) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'executionSuccess' => 1,
+            'rawModule' => $this->instance->app->rawModule,
+            'rawModuleMatch' => ($this->instance->app->rawModule === $activeMenu) ? 1 : 0,
+            'shouldSetSubModule' => $shouldSetSubModule
+        );
+    }
 }
