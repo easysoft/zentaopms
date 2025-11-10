@@ -86,4 +86,33 @@ class myZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test showWorkCount method.
+     *
+     * @param  int $recTotal   总记录数
+     * @param  int $recPerPage 每页记录数
+     * @param  int $pageID     页码
+     * @access public
+     * @return object
+     */
+    public function showWorkCountTest($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        ob_start();
+        $this->invokeArgs('showWorkCount', [$recTotal, $recPerPage, $pageID]);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->getProperty('view');
+        $result = new stdClass();
+        $result->hasTodoCount = isset($view->todoCount) && is_array($view->todoCount) ? 1 : 0;
+        $result->taskCount = isset($view->todoCount['task']) ? $view->todoCount['task'] : -1;
+        $result->storyCount = isset($view->todoCount['story']) ? $view->todoCount['story'] : -1;
+        $result->bugCount = isset($view->todoCount['bug']) ? $view->todoCount['bug'] : -1;
+        $result->caseCount = isset($view->todoCount['case']) ? $view->todoCount['case'] : -1;
+        $result->testtaskCount = isset($view->todoCount['testtask']) ? $view->todoCount['testtask'] : -1;
+        $result->isOpenedURAndSR = isset($view->isOpenedURAndSR) ? $view->isOpenedURAndSR : 0;
+
+        return $result;
+    }
 }
