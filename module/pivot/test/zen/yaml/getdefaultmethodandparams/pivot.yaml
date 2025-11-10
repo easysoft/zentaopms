@@ -1,0 +1,54 @@
+---
+title: pivot表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+- field: dimension
+  range: 1{5}
+- field: group
+  range: '5,6,10,5,6'
+- field: code
+  range: 'pivot1,pivot2,pivot3,pivot4,pivot5'
+- field: driver
+  range: mysql{5}
+- field: mode
+  range: builder{5}
+- field: name
+  range: '透视表1,透视表2,透视表3,透视表4,透视表5'
+- field: desc
+  range: ''
+- field: acl
+  range: open{5}
+- field: whitelist
+  range: ''
+- field: sql
+  range: ''
+- field: fields
+  range: ''
+- field: filters
+  range: ''
+- field: langs
+  range: ''
+- field: settings
+  range: ''
+- field: step
+  range: 2{5}
+- field: stage
+  range: published{5}
+- field: builtin
+  range: 0{5}
+- field: version
+  range: 1{5}
+- field: createdBy
+  range: admin{5}
+- field: createdDate
+  range: '`2023-01-01 00:00:00`'
+- field: editedBy
+  range: ''
+- field: editedDate
+  range: '0000-00-00 00:00:00'
+- field: deleted
+  range: '0'

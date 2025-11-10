@@ -1,0 +1,32 @@
+---
+title: module表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  range: 1-10
+- field: root
+  range: '1,1,1,1,1,1,1,1,1,1'
+- field: branch
+  range: 0
+- field: name
+  range: '产品分组,项目分组,测试分组,员工分组,子分组1,子分组2,产品分组空,项目分组无权限,空分组,测试分组2'
+- field: parent
+  range: '0,0,0,0,1,2,0,0,0,0'
+- field: path
+  range: "',1,',',2,',',3,',',4,',',1,5,',',2,6,',',7,',',8,',',9,',',10,'"
+- field: grade
+  range: '1,1,1,1,2,2,1,1,1,1'
+- field: order
+  range: 1-10
+- field: type
+  range: pivot
+- field: owner
+  range: admin
+- field: collector
+  range: 'product,project,test,staff,product,project,product,project,empty,test'
+- field: short
+  range: ''
+- field: deleted
+  range: '0'
