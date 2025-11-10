@@ -56,4 +56,32 @@ class productplanZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildBugSearchForm method.
+     *
+     * @param  object $plan
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function buildBugSearchFormTest(object $plan, int $queryID, string $orderBy)
+    {
+        global $config;
+        $this->invokeArgs('buildBugSearchForm', [$plan, $queryID, $orderBy]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回配置结果用于断言
+        $result = new stdClass();
+        $result->actionURL = $config->bug->search['actionURL'];
+        $result->queryID   = $config->bug->search['queryID'];
+        $result->style     = $config->bug->search['style'];
+        $result->hasProductField = isset($config->bug->search['fields']['product']) ? 1 : 0;
+        $result->hasBranchField  = isset($config->bug->search['fields']['branch']) ? 1 : 0;
+        $result->hasPlanParam    = isset($config->bug->search['params']['plan']) ? 1 : 0;
+        $result->hasModuleParam  = isset($config->bug->search['params']['module']) ? 1 : 0;
+
+        return $result;
+    }
 }
