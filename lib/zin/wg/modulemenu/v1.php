@@ -28,7 +28,8 @@ class moduleMenu extends wg
         'appendSettingItems?: array',
         'onCheck?: function',
         'toggleSidebar?: bool=true',
-        'isInModal?: bool=false'
+        'isInModal?: bool=false',
+        'onClickItem?: function'
     );
 
     protected static array $defineBlocks = array
