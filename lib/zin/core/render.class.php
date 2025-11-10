@@ -91,12 +91,11 @@ class render
             $name = $selector->name;
             if(isset($selector->command))
             {
-                if(!$isUserLogon) continue;
-
                 $item = new stdClass();
-                $item->name = $name;
-                $item->type = 'data';
-                $item->data = data($selector->command);
+                $item->name     = $name;
+                $item->type     = 'data';
+                $item->selector = $selector->selector;
+                $item->data     = (!$isUserLogon || $selector->disabled) ? null : data($selector->command);
                 $list[] = $item;
             }
             else
@@ -176,9 +175,7 @@ class render
             $name = $selector->name;
             if(isset($selector->command))
             {
-                if(!$isUserLogon) continue;
-
-                $output->data[$name] = data($selector->command);
+                $output->data[$name] = (!$isUserLogon || $selector->disabled) ? null : data($selector->command);
             }
             else
             {
@@ -210,7 +207,7 @@ class render
         $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
-            if(!empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands)) continue;
+            if(!empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands)) $selector->disabled = true;
             $this->selectors[$selector->name] = $selector;
         }
     }
