@@ -60,4 +60,39 @@ class kanbanZenTest extends baseTest
         $cell = $tester->loadModel('kanban')->getCellByCard($cardID, 0);
         return $cell ? array('column' => $cell->column, 'lane' => $cell->lane) : false;
     }
+
+    /**
+     * Test setUserAvatar method.
+     *
+     * @access public
+     * @return array
+     */
+    public function setUserAvatarTest()
+    {
+        // 调用被测方法
+        $this->invokeArgs('setUserAvatar', []);
+
+        if(dao::isError()) return dao::getError();
+
+        // 获取设置到view中的userList
+        $view = $this->getProperty('view');
+        $userList = $view->userList;
+
+        if(empty($userList)) return array('count' => 0, 'hasClosed' => false);
+
+        $result = array();
+        $result['count'] = count($userList);
+        $result['hasClosed'] = isset($userList['closed']);
+        $result['hasAvatar'] = true;
+        $result['hasRealname'] = true;
+
+        foreach($userList as $account => $user)
+        {
+            if($account === 'closed') continue;
+            if(!isset($user['avatar'])) $result['hasAvatar'] = false;
+            if(!isset($user['realname'])) $result['hasRealname'] = false;
+        }
+
+        return $result;
+    }
 }
