@@ -1525,4 +1525,21 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildProductForActivate method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function buildProductForActivateTest(int $productID = 0)
+    {
+        $_POST['status'] = 'normal';
+        $_POST['comment'] = 'Test activate comment';
+
+        $result = $this->invokeArgs('buildProductForActivate', array($productID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
