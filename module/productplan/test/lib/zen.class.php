@@ -193,4 +193,27 @@ class productplanZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test reorderStories method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function reorderStoriesTest()
+    {
+        global $tester;
+
+        // 调用被测方法
+        $this->invokeArgs('reorderStories', []);
+        if(dao::isError()) return dao::getError();
+
+        // 获取 session 中设置的结果
+        $result = new stdClass();
+        $result->storyBrowseList = $tester->session->storyBrowseList ?? null;
+        $result->epicBrowseList = $tester->session->epicBrowseList ?? null;
+        $result->requirementBrowseList = $tester->session->requirementBrowseList ?? null;
+
+        return $result;
+    }
 }
