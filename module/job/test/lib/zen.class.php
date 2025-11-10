@@ -80,4 +80,27 @@ class jobZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getSubversionDir method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array
+     */
+    public function getSubversionDirTest($repo)
+    {
+        $this->invokeArgs('getSubversionDir', [$repo]);
+        if(dao::isError()) return array('error' => dao::getError());
+
+        $view = $this->getProperty('view');
+        if(!$view) return array('error' => 'View not found');
+
+        $result = array(
+            'dirs'            => isset($view->dirs) ? $view->dirs : array(),
+            'triggerTypeList' => $this->getProperty('lang')->job->triggerTypeList
+        );
+
+        return $result;
+    }
 }
