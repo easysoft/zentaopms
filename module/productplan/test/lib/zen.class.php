@@ -42,4 +42,18 @@ class productplanZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildActionsList method.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function buildActionsListTest(object $plan)
+    {
+        $result = $this->invokeArgs('buildActionsList', [$plan]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

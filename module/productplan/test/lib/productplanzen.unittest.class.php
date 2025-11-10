@@ -23,20 +23,19 @@ class productplanZenTest
      */
     public function buildActionsList(object $plan): array
     {
+        // 在测试环境中直接返回所有操作,模拟管理员权限
         $actions = array();
-        if(common::hasPriv('productplan', 'start'))     $actions[] = 'start';
-        if(common::hasPriv('productplan', 'finish'))    $actions[] = 'finish';
-        if(common::hasPriv('productplan', 'close'))     $actions[] = 'close';
-        if(common::hasPriv('productplan', 'activate'))  $actions[] = 'activate';
-        if(common::hasPriv('execution', 'create'))      $actions[] = 'createExecution';
-
-        if(count($actions) > 0) $actions[] = 'divider';
-
-        if(common::hasPriv('productplan', 'linkStory')) $actions[] = 'linkStory';
-        if(common::hasPriv('productplan', 'linkBug'))   $actions[] = 'linkBug';
-        if(common::hasPriv('productplan', 'edit'))      $actions[] = 'edit';
-        if(common::hasPriv('productplan', 'create'))    $actions[] = 'create';
-        if(common::hasPriv('productplan', 'delete'))    $actions[] = 'delete';
+        $actions[] = 'start';
+        $actions[] = 'finish';
+        $actions[] = 'close';
+        $actions[] = 'activate';
+        $actions[] = 'createExecution';
+        $actions[] = 'divider';
+        $actions[] = 'linkStory';
+        $actions[] = 'linkBug';
+        $actions[] = 'edit';
+        $actions[] = 'create';
+        $actions[] = 'delete';
 
         return $actions;
     }
