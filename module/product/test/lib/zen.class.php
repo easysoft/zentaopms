@@ -1717,4 +1717,18 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getBackLink4Create method.
+     *
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
+    public function getBackLink4CreateTest(string $extra = '')
+    {
+        $result = $this->invokeArgs('getBackLink4Create', array($extra));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
