@@ -1931,15 +1931,6 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
 CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 
--- DROP TABLE IF EXISTS `zt_session`;
-CREATE TABLE IF NOT EXISTS `zt_session` (
-    `id` varchar(32) NOT NULL,
-    `data` mediumtext,
-    `timestamp` int unsigned NOT NULL DEFAULT 0,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
-
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
