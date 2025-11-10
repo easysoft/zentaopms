@@ -512,4 +512,22 @@ class metricZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getUniqueKeyByRecord method.
+     *
+     * @param  object $record
+     * @param  string $scope
+     * @access public
+     * @return mixed
+     */
+    public function getUniqueKeyByRecordZenTest($record, $scope = '')
+    {
+        $method = $this->metricZenTest->getMethod('getUniqueKeyByRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($record, $scope));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
