@@ -1867,6 +1867,19 @@ class productZenTest extends baseTest
     }
 
     /**
+     * Test getExportFields method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getExportFieldsTest()
+    {
+        $result = $this->invokeArgs('getExportFields', array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test getExportData method.
      *
      * @param  int       $programID
