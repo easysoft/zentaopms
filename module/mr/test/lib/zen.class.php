@@ -347,4 +347,29 @@ class mrZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test buildLinkTaskSearchForm method.
+     *
+     * @param  int    $MRID
+     * @param  int    $repoID
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @param  array  $productExecutions
+     * @access public
+     * @return array
+     */
+    public function buildLinkTaskSearchFormTest(int $MRID, int $repoID, string $orderBy, int $queryID, array $productExecutions): array
+    {
+        $this->invokeArgs('buildLinkTaskSearchForm', [$MRID, $repoID, $orderBy, $queryID, $productExecutions]);
+
+        global $config;
+        $result = array();
+        $result['actionURL']  = $config->execution->search['actionURL'] ?? '';
+        $result['queryID']    = $config->execution->search['queryID'] ?? 0;
+        $result['hasModule']  = isset($config->execution->search['fields']['module']) ? 1 : 0;
+        $result['executionValues'] = $config->execution->search['params']['execution']['values'] ?? array();
+
+        return $result;
+    }
 }
