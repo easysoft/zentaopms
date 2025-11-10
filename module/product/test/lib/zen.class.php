@@ -2447,4 +2447,36 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test saveSession4Browse method.
+     *
+     * @param  object|null $product
+     * @param  string      $browseType
+     * @param  string      $tab
+     * @access public
+     * @return array
+     */
+    public function saveSession4BrowseTest(object|null $product, string $browseType, string $tab = 'product')
+    {
+        global $tester;
+        unset($tester->session->currentProductType, $tester->session->storyBrowseType);
+
+        $this->instance->app->tab = $tab;
+        $this->invokeArgs('saveSession4Browse', array($product, $browseType));
+
+        $session = $tester->session;
+        $currentProductType = $session->currentProductType ?? '';
+        $storyBrowseType = $session->storyBrowseType ?? '';
+
+        $result = array(
+            'hasCurrentProductType' => !empty($currentProductType) ? 1 : 0,
+            'currentProductType' => $currentProductType,
+            'hasStoryBrowseType' => !empty($storyBrowseType) ? 1 : 0,
+            'storyBrowseType' => $storyBrowseType
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
