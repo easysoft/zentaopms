@@ -2003,4 +2003,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getProductLines method.
+     *
+     * @param  array $programIdList
+     * @access public
+     * @return array
+     */
+    public function getProductLinesTest(array $programIdList = array())
+    {
+        $result = $this->invokeArgs('getProductLines', array($programIdList));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
