@@ -101,7 +101,7 @@ foreach($reviewList as $review)
         $statusList = $lang->charter->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'mr', 'pullreq')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
