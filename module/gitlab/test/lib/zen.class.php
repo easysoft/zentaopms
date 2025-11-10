@@ -335,4 +335,42 @@ class gitlabZenTest extends baseTest
         /* 返回日志内容用于验证 */
         return $logContent;
     }
+
+    /**
+     * Test webhookParseBody method.
+     *
+     * @param  object $body
+     * @param  int    $gitlabID
+     * @access public
+     * @return object|bool|string
+     */
+    public function webhookParseBodyTest(object $body, int $gitlabID)
+    {
+        global $app;
+        if(!class_exists('gitlab')) require_once $app->getModulePath('', 'gitlab') . 'control.php';
+        if(!class_exists('gitlabZen')) require_once $app->getModulePath('', 'gitlab') . 'zen.php';
+
+        $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        $method = $reflection->getMethod('webhookParseBody');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invoke($zenInstance, $body, $gitlabID);
+        } catch(TypeError $e) {
+            if(strpos($e->getMessage(), 'Return value must be of type object, bool returned') !== false) return 'type_error_false';
+            if(strpos($e->getMessage(), 'Return value must be of type object, null returned') !== false) return 'type_error_null';
+            throw $e;
+        } catch(EndResponseException $e) {
+            return 'method_not_found';
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
