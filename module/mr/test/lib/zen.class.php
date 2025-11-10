@@ -396,4 +396,20 @@ class mrZenTest extends baseTest
 
         return false;
     }
+
+    /**
+     * Test checkProjectEdit method.
+     *
+     * @param  string $hostType
+     * @param  object $sourceProject
+     * @param  object $MR
+     * @access public
+     * @return bool|int
+     */
+    public function checkProjectEditTest(string $hostType, object $sourceProject, object $MR): bool|int
+    {
+        $result = $this->invokeArgs('checkProjectEdit', [$hostType, $sourceProject, $MR]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
