@@ -90,10 +90,7 @@ $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = $lang->productCommon;
-$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
-$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
-$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
-$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
+$lang->admin->setModule->project        = $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 

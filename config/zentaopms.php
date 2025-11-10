@@ -789,14 +789,11 @@ $config->dtable = new stdclass();
 $config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap', 'group');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->my            = array('score');
-$config->featureGroup->product       = array('roadmap', 'track', 'UR', 'ER');
-$config->featureGroup->scrum         = array();
-$config->featureGroup->waterfall     = array();
-$config->featureGroup->agileplus     = array();
-$config->featureGroup->waterfallplus = array();
-$config->featureGroup->assetlib      = array();
-$config->featureGroup->other         = array('devops', 'kanban', 'setCode');
+$config->featureGroup->my       = array('score');
+$config->featureGroup->product  = array('roadmap', 'track', 'UR', 'ER');
+$config->featureGroup->project  = array();
+$config->featureGroup->assetlib = array();
+$config->featureGroup->other    = array('devops', 'kanban', 'setCode');
 
 $config->db->sqliteBlacklist    = array('sqlite_queue', 'cron');
 $config->hasDropmenuApps        = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback', 'demandpool');
