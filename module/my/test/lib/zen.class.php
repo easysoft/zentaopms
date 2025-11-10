@@ -27,4 +27,19 @@ class myZenTest extends baseTest
         $result->hasTasks   = isset($view->tasks) && is_array($view->tasks) ? 1 : 0;
         return $result;
     }
+
+    /**
+     * Test buildCaseData method.
+     *
+     * @param  array  $cases 用例数据列表
+     * @param  string $type  类型(assigntome|openedbyme)
+     * @access public
+     * @return array
+     */
+    public function buildCaseDataTest($cases = array(), $type = 'assigntome')
+    {
+        $result = $this->invokeArgs('buildCaseData', [$cases, $type]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
