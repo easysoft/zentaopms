@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `zt_api` (
   `status` varchar(20)  NOT NULL DEFAULT '',
   `owner` varchar(30)  NOT NULl DEFAULT 0,
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `params` text DEFAULT NULL,
   `paramsExample` text DEFAULT NULL,
   `responseExample` text DEFAULT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `zt_apispec` (
   `status` varchar(20)  NOT NULL DEFAULT '',
   `owner` varchar(255) NOT NULl DEFAULT 0,
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `params` text DEFAULT NULL,
   `paramsExample` text DEFAULT NULL,
   `responseExample` text DEFAULT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct` (
   `name` varchar(30)  NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `attribute` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime DEFAULT NULL,
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct_spec` (
   `type` varchar(50)  NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
   `attribute` text DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime DEFAULT NULL,
   primary key (`id`)
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `nodes` mediumtext DEFAULT NULL,
-  `version` int unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL DEFAULT '',
   `extra` text DEFAULT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(100) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
-  `version` int unsigned NOT NULL DEFAULT 1,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `workflow` varchar(30) NOT NULL DEFAULT '',
@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
 CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `flow` int unsigned NOT NULL DEFAULT 0,
-  `version` int unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `nodes` mediumtext DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -480,11 +480,11 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `reviewedDate` date DEFAULT NULL,
   `lastEditedBy` char(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime DEFAULT NULL,
-  `version` tinyint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `linkCase` varchar(255) NOT NULL DEFAULT '',
   `fromBug` int unsigned NOT NULL DEFAULT 0,
   `fromCaseID` int unsigned NOT NULL DEFAULT 0,
-  `fromCaseVersion` int unsigned NOT NULL DEFAULT 1,
+  `fromCaseVersion` smallint unsigned NOT NULL DEFAULT 1,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime DEFAULT NULL,
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `type` varchar(10) NOT NULL DEFAULT 'step',
   `desc` text DEFAULT NULL,
   `expect` text DEFAULT NULL,
@@ -517,7 +517,7 @@ CREATE INDEX `version` ON `zt_casestep`(`version`);
 CREATE TABLE IF NOT EXISTS `zt_casespec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `title` varchar(255) NOT NULL DEFAULT '',
   `precondition` text DEFAULT NULL,
   `files` text DEFAULT NULL,
@@ -784,7 +784,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `docs` text DEFAULT NULL,
   `docVersions` text DEFAULT NULL,
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `type` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -792,7 +792,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `design` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
   `files` varchar(255) NOT NULL DEFAULT ''
@@ -883,8 +883,8 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `addedDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
-  `fromVersion` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
+  `fromVersion` smallint unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
@@ -1599,8 +1599,8 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT 1,
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
-  `parentVersion` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
+  `parentVersion` smallint unsigned NOT NULL DEFAULT 1,
   `planDuration` int unsigned NOT NULL DEFAULT 0,
   `realDuration` int unsigned NOT NULL DEFAULT 0,
   `progress` decimal(5,2) NOT NULL DEFAULT '0',
@@ -1690,7 +1690,7 @@ CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `produc
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `project` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `milestone` tinyint unsigned NOT NULL DEFAULT 0,
   `begin` date DEFAULT NULL,
@@ -1733,11 +1733,11 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `execution` int unsigned NOT NULL DEFAULT 0,
   `AType` char(30) NOT NULL DEFAULT '',
   `AID` int unsigned NOT NULL DEFAULT 0,
-  `AVersion` char(30) NOT NULL DEFAULT '',
+  `AVersion` smallint unsigned NOT NULL DEFAULT 1,
   `relation` char(30) NOT NULL DEFAULT '',
   `BType` char(30) NOT NULL DEFAULT '',
   `BID` int unsigned NOT NULL DEFAULT 0,
-  `BVersion` char(30) NOT NULL DEFAULT '',
+  `BVersion` smallint unsigned NOT NULL DEFAULT 1,
   `extra` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1999,8 +1999,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
-  `parentVersion` smallint unsigned NOT NULL DEFAULT 0,
-  `demandVersion` smallint unsigned NOT NULL DEFAULT 0,
+  `parentVersion` smallint unsigned NOT NULL DEFAULT 1,
+  `demandVersion` smallint unsigned NOT NULL DEFAULT 1,
   `storyChanged` tinyint unsigned NOT NULL DEFAULT 0,
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
@@ -2036,7 +2036,7 @@ CREATE TABLE IF NOT EXISTS `zt_storygrade` (
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime DEFAULT NULL
@@ -2057,7 +2057,7 @@ CREATE UNIQUE INDEX `story` ON `zt_storyestimate`(`story`,`round`);
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `story` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext DEFAULT NULL,
   `verify` mediumtext DEFAULT NULL,
@@ -2082,7 +2082,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0
+  `version` smallint unsigned NOT NULL DEFAULT 1
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `suitecase` ON `zt_suitecase`(`suite`,`case`);
 
@@ -2119,7 +2119,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `mailto` text DEFAULT NULL,
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
@@ -2175,7 +2175,7 @@ CREATE INDEX `task` ON `zt_taskestimate` (`task`);
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `estStarted` date DEFAULT NULL,
   `deadline` date DEFAULT NULL
@@ -2248,7 +2248,7 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `run` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `job` int unsigned NOT NULL DEFAULT 0,
   `compile` int unsigned NOT NULL DEFAULT 0,
   `caseResult` char(30) NOT NULL DEFAULT '',
@@ -2271,7 +2271,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` tinyint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `assignedTo` char(30) NOT NULL DEFAULT '',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
   `lastRunDate` datetime DEFAULT NULL,
@@ -15856,7 +15856,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `duplicateDemand` int unsigned NOT NULL DEFAULT 0,
   `childDemands` varchar(255) NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 1,
-  `parentVersion` smallint unsigned NOT NULL DEFAULT 0,
+  `parentVersion` smallint unsigned NOT NULL DEFAULT 1,
   `vision` varchar(255) NOT NULL DEFAULT 'or',
   `color` varchar(255) NOT NULL DEFAULT '',
   `changedBy` char(30) NOT NULL DEFAULT '',
@@ -15879,7 +15879,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
 -- DROP TABLE IF EXISTS `zt_demandspec`;
 CREATE TABLE IF NOT EXISTS `zt_demandspec` (
   `demand` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext DEFAULT NULL,
   `verify` mediumtext DEFAULT NULL,
@@ -15890,7 +15890,7 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 -- DROP TABLE IF EXISTS `zt_demandreview`;
 CREATE TABLE IF NOT EXISTS `zt_demandreview` (
   `demand` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 0,
+  `version` smallint unsigned NOT NULL DEFAULT 1,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime DEFAULT NULL
