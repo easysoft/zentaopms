@@ -2143,4 +2143,35 @@ class productZenTest extends baseTest
 
         return array('count' => 0);
     }
+
+    /**
+     * Test getStoriesByStoryType method.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $storyType
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return mixed
+     */
+    public function getStoriesByStoryTypeTest(int $productID = 0, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', ?object $pager = null)
+    {
+        $result = $this->invokeArgs('getStoriesByStoryType', array($productID, $branch, $storyType, $orderBy, $pager));
+        if(dao::isError()) return dao::getError();
+
+        /* Return count and first story info for testing. */
+        if(is_array($result) && count($result) > 0)
+        {
+            $firstStory = reset($result);
+            return array(
+                'count' => count($result),
+                'firstId' => isset($firstStory->id) ? $firstStory->id : 0,
+                'firstType' => isset($firstStory->type) ? $firstStory->type : '',
+                'firstTitle' => isset($firstStory->title) ? $firstStory->title : ''
+            );
+        }
+
+        return array('count' => 0);
+    }
 }
