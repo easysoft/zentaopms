@@ -2052,4 +2052,39 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getProducts4DropMenu method.
+     *
+     * @param  string $shadow
+     * @param  string $module
+     * @param  string $tab
+     * @param  int    $projectID
+     * @access public
+     * @return array|int
+     */
+    public function getProducts4DropMenuTest(string $shadow = '0', string $module = '', string $tab = 'product', int $projectID = 0)
+    {
+        $this->instance->app->tab = $tab;
+        if($projectID > 0) $_SESSION['project'] = $projectID;
+
+        $result = $this->invokeArgs('getProducts4DropMenu', array($shadow, $module));
+        if(dao::isError()) return dao::getError();
+
+        /* Convert result to indexed array for easier testing. */
+        if(is_array($result))
+        {
+            $products = array();
+            foreach($result as $product)
+            {
+                if(is_object($product))
+                {
+                    $products[] = $product;
+                }
+            }
+            return $products;
+        }
+
+        return $result;
+    }
 }
