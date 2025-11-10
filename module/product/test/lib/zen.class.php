@@ -2689,4 +2689,49 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setShowErrorNoneMenu method.
+     *
+     * @param  string $moduleName
+     * @param  string $activeMenu
+     * @param  int    $objectID
+     * @param  string $viewType
+     * @access public
+     * @return int
+     */
+    public function setShowErrorNoneMenuTest(string $moduleName = '', string $activeMenu = '', int $objectID = 0, string $viewType = '')
+    {
+        global $tester;
+
+        /* Set view type using reflection. */
+        if($viewType !== '')
+        {
+            /* Create a method to get view type that returns our desired value. */
+            $reflectionClass = new ReflectionClass($this->instance->app);
+            if($reflectionClass->hasProperty('viewType'))
+            {
+                $property = $reflectionClass->getProperty('viewType');
+                $property->setAccessible(true);
+                $property->setValue($this->instance->app, $viewType);
+            }
+        }
+
+        /* Mock getViewType method to return mhtml if viewType is set. */
+        $getViewTypeMethodExists = method_exists($this->instance->app, 'getViewType');
+
+        $executionSuccess = 0;
+
+        ob_start();
+        try {
+            $this->invokeArgs('setShowErrorNoneMenu', array($moduleName, $activeMenu, $objectID));
+            $executionSuccess = 1;
+        } catch (Throwable $e) {
+            $executionSuccess = 0;
+        }
+        ob_end_clean();
+
+        if(dao::isError()) return 0;
+        return $executionSuccess;
+    }
 }
