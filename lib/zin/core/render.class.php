@@ -91,8 +91,6 @@ class render
             $name = $selector->name;
             if(isset($selector->command))
             {
-                if(!$isUserLogon) continue;
-
                 $item = new stdClass();
                 $item->name     = $name;
                 $item->type     = 'data';
