@@ -7,20 +7,22 @@ title=测试 kanbanTao::getStoryCardMenu();
 timeout=0
 cid=0
 
-- 步骤1:空对象数组输入 >> 期望返回空数组
-- 步骤2:单个active状态需求 >> 期望返回包含菜单项的数组
-- 步骤3:draft状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
-- 步骤4:closed状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
-- 步骤5:无产品关联执行无移除需求菜单 >> 期望菜单中不包含移除需求选项
-- 步骤6:reviewing状态需求无创建任务权限 >> 期望菜单中不包含创建任务选项
+- 步骤1:空对象数组输入 @0
+- 步骤2:单个active状态需求 @1
+- 步骤3:draft状态需求返回菜单 @1
+- 步骤4:closed状态需求返回菜单 @1
+- 步骤5:无产品关联执行返回菜单 @1
+- 步骤6:reviewing状态需求返回菜单 @1
+- 步骤7:多个不同状态需求混合 @3
+- 步骤8:需求包含module字段 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-// 2. zendata数据准备（根据需要配置）
+// 2. zendata数据准备(根据需要配置)
 $story = zenData('story');
 $story->id->range('1-10');
 $story->product->range('1-3');
@@ -67,14 +69,14 @@ $user->role->range('admin,dev,qa,pm,td');
 $user->deleted->range('0{4},1{1}');
 $user->gen(5);
 
-// 3. 用户登录（选择合适角色）
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
+// 4. 创建测试实例(变量名与模块名一致)
 $kanbanTest = new kanbanTaoTest();
 
-// 5. 强制要求：必须包含至少6个测试步骤
-r($kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array())) && p() && e('0'); // 步骤1：空对象数组输入
+// 5. 强制要求:必须包含至少8个测试步骤
+r($kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array())) && p() && e('0'); // 步骤1:空对象数组输入
 
 $story1 = new stdclass();
 $story1->id = 1;
@@ -89,7 +91,7 @@ $story1->story = 1;
 $story1->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($story1));
-r(count($result)) && p() && e('1'); // 步骤2：单个active状态需求
+r(count($result)) && p() && e('1'); // 步骤2:单个active状态需求
 
 $storyDraft = new stdclass();
 $storyDraft->id = 4;
@@ -102,7 +104,7 @@ $storyDraft->story = 4;
 $storyDraft->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($storyDraft));
-r(count($result)) && p() && e('1'); // 步骤3：draft状态需求返回菜单
+r(count($result)) && p() && e('1'); // 步骤3:draft状态需求返回菜单
 
 $storyClosed = new stdclass();
 $storyClosed->id = 6;
@@ -115,10 +117,10 @@ $storyClosed->story = 6;
 $storyClosed->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($storyClosed));
-r(count($result)) && p() && e('1'); // 步骤4：closed状态需求返回菜单
+r(count($result)) && p() && e('1'); // 步骤4:closed状态需求返回菜单
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 105, 'hasProduct' => 0), array($story1));
-r(count($result)) && p() && e('1'); // 步骤5：无产品关联执行返回菜单
+r(count($result)) && p() && e('1'); // 步骤5:无产品关联执行返回菜单
 
 $storyReviewing = new stdclass();
 $storyReviewing->id = 8;
@@ -131,4 +133,46 @@ $storyReviewing->story = 8;
 $storyReviewing->module = 0;
 
 $result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 102, 'hasProduct' => 1), array($storyReviewing));
-r(count($result)) && p() && e('1'); // 步骤6：reviewing状态需求返回菜单
+r(count($result)) && p() && e('1'); // 步骤6:reviewing状态需求返回菜单
+
+$story2 = new stdclass();
+$story2->id = 2;
+$story2->type = 'story';
+$story2->status = 'active';
+$story2->title = '需求标题2';
+$story2->stage = 'projected';
+$story2->assignedTo = 'user1';
+$story2->version = 1;
+$story2->deleted = '0';
+$story2->story = 2;
+$story2->module = 0;
+
+$story3 = new stdclass();
+$story3->id = 3;
+$story3->type = 'story';
+$story3->status = 'active';
+$story3->title = '需求标题3';
+$story3->stage = 'wait';
+$story3->assignedTo = 'user2';
+$story3->version = 1;
+$story3->deleted = '0';
+$story3->story = 3;
+$story3->module = 0;
+
+$result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 101, 'hasProduct' => 1), array($story1, $story2, $story3));
+r(count($result)) && p() && e('3'); // 步骤7:多个不同状态需求混合
+
+$storyWithModule = new stdclass();
+$storyWithModule->id = 5;
+$storyWithModule->type = 'story';
+$storyWithModule->status = 'active';
+$storyWithModule->title = '需求标题5';
+$storyWithModule->stage = 'developing';
+$storyWithModule->assignedTo = 'admin';
+$storyWithModule->version = 1;
+$storyWithModule->deleted = '0';
+$storyWithModule->story = 5;
+$storyWithModule->module = 10;
+
+$result = $kanbanTest->getStoryCardMenuTest((object)array('id' => 103, 'hasProduct' => 1), array($storyWithModule));
+r(count($result)) && p() && e('1'); // 步骤8:需求包含module字段
