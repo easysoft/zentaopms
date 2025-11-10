@@ -577,4 +577,19 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getModuleId method.
+     *
+     * @param  int    $param
+     * @param  string $browseType
+     * @access public
+     * @return int
+     */
+    public function getModuleIdTest(int $param = 0, string $browseType = '')
+    {
+        $result = $this->invokeArgs('getModuleId', array($param, $browseType));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
