@@ -180,4 +180,25 @@ class pivotZenTest extends baseTest
             'title'    => $this->instance->view->title ?? ''
         );
     }
+
+    /**
+     * Test projectDeviation method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return mixed
+     */
+    public function projectDeviationTest(string $begin = '', string $end = '')
+    {
+        $this->invokeArgs('projectDeviation', [$begin, $end]);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'executions' => $this->instance->view->executions ?? array(),
+            'begin'      => $this->instance->view->begin ?? '',
+            'end'        => $this->instance->view->end ?? '',
+            'title'      => $this->instance->view->title ?? ''
+        );
+    }
 }
