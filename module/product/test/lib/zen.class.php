@@ -1951,4 +1951,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getKanbanList method.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return mixed
+     */
+    public function getKanbanListTest(string $browseType = 'my')
+    {
+        $result = $this->invokeArgs('getKanbanList', array($browseType));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
