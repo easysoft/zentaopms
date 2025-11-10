@@ -412,4 +412,18 @@ class mrZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getAllProjects method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array|string
+     */
+    public function getAllProjectsTest(object $repo): array|string
+    {
+        $result = $this->invokeArgs('getAllProjects', [$repo]);
+        if(dao::isError()) return dao::getError();
+        return is_array($result) ? 'array' : '0';
+    }
 }
