@@ -39,8 +39,8 @@ CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_actionproduct`;
 CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
-  `action` int unsigned NOT NULL,
-  `product` int unsigned NOT NULL
+  `action` int unsigned NOT NULL DEFAULT 0,
+  `product` int unsigned NOT NULL DEFAULT 0,
 ) ENGINE=InnoDB;
 CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 CREATE INDEX `product` ON `zt_actionproduct`(`product`);
@@ -894,7 +894,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `parent`  int unsigned NOT NULL DEFAULT 0,
+  `parent` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `project` int unsigned NOT NULL DEFAULT 0,
   `execution` int unsigned NOT NULL DEFAULT 0,
@@ -1713,11 +1713,11 @@ CREATE INDEX `story` ON `zt_projectstory` (`story`);
 -- DROP TABLE IF EXISTS `zt_queue`;
 CREATE TABLE IF NOT EXISTS `zt_queue` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `cron` int unsigned NOT NULL,
+  `cron` int unsigned NOT NULL DEFAULT 0,
   `type` varchar(255) NOT NULL,
   `command` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `execId` int unsigned DEFAULT NULL,
+  `execId` int unsigned NOT NULL DEFAULT 0,
   `createdDate` datetime DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
@@ -1779,8 +1779,8 @@ CREATE INDEX `idx_system` ON `zt_release` (`system`);
 -- DROP TABLE IF EXISTS `zt_releaserelated`;
 CREATE TABLE IF NOT EXISTS `zt_releaserelated` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `release` int unsigned NOT NULL,
-  `objectID` int unsigned NOT NULL,
+  `release` int unsigned NOT NULL DEFAULT 0,
+  `objectID` int unsigned NOT NULL DEFAULT 0,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1905,7 +1905,7 @@ CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
     `data` mediumtext,
-    `timestamp` int unsigned DEFAULT NULL,
+    `timestamp` int unsigned NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
@@ -2028,7 +2028,7 @@ CREATE INDEX `feedback` ON `zt_story` (`feedback`);
 -- DROP TABLE IF EXISTS `zt_storygrade`;
 CREATE TABLE IF NOT EXISTS `zt_storygrade` (
   `type` varchar(10) NOT NULL,
-  `grade` smallint unsigned NOT NULL,
+  `grade` smallint unsigned NOT NULL DEFAULT 0,
   `name` char(30) NOT NULL,
   `status` char(30) NOT NULL
 ) ENGINE=InnoDB;
@@ -2637,10 +2637,10 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
-  `pretask` int unsigned NOT NULL ,
-  `condition` varchar(10) NOT NULL ,
-  `task` int unsigned NOT NULL ,
-  `action` varchar(10) NOT NULL ,
+  `pretask` int unsigned NOT NULL DEFAULT 0,
+  `condition` varchar(10) NOT NULL,
+  `task` int unsigned NOT NULL DEFAULT 0,
+  `action` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
@@ -13885,7 +13885,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
   `editedDate` datetime DEFAULT NULL,
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `order` int unsigned DEFAULT 0,
+  `order` int unsigned NOT NULL DEFAULT 0,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -14003,7 +14003,7 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
-  `order` int unsigned DEFAULT 0,
+  `order` int unsigned NOT NULL DEFAULT 0,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -14343,7 +14343,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `category` char(30) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
-  `order` int unsigned DEFAULT 0,
+  `order` int unsigned NOT NULL DEFAULT 0,
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -15628,7 +15628,7 @@ CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
 -- DROP TABLE IF EXISTS `zt_pivotspec`;
 CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
-  `pivot` int unsigned NOT NULL,
+  `pivot` int unsigned NOT NULL DEFAULT 0,
   `version` varchar(10) NOT NULL,
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
   `mode` varchar(10) NOT NULL DEFAULT 'builder',
@@ -15648,7 +15648,7 @@ CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 -- DROP TABLE IF EXISTS `zt_sqlbuilder`;
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `objectID`   int unsigned NOT NULL,
+  `objectID` int unsigned NOT NULL DEFAULT 0,
   `objectType` varchar(50)   NOT NULL,
   `sql` text DEFAULT NULL,
   `setting` text DEFAULT NULL,
@@ -15657,7 +15657,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
-  `pivot`     int unsigned NOT NULL,
+  `pivot` int unsigned NOT NULL DEFAULT 0,
   `version`   varchar(10) NOT NULL DEFAULT '1',
   `field`     varchar(255) NOT NULL,
   `object`    varchar(40)  NOT NULL,
@@ -15853,7 +15853,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `mailto` text DEFAULT NULL,
-  `duplicateDemand` int unsigned NULL,
+  `duplicateDemand` int unsigned NOT NULL DEFAULT 0,
   `childDemands` varchar(255) NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `parentVersion` smallint unsigned NOT NULL DEFAULT 0,
@@ -15982,7 +15982,7 @@ CREATE TABLE IF NOT EXISTS `zt_roadmap` (
 CREATE TABLE IF NOT EXISTS `zt_roadmapstory` (
   `roadmap` int unsigned NOT NULL DEFAULT 0,
   `story` int unsigned NOT NULL DEFAULT 0,
-  `order` int unsigned  NOT NULL
+  `order` int unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
@@ -16131,8 +16131,8 @@ INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `icon`, `crea
 -- DROP TABLE IF EXISTS `zt_ai_message`;
 CREATE TABLE IF NOT EXISTS `zt_ai_message` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `appID` int unsigned NOT NULL,
-  `user` int unsigned NOT NULL,
+  `appID` int unsigned NOT NULL DEFAULT 0,
+  `user` int unsigned NOT NULL DEFAULT 0,
   `type` varchar(10) NOT NULL,
   `content` text DEFAULT NULL,
   `createdDate` datetime DEFAULT NULL,
@@ -16141,7 +16141,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_message` (
 
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `appID` int unsigned NOT NULL,
+  `appID` int unsigned NOT NULL DEFAULT 0,
   `name` varchar(30) NOT NULL,
   `type` varchar(10) DEFAULT 'text',
   `placeholder` text DEFAULT NULL,
@@ -16219,8 +16219,8 @@ INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `o
 
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `appID` int unsigned NOT NULL,
-  `userID` int unsigned NOT NULL,
+  `appID` int unsigned NOT NULL DEFAULT 0,
+  `userID` int unsigned NOT NULL DEFAULT 0,
   `createdDate` datetime DEFAULT NULL,
   UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
@@ -16232,7 +16232,7 @@ ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
-  `modelId` int unsigned NOT NULL,
+  `modelId` int unsigned NOT NULL DEFAULT 0,
   `desc` text DEFAULT NULL,
   `systemMessage` text DEFAULT NULL,
   `greetings` text DEFAULT NULL,
