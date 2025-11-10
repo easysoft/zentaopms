@@ -2188,4 +2188,27 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getUnauthProgramsOfProducts method.
+     *
+     * @param  array $products
+     * @param  array $authPrograms
+     * @access public
+     * @return array
+     */
+    public function getUnauthProgramsOfProductsTest(array $products = array(), array $authPrograms = array())
+    {
+        global $tester;
+
+        /* Ensure program model is loaded. */
+        if(!isset($this->instance->program))
+        {
+            $this->instance->program = $tester->loadModel('program');
+        }
+
+        $result = $this->invokeArgs('getUnauthProgramsOfProducts', array($products, $authPrograms));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
