@@ -172,4 +172,24 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test prepareStartExtras method.
+     *
+     * @param  array $data
+     * @access public
+     * @return object
+     */
+    public function prepareStartExtrasTest(array $data = array())
+    {
+        $fixer = new fixer('post');
+        $fixer->data = (object)$data;
+
+        $method = $this->objectZen->getMethod('prepareStartExtras');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($fixer));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
