@@ -549,4 +549,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFormFields4Edit method.
+     *
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function getFormFields4EditTest(object $product)
+    {
+        $result = $this->invokeArgs('getFormFields4Edit', array($product));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
