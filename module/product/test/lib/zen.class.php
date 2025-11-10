@@ -2106,4 +2106,41 @@ class productZenTest extends baseTest
 
         return 0;
     }
+
+    /**
+     * Test getStories method.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $branchID
+     * @param  int       $moduleID
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return mixed
+     */
+    public function getStoriesTest(int $projectID = 0, int $productID = 0, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', ?object $pager = null)
+    {
+        $this->instance->app->rawModule = $projectID > 0 ? 'projectstory' : 'product';
+
+        $result = $this->invokeArgs('getStories', array($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager));
+        if(dao::isError()) return dao::getError();
+
+        /* Return count and first story info for testing. */
+        if(is_array($result) && count($result) > 0)
+        {
+            $firstStory = reset($result);
+            return array(
+                'count' => count($result),
+                'firstId' => $firstStory->id,
+                'firstType' => $firstStory->type,
+                'firstStatus' => $firstStory->status
+            );
+        }
+
+        return array('count' => 0);
+    }
 }
