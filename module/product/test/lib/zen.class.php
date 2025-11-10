@@ -2337,4 +2337,48 @@ class productZenTest extends baseTest
 
         return $sendData;
     }
+
+    /**
+     * Test saveAndModifyCookie4Browse method.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $param
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  string    $preProductID
+     * @param  string    $preBranch
+     * @param  string    $storyModule
+     * @param  string    $tab
+     * @access public
+     * @return array
+     */
+    public function saveAndModifyCookie4BrowseTest(int $productID = 0, string $branch = '', int $param = 0, string $browseType = '', string $orderBy = 'id_desc', string $preProductID = '', string $preBranch = '', string $storyModule = '', string $tab = 'product')
+    {
+        /* Set up cookie values. */
+        if($preProductID !== '') $_COOKIE['preProductID'] = $preProductID;
+        if($preBranch !== '') $_COOKIE['preBranch'] = $preBranch;
+        if($storyModule !== '') $_COOKIE['storyModule'] = $storyModule;
+
+        /* Set app tab. */
+        $this->instance->app->tab = $tab;
+
+        /* Call the method. */
+        $this->invokeArgs('saveAndModifyCookie4Browse', array($productID, $branch, $param, $browseType, $orderBy));
+
+        /* Get the cookie values after method execution. */
+        $result = array(
+            'storyModule' => isset($_COOKIE['storyModule']) ? $_COOKIE['storyModule'] : '',
+            'storyModuleParam' => isset($_COOKIE['storyModuleParam']) ? $_COOKIE['storyModuleParam'] : '',
+            'storyBranch' => isset($_COOKIE['storyBranch']) ? $_COOKIE['storyBranch'] : '',
+            'treeBranch' => isset($_COOKIE['treeBranch']) ? $_COOKIE['treeBranch'] : '',
+            'productStoryOrder' => isset($_COOKIE['productStoryOrder']) ? $_COOKIE['productStoryOrder'] : '',
+            'preProductID' => isset($_COOKIE['preProductID']) ? $_COOKIE['preProductID'] : '',
+            'preBranch' => isset($_COOKIE['preBranch']) ? $_COOKIE['preBranch'] : ''
+        );
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
