@@ -2589,4 +2589,49 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setMenu4All method.
+     *
+     * @param  string $viewType
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function setMenu4AllTest(string $viewType = '', array $products = array())
+    {
+        global $tester;
+
+        /* Set view type. */
+        if($viewType !== '')
+        {
+            $reflectionClass = new ReflectionClass($this->instance->app);
+            if($reflectionClass->hasProperty('viewType'))
+            {
+                $property = $reflectionClass->getProperty('viewType');
+                $property->setAccessible(true);
+                $property->setValue($this->instance->app, $viewType);
+            }
+        }
+
+        /* Set products. */
+        if(!empty($products)) $this->instance->products = $products;
+
+        $executionSuccess = 0;
+        ob_start();
+        try {
+            $this->invokeArgs('setMenu4All', array());
+            $executionSuccess = 1;
+        } catch (Throwable $e) {}
+        ob_end_clean();
+
+        $result = array(
+            'viewType' => $viewType,
+            'executionSuccess' => $executionSuccess,
+            'productsCount' => count($products)
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
