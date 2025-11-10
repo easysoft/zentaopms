@@ -1852,4 +1852,17 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getEmptyHour method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getEmptyHourTest()
+    {
+        $result = $this->invokeArgs('getEmptyHour', array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
