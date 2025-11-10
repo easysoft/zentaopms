@@ -103,4 +103,31 @@ class jobZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test reponseAfterCreateEdit method.
+     *
+     * @param  int    $repoID
+     * @param  array  $errors
+     * @param  string $engine
+     * @param  int    $repo
+     * @access public
+     * @return array
+     */
+    public function reponseAfterCreateEditTest($repoID = 0, $errors = array(), $engine = '', $repo = 0)
+    {
+        global $tester;
+
+        if(!empty($errors)) dao::$errors = $errors;
+        if($engine) $_POST['engine'] = $engine;
+        if($repo) $_POST['repo'] = $repo;
+
+        $result = $this->invokeArgs('reponseAfterCreateEdit', [$repoID]);
+
+        dao::$errors = array();
+        unset($_POST['engine']);
+        unset($_POST['repo']);
+
+        return $result;
+    }
 }
