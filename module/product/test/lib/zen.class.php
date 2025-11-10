@@ -2035,4 +2035,21 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getProductPlans method.
+     *
+     * @param  array  $projectProducts
+     * @param  int    $projectID
+     * @param  string $storyType
+     * @param  bool   $isProjectStory
+     * @access public
+     * @return array
+     */
+    public function getProductPlansTest(array $projectProducts = array(), int $projectID = 0, string $storyType = 'story', bool $isProjectStory = false)
+    {
+        $result = $this->invokeArgs('getProductPlans', array($projectProducts, $projectID, $storyType, $isProjectStory));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
