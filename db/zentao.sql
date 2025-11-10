@@ -2393,7 +2393,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `commiter` varchar(100) NOT NULL DEFAULT '',
   `avatar` text NULL,
   `birthday` date NULL,
-  `gender` enum('f','m') NOT NULL DEFAULT 'f',
+  `gender` char(1) NOT NULL DEFAULT 'f',
   `email` char(90) NOT NULL DEFAULT '',
   `skype` char(90) NOT NULL DEFAULT '',
   `qq` char(20) NOT NULL DEFAULT '',
