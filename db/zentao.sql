@@ -39,8 +39,10 @@ CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_actionproduct`;
 CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `action` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 CREATE INDEX `product` ON `zt_actionproduct`(`product`);
@@ -432,6 +434,7 @@ CREATE INDEX `idx_system` ON `zt_build`(`system`);
 
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `execution` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `task` int unsigned NOT NULL DEFAULT 0,
@@ -439,7 +442,8 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `estimate` float NOT NULL DEFAULT '0',
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
-  `storyPoint` float NOT NULL DEFAULT '0'
+  `storyPoint` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `execution_task` ON `zt_burn` (`execution`,`date`,`task`);
 
@@ -791,11 +795,13 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
 
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `design` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
-  `files` varchar(255) NOT NULL DEFAULT ''
+  `files` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `design` ON `zt_designspec`(`design`,`version`);
 
@@ -1054,9 +1060,11 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
 
 -- DROP TABLE IF EXISTS `zt_grouppriv`;
 CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT 0,
   `module` varchar(30) NOT NULL DEFAULT '',
-  `method` varchar(30) NOT NULL DEFAULT ''
+  `method` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `group` ON `zt_grouppriv`(`group`,`module`,`method`);
 
@@ -1396,10 +1404,12 @@ CREATE INDEX `status`     ON `zt_notify`(`status`);
 
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
-  `providerID` int unsigned NOT NULL DEFAULT 0
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `account`      ON `zt_oauth` (`account`);
 CREATE INDEX `providerType` ON `zt_oauth` (`providerType`);
@@ -1427,9 +1437,11 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
 
 -- DROP TABLE IF EXISTS `zt_planstory`;
 CREATE TABLE IF NOT EXISTS `zt_planstory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `plan` int unsigned NOT NULL DEFAULT 0,
   `story` int unsigned NOT NULL DEFAULT 0,
-  `order` int unsigned NOT NULL DEFAULT 0
+  `order` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `plan_story` ON `zt_planstory`(`plan`,`story`);
 
@@ -1461,20 +1473,24 @@ CREATE TABLE IF NOT EXISTS `zt_privmanager` (
 
 -- DROP TABLE IF EXISTS `zt_privlang`;
 CREATE TABLE IF NOT EXISTS `zt_privlang` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `objectType` varchar(10) NOT NULL DEFAULT 'priv',
   `lang` varchar(30) NOT NULL DEFAULT '',
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` varchar(255) NOT NULL DEFAULT '',
-  `desc` text DEFAULT NULL
+  `desc` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `objectlang` ON `zt_privlang` (`objectID`,`objectType`,`lang`);
 
 -- DROP TABLE IF EXISTS `zt_privrelation`;
 CREATE TABLE IF NOT EXISTS `zt_privrelation` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `priv` varchar(100) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `relationPriv` varchar(100) NOT NULL DEFAULT ''
+  `relationPriv` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
 
@@ -1657,55 +1673,65 @@ CREATE INDEX `type_order` ON `zt_project` (`type`, `order`);
 
 -- DROP TABLE IF EXISTS `zt_projectadmin`;
 CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` smallint unsigned NOT NULL DEFAULT 0,
   `account` varchar(30) NOT NULL DEFAULT '',
   `programs` text DEFAULT NULL,
   `projects` text DEFAULT NULL,
   `products` text DEFAULT NULL,
-  `executions` text DEFAULT NULL
+  `executions` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `group_account` ON `zt_projectadmin`(`group`, `account`);
 
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
   `count` int unsigned NOT NULL DEFAULT 1,
   `version` smallint unsigned NOT NULL DEFAULT 1,
-  `order` smallint unsigned NOT NULL DEFAULT 0
+  `order` smallint unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectcase`(`project`,`case`);
 
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `branch` int unsigned NOT NULL DEFAULT 0,
   `plan` varchar(255) NOT NULL DEFAULT '',
-  `roadmap` varchar(255) NOT NULL DEFAULT ''
+  `roadmap` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `product`, `branch`);
 
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `milestone` tinyint unsigned NOT NULL DEFAULT 0,
   `begin` date DEFAULT NULL,
-  `end` date DEFAULT NULL
+  `end` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectspec`(`project`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_projectstory`;
 CREATE TABLE IF NOT EXISTS `zt_projectstory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `branch` int unsigned NOT NULL DEFAULT 0,
   `story` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
-  `order` smallint unsigned NOT NULL DEFAULT 0
+  `order` smallint unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 CREATE INDEX `story` ON `zt_projectstory` (`story`);
@@ -1822,9 +1848,11 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
 
 -- DROP TABLE IF EXISTS `zt_repobranch`;
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
   `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(100) NOT NULL DEFAULT ''
+  `branch` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
@@ -1880,8 +1908,10 @@ CREATE INDEX `method`  ON `zt_score` (`method`);
 
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `key` smallint unsigned NOT NULL DEFAULT 0,
-  `value` char(3) NOT NULL DEFAULT ''
+  `value` char(3) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 
@@ -2027,35 +2057,42 @@ CREATE INDEX `feedback` ON `zt_story` (`feedback`);
 
 -- DROP TABLE IF EXISTS `zt_storygrade`;
 CREATE TABLE IF NOT EXISTS `zt_storygrade` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL,
   `grade` smallint unsigned NOT NULL DEFAULT 0,
   `name` varchar(30) NOT NULL,
-  `status` varchar(30) NOT NULL
+  `status` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
-  `reviewDate` datetime DEFAULT NULL
+  `reviewDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyreview`(`story`,`version`,`reviewer`);
 
 -- DROP TABLE IF EXISTS `zt_storyestimate`;
 CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT 0,
   `round` smallint unsigned NOT NULL DEFAULT 0,
   `estimate` text DEFAULT NULL,
   `average` float NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
-  `openedDate` datetime DEFAULT NULL
+  `openedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyestimate`(`story`,`round`);
 
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -2063,26 +2100,31 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `verify` mediumtext DEFAULT NULL,
   `files` text DEFAULT NULL,
   `docs` text DEFAULT NULL,
-  `docVersions` text DEFAULT NULL
+  `docVersions` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_storystage`;
 CREATE TABLE IF NOT EXISTS `zt_storystage` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `story` int unsigned NOT NULL DEFAULT 0,
   `branch` int unsigned NOT NULL DEFAULT 0,
   `stage` varchar(50) NOT NULL DEFAULT '',
-  `stagedBy` varchar(30) NOT NULL DEFAULT ''
+  `stagedBy` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story_branch` ON `zt_storystage`(`story`,`branch`);
 CREATE INDEX `story` ON `zt_storystage` (`story`);
 
 -- DROP TABLE IF EXISTS `zt_suitecase`;
 CREATE TABLE IF NOT EXISTS `zt_suitecase` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `suite` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
-  `version` smallint unsigned NOT NULL DEFAULT 1
+  `version` smallint unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `suitecase` ON `zt_suitecase`(`suite`,`case`);
 
@@ -2174,11 +2216,13 @@ CREATE INDEX `task` ON `zt_taskestimate` (`task`);
 
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `name` varchar(255) NOT NULL DEFAULT '',
   `estStarted` date DEFAULT NULL,
-  `deadline` date DEFAULT NULL
+  `deadline` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `task` ON `zt_taskspec`(`task`,`version`);
 
@@ -2445,9 +2489,11 @@ CREATE INDEX `account` ON `zt_usercontact` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_usergroup`;
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
   `group` int unsigned NOT NULL DEFAULT 0,
-  `project` text DEFAULT NULL
+  `project` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_usergroup`(`account`,`group`);
 
@@ -2811,8 +2857,10 @@ CREATE INDEX `ticketId` ON `zt_ticketrelation` (`ticketId`);
 
 -- DROP TABLE IF EXISTS `zt_feedbackview`;
 CREATE TABLE IF NOT EXISTS `zt_feedbackview` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL DEFAULT '',
-  `product` int unsigned NOT NULL DEFAULT 0
+  `product` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account_product` ON `zt_feedbackview`(`account`,`product`);
 
@@ -3103,9 +3151,11 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
 
 -- DROP TABLE IF EXISTS `zt_deployproduct`;
 CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `deploy` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
-  `release` int unsigned NOT NULL DEFAULT 0
+  `release` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`product`,`release`);
 
@@ -3182,10 +3232,12 @@ CREATE INDEX `path` ON `zt_traincategory` (`path`);
 
 -- DROP TABLE IF EXISTS `zt_trainrecords`;
 CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user` varchar(30) NOT NULL DEFAULT '',
   `objectId` int unsigned NOT NULL DEFAULT 0,
   `objectType` varchar(10) NOT NULL DEFAULT '',
-  `status` varchar(10) NOT NULL DEFAULT ''
+  `status` varchar(10) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_trainrecords` (`user`, `objectId`, `objectType`);
 
@@ -13559,12 +13611,14 @@ CREATE INDEX `module` ON `zt_workflowlabel` (`module`);
 
 -- DROP TABLE IF EXISTS `zt_workflowlinkdata`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `linkedType` varchar(30) NOT NULL DEFAULT '',
   `linkedID` int unsigned NOT NULL DEFAULT 0,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL
+  `createdDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlinkdata`(`objectType`, `objectID`, `linkedType`, `linkedID`);
 
@@ -14567,8 +14621,10 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
 
 -- DROP TABLE IF EXISTS `zt_riskissue`;
 CREATE TABLE IF NOT EXISTS `zt_riskissue` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `risk` int unsigned NOT NULL DEFAULT 0,
-  `issue` int unsigned NOT NULL DEFAULT 0
+  `issue` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `risk_issue` ON `zt_riskissue`(`risk`,`issue`);
 
@@ -15628,6 +15684,7 @@ CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
 -- DROP TABLE IF EXISTS `zt_pivotspec`;
 CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT 0,
   `version` varchar(10) NOT NULL,
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
@@ -15640,8 +15697,9 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `vars` text DEFAULT NULL,
   `objects` text DEFAULT NULL,
   `settings` text DEFAULT NULL,
-  `filters` text DEFAULT NULL,
-  `createdDate` datetime DEFAULT NULL
+  `filters` text DEFAULT NULL
+  `createdDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
@@ -15657,6 +15715,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT 0,
   `version`   varchar(10) NOT NULL DEFAULT '1',
   `field`     varchar(255) NOT NULL,
@@ -15665,7 +15724,8 @@ CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
   `condition` mediumtext DEFAULT NULL,
   `status`    varchar(10) NOT NULL DEFAULT 'published',
   `account`   varchar(30) NOT NULL DEFAULT '',
-  `type`      varchar(10) NOT NULL DEFAULT 'manual'
+  `type`      varchar(10) NOT NULL DEFAULT 'manual',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;
@@ -15878,22 +15938,26 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
 
 -- DROP TABLE IF EXISTS `zt_demandspec`;
 CREATE TABLE IF NOT EXISTS `zt_demandspec` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `demand` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext DEFAULT NULL,
   `verify` mediumtext DEFAULT NULL,
-  `files` text DEFAULT NULL
+  `files` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_demandreview`;
 CREATE TABLE IF NOT EXISTS `zt_demandreview` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `demand` int unsigned NOT NULL DEFAULT 0,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
-  `reviewDate` datetime DEFAULT NULL
+  `reviewDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
@@ -15948,11 +16012,13 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
 
 -- DROP TABLE IF EXISTS `zt_charterproduct`;
 CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `charter` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `branch` int unsigned NOT NULL DEFAULT 0,
   `plan` varchar(255) NOT NULL DEFAULT '',
-  `roadmap` varchar(255) NOT NULL DEFAULT ''
+  `roadmap` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);
 
@@ -15980,9 +16046,11 @@ CREATE TABLE IF NOT EXISTS `zt_roadmap` (
 
 -- DROP TABLE IF EXISTS `zt_roadmapstory`;
 CREATE TABLE IF NOT EXISTS `zt_roadmapstory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `roadmap` int unsigned NOT NULL DEFAULT 0,
   `story` int unsigned NOT NULL DEFAULT 0,
-  `order` int unsigned NOT NULL DEFAULT 0
+  `order` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
@@ -16407,9 +16475,11 @@ CREATE INDEX `metricCode_user_date` ON `zt_metriclib` (`metricCode`, `user`, `da
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `object` varchar(255) NOT NULL DEFAULT '',
   `updatedTime` datetime DEFAULT NULL,
-  `syncTime` datetime DEFAULT NULL
+  `syncTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 
