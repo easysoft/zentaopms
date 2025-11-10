@@ -285,4 +285,54 @@ class gitlabZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test recordWebhookLogs method.
+     *
+     * @param  string $input
+     * @param  object $result
+     * @access public
+     * @return string|bool
+     */
+    public function recordWebhookLogsTest(string $input, object $result)
+    {
+        global $app;
+
+        /* 加载 control 和 zen 类 */
+        if(!class_exists('gitlab')) require_once $app->getModulePath('', 'gitlab') . 'control.php';
+        if(!class_exists('gitlabZen')) require_once $app->getModulePath('', 'gitlab') . 'zen.php';
+
+        /* 使用反射创建 gitlabZen 实例并初始化 */
+        $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        /* 通过反射调用 recordWebhookLogs 方法 */
+        $method = $reflection->getMethod('recordWebhookLogs');
+        $method->setAccessible(true);
+
+        /* 获取日志文件路径 */
+        $logFile = $app->getLogRoot() . 'webhook.' . date('Ymd') . '.log.php';
+
+        /* 删除已存在的日志文件,确保测试环境干净 */
+        if(file_exists($logFile)) unlink($logFile);
+
+        /* 调用 zen 方法 */
+        $method->invoke($zenInstance, $input, $result);
+
+        /* 验证日志文件是否创建 */
+        if(!file_exists($logFile)) return 'file_not_created';
+
+        /* 读取日志文件内容 */
+        $logContent = file_get_contents($logFile);
+
+        /* 清理测试日志文件 */
+        unlink($logFile);
+
+        /* 返回日志内容用于验证 */
+        return $logContent;
+    }
 }
