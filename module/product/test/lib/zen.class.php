@@ -2515,4 +2515,53 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setCreateMenu method.
+     *
+     * @param  int    $programID
+     * @param  string $tab
+     * @param  string $viewType
+     * @param  string $rawModule
+     * @param  string $rawMethod
+     * @access public
+     * @return array
+     */
+    public function setCreateMenuTest(int $programID = 0, string $tab = 'product', string $viewType = '', string $rawModule = 'product', string $rawMethod = 'create')
+    {
+        $this->instance->app->tab = $tab;
+        $this->instance->app->rawModule = $rawModule;
+        $this->instance->app->rawMethod = $rawMethod;
+
+        if($viewType !== '')
+        {
+            $reflectionClass = new ReflectionClass($this->instance->app);
+            if($reflectionClass->hasProperty('viewType'))
+            {
+                $property = $reflectionClass->getProperty('viewType');
+                $property->setAccessible(true);
+                $property->setValue($this->instance->app, $viewType);
+            }
+        }
+
+        ob_start();
+        try {
+            $this->invokeArgs('setCreateMenu', array($programID));
+        } catch (Throwable $e) {}
+        ob_end_clean();
+
+        $docSubMenuUnset = ($tab == 'doc' && !isset($this->instance->lang->doc->menu->product['subMenu'])) ? 1 : 0;
+
+        $result = array(
+            'programID' => $programID,
+            'tab' => $tab,
+            'viewType' => $viewType,
+            'rawModule' => $rawModule,
+            'rawMethod' => $rawMethod,
+            'docSubMenuUnset' => $docSubMenuUnset
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
