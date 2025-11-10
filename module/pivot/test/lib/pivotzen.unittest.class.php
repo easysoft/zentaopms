@@ -92,4 +92,22 @@ class pivotZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getDrill method.
+     *
+     * @param  int    $pivotID
+     * @param  string $version
+     * @param  string $colName
+     * @param  string $status
+     * @access public
+     * @return mixed
+     */
+    public function getDrillTest(int $pivotID = 0, string $version = '1', string $colName = '', string $status = 'published')
+    {
+        $result = $this->invokeArgs('getDrill', [$pivotID, $version, $colName, $status]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
