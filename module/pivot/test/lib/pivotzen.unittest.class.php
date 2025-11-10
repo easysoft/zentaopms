@@ -240,4 +240,33 @@ class pivotZenTest extends baseTest
             'configs'     => array(),
         );
     }
+
+    /**
+     * Test workload method.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  int    $days
+     * @param  float  $workhour
+     * @param  int    $dept
+     * @param  string $assign
+     * @access public
+     * @return mixed
+     */
+    public function workloadTest(string $begin = '', string $end = '', int $days = 0, float $workhour = 0, int $dept = 0, string $assign = 'assign')
+    {
+        $this->invokeArgs('workload', [$begin, $end, $days, $workhour, $dept, $assign]);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'workload'   => $this->instance->view->workload ?? array(),
+            'begin'      => $this->instance->view->begin ?? '',
+            'end'        => $this->instance->view->end ?? '',
+            'days'       => $this->instance->view->days ?? 0,
+            'workhour'   => $this->instance->view->workhour ?? 0,
+            'dept'       => $this->instance->view->dept ?? 0,
+            'assign'     => $this->instance->view->assign ?? '',
+            'title'      => $this->instance->view->title ?? ''
+        );
+    }
 }
