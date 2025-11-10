@@ -1731,4 +1731,20 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBranchAndTagOption method.
+     *
+     * @param  int         $projectID
+     * @param  object|null $product
+     * @param  bool        $isProjectStory
+     * @access public
+     * @return array
+     */
+    public function getBranchAndTagOptionTest(int $projectID = 0, object|null $product = null, bool $isProjectStory = false)
+    {
+        $result = $this->invokeArgs('getBranchAndTagOption', array($projectID, $product, $isProjectStory));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
