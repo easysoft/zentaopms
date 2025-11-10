@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
-class pivotZenTest
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class pivotZenTest extends baseTest
 {
-    public function __construct()
-    {
-        $this->objectZen = initReference('pivot');
-    }
+    protected $moduleName = 'pivot';
+    protected $className  = 'zen';
 
     /**
      * Test processProductsForProductSummary method.
@@ -16,12 +17,23 @@ class pivotZenTest
      */
     public function processProductsForProductSummaryTest($products = null)
     {
-        $method = $this->objectZen->getMethod('processProductsForProductSummary');
-        $method->setAccessible(true);
-        $instance = $this->objectZen->newInstance();
-        $result = $method->invoke($instance, $products);
+        $result = $this->invokeArgs('processProductsForProductSummary', [$products]);
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test bugAssign method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function bugAssignTest()
+    {
+        $this->invokeArgs('bugAssign');
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->view->bugs ?? array();
     }
 }
