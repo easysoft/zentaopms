@@ -2241,4 +2241,22 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processProjectListData method.
+     *
+     * @param  array $projectList
+     * @access public
+     * @return array
+     */
+    public function processProjectListDataTest(array $projectList = array())
+    {
+        /* Start output buffering to capture any warnings or errors. */
+        ob_start();
+        $result = $this->invokeArgs('processProjectListData', array($projectList));
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
