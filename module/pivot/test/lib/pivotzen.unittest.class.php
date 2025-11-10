@@ -127,4 +127,19 @@ class pivotZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getMenuItems method.
+     *
+     * @param  array $menus
+     * @access public
+     * @return mixed
+     */
+    public function getMenuItemsTest(array $menus = array())
+    {
+        $result = $this->invokeArgs('getMenuItems', [$menus]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
