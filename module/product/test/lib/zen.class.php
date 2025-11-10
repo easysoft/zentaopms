@@ -1699,4 +1699,22 @@ class productZenTest extends baseTest
         /* Return count of actions. */
         return count($result[0]);
     }
+
+    /**
+     * Test getActiveStoryTypeForTrack method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getActiveStoryTypeForTrackTest(int $projectID = 0, int $productID = 0)
+    {
+        $this->instance->app->rawModule = $projectID > 0 ? 'projectstory' : 'product';
+
+        $result = $this->invokeArgs('getActiveStoryTypeForTrack', array($projectID, $productID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
