@@ -108,9 +108,11 @@ foreach($reviewList as $review)
         if(isset($flows[$review->type]) && $rawMethod != 'audit') $statusList = $lang->approval->statusList;
     }
 
-    if($type == 'mr')
+    if(in_array($type, array('mr', 'pullreq')))
     {
         $this->app->loadLang('mr');
+
+        if(empty($review->status)) $review->status = 'notReviewed';
         $statusList = $lang->mr->approvalStatusList;
     }
 
