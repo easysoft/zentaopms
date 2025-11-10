@@ -2087,4 +2087,23 @@ class productZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getProjectProductList method.
+     *
+     * @param  int  $projectID
+     * @param  bool $isProjectStory
+     * @access public
+     * @return array|int
+     */
+    public function getProjectProductListTest(int $projectID = 0, bool $isProjectStory = false)
+    {
+        $result = $this->invokeArgs('getProjectProductList', array($projectID, $isProjectStory));
+        if(dao::isError()) return dao::getError();
+
+        /* Return count for easy assertion. */
+        if(is_array($result)) return count($result);
+
+        return 0;
+    }
 }
