@@ -1556,4 +1556,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildProductForCreate method.
+     *
+     * @param  int    $workflowGroup
+     * @access public
+     * @return object
+     */
+    public function buildProductForCreateTest(int $workflowGroup = 0)
+    {
+        $result = $this->invokeArgs('buildProductForCreate', array($workflowGroup));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
