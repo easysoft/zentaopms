@@ -216,4 +216,38 @@ class productplanZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test setSessionForViewPage method.
+     *
+     * @param  int    $planID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pageID
+     * @param  int    $recPerPage
+     * @access public
+     * @return object
+     */
+    public function setSessionForViewPageTest(int $planID, string $type, string $orderBy, int $pageID, int $recPerPage)
+    {
+        global $tester, $config;
+
+        // 清除之前的 session 设置,确保每次测试从干净状态开始
+        $_SESSION = array();
+
+        // 调用被测方法
+        $this->invokeArgs('setSessionForViewPage', [$planID, $type, $orderBy, $pageID, $recPerPage]);
+        if(dao::isError()) return dao::getError();
+
+        // 获取调用后的 session 值
+        $afterStoryList = $tester->session->storyList;
+        $afterBugList   = $tester->session->bugList;
+
+        // 判断 session 是否被设置 (不是 false 表示已设置)
+        $result = new stdClass();
+        $result->storyList = $afterStoryList !== false ? 1 : 0;
+        $result->bugList   = $afterBugList !== false ? 1 : 0;
+
+        return $result;
+    }
 }
