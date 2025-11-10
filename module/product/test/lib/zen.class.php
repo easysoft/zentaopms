@@ -1922,4 +1922,19 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFormFields4Create method.
+     *
+     * @param  int    $programID
+     * @param  string $extra
+     * @access public
+     * @return array
+     */
+    public function getFormFields4CreateTest(int $programID = 0, string $extra = '')
+    {
+        $result = $this->invokeArgs('getFormFields4Create', array($programID, $extra));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
