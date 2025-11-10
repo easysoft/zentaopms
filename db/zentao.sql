@@ -512,7 +512,7 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `type` varchar(10) NOT NULL DEFAULT 'step',
   `desc` text DEFAULT NULL,
   `expect` text DEFAULT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `case`    ON `zt_casestep`(`case`);
 CREATE INDEX `version` ON `zt_casestep`(`version`);
@@ -525,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `zt_casespec` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `precondition` text DEFAULT NULL,
   `files` text DEFAULT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
@@ -537,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `count` smallint unsigned NOT NULL DEFAULT 0,
   `date` date DEFAULT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `execution_type_name_date` ON `zt_cfd`(`execution`,`type`,`name`,`date`);
 
@@ -641,7 +641,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `guest` tinyint unsigned NOT NULL DEFAULT 0,
   `admins` varchar(255) DEFAULT NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_compile`;
@@ -674,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `section` varchar(30) NOT NULL DEFAULT '',
   `key` varchar(30) NOT NULL DEFAULT '',
   `value` longtext DEFAULT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_config`(`vision`,`owner`,`module`,`section`,`key`);
 CREATE INDEX `vision` ON `zt_config`(`vision`);
@@ -918,7 +918,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   `archived` tinyint unsigned NOT NULL DEFAULT 0,
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_doclib`(`product`);
 CREATE INDEX `execution` ON `zt_doclib`(`execution`);
@@ -1010,7 +1010,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `dirs` mediumtext DEFAULT NULL,
   `files` mediumtext DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_extension`(`code`);
 CREATE INDEX `name` ON `zt_extension`(`name`);
@@ -1290,7 +1290,7 @@ CREATE TABLE IF NOT EXISTS `zt_lang` (
   `value` text DEFAULT NULL,
   `system` tinyint unsigned NOT NULL DEFAULT 1,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `lang` ON `zt_lang`(`lang`,`module`,`section`,`key`,`vision`);
 
@@ -2321,7 +2321,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `lastRunDate` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `task` ON `zt_testrun`(`task`,`case`);
 
@@ -2507,7 +2507,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `sql` text DEFAULT NULL,
   `shortcut` tinyint unsigned NOT NULL DEFAULT 0,
   `common` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_userquery` (`account`);
 CREATE INDEX `module`  ON `zt_userquery` (`module`);
@@ -2520,7 +2520,7 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
   `title` varchar(150) NOT NULL DEFAULT '',
   `content` text DEFAULT NULL,
   `public` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_usertpl` (`account`);
 
@@ -2532,7 +2532,7 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `products` mediumtext DEFAULT NULL,
   `projects` mediumtext DEFAULT NULL,
   `sprints` mediumtext DEFAULT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_userview`(`account`);
 
@@ -3257,13 +3257,13 @@ CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_faq`;
 CREATE TABLE IF NOT EXISTS `zt_faq` (
-`id` int unsigned NOT NULL AUTO_INCREMENT,
-`module` int unsigned NOT NULL DEFAULT 0,
-`product` int unsigned NOT NULL DEFAULT 0,
-`question` varchar(255) NOT NULL DEFAULT '',
-`answer` text DEFAULT NULL,
-`addedtime` datetime DEFAULT NULL,
-PRIMARY KEY (`id`)
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `module` int unsigned NOT NULL DEFAULT 0,
+  `product` int unsigned NOT NULL DEFAULT 0,
+  `question` varchar(255) NOT NULL DEFAULT '',
+  `answer` text DEFAULT NULL,
+  `addedtime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
@@ -13533,7 +13533,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `group` int unsigned NOT NULL DEFAULT 0,
   `module` varchar(30) NOT NULL DEFAULT '',
-  `field`  varchar(50) NOT NULL DEFAULT '',
+  `field` varchar(50) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT 'varchar',
   `length` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(50) NOT NULL DEFAULT '',
@@ -14485,19 +14485,19 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
 
 -- DROP TABLE IF EXISTS `zt_solutions`;
 CREATE TABLE IF NOT EXISTS `zt_solutions` (
- `id` int unsigned NOT NULL AUTO_INCREMENT,
- `project` int unsigned NOT NULL DEFAULT 0,
- `execution` int unsigned NOT NULL DEFAULT 0,
- `contents` text DEFAULT NULL,
- `support` text DEFAULT NULL,
- `measures` text DEFAULT NULL,
- `type` varchar(30) NOT NULL DEFAULT '',
- `addedBy` varchar(30) NOT NULL DEFAULT '',
- `addedDate` date DEFAULT NULL,
- `editedBy` varchar(30) NOT NULL DEFAULT '',
- `editedDate` date DEFAULT NULL,
- `deleted` tinyint unsigned NOT NULL DEFAULT 0,
- PRIMARY KEY (`id`)
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `project` int unsigned NOT NULL DEFAULT 0,
+  `execution` int unsigned NOT NULL DEFAULT 0,
+  `contents` text DEFAULT NULL,
+  `support` text DEFAULT NULL,
+  `measures` text DEFAULT NULL,
+  `type` varchar(30) NOT NULL DEFAULT '',
+  `addedBy` varchar(30) NOT NULL DEFAULT '',
+  `addedDate` date DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` date DEFAULT NULL,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
@@ -15650,7 +15650,7 @@ REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `typ
 ('1','0','*','*','*','moduleName=weekly&methodName=createCycleReport','定时生成报告','zentao',1,'normal');
 
 -- DROP TABLE IF EXISTS `zt_pivot`;
-CREATE TABLE IF NOT EXISTS `zt_pivot`  (
+CREATE TABLE IF NOT EXISTS `zt_pivot` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `dimension` int unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
@@ -15707,7 +15707,7 @@ CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(50)   NOT NULL,
+  `objectType` varchar(50) NOT NULL,
   `sql` text DEFAULT NULL,
   `setting` text DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -15717,14 +15717,14 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT 0,
-  `version`   varchar(10) NOT NULL DEFAULT '1',
-  `field`     varchar(255) NOT NULL,
-  `object`    varchar(40)  NOT NULL,
+  `version`  varchar(10) NOT NULL DEFAULT '1',
+  `field` varchar(255) NOT NULL,
+  `object` varchar(40) NOT NULL,
   `whereSql` mediumtext DEFAULT NULL,
   `condition` mediumtext DEFAULT NULL,
-  `status`    varchar(10) NOT NULL DEFAULT 'published',
-  `account`   varchar(30) NOT NULL DEFAULT '',
-  `type`      varchar(10) NOT NULL DEFAULT 'manual',
+  `status` varchar(10) NOT NULL DEFAULT 'published',
+  `account` varchar(30) NOT NULL DEFAULT '',
+  `type` varchar(10) NOT NULL DEFAULT 'manual',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -16392,7 +16392,7 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `participants` varchar(255) NOT NULL DEFAULT '',
   `source` varchar(30) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
-  `status` varchar(20)  NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime DEFAULT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
