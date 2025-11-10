@@ -478,4 +478,19 @@ class mrZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test saveMrData method.
+     *
+     * @param  object $repo
+     * @param  array  $rawMrList
+     * @access public
+     * @return bool|array
+     */
+    public function saveMrDataTest(object $repo, array $rawMrList): bool|array
+    {
+        $result = $this->invokeArgs('saveMrData', [$repo, $rawMrList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
