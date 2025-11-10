@@ -99,4 +99,35 @@ class productplanZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildLinkStorySearchForm method.
+     *
+     * @param  object $plan
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function buildLinkStorySearchFormTest(object $plan, int $queryID, string $orderBy)
+    {
+        global $config;
+        $this->invokeArgs('buildLinkStorySearchForm', [$plan, $queryID, $orderBy]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回配置结果用于断言
+        $result = new stdClass();
+        $result->actionURL = $config->product->search['actionURL'];
+        $result->queryID   = $config->product->search['queryID'];
+        $result->style     = $config->product->search['style'];
+        $result->hasProductField = isset($config->product->search['fields']['product']) ? 1 : 0;
+        $result->hasBranchField  = isset($config->product->search['fields']['branch']) ? 1 : 0;
+        $result->hasTitleField   = isset($config->product->search['fields']['title']) ? 1 : 0;
+        $result->hasPlanParam    = isset($config->product->search['params']['plan']) ? 1 : 0;
+        $result->hasModuleParam  = isset($config->product->search['params']['module']) ? 1 : 0;
+        $result->hasStatusParam  = isset($config->product->search['params']['status']) ? 1 : 0;
+        $result->hasGradeParam   = isset($config->product->search['params']['grade']) ? 1 : 0;
+
+        return $result;
+    }
 }
