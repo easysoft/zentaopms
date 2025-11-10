@@ -1,0 +1,28 @@
+---
+title: 产品数据定义
+desc: 用于测试 getBranchID 方法的产品数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: program
+  note: 所属项目集
+  range: 0
+- field: name
+  note: 产品名称
+  range: '产品1,产品2{3},产品3{6}'
+- field: code
+  note: 产品代号
+  range: 'PROD1,PROD2{3},PROD3{6}'
+- field: type
+  note: 产品类型
+  range: 'normal,branch{3},platform{6}'
+- field: status
+  note: 状态
+  range: normal
+- field: deleted
+  note: 是否删除
+  range: '0'
