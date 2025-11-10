@@ -2277,4 +2277,23 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterCreate method.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  string $viewType
+     * @access public
+     * @return array
+     */
+    public function responseAfterCreateTest(int $productID = 0, int $programID = 0, string $viewType = '')
+    {
+        /* Set view type if provided. */
+        if($viewType) $this->instance->viewType = $viewType;
+
+        $result = $this->invokeArgs('responseAfterCreate', array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
