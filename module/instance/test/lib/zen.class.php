@@ -47,4 +47,51 @@ class instanceZenTest extends baseTest
         }
         return 0;
     }
+
+    /**
+     * Test storeView method.
+     *
+     * @param  int $id
+     * @access public
+     * @return mixed
+     */
+    public function storeViewTest(int $id)
+    {
+        /* Set viewType to json to get json response. */
+        $originalViewType = $this->instance->viewType;
+        $this->instance->viewType = 'json';
+
+        try
+        {
+            $result = $this->invokeArgs('storeView', [$id]);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(EndResponseException $e)
+        {
+            $content = $e->getContent();
+            $result  = json_decode($content, true);
+            return $result;
+        }
+        catch(TypeError $e)
+        {
+            /* Handle type errors from external dependencies. */
+            return array('result' => 'fail', 'error' => 'TypeError', 'message' => $e->getMessage());
+        }
+        catch(Exception $e)
+        {
+            /* Handle other exceptions like missing dependencies. */
+            return array('result' => 'fail', 'error' => get_class($e), 'message' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            /* Handle all other errors. */
+            return array('result' => 'fail', 'error' => get_class($e), 'message' => $e->getMessage());
+        }
+        finally
+        {
+            /* Restore viewType. */
+            $this->instance->viewType = $originalViewType;
+        }
+    }
 }
