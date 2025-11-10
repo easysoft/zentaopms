@@ -1,0 +1,60 @@
+---
+title: Story data for getStories test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Story ID
+  range: 1-20
+- field: product
+  note: Product ID
+  range: 1{10},2{5},3{3},4{2}
+- field: title
+  note: Story title
+  format: 需求标题%s
+- field: type
+  note: Story type
+  range: '[story,requirement]{10}'
+- field: status
+  note: Story status
+  range: '[active,draft,closed]{7}'
+- field: stage
+  note: Story stage
+  range: wait
+- field: pri
+  note: Priority
+  range: 1-4
+- field: estimate
+  note: Estimate hours
+  range: 0-100
+- field: vision
+  note: Vision
+  range: rnd
+- field: parent
+  note: Parent story ID
+  range: 0
+- field: isParent
+  note: Is parent flag
+  range: 0
+- field: root
+  note: Root ID
+  range: 0
+- field: path
+  note: Path
+  range: '`,`'
+- field: grade
+  note: Grade
+  range: 0
+- field: openedBy
+  note: Opened by
+  range: admin
+- field: openedDate
+  note: Opened date
+  range: "`2024-01-01 00:00:00`"
+- field: assignedTo
+  note: Assigned to
+  range: admin,user1,user2
+- field: deleted
+  note: Deleted flag
+  range: 0

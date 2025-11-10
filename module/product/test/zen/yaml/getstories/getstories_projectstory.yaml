@@ -1,0 +1,21 @@
+---
+title: Project story relation data for getStories test
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: Project ID
+  range: 11{5},12{3},13{2}
+- field: product
+  note: Product ID
+  range: 1{5},2{3},3{2}
+- field: story
+  note: Story ID
+  range: 1-10
+- field: version
+  note: Story version
+  range: 1
+- field: order
+  note: Order
+  range: 1-10

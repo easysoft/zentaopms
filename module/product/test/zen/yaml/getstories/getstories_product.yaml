@@ -1,0 +1,30 @@
+---
+title: Product data for getStories test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Product ID
+  range: 1-5
+- field: name
+  note: Product name
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  note: Product code
+  range: product1,product2,product3,product4,product5
+- field: type
+  note: Product type
+  range: normal
+- field: status
+  note: Product status
+  range: normal
+- field: vision
+  note: Vision
+  range: rnd
+- field: program
+  note: Program ID
+  range: 0
+- field: deleted
+  note: Deleted flag
+  range: 0
