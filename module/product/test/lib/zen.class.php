@@ -435,4 +435,18 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getCustomFieldsForTrack method.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getCustomFieldsForTrackTest(string $storyType = 'epic')
+    {
+        $result = $this->invokeArgs('getCustomFieldsForTrack', array($storyType));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
