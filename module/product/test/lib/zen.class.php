@@ -2017,4 +2017,22 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getProductList4Kanban method.
+     *
+     * @param  array $productList
+     * @param  array $planList
+     * @param  array $projectList
+     * @param  array $releaseList
+     * @param  array $projectProduct
+     * @access public
+     * @return array
+     */
+    public function getProductList4KanbanTest(array $productList = array(), array $planList = array(), array $projectList = array(), array $releaseList = array(), array $projectProduct = array())
+    {
+        $result = $this->invokeArgs('getProductList4Kanban', array($productList, $planList, $projectList, $releaseList, $projectProduct));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
