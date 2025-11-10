@@ -243,4 +243,46 @@ class gitlabZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test issueToZentaoObject method.
+     *
+     * @param  object $issue
+     * @param  int    $gitlabID
+     * @param  object $changes
+     * @access public
+     * @return object|null|string
+     */
+    public function issueToZentaoObjectTest(object $issue, int $gitlabID, ?object $changes = null)
+    {
+        global $app;
+
+        /* 加载 control 和 zen 类 */
+        if(!class_exists('gitlab')) require_once $app->getModulePath('', 'gitlab') . 'control.php';
+        if(!class_exists('gitlabZen')) require_once $app->getModulePath('', 'gitlab') . 'zen.php';
+
+        /* 使用反射创建 gitlabZen 实例并初始化 */
+        $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        /* 通过反射调用 issueToZentaoObject 方法 */
+        $method = $reflection->getMethod('issueToZentaoObject');
+        $method->setAccessible(true);
+
+        try
+        {
+            $result = $method->invoke($zenInstance, $issue, $gitlabID, $changes);
+        }
+        catch(TypeError $e)
+        {
+            return 'invalid_object_type';
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
