@@ -2591,6 +2591,46 @@ class productZenTest extends baseTest
     }
 
     /**
+     * Test setProjectMenu method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $preBranch
+     * @access public
+     * @return array
+     */
+    public function setProjectMenuTest(int $productID = 0, string $branch = '', string $preBranch = '')
+    {
+        global $tester;
+
+        $executionSuccess = 0;
+        ob_start();
+        try {
+            $this->invokeArgs('setProjectMenu', array($productID, $branch, $preBranch));
+            $executionSuccess = 1;
+        } catch (Throwable $e) {}
+        ob_end_clean();
+
+        /* Get cookie value after execution. */
+        $cookiePreBranch = isset($_COOKIE['preBranch']) ? $_COOKIE['preBranch'] : '';
+
+        /* Calculate expected branch value. */
+        $expectedBranch = ($preBranch !== '' && $branch === '') ? $preBranch : $branch;
+
+        $result = array(
+            'productID' => $productID,
+            'inputBranch' => $branch,
+            'inputPreBranch' => $preBranch,
+            'cookiePreBranch' => $cookiePreBranch,
+            'branchMatch' => ($cookiePreBranch === $expectedBranch) ? 1 : 0,
+            'executionSuccess' => $executionSuccess
+        );
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test setMenu4All method.
      *
      * @param  string $viewType
