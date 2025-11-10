@@ -1,0 +1,28 @@
+title: productplan data for assignKanbanData test
+author: claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-30
+  - field: product
+    range: '1{10},2{5},6{8},7{7}'
+  - field: branch
+    range: '0{15},1{8},2{7}'
+  - field: parent
+    range: '0'
+  - field: title
+    range: 1-30
+    prefix: '计划'
+  - field: status
+    range: 'wait{10},doing{10},done{10}'
+  - field: begin
+    range: '`(-30d)-(-1d)`'
+    format: 'YYYY-MM-DD'
+  - field: end
+    range: '`(+1d)-(+60d)`'
+    format: 'YYYY-MM-DD'
+  - field: createdBy
+    range: 'admin'
+  - field: deleted
+    range: '0'

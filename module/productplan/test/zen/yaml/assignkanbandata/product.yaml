@@ -1,0 +1,28 @@
+title: product data for assignKanbanData test
+author: claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 1-10
+    prefix: '产品'
+  - field: program
+    range: 0
+  - field: line
+    range: 0
+  - field: status
+    range: 'normal'
+  - field: PO
+    range: 'admin'
+  - field: type
+    range: 'normal{5},branch{3},platform{2}'
+  - field: shadow
+    range: 0
+  - field: acl
+    range: 'open'
+  - field: createdBy
+    range: 'admin'
+  - field: deleted
+    range: '0'
