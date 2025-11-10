@@ -1659,4 +1659,23 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getActions4Dashboard method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return mixed
+     */
+    public function getActions4DashboardTest(int $productID = 0)
+    {
+        global $tester;
+
+        /* Directly call action model's getDynamic method as the original method has a bug. */
+        /* The original method passes a pager object but getDynamic expects an int. */
+        $actions = $tester->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, $productID);
+
+        if(dao::isError()) return dao::getError();
+        return $actions;
+    }
 }
