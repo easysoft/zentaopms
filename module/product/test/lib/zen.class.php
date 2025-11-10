@@ -1865,4 +1865,22 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getExportData method.
+     *
+     * @param  int       $programID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @param  int       $param
+     * @param  object    $pager
+     * @access public
+     * @return mixed
+     */
+    public function getExportDataTest(int $programID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, ?object $pager = null)
+    {
+        $result = $this->invokeArgs('getExportData', array($programID, $browseType, $orderBy, $param, $pager));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
