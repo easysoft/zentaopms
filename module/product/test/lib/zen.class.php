@@ -1625,4 +1625,38 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildSearchFormForTrack method.
+     *
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  int         $projectID
+     * @param  string      $browseType
+     * @param  int         $param
+     * @param  string      $storyType
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormForTrackTest(int $productID = 0, string $branch = '', int $projectID = 0, string $browseType = 'all', int $param = 0, string $storyType = 'story')
+    {
+        global $tester;
+        if($productID > 0)
+        {
+            $product = $tester->loadModel('product')->getByID($productID);
+            if($product) $this->instance->products = array($productID => $product->name);
+        }
+        $this->instance->app->rawModule = $projectID > 0 ? 'projectstory' : 'product';
+        $this->instance->app->rawMethod = 'track';
+        $this->instance->app->tab = 'product';
+        try {
+            $this->invokeArgs('buildSearchFormForTrack', array(&$productID, $branch, $projectID, $browseType, $param, $storyType));
+        } catch (Throwable $e) {}
+        $result = new stdclass();
+        $result->productID = $productID;
+        $result->searchModule = isset($this->instance->config->product->search['module']) ? $this->instance->config->product->search['module'] : '';
+        $result->hasRoadmapField = isset($this->instance->config->product->search['fields']['roadmap']) ? 1 : 0;
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
