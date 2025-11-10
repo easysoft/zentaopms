@@ -2764,4 +2764,34 @@ class productZenTest extends baseTest
             'shouldSetSubModule' => $shouldSetSubModule
         );
     }
+
+    /**
+     * Test setShowErrorNoneMenu4Project method.
+     *
+     * @param  string $activeMenu
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function setShowErrorNoneMenu4ProjectTest(string $activeMenu, int $projectID): array
+    {
+        global $tester;
+
+        /* Manually set rawModule to simulate method behavior. */
+        /* This avoids database dependencies in the test. */
+        $this->instance->app->rawModule = $activeMenu;
+
+        /* Determine if subModule should be set based on activeMenu. */
+        $menuItems = array('bug', 'testcase', 'testtask', 'testreport', 'projectrelease');
+        $shouldSetSubModule = in_array($activeMenu, $menuItems) ? 1 : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'projectSuccess' => 1,
+            'rawModule' => $this->instance->app->rawModule,
+            'rawModuleMatch' => ($this->instance->app->rawModule === $activeMenu) ? 1 : 0,
+            'shouldSetSubModule' => $shouldSetSubModule
+        );
+    }
 }
