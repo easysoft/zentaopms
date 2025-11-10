@@ -151,4 +151,18 @@ class productplanZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildViewActions method.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function buildViewActionsTest(object $plan)
+    {
+        $result = $this->invokeArgs('buildViewActions', [$plan]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
