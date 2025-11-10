@@ -54,6 +54,7 @@ $bugCols['resolvedBuild']['map'] = $builds;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
 $bugCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&type=bug&linkID={id}&confirm=yes");
+$bugCols['actions']['list']['unlink']['hint']         = $lang->productplan->unlinkBug;
 
 $bugCols['id']['checkbox']       = false;
 $bugCols['title']['data-toggle'] = 'modal';
@@ -67,6 +68,7 @@ $taskCols['assignedTo']['currentUser'] = $app->user->account;
 $taskCols['actions'] = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
 $taskCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&type=task&linkID={id}&confirm=yes");
+$taskCols['actions']['list']['unlink']['hint']         = $lang->mr->unlinkTask;
 
 $tasks = initTableData($tasks, $taskCols);
 
