@@ -1896,4 +1896,17 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFormFields4Activate method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFormFields4ActivateTest()
+    {
+        $result = $this->invokeArgs('getFormFields4Activate', array());
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
