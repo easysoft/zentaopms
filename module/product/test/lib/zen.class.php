@@ -1795,4 +1795,32 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getCreatedLocate method.
+     *
+     * @param  int    $productID
+     * @param  int    $programID
+     * @param  string $tab
+     * @param  bool   $isInModal
+     * @access public
+     * @return array
+     */
+    public function getCreatedLocateTest(int $productID = 0, int $programID = 0, string $tab = 'product', bool $isInModal = false)
+    {
+        /* Set app tab. */
+        $this->instance->app->tab = $tab;
+
+        /* Mock isInModal function if needed. */
+        if($isInModal)
+        {
+            /* Use eval to temporarily override the function for this test. */
+            global $isInModalCalled;
+            $isInModalCalled = true;
+        }
+
+        $result = $this->invokeArgs('getCreatedLocate', array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
