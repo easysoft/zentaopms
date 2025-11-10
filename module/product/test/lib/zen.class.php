@@ -2296,4 +2296,19 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test responseAfterEdit method.
+     *
+     * @param  int $productID
+     * @param  int $programID
+     * @access public
+     * @return array
+     */
+    public function responseAfterEditTest(int $productID = 0, int $programID = 0)
+    {
+        $result = $this->invokeArgs('responseAfterEdit', array($productID, $programID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
