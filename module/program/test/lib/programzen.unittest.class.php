@@ -61,4 +61,22 @@ class programTest
 
         return $result;
     }
+
+    /**
+     * Test buildTree method.
+     *
+     * @param  array $programs
+     * @param  int   $parentID
+     * @access public
+     * @return array
+     */
+    public function buildTreeTest(array $programs, int $parentID = 0)
+    {
+        $method = $this->objectZen->getMethod('buildTree');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($programs, $parentID));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
