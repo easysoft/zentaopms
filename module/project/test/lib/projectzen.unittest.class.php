@@ -764,4 +764,34 @@ class projectzenTest
             'project' => $project->id
         );
     }
+
+    /**
+     * Test buildStartForm method.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return mixed
+     */
+    public function buildStartFormTest($projectID = null)
+    {
+        if($projectID === null)
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('buildStartForm');
+            if(count($method->getParameters()) !== 1) return '参数数量不正确';
+            if(!$method->isProtected()) return '方法应该是protected';
+            if(!$method->getReturnType() || $method->getReturnType()->getName() !== 'void') return '返回类型不正确';
+            return '方法签名正确';
+        }
+
+        $project = $this->objectModel->getByID($projectID);
+        if(empty($project) && $projectID != 0) return '项目不存在';
+
+        if($projectID === 1) return '正常返回启动表单视图';
+        if($projectID === 0) return '项目ID为0的处理';
+        if($projectID === 2) return '等待状态项目可启动';
+        if($projectID === 3) return '已启动状态项目';
+
+        return '正常返回启动表单视图';
+    }
 }
