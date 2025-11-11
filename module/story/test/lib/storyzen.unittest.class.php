@@ -1023,4 +1023,21 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test convertChildID method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function convertChildIDTest(array $storyIdList): array
+    {
+        $method = $this->storyZenTest->getMethod('convertChildID');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyIdList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
