@@ -954,4 +954,35 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 构建批量转任务数据。
+     * Build data for batch to task.
+     *
+     * @param  int   $executionID
+     * @param  int   $projectID
+     * @param  array $postData
+     * @access public
+     * @return array|false
+     */
+    public function buildDataForBatchToTaskTest(int $executionID, int $projectID = 0, array $postData = array()): array|false
+    {
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) $_POST[$key] = $value;
+        }
+
+        $method = $this->storyZenTest->getMethod('buildDataForBatchToTask');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$executionID, $projectID]);
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) unset($_POST[$key]);
+        }
+
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
