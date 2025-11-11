@@ -1268,4 +1268,44 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 获取编辑需求的表单字段。
+     * Get form fields for edit story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForEditTest(int $storyID): array
+    {
+        global $tester, $config;
+
+        // 设置必要的配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->gradeRule)) $config->story->gradeRule = '';
+        if(!isset($config->requirement)) $config->requirement = new stdclass();
+        if(!isset($config->requirement->gradeRule)) $config->requirement->gradeRule = '';
+        if(!isset($config->epic)) $config->epic = new stdclass();
+        if(!isset($config->epic->gradeRule)) $config->epic->gradeRule = '';
+
+        // 获取story和product对象
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $product = $tester->loadModel('product')->getByID($story->product);
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForEdit');
+        $method->setAccessible(true);
+
+        // 创建实例并设置view属性
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+        $storyInstance->view->product = $product;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
