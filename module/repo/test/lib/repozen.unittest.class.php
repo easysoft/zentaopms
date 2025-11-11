@@ -1750,4 +1750,36 @@ class repoZenTest
         if(dao::isError()) return dao::getError();
         return $type == 'batch' ? $commitCount : 'finish';
     }
+
+    /**
+     * Test encodingDiff method.
+     *
+     * @param  array  $diffs
+     * @param  string $encoding
+     * @access public
+     * @return array
+     */
+    public function encodingDiffTest(array $diffs, string $encoding): array
+    {
+        if(dao::isError()) return dao::getError();
+
+        foreach($diffs as $diff)
+        {
+            $diff->fileName = helper::convertEncoding($diff->fileName, $encoding);
+            if(empty($diff->contents)) continue;
+
+            foreach($diff->contents as $content)
+            {
+                if(empty($content->lines)) continue;
+
+                foreach($content->lines as $lines)
+                {
+                    if(empty($lines->line)) continue;
+                    $lines->line = helper::convertEncoding($lines->line, $encoding);
+                }
+            }
+        }
+
+        return $diffs;
+    }
 }
