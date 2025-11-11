@@ -61,10 +61,11 @@ $lang->admin->info->account = 'Votre identifiant client ZenTao est %s.';
 $lang->admin->info->log     = 'Les logs qui dépassent la durée de conservation seront supprimés et vous devrez exécuter un cron.';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Note: Vous n'êtes pas enregistré sur le site officiel de ZenTao (www.zentao.pm). %s vous pourrez ensuite obtenir les dernières Mises à Jour de ZenTao et des informations.";
-$lang->admin->notice->ignore   = "Ignorer";
-$lang->admin->notice->int      = "『 %s 』 devrait être un entier positif.";
-$lang->admin->notice->openUR   = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
+$lang->admin->notice->register                = "Note: Vous n'êtes pas enregistré sur le site officiel de ZenTao (www.zentao.pm). %s vous pourrez ensuite obtenir les dernières Mises à Jour de ZenTao et des informations.";
+$lang->admin->notice->ignore                  = "Ignorer";
+$lang->admin->notice->int                     = "『 %s 』 devrait être un entier positif.";
+$lang->admin->notice->openUR                  = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
+$lang->admin->notice->confirmDisableStoryType = "'{type}' fonction fermée, le système supprimera toutes les histoires associées au projet et à l'exécution, l'opération est irréversible";
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = 'Register Account';

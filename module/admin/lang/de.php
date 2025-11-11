@@ -61,10 +61,11 @@ $lang->admin->info->account = 'Ihr ZenTao Konto ist %s.';
 $lang->admin->info->log     = 'Logs die über die Gültigen Tage hinausgehen werden gelöscht. Aufgabenplanung muss laufen (cron).';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Hinweiß: Sie haben sich nicht bei ZenTao (www.zentao.pm) registriert. %s um die aktuellen Updates und News zu erhalten.";
-$lang->admin->notice->ignore   = "Ignorieren";
-$lang->admin->notice->int      = "『%s』sollte eine positive Zahl sein.";
-$lang->admin->notice->openUR   = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
+$lang->admin->notice->register                = "Hinweiß: Sie haben sich nicht bei ZenTao (www.zentao.pm) registriert. %s um die aktuellen Updates und News zu erhalten.";
+$lang->admin->notice->ignore                  = "Ignorieren";
+$lang->admin->notice->int                     = "『%s』sollte eine positive Zahl sein.";
+$lang->admin->notice->openUR                  = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
+$lang->admin->notice->confirmDisableStoryType = "'{type}' Funktion geschlossen, das System wird alle Geschichten entfernen, die mit dem Projekt und der Ausführung verknüpft sind, die Operation ist irreversibel";
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = 'Register Account';
