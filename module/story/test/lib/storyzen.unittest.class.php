@@ -1511,4 +1511,36 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setFormOptionsForBatchEdit method.
+     *
+     * @param  int   $productID
+     * @param  int   $executionID
+     * @param  array $stories
+     * @access public
+     * @return object
+     */
+    public function setFormOptionsForBatchEditTest(int $productID, int $executionID, array $stories): object
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('setFormOptionsForBatchEdit');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->product = $tester->loadModel('product');
+        $storyZen->tree = $tester->loadModel('tree');
+        $storyZen->branch = $tester->loadModel('branch');
+        $storyZen->productplan = $tester->loadModel('productplan');
+        $storyZen->user = $tester->loadModel('user');
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->dao = $tester->dao;
+        $storyZen->lang = $tester->lang;
+
+        $method->invokeArgs($storyZen, [$productID, $executionID, $stories]);
+        if(dao::isError()) return dao::getError();
+
+        return $storyZen->view;
+    }
 }
