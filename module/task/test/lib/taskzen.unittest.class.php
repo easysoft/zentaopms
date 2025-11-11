@@ -1359,11 +1359,15 @@ class taskZenTest
      * @param  array  $projects
      * @param  array  $executions
      * @param  array  $users
+     * @param  string $fileType
      * @access public
      * @return object
      */
-    public function formatExportTaskTest(object $task, array $projects = array(), array $executions = array(), array $users = array()): object
+    public function formatExportTaskTest(object $task, array $projects = array(), array $executions = array(), array $users = array(), string $fileType = 'html'): object
     {
+        global $tester;
+        $_POST['fileType'] = $fileType;
+
         $method = $this->taskZenTest->getMethod('formatExportTask');
         $method->setAccessible(true);
 
