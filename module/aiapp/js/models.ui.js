@@ -12,14 +12,16 @@ window.initModelList = async function()
 
     $('#modelsList').addClass('loading');
     const models = await zui.AIPanel.shared.store.getLlmModels();
-    models?.forEach((model, index)=> {
+    (models || []).forEach((model, index)=>
+    {
         model.index = index + 1;
+        model.name  = model.name || model.id;
     });
 
     const {modelLang, actionLang, converseLang, canConverse} = $('.models-view').data();
     const cols = [
         {name: 'index', title: 'ID', type: 'id', sortType: false},
-        {name: 'id', title: modelLang},
+        {name: 'name', title: modelLang},
         {name: 'actions', title: actionLang, width: 90, type: 'actions', onRenderCell(_result, {col, row})
         {
             if(!canConverse) return [{html: ''}];
