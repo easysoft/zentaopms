@@ -1002,18 +1002,6 @@ class zaiModel extends model
                     $content[] = "| {$item->field} | $required | $desc |\n";
                 }
             }
-            if(!empty($doc->params->params))
-            {
-                $content[] = "\n## {$app->lang->api->params}\n";
-                $content[] = "| {$app->lang->api->req->name} | {$app->lang->api->req->type} | {$app->lang->api->req->required} | {$app->lang->api->req->desc} |\n";
-                $content[] = "|------|---|---|---------|\n";
-                foreach($doc->params->params as $item)
-                {
-                    $desc      = strip_tags($item->desc);
-                    $required  = zget($lang->api->boolList, $item->required);
-                    $content[] = "| {$item->field} | {$item->paramsType} | $required | $desc |\n";
-                }
-            }
             if(!empty($doc->params->query))
             {
                 $content[] = "\n## {$app->lang->api->query}\n";
@@ -1026,17 +1014,29 @@ class zaiModel extends model
                     $content[] = "| {$item->field} | $required | $desc |\n";
                 }
             }
+            if(!empty($doc->params->params))
+            {
+                $content[] = "\n## {$app->lang->api->params}\n";
+                $content[] = "| {$app->lang->api->req->name} | {$app->lang->api->req->type} | {$app->lang->api->req->required} | {$app->lang->api->req->desc} |\n";
+                $content[] = "|------|---|---|---------|\n";
+                foreach($doc->params->params as $item)
+                {
+                    $desc      = strip_tags($item->desc);
+                    $required  = zget($lang->api->boolList, $item->required);
+                    $content[] = "| {$item->field} | {$item->paramsType} | $required | $desc |\n";
+                }
+            }
             if(!empty($doc->paramsExample))
             {
                 $content[] = "\n## {$app->lang->api->paramsExample}\n";
                 $content[] = "```json\n{$doc->paramsExample}\n```";
             }
-            if(!empty($doc->params->response))
+            if(!empty($doc->response))
             {
                 $content[] = "\n## {$app->lang->api->response}\n";
                 $content[] = "| {$app->lang->api->req->name} | {$app->lang->api->req->required} | {$app->lang->api->req->desc} |\n";
                 $content[] = "|------|---|---------|\n";
-                foreach($doc->params->response as $item)
+                foreach($doc->response as $item)
                 {
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
