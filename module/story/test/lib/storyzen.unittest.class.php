@@ -1040,4 +1040,28 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getAfterBatchCreateLocation method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getAfterBatchCreateLocationTest(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    {
+        global $app;
+
+        $method = $this->storyZenTest->getMethod('getAfterBatchCreateLocation');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $executionID, $storyID, $storyType]);
+        if(dao::isError()) return implode(', ', dao::getError());
+
+        return $result;
+    }
 }
