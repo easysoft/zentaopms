@@ -1308,4 +1308,33 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 获取评审需求的表单字段。
+     * Get form fields for review story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForReviewTest(int $storyID): array
+    {
+        global $tester;
+
+        // 获取story对象
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForReview');
+        $method->setAccessible(true);
+
+        // 创建实例并设置view属性
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
