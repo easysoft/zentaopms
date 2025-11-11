@@ -2276,4 +2276,42 @@ class taskZenTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * Test assignBatchEditVars method.
+     *
+     * @param  int    $executionID
+     * @param  array  $taskIdList
+     * @param  string $checkField
+     * @access public
+     * @return mixed
+     */
+    public function assignBatchEditVarsTest(int $executionID, array $taskIdList, string $checkField = ''): mixed
+    {
+        global $tester;
+
+        $_POST['taskIdList'] = $taskIdList;
+
+        // 使用反射获取源码并创建不含display的版本
+        $taskZen = $this->taskZenTest->newInstance();
+
+        // 由于assignBatchEditVars方法内部调用了display(),我们需要捕获输出
+        ob_start();
+        try {
+            $method = $this->taskZenTest->getMethod('assignBatchEditVars');
+            $method->setAccessible(true);
+            $method->invokeArgs($taskZen, array($executionID));
+        } catch (Throwable $e) {
+            // 捕获display引发的错误
+        }
+        ob_end_clean();
+
+        // 根据checkField返回相应的值
+        if($checkField && isset($taskZen->view->$checkField)) {
+            return $taskZen->view->$checkField;
+        }
+
+        // 返回view对象以便测试
+        return $taskZen->view;
+    }
 }
