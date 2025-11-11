@@ -4,22 +4,13 @@ function changeModule($target)
     if($target.prop('checked'))
     {
         $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
+        checkRelated(name, 'open');
     }
     else
     {
+        $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
         $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
-    }
-
-    if(edition != 'ipd')
-    {
-        const enableER = $('[name="module[productER]"]').prop('checked');
-        const URAndSR  = $('[name="module[productUR]"]').prop('checked');
-        if(enableER && !URAndSR)
-        {
-            $('[name="module[productUR]"]').prop('checked', true);
-            $('[name="module[productUR]"][type=hidden]').val('1');
-            zui.Modal.alert(openUR);
-        }
+        checkRelated(name, 'close');
     }
 };
 
@@ -65,7 +56,8 @@ window.submitForm = function()
 
     if(enableER && !isCheckedER)
     {
-        storyType += ' ' + ERCommon;
+        if(storyType) storyType += ',';
+        storyType += ERCommon;
     }
 
     if(storyType)
@@ -79,14 +71,12 @@ window.submitForm = function()
         {
             if(res)
             {
-                $('#moduleproductUR[type=hidden]').val('0');
-                $('#moduleproductER[type=hidden]').val('0');
                 realSubmitForm();
                 return false;
             }
 
-            $('[name="module[productUR]"]').prop('checked', true);
-            $('[name="module[productER]"]').prop('checked', true);
+            setModuleState('productUR', true);
+            setModuleState('productER', true);
         });
         return false;
     }
@@ -100,4 +90,27 @@ window.realSubmitForm = function()
     const formData = new FormData($('#setModuleForm form')[0]);
     const url      = $.createLink('admin', 'setmodule');
     $.ajaxSubmit({url: url, data: formData});
+}
+
+/**
+ * 设置模块的checkbox和hidden input状态
+ * @param {string} moduleName - 模块名称（如 'productUR', 'productER'）
+ * @param {boolean} checked - 是否选中
+ */
+function setModuleState(moduleName, checked)
+{
+    const checkboxSelector = `[name="module[${moduleName}]"]`;
+    const hiddenSelector   = `#module${moduleName}[type=hidden]`;
+    $(checkboxSelector).prop('checked', checked);
+    $(hiddenSelector).val(checked ? '1' : '0');
+}
+
+/**
+ * 检查模块是否已启用
+ * @param {string} moduleName - 模块名称
+ * @returns {boolean} 是否已启用
+ */
+function isModuleEnabled(moduleName)
+{
+    return $('[name="module[' + moduleName + ']"]').prop('checked');
 }
