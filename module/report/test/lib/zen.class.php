@@ -56,4 +56,17 @@ class reportZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getReminder method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getReminderTest()
+    {
+        $result = $this->invokeArgs('getReminder', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
