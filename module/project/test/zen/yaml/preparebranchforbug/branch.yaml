@@ -1,0 +1,58 @@
+---
+title: Branch data for prepareBranchForBug test
+desc: 为prepareBranchForBug方法测试准备分支数据
+author: Claude
+
+fields:
+- field: id
+  note: ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品ID
+  range: '3-10'
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 分支名称
+  range: 'master{2},develop{3},feature-1{3},feature-2{3},release-1{3},hotfix-1{3},platform-android{3}'
+  prefix: ""
+  postfix: ""
+- field: default
+  note: 是否默认
+  range: '0{18},1{2}'
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 分支状态
+  range: 'active{15},closed{5}'
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: 分支描述
+  range: '分支描述信息'
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: 创建时间
+  range: '(-180D)-(0D):10D'
+  prefix: ""
+  postfix: ""
+  format: YYYY-MM-DD
+- field: closedDate
+  note: 关闭时间
+  range: '[]{15},(M){5}'
+  prefix: ""
+  postfix: ""
+  format: YYYY-MM-DD
+- field: order
+  note: 排序
+  range: 1-20
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

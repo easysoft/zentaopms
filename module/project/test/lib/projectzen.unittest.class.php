@@ -915,4 +915,52 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test prepareBranchForBug method.
+     *
+     * @param  array $products  产品列表
+     * @param  int   $productID 产品ID
+     * @access public
+     * @return mixed
+     */
+    public function prepareBranchForBugTest($products = array(), $productID = 0)
+    {
+        try
+        {
+            global $tester, $lang;
+
+            // 初始化必要的语言配置
+            if(!isset($lang->branch)) $lang->branch = new stdClass();
+            if(!isset($lang->branch->statusList)) $lang->branch->statusList = array('active' => '激活', 'closed' => '已关闭');
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->view = new stdClass();
+
+            // 加载必要的模型
+            if(!isset($this->objectZen->branch)) $this->objectZen->branch = $tester->loadModel('branch');
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('prepareBranchForBug');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $products, $productID);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回view对象中设置的分支选项的数量
+            $branchOptionCount = isset($this->objectZen->view->branchOption) ? count($this->objectZen->view->branchOption) : 0;
+            $branchTagOptionCount = isset($this->objectZen->view->branchTagOption) ? count($this->objectZen->view->branchTagOption) : 0;
+
+            return (object)array(
+                'branchOptionCount' => $branchOptionCount,
+                'branchTagOptionCount' => $branchTagOptionCount
+            );
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
