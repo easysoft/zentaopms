@@ -61,4 +61,20 @@ class searchZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setOptions method.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @param  array $queries
+     * @access public
+     * @return mixed
+     */
+    public function setOptionsTest($fields, $fieldParams, $queries = array())
+    {
+        $result = $this->invokeArgs('setOptions', [$fields, $fieldParams, $queries]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
