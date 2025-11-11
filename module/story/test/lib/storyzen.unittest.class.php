@@ -313,34 +313,12 @@ class storyZenTest
      */
     public function getInitStoryByBugTest(int $bugID, object $initStory): object
     {
-        // 使用简化的逻辑来避免数据库错误，直接模拟getInitStoryByBug的核心逻辑
-        if(empty($bugID) || $bugID <= 0) return $initStory;
+        $method = $this->storyZenTest->getMethod('getInitStoryByBug');
+        $method->setAccessible(true);
 
-        // 模拟从数据库获取的bug数据，基于测试数据配置
-        if($bugID == 1) {
-            $initStory->product  = 1;
-            $initStory->source   = 'bug';
-            $initStory->title    = 'Bug标题1';
-            $initStory->keywords = '关键词1';
-            $initStory->spec     = '步骤1';
-            $initStory->pri      = '1';
-            $initStory->mailto   = 'user1@test.com,admin,';
-            $initStory->files    = array();
-        } elseif($bugID == 2) {
-            $initStory->product  = 1;
-            $initStory->source   = 'bug';
-            $initStory->title    = 'Bug标题2';
-            $initStory->keywords = '关键词2';
-            $initStory->spec     = '步骤2';
-            $initStory->pri      = '2';
-            $initStory->mailto   = 'user2@test.com';
-            $initStory->files    = array();
-        } else {
-            // 对于不存在的bug ID，返回原始的initStory
-            return $initStory;
-        }
-
-        return $initStory;
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$bugID, $initStory]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
