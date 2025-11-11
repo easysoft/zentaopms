@@ -79,7 +79,7 @@ class storyTester extends tester
         $form->wait(3);
 
         $form->dom->search(array("{$this->lang->story->name},=,{$name}"));
-        $form->wait(1);
+        $form->wait(2);
         if($form->dom->firstName === false) return $this->success('需求批量移除成功');
         return $this->failed('需求批量移除失败');
     }
