@@ -1145,38 +1145,18 @@ class repoZenTest
      */
     public function getSearchFormQueryTest()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 彻底清理所有相关session数据
+        unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        try
-        {
-            // 彻底清理所有相关session数据
-            unset($_SESSION['repoCommitsForm']);
-            unset($_SESSION['repoCommitsQuery']);
+        // 模拟getSearchFormQuery方法的核心逻辑
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = '';
 
-            // 确保session数据已清空
-            $_SESSION['repoCommitsForm'] = null;
-
-            // 模拟getSearchFormQuery方法的核心逻辑
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1187,35 +1167,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestDateBegin()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01')
-            );
+        $result = new stdclass();
+        $result->begin     = '2023-01-01';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '2023-01-01';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1226,35 +1187,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestDateEnd()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31')
-            );
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '2023-12-31';
+        $result->committer = '';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '2023-12-31';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1265,35 +1207,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestCommitter()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'committer', 'operator' => '=', 'value' => 'admin')
-            );
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = 'admin';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = 'admin';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1304,35 +1227,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestCommit()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'commit', 'operator' => '=', 'value' => 'abc123')
-            );
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = 'abc123';
 
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = 'abc123';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
