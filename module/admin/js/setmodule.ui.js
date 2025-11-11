@@ -171,4 +171,54 @@ window.checkRelated = function(name, type)
                 return false;
             }
         }
+        // 开启 项目变更 时，需要确保 交付物 和 基线 都已开启
+        else if(name.includes('projectChange'))
+        {
+            const deliverableEnabled = isModuleEnabled('projectDeliverable');
+            const cmEnabled          = isModuleEnabled('projectCm');
+
+            if(!deliverableEnabled || !cmEnabled)
+            {
+                let message = openDependFeature.replace('{source}', changeLang);
+                const missingLangs = [];
+
+                if(!deliverableEnabled) missingLangs.push(deliverableLang);
+                if(!cmEnabled) missingLangs.push(cmLang);
+
+                message = message.replace('{target}', missingLangs.join(','));
+
+                showDependencyConfirm(
+                    message,
+                    () =>
+                    {
+                        if(!deliverableEnabled) setModuleState('projectDeliverable', true);
+                        if(!cmEnabled) setModuleState('projectCm', true);
+                    },
+                    () => setModuleState('projectChange', false)
+                );
+                return false;
+            }
+        }
+    }
+    else
+    {
+        // 关闭 用户需求 时，如果 业务需求 已开启，需要提示关闭 业务需求
+        if(name.includes('productUR') && edition !== 'ipd')
+        {
+            if(isModuleEnabled('productER'))
+            {
+                const message = closeDependFeature.replace('{source}', URCommon).replace('{target}', ERCommon);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('productER', false),
+                    () =>
+                    {
+                        setModuleState('productUR', true);
+                        setModuleState('productER', true);
+                    }
+                );
+                return false;
+            }
+        }
+    }
 }
