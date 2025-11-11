@@ -956,6 +956,44 @@ class zaiModel extends model
     }
 
     /**
+     * 将任务对象转换为 Markdown 格式。
+     * Convert task object to markdown format.
+     *
+     * @param  object $task
+     * @access public
+     * @return array
+     */
+    public static function convertTaskToMarkdown($task)
+    {
+        global $app;
+
+        $app->loadLang('task');
+        $lang = $app->lang;
+
+        $markdown = array('id' => $task->id, 'title' => "{$lang->task->common} #$task->id $task->name");
+        $content  = array();
+
+        $content[] = "# {$lang->task->common} #$task->id $task->name\n";
+        $content[] = "## {$lang->task->legendBasic}\n";
+        $content[] = "* {$lang->task->project}: $task->project";
+        $content[] = "* {$lang->task->execution}: $task->execution";
+        $content[] = "* {$lang->task->module}: $task->module";
+        $content[] = "* {$lang->task->fromBug}: $task->fromBug";
+        $content[] = "* {$lang->task->feedback}: $task->feedback";
+        $content[] = "* {$lang->task->story}: $task->storyID";
+        $content[] = "* {$lang->task->assignedTo}: $task->assignedTo";
+        $content[] = "* {$lang->task->assignedDate}: $task->assignedDate";
+        $content[] = "* {$lang->task->type}: " . zget($lang->task->typeList, $task->type);
+        $content[] = "* {$lang->task->status}: " . zget($lang->task->statusList, $task->status);
+        $content[] = "* {$lang->task->pri}: " . zget($lang->task->priList, $task->pri);
+
+        $markdown['content'] = implode("\n", $content);
+
+        $markdown['attrs'] = array('project' => $task->project, 'module' => $task->module, 'design' => $task->design, 'fromBug' => $task->fromBug, 'story' => $task->storyID);
+        return $markdown;
+    }
+
+    /**
      * 将 DOC 对象转换为 Markdown 格式。
      * Convert doc object to markdown format.
      *
