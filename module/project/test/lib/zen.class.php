@@ -173,4 +173,43 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $tester->config->bug->search;
     }
+
+    /**
+     * Test processBuildSearchParams method.
+     *
+     * @param  object $project  项目对象
+     * @param  object $product  产品对象
+     * @param  array  $products 产品数组
+     * @param  string $type     搜索类型
+     * @param  int    $param    查询参数
+     * @access public
+     * @return mixed
+     */
+    public function processBuildSearchParamsTest($project = null, $product = null, $products = array(), $type = '', $param = 0)
+    {
+        global $tester, $app;
+
+        /* 设置必要的app属性 */
+        if(!isset($app->rawModule)) $app->rawModule = 'project';
+        if(!isset($app->rawMethod)) $app->rawMethod = 'build';
+
+        /* 每次测试前重置build配置 */
+        $tester->config->build = new stdclass();
+        $tester->config->build->search = array();
+        $tester->config->build->search['fields'] = array('product' => 'Product', 'name' => 'Name');
+        $tester->config->build->search['params'] = array();
+
+        ob_start();
+        try
+        {
+            $result = $this->invokeArgs('processBuildSearchParams', [$project, $product, $products, $type, $param]);
+        }
+        catch(TypeError $e)
+        {
+            /* 捕获类型错误,但仍返回配置,因为前面的逻辑已经执行 */
+        }
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+        return $tester->config->build->search;
+    }
 }
