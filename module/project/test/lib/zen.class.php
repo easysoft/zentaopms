@@ -287,4 +287,20 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test updateLinkedProducts method.
+     *
+     * @param  int    $projectID 项目ID
+     * @param  object $project   项目对象
+     * @param  array  $IdList    执行ID列表
+     * @access public
+     * @return bool|array
+     */
+    public function updateLinkedProductsTest($projectID = 0, $project = null, $IdList = array())
+    {
+        $result = $this->invokeArgs('updateLinkedProducts', [$projectID, $project, $IdList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
