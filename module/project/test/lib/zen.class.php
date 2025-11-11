@@ -40,4 +40,18 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $view;
     }
+
+    /**
+     * Test expandExecutionIdList method.
+     *
+     * @param  mixed $stats 执行统计数据
+     * @access public
+     * @return array
+     */
+    public function expandExecutionIdListTest($stats = null)
+    {
+        $result = $this->invokeArgs('expandExecutionIdList', [$stats]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
