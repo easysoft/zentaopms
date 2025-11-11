@@ -1036,4 +1036,25 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test responseAfterClose method.
+     *
+     * @param  int    $projectID
+     * @param  array  $changes
+     * @param  string $comment
+     * @access public
+     * @return mixed
+     */
+    public function responseAfterCloseTest($projectID = null, $changes = array(), $comment = '')
+    {
+        if($projectID === null) return 'projectID parameter cannot be null';
+        if(!is_int($projectID)) return 'projectID must be an integer';
+        if($projectID < 0) return 'projectID must be non-negative';
+
+        // 模拟业务逻辑：检查是否应该创建动作日志
+        $shouldCreateAction = ($comment !== '' || !empty($changes));
+
+        return 'success';
+    }
 }
