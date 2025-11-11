@@ -1566,4 +1566,51 @@ class storyZenTest
 
         return isset($storyZen->view->hiddenPlan) ? $storyZen->view->hiddenPlan : false;
     }
+
+    /**
+     * Test setViewVarsForKanban method.
+     *
+     * @param  int    $objectID
+     * @param  array  $kanbanSetting
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function setViewVarsForKanbanTest(int $objectID, array $kanbanSetting, string $storyType = 'story'): mixed
+    {
+        global $tester, $config;
+
+        $emptyResult = (object)['executionType' => '', 'regionOptions' => [], 'regionDefault' => 0, 'laneOptions' => [], 'laneDefault' => 0];
+        if(empty($objectID)) return $emptyResult;
+
+        $execution = $tester->dao->findById($objectID)->from(TABLE_EXECUTION)->fetch();
+        if(!$execution || $execution->type != 'kanban') return $emptyResult;
+
+        $method = $this->storyZenTest->getMethod('setViewVarsForKanban');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->dao = $tester->dao;
+        $storyZen->view = new stdClass();
+        $storyZen->config = $config;
+        $storyZen->lang = $tester->lang;
+        $storyZen->kanban = $tester->loadModel('kanban');
+
+        if(!isset($config->story->form->create)) {
+            if(!isset($config->story)) $config->story = new stdClass();
+            if(!isset($config->story->form)) $config->story->form = new stdClass();
+            $config->story->form->create = array();
+        }
+
+        $method->invokeArgs($storyZen, [$objectID, $kanbanSetting, $storyType]);
+        if(dao::isError()) return dao::getError();
+
+        return (object)[
+            'executionType' => $storyZen->view->executionType ?? '',
+            'regionOptions' => $config->story->form->create['region']['options'] ?? [],
+            'regionDefault' => $config->story->form->create['region']['default'] ?? 0,
+            'laneOptions' => $config->story->form->create['lane']['options'] ?? [],
+            'laneDefault' => $config->story->form->create['lane']['default'] ?? 0
+        ];
+    }
 }
