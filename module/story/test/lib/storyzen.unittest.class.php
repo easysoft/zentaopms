@@ -1418,4 +1418,32 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test hiddenFormFieldsForEdit method.
+     *
+     * @param  array  $fields
+     * @param  string $storyType
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function hiddenFormFieldsForEditTest(array $fields, string $storyType, object $product)
+    {
+        global $tester;
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->view->product = $product;
+        $storyZen->project = $tester->loadModel('project');
+        $storyZen->lang = $tester->lang;
+        $storyZen->config = $tester->config;
+
+        $method = $this->storyZenTest->getMethod('hiddenFormFieldsForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($storyZen, [$fields, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
