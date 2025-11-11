@@ -2029,7 +2029,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `duration` varchar(30) NOT NULL DEFAULT '',
   `demand` int unsigned NOT NULL DEFAULT 0,
   `submitedBy` varchar(30) NOT NULL DEFAULT '',
-  `roadmap` varchar(255)  NOT NULL  DEFAULT '',
+  `roadmap` varchar(255) NOT NULL DEFAULT '',
   `URChanged` tinyint unsigned NOT NULL DEFAULT 0,
   `unlinkReason` varchar(10) NOT NULL DEFAULT '',
   `retractedReason` varchar(10) NOT NULL DEFAULT '',
