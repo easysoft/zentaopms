@@ -1626,4 +1626,42 @@ class repoZenTest
         array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
         return $treeList;
     }
+
+    /**
+     * Test checkACL method.
+     *
+     * @param  array $postData
+     * @access public
+     * @return array|false
+     */
+    public function checkACLTest(array $postData)
+    {
+        $originalPost = $_POST;
+
+        try
+        {
+            $_POST = $postData;
+
+            $acl = isset($_POST['acl']) ? $_POST['acl'] : array();
+            if(isset($acl['acl']) && $acl['acl'] == 'custom')
+            {
+                $aclGroups = isset($acl['groups']) ? array_filter($acl['groups']) : array();
+                $aclUsers  = isset($acl['users']) ? array_filter($acl['users']) : array();
+                if(empty($aclGroups) && empty($aclUsers))
+                {
+                    $this->objectModel->app->loadLang('product');
+                    dao::$errors['acl'] = sprintf($this->objectModel->lang->error->notempty, $this->objectModel->lang->product->whitelist);
+                    return dao::getError();
+                }
+            }
+
+            if(dao::isError()) return dao::getError();
+
+            return $acl;
+        }
+        finally
+        {
+            $_POST = $originalPost;
+        }
+    }
 }
