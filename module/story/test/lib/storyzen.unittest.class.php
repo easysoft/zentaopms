@@ -1064,4 +1064,19 @@ class storyZenTest
 
         return $result;
     }
+
+    /**
+     * Test getAfterEditLocation method.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getAfterEditLocationTest(int $storyID, string $storyType = 'story'): string
+    {
+        $result = callZenMethod('story', 'getAfterEditLocation', [$storyID, $storyType]);
+        if(dao::isError()) return implode(', ', dao::getError());
+        return $result;
+    }
 }
