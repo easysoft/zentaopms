@@ -1,0 +1,47 @@
+---
+title: Module测试数据
+desc: 用于getLinkedObjects方法的Module测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: 根ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父模块ID
+  range: 0,0,1,1,2,2,3,3,4,4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 模块名称
+  range: Module1,Module2,Module3,Module4,Module5,Module6,Module7,Module8,Module9,Module10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: story
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1315,4 +1315,38 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  object $story
+     * @access public
+     * @return object
+     */
+    public function getLinkedObjectsTest(object $story): object
+    {
+        global $tester;
+
+        $method = $this->storyZenTest->getMethod('getLinkedObjects');
+        $method->setAccessible(true);
+
+        // 创建storyZen实例并初始化dao等属性
+        $storyZen = $this->storyZenTest->newInstance();
+
+        // 初始化必要的属性
+        global $app;
+        $storyZen->app   = $app;
+        $storyZen->dao   = $app->dao;
+        $storyZen->dbh   = $app->dbh;
+        $storyZen->tree  = $tester->loadModel('tree');
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->view  = new stdclass();
+
+        // 调用方法
+        $method->invokeArgs($storyZen, [$story]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回view对象，包含所有设置的数据
+        return $storyZen->view;
+    }
 }
