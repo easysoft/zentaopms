@@ -794,4 +794,42 @@ class projectzenTest
 
         return '正常返回启动表单视图';
     }
+
+    /**
+     * Test buildUsers method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function buildUsersTest()
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('buildUsers');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回一个包含统计信息的对象,便于测试框架验证
+            $userPairs = $result[0];
+            $userList  = $result[1];
+
+            return (object)array(
+                'pairsCount'       => count($userPairs),
+                'listCount'        => count($userList),
+                'hasAdmin'         => isset($userPairs['admin']) ? 1 : 0,
+                'adminRealname'    => isset($userPairs['admin']) ? $userPairs['admin'] : '',
+                'hasAdminObject'   => isset($userList['admin']) ? 1 : 0,
+                'adminAccount'     => isset($userList['admin']) ? $userList['admin']->account : '',
+                'adminObjRealname' => isset($userList['admin']) ? $userList['admin']->realname : ''
+            );
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
