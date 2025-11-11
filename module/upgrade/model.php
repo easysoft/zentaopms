@@ -12734,4 +12734,48 @@ class upgradeModel extends model
         $this->dao->exec($sql);
         return true;
     }
+
+    /**
+     * 四个项目模型的功能开关合并成一个。
+     * Merge four project model feature switches into one.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeClosedFeature()
+    {
+        if(!in_array($this->config->edition, array('max', 'ipd'))) return true;
+
+        $disabledFeatures = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->fetch('value');
+        if(empty($disabledFeatures)) return true;
+
+        $disabledFeatures = explode(',', $disabledFeatures);
+        $countFeature     = array();
+        foreach($this->config->featureGroup->project as $newFeature)
+        {
+            $countFeature[$newFeature] = 0;
+            foreach($disabledFeatures as $key => $feature)
+            {
+                $feature = strtolower(trim($feature));
+                if(strpos($feature, $newFeature) !== false)
+                {
+                    $countFeature[$newFeature]++;
+                    unset($disabledFeatures[$key]);
+                }
+            }
+        }
+
+        /* 之前在所有模型下都关闭的功能升级上来才关闭，否则开启。*/
+        $disabledFeatures = array_values($disabledFeatures);
+        foreach($countFeature as $feature => $count)
+        {
+            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan'))))
+            {
+                $disabledFeatures[] = 'project' . ucfirst($feature);
+            }
+        }
+
+        $disabledFeatures = implode(',', array_unique($disabledFeatures));
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq($disabledFeatures)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->exec();
+    }
 }

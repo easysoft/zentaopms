@@ -61,10 +61,12 @@ $lang->admin->info->account = "您的禅道社区账户为%s。";
 $lang->admin->info->log     = '超出存天数的日志会被删除，需要开启计划任务。';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "可%s禅道社区 www.zentao.net，及时获得禅道最新信息。";
-$lang->admin->notice->ignore   = "不再提示";
-$lang->admin->notice->int      = "『%s』应当是正整数。";
-$lang->admin->notice->openUR   = "请先开启{$lang->URCommon}，才能使用{$lang->ERCommon}。";
+$lang->admin->notice->register                = "可%s禅道社区 www.zentao.net，及时获得禅道最新信息。";
+$lang->admin->notice->ignore                  = "不再提示";
+$lang->admin->notice->int                     = "『%s』应当是正整数。";
+$lang->admin->notice->confirmDisableStoryType = "‘{type}’功能关闭后，系统会将项目和执行内已经关联的相应‘{type}’全部移除, 操作不可逆";
+$lang->admin->notice->openDependFeature       = '使用“{source}”功能时需要同步开启“{target}”功能。';
+$lang->admin->notice->closeDependFeature      = '关闭“{source}”功能时需要同步关闭“{target}”功能。';
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = '注册新帐号';
@@ -108,7 +110,7 @@ $lang->admin->setModule->ER             = $lang->ERCommon;
 $lang->admin->setModule->UR             = $lang->URCommon;
 $lang->admin->setModule->deliverable    = '交付物';
 $lang->admin->setModule->cm             = '基线';
-$lang->admin->setModule->projectchange  = '变更';
+$lang->admin->setModule->change         = '变更';
 $lang->admin->setModule->researchplan   = '调研';
 $lang->admin->setModule->gapanalysis    = '培训';
 $lang->admin->setModule->storylib       = '需求库';
