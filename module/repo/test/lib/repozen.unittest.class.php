@@ -65,6 +65,47 @@ class repoZenTest
     }
 
     /**
+     * Test buildCreateRepoForm method.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return mixed
+     */
+    public function buildCreateRepoFormTest(int $objectID)
+    {
+        $this->objectModel->saveState(0, $objectID);
+        ob_start();
+        $this->objectModel->app->loadLang('action');
+
+        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
+        {
+            $products = $this->objectModel->loadModel('product')->getProductPairsByProject($objectID);
+        }
+        else
+        {
+            $products = $this->objectModel->loadModel('product')->getPairs('', 0, '', 'all');
+        }
+
+        $repoGroups = array();
+        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs(implode(',', $this->objectModel->config->repo->notSyncSCM), true);
+        if(!empty($serviceHosts))
+        {
+            $serverID = key($serviceHosts);
+            $repoGroups = $this->objectModel->getGroups($serverID);
+        }
+
+        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->create;
+        $groups = $this->objectModel->loadModel('group')->getPairs();
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return array('title' => $title, 'products' => $products, 'groups' => $groups, 'users' => $users, 'serviceHosts' => $serviceHosts, 'repoGroups' => $repoGroups, 'objectID' => $objectID);
+    }
+
+    /**
      * Test updateLastCommit method.
      *
      * @param  object $repo
