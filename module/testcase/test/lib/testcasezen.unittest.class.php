@@ -2671,4 +2671,47 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test assignForBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @access public
+     * @return mixed
+     */
+    public function assignForBatchCreateTest(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0): mixed
+    {
+        global $tester;
+
+        try {
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
+
+            ob_start();
+            $result = callZenMethod('testcase', 'assignForBatchCreate', [$productID, $branch, $moduleID, $storyID]);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'customFields' => isset($tester->view->customFields) ? count($tester->view->customFields) : 0,
+                'showFields' => isset($tester->view->showFields) ? 1 : 0,
+                'story' => isset($tester->view->story) ? 1 : 0,
+                'storyPairs' => isset($tester->view->storyPairs) ? count($tester->view->storyPairs) : 0,
+                'sceneOptionMenu' => isset($tester->view->sceneOptionMenu) ? 1 : 0,
+                'currentModuleID' => isset($tester->view->currentModuleID) ? $tester->view->currentModuleID : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
+        }
+    }
+
 }
