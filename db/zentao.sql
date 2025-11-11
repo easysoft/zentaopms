@@ -16202,7 +16202,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT 0,
   `name` varchar(30) NOT NULL DEFAULT '',
-  `type` varchar(10) DEFAULT 'text',
+  `type` varchar(10) NOT NULL DEFAULT 'text',
   `placeholder` text DEFAULT NULL,
   `options` text DEFAULT NULL,
   `required` tinyint unsigned NOT NULL DEFAULT 1,
