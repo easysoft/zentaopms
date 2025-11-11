@@ -12,13 +12,17 @@ namespace zin;
 
 global $app;
 $app->loadLang('project');
-jsVar('openUR', $lang->admin->notice->openUR);
 jsVar('confirmDisableStoryType', $lang->admin->notice->confirmDisableStoryType);
 jsVar('edition', $config->edition);
 jsVar('enableER', $config->enableER);
 jsVar('URAndSR', $config->URAndSR);
 jsVar('ERCommon', $lang->ERCommon);
 jsVar('URCommon', $lang->URCommon);
+jsVar('changeLang', $lang->admin->setModule->change);
+jsVar('deliverableLang', $lang->admin->setModule->deliverable);
+jsVar('cmLang', $lang->admin->setModule->cm);
+jsVar('openDependFeature', $lang->admin->notice->openDependFeature);
+jsVar('closeDependFeature', $lang->admin->notice->closeDependFeature);
 
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
 
