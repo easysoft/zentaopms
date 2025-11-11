@@ -2625,4 +2625,50 @@ class testcaseZenTest
         return $output;
     }
 
+    /**
+     * Test assignCreateVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $from
+     * @param  int    $param
+     * @param  int    $storyID
+     * @access public
+     * @return mixed
+     */
+    public function assignCreateVarsTest(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0): mixed
+    {
+        global $tester;
+
+        try {
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
+
+            ob_start();
+            $result = callZenMethod('testcase', 'assignCreateVars', [$productID, $branch, $moduleID, $from, $param, $storyID]);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'projectID' => isset($tester->view->projectID) ? $tester->view->projectID : 0,
+                'currentSceneID' => isset($tester->view->currentSceneID) ? $tester->view->currentSceneID : 0,
+                'case' => isset($tester->view->case) ? 1 : 0,
+                'executionID' => isset($tester->view->executionID) ? $tester->view->executionID : 0,
+                'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'from' => isset($tester->view->from) ? $tester->view->from : '',
+                'param' => isset($tester->view->param) ? $tester->view->param : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
+        }
+    }
+
 }
