@@ -1280,6 +1280,46 @@ class repoZenTest
     }
 
     /**
+     * Test buildEditForm method.
+     *
+     * @param  int $repoID
+     * @param  int $objectID
+     * @access public
+     * @return mixed
+     */
+    public function buildEditFormTest(int $repoID, int $objectID)
+    {
+        $repo = $this->objectModel->getByID($repoID);
+        if(empty($repo)) return false;
+        if(isset($repo->client)) $repo->client = trim($repo->client, '"');
+        $this->objectModel->app->loadLang('action');
+        $scm = strtolower($repo->SCM);
+        $project = null;
+        if(in_array($scm, array('gitlab', 'gitea', 'gogs')))
+        {
+            $projectID = in_array($repo->SCM, $this->objectModel->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
+            $project = new stdClass();
+            $project->id = $projectID;
+            $project->name = "Test Project {$projectID}";
+        }
+        $products = $this->objectModel->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProductIDs = explode(',', $repo->product);
+        if(!empty($linkedProductIDs[0]))
+        {
+            $linkedProducts = $this->objectModel->product->getByIdList($linkedProductIDs);
+            $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+            $products = $products + $linkedProductPairs;
+        }
+        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->edit;
+        $groups = $this->objectModel->loadModel('group')->getPairs();
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $relatedProjects = $this->objectModel->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs($repo->SCM);
+        if(dao::isError()) return dao::getError();
+        return array('title' => $title, 'repo' => $repo, 'repoID' => $repoID, 'objectID' => $objectID, 'groups' => $groups, 'users' => $users, 'products' => $products, 'relatedProjects' => $relatedProjects, 'serviceHosts' => $serviceHosts, 'project' => $project, 'productCount' => count($products), 'hasRepo' => !empty($repo));
+    }
+
+    /**
      * Test checkConnection method in zen layer.
      *
      * @param  array $postData POST数据
