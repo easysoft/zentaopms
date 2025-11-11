@@ -14314,7 +14314,7 @@ CREATE TABLE IF NOT EXISTS `zt_measrecords` (
   `params` text DEFAULT NULL,
   `year` char(4) NOT NULL DEFAULT '',
   `month` char(6) NOT NULL DEFAULT '',
-  `week` char(8) NOT NULL DEFAULT '',
+  `week` char(2) NOT NULL DEFAULT '',
   `day` char(8) NOT NULL DEFAULT '',
   `value` varchar(255) NOT NULL DEFAULT '',
   `date` date DEFAULT NULL,
