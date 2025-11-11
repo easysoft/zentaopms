@@ -1446,4 +1446,40 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processDataForEdit method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  array  $oldStory
+     * @access public
+     * @return object
+     */
+    public function processDataForEditTest(int $storyID, object $story, array $oldStory = []): object
+    {
+        global $tester;
+        if(!empty($oldStory)) {
+            $mockOldStory = (object)$oldStory;
+            $mockStoryModel = new class($mockOldStory) {
+                private $mockData;
+                public function __construct($data) { $this->mockData = $data; }
+                public function fetchByID($id) { return $this->mockData; }
+                public function __call($name, $arguments) { return null; }
+            };
+            $storyZen = $this->storyZenTest->newInstance();
+            $storyZen->story = $mockStoryModel;
+        } else {
+            $storyZen = $this->storyZenTest->newInstance();
+            $storyZen->story = $tester->loadModel('story');
+        }
+        $storyZen->app = $tester->app;
+        $storyZen->app->user = new stdClass();
+        $storyZen->app->user->account = 'admin';
+        $method = $this->storyZenTest->getMethod('processDataForEdit');
+        $method->setAccessible(true);
+        $method->invokeArgs($storyZen, [$storyID, $story]);
+        if(dao::isError()) return dao::getError();
+        return $story;
+    }
 }
