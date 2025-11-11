@@ -17,7 +17,7 @@ foreach($crons as $cron)
     {
         $toggleLink   = inlink('toggle', "id={$cron->id}&status=" . ($cron->status == 'stop' ? 'normal' :  'stop'));
         $toggleName   = $cron->status == 'stop' ? $lang->cron->toggleList['start'] : $lang->cron->toggleList['stop'];
-        $actionsHtml .= html::a('###', $toggleName, '', "class='primary-500 ajaxRefresh' data-href='{$toggleLink}' onclick='refreshURL(this)'");
+        $actionsHtml .= html::a($toggleLink, $toggleName, '', "class='primary-500 ajax-submit'");
     }
     if(!empty($cron->command) and common::hasPriv('cron', 'edit')) $actionsHtml .= html::a(inlink('edit', "id={$cron->id}"), $lang->edit, '', "class='primary-500' data-toggle='modal'");
     if($cron->buildin == 0 and common::hasPriv('cron', 'delete'))  $actionsHtml .= html::a(inlink('delete', "id={$cron->id}"), $lang->delete, '', "class='primary-500 ajax-submit' data-confirm={$lang->cron->confirmDelete}");
