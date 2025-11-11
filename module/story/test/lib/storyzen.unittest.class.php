@@ -1223,4 +1223,49 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 获取创建需求的表单字段。
+     * Get form fields for create story.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $objectID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForCreateTest(int $productID, string $branch, int $objectID, string $storyType = 'story'): array
+    {
+        global $tester, $config;
+
+        // 设置必要的配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->gradeRule)) $config->story->gradeRule = '';
+        if(!isset($config->requirement)) $config->requirement = new stdclass();
+        if(!isset($config->requirement->gradeRule)) $config->requirement->gradeRule = '';
+        if(!isset($config->epic)) $config->epic = new stdclass();
+        if(!isset($config->epic->gradeRule)) $config->epic->gradeRule = '';
+
+        // 准备initStory对象
+        $initStory = new stdclass();
+        $initStory->source     = '';
+        $initStory->sourceNote = '';
+        $initStory->pri        = 3;
+        $initStory->estimate   = '';
+        $initStory->title      = '';
+        $initStory->spec       = '';
+        $initStory->verify     = '';
+        $initStory->keywords   = '';
+        $initStory->mailto     = '';
+        $initStory->color      = '';
+        $initStory->plan       = 0;
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $objectID, $initStory, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
