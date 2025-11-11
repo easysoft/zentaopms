@@ -148,6 +148,7 @@ foreach($hasViewPriv as $type => $bool)
         setID("assigntome{$type}Tab{$blockNavCode}"),
         dtable
         (
+            set::id($type),
             set::height(318),
             set::bordered(false),
             $type == 'todo'  || $type == 'task' ? set::fixedLeftWidth('0.44') : '',
