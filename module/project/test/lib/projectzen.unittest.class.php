@@ -544,6 +544,51 @@ class projectzenTest
     }
 
     /**
+     * Test checkProductAndBranch method.
+     *
+     * @param  object $project
+     * @param  object $rawdata
+     * @access public
+     * @return mixed
+     */
+    public function checkProductAndBranchTest($project = null, $rawdata = null)
+    {
+        try
+        {
+            global $tester, $lang, $app;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->project)) $lang->project = new stdClass();
+            if(!isset($lang->project->errorNoProducts)) $lang->project->errorNoProducts = '请选择产品。';
+            if(!isset($lang->project->error)) $lang->project->error = new stdClass();
+            if(!isset($lang->project->error->emptyBranch)) $lang->project->error->emptyBranch = '『分支』不能为空。';
+            if(!isset($lang->project->api)) $lang->project->api = new stdClass();
+            if(!isset($lang->project->api->error)) $lang->project->api->error = new stdClass();
+            if(!isset($lang->project->api->error->productNotFound)) $lang->project->api->error->productNotFound = '产品不存在。';
+
+            if(!isset($app->apiVersion)) $app->apiVersion = '';
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->app = $app;
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('checkProductAndBranch');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $project, $rawdata);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Test prepareModuleForBug method.
      *
      * @param  mixed $productID
