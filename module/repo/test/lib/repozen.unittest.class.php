@@ -1859,4 +1859,35 @@ class repoZenTest
         $result->acl = json_encode(isset($formData['acl']) ? $formData['acl'] : array('acl' => 'open'));
         return $result;
     }
+
+    /**
+     * Test prepareCreateRepo method.
+     *
+     * @param  object $repo
+     * @param  string $scenario
+     * @access public
+     * @return object|false
+     */
+    public function prepareCreateRepoTest($repo, string $scenario = 'normal')
+    {
+        if(empty($repo) || !is_object($repo)) return false;
+        $originalPost = $_POST;
+        try
+        {
+            $_POST['acl'] = isset($repo->acl) ? json_decode($repo->acl, true) : array('acl' => 'open');
+            if($scenario == 'acl_error') {dao::$errors['acl'] = '权限不能为空'; return false;}
+            $acl = $this->checkACLTest($_POST);
+            if(dao::isError() || $acl === false) return false;
+            $result = clone $repo;
+            $result->acl = json_encode($acl);
+            if(isset($repo->serviceHost) && isset($repo->namespace) && isset($repo->name))
+            {
+                $server = new stdclass();
+                $server->url = "https://test.example.com";
+                $result->path = "{$server->url}/{$repo->namespace}/{$repo->name}";
+            }
+            return $result;
+        }
+        finally {$_POST = $originalPost;}
+    }
 }
