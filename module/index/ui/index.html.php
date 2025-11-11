@@ -231,6 +231,13 @@ else
 {
     $zaiLang->zaiConfigNotValid = $lang->aiapp->langData->zaiConfigNotValid;
 }
+
+if($config->edition != 'pms')
+{
+    $this->app->loadLang('ai');
+    $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
+}
+
 $zaiConfigUrl = createLink('zai', 'setting');
 $zaiLang->zaiConfigNotValid = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->zaiConfigNotValid);
 if(isset($zaiLang->unauthorizedError)) $zaiLang->unauthorizedError = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->unauthorizedError);
