@@ -12,8 +12,9 @@ namespace zin;
 
 global $app;
 $app->loadLang('project');
-jsVar('confirmDisableStoryType', $lang->admin->notice->confirmDisableStoryType);
 jsVar('openUR', $lang->admin->notice->openUR);
+jsVar('confirmDisableStoryType', $lang->admin->notice->confirmDisableStoryType);
+jsVar('edition', $config->edition);
 jsVar('enableER', $config->enableER);
 jsVar('URAndSR', $config->URAndSR);
 jsVar('ERCommon', $lang->ERCommon);

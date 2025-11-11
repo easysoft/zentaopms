@@ -5,14 +5,9 @@ function changeModule($target)
     {
         $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
     }
-
-    const enableER = $('[name="module[productER]"]').prop('checked');
-    const URAndSR  = $('[name="module[productUR]"]').prop('checked');
-    if(enableER && !URAndSR)
+    else
     {
-        $('[name="module[productUR]"]').prop('checked', true);
-        $('[name="module[productUR]"][type=hidden]').val('1');
-        zui.Modal.alert(openUR);
+        $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
     }
 
 };
@@ -52,7 +47,7 @@ window.submitForm = function()
     let message   = confirmDisableStoryType;
     let storyType = '';
 
-    if(URAndSR && !isCheckedUR)
+    if(edition != 'ipd' && URAndSR && !isCheckedUR)
     {
         storyType += URCommon;
     }

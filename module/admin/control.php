@@ -176,6 +176,9 @@ class admin extends control
                 }
             }
 
+            $enableER = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productER', 0);
+            $URAndSR  = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0);
+
             $this->setting->setItem('system.common.closedFeatures', implode(',', $closedFeatures));
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
             $this->setting->setItem('system.custom.enableER', $enableER);
