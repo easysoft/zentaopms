@@ -986,6 +986,27 @@ class zaiModel extends model
         $content[] = "* {$lang->task->type}: " . zget($lang->task->typeList, $task->type);
         $content[] = "* {$lang->task->status}: " . zget($lang->task->statusList, $task->status);
         $content[] = "* {$lang->task->pri}: " . zget($lang->task->priList, $task->pri);
+        $content[] = "* {$lang->task->keywords}: $task->keywords";
+        $content[] = "* {$lang->task->mailto}: $task->mailto";
+        $content[] = "## {$lang->task->legendEffort}\n";
+        $content[] = "* {$lang->task->estimate}: $task->estimate";
+        $content[] = "* {$lang->task->consumed}: $task->consumed";
+        $content[] = "* {$lang->task->left}: $task->left";
+        $content[] = "* {$lang->task->estStarted}: $task->estStarted";
+        $content[] = "* {$lang->task->realStarted}: $task->realStarted";
+        $content[] = "* {$lang->task->deadline}: $task->deadline";
+        $content[] = "## {$lang->task->legendLife}\n";
+        $content[] = "* {$lang->task->openedBy}: $task->openedBy";
+        $content[] = "* {$lang->task->openedDate}: $task->openedDate";
+        $content[] = "* {$lang->task->finishedBy}: $task->finishedBy";
+        $content[] = "* {$lang->task->finishedDate}: $task->finishedDate";
+        $content[] = "* {$lang->task->canceledBy}: $task->canceledBy";
+        $content[] = "* {$lang->task->canceledDate}: $task->canceledDate";
+        $content[] = "* {$lang->task->closedBy}: $task->closedBy";
+        $content[] = "* {$lang->task->closedDate}: $task->closedDate";
+        $content[] = "* {$lang->task->closedReason}: $task->closedReason";
+        $content[] = "\n## {$lang->task->desc}\n";
+        $content[] = strip_tags($task->desc) . "\n";
 
         $markdown['content'] = implode("\n", $content);
 
