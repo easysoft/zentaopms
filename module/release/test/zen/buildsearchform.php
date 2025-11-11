@@ -7,11 +7,13 @@ title=测试 releaseZen::buildSearchForm();
 timeout=0
 cid=0
 
-- 测试正常产品类型queryID为0 >> queryID应为0
-- 测试正常产品类型queryID为5 >> queryID和actionURL应正确设置
-- 测试branch产品类型 >> 应有分支配置
-- 测试platform产品类型 >> 应有分支配置
-- 测试正常产品类型 >> 不应有分支配置
+- 执行releaseTest模块的buildSearchFormTest方法，参数是0, '', $normalProduct, '' 属性queryID @0
+- 执行releaseTest模块的buildSearchFormTest方法，参数是5, '/release/browse-1-all-0.html', $normalProduct, ''
+ - 属性queryID @5
+ - 属性actionURL @/release/browse-1-all-0.html
+- 执行releaseTest模块的buildSearchFormTest方法，参数是0, '', $branchProduct, '1' 属性hasBranchConfig @1
+- 执行releaseTest模块的buildSearchFormTest方法，参数是0, '', $platformProduct, '2' 属性hasBranchConfig @1
+- 执行releaseTest模块的buildSearchFormTest方法，参数是0, '', $normalProduct, '' 属性hasBranchConfig @0
 
 */
 

@@ -312,4 +312,18 @@ class releaseZenTest
         $html .= '</table>';
         return $html;
     }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getExcludeStoryIdListTest($release)
+    {
+        $result = callZenMethod('release', 'getExcludeStoryIdList', array($release));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
