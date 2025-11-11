@@ -1366,4 +1366,33 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getResponseInModal method.
+     *
+     * @param  string $message
+     * @param  bool   $inModal
+     * @param  string $tab
+     * @param  string $executionType
+     * @param  int    $executionID
+     * @access public
+     * @return array|false
+     */
+    public function getResponseInModalTest(string $message = '', bool $inModal = false, string $tab = '', string $executionType = '', int $executionID = 0): array|false
+    {
+        global $tester, $app;
+        if($inModal) { $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'; $_SERVER['HTTP_X_ZUI_MODAL'] = true; }
+        else { unset($_SERVER['HTTP_X_REQUESTED_WITH']); unset($_SERVER['HTTP_X_ZUI_MODAL']); }
+        if(!empty($executionType) && $executionID > 0) $tester->dao->update(TABLE_EXECUTION)->set('type')->eq($executionType)->where('id')->eq($executionID)->exec();
+        if($executionID > 0) $tester->session->set('execution', $executionID);
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->app = $app; $storyZen->session = $tester->session;
+        $storyZen->execution = $tester->loadModel('execution'); $storyZen->lang = $tester->lang;
+        if(!empty($tab)) $storyZen->app->tab = $tab;
+        $method = $this->storyZenTest->getMethod('getResponseInModal'); $method->setAccessible(true);
+        try { $result = $method->invokeArgs($storyZen, [$message]); }
+        catch(EndResponseException $e) { $result = json_decode($e->getContent(), true); }
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
