@@ -232,7 +232,7 @@ else
     $zaiLang->zaiConfigNotValid = $lang->aiapp->langData->zaiConfigNotValid;
 }
 
-if($config->edition != 'pms')
+if($config->edition != 'open')
 {
     $this->app->loadLang('ai');
     $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
