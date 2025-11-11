@@ -225,6 +225,39 @@ class releaseZenTest
     }
 
     /**
+     * Test buildSearchForm method.
+     *
+     * @param  int $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest($queryID = 0, $actionURL = '', $product = null, $branch = '')
+    {
+        global $config;
+
+        if($product === null) {
+            $product = new stdClass();
+            $product->id = 1;
+            $product->type = 'normal';
+        }
+
+        $result = callZenMethod('release', 'buildSearchForm', array($queryID, $actionURL, $product, $branch), 'view');
+
+        $searchConfig = new stdClass();
+        $searchConfig->queryID = isset($config->release->search['queryID']) ? $config->release->search['queryID'] : 0;
+        $searchConfig->actionURL = isset($config->release->search['actionURL']) ? $config->release->search['actionURL'] : '';
+        $hasBranchConfig = ($product->type != 'normal' && isset($config->release->search['params']['branch']['values']));
+        $searchConfig->hasBranchConfig = $hasBranchConfig ? '1' : '0';
+        $searchConfig->branchCount = $hasBranchConfig ? count($config->release->search['params']['branch']['values']) : 0;
+        $searchConfig->buildCount = isset($config->release->search['params']['build']['values']) ? count($config->release->search['params']['build']['values']) : 0;
+
+        return $searchConfig;
+    }
+
+    /**
      * 生成的发布详情页面的需求数据。
      * Generate the story data for the release view page.
      *

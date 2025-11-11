@@ -7,40 +7,39 @@ title=测试 releaseZen::buildSearchForm();
 timeout=0
 cid=0
 
-- 步骤1: 测试普通产品queryID为0属性queryID @0
-- 步骤2: 测试普通产品actionURL设置属性actionURL @/release/browse
-- 步骤3: 测试分支产品有分支配置
- - 属性hasBranchConfig @1
- - 属性branchCount @3
-- 步骤4: 测试平台产品分支和构建配置
- - 属性branchCount @3
- - 属性buildCount @2
-- 步骤5: 测试普通产品无分支配置属性branchCount @0
+- 测试正常产品类型queryID为0 >> queryID应为0
+- 测试正常产品类型queryID为5 >> queryID和actionURL应正确设置
+- 测试branch产品类型 >> 应有分支配置
+- 测试platform产品类型 >> 应有分支配置
+- 测试正常产品类型 >> 不应有分支配置
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/releasezen.unittest.class.php';
 
+zendata('product')->loadYaml('buildsearchform', false, 2)->gen(10);
+zendata('branch')->loadYaml('buildsearchform', false, 2)->gen(10);
+zendata('build')->loadYaml('buildsearchform', false, 2)->gen(20);
+
 su('admin');
 
 $releaseTest = new releaseZenTest();
 
-// 准备不同类型的产品对象
 $normalProduct = new stdClass();
 $normalProduct->id = 1;
 $normalProduct->type = 'normal';
 
 $branchProduct = new stdClass();
-$branchProduct->id = 2;
+$branchProduct->id = 5;
 $branchProduct->type = 'branch';
 
 $platformProduct = new stdClass();
-$platformProduct->id = 3;
+$platformProduct->id = 8;
 $platformProduct->type = 'platform';
 
-r($releaseTest->buildSearchFormTest(0, '/release/browse', $normalProduct, '')) && p('queryID') && e('0'); // 步骤1: 测试普通产品queryID为0
-r($releaseTest->buildSearchFormTest(1, '/release/browse', $normalProduct, '')) && p('actionURL') && e('/release/browse'); // 步骤2: 测试普通产品actionURL设置
-r($releaseTest->buildSearchFormTest(2, '/release/browse', $branchProduct, '1')) && p('hasBranchConfig,branchCount') && e('1,3'); // 步骤3: 测试分支产品有分支配置
-r($releaseTest->buildSearchFormTest(3, '/release/browse', $platformProduct, '2')) && p('branchCount,buildCount') && e('3,2'); // 步骤4: 测试平台产品分支和构建配置
-r($releaseTest->buildSearchFormTest(0, '/release/browse', $normalProduct, '')) && p('branchCount') && e('0'); // 步骤5: 测试普通产品无分支配置
+r($releaseTest->buildSearchFormTest(0, '', $normalProduct, '')) && p('queryID') && e('0');
+r($releaseTest->buildSearchFormTest(5, '/release/browse-1-all-0.html', $normalProduct, '')) && p('queryID,actionURL') && e('5,/release/browse-1-all-0.html');
+r($releaseTest->buildSearchFormTest(0, '', $branchProduct, '1')) && p('hasBranchConfig') && e('1');
+r($releaseTest->buildSearchFormTest(0, '', $platformProduct, '2')) && p('hasBranchConfig') && e('1');
+r($releaseTest->buildSearchFormTest(0, '', $normalProduct, '')) && p('hasBranchConfig') && e('0');
