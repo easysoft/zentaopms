@@ -877,4 +877,42 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test extractUnModifyForm method.
+     *
+     * @param  int    $projectID
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function extractUnModifyFormTest($projectID = 0, $project = null)
+    {
+        try
+        {
+            global $tester, $config;
+
+            // 初始化必要的配置
+            if(!isset($config->systemMode)) $config->systemMode = 'ALM';
+
+            // 初始化zen对象的依赖
+            $this->objectZen->view = new stdClass();
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('extractUnModifyForm');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($this->objectZen, $projectID, $project);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回view对象
+            return $this->objectZen->view;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
