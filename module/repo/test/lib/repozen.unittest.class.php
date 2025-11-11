@@ -1700,4 +1700,54 @@ class repoZenTest
         catch(Exception $e) {return array('error' => $e->getMessage());}
         finally {$_POST = $originalPost;}
     }
+
+    /**
+     * Test checkSyncResult method.
+     *
+     * @param  object $repo
+     * @param  array  $branches
+     * @param  string $branchID
+     * @param  int    $commitCount
+     * @param  string $type
+     * @access public
+     * @return string|int
+     */
+    public function checkSyncResultTest($repo, $branches, $branchID, $commitCount, $type)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+        if(!in_array($type, array('batch', 'sync'))) return false;
+
+        $gitTypeList = $this->objectModel->config->repo->gitTypeList;
+        $notSyncSCM = $this->objectModel->config->repo->notSyncSCM;
+
+        if(empty($commitCount) && !$repo->synced)
+        {
+            if(in_array($repo->SCM, $gitTypeList))
+            {
+                if($branchID) $this->objectModel->saveExistCommits4Branch($repo->id, $branchID);
+                if($branches)
+                {
+                    $branchID = array_shift($branches);
+                    helper::setcookie("syncBranch", $branchID);
+                }
+                else
+                {
+                    $branchID = '';
+                }
+                if($branchID) $this->objectModel->fixCommit($repo->id);
+            }
+
+            if(empty($branchID) || in_array($repo->SCM, $notSyncSCM))
+            {
+                helper::setcookie("syncBranch", '');
+                $this->objectModel->markSynced($repo->id);
+                return 'finish';
+            }
+        }
+
+        $this->objectModel->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
+        if(dao::isError()) return dao::getError();
+        return $type == 'batch' ? $commitCount : 'finish';
+    }
 }
