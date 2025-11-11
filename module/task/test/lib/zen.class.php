@@ -41,4 +41,19 @@ class taskZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getCustomFields method.
+     *
+     * @param  object $execution
+     * @param  string $action
+     * @access public
+     * @return array
+     */
+    public function getCustomFieldsTest(object $execution, string $action): array
+    {
+        $result = $this->invokeArgs('getCustomFields', [$execution, $action]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
