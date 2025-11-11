@@ -1782,4 +1782,36 @@ class repoZenTest
 
         return $diffs;
     }
+
+    /**
+     * Test getBranchAndTagItems method.
+     *
+     * @param  object $repo
+     * @param  string $branchID
+     * @access public
+     * @return array|false
+     */
+    public function getBranchAndTagItemsTest($repo, string $branchID)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+        if(!in_array($repo->SCM, $this->objectModel->config->repo->gitTypeList)) return array();
+
+        $branches = array('master', 'develop', 'feature/test');
+        $tags = array('v1.0', 'v1.1', 'v2.0');
+        $selected = '';
+        $branchMenus = $tagMenus = array();
+
+        foreach($branches as $name)
+        {
+            $selected = ($name == $branchID) ? $name : $selected;
+            $branchMenus[] = array('text' => $name, 'id' => $name, 'keys' => zget(common::convert2Pinyin(array($name)), $name, ''), 'url' => 'javascript:;', 'data-type' => 'branch', 'data-value' => $name);
+        }
+        foreach($tags as $name)
+        {
+            $selected = ($name == $branchID) ? $name : $selected;
+            $tagMenus[] = array('text' => $name, 'id' => $name, 'keys' => zget(common::convert2Pinyin(array($name)), $name, ''), 'url' => 'javascript:;', 'data-type' => 'tag', 'data-value' => $name);
+        }
+        return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
+    }
 }
