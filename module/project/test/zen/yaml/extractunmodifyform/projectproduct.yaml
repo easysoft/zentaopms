@@ -1,0 +1,27 @@
+---
+title: 项目关联产品测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: '1,1,2,2,3,3,4,4,6,6,8,8,9,9,10,10'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: '1,2,1,3,2,4,3,5,1,2,3,4,5,6,7,8'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: '0,1,0,0,1,0,0,2,0,1,0,0,2,0,0,0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
