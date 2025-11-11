@@ -22,8 +22,8 @@ class testtaskZen extends testtask
         }
         if($this->app->tab == 'execution')
         {
-            $this->view->executionID = $this->loadModel('execution')->setMenu($executionID);
-            return $this->view->executionID;
+            $this->loadModel('execution')->setMenu($executionID);
+            return $executionID;
         }
         return $this->loadModel('qa')->setMenu($productID, $branch);
     }
@@ -780,7 +780,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function setDropMenu(int $productID, object $task)
+    public function setDropMenu(int $productID, object $task)
     {
         /* Set drop menu. */
         $objectType = $objectID = '';
