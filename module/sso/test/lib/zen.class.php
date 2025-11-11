@@ -122,4 +122,18 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test idenfyFromSSO method.
+     *
+     * @param  string $locate
+     * @access public
+     * @return bool
+     */
+    public function idenfyFromSSOTest(string $locate): bool
+    {
+        $result = $this->invokeArgs('idenfyFromSSO', [$locate]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
