@@ -148,4 +148,29 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processBugSearchParams method.
+     *
+     * @param  object $project   项目对象
+     * @param  string $type      搜索类型
+     * @param  int    $param     查询参数
+     * @param  int    $projectID 项目ID
+     * @param  int    $productID 产品ID
+     * @param  string $branchID  分支ID
+     * @param  string $orderBy   排序
+     * @param  int    $build     版本ID
+     * @param  array  $products  产品数组
+     * @access public
+     * @return mixed
+     */
+    public function processBugSearchParamsTest($project = null, $type = '', $param = 0, $projectID = 0, $productID = 0, $branchID = '', $orderBy = '', $build = 0, $products = array())
+    {
+        global $tester;
+        ob_start();
+        $result = $this->invokeArgs('processBugSearchParams', [$project, $type, $param, $projectID, $productID, $branchID, $orderBy, $build, $products]);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+        return $tester->config->bug->search;
+    }
 }
