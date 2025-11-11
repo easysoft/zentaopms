@@ -963,4 +963,43 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test prepareClosedExtras method.
+     *
+     * @param  int    $projectID
+     * @param  object $postData
+     * @access public
+     * @return mixed
+     */
+    public function prepareClosedExtrasTest($projectID = null, $postData = null)
+    {
+        try
+        {
+            global $app, $config;
+
+            // 初始化必要的配置
+            if(!isset($config->project)) $config->project = new stdClass();
+            if(!isset($config->project->editor)) $config->project->editor = new stdClass();
+            if(!isset($config->project->editor->suspend)) $config->project->editor->suspend = array();
+            if(!isset($config->project->editor->suspend['id'])) $config->project->editor->suspend['id'] = 'desc,comment';
+            if(!isset($config->allowedTags)) $config->allowedTags = '<p><br><strong><em>';
+            if(!isset($app->user)) $app->user = new stdClass();
+            $app->user->account = 'admin';
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('prepareClosedExtras');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $projectID, $postData);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }
