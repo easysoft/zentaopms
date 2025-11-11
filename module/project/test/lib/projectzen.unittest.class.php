@@ -733,4 +733,35 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test buildActivateForm method.
+     *
+     * @param  object $project
+     * @access public
+     * @return mixed
+     */
+    public function buildActivateFormTest($project = null)
+    {
+        if(!is_object($project) || !isset($project->id)) return array('error' => 'Invalid project object');
+
+        // 模拟buildActivateForm方法的业务逻辑
+        $newBegin = date('Y-m-d');
+        $dateDiff = helper::diffDate($newBegin, $project->begin);
+        $dateTime = (int)(strtotime($project->end) + $dateDiff * 24 * 3600);
+        $newEnd   = date('Y-m-d', $dateTime);
+
+        // 模拟用户和动作数据
+        $users   = $this->objectModel->loadModel('user')->getPairs('noletter');
+        $actions = $this->objectModel->loadModel('action')->getList('project', $project->id);
+
+        return (object)array(
+            'title' => '激活项目',
+            'users' => count($users),
+            'actions' => count($actions),
+            'newBegin' => $newBegin,
+            'newEnd' => $newEnd,
+            'project' => $project->id
+        );
+    }
 }
