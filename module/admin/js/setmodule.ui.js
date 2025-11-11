@@ -114,3 +114,27 @@ function isModuleEnabled(moduleName)
 {
     return $('[name="module[' + moduleName + ']"]').prop('checked');
 }
+
+/**
+ * 显示依赖关系确认对话框
+ * @param {string} message - 确认消息
+ * @param {Function} onConfirm - 确认回调
+ * @param {Function} onCancel - 取消回调
+ */
+function showDependencyConfirm(message, onConfirm, onCancel)
+{
+    zui.Modal.confirm(
+    {
+        message: message,
+        icon: 'icon-exclamation-sign',
+        iconClass: 'warning-pale rounded-full icon-2x'
+    }).then((res) =>
+    {
+        if(res)
+        {
+            if(onConfirm) onConfirm();
+            return false;
+        }
+        if(onCancel) onCancel();
+    });
+}
