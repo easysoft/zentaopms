@@ -1543,4 +1543,27 @@ class storyZenTest
 
         return $storyZen->view;
     }
+
+    /**
+     * Test setHiddenFieldsForView method.
+     *
+     * @param  object $product
+     * @access public
+     * @return object
+     */
+    public function setHiddenFieldsForViewTest(object $product): mixed
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('setHiddenFieldsForView');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->dao = $tester->dao;
+
+        $method->invokeArgs($storyZen, [$product]);
+        if(dao::isError()) return dao::getError();
+
+        return isset($storyZen->view->hiddenPlan) ? $storyZen->view->hiddenPlan : false;
+    }
 }
