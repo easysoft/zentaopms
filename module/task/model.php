@@ -3553,7 +3553,7 @@ class taskModel extends model
     public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
         /* Get child task info. */
-        $childTask = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,assignedTo,parent,path,realStarted')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
         $taskIdList = $childTask->path;
