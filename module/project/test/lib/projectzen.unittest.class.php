@@ -1002,4 +1002,38 @@ class projectzenTest
             return $e->getMessage();
         }
     }
+
+    /**
+     * Test removeAssociatedProducts method.
+     *
+     * @param  object $project 项目对象
+     * @access public
+     * @return mixed
+     */
+    public function removeAssociatedProductsTest($project = null)
+    {
+        try
+        {
+            global $tester;
+
+            // 初始化必要的模型和依赖
+            if(!isset($this->objectZen->project)) $this->objectZen->project = $this->objectModel;
+            if(!isset($this->objectZen->product)) $this->objectZen->product = $tester->loadModel('product');
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('removeAssociatedProducts');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($this->objectZen, $project);
+
+            if(dao::isError()) return dao::getError();
+
+            return 'success';
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }

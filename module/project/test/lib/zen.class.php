@@ -273,4 +273,18 @@ class projectZenTest extends baseTest
 
         return $actions;
     }
+
+    /**
+     * Test removeAssociatedProducts method.
+     *
+     * @param  object $project 项目对象
+     * @access public
+     * @return mixed
+     */
+    public function removeAssociatedProductsTest($project = null)
+    {
+        $result = $this->invokeArgs('removeAssociatedProducts', [$project]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
