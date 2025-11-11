@@ -107,4 +107,19 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFeishuUserToken method.
+     *
+     * @param  string $code
+     * @param  string $accessToken
+     * @access public
+     * @return array
+     */
+    public function getFeishuUserTokenTest(string $code, string $accessToken): array
+    {
+        $result = $this->invokeArgs('getFeishuUserToken', [$code, $accessToken]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
