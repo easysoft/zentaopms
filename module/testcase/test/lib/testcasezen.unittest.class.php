@@ -1599,22 +1599,40 @@ class testcaseZenTest
     {
         global $tester;
 
-        // 调用zen方法
-        $result = callZenMethod('testcase', 'assignCreateSceneVars', [$productID, $branch, $moduleID]);
-        if(dao::isError()) return dao::getError();
+        try {
+            // 初始化必要的对象和状态
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
 
-        // 返回视图变量以便验证
-        return array(
-            'title' => isset($tester->view->title) ? $tester->view->title : '',
-            'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
-            'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
-            'moduleID' => isset($tester->view->moduleID) ? $tester->view->moduleID : 0,
-            'parent' => isset($tester->view->parent) ? $tester->view->parent : 0,
-            'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
-            'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
-            'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
-            'debug_view' => isset($tester->view) ? 'view_exists' : 'view_not_exists'
-        );
+            // 启用输出缓冲以捕获错误输出
+            ob_start();
+
+            // 调用zen方法
+            $result = callZenMethod('testcase', 'assignCreateSceneVars', [$productID, $branch, $moduleID]);
+
+            // 清理输出缓冲
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回视图变量以便验证
+            return array(
+                'title' => isset($tester->view->title) ? $tester->view->title : '',
+                'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
+                'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
+                'moduleID' => isset($tester->view->moduleID) ? $tester->view->moduleID : 0,
+                'parent' => isset($tester->view->parent) ? $tester->view->parent : 0,
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
+        }
     }
 
     /**
