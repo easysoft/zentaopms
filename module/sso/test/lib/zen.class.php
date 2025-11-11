@@ -51,4 +51,17 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildUserForCreate method.
+     *
+     * @access public
+     * @return object
+     */
+    public function buildUserForCreateTest(): object
+    {
+        $result = $this->invokeArgs('buildUserForCreate', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
