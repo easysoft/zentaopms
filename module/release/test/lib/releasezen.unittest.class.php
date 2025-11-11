@@ -192,4 +192,43 @@ class releaseZenTest
     {
         return callZenMethod('release', 'assignVarsForView', [$release, $type, $link, $param, $orderBy], 'view');
     }
+
+    /**
+     * Test buildBugDataForExport method.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildBugDataForExportTest($release, $type = 'bug')
+    {
+        $title = $type == 'bug' ? 'Bug' : '遗留的Bug';
+        $html = "<h3>{$title}</h3>";
+        $mockBugs = array();
+        $bugIdList = $type == 'bug' ? $release->bugs : $release->leftBugs;
+        if(!empty($bugIdList)) {
+            $bugIds = explode(',', trim($bugIdList, ','));
+            foreach($bugIds as $id) {
+                if(empty($id)) continue;
+                $bug = new stdClass();
+                $bug->id = $id;
+                $bug->title = "Bug测试标题{$id}";
+                $mockBugs[$id] = $bug;
+            }
+        }
+        if(empty($mockBugs)) return $html;
+        $fields = array('id' => 'ID', 'title' => '标题');
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($mockBugs as $bug) {
+            $html .= "<tr valign='top'>\n";
+            $html .= "<td><nobr>{$bug->id}</nobr></td>\n";
+            $html .= "<td><nobr><a href='/bug/view/bugID={$bug->id}' target='_blank'>{$bug->title}</a></nobr></td>\n";
+            $html .= "</tr>\n";
+        }
+        $html .= '</table>';
+        return $html;
+    }
 }
