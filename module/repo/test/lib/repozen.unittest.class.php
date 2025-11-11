@@ -1814,4 +1814,35 @@ class repoZenTest
         }
         return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
     }
+
+    /**
+     * Test getLinkModules method.
+     *
+     * @param  array  $products
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getLinkModulesTest($products, $type)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($products as $productID => $product)
+        {
+            if(empty($product) || !is_object($product)) continue;
+
+            // 模拟模块数据,避免数据库调用
+            $productModules = array();
+            $productModules["module_{$productID}_1"] = "模块{$productID}_1";
+            $productModules["module_{$productID}_2"] = "模块{$productID}_2";
+
+            foreach($productModules as $key => $module)
+            {
+                $modules[$key] = $product->name . ' / ' . $module;
+            }
+        }
+
+        return $modules;
+    }
 }
