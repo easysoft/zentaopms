@@ -119,4 +119,18 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareStartExtras method.
+     *
+     * @param  object $postData POST数据对象
+     * @access public
+     * @return object
+     */
+    public function prepareStartExtrasTest($postData = null)
+    {
+        $result = $this->invokeArgs('prepareStartExtras', [$postData]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
