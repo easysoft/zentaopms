@@ -229,11 +229,24 @@ class zaiModel extends model
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             }
         }
-        if($postData) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData, JSON_UNESCAPED_UNICODE));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Authorization: Bearer ' . $token,
-            'Content-Type: application/json'
-        ));
+
+        $hasFile = false;
+        if($postData)
+        {
+            foreach($postData as $value)
+            {
+                if($value instanceof CURLFile)
+                {
+                    $hasFile = true;
+                    break;
+                }
+            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $hasFile ? $postData : json_encode($postData, JSON_UNESCAPED_UNICODE));
+        }
+
+        $headers = ['Authorization: Bearer ' . $token];
+        if(!$hasFile) $headers[] = 'Content-Type: application/json';
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($curl);
         $error    = '';
