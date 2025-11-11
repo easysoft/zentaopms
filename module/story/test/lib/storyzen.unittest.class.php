@@ -1142,4 +1142,54 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getDataFromUploadImages method.
+     *
+     * @param  int   $productID
+     * @param  int   $moduleID
+     * @param  int   $planID
+     * @param  array $sessionData
+     * @param  int   $preProductID
+     * @access public
+     * @return array
+     */
+    public function getDataFromUploadImagesTest(int $productID, int $moduleID = 0, int $planID = 0, array $sessionData = array(), int $preProductID = 0): array
+    {
+        global $config;
+
+        // 设置session数据
+        if(!empty($sessionData)) {
+            $_SESSION['storyImagesFile'] = $sessionData;
+        } else {
+            unset($_SESSION['storyImagesFile']);
+        }
+
+        // 设置配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->batchCreate)) $config->story->batchCreate = 10;
+        if(!isset($config->story->defaultPriority)) $config->story->defaultPriority = 3;
+
+        $method = $this->storyZenTest->getMethod('getDataFromUploadImages');
+        $method->setAccessible(true);
+
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->branchID = 0;
+
+        // 模拟cookie对象
+        $storyInstance->cookie = new stdclass();
+        $storyInstance->cookie->preProductID = $preProductID;
+
+        // 模拟session对象
+        $storyInstance->session = new stdclass();
+        if(!empty($sessionData)) {
+            $storyInstance->session->storyImagesFile = $sessionData;
+        }
+
+        $result = $method->invokeArgs($storyInstance, [$productID, $moduleID, $planID]);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
