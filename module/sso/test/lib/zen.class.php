@@ -78,4 +78,19 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBindFeishuUser method.
+     *
+     * @param  string $userToken
+     * @param  object $feishuConfig
+     * @access public
+     * @return array
+     */
+    public function getBindFeishuUserTest(string $userToken, object $feishuConfig): array
+    {
+        $result = $this->invokeArgs('getBindFeishuUser', [$userToken, $feishuConfig]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
