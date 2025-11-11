@@ -1395,4 +1395,27 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getStoriesByChecked method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array|false
+     */
+    public function getStoriesByCheckedTest(array $storyIdList = []): array|false
+    {
+        global $tester;
+        $_POST['storyIdList'] = $storyIdList;
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->lang = $tester->lang;
+        $method = $this->storyZenTest->getMethod('getStoriesByChecked');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($storyZen, []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
