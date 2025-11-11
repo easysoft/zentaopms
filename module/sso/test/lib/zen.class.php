@@ -64,4 +64,18 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test computeAuth method.
+     *
+     * @param  string $token
+     * @access public
+     * @return string
+     */
+    public function computeAuthTest(string $token): string
+    {
+        $result = $this->invokeArgs('computeAuth', [$token]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
