@@ -12,7 +12,12 @@ namespace zin;
 
 global $app;
 $app->loadLang('project');
-jsVar('confirmDisableStoryType', $lang->project->confirmDisableStoryType);
+jsVar('confirmDisableStoryType', $lang->admin->notice->confirmDisableStoryType);
+jsVar('openUR', $lang->admin->notice->openUR);
+jsVar('enableER', $config->enableER);
+jsVar('URAndSR', $config->URAndSR);
+jsVar('ERCommon', $lang->ERCommon);
+jsVar('URCommon', $lang->URCommon);
 
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
 
@@ -84,8 +89,10 @@ foreach($config->featureGroup as $group => $features)
 
 formPanel
 (
+    set::id('setModuleForm'),
     set::title($lang->admin->setModuleIndex),
     set::actions(false),
+    set::ajax(array('beforeSubmit' => jsRaw("submitForm"))),
     h::table
     (
         setClass('border w-full'),

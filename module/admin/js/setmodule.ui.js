@@ -5,30 +5,16 @@ function changeModule($target)
     {
         $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
     }
-    else
+
+    const enableER = $('[name="module[productER]"]').prop('checked');
+    const URAndSR  = $('[name="module[productUR]"]').prop('checked');
+    if(enableER && !URAndSR)
     {
-        if(name == 'module[productUR]' || name == 'module[productER]')
-        {
-            zui.Modal.confirm(
-            {
-                message: confirmDisableStoryType,
-                icon: 'icon-exclamation-sign',
-                iconClass: 'warning-pale rounded-full icon-2x'
-            }).then((res) =>
-            {
-               if(res)
-                {
-                    $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
-                    return false;
-                }
-
-                $target.prop('checked', true);
-            });
-            return false;
-        }
-
-        $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
+        $('[name="module[productUR]"]').prop('checked', true);
+        $('[name="module[productUR]"][type=hidden]').val('1');
+        zui.Modal.alert(openUR);
     }
+
 };
 
 function checkModule(event)
@@ -56,3 +42,56 @@ function checkAll()
         changeModule($(this));
     });
 };
+
+
+window.submitForm = function()
+{
+    const isCheckedUR = $('[name="module[productUR]"]').prop('checked');
+    const isCheckedER = $('[name="module[productER]"]').prop('checked');
+
+    let message   = confirmDisableStoryType;
+    let storyType = '';
+
+    if(URAndSR && !isCheckedUR)
+    {
+        storyType += URCommon;
+    }
+
+    if(enableER && !isCheckedER)
+    {
+        storyType += ' ' + ERCommon;
+    }
+
+    if(storyType)
+    {
+        zui.Modal.confirm(
+        {
+            message: message.replace(/{type}/g, storyType),
+            icon: 'icon-exclamation-sign',
+            iconClass: 'warning-pale rounded-full icon-2x'
+        }).then((res) =>
+        {
+            if(res)
+            {
+                $('#moduleproductUR[type=hidden]').val('0');
+                $('#moduleproductER[type=hidden]').val('0');
+                realSubmitForm();
+                return false;
+            }
+
+            $('[name="module[productUR]"]').prop('checked', true);
+            $('[name="module[productER]"]').prop('checked', true);
+        });
+        return false;
+    }
+
+    realSubmitForm();
+    return false;
+}
+
+window.realSubmitForm = function()
+{
+    const formData = new FormData($('#setModuleForm form')[0]);
+    const url      = $.createLink('admin', 'setmodule');
+    $.ajaxSubmit({url: url, data: formData});
+}
