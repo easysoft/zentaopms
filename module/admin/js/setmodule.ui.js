@@ -10,6 +10,17 @@ function changeModule($target)
         $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
     }
 
+    if(edition != 'ipd')
+    {
+        const enableER = $('[name="module[productER]"]').prop('checked');
+        const URAndSR  = $('[name="module[productUR]"]').prop('checked');
+        if(enableER && !URAndSR)
+        {
+            $('[name="module[productUR]"]').prop('checked', true);
+            $('[name="module[productUR]"][type=hidden]').val('1');
+            zui.Modal.alert(openUR);
+        }
+    }
 };
 
 function checkModule(event)
