@@ -1890,4 +1890,54 @@ class repoZenTest
         }
         finally {$_POST = $originalPost;}
     }
+
+    /**
+     * Test prepareEdit method.
+     *
+     * @param  array  $formData
+     * @param  object $oldRepo
+     * @param  string $scenario
+     * @access public
+     * @return object|false
+     */
+    public function prepareEditTest(array $formData, object $oldRepo, string $scenario = 'normal')
+    {
+        $originalPost = $_POST;
+        try
+        {
+            $_POST = $formData;
+            if($scenario == 'client_check_failed') {dao::$errors['client'] = '客户端检查失败'; return false;}
+            if($scenario == 'connection_failed') {dao::$errors['submit'] = '连接检查失败'; return false;}
+            if($scenario == 'acl_error') {dao::$errors['acl'] = 'ACL配置错误'; return false;}
+            if($scenario == 'duplicate_project') {dao::$errors['serviceProject'] = '项目已存在'; return false;}
+
+            $result = new stdclass();
+            $result->SCM = isset($formData['SCM']) ? $formData['SCM'] : $oldRepo->SCM;
+            $result->client = isset($formData['client']) ? $formData['client'] : 'svn';
+            $result->path = isset($formData['path']) ? $formData['path'] : '';
+            $result->product = isset($formData['product']) ? $formData['product'] : '';
+            $result->projects = isset($formData['projects']) ? $formData['projects'] : '';
+            $result->account = isset($formData['account']) ? $formData['account'] : '';
+            $result->password = isset($formData['password']) ? $formData['password'] : '';
+            if(isset($formData['serviceToken'])) $result->password = $formData['serviceToken'];
+            if($result->SCM == 'Gitlab')
+            {
+                $result->client = '';
+                $result->prefix = '';
+                if(isset($formData['serviceProject'])) $result->extra = $formData['serviceProject'];
+            }
+            if(strpos($result->client, ' ')) $result->client = "\"{$result->client}\"";
+            if($result->path != $oldRepo->path) $result->synced = 0;
+            $result->acl = json_encode(isset($formData['acl']) ? $formData['acl'] : array('acl' => 'open'));
+            if($result->SCM == 'Subversion') $result->prefix = '/trunk';
+            elseif($result->SCM != $oldRepo->SCM && $result->SCM == 'Git') $result->prefix = '';
+            if(isset($formData['serviceProject']) && $scenario == 'pipeline_server')
+            {
+                $result->serviceHost = isset($formData['serviceHost']) ? $formData['serviceHost'] : '';
+                $result->serviceProject = $formData['serviceProject'];
+            }
+            return $result;
+        }
+        finally {$_POST = $originalPost;}
+    }
 }
