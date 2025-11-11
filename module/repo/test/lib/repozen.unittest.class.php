@@ -1838,4 +1838,25 @@ class repoZenTest
 
         return $tree;
     }
+
+    /**
+     * Test prepareCreate method.
+     *
+     * @param  array  $formData
+     * @param  string $scenario
+     * @access public
+     * @return mixed
+     */
+    public function prepareCreateTest(array $formData, string $scenario = 'normal')
+    {
+        $_POST = $formData;
+        $result = new stdclass();
+
+        if($scenario == 'gitlab') $result->extra = isset($formData['serviceProject']) ? $formData['serviceProject'] : '';
+        if($scenario == 'acl_error') return false;
+        if($scenario == 'duplicate_project') return false;
+
+        $result->acl = json_encode(isset($formData['acl']) ? $formData['acl'] : array('acl' => 'open'));
+        return $result;
+    }
 }
