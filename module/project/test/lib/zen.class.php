@@ -74,4 +74,17 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $view;
     }
+
+    /**
+     * Test getKanbanData method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getKanbanDataTest()
+    {
+        $result = $this->invokeArgs('getKanbanData', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
