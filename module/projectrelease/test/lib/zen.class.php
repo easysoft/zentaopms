@@ -49,4 +49,45 @@ class projectreleaseZenTest extends baseTest
             return false;
         }
     }
+
+    /**
+     * Test commonAction method.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function commonActionTest(int $projectID = 0, int $productID = 0, string $branch = '')
+    {
+        $errorLevel = error_reporting();
+        error_reporting($errorLevel & ~E_WARNING);
+        global $app;
+
+        try {
+            dao::$errors = array();
+            $this->objectModel->app->user->admin = true;
+            $app->user->admin = true;
+            $result = $this->invokeArgs('commonAction', [$projectID, $productID, $branch]);
+            if(dao::isError()) return dao::getError();
+
+            $returnData = new stdclass();
+            $returnData->products = $this->objectModel->view->products ?? array();
+            $returnData->product  = $this->objectModel->view->product ?? new stdclass();
+            $returnData->branches = $this->objectModel->view->branches ?? array();
+            $returnData->branch   = $this->objectModel->view->branch ?? '';
+            $returnData->project  = $this->objectModel->view->project ?? new stdclass();
+            $returnData->appList  = $this->objectModel->view->appList ?? array();
+            error_reporting($errorLevel);
+            return $returnData;
+        } catch (EndResponseException $e) {
+            error_reporting($errorLevel);
+            return 'redirect';
+        } catch (Exception | Throwable $e) {
+            error_reporting($errorLevel);
+            if(dao::isError()) return dao::getError();
+            return false;
+        }
+    }
 }
