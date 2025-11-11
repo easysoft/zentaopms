@@ -133,4 +133,19 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareSuspendExtras method.
+     *
+     * @param  int    $projectID 项目ID
+     * @param  object $postData  POST数据对象
+     * @access public
+     * @return object
+     */
+    public function prepareSuspendExtrasTest($projectID = 0, $postData = null)
+    {
+        $result = $this->invokeArgs('prepareSuspendExtras', [$projectID, $postData]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
