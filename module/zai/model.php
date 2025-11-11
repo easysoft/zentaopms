@@ -970,34 +970,76 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
-        $docContent = $app->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($doc->version)->fetch();
-        if(empty($docContent))
+        if(isset($doc->protocol))
         {
-            $docContent = new stdClass();
-            $docContent->title   = $doc->title;
-            $docContent->content = isset($doc->content) ? $doc->content : '';
+            $app->loadLang('api');
+            $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $doc->title");
+            $content  = array();
+
+            $content[] = "# {$app->lang->api->common} #$doc->id $doc->title\n";
+            $content[] = "## {$lang->doc->basicInfo}\n";
+            $content[] = "* {$lang->doc->product}: $doc->product";
+            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$app->lang->api->module}: $doc->module";
+            $content[] = "* {$app->lang->api->title}: $doc->title";
+            $content[] = "* {$app->lang->api->path}: $doc->path";
+            $content[] = "* {$app->lang->api->protocol}: $doc->protocol";
+            $content[] = "* {$app->lang->api->method}: $doc->method";
+            $content[] = "* {$app->lang->api->requestType}: $doc->requestType";
+            $content[] = "* {$app->lang->api->status}: " . zget($app->lang->api->statusOptions, $doc->status);
+            $content[] = "* {$app->lang->api->owner}: $doc->owner";
+            $content[] = "* {$app->lang->api->version}: $doc->version";
+
+            if(!empty($doc->params->header))
+            {
+                $content[] = "\n## {$app->lang->api->header}\n";
+                $content[] = "| {$app->lang->api->req->name} | {$app->lang->api->req->required} | {$app->lang->api->req->desc} |\n";
+                $content[] = "|------|---|---------|\n";
+                foreach($doc->params->header as $item)
+                {
+                    $desc      = strip_tags($item->desc);
+                    $required  = zget($lang->api->boolList, $item->required);
+                    $content[] = "| {$item->field} | $required | $desc |\n";
+                }
+            }
+
+            $content[] = "\n## {$app->lang->api->desc}\n";
+            $content[] = strip_tags($doc->desc) . "\n";
+
+            $markdown['content'] = implode("\n", $content);
+            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version);
+        }
+        else
+        {
+            $docContent = $app->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($doc->version)->fetch();
+            if(empty($docContent))
+            {
+                $docContent = new stdClass();
+                $docContent->title   = $doc->title;
+                $docContent->content = isset($doc->content) ? $doc->content : '';
+            }
+
+            $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $docContent->title");
+            $content  = array();
+
+            $content[] = "# {$lang->doc->common} #$doc->id $docContent->title\n";
+            $content[] = "## {$lang->doc->basicInfo}\n";
+            $content[] = "* {$lang->doc->title}: $docContent->title";
+            $content[] = "* {$lang->doc->type}: " . zget($lang->doc->typeList, $doc->type);
+            $content[] = "* {$lang->doc->product}: $doc->product";
+            $content[] = "* {$lang->doc->project}: $doc->project";
+            $content[] = "* {$lang->doc->execution}: $doc->execution";
+            $content[] = "* {$lang->doc->version}: $doc->version";
+            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$lang->doc->module}: $doc->module";
+
+            $content[] = "\n---\n";
+            $content[] = strip_tags($docContent->content) . "\n";
+
+            $markdown['content'] = implode("\n", $content);
+            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type, 'version' => $doc->version);
         }
 
-        $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $docContent->title");
-        $content  = array();
-
-        $content[] = "# {$lang->doc->common} #$doc->id $docContent->title\n";
-        $content[] = "## {$lang->doc->basicInfo}\n";
-        $content[] = "* {$lang->doc->title}: $docContent->title";
-        $content[] = "* {$lang->doc->type}: " . zget($lang->doc->typeList, $doc->type);
-        $content[] = "* {$lang->doc->product}: $doc->product";
-        $content[] = "* {$lang->doc->project}: $doc->project";
-        $content[] = "* {$lang->doc->execution}: $doc->execution";
-        $content[] = "* {$lang->doc->version}: $doc->version";
-        $content[] = "* {$lang->doc->lib}: $doc->lib";
-        $content[] = "* {$lang->doc->module}: $doc->module";
-
-        $content[] = "\n---\n";
-        $content[] = strip_tags($docContent->content) . "\n";
-
-        $markdown['content'] = implode("\n", $content);
-
-        $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type, 'version' => $doc->version);
         return $markdown;
     }
 
