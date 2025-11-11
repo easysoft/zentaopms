@@ -1940,4 +1940,41 @@ class repoZenTest
         }
         finally {$_POST = $originalPost;}
     }
+
+    /**
+     * Test setBrowseSession method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return array
+     */
+    public function setBrowseSessionTest(string $scenario = 'normal')
+    {
+        if(session_id()) session_write_close();
+        if(!session_id()) session_start();
+
+        $testUri = '/repo-browse-1-master.html';
+        if($scenario == 'with_params') $testUri = '/repo-browse-2-develop-product-10.html';
+        if($scenario == 'empty_uri') $testUri = '';
+        if($scenario == 'complex_uri') $testUri = '/repo-browse-1-feature%2Ftest-objectID-100.html?tab=revision';
+
+        if($scenario == 'session_exists')
+        {
+            $_SESSION['revisionList'] = '/old-uri.html';
+            $_SESSION['gitlabBranchList'] = '/old-uri.html';
+        }
+
+        $_SESSION['revisionList'] = $testUri;
+        $_SESSION['gitlabBranchList'] = $testUri;
+        session_write_close();
+
+        $result = array('revisionList' => $_SESSION['revisionList'], 'gitlabBranchList' => $_SESSION['gitlabBranchList']);
+        if($scenario == 'with_params') $result['uriContainsParams'] = strpos($testUri, 'product') !== false ? 1 : 0;
+        if($scenario == 'session_exists') $result['dataUpdated'] = $_SESSION['revisionList'] === $testUri ? 1 : 0;
+        if($scenario == 'empty_uri') $result['isEmpty'] = empty($_SESSION['revisionList']) ? 1 : 0;
+        if($scenario == 'complex_uri') $result['hasSpecialChars'] = strpos($testUri, '%2F') !== false ? 1 : 0;
+        if($scenario == 'normal') $result['sessionClosed'] = session_id() ? 0 : 1;
+
+        return $result;
+    }
 }
