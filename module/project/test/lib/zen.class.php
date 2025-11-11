@@ -104,4 +104,19 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareProject method.
+     *
+     * @param  object $postData   POST数据对象
+     * @param  int    $hasProduct 是否有产品
+     * @access public
+     * @return object|array
+     */
+    public function prepareProjectTest($postData = null, $hasProduct = 1)
+    {
+        $result = $this->invokeArgs('prepareProject', [$postData, $hasProduct]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
