@@ -1349,4 +1349,21 @@ class storyZenTest
         // 返回view对象，包含所有设置的数据
         return $storyZen->view;
     }
+
+    /**
+     * 获取产品列表，并排序，将我负责的产品排前面。
+     * Get products for edit.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductsForEditTest(): array
+    {
+        $method = $this->storyZenTest->getMethod('getProductsForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
