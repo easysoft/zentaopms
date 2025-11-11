@@ -1,0 +1,30 @@
+---
+title: 用户测试数据
+desc: 用于buildBugView方法测试的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-10
+- field: account
+  note: 账号
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9
+- field: password
+  note: 密码
+  range: 1a2b3c4d5e6f
+  format: md5
+- field: role
+  note: 角色
+  range: admin,dev,qa,pm,po,td
+- field: email
+  note: 邮箱
+  format: "%s@example.com"
+  fields:
+  - field: username
+    range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+- field: deleted
+  note: 是否删除
+  range: '0'

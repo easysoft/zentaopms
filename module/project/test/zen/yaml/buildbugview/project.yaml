@@ -1,0 +1,65 @@
+---
+title: 项目测试数据
+desc: 用于buildBugView方法测试的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+- field: name
+  note: 项目名称
+  range: 项目1,项目2,项目3,项目4,项目5
+- field: code
+  note: 项目代号
+  range: project1,project2,project3,project4,project5
+- field: type
+  note: 类型
+  range: project
+- field: parent
+  note: 父项目
+  range: 0
+- field: hasProduct
+  note: 是否关联产品
+  range: 1{3},0{2}
+- field: model
+  note: 模型
+  range: scrum{2},waterfall{1},kanban{1},agileplus{1}
+- field: budget
+  note: 预算
+  range: 100000{3},200000{2}
+- field: budgetUnit
+  note: 预算单位
+  range: CNY
+- field: status
+  note: 状态
+  range: doing{3},wait{1},suspended{1}
+- field: begin
+  note: 开始日期
+  range: (-60d)-(-30d)
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: (30d)-(60d)
+  format: YYYY-MM-DD
+- field: days
+  note: 可用工作日
+  range: 0
+- field: PM
+  note: 项目经理
+  range: admin{3},user1{2}
+- field: openedBy
+  note: 创建人
+  range: admin
+- field: openedDate
+  note: 创建时间
+  range: (-90d)-(-60d)
+  format: YYYY-MM-DD hh:mm:ss
+- field: desc
+  note: 项目描述
+  range: <p>项目描述内容</p>
+- field: acl
+  note: 访问控制
+  range: open{3},private{2}
+- field: deleted
+  note: 是否删除
+  range: '0'
