@@ -220,5 +220,45 @@ window.checkRelated = function(name, type)
                 return false;
             }
         }
+        // 关闭 交付物 时，如果 项目变更 或 基线 已开启，需要提示关闭它们
+        else if(name.includes('projectDeliverable'))
+        {
+            const changeEnabled = isModuleEnabled('projectChange');
+            const cmEnabled     = isModuleEnabled('projectCm');
+
+            if(changeEnabled || cmEnabled)
+            {
+                let message = closeDependFeature.replace('{source}', changeLang);
+                const activeLangs = [];
+
+                if(changeEnabled) activeLangs.push(changeLang);
+                if(cmEnabled) activeLangs.push(cmLang);
+
+                message = message.replace('{target}', activeLangs.join(','));
+
+                showDependencyConfirm(
+                    message,
+                    () =>
+                    {
+                        if(changeEnabled) setModuleState('projectChange', false);
+                        if(cmEnabled) setModuleState('projectCm', false);
+                    },
+                    () => setModuleState('projectDeliverable', true)
+                );
+            }
+        }
+        // 关闭 基线 时，如果 项目变更 已开启，需要提示关闭 项目变更
+        else if(name.includes('projectCm'))
+        {
+            if(isModuleEnabled('projectChange'))
+            {
+                const message = closeDependFeature.replace('{source}', cmLang).replace('{target}', changeLang);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('projectChange', false),
+                    () => setModuleState('projectCm', true)
+                );
+            }
+        }
     }
 }
