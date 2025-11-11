@@ -204,7 +204,6 @@ function registerZentaoAIPlugin(lang)
 
     if(lang.knowledgeLib)
     {
-        window.knowledgeLibs = [];
         plugin.defineContextProvider({
             code : 'knowledgeLibs',
             title: lang.knowledgeLib,
