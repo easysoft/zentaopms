@@ -140,7 +140,11 @@ class cron extends control
         session_write_close();
 
         $execId = mt_rand();
-        if($restart) $this->cron->restartCron($execId);
+        if($restart)
+        {
+            $this->cron->restartCron($execId);
+            return $this->sendSuccess(array('load' => true));
+        }
 
         while(true)
         {
