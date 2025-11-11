@@ -2532,4 +2532,45 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test assignBranchForEdit method.
+     *
+     * @param  object $case
+     * @param  int    $executionID
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function assignBranchForEditTest(object $case, int $executionID = 0, string $tab = 'execution'): array
+    {
+        global $tester;
+
+        $tester->app->tab = $tab;
+        $objectID = $tab == 'execution' ? $executionID : $case->project;
+
+        $branchModel = $tester->loadModel('branch');
+        $branches = $branchModel->getList($case->product, $objectID, 'all');
+
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $closedTag = $branchInfo->status == 'closed' ? ' (已关闭)' : '';
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . $closedTag;
+        }
+
+        if(!isset($branchTagOption[$case->branch]) && $case->branch)
+        {
+            $caseBranch = $branchModel->getByID((string)$case->branch, $case->product, '');
+            if($caseBranch)
+            {
+                $closedTag = isset($caseBranch->status) && $caseBranch->status == 'closed' ? ' (已关闭)' : '';
+                $branchName = is_object($caseBranch) ? $caseBranch->name : $caseBranch;
+                $branchTagOption[$case->branch] = $branchName . $closedTag;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $branchTagOption;
+    }
+
 }
