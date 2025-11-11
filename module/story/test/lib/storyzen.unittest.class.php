@@ -1099,4 +1099,47 @@ class storyZenTest
             return 0;
         }
     }
+
+    /**
+     * Test getCustomFields method.
+     *
+     * @param  string $storyType
+     * @param  bool   $hiddenPlan
+     * @param  object $product
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function getCustomFieldsTest(string $storyType, bool $hiddenPlan, object $product, string $tab = 'product'): array
+    {
+        global $config, $app;
+
+        // 保存原始tab值
+        $oldTab = isset($app->tab) ? $app->tab : '';
+
+        // 设置测试环境的tab
+        $app->tab = $tab;
+
+        // 准备config对象
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->list)) $config->story->list = new stdclass();
+        if(!isset($config->story->custom)) $config->story->custom = new stdclass();
+        $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+        $config->story->custom->batchCreateFields = 'module,parent,%s,story,roadmap,plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+
+        // 准备storyType配置
+        if(!isset($config->{$storyType})) $config->{$storyType} = new stdclass();
+        if(!isset($config->{$storyType}->custom)) $config->{$storyType}->custom = new stdclass();
+
+        $method = $this->storyZenTest->getMethod('getCustomFields');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [&$config, $storyType, $hiddenPlan, $product]);
+
+        // 恢复原始tab
+        $app->tab = $oldTab;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
