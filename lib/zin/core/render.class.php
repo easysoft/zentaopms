@@ -207,7 +207,7 @@ class render
         $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
-            if(!empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands)) $selector->disabled = true;
+            $selector->disabled = !empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands);
             $this->selectors[$selector->name] = $selector;
         }
     }
