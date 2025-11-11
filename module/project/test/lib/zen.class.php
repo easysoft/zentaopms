@@ -212,4 +212,32 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $tester->config->build->search;
     }
+
+    /**
+     * Test processGroupPrivs method.
+     *
+     * @param  object $project 项目对象
+     * @access public
+     * @return object
+     */
+    public function processGroupPrivsTest($project = null)
+    {
+        global $tester;
+
+        /* 备份原始lang资源配置 */
+        $originalResource = clone $tester->lang->resource;
+
+        ob_start();
+        $result = $this->invokeArgs('processGroupPrivs', [$project]);
+        ob_end_clean();
+
+        /* 获取修改后的lang资源 */
+        $modifiedResource = $tester->lang->resource;
+
+        /* 恢复原始配置 */
+        $tester->lang->resource = $originalResource;
+
+        if(dao::isError()) return dao::getError();
+        return $modifiedResource;
+    }
 }
