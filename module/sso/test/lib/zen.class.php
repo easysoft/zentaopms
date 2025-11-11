@@ -22,4 +22,19 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildLocationByPATHINFO method.
+     *
+     * @param  string $location
+     * @param  string $referer
+     * @access public
+     * @return string
+     */
+    public function buildLocationByPATHINFOTest(string $location, string $referer): string
+    {
+        $result = $this->invokeArgs('buildLocationByPATHINFO', [$location, $referer]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
