@@ -1155,7 +1155,7 @@ class baseDAO
      * @access private
      * @return int
      */
-    private function convertReplaceToInsert($table)
+    protected function convertReplaceToInsert($table)
     {
         $processedData = new stdclass();
         foreach($this->sqlobj->data as $field => $value)
