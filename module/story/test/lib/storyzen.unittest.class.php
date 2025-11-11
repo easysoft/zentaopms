@@ -1079,4 +1079,24 @@ class storyZenTest
         if(dao::isError()) return implode(', ', dao::getError());
         return $result;
     }
+
+    /**
+     * Test getAssignMeBlockID method.
+     *
+     * @access public
+     * @return int
+     */
+    public function getAssignMeBlockIDTest(): int
+    {
+        $method = $this->storyZenTest->getMethod('getAssignMeBlockID');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->storyZenTest->newInstance(), []);
+            if(dao::isError()) return 0;
+            return (int)$result;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 }
