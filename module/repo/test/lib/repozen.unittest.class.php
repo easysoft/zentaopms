@@ -1749,4 +1749,48 @@ class repoZenTest
 
         return $modules;
     }
+
+    /**
+     * Test getSyncBranches method.
+     *
+     * @param  object $repo
+     * @param  string $branchID
+     * @param  array  $mockBranches
+     * @param  array  $mockTags
+     * @param  string $cookieBranch
+     * @access public
+     * @return array
+     */
+    public function getSyncBranchesTest($repo, &$branchID = '', $mockBranches = array(), $mockTags = array(), $cookieBranch = '')
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return array();
+
+        $branches = array();
+        if(in_array($repo->SCM, $this->objectModel->config->repo->gitTypeList))
+        {
+            if(empty($mockBranches)) return array();
+
+            $branches = $mockBranches;
+            $tags = $mockTags;
+            foreach($tags as $tag) $branches[$tag] = $tag;
+
+            if($branches)
+            {
+                if($cookieBranch) $branchID = $cookieBranch;
+                if(!isset($branches[$branchID])) $branchID = '';
+                if(empty($branchID)) $branchID = key($branches);
+
+                foreach($branches as $branch)
+                {
+                    unset($branches[$branch]);
+                    if($branch == $branchID) break;
+                }
+
+                helper::setcookie("syncBranch", $branchID);
+            }
+        }
+
+        return $branches;
+    }
 }
