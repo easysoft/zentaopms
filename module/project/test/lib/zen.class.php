@@ -240,4 +240,37 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $modifiedResource;
     }
+
+    /**
+     * Test recordExecutionsOfUnlinkedProducts method.
+     *
+     * @param  array $formerProducts   之前关联的产品列表
+     * @param  array $selectedIds      当前选中的产品ID列表
+     * @param  array $executionIdList  执行ID列表
+     * @access public
+     * @return array
+     */
+    public function recordExecutionsOfUnlinkedProductsTest($formerProducts = array(), $selectedIds = array(), $executionIdList = array())
+    {
+        /* 获取调用前的action数量 */
+        global $tester;
+        $beforeCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)
+            ->where('objectType')->eq('execution')
+            ->andWhere('action')->eq('unlinkproduct')
+            ->fetch('count');
+
+        /* 执行被测方法 */
+        $result = $this->invokeArgs('recordExecutionsOfUnlinkedProducts', [$formerProducts, $selectedIds, $executionIdList]);
+        if(dao::isError()) return dao::getError();
+
+        /* 获取调用后创建的action记录 */
+        $actions = $tester->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('execution')
+            ->andWhere('action')->eq('unlinkproduct')
+            ->andWhere('id')->gt($beforeCount)
+            ->orderBy('objectID_asc')
+            ->fetchAll('objectID');
+
+        return $actions;
+    }
 }
