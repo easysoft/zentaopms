@@ -1664,4 +1664,40 @@ class repoZenTest
             $_POST = $originalPost;
         }
     }
+
+    /**
+     * Test checkClient method.
+     *
+     * @param  array $postData
+     * @param  string $clientVersionFile
+     * @access public
+     * @return int|array
+     */
+    public function checkClientTest(array $postData, string $clientVersionFile = '')
+    {
+        $originalPost = $_POST;
+        $hasSession = session_id() ? true : false;
+        try
+        {
+            $_POST = $postData;
+            dao::$errors = array();
+            $scm = isset($_POST['SCM']) ? $_POST['SCM'] : '';
+            $client = isset($_POST['client']) ? $_POST['client'] : '';
+            if(in_array($scm, $this->objectModel->config->repo->notSyncSCM)) return 1;
+            if(!$this->objectModel->config->features->checkClient) return 1;
+            if(empty($client)) {dao::$errors['client'] = sprintf($this->objectModel->lang->error->notempty, $this->objectModel->lang->repo->client); return dao::getError();}
+            if(!$hasSession) session_start();
+            $versionFile = $clientVersionFile !== '' ? $clientVersionFile : (isset($this->objectModel->session->clientVersionFile) ? $this->objectModel->session->clientVersionFile : '');
+            if($clientVersionFile !== '') $this->objectModel->session->set('clientVersionFile', $clientVersionFile);
+            if(!$hasSession) session_write_close();
+            if(!empty($versionFile) && file_exists($versionFile)) return 1;
+            if(!$hasSession) session_start();
+            if(empty($versionFile)) {$versionFile = $this->objectModel->app->getLogRoot() . uniqid('version_') . '.log'; $this->objectModel->session->set('clientVersionFile', $versionFile);}
+            if(!$hasSession) session_write_close();
+            dao::$errors['client'] = sprintf($this->objectModel->lang->repo->error->safe, $versionFile, $client . " --version > $versionFile");
+            return dao::getError();
+        }
+        catch(Exception $e) {return array('error' => $e->getMessage());}
+        finally {$_POST = $originalPost;}
+    }
 }
