@@ -1192,4 +1192,35 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 获取需求变更表单字段。
+     * Get form fields for change story.
+     *
+     * @param  int   $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForChangeTest(int $storyID): array
+    {
+        global $tester;
+
+        // 获取story和product数据用于测试
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $product = $tester->loadModel('product')->getByID($story->product);
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForChange');
+        $method->setAccessible(true);
+
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+        $storyInstance->view->product = $product;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
