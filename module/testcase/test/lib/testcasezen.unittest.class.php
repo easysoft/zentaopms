@@ -1689,28 +1689,36 @@ class testcaseZenTest
      */
     public function addEditActionTest(int $caseID, string $oldStatus, string $status, array $changes = array(), string $comment = ''): array
     {
-        // 模拟 addEditAction 方法的逻辑验证
-        $expectedActionCount = 0;
+        global $tester;
 
-        // 判断是否需要创建编辑/评论动作
-        if(!empty($changes) || !empty($comment))
-        {
-            $expectedActionCount++;
+        try {
+            // 调用前先统计已有的action数量
+            $beforeCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)
+                ->where('objectType')->eq('case')
+                ->andWhere('objectID')->eq($caseID)
+                ->fetch('count');
+
+            // 调用被测方法
+            callZenMethod('testcase', 'addEditAction', [$caseID, $oldStatus, $status, $changes, $comment]);
+
+            // 检查是否有错误
+            if(dao::isError()) return array('error' => dao::getError());
+
+            // 调用后统计action数量
+            $afterCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)
+                ->where('objectType')->eq('case')
+                ->andWhere('objectID')->eq($caseID)
+                ->fetch('count');
+
+            // 返回新增的action数量
+            $addedCount = $afterCount - $beforeCount;
+
+            return array('actionCount' => $addedCount);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
         }
-
-        // 判断是否需要创建提交审核动作
-        if($oldStatus != 'wait' && $status == 'wait')
-        {
-            $expectedActionCount++;
-        }
-
-        // 如果没有任何变更，至少会创建一个空的评论动作
-        if(empty($changes) && empty($comment))
-        {
-            $expectedActionCount = 1;
-        }
-
-        return array('result' => $expectedActionCount);
     }
 
     /**
