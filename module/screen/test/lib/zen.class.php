@@ -22,4 +22,18 @@ class screenZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test prepareCardList method.
+     *
+     * @param  array $screens
+     * @access public
+     * @return array
+     */
+    public function prepareCardListTest(array $screens): array
+    {
+        $result = $this->invokeArgs('prepareCardList', [$screens]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
