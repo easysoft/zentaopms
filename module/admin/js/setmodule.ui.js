@@ -138,3 +138,37 @@ function showDependencyConfirm(message, onConfirm, onCancel)
         if(onCancel) onCancel();
     });
 }
+
+window.checkRelated = function(name, type)
+{
+    if(type === 'open')
+    {
+        // 开启 业务需求 时，需要确保 用户需求 已开启
+        if(name.includes('productER') && edition !== 'ipd')
+        {
+            if(!isModuleEnabled('productUR'))
+            {
+                const message = openDependFeature.replace('{source}', ERCommon).replace('{target}', URCommon);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('productUR', true),
+                    () => setModuleState('productER', false)
+                );
+                return false;
+            }
+        }
+        // 开启 项目变更 时，需要确保 交付物 已开启
+        else if(name.includes('projectCm'))
+        {
+            if(!isModuleEnabled('projectDeliverable'))
+            {
+                const message = openDependFeature.replace('{source}', deliverableLang).replace('{target}', changeLang);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('projectDeliverable', true),
+                    () => setModuleState('projectCm', false)
+                );
+                return false;
+            }
+        }
+}
