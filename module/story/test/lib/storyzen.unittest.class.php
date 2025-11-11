@@ -985,4 +985,42 @@ class storyZenTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * 构建需求变更数据。
+     * Build story for change.
+     *
+     * @param  int   $storyID
+     * @param  array $postData
+     * @access public
+     * @return object|array|false
+     */
+    public function buildStoryForChangeTest(int $storyID, array $postData = array()): object|array|false
+    {
+        global $config, $tester;
+
+        // 设置必要的配置 - 必须在设置POST之前
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->change)) $config->story->change = new stdclass();
+        if(!isset($config->story->change->requiredFields)) $config->story->change->requiredFields = 'spec,comment';
+        if(!isset($config->story->form)) $config->story->form = new stdclass();
+        if(!isset($config->story->form->change)) $config->story->form->change = array();
+        if(!isset($config->story->editor)) $config->story->editor = new stdclass();
+        if(!isset($config->story->editor->change)) $config->story->editor->change = array('id' => 'spec,verify');
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) $_POST[$key] = $value;
+        }
+
+        $result = callZenMethod('story', 'buildStoryForChange', [$storyID]);
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) unset($_POST[$key]);
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
