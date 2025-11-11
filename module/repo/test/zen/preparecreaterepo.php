@@ -13,7 +13,7 @@ cid=0
 - 执行result4 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$fullRepo, 'normal' 属性path @https://test.example.com/dev-group/full-test-repo
 - 执行acl) && strpos($result1模块的acl, 'open') !== false方法  @1
 - 执行acl) && json_decode($result4模块的acl) !== null方法  @1
-- 执行result5 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$noAclRepo, 'no_acl' 属性name @no-acl-repo
+- 执行result5 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$noAclRepo, 'normal' 属性name @no-acl-repo
 
 */
 
@@ -47,13 +47,6 @@ $fullRepo->serviceHost = '2';
 $fullRepo->namespace = 'dev-group';
 $fullRepo->SCM = 'Gitlab';
 
-// 自定义权限的代码库对象
-$customAclRepo = new stdclass();
-$customAclRepo->name = 'custom-acl-repo';
-$customAclRepo->acl = '{"acl":"custom","groups":["1","2"],"users":["admin","user1"]}';
-$customAclRepo->serviceHost = '1';
-$customAclRepo->namespace = 'custom-group';
-
 // 无ACL字段的代码库对象
 $noAclRepo = new stdclass();
 $noAclRepo->name = 'no-acl-repo';
@@ -66,4 +59,4 @@ r($result3 = $repoZenTest->prepareCreateRepoTest(null, 'normal')) && p() && e('0
 r($result4 = $repoZenTest->prepareCreateRepoTest($fullRepo, 'normal')) && p('path') && e('https://test.example.com/dev-group/full-test-repo');
 r(is_object($result1) && isset($result1->acl) && strpos($result1->acl, 'open') !== false) && p() && e('1');
 r(is_object($result4) && isset($result4->acl) && json_decode($result4->acl) !== null) && p() && e('1');
-r($result5 = $repoZenTest->prepareCreateRepoTest($noAclRepo, 'no_acl')) && p('name') && e('no-acl-repo');
+r($result5 = $repoZenTest->prepareCreateRepoTest($noAclRepo, 'normal')) && p('name') && e('no-acl-repo');
