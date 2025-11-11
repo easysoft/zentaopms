@@ -21,4 +21,18 @@ class systemZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getMemUsage method.
+     *
+     * @param  object $metrics
+     * @access public
+     * @return mixed
+     */
+    public function getMemUsageTest(object $metrics)
+    {
+        $result = $this->invokeArgs('getMemUsage', [$metrics]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
