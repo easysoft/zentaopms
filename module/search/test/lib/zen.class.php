@@ -77,4 +77,29 @@ class searchZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setSessionForIndex method.
+     *
+     * @param  string $uri
+     * @param  string $words
+     * @param  string|array $type
+     * @access public
+     * @return mixed
+     */
+    public function setSessionForIndexTest($uri, $words, $type)
+    {
+        $this->invokeArgs('setSessionForIndex', [$uri, $words, $type]);
+        if(dao::isError()) return dao::getError();
+
+        /* Return session values for verification. */
+        $sessionData = new stdclass();
+        $sessionData->bugList = $_SESSION['bugList'] ?? '';
+        $sessionData->taskList = $_SESSION['taskList'] ?? '';
+        $sessionData->productList = $_SESSION['productList'] ?? '';
+        $sessionData->searchIngWord = $_SESSION['searchIngWord'] ?? '';
+        $sessionData->searchIngType = $_SESSION['searchIngType'] ?? '';
+
+        return $sessionData;
+    }
 }
