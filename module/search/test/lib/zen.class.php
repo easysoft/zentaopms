@@ -48,4 +48,17 @@ class searchZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setOptionOperators method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setOptionOperatorsTest()
+    {
+        $result = $this->invokeArgs('setOptionOperators');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
