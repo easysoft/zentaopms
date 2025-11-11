@@ -782,7 +782,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedBy` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime DEFAULT NULL,
-  `story` char(30) NOT NULL DEFAULT '',
+  `story` int unsigned NOT NULL DEFAULT 0,
   `storyVersion` smallint unsigned NOT NULL DEFAULT 1,
   `docs` text DEFAULT NULL,
   `docVersions` text DEFAULT NULL,
