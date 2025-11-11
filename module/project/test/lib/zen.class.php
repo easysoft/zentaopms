@@ -21,4 +21,23 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test displayAfterCreated method.
+     *
+     * @param  int $projectID 项目ID
+     * @access public
+     * @return mixed
+     */
+    public function displayAfterCreatedTest($projectID = 0)
+    {
+        global $tester;
+        ob_start();
+        $result = $this->invokeArgs('displayAfterCreated', [$projectID]);
+        ob_end_clean();
+
+        $view = $tester->view;
+        if(dao::isError()) return dao::getError();
+        return $view;
+    }
 }
