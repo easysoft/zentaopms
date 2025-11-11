@@ -36,4 +36,19 @@ class screenZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setSelectFilter method.
+     *
+     * @param  string $sourceID
+     * @param  array  $filters
+     * @access public
+     * @return mixed
+     */
+    public function setSelectFilterTest($sourceID, $filters)
+    {
+        $result = $this->invokeArgs('setSelectFilter', [$sourceID, $filters]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
