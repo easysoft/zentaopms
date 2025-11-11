@@ -689,4 +689,48 @@ class projectzenTest
 
         return array('queryID' => $queryID);
     }
+
+    /**
+     * Test assignTesttaskVars method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return mixed
+     */
+    public function assignTesttaskVarsTest($tasks = array())
+    {
+        try
+        {
+            global $tester, $lang;
+
+            // 初始化必要的语言和配置
+            if(!isset($lang->trunk)) $lang->trunk = 'trunk';
+
+            // 初始化zen对象的依赖
+            $this->objectZen->lang = $lang;
+            $this->objectZen->view = new stdClass();
+
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('assignTesttaskVars');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $method->invoke($this->objectZen, $tasks);
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回view对象中设置的统计数据
+            return (object)array(
+                'waitCount' => isset($this->objectZen->view->waitCount) ? $this->objectZen->view->waitCount : 0,
+                'testingCount' => isset($this->objectZen->view->testingCount) ? $this->objectZen->view->testingCount : 0,
+                'blockedCount' => isset($this->objectZen->view->blockedCount) ? $this->objectZen->view->blockedCount : 0,
+                'doneCount' => isset($this->objectZen->view->doneCount) ? $this->objectZen->view->doneCount : 0,
+                'taskCount' => isset($this->objectZen->view->tasks) ? count($this->objectZen->view->tasks) : 0
+            );
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }

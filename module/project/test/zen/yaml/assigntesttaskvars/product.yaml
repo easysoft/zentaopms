@@ -1,0 +1,50 @@
+---
+title: 产品数据
+desc: assignTesttaskVars方法测试产品数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: program
+  note: 所属项目集ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 产品代号
+  range: 'P001,P002,P003,P004,P005,P006,P007,P008,P009,P010'
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 产品类型
+  range: normal,branch,platform,normal,normal
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 状态
+  range: normal
+  prefix: ""
+  postfix: ""
+- field: PO
+  note: 产品负责人
+  range: admin,user1,user2,admin,user1
+  prefix: ""
+  postfix: ""
+- field: acl
+  note: 访问控制
+  range: open,private,open,open,private
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
