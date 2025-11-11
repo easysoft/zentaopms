@@ -1482,4 +1482,33 @@ class storyZenTest
         if(dao::isError()) return dao::getError();
         return $story;
     }
+
+    /**
+     * Test removeFormFieldsForBatchCreate method.
+     *
+     * @param  array  $fields
+     * @param  bool   $hiddenPlan
+     * @param  string $executionType
+     * @param  int    $executionID
+     * @param  string $appTab
+     * @access public
+     * @return array
+     */
+    public function removeFormFieldsForBatchCreateTest(array $fields, bool $hiddenPlan, string $executionType, int $executionID = 0, string $appTab = ''): array
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('removeFormFieldsForBatchCreate');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->project = $tester->loadModel('project');
+        $storyZen->app = $tester->app;
+        $storyZen->app->tab = $appTab;
+        $storyZen->dao = $tester->dao;
+
+        $result = $method->invokeArgs($storyZen, [$fields, $hiddenPlan, $executionType, $executionID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
