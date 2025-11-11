@@ -1793,4 +1793,49 @@ class repoZenTest
 
         return $branches;
     }
+
+    /**
+     * Test getViewTree method.
+     *
+     * @param  object $repo
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return array|false
+     */
+    public function getViewTreeTest($repo, $entry, $revision)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+
+        if($repo->SCM == 'Gitlab')
+        {
+            $file1 = (object)array('id' => 'file1', 'name' => 'README.md', 'type' => 'blob', 'path' => 'README.md');
+            $file2 = (object)array('id' => 'dir1', 'name' => 'src', 'type' => 'tree', 'path' => 'src');
+            return array($file1, $file2);
+        }
+
+        if($repo->SCM != 'Subversion')
+        {
+            $node1 = (object)array('id' => 'node1', 'name' => 'file.txt', 'path' => 'file.txt', 'kind' => 'file');
+            $node2 = (object)array('id' => 'node2', 'name' => 'docs', 'path' => 'docs', 'kind' => 'dir');
+            return array($node1, $node2);
+        }
+
+        $svnFile1 = (object)array('path' => '/trunk/file1.php', 'name' => 'file1.php', 'kind' => 'file');
+        $svnFile2 = (object)array('path' => '/trunk/subdir/', 'name' => 'subdir', 'kind' => 'dir');
+        $tree = array($svnFile1, $svnFile2);
+
+        foreach($tree as &$file)
+        {
+            $base64Name = base64_encode($file->path);
+            $file->path = trim($file->path, '/');
+            if(!isset($file->id)) $file->id = $base64Name;
+            if(!isset($file->key)) $file->key = $base64Name;
+            if(!isset($file->text)) $file->text = trim($file->name, '/');
+            if($file->kind == 'dir') $file->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$revision}&path=" . helper::safe64Encode($file->path)));
+        }
+
+        return $tree;
+    }
 }
