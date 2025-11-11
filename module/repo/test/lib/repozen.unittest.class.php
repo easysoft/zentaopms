@@ -1585,4 +1585,45 @@ class repoZenTest
         // 在实际环境中会调用相应的API方法获取项目信息
         return false;
     }
+
+    /**
+     * Test buildRepoTree method.
+     *
+     * @param  array  $pathList
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function buildRepoTreeTest(array $pathList = array(), string $parent = '0')
+    {
+        if(dao::isError()) return dao::getError();
+
+        $treeList = array();
+        $key      = 0;
+        $pathName = array();
+        $repoName = array();
+
+        foreach($pathList as $path)
+        {
+            if ($path['parent'] == $parent)
+            {
+                $treeList[$key] = $path;
+                $repoName[$key] = $path['text'];
+                $pathName[$key] = '~';
+                $children = $this->buildRepoTreeTest($pathList, $path['path']);
+                if($children)
+                {
+                    unset($treeList[$key]['value']);
+                    $treeList[$key]['disabled'] = true;
+                    $treeList[$key]['items'] = $children;
+                    $repoName[$key] = '';
+                    $pathName[$key] = $path['path'];
+                }
+            }
+            $key++;
+        }
+
+        array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
+        return $treeList;
+    }
 }
