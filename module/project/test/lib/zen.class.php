@@ -54,4 +54,24 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test extractUnModifyForm method.
+     *
+     * @param  int    $projectID 项目ID
+     * @param  object $project   项目对象
+     * @access public
+     * @return object
+     */
+    public function extractUnModifyFormTest($projectID = 0, $project = null)
+    {
+        global $tester;
+        ob_start();
+        $result = $this->invokeArgs('extractUnModifyForm', [$projectID, $project]);
+        ob_end_clean();
+
+        $view = $tester->view;
+        if(dao::isError()) return dao::getError();
+        return $view;
+    }
 }
