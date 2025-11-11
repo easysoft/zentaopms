@@ -1,0 +1,25 @@
+<?php
+declare(strict_types = 1);
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class screenZenTest extends baseTest
+{
+    protected $moduleName = 'screen';
+    protected $className  = 'zen';
+
+    /**
+     * Test commonAction method.
+     *
+     * @param  int  $dimensionID
+     * @param  bool $setMenu
+     * @access public
+     * @return mixed
+     */
+    public function commonActionTest($dimensionID, $setMenu = true)
+    {
+        $result = $this->invokeArgs('commonAction', [$dimensionID, $setMenu]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+}
