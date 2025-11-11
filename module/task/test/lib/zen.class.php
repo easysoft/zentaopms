@@ -56,4 +56,35 @@ class taskZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getExportFields method.
+     *
+     * @param  string $allExportFields
+     * @param  array  $postData
+     * @access public
+     * @return array
+     */
+    public function getExportFieldsTest(string $allExportFields, array $postData = array()): array
+    {
+        // 模拟POST数据
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value)
+            {
+                $_POST[$key] = $value;
+            }
+        }
+
+        $result = $this->invokeArgs('getExportFields', [$allExportFields]);
+        if(dao::isError()) return dao::getError();
+
+        // 清理POST数据
+        foreach($postData as $key => $value)
+        {
+            unset($_POST[$key]);
+        }
+
+        return $result;
+    }
 }
