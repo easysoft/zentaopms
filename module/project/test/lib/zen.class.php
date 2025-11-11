@@ -87,4 +87,21 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getOtherProducts method.
+     *
+     * @param  array $programProducts 项目集下的产品列表
+     * @param  array $branchGroups    分支分组数据
+     * @param  array $linkedBranches  已关联的分支
+     * @param  array $linkedProducts  已关联的产品
+     * @access public
+     * @return array
+     */
+    public function getOtherProductsTest($programProducts = array(), $branchGroups = array(), $linkedBranches = array(), $linkedProducts = array())
+    {
+        $result = $this->invokeArgs('getOtherProducts', [$programProducts, $branchGroups, $linkedBranches, $linkedProducts]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
