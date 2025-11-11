@@ -1,0 +1,23 @@
+<?php
+declare(strict_types = 1);
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class searchZenTest extends baseTest
+{
+    protected $moduleName = 'search';
+    protected $className  = 'zen';
+
+    /**
+     * Test getTypeList method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getTypeListTest()
+    {
+        $result = $this->invokeArgs('getTypeList');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+}
