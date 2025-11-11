@@ -2573,4 +2573,38 @@ class testcaseZenTest
         return $branchTagOption;
     }
 
+    /**
+     * Test assignCasesForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $from
+     * @access public
+     * @return array
+     */
+    public function assignCasesForBrowseTest(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): array
+    {
+        ob_start();
+        callZenMethod('testcase', 'assignCasesForBrowse', [$productID, $branch, $browseType, $queryID, $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from]);
+        $view = callZenMethod('testcase', 'assignCasesForBrowse', [$productID, $branch, $browseType, $queryID, $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from], 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        $output = array();
+        $output['casesCount'] = isset($view->cases) ? count($view->cases) : 0;
+        $output['orderBy'] = isset($view->orderBy) ? $view->orderBy : '';
+        $output['hasPager'] = isset($view->pager) ? 1 : 0;
+
+        return $output;
+    }
+
 }
