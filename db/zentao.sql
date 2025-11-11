@@ -1385,7 +1385,7 @@ CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `objectType` varchar(50) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `action` int unsigned NOT NULL DEFAULT 0,
   `toList` text DEFAULT NULL,
@@ -1919,7 +1919,7 @@ CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  `objectType` varchar(20) NOT NULL DEFAULT '',
+  `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `title` text DEFAULT NULL,
   `content` text DEFAULT NULL,
@@ -1950,7 +1950,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `key` tinyint unsigned NOT NULL DEFAULT 0,
@@ -2270,7 +2270,7 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `bugs` text DEFAULT NULL,
   `cases` text DEFAULT NULL,
   `report` text DEFAULT NULL,
-  `objectType` varchar(20) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -2841,7 +2841,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` int unsigned NOT NULL DEFAULT 0,
   `objectId` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(100) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `ticketId` ON `zt_ticketrelation` (`ticketId`);
@@ -13942,7 +13942,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `practiceArea` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
@@ -13962,7 +13962,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `dateType` varchar(30) NOT NULL DEFAULT '',
   `config` text DEFAULT NULL,
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `process` int unsigned NOT NULL DEFAULT 0,
   `processType` varchar(30) NOT NULL DEFAULT '',
   `checkDate` date DEFAULT NULL,
@@ -14235,7 +14235,7 @@ CREATE TABLE IF NOT EXISTS `zt_meeting` (
   `minutes` text DEFAULT NULL,
   `minutedBy` varchar(30) NOT NULL DEFAULT '',
   `minutedDate` datetime DEFAULT NULL,
-  `objectType` varchar(30) NOT NULL DEFAULT '',
+  `objectType` varchar(15) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
@@ -15698,7 +15698,7 @@ CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(50) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `sql` text DEFAULT NULL,
   `setting` text DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -16541,7 +16541,7 @@ CREATE INDEX `idx_status` ON `zt_system`(`status`);
 -- DROP TABLE IF EXISTS `zt_mark`;
 CREATE TABLE IF NOT EXISTS `zt_mark` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `objectType` varchar(50) NOT NULL DEFAULT '',
+  `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `version` varchar(50) NOT NULL DEFAULT '',
   `account` varchar(30) NOT NULL DEFAULT '',
