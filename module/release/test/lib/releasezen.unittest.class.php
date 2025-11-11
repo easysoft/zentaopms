@@ -326,4 +326,18 @@ class releaseZenTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getSearchQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getSearchQueryTest($queryID = 0)
+    {
+        $result = callZenMethod('release', 'getSearchQuery', array($queryID));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

@@ -1,0 +1,61 @@
+---
+title: userquery数据定义
+desc: 用于测试getSearchQuery方法的用户查询数据
+
+fields:
+- field: id
+  note: 查询ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{5}, user1{3}, user2{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: release{8}, product{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 查询标题
+  range: 发布搜索1, 发布搜索2, 发布搜索3, 发布搜索4, 发布搜索5, 产品搜索1, 产品搜索2, 其他查询1, 其他查询2, 其他查询3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: form
+  note: 表单数据
+  range: '{"status":"wait"}', '{"branch":"all"}', '{"name":"test"}', '{"status":"normal"}', '{"build":"1"}', '[]', '[]', '[]', '[]', '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL查询条件
+  range: '`status` = "wait"', '`branch` = "all"', '`name` LIKE "%test%"', '`status` = "normal" AND `build` = 1', '`build` > 0', '1 = 1', '1 = 1', '1 = 1', '1 = 1', '1 = 1'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: shortcut
+  note: 是否快捷方式
+  range: '0{8}, 1{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: common
+  note: 是否公共查询
+  range: '0{6}, 1{4}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
