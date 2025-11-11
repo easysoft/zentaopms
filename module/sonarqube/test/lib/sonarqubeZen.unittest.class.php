@@ -38,4 +38,28 @@ class sonarqubeZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return 'success';
     }
+
+    /**
+     * Test sortAndPage method.
+     *
+     * @param  array  $dataList
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return mixed
+     */
+    public function sortAndPageTest(array $dataList, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $result = $this->invokeArgs('sortAndPage', array($dataList, $orderBy, $recPerPage, $pageID));
+
+        if(dao::isError()) return dao::getError();
+
+        /* Return the page data directly instead of chunked array. */
+        if(!empty($result) && isset($result[$pageID - 1]))
+        {
+            return $result[$pageID - 1];
+        }
+        return $result;
+    }
 }
