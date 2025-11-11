@@ -456,7 +456,7 @@ class zaiModel extends model
 
         if($result['result'] === 'success')
         {
-            if(!empty($result['data']['id'])) return $result['data']['id'];
+            if(!empty($result['data']['content_id'])) return $result['data']['content_id'];
 
             $contentsResult = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'GET');
             if($contentsResult['result'] !== 'success') return null;
