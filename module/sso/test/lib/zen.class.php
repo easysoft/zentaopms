@@ -37,4 +37,18 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildSSOParams method.
+     *
+     * @param  string $referer
+     * @access public
+     * @return string
+     */
+    public function buildSSOParamsTest(string $referer): string
+    {
+        $result = $this->invokeArgs('buildSSOParams', [$referer]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
