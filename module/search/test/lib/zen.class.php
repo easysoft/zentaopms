@@ -20,4 +20,17 @@ class searchZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test setOptionAndOr method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function setOptionAndOrTest()
+    {
+        $result = $this->invokeArgs('setOptionAndOr');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
