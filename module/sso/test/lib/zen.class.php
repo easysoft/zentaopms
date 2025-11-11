@@ -136,4 +136,39 @@ class ssoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test locateNotifyLink method.
+     *
+     * @param  string $location
+     * @param  string $referer
+     * @access public
+     * @return string
+     */
+    public function locateNotifyLinkTest(string $location, string $referer): string
+    {
+        /* Since locateNotifyLink calls locate() which redirects, we need to capture the built location before redirect. */
+        /* We'll call the buildLocationByGET or buildLocationByPATHINFO directly based on the logic. */
+        $isGet = strpos($location, '&') !== false;
+        $requestType = $_GET['requestType'] ?? '';
+        if(!empty($requestType)) $isGet = $requestType == 'GET' ? true : false;
+
+        if($isGet)
+        {
+            $result = $this->invokeArgs('buildLocationByGET', [$location, $referer]);
+        }
+        else
+        {
+            $result = $this->invokeArgs('buildLocationByPATHINFO', [$location, $referer]);
+        }
+
+        if(!empty($_GET['sessionid']))
+        {
+            $sessionConfig = json_decode(base64_decode($_GET['sessionid']), false);
+            $result .= '&' . $sessionConfig->session_name . '=' . $sessionConfig->session_id;
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
