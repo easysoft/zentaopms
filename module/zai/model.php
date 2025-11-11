@@ -705,6 +705,27 @@ class zaiModel extends model
     }
 
     /**
+     * 提取文件内容。
+     * Extract file content.
+     *
+     * @access public
+     * @param int $fileID
+     * @return array
+     */
+    public function extractFileContent(int $fileID): array|null
+    {
+        $file = $this->loadModel('file')->getByID($fileID);
+        if(!is_object($file) || empty($file->realPath)) return null;
+
+        $filePath = $file->realPath;
+        $cFile    = new CURLFile($filePath, null, $file->title);
+        $result = $this->callAdminAPI('/v8/files/extract', 'POST', null, ['file' => $cFile]);
+
+        if($result['result'] != 'success') return null;
+        return $result['data'];
+    }
+
+    /**
      * 用户对象可查看缓存配置。
      * User object view cache configuration.
      *
