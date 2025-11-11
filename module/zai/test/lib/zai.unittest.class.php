@@ -236,6 +236,18 @@ class zaiTest
     }
 
     /**
+     * Test convertTaskToMarkdown static method.
+     *
+     * @param  object $task
+     * @access public
+     * @return array
+     */
+    public function convertTaskToMarkdownTest($task)
+    {
+        return zaiModel::convertTaskToMarkdown($task);
+    }
+
+    /**
      * Test convertDocToMarkdown static method.
      *
      * @param  object $doc
