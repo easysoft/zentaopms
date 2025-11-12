@@ -3107,4 +3107,66 @@ class testcaseZenTest
         );
     }
 
+    /**
+     * Test checkProducts method.
+     *
+     * @param  string $tab
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  bool   $hasProducts
+     * @access public
+     * @return array
+     */
+    public function checkProductsTest(string $tab = 'qa', int $projectID = 0, int $executionID = 0, bool $hasProducts = true): array
+    {
+        global $tester;
+
+        // 保存原始状态
+        $originalTab = $tester->app->tab;
+        $originalProject = isset($tester->session->project) ? $tester->session->project : null;
+        $originalExecution = isset($tester->session->execution) ? $tester->session->execution : null;
+
+        try {
+            // 设置测试环境
+            $tester->app->tab = $tab;
+            if($tab == 'project') $tester->session->set('project', $projectID);
+            if($tab == 'execution') $tester->session->set('execution', $executionID);
+
+            // 设置 products 属性
+            if($hasProducts)
+            {
+                $product = new stdClass();
+                $product->id = 1;
+                $product->name = 'Test Product';
+                $this->testcaseZenTest->products = array($product);
+            }
+            else
+            {
+                $this->testcaseZenTest->products = array();
+            }
+
+            // 调用被测方法
+            try {
+                callZenMethod('testcase', 'checkProducts', array());
+                $success = 1;
+                $error = '';
+            } catch(Exception $e) {
+                $success = 0;
+                $error = $e->getMessage();
+            }
+
+            return array(
+                'success' => $success,
+                'error' => $error,
+                'tab' => $tab,
+                'hasProducts' => $hasProducts ? 1 : 0
+            );
+        } finally {
+            // 恢复原始环境
+            $tester->app->tab = $originalTab;
+            if($originalProject !== null) $tester->session->set('project', $originalProject);
+            if($originalExecution !== null) $tester->session->set('execution', $originalExecution);
+        }
+    }
+
 }
