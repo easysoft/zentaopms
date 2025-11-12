@@ -270,29 +270,32 @@ class testtask extends control
         $testtask = $this->testtask->getByID($testtaskID, true);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
+        $productID   = !empty($_SESSION['product'])   && !empty($testtask->joint) ? $this->session->product   : $testtask->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($testtask->joint) ? $this->session->project   : $testtask->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($testtask->joint) ? $this->session->execution : $testtask->execution;
+
         /* session 改变时重新查询关联的产品。*/
         /* When the session changes, query the related products again. */
         $products = $this->products;
-        if($this->session->project != $testtask->project) $products = $this->loadModel('product')->getProductPairsByProject($testtask->project);
-        $this->session->project = $testtask->project;
+        if($this->session->project != $projectID) $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->session->project = $projectID;
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
-        $productID = $testtask->product;
         if(!isset($products[$productID]))
         {
             $product = $this->loadModel('product')->getByID($productID);
             $products[$productID] = $product->name;
         }
 
-        $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution);
+        $this->testtaskZen->setMenu($productID, $testtask->branch, $projectID, $executionID);
         $this->testtaskZen->setDropMenu($productID, $testtask);
 
         /* 执行工作流配置的扩展动作。*/
         /* Execute extended actions configured in the workflow. */
         $this->executeHooks($testtaskID);
 
-        if($testtask->execution) $this->view->execution = $this->loadModel('project')->getByID($testtask->execution);
+        if(!empty($executionID)) $this->view->execution = $this->loadModel('project')->getByID($executionID);
 
         $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$productID];
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -466,8 +469,10 @@ class testtask extends control
             }
         }
 
-        $task = $this->testtask->getByID($taskID);
-        $this->testtaskZen->setMenu($productID, $branchID, $task->project, $task->execution);
+        $task        = $this->testtask->getByID($taskID);
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
+        $this->testtaskZen->setMenu($productID, $branchID, $projectID, $executionID);
         $this->testtaskZen->setDropMenu($productID, $task);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
@@ -506,10 +511,14 @@ class testtask extends control
         $task = $this->testtask->getByID($taskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
+        $productID   = !empty($_SESSION['product'])   && !empty($task->joint) ? $this->session->product   : $task->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
+
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
-        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
+        $this->testtaskZen->setMenu($productID, $task->branch, $projectID, $executionID);
         $this->testtaskZen->setDropMenu($productID, $task);
 
         /* 保存部分内容到 session 和 cookie 中供后面使用。*/
@@ -577,11 +586,14 @@ class testtask extends control
         }
 
         /* Get task info. */
-        $task = $this->testtask->getByID($taskID);
+        $task        = $this->testtask->getByID($taskID);
+        $productID   = !empty($_SESSION['product'])   && !empty($task->joint) ? $this->session->product   : $task->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
 
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
-        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
@@ -591,7 +603,7 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setMenu($productID, $task->branch, $projectID, $executionID);
         $this->testtaskZen->assignForEdit($task, $productID);
 
         $this->display();
@@ -815,8 +827,12 @@ class testtask extends control
         $task = $this->testtask->getByID($taskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
+        $productID   = !empty($_SESSION['product'])   && !empty($task->joint) ? $this->session->product   : $task->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
+
         /* Check if user have permission to access the product to which the testtask belongs. */
-        $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
+        $productID = $this->loadModel('product')->checkAccess($productID, $this->products);
 
         /* Prepare the product key-value pairs. */
         $product = $this->product->getByID($productID);
@@ -825,7 +841,7 @@ class testtask extends control
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
-        $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setMenu($productID, $task->branch, $projectID, $executionID);
         $this->testtaskZen->setDropMenu($productID, $task);
         $this->testtaskZen->setSearchParamsForLinkCase($product, $task, $type, $param);
 
