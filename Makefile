@@ -45,6 +45,23 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr roadrunner zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
+	cd zentaopms/lib/; rm -fr composer.json composer.lock patches vendor/bin vendor/cweagans vendor/laminas vendor/markbaker vendor/paragonie vendor/phpseclib vendor/psr vendor/symfony
+	cd zentaopms/lib/vendor/box/spout; rm -fr appveyor.yml composer.json PATCHES.txt README.md UPGRADE-3.0.md
+	cd zentaopms/lib/vendor/dragonmantank/cron-expression; rm -fr tests CHANGELOG.md composer.json README.md
+	cd zentaopms/lib/vendor/erusev/parsedown; rm -fr composer.json PATCHES.txt README.md
+	cd zentaopms/lib/vendor/ezyang/htmlpurifier; rm -fr composer.json CREDITS README.md VERSION
+	cd zentaopms/lib/vendor/gorhill/php-fine-diff; rm -fr composer.json PATCHES.txt sample_from.txt sample_to.txt viewdiff-ex.php viewdiff.php
+	cd zentaopms/lib/vendor/gregwar/captcha; rm -fr composer.json README.md
+	cd zentaopms/lib/vendor/masterexploder/phpthumb; rm -fr examples tests composer.json PATCHES.txt phpunit.xml.dist README.md
+	cd zentaopms/lib/vendor/mobiledetect/mobiledetectlib; rm -fr tests composer.json docker-compose.yml phpcs.xml README.md
+	cd zentaopms/lib/vendor/mustangostang/spyc; rm -fr examples php4 tests composer.json PATCHES.txt phpunit.xml README.md spyc.yaml
+	cd zentaopms/lib/vendor/overtrue/pinyin; rm -fr composer.json README.md
+	cd zentaopms/lib/vendor/pclzip/pclzip; rm -fr composer.json PATCHES.txt readme.txt
+	cd zentaopms/lib/vendor/phpmailer/phpmailer; rm -fr COMMITMENT composer.json README.md SECURITY.md SMTPUTF8.md VERSION
+	cd zentaopms/lib/vendor/phpoffice/phpspreadsheet; rm -fr bin docs samples CHANGELOG.md CHANGELOG.PHPExcel.md composer.json composer.lock CONTRIBUTING.md mkdocs.yml PATCHES.txt phpunit.xml.dist
+	cd zentaopms/lib/vendor/phpoffice/phpword; rm -fr CHANGELOG.md composer.json CONTRIBUTING.md COPYING COPYING.LESSER phpword.ini.dist README.md sonar-project.properties
+	cd zentaopms/lib/vendor/rmccue/requests; rm -fr CHANGELOG.md composer.json README.md
+	cd zentaopms/lib/vendor/symfony/finder; rm -fr Tests CHANGELOG.md composer.json phpunit.xml.dist README.md
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
 	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	# disable the autoExclude function.
