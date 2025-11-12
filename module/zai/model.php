@@ -625,7 +625,6 @@ class zaiModel extends model
         if($attrs === null) $attrs = array();
         $canView = false;
         if($objectType === 'story' || $objectType === 'demand')
-        if($objectType === 'story' || $objectType === 'demand')
         {
             $table   = $objectType === 'story' ? TABLE_STORY : TABLE_DEMAND;
             $product = isset($attrs['product']) ? $attrs['product'] : 0;
