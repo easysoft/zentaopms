@@ -3559,4 +3559,28 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test setBrowseMenu method.
+     *
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $projectID
+     * @access public
+     * @return array
+     */
+    public function setBrowseMenuTest(int $productID, string|bool $branch, int $projectID = 0): array
+    {
+        global $tester;
+
+        // 清除之前的错误
+        dao::$errors = array();
+
+        // 调用 setBrowseMenu 方法
+        $result = callZenMethod('testcase', 'setBrowseMenu', [$productID, $branch, $projectID]);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
