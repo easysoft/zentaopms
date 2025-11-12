@@ -276,8 +276,8 @@ class testtask extends control
         /* session 改变时重新查询关联的产品。*/
         /* When the session changes, query the related products again. */
         $products = $this->products;
-        if($this->session->project != $testtask->project) $products = $this->loadModel('product')->getProductPairsByProject($testtask->project);
-        $this->session->project = $testtask->project;
+        if($this->session->project != $projectID) $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->session->project = $projectID;
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
@@ -503,6 +503,10 @@ class testtask extends control
         /* Check if the testtask exists. */
         $task = $this->testtask->getByID($taskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
+
+        $productID   = !empty($_SESSION['product'])   && !empty($task->joint) ? $this->session->product   : $task->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
 
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
@@ -801,6 +805,10 @@ class testtask extends control
         /* Get testtask info. */
         $task = $this->testtask->getByID($taskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
+
+        $productID   = !empty($_SESSION['product'])   && !empty($task->joint) ? $this->session->product   : $task->product;
+        $projectID   = !empty($_SESSION['project'])   && !empty($task->joint) ? $this->session->project   : $task->project;
+        $executionID = !empty($_SESSION['execution']) && !empty($task->joint) ? $this->session->execution : $task->execution;
 
         /* Check if user have permission to access the product to which the testtask belongs. */
         $this->testtaskZen->setMenu($task->product, $task->branch, $task->project, $task->execution, $task);
