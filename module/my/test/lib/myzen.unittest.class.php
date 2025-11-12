@@ -48,11 +48,14 @@ class myZenTest
      * @access public
      * @return array
      */
-    public function showWorkCountNotInOpenTest(object $pager): array
+    public function showWorkCountNotInOpenTest(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): array
     {
         global $tester;
         $tester->app->rawModule = 'my';
         $tester->app->rawMethod = 'work';
+
+        $tester->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $method = $this->myZenTest->getMethod('showWorkCountNotInOpen');
         $method->setAccessible(true);
