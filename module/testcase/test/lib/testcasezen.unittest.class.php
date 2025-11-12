@@ -3226,4 +3226,22 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test initLibCase method.
+     *
+     * @param  object $case
+     * @param  int    $libID
+     * @param  int    $maxOrder
+     * @param  int    $maxModuleOrder
+     * @param  array  $libCases
+     * @access public
+     * @return object
+     */
+    public function initLibCaseTest(object $case, int $libID, int $maxOrder, int $maxModuleOrder, array $libCases): object
+    {
+        $result = callZenMethod('testcase', 'initLibCase', [$case, $libID, $maxOrder, $maxModuleOrder, $libCases]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
 }
