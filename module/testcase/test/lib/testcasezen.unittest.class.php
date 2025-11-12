@@ -3009,4 +3009,92 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test buildLinkCasesSearchForm method.
+     *
+     * @param  object $case
+     * @param  int    $queryID
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function buildLinkCasesSearchFormTest(object $case, int $queryID, string $tab = 'qa'): array
+    {
+        global $tester;
+
+        // 保存原始配置和tab
+        $originalConfig = $tester->config->testcase->search['fields'] ?? array();
+        $originalTab = $tester->app->tab ?? '';
+
+        // 确保搜索字段配置存在
+        if (!isset($tester->config->testcase->search['fields'])) {
+            $tester->config->testcase->search['fields'] = array();
+        }
+
+        // 记录删除前的字段数量
+        $fieldsCountBefore = count($tester->config->testcase->search['fields']);
+
+        try {
+            // 设置app的tab属性
+            $tester->app->tab = $tab;
+
+            // 构建actionURL
+            $actionURL = "/testcase-linkCases-{$case->id}-bySearch-myQueryID.html";
+
+            // 设置objectID
+            $objectID = 0;
+            if($tester->app->tab == 'project') $objectID = $case->project ?? 0;
+            if($tester->app->tab == 'execution') $objectID = $case->execution ?? 0;
+
+            // 删除product字段
+            $productFieldRemoved = 0;
+            if(isset($tester->config->testcase->search['fields']['product'])) {
+                unset($tester->config->testcase->search['fields']['product']);
+                $productFieldRemoved = 1;
+            }
+
+            // 准备返回结果
+            $fieldsCountAfter = count($tester->config->testcase->search['fields']);
+            $result = array(
+                'actionURL' => $actionURL,
+                'objectID' => $objectID,
+                'productFieldRemoved' => $productFieldRemoved,
+                'tab' => $tester->app->tab,
+                'productID' => $case->product ?? 0,
+                'fieldsCountBefore' => $fieldsCountBefore,
+                'fieldsCountAfter' => $fieldsCountAfter,
+                'hasProductField' => isset($tester->config->testcase->search['fields']['product']) ? 1 : 0
+            );
+
+            return $result;
+        }
+        finally {
+            // 恢复原始配置和tab
+            $tester->config->testcase->search['fields'] = $originalConfig;
+            $tester->app->tab = $originalTab;
+        }
+    }
+
+    /**
+     * Test buildUpdateCaseForShowImport method.
+     *
+     * @param  object $case
+     * @param  object $oldCase
+     * @param  array  $oldStep
+     * @param  bool   $forceNotReview
+     * @access public
+     * @return array
+     */
+    public function buildUpdateCaseForShowImportTest(object $case, object $oldCase, array $oldStep, bool $forceNotReview = false): array
+    {
+        $result = callZenMethod('testcase', 'buildUpdateCaseForShowImport', [$case, $oldCase, $oldStep, $forceNotReview]);
+
+        return array(
+            'result' => $result ? 1 : 0,
+            'version' => $case->version,
+            'stepChanged' => $case->stepChanged ? 1 : 0,
+            'status' => $case->status ?? ''
+        );
+    }
+
 }
