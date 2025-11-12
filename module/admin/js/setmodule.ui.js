@@ -162,7 +162,7 @@ window.checkRelated = function(name, type)
         {
             if(!isModuleEnabled('projectDeliverable'))
             {
-                const message = openDependFeature.replace('{source}', deliverableLang).replace('{target}', changeLang);
+                const message = openDependFeature.replace('{source}', cmLang).replace('{target}', deliverableLang);
                 showDependencyConfirm(
                     message,
                     () => setModuleState('projectDeliverable', true),
