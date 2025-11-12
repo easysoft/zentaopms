@@ -87,3 +87,7 @@ $generic4->flag  = true;
 $result4 = $zai->convertGenericToMarkdownTest('unknownType', $generic4);
 $unknownTypeTitle = strpos($result4['title'], 'UnknownType #303 未知类型对象') !== false;
 r($unknownTypeTitle) && p() && e('1'); // 测试未知类型时的标题格式
+
+/* 测试内容保持原始字符串 */
+$contentHasOriginalText = strpos($result1['content'], '泛化对象标题') !== false;
+r($contentHasOriginalText) && p() && e('1'); // 测试内容保持原始字符串

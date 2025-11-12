@@ -162,6 +162,19 @@ class zaiTest
     }
 
     /**
+     * Test convertGenericToMarkdown protected static method via reflection.
+     *
+     * @param string $type
+     * @param object $target
+     * @access public
+     * @return array
+     */
+    public function convertGenericToMarkdownTest($type, $target)
+    {
+        return zaiModel::convertGenericToMarkdown($type, $target);
+    }
+
+    /**
      * Test convertStoryToMarkdown static method.
      *
      * @param  object $story
