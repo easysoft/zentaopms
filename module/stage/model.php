@@ -197,6 +197,7 @@ class stageModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('workflowGroup')->eq($groupID)
             ->beginIF($this->config->edition != 'ipd')->andWhere('projectType')->ne('ipd')->fi()
+            ->andWhere('type')->ne('lifecycle')
             ->orderBy($orderBy)
             ->fetchAll('id');
 

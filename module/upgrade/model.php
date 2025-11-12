@@ -12611,7 +12611,6 @@ class upgradeModel extends model
             $flowCode = $flow->code;
             foreach($stageGroup[$projectModel] as $stage)
             {
-                if($stage->type == 'lifecycle') continue;
                 if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
                 if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
                 if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
