@@ -32,13 +32,22 @@ class gitlabZenTest extends baseTest
             require_once $app->getModulePath('', 'gitlab') . 'zen.php';
         }
 
-        /* 通过反射调用 bindUsers 方法 */
+        /* 使用反射创建 gitlabZen 实例,跳过构造函数 */
         $reflection = new ReflectionClass('gitlabZen');
+        $zenInstance = $reflection->newInstanceWithoutConstructor();
+
+        /* 初始化必要的属性 */
+        $zenInstance->app = $app;
+        $zenInstance->config = $app->config;
+        $zenInstance->lang = $app->lang;
+        $zenInstance->dao = $app->loadClass('dao');
+
+        /* 通过反射调用 bindUsers 方法 */
         $method = $reflection->getMethod('bindUsers');
         $method->setAccessible(true);
 
-        /* 在 gitlab model 实例上调用 zen 方法 */
-        $method->invoke($this->instance, $gitlabID, $users, $gitlabNames, $zentaoUsers);
+        /* 调用 zen 方法 */
+        $method->invoke($zenInstance, $gitlabID, $users, $gitlabNames, $zentaoUsers);
 
         if(dao::isError()) return dao::getError();
 
