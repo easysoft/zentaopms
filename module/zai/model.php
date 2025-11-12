@@ -229,24 +229,11 @@ class zaiModel extends model
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             }
         }
-
-        $hasFile = false;
-        if($postData)
-        {
-            foreach($postData as $value)
-            {
-                if($value instanceof CURLFile)
-                {
-                    $hasFile = true;
-                    break;
-                }
-            }
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $hasFile ? $postData : json_encode($postData, JSON_UNESCAPED_UNICODE));
-        }
-
-        $headers = ['Authorization: Bearer ' . $token];
-        if(!$hasFile) $headers[] = 'Content-Type: application/json';
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        if($postData) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData, JSON_UNESCAPED_UNICODE));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json'
+        ));
 
         $response = curl_exec($curl);
         $error    = '';
@@ -469,7 +456,7 @@ class zaiModel extends model
 
         if($result['result'] === 'success')
         {
-            if(!empty($result['data']['content_id'])) return $result['data']['content_id'];
+            if(!empty($result['data']['id'])) return $result['data']['id'];
 
             $contentsResult = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'GET');
             if($contentsResult['result'] !== 'success') return null;
@@ -625,6 +612,7 @@ class zaiModel extends model
         if($attrs === null) $attrs = array();
         $canView = false;
         if($objectType === 'story' || $objectType === 'demand')
+        if($objectType === 'story' || $objectType === 'demand')
         {
             $table   = $objectType === 'story' ? TABLE_STORY : TABLE_DEMAND;
             $product = isset($attrs['product']) ? $attrs['product'] : 0;
@@ -701,27 +689,6 @@ class zaiModel extends model
             if($limit > 0 && count($filteredKnowledges) >= $limit) break;
         }
         return $filteredKnowledges;
-    }
-
-    /**
-     * 提取文件内容。
-     * Extract file content.
-     *
-     * @access public
-     * @param int $fileID
-     * @return array
-     */
-    public function extractFileContent(int $fileID): array|null
-    {
-        $file = $this->loadModel('file')->getByID($fileID);
-        if(!is_object($file) || empty($file->realPath)) return null;
-
-        $filePath = $file->realPath;
-        $cFile    = new CURLFile($filePath, null, $file->title);
-        $result   = $this->callAdminAPI('/v8/files/extract', 'POST', null, ['file' => $cFile]);
-
-        if($result['result'] != 'success') return null;
-        return $result['data'];
     }
 
     /**
