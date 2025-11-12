@@ -2910,4 +2910,56 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test assignTitleForBatchEdit method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $type
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function assignTitleForBatchEditTest(int $productID, string $branch, string $type, array $cases): array
+    {
+        global $tester;
+
+        // 初始化必要的对象
+        if(!isset($tester->view)) $tester->view = new stdClass();
+        if(!isset($tester->session)) $tester->session = new stdClass();
+        if(!isset($tester->config)) $tester->config = new stdClass();
+        if(!isset($tester->config->testcase)) $tester->config->testcase = new stdClass();
+
+        // 设置测试数据
+        $tester->session->project = 1;
+        $tester->session->execution = 1;
+
+        // 初始化config属性
+        $tester->config->testcase->list = new stdClass();
+        $tester->config->testcase->list->customBatchEditFields = 'module,story,stage,pri,status';
+        $tester->config->testcase->custom = new stdClass();
+        $tester->config->testcase->custom->batchEditFields = 'module,story,stage,pri,status';
+
+        try {
+            // 调用被测方法
+            $result = callZenMethod('testcase', 'assignTitleForBatchEdit', [$productID, $branch, $type, $cases]);
+
+            // 返回结果数组：[productIdList, libIdList]
+            return array(
+                'productIdList' => $result[0],
+                'libIdList' => $result[1],
+                'productIdListCount' => count($result[0]),
+                'libIdListCount' => count($result[1])
+            );
+        } catch (Exception $e) {
+            return array(
+                'error' => $e->getMessage(),
+                'productIdList' => array(),
+                'libIdList' => array(),
+                'productIdListCount' => 0,
+                'libIdListCount' => 0
+            );
+        }
+    }
+
 }
