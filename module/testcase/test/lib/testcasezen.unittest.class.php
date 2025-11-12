@@ -983,7 +983,17 @@ class testcaseZenTest
         try {
             $result = callZenMethod('testcase', 'checkCasesForShowImport', [$cases]);
 
-            if(dao::isError()) return dao::getError();
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                /* Flatten error array for test framework compatibility. */
+                $flatErrors = array();
+                foreach($errors as $key => $value)
+                {
+                    $flatErrors[$key] = is_array($value) ? implode(',', $value) : $value;
+                }
+                return $flatErrors;
+            }
 
             return $result;
         } catch (Exception $e) {
