@@ -1079,6 +1079,7 @@ class upgradeTao extends upgradeModel
 
         $newActivityID = $this->dao->lastInsertID();
 
+        $idMap = array();
         foreach($outputList as $output)
         {
             $oldID = $output->id;
@@ -1088,7 +1089,15 @@ class upgradeTao extends upgradeModel
             $output->editedDate = null;
             $this->dao->insert(TABLE_ZOUTPUT)->data($output)->exec();
             $newOutputID = $this->dao->lastInsertID();
+
+            $idMap[$oldID] = $newOutputID;
+        }
+
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($groupID)->fetchPairs();
+        foreach($idMap as $oldID => $newOutputID)
+        {
             $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('objectType')->eq('zoutput')->andWhere('project')->in($projectIdList)->exec();
         }
     }
 
@@ -1142,7 +1151,7 @@ class upgradeTao extends upgradeModel
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($newID)->where('id')->eq($id)->exec();
         }
 
-        $auditplans    = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)
+        $auditplans = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)
             ->where('objectType')->eq('zoutput')
             ->andWhere('objectID')->in(array_keys($idMap))
             ->andWhere('project')->in($projectIdList)
