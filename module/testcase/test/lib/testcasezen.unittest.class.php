@@ -2785,4 +2785,50 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test assignForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $projectID
+     * @param  int    $param
+     * @param  int    $moduleID
+     * @param  int    $suiteID
+     * @param  string $caseType
+     * @access public
+     * @return array
+     */
+    public function assignForBrowseTest(int $productID, string $branch, string $browseType, int $projectID, int $param, int $moduleID, int $suiteID, string $caseType): array
+    {
+        global $tester;
+
+        // 设置 session
+        $tester->session->set('project', $projectID);
+
+        // 调用被测方法并获取 view 属性
+        callZenMethod('testcase', 'assignForBrowse', [$productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType]);
+        $view = callZenMethod('testcase', 'assignForBrowse', [$productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType], 'view');
+
+        // 获取视图数据
+        $result = array();
+        $result['projectID'] = $view->projectID ?? 0;
+        $result['browseType'] = $view->browseType ?? '';
+        $result['param'] = $view->param ?? 0;
+        $result['moduleID'] = $view->moduleID ?? 0;
+        $result['moduleName'] = $view->moduleName ?? '';
+        $result['suiteID'] = $view->suiteID ?? 0;
+        $result['caseType'] = $view->caseType ?? '';
+        $result['projectType'] = $view->projectType ?? '';
+        $result['hasUsers'] = isset($view->users) && count($view->users) > 0 ? 1 : 0;
+        $result['hasModules'] = isset($view->modules) && count($view->modules) > 0 ? 1 : 0;
+        $result['hasSuites'] = isset($view->suiteList) && count($view->suiteList) > 0 ? 1 : 0;
+        $result['hasLibraries'] = isset($view->libraries) && count($view->libraries) > 0 ? 1 : 0;
+        $result['switcherObjectID'] = $view->switcherObjectID ?? 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
