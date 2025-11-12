@@ -898,6 +898,20 @@ class zaiModel extends model
             return $parts ? implode('，', $parts) : '';
         }
 
+        if(is_object($value))
+        {
+            $value = json_decode(json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true);
+            return static::formatFieldValue($langData, $field, $value);
+        }
+
+        $valueString = (string)$value;
+        if($valueString === '') return '';
+
+        if(isset($langData['maps'][$field]) && isset($langData['maps'][$field][$valueString]))
+        {
+            return (string)$langData['maps'][$field][$valueString];
+        }
+
         return $valueString;
     }
 
