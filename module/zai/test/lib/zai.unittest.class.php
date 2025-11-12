@@ -552,4 +552,19 @@ class zaiTest
 
         return $result;
     }
+
+    /**
+     * Test extractFileContent method.
+     *
+     * @param  int $fileID
+     * @access public
+     * @return mixed
+     */
+    public function extractFileContentTest(int $fileID)
+    {
+        $result = $this->objectModel->extractFileContent($fileID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
