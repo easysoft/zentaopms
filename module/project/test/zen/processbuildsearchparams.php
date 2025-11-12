@@ -31,6 +31,10 @@ $normalProduct = new stdclass();
 $normalProduct->id = 1;
 $normalProduct->type = 'normal';
 
+$branchProduct = new stdclass();
+$branchProduct->id = 2;
+$branchProduct->type = 'branch';
+
 $products = array(1 => 'Product1', 2 => 'Product2');
 
 r($projectTest->processBuildSearchParamsTest((object)array('id' => 1, 'multiple' => 0, 'hasProduct' => 0, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:name') && e('Name'); // 步骤1:无产品项目,product字段应该被移除
