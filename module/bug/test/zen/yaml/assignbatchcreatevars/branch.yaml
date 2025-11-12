@@ -1,0 +1,21 @@
+---
+title: assignBatchCreateVars测试的分支数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的分支数据
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: 2-3
+- field: name
+  note: 分支名称
+  range: '分支1,分支2,分支3,分支4,分支5'
+  loop: 2
+- field: status
+  note: 分支状态
+  range: 'active{8},closed{2}'
+- field: deleted
+  note: 是否删除
+  range: '0'

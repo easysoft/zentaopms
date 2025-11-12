@@ -1,0 +1,57 @@
+title: table zt_searchindex
+desc: "搜索索引测试数据"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-50
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectType
+    note: "对象类型"
+    range: task,bug,case,doc,todo,build,product,story
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 1-50
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "对象标题"
+    range: 1-50
+    prefix: "测试标题"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: content
+    note: "对象内容"
+    range: 1-50
+    prefix: "测试内容"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: addedDate
+    note: "添加日期"
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    note: "编辑日期"
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: vision
+    note: "界面类型"
+    range: rnd
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -1,0 +1,76 @@
+---
+title: 度量项数据
+desc: 用于测试getObjectsWithPager方法的度量项数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: purpose
+  note: 目的
+  range: scale,rate
+  prefix: ""
+  postfix: ""
+
+- field: scope
+  note: 范围
+  range: system,product{3},project{2},execution{2},user,repo
+  prefix: ""
+  postfix: ""
+
+- field: object
+  note: 对象
+  range: program,product,project,execution,story,task
+  prefix: ""
+  postfix: ""
+
+- field: stage
+  note: 阶段
+  range: released
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 类型
+  range: php,sql
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 名称
+  range: 测试度量项1,测试度量项2,测试度量项3,测试度量项4,测试度量项5,测试度量项6,测试度量项7,测试度量项8,测试度量项9,测试度量项10
+  prefix: ""
+  postfix: ""
+
+- field: alias
+  note: 别名
+  range: test_metric1,test_metric2,test_metric3,test_metric4,test_metric5,test_metric6,test_metric7,test_metric8,test_metric9,test_metric10
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 编码
+  range: test_metric_code_1,test_metric_code_2,test_metric_code_3,test_metric_code_4,test_metric_code_5,test_metric_code_6,test_metric_code_7,test_metric_code_8,test_metric_code_9,test_metric_code_10
+  prefix: ""
+  postfix: ""
+
+- field: unit
+  note: 单位
+  range: 个,次,小时
+  prefix: ""
+  postfix: ""
+
+- field: dateType
+  note: 日期类型
+  range: day,week,month,year,nodate
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0
+  prefix: ""
+  postfix: ""

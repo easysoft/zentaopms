@@ -1,0 +1,39 @@
+---
+title: 执行测试数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 所属项目
+  range: 1
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 执行类型
+  range: kanban{3},sprint{2},stage{2},normal{3}
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 执行名称
+  range: 执行1,执行2,看板执行1,看板执行2,看板执行3,冲刺1,冲刺2,阶段1,阶段2,常规执行1
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 执行状态
+  range: wait{3},doing{5},done{2}
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

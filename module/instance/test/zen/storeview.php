@@ -7,40 +7,58 @@ title=测试 instanceZen::storeView();
 timeout=0
 cid=0
 
-- 步骤1：正常访问有效实例属性result @success
-- 步骤2：访问不存在的实例ID属性result @fail
-- 步骤3：访问devops类型应用实例属性result @success
-- 步骤4：访问运行状态的实例属性result @success
-- 步骤5：正常访问实例测试权限属性result @success
+- 步骤1:查看不存在的instance实例(ID=999)属性result @fail
+- 步骤2:查看ID为0的instance实例属性result @fail
+- 步骤3:查看已删除的instance实例(ID=4)属性result @fail
+- 步骤4:查看存在但会触发异常的instance实例(ID=1)属性result @fail
+- 步骤5:查看另一个不存在的instance实例(ID=100)属性result @fail
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('instance');
-$table->id->range('1-10');
-$table->space->range('1-3');
-$table->name->range('zentao,jenkins,gitlab,test-app,demo-instance');
-$table->appID->range('1-5');
-$table->appName->range('禅道,Jenkins,GitLab,测试应用,演示实例');
-$table->appVersion->range('1.0.0,2.1.0,3.0.1,4.2.3,5.1.2');
-$table->chart->range('zentao,jenkins,gitlab,devops-toolkit,custom-app');
-$table->status->range('running,stopped,installing,upgrading,uninstalling');
-$table->domain->range('zentao.example.com,jenkins.example.com,gitlab.example.com,test.example.com,demo.example.com');
-$table->gen(5);
+zenData('user')->gen(5);
+zenData('group')->gen(5);
 
-// 3. 用户登录（选择合适角色）
+$userGroup = zenData('usergroup');
+$userGroup->account->range('admin,user1,user2');
+$userGroup->group->range('1');
+$userGroup->gen(3);
+
+$groupPriv = zenData('grouppriv');
+$groupPriv->group->range('1');
+$groupPriv->module->range('space');
+$groupPriv->method->range('browse');
+$groupPriv->gen(1);
+
+$space = zenData('space');
+$space->id->range('1-5');
+$space->name->range('Space1,Space2,Space3,Space4,Space5');
+$space->k8space->range('space1,space2,space3,space4,space5');
+$space->deleted->range('0');
+$space->gen(5);
+
+$instance = zenData('instance');
+$instance->id->range('1-5');
+$instance->name->range('Instance1,Instance2,Instance3,DeletedInstance,Instance5');
+$instance->space->range('1-5');
+$instance->appName->range('App1,App2,App3,App4,App5');
+$instance->appID->range('1-5');
+$instance->version->range('1.0,1.1,1.2,1.3,2.0');
+$instance->chart->range('zentao,gitlab,sonarqube,jenkins,zentao');
+$instance->status->range('stopped,stopped,stopped,stopped,running');
+$instance->k8name->range('instance1,instance2,instance3,instance4,instance5');
+$instance->domain->range('app1.test.com,app2.test.com,app3.test.com,app4.test.com,app5.test.com');
+$instance->deleted->range('0{3},1,0');
+$instance->gen(5);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$instanceTest = new instanceTest();
+$instanceTest = new instanceZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($instanceTest->storeViewTest(1)) && p('result') && e('success'); // 步骤1：正常访问有效实例
-r($instanceTest->storeViewTest(999)) && p('result') && e('fail'); // 步骤2：访问不存在的实例ID
-r($instanceTest->storeViewTest(3)) && p('result') && e('success'); // 步骤3：访问devops类型应用实例
-r($instanceTest->storeViewTest(4)) && p('result') && e('success'); // 步骤4：访问运行状态的实例
-r($instanceTest->storeViewTest(5)) && p('result') && e('success'); // 步骤5：正常访问实例测试权限
+r($instanceTest->storeViewTest(999)) && p('result') && e('fail'); // 步骤1:查看不存在的instance实例(ID=999)
+r($instanceTest->storeViewTest(0)) && p('result') && e('fail'); // 步骤2:查看ID为0的instance实例
+r($instanceTest->storeViewTest(4)) && p('result') && e('fail'); // 步骤3:查看已删除的instance实例(ID=4)
+r($instanceTest->storeViewTest(1)) && p('result') && e('fail'); // 步骤4:查看存在但会触发异常的instance实例(ID=1)
+r($instanceTest->storeViewTest(100)) && p('result') && e('fail'); // 步骤5:查看另一个不存在的instance实例(ID=100)

@@ -1032,6 +1032,7 @@ class taskTao extends taskModel
                 $data->assignedTo   = !empty($childTask) ? $childTask->assignedTo : $task->openedBy;
                 $data->assignedDate = $now;
             }
+            if($status == 'doing' && !empty($childTask->realStarted)) $data->realStarted = $childTask->realStarted;
 
             $data->finishedBy   = '';
             $data->finishedDate = null;

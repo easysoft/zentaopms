@@ -46,6 +46,9 @@ $task->mode = '';
 $task->openedBy   = 'dev1';
 $task->assignedTo = 'admin';
 
+global $app;
+$app->user->admin = false;
+
 $taskTest = new taskTest();
 r($taskTest->canOperateEffort($task)) && p() && e('1');  //判断非多人任务
 

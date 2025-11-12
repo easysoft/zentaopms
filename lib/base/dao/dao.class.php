@@ -1133,7 +1133,7 @@ class baseDAO
      * @access public
      * @return array
      */
-    private function getUniqueIndexes($table)
+    protected function getUniqueIndexes($table)
     {
         if(isset(dao::$uniqueIndexes[$table])) return dao::$uniqueIndexes[$table];
 
@@ -1155,7 +1155,7 @@ class baseDAO
      * @access private
      * @return int
      */
-    private function convertReplaceToInsert($table)
+    protected function convertReplaceToInsert($table)
     {
         $processedData = new stdclass();
         foreach($this->sqlobj->data as $field => $value)
@@ -2393,7 +2393,11 @@ class baseSQL
             if(strpos($set, '=') ===  false)
             {
                 $set = str_replace(',', '', $set);
-                $set = '`' . str_replace('`', '', $set) . '`';
+                $set = $this->dbh->iqchar . str_replace('`', '', $set) . $this->dbh->iqchar;
+            }
+            else
+            {
+                $set = str_replace('`', $this->dbh->iqchar, $set);
             }
 
             $this->sql .= $this->isFirstSet ? " $set" : ", $set";
@@ -2829,7 +2833,7 @@ class baseSQL
 
         if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
         {
-           $pattern = '/\s+(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
+           $pattern = '/\s+(?:(?:[a-zA-Z0-9]+\.)?|)(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
            $replacement = ' 1=1 ';
            $this->sql = preg_replace($pattern, $replacement, $this->sql);
 

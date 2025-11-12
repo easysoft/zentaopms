@@ -7,69 +7,76 @@ title=测试 releaseZen::getExcludeStoryIdList();
 timeout=0
 cid=0
 
-- 步骤1：正常情况
+- 执行releaseTest模块的getExcludeStoryIdListTest方法，参数是$release1
  - 属性1 @1
  - 属性2 @2
  - 属性3 @3
-- 步骤2：空需求列表 @0
-- 步骤3：不存在的需求ID
- - 属性99 @99
- - 属性100 @100
-- 步骤4：不同产品的需求
- - 属性10 @10
- - 属性6 @6
- - 属性7 @7
+- 执行releaseTest模块的getExcludeStoryIdListTest方法，参数是$release2
+ - 属性4 @4
+ - 属性5 @5
+- 执行$result3 @1
+- 执行releaseTest模块的getExcludeStoryIdListTest方法，参数是$release4
+ - 属性14 @14
+ - 属性15 @15
+- 执行$result5 @1
+- 执行$result6 @7
+- 执行releaseTest模块的getExcludeStoryIdListTest方法，参数是$release7
  - 属性8 @8
-- 步骤5：产品下无父需求
- - 属性1 @1
- - 属性2 @2
+ - 属性9 @9
+ - 属性10 @10
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/releasezen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('story');
-$table->id->range('1-10');
-$table->product->range('1{5},2{5}');
-$table->type->range('story{10}');
-$table->isParent->range('0{6},1{4}');
-$table->status->range('active{4},draft{2},reviewing{2},changing{1},closed{1}');
-$table->title->range('需求标题1,需求标题2,需求标题3,需求标题4,需求标题5,需求标题6,需求标题7,需求标题8,需求标题9,需求标题10');
-$table->openedBy->range('admin{10}');
-$table->openedDate->range('`2023-01-01 00:00:00`');
-$table->gen(10);
+zendata('story')->loadYaml('getexcludestoryidlist/story', false, 2)->gen(20);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$releaseTest = new releaseTest();
+$releaseTest = new releaseZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$release1 = new stdclass();
+// 测试步骤1:产品1的发布关联需求1,2,3
+$release1 = new stdClass();
 $release1->product = 1;
 $release1->stories = '1,2,3';
-r($releaseTest->getExcludeStoryIdListTest($release1)) && p('1,2,3') && e('1,2,3'); // 步骤1：正常情况
+r($releaseTest->getExcludeStoryIdListTest($release1)) && p('1;2;3') && e('1;2;3');
 
-$release2 = new stdclass();
+// 测试步骤2:产品1的发布关联需求4,5
+$release2 = new stdClass();
 $release2->product = 1;
-$release2->stories = '';
-r($releaseTest->getExcludeStoryIdListTest($release2)) && p() && e('0'); // 步骤2：空需求列表
+$release2->stories = '4,5';
+r($releaseTest->getExcludeStoryIdListTest($release2)) && p('4;5') && e('4;5');
 
-$release3 = new stdclass();
+// 测试步骤3:产品1的发布stories字段为空
+$release3 = new stdClass();
 $release3->product = 1;
-$release3->stories = '99,100';
-r($releaseTest->getExcludeStoryIdListTest($release3)) && p('99,100') && e('99,100'); // 步骤3：不存在的需求ID
+$release3->stories = '';
+$result3 = $releaseTest->getExcludeStoryIdListTest($release3);
+r(is_array($result3)) && p() && e('1');
 
-$release4 = new stdclass();
+// 测试步骤4:产品2的发布关联需求14,15
+$release4 = new stdClass();
 $release4->product = 2;
-$release4->stories = '6,7,8';
-r($releaseTest->getExcludeStoryIdListTest($release4)) && p('10,6,7,8') && e('10,6,7,8'); // 步骤4：不同产品的需求
+$release4->stories = '14,15';
+r($releaseTest->getExcludeStoryIdListTest($release4)) && p('14;15') && e('14;15');
 
-$release5 = new stdclass();
+// 测试步骤5:产品3的发布stories字段为空
+$release5 = new stdClass();
 $release5->product = 3;
-$release5->stories = '1,2';
-r($releaseTest->getExcludeStoryIdListTest($release5)) && p('1,2') && e('1,2'); // 步骤5：产品下无父需求
+$release5->stories = '';
+$result5 = $releaseTest->getExcludeStoryIdListTest($release5);
+r(is_array($result5)) && p() && e('1');
+
+// 测试步骤6:测试stories字段包含多个逗号分隔的ID
+$release6 = new stdClass();
+$release6->product = 1;
+$release6->stories = '1,2,3,4,5,6,7';
+$result6 = $releaseTest->getExcludeStoryIdListTest($release6);
+r(count($result6)) && p() && e('7');
+
+// 测试步骤7:测试stories字段含前后逗号的情况
+$release7 = new stdClass();
+$release7->product = 1;
+$release7->stories = ',8,9,10,';
+r($releaseTest->getExcludeStoryIdListTest($release7)) && p('8;9;10') && e('8;9;10');

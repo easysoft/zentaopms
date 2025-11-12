@@ -125,18 +125,22 @@ class fileZenTest
         // 设置POST数据
         $_POST['fileName'] = $fileName;
         $_POST['extension'] = $extension;
-        
-        try 
+
+        try
         {
             $method = $this->fileZenTest->getMethod('updateFileName');
             $method->setAccessible(true);
 
             $result = $method->invokeArgs($this->fileZenTest->newInstance(), array($fileID));
-            
-            if(dao::isError()) 
+
+            if(dao::isError())
             {
                 $result = array('result' => 'fail', 'message' => 'Database error');
             }
+        }
+        catch(TypeError $e)
+        {
+            $result = array('result' => 'fail', 'message' => 'File not found or invalid data');
         }
         catch(Exception $e)
         {
@@ -148,7 +152,7 @@ class fileZenTest
             unset($_POST['fileName']);
             unset($_POST['extension']);
         }
-        
+
         return $result;
     }
 }

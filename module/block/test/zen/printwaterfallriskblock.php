@@ -7,46 +7,84 @@ title=测试 blockZen::printWaterfallRiskBlock();
 timeout=0
 cid=0
 
-- 步骤1：默认参数情况，验证type属性属性type @all
-- 步骤2：默认参数情况，验证count属性属性count @15
-- 步骤3：默认参数情况，验证orderBy属性属性orderBy @id_desc
-- 步骤4：默认参数情况，验证hasValidation属性属性hasValidation @1
-- 步骤5：指定参数情况
- - 属性type @active
- - 属性count @10
- - 属性orderBy @pri_desc
+- 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block1
+ - 第count,hasUsers,1条的status属性 @5
+ - 第count,hasUsers,1条的1:project属性 @1
+- 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block2
+ - 第count,hasUsers,1条的status属性 @3
+ - 第count,hasUsers,1条的1:project属性 @1
+- 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block3
+ - 第count,hasUsers,1条的status属性 @2
+ - 第count,hasUsers,1条的1:project属性 @1
+- 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block4
+ - 属性count @5
+ - 属性hasUsers @1
+- 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block5
+ - 属性count @0
+ - 属性hasUsers @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('risk');
-$table->id->range('1-10');
-$table->project->range('1{5},2{3},3{2}');
-$table->name->range('风险1,风险2,风险3,风险4,风险5,风险6,风险7,风险8,风险9,风险10');
-$table->status->range('active{7},closed{3}');
-$table->pri->range('high{3},medium{4},low{3}');
-$table->assignedTo->range('user1,user2,user3,user4,user5,user1,user2,user3,user4,user5');
-$table->gen(10);
+$project = zenData('project');
+$project->id->range('1-10');
+$project->name->range('Project1,Project2,Project3,Project4,Project5,Project6,Project7,Project8,Project9,Project10');
+$project->type->range('project');
+$project->model->range('waterfall');
+$project->status->range('doing');
+$project->gen(10);
 
-$userTable = zenData('user');
-$userTable->id->range('1-5');
-$userTable->account->range('user1,user2,user3,user4,user5');
-$userTable->realname->range('用户1,用户2,用户3,用户4,用户5');
-$userTable->gen(5);
+$risk = zenData('risk');
+$risk->project->range('1{5},2{3},3{2}');
+$risk->status->range('active{7},closed{3}');
+$risk->pri->range('1-4');
+$risk->gen(10);
 
-// 3. 用户登录（选择合适角色）
+zenData('user')->gen(10);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printWaterfallRiskBlockTest()) && p('type') && e('all'); // 步骤1：默认参数情况，验证type属性
-r($blockTest->printWaterfallRiskBlockTest()) && p('count') && e('15'); // 步骤2：默认参数情况，验证count属性
-r($blockTest->printWaterfallRiskBlockTest()) && p('orderBy') && e('id_desc'); // 步骤3：默认参数情况，验证orderBy属性
-r($blockTest->printWaterfallRiskBlockTest()) && p('hasValidation') && e('1'); // 步骤4：默认参数情况，验证hasValidation属性
-r($blockTest->printWaterfallRiskBlockTest((object)array('params' => (object)array('type' => 'active', 'count' => '10', 'orderBy' => 'pri_desc')))) && p('type,count,orderBy') && e('active,10,pri_desc'); // 步骤5：指定参数情况
+$block1 = new stdClass();
+$block1->params = new stdClass();
+$block1->params->projectID = 1;
+$block1->params->type = 'active';
+$block1->params->count = 20;
+$block1->params->orderBy = 'id_desc';
+
+$block2 = new stdClass();
+$block2->params = new stdClass();
+$block2->params->projectID = 2;
+$block2->params->type = 'active';
+$block2->params->count = 20;
+$block2->params->orderBy = 'id_desc';
+
+$block3 = new stdClass();
+$block3->params = new stdClass();
+$block3->params->projectID = 3;
+$block3->params->type = 'active';
+$block3->params->count = 20;
+$block3->params->orderBy = 'id_desc';
+
+$block4 = new stdClass();
+$block4->params = new stdClass();
+$block4->params->projectID = 1;
+$block4->params->type = 'all';
+$block4->params->count = 20;
+$block4->params->orderBy = 'id_desc';
+
+$block5 = new stdClass();
+$block5->params = new stdClass();
+$block5->params->projectID = 999;
+$block5->params->type = 'active';
+$block5->params->count = 20;
+$block5->params->orderBy = 'id_desc';
+
+r($blockTest->printWaterfallRiskBlockTest($block1)) && p('count,hasUsers,1:status,1:project') && e('5,1,active,1');
+r($blockTest->printWaterfallRiskBlockTest($block2)) && p('count,hasUsers,1:status,1:project') && e('3,1,active,2');
+r($blockTest->printWaterfallRiskBlockTest($block3)) && p('count,hasUsers,1:status,1:project') && e('2,1,active,3');
+r($blockTest->printWaterfallRiskBlockTest($block4)) && p('count,hasUsers') && e('5,1');
+r($blockTest->printWaterfallRiskBlockTest($block5)) && p('count,hasUsers') && e('0,1');

@@ -21,12 +21,11 @@ include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 zendata('repo')->gen(5);
 zendata('pipeline')->gen(5);
 zendata('ops_space')->gen(10);
-
-// 3. 用户登录
+// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例
-$repoZenTest = new repoZenTest();
+// 4. 创建测试实例（变量名与模块名一致）
+$repoTest = new repoZenTest();
 
 // 5. 测试步骤
 r($repoZenTest->buildEditFormTest(1, 1))               && p('title')  && e('代码库-编辑'); // 步骤1：标题

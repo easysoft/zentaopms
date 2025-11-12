@@ -758,8 +758,7 @@ class taskModel extends model
             if(in_array($task->status, array('pause', 'cancel', 'closed'))) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
-        if($this->app->user->account == $effort->account) return true;
-        return false;
+        return $this->loadModel('common')->canOperateEffort($effort);
     }
 
     /**
@@ -3554,7 +3553,7 @@ class taskModel extends model
     public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
         /* Get child task info. */
-        $childTask = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,assignedTo,parent,path,realStarted')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
         $taskIdList = $childTask->path;

@@ -1,0 +1,18 @@
+title: 测试setFormOptionsForBatchEdit方法的分支数据
+desc: 包含产品分支数据用于测试
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1-10
+- field: name
+  range: 主分支,开发分支,测试分支,生产分支,热修复分支{5}
+- field: status
+  range: active{8},closed{2}
+- field: default
+  range: 1{2},0{8}
+- field: order
+  range: 1-10
+- field: deleted
+  range: 0

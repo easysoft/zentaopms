@@ -7,29 +7,41 @@ title=测试 docZen::previewProductplan();
 timeout=0
 cid=0
 
-- 步骤1：正常预览设置页面第data条的0:title属性 @产品计划1
-- 步骤2：无效产品ID属性data @~~
-- 步骤3：有效ID列表第data条的0:title属性 @产品计划1
-- 步骤4：空ID列表属性data @~~
-- 步骤5：无效视图类型属性data @~~
+- 步骤1:setting视图下预览产品1的所有计划 @3
+- 步骤2:setting视图下预览产品2的所有计划 @2
+- 步骤3:setting视图下预览不存在的产品计划 @0
+- 步骤4:list视图下根据ID列表预览计划 @3
+- 步骤5:list视图下使用空idList @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（简化，避免数据库依赖）
+$productplanTable = zenData('productplan');
+$productplanTable->product->range('1{3},2{2}');
+$productplanTable->title->range('1-5')->prefix('计划');
+$productplanTable->status->range('wait{2},doing{2},done{1}');
+$productplanTable->begin->range('`2024-01-01`,`2024-02-01`,`2024-03-01`,`2024-04-01`,`2024-05-01`');
+$productplanTable->end->range('`2024-06-01`,`2024-07-01`,`2024-08-01`,`2024-09-01`,`2024-10-01`');
+$productplanTable->deleted->range('0');
+$productplanTable->gen(5);
 
-// 3. 用户登录（选择合适角色）
+zenData('user')->gen(5);
+zenData('product')->gen(2);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($docTest->previewProductplanTest('setting', array('action' => 'preview', 'product' => 1), '')) && p('data:0:title') && e('产品计划1'); // 步骤1：正常预览设置页面
-r($docTest->previewProductplanTest('setting', array('action' => 'preview', 'product' => 0), '')) && p('data') && e('~~'); // 步骤2：无效产品ID
-r($docTest->previewProductplanTest('list', array(), '1,2,3')) && p('data:0:title') && e('产品计划1'); // 步骤3：有效ID列表
-r($docTest->previewProductplanTest('list', array(), '')) && p('data') && e('~~'); // 步骤4：空ID列表
-r($docTest->previewProductplanTest('invalid', array(), '')) && p('data') && e('~~'); // 步骤5：无效视图类型
+$settingsProduct1 = array('action' => 'preview', 'product' => 1);
+$settingsProduct2 = array('action' => 'preview', 'product' => 2);
+$settingsNoProduct = array('action' => 'preview', 'product' => 999);
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
+
+r(count($docTest->previewProductplanTest('setting', $settingsProduct1, '')['data'])) && p() && e('3'); // 步骤1:setting视图下预览产品1的所有计划
+r(count($docTest->previewProductplanTest('setting', $settingsProduct2, '')['data'])) && p() && e('2'); // 步骤2:setting视图下预览产品2的所有计划
+r(count($docTest->previewProductplanTest('setting', $settingsNoProduct, '')['data'])) && p() && e('0'); // 步骤3:setting视图下预览不存在的产品计划
+r(count($docTest->previewProductplanTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤4:list视图下根据ID列表预览计划
+r(count($docTest->previewProductplanTest('list', $settingsList, '')['data'])) && p() && e('0'); // 步骤5:list视图下使用空idList

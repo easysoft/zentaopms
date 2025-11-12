@@ -7,58 +7,60 @@ title=测试 screenModel::getThumbnail();
 timeout=0
 cid=0
 
-- 步骤1：正常情况多个screen有cover第0条的cover属性 @file-read-2.png
-- 步骤2：空数组输入 @0
-- 步骤3：无关联图片的screen第0条的cover属性 @~~
-- 步骤4：混合情况返回数组 @7
-- 步骤5：单个screen有多个图片文件第0条的cover属性 @file-read-10.png
+- 步骤1：测试单个screen有一张图片的情况第0条的cover属性 @file-read-2.png
+- 步骤2：测试单个screen有多张图片的情况第0条的cover属性 @file-read-10.png
+- 步骤3：测试多个screens的情况
+ - 第0条的cover属性 @file-read-2.png
+ - 第1条的cover属性 @file-read-4.png
+ - 第2条的cover属性 @file-read-6.png
+- 步骤4：测试screen没有图片的情况第0条的cover属性 @~~
+- 步骤5：测试空数组输入的情况 @0
+- 步骤6：测试混合情况
+ - 第0条的cover属性 @file-read-2.png
+ - 第1条的cover属性 @~~
+ - 第2条的cover属性 @file-read-4.png
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
+// 2. 用户登录
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
+// 3. 创建测试实例
 $screenTest = new screenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-// 构建测试数据
-$screensWithImages = array();
-for($i = 1; $i <= 3; $i++) {
-    $screen = new stdclass();
-    $screen->id = $i;
-    $screen->name = '测试大屏' . $i;
-    $screensWithImages[] = $screen;
-}
+// 4. 测试步骤
 
-$screensWithoutImages = array();
-for($i = 6; $i <= 7; $i++) {
-    $screen = new stdclass();
-    $screen->id = $i;
-    $screen->name = '测试大屏' . $i;
-    $screensWithoutImages[] = $screen;
-}
+// 步骤1：测试单个screen有一张图片的情况
+$screen1 = array((object)array('id' => 1, 'name' => 'Screen 1'));
+r($screenTest->getThumbnailTest($screen1)) && p('0:cover') && e('file-read-2.png'); // 步骤1：测试单个screen有一张图片的情况
 
-$mixedScreens = array();
-for($i = 1; $i <= 7; $i++) {
-    $screen = new stdclass();
-    $screen->id = $i;
-    $screen->name = '测试大屏' . $i;
-    $mixedScreens[] = $screen;
-}
+// 步骤2：测试单个screen有多张图片的情况(screen id=9有3张图片,应该选最后一张id=10)
+$screen2 = array((object)array('id' => 9, 'name' => 'Screen 9'));
+r($screenTest->getThumbnailTest($screen2)) && p('0:cover') && e('file-read-10.png'); // 步骤2：测试单个screen有多张图片的情况
 
-$singleScreenWithMultipleImages = array();
-$screen = new stdclass();
-$screen->id = 9;
-$screen->name = '测试大屏9';
-$singleScreenWithMultipleImages[] = $screen;
+// 步骤3：测试多个screens的情况
+$screens3 = array(
+    (object)array('id' => 1, 'name' => 'Screen 1'),
+    (object)array('id' => 2, 'name' => 'Screen 2'),
+    (object)array('id' => 3, 'name' => 'Screen 3')
+);
+r($screenTest->getThumbnailTest($screens3)) && p('0:cover;1:cover;2:cover') && e('file-read-2.png;file-read-4.png;file-read-6.png'); // 步骤3：测试多个screens的情况
 
-r($screenTest->getThumbnailTest($screensWithImages)) && p('0:cover') && e('file-read-2.png'); // 步骤1：正常情况多个screen有cover
-r($screenTest->getThumbnailTest(array())) && p() && e('0'); // 步骤2：空数组输入
-r($screenTest->getThumbnailTest($screensWithoutImages)) && p('0:cover') && e('~~'); // 步骤3：无关联图片的screen
-r($screenTest->getThumbnailTest($mixedScreens)) && p() && e('7'); // 步骤4：混合情况返回数组
-r($screenTest->getThumbnailTest($singleScreenWithMultipleImages)) && p('0:cover') && e('file-read-10.png'); // 步骤5：单个screen有多个图片文件
+// 步骤4：测试screen没有图片的情况(screen id=99没有关联图片)
+$screen4 = array((object)array('id' => 99, 'name' => 'Screen 99'));
+r($screenTest->getThumbnailTest($screen4)) && p('0:cover') && e('~~'); // 步骤4：测试screen没有图片的情况
+
+// 步骤5：测试空数组输入的情况
+r($screenTest->getThumbnailTest(array())) && p() && e('0'); // 步骤5：测试空数组输入的情况
+
+// 步骤6：测试混合情况(部分有图片,部分无图片)
+$screens6 = array(
+    (object)array('id' => 1, 'name' => 'Screen 1'),
+    (object)array('id' => 88, 'name' => 'Screen 88'),
+    (object)array('id' => 2, 'name' => 'Screen 2')
+);
+r($screenTest->getThumbnailTest($screens6)) && p('0:cover;1:cover;2:cover') && e('file-read-2.png;~~;file-read-4.png'); // 步骤6：测试混合情况

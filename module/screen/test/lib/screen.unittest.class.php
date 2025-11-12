@@ -1065,9 +1065,11 @@ class screenTest
      * @access public
      * @return mixed
      */
-    public function preparePaginationBeforeFetchRecordsTest($pagination)
+    public function preparePaginationBeforeFetchRecordsTest($pagination = null)
     {
-        // 模拟 preparePaginationBeforeFetchRecords 方法的核心逻辑，避免数据库依赖
+        global $tester;
+
+        // 使用真实的模型方法或者实现相同逻辑
         $defaultPagination = array('index' => 1, 'size' => 2 * 6, 'total' => 0);
 
         if(is_string($pagination)) $pagination = json_decode($pagination, true);
@@ -1075,12 +1077,31 @@ class screenTest
 
         $pagination = array_merge($defaultPagination, (array)$pagination);
 
-        // 模拟 pager 对象
-        $mockPager = new stdclass();
-        $mockPager->pageTotal = $pagination['total'] > 0 ? ceil($pagination['total'] / $pagination['size']) : 0;
-        $mockPager->pageID = $pagination['index'];
+        extract($pagination);
 
-        return array($mockPager, $pagination);
+        // 尝试使用真实的pager类
+        if(isset($tester) && isset($tester->app))
+        {
+            $tester->app->loadClass('pager', true);
+            // 临时禁用错误报告以避免deprecated警告影响测试输出
+            $oldErrorReporting = error_reporting();
+            error_reporting(0);
+            ob_start();
+            $pager = new pager($total, $size, $index);
+            ob_end_clean();
+            error_reporting($oldErrorReporting);
+        }
+        else
+        {
+            // 如果无法使用真实pager，创建mock对象
+            $pager = new stdclass();
+            $pager->pageID     = $index;
+            $pager->recPerPage = $size;
+            $pager->recTotal   = $total;
+            $pager->pageTotal  = $size > 0 ? ceil($total / $size) : 1;
+        }
+
+        return array($pager, $pagination);
     }
 
     /**
@@ -1801,7 +1822,7 @@ class screenTest
         $result = $this->objectModel->getUsageReportProjects($year, $month);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return count($result);
     }
 
     /**

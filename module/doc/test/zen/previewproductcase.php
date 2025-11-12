@@ -7,36 +7,41 @@ title=测试 docZen::previewProductCase();
 timeout=0
 cid=0
 
-- 步骤1：预览设置页面自定义搜索 @2
-- 步骤2：预览设置页面条件搜索 @3
-- 步骤3：有效ID列表 @3
-- 步骤4：空参数情况 @0
-- 步骤5：无效视图类型 @0
+- 步骤1:setting视图下customSearch条件预览产品用例列表,pri=1 @3
+- 步骤2:setting视图下customSearch条件预览产品用例列表,pri=2 @2
+- 步骤3:setting视图下普通条件预览产品用例列表 @5
+- 步骤4:list视图下根据ID列表预览用例 @3
+- 步骤5:空idList的list视图 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('case');
-$table->id->range('1-100');
-$table->product->range('1-5');
-$table->title->range('登录功能测试用例,用户注册测试用例,产品搜索测试用例');
-$table->status->range('normal{60},blocked{40}');
-$table->type->range('feature{80},performance{20}');
-$table->gen(10);
+$caseTable = zenData('case');
+$caseTable->product->range('1{5},2{5}');
+$caseTable->pri->range('1{3},2{2},3{5}');
+$caseTable->title->range('1-10')->prefix('测试用例');
+$caseTable->type->range('feature{5},performance{3},config{2}');
+$caseTable->status->range('normal{8},blocked{2}');
+$caseTable->stage->range('unittest{3},feature{4},intergrate{3}');
+$caseTable->deleted->range('0');
+$caseTable->gen(10);
 
-// 3. 用户登录（选择合适角色）
+zenData('user')->gen(5);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($docTest->previewProductCaseTest('setting', array('action' => 'preview', 'product' => 1, 'condition' => 'customSearch'), '')) && p() && e('2'); // 步骤1：预览设置页面自定义搜索
-r($docTest->previewProductCaseTest('setting', array('action' => 'preview', 'product' => 2, 'condition' => 'all'), '')) && p() && e('3'); // 步骤2：预览设置页面条件搜索
-r($docTest->previewProductCaseTest('list', array(), '1,2,3')) && p() && e('3'); // 步骤3：有效ID列表
-r($docTest->previewProductCaseTest('setting', array(), '')) && p() && e('0'); // 步骤4：空参数情况
-r($docTest->previewProductCaseTest('invalid', array(), '')) && p() && e('0'); // 步骤5：无效视图类型
+$settingsCustomSearch1 = array('action' => 'preview', 'product' => 1, 'condition' => 'customSearch', 'field' => array('pri'), 'operator' => array('='), 'value' => array('1'), 'andor' => array('and'));
+$settingsCustomSearch2 = array('action' => 'preview', 'product' => 1, 'condition' => 'customSearch', 'field' => array('pri'), 'operator' => array('='), 'value' => array('2'), 'andor' => array('and'));
+$settingsNormalCondition = array('action' => 'preview', 'product' => 1, 'condition' => 'all');
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
+
+r(count($docTest->previewProductCaseTest('setting', $settingsCustomSearch1, '')['data'])) && p() && e('3'); // 步骤1:setting视图下customSearch条件预览产品用例列表,pri=1
+r(count($docTest->previewProductCaseTest('setting', $settingsCustomSearch2, '')['data'])) && p() && e('2'); // 步骤2:setting视图下customSearch条件预览产品用例列表,pri=2
+r(count($docTest->previewProductCaseTest('setting', $settingsNormalCondition, '')['data'])) && p() && e('5'); // 步骤3:setting视图下普通条件预览产品用例列表
+r(count($docTest->previewProductCaseTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤4:list视图下根据ID列表预览用例
+r(count($docTest->previewProductCaseTest('list', $settingsList, '')['data'])) && p() && e('0'); // 步骤5:空idList的list视图

@@ -114,10 +114,15 @@ class editor extends wg
         $customProps = $this->getRestProps();
         if(!isset($customProps['class'])) $customProps['class'] = 'w-full';
 
-        $editor->add(set($customProps));
-        $editor->add(set('css', self::$css)); // Inject CSS into editor.
-        $editor->add(set('css-src', $app->getWebRoot() . 'js/zui3/zen-editor/zui-inject-style.css')); // Inject CSS on page, for tippy menus.
-        $editor->add(h('article', set('slot', 'content'), html($this->prop('value')), $this->children())); // Set initial content.
+        $editor->setProp($customProps);
+        $editor->setProp('css', self::$css); // Inject CSS into editor.
+        $editor->setProp('css-src', $app->getWebRoot() . 'js/zui3/zen-editor/zui-inject-style.css'); // Inject CSS on page, for tippy menus.
+
+        /* Set initial content. */
+        $initialContent = $this->prop('value');
+        $children       = $this->children();
+        if(empty($children)) $editor->setProp('initial-content', $initialContent);
+        else                 $editor->add(h('article', set('slot', 'content'), $initialContent? html($initialContent) : null, $children));
 
         $templateType = $this->prop('templateType');
 

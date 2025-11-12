@@ -1,0 +1,61 @@
+---
+title: 项目集测试数据
+desc: 为getUnauthProgramsOfProducts方法提供项目集测试数据
+
+fields:
+- field: id
+  note: 项目集ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目集名称
+  range: Unauthorized Program {1-30}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: program
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 等级
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父项目集
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: doing
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制
+  range: open
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

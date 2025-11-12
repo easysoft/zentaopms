@@ -1,0 +1,34 @@
+---
+title: 产品表
+desc: 用于测试 assignVarsForUploadDocs 方法的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 产品类型
+  range: normal
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 产品状态
+  range: normal
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

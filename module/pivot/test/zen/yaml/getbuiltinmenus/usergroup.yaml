@@ -1,0 +1,16 @@
+---
+title: usergroup表测试数据
+desc: 用户组关系数据
+author: Claude
+version: 1.0
+
+fields:
+- field: account
+  note: 用户账号
+  range: admin
+  loop: 0
+
+- field: group
+  note: 用户组ID
+  range: 1
+  loop: 0

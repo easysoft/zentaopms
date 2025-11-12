@@ -145,7 +145,7 @@ class jobZen extends job
         $this->app->loadLang('project');
         $taskID = $compile->testtask;
         $task   = $this->loadModel('testtask')->getById($taskID);
-        $runs   = $this->testtask->getRuns($taskID, 0, 'id');
+        $runs   = $this->testtask->getRunsForUnitCases($taskID, 'id');
 
         $cases = array();
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');

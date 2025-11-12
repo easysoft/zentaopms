@@ -789,7 +789,7 @@ class commonTest
 
         // 步骤5：检查entry是否存在（模拟数据库查询）
         // 更新有效的code列表，包含所有测试场景
-        $validCodes = array('validcode', 'nokey', 'validip', 'invalidtoken', 'validentry');
+        $validCodes = array('validcode', 'nokey', 'validip', 'invalidtoken', 'validentry', 'unboundaccount');
         if(!in_array($code, $validCodes)) {
             return 'EMPTY_ENTRY';
         }
@@ -3139,5 +3139,49 @@ class commonTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test buildOperateMenu method signature.
+     *
+     * @param  int $testCase
+     * @access public
+     * @return string
+     */
+    public function testBuildOperateMenuSignature($testCase = 1)
+    {
+        switch($testCase) {
+            case 1: // 验证方法存在
+                return method_exists('commonModel', 'buildOperateMenu') ? '1' : '0';
+
+            case 2: // 验证方法为公共方法
+                $reflection = new ReflectionMethod('commonModel', 'buildOperateMenu');
+                return $reflection->isPublic() ? '1' : '0';
+
+            case 3: // 验证第一个参数为object类型
+                $reflection = new ReflectionMethod('commonModel', 'buildOperateMenu');
+                $parameters = $reflection->getParameters();
+                if(count($parameters) > 0) {
+                    $type = $parameters[0]->getType();
+                    return ($type && $type->getName() === 'object') ? '1' : '0';
+                }
+                return '0';
+
+            case 4: // 验证第二个参数为string类型
+                $reflection = new ReflectionMethod('commonModel', 'buildOperateMenu');
+                $parameters = $reflection->getParameters();
+                if(count($parameters) > 1) {
+                    $type = $parameters[1]->getType();
+                    return ($type && $type->getName() === 'string') ? '1' : '0';
+                }
+                return '0';
+
+            case 5: // 验证参数数量
+                $reflection = new ReflectionMethod('commonModel', 'buildOperateMenu');
+                return (string)$reflection->getNumberOfParameters();
+
+            default:
+                return '0';
+        }
     }
 }

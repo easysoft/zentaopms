@@ -1,0 +1,30 @@
+---
+title: assignBatchCreateVars测试的版本数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的版本数据
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: 1-5
+- field: branch
+  note: 所属分支
+  range: '0{5},1{3},2{2}'
+- field: execution
+  note: 所属执行
+  range: 1-10
+- field: name
+  note: 版本名称
+  range: 'Build1,Build2,Build3,Build4,Build5'
+  loop: 2
+- field: date
+  note: 打包日期
+  range: '2023-06-01,2023-07-01,2023-08-01'
+- field: builder
+  note: 构建者
+  range: 'admin,user1,user2'
+- field: deleted
+  note: 是否删除
+  range: '0'

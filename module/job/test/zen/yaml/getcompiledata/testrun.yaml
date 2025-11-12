@@ -1,0 +1,68 @@
+---
+title: 测试执行记录数据
+desc: 用于测试 getCompileData 方法的测试执行记录数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: task
+  note: 任务ID
+  range: 1{10},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: case
+  note: 用例ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: assignedTo
+  note: 指派给
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastRunner
+  note: 最后执行人
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastRunDate
+  note: 最后执行时间
+  range: (M)-(d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: lastRunResult
+  note: 最后执行结果
+  range: pass,fail,blocked
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: normal,done
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

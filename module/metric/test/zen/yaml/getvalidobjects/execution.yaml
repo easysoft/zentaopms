@@ -1,0 +1,48 @@
+---
+title: execution数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 16-27
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 所属项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 执行类型
+  range: sprint{6},stage{3},kanban{3}
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 执行名称
+  range: 测试执行{12}
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 执行代码
+  range: sprint{12}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 执行状态
+  range: doing{6},closed{3},done{3}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除标记
+  range: 0{10},1{2}
+  prefix: ""
+  postfix: ""
+- field: closedDate
+  note: 关闭日期
+  range: '[]{6},2025-01-01 00:00:00{3},2020-01-01 00:00:00{3}'
+  prefix: ""
+  postfix: ""

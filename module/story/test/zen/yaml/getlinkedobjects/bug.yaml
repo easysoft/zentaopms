@@ -1,0 +1,61 @@
+---
+title: Bug测试数据
+desc: 用于getLinkedObjects方法的Bug测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 关联需求ID
+  range: 0,1,1,2,3,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Bug标题
+  range: Bug1,Bug2,Bug3,Bug4,Bug5,Bug6,Bug7,Bug8,Bug9,Bug10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: active,resolved,closed
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: severity
+  note: 严重程度
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0,0,0,0,0,0,0,0,0,1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

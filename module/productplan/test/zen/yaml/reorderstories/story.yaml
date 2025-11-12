@@ -1,0 +1,16 @@
+---
+fields:
+- field: id
+  range: 1-10
+- field: parent
+  range: 0,0,0,-1,4,4,0,-1,8,8
+- field: product
+  range: 1
+- field: type
+  range: story
+- field: status
+  range: active
+- field: stage
+  range: wait
+- field: deleted
+  range: 0

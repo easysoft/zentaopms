@@ -1,0 +1,35 @@
+---
+title: 用户数据定义
+desc: 用于测试getStoryCardMenu方法的用户数据
+
+fields:
+- field: id
+  note: 用户ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: account
+  note: 账号
+  range: admin,user1,user2,user3,user4
+  prefix: ""
+  postfix: ""
+- field: password
+  note: 密码
+  range: '123456'
+  prefix: ""
+  postfix: ""
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4
+  prefix: ""
+  postfix: ""
+- field: role
+  note: 角色
+  range: admin,dev,qa,po,dev
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

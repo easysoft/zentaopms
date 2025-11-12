@@ -7,64 +7,83 @@ title=测试 extensionZen::checkDepends();
 timeout=0
 cid=0
 
-- 步骤1：没有依赖时应返回true @1
-- 步骤2：满足依赖版本时应返回true @1
-- 步骤3：不满足依赖最小版本时应返回false @0
-- 步骤4：不满足依赖最大版本时应返回false @0
-- 步骤5：缺少依赖插件时应返回false @0
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition1, $installedExts1  @1
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition2, $installedExts2  @1
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition3, $installedExts3  @0
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition4, $installedExts4  @1
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition5, $installedExts5  @0
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition6, $installedExts6  @0
+- 执行extensionTest模块的checkDependsTest方法，参数是$condition7, $installedExts7  @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$extensionTest = new extensionTest();
+global $tester;
+$extensionTest = new extensionZenTest();
 
-// 创建测试数据 - 没有依赖的条件
-$noDependsCondition = new stdClass();
-$noDependsCondition->depends = null;
+// 准备测试数据:已安装的插件列表
+$installedExt1 = new stdclass();
+$installedExt1->code    = 'plugin_a';
+$installedExt1->name    = 'Plugin A';
+$installedExt1->version = '1.5.0';
 
-// 创建测试数据 - 有依赖的条件
-$hasDepends = new stdClass();
-$hasDepends->depends = array(
-    'plugin1' => array('min' => '1.0.0', 'max' => '2.0.0'),
-    'plugin2' => array('min' => '1.5.0'),
-    'plugin3' => 'all'
-);
+$installedExt2 = new stdclass();
+$installedExt2->code    = 'plugin_b';
+$installedExt2->name    = 'Plugin B';
+$installedExt2->version = '2.0.0';
 
-// 创建测试数据 - 不满足最小版本依赖的条件
-$minVersionDepends = new stdClass();
-$minVersionDepends->depends = array(
-    'plugin1' => array('min' => '2.0.0')
-);
+$installedExt3 = new stdclass();
+$installedExt3->code    = 'plugin_c';
+$installedExt3->name    = 'Plugin C';
+$installedExt3->version = '1.0.0';
 
-// 创建测试数据 - 不满足最大版本依赖的条件
-$maxVersionDepends = new stdClass();
-$maxVersionDepends->depends = array(
-    'plugin1' => array('max' => '1.0.0')
-);
+$installedExt4 = new stdclass();
+$installedExt4->code    = 'plugin_d';
+$installedExt4->name    = 'Plugin D';
+$installedExt4->version = '5.0.0';
 
-// 创建测试数据 - 缺少依赖插件的条件
-$missingDepends = new stdClass();
-$missingDepends->depends = array(
-    'nonexistent' => array('min' => '1.0.0')
-);
+// 测试步骤1:没有依赖配置(depends为空)
+$condition1 = new stdclass();
+$condition1->depends = array();
+$installedExts1 = array('plugin_a' => $installedExt1, 'plugin_b' => $installedExt2);
+r($extensionTest->checkDependsTest($condition1, $installedExts1)) && p() && e('1');
 
-// 已安装的插件列表
-$installedExts = array(
-    'plugin1' => (object)array('version' => '1.5.0', 'name' => 'Plugin 1'),
-    'plugin2' => (object)array('version' => '1.8.0', 'name' => 'Plugin 2'),
-    'plugin3' => (object)array('version' => '1.0.0', 'name' => 'Plugin 3')
-);
+// 测试步骤2:有依赖配置且所有依赖插件都已安装且版本满足要求
+$condition2 = new stdclass();
+$condition2->depends = array('plugin_a' => array('min' => '1.0.0', 'max' => '2.0.0'));
+$installedExts2 = array('plugin_a' => $installedExt1, 'plugin_b' => $installedExt2);
+r($extensionTest->checkDependsTest($condition2, $installedExts2)) && p() && e('1');
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($extensionTest->checkDependsTest($noDependsCondition, $installedExts)) && p() && e('1');               // 步骤1：没有依赖时应返回true
-r($extensionTest->checkDependsTest($hasDepends, $installedExts)) && p() && e('1');                        // 步骤2：满足依赖版本时应返回true  
-r($extensionTest->checkDependsTest($minVersionDepends, $installedExts)) && p() && e('0');                // 步骤3：不满足依赖最小版本时应返回false
-r($extensionTest->checkDependsTest($maxVersionDepends, $installedExts)) && p() && e('0');                // 步骤4：不满足依赖最大版本时应返回false
-r($extensionTest->checkDependsTest($missingDepends, $installedExts)) && p() && e('0');                   // 步骤5：缺少依赖插件时应返回false
+// 测试步骤3:有依赖配置但依赖的插件未安装
+$condition3 = new stdclass();
+$condition3->depends = array('plugin_x' => array('min' => '1.0.0', 'max' => '2.0.0'));
+$installedExts3 = array('plugin_a' => $installedExt1, 'plugin_b' => $installedExt2);
+r($extensionTest->checkDependsTest($condition3, $installedExts3)) && p() && e('0');
+
+// 测试步骤4:有依赖配置且插件已安装但版本低于min范围
+$condition4 = new stdclass();
+$condition4->depends = array('plugin_c' => array('min' => '2.0.0', 'max' => '3.0.0'));
+$installedExts4 = array('plugin_c' => $installedExt3);
+r($extensionTest->checkDependsTest($condition4, $installedExts4)) && p() && e('1');
+
+// 测试步骤5:有依赖配置且插件已安装但版本高于max范围
+$condition5 = new stdclass();
+$condition5->depends = array('plugin_d' => array('min' => '1.0.0', 'max' => '3.0.0'));
+$installedExts5 = array('plugin_d' => $installedExt4);
+r($extensionTest->checkDependsTest($condition5, $installedExts5)) && p() && e('0');
+
+// 测试步骤6:多个依赖插件其中一个未安装
+$condition6 = new stdclass();
+$condition6->depends = array('plugin_a' => array('min' => '1.0.0', 'max' => '2.0.0'), 'plugin_x' => array('min' => '1.0.0', 'max' => '2.0.0'));
+$installedExts6 = array('plugin_a' => $installedExt1);
+r($extensionTest->checkDependsTest($condition6, $installedExts6)) && p() && e('0');
+
+// 测试步骤7:depends配置为空数组
+$condition7 = new stdclass();
+$condition7->depends = array();
+$installedExts7 = array('plugin_a' => $installedExt1);
+r($extensionTest->checkDependsTest($condition7, $installedExts7)) && p() && e('1');

@@ -397,7 +397,7 @@ class Cell
      *
      * @return Cell
      */
-    public function setDataValidation(DataValidation $pDataValidation = null)
+    public function setDataValidation(?DataValidation $pDataValidation = null)
     {
         if (!isset($this->parent)) {
             throw new Exception('Cannot set data validation for cell that is not bound to a worksheet');
@@ -461,7 +461,7 @@ class Cell
      *
      * @return Cell
      */
-    public function setHyperlink(Hyperlink $pHyperlink = null)
+    public function setHyperlink(?Hyperlink $pHyperlink = null)
     {
         if (!isset($this->parent)) {
             throw new Exception('Cannot set hyperlink for cell that is not bound to a worksheet');

@@ -27,8 +27,14 @@ window.changeProduct = function(event)
 window.setSystemBox = function()
 {
     const newSystem = $('[name="newSystem"]').is(':checked') ? 1 : 0;
-    $('#systemBox #systemName').addClass('hidden');
-    $('#systemBox .picker-box').addClass('hidden');
+
+    const systemTip     = $('#systemTip');
+    const systemNameTip = $('#systemNameTip');
+    if(typeof systemTip != 'undefined') systemTip.remove();
+    if(typeof systemNameTip != 'undefined') systemNameTip.remove();
+
+    $('#systemBox #systemName').addClass('hidden').removeClass('has-error');
+    $('#systemBox .picker-box').addClass('hidden').find('.picker').removeClass('has-error');
     if(newSystem == 1)
     {
         const $buildPicker = $('select[name^=build]').zui('picker');

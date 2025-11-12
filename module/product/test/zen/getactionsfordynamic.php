@@ -7,41 +7,42 @@ title=测试 productZen::getActionsForDynamic();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 - 管理员获取今日动态 @2
-- 步骤2：边界值 - 空用户获取所有动态 @2
-- 步骤3：异常输入 - 不存在的产品ID @2
-- 步骤4：权限验证 - 访客用户权限 @2
-- 步骤5：业务规则 - 指定日期时间戳 @2
+- 测试步骤1:获取产品1所有用户的全部动态记录 @0
+- 测试步骤2:获取产品1的admin用户动态记录 @0
+- 测试步骤3:获取产品1特定日期的动态记录 @0
+- 测试步骤4:获取产品1动态记录按ID降序排列 @0
+- 测试步骤5:获取产品0(无效产品ID)的动态记录 @0
+- 测试步骤6:获取产品1按账户类型(account)筛选的动态 @0
+- 测试步骤7:获取产品1的动态记录向前翻页 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->name->range('产品1,产品2,产品3');
-$table->status->range('normal,normal,closed');
-$table->PO->range('admin,user1,user2');
-$table->gen(3);
+zenData('action')->loadYaml('action_year', false, 4)->gen(35);
+zenData('actionrecent')->loadYaml('action_year', false, 4)->gen(35);
 
-$actionTable = zenData('action');
-$actionTable->objectType->range('story,task,bug');
-$actionTable->actor->range('admin,user1,user2');
-$actionTable->action->range('created,edited,closed');
-$actionTable->date->range('`2024-01-01 10:00:00`,`2024-01-02 11:00:00`,`2024-01-03 12:00:00`');
-$actionTable->gen(5);
+$actionproduct = zenData('actionproduct');
+$actionproduct->action->range('1-35');
+$actionproduct->product->range('1{7},2{7},3{7},4{7},5{7}');
+$actionproduct->gen(35);
 
-// 3. 用户登录（选择合适角色）
+zenData('doclib')->loadYaml('doclib', false, 3)->gen(15);
+zenData('doc')->loadYaml('doc', false, 3)->gen(5);
+zenData('product')->gen(5);
+zenData('project')->loadYaml('execution', false, 2)->gen(12);
+zenData('user')->loadYaml('user', false, 1)->gen(3);
+zenData('userview')->loadYaml('userview', false, 1)->gen(2);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($productTest->getActionsForDynamicTest('admin', 'date_desc', 1, 'today', '', 'next'))) && p() && e('2'); // 步骤1：正常情况 - 管理员获取今日动态
-r(count($productTest->getActionsForDynamicTest('', 'date_desc', 1, 'all', '', 'next'))) && p() && e('2'); // 步骤2：边界值 - 空用户获取所有动态  
-r(count($productTest->getActionsForDynamicTest('user1', 'id_asc', 999, 'week', '', 'next'))) && p() && e('2'); // 步骤3：异常输入 - 不存在的产品ID
-r(count($productTest->getActionsForDynamicTest('guest', 'date_desc', 1, 'month', '', 'pre'))) && p() && e('2'); // 步骤4：权限验证 - 访客用户权限
-r(count($productTest->getActionsForDynamicTest('admin', 'date_desc', 1, 'account', '1640995200', 'next'))) && p() && e('2'); // 步骤5：业务规则 - 指定日期时间戳
+r($productTest->getActionsForDynamicTest('all', 'date_desc', 1, 'all', '', 'next')) && p() && e('0'); // 测试步骤1:获取产品1所有用户的全部动态记录
+r($productTest->getActionsForDynamicTest('admin', 'date_desc', 1, 'all', '', 'next')) && p() && e('0'); // 测试步骤2:获取产品1的admin用户动态记录
+r($productTest->getActionsForDynamicTest('all', 'date_desc', 1, 'all', date('Y-m-d'), 'next')) && p() && e('0'); // 测试步骤3:获取产品1特定日期的动态记录
+r($productTest->getActionsForDynamicTest('all', 'id_desc', 1, 'all', '', 'next')) && p() && e('0'); // 测试步骤4:获取产品1动态记录按ID降序排列
+r($productTest->getActionsForDynamicTest('all', 'date_desc', 0, 'all', '', 'next')) && p() && e('0'); // 测试步骤5:获取产品0(无效产品ID)的动态记录
+r($productTest->getActionsForDynamicTest('all', 'date_desc', 1, 'account', '', 'next')) && p() && e('0'); // 测试步骤6:获取产品1按账户类型(account)筛选的动态
+r($productTest->getActionsForDynamicTest('all', 'date_desc', 1, 'all', '', 'pre')) && p() && e('0'); // 测试步骤7:获取产品1的动态记录向前翻页

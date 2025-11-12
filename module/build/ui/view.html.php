@@ -128,6 +128,7 @@ if(!$canBeChanged)
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
+$onlyNoCheckCount = 0;
 if(!empty($build->builds))
 {
     $buildStories = explode(',', $build->stories);
@@ -144,6 +145,7 @@ if(!empty($build->builds))
 
     $buildBugs = explode(',', $build->bugs);
     $buildBugs = array_combine($buildBugs, $buildBugs);
+
     foreach($bugs as $index => $bug)
     {
         if(empty($bug->actions)) break;
@@ -151,6 +153,7 @@ if(!empty($build->builds))
         {
             $bug->noCheckBox = true;
             $bug->actions[0]['disabled'] = true;
+            $onlyNoCheckCount++;
         }
     }
 }
@@ -229,7 +232,7 @@ detailBody
                     set::userMap($users),
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
-                    set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::checkable(($canBatchUnlinkBug || $canBatchCloseBug) && $onlyNoCheckCount != count($bugs)),
                     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),

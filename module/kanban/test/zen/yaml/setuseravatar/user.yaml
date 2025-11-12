@@ -1,0 +1,30 @@
+---
+title: zt_user
+author: Claude
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: account
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+- field: realname
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9
+- field: password
+  range: e10adc3949ba59abbe56e057f20f883e
+- field: role
+  range: admin,dev{5},qa{4}
+- field: dept
+  range: 1-5
+- field: email
+  fields:
+  - field: emailname
+    range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+  - field: domain
+    range: '[@test.com]'
+- field: avatar
+  range: "[],avatar1.png,avatar2.png,avatar3.png,[],[],[],avatar7.png,[],avatar9.png"
+- field: deleted
+  range: 0
+- field: type
+  range: inside
+...

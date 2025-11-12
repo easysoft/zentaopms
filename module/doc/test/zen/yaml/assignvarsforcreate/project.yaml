@@ -1,0 +1,28 @@
+title: project data for assignVarsForCreate test
+author: Claude
+version: 1.0
+
+fields:
+  - field: id
+    range: 1-5
+  - field: name
+    range: 1-5
+    prefix: 项目
+  - field: type
+    range: project{3},sprint{2}
+  - field: model
+    range: scrum{2},waterfall{2},kanban
+  - field: status
+    range: doing{3},wait{2}
+  - field: PM
+    range: admin{3},user1{2}
+  - field: acl
+    range: open{3},private{2}
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: now
+  - field: begin
+    range: (-30D)-(-20D)
+  - field: end
+    range: (30D)-(60D)

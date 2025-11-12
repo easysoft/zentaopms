@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->checkAccountChange();
+timeout=0
 cid=0
 
 - 新用户忙和旧用户名相同，返回 false。属性result @0

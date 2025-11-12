@@ -1,0 +1,24 @@
+title: 测试setFormOptionsForBatchEdit方法的产品数据
+desc: 包含不同类型的产品数据用于测试
+
+fields:
+- field: id
+  range: 1-10
+- field: program
+  range: 0
+- field: name
+  range: 正常产品1,分支产品2,平台产品3,普通产品4,测试产品5{5}
+- field: code
+  range: product1,product2,product3,product4,product5{5}
+- field: type
+  range: normal{3},branch{3},platform{4}
+- field: status
+  range: normal
+- field: acl
+  range: open
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: 2023-01-01 00:00:00
+- field: deleted
+  range: 0

@@ -7,35 +7,78 @@ title=测试 blockZen::printExecutionStatisticBlock();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 @1
-- 步骤2：非法参数 @0
-- 步骤3：无执行数据 @0
-- 步骤4：指定项目 @1
-- 步骤5：指定活跃执行 @2
+- 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block1
+ - 属性executionsCount @0
+ - 属性projectsCount @3
+ - 属性hasChartData @1
+- 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block2
+ - 属性executionsCount @0
+ - 属性projectsCount @3
+ - 属性hasChartData @1
+- 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block3
+ - 属性executionsCount @0
+ - 属性projectsCount @3
+ - 属性hasChartData @1
+- 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block4
+ - 属性executionsCount @0
+ - 属性projectsCount @3
+ - 属性hasChartData @1
+ - 属性currentProjectID @0
+- 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block5
+ - 属性executionsCount @0
+ - 属性projectsCount @3
+ - 属性hasChartData @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('project');
-$table->id->range('1-5');
-$table->name->range('执行1,执行2,执行3,执行4,执行5');
-$table->type->range('sprint{3},execution{2}');
-$table->status->range('wait,doing,done,closed,wait');
-$table->gen(5);
+zendata('project')->loadYaml('project', false, 2)->gen(20);
+zendata('product')->loadYaml('product', false, 2)->gen(10);
+zendata('projectproduct')->loadYaml('projectproduct', false, 2)->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printExecutionStatisticBlockTest('normal', 'my')) && p() && e('1'); // 步骤1：正常情况
-r($blockTest->printExecutionStatisticBlockTest('invalid_type!', 'my')) && p() && e('0'); // 步骤2：非法参数
-r($blockTest->printExecutionStatisticBlockTest('none', 'my')) && p() && e('0'); // 步骤3：无执行数据
-r($blockTest->printExecutionStatisticBlockTest('normal', 'project', 1)) && p() && e('1'); // 步骤4：指定项目
-r($blockTest->printExecutionStatisticBlockTest('normal', 'my', 0, 2)) && p() && e('2'); // 步骤5：指定活跃执行
+$block1 = new stdClass();
+$block1->id = 1;
+$block1->dashboard = 'my';
+$block1->params = new stdClass();
+$block1->params->type = 'undone';
+$block1->params->count = 5;
+
+$block2 = new stdClass();
+$block2->id = 2;
+$block2->dashboard = 'my';
+$block2->params = new stdClass();
+$block2->params->type = 'done';
+$block2->params->count = 5;
+
+$block3 = new stdClass();
+$block3->id = 3;
+$block3->dashboard = 'my';
+$block3->params = new stdClass();
+$block3->params->type = 'all';
+$block3->params->count = 10;
+
+$block4 = new stdClass();
+$block4->id = 4;
+$block4->dashboard = 'project';
+$block4->params = new stdClass();
+$block4->params->type = 'undone';
+$block4->params->count = 5;
+
+$block5 = new stdClass();
+$block5->id = 5;
+$block5->dashboard = 'my';
+$block5->params = new stdClass();
+$block5->params->type = 'undone';
+$block5->params->count = 0;
+
+r($blockTest->printExecutionStatisticBlockTest($block1)) && p('executionsCount,projectsCount,hasChartData') && e('0,3,1');
+r($blockTest->printExecutionStatisticBlockTest($block2)) && p('executionsCount,projectsCount,hasChartData') && e('0,3,1');
+r($blockTest->printExecutionStatisticBlockTest($block3)) && p('executionsCount,projectsCount,hasChartData') && e('0,3,1');
+r($blockTest->printExecutionStatisticBlockTest($block4)) && p('executionsCount,projectsCount,hasChartData,currentProjectID') && e('0,3,1,0');
+r($blockTest->printExecutionStatisticBlockTest($block5)) && p('executionsCount,projectsCount,hasChartData') && e('0,3,1');

@@ -1,0 +1,76 @@
+---
+title: 测试saveMrData方法使用的action数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-1000
+  prefix: ""
+  postfix: ""
+- field: objectType
+  note: 对象类型
+  range: 'mr,pullreq,task,bug'
+  prefix: ""
+  postfix: ""
+- field: objectID
+  note: 对象ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品
+  range: '1,2,3'
+  prefix: ""
+  postfix: ""
+- field: project
+  note: 项目
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: execution
+  note: 执行
+  range: 0,1,2
+  prefix: ""
+  postfix: ""
+- field: actor
+  note: 操作者
+  range: 'system,admin,user1'
+  prefix: ""
+  postfix: ""
+- field: action
+  note: 动作
+  range: 'opened,closed,merged,commented'
+  prefix: ""
+  postfix: ""
+- field: date
+  note: 日期
+  range: '2025-11-01 00:00:00,2025-11-10 10:00:00'
+  prefix: ""
+  postfix: ""
+- field: comment
+  note: 评论
+  range: '[]{50},Comment text{50}'
+  prefix: ""
+  postfix: ""
+- field: extra
+  note: 额外信息
+  range: '[]{80},{}'
+  prefix: ""
+  postfix: ""
+- field: read
+  note: 是否已读
+  range: '0,1'
+  prefix: ""
+  postfix: ""
+- field: vision
+  note: 视图
+  range: rnd
+  prefix: ""
+  postfix: ""
+- field: efforted
+  note: 是否有工时
+  range: 0,1
+  prefix: ""
+  postfix: ""

@@ -7,35 +7,27 @@ title=测试 productZen::setCreateMenu();
 timeout=0
 cid=0
 
-- 步骤1：program tab调用setMenuVars功能属性programTabHandled @1
-- 步骤2：doc tab移除子菜单功能属性docSubMenuRemoved @1
-- 步骤3：非mhtml视图类型直接返回属性nonMhtmlReturn @1
-- 步骤4：projectstory模块story方法特殊处理属性projectStoryHandled @1
-- 步骤5：常规mhtml视图调用product->setMenu属性productMenuCalled @1
+- 步骤1:product标签页属性tab @product
+- 步骤2:program标签页,传入programID
+ - 属性tab @program
+ - 属性programID @1
+- 步骤3:doc标签页,子菜单被移除属性docSubMenuUnset @1
+- 步骤4:非mhtml视图属性tab @product
+- 步骤5:projectstory模块
+ - 属性rawModule @projectstory
+ - 属性rawMethod @story
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->id->range('1-5');
-$table->name->range('产品1,产品2,产品3,产品4,产品5');
-$table->status->range('normal{3},closed{2}');
-$table->type->range('normal');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->setCreateMenuTest(1)) && p('programTabHandled') && e('1'); // 步骤1：program tab调用setMenuVars功能
-r($productTest->setCreateMenuTest(2)) && p('docSubMenuRemoved') && e('1'); // 步骤2：doc tab移除子菜单功能
-r($productTest->setCreateMenuTest(0)) && p('nonMhtmlReturn') && e('1'); // 步骤3：非mhtml视图类型直接返回
-r($productTest->setCreateMenuTest(3)) && p('projectStoryHandled') && e('1'); // 步骤4：projectstory模块story方法特殊处理
-r($productTest->setCreateMenuTest(4)) && p('productMenuCalled') && e('1'); // 步骤5：常规mhtml视图调用product->setMenu
+r($productTest->setCreateMenuTest(0, 'product', 'mhtml', 'product', 'create')) && p('tab') && e('product'); // 步骤1:product标签页
+r($productTest->setCreateMenuTest(1, 'program', 'mhtml', 'product', 'create')) && p('tab,programID') && e('program,1'); // 步骤2:program标签页,传入programID
+r($productTest->setCreateMenuTest(0, 'doc', 'mhtml', 'product', 'create')) && p('docSubMenuUnset') && e('1'); // 步骤3:doc标签页,子菜单被移除
+r($productTest->setCreateMenuTest(0, 'product', '', 'product', 'create')) && p('tab') && e('product'); // 步骤4:非mhtml视图
+r($productTest->setCreateMenuTest(0, 'product', 'mhtml', 'projectstory', 'story')) && p('rawModule,rawMethod') && e('projectstory,story'); // 步骤5:projectstory模块

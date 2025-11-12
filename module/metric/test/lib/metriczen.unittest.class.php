@@ -360,6 +360,24 @@ class metricZenTest
     }
 
     /**
+     * Test getBasicInfo method.
+     *
+     * @param  object $view
+     * @param  string $fields
+     * @access public
+     * @return mixed
+     */
+    public function getBasicInfoZenTest($view, $fields = 'scope,object,purpose,dateType,name,alias,code,unit,stage')
+    {
+        $method = $this->metricZenTest->getMethod('getBasicInfo');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($view, $fields));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test getCreateEditInfo method.
      *
      * @param  object $view
@@ -491,6 +509,24 @@ class metricZenTest
         $method->setAccessible(true);
 
         $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($metrics));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getUniqueKeyByRecord method.
+     *
+     * @param  object $record
+     * @param  string $scope
+     * @access public
+     * @return mixed
+     */
+    public function getUniqueKeyByRecordZenTest($record, $scope = '')
+    {
+        $method = $this->metricZenTest->getMethod('getUniqueKeyByRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->metricZenTest->newInstance(), array($record, $scope));
         if(dao::isError()) return dao::getError();
         return $result;
     }

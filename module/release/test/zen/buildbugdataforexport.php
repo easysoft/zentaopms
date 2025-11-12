@@ -7,49 +7,62 @@ title=测试 releaseZen::buildBugDataForExport();
 timeout=0
 cid=0
 
-- 步骤1：正常Bug类型导出 @*<h3>解决Bug</h3><table>*Bug测试标题1*
-- 步骤2：遗留Bug类型导出 @*<h3>遗留Bug</h3><table>*Bug测试标题6*
-- 步骤3：无Bug数据的导出 @<h3>解决Bug</h3>
-- 步骤4：空Bug ID列表的导出 @<h3>遗留Bug</h3>
-- 步骤5：无效Bug类型导出 @*<h3>解决Bug</h3><table>*Bug测试标题1*
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release1, 'bug'), '<h3>Bug</h3><table>') !== false  @1
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release2, 'bug'  @<h3>Bug</h3>
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release3, 'bug'), 'Bug测试标题5') !== false  @1
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release4, 'bug'), 'Bug测试标题10') !== false  @1
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release5, 'leftbug'), '<h3>遗留的Bug</h3><table>') !== false  @1
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release6, 'leftbug'  @<h3>遗留的Bug</h3>
+- 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release7, 'bug'), 'Bug测试标题15') !== false  @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/releasezen.unittest.class.php';
 
-// 2. 创建模拟数据，避免数据库依赖
-// 创建测试实例（变量名与模块名一致）
-$releaseTest = new releaseTest();
+su('admin');
 
-// 创建模拟的release对象
+$releaseTest = new releaseZenTest();
+
 $release1 = new stdclass();
 $release1->id = 1;
 $release1->bugs = '1,2,3';
-$release1->leftBugs = '6,7';
+$release1->leftBugs = '';
 
 $release2 = new stdclass();
 $release2->id = 2;
-$release2->bugs = '4,5';
+$release2->bugs = '';
 $release2->leftBugs = '';
 
 $release3 = new stdclass();
 $release3->id = 3;
-$release3->bugs = '';
-$release3->leftBugs = '8,9';
+$release3->bugs = '5';
+$release3->leftBugs = '';
 
 $release4 = new stdclass();
 $release4->id = 4;
-$release4->bugs = '';
+$release4->bugs = '10,11,12,13';
 $release4->leftBugs = '';
 
-// 3. 用户登录（选择合适角色）
-su('admin');
+$release5 = new stdclass();
+$release5->id = 5;
+$release5->bugs = '';
+$release5->leftBugs = '20,21,22';
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($releaseTest->buildBugDataForExportTest($release1, 'bug')) && p() && e('*<h3>解决Bug</h3><table>*Bug测试标题1*'); // 步骤1：正常Bug类型导出
-r($releaseTest->buildBugDataForExportTest($release1, 'leftbug')) && p() && e('*<h3>遗留Bug</h3><table>*Bug测试标题6*'); // 步骤2：遗留Bug类型导出
-r($releaseTest->buildBugDataForExportTest($release3, 'bug')) && p() && e('<h3>解决Bug</h3>'); // 步骤3：无Bug数据的导出
-r($releaseTest->buildBugDataForExportTest($release4, 'leftbug')) && p() && e('<h3>遗留Bug</h3>'); // 步骤4：空Bug ID列表的导出
-r($releaseTest->buildBugDataForExportTest($release1, 'invalid')) && p() && e('*<h3>解决Bug</h3><table>*Bug测试标题1*'); // 步骤5：无效Bug类型导出
+$release6 = new stdclass();
+$release6->id = 6;
+$release6->bugs = '';
+$release6->leftBugs = '';
+
+$release7 = new stdclass();
+$release7->id = 7;
+$release7->bugs = ',,,15,16,,,';
+$release7->leftBugs = '';
+
+r(strpos($releaseTest->buildBugDataForExportTest($release1, 'bug'), '<h3>Bug</h3><table>') !== false) && p() && e('1');
+r($releaseTest->buildBugDataForExportTest($release2, 'bug')) && p() && e('<h3>Bug</h3>');
+r(strpos($releaseTest->buildBugDataForExportTest($release3, 'bug'), 'Bug测试标题5') !== false) && p() && e('1');
+r(strpos($releaseTest->buildBugDataForExportTest($release4, 'bug'), 'Bug测试标题10') !== false) && p() && e('1');
+r(strpos($releaseTest->buildBugDataForExportTest($release5, 'leftbug'), '<h3>遗留的Bug</h3><table>') !== false) && p() && e('1');
+r($releaseTest->buildBugDataForExportTest($release6, 'leftbug')) && p() && e('<h3>遗留的Bug</h3>');
+r(strpos($releaseTest->buildBugDataForExportTest($release7, 'bug'), 'Bug测试标题15') !== false) && p() && e('1');

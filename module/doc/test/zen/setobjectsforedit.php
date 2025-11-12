@@ -7,37 +7,53 @@ title=测试 docZen::setObjectsForEdit();
 timeout=0
 cid=0
 
-- 步骤1：项目类型 @1
-- 步骤2：执行类型 @0
-- 步骤3：产品类型 @10
-- 步骤4：我的空间类型 @0
-- 步骤5：无效类型 @0
+- 执行docTest模块的setObjectsForEditTest方法，参数是'project', 1 属性hasObjects @1
+- 执行docTest模块的setObjectsForEditTest方法，参数是'execution', 6 属性hasObjects @1
+- 执行docTest模块的setObjectsForEditTest方法，参数是'execution', 7 属性hasObjects @1
+- 执行docTest模块的setObjectsForEditTest方法，参数是'product', 1
+ - 属性hasObjects @1
+ - 属性objectsCount @10
+- 执行docTest模块的setObjectsForEditTest方法，参数是'mine', 0
+ - 属性hasObjects @0
+ - 属性hasAclList @1
+- 执行docTest模块的setObjectsForEditTest方法，参数是'', 1
+ - 属性hasObjects @0
+ - 属性objectsCount @0
+- 执行docTest模块的setObjectsForEditTest方法，参数是'custom', 1
+ - 属性hasObjects @0
+ - 属性objectsCount @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
 $project = zenData('project');
-$project->loadYaml('zt_project_setobjectsforedit', false, 2)->gen(10);
-
-$execution = zenData('project');
-$execution->loadYaml('zt_execution_setobjectsforedit', false, 2)->gen(15);
+$project->id->range('1-20');
+$project->project->range('0{5},1{5},2{5},3{5}');
+$project->name->range('项目1,项目2,项目3,项目4,项目5,Sprint1-1{3},Sprint1-2{2},Sprint2-1{3},Sprint2-2{2},阶段A{3},阶段B{2}');
+$project->type->range('project{5},sprint{10},stage{5}');
+$project->status->range('wait{3},doing{12},done{5}');
+$project->grade->range('1{5},2{15}');
+$project->parent->range('0{5},1{3},2{2},2{3},3{2},3{3},4{2}');
+$project->deleted->range('0');
+$project->gen(20);
 
 $product = zenData('product');
-$product->loadYaml('zt_product_setobjectsforedit', false, 2)->gen(10);
+$product->id->range('1-10');
+$product->name->range('产品A,产品B,产品C,产品D,产品E,测试产品{5}');
+$product->status->range('normal{8},closed{2}');
+$product->deleted->range('0');
+$product->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($docTest->setObjectsForEditTest('project', 1)) && p() && e('1'); // 步骤1：项目类型
-r($docTest->setObjectsForEditTest('execution', 1)) && p() && e('0'); // 步骤2：执行类型
-r($docTest->setObjectsForEditTest('product', 1)) && p() && e('10'); // 步骤3：产品类型
-r($docTest->setObjectsForEditTest('mine', 1)) && p() && e('0'); // 步骤4：我的空间类型
-r($docTest->setObjectsForEditTest('invalid', 1)) && p() && e('0'); // 步骤5：无效类型
+r($docTest->setObjectsForEditTest('project', 1)) && p('hasObjects') && e('1');
+r($docTest->setObjectsForEditTest('execution', 6)) && p('hasObjects') && e('1');
+r($docTest->setObjectsForEditTest('execution', 7)) && p('hasObjects') && e('1');
+r($docTest->setObjectsForEditTest('product', 1)) && p('hasObjects,objectsCount') && e('1,10');
+r($docTest->setObjectsForEditTest('mine', 0)) && p('hasObjects,hasAclList') && e('0,1');
+r($docTest->setObjectsForEditTest('', 1)) && p('hasObjects,objectsCount') && e('0,0');
+r($docTest->setObjectsForEditTest('custom', 1)) && p('hasObjects,objectsCount') && e('0,0');

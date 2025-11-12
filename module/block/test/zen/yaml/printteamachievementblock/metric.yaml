@@ -1,0 +1,142 @@
+---
+title: 度量指标定义数据
+desc: printTeamAchievementBlock方法的度量指标定义
+
+fields:
+- field: id
+  note: 度量指标ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: purpose
+  note: 用途
+  range: cron{5}
+  prefix: ""
+  postfix: ""
+
+- field: scope
+  note: 范围
+  range: system{5}
+  prefix: ""
+  postfix: ""
+
+- field: object
+  note: 对象
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: stage
+  note: 阶段
+  range: released{5}
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 类型
+  range: php{5}
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 名称
+  range: 每日完成任务数,每日创建需求数,每日关闭Bug数,每日执行用例数,每日消耗工时
+  prefix: ""
+  postfix: ""
+
+- field: alias
+  note: 别名
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: 代码
+  range: count_of_daily_finished_task,count_of_daily_created_story,count_of_daily_closed_bug,count_of_daily_run_case,hour_of_daily_effort
+  prefix: ""
+  postfix: ""
+
+- field: unit
+  note: 单位
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: dateType
+  note: 日期类型
+  range: day{5}
+  prefix: ""
+  postfix: ""
+
+- field: collector
+  note: 采集器
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 描述
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: definition
+  note: 定义
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: when
+  note: 时间条件
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: event
+  note: 事件
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: cronCFG
+  note: 定时配置
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: time
+  note: 时间
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: admin{5}
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '2024-01-01 00:00:00{5}'
+  prefix: ""
+  postfix: ""
+
+- field: editedBy
+  note: 编辑者
+  range: ''
+  prefix: ""
+  postfix: ""
+
+- field: editedDate
+  note: 编辑时间
+  range: '0000-00-00 00:00:00{5}'
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 删除标记
+  range: '`0`{5}'
+  prefix: ""
+  postfix: ""

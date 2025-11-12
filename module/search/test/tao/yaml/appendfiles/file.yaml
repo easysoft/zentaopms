@@ -1,0 +1,98 @@
+---
+title: 文件测试数据
+desc: 用于测试appendFiles方法的文件数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pathname
+  note: 文件路径
+  range: /tmp/test1.txt, /tmp/test2.docx, /tmp/test3.txt, /tmp/test4.doc, /tmp/test5.pdf
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 文件标题
+  range: test file 1, test file 2, test file 3, test file 4, test file 5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: extension
+  note: 文件扩展名
+  range: txt, docx, txt, doc, pdf
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: size
+  note: 文件大小
+  range: 1024, 2048, 512, 4096, 8192
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: doc
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1, 2, 3, 4, 5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: gid
+  note: gid
+  range: test-gid-{1-5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: downloads
+  note: 下载次数
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

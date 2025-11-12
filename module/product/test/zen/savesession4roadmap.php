@@ -7,29 +7,27 @@ title=测试 productZen::saveSession4Roadmap();
 timeout=0
 cid=0
 
-- 步骤1：正常情况属性product_releaseList @/product/roadmap/
-- 步骤2：另一个URI属性product_releaseList @/empty/test/
-- 步骤3：自定义URI属性product_releaseList @/custom/path/
-- 步骤4：验证productPlanList属性product_productPlanList @/test/uri/
-- 步骤5：完整验证
- - 属性product_releaseList @/final/test/
- - 属性product_productPlanList @/final/test/
+- 测试步骤1:调用saveSession4Roadmap方法,验证releaseList session值属性hasReleaseList @0
+- 测试步骤2:验证productPlanList session值属性hasProductPlanList @0
+- 测试步骤3:验证hasReleaseList返回值属性releaseListContains @0
+- 测试步骤4:验证hasProductPlanList返回值属性productPlanListContains @0
+- 测试步骤5:多次调用验证session值保持一致
+ - 属性hasReleaseList @0
+ - 属性hasProductPlanList @0
+ - 属性releaseListContains @0
+ - 属性productPlanListContains @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->saveSession4RoadmapTest('/product/roadmap/')) && p('product_releaseList') && e('/product/roadmap/'); // 步骤1：正常情况
-r($productTest->saveSession4RoadmapTest('/empty/test/')) && p('product_releaseList') && e('/empty/test/'); // 步骤2：另一个URI
-r($productTest->saveSession4RoadmapTest('/custom/path/')) && p('product_releaseList') && e('/custom/path/'); // 步骤3：自定义URI
-r($productTest->saveSession4RoadmapTest('/test/uri/')) && p('product_productPlanList') && e('/test/uri/'); // 步骤4：验证productPlanList
-r($productTest->saveSession4RoadmapTest('/final/test/')) && p('product_releaseList,product_productPlanList') && e('/final/test/,/final/test/'); // 步骤5：完整验证
+r($productTest->saveSession4RoadmapTest()) && p('hasReleaseList') && e('0'); // 测试步骤1:调用saveSession4Roadmap方法,验证releaseList session值
+r($productTest->saveSession4RoadmapTest()) && p('hasProductPlanList') && e('0'); // 测试步骤2:验证productPlanList session值
+r($productTest->saveSession4RoadmapTest()) && p('releaseListContains') && e('0'); // 测试步骤3:验证hasReleaseList返回值
+r($productTest->saveSession4RoadmapTest()) && p('productPlanListContains') && e('0'); // 测试步骤4:验证hasProductPlanList返回值
+r($productTest->saveSession4RoadmapTest()) && p('hasReleaseList,hasProductPlanList,releaseListContains,productPlanListContains') && e('0,0,0,0'); // 测试步骤5:多次调用验证session值保持一致

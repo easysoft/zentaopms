@@ -13,7 +13,6 @@ cid=0
 - 步骤5：获取产品属性10 @正常产品10
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 

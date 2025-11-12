@@ -7,37 +7,44 @@ title=测试 productZen::saveSession4Browse();
 timeout=0
 cid=0
 
-- 步骤1：正常情况
- - 属性productList @true
- - 属性storyList @true
-- 步骤2：空产品对象属性currentProductType @empty
-- 步骤3：bymodule类型属性storyBrowseType @empty
-- 步骤4：bybranch类型属性storyBrowseType @empty
-- 步骤5：项目标签属性storyList @true
+- 测试在product模块下保存session,产品类型为normal属性currentProductType @normal
+- 测试在product模块下保存session,产品类型为branch属性currentProductType @branch
+- 测试在product模块下保存session,浏览类型为unclosed属性storyBrowseType @unclosed
+- 测试在product模块下保存session,浏览类型为all属性storyBrowseType @all
+- 测试在project模块下保存session,产品类型为normal属性currentProductType @normal
+- 测试浏览类型为bysearch时保存storyBrowseType属性storyBrowseType @bysearch
+- 测试浏览类型为active时保存storyBrowseType属性storyBrowseType @active
+- 测试产品类型为platform属性currentProductType @platform
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->id->range('1-10');
-$table->name->range('产品1,产品2,产品3,产品4,产品5');
-$table->type->range('normal{3},branch{2}');
-$table->status->range('normal');
-$table->gen(5);
+$product1 = new stdclass();
+$product1->id   = 1;
+$product1->name = 'Product 1';
+$product1->type = 'normal';
 
-// 3. 用户登录（选择合适角色）
+$product2 = new stdclass();
+$product2->id   = 2;
+$product2->name = 'Product 2';
+$product2->type = 'branch';
+
+$product3 = new stdclass();
+$product3->id   = 3;
+$product3->name = 'Product 3';
+$product3->type = 'platform';
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->saveSession4BrowseTest((object)array('id' => 1, 'type' => 'normal'), 'unclosed')) && p('productList,storyList') && e('true,true'); // 步骤1：正常情况
-r($productTest->saveSession4BrowseTest(null, 'closed')) && p('currentProductType') && e('empty'); // 步骤2：空产品对象
-r($productTest->saveSession4BrowseTest((object)array('id' => 2, 'type' => 'branch'), 'bymodule')) && p('storyBrowseType') && e('empty'); // 步骤3：bymodule类型
-r($productTest->saveSession4BrowseTest((object)array('id' => 3, 'type' => 'normal'), 'bybranch')) && p('storyBrowseType') && e('empty'); // 步骤4：bybranch类型
-r($productTest->saveSession4BrowseTest((object)array('id' => 4, 'type' => 'normal'), 'active', 'project')) && p('storyList') && e('true'); // 步骤5：项目标签
+r($productTest->saveSession4BrowseTest($product1, 'unclosed', 'product')) && p('currentProductType') && e('normal'); // 测试在product模块下保存session,产品类型为normal
+r($productTest->saveSession4BrowseTest($product2, 'all', 'product')) && p('currentProductType') && e('branch'); // 测试在product模块下保存session,产品类型为branch
+r($productTest->saveSession4BrowseTest($product1, 'unclosed', 'product')) && p('storyBrowseType') && e('unclosed'); // 测试在product模块下保存session,浏览类型为unclosed
+r($productTest->saveSession4BrowseTest($product1, 'all', 'product')) && p('storyBrowseType') && e('all'); // 测试在product模块下保存session,浏览类型为all
+r($productTest->saveSession4BrowseTest($product1, 'active', 'project')) && p('currentProductType') && e('normal'); // 测试在project模块下保存session,产品类型为normal
+r($productTest->saveSession4BrowseTest($product1, 'bysearch', 'product')) && p('storyBrowseType') && e('bysearch'); // 测试浏览类型为bysearch时保存storyBrowseType
+r($productTest->saveSession4BrowseTest($product1, 'active', 'product')) && p('storyBrowseType') && e('active'); // 测试浏览类型为active时保存storyBrowseType
+r($productTest->saveSession4BrowseTest($product3, 'unclosed', 'product')) && p('currentProductType') && e('platform'); // 测试产品类型为platform

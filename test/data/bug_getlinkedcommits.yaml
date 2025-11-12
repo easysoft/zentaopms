@@ -1,0 +1,133 @@
+title: zt_bug for getLinkedCommits test
+desc: Bug测试数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: project
+    range: 1
+  - field: product
+    range: 1
+  - field: injection
+    range: "[]"
+  - field: identify
+    range: "[]"
+  - field: branch
+    range: 0
+  - field: module
+    range: 0
+  - field: execution
+    range: 1
+  - field: plan
+    range: 0
+  - field: story
+    range: 0
+  - field: storyVersion
+    range: 1
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    range: Bug 001,Bug 002,Bug 003,Bug 004,Bug 005,Bug 006,Bug 007,Bug 008,Bug 009,Bug 010
+  - field: keywords
+    range: "[]"
+  - field: severity
+    range: 1-4
+  - field: pri
+    range: 1-4
+  - field: type
+    range: codeerror
+  - field: os
+    range: all
+  - field: browser
+    range: all
+  - field: hardware
+    range: "[]"
+  - field: found
+    range: "[]"
+  - field: steps
+    range: Test steps
+  - field: status
+    range: active
+  - field: subStatus
+    range: "[]"
+  - field: color
+    range: "[]"
+  - field: confirmed
+    range: 0-1
+  - field: activatedCount
+    range: 0
+  - field: activatedDate
+    range: "`NULL`"
+  - field: mailto
+    range: "[]"
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "2024-01-01 00:00:00"
+  - field: openedBuild
+    range: trunk
+  - field: assignedTo
+    range: admin
+  - field: assignedDate
+    range: "2024-01-01 00:00:00"
+  - field: deadline
+    range: "`NULL`"
+  - field: resolvedBy
+    range: "[]"
+  - field: resolution
+    range: "[]"
+  - field: resolvedBuild
+    range: "[]"
+  - field: resolvedDate
+    range: "`NULL`"
+  - field: closedBy
+    range: "[]"
+  - field: closedDate
+    range: "`NULL`"
+  - field: duplicateBug
+    range: 0
+  - field: linkBug
+    range: "[]"
+  - field: linkMR
+    range: 0
+  - field: linkPlan
+    range: "[]"
+  - field: case
+    range: 0
+  - field: caseVersion
+    range: 0
+  - field: result
+    range: 0
+  - field: repo
+    range: 0
+  - field: entry
+    range: "[]"
+  - field: lines
+    range: "[]"
+  - field: v1
+    range: "[]"
+  - field: v2
+    range: "[]"
+  - field: repoType
+    range: "[]"
+  - field: testtask
+    range: 0
+  - field: lastEditedBy
+    range: "[]"
+  - field: lastEditedDate
+    range: "`NULL`"
+  - field: deleted
+    range: "0"
+  - field: feedback
+    range: 0
+  - field: feedbackBy
+    range: "[]"
+  - field: notifyEmail
+    range: "[]"
+  - field: ditto
+    range: "0"

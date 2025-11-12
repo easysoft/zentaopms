@@ -1,0 +1,40 @@
+---
+title: 产品测试数据
+desc: 用于getCustomFields方法测试的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 产品名称
+  range: 'normal产品,branch产品,platform产品,普通产品{7}'
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 产品类型
+  range: 'normal,branch,platform,normal{7}'
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 产品状态
+  range: 'normal'
+  prefix: ""
+  postfix: ""
+
+- field: createdBy
+  note: 创建者
+  range: 'admin'
+  prefix: ""
+  postfix: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '`(M)-10d`'
+  prefix: ""
+  postfix: ""

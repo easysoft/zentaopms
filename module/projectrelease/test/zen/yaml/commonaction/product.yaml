@@ -1,0 +1,136 @@
+---
+title: Product data for commonAction test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Product ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: program
+  note: Program ID
+  range: 1
+  prefix: ""
+  postfix: ""
+- field: name
+  note: Product name
+  range: Product 1,Product 2,Product 3,Product 4,Product 5,Product 6,Product 7,Product 8,Product 9,Product 10
+  prefix: ""
+  postfix: ""
+- field: code
+  note: Product code
+  range: P001-P010
+  prefix: ""
+  postfix: ""
+- field: shadow
+  note: Shadow product flag
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: bind
+  note: Bind flag
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: line
+  note: Product line
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: type
+  note: Product type
+  range: normal{5},branch{5}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: Product status
+  range: normal
+  prefix: ""
+  postfix: ""
+- field: subStatus
+  note: Sub status
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: Description
+  range: Product description
+  prefix: ""
+  postfix: ""
+- field: PO
+  note: Product owner
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: QD
+  note: QD
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: RD
+  note: RD
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: feedback
+  note: Feedback
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: ticket
+  note: Ticket
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: workflowGroup
+  note: Workflow group
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: acl
+  note: ACL
+  range: open
+  prefix: ""
+  postfix: ""
+- field: groups
+  note: Groups
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: whitelist
+  note: Whitelist
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: Created by
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: Created date
+  range: '`(M)-(w)`'
+  prefix: ""
+  postfix: ""
+- field: createdVersion
+  note: Created version
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: order
+  note: Order
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: vision
+  note: Vision
+  range: ',rnd,'
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: Deleted flag
+  range: '0'
+  prefix: ""
+  postfix: ""

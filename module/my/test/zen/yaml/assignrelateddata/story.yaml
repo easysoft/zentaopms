@@ -1,0 +1,35 @@
+---
+title: story测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1{10}
+- field: title
+  note: 需求标题
+  range: Story 1,Story 2,Story 3,Story 4,Story 5,Story 6,Story 7,Story 8,Story 9,Story 10
+- field: type
+  note: 需求类型
+  range: story{10}
+- field: status
+  note: 需求状态
+  range: active{10}
+- field: stage
+  note: 需求阶段
+  range: wait{10}
+- field: pri
+  note: 优先级
+  range: 1{10}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}

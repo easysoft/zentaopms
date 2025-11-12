@@ -1,0 +1,31 @@
+title: doclib data for assignVarsForCreate test
+author: Claude
+version: 1.0
+
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 产品文档库,项目文档库,执行文档库,自定义文档库,我的文档库,产品接口库,项目接口库,测试文档库,开发文档库,需求文档库
+  - field: type
+    range: product,project,execution,custom,mine,product,project,product,project,custom
+  - field: product
+    range: 1,0,0,0,0,2,0,1,0,0
+  - field: parent
+    range: 0,0,0,0,0,0,0,0,0,0
+  - field: project
+    range: 0,2,2,0,0,0,3,0,2,0
+  - field: execution
+    range: 0,0,3,0,0,0,0,0,0,0
+  - field: acl
+    range: default
+  - field: main
+    range: 1,1,1,0,1,0,0,0,0,0
+  - field: addedBy
+    range: admin
+  - field: addedDate
+    range: now
+  - field: vision
+    range: rnd
+  - field: order
+    range: 1-10

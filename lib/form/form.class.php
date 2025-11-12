@@ -142,6 +142,7 @@ class form extends fixer
         /* 复制项目使用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
 
+        if(empty($app->control)) return $configObject;
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 

@@ -1,0 +1,63 @@
+---
+title: kanbanregion表数据定义
+desc: 为assignKanbanVars方法测试准备kanban区域数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 区域ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: space
+  note: 空间ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: kanban
+  note: 看板ID(对应execution ID)
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 区域名称
+  range: "Region{1-20}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: "admin,user1,user2"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: "0{19},1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

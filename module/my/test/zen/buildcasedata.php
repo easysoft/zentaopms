@@ -7,42 +7,105 @@ title=测试 myZen::buildCaseData();
 timeout=0
 cid=0
 
-- 步骤1：空用例数组处理 @0
-- 步骤2：正常用例处理 @1
-- 步骤3：失败结果保持 @fail
-- 步骤4：空执行结果处理 @未执行
-- 步骤5：不同type参数处理 @1
-- 步骤6：阻塞结果统计验证 @blocked
-- 步骤7：基本属性保持验证 @测试用例6
+- 测试空用例列表返回结果 @0
+- 测试assigntome类型处理正常用例数据第0条的title属性 @正常用例1
+- 测试openedbyme类型处理正常用例数据第0条的title属性 @正常用例1
+- 测试用例needconfirm标记处理第0条的status属性 @normal
+- 测试用例lastRunResult为空时的默认值第0条的lastRunResult属性 @未执行
+- 测试用例lastRunResult为fail时增加失败计数第0条的lastRunResult属性 @fail
+- 测试用例fromCaseVersion大于version时状态变更第0条的status属性 @原用例更新
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('case');
-$table->id->range('1-10');
-$table->product->range('1-3');
-$table->title->range('测试用例{1-10}');
-$table->status->range('normal{5},wait{3},blocked{2}');
-$table->lastRunResult->range('pass{3},fail{2},blocked{1},""4');
-$table->version->range('1-5');
-$table->fromCaseVersion->range('1{5},6{5}');
-$table->gen(10);
+zenData('case')->loadYaml('buildcasedata/case', false, 2)->gen(20);
+zenData('story')->loadYaml('buildcasedata/story', false, 2)->gen(10);
+zenData('product')->loadYaml('buildcasedata/product', false, 2)->gen(5);
+zenData('user')->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$myTest = new myTest();
+$myTest = new myZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($myTest->buildCaseDataTest(array(), 'assigntome')) && p() && e('0'); // 步骤1：空用例数组处理
-r(count($myTest->buildCaseDataTest(array((object)array('id' => 1, 'title' => '测试用例1', 'lastRunResult' => 'pass', 'version' => 1, 'fromCaseVersion' => 1)), 'assigntome'))) && p() && e('1'); // 步骤2：正常用例处理
-r($myTest->buildCaseDataTest(array((object)array('id' => 2, 'title' => '测试用例2', 'lastRunResult' => 'fail', 'version' => 1, 'fromCaseVersion' => 1)), 'assigntome')[0]->lastRunResult) && p() && e('fail'); // 步骤3：失败结果保持
-r($myTest->buildCaseDataTest(array((object)array('id' => 3, 'title' => '测试用例3', 'lastRunResult' => '', 'version' => 1, 'fromCaseVersion' => 1)), 'assigntome')[0]->lastRunResult) && p() && e('未执行'); // 步骤4：空执行结果处理
-r(count($myTest->buildCaseDataTest(array((object)array('id' => 4, 'title' => '测试用例4', 'lastRunResult' => 'pass', 'version' => 1, 'fromCaseVersion' => 1)), 'openedbyme'))) && p() && e('1'); // 步骤5：不同type参数处理
-r($myTest->buildCaseDataTest(array((object)array('id' => 5, 'title' => '测试用例5', 'lastRunResult' => 'blocked', 'version' => 1, 'fromCaseVersion' => 1)), 'assigntome')[0]->lastRunResult) && p() && e('blocked'); // 步骤6：阻塞结果统计验证
-r($myTest->buildCaseDataTest(array((object)array('id' => 6, 'title' => '测试用例6', 'lastRunResult' => 'pass', 'version' => 1, 'fromCaseVersion' => 1)), 'assigntome')[0]->title) && p() && e('测试用例6'); // 步骤7：基本属性保持验证
+$emptyCases = array();
+
+$case1 = new stdClass();
+$case1->id = 1;
+$case1->title = '正常用例1';
+$case1->product = 1;
+$case1->status = 'normal';
+$case1->lastRunResult = 'pass';
+$case1->version = 1;
+$case1->fromCaseVersion = 1;
+$case1->needconfirm = 0;
+$case1->story = 0;
+$case1->storyVersion = 1;
+$case1->case = 1;
+
+$case2 = new stdClass();
+$case2->id = 2;
+$case2->title = '正常用例2';
+$case2->product = 1;
+$case2->status = 'normal';
+$case2->lastRunResult = '';
+$case2->version = 1;
+$case2->fromCaseVersion = 1;
+$case2->needconfirm = 0;
+$case2->story = 0;
+$case2->storyVersion = 1;
+$case2->case = 2;
+
+$case3 = new stdClass();
+$case3->id = 3;
+$case3->title = '需求变更用例';
+$case3->product = 1;
+$case3->status = 'normal';
+$case3->lastRunResult = 'pass';
+$case3->version = 1;
+$case3->fromCaseVersion = 1;
+$case3->needconfirm = 1;
+$case3->story = 1;
+$case3->storyVersion = 1;
+$case3->case = 3;
+
+$case4 = new stdClass();
+$case4->id = 4;
+$case4->title = '执行失败用例';
+$case4->product = 1;
+$case4->status = 'normal';
+$case4->lastRunResult = 'fail';
+$case4->version = 1;
+$case4->fromCaseVersion = 1;
+$case4->needconfirm = 0;
+$case4->story = 0;
+$case4->storyVersion = 1;
+$case4->case = 4;
+
+$case5 = new stdClass();
+$case5->id = 5;
+$case5->title = '版本变更用例';
+$case5->product = 1;
+$case5->status = 'normal';
+$case5->lastRunResult = 'pass';
+$case5->version = 1;
+$case5->fromCaseVersion = 2;
+$case5->needconfirm = 0;
+$case5->story = 0;
+$case5->storyVersion = 1;
+$case5->case = 5;
+
+$normalCases = array($case1);
+$caseWithEmptyResult = array($case2);
+$caseNeedConfirm = array($case3);
+$caseWithFail = array($case4);
+$caseVersionChanged = array($case5);
+
+r($myTest->buildCaseDataTest($emptyCases, 'assigntome')) && p('') && e('0'); // 测试空用例列表返回结果
+r($myTest->buildCaseDataTest($normalCases, 'assigntome')) && p('0:title') && e('正常用例1'); // 测试assigntome类型处理正常用例数据
+r($myTest->buildCaseDataTest($normalCases, 'openedbyme')) && p('0:title') && e('正常用例1'); // 测试openedbyme类型处理正常用例数据
+r($myTest->buildCaseDataTest($caseNeedConfirm, 'assigntome')) && p('0:status') && e('normal'); // 测试用例needconfirm标记处理
+r($myTest->buildCaseDataTest($caseWithEmptyResult, 'assigntome')) && p('0:lastRunResult') && e('未执行'); // 测试用例lastRunResult为空时的默认值
+r($myTest->buildCaseDataTest($caseWithFail, 'assigntome')) && p('0:lastRunResult') && e('fail'); // 测试用例lastRunResult为fail时增加失败计数
+r($myTest->buildCaseDataTest($caseVersionChanged, 'assigntome')) && p('0:status') && e('原用例更新'); // 测试用例fromCaseVersion大于version时状态变更

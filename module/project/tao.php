@@ -977,7 +977,7 @@ class projectTao extends projectModel
     protected function accessDenied(): string
     {
         $this->session->set('project', '');
-        return $this->app->control->sendError($this->lang->project->accessDenied, helper::createLink('project', 'index'));
+        return $this->app->control->sendError($this->lang->project->accessDenied, helper::createLink('project', 'browse'));
     }
 
     /**
@@ -1180,13 +1180,13 @@ class projectTao extends projectModel
      */
     protected function createMilestoneReport(int $projectID): bool
     {
-        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('module')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
+        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('reportModule')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
         if(!empty($reportID)) return true;
 
         $report = new stdclass();
         $report->title        = $this->lang->project->milestoneReport;
         $report->project      = $projectID;
-        $report->module       = 'milestone';
+        $report->reportModule = 'milestone';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
         $report->addedDate    = helper::now();

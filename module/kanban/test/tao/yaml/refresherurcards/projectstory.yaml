@@ -1,0 +1,36 @@
+---
+title: ProjectStory关联数据用于测试refreshERURCards方法
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: '101'
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 产品ID
+  range: '1'
+  prefix: ""
+  postfix: ""
+- field: branch
+  note: 分支
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: story
+  note: 需求ID
+  range: 1-15
+  prefix: ""
+  postfix: ""
+- field: version
+  note: 版本
+  range: '1'
+  prefix: ""
+  postfix: ""
+- field: order
+  note: 排序
+  range: 1-15
+  prefix: ""
+  postfix: ""

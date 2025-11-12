@@ -1,0 +1,22 @@
+title: project data for buildBatchEditForm test
+author: claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-3
+  - field: name
+    range: 1-3
+    prefix: 'Program'
+  - field: type
+    range: 'program'
+  - field: status
+    range: 'doing'
+  - field: parent
+    range: 0
+  - field: grade
+    range: 1
+  - field: model
+    range: 'scrum'
+  - field: path
+    range: '`,1,`,`,2,`,`,3,`'

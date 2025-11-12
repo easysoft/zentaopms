@@ -1,0 +1,55 @@
+---
+title: 为assignBranchForEdit方法提供分支测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 分支ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 分支名称
+  range: '分支1,分支2,分支3,分支4,分支5,分支6,分支7,分支8,分支9,分支10'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 分支状态
+  range: 'active,closed,active,active,active,active,active,active,active,closed'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: default
+  note: 是否默认
+  range: '1,0{9}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

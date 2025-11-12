@@ -1,0 +1,120 @@
+diff --git a/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php b/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
+index 6f85f320c8f..8551d756c17 100644
+--- a/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
++++ b/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
+@@ -83,7 +83,7 @@ class XMLReader extends \XMLReader
+      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
+      * @return bool TRUE on success or FALSE on failure
+      */
+-    public function read()
++    public function read(): bool
+     {
+         $this->useXMLInternalErrors();
+
+@@ -119,7 +119,7 @@ class XMLReader extends \XMLReader
+      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
+      * @return bool TRUE on success or FALSE on failure
+      */
+-    public function next($localName = null)
++    public function next($localName = null): bool
+     {
+         $this->useXMLInternalErrors();
+
+diff --git a/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php b/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
+index a54b8b192b0..2a5616d10f8 100644
+--- a/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
+@@ -139,7 +139,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If the sheet data XML cannot be read
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->xmlReader->close();
+
+@@ -163,7 +163,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return (!$this->hasReachedEndOfFile);
+     }
+@@ -176,7 +176,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         $this->nextRowIndexToBeProcessed++;
+
+@@ -374,7 +374,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row|null
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         $rowToBeProcessed = $this->rowBuffer;
+
+@@ -399,7 +399,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         // TODO: This should return $this->nextRowIndexToBeProcessed
+         //       but to avoid a breaking change, the return value for
+diff --git a/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
+index 81f481c3cdc..5b6315e9ac5 100644
+--- a/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
+@@ -38,7 +38,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->currentSheetIndex = 0;
+     }
+@@ -49,7 +49,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return ($this->currentSheetIndex < \count($this->sheets));
+     }
+@@ -60,7 +60,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         // Using isset here because it is way faster than array_key_exists...
+         if (isset($this->sheets[$this->currentSheetIndex])) {
+@@ -77,7 +77,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\XLSX\Sheet
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->sheets[$this->currentSheetIndex];
+     }
+@@ -88,7 +88,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->currentSheetIndex + 1;
+     }
