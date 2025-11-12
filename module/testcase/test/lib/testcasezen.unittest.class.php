@@ -3395,4 +3395,18 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test processCasesForBrowse method.
+     *
+     * @param  array $cases
+     * @access public
+     * @return array
+     */
+    public function processCasesForBrowseTest(array $cases): array
+    {
+        $result = callZenMethod('testcase', 'processCasesForBrowse', [$cases]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
 }
