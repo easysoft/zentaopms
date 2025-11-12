@@ -18,7 +18,7 @@ cid=1
 - 检查 result1 是否包含 self.location='/project.html' @1
 - 检查 result2 是否存在 @1
 - 检查 result2 的 result @fail
-- 检查 result2 的 load属性locate @/accessdenied.php?m=project&f=index
+- 检查 result2 的 load属性locate @/accessdenied.php?m=project&f=browse
 
 */
 
@@ -62,4 +62,4 @@ r((int)isset($result2)) && p() && e('1'); // 检查 result2 是否存在
 
 $result2 = json_decode($result2, true);
 r($result2['result']) && p()         && e('fail'); // 检查 result2 的 result
-r($result2['load'])   && p('locate') && e('/accessdenied.php?m=project&f=index'); // 检查 result2 的 load
+r($result2['load'])   && p('locate') && e('/accessdenied.php?m=project&f=browse'); // 检查 result2 的 load
