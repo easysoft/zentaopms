@@ -108,7 +108,6 @@ class executionModel extends model
         $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
-        if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
         $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
         if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
