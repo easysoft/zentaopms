@@ -169,8 +169,8 @@ class testreport extends control
 
         if($objectType == 'testtask')
         {
-            if($productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
-            if($task->build == 'trunk')      return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+            if(empty($task->joint) && $productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
             $reportData = $this->testreportZen->assignTesttaskReportData($objectID, $begin, $end, $productID, $task, 'create');
         }

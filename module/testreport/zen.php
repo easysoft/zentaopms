@@ -102,7 +102,8 @@ class testreportZen extends testreport
         if($objectID)
         {
             $task      = $this->testtask->getByID($objectID);
-            $productID = $this->commonAction($task->product, 'product');
+            $productID = !empty($_SESSION['product']) && !empty($task->joint) ? $this->session->product : $task->product;
+            $productID = $this->commonAction($productID, 'product');
         }
 
         $taskPairs = array();
@@ -121,7 +122,8 @@ class testreportZen extends testreport
         {
             $objectID  = key($taskPairs);
             $task      = $this->testtask->getByID($objectID);
-            $productID = $this->commonAction($task->product, 'product');
+            $productID = !empty($_SESSION['product']) && !empty($task->joint) ? $this->session->product : $task->product;
+            $productID = $this->commonAction($productID, 'product');
         }
 
         $this->view->taskPairs = $taskPairs;

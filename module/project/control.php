@@ -1042,6 +1042,7 @@ class project extends control
         $this->view->title     = $project->name . $this->lang->hyphen . $this->lang->project->common;
         $this->view->project   = $project;
         $this->view->productID = $productID;
+        $this->view->projectID = $projectID;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
