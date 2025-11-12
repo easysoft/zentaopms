@@ -181,3 +181,6 @@ CREATE TABLE IF NOT EXISTS `zt_projectchange` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `project` ON `zt_projectchange` (`project`);
+
+ALTER TABLE `zt_nc` ADD `execution` int unsigned NOT NULL DEFAULT 0 COMMENT '所属执行' AFTER `project`;
+ALTER TABLE `zt_nc` ADD `deliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '交付物' AFTER `auditplan`;
