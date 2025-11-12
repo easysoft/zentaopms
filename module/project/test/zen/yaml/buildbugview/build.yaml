@@ -1,0 +1,39 @@
+---
+title: 版本测试数据
+desc: 用于buildBugView方法测试的版本数据
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-5
+- field: project
+  note: 项目ID
+  range: 1{3},2{2}
+- field: product
+  note: 产品ID
+  range: 1{3},2{2}
+- field: branch
+  note: 分支ID
+  range: 0{4},1{1}
+- field: execution
+  note: 执行ID
+  range: 1{3},2{2}
+- field: name
+  note: 版本名称
+  range: Build1,Build2,Build3,Build4,Build5
+- field: scmPath
+  note: 源代码路径
+  range: ''
+- field: filePath
+  note: 文件路径
+  range: ''
+- field: date
+  note: 打包日期
+  range: (-30d)-(-1d)
+  format: YYYY-MM-DD
+- field: builder
+  note: 构建者
+  range: admin{3},user1{2}
+- field: deleted
+  note: 是否删除
+  range: '0'

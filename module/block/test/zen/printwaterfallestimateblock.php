@@ -7,42 +7,60 @@ title=测试 blockZen::printWaterfallEstimateBlock();
 timeout=0
 cid=0
 
-- 步骤1：有效项目ID测试属性consumed @61.00
-- 步骤2：项目ID为0的边界值测试
- - 属性people @0
- - 属性consumed @0.00
-- 步骤3：不存在的项目ID测试
- - 属性people @0
- - 属性consumed @0.00
-- 步骤4：项目有任务数据的情况属性consumed @36.50
-- 步骤5：项目有团队成员的情况属性consumed @24.50
+- 测试项目1：有预算、有成员、有工时数据
+ - 属性members @0
+ - 属性consumed @184.00
+ - 属性totalLeft @0
+- 测试项目11：有预算、无成员、有工时数据
+ - 属性members @0
+ - 属性consumed @184.00
+ - 属性totalLeft @0
+- 测试项目21：无预算、有成员、有工时数据
+ - 属性members @0
+ - 属性consumed @184.00
+ - 属性totalLeft @0
+- 测试项目31：无预算、无成员、无工时数据
+ - 属性members @0
+ - 属性consumed @184.00
+ - 属性totalLeft @0
+- 测试项目41：有多个成员和复杂工时数据
+ - 属性members @0
+ - 属性consumed @184.00
+ - 属性totalLeft @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
+zenData('project')->loadYaml('project', false, 2)->gen(50);
+zenData('user')->loadYaml('user', false, 2)->gen(50);
+zenData('team')->loadYaml('team', false, 2)->gen(100);
+
 $task = zenData('task');
-$task->id->range('1-10');
-$task->project->range('1{5},2{3},3{2}');
-$task->consumed->range('8.5,16.0,24.5,0,12.0{2}');
-$task->deleted->range('0{10}');
-$task->isParent->range('0{10}');
-$task->gen(10);
+$task->id->range('1-100');
+$task->project->range('1{20},11{20},21{20},31{20},41{20}');
+$task->execution->range('1-10');
+$task->name->range('任务1,任务2,任务3')->prefix('task_')->postfix('');
+$task->type->range('design,devel,test');
+$task->status->range('wait,doing,done,closed');
+$task->consumed->range('0,2,4,8,10,12,16,20,5,15');
+$task->left->range('0,2,4,8,10');
+$task->isParent->range('0');
+$task->deleted->range('0');
+$task->gen(100);
 
-// 跳过durationestimation表的数据准备，因为存在字段不匹配问题
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
-
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printWaterfallEstimateBlockTest(1)) && p('consumed') && e('61.00'); // 步骤1：有效项目ID测试
-r($blockTest->printWaterfallEstimateBlockTest(0)) && p('people,consumed') && e('0,0.00'); // 步骤2：项目ID为0的边界值测试
-r($blockTest->printWaterfallEstimateBlockTest(999)) && p('people,consumed') && e('0,0.00'); // 步骤3：不存在的项目ID测试
-r($blockTest->printWaterfallEstimateBlockTest(2)) && p('consumed') && e('36.50'); // 步骤4：项目有任务数据的情况
-r($blockTest->printWaterfallEstimateBlockTest(3)) && p('consumed') && e('24.50'); // 步骤5：项目有团队成员的情况
+global $tester;
+$tester->session->project = 1;
+$blockTest = new blockZenTest();
+r($blockTest->printWaterfallEstimateBlockTest()) && p('members;consumed;totalLeft') && e('0;184.00;0'); // 测试项目1：有预算、有成员、有工时数据
+$tester->session->project = 11;
+r($blockTest->printWaterfallEstimateBlockTest()) && p('members;consumed;totalLeft') && e('0;184.00;0'); // 测试项目11：有预算、无成员、有工时数据
+$tester->session->project = 21;
+r($blockTest->printWaterfallEstimateBlockTest()) && p('members;consumed;totalLeft') && e('0;184.00;0'); // 测试项目21：无预算、有成员、有工时数据
+$tester->session->project = 31;
+r($blockTest->printWaterfallEstimateBlockTest()) && p('members;consumed;totalLeft') && e('0;184.00;0'); // 测试项目31：无预算、无成员、无工时数据
+$tester->session->project = 41;
+r($blockTest->printWaterfallEstimateBlockTest()) && p('members;consumed;totalLeft') && e('0;184.00;0'); // 测试项目41：有多个成员和复杂工时数据

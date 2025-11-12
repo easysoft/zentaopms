@@ -72,8 +72,8 @@ detailBody
                     item(set::name($lang->kanbancard->begin), $card->begin),
                     item(set::name($lang->kanbancard->end), $card->end),
                     item(set::name($lang->kanbancard->pri), priLabel($card->pri)),
-                    item(set::name($lang->kanbancard->estimate), round($card->estimate, 2) . ' ' . $lang->kanbancard->lblHour),
-                    $kanban->performable ? item(set::name($lang->kanbancard->progress), round($card->progress, 2) . ' %') : null
+                    item(set::name($lang->kanbancard->estimate), round((float)$card->estimate, 2) . ' ' . $lang->kanbancard->lblHour),
+                    $kanban->performable ? item(set::name($lang->kanbancard->progress), round((float)$card->progress, 2) . ' %') : null
                 )
             )
         ),

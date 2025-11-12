@@ -1,0 +1,23 @@
+---
+title: testrun数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: task
+  note: 测试单ID
+  range: 1{3},2{3},3{4}
+- field: case
+  note: 用例ID
+  range: 1{3},2{3},3{4}
+- field: version
+  note: 用例版本
+  range: 1{10}
+- field: status
+  note: 状态
+  range: normal{7},blocked{2},done{1}

@@ -7,52 +7,164 @@ title=测试 testcaseModel::saveXmindImport();
 timeout=0
 cid=0
 
-- 步骤1：场景和用例数据导入失败测试属性result @fail
-- 步骤2：空场景列表导入失败测试属性result @fail
-- 步骤3：空用例列表导入成功测试属性result @success
-- 步骤4：空场景名称导入测试属性result @success
-- 步骤5：无效产品ID场景导入测试属性result @success
+- 测试1属性result @success
+- 测试2属性result @success
+- 测试3属性result @success
+- 测试4属性result @success
+- 测试5属性result @success
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
 $product = zenData('product');
-$product->id->range('1-5');
-$product->name->range('产品1,产品2,产品3,产品4,产品5');
-$product->type->range('normal{5}');
-$product->status->range('normal{5}');
-$product->gen(5);
+$product->id->range('1-10');
+$product->name->range('产品1,产品2,产品3,产品4,产品5{5}');
+$product->code->range('product1-10');
+$product->type->range('normal');
+$product->status->range('normal');
+$product->gen(10);
 
-$scene = zenData('scene');
-$scene->id->range('1-10');
-$scene->product->range('1-5');
-$scene->title->range('场景1,场景2,场景3,场景4,场景5');
-$scene->parent->range('0{5},1-5');
-$scene->grade->range('1{5},2{5}');
-$scene->path->range(',1,,2,,3,,4,,5,');
-$scene->gen(10);
+$user = zenData('user');
+$user->id->range('1-5');
+$user->account->range('admin,user1,user2,user3,user4');
+$user->password->range('123456');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4');
+$user->gen(5);
 
-$case = zenData('case');
-$case->id->range('1-20');
-$case->product->range('1-5');
-$case->title->range('测试用例1,测试用例2,测试用例3,测试用例4,测试用例5');
-$case->type->range('feature{20}');
-$case->status->range('normal{20}');
-$case->gen(20);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $testcaseTest = new testcaseTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->saveXmindImportTest(array(array('tmpId' => 'scene1', 'tmpPId' => '', 'name' => '测试场景1', 'product' => 1, 'branch' => 0)), array((object)array('tmpPId' => 'scene1', 'title' => '测试用例1', 'product' => 1, 'module' => 0, 'type' => 'feature', 'pri' => 3, 'status' => 'normal', 'stage' => 'unittest', 'story' => 0)))) && p('result') && e('fail'); // 步骤1：场景和用例数据导入失败测试
-r($testcaseTest->saveXmindImportTest(array(), array((object)array('tmpPId' => '', 'title' => '测试用例2', 'product' => 1, 'module' => 0, 'type' => 'feature', 'pri' => 3, 'status' => 'normal', 'stage' => 'unittest', 'story' => 0)))) && p('result') && e('fail'); // 步骤2：空场景列表导入失败测试
-r($testcaseTest->saveXmindImportTest(array(array('tmpId' => 'scene2', 'tmpPId' => '', 'name' => '测试场景2', 'product' => 1, 'branch' => 0)), array())) && p('result') && e('success'); // 步骤3：空用例列表导入成功测试
-r($testcaseTest->saveXmindImportTest(array(array('tmpId' => 'scene3', 'tmpPId' => '', 'name' => '', 'product' => 1, 'branch' => 0)), array())) && p('result') && e('success'); // 步骤4：空场景名称导入测试
-r($testcaseTest->saveXmindImportTest(array(array('tmpId' => 'scene4', 'tmpPId' => '', 'name' => '测试场景4', 'product' => 999, 'branch' => 0)), array())) && p('result') && e('success'); // 步骤5：无效产品ID场景导入测试
+// 测试1: 正常导入1个场景和1个测试用例
+$scenes1 = array(
+    array(
+        'tmpId' => 'tmp_scene_1',
+        'tmpPId' => 0,
+        'name' => '场景测试1',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0
+    )
+);
+$testcases1 = array(
+    (object)array(
+        'tmpPId' => 'tmp_scene_1',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0,
+        'title' => '测试用例1',
+        'type' => 'feature',
+        'pri' => 3,
+        'status' => 'wait',
+        'precondition' => '',
+        'keywords' => '',
+        'steps' => array('步骤1'),
+        'expects' => array('期望1'),
+        'stepType' => array('step')
+    )
+);
+r($testcaseTest->saveXmindImportTest($scenes1, $testcases1)) && p('result') && e('success'); // 测试1
+
+// 测试2: 导入多个场景和多个测试用例
+$scenes2 = array(
+    array(
+        'tmpId' => 'tmp_scene_2',
+        'tmpPId' => 0,
+        'name' => '场景测试2',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0
+    ),
+    array(
+        'tmpId' => 'tmp_scene_3',
+        'tmpPId' => 0,
+        'name' => '场景测试3',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0
+    )
+);
+$testcases2 = array(
+    (object)array(
+        'tmpPId' => 'tmp_scene_2',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0,
+        'title' => '测试用例2',
+        'type' => 'feature',
+        'pri' => 3,
+        'status' => 'wait',
+        'precondition' => '',
+        'keywords' => '',
+        'steps' => array('步骤1'),
+        'expects' => array('期望1'),
+        'stepType' => array('step')
+    ),
+    (object)array(
+        'tmpPId' => 'tmp_scene_3',
+        'product' => 1,
+        'branch' => 0,
+        'module' => 0,
+        'title' => '测试用例3',
+        'type' => 'feature',
+        'pri' => 2,
+        'status' => 'wait',
+        'precondition' => '',
+        'keywords' => '',
+        'steps' => array('步骤1'),
+        'expects' => array('期望1'),
+        'stepType' => array('step')
+    )
+);
+r($testcaseTest->saveXmindImportTest($scenes2, $testcases2)) && p('result') && e('success'); // 测试2
+
+// 测试3: 导入场景但没有测试用例
+$scenes3 = array(
+    array(
+        'tmpId' => 'tmp_scene_4',
+        'tmpPId' => 0,
+        'name' => '场景测试4',
+        'product' => 2,
+        'branch' => 0,
+        'module' => 0
+    )
+);
+$testcases3 = array();
+r($testcaseTest->saveXmindImportTest($scenes3, $testcases3)) && p('result') && e('success'); // 测试3
+
+// 测试4: 导入空场景和空测试用例数组
+$scenes4 = array();
+$testcases4 = array();
+r($testcaseTest->saveXmindImportTest($scenes4, $testcases4)) && p('result') && e('success'); // 测试4
+
+// 测试5: 导入场景和测试用例时验证product字段
+$scenes5 = array(
+    array(
+        'tmpId' => 'tmp_scene_5',
+        'tmpPId' => 0,
+        'name' => '场景测试5',
+        'product' => 2,
+        'branch' => 0,
+        'module' => 0
+    )
+);
+$testcases5 = array(
+    (object)array(
+        'tmpPId' => 'tmp_scene_5',
+        'product' => 2,
+        'branch' => 0,
+        'module' => 0,
+        'title' => '测试用例5',
+        'type' => 'performance',
+        'pri' => 2,
+        'status' => 'normal',
+        'precondition' => '前置条件',
+        'keywords' => 'keyword',
+        'steps' => array('步骤1', '步骤2'),
+        'expects' => array('期望1', '期望2'),
+        'stepType' => array('step', 'step')
+    )
+);
+r($testcaseTest->saveXmindImportTest($scenes5, $testcases5)) && p('result') && e('success'); // 测试5

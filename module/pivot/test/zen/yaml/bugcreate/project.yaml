@@ -1,0 +1,54 @@
+---
+title: Project数据定义(执行表)
+desc: bugCreate测试使用的project数据(执行表)
+
+fields:
+- field: id
+  note: 执行ID
+  range: 101-105
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 执行名称
+  range: 执行
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: sprint{3},stage{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: doing{3},wait{1},closed{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图
+  range: rnd
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 层级
+  range: '2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

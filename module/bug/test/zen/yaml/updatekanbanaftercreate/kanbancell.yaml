@@ -1,0 +1,41 @@
+---
+title: 看板单元格数据
+author: AI
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: kanban
+  note: 看板ID
+  range: 1-5:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lane
+  note: 泳道ID
+  range: 1-10:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: column
+  note: 列ID
+  range: 1-10:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: 'story{10},bug{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

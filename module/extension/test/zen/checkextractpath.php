@@ -7,52 +7,63 @@ title=测试 extensionZen::checkExtractPath();
 timeout=0
 cid=0
 
-- 步骤1：使用已存在插件测试，返回对象类型 @1
-- 步骤2：使用空插件名测试，返回对象类型 @1
-- 步骤3：使用不存在插件测试，返回对象类型 @1
-- 步骤4：检查返回对象的result属性属性result @fail
-- 步骤5：验证对象结构完整性 @1
+- 执行extensionTest模块的checkExtractPathTest方法，参数是'', $checkResult1 属性result @ok
+- 执行extensionTest模块的checkExtractPathTest方法，参数是'nonexistent_plugin', $checkResult2 属性result @ok
+- 执行extensionTest模块的checkExtractPathTest方法，参数是'test_plugin', $checkResult3 属性result @ok
+- 执行extensionTest模块的checkExtractPathTest方法，参数是'test_plugin', $checkResult4 属性errors @Previous error<br />
+- 执行checkExtractPathTest('test_plugin', $checkResult5)模块的dirs2Created方法  @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）  
-$table = zenData('extension');
-$table->name->range('测试插件1,测试插件2,样例插件,演示插件,功能插件');
-$table->code->range('testplugin1,testplugin2,sampleplugin,demoplugin,functionplugin');
-$table->version->range('1.0.0,1.1.0,2.0.0,1.5.0,3.0.0');
-$table->status->range('installed{2},available{3}');
-$table->type->range('extension{5}');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$extensionTest = new extensionTest();
+global $tester, $app, $config;
+$app->rawModule = 'extension';
+$app->rawMethod = 'browse';
 
-// 创建初始检查结果对象
-$checkResult = new stdClass();
-$checkResult->result = 'ok';
-$checkResult->errors = '';
-$checkResult->mkdirCommands = '';
-$checkResult->chmodCommands = '';
-$checkResult->dirs2Created = array();
+$extensionTest = new extensionZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$result1 = $extensionTest->checkExtractPathTest('testplugin1', $checkResult);
-r(is_object($result1)) && p() && e('1'); // 步骤1：使用已存在插件测试，返回对象类型
+/* 准备测试用的checkResult对象 */
+$checkResult1 = new stdclass();
+$checkResult1->result        = 'ok';
+$checkResult1->errors        = '';
+$checkResult1->mkdirCommands = '';
+$checkResult1->chmodCommands = '';
+$checkResult1->dirs2Created  = array();
 
-$result2 = $extensionTest->checkExtractPathTest('', $checkResult);
-r(is_object($result2)) && p() && e('1'); // 步骤2：使用空插件名测试，返回对象类型
+$checkResult2 = new stdclass();
+$checkResult2->result        = 'ok';
+$checkResult2->errors        = '';
+$checkResult2->mkdirCommands = '';
+$checkResult2->chmodCommands = '';
+$checkResult2->dirs2Created  = array();
 
-$result3 = $extensionTest->checkExtractPathTest('nonexistent', $checkResult);
-r(is_object($result3)) && p() && e('1'); // 步骤3：使用不存在插件测试，返回对象类型
+$checkResult3 = new stdclass();
+$checkResult3->result        = 'ok';
+$checkResult3->errors        = '';
+$checkResult3->mkdirCommands = '';
+$checkResult3->chmodCommands = '';
+$checkResult3->dirs2Created  = array();
 
-r($extensionTest->checkExtractPathTest('testplugin1', $checkResult)) && p('result') && e('fail'); // 步骤4：检查返回对象的result属性
+$checkResult4 = new stdclass();
+$checkResult4->result        = 'ok';
+$checkResult4->errors        = 'Previous error<br />';
+$checkResult4->mkdirCommands = '';
+$checkResult4->chmodCommands = '';
+$checkResult4->dirs2Created  = array();
 
-$result5 = $extensionTest->checkExtractPathTest('testplugin1', $checkResult);
-r(isset($result5->errors) && isset($result5->mkdirCommands) && isset($result5->chmodCommands)) && p() && e('1'); // 步骤5：验证对象结构完整性
+$checkResult5 = new stdclass();
+$checkResult5->result        = 'ok';
+$checkResult5->errors        = '';
+$checkResult5->mkdirCommands = '';
+$checkResult5->chmodCommands = '';
+$checkResult5->dirs2Created  = array('test_dir1', 'test_dir2');
+
+r($extensionTest->checkExtractPathTest('', $checkResult1)) && p('result') && e('ok');
+r($extensionTest->checkExtractPathTest('nonexistent_plugin', $checkResult2)) && p('result') && e('ok');
+r($extensionTest->checkExtractPathTest('test_plugin', $checkResult3)) && p('result') && e('ok');
+r($extensionTest->checkExtractPathTest('test_plugin', $checkResult4)) && p('errors') && e('Previous error<br />');
+r(is_array($extensionTest->checkExtractPathTest('test_plugin', $checkResult5)->dirs2Created)) && p() && e(1);

@@ -64,6 +64,13 @@ $action->read->range('0');
 $action->vision->range('rnd');
 $action->gen(4);
 
+$user = zenData('user');
+$user->id->range('1-3');
+$user->account->range('admin, user1, user2');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->realname->range('admin, USER1, USER2');
+$user->gen(3);
+
 $tester = new assignToStoryTester();
 $tester->login();
 

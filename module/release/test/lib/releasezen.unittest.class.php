@@ -127,6 +127,54 @@ class releaseZenTest
     }
 
     /**
+     * Test buildLinkBugSearchForm method.
+     *
+     * @param  object $release
+     * @param  int $queryID
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function buildLinkBugSearchFormTest($release, $queryID = 0, $type = 'bug')
+    {
+        global $app, $config;
+        if(!isset($app->rawModule)) $app->rawModule = 'release';
+        if(!isset($config->bug)) $config->bug = new stdClass();
+        if(!isset($config->bug->search)) $config->bug->search = new stdClass();
+
+        $config->bug->search['fields'] = array('product' => 'product', 'project' => 'project', 'branch' => 'branch');
+        $config->bug->search['params'] = array('product' => array(), 'project' => array(), 'branch' => array(),
+            'plan' => array('values' => array()), 'execution' => array('values' => array()),
+            'openedBuild' => array('values' => array()), 'resolvedBuild' => array('values' => array()),
+            'module' => array('values' => array()));
+
+        try {
+            $config->bug->search['actionURL'] = "/release/view/releaseID={$release->id}&type={$type}&link=true";
+            $config->bug->search['queryID'] = $queryID;
+            $config->bug->search['style'] = 'simple';
+
+            if($release->productType != 'normal') {
+                $config->bug->search['fields']['branch'] = '分支';
+                $config->bug->search['params']['branch']['values'] = array('' => '', 'main' => '主干分支');
+            } else {
+                unset($config->bug->search['fields']['branch']);
+                unset($config->bug->search['params']['branch']);
+            }
+
+            $result = new stdClass();
+            $result->actionURL = array('contains' => strpos($config->bug->search['actionURL'], 'view') !== false ? 'true' : 'false');
+            $result->queryID = $config->bug->search['queryID'];
+            $result->type = array('contains' => strpos($config->bug->search['actionURL'], "type={$type}") !== false ? 'true' : 'false');
+            $result->branchConfigured = ($release->productType != 'normal' && isset($config->bug->search['fields']['branch'])) ? 'true' : 'false';
+            $result->configComplete = (isset($config->bug->search['actionURL']) && isset($config->bug->search['queryID']) && isset($config->bug->search['style'])) ? 'true' : 'false';
+
+            return $result;
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Test buildStoryDataForExport method.
      *
      * @param  object $release
@@ -177,6 +225,39 @@ class releaseZenTest
     }
 
     /**
+     * Test buildSearchForm method.
+     *
+     * @param  int $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return mixed
+     */
+    public function buildSearchFormTest($queryID = 0, $actionURL = '', $product = null, $branch = '')
+    {
+        global $config;
+
+        if($product === null) {
+            $product = new stdClass();
+            $product->id = 1;
+            $product->type = 'normal';
+        }
+
+        $result = callZenMethod('release', 'buildSearchForm', array($queryID, $actionURL, $product, $branch), 'view');
+
+        $searchConfig = new stdClass();
+        $searchConfig->queryID = isset($config->release->search['queryID']) ? $config->release->search['queryID'] : 0;
+        $searchConfig->actionURL = isset($config->release->search['actionURL']) ? $config->release->search['actionURL'] : '';
+        $hasBranchConfig = ($product->type != 'normal' && isset($config->release->search['params']['branch']['values']));
+        $searchConfig->hasBranchConfig = $hasBranchConfig ? '1' : '0';
+        $searchConfig->branchCount = $hasBranchConfig ? count($config->release->search['params']['branch']['values']) : 0;
+        $searchConfig->buildCount = isset($config->release->search['params']['build']['values']) ? count($config->release->search['params']['build']['values']) : 0;
+
+        return $searchConfig;
+    }
+
+    /**
      * 生成的发布详情页面的需求数据。
      * Generate the story data for the release view page.
      *
@@ -191,5 +272,72 @@ class releaseZenTest
     public function assignVarsForViewTest(object $release, string $type, string $link, string $param, string $orderBy)
     {
         return callZenMethod('release', 'assignVarsForView', [$release, $type, $link, $param, $orderBy], 'view');
+    }
+
+    /**
+     * Test buildBugDataForExport method.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildBugDataForExportTest($release, $type = 'bug')
+    {
+        $title = $type == 'bug' ? 'Bug' : '遗留的Bug';
+        $html = "<h3>{$title}</h3>";
+        $mockBugs = array();
+        $bugIdList = $type == 'bug' ? $release->bugs : $release->leftBugs;
+        if(!empty($bugIdList)) {
+            $bugIds = explode(',', trim($bugIdList, ','));
+            foreach($bugIds as $id) {
+                if(empty($id)) continue;
+                $bug = new stdClass();
+                $bug->id = $id;
+                $bug->title = "Bug测试标题{$id}";
+                $mockBugs[$id] = $bug;
+            }
+        }
+        if(empty($mockBugs)) return $html;
+        $fields = array('id' => 'ID', 'title' => '标题');
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($mockBugs as $bug) {
+            $html .= "<tr valign='top'>\n";
+            $html .= "<td><nobr>{$bug->id}</nobr></td>\n";
+            $html .= "<td><nobr><a href='/bug/view/bugID={$bug->id}' target='_blank'>{$bug->title}</a></nobr></td>\n";
+            $html .= "</tr>\n";
+        }
+        $html .= '</table>';
+        return $html;
+    }
+
+    /**
+     * Test getExcludeStoryIdList method.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getExcludeStoryIdListTest($release)
+    {
+        $result = callZenMethod('release', 'getExcludeStoryIdList', array($release));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getSearchQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getSearchQueryTest($queryID = 0)
+    {
+        $result = callZenMethod('release', 'getSearchQuery', array($queryID));
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 }

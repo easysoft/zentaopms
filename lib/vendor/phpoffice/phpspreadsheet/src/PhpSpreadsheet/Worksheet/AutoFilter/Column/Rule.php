@@ -240,7 +240,7 @@ class Rule
      *
      * @param Column $pParent
      */
-    public function __construct(Column $pParent = null)
+    public function __construct(?Column $pParent = null)
     {
         $this->parent = $pParent;
     }
@@ -426,7 +426,7 @@ class Rule
      *
      * @return Rule
      */
-    public function setParent(Column $pParent = null)
+    public function setParent(?Column $pParent = null)
     {
         $this->parent = $pParent;
 

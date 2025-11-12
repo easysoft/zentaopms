@@ -1,0 +1,26 @@
+---
+title: group表测试数据
+desc: 用户组数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 组ID
+  range: 1
+  loop: 0
+
+- field: name
+  note: 组名称
+  range: admin
+  loop: 0
+
+- field: role
+  note: 角色
+  range: ''
+  loop: 0
+
+- field: desc
+  note: 描述
+  range: 'Admin Group'
+  loop: 0

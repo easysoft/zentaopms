@@ -1,0 +1,34 @@
+---
+title: 代码库数据
+desc: 用于测试getObjectsWithPager方法的代码库数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 代码库名称
+  range: 代码库1,代码库2,代码库3,代码库4,代码库5,代码库6,代码库7,代码库8,代码库9,代码库10
+  prefix: ""
+  postfix: ""
+
+- field: path
+  note: 路径
+  range: /repo1,/repo2,/repo3,/repo4,/repo5,/repo6,/repo7,/repo8,/repo9,/repo10
+  prefix: ""
+  postfix: ""
+
+- field: SCM
+  note: 代码管理工具
+  range: Git,Gitlab
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""

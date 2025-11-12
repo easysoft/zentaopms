@@ -1,0 +1,48 @@
+---
+title: 项目数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 项目名称
+  range: 项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 项目代号
+  range: project1,project2,project3,project4,project5,project6,project7,project8,project9,project10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 项目类型
+  range: project
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: doing
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 已删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -7,94 +7,83 @@ title=测试 pivotZen::getMenuItems();
 timeout=0
 cid=0
 
-- 步骤1：正常情况 @2
-- 步骤2：边界值 @0
-- 步骤3：异常输入 @1
-- 步骤4：权限验证 @0
-- 步骤5：业务规则 @2
+- 执行pivotTest模块的getMenuItemsTest方法，参数是$menusWithUrl  @3
+- 执行pivotTest模块的getMenuItemsTest方法，参数是$emptyMenus  @0
+- 执行pivotTest模块的getMenuItemsTest方法，参数是$menusWithoutUrl  @0
+- 执行pivotTest模块的getMenuItemsTest方法，参数是$mixedMenus  @2
+- 执行pivotTest模块的getMenuItemsTest方法，参数是$menusWithOtherProps  @0
+- 执行getMenuItemsTest($menusWithUrl)[0]模块的id方法  @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$pivotTest = new pivotTest();
+$pivotTest = new pivotZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-// 步骤1：正常情况 - 包含url的菜单项
-$normalMenus = array();
-$menu1 = new stdClass();
+$menusWithUrl = array();
+$menu1 = new stdclass();
 $menu1->id = 1;
-$menu1->name = 'Test Menu 1';
+$menu1->name = 'Menu1';
 $menu1->url = 'http://example.com/menu1';
-$normalMenus[] = $menu1;
+$menusWithUrl[] = $menu1;
 
-$menu2 = new stdClass();
+$menu2 = new stdclass();
 $menu2->id = 2;
-$menu2->name = 'Test Menu 2';
+$menu2->name = 'Menu2';
 $menu2->url = 'http://example.com/menu2';
-$normalMenus[] = $menu2;
+$menusWithUrl[] = $menu2;
 
-r($pivotTest->getMenuItemsCountTest($normalMenus)) && p() && e('2'); // 步骤1：正常情况
+$menu3 = new stdclass();
+$menu3->id = 3;
+$menu3->name = 'Menu3';
+$menu3->url = 'http://example.com/menu3';
+$menusWithUrl[] = $menu3;
 
-// 步骤2：边界值 - 空数组输入
-$emptyMenus = array();
-r($pivotTest->getMenuItemsCountTest($emptyMenus)) && p() && e('0'); // 步骤2：边界值
+$menusWithoutUrl = array();
+$menu4 = new stdclass();
+$menu4->id = 4;
+$menu4->name = 'Menu4';
+$menusWithoutUrl[] = $menu4;
 
-// 步骤3：混合情况 - 包含url和不包含url的菜单项
+$menu5 = new stdclass();
+$menu5->id = 5;
+$menu5->name = 'Menu5';
+$menusWithoutUrl[] = $menu5;
+
 $mixedMenus = array();
-$menuWithUrl = new stdClass();
-$menuWithUrl->id = 3;
-$menuWithUrl->name = 'With URL';
-$menuWithUrl->url = 'http://example.com/with-url';
-$mixedMenus[] = $menuWithUrl;
+$menu6 = new stdclass();
+$menu6->id = 6;
+$menu6->name = 'Menu6';
+$menu6->url = 'http://example.com/menu6';
+$mixedMenus[] = $menu6;
 
-$menuWithoutUrl = new stdClass();
-$menuWithoutUrl->id = 4;
-$menuWithoutUrl->name = 'Without URL';
-$mixedMenus[] = $menuWithoutUrl;
+$menu7 = new stdclass();
+$menu7->id = 7;
+$menu7->name = 'Menu7';
+$mixedMenus[] = $menu7;
 
-r($pivotTest->getMenuItemsCountTest($mixedMenus)) && p() && e('1'); // 步骤3：异常输入
+$menu8 = new stdclass();
+$menu8->id = 8;
+$menu8->name = 'Menu8';
+$menu8->url = 'http://example.com/menu8';
+$mixedMenus[] = $menu8;
 
-// 步骤4：权限验证 - 所有菜单项都没有url属性
-$noUrlMenus = array();
-$menuNoUrl1 = new stdClass();
-$menuNoUrl1->id = 5;
-$menuNoUrl1->name = 'No URL 1';
-$noUrlMenus[] = $menuNoUrl1;
+$emptyMenus = array();
 
-$menuNoUrl2 = new stdClass();
-$menuNoUrl2->id = 6;
-$menuNoUrl2->name = 'No URL 2';
-$noUrlMenus[] = $menuNoUrl2;
+$menusWithOtherProps = array();
+$menu9 = new stdclass();
+$menu9->id = 9;
+$menu9->name = 'Menu9';
+$menu9->parent = 0;
+$menu9->children = array();
+$menusWithOtherProps[] = $menu9;
 
-r($pivotTest->getMenuItemsCountTest($noUrlMenus)) && p() && e('0'); // 步骤4：权限验证
-
-// 步骤5：业务规则 - 包含复杂菜单对象结构
-$complexMenus = array();
-$complexMenu1 = new stdClass();
-$complexMenu1->id = 7;
-$complexMenu1->name = 'Complex Menu 1';
-$complexMenu1->url = 'http://example.com/complex1';
-$complexMenu1->parent = 0;
-$complexMenu1->extra = 'extra_data';
-$complexMenus[] = $complexMenu1;
-
-$complexMenu2 = new stdClass();
-$complexMenu2->id = 8;
-$complexMenu2->name = 'Complex Menu 2';
-$complexMenu2->parent = 7;
-$complexMenus[] = $complexMenu2; // 没有url
-
-$complexMenu3 = new stdClass();
-$complexMenu3->id = 9;
-$complexMenu3->name = 'Complex Menu 3';
-$complexMenu3->url = 'http://example.com/complex3';
-$complexMenus[] = $complexMenu3;
-
-r($pivotTest->getMenuItemsCountTest($complexMenus)) && p() && e('2'); // 步骤5：业务规则
+r(count($pivotTest->getMenuItemsTest($menusWithUrl))) && p() && e('3');
+r(count($pivotTest->getMenuItemsTest($emptyMenus))) && p() && e('0');
+r(count($pivotTest->getMenuItemsTest($menusWithoutUrl))) && p() && e('0');
+r(count($pivotTest->getMenuItemsTest($mixedMenus))) && p() && e('2');
+r(count($pivotTest->getMenuItemsTest($menusWithOtherProps))) && p() && e('0');
+r($pivotTest->getMenuItemsTest($menusWithUrl)[0]->id) && p() && e('1');

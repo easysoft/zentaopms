@@ -1,0 +1,32 @@
+---
+title: testtask数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1{5},2{5}
+- field: project
+  note: 所属项目
+  range: 1{3},2{3},3{4}
+- field: execution
+  note: 所属执行
+  range: 101{3},102{3},103{4}
+- field: build
+  note: 版本
+  range: 1{3},2{3},3{4}
+- field: name
+  note: 测试单名称
+  range: Test task 1,Test task 2,Test task 3,Test task 4,Test task 5,Test task 6,Test task 7,Test task 8,Test task 9,Test task 10
+- field: status
+  note: 状态
+  range: wait{3},doing{4},done{3}
+- field: deleted
+  note: 是否删除
+  range: 0{10}

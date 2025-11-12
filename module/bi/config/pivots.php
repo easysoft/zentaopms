@@ -267,9 +267,9 @@ from zt_product as t1
         select
             product,
             count(id) as bug,
-            sum(case when resolution in ('fixed', 'postponed') or status = 'active' then 1 else 0 end) as effbugs,
-            sum(case when resolution = 'fixed' then 1 else 0 end) as fixedbugs,
-            sum(case when severity IN (1, 2) then 1 else 0 end) as pri12bugs
+            sum(case when resolution in ('fixed', 'postponed') or status = 'active' then 1=1 else 0 end) as effbugs,
+            sum(case when resolution = 'fixed' then 1=1 else 0 end) as fixedbugs,
+            sum(case when severity IN (1, 2) then 1=1 else 0 end) as pri12bugs
         from zt_bug
         where deleted = '0'
         group by product
@@ -374,7 +374,7 @@ $config->bi->builtin->pivots[] = array
 select
     t1.product,
     t2.name,
-    (case when t1.closedReason = 'done' or t1.stage = 'released' then 1 else 0 end) as done,
+    (case when t1.closedReason = 'done' or t1.stage = 'released' then 1=1 else 1=0 end) as done,
     1 as count from zt_story as t1
 left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
@@ -401,7 +401,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -484,7 +484,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -557,7 +557,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -631,7 +631,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -687,7 +687,7 @@ select
          and t2.deadline is not null
          and t2.status != 'closed'
          and t2.status != 'done'
-         and t2.status != 'cancel' then 1 else 0 end
+         and t2.status != 'cancel' then 1=1 else 0 end
      ) as timeout
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
@@ -718,8 +718,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -822,8 +822,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -909,8 +909,8 @@ and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus en
 and (case when \$project='' then 1=1 else t4.id=\$project end)
 and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
-and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate)
+and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate = '')
 EOT,
     'settings'  => array
     (
@@ -927,8 +927,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -1012,9 +1012,9 @@ and t2.deleted='0'
 and t2.finishedBy!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$dept='' then 1 else t4.dept=\$dept end)
-and (case when \$user='' then 1 else t2.finishedBy=\$user end)
+and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$dept='' then 1=1 else t4.dept=\$dept end)
+and (case when \$user='' then 1=1 else t2.finishedBy=\$user end)
 and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
 EOT,
     'settings'  => array
@@ -1032,10 +1032,10 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
-        array('from' => 'query', 'field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => ''),
-        array('from' => 'query', 'field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0'),
+        array('from' => 'query', 'field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0'),
+        array('from' => 'query', 'field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1141,7 +1141,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -1278,8 +1278,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1372,8 +1372,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1467,8 +1467,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1563,8 +1563,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1659,8 +1659,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1757,8 +1757,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1832,10 +1832,10 @@ left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t2.deleted='0'
-and (case when \$projectStatus='' then 1 else t3.status=\$projectStatus end)
-and (case when \$executionStatus='' then 1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$execution='' then 1 else t1.id=\$execution end)
+and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -1852,8 +1852,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -1937,10 +1937,10 @@ left join zt_project as t5 on t5.id=t1.project
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and t1.grade='1'
-and (case when \$projectStatus='' then 1 else t5.status=\$projectStatus end)
-and (case when \$executionStatus='' then 1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1 else t5.id=\$project end)
-and (case when \$execution='' then 1 else t1.id=\$execution end)
+and (case when \$projectStatus='' then 1=1 else t5.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t5.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -1965,8 +1965,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2136,7 +2136,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2222,7 +2222,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2319,8 +2319,8 @@ $config->bi->builtin->pivots[] = array
 select t1.actor,LEFT(t1.`date`,10) as `day` from zt_action t1
 left join zt_user as t2 on t1.actor = t2.account
 where t1.`action`='login'
-and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=cast(\$startDate as date))
-and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=cast(\$endDate as date))
+and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=\$startDate)
+and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=\$endDate)
 and if(\$dept='',1=1,t2.`dept`=\$dept)
 and not (\$startDate='' and \$endDate='' and \$dept='')
 order by t1.`date` asc, t1.actor asc
@@ -2339,7 +2339,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY'),
-        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '')
+        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2417,7 +2417,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => ''),
+        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONDAY'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$SUNDAY')
     ),
@@ -2449,7 +2449,7 @@ EOT,
         (
             'field'     => 'consumed',
             'object'    => 'effort',
-            'whereSql'  => "left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = '0' and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end) and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)  and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0) order by t1.`date` asc",
+            'whereSql'  => "left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = '0' and (case when \$startDate='' then 1=1 else cast(t1.`date` as date) >= cast(\$startDate as date) end) and (case when \$endDate='' then 1=1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)  and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0) order by t1.`date` asc",
             'condition' => array
             (
                 array('drillObject' => 'zt_effort', 'drillAlias' => 't1', 'drillField' => 'account', 'queryField' => 'account'),
@@ -2659,9 +2659,9 @@ left join zt_product as t2 on t1.product = t2.id
 where t1.deleted='0'
 and t2.deleted='0'
 and t1.resolution!=''
-and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
-and (case when \$product = '' then 1 else t1.product=\$product end)
+and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
+and (case when \$product = '' then 1=1 else t1.product=\$product end)
 and not (\$product='' and \$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
@@ -2676,7 +2676,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => ''),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '解决日期开始', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '解决日期结束', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
@@ -2704,7 +2704,7 @@ EOT,
         (
             'field'     => 'resolution',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1 else t1.product=\$product end)",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
             'condition' => array
             (
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),
@@ -2747,10 +2747,10 @@ left join ztv_projectstories as t3 on t1.id=t3.execution
 left join zt_project as t4 on t4.id=t1.project
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
-and (case when \$projectStatus='' then 1 else t4.status=\$projectStatus end)
-and (case when \$executionStatus='' then 1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1 else t4.id=\$project end)
-and (case when \$execution='' then 1 else t1.id=\$execution end)
+and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t4.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -2772,8 +2772,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -2912,10 +2912,10 @@ left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t2.deleted='0'
-and (case when \$projectStatus='' then 1 else t3.status=\$projectStatus end)
-and (case when \$executionStatus='' then 1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$execution='' then 1 else t1.id=\$execution end)
+and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -2932,8 +2932,8 @@ EOT,
     (
         array('from' => 'query', 'field' => 'projectStatus',   'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
-        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
+        array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => '0'),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -3019,7 +3019,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
         array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
-        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '0')
     ),
     'fields'    => array
     (
@@ -3073,9 +3073,9 @@ left join zt_product as t2 on t1.product = t2.id
 where t1.deleted='0'
 and t2.deleted='0'
 and t1.resolution!=''
-and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
-and (case when \$product = '' then 1 else t1.product=\$product end)
+and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
+and (case when \$product = '' then 1=1 else t1.product=\$product end)
 and not (\$product='' and \$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
@@ -3090,7 +3090,7 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => ''),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => '0'),
         array('from' => 'query', 'field' => 'startDate', 'name' => '解决日期开始', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '解决日期结束', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
@@ -3118,7 +3118,7 @@ EOT,
         (
             'field'     => 'resolution',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1 else t1.product=\$product end)",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
             'condition' => array
             (
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),

@@ -1,0 +1,62 @@
+---
+title: 项目数据for assignEditData测试
+desc: 为assignEditData方法提供项目测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 项目名称
+  range: 'Project{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 项目类型
+  range: 'project{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 项目状态
+  range: 'wait{2},doing{5},done{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: model
+  note: 项目模型
+  range: 'scrum{5},waterfall{3},kanban{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: hasProduct
+  note: 是否关联产品
+  range: '1{8},0{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

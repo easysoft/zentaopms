@@ -1,0 +1,48 @@
+---
+title: 为assignCasesForBrowse方法提供测试用例数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用例ID
+  range: 1-50
+- field: product
+  note: 产品ID
+  range: 1{30},2{10},3{10}
+- field: project
+  note: 项目ID
+  range: 1{25},2{15},0{10}
+- field: execution
+  note: 执行ID
+  range: 1{20},2{15},0{15}
+- field: branch
+  note: 分支ID
+  range: 0{35},1{10},2{5}
+- field: module
+  note: 模块ID
+  range: 0{10},1{15},2{10},3{15}
+- field: title
+  note: 用例标题
+  range: '测试用例1,测试用例2,测试用例3,测试用例4,测试用例5,测试登录功能,测试注册功能,测试权限检查,测试数据导入,测试数据导出'
+- field: type
+  note: 用例类型
+  range: 'feature{30},performance{5},config{5},install{5},security{5}'
+- field: status
+  note: 用例状态
+  range: 'normal{35},blocked{10},investigate{5}'
+- field: pri
+  note: 优先级
+  range: 1{5},2{15},3{25},4{5}
+- field: openedBy
+  note: 由谁创建
+  range: 'admin{20},user1{15},user2{15}'
+- field: openedDate
+  note: 创建日期
+  range: "`2024-01-01 00:00:00`,`2024-02-01 00:00:00`,`2024-03-01 00:00:00`"
+- field: version
+  note: 版本号
+  range: 1{40},2{5},3{5}
+- field: deleted
+  note: 是否删除
+  range: '0{45},1{5}'

@@ -108,7 +108,6 @@ class executionModel extends model
         $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
-        if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
         $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
         if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
@@ -446,7 +445,6 @@ class executionModel extends model
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
-            ->limit(1)
             ->exec();
 
         if(dao::isError()) return false;
@@ -561,7 +559,6 @@ class executionModel extends model
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
-                ->limit(1)
                 ->exec();
 
             if(dao::isError()) return false;

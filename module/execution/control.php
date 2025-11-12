@@ -2504,7 +2504,7 @@ class execution extends control
         $this->view->executionID  = $object->id;
         $this->view->projectID    = $object->id;
         $this->view->storyType    = $storyType;
-        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs($productPairs);
+        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs(array_keys($productPairs));
 
         $this->display();
     }

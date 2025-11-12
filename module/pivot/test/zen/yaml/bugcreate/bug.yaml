@@ -1,0 +1,89 @@
+---
+title: Bug数据定义
+desc: bugCreate测试使用的bug数据
+
+fields:
+- field: id
+  note: Bug ID
+  range: 1-20
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: 1{10},2{5},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{8},2{7},3{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 101{6},102{6},103{4},0{4}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: Bug标题
+  range: Bug标题测试
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedBy
+  note: 创建者
+  range: admin{10},user1{5},user2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: openedDate
+  note: 创建日期
+  range: '2024-10-01 00:00:00'-'2024-11-10 23:59:59':1D
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: YYYY-MM-DD hh:mm:ss
+- field: assignedTo
+  note: 指派给
+  range: admin{8},user1{7},user2{5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: Bug状态
+  range: active{12},resolved{5},closed{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: severity
+  note: 严重程度
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

@@ -1,0 +1,11 @@
+---
+title: assignBatchCreateVars测试的项目产品关联数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的项目产品关联数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-5
+- field: product
+  note: 产品ID
+  range: 1-5

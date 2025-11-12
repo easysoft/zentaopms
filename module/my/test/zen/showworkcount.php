@@ -7,52 +7,38 @@ title=测试 myZen::showWorkCount();
 timeout=0
 cid=0
 
-- 步骤1：正常情况，检查任务数量属性task @5
-- 步骤2：自定义分页参数属性story @3
-- 步骤3：检查bug数量属性bug @2
-- 步骤4：检查用例数量属性case @0
-- 步骤5：检查测试任务数量属性testtask @0
+- 测试默认参数调用属性hasTodoCount @1
+- 测试默认参数时taskCount初始化为0属性taskCount @0
+- 测试默认参数时storyCount初始化为0属性storyCount @0
+- 测试默认参数时bugCount初始化为0属性bugCount @0
+- 测试默认参数时caseCount初始化为0属性caseCount @0
+- 测试recTotal为100时属性hasTodoCount @1
+- 测试recPerPage为50时属性hasTodoCount @1
+- 测试pageID为2时属性hasTodoCount @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$task = zenData('task');
-$task->id->range('1-10');
-$task->name->range('Task{1-10}');
-$task->assignedTo->range('admin{5},user1{3},user2{2}');
-$task->status->range('wait{3},doing{4},done{3}');
-$task->deleted->range('0{10}');
-$task->gen(10);
+zenData('task')->gen(0);
+zenData('story')->gen(0);
+zenData('bug')->gen(0);
+zenData('case')->gen(0);
+zenData('testtask')->gen(0);
+zenData('user')->gen(10);
+zenData('product')->gen(5);
+zenData('project')->gen(5);
 
-$story = zenData('story');
-$story->id->range('1-5');
-$story->title->range('Story{1-5}');
-$story->assignedTo->range('admin{3},user1{2}');
-$story->status->range('active{3},reviewing{2}');
-$story->deleted->range('0{5}');
-$story->gen(5);
-
-$bug = zenData('bug');
-$bug->id->range('1-3');
-$bug->title->range('Bug{1-3}');
-$bug->assignedTo->range('admin{2},user1{1}');
-$bug->status->range('active{2},resolved{1}');
-$bug->deleted->range('0{3}');
-$bug->gen(3);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$myTest = new myTest();
+$myTest = new myZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($myTest->showWorkCountTest()) && p('task') && e('5'); // 步骤1：正常情况，检查任务数量
-r($myTest->showWorkCountTest(100, 10, 1)) && p('story') && e('3'); // 步骤2：自定义分页参数
-r($myTest->showWorkCountTest(0, 10, 1)) && p('bug') && e('2'); // 步骤3：检查bug数量
-r($myTest->showWorkCountTest(50, 20, 2)) && p('case') && e('0'); // 步骤4：检查用例数量
-r($myTest->showWorkCountTest(0, 20, 1)) && p('testtask') && e('0'); // 步骤5：检查测试任务数量
+r($myTest->showWorkCountTest(0, 20, 1)) && p('hasTodoCount') && e('1'); // 测试默认参数调用
+r($myTest->showWorkCountTest(0, 20, 1)) && p('taskCount') && e('0'); // 测试默认参数时taskCount初始化为0
+r($myTest->showWorkCountTest(0, 20, 1)) && p('storyCount') && e('0'); // 测试默认参数时storyCount初始化为0
+r($myTest->showWorkCountTest(0, 20, 1)) && p('bugCount') && e('0'); // 测试默认参数时bugCount初始化为0
+r($myTest->showWorkCountTest(0, 20, 1)) && p('caseCount') && e('0'); // 测试默认参数时caseCount初始化为0
+r($myTest->showWorkCountTest(100, 20, 1)) && p('hasTodoCount') && e('1'); // 测试recTotal为100时
+r($myTest->showWorkCountTest(0, 50, 1)) && p('hasTodoCount') && e('1'); // 测试recPerPage为50时
+r($myTest->showWorkCountTest(0, 20, 2)) && p('hasTodoCount') && e('1'); // 测试pageID为2时

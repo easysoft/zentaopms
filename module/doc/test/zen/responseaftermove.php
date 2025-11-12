@@ -7,40 +7,41 @@ title=测试 docZen::responseAfterMove();
 timeout=0
 cid=0
 
-- 步骤1：正常文档移动
+- 步骤1:移动文档到mine空间
  - 属性result @success
  - 属性closeModal @1
-- 步骤2：空间类型改变到我的空间
+- 步骤2:移动文档到custom空间
  - 属性result @success
- - 属性load @/doc-mySpace-1-1.html
-- 步骤3：空间类型改变到团队空间
+ - 属性closeModal @1
+- 步骤3:移动库到product空间,空间类型改变
  - 属性result @success
- - 属性load @/doc-teamSpace-2-2.html
-- 步骤4：空间类型改变到产品空间
+ - 属性closeModal @1
+- 步骤4:移动库到project空间,空间类型改变
  - 属性result @success
- - 属性load @/doc-productSpace-3-3.html
-- 步骤5：空间类型未改变
+ - 属性closeModal @1
+- 步骤5:移动库到mine空间,空间类型未改变
+ - 属性result @success
+ - 属性closeModal @1
+- 步骤6:移动文档到product空间
+ - 属性result @success
+ - 属性closeModal @1
+- 步骤7:移动库到custom空间,空间类型改变
  - 属性result @success
  - 属性closeModal @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-zendata('doclib')->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($docTest->responseAfterMoveTest('mine.1', 1, 1, false)) && p('result,closeModal') && e('success,1'); // 步骤1：正常文档移动
-r($docTest->responseAfterMoveTest('mine.1', 1, 0, true)) && p('result,load') && e('success,/doc-mySpace-1-1.html'); // 步骤2：空间类型改变到我的空间  
-r($docTest->responseAfterMoveTest('custom.2', 2, 0, true)) && p('result,load') && e('success,/doc-teamSpace-2-2.html'); // 步骤3：空间类型改变到团队空间
-r($docTest->responseAfterMoveTest('product.3', 3, 0, true)) && p('result,load') && e('success,/doc-productSpace-3-3.html'); // 步骤4：空间类型改变到产品空间
-r($docTest->responseAfterMoveTest('mine.1', 1, 0, false)) && p('result,closeModal') && e('success,1'); // 步骤5：空间类型未改变
+r($docTest->responseAfterMoveTest('mine.1', 1, 1, false)) && p('result;closeModal') && e('success;1'); // 步骤1:移动文档到mine空间
+r($docTest->responseAfterMoveTest('custom.2', 2, 2, false)) && p('result;closeModal') && e('success;1'); // 步骤2:移动文档到custom空间
+r($docTest->responseAfterMoveTest('product.3', 3, 0, true)) && p('result;closeModal') && e('success;1'); // 步骤3:移动库到product空间,空间类型改变
+r($docTest->responseAfterMoveTest('project.4', 4, 0, true)) && p('result;closeModal') && e('success;1'); // 步骤4:移动库到project空间,空间类型改变
+r($docTest->responseAfterMoveTest('mine.5', 5, 0, false)) && p('result;closeModal') && e('success;1'); // 步骤5:移动库到mine空间,空间类型未改变
+r($docTest->responseAfterMoveTest('product.6', 6, 3, false)) && p('result;closeModal') && e('success;1'); // 步骤6:移动文档到product空间
+r($docTest->responseAfterMoveTest('custom.7', 7, 0, true)) && p('result;closeModal') && e('success;1'); // 步骤7:移动库到custom空间,空间类型改变

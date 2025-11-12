@@ -37,7 +37,7 @@ div
                 (
                     setID('upgradeReportsBtn'),
                     set::type('primary'),
-                    set::url('upgrade', 'afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes&skipUpdateProjectReports=yes"),
+                    set::url('upgrade', 'upgradeprojectreports', "fromVersion={$fromVersion}&processed=yes"),
                     on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingProjectReports, $lang->upgrade->next),
                     span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingProjectReports),
                     span(setClass('hidden as-finish-text'), $lang->upgrade->next),

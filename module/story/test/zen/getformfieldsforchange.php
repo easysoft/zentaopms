@@ -7,45 +7,69 @@ title=测试 storyZen::getFormFieldsForChange();
 timeout=0
 cid=0
 
-- 步骤1：正常需求变更字段获取第title条的name属性 @title
-- 步骤2：评审者字段配置第reviewer条的name属性 @reviewer
-- 步骤3：编辑器字段控件类型第spec条的control属性 @editor
-- 步骤4：标题字段默认值设置第title条的default属性 @软件需求4
-- 步骤5：不存在需求处理属性error @story_not_found
+- 步骤1：测试需求1的变更表单字段包含title第title条的name属性 @title
+- 步骤2：测试需求2的变更表单字段包含spec第spec条的name属性 @spec
+- 步骤3：测试需求3的变更表单字段包含verify第verify条的name属性 @verify
+- 步骤4：测试需求4的变更表单字段包含reviewer第reviewer条的name属性 @reviewer
+- 步骤5：测试需求5的变更表单字段包含comment第comment条的name属性 @comment
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-zendata('story')->loadYaml('story_getformfieldsforchange', false, 2)->gen(10);
-zendata('storyspec')->loadYaml('storyspec_getformfieldsforchange', false, 2)->gen(10);
+// 2. zendata数据准备
+$story = zenData('story');
+$story->id->range('1-10');
+$story->product->range('1{10}');
+$story->type->range('story{10}');
+$story->status->range('active{5},reviewing{5}');
+$story->stage->range('wait{10}');
+$story->version->range('1{10}');
+$story->color->range('#3da7f5{10}');
+$story->assignedTo->range('admin{10}');
+$story->gen(10);
 
-$productTable = zenData('product');
-$productTable->id->range('1-3');
-$productTable->name->range('测试产品1,测试产品2,测试产品3');
-$productTable->PO->range('admin{3}');
-$productTable->status->range('normal{3}');
-$productTable->gen(3);
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-10');
+$storyspec->version->range('1{10}');
+$storyspec->title->range('需求标题1,需求标题2,需求标题3,需求标题4,需求标题5{5}');
+$storyspec->spec->range('需求描述1,需求描述2,需求描述3,需求描述4,需求描述5{5}');
+$storyspec->verify->range('验收标准1,验收标准2,验收标准3,验收标准4,验收标准5{5}');
+$storyspec->gen(10);
 
-$userTable = zenData('user');
-$userTable->id->range('1-5');
-$userTable->account->range('admin,user1,user2,user3,user4');
-$userTable->realname->range('管理员,用户一,用户二,用户三,用户四');
-$userTable->deleted->range('0{5}');
-$userTable->gen(5);
+$storyreview = zenData('storyreview');
+$storyreview->story->range('1-10');
+$storyreview->version->range('1{10}');
+$storyreview->reviewer->range('user1,user2,user3,admin{7}');
+$storyreview->result->range('pass{5},pending{5}');
+$storyreview->gen(10);
 
-// 3. 用户登录（选择合适角色）
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('产品1,产品2,产品3,产品4,产品5');
+$product->type->range('normal{5}');
+$product->status->range('normal{5}');
+$product->PO->range('admin{5}');
+$product->gen(5);
+
+$user = zenData('user');
+$user->id->range('1-10');
+$user->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9');
+$user->deleted->range('0{10}');
+$user->gen(10);
+
+// 3. 用户登录
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+// 4. 创建测试实例
+$storyTest = new storyZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($storyTest->getFormFieldsForChangeTest(1)) && p('title:name') && e('title'); // 步骤1：正常需求变更字段获取
-r($storyTest->getFormFieldsForChangeTest(2)) && p('reviewer:name') && e('reviewer'); // 步骤2：评审者字段配置
-r($storyTest->getFormFieldsForChangeTest(3)) && p('spec:control') && e('editor'); // 步骤3：编辑器字段控件类型
-r($storyTest->getFormFieldsForChangeTest(4)) && p('title:default') && e('软件需求4'); // 步骤4：标题字段默认值设置
-r($storyTest->getFormFieldsForChangeTest(999)) && p('error') && e('story_not_found'); // 步骤5：不存在需求处理
+// 5. 测试步骤（必须至少5个）
+r($storyTest->getFormFieldsForChangeTest(1)) && p('title:name') && e('title'); // 步骤1：测试需求1的变更表单字段包含title
+r($storyTest->getFormFieldsForChangeTest(2)) && p('spec:name') && e('spec'); // 步骤2：测试需求2的变更表单字段包含spec
+r($storyTest->getFormFieldsForChangeTest(3)) && p('verify:name') && e('verify'); // 步骤3：测试需求3的变更表单字段包含verify
+r($storyTest->getFormFieldsForChangeTest(4)) && p('reviewer:name') && e('reviewer'); // 步骤4：测试需求4的变更表单字段包含reviewer
+r($storyTest->getFormFieldsForChangeTest(5)) && p('comment:name') && e('comment'); // 步骤5：测试需求5的变更表单字段包含comment

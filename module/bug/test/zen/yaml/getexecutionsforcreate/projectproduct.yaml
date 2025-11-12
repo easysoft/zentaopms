@@ -1,0 +1,26 @@
+---
+title: 项目产品关联测试数据
+desc: getExecutionsForCreate方法的项目产品关联测试数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

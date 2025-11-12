@@ -1,0 +1,54 @@
+---
+title: Case测试数据
+desc: 用于getLinkedObjects方法的Case测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 关联需求ID
+  range: 0,1,1,1,2,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 用例标题
+  range: Case1,Case2,Case3,Case4,Case5,Case6,Case7,Case8,Case9,Case10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: 1,2,3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0,0,0,0,0,0,0,0,0,1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

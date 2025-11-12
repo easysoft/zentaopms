@@ -1,0 +1,40 @@
+---
+title: 用户数据
+desc: 用于测试getObjectsWithPager方法的用户数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: account
+  note: 账号
+  range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9
+  prefix: ""
+  postfix: ""
+
+- field: realname
+  note: 真实姓名
+  range: 管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9
+  prefix: ""
+  postfix: ""
+
+- field: password
+  note: 密码
+  range: 123456
+  prefix: ""
+  postfix: ""
+
+- field: role
+  note: 角色
+  range: admin,dev,qa,pm
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 已删除
+  range: 0{5},1{5}
+  prefix: ""
+  postfix: ""

@@ -2500,6 +2500,7 @@ class gitlabModel extends model
      */
     public function getFileLastCommit(object $repo, string $path, string $branch = 'HEAD'): object|array|null
     {
+        $path     = str_replace(array('\\', '"', '%'), array('\\\\', '\"', '%%'), $path);
         $query    = 'query {project(fullPath: "%s") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {lastCommit {sha message author {name username} authorName authoredDate}}}}}';
         $response = $this->apiGetByGraphql($repo, $query);
         if(!isset($response->data->project->repository->tree->lastCommit)) return null;

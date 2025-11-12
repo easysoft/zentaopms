@@ -7,11 +7,11 @@ title=测试 convertModel::getZentaoObjectList();
 timeout=0
 cid=0
 
-- 步骤1：默认配置测试基本对象 >> 期望包含基础的story、task、testcase、bug字段
-- 步骤2：默认配置包含epic和requirement >> 期望包含epic和requirement字段
-- 步骤3：禁用ER功能后数量减少 >> 期望数量为5（去掉epic）
-- 步骤4：禁用UR/SR功能后数量减少 >> 期望数量为5（去掉requirement）
-- 步骤5：同时禁用两个功能后数量进一步减少 >> 期望数量为4（去掉epic和requirement）
+- 步骤1:enableER=true且URAndSR=true时,返回所有对象(含epic和requirement)属性epic @业务需求
+- 步骤2:enableER=false时,不包含epic对象属性requirement @用户需求
+- 步骤3:URAndSR=false时,不包含requirement对象属性epic @业务需求
+- 步骤4:enableER=false且URAndSR=false时,不包含epic和requirement @5
+- 步骤5:验证返回的是数组类型 @array
 
 */
 
@@ -19,12 +19,15 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. 创建测试实例（变量名与模块名一致）
+// 2. 用户登录（选择合适角色）
+su('admin');
+
+// 3. 创建测试实例（变量名与模块名一致）
 $convertTest = new convertTest();
 
-// 3. 🔴 强制要求：必须包含至少5个测试步骤
-r($convertTest->getZentaoObjectListTest()) && p('story,task,testcase,bug') && e('软件需求,任务,用例,Bug'); // 步骤1：默认配置测试基本对象
-r($convertTest->getZentaoObjectListTest()) && p('epic,requirement') && e('业务需求,用户需求'); // 步骤2：默认配置包含epic和requirement
-r($convertTest->getZentaoObjectListCountTest('noER')) && p() && e(5); // 步骤3：禁用ER功能后数量减少
-r($convertTest->getZentaoObjectListCountTest('noUR')) && p() && e(5); // 步骤4：禁用UR/SR功能后数量减少
-r($convertTest->getZentaoObjectListCountTest('noERAndUR')) && p() && e(4); // 步骤5：同时禁用两个功能后数量进一步减少
+// 4. 🔴 强制要求：必须包含至少5个测试步骤
+r($convertTest->getZentaoObjectListTest()) && p('epic') && e('业务需求'); // 步骤1:enableER=true且URAndSR=true时,返回所有对象(含epic和requirement)
+r($convertTest->getZentaoObjectListTestWithoutER()) && p('requirement') && e('用户需求'); // 步骤2:enableER=false时,不包含epic对象
+r($convertTest->getZentaoObjectListTestWithoutUR()) && p('epic') && e('业务需求'); // 步骤3:URAndSR=false时,不包含requirement对象
+r(count($convertTest->getZentaoObjectListTestWithoutERAndUR())) && p() && e('5'); // 步骤4:enableER=false且URAndSR=false时,不包含epic和requirement
+r(gettype($convertTest->getZentaoObjectListTest())) && p() && e('array'); // 步骤5:验证返回的是数组类型

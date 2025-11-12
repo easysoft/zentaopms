@@ -94,7 +94,7 @@ class Column
      * @param string $pColumn Column (e.g. A)
      * @param AutoFilter $pParent Autofilter for this column
      */
-    public function __construct($pColumn, AutoFilter $pParent = null)
+    public function __construct($pColumn, ?AutoFilter $pParent = null)
     {
         $this->columnIndex = $pColumn;
         $this->parent = $pParent;
@@ -149,7 +149,7 @@ class Column
      *
      * @return Column
      */
-    public function setParent(AutoFilter $pParent = null)
+    public function setParent(?AutoFilter $pParent = null)
     {
         $this->parent = $pParent;
 

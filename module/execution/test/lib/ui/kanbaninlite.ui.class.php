@@ -18,7 +18,7 @@ class kanbanTester extends tester
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
-        $form->wait(1);
+        $form->wait(2);
 
         /* 选择泳道分组 */
         if(!empty($groupId))

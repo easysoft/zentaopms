@@ -7,61 +7,71 @@ title=测试 blockZen::printSingleStatisticBlock();
 timeout=0
 cid=0
 
-- 步骤1：正常产品统计区块属性type @normal
-- 步骤2：指定count参数的产品统计区块属性count @10
-- 步骤3：无type参数的产品统计区块属性type @~~
-- 步骤4：无count参数的产品统计区块属性count @~~
-- 步骤5：验证product对象的创建第product条的id属性 @1
+- 执行blockTest模块的printSingleStatisticBlockTest方法，参数是$emptyBlock 属性productID @1
+- 执行blockTest模块的printSingleStatisticBlockTest方法，参数是$normalBlock 属性totalStories @0
+- 执行blockTest模块的printSingleStatisticBlockTest方法，参数是$typeBlock 属性closedStories @0
+- 执行blockTest模块的printSingleStatisticBlockTest方法，参数是$zeroCountBlock 属性unclosedStories @0
+- 执行blockTest模块的printSingleStatisticBlockTest方法，参数是$largeCountBlock 属性monthFinishCount @6
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->id->range('1-10');
-$table->name->range('产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10');
-$table->code->range('product1,product2,product3,product4,product5,product6,product7,product8,product9,product10');
-$table->type->range('normal{5},branch{3},platform{2}');
-$table->status->range('normal{8},closed{2}');
-$table->deleted->range('0{9},1{1}');
-$table->gen(10);
+// 准备产品数据
+zendata('product')->loadYaml('product', false, 2)->gen(10);
 
-// 简化数据准备，只准备基本必要数据
+// 准备度量数据
+zendata('metriclib')->loadYaml('metriclib', false, 2)->gen(100);
 
-// 3. 用户登录（选择合适角色）
+// 准备计划数据
+zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);
+
+// 准备执行数据
+zendata('project')->loadYaml('execution', false, 2)->gen(20);
+
+// 准备项目产品关联数据
+zendata('projectproduct')->loadYaml('projectproduct', false, 2)->gen(20);
+
+// 准备发布数据
+zendata('release')->loadYaml('release', false, 2)->gen(10);
+
+// 设置session中的产品ID
 su('admin');
+$_SESSION['product'] = 1;
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$block1 = new stdclass();
-$block1->params = new stdclass();
-$block1->params->type = 'normal';
-$block1->params->count = '5';
-r($blockTest->printSingleStatisticBlockTest($block1)) && p('type') && e('normal'); // 步骤1：正常产品统计区块
+// 测试场景1：空的block对象，使用默认参数
+$emptyBlock = new stdclass();
+$emptyBlock->params = new stdclass();
 
-$block2 = new stdclass();
-$block2->params = new stdclass();
-$block2->params->type = 'closed';
-$block2->params->count = '10';
-r($blockTest->printSingleStatisticBlockTest($block2)) && p('count') && e('10'); // 步骤2：指定count参数的产品统计区块
+// 测试场景2：正常block对象，type为空字符串，count为10
+$normalBlock = new stdclass();
+$normalBlock->params = new stdclass();
+$normalBlock->params->type = '';
+$normalBlock->params->count = 10;
 
-$block3 = new stdclass();
-$block3->params = new stdclass();
-$block3->params->count = '8';
-r($blockTest->printSingleStatisticBlockTest($block3)) && p('type') && e('~~'); // 步骤3：无type参数的产品统计区块
+// 测试场景3：block对象设置type为normal，count为5
+$typeBlock = new stdclass();
+$typeBlock->params = new stdclass();
+$typeBlock->params->type = 'normal';
+$typeBlock->params->count = 5;
 
-$block4 = new stdclass();
-$block4->params = new stdclass();
-$block4->params->type = 'active';
-r($blockTest->printSingleStatisticBlockTest($block4)) && p('count') && e('~~'); // 步骤4：无count参数的产品统计区块
+// 测试场景4：block对象设置count为0
+$zeroCountBlock = new stdclass();
+$zeroCountBlock->params = new stdclass();
+$zeroCountBlock->params->type = '';
+$zeroCountBlock->params->count = 0;
 
-$block5 = new stdclass();
-$block5->params = new stdclass();
-$block5->params->type = 'all';
-$block5->params->count = '15';
-r($blockTest->printSingleStatisticBlockTest($block5)) && p('product:id') && e('1'); // 步骤5：验证product对象的创建
+// 测试场景5：block对象设置较大count值
+$largeCountBlock = new stdclass();
+$largeCountBlock->params = new stdclass();
+$largeCountBlock->params->type = '';
+$largeCountBlock->params->count = 100;
+
+r($blockTest->printSingleStatisticBlockTest($emptyBlock)) && p('productID') && e('1');
+r($blockTest->printSingleStatisticBlockTest($normalBlock)) && p('totalStories') && e('0');
+r($blockTest->printSingleStatisticBlockTest($typeBlock)) && p('closedStories') && e('0');
+r($blockTest->printSingleStatisticBlockTest($zeroCountBlock)) && p('unclosedStories') && e('0');
+r($blockTest->printSingleStatisticBlockTest($largeCountBlock)) && p('monthFinishCount') && e('6');

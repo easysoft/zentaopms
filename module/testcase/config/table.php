@@ -83,10 +83,11 @@ $config->testcase->dtable->fieldList['openedDate']['type']     = 'date';
 $config->testcase->dtable->fieldList['openedDate']['group']    = 4;
 $config->testcase->dtable->fieldList['openedDate']['sortType'] = true;
 
-$config->testcase->dtable->fieldList['reviewedBy']['title']    = $lang->testcase->reviewedByAB;
-$config->testcase->dtable->fieldList['reviewedBy']['type']     = 'user';
-$config->testcase->dtable->fieldList['reviewedBy']['group']    = 4;
-$config->testcase->dtable->fieldList['reviewedBy']['sortType'] = true;
+$config->testcase->dtable->fieldList['reviewedBy']['title']     = $lang->testcase->reviewedByAB;
+$config->testcase->dtable->fieldList['reviewedBy']['type']      = 'user';
+$config->testcase->dtable->fieldList['reviewedBy']['group']     = 4;
+$config->testcase->dtable->fieldList['reviewedBy']['sortType']  = true;
+$config->testcase->dtable->fieldList['reviewedBy']['delimiter'] = true;
 
 $config->testcase->dtable->fieldList['reviewedDate']['title']    = $lang->testcase->reviewedDate;
 $config->testcase->dtable->fieldList['reviewedDate']['type']     = 'date';

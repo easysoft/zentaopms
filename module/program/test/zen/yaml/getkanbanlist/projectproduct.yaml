@@ -1,0 +1,17 @@
+---
+title: 项目产品关联测试数据
+desc: 用于getKanbanList方法的项目产品关联测试数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 21-45
+- field: product
+  note: 产品ID
+  range: 1-30:R
+- field: branch
+  note: 分支
+  range: '0'
+- field: plan
+  note: 计划
+  range: ''

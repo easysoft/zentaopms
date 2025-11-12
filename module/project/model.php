@@ -2307,6 +2307,12 @@ class projectModel extends model
      */
     public function setMenu(int $projectID): int|false
     {
+        if(!commonModel::isTutorialMode() and $projectID != 0 and !$this->checkPriv($projectID))
+        {
+            $this->projectTao->accessDenied();
+            return true;
+        }
+
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
         if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);

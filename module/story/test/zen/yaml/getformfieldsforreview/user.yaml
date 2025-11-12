@@ -1,0 +1,21 @@
+title: zt_user
+author: Claude
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-10
+  - field: account
+    range: 'admin,user1,user2,user3,user4,user5,user6,user7,user8,user9'
+  - field: realname
+    range: 1-10
+    prefix: '用户'
+  - field: role
+    range: ''
+  - field: dept
+    range: 0
+  - field: email
+    range: 1-10
+    prefix: 'user'
+    postfix: '@zentao.net'
+  - field: deleted
+    range: '0'

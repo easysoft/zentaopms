@@ -700,7 +700,7 @@ class gitlab extends control
         }
 
         $gitlab    = $this->gitlab->getByID($gitlabID);
-        $repos     = $this->loadModel('repo')->getListByCondition("serviceHost = {$gitlabID}", 'Gitlab');
+        $repos     = $this->loadModel('repo')->getListByCondition("serviceHost = '{$gitlabID}'", 'Gitlab');
         $repoPairs = array();
         foreach($repos as $repo) $repoPairs[$repo->serviceProject] = $repo->id;
 

@@ -10,7 +10,7 @@ cid=1
  - 属性title @里程碑报告
  - 属性project @1
  - 属性templateType @projectReport
- - 属性module @milestone
+ - 属性reportModule @milestone
  - 属性addedBy @system
 
 */
@@ -27,4 +27,4 @@ $projectModel = $tester->loadModel('project');
 $projectModel->createMilestoneReport(1);
 
 $report = $tester->dao->select('*')->from(TABLE_DOC)->fetch();
-r($report) && p('title,project,templateType,module,addedBy') && e('里程碑报告,1,projectReport,milestone,system'); // 测试创建里程碑报告
+r($report) && p('title,project,templateType,reportModule,addedBy') && e('里程碑报告,1,projectReport,milestone,system'); // 测试创建里程碑报告

@@ -1,0 +1,60 @@
+---
+title: zt_module 表测试数据
+desc: 用于测试 getCorrectGroup 方法的模块数据
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-20
+
+- field: root
+  note: 根模块ID
+  range: 1{5},2{5},3{5}
+
+- field: branch
+  note: 分支
+  range: 0
+
+- field: name
+  note: 模块名称
+  range: '产品{5},项目{5},测试{5},组织{5}'
+
+- field: parent
+  note: 父模块ID
+  range: 0
+
+- field: path
+  note: 路径
+  range: ',1,,2,,3,,4,,5,,6,,7,,8,,9,,10,,11,,12,,13,,14,,15,'
+
+- field: grade
+  note: 等级
+  range: 1{10},2{10}
+
+- field: order
+  note: 排序
+  range: 1-20
+
+- field: type
+  note: 类型
+  range: 'chart{10},pivot{10}'
+
+- field: from
+  note: 来源
+  range: 0
+
+- field: owner
+  note: 所有者
+  range: ''
+
+- field: collector
+  note: 收藏者
+  range: ''
+
+- field: short
+  note: 简称
+  range: ''
+
+- field: deleted
+  note: 是否删除
+  range: '0'

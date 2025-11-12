@@ -7,36 +7,55 @@ title=测试 repoZen::getCommits();
 timeout=0
 cid=0
 
-- 步骤1：正常情况返回3条记录 @3
-- 步骤2：空路径返回3条记录 @3
-- 步骤3：无效repo对象返回false @0
-- 步骤4：Git版本库返回3条记录 @3
-- 步骤5：Subversion版本库返回3条记录 @3
+- 测试步骤1:获取Git版本库的提交记录 @3
+- 测试步骤2:获取Subversion版本库的提交记录 @3
+- 测试步骤3:获取指定文件的提交记录 @1
+- 测试步骤4:传入无效的repo对象 @0
+- 测试步骤5:传入无效的type参数 @0
+- 测试步骤6:使用不同分页参数获取提交记录 @3
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('repo');
-$table->id->range('1-5');
-$table->name->range('test-repo{5}');
-$table->path->range('/var/repos/test{5}');
-$table->SCM->range('Git{3},Subversion{2}');
-$table->encoding->range('UTF-8{5}');
-$table->gen(5);
+ob_start();
+zenData('repo')->loadYaml('repo', false, 2)->gen(10);
+zenData('repohistory')->loadYaml('repohistory', false, 2)->gen(50);
+zenData('user')->gen(5);
+ob_end_clean();
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $repoTest = new repoZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($repoTest->getCommitsTest((object)array('id' => 1, 'SCM' => 'Git'), '/src', 'master', 'branch', null, 1))) && p() && e('3'); // 步骤1：正常情况返回3条记录
-r(count($repoTest->getCommitsTest((object)array('id' => 2, 'SCM' => 'Git'), '', 'develop', 'branch', null, 2))) && p() && e('3'); // 步骤2：空路径返回3条记录
-r($repoTest->getCommitsTest(null, '/src', 'master', 'branch', null, 1)) && p() && e('0'); // 步骤3：无效repo对象返回false
-r(count($repoTest->getCommitsTest((object)array('id' => 3, 'SCM' => 'Git'), '/lib', 'abcdef1234567890', 'commit', null, 3))) && p() && e('3'); // 步骤4：Git版本库返回3条记录
-r(count($repoTest->getCommitsTest((object)array('id' => 4, 'SCM' => 'Subversion'), '/trunk', '12345', 'commit', null, 4))) && p() && e('3'); // 步骤5：Subversion版本库返回3条记录
+$pager1 = new stdClass();
+$pager1->recPerPage = 20;
+$pager1->pageID = 1;
+
+$pager2 = new stdClass();
+$pager2->recPerPage = 10;
+$pager2->pageID = 1;
+
+global $tester;
+$repoModel = $tester->loadModel('repo');
+
+$repo1 = new stdClass();
+$repo1->id = 1;
+$repo1->SCM = 'Git';
+$repo1->name = 'test-repo';
+
+$repo2 = new stdClass();
+$repo2->id = 2;
+$repo2->SCM = 'Subversion';
+$repo2->name = 'svn-repo';
+
+$invalidRepo = new stdClass();
+$invalidRepo->id = 0;
+
+r(count($repoTest->getCommitsTest($repo1, '', 'HEAD', 'dir', $pager1, 1))) && p() && e('3'); // 测试步骤1:获取Git版本库的提交记录
+r(count($repoTest->getCommitsTest($repo2, '', 'HEAD', 'dir', $pager1, 1))) && p() && e('3'); // 测试步骤2:获取Subversion版本库的提交记录
+r(count($repoTest->getCommitsTest($repo1, '/src/index.php', 'HEAD', 'file', $pager1, 1))) && p() && e('1'); // 测试步骤3:获取指定文件的提交记录
+r(count($repoTest->getCommitsTest($invalidRepo, '', 'HEAD', 'dir', $pager1, 1))) && p() && e('0'); // 测试步骤4:传入无效的repo对象
+r(count($repoTest->getCommitsTest($repo1, '', 'HEAD', 'invalid', $pager1, 1))) && p() && e('0'); // 测试步骤5:传入无效的type参数
+r(count($repoTest->getCommitsTest($repo1, '', 'HEAD', 'dir', $pager2, 1))) && p() && e('3'); // 测试步骤6:使用不同分页参数获取提交记录

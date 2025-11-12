@@ -81,7 +81,10 @@ class render
 
     public function renderList(): array
     {
-        $list = array();
+        global $app;
+
+        $isUserLogon = isset($app->user) && $app->user->account != 'guest';
+        $list        = array();
 
         foreach($this->selectors as $selector)
         {
@@ -89,9 +92,10 @@ class render
             if(isset($selector->command))
             {
                 $item = new stdClass();
-                $item->name = $name;
-                $item->type = 'data';
-                $item->data = data($selector->command);
+                $item->name     = $name;
+                $item->type     = 'data';
+                $item->selector = $selector->selector;
+                $item->data     = (!$isUserLogon || $selector->disabled) ? null : data($selector->command);
                 $list[] = $item;
             }
             else
@@ -160,14 +164,18 @@ class render
      */
     public function renderJson(): object
     {
-        $output = new stdClass();
+        global $app;
+
+        $isUserLogon = isset($app->user) && $app->user->account != 'guest';
+        $output      = new stdClass();
+
         $output->data = array();
         foreach($this->selectors as $selector)
         {
             $name = $selector->name;
             if(isset($selector->command))
             {
-                $output->data[$name] = data($selector->command);
+                $output->data[$name] = (!$isUserLogon || $selector->disabled) ? null : data($selector->command);
             }
             else
             {
@@ -194,9 +202,12 @@ class render
     {
         if(!$selectors) return;
 
+        global $config;
+
         $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
+            $selector->disabled = !empty($selector->command) && !in_array($selector->command, $config->zin->allowCommands);
             $this->selectors[$selector->name] = $selector;
         }
     }

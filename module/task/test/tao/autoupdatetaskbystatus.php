@@ -64,7 +64,9 @@ su('user4');
 
 $task = new taskTest();
 
-zenData('task')->gen(10);
+$taskTable = zenData('task');
+$taskTable->story->range(0);
+$taskTable->gen(10);
 
 $parentTask = new stdclass();
 $parentTask->id         = 1;

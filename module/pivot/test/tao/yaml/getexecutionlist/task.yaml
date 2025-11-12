@@ -1,0 +1,38 @@
+title: task表测试数据 for getExecutionList
+desc: 用于测试获取执行列表方法的task表数据
+version: 1.0
+fields:
+  - field: id
+    range: 1-20
+  - field: project
+    range: 1{4},2{4},3{4},4{4},5{4}
+  - field: execution
+    range: 6{4},7{4},8{4},9{4},10{4}
+  - field: parent
+    range: 0{18},-1{2}
+  - field: name
+    range: 任务1,任务2,任务3,任务4,任务5,任务6,任务7,任务8,任务9,任务10,任务11,任务12,任务13,任务14,任务15,任务16,任务17,任务18,任务19,任务20
+  - field: type
+    range: devel{10},test{6},design{4}
+  - field: status
+    range: wait{4},doing{6},done{6},pause{2},closed{2}
+  - field: pri
+    range: 1{5},2{7},3{6},4{2}
+  - field: estimate
+    range: 1{4},2{4},4{4},8{4},16{4}
+  - field: consumed
+    range: 0.5{4},1{4},2{4},4{4},8{4}
+  - field: left
+    range: 0{6},1{4},2{4},4{4},8{2}
+  - field: deadline
+    range: "2024-06-30"{5},"2024-07-31"{5},"2024-08-31"{5},"2024-09-30"{5}
+  - field: assignedTo
+    range: admin{6},user1{5},user2{4},user3{3},user4{2}
+  - field: assignedDate
+    range: "2024-01-01 00:00:00"
+  - field: openedBy
+    range: admin{20}
+  - field: openedDate
+    range: "2024-01-01 00:00:00"
+  - field: deleted
+    range: "0"

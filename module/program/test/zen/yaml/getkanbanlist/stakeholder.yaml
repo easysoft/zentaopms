@@ -1,0 +1,48 @@
+---
+title: 干系人测试数据
+desc: 用于getKanbanList方法的干系人测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+- field: objectID
+  note: 对象ID
+  range: 1-20:R
+- field: objectType
+  note: 对象类型
+  range: '[program]{30},[project]{20}'
+- field: user
+  note: 用户
+  range: admin{20},user1{15},user2{15}
+- field: name
+  note: 名称
+  range: ''
+- field: type
+  note: 类型
+  range: inside
+- field: key
+  note: 关键
+  range: no
+- field: from
+  note: 来源
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: '(-3M)-(-1M):15D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: editedBy
+  note: 编辑者
+  range: '[]'
+- field: editedDate
+  note: 编辑时间
+  range: '[]'
+- field: deleted
+  note: 已删除
+  range: '0'

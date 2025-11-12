@@ -1068,6 +1068,9 @@ class projectZen extends project
             ->setIF($rawdata->begin == '0000-00-00', 'begin', '')
             ->setIF($rawdata->end   == '0000-00-00', 'end', '')
             ->stripTags($editorIdList, $this->config->allowedTags)
+            ->add('closedBy', '')
+            ->add('closedDate', null)
+            ->add('closedReason', '')
             ->get();
     }
 

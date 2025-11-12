@@ -1,0 +1,66 @@
+---
+title: module表测试数据 for getBuiltinMenus测试
+desc: 用于测试pivot模块zen层getBuiltinMenus方法的module数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-10
+  loop: 0
+
+- field: root
+  note: 根节点ID
+  range: 1-5
+  loop: 0
+
+- field: branch
+  note: 分支ID
+  range: 0
+  loop: 0
+
+- field: type
+  note: 类型
+  range: pivot
+  loop: 0
+
+- field: parent
+  note: 父节点ID
+  range: 0
+  loop: 0
+
+- field: path
+  note: 路径
+  range: ',1,',',2,',',3,',',4,',',5,'
+  loop: 0
+
+- field: grade
+  note: 层级
+  range: 1
+  loop: 0
+
+- field: name
+  note: 名称
+  range: product,project,test,staff,other
+  loop: 0
+
+- field: collector
+  note: 收集器
+  range: product,project,test,staff,empty
+  loop: 0
+
+- field: order
+  note: 排序
+  range: 10-100:10
+  loop: 0
+
+- field: owner
+  note: 所有者
+  range: admin
+  loop: 0
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  loop: 0

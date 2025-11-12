@@ -7,92 +7,90 @@ title=测试 docZen::assignVarsForView();
 timeout=0
 cid=0
 
-- 步骤1：execution类型且app->tab为project
- - 属性objectType @project
- - 属性objectID @2
-- 步骤2：product类型正常情况
- - 属性docID @2
+- 执行docTest模块的assignVarsForViewTest方法，参数是1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown
+ - 属性docID @1
  - 属性type @product
-- 步骤3：docID为0的边界值情况属性docID @0
-- 步骤4：version为0的边界值情况属性version @0
-- 步骤5：libs为空数组的边界值情况属性objectType @mine
+- 执行docTest模块的assignVarsForViewTest方法，参数是2, 1, 'project', 2, 2, $doc2, $object2, 'project', $libs, $objectDropdown
+ - 属性objectID @2
+ - 属性libID @2
+- 执行docTest模块的assignVarsForViewTest方法，参数是1, 2, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown
+ - 属性version @2
+ - 属性objectType @product
+- 执行docTest模块的assignVarsForViewTest方法，参数是2, 0, 'project', 2, 2, $doc2, $object2, 'project', $libs, $objectDropdown
+ - 属性spaceType @project
+ - 属性moduleID @3
+- 执行docTest模块的assignVarsForViewTest方法，参数是1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown
+ - 属性productID @1
+ - 属性projectID @1
+ - 属性executionID @0
+- 执行docTest模块的assignVarsForViewTest方法，参数是2, 0, 'execution', 2, 2, $doc2, $object2, 'execution', $libs, $objectDropdown
+ - 属性objectType @execution
+ - 属性objectID @2
+- 执行docTest模块的assignVarsForViewTest方法，参数是1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown
+ - 属性hasDoc @1
+ - 属性hasObject @1
+ - 属性hasLibs @1
+ - 属性hasUsers @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/doczen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$doc = zenData('doc');
-$doc->id->range('1-10');
-$doc->lib->range('1-3');
-$doc->title->range('测试文档1,测试文档2,测试文档3');
-$doc->type->range('html{5},attachment{3},word{2}');
-$doc->status->range('normal{8},draft{2}');
-$doc->product->range('1-5');
-$doc->project->range('1-3');
-$doc->execution->range('1-3');
-$doc->module->range('0{5},1{3},2{2}');
-$doc->gen(10);
+zendata('doc')->gen(10);
+zendata('doclib')->gen(10);
+zendata('user')->gen(10);
+zendata('product')->gen(5);
+zendata('project')->gen(5);
+zendata('action')->gen(20);
 
-$doclib = zenData('doclib');
-$doclib->id->range('1-5');
-$doclib->name->range('测试文档库1,测试文档库2,API文档库,产品文档库,项目文档库');
-$doclib->type->range('mine{1},custom{1},api{1},product{1},project{1}');
-$doclib->product->range('0{2},1{2},2{1}');
-$doclib->project->range('0{3},1{1},2{1}');
-$doclib->execution->range('0{4},1{1}');
-$doclib->gen(5);
-
-$user = zenData('user');
-$user->id->range('1-10');
-$user->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
-$user->realname->range('管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9');
-$user->deleted->range('0{9},1{1}');
-$user->gen(10);
-
-$project = zenData('project');
-$project->id->range('1-5');
-$project->name->range('项目1,项目2,项目3,项目4,项目5');
-$project->type->range('project');
-$project->status->range('wait{2},doing{2},done{1}');
-$project->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 模拟$this->app->tab设置
-global $app;
-$app->tab = 'project';
+global $tester;
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-// 创建测试用的对象数据
-$testDoc = new stdClass();
-$testDoc->id = 1;
-$testDoc->title = '测试文档';
-$testDoc->module = 1;
-$testDoc->product = 1;
-$testDoc->project = 1;
-$testDoc->execution = 1;
+$doc1 = new stdclass();
+$doc1->id = 1;
+$doc1->title = 'Test Document 1';
+$doc1->module = 0;
+$doc1->product = 1;
+$doc1->project = 1;
+$doc1->execution = 0;
 
-$testObject = new stdClass();
-$testObject->id = 1;
-$testObject->project = 2;
-$testObject->name = '测试执行';
+$doc2 = new stdclass();
+$doc2->id = 2;
+$doc2->title = 'Test Document 2';
+$doc2->module = 3;
+$doc2->product = 2;
+$doc2->project = 2;
+$doc2->execution = 1;
 
-$testLibs = array(
-    1 => (object)array('id' => 1, 'name' => '测试库1', 'type' => 'project'),
-    2 => (object)array('id' => 2, 'name' => '测试库2', 'type' => 'product')
-);
+$object1 = new stdclass();
+$object1->id = 1;
+$object1->project = 0;
 
-$testObjectDropdown = array(1 => '对象1', 2 => '对象2');
+$object2 = new stdclass();
+$object2->id = 2;
+$object2->project = 1;
 
-r($docTest->assignVarsForViewTest(1, 1, 'execution', 1, 1, $testDoc, $testObject, 'execution', $testLibs, $testObjectDropdown)) && p('objectType,objectID') && e('project,2'); // 步骤1：execution类型且app->tab为project
-r($docTest->assignVarsForViewTest(2, 1, 'product', 2, 2, $testDoc, $testObject, 'product', $testLibs, $testObjectDropdown)) && p('docID,type') && e('2,product'); // 步骤2：product类型正常情况
-r($docTest->assignVarsForViewTest(0, 1, 'project', 1, 1, $testDoc, $testObject, 'project', $testLibs, $testObjectDropdown)) && p('docID') && e('0'); // 步骤3：docID为0的边界值情况
-r($docTest->assignVarsForViewTest(1, 0, 'custom', 1, 1, $testDoc, $testObject, 'custom', $testLibs, $testObjectDropdown)) && p('version') && e('0'); // 步骤4：version为0的边界值情况
-r($docTest->assignVarsForViewTest(1, 1, 'mine', 1, 1, $testDoc, $testObject, 'mine', array(), $testObjectDropdown)) && p('objectType') && e('mine'); // 步骤5：libs为空数组的边界值情况
+$lib1 = new stdclass();
+$lib1->id = 1;
+$lib1->name = 'testlib';
+$lib1->type = 'product';
+
+$lib2 = new stdclass();
+$lib2->id = 2;
+$lib2->name = 'projectlib';
+$lib2->type = 'project';
+
+$libs = array(1 => $lib1, 2 => $lib2);
+$objectDropdown = array(1 => 'Product 1', 2 => 'Product 2');
+
+r($docTest->assignVarsForViewTest(1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown)) && p('docID,type') && e('1,product');
+r($docTest->assignVarsForViewTest(2, 1, 'project', 2, 2, $doc2, $object2, 'project', $libs, $objectDropdown)) && p('objectID,libID') && e('2,2');
+r($docTest->assignVarsForViewTest(1, 2, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown)) && p('version,objectType') && e('2,product');
+r($docTest->assignVarsForViewTest(2, 0, 'project', 2, 2, $doc2, $object2, 'project', $libs, $objectDropdown)) && p('spaceType,moduleID') && e('project,3');
+r($docTest->assignVarsForViewTest(1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown)) && p('productID,projectID,executionID') && e('1,1,0');
+r($docTest->assignVarsForViewTest(2, 0, 'execution', 2, 2, $doc2, $object2, 'execution', $libs, $objectDropdown)) && p('objectType,objectID') && e('execution,2');
+r($docTest->assignVarsForViewTest(1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown)) && p('hasDoc,hasObject,hasLibs,hasUsers') && e('1,1,1,1');

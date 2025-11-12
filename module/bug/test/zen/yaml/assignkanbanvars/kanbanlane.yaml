@@ -1,0 +1,84 @@
+---
+title: kanbanlane表数据定义
+desc: 为assignKanbanVars方法测试准备kanban泳道数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 泳道ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 泳道类型
+  range: "bug{30}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: region
+  note: 所属区域ID
+  range: 1-20{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: group
+  note: 分组ID
+  range: 0,1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: groupby
+  note: 分组方式
+  range: "default{20},story{5},module{5}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 泳道名称
+  range: "Lane{1-30}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: color
+  note: 颜色
+  range: "#FF5722,#4CAF50,#2196F3,#9C27B0,#FF9800"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastEditedTime
+  note: 最后编辑时间
+  range: "2023-01-01 00:00:00-2023-12-31 23:59:59"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 删除状态
+  range: "0{29},1{1}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

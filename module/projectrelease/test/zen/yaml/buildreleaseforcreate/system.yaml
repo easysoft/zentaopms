@@ -1,0 +1,48 @@
+---
+title: 系统数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 系统ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 系统名称
+  range: 普通系统1,普通系统2,集成系统1,集成系统2,普通系统3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: integrated
+  note: 是否集成
+  range: '0,0,1,1,0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: active
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 已删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

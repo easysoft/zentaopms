@@ -1,0 +1,26 @@
+---
+title: testresult数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: run
+  note: 执行ID
+  range: 1{3},2{3},3{4}
+- field: case
+  note: 用例ID
+  range: 1{3},2{3},3{4}
+- field: version
+  note: 用例版本
+  range: 1{10}
+- field: caseResult
+  note: 测试结果
+  range: pass{5},fail{5}
+- field: stepResults
+  note: 步骤结果
+  range: a:0:{}{10}
