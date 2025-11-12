@@ -27,10 +27,20 @@ cid=0
  - 属性productMembers @2
  - 属性projectMembers @2
  - 属性executionMembers @0
-- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是$bugs5, $productIdList5, $branchTagOption5, 'qa'
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是$bugs5, $productIdList5, $branchTagOption5, 'project'
  - 属性users @20
- - 属性productMembers @2
+ - 属性productMembers @3
  - 属性projectMembers @2
+ - 属性executionMembers @0
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是$bugs6, $productIdList6, $branchTagOption6, 'qa'
+ - 属性users @20
+ - 属性productMembers @3
+ - 属性projectMembers @2
+ - 属性executionMembers @0
+- 执行bugTest模块的assignUsersForBatchEditTest方法，参数是$bugs7, $productIdList7, $branchTagOption7, 'execution'
+ - 属性users @20
+ - 属性productMembers @1
+ - 属性projectMembers @0
  - 属性executionMembers @0
 
 */
@@ -39,12 +49,12 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $bug = zenData('bug');
-$bug->id->range('1-10');
+$bug->id->range('1-15');
 $bug->product->range('1-5');
 $bug->project->range('11-15');
 $bug->execution->range('101-105');
 $bug->branch->range('0');
-$bug->gen(10);
+$bug->gen(15);
 
 $user = zenData('user');
 $user->id->range('1-20');
@@ -59,19 +69,19 @@ $product->name->range('产品1,产品2,产品3,产品4,产品5');
 $product->gen(5);
 
 $project = zenData('project');
-$project->id->range('11-15,101-105');
-$project->name->range('项目1,项目2,项目3,项目4,项目5,执行1,执行2,执行3,执行4,执行5');
-$project->type->range('project{5},stage{5}');
-$project->parent->range('0{5},11,12,13,14,15');
-$project->multiple->range('1');
-$project->gen(10);
+$project->id->range('11-16,101-106');
+$project->name->range('项目1,项目2,项目3,项目4,项目5,项目6,执行1,执行2,执行3,执行4,执行5,执行6');
+$project->type->range('project{6},stage{6}');
+$project->parent->range('0{6},11,12,13,14,15,16');
+$project->multiple->range('1{5},0,1{6}');
+$project->gen(12);
 
 $team = zenData('team');
-$team->id->range('1-20');
-$team->root->range('11-15{4},101-105{4}');
-$team->type->range('project{10},execution{10}');
-$team->account->range('user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12,user13,user14,user15,user16,user17,user18,user19,user20');
-$team->gen(20);
+$team->id->range('1-30');
+$team->root->range('11-16{5},101-106{5}');
+$team->type->range('project{15},execution{15}');
+$team->account->range('user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12,user13,user14,user15,user16,user17,user18,user19,user20{2}');
+$team->gen(30);
 
 su('admin');
 
@@ -104,12 +114,28 @@ $bugs4 = array(
 $productIdList4 = array(1 => 1, 2 => 2);
 $branchTagOption4 = array(1 => array(0 => array('name' => 'trunk')), 2 => array(0 => array('name' => 'trunk')));
 
-$bugs5 = array();
-$productIdList5 = array();
-$branchTagOption5 = array();
+$bugs5 = array(
+    (object)array('id' => 8, 'project' => 11, 'product' => 1, 'execution' => 101, 'branch' => 0),
+    (object)array('id' => 9, 'project' => 13, 'product' => 3, 'execution' => 103, 'branch' => 0),
+    (object)array('id' => 10, 'project' => 14, 'product' => 4, 'execution' => 104, 'branch' => 0)
+);
+$productIdList5 = array(1 => 1, 3 => 3, 4 => 4);
+$branchTagOption5 = array(1 => array(0 => array('name' => 'trunk')), 3 => array(0 => array('name' => 'trunk')), 4 => array(0 => array('name' => 'trunk')));
+
+$bugs6 = array();
+$productIdList6 = array();
+$branchTagOption6 = array();
+
+$bugs7 = array(
+    (object)array('id' => 11, 'project' => 16, 'product' => 5, 'execution' => 106, 'branch' => 0)
+);
+$productIdList7 = array(5 => 5);
+$branchTagOption7 = array(5 => array(0 => array('name' => 'trunk')));
 
 r($bugTest->assignUsersForBatchEditTest($bugs1, $productIdList1, $branchTagOption1, 'execution')) && p('users,productMembers,projectMembers,executionMembers') && e('20,1,1,0');
 r($bugTest->assignUsersForBatchEditTest($bugs2, $productIdList2, $branchTagOption2, 'project')) && p('users,productMembers,projectMembers,executionMembers') && e('20,1,1,0');
 r($bugTest->assignUsersForBatchEditTest($bugs3, $productIdList3, $branchTagOption3, 'qa')) && p('users,productMembers,projectMembers,executionMembers') && e('20,1,1,0');
 r($bugTest->assignUsersForBatchEditTest($bugs4, $productIdList4, $branchTagOption4, 'execution')) && p('users,productMembers,projectMembers,executionMembers') && e('20,2,2,0');
-r($bugTest->assignUsersForBatchEditTest($bugs5, $productIdList5, $branchTagOption5, 'qa')) && p('users,productMembers,projectMembers,executionMembers') && e('20,2,2,0');
+r($bugTest->assignUsersForBatchEditTest($bugs5, $productIdList5, $branchTagOption5, 'project')) && p('users,productMembers,projectMembers,executionMembers') && e('20,3,2,0');
+r($bugTest->assignUsersForBatchEditTest($bugs6, $productIdList6, $branchTagOption6, 'qa')) && p('users,productMembers,projectMembers,executionMembers') && e('20,3,2,0');
+r($bugTest->assignUsersForBatchEditTest($bugs7, $productIdList7, $branchTagOption7, 'execution')) && p('users,productMembers,projectMembers,executionMembers') && e('20,1,0,0');

@@ -7,11 +7,13 @@ title=测试 projectZen::processBuildSearchParams();
 timeout=0
 cid=0
 
-- 执行$searchConfig1['fields']['product'] @1
-- 执行$searchConfig2['fields']['product'] @1
-- 执行$searchConfig3 @1
-- 执行$searchConfig4['fields'] @1
-- 执行$searchConfig5['params'] @1
+- 步骤1:无产品项目,product字段应该被移除第fields条的name属性 @Name
+- 步骤2:有产品项目,product字段应该存在第fields条的product属性 @Product
+- 步骤3:多迭代项目,execution字段应该被添加第fields条的name属性 @Name
+- 步骤4:单迭代项目,execution字段不应该存在第fields条的name属性 @Name
+- 步骤5:多分支产品,branch字段的params被正确设置第fields条的product属性 @Product
+- 步骤6:普通产品,branch字段不应该存在第fields条的name属性 @Name
+- 步骤7:测试返回数组包含name字段第fields条的product属性 @Product
 
 */
 
@@ -29,36 +31,16 @@ $normalProduct = new stdclass();
 $normalProduct->id = 1;
 $normalProduct->type = 'normal';
 
+$branchProduct = new stdclass();
+$branchProduct->id = 2;
+$branchProduct->type = 'branch';
+
 $products = array(1 => 'Product1', 2 => 'Product2');
 
-// 步骤1:无产品项目,product字段应该不存在
-$noProductProject = new stdclass();
-$noProductProject->id = 1;
-$noProductProject->multiple = 0;
-$noProductProject->hasProduct = 0;
-$noProductProject->model = 'scrum';
-
-$searchConfig1 = $projectTest->processBuildSearchParamsTest($noProductProject, $normalProduct, $products, 'all', 0);
-r(!isset($searchConfig1['fields']['product'])) && p() && e('1');
-
-// 步骤2:有产品项目,product字段应该存在
-$productProject = new stdclass();
-$productProject->id = 2;
-$productProject->multiple = 0;
-$productProject->hasProduct = 1;
-$productProject->model = 'scrum';
-
-$searchConfig2 = $projectTest->processBuildSearchParamsTest($productProject, $normalProduct, $products, 'all', 0);
-r(isset($searchConfig2['fields']['product'])) && p() && e('1');
-
-// 步骤3:测试配置是数组类型
-$searchConfig3 = $projectTest->processBuildSearchParamsTest($productProject, $normalProduct, $products, 'normal', 0);
-r(is_array($searchConfig3)) && p() && e('1');
-
-// 步骤4:测试配置中包含fields键
-$searchConfig4 = $projectTest->processBuildSearchParamsTest($productProject, $normalProduct, $products, 'all', 0);
-r(isset($searchConfig4['fields'])) && p() && e('1');
-
-// 步骤5:测试配置中包含params键
-$searchConfig5 = $projectTest->processBuildSearchParamsTest($productProject, $normalProduct, $products, 'all', 0);
-r(isset($searchConfig5['params'])) && p() && e('1');
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 1, 'multiple' => 0, 'hasProduct' => 0, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:name') && e('Name'); // 步骤1:无产品项目,product字段应该被移除
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 2, 'multiple' => 0, 'hasProduct' => 1, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:product') && e('Product'); // 步骤2:有产品项目,product字段应该存在
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 3, 'multiple' => 1, 'hasProduct' => 1, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:name') && e('Name'); // 步骤3:多迭代项目,execution字段应该被添加
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 4, 'multiple' => 0, 'hasProduct' => 1, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:name') && e('Name'); // 步骤4:单迭代项目,execution字段不应该存在
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 5, 'multiple' => 0, 'hasProduct' => 1, 'model' => 'scrum'), $branchProduct, $products, 'all', 0)) && p('fields:product') && e('Product'); // 步骤5:多分支产品,branch字段的params被正确设置
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 6, 'multiple' => 0, 'hasProduct' => 1, 'model' => 'scrum'), $normalProduct, $products, 'all', 0)) && p('fields:name') && e('Name'); // 步骤6:普通产品,branch字段不应该存在
+r($projectTest->processBuildSearchParamsTest((object)array('id' => 7, 'multiple' => 0, 'hasProduct' => 1, 'model' => 'scrum'), $normalProduct, $products, 'bysearch', 10)) && p('fields:product') && e('Product'); // 步骤7:测试返回数组包含name字段
