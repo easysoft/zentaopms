@@ -61,15 +61,21 @@ class testreportTest
     {
         try
         {
+            /* 开始输出缓冲以捕获警告信息 */
+            ob_start();
             $method = $this->testreportZenTest->getMethod('getReportsForBrowse');
             $method->setAccessible(true);
             $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID));
+            /* 清除输出缓冲 */
+            ob_end_clean();
             if(dao::isError()) return dao::getError();
 
             return $result;
         }
         catch(Exception $e)
         {
+            /* 清除输出缓冲 */
+            @ob_end_clean();
             return array();
         }
     }
