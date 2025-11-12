@@ -2494,7 +2494,10 @@ class testcaseZenTest
             $method = $reflection->getMethod('parseUploadFile');
             $method->setAccessible(true);
 
+            // 开启输出缓冲以捕获错误输出
+            ob_start();
             $returnValue = $method->invoke($zenInstance, $productID, $branch);
+            ob_end_clean();
 
             // 恢复原始 $_FILES 数据
             $_FILES = $originalFiles;
@@ -2503,10 +2506,14 @@ class testcaseZenTest
 
             return $returnValue;
         } catch (Exception $e) {
+            // 清理输出缓冲
+            if(ob_get_level() > 0) ob_end_clean();
             // 恢复原始 $_FILES 数据
             $_FILES = $originalFiles;
             return 'error: ' . $e->getMessage();
         } catch (Error $e) {
+            // 清理输出缓冲
+            if(ob_get_level() > 0) ob_end_clean();
             // 恢复原始 $_FILES 数据
             $_FILES = $originalFiles;
             return 'error: ' . $e->getMessage();
