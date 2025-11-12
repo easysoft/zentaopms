@@ -2831,4 +2831,35 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test assignProductAndBranchForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function assignProductAndBranchForBrowseTest(int $productID, string $branch = '0', int $projectID = 0): array
+    {
+        global $tester;
+
+        // 调用被测方法并获取 view 属性
+        callZenMethod('testcase', 'assignProductAndBranchForBrowse', [$productID, $branch, $projectID]);
+        $view = callZenMethod('testcase', 'assignProductAndBranchForBrowse', [$productID, $branch, $projectID], 'view');
+
+        // 获取视图数据
+        $result = array();
+        $result['productID'] = $view->productID ?? 0;
+        $result['productName'] = $view->productName ?? '';
+        $result['productType'] = (isset($view->product) && is_object($view->product)) ? $view->product->type : '';
+        $result['branch'] = $view->branch ?? 0;
+        $result['branchOptionCount'] = isset($view->branchOption) ? count($view->branchOption) : 0;
+        $result['branchTagOptionCount'] = isset($view->branchTagOption) ? count($view->branchTagOption) : 0;
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }
