@@ -759,6 +759,53 @@ class testcaseZenTest
     }
 
     /**
+     * Test buildCasesForBathcCreate method.
+     *
+     * @param  int    $productID  产品ID
+     * @param  string $tab        当前标签页
+     * @access public
+     * @return array
+     */
+    public function buildCasesForBathcCreateTest(int $productID = 1, string $tab = 'qa')
+    {
+        global $tester;
+
+        try {
+            // 初始化必要的配置
+            if(!isset($tester->config->testcase)) $tester->config->testcase = new stdClass();
+            if(!isset($tester->config->testcase->form)) $tester->config->testcase->form = new stdClass();
+            if(!isset($tester->config->testcase->form->batchCreate)) $tester->config->testcase->form->batchCreate = array();
+
+            // 设置app的tab属性
+            $originalTab = $tester->app->tab ?? '';
+            $tester->app->tab = $tab;
+
+            // 如果是项目模式，设置session数据
+            if($tab == 'project') {
+                if(!isset($tester->session)) $tester->session = new stdClass();
+                $tester->session->project = 1;
+            }
+
+            // 调用zen方法
+            $result = callZenMethod('testcase', 'buildCasesForBathcCreate', [$productID]);
+
+            // 恢复原始tab状态
+            $tester->app->tab = $originalTab;
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } catch (Exception $e) {
+            // 恢复原始tab状态
+            if(isset($originalTab)) $tester->app->tab = $originalTab;
+            return $e->getMessage();
+        } catch (Error $e) {
+            // 恢复原始tab状态
+            if(isset($originalTab)) $tester->app->tab = $originalTab;
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Test buildCasesForShowImport method.
      *
      * @param  int    $productID  产品ID
