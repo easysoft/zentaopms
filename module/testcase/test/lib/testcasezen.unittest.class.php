@@ -3169,4 +3169,27 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test getBrowseBranch method.
+     *
+     * @param  string $branch
+     * @param  string $preBranch
+     * @access public
+     * @return string
+     */
+    public function getBrowseBranchTest(string $branch, string $preBranch = ''): string
+    {
+        global $tester;
+
+        // 清除之前的 preBranch 值
+        $tester->cookie->preBranch = '';
+
+        // 模拟 cookie 中的 preBranch 值
+        if($preBranch !== '') $tester->cookie->preBranch = $preBranch;
+
+        $result = callZenMethod('testcase', 'getBrowseBranch', [$branch]);
+
+        return $result;
+    }
+
 }
