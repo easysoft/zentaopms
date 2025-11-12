@@ -3210,4 +3210,20 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test getImportField method.
+     *
+     * @param  string $field
+     * @param  string $cellValue
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function getImportFieldTest(string $field, string $cellValue, object $case): object
+    {
+        $result = callZenMethod('testcase', 'getImportField', [$field, $cellValue, $case]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
 }
