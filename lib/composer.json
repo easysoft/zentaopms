@@ -38,6 +38,9 @@
     },
     "extra": {
         "patches": {
+            "box/spout": {
+                "Add return type declarations to Iterator methods": "patches/box-spout-php8-compatibility.patch"
+            },
             "erusev/parsedown": {
                 "Add namespace to Parsedown class": "patches/parsedown-add-namespace.patch"
             },

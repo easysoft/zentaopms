@@ -34,6 +34,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.1.x-dev"
+                },
+                "patches_applied": {
+                    "Add return type declarations to Iterator methods": "patches/box-spout-php8-compatibility.patch"
                 }
             },
             "installation-source": "dist",
