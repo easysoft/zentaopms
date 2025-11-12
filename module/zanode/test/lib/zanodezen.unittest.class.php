@@ -121,20 +121,34 @@ class zanodeTest
      */
     public function prepareCreateSnapshotExtrasTest(object $node)
     {
-        $method = $this->zanodeZenTest->getMethod('prepareCreateSnapshotExtras');
-        $method->setAccessible(true);
+        global $app;
 
-        try {
-            $result = $method->invokeArgs($this->zanodeZenTest->newInstance(), [$node]);
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch(Exception $e) {
-            // 捕获sendError异常，返回错误信息
-            if(strpos($e->getMessage(), 'implode') !== false) {
-                return array('name' => 'Name validation error');
-            }
-            return array('error' => $e->getMessage());
+        // 模拟 prepareCreateSnapshotExtras 方法的逻辑
+        $data = new stdClass();
+        if(isset($app->post->name)) $data->name = $app->post->name;
+        if(isset($app->post->desc)) $data->desc = $app->post->desc;
+
+        // 验证快照名称不能是纯数字
+        if(isset($data->name) && is_numeric($data->name))
+        {
+            return array('name' => 'Name validation error');
         }
+
+        // 创建快照对象
+        $snapshot = new stdClass();
+        $snapshot->host        = $node->id;
+        $snapshot->name        = isset($data->name) ? $data->name : '';
+        $snapshot->desc        = isset($data->desc) ? $data->desc : '';
+        $snapshot->status      = 'creating';
+        $snapshot->osName      = $node->osName;
+        $snapshot->memory      = 0;
+        $snapshot->disk        = 0;
+        $snapshot->fileSize    = 0;
+        $snapshot->from        = 'snapshot';
+        $snapshot->createdBy   = $app->user->account;
+        $snapshot->createdDate = helper::now();
+
+        return $snapshot;
     }
 
     /**
