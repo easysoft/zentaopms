@@ -2862,4 +2862,52 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test assignShowImportVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $caseData
+     * @param  int    $stepVars
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @access public
+     * @return array|string
+     */
+    public function assignShowImportVarsTest(int $productID, string $branch, array $caseData, int $stepVars = 0, int $pagerID = 1, int $maxImport = 0): array|string
+    {
+        global $tester;
+
+        // 检查空数据情况
+        if(empty($caseData)) return 'noData';
+
+        // 调用被测方法
+        try {
+            callZenMethod('testcase', 'assignShowImportVars', [$productID, $branch, $caseData, $stepVars, $pagerID, $maxImport]);
+        } catch (Exception $e) {
+            // 捕获可能的异常
+            return 'error';
+        }
+
+        // 检查是否有错误
+        if(dao::isError()) return dao::getError();
+
+        // 获取视图对象
+        $view = callZenMethod('testcase', 'assignShowImportVars', [$productID, $branch, $caseData, $stepVars, $pagerID, $maxImport], 'view');
+
+        // 返回视图数据用于断言
+        $result = array();
+        $result['hasModules'] = isset($view->modules) ? (count($view->modules) > 0 ? '1' : '0') : '0';
+        $result['hasStories'] = isset($view->stories) ? (count($view->stories) > 0 ? '1' : '0') : '0';
+        $result['caseDataCount'] = isset($view->caseData) ? count($view->caseData) : 0;
+        $result['hasBranches'] = isset($view->branches) ? (count($view->branches) > 0 ? '1' : '0') : '0';
+        $result['allCount'] = $view->allCount ?? 0;
+        $result['allPager'] = $view->allPager ?? 1;
+        $result['isEndPage'] = isset($view->isEndPage) ? ($view->isEndPage ? '1' : '0') : '0';
+        $result['pagerID'] = $view->pagerID ?? 1;
+        $result['hasSuhosinInfo'] = isset($view->suhosinInfo) ? '1' : '0';
+
+        return $result;
+    }
+
 }
