@@ -164,7 +164,7 @@ class transferZenTest
 
         // 设置必要的配置和语言
         if(!isset($tester->config->transfer)) $tester->config->transfer = new stdClass();
-        if(!isset($tester->config->transfer->actionModule)) $tester->config->transfer->actionModule = array();
+        $tester->config->transfer->actionModule = array('task', 'story', 'bug');
 
         if(!isset($tester->lang->transfer)) $tester->lang->transfer = new stdClass();
         $tester->lang->transfer->new = '新建';
@@ -173,16 +173,22 @@ class transferZenTest
 
         try {
             // 获取transfer对象并设置transferConfig
-            $transferZen = $tester->loadTarget('transfer', '', 'zen');
+            $transferZen = $tester->app->loadTarget('transfer', '', 'zen');
             if(!property_exists($transferZen, 'transferConfig')) {
                 $transferZen->transferConfig = new stdClass();
             }
             $transferZen->transferConfig->textareaFields = 'desc,content,steps';
 
-            $result = callZenMethod('transfer', 'printRow', array($module, $row, $fields, $object, $trClass, $addID));
+            // 使用反射直接调用private方法,避免responseException
+            $reflection = new ReflectionClass($transferZen);
+            $method = $reflection->getMethod('printRow');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($transferZen, array($module, $row, $fields, $object, $trClass, $addID));
 
             if(dao::isError()) return dao::getError();
             return $result;
+        } catch(EndResponseException $e) {
+            return $e->getContent();
         } catch(Exception $e) {
             return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         } catch(TypeError $e) {
