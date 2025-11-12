@@ -390,7 +390,14 @@ class fileModel extends model
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
         if($extension and strpos($extension, '::') !== false) $extension = substr($extension, 0, strpos($extension, '::'));
 
-        if(in_array($extension, $this->config->file->imageExtensions) && !empty($filePath) && function_exists('exif_imagetype')) $extension = exif_imagetype($filePath);
+        if(in_array($extension, $this->config->file->imageExtensions) && !empty($filePath))
+        {
+            $imagesize = getimagesize($filePath);
+            if(!isset($imagesize[2])) return 'txt';
+
+            $realExtension = image_type_to_extension($imagesize[2], false);
+            $extension     = $extension == 'jpg' && $realExtension == 'jpeg' ? 'jpg' : $realExtension;
+        }
 
         if(empty($extension) or stripos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
         if(empty($extension) or stripos(",{$this->config->file->allowed},", ",{$extension},") === false) return 'txt';
