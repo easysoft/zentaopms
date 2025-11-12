@@ -1066,9 +1066,12 @@ class upgradeTao extends upgradeModel
      */
     protected function copyActivity(object $activity, int $processID, int $groupID, array $outputGroup)
     {
-        $outputList = zget($outputGroup, $activity->id, array());
+        $outputList    = zget($outputGroup, $activity->id, array());
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($groupID)->fetchPairs();
 
+        $oldActivityID = $activity->id;
         unset($activity->id);
+
         $activity->process       = $processID;
         $activity->optional      = !empty($activity->optional) ? $activity->optional : 'no';
         $activity->workflowGroup = $groupID;
@@ -1078,6 +1081,9 @@ class upgradeTao extends upgradeModel
         $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
 
         $newActivityID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('objectType')->eq('activity')->andWhere('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_PROGRAMACTIVITY)->set('activity')->eq($newActivityID)->where('activity')->eq($oldActivityID)->andWhere('project')->in($projectIdList)->exec();
 
         $idMap = array();
         foreach($outputList as $output)
@@ -1093,7 +1099,6 @@ class upgradeTao extends upgradeModel
             $idMap[$oldID] = $newOutputID;
         }
 
-        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($groupID)->fetchPairs();
         foreach($idMap as $oldID => $newOutputID)
         {
             $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->exec();
