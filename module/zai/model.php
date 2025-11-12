@@ -852,6 +852,56 @@ class zaiModel extends model
     }
 
     /**
+     * 获取字段标签。
+     *
+     * @param  array  $langData
+     * @param  string $field
+     * @return string
+     */
+    protected static function getFieldLabel(array $langData, string $field): string
+    {
+        return isset($langData['fields'][$field]) ? $langData['fields'][$field] : '';
+    }
+
+    /**
+     * 获取章节标签。
+     *
+     * @param  array  $langData
+     * @param  string $section
+     * @return string
+     */
+    protected static function getSectionLabel(array $langData, string $section): string
+    {
+        return isset($langData['sections'][$section]) ? $langData['sections'][$section] : '';
+    }
+
+    /**
+     * 格式化字段值。
+     *
+     * @param  array       $langData
+     * @param  string      $field
+     * @param  mixed       $value
+     * @return string
+     */
+    protected static function formatFieldValue(array $langData, string $field, $value): string
+    {
+        if($value === null) return '';
+
+        if(is_array($value))
+        {
+            $parts = array();
+            foreach($value as $item)
+            {
+                $formatted = static::formatFieldValue($langData, $field, $item);
+                if($formatted !== '') $parts[] = $formatted;
+            }
+            return $parts ? implode('，', $parts) : '';
+        }
+
+        return $valueString;
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
