@@ -3382,4 +3382,17 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test preProcessForEdit method.
+     *
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function preProcessForEditTest(object $case): object
+    {
+        $result = callZenMethod('testcase', 'preProcessForEdit', [$case]);
+        return $result;
+    }
+
 }
