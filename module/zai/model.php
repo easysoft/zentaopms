@@ -792,29 +792,27 @@ class zaiModel extends model
      * Convert target object to Markdown format.
      *
      * @access public
-     * @param string $type
-     * @param object $target
+     * @param  string     $type
+     * @param  object     $target
+     * @param  array|null $langData
      * @return array
      */
-    public static function convertTargetToMarkdown($type, $target)
+    public static function convertTargetToMarkdown($type, $target, ?array $langData = null)
     {
         global $app;
 
         $funcName = 'convert' . ucfirst($type) . 'ToMarkdown';
         if(method_exists(static::class, $funcName))
         {
-            $markdown = static::$funcName($target);
+            $markdown = static::$funcName($target, $langData);
+        }
+        elseif($type === 'practice' || $type === 'component')
+        {
+            $markdown = static::convertDocToMarkdown($target);
         }
         else
         {
-            $markdown = array('content' => json_encode($target), 'id' => $target->id, 'title' => '');
-            $typeName = zget($app->lang->zai->syncingTypeList, $type, $type);
-            $title    = '';
-
-            if(isset($target->title))     $title = $target->title;
-            elseif(isset($target->name))  $title = $target->name;
-
-            $markdown['title'] = "$typeName #$target->id $title";
+            $markdown = static::convertGenericToMarkdown($type, $target);
         }
 
         if(!isset($markdown['attrs']))               $markdown['attrs'] = array();
@@ -823,6 +821,34 @@ class zaiModel extends model
         if(!isset($markdown['attrs']['objectKey']))  $markdown['attrs']['objectKey'] = $type . '-' . $target->id;
 
         return $markdown;
+    }
+
+    /**
+     * 将通用对象转换为 Markdown。
+     * Convert generic object to Markdown format.
+     *
+     * @access protected
+     * @param  string $type
+     * @param  object $target
+     * @return array
+     */
+    protected static function convertGenericToMarkdown(string $type, object $target): array
+    {
+        global $app;
+
+        $typeName = zget($app->lang->zai->syncingTypeList, $type, ucfirst($type));
+        $title    = '';
+
+        if(isset($target->title) && $target->title !== '')     $title = $target->title;
+        elseif(isset($target->name) && $target->name !== '')   $title = $target->name;
+
+        $id = isset($target->id) ? $target->id : 0;
+
+        return array(
+            'id'      => $id,
+            'title'   => trim("$typeName #$id $title"),
+            'content' => json_encode($target, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
     }
 
     /**
