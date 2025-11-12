@@ -3192,4 +3192,22 @@ class testcaseZenTest
         return $result;
     }
 
+    /**
+     * Test getGroupCases method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $groupBy
+     * @param  string $caseType
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getGroupCasesTest(int $productID = 0, string $branch = '', string $groupBy = '', string $caseType = '', string $browseType = ''): array
+    {
+        $result = callZenMethod('testcase', 'getGroupCases', [$productID, $branch, $groupBy, $caseType, $browseType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
 }
