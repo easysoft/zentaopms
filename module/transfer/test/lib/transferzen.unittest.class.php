@@ -115,7 +115,7 @@ class transferZenTest
      *
      * @param  array  $list
      * @param  int    $lastID
-     * @param  string $fields
+     * @param  array  $fields
      * @param  int    $pagerID
      * @param  string $module
      * @access public
