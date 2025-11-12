@@ -18,6 +18,7 @@ cid=17578
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 3) . '/control.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('product')->gen(10);
