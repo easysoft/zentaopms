@@ -3316,4 +3316,70 @@ class testcaseZenTest
         }
     }
 
+    /**
+     * Test prepareReviewData method.
+     *
+     * @param  int    $caseID
+     * @param  object $oldCase
+     * @param  array  $postData
+     * @access public
+     * @return bool|object|array
+     */
+    public function prepareReviewDataTest(int $caseID, object $oldCase, array $postData = array()): bool|object|array
+    {
+        global $tester;
+
+        // 保存原始POST数据
+        $originalPost = $_POST;
+
+        try {
+            // 清除之前的错误
+            dao::$errors = array();
+
+            // 设置POST数据
+            $_POST = array();
+            foreach($postData as $key => $value)
+            {
+                $_POST[$key] = $value;
+            }
+
+            // 获取testcase的zen对象实例
+            $zenClass = initReference('testcase');
+            $zenInstance = $zenClass->newInstance();
+
+            // 使用反射调用protected方法
+            $reflection = new ReflectionClass($zenInstance);
+            $method = $reflection->getMethod('prepareReviewData');
+            $method->setAccessible(true);
+
+            // 调用方法
+            $returnValue = $method->invoke($zenInstance, $caseID, $oldCase);
+
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+
+            // 如果返回false并且有错误,返回错误信息
+            if($returnValue === false && dao::isError())
+            {
+                return dao::getError();
+            }
+
+            return $returnValue;
+        } catch (EndResponseException $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            // EndResponseException通常表示正常的流程控制,检查是否有dao错误
+            if(dao::isError()) return dao::getError();
+            return false;
+        } catch (Exception $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return array('exception' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine());
+        } catch (Error $e) {
+            // 恢复原始POST数据
+            $_POST = $originalPost;
+            return array('error' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine());
+        }
+    }
+
 }
