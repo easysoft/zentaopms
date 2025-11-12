@@ -185,4 +185,4 @@ CREATE INDEX `project` ON `zt_projectchange` (`project`);
 ALTER TABLE `zt_nc` ADD `execution` int unsigned NOT NULL DEFAULT 0 COMMENT '所属执行' AFTER `project`;
 ALTER TABLE `zt_nc` ADD `deliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '交付物' AFTER `auditplan`;
 
-ALTER TABLE `zt_workflowgroup` ADD `disabledFeatures` varchar(255) NOT NULL DEFAULT '' AFTER `disabledModules`;
+ALTER TABLE `zt_workflowgroup` ADD `disabledFeatures` varchar(255) NOT NULL DEFAULT '' COMMENT '项目流程关闭的功能' AFTER `disabledModules`;

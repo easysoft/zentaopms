@@ -13476,7 +13476,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `code` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
   `disabledModules` varchar(255) NOT NULL DEFAULT '',
-  `disabledFeatures` varchar(255) NOT NULL DEFAULT '',
+  `disabledFeatures` varchar(255) NOT NULL DEFAULT '' COMMENT '项目流程关闭的功能',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `main` enum('0','1') NOT NULL DEFAULT '0',
