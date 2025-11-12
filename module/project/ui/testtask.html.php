@@ -37,7 +37,7 @@ featureBar
             $lang->testtask->browse
         )
     ),
-    to::before($productDropdown),
+    to::before($productDropdown)
 );
 
 $canModify = common::canModify('project', $project);

@@ -177,13 +177,14 @@ class testtaskModel extends model
      * Get testtasks of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $objectType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
 
@@ -194,6 +195,7 @@ class testtaskModel extends model
             ->where('t1.deleted')->eq('0')
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
