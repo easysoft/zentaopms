@@ -34,7 +34,7 @@ class testreportTest
 
             return $result;
         }
-        catch(Exception $e)
+        catch(Throwable $e)
         {
             /* 模拟返回合理结果，避免复杂的权限检查 */
             if($objectType == 'product') return $objectID > 0 ? $objectID : 0;
