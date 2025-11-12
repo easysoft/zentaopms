@@ -14053,7 +14053,9 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
 CREATE TABLE IF NOT EXISTS `zt_nc` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `execution` int unsigned NOT NULL DEFAULT 0,
   `auditplan` mediumint(8) NOT NULL DEFAULT '0',
+  `deliverable` int unsigned NOT NULL DEFAULT 0,
   `listID` mediumint(8) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
