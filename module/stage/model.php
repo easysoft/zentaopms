@@ -278,7 +278,7 @@ class stageModel extends model
                 $builtinStage->createdDate   = helper::now();
                 $builtinStage->name          = in_array($workflowGroup->projectModel, array('waterfall', 'waterfallplus')) ? zget($this->lang->stage->typeList, $stageType, '') : zget($this->lang->stage->ipdTypeList, $stageType, '');
                 $builtinStage->type          = $stageType;
-                $builtinStage->projectType   = $workflowGroup->projectType;
+                $builtinStage->projectType   = $workflowGroup->projectModel;
                 $this->dao->insert(TABLE_STAGE)->data($builtinStage)->exec();
 
                 $stageID = $this->dao->lastInsertID();

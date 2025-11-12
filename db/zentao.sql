@@ -1991,6 +1991,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `percent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
+  `projectType` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
