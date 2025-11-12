@@ -719,7 +719,7 @@ class zaiModel extends model
 
         $filePath = $file->realPath;
         $cFile    = new CURLFile($filePath, null, $file->title);
-        $result = $this->callAdminAPI('/v8/files/extract', 'POST', null, ['file' => $cFile]);
+        $result   = $this->callAdminAPI('/v8/files/extract', 'POST', null, ['file' => $cFile]);
 
         if($result['result'] != 'success') return null;
         return $result['data'];
