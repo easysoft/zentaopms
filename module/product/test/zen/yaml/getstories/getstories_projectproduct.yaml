@@ -1,0 +1,18 @@
+---
+title: Project product relation data for getStories test
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: Project ID
+  range: 11{1},12{1},13{1}
+- field: product
+  note: Product ID
+  range: 1,2,3
+- field: branch
+  note: Branch ID
+  range: 0
+- field: plan
+  note: Plan ID
+  range: 0

@@ -1,0 +1,19 @@
+title: table zt_actionproduct
+desc: "系统日志-产品关联"
+author: test
+version: "1.0"
+fields:
+  - field: action
+    note: "动作ID"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品ID"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

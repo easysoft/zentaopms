@@ -1,0 +1,34 @@
+---
+title: 模块表
+desc: 用于测试 assignVarsForUploadDocs 方法的模块数据
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: root
+  note: 所属库ID
+  range: 1,1,2,2,5
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 模块名称
+  range: 模块1,模块2,模块3,模块4,模块5
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 模块类型
+  range: doc
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

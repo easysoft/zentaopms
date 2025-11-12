@@ -1,0 +1,69 @@
+---
+title: 测试用例数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 用例标题
+  range: 用户登录测试,数据查询测试,权限验证测试,性能测试用例,接口测试用例
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 用例类型
+  range: feature{50},performance{30},config{10},install{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: pri
+  note: 优先级
+  range: 1-4
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: normal{80},blocked{10},investigate{10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastRunner
+  note: 执行人
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: auto
+  note: 自动化类型
+  range: unit{30},func{40},no{30}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

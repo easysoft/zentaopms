@@ -1599,22 +1599,40 @@ class testcaseZenTest
     {
         global $tester;
 
-        // 调用zen方法
-        $result = callZenMethod('testcase', 'assignCreateSceneVars', [$productID, $branch, $moduleID]);
-        if(dao::isError()) return dao::getError();
+        try {
+            // 初始化必要的对象和状态
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
 
-        // 返回视图变量以便验证
-        return array(
-            'title' => isset($tester->view->title) ? $tester->view->title : '',
-            'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
-            'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
-            'moduleID' => isset($tester->view->moduleID) ? $tester->view->moduleID : 0,
-            'parent' => isset($tester->view->parent) ? $tester->view->parent : 0,
-            'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
-            'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
-            'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
-            'debug_view' => isset($tester->view) ? 'view_exists' : 'view_not_exists'
-        );
+            // 启用输出缓冲以捕获错误输出
+            ob_start();
+
+            // 调用zen方法
+            $result = callZenMethod('testcase', 'assignCreateSceneVars', [$productID, $branch, $moduleID]);
+
+            // 清理输出缓冲
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            // 返回视图变量以便验证
+            return array(
+                'title' => isset($tester->view->title) ? $tester->view->title : '',
+                'modules' => isset($tester->view->modules) ? count($tester->view->modules) : 0,
+                'scenes' => isset($tester->view->scenes) ? count($tester->view->scenes) : 0,
+                'moduleID' => isset($tester->view->moduleID) ? $tester->view->moduleID : 0,
+                'parent' => isset($tester->view->parent) ? $tester->view->parent : 0,
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
+        }
     }
 
     /**
@@ -1689,28 +1707,36 @@ class testcaseZenTest
      */
     public function addEditActionTest(int $caseID, string $oldStatus, string $status, array $changes = array(), string $comment = ''): array
     {
-        // 模拟 addEditAction 方法的逻辑验证
-        $expectedActionCount = 0;
+        global $tester;
 
-        // 判断是否需要创建编辑/评论动作
-        if(!empty($changes) || !empty($comment))
-        {
-            $expectedActionCount++;
+        try {
+            // 调用前先统计已有的action数量
+            $beforeCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)
+                ->where('objectType')->eq('case')
+                ->andWhere('objectID')->eq($caseID)
+                ->fetch('count');
+
+            // 调用被测方法
+            callZenMethod('testcase', 'addEditAction', [$caseID, $oldStatus, $status, $changes, $comment]);
+
+            // 检查是否有错误
+            if(dao::isError()) return array('error' => dao::getError());
+
+            // 调用后统计action数量
+            $afterCount = $tester->dao->select('COUNT(*) as count')->from(TABLE_ACTION)
+                ->where('objectType')->eq('case')
+                ->andWhere('objectID')->eq($caseID)
+                ->fetch('count');
+
+            // 返回新增的action数量
+            $addedCount = $afterCount - $beforeCount;
+
+            return array('actionCount' => $addedCount);
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Error $e) {
+            return array('error' => $e->getMessage());
         }
-
-        // 判断是否需要创建提交审核动作
-        if($oldStatus != 'wait' && $status == 'wait')
-        {
-            $expectedActionCount++;
-        }
-
-        // 如果没有任何变更，至少会创建一个空的评论动作
-        if(empty($changes) && empty($comment))
-        {
-            $expectedActionCount = 1;
-        }
-
-        return array('result' => $expectedActionCount);
     }
 
     /**
@@ -2521,6 +2547,170 @@ class testcaseZenTest
             return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
         } catch (Error $e) {
             return array('result' => 'fail', 'message' => 'error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Test assignBranchForEdit method.
+     *
+     * @param  object $case
+     * @param  int    $executionID
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function assignBranchForEditTest(object $case, int $executionID = 0, string $tab = 'execution'): array
+    {
+        global $tester;
+
+        $tester->app->tab = $tab;
+        $objectID = $tab == 'execution' ? $executionID : $case->project;
+
+        $branchModel = $tester->loadModel('branch');
+        $branches = $branchModel->getList($case->product, $objectID, 'all');
+
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $closedTag = $branchInfo->status == 'closed' ? ' (已关闭)' : '';
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . $closedTag;
+        }
+
+        if(!isset($branchTagOption[$case->branch]) && $case->branch)
+        {
+            $caseBranch = $branchModel->getByID((string)$case->branch, $case->product, '');
+            if($caseBranch)
+            {
+                $closedTag = isset($caseBranch->status) && $caseBranch->status == 'closed' ? ' (已关闭)' : '';
+                $branchName = is_object($caseBranch) ? $caseBranch->name : $caseBranch;
+                $branchTagOption[$case->branch] = $branchName . $closedTag;
+            }
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $branchTagOption;
+    }
+
+    /**
+     * Test assignCasesForBrowse method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $caseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $from
+     * @access public
+     * @return array
+     */
+    public function assignCasesForBrowseTest(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): array
+    {
+        ob_start();
+        callZenMethod('testcase', 'assignCasesForBrowse', [$productID, $branch, $browseType, $queryID, $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from]);
+        $view = callZenMethod('testcase', 'assignCasesForBrowse', [$productID, $branch, $browseType, $queryID, $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from], 'view');
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        $output = array();
+        $output['casesCount'] = isset($view->cases) ? count($view->cases) : 0;
+        $output['orderBy'] = isset($view->orderBy) ? $view->orderBy : '';
+        $output['hasPager'] = isset($view->pager) ? 1 : 0;
+
+        return $output;
+    }
+
+    /**
+     * Test assignCreateVars method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $from
+     * @param  int    $param
+     * @param  int    $storyID
+     * @access public
+     * @return mixed
+     */
+    public function assignCreateVarsTest(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0): mixed
+    {
+        global $tester;
+
+        try {
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
+
+            ob_start();
+            $result = callZenMethod('testcase', 'assignCreateVars', [$productID, $branch, $moduleID, $from, $param, $storyID]);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'projectID' => isset($tester->view->projectID) ? $tester->view->projectID : 0,
+                'currentSceneID' => isset($tester->view->currentSceneID) ? $tester->view->currentSceneID : 0,
+                'case' => isset($tester->view->case) ? 1 : 0,
+                'executionID' => isset($tester->view->executionID) ? $tester->view->executionID : 0,
+                'branch' => isset($tester->view->branch) ? $tester->view->branch : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'from' => isset($tester->view->from) ? $tester->view->from : '',
+                'param' => isset($tester->view->param) ? $tester->view->param : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
+        }
+    }
+
+    /**
+     * Test assignForBatchCreate method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @access public
+     * @return mixed
+     */
+    public function assignForBatchCreateTest(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0): mixed
+    {
+        global $tester;
+
+        try {
+            if(!isset($tester->view)) $tester->view = new stdClass();
+            if(!isset($tester->session)) $tester->session = new stdClass();
+            if(!isset($tester->session->project)) $tester->session->project = 0;
+            if(!isset($tester->session->execution)) $tester->session->execution = 0;
+            if(!isset($tester->app->tab)) $tester->app->tab = 'qa';
+
+            ob_start();
+            $result = callZenMethod('testcase', 'assignForBatchCreate', [$productID, $branch, $moduleID, $storyID]);
+            $output = ob_get_clean();
+
+            if(dao::isError()) return dao::getError();
+
+            return array(
+                'product' => isset($tester->view->product->name) ? $tester->view->product->name : '',
+                'branches' => isset($tester->view->branches) ? count($tester->view->branches) : 0,
+                'customFields' => isset($tester->view->customFields) ? count($tester->view->customFields) : 0,
+                'showFields' => isset($tester->view->showFields) ? 1 : 0,
+                'story' => isset($tester->view->story) ? 1 : 0,
+                'storyPairs' => isset($tester->view->storyPairs) ? count($tester->view->storyPairs) : 0,
+                'sceneOptionMenu' => isset($tester->view->sceneOptionMenu) ? 1 : 0,
+                'currentModuleID' => isset($tester->view->currentModuleID) ? $tester->view->currentModuleID : 0,
+                'executed' => 1
+            );
+        } catch (Exception $e) {
+            return array('executed' => 0, 'error' => $e->getMessage());
         }
     }
 

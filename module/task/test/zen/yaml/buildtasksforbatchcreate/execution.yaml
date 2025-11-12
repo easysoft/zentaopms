@@ -1,0 +1,30 @@
+---
+title: 执行数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: project
+  note: 所属项目
+  range: 1-5
+- field: type
+  note: 执行类型
+  range: sprint,sprint,sprint,sprint,sprint,kanban,kanban,kanban,stage,stage
+- field: name
+  note: 执行名称
+  range: 执行1,执行2,执行3,执行4,执行5,看板执行1,看板执行2,看板执行3,阶段1,阶段2
+- field: status
+  note: 状态
+  range: wait,wait,wait,doing,doing,doing,doing,doing,done,done
+- field: begin
+  note: 开始日期
+  range: 2025-01-01
+- field: end
+  note: 结束日期
+  range: 2025-12-31
+- field: deleted
+  note: 是否删除
+  range: '0'

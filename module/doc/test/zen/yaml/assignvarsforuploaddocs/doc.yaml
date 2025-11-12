@@ -1,0 +1,53 @@
+---
+title: 文档表
+desc: 用于测试 assignVarsForUploadDocs 方法的文档数据
+
+fields:
+- field: id
+  note: 文档ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: lib
+  note: 所属库ID
+  range: 1,1,2,2,3,4,5,5,7,9
+  prefix: ""
+  postfix: ""
+
+- field: title
+  note: 文档标题
+  range: 文档1,文档2,文档3,文档4,文档5,文档6,文档7,文档8,文档9,文档10
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 文档类型
+  range: text,html,markdown
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 文档状态
+  range: normal,draft
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+
+- field: addedBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+
+- field: addedDate
+  note: 创建时间
+  range: (-1M)-(now):1D
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""

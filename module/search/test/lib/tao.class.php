@@ -237,4 +237,110 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test processExecutionRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processExecutionRecordTest(object $record, array $objectList): object
+    {
+        $result = $this->invokeArgs('processExecutionRecord', [$record, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processProjectRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processProjectRecordTest(object $record, array $objectList): object
+    {
+        $result = $this->invokeArgs('processProjectRecord', [$record, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processRecordTest(object $record, array $objectList): object
+    {
+        $result = $this->invokeArgs('processRecord', [$record, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processRiskRecord method.
+     *
+     * @param  object $record
+     * @param  string $module
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processRiskRecordTest(object $record, string $module, array $objectList): object
+    {
+        $result = $this->invokeArgs('processRiskRecord', [$record, $module, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processStoryRecord method.
+     *
+     * @param  object $record
+     * @param  string $module
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processStoryRecordTest(object $record, string $module, array $objectList): object
+    {
+        $result = $this->invokeArgs('processStoryRecord', [$record, $module, $objectList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processTaskRecord method.
+     *
+     * @param  object $record
+     * @access public
+     * @return object
+     */
+    public function processTaskRecordTest(object $record): object
+    {
+        $result = $this->invokeArgs('processTaskRecord', [$record]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test unify method.
+     *
+     * @param  string $string
+     * @param  string $to
+     * @access public
+     * @return string
+     */
+    public function unifyTest(string $string, string $to = ','): string
+    {
+        $result = $this->invokeArgs('unify', [$string, $to]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

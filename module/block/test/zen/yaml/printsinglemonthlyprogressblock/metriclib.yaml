@@ -1,0 +1,40 @@
+---
+title: 度量项库数据定义
+desc: 用于测试printSingleMonthlyProgressBlock方法的度量项库数据
+
+fields:
+- field: id
+  note: 度量项ID
+  range: 1-6
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: code
+  note: 度量项代码
+  range: scale_of_monthly_finished_story_in_product,count_of_monthly_created_story_in_product,count_of_monthly_finished_story_in_product,count_of_monthly_created_bug_in_product,count_of_monthly_fixed_bug_in_product,count_of_monthly_created_release_in_product
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 度量项名称
+  range: 产品月度完成需求规模,产品月度新增需求数,产品月度完成需求数,产品月度新增Bug数,产品月度修复Bug数,产品月度发布数
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: purpose
+  note: 度量目的
+  range: scale{6}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

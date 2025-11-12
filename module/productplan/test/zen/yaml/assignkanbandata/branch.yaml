@@ -1,0 +1,20 @@
+title: branch data for assignKanbanData test
+author: claude
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-10
+  - field: product
+    range: '6{5},7{5}'
+  - field: name
+    range: 1-10
+    prefix: '分支'
+  - field: default
+    range: '0'
+  - field: status
+    range: 'active'
+  - field: order
+    range: 1-10
+  - field: deleted
+    range: '0'
