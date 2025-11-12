@@ -288,7 +288,7 @@ class myZen extends my
 
                 /* Get the number of nc assigned to me. */
                 $pager->recTotal = 0;
-                $this->loadModel('auditplan')->getList(0, 'my', 'mychecking', '', 'id_desc', $pager);
+                $this->loadModel('auditplan')->getList(0, 'myChecking', '', 'id_desc', $pager);
                 $auditplanCount = $pager->recTotal;
                 $count['qa']    = $ncCount + $auditplanCount;
 
